@@ -399,25 +399,30 @@ InfoType Parser::cmd7(const QString &line)
 		return IT_OTHER;
 	}
 #endif
+	QRegExp gamesre("\\[\\s*(\\d+)\\s*\\]\\s+"
+			"([^\\s]+)\\s+\\[\\s*([^\\]\\s]*)\\s*\\]\\s+" "vs.\\s+"
+			"([^\\s]+)\\s+\\[\\s*([^\\]\\s]*)\\s*\\]\\s+"
+			"\\(\\s*(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+([\\d-.]+)\\s+(\\d+)\\s+([^\\s\\)]+)\\)\\s+"
+			"\\(\\s*(\\d+)\\).*");
+
+	if (gamesre.indexIn (line) == -1) {
+		return GAME7;
+	}
+
 	// get info line
-	buffer = element(line, 0, "(", ")");
-	aGame->mv = buffer.left(3);
-	buffer.remove(0, 4);
-	aGame->Sz = element(buffer, 0, " ");
-	aGame->H = element(buffer, 1, " ");
-	aGame->K = element(buffer, 2, " ");
-	aGame->By = element(buffer, 3, " ");
-	aGame->FR = element(buffer, 4, " ");
+	aGame->mv = gamesre.cap (6);
+	aGame->Sz = gamesre.cap (7);
+	aGame->H = gamesre.cap (8);
+	aGame->K = gamesre.cap (9);
+	aGame->By = gamesre.cap (10);
+	aGame->FR = gamesre.cap (11);
 			
-	// parameter "true" -> kill blanks
-	aGame->nr = element(line, 0, "[", "]", true);
-	aGame->wname = element(line, 0, "]", "[", true);
-	aGame->wrank = element(line, 1, "[", "]", true);
-	// skip 'vs.'
-	buffer = element(line, 1, "]", "[", true);
-	aGame->bname = buffer.remove(0, 3);
-	aGame->brank = element(line, 2, "[", "]", true);
-	aGame->ob = element(line, 1, "(", ")", true);
+	aGame->nr = gamesre.cap (1);
+	aGame->wname = gamesre.cap (2);
+	aGame->wrank = gamesre.cap (3);
+	aGame->bname = gamesre.cap (4);
+	aGame->brank = gamesre.cap (5);
+	aGame->ob = gamesre.cap (12);
 
 	// indicate game to be running
 	aGame->running = true;
