@@ -1151,12 +1151,11 @@ InfoType Parser::cmd9(QString &line)
         
 	else if (line.contains("Idle Time:"))
 	{
-
-		if    (gsName == WING)
-			statsPlayer->idle = element(line, 2, " ");
+		if (gsName == WING)
+			statsPlayer->idle = line.section(':', 1).trimmed();
 		else
-			statsPlayer->idle = element(line, 4, " ");
-            
+			statsPlayer->idle = line.section(')', 1).trimmed();
+	      
 		emit signal_statsPlayer(statsPlayer);
 		return IT_OTHER ;
 	}
@@ -1189,8 +1188,11 @@ InfoType Parser::cmd9(QString &line)
 	//9 ROOM 92: PANDA OPEN ROOM;X;ŒŽ—á‘å‰ï;19;10;15
 	else if (! line.left(5).compare("ROOM "))
 	{
+		QString t1 = line.section(';', 0, 0).trimmed();
+		QString t2 = line.section(';', 1, 1).trimmed();
+
 		//(element(line, 0,";")=="X") || (element(line, 0,";")=="P");
-		emit signal_room(element(line,0," ",";"),(element(line, 1,";")=="X") || (element(line, 1,";")=="P"));
+		emit signal_room(t1.section(' ', 1), t2 == "X" || t2 == "P");
 		return IT_OTHER ;
 	}
 #if 0
@@ -1265,16 +1267,26 @@ InfoType Parser::cmd15(const QString &line)
 {
 	if (line.contains("Game"))
 	{
-		aGameInfo->nr = element(line, 1, " ");
-		aGameInfo->type = element(line, 1, " ", ":");
-		aGameInfo->wname = element(line, 3, " ");
-		aGameInfo->wprisoners = element(line, 0, "(", " ");
-		aGameInfo->wtime = element(line, 5, " ");
-		aGameInfo->wstones = element(line, 5, " ", ")");
-		aGameInfo->bname = element(line, 8, " ");
-		aGameInfo->bprisoners = element(line, 1, "(", " ");
-		aGameInfo->btime = element(line, 10, " ");
-		aGameInfo->bstones = element(line, 10, " ", ")");
+		QRegExp gamere ("Game\\s+(\\d+)\\s+"
+				"([^:]+)\\s*:\\s+([^\\s]+)\\s+"
+				"\\(\\s*(\\d+)\\s+(\\d+)\\s+([\\d-]+)\\)\\s+"
+				"vs\\s+([^\\s]+)\\s+"
+				"\\(\\s*(\\d+)\\s+(\\d+)\\s+([\\d-]+)\\).*");
+
+		if (!gamere.exactMatch (line)) {
+			return IT_OTHER;
+		}
+
+		aGameInfo->nr = gamere.cap (1);
+		aGameInfo->type = gamere.cap (2);
+		aGameInfo->wname = gamere.cap (3);
+		aGameInfo->wprisoners = gamere.cap (4);
+		aGameInfo->wtime = gamere.cap (5);
+		aGameInfo->wstones = gamere.cap (6);
+		aGameInfo->bname = gamere.cap (7);
+		aGameInfo->bprisoners = gamere.cap (8);
+		aGameInfo->btime = gamere.cap (9);
+		aGameInfo->bstones = gamere.cap (10);
 
 		if (memory_str == QString("rmv@"))
 		{
@@ -1303,23 +1315,29 @@ InfoType Parser::cmd15(const QString &line)
 	}
 	else if (line.contains("TIME"))
 	{	
+		QRegExp timere ("TIME:\\s*(\\d+)\\s*:([^:]+)\\([BW]\\):\\s*"
+				"(\\d+)\\s+(\\d+)/(\\d+)\\s+(\\d+)/(\\d+)\\s+(\\d+)/(\\d+)\\s+.*");
+
+		if (!timere.exactMatch (line)) {
+			return IT_OTHER;
+		}
 		aGameInfo->mv_col = "T";
-		aGameInfo->nr = element(line, 0, ":",":");
-		QString time1 = element(line, 1, " ","/");
-		QString time2 = element(line, 2, " ","/");
-		QString stones = element(line, 3, " ","/");				
+		aGameInfo->nr = timere.cap (1);
+		QString time1 = timere.cap (4);
+		QString time2 = timere.cap (6);
+		QString stones = timere.cap (8);
 	
 		if (line.contains("(W)"))
 		{
-			aGameInfo->wname = element(line, 1, ":","(");
+			aGameInfo->wname = timere.cap (2);
 			aGameInfo->wtime = (time1.toInt()==0 ? time2 : time1);
 			aGameInfo->wstones = (time1.toInt()==0 ?stones: "-1") ;
 		}
 		else if (line.contains("(B)"))					
 		{
-			aGameInfo->bname = element(line, 1, ":","(");
+			aGameInfo->bname = timere.cap (2);
 			aGameInfo->btime = (time1.toInt()==0 ? time2 : time1);
-			aGameInfo->bstones = (time1.toInt()==0 ? stones:"-1") ;
+			aGameInfo->bstones = (time1.toInt()==0 ? stones: "-1") ;
 		}
 		else //never know with IGS ...
 			return IT_OTHER;
@@ -1330,11 +1348,14 @@ InfoType Parser::cmd15(const QString &line)
 	}
 	else
 	{
-		aGameInfo->mv_nr = element(line, 0, "(");
-		aGameInfo->mv_pt = element(line, 0, " ", "EOL");
+		QRegExp movere ("(\\d+)\\s*\\(([BW])\\):\\s*([^\\s]*).*");
 
-		// it's a move info of color:
-		aGameInfo->mv_col = element(line, 0, "(", ")");
+		if (!movere.exactMatch (line)) {
+			return IT_OTHER;
+		}
+		aGameInfo->mv_nr = movere.cap (1);
+		aGameInfo->mv_col = movere.cap (2);
+		aGameInfo->mv_pt = movere.cap (3);
 	}
 
 	emit signal_set_observe(aGameInfo->nr);
