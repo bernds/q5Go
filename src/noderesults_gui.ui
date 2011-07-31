@@ -1,0 +1,112 @@
+<!DOCTYPE UI><UI>
+<class>NodeResultsGUI</class>
+<widget>
+    <class>QWidget</class>
+    <property stdset="1">
+        <name>name</name>
+        <cstring>NodeResultsGUI</cstring>
+    </property>
+    <property stdset="1">
+        <name>geometry</name>
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>130</width>
+            <height>161</height>
+        </rect>
+    </property>
+    <property stdset="1">
+        <name>caption</name>
+        <string>Results</string>
+    </property>
+    <vbox>
+        <property stdset="1">
+            <name>margin</name>
+            <number>11</number>
+        </property>
+        <property stdset="1">
+            <name>spacing</name>
+            <number>6</number>
+        </property>
+        <widget>
+            <class>QIconView</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>IconView</cstring>
+            </property>
+            <property stdset="1">
+                <name>minimumSize</name>
+                <size>
+                    <width>100</width>
+                    <height>100</height>
+                </size>
+            </property>
+        </widget>
+        <widget>
+            <class>QLayoutWidget</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>Layout1</cstring>
+            </property>
+            <hbox>
+                <property stdset="1">
+                    <name>margin</name>
+                    <number>0</number>
+                </property>
+                <property stdset="1">
+                    <name>spacing</name>
+                    <number>6</number>
+                </property>
+                <spacer>
+                    <property>
+                        <name>name</name>
+                        <cstring>Spacer1</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>orientation</name>
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property stdset="1">
+                        <name>sizeType</name>
+                        <enum>Expanding</enum>
+                    </property>
+                    <property>
+                        <name>sizeHint</name>
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget>
+                    <class>QPushButton</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>closeButton</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Close</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+    </vbox>
+</widget>
+<connections>
+    <connection>
+        <sender>closeButton</sender>
+        <signal>clicked()</signal>
+        <receiver>NodeResultsGUI</receiver>
+        <slot>doHide()</slot>
+    </connection>
+    <connection>
+        <sender>IconView</sender>
+        <signal>selectionChanged(QIconViewItem*)</signal>
+        <receiver>NodeResultsGUI</receiver>
+        <slot>fump(QIconViewItem*)</slot>
+    </connection>
+    <slot access="public">fump(QIconViewItem*)</slot>
+    <slot access="public">doHide()</slot>
+</connections>
+</UI>

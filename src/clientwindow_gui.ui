@@ -1,0 +1,1543 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>ClientWindowGui</class>
+<widget class="QMainWindow">
+    <property name="name">
+        <cstring>ClientWindowGui</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>773</width>
+            <height>591</height>
+        </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>7</hsizetype>
+            <vsizetype>7</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </property>
+    <property name="backgroundOrigin">
+        <enum>AncestorOrigin</enum>
+    </property>
+    <property name="caption">
+        <string>qGo Client V2</string>
+    </property>
+    <property name="icon">
+        <pixmap>image0</pixmap>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QSplitter" row="0" column="0">
+            <property name="name">
+                <cstring>s1</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>7</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <widget class="QSplitter">
+                <property name="name">
+                    <cstring>s2</cstring>
+                </property>
+                <property name="orientation">
+                    <enum>Vertical</enum>
+                </property>
+                <widget class="QGroupBox">
+                    <property name="name">
+                        <cstring>groupBox1</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>7</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Sunken</enum>
+                    </property>
+                    <property name="title">
+                        <string>Players</string>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>3</number>
+                        </property>
+                        <widget class="PlayerTable" row="0" column="0" rowspan="1" colspan="3">
+                            <property name="name">
+                                <cstring>ListView_players</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>7</hsizetype>
+                                    <vsizetype>7</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>0</width>
+                                    <height>10</height>
+                                </size>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox" row="1" column="1">
+                            <item>
+                                <property name="text">
+                                    <string></string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>1p-9p</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>9d</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>8d</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>7d</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>6d</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>5d</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>4d</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>3d</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>2d</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>1d</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>1k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>2k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>3k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>4k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>5k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>6k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>7k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>8k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>9k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>10k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>11k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>12k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>13k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>14k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>15k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>16k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>17k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>18k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>19k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>20k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>21k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>22k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>23k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>24k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>25k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>26k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>27k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>28k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>29k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>30k</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>whoBox2</cstring>
+                            </property>
+                            <property name="currentItem">
+                                <number>0</number>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Select players rank boundaries</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>Select players ranks boundaries
+
+Use these lists to select the rank of players you want to see in the list
+This will take effect after refreshing the players list.</string>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox" row="1" column="0">
+                            <item>
+                                <property name="text">
+                                    <string></string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>1p-9p</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>9d</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>8d</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>7d</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>6d</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>5d</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>4d</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>3d</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>2d</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>1d</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>1k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>2k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>3k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>4k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>5k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>6k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>7k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>8k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>9k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>10k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>11k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>12k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>13k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>14k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>15k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>16k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>17k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>18k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>19k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>20k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>21k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>22k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>23k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>24k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>25k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>26k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>27k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>28k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>29k</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>30k</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>whoBox1</cstring>
+                            </property>
+                            <property name="currentItem">
+                                <number>0</number>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Select players rank boundaries</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>Select players ranks boundaries
+
+Use these lists to select the rank of players you want to see in the list
+This will take effect after refreshing the players list.</string>
+                            </property>
+                        </widget>
+                        <widget class="QCheckBox" row="1" column="2">
+                            <property name="name">
+                                <cstring>whoOpenCheck</cstring>
+                            </property>
+                            <property name="text">
+                                <string>open</string>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>toggle for displaying only open players</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>Open players
+
+Check this box if you want the list to display only open players (uncheck if you want all players).
+This will take effect after refreshing the players list.</string>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+                <widget class="QTabWidget">
+                    <property name="name">
+                        <cstring>TabWidget_mini_2</cstring>
+                    </property>
+                    <property name="tabPosition">
+                        <enum>Bottom</enum>
+                    </property>
+                    <widget class="QWidget">
+                        <property name="name">
+                            <cstring>rooms</cstring>
+                        </property>
+                        <attribute name="title">
+                            <string>Rooms*</string>
+                        </attribute>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>0</number>
+                            </property>
+                            <widget class="QPushButton" row="1" column="1">
+                                <property name="name">
+                                    <cstring>LeaveRoomButton</cstring>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>22</width>
+                                        <height>22</height>
+                                    </size>
+                                </property>
+                                <property name="text">
+                                    <string></string>
+                                </property>
+                                <property name="pixmap">
+                                    <pixmap>image1</pixmap>
+                                </property>
+                            </widget>
+                            <widget class="QListBox" row="0" column="0" rowspan="1" colspan="2">
+                                <property name="name">
+                                    <cstring>RoomList</cstring>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QWidget">
+                        <property name="name">
+                            <cstring>messages</cstring>
+                        </property>
+                        <attribute name="title">
+                            <string>Msg*</string>
+                        </attribute>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>0</number>
+                            </property>
+                            <widget class="QTextBrowser">
+                                <property name="name">
+                                    <cstring>MultiLineEdit3</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>7</hsizetype>
+                                        <vsizetype>7</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>pb_releaseTalkTabs</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Close all talk tabs</string>
+                                </property>
+                            </widget>
+                        </vbox>
+                    </widget>
+                </widget>
+            </widget>
+            <widget class="QSplitter">
+                <property name="name">
+                    <cstring>s3</cstring>
+                </property>
+                <property name="orientation">
+                    <enum>Vertical</enum>
+                </property>
+                <widget class="QGroupBox">
+                    <property name="name">
+                        <cstring>groupBox2</cstring>
+                    </property>
+                    <property name="title">
+                        <string>Games</string>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>3</number>
+                        </property>
+                        <widget class="GamesTable" row="0" column="0">
+                            <property name="name">
+                                <cstring>ListView_games</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>7</hsizetype>
+                                    <vsizetype>7</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout1</cstring>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <property name="spacing">
+                            <number>0</number>
+                        </property>
+                        <widget class="QTextBrowser" row="0" column="0">
+                            <property name="name">
+                                <cstring>MultiLineEdit2</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>7</hsizetype>
+                                    <vsizetype>7</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>relevant messages from/to server</string>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox" row="1" column="0">
+                            <property name="name">
+                                <cstring>cb_cmdLine</cstring>
+                            </property>
+                            <property name="editable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="insertionPolicy">
+                                <enum>AtTop</enum>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+            </widget>
+        </widget>
+    </grid>
+</widget>
+<menubar>
+    <property name="name">
+        <cstring>menuBar</cstring>
+    </property>
+    <item text="&amp;File" name="fileMenu">
+        <action name="fileNewBoard"/>
+        <action name="fileNew"/>
+        <action name="fileOpen"/>
+        <action name="computerPlay"/>
+        <separator/>
+        <action name="fileQuit"/>
+    </item>
+    <item text="&amp;Connections" name="PopupMenu">
+        <action name="Connect"/>
+        <action name="Disconnect"/>
+        <separator/>
+        <action name="editServers"/>
+    </item>
+    <item text="&amp;Settings" name="PopupMenu_2">
+        <action name="setPreferences"/>
+        <separator/>
+        <action name="setLookingMode"/>
+        <action name="setOpenMode"/>
+        <action name="setQuietMode"/>
+    </item>
+    <item text="&amp;View" name="PopupMenu_3">
+        <action name="viewToolBar"/>
+        <action name="viewUserToolBar"/>
+        <action name="viewMenuBar"/>
+        <action name="viewStatusBar"/>
+    </item>
+    <item text="&amp;Help" name="helpMenu">
+        <action name="helpManual"/>
+        <separator/>
+        <action name="helpSoundInfo"/>
+        <separator/>
+        <action name="helpAboutApp"/>
+        <action name="helpAboutQt"/>
+        <action name="helpNewVersion"/>
+    </item>
+</menubar>
+<toolbars>
+    <toolbar dock="2">
+        <property name="name">
+            <cstring>Toolbar</cstring>
+        </property>
+        <property name="horizontallyStretchable">
+            <bool>false</bool>
+        </property>
+        <property name="label">
+            <string>main toolbar</string>
+        </property>
+        <action name="fileNewBoard"/>
+        <action name="fileOpen"/>
+        <action name="computerPlay"/>
+        <separator/>
+        <widget class="QToolButton">
+            <property name="name">
+                <cstring>toolConnect</cstring>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="toggleButton">
+                <bool>true</bool>
+            </property>
+            <property name="iconSet">
+                <iconset>image2</iconset>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Connect
+
+Connect with/Disconnect from selected Go server.</string>
+            </property>
+        </widget>
+        <widget class="QComboBox">
+            <property name="name">
+                <cstring>cb_connect</cstring>
+            </property>
+            <property name="focusPolicy">
+                <enum>NoFocus</enum>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>choose server</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>chose Go server to connect to or use 'Preferences' to add/change a Go server entry</string>
+            </property>
+        </widget>
+        <separator/>
+        <widget class="QToolButton">
+            <property name="name">
+                <cstring>toolSeek</cstring>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="toggleButton">
+                <bool>true</bool>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Seek game</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Seek game
+
+Use this button to 'seek' a game, with the given time settings (popup menu), and handicap range (list beside)
+The server will automatically launch a game against an opponent with matching settings.</string>
+            </property>
+        </widget>
+        <widget class="QComboBox">
+            <item>
+                <property name="text">
+                    <string>even</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>within 2 stones</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>within 5 stones</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>anyone</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>same or stronger</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>same or weaker</string>
+                </property>
+            </item>
+            <property name="name">
+                <cstring>cb_seek_handicap</cstring>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Set the handicap range you want for seeking games</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>handicap range
+
+Set the handicap range you wish when seeking a game. See 'seek' button for more</string>
+            </property>
+        </widget>
+        <action name="setLookingMode"/>
+        <action name="setQuietMode"/>
+        <action name="setOpenMode"/>
+        <separator/>
+        <action name="refreshPlayers"/>
+        <action name="refreshGames"/>
+    </toolbar>
+    <toolbar dock="2">
+        <property name="name">
+            <cstring>UserToolbar</cstring>
+        </property>
+        <property name="label">
+            <string>user defined toolbar</string>
+        </property>
+    </toolbar>
+</toolbars>
+<customwidgets>
+    <customwidget>
+        <class>GamesTable</class>
+        <header location="global">gamestable.h</header>
+        <sizehint>
+            <width>-1</width>
+            <height>-1</height>
+        </sizehint>
+        <container>0</container>
+        <sizepolicy>
+            <hordata>5</hordata>
+            <verdata>5</verdata>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+        <pixmap>image3</pixmap>
+    </customwidget>
+    <customwidget>
+        <class>PlayerTable</class>
+        <header location="global">playertable.h</header>
+        <sizehint>
+            <width>-1</width>
+            <height>-1</height>
+        </sizehint>
+        <container>0</container>
+        <sizepolicy>
+            <hordata>5</hordata>
+            <verdata>5</verdata>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+        <pixmap>image3</pixmap>
+    </customwidget>
+</customwidgets>
+<actions>
+    <action>
+        <property name="name">
+            <cstring>fileOpen</cstring>
+        </property>
+        <property name="text">
+            <string>Open</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Open...</string>
+        </property>
+        <property name="whatsThis">
+            <string>Open
+
+Open a sgf file.</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+O</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>helpManual</cstring>
+        </property>
+        <property name="text">
+            <string>Manual</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Manual</string>
+        </property>
+        <property name="toolTip">
+            <string>Opens the manual</string>
+        </property>
+        <property name="whatsThis">
+            <string>Help
+
+Opens the manual of the application.</string>
+        </property>
+        <property name="accel">
+            <string>F1</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>helpAboutApp</cstring>
+        </property>
+        <property name="text">
+            <string>About</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;About</string>
+        </property>
+        <property name="toolTip">
+            <string>About the application.</string>
+        </property>
+        <property name="whatsThis">
+            <string>About
+
+About the application.</string>
+        </property>
+        <property name="accel">
+            <string></string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>Disconnect</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>false</bool>
+        </property>
+        <property name="on">
+            <bool>false</bool>
+        </property>
+        <property name="enabled">
+            <bool>true</bool>
+        </property>
+        <property name="text">
+            <string>Disconnect</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Disconnect</string>
+        </property>
+        <property name="toolTip">
+            <string>Disconnect from server</string>
+        </property>
+        <property name="whatsThis">
+            <string>Disconnect from server</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>setLookingMode</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="text">
+            <string>Looking</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Looking</string>
+        </property>
+        <property name="toolTip">
+            <string>toggles looking for matches</string>
+        </property>
+        <property name="whatsThis">
+            <string>If checked then you are looking for matches, that means you are ready to play. After refreshing the player table having a '!' mark indicates to be looking for matches. Clicking this checkbox toggles the mode. You have to be open too, if you are looking. Thus, the Go server sets you open for matches (no 'X')!</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>setOpenMode</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="text">
+            <string>Open</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Open</string>
+        </property>
+        <property name="toolTip">
+            <string>toggles open for matches</string>
+        </property>
+        <property name="whatsThis">
+            <string>If checked you are open for matches. After refreshing the player table having a 'X' mark indicates to be NOT open for matches. Clicking this checkbox toggles the mode.</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>computerPlay</cstring>
+        </property>
+        <property name="text">
+            <string>Play with program</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Play with program</string>
+        </property>
+        <property name="statusTip">
+            <string>Play with program</string>
+        </property>
+        <property name="whatsThis">
+            <string>Play with a program
+
+Sets a playing session with a pGo program using GTP (like GNUGO)</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+P</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>refreshPlayers</cstring>
+        </property>
+        <property name="text">
+            <string>Refresh players</string>
+        </property>
+        <property name="menuText">
+            <string>Refresh players</string>
+        </property>
+        <property name="toolTip">
+            <string>Get new players table from server</string>
+        </property>
+        <property name="whatsThis">
+            <string>Get new players table from server</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>refreshGames</cstring>
+        </property>
+        <property name="text">
+            <string>Refresh Games</string>
+        </property>
+        <property name="menuText">
+            <string>Refresh Games</string>
+        </property>
+        <property name="toolTip">
+            <string>Get new games table from server</string>
+        </property>
+        <property name="whatsThis">
+            <string>Get new games table from server</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>setQuietMode</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="text">
+            <string>Quiet</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Quiet</string>
+        </property>
+        <property name="toolTip">
+            <string>toggles system messages</string>
+        </property>
+        <property name="whatsThis">
+            <string>If checked then you don't receive system messages, that means you are not informed about connecting/disconnecting players, started/finished games etc. Clicking this checkbox toggles the mode. To be quiet is indicated with a 'Q' in the playertable.
+
+Note : some features cannot work if set to quiet (checked box):
+	- sound when watched players enter/leave
+	- update of player/gamestable</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>Connect</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>false</bool>
+        </property>
+        <property name="on">
+            <bool>false</bool>
+        </property>
+        <property name="enabled">
+            <bool>true</bool>
+        </property>
+        <property name="text">
+            <string>Connect</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Connect</string>
+        </property>
+        <property name="toolTip">
+            <string>Connects to the server</string>
+        </property>
+        <property name="statusTip">
+            <string>Connects to the server</string>
+        </property>
+        <property name="whatsThis">
+            <string>Connects to the server</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>setPreferences</cstring>
+        </property>
+        <property name="text">
+            <string>Preferences</string>
+        </property>
+        <property name="menuText">
+            <string>Preferences</string>
+        </property>
+        <property name="toolTip">
+            <string>Edit the preferences</string>
+        </property>
+        <property name="whatsThis">
+            <string>Preferences
+
+Edit the applications preferences.</string>
+        </property>
+        <property name="accel">
+            <string>Alt+P</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>fileQuit</cstring>
+        </property>
+        <property name="text">
+            <string>Exit</string>
+        </property>
+        <property name="menuText">
+            <string>E&amp;xit</string>
+        </property>
+        <property name="toolTip">
+            <string>Quits the application</string>
+        </property>
+        <property name="whatsThis">
+            <string>Exit
+
+Quits the application.</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+Q</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>fileNewBoard</cstring>
+        </property>
+        <property name="text">
+            <string>New Board 19x19</string>
+        </property>
+        <property name="menuText">
+            <string>New &amp;Board 19x19</string>
+        </property>
+        <property name="toolTip">
+            <string>Creates a new board with size 19x19</string>
+        </property>
+        <property name="whatsThis">
+            <string>New
+
+Creates a new 19x19 board.</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+B</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewToolBar</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="on">
+            <bool>true</bool>
+        </property>
+        <property name="text">
+            <string>ToolBar</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;ToolBar</string>
+        </property>
+        <property name="toolTip">
+            <string>Enables/disables the toolbar</string>
+        </property>
+        <property name="whatsThis">
+            <string>Navigation toolbar
+
+Enables/disables the toolbar.</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editServers</cstring>
+        </property>
+        <property name="text">
+            <string>Edit servers</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Edit servers</string>
+        </property>
+        <property name="whatsThis">
+            <string>Edit servers</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewMenuBar</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="on">
+            <bool>true</bool>
+        </property>
+        <property name="text">
+            <string>Menubar</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Menubar</string>
+        </property>
+        <property name="toolTip">
+            <string>Enables/disables the menubar</string>
+        </property>
+        <property name="accel">
+            <string>F7</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewStatusBar</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="on">
+            <bool>true</bool>
+        </property>
+        <property name="text">
+            <string>Statusbar</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Statusbar</string>
+        </property>
+        <property name="toolTip">
+            <string>Enables/disables the statusbar</string>
+        </property>
+        <property name="whatsThis">
+            <string>Statusbar
+
+Enables/disables the statusbar.</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>helpSoundInfo</cstring>
+        </property>
+        <property name="text">
+            <string>Sound</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Sound</string>
+        </property>
+        <property name="toolTip">
+            <string>Short info on sound availability</string>
+        </property>
+        <property name="whatsThis">
+            <string>Sound Info
+
+Views a message box with a short comment about sound.</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>helpAboutQt</cstring>
+        </property>
+        <property name="text">
+            <string>About Qt</string>
+        </property>
+        <property name="menuText">
+            <string>About &amp;Qt</string>
+        </property>
+        <property name="whatsThis">
+            <string>About Qt
+
+About Qt.</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>fileNew</cstring>
+        </property>
+        <property name="text">
+            <string>New Board</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;New Board</string>
+        </property>
+        <property name="whatsThis">
+            <string>Creates a new board</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+N</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewUserToolBar</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="on">
+            <bool>true</bool>
+        </property>
+        <property name="text">
+            <string>View user toolbar</string>
+        </property>
+        <property name="menuText">
+            <string>View &amp;user toolbar</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>Seek</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="text">
+            <string>Action</string>
+        </property>
+        <property name="menuText">
+            <string>Action</string>
+        </property>
+        <property name="toolTip">
+            <string>Seek game</string>
+        </property>
+        <property name="whatsThis">
+            <string>Seek game
+
+Use this button to 'seek' a game, with the given time settings (popup menu), and handicap range (list beside)
+The server will automatically launch a game against an opponent with matching settings.</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>helpNewVersion</cstring>
+        </property>
+        <property name="text">
+            <string>New version message</string>
+        </property>
+        <property name="toolTip">
+            <string>shows new version message</string>
+        </property>
+        <property name="whatsThis">
+            <string>new version message
+
+displays the message box that appears at launch of a new version</string>
+        </property>
+    </action>
+</actions>
+<images>
+    <image name="image0">
+        <data format="PNG" length="1774">89504e470d0a1a0a0000000d4948445200000020000000200806000000737a7af4000006b5494441545885c596698c5d6519c77fef59eeb9e79c7be7cedae9ccb49d69675abad8da4ca93b6d2008126a5288418da8a83462f8a095264a22027e28698c1a179ab8b436888091a4c188316a48ac71429d4229a5031dbacc4ccbbdb3defddeb39fd70f8421b54be64e9af8fffabe79f27b9fffb3bc62686888ffa794462e37572765eea5e76562eab4bc5e00dab50ea70eec95a6e16376f6e2f915a64b05823866fcc20922919646a685b9e90bacddf503b1580071250bce3ff93dd935b08c5aad42e8f9389e4bb158c4a94758ba41c24c12fb0eba95042541642e458f6718f8f2a30d835c0630f9d43e19252074ea94672b947cc1377ef90c00f192a5fce681fbb9ffdbbb29a9197efae07df4a41524114e2d66a0d565c5b7f637047109c0914777c9d56bd7502bce801f331bb6f1f567fe88953080186444142ba8aa8a0446868f92d0753209c95baf1e67f6c543f86dedf47ee13b0b86982fc2a79f7858ea6182990b59ce1613dcb5efb7ec7ef630e74fbc06c0a9e16140478877638f0c1f65cde016fa376da214478cfdf32f0829b04ac54612f03ec07211531109e299128ffde13076ef1ad0056b070739357c940d5bb72285cf9baf0c03b061eb5674554111312f3ff2302d9e4b547798ca4d517bfec082bb64de82171fdf23d351442a8ec8972b849aced24f6ce781ef3f01691b0f818e408d81c0e1d95f1d64956e52afcf62a82a675efa3361711ac72d326175b373efcf1664c37c1baa519d58c25b33798c40a73d25c99c798dfd9ffe08553744a83a56a685aede7564d6af6373ff2a2cbb8589a3ef70faaf2fa0380542192148d2df9c5e6802de07480a49bee4a04981614a9a3bd2d41c9f406d66e5b6ed684d36b3a7df44d4e660ec1467465f27373a422272893d97645386522e8713aae48b1536360a2032edc4c5f3e8868699082895f3385e48de51085ffd3b95c0a247af92e86ae2dcb9025ea18e1e16a9862eb66d939b2962a8291c60c0587827ce1761b46a3d9666a0681e81a6e24ac954de236de88c4de4c8c45374a4155e3f798ee2f804417d92baef819aa2e62bb89e47ae5e433593783bbed438c02d3b3f2f94b486471255d389239584a1922dd7696d92b4b4d8bc3d59a25a8fd0b41042838a0b938512f992833053245b2ce6366e66cb962d8dcf0180fafa5b300c03c3b4515515c34cb0b4cdc64ca79929b84cd62422a1325b876cb94c1482effbcc792e9eae237ad731f0810f2ff8f59701dc7dcf67c5ecb2cd942a6544529069b288a20081caace3913404e52066ba5cc593920b9532734223d56371d26c47fbe0f6865e0f575946070f3c25a7465fa62d374d53ca60494ac515495429a9f931beef13291a5285ac96c25a623198b1f8504f3f2b3a5254aa25de2915288f4db0eca11f5f13e88a00efe9e9df3d27c7735944758ec8ade14b05436884a6816e37f32959a1bb4bc79ccd62f7dd40aaad03b7e2a3440e86653076fa2ca7df18a57ff5b2ab825c13e05abaf0a33d52940b581b6f62ebce3b993e791c273b4aec38449e4bad52240a34cee7aa14429ff18b530cf6b5b369efc14b40160530fec33d322a16597bdb36a62fe6b1e302193b815bae529eab10f8e0873179d7271406220a98aad4385f8db8bdaf83e58ffd7c1ea2a12f19c0dbfb76cb6611d2d1dd496d6c14dbcd31932b333d9ec70f1c7c19d1fbc87e6efdf561b4a449bbad6227a0abd924adaa9cca5719faee57e79755c300a56ac074de21dd0a8a13e3d73d5adb20ef3a54eb824a4da1b7bb9354770f5b1e7f92bb5f18c28b43e238a6d554383b79115bb5e6e35df34f7825f9b14f4c4ca5e0a10b8823c007d352706368eb4c72e89e3b4013b47de64136dc3888e306188a464ad7491b2655af361fafe10c7498169165512907d4eb1e4953c13214fa1fdacf277ff21ce5aa2469eac49147f8a75ff0fb5b37626a098ca446a5e671637f1719d35c3c402425c7c726a8850aa1a750aa0694cbe1bb69ef5981e3d4d19034db2df8b144d12112218114582993304c905bb27c3e5ec3161cebdbccc7959063e7b22c6f4dd1d36c122725437b3e875373f0025001d72b933432c48acfd46c99eed5cbe84b69e4a280d68fddb6f80cdcfbc5af887fa40658b9b29da6768b232313bc72aec86459e286067e1810858230322849835c0d44aa894e2da4ded5ccc58d375d32ae1b0600d8f5cddde28dae8ff2b782647d7f071b3a5348cbe0e47491ff4ce439922de024d2244d1d4bc0b61db773a8a430d2b286bb76dc71c9206ad882f774dfd7ee15ff1ebe411e1b19213b314e229b67c04eb2249dc143e15f95029eba14ab6d0d63c58028d5c1ce1d775e368e173d8aff57434343329fcfe3791eaaaa62db36274e9c04e0e69bafbe25af1bc062b5a81ab89efa2f98a119ac91787b960000000049454e44ae426082</data>
+    </image>
+    <image name="image1">
+        <data format="XPM.GZ" length="8545">789c3d98c78e24bb8e86f7e7291a47bb83816e78838b5994f7ded76016124995f7be06f3ee57c99f91dd8d063e4821d193ca7ffdf3e77c7fe7cf3ffffaebed3dbcdfd01fba0eaf7ffee18f87879ffff9dffffebfbffeaeaa3ff95fd3b57faabfffebafbfc5ffa13faec87fca38639e73a5ebb437e756f97dcee38ce3386751fe98b8d6efe3745e59ebf76198b8ed67ec9e8daba2d0f3a7f5aa21ddef8ceb52cfe7e9fc1af285fd39e3fedd89bb52d7a7fb9b0af7dd1bb776df247f5b075d7f35ee0abddf4de777e5a0e74df6e81ae8b763dcb7fa7d98ce1b1a5679271eaba4f6be300e95de1f3ee7aceb61b26f68d45eb1308e90573626aee0afb7891bf54798f48f6da3f2bf1853a1f2b8693f95ba1e6a63c6f9b19fb8537b89ed2fb303f4be61ce7a5e9caf7790c7ec57362de43f35367bf3eec4d02ff413772abf5b33eeb1dfdd1a0f26dfb43e1a9f189b7d423771abf2c43363b2fd0fc6a66fd89918fac6497eeed53e34c9279dfa3f4ee7a74efd45c65583fb5c656cf2f3cbc4adda4becfc6a6810afad7168114f161f95e943cf13c39f713a2f769daedf80ebc2f4db9eb8039f1b97268fe95bb7f6fdb4bfef6ae56563b3b75b05b7e6bfb800ee26fbdbfddd647ff34f27c625b8ef8c2f8dcdfecee2bb4fb6be021e4c9f60fe1bac3ec4646ce745319eeebf339eee377dc6c678c97892c7e2334ceb8bc6b6ee102fe5ac2229e3fc32c723fc81f8ac7ab38743fed605976adf807a53677951afe0df66b0f888a8276d595abcbe1bd7adc64780ffda491ff7a8dc1593bf918f5d99b7e87ed4c7aeca47e8fa9572df4ff681bdfba181fc047d86628a8f7de3887aca906728bb46e323dafe5e0ac40ff27f2c7bdccfd027145c431ec44f1cb840fd7d52a66234fb5d83fb60f18efac055d5437ef82b6505b51ec74be354601df64d7d5368fd258db759b5b1f357c15941c8abfa97b1ac4b7caffe2ef3fd15eca1f9594a5d0d905fe3ad2ab845fd8f1a4f55d94ffd4af329673f05d52fdc80b9add0bfb41e54edd054b85ff3a31a0a29b15ffd5311730dd678aa983bd45bd27caf523744ad970ef7272ee19f706d9c6af40fcdcfbaa054a93da2e6535de6f8813c5a2feb8a2bf46777619ce02f527bd57555a33f38b57fdd73c0f94eed5f8f5263bf537bd71c03faa13b074b8578709a5fb5505dabfe4ef3b92979b0feaff23715970dee537b34358fadc65bd0786f8651d02f48e569c668f116599939583ddd9a715bd220d0075c5329c83fcde7b625423d25bdbfed2834b09fd693b697aa413efe2a0f914dde153077767fa33cf298f43cd67ada8658b2da9baec01490cfa4f1d4f2d0a0df388df736f57144fd6d8c65d4fb69133cf401f389f6ebae1aeb16e76bbc747527b05fd804f7b922a97cd89feb4f44fd50ff770df5e8376e112c34605de3b96bfb6c403def4bb9cbe6467e3d82c79cd2babe0e26b27ea2f6e9faa1853de9092c45c2fca1f6e9862ef5e8b79077188600ff617f18ba51d90d1307cc17cf60aa05f3c7c483405ecddf2e0e25f40deaff2e2f47d847e7a78ec7ba433d390687007f04b57f97866644be1dccb82fb23da0afcad7e7f1a3c37d58afb2bf100f3acff5b99de2fba8f6ea9b61e8a1bf9e9fad9907045dd77adb67fb8e88c716cc4352fb45ad1f7ddfe712abf7bd808736c07f3a9ff4439617f3aace23fdd847c81bd7c1631e40d47ed83fd290505fce8db3c594b57ff421c723fac1a7b1c0ff21808730221e349ffad8f7b89fbc7134fb7d1827c8431760921ef6d7fad1d3ec463d1ffa5364c1f71a1f3d670b201f36261e35be49c04389f825d853fa047b45079edb0be7a7fc053881b91bf1ded17c198abe1a30cf6d80b3bfe0bf75f0187accf32f60ea44edc17a5f96a6b17cd6fe948bdd00fb09be6fa330ea0bceef867644fc3d1b0be427ad6f431e2fa0bf3f038bf9d769bd1fc6d48ea8cf1aef030d61507983f6e741020be611cdbf21c5fc859ea7fe1fcb54d8795aefc65afa01f65579c77ea6b1caaffd6b1ca864d58f3b3097a2fe64bd7f1c2909fca5f28e21b6c8ef700ca671c4fb48fd31121584efaf8d19f94f1aff234ff5d1fd8099cc3f384fb8443cb81bb054d05fb41e8522b441ede9b59e842a1764fd5e36c1b120e5a4f7879a7288e9fe536342fd15add7f9b42620de2398c680f7cc2f98fba0f68e87ca1d15980f5c30aec1a2fd34e48017d54f9ec1b99fa07eb131e13cc2f70357b027df180f41eb4702e7fc66c4e393310bee03e77ac9887f01f368f305f489d4413eff681c23fcf105e602f7d3b7726ea741e347201fe71bd14ff6c054431eaff52f4848383f129807eb4fdfc621a83f45e327a4982708fd1ef2256a08f5f507ccd63f9cda3b167124d5cf5f8073bc213f8e268e8827328e01f543fd1dcb2084f7ee2d981ac8e7378dcd1e6e047399606fed07f9715e219edd17986bf41f01d7b18cba2eb57115619fd2b88e2a6f4ac6027bfa13e314510f16c154a37e45e897e7a708fd351e6293230ebf0f7c8373bea9fc5ee7e1fc581e709fdf025307797d3767e8c360b67eec751e8d5db617fc11c1d903b0c786716bfa3d1b0bfccf0d980abbffc97880fc44c623e2215d1913f253cec15c31f4d1f970d67ea2e64bba3516463ee1bc3edfa7f5c11f1b57a62fe41da836fb3e18f7b03fc1de0337847956eb7dbead877d920753857ae2837143781f2d1bb711f9f56d4c58f7902f640dd59ee9ce78000bf6072a713e2f1957b6be0ae692d55e0c7fc51c5fc89f17e31860ef1d6341fe13e227667b207e266eecfb0563c2bc2388973c3e10e2f5d138c25ef203cef1867cbe9a33eaad33ce4f303dffcbb847be33f28db8467d0c382fbf37b09eee8d23fcc1e7c6c9ecb33867e41bea03e7fb61af3467c4d3f59c61bff93a6b3d90d13857045d5f31b6fee67b63813c740966427c30f243b285305f7d1927e813209fe4fe03fb16c6b9e5e9f9ad7140fd89df135b7dd07a9babc388f8a54f6332fdca39a33f7ecc19f34c6b6cf5367e4d8cfce10be384f3f86cce6a2f0ff9538e6fd80ffe4e5ca3df789dcf72f659bef86be301faf182b158bcd09cd1af7f8d13ec4f077346be0470fe8bf75e3426d8930e8d19f225cd0f2a7386e1f7f0a339c3bfa7c656dfe4c038597cdfcc19dfcb9c51ef07f04c03d5f7c7d8f23706e306f52c41de2a9a7c0c79aa295f9c372e2dde0f27467ca627e30af7fb5fe31af5ce7d1ab7960f5a5ff26a8b79867f8dc5bedf056789306f0463ab677e34ee09f311fcd7e488c6fecb89612f7e344e981f23ecd964f9d57eacf536675340fcf21a380ea8570cfbb6f37c8dc615ce23c8dfe50e83f8393666f3e7c99c553eb93516bbef67ceb04f6f9c50afe978ce988f1d38df8ffab06d5c33fa8f18b7982744eb35f539be305f7c1b33ee17e83feb4ff0ef9d7169df57c6ade5d38171b075d8b7e702f9cd90778853fd298c19fa08cf19f777c6f65e96fd39e3fd5883733c40bf07e31ef779c4d798e71bd4936570de8f7ab663dc33f249eb77ae6664fde8159c3d8edf0f7e8c3bf30f195b3ff6fa3ec9edc6defb09ebb3fe85feabf52777578b2f39316e910fbc6adc411f0fffe5e9c2ea37e27956ff910f6fc615d63de2275bcbf4d7df4b295703d42f3a316e2cdf1a63c17982fa92d8f2db6b3dced3f560fa25700c78bf7a368e566fdec14498ef59eb3b67eba35f7305ce1509dfd7c6b5f59b23e30ef1ea578c47413ced81b9c03aabbdb99a65acae2f1adbfc289a0f5ce7f71fe63db56f9e962c1fbce633b7791e41bf807c5df627ea23beefa7f798bf371e2d5e35be38f080df0718ebf3f7a3d77ccbedb6c67bc45f82d9de3b5ef389659a4f0fd47e921fa8583f78f7ce071f3d79f6e293bff2d7fec6dffa3b7fef1ffca37ff2cffec5bffa37ff0e7ff94fffe5bffd8ffff50b7ed12ff965bfe257fd9a5ff71b7ed36ff96dbfe377fd9edf47befa437fe48ffd893ff567fedc5ff84b5ff8d257bef68d6f7de77b3ff8d179e7b45e07171d3976e292bb72d7eec6ddba3b77ef1edca37b72cfeec5bdba37f7ee3edca7eeff72dfeec7fdba05b7e896dcb25b71ab6ecdadbb0db7e9b6dcb6db71bb6ecfedbb0377a8fb8fdcb13b71a7eecc9dbb0b77e90a57bacad5ae71adeb5cef86fc58f721bf1031efe77733ebebed2a5c879b701beec27d78088fe1293c8797f01adec27bf8089fe12b7cebfe9ff01b16c262580acb79ef725809ab612dac878db019b6c276d809bb612fec87837088780cc7e1249ce6bd67e13c5c84cbfc762ff37bbdce2fee36e457e9eca7a7e8a383fff2e44ab35a9ee3fd2a5ec79b781befe27d7c888ff1293ec797f81adfe27bfc889ff10bf352fc89bf71212ec6a5b81c57f257ab712daec78db819b7e276dc89bb712fefdf8f07baff301ec5e378124fe3593c8f17f1d2553976cad93c1d9bfcaae9f22433e4f9dd93fa2b57a63c4ad16cfe4b7445d77443b77447f7f4408ff444cff442aff446eff441ea2ffaa26ffaa15f5aa0455aa2655aa1555aa375daa04ddaa26ddaa1ddf04e7bb44f07985fe8888ee9844ee98ccee9822e73e497b3fe3e7b11d32c8f863c2b7a76f6fecfa3688e7ee1c4577ccd377ccb777ccf0ffcc84ffccc2ffcca6ffcce1ffcc95fe847fcc3bfbcc08bbcc4cbbcc2abbcc6ebbcc19bbcc5dbbcc3bbbcc7fb7cc0877c84fec2277cca677cce177c99ab44aeb379d66b38bf1039cfb03c8a1727218f03a87fcc3f2292e44aaee5466ee54eeee5411ee5499ee5455ee54ddef3ee0ff914c853e43d3779ffb7fcc8af2cc8a22cc9b2acc8aaacc9ba6cc8a66cc9b6ecc8aeeca15fd1b11cc861deff9dff3f902339961339953339970bb994424aa9a49606f5433ae9659031e5544f2e85d9209b38494ae92a5da79b749beed27d7a488fe9e9effffff75fff01a2ffea4f</data>
+    </image>
+    <image name="image2">
+        <data format="PNG" length="1542">89504e470d0a1a0a0000000d4948445200000020000000200806000000737a7af4000005cd494441545885ed975d6c1c571580bf3bfbeb5d7b77e3d851ac94e0a69884005520128a1028ce4384044ab1149588e5214e255b8d096a55e440238151a9ca3f2a88ba91c20b2ad0aa8084a894071421f3405003c18d1a519346786da78db3b137b3fff37b0f0f6b8fbdac3771296f70a4d1dc9f73cff9eeb9678eeea88b172ff24e64647c5200f60ceca42b996c9abb3e7b833bc532e7be37a6366b2fbc59c5d34fbf209f38f0203f7df6ab7ceca37b0010406b693414840cc51b6fcef1d7e919f9cd2b7fe4c95343f70451f78ac0c8f8a41c1b3ac4e82347482593a004bbee6118065a6bc2e110c6ba6d8848f07ef1d717f8f9cb7fe0db67bed016e4ae005ffada59797cec731cf9f4c7410411411ad6f17d41c4271c0aa1d1a815a7826e0299b9b6c08f9ffb1d4f8c1ed910a22dc0a9af3f2fdf7cfaf3ecdffbe1c0a0a0a9975d6a1517cf836457847892c0b946af8106c09a9bf9b77972e205be7bfa8b2d101be6c0c8f8a49c3c7d800f0eeca2ee54f03dcde24219bbeee1397a8d3eafd8b9bb03ad7593532d7e53bf33d9c1b1ec008f9ef9919c7de6b126880d01f60fa6d83dd08b592a91bf51a6b854c7f3c0506084a32823846184d9b2dda7542be0bb0286466b1d1c8f526bb920c0033bef67e79e575b7cb5003cf6d4a43c3cb615edc0e5bfddc0b5ea088a503846381c4529078050d4a553bb98159fe22d4dbc5363d70c421121121342a19568004a838822d3779347cffc40ce3ef365d51660ff60074bb7cacc984b58b743a0c2c4125de0798007c096ed165dbd552a8e80034652b07d20aaf04470adb5dd03886eb43dc767fbfde5f61118199f9487463d2ebca4e9df71855d7def23964853f72a814e775f0d2359a65c1564251d82f3d68d92209a9639b3b484e308f1e43223e393b25aac9a00a21d0ecb790bc78a72f9cf6fb2ed33efc715ab8958a2158cce227ad5a1084a044405fdd507518d63d0f08fdc553cd7478c1a46d46c9303ca2114bbcd81cf6acc25987deb4f6ceb7c1025b140e58ea9709426992e36ef7cc5915add393a8844be502077bd40478a46a2aee4510b405fbf8bebba8886644ae848cc136289f957074874f660841aeae6e5285d5b21146a7c7edd3b4acd202b6da5e14e7999a5428148cc27f7fa2eb6bdf726f184bd3180af359edd481cad35da175c2911ddf13a0b6f64e84cec221c8e02502cc683750e0bc4927e1384e338546a250a6f27c8bf1527d323f4deb74879b91311dd06c0133cd7c72a86b0ebeb0dd649f53a2cfcdda633d583611828b5564ffc7f3ac4532b51f0349eefa2b5c675e2dcbade81a82a1165a3bc08f5f21690541b005fe3393e33bff7181b1ba345065b87ee299f6abc4cd3e4172ffd16ba524dd34d00665eb3a5af7104a3a3a35856e30b989b9bfb0f3c432693219d4e0370edda355efcd52f89a7a7a9153f12e818eb173cf78da7946f3586b4d6d8b68d6ddb5cbd7a95783ccee2e2228b8b8bc4e371e2f138966531333313f457c7567580c046b55a05e5e2381d4d1796964a78fbc656e076904800ddddddcccfcf73f4e85100a6a7a7e9efefe7d0a143e47239868787999898606a6a8a13274e609a26b3b3b384c3612a9546115bb5e5d47a9afc354500a0b8b4358880e338c1c25c2e17e84c4d4d018d73cde57298a619e898a64926932197cbe1fb7e60c3b22cb497c650cd002d1138f79d27d4e8e8a8ac8f00c0d0d01073737398a6c9f0f03000c78f1f6768688883070f02303838c8c4c40457ae5c61dfbe7d140a85c0866ddb20bae5bed8f64eb81e607517274f9e04209fcf0390cd6603fd7c3e4f2291209bcd92cd66c9e7f3d46ab52600f56f65fdae00a552894b972e05fdf3e7cfb753dd9454abd50dc7db021c3e7cf85d39dcacdcf3560cf0fccf2e088687d6269edc647bcf5ea29108dd99fbf0bc1a22422c92c6765d6a758b52a9c29d52955adde22b630fddf56abe298055f9feb99f88e5e459367380d7548e458474d77b48753c4026f5011e39f6c94dfd9cbc2380f5f2ad677f281fdabb1b88f0da6b7fa1ab37cde3274e6dfa8fe85d03fcb7a4a510fd1fe07f0ee05f18b377fbda81bb9f0000000049454e44ae426082</data>
+    </image>
+    <image name="image3">
+        <data format="PNG" length="1002">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000003b149444154388dad945f4c5b551cc73fe7dc4b7b4bcba0762d45c43114323599ee6192609c51d883892ce083f1718b3ebb185f8dc91e972cf39d2d2a2f1af664b6f1e0fe3863a0718969700eb0c52142da0242a1bd6d696f7bcff101585203ceb8fd9ece39f99dcff9fe7edf939f88c562ec465f5f9fe609442c161362173c3e3eae7b7a7ac8e7f36432196cdbfe4f907c3e4f2291201e8fe338cec3737357e9e8e828aded1e229d650e1f2d51754b082110124c13a4dc5ea341eb9dc284c0558a853f3ce8cb0677ef500fde7d39d2596679e326597b8e9abb85d7a770ab16ab6983ec5a05b487a70e36f0f4e10afe408d6a558310980108478dba4a1e8233990c5d474b64ed39aa3a8fe5f3317fbf81dbd70bccfeb205947632fd74f6589c1c6ea2f70d03a58ba0c1f2c9bdc1b66de3b8256a6e11cbe7e3ee1d181b590124fe2693aeee08d223c82c3a2c24b7b874bec8f26288774f7bd054504aef0dde6e99c0eb83f9fb266323cb80a27fb0958141836044605a2ee5523393371cc646fee2da37195aa35d0c0c5b4859ac03d7e91712dcaac5adab3650a3ff9d08ef7dd8404bb48869e5d958b5b87dadc4c9a1464e9f0d0326df7ebd86bd2e310cb1bf62d384d59441f2d70a070e1c60e09489929b988681bdd9cc97170bcc4c65595f71f8e0e3301337fc24a7732467831875a47f289652b0be5e4151e6d07316c1b0c0340d8ab92023e76d66a6b2840e36d2fb7a13fee632475e6edc367ea98a90fb98b7dd6310ca0328a44761582e1bab41befabcc0ec940d28bc5e93b68e064cab84e1d9beaeb48934eac1f53b01c1b000fca496aa54b61a99fcde61662a4b4b4b23d1680be9d426173e4df3602a48ea411989a4fd590f52a8fd156b05ed9d350e3defe3cfdf4b4c7ce770ea7d3fb9f520afbe1620daeee5c26735d20b9b9cfb6811a754a439e4e5c5639a4caa1e5caf586bfc0197b78702005cb9b4cae4cd3267ce8638fe964bd72b393e39d74928d242617303a756a37f284447770dcdbffc6384a05a85de1306e9a52057c7527c7131c3c42d3f475eb2303c82d4fc3276d6811db37efeb148723082d9b08f79f97c1e5729109a9a28307cc622d2d6cdf52b2b24efe548dedb00142009862cfa879ee1a71f6cec928353511472fbf4389148b0b0e0c108081412458dfe21c9f11351e67e7358595468246d1d1e5e38a6e9e851bc39d84ab502a669331dafec0d8ec7e3e8cb06e1a881d727d1ae40180a434a8c9db129a54126ad48a7358c2b4c5352c8c374bcccdab2bb37d8719cba79fab8211f9df218e0582c261e95f8bfc04f1a1e8bc5c4dfe0a190172af6a9690000000049454e44ae426082</data>
+    </image>
+</images>
+<connections>
+    <connection>
+        <sender>setQuietMode</sender>
+        <signal>activated()</signal>
+        <receiver>ClientWindowGui</receiver>
+        <slot>slot_cbquiet()</slot>
+    </connection>
+    <connection>
+        <sender>setOpenMode</sender>
+        <signal>activated()</signal>
+        <receiver>ClientWindowGui</receiver>
+        <slot>slot_cbopen()</slot>
+    </connection>
+    <connection>
+        <sender>setLookingMode</sender>
+        <signal>activated()</signal>
+        <receiver>ClientWindowGui</receiver>
+        <slot>slot_cblooking()</slot>
+    </connection>
+    <connection>
+        <sender>refreshGames</sender>
+        <signal>activated()</signal>
+        <receiver>ClientWindowGui</receiver>
+        <slot>slot_pbrefreshgames()</slot>
+    </connection>
+    <connection>
+        <sender>refreshPlayers</sender>
+        <signal>activated()</signal>
+        <receiver>ClientWindowGui</receiver>
+        <slot>slot_pbrefreshplayers()</slot>
+    </connection>
+    <connection>
+        <sender>pb_releaseTalkTabs</sender>
+        <signal>clicked()</signal>
+        <receiver>ClientWindowGui</receiver>
+        <slot>slot_pbRelTabs()</slot>
+    </connection>
+    <connection>
+        <sender>RoomList</sender>
+        <signal>doubleClicked(QListBoxItem*)</signal>
+        <receiver>ClientWindowGui</receiver>
+        <slot>slot_RoomListClicked(QListBoxItem*)</slot>
+    </connection>
+    <connection>
+        <sender>LeaveRoomButton</sender>
+        <signal>clicked()</signal>
+        <receiver>ClientWindowGui</receiver>
+        <slot>slot_leaveRoom()</slot>
+    </connection>
+    <connection>
+        <sender>cb_connect</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>ClientWindowGui</receiver>
+        <slot>slot_cbconnect(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>toolConnect</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>ClientWindowGui</receiver>
+        <slot>slot_connect(bool)</slot>
+    </connection>
+    <connection>
+        <sender>toolSeek</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>ClientWindowGui</receiver>
+        <slot>slot_seek(bool)</slot>
+    </connection>
+</connections>
+<slots>
+    <slot>slot_cbquiet()</slot>
+    <slot>slot_cbopen()</slot>
+    <slot>slot_cblooking()</slot>
+    <slot>slot_pbrefreshgames()</slot>
+    <slot>slot_pbrefreshplayers()</slot>
+    <slot>slot_pbuser1()</slot>
+    <slot>slot_pbuser2()</slot>
+    <slot>slot_pbuser3()</slot>
+    <slot>slot_pbuser4()</slot>
+    <slot>slot_pbRelTabs()</slot>
+    <slot>slot_RoomListClicked(QListBoxItem *qli)</slot>
+    <slot>slot_leaveRoom()</slot>
+    <slot>slot_cbconnect(const QString&amp;)</slot>
+    <slot>slot_connect(bool)</slot>
+    <slot>slot_seek(bool)</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>playertable.h</includehint>
+    <includehint>gamestable.h</includehint>
+</includehints>
+</UI>

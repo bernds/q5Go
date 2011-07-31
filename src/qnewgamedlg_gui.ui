@@ -1,0 +1,589 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>QNewGameDlgGui</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>QNewGameDlgGui</cstring>
+    </property>
+    <property name="enabled">
+        <bool>true</bool>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>400</width>
+            <height>375</height>
+        </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>5</hsizetype>
+            <vsizetype>5</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>400</width>
+            <height>375</height>
+        </size>
+    </property>
+    <property name="caption">
+        <string>Computer Game</string>
+    </property>
+    <property name="sizeGripEnabled">
+        <bool>true</bool>
+    </property>
+    <property name="modal">
+        <bool>false</bool>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QGroupBox" row="2" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>IGSgroup_box_2</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="title">
+                <string>Load game</string>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLineEdit">
+                    <property name="name">
+                        <cstring>_LineEdit_GameToLoad</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QToolButton">
+                    <property name="name">
+                        <cstring>_FilePathButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="iconSet">
+                        <iconset>image0</iconset>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QGroupBox" row="0" column="1">
+            <property name="name">
+                <cstring>groupBox1_2</cstring>
+            </property>
+            <property name="title">
+                <string>Black Player</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel" row="2" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>textLabel1_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Computer Level</string>
+                    </property>
+                </widget>
+                <widget class="QSpinBox" row="2" column="2">
+                    <property name="name">
+                        <cstring>_BlackLevelSpinBox</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="maxValue">
+                        <number>10</number>
+                    </property>
+                    <property name="value">
+                        <number>10</number>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Name</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>pixmapLabel2</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="pixmap">
+                        <pixmap>image1</pixmap>
+                    </property>
+                    <property name="scaledContents">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="1" column="1" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>_BlackPlayerLineEdit</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>5</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                </widget>
+                <widget class="QComboBox" row="0" column="1" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>_BlackTypeComboBox</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>5</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QGroupBox" row="1" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>groupBox4</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="title">
+                <string>New Game</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLayoutWidget" row="0" column="0">
+                    <property name="name">
+                        <cstring>Layout10</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <property name="spacing">
+                            <number>6</number>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>TextLabel3</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Board size:</string>
+                            </property>
+                        </widget>
+                        <widget class="QSpinBox">
+                            <property name="name">
+                                <cstring>_SizeSpinBox</cstring>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>60</width>
+                                    <height>32767</height>
+                                </size>
+                            </property>
+                            <property name="maxValue">
+                                <number>36</number>
+                            </property>
+                            <property name="minValue">
+                                <number>4</number>
+                            </property>
+                            <property name="value">
+                                <number>19</number>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QLayoutWidget" row="2" column="0">
+                    <property name="name">
+                        <cstring>Layout14</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <property name="spacing">
+                            <number>6</number>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>TextLabel5</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Handicap:</string>
+                            </property>
+                        </widget>
+                        <widget class="QSpinBox">
+                            <property name="name">
+                                <cstring>_HandicapSpinBox</cstring>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>60</width>
+                                    <height>32767</height>
+                                </size>
+                            </property>
+                            <property name="maxValue">
+                                <number>13</number>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QLayoutWidget" row="1" column="0">
+                    <property name="name">
+                        <cstring>Layout15</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <property name="spacing">
+                            <number>6</number>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>TextLabel4</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Komi:</string>
+                            </property>
+                        </widget>
+                        <widget class="KomiSpinBox">
+                            <property name="name">
+                                <cstring>komiSpin</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>20</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>60</width>
+                                    <height>32767</height>
+                                </size>
+                            </property>
+                            <property name="focusPolicy">
+                                <enum>StrongFocus</enum>
+                            </property>
+                            <property name="acceptDrops">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QCheckBox" row="0" column="1">
+                    <property name="name">
+                        <cstring>_oneColorGoCheckbox</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>true</bool>
+                    </property>
+                    <property name="text">
+                        <string>One Color Go</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QGroupBox" row="0" column="0">
+            <property name="name">
+                <cstring>groupBox1_2_2</cstring>
+            </property>
+            <property name="title">
+                <string>White Player</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QSpinBox" row="2" column="2">
+                    <property name="name">
+                        <cstring>_WhiteLevelSpinBox</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="maxValue">
+                        <number>10</number>
+                    </property>
+                    <property name="value">
+                        <number>10</number>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>textLabel1_2_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Computer Level</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>textLabel1_3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Name</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="1" column="1" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>_WhitePlayerLineEdit</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>5</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                </widget>
+                <widget class="QComboBox" row="0" column="1" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>_WhiteTypeComboBox</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>5</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>pixmapLabel2_2</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="pixmap">
+                        <pixmap>image2</pixmap>
+                    </property>
+                    <property name="scaledContents">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <spacer row="3" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>spacer3</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QLayoutWidget" row="4" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>Layout1</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <spacer>
+                    <property name="name">
+                        <cstring>Horizontal Spacing2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>224</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>_OkPushButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;OK</string>
+                    </property>
+                    <property name="accel">
+                        <string></string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                    <property name="default">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>_CancelPushButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Cancel</string>
+                    </property>
+                    <property name="accel">
+                        <string></string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+    </grid>
+</widget>
+<customwidgets>
+    <customwidget>
+        <class>KomiSpinBox</class>
+        <header location="global">komispinbox.h</header>
+        <sizehint>
+            <width>-1</width>
+            <height>-1</height>
+        </sizehint>
+        <container>0</container>
+        <sizepolicy>
+            <hordata>1</hordata>
+            <verdata>0</verdata>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+        <pixmap>image3</pixmap>
+    </customwidget>
+</customwidgets>
+<images>
+    <image name="image0">
+        <data format="PNG" length="528">89504e470d0a1a0a0000000d49484452000000100000001008060000001ff3ff61000001d749444154789c9592cf6b134114c73fb3596942f0e4a9a820782fa81564ff010f4251a87f802014851ef4a487dc44bc445021e2c18bb420edd1e420de8a2c543d466cf6644e628318bad9ceee647e7868b24de246f0c1637833f33eeffbe68d08c390220b82c04dc661188aa27bdebf922793822070e3fd49b898551004812baa364fd15f0ae649fdaf168a6c56c1d84418863c59bf3975f8e0c57661b542c0caa5d3eee5fd6b2c2e2dc3418f1fdfbbdc79da9a9b300bf7011697967107bf10c6706a41b3f5f0ea5c4079e6917d00923ec20cb97eef1527ce5e04c0f33c16ca655229f31860f5c6cad47b1c01544af8f10bfe990bbcd97c0b809492344d739752926519699a72ebf61ad65a6ab5da08003cdefeccb3ad1df6f77f52a954b0d6301c2a0e0f139224218ee3dc078301ad568b46a3217c80f71f76a89cbb8c730ead355996e56b966528a5d05aa3b506a0dd6ed3e9748e5b78feaecda3d72dfafddf54ab55945218a3516a98b73286254942b7db65636353e48093e7af2084603088512ac3f34a1863d05ae70029255a6ba2286277f7d3f418d7eeaeb3b7f70ddf2f512a951042608c456b8d526ad4c69182288a68369bc763fcda2f53afd701371a95001cce39acb5186331c660ad218e637abdded4bff80385c5209b1bcbdd470000000049454e44ae426082</data>
+    </image>
+    <image name="image1">
+        <data format="PNG" length="426">89504e470d0a1a0a0000000d49484452000000100000001008060000001ff3ff610000017149444154789c9593bdaee23010853fc74ea4a0082908e99669788ad0d2d3d1c2bb22e559f8090d5242b063cf6d2ed95d4876b5479a66e43973cee8585555c518b6dbad3c9f4facb538e7381e8f6aec9d796f1c0e0701c8b20cad35002104d6ebb588085555a95182fd7e2f699ab2582cd05ae39ce37ebf03d0f73d7ddf2322946529c0403410c471cc7c3e27cf7366b319de7beaba268440d775586b09217c58880076bb9d68ad49d394e572495114ac562b8aa220cf73922441a93f4ff0526200bcf7841088a288344df9fafa22cb32e238e6743a61ccc7a97e29d86c3662ade5f178d0340d6ddbe29cc318439224c31145e463b82c4b31ce39945268ada9eb7a907bbd5ea9eb9acbe542dbb678ef471518ef3dd65a4404ef3d5dd771bbdd489284a669389fcfb46d3baa004001a294228a22b4d6186306cfce39acb593db01f849a2bc4a2935d4effdb1aaaaea33895352a710fda818cdf9dff09a89fe77f01deafd37be12f6afcd930453445336bf01665ecbb8fbf38b2c0000000049454e44ae426082</data>
+    </image>
+    <image name="image2">
+        <data format="PNG" length="499">89504e470d0a1a0a0000000d49484452000000100000001008060000001ff3ff61000001ba49444154789c6d934b4e04310c449f9d301ff53412bfc570ffb3701256ec108dd29dc4318b21d10c22bb44e5b25d5591b7b737fe3b8f8f8f6e668808dbb6915292ff70f1efc3ebebab8b5cb0dbb6d15a4355399d4e5e4a61db36f997609a26bfbfbf2784c0b66d74120077bf8063c4dd3da544084100b483e67946557b3742089819ee4e8c113323e70cc0e17018e40a703a9d3ce78c9931cf334f4f4fbcbcbcb0dbed28a5e0eeb83b664629859c33a5141f0421040044849c33aacaf1781c53991921045415774755d9ed7697b544c4bb50ebba526be5eeee8efd7ecff7f737ad354a29c41869ade1ee880866c6e7e7a7c7e3f148ad7530d75a797f7f2784c0b22c8808adb5216cad754c7c381c882925e679c6cc68add15a1b84fdde35b816b493e9baaeb4d60821506ba5948299016066d45a87855da78e5d9605ddeff7d28b6aad43a8aefeaff7c3c26becf97c16ed89eb1af4d0a82aadb59bd54a29376e5d0749524aa8ea48601fb577ed5ad45a59d795878707b989b2bb4b4ac955959c33218441d6adeb8e4cd334723ea2fcdb559665193be79c69ad1163a494c2d7d7d74df1cd04579f4a003e3e3ebca7add6caf3f3b34cd3f417ce0f61624e5ed85852040000000049454e44ae426082</data>
+    </image>
+    <image name="image3">
+        <data format="PNG" length="256">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000000c749444154789cad55db1184200c4c180bb81a28c73aad811228c356f42b3792db3cc0db2fc724bb7901dc7b270f27ed17fa5fa9b117b7cd90211f4ba0ac906a7f1453b4d30ca917bb590681552af23f69bfc4ffa71519d2c8f62546ea5ea03738b1c18c33a4d156f0d13f43b61952e4af6d6e8fb3a408f080448419a433d6486d85052fdba892a295f5d45785cd8c51a9d6de6a814a8d2131da51f98e7a3b64ec9da04a8db53d43be3c3c0b22cacf17e4cdb5a931649ceddf34b190cf0aa019f03f1fd3e7457f03b5a66c9e1f13d0b20000000049454e44ae426082</data>
+    </image>
+</images>
+<connections>
+    <connection>
+        <sender>_OkPushButton</sender>
+        <signal>clicked()</signal>
+        <receiver>QNewGameDlgGui</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>_CancelPushButton</sender>
+        <signal>clicked()</signal>
+        <receiver>QNewGameDlgGui</receiver>
+        <slot>reject()</slot>
+    </connection>
+    <connection>
+        <sender>_FilePathButton</sender>
+        <signal>clicked()</signal>
+        <receiver>QNewGameDlgGui</receiver>
+        <slot>slotGetFileName()</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>_WhiteTypeComboBox</tabstop>
+    <tabstop>_WhitePlayerLineEdit</tabstop>
+    <tabstop>_WhiteLevelSpinBox</tabstop>
+    <tabstop>_BlackTypeComboBox</tabstop>
+    <tabstop>_BlackPlayerLineEdit</tabstop>
+    <tabstop>_BlackLevelSpinBox</tabstop>
+    <tabstop>_SizeSpinBox</tabstop>
+    <tabstop>komiSpin</tabstop>
+    <tabstop>_HandicapSpinBox</tabstop>
+    <tabstop>_oneColorGoCheckbox</tabstop>
+    <tabstop>_LineEdit_GameToLoad</tabstop>
+    <tabstop>_OkPushButton</tabstop>
+    <tabstop>_CancelPushButton</tabstop>
+</tabstops>
+<slots>
+    <slot>slotGetFileName()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>komispinbox.h</includehint>
+</includehints>
+</UI>

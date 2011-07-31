@@ -1,0 +1,1370 @@
+<?xml version='1.0'?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+"docbook/docbookx.dtd">
+<book>
+  <bookinfo>
+	<title>qGo</title>
+
+	<copyright>
+	  <year>2001-2003</year>
+
+	  <holder>Peter Strempel, Johannes Mesa, Emmanuel Beranger, Marin Ferecatu</holder>
+	</copyright>
+  </bookinfo>
+
+<!-- Preface -->
+  <preface>
+	<title>Introduction</title>
+
+	<para>qGo is a Go client and
+	<link linkend="sgf">SGF</link>
+
+	editor written with the Qt library, available for Linux,
+	Windows and Mac OS X.</para>
+
+	<para>Go is an ancient boardgame, very common in Japan, China
+	and Korea.</para>
+
+	<para>qGo can support translations. Check in the preferences
+	dialog if your language is available. If not, you might
+	consider translating qGo to your language. Read more about
+	<link linkend="language">translations</link>
+
+	in the preferences chapter.</para>
+
+	<para>This manual describes the basic usage of qGo.</para>
+
+	<note>
+	  <para>It is currently in progress and anything from
+	  finished. Please be patient.</para>
+	</note>
+  </preface>
+
+<!-- Chapter Installation -->
+  <chapter>
+	<title>Installation</title>
+
+<!-- Section: Installing -->
+	<section>
+	  <title>Installing</title>
+
+	  <section>
+		<title>Linux</title>
+
+		<para>The easiest way to install qGo on Linux is to get
+		the binary packages from the qGo webpage. Depending on
+		your distribution, that are the rpm or deb
+		packages.</para>
+
+		<itemizedlist>
+		  <listitem>
+			<para>To install the rpm, login as root and type:
+			<userinput>rpm -i
+			qgo-(version)-1.i386.rpm</userinput>
+			</para>
+		  </listitem>
+
+		  <listitem>
+			<para>On a Debian system, you would do:
+			<userinput>dpkg -i
+			qgo_(version)-1_i386.deb</userinput>
+			</para>
+		  </listitem>
+
+		  <listitem>
+			<para>To install as shell package, type:
+			<userinput>sh
+			qgo_(version)-1_i386.sh</userinput>
+			</para>
+		  </listitem>
+		</itemizedlist>
+
+
+		<note>
+		<para>You must have installed the most recent version of Qt to make the binaries work reliable.
+		</para>
+		</note>
+	  </section>
+
+	  <section>
+		<title>Windows</title>
+
+		<para>Installing qGo on Windows is easy.</para>
+
+		<para>Download the windows installation package from the
+		qGo webpage:
+		<filename>qgo-(version)-win.exe</filename>
+
+		.</para>
+
+		<para>Simple double-click on this executable file and the
+		normal windows installation process will start, dialogs
+		will guide you through the installation. qGo will by
+		default be installed in the directory
+		<filename class="directory">C:\Program
+		Files\qGo\</filename>
+
+		.</para>
+
+		<para>To run qGo, select the link from the start
+		menu.</para>
+
+		<tip>
+		  <para>If you already have qGo installed on your
+		  computer, you can download the smaller update package:
+		  <filename>qgo-(version)-winupdate.exe</filename>
+
+		  .</para>
+
+		  <para>This file is much smaller, as it does not contain
+		  the qt library. You can simply install this package
+		  over an existing qGo installation, just make sure you
+		  choose the same installation directory. The qt library
+		  file will stay.</para>
+
+		  <para>This update package is provided to save people
+		  with a slow internet connection some download
+		  time.</para>
+		</tip>
+	  </section>
+
+	  <section>
+		<title>Mac OS X</title>
+
+		<para>Compiling qGo on Mac OS X is a task that requires experience in
+		a Unix software development environment.</para>
+
+		<para>The system requirements for compiling qGo on Mac OS X follow.
+		Older versions of the listed components might work, but are untested
+		on this platform.  Newer but compatible versions are likely to
+		work.</para>
+
+		<itemizedlist>
+			<listitem><ulink url="http://www.apple.com/macosx/">OS X</ulink>
+			10.4</listitem>
+
+			<listitem><ulink
+			url="http://developer.apple.com/tools/xcode/">Xcode</ulink>
+			2.2</listitem>
+
+			<listitem>GCC 4.0.1 (included with Xcode) <tip>Run
+			<userinput>sudo gcc_select 4.0</userinput> if your system
+			<filename>gcc</filename> is set to be GCC 3.3.</tip></listitem>
+
+			<listitem><ulink
+			url="http://www.trolltech.com/products/qt/">Qt</ulink> 3.3.5
+			(but not Qt 4), preferably staticly linked.
+			
+				<tip>You may need to run <filename>ranlib</filename> on
+				<filename>libqt-mt.a</filename> after compilation and
+				installation of Qt.</tip>
+
+				<tip>Qt and qGo must be compiled with the same version of
+				GCC.</tip>
+			
+			</listitem>
+
+			<listitem><ulink url="http://rake.rubyforge.org">Rake</ulink>
+			0.6.2</listitem>
+
+			<listitem><ulink url="http://www.gnu.org/software/gnugo/">GNU
+			Go</ulink></listitem>
+
+			<listitem>The qGo source distribution</listitem>
+		</itemizedlist>
+
+		<para>After expanding the qGo source distribution, and entering the
+		created folder in a shell, follow these steps and run these commands
+		to compile qGo:</para>
+
+		<itemizedlist>
+		
+			<listitem>Run <userinput>cd &lt;path to your unpacked qGo
+			sources&gt;/src</userinput></listitem>
+
+			<listitem>Edit <filename>mac/Rakefile</filename>, correcting the
+			<token>GNUGO</token> and <token>QTDIR</token> varaibles to
+			reference correctly where you installed GNU Go and Qt,
+			respectively.</listitem>
+
+			<listitem>Run <userinput>rake -f mac/Rakefile</userinput></listitem>
+		</itemizedlist>
+
+		<para>At the conclusion of the Rake processing, qGo.app should be
+		created and ready to run.</para>
+
+	  </section>
+	</section>
+
+	<section>
+	  <title>Source codes</title>
+
+	  <para>If you want to compile qGo on Windows (as well as
+	  Linux or Mac) yourself, get the tmake package from the
+	  download page. For further information please refer to the
+	  Qt and tmake documentation. You need to have either the
+	  non-commercial Qt package or a commercial Version and
+	  Visual Studio installed on your system.</para>
+
+	  <para>To compile go to the src directory and type</para>
+
+	  <para>for Qt version 2.3:</para>
+
+	  <itemizedlist>
+		<listitem>
+		  <para>
+			<userinput>tmake -o Makefile main.pro</userinput>
+		  </para>
+		</listitem>
+
+		<listitem>
+		  <para>
+			<userinput>nmake</userinput>
+		  </para>
+		</listitem>
+	  </itemizedlist>
+
+	  <para>for Qt version 3.0 and above:</para>
+
+	  <itemizedlist>
+		<listitem>
+		  <para>
+			<userinput>qmake -o Makefile qgo.pro</userinput>
+		  </para>
+		</listitem>
+
+		<listitem>
+		  <para>
+			<userinput>nmake</userinput>
+		  </para>
+		</listitem>
+	  </itemizedlist>
+
+	  <para>On Unix use
+	  <userinput>make</userinput>
+
+	  instead of
+	  <userinput>nmake</userinput>
+	  </para>
+
+	  <para>If you want to work with Visual C++ IDE, you may use
+	  either the file
+	  <userinput>qgo23.dsw</userinput>
+
+	  (Qt 2.3) or
+	  <userinput>qgo.dsw</userinput>
+
+	  (Qt 3.x) and create a corresponding
+	  <userinput>.dsp</userinput>
+
+	  file using the command</para>
+
+	  <para>for Qt version 2.3:</para>
+
+	  <itemizedlist>
+		<listitem>
+		  <para>
+			<userinput>tmake -t vcapp -o qgo23.dsp
+			qgo23.pro</userinput>
+		  </para>
+		</listitem>
+	  </itemizedlist>
+
+	  <para>for Qt version 3.x:</para>
+
+	  <itemizedlist>
+		<listitem>
+		  <para>
+			<userinput>qmake -t vcapp -o qgo.dsp
+			qgo.pro</userinput>
+		  </para>
+		</listitem>
+	  </itemizedlist>
+	</section>
+
+<!-- Section: Uninstalling -->
+	<section>
+	  <title>Uninstalling</title>
+
+	  <section>
+		<title>Linux</title>
+
+		<itemizedlist>
+		  <listitem>
+			<para>To uninstall the rpm, login as root and
+			type:</para>
+
+			<para>
+			  <userinput>rpm -e qgo</userinput>
+			</para>
+		  </listitem>
+
+		  <listitem>
+			<para>On Debian, do as root:</para>
+
+			<para>
+			  <userinput>dpkg -P qgo</userinput>
+			</para>
+		  </listitem>
+
+		  <listitem>
+			<para>If you installed from the sources, cd into the
+			<filename class="directory">qgo-(version)</filename>
+
+			directory and type as root:</para>
+
+			<para>
+			  <userinput>make uninstall</userinput>
+			</para>
+		  </listitem>
+		</itemizedlist>
+	  </section>
+
+	  <section>
+		<title>Windows</title>
+
+		<para>To uninstall qGo:
+		<itemizedlist>
+		  <listitem>
+			<para>Locate qGo's program folder from your Start
+			folder and select 'Uninstall qGo'.</para>
+
+			<para>or</para>
+		  </listitem>
+
+		  <listitem>
+			<para>Locate the qGo directory - by default
+			<filename class="directory">C:\Program
+			Files\qGo\</filename>
+
+			and run unins000.exe manually.</para>
+
+			<para>or</para>
+		  </listitem>
+
+		  <listitem>
+			<para>You can also use the Add/Remove Programs
+			utility from the Control Panel.</para>
+		  </listitem>
+		</itemizedlist>
+		</para>
+
+		<note>
+		  <para>There is a residing file
+		  <userinput>.qGorc</userinput>
+
+		  containing configuration information and Go server
+		  account information. The path to this file is either
+		  one of the environment variables
+		  <userinput>HOME</userinput>
+
+		  or
+		  <userinput>USERPROFILE</userinput>
+
+		  or the system path
+		  <userinput>root</userinput>
+
+		  or
+		  <userinput>c:\</userinput>
+
+		  or similar.</para>
+		</note>
+	  </section>
+	</section>
+  </chapter>
+
+<!-- Chapter: File formats -->
+  <chapter>
+	<title>File formats</title>
+
+<!-- Section: SGF -->
+	<section>
+	  <title>SGF</title>
+
+	  <anchor id="sgf" />
+
+	  <para>SGF (Smart Game Format) files are a simple and
+	  effective way to store records of two-player board games.
+	  File information is saved as plain text, which makes the
+	  files very small and easy to handle or store. Game
+	  information is stored in a tree-based format - in other
+	  words, there is one main linear sequence of moves, with any
+	  alternatives that have been entered into the record
+	  branching away from that main sequence. These branches may
+	  have their own branches and so on.</para>
+
+	  <para>Because an SGF can contain much information -
+	  including but not limited to board setup, markings,
+	  variations, and extensive comments - programs such as qGo
+	  have been created. qGo provides a powerful, easy-to-use
+	  interface for creating, editing and viewing SGF
+	  files.</para>
+
+	  <para>Loading and saving SGF files supports
+	  <link linkend="encoding">text encoding</link>
+
+	  for asian languages.</para>
+	</section>
+
+<!-- Section: MGT -->
+	<section>
+	  <title>MGT</title>
+
+	  <anchor id="mgt" />
+
+	  <para>qGo is able to load files in the MGT format. This
+	  format is used by the common editor WinMGT.</para>
+
+	  <para>The newer WinMGT versions save files with the
+	  extension .mgt, but the file format follows the SGF
+	  specification, so reading those is just like reading SGF
+	  files.</para>
+
+	  <para>But there are some very old games out on the web in
+	  an older format. qGo is able to convert this format to SGF
+	  automatically when loading those files.</para>
+	</section>
+
+<!-- Section: XML -->
+	<section>
+	  <title>XML</title>
+
+	  <anchor id="xml" />
+
+	  <para>XML is a modern file format and not yet much used in
+	  the Go world.</para>
+
+	  <para>Jago is able to load and save Go games in XML format.
+	  Unlike SGF, which is a standardized format, such a standard
+	  does not exist for XML yet. The author of Jago created an
+	  own XML specification.</para>
+
+	  <para>qGo is using Jagos XML definitions and currently able
+	  to load XML games saved with Jago. qGo is not yet able to
+	  save games in XML format, this but this feature will be
+	  implemented somewhen in the future.</para>
+	</section>
+  </chapter>
+
+<!-- Chapter: qGo, the Program -->
+  <chapter>
+	<title>qGo, the Program</title>
+
+<!-- Section Launching -->
+	<section>
+	  <title>Launching</title>
+
+	  <para>You may simple use a desktop icon or command line
+	  input to launch the program. The command line syntax
+	  is</para>
+
+	  <para>
+	  <userinput>qGo</userinput>
+
+	  [options] [
+	  <filename>file</filename>
+
+	  ]</para>
+
+	  <table frame="all">
+		<title>Launch parameters</title>
+
+		<tgroup cols="2" align="left" colsep="1" rowsep="1">
+		  <thead>
+			<row>
+			  <entry>option</entry>
+
+			  <entry>meaning</entry>
+			</row>
+		  </thead>
+
+		  <tbody>
+			<row>
+			  <entry>
+				<userinput>-sgf</userinput>
+			  </entry>
+
+			  <entry>make new sgf file (or simple open a board to
+			  play)</entry>
+			</row>
+
+			<row>
+			  <entry>
+				<userinput>-sgf19</userinput>
+			  </entry>
+
+			  <entry>same but don't ask and open 19x19
+			  board</entry>
+			</row>
+
+			<row>
+			  <entry>
+				<userinput>-debug</userinput>
+			  </entry>
+
+			  <entry>open debug window and show status
+			  messages</entry>
+			</row>
+
+			<row>
+			  <entry>
+				<userinput>-desktop</userinput>
+			  </entry>
+
+			  <entry>use standard options from desktop</entry>
+			</row>
+
+			<row>
+			  <entry>
+				<filename>file</filename>
+			  </entry>
+
+			  <entry>open file (type
+			  <link linkend="sgf">SGF</link>
+
+			  ,
+			  <link linkend="mgt">MGT</link>
+
+			  or
+			  <link linkend="xml">XML</link>
+
+			  )</entry>
+			</row>
+		  </tbody>
+		</tgroup>
+	  </table>
+	</section>
+
+<!-- Section Structure -->
+	<section>
+	  <title>Structure</title>
+
+	  <para>qGo has two main windows, one is the client window
+	  the other is the board window. Further, there is the debug window, too, but you may not need
+	  it.</para>
+
+	  <section>
+		<title>Client Window</title>
+
+		<anchor id="client" />
+
+		<para>While handling the connection to internet,
+		negotiating your match requests or looking for games to
+		observe this is your main window. This window appears on
+		starting the qGo program without any of the options
+		<userinput>-sgf</userinput>
+
+		,
+		<userinput>-sgf19</userinput>
+
+		or
+		<filename>filename</filename>
+
+		.</para>
+
+		<para>The client window consists of a players list in the
+		upper left, a games list in the upper right, talk windows
+		in the lower left, a restricted message window in the
+		lower right.</para>
+
+		<para>Further, there is a single edit line, further
+		referred as command line, on the lower edge and a bar on
+		the right edge containing the hostlist combo box on the
+		top.</para>
+
+		<para>Type
+		<userinput>#</userinput>
+
+		at the command line to get a list of internal
+		commands.</para>
+
+		<note>
+		  <para>Starting any text with
+		  <userinput>#</userinput>
+
+		  at the command line will parsed as internal command.
+		  Nothing is sent to host! E.g.
+		  <userinput>#+dbgwin</userinput>
+
+		  as internal command.</para>
+		</note>
+	  </section>
+
+	  <section>
+		<title>Board Window</title>
+
+		<para>The Go board is the most important part of the
+		program. It is embedded in the board window. Further the
+		board window contains clocks displaying the remaining
+		times for each player, edit tools and two comment edit
+		windows, a single line field to kibitz online games and a
+		multi line field for receiving comments during online
+		games or commenting games offline.</para>
+
+		<para>For fast startup, the command line option
+		<userinput>-sgf19</userinput>
+
+		,
+		<userinput>-sgf</userinput>
+
+		brings up a local (offline) board to edit a game. If
+		using
+		<filename>filename</filename>
+
+		then the file with name
+		<filename>filename</filename>
+
+		is loaded immediately. In any case, the main window will
+		not be shown.</para>
+
+		<note>
+		  <para>Starting any text with
+		  <userinput>#</userinput>
+
+		  at the single edit line will be sent to client window
+		  and parsed as a command (without
+		  <userinput>#</userinput>
+
+		  ). It is sent to host! Thus, starting with
+		  <userinput>##</userinput>
+
+		  will result in a internal command for the client
+		  window. E.g.
+		  <userinput>#stats</userinput>
+
+		  as host command or
+		  <userinput>##+dbgwin</userinput>
+
+		  as internal command.</para>
+		</note>
+	  </section>
+
+	  <section>
+		<title>Debug Window</title>
+
+		<para>For debugging purposes, the debug window can be
+		shown with the
+		<userinput>-debug</userinput>
+
+		startup option. However, this will set qGo in a debug
+		mode, too, which means the program will run
+		slower.</para>
+
+		<para>The debug window is always present but it's maybe
+		hidden. Thus, the debug window a log viewer for qGo.
+		Setting qGo to debug mode means logging more events,
+		especially logging all host responses but some internal
+		messages, too.</para>
+
+		<para>Therefore, only opening the debug window doesn't
+		slow down the qGo program.</para>
+
+		<para>In order to show the debug window there are other
+		options:</para>
+
+		<table frame="all">
+		  <title>Debug parameters</title>
+
+		  <tgroup cols="4" align="left" colsep="1" rowsep="1">
+			<thead>
+			  <row>
+				<entry>command</entry>
+
+				<entry>where to enter</entry>
+
+				<entry>set mode</entry>
+
+				<entry>debug window</entry>
+			  </row>
+			</thead>
+
+			<tbody>
+			  <row>
+				<entry>
+				  <userinput>-debug</userinput>
+				</entry>
+
+				<entry>when launching qGo</entry>
+
+				<entry>DEBUG</entry>
+
+				<entry>show</entry>
+			  </row>
+
+			  <row>
+				<entry>
+				  <userinput>#+dbg</userinput>
+				</entry>
+
+				<entry>command line</entry>
+
+				<entry>DEBUG</entry>
+
+				<entry>show</entry>
+			  </row>
+
+			  <row>
+				<entry>
+				  <userinput>#+dbgwin</userinput>
+				</entry>
+
+				<entry>command line</entry>
+
+				<entry>NORMAL</entry>
+
+				<entry>show</entry>
+			  </row>
+
+			  <row>
+				<entry>
+				  <userinput>#-dbg</userinput>
+				</entry>
+
+				<entry>command line</entry>
+
+				<entry>NORMAL</entry>
+
+				<entry>hide</entry>
+			  </row>
+			</tbody>
+		  </tgroup>
+		</table>
+
+		<para>command line is the bottom most line of the
+		<link linkend="client">client window</link>
+
+		.</para>
+	  </section>
+	</section>
+  </chapter>
+
+<!-- Chapter: Client Window Usage-->
+  <chapter>
+	<title>Client Window - Usage</title>
+
+	<note>
+	  <para>There are a lot of settings saved when qGo is getting
+	  closed. Thus, by running several instances of qGo the last
+	  closed instance of qGo supersedes the settings.</para>
+
+	  <para>This is different to closing a board window since all
+	  board settings are updated simultaneosly and they are saved
+	  when qGo quits.</para>
+	</note>
+
+<!-- Section Window focus -->
+	<section>
+	  <title>Window focus</title>
+
+	  <para>When the command line on the lower side has focus,
+	  i.e. after pressing
+	  <keycap>Escape</keycap>
+
+	  or clicking onto the command line, the window position and
+	  size can rapidly be changed by pressing
+	  <keycap>CTRL</keycap>
+
+	  +
+	  <keycap>0</keycap>
+
+	  ..
+	  <keycap>9</keycap>
+
+	  whereby the window position and size have to be saved once
+	  by pressing the same number
+	  <keycap>ALT</keycap>
+
+	  +
+	  <keycap>0</keycap>
+
+	  ..
+	  <keycap>9</keycap>
+
+	  before.</para>
+	</section>
+
+<!-- Section Menus -->
+	<section>
+	  <title>Menus</title>
+
+<!-- Section: File menu -->
+	  <section>
+		<title>File</title>
+
+		<section>
+		  <title>New</title>
+
+		  <para>
+		  </para>
+		</section>
+	  </section>
+	</section>
+
+<!-- Section Mouse control -->
+	<section>
+	  <title>Mouse control</title>
+
+	  <para>
+	  </para>
+	</section>
+
+<!-- Section Keyboard control -->
+	<section>
+	  <title>Keyboard control</title>
+
+	  <para>
+	  </para>
+	</section>
+  </chapter>
+
+<!-- Chapter: Usage-->
+  <chapter>
+	<title>Board Window - Usage</title>
+
+<!-- Section Window focus -->
+	<section>
+	  <title>Window focus</title>
+
+	  <para>Once the comment editor has the window focus, and you
+	  want to continue using the
+	  <keycap>cursor</keycap>
+
+	  and
+	  <keycap>Home</keycap>
+
+	  /
+	  <keycap>End</keycap>
+
+	  keys for game navigation, just press
+	  <keycap>Escape</keycap>
+
+	  or click onto the board window to return the focus to the
+	  board again. With
+	  <keycap>Tab</keycap>
+
+	  you can switch from the board to the editor again.</para>
+
+	  <tip>
+		<para>If you have a wheelmouse, move the mouse over the
+		board and use the wheel for fast navigation.</para>
+	  </tip>
+	</section>
+
+<!-- Section Menus -->
+	<section>
+	  <title>Menus</title>
+
+<!-- Section: File menu -->
+	  <section>
+		<title>File</title>
+
+		<section>
+		  <title>New</title>
+
+		  <para>This lets you create a new SGF. You will be
+		  prompted for some basic game information (white player,
+		  black player, board size, komi, and handicap).</para>
+		</section>
+
+		<section>
+		  <title>Open</title>
+
+		  <para>This will open a stored SGF file into the current
+		  window. qGo will remember which directory you store
+		  your SGFs in and return there next time you perform the
+		  Open, Save, or Save As functions during the same
+		  session. The file does not have to have an .sgf
+		  extension as long as it is in the SGF format (sometimes
+		  downloaded files are saved without the
+		  extension).</para>
+		</section>
+
+		<section>
+		  <title>Save</title>
+
+		  <para>This will save the SGF you are currently editing.
+		  If the SGF has not yet been saved to a file, you will
+		  be prompted for a filename. If you want to save an
+		  existing file under another name or in another
+		  location, use the Save As option.</para>
+		</section>
+
+		<section>
+		  <title>Save As</title>
+
+		  <para>This will let you define which location and name
+		  the SGF file will be saved under. Use this to save
+		  edited, or alternate copies of SGFs without overwriting
+		  the original.</para>
+		</section>
+
+		<section>
+		  <title>Import ASCII</title>
+
+		  <para>Sometimes (especially in text-based forums) you
+		  will see a Go board diagram in ASCII text. qGo can
+		  import this ASCII diagram into SGF format, making it
+		  much easier to view/edit/store. Save or cut and paste
+		  the ASCII diagram you want to import into a file. Then
+		  select File - Import ASCII - and you will be prompted
+		  for the filename. To [re]define various ASCII marks for
+		  the import function, see Settings - Preferences -
+		  Import. qGo defaults to the standard format. The
+		  position will be added as brother or son of the current
+		  node - this can be set in the preferences
+		  dialog.</para>
+		</section>
+
+		<section>
+		  <title>Export ASCII</title>
+
+		  <para>qGo can also export an SGF position into ASCII
+		  format. Simply load the position you want to export and
+		  then select File - Export ASCII. This opens a window to
+		  show you what the exported ASCII file will look like.
+		  You can 'Close' window or 'Save' the displayed ASCII
+		  position (you will be prompted for a filename). Note
+		  that the currently displayed position, not the entire
+		  SGF file, is saved in ASCII format. The characters to
+		  display the position can be altered in the preferences
+		  dialog.</para>
+		</section>
+
+		<section>
+		  <title>Export image</title>
+
+		  <para>You can export the current board position to an
+		  image file. Simply load the position you want to save
+		  and select File - Export Image. You will be prompted
+		  for a filename to save the image under. Note that this
+		  does not produce a screenshot; it produces an image of
+		  the board position only. qGo supports common image
+		  formats like png, gif, jpeg, bmp. You can the exported
+		  file to alter in common graphic suits like Gimp or
+		  CorelDraw.</para>
+
+		  <tip>
+			<para>If you want to create a graphic of only a
+			limited board position, zoom the board and navigate
+			to the position you want to display.</para>
+		  </tip>
+		</section>
+
+		<section>
+		  <title>Exit</title>
+
+		  <para>This lets you exit the program.</para>
+		</section>
+	  </section>
+
+<!-- Section: Edit menu -->
+	  <section>
+		<title>Edit</title>
+
+		<section>
+		  <title>Cut</title>
+
+		  <para>To be written.</para>
+		</section>
+
+		<section>
+		  <title>Paste</title>
+
+		  <para>To be written.</para>
+		</section>
+
+		<section>
+		  <title>Paste as brother</title>
+
+		  <para>To be written.</para>
+		</section>
+
+		<section>
+		  <title>Delete</title>
+
+		  <para>To be written.</para>
+		</section>
+	  </section>
+
+<!-- Section: Navigation menu -->
+	  <section>
+		<title>Navigation</title>
+
+		<para>To be written.</para>
+	  </section>
+
+<!-- Section: Settings menu -->
+	  <section>
+		<title>Settings</title>
+
+		<section>
+		  <title>Preferences</title>
+
+		  <para>To be written.</para>
+		</section>
+
+		<section>
+		  <title>Game Info</title>
+
+		  <para>To be written.</para>
+		</section>
+	  </section>
+
+<!-- Section: View menu -->
+	  <section>
+		<title>View</title>
+
+		<para>To be written.</para>
+	  </section>
+
+<!-- Section: Help menu -->
+	  <section>
+		<title>Help</title>
+
+		<para>To be written.</para>
+	  </section>
+	</section>
+
+<!-- Section Preferences -->
+	<section>
+	  <title>Preferences</title>
+
+	  <para>In the preferences dialog the main features of qGo
+	  can be controlled. There are three sections for the
+	  Interface, ASCII importing/exporting and SGF
+	  loading.</para>
+
+<!-- Section Interface -->
+	  <section>
+		<title>Interface</title>
+
+		<para>Here the visual settings can be changed. All
+		settings are saved and reloaded when qGo starts up the
+		next time.</para>
+
+		<para>More detailed information has to be written. Please
+		check the tool tips and use the help button in the lower
+		left corner to get more help about each button and
+		checkbox.</para>
+
+		<anchor id="language" />
+
+		<section>
+		  <title>Language</title>
+
+		  <para>You can chose the language in the preferences
+		  dialog. If 'System default' is selected, the Unix
+		  system locale will be used. To set this, type for
+		  example
+		  <userinput>export LANG=de_DE</userinput>
+
+		  in your bash, to set your language settings to german.
+		  Probably your system has already a locale set, check it
+		  by typing
+		  <userinput>echo $LANG</userinput>
+
+		  .</para>
+
+		  <para>Actually, I have no clue how the Windows locale
+		  is checked. Qt is expecting a string like "de" or
+		  "de_DE", but Windows gives the string "C". If you are
+		  on Windows, just chose the language manually.</para>
+
+		  <note>
+			<para>You have to restart qGo to let the language
+			change take effect.</para>
+		  </note>
+		</section>
+	  </section>
+
+<!-- Section ASCII -->
+	  <section>
+		<title>ASCII</title>
+
+		<para>This tab controls the characters used for importing
+		and exporting ASCII boards. This feature can be used for
+		posting in textbased groups like rec.games.go. If a
+		textfile is imported, the given characters are parsed to
+		reconstruct the board position. When a board is exported
+		to ASCII, the characters are used to construct the
+		textfile.</para>
+
+		<para>When
+		<emphasis>Add as brother</emphasis>
+
+		is selected, an imported board position will be added as
+		a brother of the current node, if unselected it is added
+		as son.</para>
+
+		<para>These settings are currently not saved.</para>
+	  </section>
+
+<!-- Section SGF Loading -->
+	  <section>
+		<title>SGF Loading</title>
+
+		<para>If
+		<emphasis>Remember last directory</emphasis>
+
+		is checked, qGo will remember the directory a user loads
+		from or saves to and reuse this directory the next time a
+		file operation is performed. This can be useful,
+		especially on Windows, if one certain directory is used
+		for all game files. On Linux, qGo defaults to the users
+		home directory, so leaving this option unchecked might be
+		more comfortable.</para>
+
+		<para>
+		<anchor id="encoding" />
+
+		The
+		<emphasis>text encoding</emphasis>
+
+		is useful when dealing with asian languages. When loading
+		or saving a SGF file, the given encoding is used. Note,
+		changing this setting will take effect the next time a
+		game is loaded or saved, it won't affect the currently
+		loaded game.</para>
+
+		<para>
+		  <itemizedlist>
+			<listitem>
+			  <para>
+			  <emphasis>None</emphasis>
+
+			  - Default western latin1 encoding</para>
+			</listitem>
+
+			<listitem>
+			  <para>
+			  <emphasis>Japanese</emphasis>
+
+			  - EUC-JP, JIS, Shift-JIS</para>
+			</listitem>
+
+			<listitem>
+			  <para>
+			  <emphasis>Chinese</emphasis>
+
+			  - GBK</para>
+			</listitem>
+
+			<listitem>
+			  <para>
+			  <emphasis>Korean</emphasis>
+
+			  - EUC-KR</para>
+			</listitem>
+		  </itemizedlist>
+		</para>
+
+		<para>You might need to experiment a bit with these
+		settings.</para>
+
+		<para>If you are not using an asian language, leave this
+		setting to 'None', this will make loading and saving much
+		faster. Especially for Kogo's Joseki dictionary I
+		recommand switching this setting to 'None'.</para>
+
+		<para>The encoding settings are automatically saved and
+		reloaded the next time qGo starts.</para>
+
+		<para>
+		<emphasis>Fast loading</emphasis>
+
+		is an experimental setting. It is not working well. It is
+		highly recommanded to unselect this setting.</para>
+	  </section>
+	</section>
+
+<!-- Section Mouse control -->
+	<section>
+	  <title>Mouse control</title>
+
+	  <para>qGo offers advanced navigation features by using the
+	  mouse only, to provide a comfortable interface to the user.
+	  Mouse gestures are implemented as button and wheel
+	  gestures.</para>
+
+	  <para>These navigation gestures are an additional feature,
+	  they offer basically the same as the toolbar or keyboard
+	  control, but are meant to make a convinient way of
+	  navigation through a game available.</para>
+
+	  <section>
+		<title>Mousebutton navigation</title>
+
+		<para>There are four navigation gestures
+		available:</para>
+
+		<itemizedlist>
+		  <listitem>
+			<para>Hold right, then click left -&gt; Previous
+			move</para>
+		  </listitem>
+
+		  <listitem>
+			<para>Hold left, then click right -&gt; Next
+			move</para>
+		  </listitem>
+
+		  <listitem>
+			<para>Hold middle, then click left -&gt; Start of
+			variation</para>
+		  </listitem>
+
+		  <listitem>
+			<para>Hold middle, then click right -&gt; Go to next
+			variation</para>
+		  </listitem>
+		</itemizedlist>
+
+		<tip>
+		  <para>This only applies if the mouse pointer is over
+		  the green table part of the window, not if it is over
+		  the valid goban, to avoid accidental changes to the
+		  game when applying navigation gestures through the
+		  mousebuttons.</para>
+		</tip>
+	  </section>
+
+	  <section>
+		<title>Mousewheel navigation</title>
+
+		<itemizedlist>
+		  <listitem>
+			<para>Mousewheel forward -&gt; Previous move</para>
+		  </listitem>
+
+		  <listitem>
+			<para>Mousewheel backward -&gt; Next move</para>
+		  </listitem>
+
+		  <listitem>
+			<para>Hold right + mousewheel forward -&gt; Previous
+			variation</para>
+		  </listitem>
+
+		  <listitem>
+			<para>Hold right + mousewheel backward -&gt; Next
+			variation</para>
+		  </listitem>
+		</itemizedlist>
+
+		<tip>
+		  <para>This applies when the mouse pointer is over any
+		  part of the board window - the green table or the valid
+		  wooden goban. Using the mousewheel won't cause
+		  accidental clicks on the goban. So this is a slight
+		  difference to the mousebutton navigation.</para>
+		</tip>
+	  </section>
+	</section>
+
+<!-- Section Keyboard control -->
+	<section>
+	  <title>Keyboard control</title>
+
+	  <para>qGo offers easy keyboard control to navigate through
+	  a game tree. Most menu items have a keyboard shortcut, as
+	  stated in the menu. The cursor keys offer the basic
+	  navigation through moves and navigation.</para>
+
+	  <para>Those four keys not mentioned in the menus:</para>
+
+	  <itemizedlist>
+		<listitem>
+		  <para>
+		  <keycap>Ctrl-E</keycap>
+
+		  - Toggles between normal and edit mode.</para>
+		</listitem>
+
+		<listitem>
+		  <para>
+		  <keycap>Ctrl-T</keycap>
+
+		  - Switched through the mark types in edit mode.</para>
+		</listitem>
+
+		<listitem>
+		  <para>
+		  <keycap>Escape</keycap>
+
+		  - Forces the window focus back to the board from the
+		  comment edit widget.</para>
+		</listitem>
+
+		<listitem>
+		  <para>
+			<keycap>Shift</keycap>
+
+			<itemizedlist>
+			  <listitem>
+				<para>When in normal mode, holding down the shift
+				key and
+				<emphasis>left</emphasis>
+
+				clicking moves to the
+				<emphasis>first</emphasis>
+
+				position of the
+				<emphasis>main variation branch</emphasis>
+
+				where the stone at this spot was played.</para>
+			  </listitem>
+
+			  <listitem>
+				<para>When in normal mode, holding down the shift
+				key and
+				<emphasis>right</emphasis>
+
+				clicking moves to the
+				<emphasis>next</emphasis>
+
+				position within the
+				<emphasis>current branch</emphasis>
+
+				where the stone at this spot was played.</para>
+			  </listitem>
+
+			  <listitem>
+				<para>In edit mode, when editing letter marks,
+				shift-click allows to customize the mark
+				text.</para>
+			  </listitem>
+
+			  <listitem>
+				<para>In edit mode, when editing letter marks,
+				shift-click allows to customize the mark
+				text.</para>
+			  </listitem>
+			</itemizedlist>
+		  </para>
+		</listitem>
+
+		<listitem>
+		  <para>
+			<keycap>Control</keycap>
+		  </para>
+
+		  <para>In normal mode, to lookup all game positions of a
+		  spot, hold down the control key and left-click to find
+		  all moves at the given position. The search result will
+		  be displayed in a bookmark-like dialog. The lookup is
+		  performed in all variations after the current
+		  move.</para>
+
+		  <para>The difference to the shift key is, that this
+		  lookup searched through all following variations, while
+		  the shift key search only checks the main branch. Also,
+		  the shift key search finds the first position in the
+		  whole game, while the control key search looks up all
+		  moves, but only those after the current.</para>
+		</listitem>
+	  </itemizedlist>
+	</section>
+  </chapter>
+</book>
+
+

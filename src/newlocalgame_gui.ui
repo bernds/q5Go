@@ -1,0 +1,560 @@
+<!DOCTYPE UI><UI>
+<class>NewLocalGameDialog</class>
+<widget>
+    <class>QDialog</class>
+    <property stdset="1">
+        <name>name</name>
+        <cstring>NewLocalGameDialog</cstring>
+    </property>
+    <property>
+        <name>geometry</name>
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>259</width>
+            <height>359</height>
+        </rect>
+    </property>
+    <property>
+        <name>maximumSize</name>
+        <size>
+            <width>300</width>
+            <height>380</height>
+        </size>
+    </property>
+    <property>
+        <name>caption</name>
+        <string>New Game</string>
+    </property>
+    <property>
+        <name>layoutMargin</name>
+    </property>
+    <grid>
+        <property>
+            <name>margin</name>
+            <number>0</number>
+        </property>
+        <property>
+            <name>spacing</name>
+            <number>6</number>
+        </property>
+        <widget row="0"  column="0" >
+            <class>QFrame</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>Frame13</cstring>
+            </property>
+            <property>
+                <name>frameShape</name>
+                <enum>StyledPanel</enum>
+            </property>
+            <property>
+                <name>frameShadow</name>
+                <enum>Raised</enum>
+            </property>
+            <grid>
+                <property>
+                    <name>margin</name>
+                    <number>11</number>
+                </property>
+                <property>
+                    <name>spacing</name>
+                    <number>6</number>
+                </property>
+                <widget row="1"  column="0" >
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TextLabel2</cstring>
+                    </property>
+                    <property>
+                        <name>text</name>
+                        <string>White:</string>
+                    </property>
+                </widget>
+                <widget row="2"  column="0" >
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TextLabel1</cstring>
+                    </property>
+                    <property>
+                        <name>text</name>
+                        <string>Black:</string>
+                    </property>
+                </widget>
+                <widget row="2"  column="1" >
+                    <class>QLineEdit</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>playerBlackEdit</cstring>
+                    </property>
+                    <property>
+                        <name>text</name>
+                        <string>Black</string>
+                    </property>
+                </widget>
+                <widget row="0"  column="1" >
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TextLabel2_2</cstring>
+                    </property>
+                    <property>
+                        <name>text</name>
+                        <string>Player Name:</string>
+                    </property>
+                </widget>
+                <widget row="1"  column="1" >
+                    <class>QLineEdit</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>playerWhiteEdit</cstring>
+                    </property>
+                    <property>
+                        <name>text</name>
+                        <string>White</string>
+                    </property>
+                </widget>
+                <widget row="1"  column="2" >
+                    <class>QLineEdit</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>playerWhiteRkEdit</cstring>
+                    </property>
+                </widget>
+                <widget row="2"  column="2" >
+                    <class>QLineEdit</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>playerBlackRkEdit</cstring>
+                    </property>
+                </widget>
+                <widget row="0"  column="2" >
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TextLabel2_3</cstring>
+                    </property>
+                    <property>
+                        <name>text</name>
+                        <string>Rank:</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget row="3"  column="0" >
+            <class>QLayoutWidget</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>Layout7</cstring>
+            </property>
+            <hbox>
+                <property>
+                    <name>margin</name>
+                    <number>0</number>
+                </property>
+                <property>
+                    <name>spacing</name>
+                    <number>6</number>
+                </property>
+                <spacer>
+                    <property>
+                        <name>name</name>
+                        <cstring>Horizontal Spacing2</cstring>
+                    </property>
+                    <property>
+                        <name>orientation</name>
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property>
+                        <name>sizeType</name>
+                        <enum>Expanding</enum>
+                    </property>
+                    <property>
+                        <name>sizeHint</name>
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget>
+                    <class>QPushButton</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>buttonOk</cstring>
+                    </property>
+                    <property>
+                        <name>text</name>
+                        <string>&amp;Ok</string>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QPushButton</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>buttonCancel</cstring>
+                    </property>
+                    <property>
+                        <name>text</name>
+                        <string>&amp;Cancel</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget row="1"  column="0" >
+            <class>QFrame</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>Frame14</cstring>
+            </property>
+            <property>
+                <name>frameShape</name>
+                <enum>StyledPanel</enum>
+            </property>
+            <property>
+                <name>frameShadow</name>
+                <enum>Raised</enum>
+            </property>
+            <grid>
+                <property>
+                    <name>margin</name>
+                    <number>11</number>
+                </property>
+                <property>
+                    <name>spacing</name>
+                    <number>6</number>
+                </property>
+                <widget row="0"  column="0" >
+                    <class>QLayoutWidget</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>Layout10</cstring>
+                    </property>
+                    <hbox>
+                        <property>
+                            <name>margin</name>
+                            <number>0</number>
+                        </property>
+                        <property>
+                            <name>spacing</name>
+                            <number>6</number>
+                        </property>
+                        <widget>
+                            <class>QLabel</class>
+                            <property stdset="1">
+                                <name>name</name>
+                                <cstring>TextLabel3</cstring>
+                            </property>
+                            <property>
+                                <name>text</name>
+                                <string>Board size:</string>
+                            </property>
+                        </widget>
+                        <widget>
+                            <class>QSpinBox</class>
+                            <property stdset="1">
+                                <name>name</name>
+                                <cstring>boardSizeSpin</cstring>
+                            </property>
+                            <property>
+                                <name>maximumSize</name>
+                                <size>
+                                    <width>60</width>
+                                    <height>32767</height>
+                                </size>
+                            </property>
+                            <property>
+                                <name>maxValue</name>
+                                <number>36</number>
+                            </property>
+                            <property>
+                                <name>minValue</name>
+                                <number>4</number>
+                            </property>
+                            <property>
+                                <name>value</name>
+                                <number>19</number>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget row="2"  column="0" >
+                    <class>QLayoutWidget</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>Layout14</cstring>
+                    </property>
+                    <hbox>
+                        <property>
+                            <name>margin</name>
+                            <number>0</number>
+                        </property>
+                        <property>
+                            <name>spacing</name>
+                            <number>6</number>
+                        </property>
+                        <widget>
+                            <class>QLabel</class>
+                            <property stdset="1">
+                                <name>name</name>
+                                <cstring>TextLabel5</cstring>
+                            </property>
+                            <property>
+                                <name>text</name>
+                                <string>Handicap:</string>
+                            </property>
+                        </widget>
+                        <widget>
+                            <class>QSpinBox</class>
+                            <property stdset="1">
+                                <name>name</name>
+                                <cstring>handicapSpin</cstring>
+                            </property>
+                            <property>
+                                <name>maximumSize</name>
+                                <size>
+                                    <width>60</width>
+                                    <height>32767</height>
+                                </size>
+                            </property>
+                            <property>
+                                <name>maxValue</name>
+                                <number>13</number>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget row="1"  column="0" >
+                    <class>QLayoutWidget</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>Layout15</cstring>
+                    </property>
+                    <hbox>
+                        <property>
+                            <name>margin</name>
+                            <number>0</number>
+                        </property>
+                        <property>
+                            <name>spacing</name>
+                            <number>6</number>
+                        </property>
+                        <widget>
+                            <class>QLabel</class>
+                            <property stdset="1">
+                                <name>name</name>
+                                <cstring>TextLabel4</cstring>
+                            </property>
+                            <property>
+                                <name>text</name>
+                                <string>Komi:</string>
+                            </property>
+                        </widget>
+                        <widget>
+                            <class>KomiSpinBox</class>
+                            <property stdset="1">
+                                <name>name</name>
+                                <cstring>komiSpin</cstring>
+                            </property>
+                            <property>
+                                <name>minimumSize</name>
+                                <size>
+                                    <width>20</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                            <property>
+                                <name>maximumSize</name>
+                                <size>
+                                    <width>60</width>
+                                    <height>32767</height>
+                                </size>
+                            </property>
+                            <property>
+                                <name>focusPolicy</name>
+                                <enum>StrongFocus</enum>
+                            </property>
+                            <property>
+                                <name>acceptDrops</name>
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+            </grid>
+        </widget>
+        <widget row="2"  column="0" >
+            <class>QFrame</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>Frame14_2</cstring>
+            </property>
+            <property>
+                <name>frameShape</name>
+                <enum>StyledPanel</enum>
+            </property>
+            <property>
+                <name>frameShadow</name>
+                <enum>Raised</enum>
+            </property>
+            <grid>
+                <property>
+                    <name>margin</name>
+                    <number>11</number>
+                </property>
+                <property>
+                    <name>spacing</name>
+                    <number>6</number>
+                </property>
+                <widget row="1"  column="0" >
+                    <class>QLayoutWidget</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>Layout12</cstring>
+                    </property>
+                    <hbox>
+                        <property>
+                            <name>margin</name>
+                            <number>0</number>
+                        </property>
+                        <property>
+                            <name>spacing</name>
+                            <number>6</number>
+                        </property>
+                        <widget>
+                            <class>QLabel</class>
+                            <property stdset="1">
+                                <name>name</name>
+                                <cstring>TextLabel7</cstring>
+                            </property>
+                            <property>
+                                <name>text</name>
+                                <string>Byoyomi Time:</string>
+                            </property>
+                        </widget>
+                        <widget>
+                            <class>QSpinBox</class>
+                            <property stdset="1">
+                                <name>name</name>
+                                <cstring>byoTimeSpin</cstring>
+                            </property>
+                            <property>
+                                <name>maximumSize</name>
+                                <size>
+                                    <width>60</width>
+                                    <height>32767</height>
+                                </size>
+                            </property>
+                            <property>
+                                <name>value</name>
+                                <number>10</number>
+                            </property>
+                            <property>
+                                <name>toolTip</name>
+                                <string>Additional time for 25 moves; after 25 moves the byoyomi time starts again and again</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget row="0"  column="0" >
+                    <class>QLayoutWidget</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>Layout13</cstring>
+                    </property>
+                    <hbox>
+                        <property>
+                            <name>margin</name>
+                            <number>0</number>
+                        </property>
+                        <property>
+                            <name>spacing</name>
+                            <number>6</number>
+                        </property>
+                        <widget>
+                            <class>QLabel</class>
+                            <property stdset="1">
+                                <name>name</name>
+                                <cstring>TextLabel6</cstring>
+                            </property>
+                            <property>
+                                <name>text</name>
+                                <string>Time:</string>
+                            </property>
+                        </widget>
+                        <widget>
+                            <class>QSpinBox</class>
+                            <property stdset="1">
+                                <name>name</name>
+                                <cstring>timeSpin</cstring>
+                            </property>
+                            <property>
+                                <name>maximumSize</name>
+                                <size>
+                                    <width>60</width>
+                                    <height>32767</height>
+                                </size>
+                            </property>
+                            <property>
+                                <name>value</name>
+                                <number>10</number>
+                            </property>
+                            <property>
+                                <name>toolTip</name>
+                                <string>Playing time</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+            </grid>
+        </widget>
+    </grid>
+</widget>
+<customwidgets>
+    <customwidget>
+        <class>KomiSpinBox</class>
+        <header location="global">komispinbox.h</header>
+        <sizehint>
+            <width>-1</width>
+            <height>-1</height>
+        </sizehint>
+        <container>0</container>
+        <sizepolicy>
+            <hordata>1</hordata>
+            <verdata>0</verdata>
+        </sizepolicy>
+        <pixmap>image0</pixmap>
+    </customwidget>
+</customwidgets>
+<images>
+    <image>
+        <name>image0</name>
+        <data format="XPM.GZ" length="646">789c6dd2c10ac2300c00d07bbf2234b7229d1be245fc04c5a3201e4615f430059d0711ff5ddb2e6bb236ec90eed134cb5a19d8ef36602af5ecdbfeeac05dda0798d3abebde87e3faa374d3807fa0d633a52d38d8de6f679fe33fc776e196f53cd010188256a3600a292882096246517815ca99884606e18044a3a40d91824820924265a7923a2e8bcd05f33db1173e002913175f2a6be6d3294871a2d95fa00e8a94ee017b69d339d90df1e77c57ea072ede6758</data>
+    </image>
+</images>
+<connections>
+    <connection>
+        <sender>buttonCancel</sender>
+        <signal>clicked()</signal>
+        <receiver>NewLocalGameDialog</receiver>
+        <slot>reject()</slot>
+    </connection>
+    <connection>
+        <sender>buttonOk</sender>
+        <signal>clicked()</signal>
+        <receiver>NewLocalGameDialog</receiver>
+        <slot>accept()</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>playerWhiteEdit</tabstop>
+    <tabstop>playerBlackEdit</tabstop>
+    <tabstop>boardSizeSpin</tabstop>
+    <tabstop>komiSpin</tabstop>
+    <tabstop>handicapSpin</tabstop>
+    <tabstop>buttonOk</tabstop>
+    <tabstop>buttonCancel</tabstop>
+</tabstops>
+</UI>

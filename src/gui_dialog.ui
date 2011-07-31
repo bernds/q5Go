@@ -1,0 +1,39 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>Debug_Dialog</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>Debug_Dialog</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>336</width>
+            <height>680</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Debug</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <property name="spacing">
+            <number>0</number>
+        </property>
+        <widget class="QTextEdit" row="0" column="0">
+            <property name="name">
+                <cstring>TextView1</cstring>
+            </property>
+            <property name="readOnly">
+                <bool>true</bool>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

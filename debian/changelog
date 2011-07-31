@@ -1,0 +1,253 @@
+qgo (0.0.14-1) unstable; urgency=low
+	
+  * added load function to reload adjourned games
+  * fixed: show correct number of obs. players
+  * enabled autoplay sound again
+  * added predefined server list (fixed coded)
+  * F1: open help from client window
+  * fixed: delete unused host entry
+  * added player menu: 'observe game'
+  * added read messages at entering the go server
+  * correct respond to manual entry of observe/teach cmds (lloigor)
+  * added update of players/games list w/o clearing the table (not quiet mode)
+  * added a stone rendering algorithm coded by Marin Ferecatu (big thanks!)
+  * added game info to toolbar (M. Ferecatu)
+  * skipped annoying 'sound not available' messages
+  * added simple beep
+  * added 'help sound info' menu entry
+  * deleted some pics within startup frame because of copyright problem
+  * fixed: crash on using small ghosts (E. Beranger)
+  * set hold-the-line feature to maximum idle time of 1h (if not observing a game)
+  * added auto away message
+  * hide comment line too if no comments wanted
+  * accelerated canvas update
+  * replaced ugly circle mark by a simple '+' mark (M. Ferecatu)
+  * extended support of cmd 'user' on IGS (lloigor)
+  * fixed: student may do the first move in a ext. teaching game now
+  * fixed: own games are updated in column pl. of players list
+  * changed toggle exclude/watch list behaviour
+  * added player's name + rk shown at his clock
+  * added stone boxes to preferences dialog
+  * fixed: stone drawing problem; sometimes parts of a stone remained on the board
+  * fixed: sound directory will now be saved as promised in the message box
+  * added read time info from sgf file
+  * added autoplay using sgf time tags
+  * added simple dame points recognition algorithm to counter
+  * fixed: handicap can be undone and is now handled as a variation
+  * fixed: solved a problem while reading L[] property (old-style)
+  * added fonts/colors selection (M. Ferecatu)
+  * fixed: support for compressed lists at editMark in sgf files
+  * added: results of observed games are now written to gameinfo
+  * fixed: resume an adjourned session now works
+	
+ -- Peter Strempel <pstrempel@t-online.de>  Thu, 01 Jan 2003 18:00:00 +0100
+
+qgo (0.0.13-1) unstable; urgency=low
+	
+  * added 'mark' (IGS) function for teaching games
+  * enabled languages
+  * corrected styles for client window
+  * changed timer mistake - now hold-the-line commands are sent
+  * user is no longer asked for soundfiles if disabled
+  * set comment field read only for online games
+  * clear comment field when moving forward or backward (not online!)
+  * correct saving of comments
+  * added byoyomi time field and free/rated display
+  * added rank field in game nego dialog
+  * added exclude list
+  * added handicap for boards of size 7x7 - 25x25
+  * corrected star points for even sized boards
+  * added user definable buttons (suggested by J. VanDerHout)
+  * added -debug command
+  * added addtime function
+  * added pause function
+  * corrected channel support for IGS
+  * added save size
+  * added startup frame
+  * added startup flags: -debug -sgf -menu <file>
+  * corrected sound while loading stones ("moves" cmd)
+  * less sound for active talk window (suggested by LordOfPi)
+  * added splitters
+  * added tab widget for talk windows (suggested by LordOfPi)
+  * removed talk dialog (now: talk within tab widget)
+  * corrected highlighing during scroll for players and games
+  * added popup menus (suggested by teratles et al.)
+  * fixed preferences problem on Win95
+  * temporaryly disabled autoplay sound (now: equal to stone sound)
+  * added update button for syncing online games to edit board
+  * show territory after end of observed game
+  * cmd "say" after game end now possible from board edit line
+  * added some stone pics and some wood pics
+  * added save window (ALT-0...ALT-9)
+  * erased usage of qGoClient.rc, moved qGo.rc to HOME/USERPROFILE
+  * fixed comment problem during online games (all comments of last moves were repeatly saved)
+  * fixed sgf bug: node in root can be handled now (Thanks to Emmanuel Beranger)
+  * sgf: added compressed lists
+  * sgf: save unknown properties
+  * sgf: added nodeName prop
+
+ -- Peter Strempel <pstrempel@t-online.de>  Tue, 12 Nov 2002 17:00:00 +0100
+
+qgo (0.0.12-1) unstable; urgency=low
+
+  * Added CLIENT, thus, many new features
+  * disabled languages temporary, but I will enable french and german translation as soon as possible
+
+ -- Peter Strempel <pstrempel@t-online.de>  Mon, 02 Sep 2002 18:00:00 +0100
+
+qgo (0.0.11-1) unstable; urgency=low
+
+  * Added french translation. Thanks to Emmanuel Beranger
+  * Fixed another bug with scoring.
+
+ -- Peter Strempel <pstre001@stud.informatik.fh-wiesbaden.de>  Thu, 19 May 2002 16:00:00 +0100
+
+qgo (0.0.10-1) unstable; urgency=low
+	
+  * Fixed a bug with scoring, already marked dead stones are now counted properly to prisoners.
+  * Fixed a bug with sgf reading. If the parent node of the currently read node is in edit mode,
+    check all positions before adding the new stone.
+
+ -- Peter Strempel <pstre001@stud.informatik.fh-wiesbaden.de>  Thu, 25 Apr 2002 16:00:00 +0100
+
+qgo (0.0.9-1) unstable; urgency=low
+
+  * Fixed a critical bug in the sgf write code. Multiple varations resulted in invalid sgf.
+  * Added a define in main.cpp to disable getopt library. A FreeBSD user reported problems with this.
+
+ -- Peter Strempel <pstre001@stud.informatik.fh-wiesbaden.de>  Thu, 14 Apr 2002 19:00:00 +0100
+
+qgo (0.0.8-1) unstable; urgency=low
+
+  * Bugfix: When trying to play a suicide move, the stone was not properly removed from the data.
+  * Bugfix: Last position after loading a game was not processed properly.
+  * Some performance enhancement when reading sgf files
+  * Removed lots of debug messages
+  * Added an icon for NewBoard menu.
+
+ -- Peter Strempel <pstre001@stud.informatik.fh-wiesbaden.de>  Thu, 04 Apr 2002 16:00:00 +0100
+	
+qgo (0.0.7-1) unstable; urgency=low
+
+  * Added a patch from Bernd Schmidt fixing a bug in the sgf parser.
+  * Fixed a bug in sgf parser, empty nodes messed variation reading.
+  * Added possibility for translations. Please contact me if you want to translate qGo
+    to your language. For further informations check out http://qgo.sourceforge.net
+    The language can be set in the preferences dialog. If system default is selected, the
+    Unix system locale will be used (LANG environment variable).
+  * Added a german translation.
+  * Implemented a simple anti-alias algorithm for the stone pixmaps.
+  * Added Disable-tooltips settings in preferences.
+  * Some loaded sgf files start with move 0 (sgf2misc). Added a check to force the game
+    starting with move 1.
+  * Adjusted starpoint drawing slightly.
+  * Fixed a bug in mouse coords check.
+  * Fixed a bug with the ghost cursor, that was not properly redrawn when the mouse
+    reentered the board at the same position.
+
+ -- Peter Strempel <pstre001@stud.informatik.fh-wiesbaden.de>  Wed, 22 Mar 2002 14:00:00 +0100
+
+qgo (0.0.6-1) unstable; urgency=low
+
+  * Added an option and menu item for vertical or horizontal comment field display.
+  * Show sidebar setting is now saved.
+  * Fixed a bug in the coordinates display inside the statusbar.
+  * Fixed slider. Won't jump back to the main branch anymore. Max value is dynamically
+    updated to the branch length.
+  * Because of the changed slider, added a button to move back to the main branch if we
+    are in a variation.
+  * Added function to export SGF to clipboard. Works together with Jago on Java 1.3.
+  * Added an option to select the display type of variations: None, ghost, small stones.
+  * Fixed a bug when qGo segfaulted on exit.
+  * Added waypoints when moving through branches, so the next time the former path is
+    chosen again.
+
+ -- Peter Strempel <pstre001@stud.informatik.fh-wiesbaden.de>  Wed, 20 Feb 2002 19:15:00 +0100
+
+qgo (0.0.5-1) unstable; urgency=low
+
+  * Added support for locale settings and text encoding to support japanese, korean and
+    chinese characters.
+    The encoding can be selected from the preferences dialog.
+  * Implemented more than one board window. SDI now only.
+  * Added function to mark variations, either brothers or sons.
+  * Added function to number all moves with their turn value.
+  * Improved ASCII Importing. Positions of only a part of the board is now placed properly.
+  * Updated the score mode. When a move has been scored, the points are displayed in the
+    captures fields. Existing score, territory marks and dead stones are kept now.
+  * Removed window size option and replaced with a menu item to save the current size.
+    Old version was too confusing with several boards open.
+  * Changed window names and flags to work better with some linux windowmanagers.
+  * Fixed a bug in liberty count for handicap stones.
+  * Added automatic appending '.sgf' to filenames when saving.
+  * Fixed a bug when clicking on an existing stone, this won't double the node anymore.
+  * Some updates and bugfixes in XML reading code. It's not yet fully functional.
+  * Added some more text to the manual.
+ 
+ -- Peter Strempel <pstre001@stud.informatik.fh-wiesbaden.de>  Fri, 08 Feb 2002 12:42:17 +0100	
+
+qgo (0.0.4-1) unstable; urgency=low
+
+  * A serious bug in the code for saving SGF files was fixed. Variations were not saved properly.
+  * Some bugs in the SGF reading code were fixed. Kogo joseki dictionary now displays properly.
+  * Bug reading SGF text labels fixed.
+  * Added basic code for loading XML files. It's not fully working yet.
+  * Added loading of MGT files. Old SGF or MGT format is automatically noticed and converted.
+  * Design update: Stones got larger, but can be toggled to smaller stones.
+  * Bookmark window to display the search results if there is more than one move found.
+  * Design update: Coordinates display smaller now.
+  * Added an icon for SaveAs.
+  * Added a toolbar for common file menu items.
+  * New search feature: Three different searches can be performed. See manual for details.
+  * Slider max value fixed. Slider now increases smoothly without jumps when adding moves.
+  * Some new settings in the preferences dialog and for the config file. Window size is
+    saved on exit.
+  * Some more chapters for the manual written
+  * Windows: Added a small delay when resizing. The board redraw while resizing was
+    too frequent and annoying. Does not influence Linux, here the windowmanager handles
+    this feature.
+  * Windows 98: The registry entry is not properly read. Now qGo saves it install dir in
+    the config file, and eventually prompts the user for the install path. This applies
+    -only- for Windows 9X, not NT, 2000, Xp.
+
+ -- Peter Strempel <pstre001@stud.informatik.fh-wiesbaden.de>  Sat, 19 Jan 2002 11:37:49 +0100
+
+qgo (0.0.3-1) unstable; urgency=low
+	
+  * When game was modified, user is prompted to save when choosing Quit, Load, New game.
+  * Basic mousegestures implemented, using mousebutton and mousewheel combinations.
+  * Directory from last load/save is remembered, request from windows users.
+  * Design updates, wooden board and green table are drawn faster now.
+  * Zoom fixed, board can't be zoomed smaller than the board widget anymore.
+  * Basic manual implemented, using XML/XSL processing.
+  * ASCII/Graphics export to and from clipboard.
+  * Fix to sound for autoplay.
+  * Update on slider design.
+  * Windows: Installation dir saved in registry, to find sound and help files properly.
+  * Windows: Switched to Inno installer, this is freeware. Registered qGo for .sgf files.
+  * Linux: Moved html help to /usr/share/doc
+
+ -- Peter Strempel <pstre001@stud.informatik.fh-wiesbaden.de>  Sat, 05 Jan 2002 15:12:23 +0100
+	
+qgo (0.0.2-1) unstable; urgency=low
+
+  * Design updates. The background is now split in a green table and the wood
+    only for the board itself. The board is now centered in the canvas.
+  * Telnet menu item removed if telnet is disabled (default).
+  * Bugfix in SGF reader. Newlines were partly ignored.
+  * Old SGF version 3 label 'L' is now also supported, as some older clients
+    use this to display text marks.
+  * Added a slider for fast navigation through the main branch of a game.
+  * Simple skin support. Light and dark wood for board available.
+
+ -- Peter Strempel <pstre001@stud.informatik.fh-wiesbaden.de>  Sat, 25 Dec 2001 18:22:21 +0100
+
+qgo (0.0.1-1) unstable; urgency=low
+
+  * Initial Release.
+
+ -- Peter Strempel <pstre001@stud.informatik.fh-wiesbaden.de>  Sat, 15 Dec 2001 00:51:51 +0100
+
+Local variables:
+mode: debian-changelog
+End:

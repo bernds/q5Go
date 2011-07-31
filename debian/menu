@@ -1,0 +1,2 @@
+?package(qgo):needs=X11 section=Games/Board/\
+  title="qGo" command="/usr/bin/qgo"

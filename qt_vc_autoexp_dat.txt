@@ -1,0 +1,13 @@
+; Trolltech Qt
+QString=<d->unicode,su> len=<d->len,u>
+QCString =<shd->data, s>
+QPoint =x=<xp> y=<yp>
+QRect =x1=<x1> y1=<y1> x2=<x2> y2=<y2>
+QSize =width=<wd> height=<ht>
+QWMatrix =m11=<_m11> m12=<_m12> m21=<_m21> m22=<_m22> dx=<_dx> dy=<_dy>
+QVariant =Type=<d->typ> value=<d->value>
+QValueList<*> =Count=<sh->nodes>
+QPtrList<*> =Count=<numNodes>
+QGuardedPtr<*> =ptr=<priv->obj>
+QEvent =type=<t>
+QObject =class=<metaObj->classname,s> name=<objname,s>

@@ -1,0 +1,148 @@
+<!DOCTYPE UI><UI>
+<class>NthMoveDialog</class>
+<widget>
+    <class>QDialog</class>
+    <property stdset="1">
+        <name>name</name>
+        <cstring>NthMoveDialog</cstring>
+    </property>
+    <property stdset="1">
+        <name>geometry</name>
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>210</width>
+            <height>90</height>
+        </rect>
+    </property>
+    <property stdset="1">
+        <name>minimumSize</name>
+        <size>
+            <width>210</width>
+            <height>90</height>
+        </size>
+    </property>
+    <property stdset="1">
+        <name>maximumSize</name>
+        <size>
+            <width>210</width>
+            <height>90</height>
+        </size>
+    </property>
+    <property stdset="1">
+        <name>caption</name>
+        <string>Move Number</string>
+    </property>
+    <widget>
+        <class>QPushButton</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>buttonCancel</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>110</x>
+                <y>50</y>
+                <width>80</width>
+                <height>32</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>&amp;Cancel</string>
+        </property>
+        <property stdset="1">
+            <name>autoDefault</name>
+            <bool>true</bool>
+        </property>
+    </widget>
+    <widget>
+        <class>QLabel</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>TextLabel1</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>10</x>
+                <y>10</y>
+                <width>120</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>Enter move number:</string>
+        </property>
+    </widget>
+    <widget>
+        <class>QPushButton</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>buttonOk</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>20</x>
+                <y>50</y>
+                <width>80</width>
+                <height>32</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>&amp;OK</string>
+        </property>
+        <property stdset="1">
+            <name>autoDefault</name>
+            <bool>true</bool>
+        </property>
+        <property stdset="1">
+            <name>default</name>
+            <bool>true</bool>
+        </property>
+    </widget>
+    <widget>
+        <class>QSpinBox</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>moveSpinBox</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>140</x>
+                <y>10</y>
+                <width>50</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>maxValue</name>
+            <number>999</number>
+        </property>
+    </widget>
+</widget>
+<connections>
+    <connection>
+        <sender>buttonOk</sender>
+        <signal>clicked()</signal>
+        <receiver>NthMoveDialog</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>buttonCancel</sender>
+        <signal>clicked()</signal>
+        <receiver>NthMoveDialog</receiver>
+        <slot>reject()</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>moveSpinBox</tabstop>
+    <tabstop>buttonOk</tabstop>
+    <tabstop>buttonCancel</tabstop>
+</tabstops>
+</UI>

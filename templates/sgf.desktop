@@ -1,0 +1,7 @@
+[Desktop Entry]
+Comment=Smart go format
+Hidden=false
+Icon=/usr/share/qGo/pics/Bowl.png
+MimeType=text/sfg
+Patterns=*.sgf
+Type=MimeType

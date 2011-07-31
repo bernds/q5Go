@@ -1,0 +1,579 @@
+2007-06-30 : 1.5.4
+	* fixed : mark issue with teaching games
+	* added : blind go
+	* added : 2 new translations (latin and simplified chinese)
+	* changed : added 'SGF' (uppercase) as file suffix
+
+	* added (r2) : turkish translation
+
+2007-01-04 : 1.5.3
+	* fixed : 9x9 grid display
+	* changed : 'remember last dir' set by default
+	* changed : made ugly 2D stones available
+	* added : IGS 'nmatch' range now in the preferences 
+
+2006-10-7 : 1.5.2
+	* changed : thinner stones stripes (more realistic)
+	* changed : 'observe' handling
+	* fixed : 'trail' works now (as consequence of precedent)
+	* added : 'trail' menu item (players popup menu)
+	* changed : code for goban gatter grid revamped (looks better)
+	* added : more of IGS 'nmatch' (nigiri, ...)
+	* changed : layout of match requests
+	* fixed : file name candidate for 'save as'
+	* fixed : observe players name with * at the end (games list)
+
+
+2006-07-08 : 1.5.1
+	* changed : logon procedure (dropped use of codec for logon)
+	* fixed : crash bug for some distributions
+	* added : match dispute management on IGS
+	* fixed : corrected a small komi bug with computer play
+	* fixed : UI layouts (Peter)
+	* fixed : styles definitively removed
+
+
+2006-04-05: 1.5
+	* changed : started in quiet mode on IGS
+	* added : 2 buttons on board toolbar : coordinates and toggle stone sound
+	* fixed : toolbar width glitch (long player name)
+	* added : new IGS 'undo' protocol
+	* changed : restored saving of comment window position
+	* changed : added a blank space before players name in games table for readability
+	* changed : lightened the alternate background color (windows users)
+	* fixed : channels tabs not crippled with stats infos anymore
+	* changed : channel tab initialised when entering a channel
+	* removed : code with 'png' icons
+	* changed : command line in client window
+	* added : alternate background for lists is now choosable
+	* added : message box for game results
+	* fixed : enabled the IGS extended user info which was not working
+	* added : players 'nmatch' information is now available in extended user info
+	* added : automatic players refresh in rooms
+	* added : Improvements to Mac build: 
+			- include gnugo in the bundle
+			- include translations in the bundle
+			- include extra background images in the bundle 
+			- set the preferences dialog to look there first
+	* added : Table picture selectable
+	* fixed : 'who' syntax on LGS and WING
+	* added : more IGS nmatch integration : now possible to propose nmatch
+	* added : new version warning is now accessible from help menu
+	* changed : command line in board window
+
+2006-08-01: 1.0.4
+r1	* changed : total code revamp for played end game handling
+	* fixed : now impossible to play on an illegal ko
+	* changed : code change for resign / adjourn buttons (did not work with my compiler)
+	* fixed : reduced CPU consumption waiting for gnugo to answer (Rob Leathley)
+	* changed : use of DATADIR macro for users putting qGo in a weird place (anonymous patch)
+	* added : autosave for played games
+	* changed : further nmatch integration
+	* added : clock visual warning for byo yomi
+
+r2	* fixed	: reverted to original code for gnugo answer (some qgo hanged)
+
+2005-10-02: 1.0.3
+r1	* fixed : display of SGF coords in status bar
+	* fixed : "suggest" now working with IGS new rating
+	* added : date and server name in game infos
+	* added : autosave observed games feature
+	* removed : styles (no use, and caused compilation woes)
+	* fixed : wav files now playable on linux PPC machines (Thomas Huth)
+	* added : board picture is now selectable from image file
+	* added : shadows for the goban
+	* added : IGS 'seek' feature
+	* changed : the 'offer' button is no more selected by default in match dialog 
+
+r2	*fixed : there was no ghost for the white stones
+	*fixed : suppressed the 'open / new game' menu for observed and computer game
+	*added : IGS time tags parsing
+
+2005-07-04: 1.0.2
+r1	* changed : IGS new ratings 
+	* added : stone look and shadows
+	* fixed : letter marks background
+	* added : portuguese and danish translations
+	* fixed : loading of default translation
+	* added : saving the status and menu bar display on board window
+	* fixed : (dirty fix) no more crash when playing GNUgo while connected to IGS
+	* added : anti-clicko feature
+	* fixed : restored the shadow cursor for IGS games
+	* fixed : (hopefully) a bug when starting an on line handicap game
+	* added : possibility to have a one time display warning message at the launch of a new version
+	* added : keyboard shortcuts : end and beginning of an observed games (Bernd Schmidt)
+	
+2005-04-01: 1.0.1 
+r1	* fixed : removed unappropriate installation of header files
+	* added : IGS Rooms 
+	* added : GNUgo "resign" command
+	* fixed : better handling of Gnugo game ending
+	* fixed : game loading with Gnugo
+	* fixed : better handling of "stats" command
+	* fixed : numbering when loading SGF file (Peter)
+	* added : SGF coordinates around board (Peter)
+	* fixed : "apply" button in Preferences
+
+2004-12-14: 1.0.0 
+r1 	* changed : better handling of game ending
+	* added : additional infos on stats tab
+	* added : czech and chinese translations
+	* changed : made gnugo settings saveable
+	* changed : closed game dialog after match declined 
+	* changed : better CPU usage (now 30 % of previous consumption)
+	* added : Big5 decoding (code from Chia-Lin Kao)
+	* changed : made alternate background in list honor local palette
+	
+r2	* fixed : change in IGS protocol
+	* fixed : compile with gcc 3.4
+	* added : OS X binary (thanks to Peter-ius)
+
+	
+2004-10-18: 0.2.2
+b1:	* removed: old parts of earlier Qt releases (QList, QStack, QSortedList)
+	* fixed: crash (not on all systems) when player on top of visible list disconnect
+	* fixed: several minor UI tweaks. widgets behaving really neat now.
+	* fixed: saving of ASCII character set
+	* fixed: "default" language was not read properly at initialising
+	* changed: reorganised preference dialog
+	* changed: improved user defineable buttons
+	* fixed : illegal move when playing gnugo was taken as "pass" move (still ko moves to fix)
+	* fixed : popup menus on client window did not have a consistent behaviour after 2nd invoke
+	* added : alternate color background items in players and games list
+	* added : new "stats" command display, auto "stats" feature
+	* fixed : small bug when reading "RG" tags from sgf file
+	* fixed : small bug when receiving match request (player color now properly allotted)
+	* added : Big 5 encoding
+	* changed: small changes in server window display
+	* added : name proposed when saving a file (code from Stuart Yates) 
+	* added : players list filters are now saved and restored
+	* added : handling of match cancellation
+	* changed : display in the telnet window - added the issued command
+b3	* changed : backtrack Big5 for windows
+
+2004-07-02: 0.2.1
+b1:	* fixed: komi bug
+	* added: new preferences: komi, auto negotiation
+	* fixed: better GTP 2 compliance
+	* changed: improved game wrapup when playing with computer
+	* added: adjustable BY warning time
+	* added: players list filters
+	* fixed: image file export
+	* added: stats player button in game dialog
+	* added: console font in preferences
+	* fixed: board table layout (stones don't hide coordinates of small boards anymore)
+	* removed: "remember font" checkbox in preferences
+	* fixed : desktop integration (does not take default OS style anymore, but the actual)
+	* fixed: crash when trying to number a 'pass' move
+	* fixed: IGS logging script because they modified it (again)
+
+2004-02-14: 0.2
+b1:	* changed: Client windows is now a .ui file
+	* changed: new icon theme
+	* changed: command line list behaviour
+	* added: UI style. Now the default is the desktop style
+	* fixed: no more One Color Go when observing a new game in the list game
+	* UPDATED to GTP 2 protocol (Gunnar Farnebäck)
+	* fixed : Board coordinates initialisation
+	* fixed : toolbar initialisation
+b2:	* fixed: gtp protocol and source of QProcess()
+b3:	* removed: -menu option
+	* added: list of observers for an online game is now sorted by rank
+	* fixed: incoming player has been on second line at player list
+	* added: store defaults for computer/human players (preferences)
+	* fixed: display problem if player's name is too long
+	* changed: application icon
+b4:	* fixed: double request for adjournment at IGS
+	* fixed: corrected free game management if requested (NNGS)
+	* fixed: endless komi request
+	* fixed: calculation of result was wrong
+	* fixed: debug window freed to early
+
+2004-02-01: 0.1.3
+b1:	* added: language tab "Magyar" - hope to get a translation by Szervac Attila
+	* added: undo when playing with GNUGO
+	* added: One Color go when playing Gnugo
+b2:	* added: language tab "Nederlands" - translation to Dutch by Tim Fooy
+b3:	* fixed: next/previous move text tab corrected
+	* added: default games settings 
+
+2003-12-10: 0.1.2
+b1:	* fixed: clock field was too small
+	* changed: passwords are not shown any longer inside qGo (Nick Wedd)
+	* added: clicking on a sound check box in the preferences let's you hear the sound (Nick Wedd)
+	* changed: connected open and looking flags: not open->not looking; looking -> open
+b2	* Added Gnugo handling
+b3	* Windows gnugo handling
+b4	* added: Italian translation
+	* suppressed :Time management when playing GNUGO
+
+2003-09-02: 0.1.1
+b1:	* fixed: update problem with go server list
+b2:	* added: language tab "Italiano" - hope to get a translation in Italian by Oha
+	* fixed: tr() -> QObject::tr() for Qt 2.3nc compatiblity
+b3:	* added: compiler flag QGO_NOSTYLES to disable styles (default: enabled)
+b4:	* fixed: adapted 'who' table parser for WING
+	* changed: mouse wheel action while observing allowed
+	* fixed: teaching game is now shown correctly (WING)
+b5:	* added: make slider work while observing
+b6:	* UPDATED TO Qt 3.2.0 COMPATIBILITY
+b7:	* fixed: qGo crashed by clicking on an empty field at preferences->Go Server
+b8:	* UPDATED TO Qt 3.2.1 COMPATIBILITY
+	* fixed: clock field exceeded horizontal size when name was too long
+	* fixed: set komi to 5.5 when a new 19x19 board is created.
+
+2003-05-30: 0.1
+b1:	* fixed: password problem while establishing connection (eb)
+	* fixed: resize missing mark (eb)
+	* added: language tab "Dansk" - hope to get a translation in Danish by Christian Mikkelsen
+	* fixed: refreshing hosts table
+b2:	* fixed: watch/exclude list entries are now correct displayed
+	* fixed: game end message appears even in quiet mode when opponent has resigned
+b3:	* fixed: no external window appears after counting in online mode
+	* fixed: counting on IGS (Christopher Weinberger)
+	* fixed: update account info at every refresh
+	* fixed: number of observed games corrected
+	* fixed: suggest command toggles only if w_Rk > b_Rk
+	* fixed: ensure that my game is always at first place
+	* fixed: show my own games in blue
+	* fixed: better check for open/looking
+	* fixed: corrected message "white forfeits on time" if either side forfeits (Ch. Weinberger)
+b4	* changed: alphabetic order of languages
+	* changed: added a settings version number
+	* fixed: IGSConnection::checkPrompt() -> if (bufferLineRest.length() < 4) 
+
+2003-04-23: 0.0.99
+b1:	* changed: defaults for sounds set to true
+b2:	* changed: moved all sidebar items to toolbar (eb)
+	* added: menu for list of games
+	* added: doubleclick for lists (eb)
+	* changed: moved list of channels to status bar
+	* changed: removed client window's sidebar
+	* fixed: after deletion of an entry at hostlist, the fields are reset
+	* fixed: when using a grip at client window, the text field has scrolled down
+	* fixed: VIEW_COMMENT is obsolete
+b3:	* added: sound for Unix (eb)
+	* changed: disabled annoying beep (eb)
+	* fixed: changed operator "<" in Host()
+b4:	* added: new install scripts for Linux (ps)
+	* fixed: modified install script for Windows: file association only on demand (ps)
+b5:	* added: VIEW_COMMENT label indicating default orientation
+	* fixed: navigate in edit board to last made move when updated
+	* added: time info for teaching games
+	* removed: buttons at toolbox
+b6:	* added: single line ASCII import
+b7:	* removed: survey/messages/toolbox tab
+	* removed: gui_basetable
+b8:	* removed: hosttable while integrating it to preferences
+b9:	* fixed: size/pos of preferences window
+	* changed: settings file will be written by closing the preferences window
+	* fixed: edit button group's color button has pix now
+	* changed: HOST[] entries are saved in a more better way
+b10:	* changed: comment field will not be cleared by pass move
+	* fixed: didn't check for strings when passes were first moves of edited game
+	* fixed: diplaying the hoshi points correct
+b11:	* fixed: no trailing PW[]
+
+2003-03-25:
+	* added: clock font selection
+	* set matchrequest to free game if player is NR
+	* fixed: sorting order of resumed games
+	* UPDATED TO Qt 3.1.1 COMPATIBILITY
+	* added support for PL[] tag of sgf files
+	* fixed: line insert at end of text in every text field
+	* dropped online menu feature
+	* fixed sgfault: F1 opens the help file correctly
+	* fixed: talk windows color update
+	* added columns at game list
+	* fixed: better internal clock for timing functions (hold-the-line)
+	* fixed: single character commands can be sent
+	* changed: loading order: games, then who/user
+	* fixed: result entry at end of game
+	* fixed: antialiasing color is now based on the board's color (M. Ferecatu)
+	* added sidebar on the left side possible (M. Ferecatu)
+	* fixed: current move is signed after window resize (E. Beranger, M. Ferecatu)
+	* fixed: correct komi is shown near board when starting a game
+	* fixed: preferences accept/ok(R. Assard)
+	* fixed: comment field should work correct in online mode (E. Beranger)
+	* changed: my own kibitzes are not shown if sent back by the server
+	* fixed: variable LANG for system language is read now (E. Beranger)
+	* changed: save format of user defineable buttons
+	* added: EGF Go Server entry -> NNGS type
+	* added: new NNGS msg type support (R. Assard)
+	* fixed: leave channel in popup window works
+	* fixed: automatic komi settings
+	* added: disable sorting while initial reading or playertable/gamestable (Qt 3.1)
+	* added: clear playertable when manually entered 'who' cmd (E. Beranger)
+	* fixed: titles are shown correctly
+	* fixed: automatic 'moves' cmd is only sent one times
+	* added: time delay before sending cmd
+	* added: observer field
+	* fixed: L[] property values are now numberd in correct order
+	* fixed: sgf loading - replaced newline checking with isSpace() checking
+	* changed sgf output format by placing a fistfull of moves into one line
+	* added: bytes in/out statistics
+	* changed: observed games are considered to be unchanged (no star '*')
+	* changed: player list menu: status -> stats
+	* fixed: allocated workspace will now be deleted
+	* added: horizontal cross instead of plus sign
+	* added: Emmanuel Beranger and Marin Ferecatu are now in the author's list
+	* added: "go to next/previous comment" by E. Beranger
+	* added: pics for next/prev comment by EB
+	* added: (dis)connect sound
+	* added: menus in client window by EB
+	* changed: editing host is now more comfortable
+	* added: toolbar
+	* fixed: enable/disable bug for observed handicap games
+	* added: save sizes/pos of host window and preferences window
+	* added: -desktop option in order to use standard options from desktop
+	* fixed: qGo allows to remove stones at IGS after 3x pass
+
+2003-01-02:
+	0.0.14
+	* added load function to reload adjourned games
+	* fixed: show correct number of obs. players
+	* enabled autoplay sound again
+	* added predefined server list (fixed coded)
+	* F1: open help from client window
+	* fixed: delete unused host entry
+	* added player menu: 'observe game'
+	* added read messages at entering the go server
+	* correct respond to manual entry of observe/teach cmds (lloigor)
+	* added update of players/games list w/o clearing the table (not quiet mode)
+	* added a stone rendering algorithm coded by Marin Ferecatu (big thanks!)
+	* added game info to toolbar (M. Ferecatu)
+	* skipped annoying 'sound not available' messages
+	* added simple beep
+	* added 'help sound info' menu entry
+	* deleted some pics within startup frame because of copyright problem
+	* fixed: crash on using small ghosts (E. Beranger)
+	* set hold-the-line feature to maximum idle time of 1h (if not observing a game)
+	* added auto away message
+	* hide comment line too if no comments wanted
+	* accelerated canvas update
+	* replaced ugly circle mark by a simple '+' mark (M. Ferecatu)
+	* extended support of cmd 'user' on IGS (lloigor)
+	* fixed: student may do the first move in a ext. teaching game now
+	* fixed: own games are updated in column pl. of players list
+	* changed toggle exclude/watch list behaviour
+	* added player's name + rk shown at his clock
+	* added stone boxes to preferences dialog
+	* fixed: stone drawing problem; sometimes parts of a stone remained on the board
+	* fixed: sound directory will now be saved as promised in the message box
+	* added read time info from sgf file
+	* added autoplay using sgf time tags
+	* added simple dame points recognition algorithm to counter
+	* fixed: handicap can be undone and is now handled as a variation
+	* fixed: solved a problem while reading L[] property (old-style)
+	* added fonts/colors selection (M. Ferecatu)
+	* fixed: support for compressed lists at editMark in sgf files
+	* added: results of observed games are now written to gameinfo
+	* fixed: resume an adjourned session now works
+
+2002-11-07:
+	0.0.13
+	* added 'mark' (IGS) function for teaching games
+	* enabled languages
+	* corrected styles for client window
+	* changed timer mistake - now hold-the-line commands are sent
+	* user is no longer asked for soundfiles if disabled
+	* set comment field read only for online games
+	* clear comment field when moving forward or backward (not online!)
+	* correct saving of comments
+	* added byoyomi time field and free/rated display
+	* added rank field in game nego dialog
+	* added exclude list
+	* added handicap for boards of size 7x7 - 25x25
+	* corrected star points for even sized boards
+	* added user definable buttons (suggested by J. VanDerHout)
+	* added -debug command
+	* added addtime function
+	* added pause function
+	* corrected channel support for IGS
+	* added save size
+	* added startup frame
+	* added startup flags: -debug -sgf -menu <file>
+	* corrected sound while loading stones ("moves" cmd)
+	* less sound for active talk window (suggested by LordOfPi)
+	* added splitters
+	* added tab widget for talk windows (suggested by LordOfPi)
+	* removed talk dialog (now: talk within tab widget)
+	* corrected highlighing during scroll for players and games
+	* added popup menus (suggested by teratles et al.)
+	* fixed preferences problem on Win95
+	* temporaryly disabled autoplay sound
+	* added update button for syncing online games to edit board
+	* show territory after end of observed game
+	* cmd "say" after game end now possible from board edit line
+	* added some stone pics and some wood pics
+	* added save window (ALT-0...ALT-9)
+	* erased usage of qGoClient.rc, moved qGo.rc to HOME/USERPROFILE
+	* fixed comment problem during online games (all comments of last moves were repeatly saved)
+	* fixed sgf bug: node in root can be handled now (Thanks to Emmanuel Beranger)
+	* sgf: added compressed lists
+	* sgf: save unknown properties
+	* sgf: added nodeName prop
+
+2002-09-02:
+	0.0.12
+	* Added CLIENT, thus, many new features
+	* disabled languages temporary
+
+2002-05-19:
+	0.0.11
+	* Added french translation. Thanks to Emmanuel Beranger
+	* Fixed another bug with scoring.
+	
+2002-04-25:
+	0.0.10
+	* Fixed a bug with scoring, already marked dead stones are now counted properly to prisoners.
+	* Fixed a bug with sgf reading. If the parent node of the currently read node is in edit mode,
+	  check all positions before adding the new stone.
+
+2002-04-14:
+	0.0.9
+	* Fixed a critical bug in the sgf write code. Multiple varations resulted in invalid sgf.
+	* Added a define in main.cpp to disable getopt library. A FreeBSD user reported problems with this.
+
+2002-04-04:
+	0.0.8
+	* Bugfix: When trying to play a suicide move, the stone was not properly removed from the data.
+	* Bugfix: Last position after loading a game was not processed properly.
+	* Some performance enhancement when reading sgf files
+	* Removed lots of debug messages
+	* Added an icon for NewBoard menu.
+
+2002-03-21:
+	0.0.7
+	* Added a patch from Bernd Schmidt fixing a bug in the sgf parser.
+	* Fixed a bug in sgf parser, empty nodes messed variation reading.
+	* Added possibility for translations. Please contact me if you want to translate qGo
+	  to your language. For further informations check out http://qgo.sourceforge.net
+	  The language can be set in the preferences dialog. If system default is selected, the
+	  Unix system locale will be used (LANG environment variable).
+	* Added a german translation.
+	* Implemented a simple anti-alias algorithm for the stone pixmaps.
+	* Added Disable-tooltips settings in preferences.
+	* Some loaded sgf files start with move 0 (sgf2misc). Added a check to force the game
+	  starting with move 1.
+	* Adjusted starpoint drawing slightly.
+	* Fixed a bug in mouse coords check.
+	* Fixed a bug with the ghost cursor, that was not properly redrawn when the mouse
+	  reentered the board at the same position.
+
+2002-02-20:
+	0.0.6
+	* Added an option and menu item for vertical or horizontal comment field display.
+	* Show sidebar setting is now saved.
+	* Fixed a bug in the coordinates display inside the statusbar.
+	* Fixed slider. Won't jump back to the main branch anymore. Max value is dynamically
+	  updated to the branch length.
+	* Because of the changed slider, added a button to move back to the main branch if we
+	  are in a variation.
+	* Added function to export SGF to clipboard. Works together with Jago on Java 1.3.
+	* Added an option to select the display type of variations: None, ghost, small stones.
+	* Fixed a bug when qGo segfaulted on exit.
+	* Added waypoints when moving through branches, so the next time the former path is
+	  chosen again.
+
+2002-02-08:
+	0.0.5
+	* Added support for locale settings and text encoding to support japanese, korean and
+	  chinese characters.
+	  The encoding can be selected from the preferences dialog.
+	* Implemented more than one board window. SDI now only.
+	* Added function to mark variations, either brothers or sons.
+	* Added function to number all moves with their turn value.
+	* Improved ASCII Importing. Positions of only a part of the board is now placed properly.
+	* Updated the score mode. When a move has been scored, the points are displayed in the
+	  captures fields. Existing score, territory marks and dead stones are kept now.
+	* Removed window size option and replaced with a menu item to save the current size.
+	  Old version was too confusing with several boards open.
+	* Changed window names and flags to work better with some linux windowmanagers.
+	* Fixed a bug in liberty count for handicap stones.
+	* Added automatic appending '.sgf' to filenames when saving.
+	* Fixed a bug when clicking on an existing stone, this won't double the node anymore.
+	* Some updates and bugfixes in XML reading code. It's not yet fully functional.
+	* Added some more text to the manual.
+
+2002-01-19:
+	0.0.4
+	* A serious bug in the code for saving SGF files was fixed. Variations were not saved properly.
+	* Some bugs in the SGF reading code were fixed. Kogo joseki dictionary now displays properly.
+	* Bug reading SGF text labels fixed.
+	* Added basic code for loading XML files. It's not fully working yet.
+	* Added loading of MGT files. Old SGF or MGT format is automatically noticed and converted.
+	* Design update: Stones got larger, but can be toggled to smaller stones.
+	* Bookmark window to display the search results if there is more than one move found.
+	* Design update: Coordinates display smaller now.
+	* Added an icon for SaveAs.
+	* Added a toolbar for common file menu items.
+	* New search feature: Three different searches can be performed. See manual for details.
+	* Slider max value fixed. Slider now increases smoothly without jumps when adding moves.
+	* Some new settings in the preferences dialog and for the config file. Window size is
+	  saved on exit.
+	* Some more chapters for the manual written
+	* Windows: Added a small delay when resizing. The board redraw while resizing was
+          too frequent and annoying. Does not influence Linux, here the windowmanager handles
+	  this feature.
+	* Windows 98: The registry entry is not properly read. Now qGo saves it install dir in
+	  the config file, and eventually prompts the user for the install path. This applies
+	  -only- for Windows 9X, not NT, 2000, Xp.
+
+2002-01-05:
+	0.0.3
+	* When game was modified, user is prompted to save when choosing Quit, Load, New game.
+	* Basic mousegestures implemented, using mousebutton and mousewheel combinations.
+	* Directory from last load/save is remembered, request from windows users.
+	* Design updates, wooden board and green table are drawn faster now.
+	* Zoom fixed, board can't be zoomed smaller than the board widget anymore.
+	* Basic manual implemented, using XML/XSL processing.
+	* ASCII/Graphics export to and from clipboard.
+	* Fix to sound for autoplay.
+	* Update on slider design.
+	* Windows: Installation dir saved in registry, to find sound and help files properly.
+	* Windows: Switched to Inno installer, this is freeware. Registered qGo for .sgf files.
+	* Linux: Moved html help to /usr/share/doc
+
+2001-12-25:
+	0.0.2
+	* Design updates. The background is now split in a green table and the wood
+	  only for the board itself. The board is now centered in the canvas.
+	* Telnet menu item removed if telnet is disabled (default).
+	* Bugfix in SGF reader. Newlines were partly ignored.
+	* Old SGF version 3 label 'L' is now also supported, as some older clients
+	  use this to display text marks.
+	* Added a slider for fast navigation through the main branch of a game.
+	* Simple skin support. Light and dark wood for board available.
+
+2001-12-15:
+	0.0.1
+	* First alpha release.
+	* Added basic support for the IGS connection library. The library itself is
+	  not yet available. Dont expect any usable server connection feature too soon.
+	* Added font choosing dialog.
+
+2001-11-26:
+	Test Release 1.3
+	* SGF file reading is much faster now.
+	* Added -experimental- fastload option to speed up loading even more.
+	  This is pretty bugged still.
+
+2001-09-30:
+	Test Release 1.2
+	* Added scoring
+	* Added pass-variation ghost stone
+	* Save remembers filename
+	* SGF Property GameName added
+
+2001-09-28:
+	Test Release 1.1
+        * Added pass button.
+	* Added managment for letter and number mark labels.
+	* Fixed sgf reading for pass.
+	* Added territory property when reading sgf.
+	* Added counter for captures.
+	* Changed design of sidebar of main window.
+
+2001-09-23:
+	Test Release 1

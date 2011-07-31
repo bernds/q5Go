@@ -1,0 +1,81 @@
+Bugs :							Status
+___________________________________________________________________________
+
+- Player rank is not shown on match request on LGS	*** not a bug ***
+  (explanation : LGS displays only 50 players)
+
+- 'trail' does not work					DONE
+
+- right button click on empty list crashes on Windows	Priority
+
+
+
+Annoyances (features) :
+___________________________________________________________________________
+
+
+
+Annoyances (GUI) :
+___________________________________________________________________________
+
+
+- complete the help system and manual			To be done (cont.)
+
+- fix marks background (not tiling properly with board)	DONE
+
+
+Features requests
+___________________________________________________________________________
+
+- rotated Handicap for h3 depending on color		Discarded
+							
+- full screen view 					Not a priority
+
+- 3D view; OpenGL support				Not a priority
+
+- load ISHI/UGF/XML format				Not a priority
+
+- automatic counting					Not a priority
+
+- manual counting aid					Not a priority
+
+- integration of go board into client window 		Discarded
+
+- add a command line dialog box for placing moves	Discarded
+  instead of using mouse
+
+- Win only: show undeleted files after 			Not a priority
+  uninstall procedure (H. Nakesch)
+
+- prepare for team games				Discarded
+
+- have a "show last 50 moves numbers" (or 30 etc) 	To be done (unsched.)
+  menu item, and also a "show move numbers" 
+  for all moves (in the Jago style), 
+
+- Have a simple quick file browser (a separate 		Not a priority
+  window), which shows only go formats files on 
+  the left side panel, and lets say on the right 
+  panel a quick preview of the game 
+
+- add a "test Go playing program" button		Not a priority
+
+- add some tweakable time warning (time per move	Not a priority
+  for instance)
+  
+- more 'stats' display	(like rank - Neil)		Not a priority
+
+- Have a list of board pictures instead of path (Neil)	Not a priority
+
+- Display and choose other colums in players list 	Not a priority
+  (Neil, Bear)
+
+- make observers tab optional (Bear)			Not a priority
+
+- have ugly flat stones (Bear)				DONE
+
+- several flavour for the mark : bold, ... (Bear)	To be done (unsched)
+
+- mouse wheel direction toggling flag			Discarded (hardware dependent issue)
+
+- toggle nmatch	use					Discarded (linked wth seek)

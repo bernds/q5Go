@@ -1,0 +1,123 @@
+qGo 1.5.2
+---------
+
+Startup options:
+
+qGo [options] [<file>]
+
+-sgf		make new sgf file (or simple open a board to play)
+-sgf19		same but don't ask and open 19x19 board
+-debug		open debug window and show status messages
+-desktop	use standard options from desktop
+<file>		open file (type sgf, mgt or xml)
+
+
+qGo is a Go board, SGF editor and client for IGS/NNGS or similar servers.
+Go is an ancient boardgame, very common in Japan, China and Korea.
+
+Open index.html for installation support.
+
+support table:
+
+windows:	Qt 3.2.1nc
+Linux:		Qt 3.1 and above
+Mac OsX:	Qt 3.1 and above
+
+Version 0.1 should be stable including a lot of bugfixes concerning
+the go server behavioural.
+
+Version 0.0.14 has many bugfixes and new stones + board coded by
+Marin Ferecatu. That's why I dropped the old stones. Further, fonts
+and background colors are free selectable.
+The autoplay feature can now use sgf time information, thus you can
+replay a game in original speed.
+
+Version 0.0.13 offers some teaching tools whereby the teacher starts
+a teaching session and his client works as server for the invited
+student. The student (if one) is able to play one or both colors, but,
+the teacher can always play both colors. Hope this helps for online
+teaching.
+There's are a watch list and an exclude list too, whereby
+entering/leaving of players can be watched as well as players can be
+excluded from shouting. I removed the thousands of talk windows and
+added a talk tab inside the client window.
+The translations have been
+enabled again in Version 0.0.13, but, since Peter and me speak only German
+and Enlish, there are only these two translations fixed. Thanks to
+Emmanuel Beranger for the French translation.
+Look at changelog for more details to this version.
+
+Since Version 0.0.12 qGo has it's own client.
+
+qGo is no longer supported by Qt 2.3nc.
+
+----
+
+Version 0.0.7 comes with support for translations. Currently there are
+english, french and german versions available.
+You can chose the language in the preferences dialog. If system default
+is selected, the Unix system locale will be used (LANG environment variable).
+Somehow I thought on Windows it would also chose the default language, but
+this does not work. The locale on my german windows 2000 is "C" - anything
+but the "de" or "de_DE" what Qt expects. Well, Windows.... I don't really
+care. Set the language manually and you are fine.
+You have to restart qGo to let the language change take effect.
+Please contact me if you want to translate qGo to your language. I will put
+more detailed informations on the qGo webpage at http://qgo.sourceforge.net
+
+I added a patch from Bernd Schmidt fixing a really nasty SGF parser bug.
+Thanks, Bernd!
+
+Version 0.0.6 is mainly a maintaining release with bugfixes and minor
+feature enhancements.
+Translation files (requested by some users) are not yet in. I plan to
+release a version for translations soon.
+
+In version 0.0.5 a SDI interface for multiple boards in one running
+process is implemented. It is not using threads, so if you load a
+large file like Kogos, it will hang up the program while
+loading. Maybe I add thread support, not sure yet. You can always
+start several processes, that might be safer than threads.
+
+Support for Kanji letters is implemented in 0.0.5. You can now load
+and save games with a text encoding, set in the preferences dialog in
+the third tab 'SGF Loading'. You have to select the encoding before
+loading a file. You might need to try a bit which encoding fits your
+language best. It was tested on japanese (windows and linux), chinese
+(linux) and korean (windows) systems and worked.
+
+0.0.4 comes with a basic implementation of XML support.
+Currently only reading XML files is done, saving not yet.
+Reading XML works with files saved from Jago, but not yet all XML
+are loaded properly. Please consider this currently as a draft, XML
+code is under development still.
+
+qGo now supports old SGF and MGT files that can sometimes be found
+on the web. If it's an old format, it's automatically noticed and qGo
+converts the file upon loading into new SGF format.
+I found some of those files at the download section of the german
+go association.
+
+
+Copyright
+---------
+
+Copyright (C) 2001-2006 Emmanuel Beranger, Johannes Mesa, Peter Strempel
+
+This software is published under the GNU General Public License (GPL).
+See the file COPYING for more informations or visit http://www.fsf.org/.
+
+The Windows version is linked against the Qt non-commercial edition
+and also published under the GPL with the following exception applying
+to the Windows version of qGo:
+
+  As a special exception, the author gives permission to link this program
+  with Qt non-commercial edition, and distribute the resulting executable,
+  without including the source code for the Qt non-commercial edition in the
+  source distribution.
+
+Any feedback is welcome.
+
+Emmanuel Beranger <e2(at!)beranger.com.fr>
+Johannes Mesa <frosla(at!)gmx.at>
+Peter Strempel <pstrempel(at!)t-online.de>
