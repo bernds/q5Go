@@ -2598,8 +2598,8 @@ void MainWindow::updateObserverCnt()
 
 void MainWindow::addObserver(const QString &name)
 {
-	QString name_without_rank = element(name, 0);
-	QString rank = element(name, 1);
+	QString name_without_rank = name.section(' ', 0, 0);
+	QString rank = name.section(' ', 1, 1);
 	QString rankkey = rkToKey(rank) + name_without_rank;
 	
 	new QListViewItem(ListView_observers, name_without_rank, rank, rankkey);

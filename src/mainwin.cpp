@@ -958,7 +958,7 @@ void ClientWindow::sendTextToApp(const QString &txt)
 				{
 					// IGS - check if client mode
 					bool ok;
-					/*int cmd_nr =*/ element(txt, 0, " ").toInt(&ok);
+					/*int cmd_nr =*/ txt.section(' ', 0, 0).toInt(&ok);
 					if (!ok)
 						set_sessionparameter("client", true);
 
@@ -1313,7 +1313,7 @@ qDebug("cmd_valid: %i", (int)cmd_valid);
 			QString testcmd;
 
 			qDebug("found cmd: observe");
-			testcmd = element(cmdLine, 1, " ");
+			testcmd = cmdLine.section(' ', 1, 1);
 			if (testcmd)
 			{
 //				qgoif->set_observe(testcmd);
@@ -1837,7 +1837,7 @@ void ClientWindow::slot_matchrequest(const QString &line, bool myrequest)
 	if (!myrequest)
 	{
 		// match xxxx B 19 1 10
-		opponent = element(line, 1, " ");
+		opponent = line.section(' ', 1, 1);
 
 		// play sound
 		qgoif->get_qgo()->playMatchSound();
@@ -1845,7 +1845,7 @@ void ClientWindow::slot_matchrequest(const QString &line, bool myrequest)
 	else
 	{
 		// xxxxx 4k*
-		opponent = element(line, 0, " ");
+		opponent = line.section(' ', 0, 0);
 	}
 
 	// look for same opponent
@@ -1910,7 +1910,7 @@ void ClientWindow::slot_matchrequest(const QString &line, bool myrequest)
 
 	if (myrequest)
 	{
-		QString rk = element(line, 1, " ");
+		QString rk = line.section(' ', 1, 1);
 
 		// set values
 		/*dlg->playerWhiteEdit->setText(myAccount->acc_name);
@@ -1983,8 +1983,8 @@ void ClientWindow::slot_matchrequest(const QString &line, bool myrequest)
 	else
 	{
 		// match xxxx B 19 1 10 - using this line means: I am black!
-		bool opp_plays_white = (element(line, 2, " ") == "B");//QString(tr("B")));
-		bool opp_plays_nigiri = (element(line, 2, " ") == "N");
+		bool opp_plays_white = (line.section(' ', 2, 2) == "B");//QString(tr("B")));
+		bool opp_plays_nigiri = (line.section(' ', 2, 2) == "N");
 
 		QString handicap, size, time,byotime, byostones ;
 
@@ -1993,11 +1993,11 @@ void ClientWindow::slot_matchrequest(const QString &line, bool myrequest)
 			//specific behavior here : IGS nmatch not totally supported
 			// disputes are hardly supported
 			dlg->set_is_nmatch(true);
-			handicap = element(line,3 , " ");
-			size = element(line, 4, " ");
-			time = element(line, 5, " ");
-			byotime = element(line, 6, " ");
-			byostones = element(line, 7, " ");
+			handicap = line.section(' ', 3, 3);
+			size = line.section(' ', 4, 4);
+			time = line.section(' ', 5, 5);
+			byotime = line.section(' ', 6, 6);
+			byostones = line.section(' ', 7, 7);
 			dlg->timeSpin->setRange(0,100);
 			dlg->timeSpin->setValue(time.toInt()/60);
 			dlg->byoTimeSpin->setRange(0,100);
@@ -2011,9 +2011,9 @@ void ClientWindow::slot_matchrequest(const QString &line, bool myrequest)
 		else
 		{
 			dlg->set_is_nmatch(false);
-			size = element(line, 3, " ");
-			time = element(line, 4, " ");
-			byotime = element(line, 5, " ");
+			size = line.section(' ', 3, 3);
+			time = line.section(' ', 4, 4);
+			byotime = line.section(' ', 5, 5);
 			dlg->timeSpin->setRange(0,1000);
 			dlg->timeSpin->setValue(time.toInt());
 			dlg->byoTimeSpin->setRange(0,100);
@@ -2126,14 +2126,14 @@ void ClientWindow::slot_playerPopup(int i)
 		case 6:
 		{
 			// toggle watch list
-			QString cpy = ";" + setting->readEntry("WATCH").simplifyWhiteSpace() + ";";
+			QString cpy = setting->readEntry("WATCH").simplifyWhiteSpace() + ";";
 			QString line;
 			QString name;
 			bool found = false;
-			int cnt = cpy.contains(';') + 1;
+			int cnt = cpy.contains(';');
 			for (int i = 0; i < cnt; i++)
 			{
-				name = element(cpy, i, ";");
+				name = cpy.section(';', i, i);
 				if (name)
 				{
 					if (name == lv_popupPlayer->text(1))
@@ -2179,17 +2179,16 @@ void ClientWindow::slot_playerPopup(int i)
 			break;
 
 		case 7:
-			// toggle exclude list
 		{
-			// toggle watch list
-			QString cpy = ";" + setting->readEntry("EXCLUDE").simplifyWhiteSpace() + ";";
+			// toggle exclude list
+			QString cpy = setting->readEntry("EXCLUDE").simplifyWhiteSpace() + ";";
 			QString line;
 			QString name;
 			bool found = false;
-			int cnt = cpy.contains(';') + 1;
+			int cnt = cpy.contains(';');
 			for (int i = 0; i < cnt; i++)
 			{
-				name = element(cpy, i, ";");
+				name = cpy.section(';', i, i);
 				if (name)
 				{
 					if (name == lv_popupPlayer->text(1))
