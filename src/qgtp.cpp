@@ -277,7 +277,7 @@ int msglen = strlen(s);
 	_cpt++;
 
 	qDebug(QString("flush -> %1").arg(s));
-    programProcess->writeToStdin(QString::QString(s));
+	programProcess->writeToStdin(QString(s));
 	
 	
 }
