@@ -31,7 +31,6 @@ Parser::~Parser()
 	delete aPlayer;
 }
 
-
 // put a line from host to parser
 // if info is recognized, a signal is sent, and, however,
 // the return type indicates the type of information
@@ -220,30 +219,107 @@ InfoType Parser::put_line(const QString &txt)
 	// command mode -> expect result
 	switch (cmd_nr)
 	{
-		// PROMPT
-		case 1:
+	case 1:
+		return cmd1(line);
+	case 2:
+		return cmd2(line);
+	case 5:
+		return cmd5(line);
+	case 7:
+		return cmd7(line);
+	case 8:
+		return cmd8(line);
+	case 9:
+		return cmd9(line);
+	case 11:
+		return cmd11(line);
+	case 14:
+		return cmd14(line);
+	case 15:
+		return cmd15(line);
+	case 19:
+		return cmd19(line);
+	case 20:
+		return cmd20(line);
+	case 21:
+		return cmd21(line);
+	case 22:
+		return cmd22(line);
+#if 0 // TODO
+		// STORED
+		// 9 Stored games for frosla:
+		// 23           frosla-physician
+	case 23:
+		break;
+#endif
+
+	case 24:
+		return cmd24(line);
+		// results
+		//25 File
+		//curio      [ 5d*](W) : lllgolll   [ 4d*](B) H 0 K  0.5 19x19 W+Resign 22-04-47 R
+		//curio      [ 5d*](W) : was        [ 4d*](B) H 0 K  0.5 19x19 W+Time 22-05-06 R
+		//25 File
+	case 25:
+		break;
+	case 27:
+		return cmd27(txt);
+	case 28:
+		return cmd28(line);
+	case 32:
+		return cmd32(line);
+
+		// Setting your . to xxxx
+	case 40:
+		break;
+
+	case 42:
+		return cmd42(txt);
+
+	case 48:
+		return cmd48(line);
+
+	case 49:
+		return cmd49(line);
+
+	case 63:
+		return cmd63(line);
+
+	default:
+		emit signal_message(line);
+		return MESSAGE;
+	}
+
+	return IT_OTHER;
+}
+
+// PROMPT
+InfoType Parser::cmd1(const QString &line)
+{
 			if (memory_str && (memory_str.contains("File")||memory_str.contains("STATS")))
 				// if ready this cannont be a help message
 				memory_str = QString();
 			emit signal_message("\n");  
 			return READY;
-			break;
+}
 
-		// BEEP
-		case 2:
+// BEEP
+InfoType Parser::cmd2(const QString &line)
+{
 			if (line.contains("Game saved"))
 			{
 				return IT_OTHER;
 			}
 			return BEEP;
-			break;
+}
 
-		// ERROR message
-		//	5 Player "xxxx" is not open to match requests.
-		//	5 You cannot observe a game that you are playing.
-		//	5 You cannot undo in this game
-		//	5 Opponent's client does not support undoplease
-		case 5:
+// ERROR message
+//	5 Player "xxxx" is not open to match requests.
+//	5 You cannot observe a game that you are playing.
+//	5 You cannot undo in this game
+//	5 Opponent's client does not support undoplease
+InfoType Parser::cmd5(const QString &line)
+{
 			if (line.contains("No user named"))
 			{
 				QString name = element(line, 1, "\"");
@@ -295,20 +371,21 @@ InfoType Parser::put_line(const QString &txt)
 			emit signal_message(line);
 
 			return  MESSAGE;
-			break;
-			
-		// games
-		// 7 [##] white name [ rk ] black name [ rk ] (Move size H Komi BY FR) (###)
-		// 7 [41]      xxxx10 [ 1k*] vs.      xxxx12 [ 1k*] (295   19  0  5.5 12  I) (  1)
-		// 7 [118]      larske [ 7k*] vs.      T08811 [ 7k*] (208   19  0  5.5 10  I) (  0)
-		// 7 [255]          YK [ 7d*] vs.         SOJ [ 7d*] ( 56   19  0  5.5  4  I) ( 18)
-		// 7 [42]    TetsuyaK [ 1k*] vs.       ezawa [ 1k*] ( 46   19  0  5.5  8  I) (  0)
-		// 7 [237]       s2884 [ 3d*] vs.         csc [ 2d*] (123   19  0  0.5  6  I) (  0)
-		// 7 [67]    atsukann [14k*] vs.    mitsuo45 [15k*] ( 99   19  0  0.5 10  I) (  0)
-		// 7 [261]      lbeach [ 3k*] vs.    yurisuke [ 3k*] (194   19  0  5.5  3  I) (  0)
-		// 7 [29]      ppmmuu [ 1k*] vs.       Natta [ 2k*] (141   19  0  0.5  2  I) (  0)
-		// 7 [105]      Clarky [ 2k*] vs.       gaosg [ 2k*] ( 65   19  0  5.5 10  I) (  1)
-		case 7:
+}
+
+// games
+// 7 [##] white name [ rk ] black name [ rk ] (Move size H Komi BY FR) (###)
+// 7 [41]      xxxx10 [ 1k*] vs.      xxxx12 [ 1k*] (295   19  0  5.5 12  I) (  1)
+// 7 [118]      larske [ 7k*] vs.      T08811 [ 7k*] (208   19  0  5.5 10  I) (  0)
+// 7 [255]          YK [ 7d*] vs.         SOJ [ 7d*] ( 56   19  0  5.5  4  I) ( 18)
+// 7 [42]    TetsuyaK [ 1k*] vs.       ezawa [ 1k*] ( 46   19  0  5.5  8  I) (  0)
+// 7 [237]       s2884 [ 3d*] vs.         csc [ 2d*] (123   19  0  0.5  6  I) (  0)
+// 7 [67]    atsukann [14k*] vs.    mitsuo45 [15k*] ( 99   19  0  0.5 10  I) (  0)
+// 7 [261]      lbeach [ 3k*] vs.    yurisuke [ 3k*] (194   19  0  5.5  3  I) (  0)
+// 7 [29]      ppmmuu [ 1k*] vs.       Natta [ 2k*] (141   19  0  0.5  2  I) (  0)
+// 7 [105]      Clarky [ 2k*] vs.       gaosg [ 2k*] ( 65   19  0  5.5 10  I) (  1)
+InfoType Parser::cmd7(const QString &line)
+{
 			if (line.contains("##"))
 				// skip first line
 				return GAME7_START;
@@ -347,10 +424,11 @@ InfoType Parser::put_line(const QString &txt)
 			emit signal_move(aGame);
 			
 			return GAME7;
-			break;
+}
 
-		// "8 File"
-		case 8:
+// "8 File"
+InfoType Parser::cmd8(const QString &line)
+{
 			if (memory_str && memory_str.contains("File"))
 			{
 				// toggle
@@ -373,69 +451,69 @@ InfoType Parser::put_line(const QString &txt)
 					memory = 8;
 			}
 			return HELP;
-			break;
+}
 
-		// INFO: stats, channelinfo
-		// NNGS, LGS: (NNGS new: 2nd line w/o number!)
-		//	9 Channel 20 Topic: [xxx] don't pay your NIC bill and only get two players connected
-		//	9  xxxx1 xxxx2 xxxx3 xxxx4 frosla
-		//	9 Channel 49 Topic: Der deutsche Kanal (German)
-		//	9  frosla
-		//
-		//	-->  channel 49
-		//	9 Channel 49 turned on.
-		//	9 Channel 49 Title:
-		//
-		//	9 guest has left channel 49.
-		//
-		//	9 Komi set to -3.5 in match 10
-		// - in my game:
-		// -   opponent:
-		//      9 Komi is now set to -3.5
-		// -   me:
-		//      9 Set the komi to -3.5
-		// NNGS, LGS:
-		//	9 I suggest that ditto play White against made:
-		//	9 For 19x19:  Play an even game and set komi to 1.5.
-		//	9 For 13x13:  Play an even game and set komi to 6.5.
-		//	9 For   9x9:  Play an even game and set komi to 4.5.
-		// or:
-		//	9 I suggest that pem play Black against eek:
-		//	For 19x19:  Take 3 handicap stones and set komi to -2.5.
-		//	For 13x13:  Take 1 handicap stones and set komi to -6.5.
-		//	For   9x9:  Take 1 handicap stones and set komi to 0.5.
-		// or:
-		//	   I suggest that you play White against Cut:
-		//
-		//	9 Match [19x19] in 1 minutes requested with xxxx as White.
-		//	9 Use <match xxxx B 19 1 10> or <decline xxxx> to respond.
-		//
-		//	9 Match [5] with guest17 in 1 accepted.
-		//	9 Creating match [5] with guest17.
-		//
-		//	9 Requesting match in 10 min with frosla as Black.
-		//	9 guest17 declines your request for a match.
-		//	9 frosla withdraws the match offer.
-		//
-		//	9 You can check your score with the score command
-		//	9 You can check your score with the score command, type 'done' when finished.
-		//	9 Removing @ K8
-		//
-		//	9 Use adjourn to adjourn the game.
-		//
-		// NNGS: cmd 'user' NOT PARSED!
-		//	9  Info     Name       Rank  19  9  Idle Rank Info
-		//	9  -------- ---------- ---- --- --- ---- ---------------------------------
-		//	9  Q  --  5 hhhsss      2k*   0   0  1s  NR                                    
-		//	9     --  5 saturn      2k    0   0 18s  2k                                    
-		//	9     --  6 change1     1k*   0   0  7s  NR                                    
-		//	9 S   -- -- mikke       1d    0  18 30s  shodan in sweden                      
-		//	9   X -- -- ksonney     NR    0   0 56s  NR                                    
-		//	9     -- -- kou         6k*   0   0 23s  NR                                    
-		//	9 SQ! -- -- GnuGo      11k*   0   0  5m  Estimation based on NNGS rating early 
-		//	9   X -- -- Maurice     3k*   0   0 24s  2d at Hamilton Go Club, Canada; 3d in 
-
-		case 9:
+// INFO: stats, channelinfo
+// NNGS, LGS: (NNGS new: 2nd line w/o number!)
+//	9 Channel 20 Topic: [xxx] don't pay your NIC bill and only get two players connected
+//	9  xxxx1 xxxx2 xxxx3 xxxx4 frosla
+//	9 Channel 49 Topic: Der deutsche Kanal (German)
+//	9  frosla
+//
+//	-->  channel 49
+//	9 Channel 49 turned on.
+//	9 Channel 49 Title:
+//
+//	9 guest has left channel 49.
+//
+//	9 Komi set to -3.5 in match 10
+// - in my game:
+// -   opponent:
+//      9 Komi is now set to -3.5
+// -   me:
+//      9 Set the komi to -3.5
+// NNGS, LGS:
+//	9 I suggest that ditto play White against made:
+//	9 For 19x19:  Play an even game and set komi to 1.5.
+//	9 For 13x13:  Play an even game and set komi to 6.5.
+//	9 For   9x9:  Play an even game and set komi to 4.5.
+// or:
+//	9 I suggest that pem play Black against eek:
+//	For 19x19:  Take 3 handicap stones and set komi to -2.5.
+//	For 13x13:  Take 1 handicap stones and set komi to -6.5.
+//	For   9x9:  Take 1 handicap stones and set komi to 0.5.
+// or:
+//	   I suggest that you play White against Cut:
+//
+//	9 Match [19x19] in 1 minutes requested with xxxx as White.
+//	9 Use <match xxxx B 19 1 10> or <decline xxxx> to respond.
+//
+//	9 Match [5] with guest17 in 1 accepted.
+//	9 Creating match [5] with guest17.
+//
+//	9 Requesting match in 10 min with frosla as Black.
+//	9 guest17 declines your request for a match.
+//	9 frosla withdraws the match offer.
+//
+//	9 You can check your score with the score command
+//	9 You can check your score with the score command, type 'done' when finished.
+//	9 Removing @ K8
+//
+//	9 Use adjourn to adjourn the game.
+//
+// NNGS: cmd 'user' NOT PARSED!
+//	9  Info     Name       Rank  19  9  Idle Rank Info
+//	9  -------- ---------- ---- --- --- ---- ---------------------------------
+//	9  Q  --  5 hhhsss      2k*   0   0  1s  NR                                    
+//	9     --  5 saturn      2k    0   0 18s  2k                                    
+//	9     --  6 change1     1k*   0   0  7s  NR                                    
+//	9 S   -- -- mikke       1d    0  18 30s  shodan in sweden                      
+//	9   X -- -- ksonney     NR    0   0 56s  NR                                    
+//	9     -- -- kou         6k*   0   0 23s  NR                                    
+//	9 SQ! -- -- GnuGo      11k*   0   0  5m  Estimation based on NNGS rating early 
+//	9   X -- -- Maurice     3k*   0   0 24s  2d at Hamilton Go Club, Canada; 3d in 
+InfoType Parser::cmd9(QString &line)
+{
 			// status messages
 			if (line.contains("Set open to be"))
 			{
@@ -835,9 +913,11 @@ qDebug("parser->case 9: Use adjourn to");
 			// NNGS: 9 You have 1 messages.  Type "messages" to display them
 			else if (line.contains("You have") && line.contains("messages"))
 			{
+#if 0 // already done??
 				// remove cmd nr
 				line = txt.stripWhiteSpace();
 				line = line.remove(0, 2);
+#endif
 				emit signal_message(line);
 				return YOUHAVEMSG;
 			}
@@ -907,7 +987,7 @@ qDebug("parser->case 9: Use adjourn to");
 				aGame->Sz = line ;
 			
 				emit signal_move(aGame);
-				break;
+				return IT_OTHER;
 				// make better check
 				//if (element(line, 0, " ", "EOL") != QString("has resigned the game."))
 				//{
@@ -1120,11 +1200,12 @@ qDebug("parser->case 9: Use adjourn to");
       if (memory_str != "STATS")
   			emit signal_message(line);
 			return MESSAGE;
-			break;
+}
 
-		// 11 Kibitz Achim [ 3d*]: Game TELRUZU vs Anacci [379]
-		// 11    will B resign?
-		case 11:
+// 11 Kibitz Achim [ 3d*]: Game TELRUZU vs Anacci [379]
+// 11    will B resign?
+InfoType Parser::cmd11(const QString &line)
+{
 			if (line.contains("Kibitz"))
 			{
 				// who is kibitzer
@@ -1143,13 +1224,14 @@ qDebug("parser->case 9: Use adjourn to");
 				memory_str = QString();
 			}
 			return KIBITZ;
-			break;
+}
 
-		// messages
-		// 14 File
-		// frosla 11/15/02 14:00: Hallo
-		// 14 File
-		case 14:
+// messages
+// 14 File
+// frosla 11/15/02 14:00: Hallo
+// 14 File
+InfoType Parser::cmd14(const QString &line)
+{
 			if (memory_str && memory_str.contains("File"))
 			{
 				// toggle
@@ -1163,16 +1245,16 @@ qDebug("parser->case 9: Use adjourn to");
 				memory = 14;
 			}
 			return IT_OTHER;
-			break;
+}
 
-		// MOVE
-		// 15 Game 43 I: xxxx (4 223 16) vs yyyy (5 59 13)
-		// 15 TIME:21:lowlow(W): 1 0/60 479/600 14/25 0/0 0/0 0/0
-		// 15 144(B): B12
-		// IGS: teaching game:
-		// 15 Game 167 I: qGoDev (0 0 -1) vs qGoDev (0 0 -1)
-
-		case 15:
+// MOVE
+// 15 Game 43 I: xxxx (4 223 16) vs yyyy (5 59 13)
+// 15 TIME:21:lowlow(W): 1 0/60 479/600 14/25 0/0 0/0 0/0
+// 15 144(B): B12
+// IGS: teaching game:
+// 15 Game 167 I: qGoDev (0 0 -1) vs qGoDev (0 0 -1)
+InfoType Parser::cmd15(const QString &line)
+{
 			if (line.contains("Game"))
 			{
 				aGameInfo->nr = element(line, 1, " ");
@@ -1237,7 +1319,6 @@ qDebug("parser->case 9: Use adjourn to");
 			else if (line.contains("GAMERPROPS"))
 			{	
 				return IT_OTHER;
-				break ;
 			}
 			else
 			{
@@ -1251,22 +1332,24 @@ qDebug("parser->case 9: Use adjourn to");
 			emit signal_set_observe(aGameInfo->nr);
 			emit signal_move(aGameInfo);
 			return MOVE;
-			break;
+}
 
-		// SAY
-		// 19 *xxxx*: whish you a nice game  :)
-		// NNGS - new:
-		//  19 --> frosla hallo
-		case 19:
+// SAY
+// 19 *xxxx*: whish you a nice game  :)
+// NNGS - new:
+//  19 --> frosla hallo
+InfoType Parser::cmd19(const QString &line)
+{
 			if (line.contains("-->"))
 				emit signal_kibitz(0, 0, element(line, 1, " ", "EOL"));
 			else
 				emit signal_kibitz(0, 0, element(line, 0, ":", "EOL"));
-			break;
-			
-				
-		//20 yfh2 (W:O): 4.5 to NaiWei (B:#): 4.0
-		case 20:
+			return IT_OTHER;
+}
+
+//20 yfh2 (W:O): 4.5 to NaiWei (B:#): 4.0
+InfoType Parser::cmd20(const QString &line)
+{
 			aGame->nr = "@";
 			aGame->running = false;
 			
@@ -1276,12 +1359,12 @@ qDebug("parser->case 9: Use adjourn to");
 				aGame->Sz = "B " + element(line, 2, " ") + " W " + element(line, 6, " ");				
 			
 			emit signal_move(aGame);
-			break;
-			
-			
-			
-		// SHOUT - a info from the server
-		case 21:
+			return IT_OTHER;
+}
+
+// SHOUT - a info from the server
+InfoType Parser::cmd21(QString &line)
+{
 			// case sensitive
 			if (line.contains(" connected.}"))
 			{
@@ -1403,31 +1486,32 @@ qDebug("parser->case 9: Use adjourn to");
 
 			emit signal_message(line);
 			return MESSAGE;
-			break;
+}
 
-		// CURRENT GAME STATUS
-		// 22 Pinkie  3d* 21 218 9 T 5.5 0
-		// 22 aura  3d* 24 276 16 T 5.5 0
-		// 22  0: 4441000555033055001
-		// 22  1: 1441100000011000011
-		// 22  2: 4141410105013010144
-		// 22  3: 1411411100113011114
-		// 22  4: 1131111111100001444
-		// 22  5: 0100010001005011111
-		// 22  6: 0055000101105000010
-		// 22  7: 0050011110055555000
-		// 22  8: 1005000141005055010
-		// 22  9: 1100113114105500011
-		// 22 10: 1111411414105010141
-		// 22 11: 4144101101100111114
-		// 22 12: 1411300103100000144
-		// 22 13: 1100005000101001144
-		// 22 14: 1050505550101011144
-		// 22 15: 0505505001111001444
-		// 22 16: 0050050111441011444
-		// 22 17: 5550550001410001144
-		// 22 18: 5555000111411300144
-		case 22:
+// CURRENT GAME STATUS
+// 22 Pinkie  3d* 21 218 9 T 5.5 0
+// 22 aura  3d* 24 276 16 T 5.5 0
+// 22  0: 4441000555033055001
+// 22  1: 1441100000011000011
+// 22  2: 4141410105013010144
+// 22  3: 1411411100113011114
+// 22  4: 1131111111100001444
+// 22  5: 0100010001005011111
+// 22  6: 0055000101105000010
+// 22  7: 0050011110055555000
+// 22  8: 1005000141005055010
+// 22  9: 1100113114105500011
+// 22 10: 1111411414105010141
+// 22 11: 4144101101100111114
+// 22 12: 1411300103100000144
+// 22 13: 1100005000101001144
+// 22 14: 1050505550101011144
+// 22 15: 0505505001111001444
+// 22 16: 0050050111441011444
+// 22 17: 5550550001410001144
+// 22 18: 5555000111411300144
+InfoType Parser::cmd22(const QString &line)
+{
 			if (!line.contains(":"))
 			{
 				QString player = element(line, 0, " ");
@@ -1443,24 +1527,19 @@ qDebug("parser->case 9: Use adjourn to");
 			}
 
 //			emit signal_message(line);
-			break;
+			return IT_OTHER;
+}
 
-		// STORED
-		// 9 Stored games for frosla:
-		// 23           frosla-physician
-//TODO		case 23:
-//TODO			break;
+//  24 *xxxx*: CLIENT: <cgoban 1.9.12> match xxxx wants handicap 0, komi 5.5, free
+//  24 *jirong*: CLIENT: <cgoban 1.9.12> match jirong wants handicap 0, komi 0.5
+//  24 *SYSTEM*: shoei canceled the nmatch request.
+//  24 *SYSTEM*: xxx requests .
 
-		//  24 *xxxx*: CLIENT: <cgoban 1.9.12> match xxxx wants handicap 0, komi 5.5, free
-		//  24 *jirong*: CLIENT: <cgoban 1.9.12> match jirong wants handicap 0, komi 0.5
-    		//  24 *SYSTEM*: shoei canceled the nmatch request.
-		//  24 *SYSTEM*: xxx requests .
-
-		// NNGS - new version:
-		//  24 --> frosla CLIENT: <qGo 0.0.15b7> match frosla wants handicap 0, komi 0.5, free
-		//  24 --> frosla  Hallo
-		case 24:
-		{
+// NNGS - new version:
+//  24 --> frosla CLIENT: <qGo 0.0.15b7> match frosla wants handicap 0, komi 0.5, free
+//  24 --> frosla  Hallo
+InfoType Parser::cmd24(QString &line)
+{
 			int pos;
 			if ((((pos = line.find("*")) != -1) && (pos < 3) || 
 				((pos = line.find("-->")) != -1) && (pos < 3)) &&
@@ -1528,55 +1607,44 @@ qDebug("parser->case 9: Use adjourn to");
 			emit signal_talk(e1, e2, true);
 
 			return TELL;
-			break;
-		}
+}
 
+// who
+// 27  Info Name Idle Rank | Info Name Idle Rank
+// 27  SX --   -- xxxx03      1m     NR  |  Q! --   -- xxxx101    33s     NR  
+// 0   4 6    11  15         26     33   38 41
+// 27     --  221 DAISUKEY   33s     8k  |   X172   -- hiyocco     2m    19k*
+// 27  Q  --  216 Saiden      7s     1k* |     --   53 toshiao    11s    10k 
+// 27     48   -- kyouji      3m    11k* |     --   95 bengi       5s     4d*
+// IGS:
+//        --   -- kimisa      1m     2k* |  Q  --  206 takabo     45s     1k*
+//      X 39   -- Marin       5m     2k* |     --   53 KT713      18s     2d*
+//        --   34 mat21       2m    14k* |     --    9 entropy    28s     4d 
+// NNGS:
+// 27   X --   -- arndt      21s     5k  |   X --   -- biogeek    58s    20k   
+// 27   X --   -- buffel     21s     4k  |  S  --    5 frosla     12s     7k   
+// 27  S  --   -- GoBot       1m     NR  |     --    5 guest17     0s     NR   
+// 27     --    3 hama        3s    15k  |     --   -- niki        5m     NR   
+// 27   ! --   -- viking4    55s    19k* |  S  --    3 GnuGo       6s    14k*  
+// 27   X --   -- kossa      21m     5k  |   X --   -- leif        5m     3k*  
+// 27     --    6 ppp        18s     2k* |     --    6 chmeng     20s     1d*  
+// 27                 ********  14 Players 3 Total Games ********
 
-    // results
-    //25 File
-    //curio      [ 5d*](W) : lllgolll   [ 4d*](B) H 0 K  0.5 19x19 W+Resign 22-04-47 R
-    //curio      [ 5d*](W) : was        [ 4d*](B) H 0 K  0.5 19x19 W+Time 22-05-06 R
-    //25 File
-		case 25:
-		{
-      			break;
-    		}
-		// who
-		case 27:
-		{
-			// 27  Info Name Idle Rank | Info Name Idle Rank
-			// 27  SX --   -- xxxx03      1m     NR  |  Q! --   -- xxxx101    33s     NR  
-			// 0   4 6    11  15         26     33   38 41
-			// 27     --  221 DAISUKEY   33s     8k  |   X172   -- hiyocco     2m    19k*
-			// 27  Q  --  216 Saiden      7s     1k* |     --   53 toshiao    11s    10k 
-			// 27     48   -- kyouji      3m    11k* |     --   95 bengi       5s     4d*
-			// IGS:
-			//        --   -- kimisa      1m     2k* |  Q  --  206 takabo     45s     1k*
-			//      X 39   -- Marin       5m     2k* |     --   53 KT713      18s     2d*
-			//        --   34 mat21       2m    14k* |     --    9 entropy    28s     4d 
-			// NNGS:
-			// 27   X --   -- arndt      21s     5k  |   X --   -- biogeek    58s    20k   
-			// 27   X --   -- buffel     21s     4k  |  S  --    5 frosla     12s     7k   
-			// 27  S  --   -- GoBot       1m     NR  |     --    5 guest17     0s     NR   
-			// 27     --    3 hama        3s    15k  |     --   -- niki        5m     NR   
-			// 27   ! --   -- viking4    55s    19k* |  S  --    3 GnuGo       6s    14k*  
-			// 27   X --   -- kossa      21m     5k  |   X --   -- leif        5m     3k*  
-			// 27     --    6 ppp        18s     2k* |     --    6 chmeng     20s     1d*  
-			// 27                 ********  14 Players 3 Total Games ********
-
-			// WING:
-			// 0        9    14                      38      46   51
-			// 27   X 13   -- takeo6      1m     2k  |   ! 26   -- ooide       6m     2k*  
-			// 27   ! --   -- hide1234    9m     2k* |  QX --   -- yochi       0s     2k*  
-			// 27   g --   86 karasu     45s     2k* |  Sg --   23 denakechi  16s     1k*  
-			// 27   g 23   43 kH03       11s     1k* |   g --   43 kazusige   24s     1k*  
-			// 27   g --   50 jan        24s     1k* |  QX --   -- maigo      32s     1d   
-			// 27   g --   105 kume1       5s     1d* |   g --   30 yasumitu   24s     1d   
-			// 27  Qf --   13 motono      2m     1d* |   X 13   -- tak7       57s     1d*  
-			// 27   ! 50   -- okiek       8m     1d* |   X --   -- DrO        11s     1d*  
-			// 27   f --   103 hiratake   35s     8k  |   g --   33 kushinn    21s     8k*
-			// 27   g --   102 teacup      1m     1d* |   g --   102 Tadao      32s     1d*  
-
+// WING:
+// 0        9    14                      38      46   51
+// 27   X 13   -- takeo6      1m     2k  |   ! 26   -- ooide       6m     2k*  
+// 27   ! --   -- hide1234    9m     2k* |  QX --   -- yochi       0s     2k*  
+// 27   g --   86 karasu     45s     2k* |  Sg --   23 denakechi  16s     1k*  
+// 27   g 23   43 kH03       11s     1k* |   g --   43 kazusige   24s     1k*  
+// 27   g --   50 jan        24s     1k* |  QX --   -- maigo      32s     1d   
+// 27   g --   105 kume1       5s     1d* |   g --   30 yasumitu   24s     1d   
+// 27  Qf --   13 motono      2m     1d* |   X 13   -- tak7       57s     1d*  
+// 27   ! 50   -- okiek       8m     1d* |   X --   -- DrO        11s     1d*  
+// 27   f --   103 hiratake   35s     8k  |   g --   33 kushinn    21s     8k*
+// 27   g --   102 teacup      1m     1d* |   g --   102 Tadao      32s     1d*  
+InfoType Parser::cmd27(const QString &txt)
+{
+	int pos;
 			// search for first line
 			if (txt.contains("Idle") && (txt.find("Info")) != -1)
 			{
@@ -1729,16 +1797,15 @@ qDebug("parser->case 9: Use adjourn to");
 			}
 
 			return PLAYER27;
-			break;
-		}
+}
 
-		// 28 guest17 undid the last move (J16).
-		// 15 Game 7 I: frosla (0 5363 -1) vs guest17 (0 5393 -1)
-		// 15   2(B): F17
-		// IGS:
-		// 28 Undo in game 64: MyMaster vs MyMaster:  N15 
-		case 28:
-		{
+// 28 guest17 undid the last move (J16).
+// 15 Game 7 I: frosla (0 5363 -1) vs guest17 (0 5393 -1)
+// 15   2(B): F17
+// IGS:
+// 28 Undo in game 64: MyMaster vs MyMaster:  N15 
+InfoType Parser::cmd28(const QString &line)
+{
 			if (line.contains("undid the last move"))
 			{
 				// now: just look in qgo_interface if move_nr has decreased...
@@ -1757,34 +1824,33 @@ qDebug("parser->case 9: Use adjourn to");
 
 			// message anyway
 			emit signal_message(line);
-			break;
-		}
+			return IT_OTHER;
+}
 
-		// IGS
-		// -->  ; \20
-		// 32 Changing into channel 20.
-		// 32 Welcome to cyberspace.
-		//
-		// 32 49:qgodev: Title is now: (qgodev) qGo development
-		// 32 20:qGoDev: Person joining channel
-		// 32 20:frosla: hi
-		// 32 20:qGoDev: Person leaving channel
+// IGS
+// -->  ; \20
+// 32 Changing into channel 20.
+// 32 Welcome to cyberspace.
+//
+// 32 49:qgodev: Title is now: (qgodev) qGo development
+// 32 20:qGoDev: Person joining channel
+// 32 20:frosla: hi
+// 32 20:qGoDev: Person leaving channel
 
-		//
-		// 1 5
-		// -->  channels
-		// 9 #1 Title: Professional Channel -- Open
-		// 
-		// 9 #20 Title: Untitled -- Open
-		// 9 #20     frosla
-		// #> 23 till: hello all  <-- this is what the members in channel 23 see:
-		//			(channel number and who sent the message)
-		//
-		// NNGS:
-		// channel talk: "49:xxxx: hi"
-		case 32:
-		{
-			
+//
+// 1 5
+// -->  channels
+// 9 #1 Title: Professional Channel -- Open
+// 
+// 9 #20 Title: Untitled -- Open
+// 9 #20     frosla
+// #> 23 till: hello all  <-- this is what the members in channel 23 see:
+//			(channel number and who sent the message)
+//
+// NNGS:
+// channel talk: "49:xxxx: hi"
+InfoType Parser::cmd32(const QString &line)
+{		
 			QString e1,e2;
 			
 			if (line.contains("Changing into channel"))
@@ -1795,24 +1861,24 @@ qDebug("parser->case 9: Use adjourn to");
 				emit signal_talk(e1, "", false);
 				//emit signal_message(line);
 				
-				break;
+				return IT_OTHER;
 			}
 			else if (line.contains("Welcome to cyberspace"))
 			{
 				emit signal_message(line);
-				break;
+				return IT_OTHER;
 			}
 			else if (line.contains("Person joining channel"))
 			{
 				int nr = element(line, 0, ":").toInt();
 				emit signal_channelinfo(nr, QString("*on*"));
-				break;
+				return IT_OTHER;
 			}
 			else if (line.contains("Person leaving channel"))
 			{
 				int nr = element(line, 0, ":").toInt();
 				emit signal_channelinfo(nr, QString("*on*"));
-				break;
+				return IT_OTHER;
 			}
 
 			// emit (channel number, player + message , false =channel )
@@ -1831,50 +1897,46 @@ qDebug("parser->case 9: Use adjourn to");
 			}
 			//emit signal_talk(element(line, 0, ":"), element(line, 0, ":", "EOL").stripWhiteSpace() + "\n", false);
 			emit signal_talk(e1, e2, false);
-			break;
-		}
+			return IT_OTHER;
+}
 
-		// Setting your . to xxxx
-		case 40:
-			break;
+// long user report equal to 7
+// 7 [255]          YK [ 7d*] vs.         SOJ [ 7d*] ( 56   19  0  5.5  4  I) ( 18)
+// 42 [88]          AQ [ 2d*] vs.        lang [ 2d*] (177   19  0  5.5  6  I) (  1)
 
-		// long user report equal to 7
-		// 7 [255]          YK [ 7d*] vs.         SOJ [ 7d*] ( 56   19  0  5.5  4  I) ( 18)
-		// 42 [88]          AQ [ 2d*] vs.        lang [ 2d*] (177   19  0  5.5  6  I) (  1)
+// IGS: cmd 'user'
+// 42 Name        Info            Country  Rank Won/Lost Obs  Pl Idle Flags Language
+// 0  3           15              31       40   45 48    54   59 62   67    72
+// 42    guest15                  --        NR    0/   0  -   -   10s    Q- default 
+// 42    guest13                  --        NR    0/   0  -   -   24s    Q- default 
+// 42         zz  You may be rec  France    NR    0/   0  -   -    0s    -X default 
+// 42     zz0002  <none>          Japan     NR    0/   0  -   -    1m    QX default 
+// 42     zz0003  <none> ()       Japan     NR    0/   0  -   -    1m    SX default 
+// 42       anko                  Taiwan    2k* 168/  97  -   -    1s    -- default 
+// 42     MUKO12  1/12 „Äú 1/15    Japan     4k* 666/ 372  17  -    1m    -X default 
+// 42        mof  [Igc2000 1.1]   Sweden    2k* 509/ 463 124  -    0s    -X default 
+// 42     obiyan  <None>          Japan     3k* 1018/ 850  -   50  11s    -- default 
+// 42    uzumaki                  COM       1k    0/   0  -   -    1s    -X default 
+// 42 HansWerner  [Igc2000 1.2]   Germany   1k   11/   3 111  -    1m    QX default 
+// 42    genesis                  Germany   1k* 592/ 409  -  136  14s    -- default 
+// 42    hamburg                  Germany   3k* 279/ 259  -  334  13s    -- default 
+// 42        Sie                  Germany   1k*   6/   7  -   68  39s    -- default 
+// 42     borkum                  Germany   4k* 163/ 228  -  100   7s    -- default 
+// 42     casumy  45-3            Germany   1d    0/   0  -  133   2s    Q- default 
+// 42      stoni                  Germany   2k* 482/ 524  -  166   7s    -- default 
+// 42   Beholder  <None>          Germany   NR    0/   0 263  -    5s    QX default 
+// 42     xiejun  1/10-15         Germany   3d* 485/ 414 179  -   49s    -X default
+// 9                 ******** 1120 Players 247 Total Games ********
 
-		// IGS: cmd 'user'
-		// 42 Name        Info            Country  Rank Won/Lost Obs  Pl Idle Flags Language
-		// 0  3           15              31       40   45 48    54   59 62   67    72
-		// 42    guest15                  --        NR    0/   0  -   -   10s    Q- default 
-		// 42    guest13                  --        NR    0/   0  -   -   24s    Q- default 
-		// 42         zz  You may be rec  France    NR    0/   0  -   -    0s    -X default 
-		// 42     zz0002  <none>          Japan     NR    0/   0  -   -    1m    QX default 
-		// 42     zz0003  <none> ()       Japan     NR    0/   0  -   -    1m    SX default 
-		// 42       anko                  Taiwan    2k* 168/  97  -   -    1s    -- default 
-		// 42     MUKO12  1/12 Å` 1/15    Japan     4k* 666/ 372  17  -    1m    -X default 
-		// 42        mof  [Igc2000 1.1]   Sweden    2k* 509/ 463 124  -    0s    -X default 
-		// 42     obiyan  <None>          Japan     3k* 1018/ 850  -   50  11s    -- default 
-		// 42    uzumaki                  COM       1k    0/   0  -   -    1s    -X default 
-		// 42 HansWerner  [Igc2000 1.2]   Germany   1k   11/   3 111  -    1m    QX default 
-		// 42    genesis                  Germany   1k* 592/ 409  -  136  14s    -- default 
-		// 42    hamburg                  Germany   3k* 279/ 259  -  334  13s    -- default 
-		// 42        Sie                  Germany   1k*   6/   7  -   68  39s    -- default 
-		// 42     borkum                  Germany   4k* 163/ 228  -  100   7s    -- default 
-		// 42     casumy  45-3            Germany   1d    0/   0  -  133   2s    Q- default 
-		// 42      stoni                  Germany   2k* 482/ 524  -  166   7s    -- default 
-		// 42   Beholder  <None>          Germany   NR    0/   0 263  -    5s    QX default 
-		// 42     xiejun  1/10-15         Germany   3d* 485/ 414 179  -   49s    -X default
-		// 9                 ******** 1120 Players 247 Total Games ********
-
-		// IGS: new cmd 'userlist' for nmatch information
-		//          10        20        30        40        50        60        70        80        80        90       100       110       120
-		// 01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789
-		// 42 Name        Info            Country  Rank Won/Lost Obs  Pl Idle Flags Language
-		// 42      -----  <none>          Japan    15k+ 2108/2455  -   -    1m    Q- default  T BWN 0-9 19-19 600-600 1200-1200 25-25 0-0 0-0 0-0
-		// 42      -----           Japan     3d   11/  13  -  222  46s    Q- default  T BWN 0-9 19-19 60-60 600-600 25-25 0-0 0-0 0-0
-		// 42       Neil  <None>          USA      12k  136/  86  -   -    0s    -X default  T BWN 0-9 19-19 60-60 60-3600 25-25 0-0 0-0 0-0
-		case 42:
-		{
+// IGS: new cmd 'userlist' for nmatch information
+//          10        20        30        40        50        60        70        80        80        90       100       110       120
+// 01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789
+// 42 Name        Info            Country  Rank Won/Lost Obs  Pl Idle Flags Language
+// 42      -----  <none>          Japan    15k+ 2108/2455  -   -    1m    Q- default  T BWN 0-9 19-19 600-600 1200-1200 25-25 0-0 0-0 0-0
+// 42      -----           Japan     3d   11/  13  -  222  46s    Q- default  T BWN 0-9 19-19 60-60 600-600 25-25 0-0 0-0 0-0
+// 42       Neil  <None>          USA      12k  136/  86  -   -    0s    -X default  T BWN 0-9 19-19 60-60 60-3600 25-25 0-0 0-0 0-0
+InfoType Parser::cmd42(const QString &txt)
+{
 			if (txt[40] == 'R')
 			{
 				// skip
@@ -1902,7 +1964,7 @@ qDebug("parser->case 9: Use adjourn to");
 			{
 				qDebug("%s\n", txt.utf8().data());
 				qDebug("No match\n");
-				break;
+				return IT_OTHER;
 			}
 			// 42       Neil  <None>          USA      12k  136/  86  -   -    0s    -X default  T BWN 0-9 19-19 60-60 60-3600 25-25 0-0 0-0 0-0
 
@@ -1993,11 +2055,11 @@ qDebug("parser->case 9: Use adjourn to");
 			emit signal_player(aPlayer, true);
 
 			return PLAYER42;
-			break;
-		}
+}
 
-		// IGS:48 Game 354 qGoDev requests an adjournment
-		case 48:
+// IGS:48 Game 354 qGoDev requests an adjournment
+InfoType Parser::cmd48(const QString &line)
+{
 #if 0 // have a look at case 9
 			if (line.contains("requests an adjournment"))
 			{
@@ -2018,10 +2080,12 @@ qDebug("parser->case 9: Use adjourn to");
 				}
 			}
 #endif
-			break;
+			return IT_OTHER;
+}
 
-		// IGS: 49 Game 42 qGoDev is removing @ C5
-		case 49:
+// IGS: 49 Game 42 qGoDev is removing @ C5
+InfoType Parser::cmd49(const QString &line)
+{
 			if (line.contains("is removing @"))
 			{
 				QString pt = element(line, 6, " ");
@@ -2034,27 +2098,28 @@ qDebug("parser->case 9: Use adjourn to");
 					emit signal_kibitz(game.toInt(), who, pt);
 				}
 			}
-			break;
+			return IT_OTHER;
+}
 
+// IGS : seek syntax, answer to 'seek config_list' command
+// 63 CONFIG_LIST_START 4
+// 63 CONFIG_LIST 0 60 600 25 0 0
+// 63 CONFIG_LIST 1 60 480 25 0 0
+// 63 CONFIG_LIST 2 60 300 25 0 0
+// 63 CONFIG_LIST 3 60 900 25 0 0
+// 63 CONFIG_LIST_END
 
-		// IGS : seek syntax, answer to 'seek config_list' command
-		// 63 CONFIG_LIST_START 4
-		// 63 CONFIG_LIST 0 60 600 25 0 0
-		// 63 CONFIG_LIST 1 60 480 25 0 0
-		// 63 CONFIG_LIST 2 60 300 25 0 0
-		// 63 CONFIG_LIST 3 60 900 25 0 0
-		// 63 CONFIG_LIST_END
+// 63 OPPONENT_FOUND
 
-		// 63 OPPONENT_FOUND
-
-		//63 ENTRY_LIST_START 5
-		//63 ENTRY_LIST HKL 60 480 25 0 0 19 1 1 0
-		//63 ENTRY_LIST tgor 60 480 25 0 0 19 1 1 0
-		//63 ENTRY_LIST sun756 60 600 25 0 0 19 1 1 0
-		//63 ENTRY_LIST horse 60 600 25 0 0 19 2 2 0
-		//63 ENTRY_LIST masaeaki 60 300 25 0 0 19 1 1 0
-		//63 ENTRY_LIST_END
-		case 63:
+//63 ENTRY_LIST_START 5
+//63 ENTRY_LIST HKL 60 480 25 0 0 19 1 1 0
+//63 ENTRY_LIST tgor 60 480 25 0 0 19 1 1 0
+//63 ENTRY_LIST sun756 60 600 25 0 0 19 1 1 0
+//63 ENTRY_LIST horse 60 600 25 0 0 19 2 2 0
+//63 ENTRY_LIST masaeaki 60 300 25 0 0 19 1 1 0
+//63 ENTRY_LIST_END
+InfoType Parser::cmd63(const QString &line)
+{
 			if (line.contains("CONFIG_LIST "))
 			{
 				QString nb = element(line, 1, " ");
@@ -2063,32 +2128,32 @@ qDebug("parser->case 9: Use adjourn to");
 				QString Stone_number = element(line, 4, " ");
 				QString bline = element(line, 1, " ", "EOL");
 				emit signal_addSeekCondition(nb,time,BY,Stone_number,bline );
-				break;
+				return IT_OTHER;
 			}
 
 			else if (line.contains("CONFIG_LIST_START"))
 			{	
 				emit signal_clearSeekCondition();
-				break;
+				return IT_OTHER;
 			}
 
 			else if ((line.contains("OPPONENT_FOUND")) ||(line.contains("ENTRY_CANCEL")))
 			{	
 				emit signal_cancelSeek();
-				break;
+				return IT_OTHER;
 			}
 
 			else if ((line.contains("ERROR")) )
 			{	
 				emit signal_cancelSeek();
 				emit signal_message(line);
-				break;
+				return IT_OTHER;
 			}
 
 			else if ((line.contains("ENTRY_LIST_START")) )
 			{	
 				//emit signal_clearSeekList();
-				break;
+				return IT_OTHER;
 			}
 
 			else if ((line.contains("ENTRY_LIST ")) )
@@ -2107,19 +2172,9 @@ qDebug("parser->case 9: Use adjourn to");
 						element(line, 9, " ");						
 				
 				emit signal_SeekList(player,condition);
-				break;
+				return IT_OTHER;
 			}
-			//else
-			break;			
-
-		default:
-			emit signal_message(line);
-			return MESSAGE;
-			
-			break;
-	}
-
-	return IT_OTHER;
+			return IT_OTHER;
 }
 
 GSName Parser::get_gsname()

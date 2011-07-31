@@ -78,6 +78,27 @@ public:
 	InfoType   cmdsent(const QString&);
 
 private:
+	InfoType   cmd1(const QString&);
+	InfoType   cmd2(const QString&);
+	InfoType   cmd5(const QString&);
+	InfoType   cmd7(const QString&);
+	InfoType   cmd8(const QString&);
+	InfoType   cmd9(QString&);
+	InfoType   cmd11(const QString&);
+	InfoType   cmd14(const QString&);
+	InfoType   cmd15(const QString&);
+	InfoType   cmd19(const QString&);
+	InfoType   cmd20(const QString&);
+	InfoType   cmd21(QString&);
+	InfoType   cmd22(const QString&);
+	InfoType   cmd24(QString&);
+	InfoType   cmd27(const QString&);
+	InfoType   cmd28(const QString&);
+	InfoType   cmd32(const QString&);
+	InfoType   cmd42(const QString&);
+	InfoType   cmd48(const QString&);
+	InfoType   cmd49(const QString&);
+	InfoType   cmd63(const QString&);
 	QString    myname;
 	QString    buffer;
 	GSName     gsName;
