@@ -312,13 +312,13 @@ InfoType Parser::put_line(const QString &txt)
 			if (line.contains("##"))
 				// skip first line
 				return GAME7_START;
-/*			
+#if 0
 			if (!line.contains('['))
 			{
 				// no GAMES result -> leave GAMES mode
 				return IT_OTHER;
 			}
-*/
+#endif
 			// get info line
 			buffer = element(line, 0, "(", ")");
 			aGame->mv = buffer.left(3);
@@ -1106,14 +1106,14 @@ qDebug("parser->case 9: Use adjourn to");
 	 emit signal_room(element(line,0," ",";"),(element(line, 1,";")=="X") || (element(line, 1,";")=="P"));
          return IT_OTHER ;
         }
-      /*
+#if 0
       else if (line.contains("Idle"))
         {
          statsPlayer->extInfo = element(line, 3, " ","EOL");
          return STATS ;
         }
-       */ 
-              
+#endif
+
 	// remove cmd nr
       //			line = txt.stripWhiteSpace();
       //			line = line.remove(0, 2);
@@ -1370,14 +1370,14 @@ qDebug("parser->case 9: Use adjourn to");
 				
 				aGame->wname = element(line, 0, ":", "[");
 				aGame->bname = element(line, 0, "]", "[");
-/*
+#if 0
 				// skip info for own games; full info is coming soon
 				if (aGame->wname == myname || aGame->bname == myname)
 				{
 					emit signal_message(line);
 					return IT_OTHER;
 				}
-*/
+#endif
 				aGame->nr = element(line, 0, "{", ":");
 				aGame->wrank = element(line, 0, "[", "]");
 				aGame->brank = element(line, 1, "[", "]");
@@ -1998,8 +1998,8 @@ qDebug("parser->case 9: Use adjourn to");
 
 		// IGS:48 Game 354 qGoDev requests an adjournment
 		case 48:
-			// have a look at case 9
-/*			if (line.contains("requests an adjournment"))
+#if 0 // have a look at case 9
+			if (line.contains("requests an adjournment"))
 			{
 				QString nr = element(line, 1, " ");
 				QString opp = element(line, 2, " ");
@@ -2016,7 +2016,8 @@ qDebug("parser->case 9: Use adjourn to");
 						emit signal_requestDialog("adjourn", "decline adjourn", nr, opp);
 						break;
 				}
-			} */
+			}
+#endif
 			break;
 
 		// IGS: 49 Game 42 qGoDev is removing @ C5
