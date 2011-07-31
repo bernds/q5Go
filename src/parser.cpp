@@ -330,7 +330,7 @@ InfoType Parser::cmd5(const QString &line)
 	}
 	else if (line.contains("is not open to match requests"))
 	{
-		QString opp = element(line, 0, "\"", "\"");
+		QString opp = line.section('"', 1, 1);
 		emit signal_notopen(opp);
 	}
 	else if (line.contains("player is currently not accepting matches"))
@@ -735,8 +735,12 @@ InfoType Parser::cmd9(QString &line)
 	}
 	else if (line.contains("Match") && line.contains("accepted"))
 	{
-		QString nr = element(line, 0, "[", "]");
-		QString opp = element(line, 3, " ");
+		QRegExp re("\\[\\s*(\\d+)\\s*\\]\\s+with\\s+([^\\s]+)\\s+.*");
+		if (re.indexIn(line) == -1) {
+			return IT_OTHER;
+		}
+		QString nr = re.cap(1);
+		QString opp = re.cap(2);
 		emit signal_matchcreate(nr, opp);
         
 	}
