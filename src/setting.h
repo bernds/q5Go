@@ -55,7 +55,7 @@ private:
 };
 
 
-class Setting : public Misc<QString>
+class Setting
 {
 public:
 	Setting();

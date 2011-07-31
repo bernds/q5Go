@@ -71,7 +71,7 @@ Parameter::Parameter(const QString &key, const QString &txt)
  *   Settings
  */
 
-Setting::Setting() : Misc<QString>()
+Setting::Setting()
 {
 	// list of parameters to be read/saved at start/end
 	// true -> delete items when they are removed
@@ -287,12 +287,12 @@ void Setting::updateFont(QFont &font, QString entry)
 #ifdef Q_WS_X11_xxx
 	font.setRawName(s);
 #else
-	QString fs = element(s, 0, "-");
+	QString fs = s.section('-', 0, 0);
 	font.setFamily(fs);
 //	qDebug("FAMILY: %s", fs.latin1());
 	for (int i=1; i<6; i++)
 	{
-		int n = element(s, i, "-").toInt();
+		int n = s.section('-', i, i).toInt();
 
 		switch (i)
 		{

@@ -14,7 +14,6 @@
 #include "igsinterface.h"
 #include "parser.h"
 #include "gs_globals.h"
-#include "misc.h"
 #include "gamedialog.h"
 #include "maintable.h"
 #include "gamestable.h"
@@ -65,7 +64,7 @@ private:
 	bool localecho;
 };
 
-class ClientWindow : public ClientWindowGui, public Misc<QString>
+class ClientWindow : public ClientWindowGui
 {
 	Q_OBJECT
 

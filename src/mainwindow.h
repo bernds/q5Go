@@ -8,7 +8,6 @@
 #include "preferences.h"
 #include "board.h"
 #include "mainwidget.h"
-#include "misc.h"
 #include "setting.h"
 #include <qmainwindow.h>
 #include <qaction.h>
@@ -25,7 +24,7 @@ class QNewGameDlg; //SL added eb 12
 
 struct ASCII_Import;
 
-class MainWindow : public QMainWindow, public Misc<QString>
+class MainWindow : public QMainWindow
 {
 	Q_OBJECT
 		

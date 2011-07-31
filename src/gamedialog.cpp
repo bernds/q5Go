@@ -508,7 +508,7 @@ void GameDialog::slot_dispute(const QString &opponent, const QString &line)
 	if (playerOpponentEdit->text() == opponent)//(playerWhiteEdit->isReadOnly() && playerBlackEdit->text() == opponent ||	    playerBlackEdit->isReadOnly() && playerWhiteEdit->text() == opponent)
 
 	{
-		val = element(line,1," ");
+		val = line.section(' ', 1, 1);
 		if (handicapSpin->value() != val.toInt())
 		{
 			handicapSpin->setValue(val.toInt());
@@ -517,7 +517,7 @@ void GameDialog::slot_dispute(const QString &opponent, const QString &line)
 		else
 			handicapSpin->unsetPalette();
 
-		val = element(line,2," ");
+		val = line.section(' ', 2, 2);
 		if (boardSizeSpin->value() != val.toInt())
 		{
 			boardSizeSpin->setValue(val.toInt());
@@ -526,7 +526,7 @@ void GameDialog::slot_dispute(const QString &opponent, const QString &line)
 		else
 			boardSizeSpin->unsetPalette();
 
-		val = element(line,3," ");
+		val = line.section(' ', 3, 3);
 		if (timeSpin->value() != val.toInt()/60)
 		{
 			timeSpin->setValue(val.toInt()/60);
@@ -535,7 +535,7 @@ void GameDialog::slot_dispute(const QString &opponent, const QString &line)
 		else
 			timeSpin->unsetPalette();
 
-		val = element(line,4," ");
+		val = line.section(' ', 4, 4);
 		if (byoTimeSpin->value() != val.toInt()/60)
 		{
 			byoTimeSpin->setValue(val.toInt()/60);
@@ -544,10 +544,10 @@ void GameDialog::slot_dispute(const QString &opponent, const QString &line)
 		else
 			byoTimeSpin->unsetPalette();	
 
-		//val = element(line,5," ");
+		//val = line.section(' ', 5, 5);
 		//BY_label->setText(tr(" Byoyomi Time : (")+ val + tr(" stones)"));
 
-		val = element(line,0," ");
+		val = line.section(' ', 0, 0);
 		if ( !(play_nigiri_button->isChecked()) && (val == "N"))
 		{
 			play_nigiri_button->setPaletteBackgroundColor(QColor("cyan"));

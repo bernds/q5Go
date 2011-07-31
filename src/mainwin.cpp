@@ -64,7 +64,7 @@
 
 
 ClientWindow::ClientWindow(QMainWindow *parent, const char* name, WFlags fl)
-	: ClientWindowGui( parent, name, fl ), Misc<QString>()
+	: ClientWindowGui( parent, name, fl )
 {
 
 

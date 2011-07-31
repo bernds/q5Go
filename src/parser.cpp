@@ -12,7 +12,7 @@ using namespace std;
 #define indexIn search
 
 // Parsing of Go Server messages
-Parser::Parser() : QObject(), Misc<QString>()
+Parser::Parser() : QObject()
 {
 	// generate buffers
 	aPlayer = new Player;

@@ -27,6 +27,7 @@
 #include <qslider.h>
 #include <qtoolbar.h>
 #include <qptrlist.h>
+#include <qregexp.h>
 
 #ifdef Q_OS_MACX
 #include <CoreFoundation/CFString.h>
@@ -1464,7 +1465,7 @@ void qGoIF::wrapupMatchGame(qGoBoard * qgobrd, bool doSave)
 
 
 // add new board window
-qGoBoard::qGoBoard(qGoIF *parent, qGo *qgo_) : QObject(), Misc<QString>()
+qGoBoard::qGoBoard(qGoIF *parent, qGo *qgo_) : QObject()
 {
 	qDebug("::qGoBoard()");
 	have_gameData = false;
@@ -1928,7 +1929,7 @@ void qGoBoard::set_move(StoneColor sc, QString pt, QString mv_nr)
 	if (pt.contains("Handicap"))
 	{
 		QString handi = pt.simplifyWhiteSpace();
-		int h = element(handi, 1, " ").toInt();
+		int h = handi.section(' ', 1, 1).toInt();
 
 		// check if handicap is set with initGame() - game data from server do not
 		// contain correct handicap in early stage, because handicap is first move!
@@ -2066,10 +2067,7 @@ void qGoBoard::send_kibitz(const QString msg)
 		{
 			// opponent has been selected
 			QString opp;
-			if (msg.contains('('))
-				opp = element(msg, 1, ":", "(").stripWhiteSpace();
-			else
-				opp = element(msg, 2, ":").stripWhiteSpace();
+			opp = msg.section(':', 2, -1).remove(QRegExp("\\(.*$")).stripWhiteSpace();
 
 			if (opp == "0")
 				slot_ttOpponentSelected(tr("-- none --"));
@@ -2103,7 +2101,7 @@ void qGoBoard::send_kibitz(const QString msg)
 			haveControls = true;
 			win->getMainWidget()->pb_controls->setOn(false);
 		}
-		else if (havePupil && element(msg, 0, " ") == element(ttOpponent, 0, " ") &&
+		else if (havePupil && msg.section(' ', 0, 0) == ttOpponent.section(' ', 0, 0) &&
 		        (myColorIsBlack && (mv_counter % 2) || !myColorIsBlack && ((mv_counter % 2 + 1) || mv_counter == -1) ||
 			   !haveControls))
 		{
@@ -2112,10 +2110,7 @@ void qGoBoard::send_kibitz(const QString msg)
 			//   it's ensured that yyy [rk] didn't send forged message
 			//   e.g.: yyy [rk]: xxx[rk]: S1 (3)
 			QString s;
-			if (msg.contains('('))
-				s = element(msg, 0, ":", "(").stripWhiteSpace().upper();
-			else
-				s = element(msg, 1, ":").stripWhiteSpace().upper();
+			s = msg.section(':', 1, -1).remove(QRegExp("\\(.*$")).stripWhiteSpace().upper();
 
 			// check whether it's a position
 			// e.g. B1, A17, NOT: ok, yes
@@ -2660,7 +2655,7 @@ void qGoBoard::slot_ttOpponentSelected(const QString &opponent)
 		}
 
 		// check if it's me
-		QString opp = element(opponent, 0, " ");
+		QString opp = opponent.section(' ', 0, 0);
 		if (opp == myName)
 		{
 			IamPupil = true;

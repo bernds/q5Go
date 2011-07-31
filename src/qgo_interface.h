@@ -13,7 +13,6 @@
 #include "defines.h"
 #include "globals.h"
 #include "gs_globals.h"
-#include "misc.h"
 #include "setting.h"
 #include <qobject.h>
 #include <qstring.h>
@@ -56,7 +55,7 @@ public:
 
 //-----------
 
-class qGoBoard : public QObject, public Misc<QString>
+class qGoBoard : public QObject
 {
 	Q_OBJECT
 

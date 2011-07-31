@@ -9,14 +9,13 @@
 #include <qobject.h>
 #include "gs_globals.h"
 #include "tables.h"
-#include "misc.h"
 #include "qgo_interface.h"
 
 class Player;
 class Game;
 class GameInfo;
 
-class Parser : public QObject, public Misc<QString>
+class Parser : public QObject
 {
 	Q_OBJECT
 

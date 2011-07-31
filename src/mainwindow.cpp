@@ -2,7 +2,6 @@
 * mainwindow.cpp - qGo's main window
 */
 
-#include "misc.h"
 #include "qgo.h"
 #include "mainwin.h"
 #include "mainwindow.h"
@@ -92,7 +91,7 @@
 
 
 MainWindow::MainWindow(QWidget* parent, const char* name, WFlags f)
-: QMainWindow(parent, name, f), Misc<QString>()
+: QMainWindow(parent, name, f)
 {
 
   // this is very dirty : we do this because there seem to be no clean way to backtrack to the ClientWindow, which has stored the style :-(  
