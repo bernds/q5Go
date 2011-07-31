@@ -717,17 +717,23 @@ InfoType Parser::cmd9(QString &line)
 	// 9 Use <nmatch yfh2test B 3 19 60 600 25 0 0 0> or <decline yfh2test> to respond.
 	else if (line.contains("<decline") && line.contains("match"))
 	{
+		QRegExp re("<(n?match[^>]*)>");
+		if (re.indexIn(line) == -1) {
+			return IT_OTHER;
+		}
 		// false -> not my request: used in mainwin.cpp
-		emit signal_matchrequest(element(line, 0, "<", ">"), false);
+		emit signal_matchrequest(re.cap(1), false);
 	}
 	// 9 Match [5] with guest17 in 1 accepted.
 	// 9 Creating match [5] with guest17.
 	else if (line.contains("Creating match"))
 	{
-		QString nr = element(line, 0, "[", "]");
-		// maybe there's a blank within the brackets: ...[ 5]...
-		QString dummy = element(line, 0, "]", ".").stripWhiteSpace();
-		QString opp = element(dummy, 1, " ");
+		QRegExp re("\\[\\s*(\\d+)\\s*\\]\\s+with\\s+([^\\s\\.]+)(?:\\sin.*accepted)?\\..*");
+		if (re.indexIn(line) == -1) {
+			return IT_OTHER;
+		}
+		QString nr = re.cap(1);
+		QString opp = re.cap(2);
 
 		emit signal_matchcreate(nr, opp);
 		// automatic opening of a dialog tab for further conversation
