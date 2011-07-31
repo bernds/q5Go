@@ -1371,15 +1371,18 @@ InfoType Parser::cmd20(const QString &line)
 }
 
 // SHOUT - a info from the server
-InfoType Parser::cmd21(QString &line)
+InfoType Parser::cmd21(const QString &line)
 {
 	// case sensitive
 	if (line.contains(" connected.}"))
 	{
 		// {guest1381 [NR ] has connected.}
-		//line.replace(QRegExp(" "), "");
-		aPlayer->name = element(line, 0, "{", " ");
-		aPlayer->rank = element(line, 0, "[", "]", true);
+		QRegExp re("\\{\\s*([^\\s]+)\\s+\\[\\s*([^\\]\\s]+)\\s*\\]");
+		if (re.indexIn(line) == -1) {
+			return IT_OTHER;
+		}
+		aPlayer->name = re.cap(1);
+		aPlayer->rank = re.cap(2);
 		aPlayer->info = "??";
 		aPlayer->play_str = "-";
 		aPlayer->obs_str = "-";
@@ -1455,12 +1458,17 @@ InfoType Parser::cmd21(QString &line)
 		// {Match 116: xxxx [19k*] vs. yyyy1 [18k*] }
 		// {116:xxxx[19k*]yyyy1[18k*]}
 		// WING: {Match 41: o4641 [10k*] vs. Urashima [11k*] H:2 Komi:3.5}
-		line.replace(QRegExp("vs. "), "");
-		line.replace(QRegExp("Match "), "");
-		line.replace(QRegExp(" "), "");
-				
-		aGame->wname = element(line, 0, ":", "[");
-		aGame->bname = element(line, 0, "]", "[");
+		QRegExp re("\\{[\\w\\s]*(\\d+):\\s*"
+			   "([\\w\\d]+)\\s*\\[\\s*([^\\s\\]]+)\\s*\\]"
+			   "(?:\\s+vs.\\s+)?"
+			   "([\\w\\d]+)\\s*\\[\\s*([^\\s\\]]+)\\s*\\]\\s+\\}.*");
+
+		if (re.indexIn(line) == -1) {
+			return IT_OTHER;
+		}
+
+		aGame->wname = re.cap (2);
+		aGame->bname = re.cap (4);
 #if 0
 		// skip info for own games; full info is coming soon
 		if (aGame->wname == myname || aGame->bname == myname)
@@ -1469,14 +1477,14 @@ InfoType Parser::cmd21(QString &line)
 			return IT_OTHER;
 		}
 #endif
-		aGame->nr = element(line, 0, "{", ":");
-		aGame->wrank = element(line, 0, "[", "]");
-		aGame->brank = element(line, 1, "[", "]");
+		aGame->nr = re.cap(1);
+		aGame->wrank = re.cap(3);
+		aGame->brank = re.cap(5);
 		aGame->mv = "-";
 		aGame->Sz = "-";
 		aGame->H = QString();
 		aGame->running = true;
-				
+
 		if (gsName == WING && aGame->wname == aGame->bname)
 			// WING doesn't send 'create match' msg in case of teaching game
 			emit signal_matchcreate(aGame->nr, aGame->bname);
@@ -1529,7 +1537,7 @@ InfoType Parser::cmd22(const QString &line)
 	}
 	else
 	{
-		QString row = line.section (':', 0, 0).trimmed();
+		QString row = line.section(':', 0, 0).trimmed();
 		QString results = line.section(' ', 1, 1);
 		emit signal_result(row, results, false, 0);
 	}
@@ -1548,34 +1556,20 @@ InfoType Parser::cmd22(const QString &line)
 // NNGS - new version:
 //  24 --> frosla CLIENT: <qGo 0.0.15b7> match frosla wants handicap 0, komi 0.5, free
 //  24 --> frosla  Hallo
-InfoType Parser::cmd24(QString &line)
+InfoType Parser::cmd24(const QString &line)
 {
 	int pos;
-	if ((((pos = line.find("*")) != -1) && (pos < 3) || 
-	     ((pos = line.find("-->")) != -1) && (pos < 3)) &&
-	    line.contains("CLIENT:"))
+	QRegExp re("\\*([^\\*]+)\\*: CLIENT:.*wants handicap\\s+(\\d+), komi\\s+([\\d.-]+)");
+	if (re.indexIn (line) == -1) {
+		re = QRegExp ("-->\\s+([^\\*]+)\\s+CLIENT:.*wants handicap\\s+(\\d+), komi\\s+([\\d.-]+)");
+	}
+	if (re.indexIn (line) != -1)
 	{
-		line = line.simplifyWhiteSpace();
-		QString opp = element(line, 1, "*");
-		int offset = 0;
-		if (!opp)
-		{
-			offset++;
-			opp = element(line, 1, " ");
-		}
-
-		QString h = element(line, 7+offset, " ", ",");
-		QString k = element(line, 10+offset, " ");
-
-		if (k.at(k.length()-1) == ',')
-			k.truncate(k.length() - 1);
+		bool free = line.contains("free");
+		QString opp = re.cap(1);
+		QString h = re.cap(2);
+		QString k = re.cap(3);
 		int komi = (int) (k.toFloat() * 10);
-
-		bool free;
-		if (line.contains("free"))
-			free = true;
-		else
-			free = false;
 
 		emit signal_komirequest(opp, h.toInt(), komi, free);
 		emit signal_message(line);
@@ -1820,7 +1814,7 @@ InfoType Parser::cmd28(const QString &line)
 		// now: just look in qgo_interface if move_nr has decreased...
 		// but send undo-signal anyway: in case of undo while scoring it's necessary
 		QString player = line.section(' ', 0, 0);
-		QString move = line.section(' ', 5, 5).remove('(').remove(')');
+		QString move = line.section(' ', 5, 5).remove('(').remove(").");
 		emit signal_undo(player, move);
 	}
 	else if (line.contains("Undo in game"))

@@ -89,9 +89,9 @@ private:
 	InfoType   cmd15(const QString&);
 	InfoType   cmd19(const QString&);
 	InfoType   cmd20(const QString&);
-	InfoType   cmd21(QString&);
+	InfoType   cmd21(const QString&);
 	InfoType   cmd22(const QString&);
-	InfoType   cmd24(QString&);
+	InfoType   cmd24(const QString&);
 	InfoType   cmd27(const QString&);
 	InfoType   cmd28(const QString&);
 	InfoType   cmd32(const QString&);
