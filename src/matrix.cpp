@@ -5,8 +5,10 @@
 #include "matrix.h"
 #include <stdlib.h>
 #ifndef NO_DEBUG
-#include <iostream.h>
+#include <iostream>
 #endif
+
+using namespace std;
 
 Matrix::Matrix(int s)
 : size(s)

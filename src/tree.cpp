@@ -5,9 +5,10 @@
 #include "tree.h"
 #include "move.h"
 #include "qgo.h"
-#include <iostream.h>
+#include <iostream>
 #include <qptrstack.h>
 
+using namespace std;
 Tree::Tree(int board_size)
 {
 	root = new Move(board_size);
