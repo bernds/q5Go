@@ -20,7 +20,7 @@
 
 // delimiters for variables in settings file
 // however, this character must not be used in parameters, e.g. host
-#define DELIMITER ":"
+#define DELIMITER ':'
 #define SETTING_VERSION 1
 
 

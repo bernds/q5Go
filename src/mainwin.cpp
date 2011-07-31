@@ -230,9 +230,9 @@ ClientWindow::ClientWindow(QMainWindow *parent, const char* name, WFlags fl)
 					if (s.length() > 0)
 					{
 						QString i_ = QString::number(i);
-						setting->writeEntry("USER" + i_ + "_1", element(s, 0, DELIMITER));
-						setting->writeEntry("USER" + i_ + "_2", element(s, 1, DELIMITER));
-						setting->writeEntry("USER" + i_ + "_3", element(s, 2, DELIMITER));
+						setting->writeEntry("USER" + i_ + "_1", s.section(DELIMITER, 0, 0));
+						setting->writeEntry("USER" + i_ + "_2", s.section(DELIMITER, 1, 1));
+						setting->writeEntry("USER" + i_ + "_3", s.section(DELIMITER, 2, 2));
 						// delete old label
 						setting->writeEntry("USER" + i_, 0);
 					}
@@ -245,11 +245,11 @@ ClientWindow::ClientWindow(QMainWindow *parent, const char* name, WFlags fl)
 					// check if 4 delimiters in s
 					if (s.contains(DELIMITER) == 4)
 					{
-						setting->writeEntry("HOST" + QString::number(i) + "a", element(s, 0, DELIMITER));
-						setting->writeEntry("HOST" + QString::number(i) + "b", element(s, 1, DELIMITER));
-						setting->writeIntEntry("HOST" + QString::number(i) + "c", element(s, 2, DELIMITER).toInt());
-						setting->writeEntry("HOST" + QString::number(i) + "d", element(s, 3, DELIMITER));
-						setting->writeEntry("HOST" + QString::number(i) + "e", element(s, 4, DELIMITER));
+						setting->writeEntry("HOST" + QString::number(i) + "a", s.section(DELIMITER, 0, 0));
+						setting->writeEntry("HOST" + QString::number(i) + "b", s.section(DELIMITER, 1, 1));
+						setting->writeIntEntry("HOST" + QString::number(i) + "c", s.section(DELIMITER, 2, 2).toInt());
+						setting->writeEntry("HOST" + QString::number(i) + "d", s.section(DELIMITER, 3, 3));
+						setting->writeEntry("HOST" + QString::number(i) + "e", s.section(DELIMITER, 4, 4));
 					}
 					// delete old hosts
 					setting->writeEntry("HOST" + QString::number(i), QString());
@@ -317,11 +317,11 @@ ClientWindow::ClientWindow(QMainWindow *parent, const char* name, WFlags fl)
 	if (s.length() > 5)
 	{
 		QPoint p;
-		p.setX(element(s, 0, DELIMITER).toInt());
-		p.setY(element(s, 1, DELIMITER).toInt());
+		p.setX(s.section(DELIMITER, 0, 0).toInt());
+		p.setY(s.section(DELIMITER, 1, 1).toInt());
 		QSize sz;
-		sz.setWidth(element(s, 2, DELIMITER).toInt());
-		sz.setHeight(element(s, 3, DELIMITER).toInt());
+		sz.setWidth(s.section(DELIMITER, 2, 2).toInt());
+		sz.setHeight(s.section(DELIMITER, 3, 3).toInt());
 		resize(sz);
 		move(p);
 	}
@@ -331,9 +331,9 @@ ClientWindow::ClientWindow(QMainWindow *parent, const char* name, WFlags fl)
 	if (s.length() > 5)
 	{
 		QValueList<int> w1, h1, w2;
-		w1 << element(s, 0, DELIMITER).toInt() << element(s, 1, DELIMITER).toInt();
-		h1 << element(s, 2, DELIMITER).toInt() << element(s, 3, DELIMITER).toInt();
-		w2 << element(s, 4, DELIMITER).toInt() << element(s, 5, DELIMITER).toInt();
+		w1 << s.section(DELIMITER, 0, 0).toInt() << s.section(DELIMITER, 1, 1).toInt();
+		h1 << s.section(DELIMITER, 2, 2).toInt() << s.section(DELIMITER, 3, 3).toInt();
+		w2 << s.section(DELIMITER, 4, 4).toInt() << s.section(DELIMITER, 5, 5).toInt();
 		//mainTable->s1->setSizes(w1);
     		s1->setSizes(w1);
 		s2->setSizes(h1);
@@ -344,10 +344,10 @@ ClientWindow::ClientWindow(QMainWindow *parent, const char* name, WFlags fl)
 	s = setting->readEntry("DEBUGWINDOW");
 	if (s.length() > 5)
 	{
-		view_p.setX(element(s, 0, DELIMITER).toInt());
-		view_p.setY(element(s, 1, DELIMITER).toInt());
-		view_s.setWidth(element(s, 2, DELIMITER).toInt());
-		view_s.setHeight(element(s, 3, DELIMITER).toInt());
+		view_p.setX(s.section(DELIMITER, 0, 0).toInt());
+		view_p.setY(s.section(DELIMITER, 1, 1).toInt());
+		view_s.setWidth(s.section(DELIMITER, 2, 2).toInt());
+		view_s.setHeight(s.section(DELIMITER, 3, 3).toInt());
 	}
 	else
 	{
@@ -359,10 +359,10 @@ ClientWindow::ClientWindow(QMainWindow *parent, const char* name, WFlags fl)
 	s = setting->readEntry("MENUWINDOW");
 	if (s.length() > 5)
 	{
-		menu_p.setX(element(s, 0, DELIMITER).toInt());
-		menu_p.setY(element(s, 1, DELIMITER).toInt());
-		menu_s.setWidth(element(s, 2, DELIMITER).toInt());
-		menu_s.setHeight(element(s, 3, DELIMITER).toInt());
+		menu_p.setX(s.section(DELIMITER, 0, 0).toInt());
+		menu_p.setY(s.section(DELIMITER, 1, 1).toInt());
+		menu_s.setWidth(s.section(DELIMITER, 2, 2).toInt());
+		menu_s.setHeight(s.section(DELIMITER, 3, 3).toInt());
 	}
 	else
 	{
@@ -374,10 +374,10 @@ ClientWindow::ClientWindow(QMainWindow *parent, const char* name, WFlags fl)
 	s = setting->readEntry("PREFWINDOW");
 	if (s.length() > 5)
 	{
-		pref_p.setX(element(s, 0, DELIMITER).toInt());
-		pref_p.setY(element(s, 1, DELIMITER).toInt());
-		pref_s.setWidth(element(s, 2, DELIMITER).toInt());
-		pref_s.setHeight(element(s, 3, DELIMITER).toInt());
+		pref_p.setX(s.section(DELIMITER, 0, 0).toInt());
+		pref_p.setY(s.section(DELIMITER, 1, 1).toInt());
+		pref_s.setWidth(s.section(DELIMITER, 2, 2).toInt());
+		pref_s.setHeight(s.section(DELIMITER, 3, 3).toInt());
 	}
 	else
 	{
@@ -2614,11 +2614,11 @@ void ClientWindow::reStoreWindowSize(QString strKey, bool store)
 		if (s.length() > 5)
 		{
 			QPoint p;
-			p.setX(element(s, 0, DELIMITER).toInt());
-			p.setY(element(s, 1, DELIMITER).toInt());
+			p.setX(s.section(DELIMITER, 0, 0).toInt());
+			p.setY(s.section(DELIMITER, 1, 1).toInt());
 			QSize sz;
-			sz.setWidth(element(s, 2, DELIMITER).toInt());
-			sz.setHeight(element(s, 3, DELIMITER).toInt());
+			sz.setWidth(s.section(DELIMITER, 2, 2).toInt());
+			sz.setHeight(s.section(DELIMITER, 3, 3).toInt());
 			resize(sz);
 			move(p);
 		}
@@ -2628,9 +2628,9 @@ void ClientWindow::reStoreWindowSize(QString strKey, bool store)
 		if (s.length() > 5)
 		{
 			QValueList<int> w1, h1, w2;
-			w1 << element(s, 0, DELIMITER).toInt() << element(s, 1, DELIMITER).toInt();
-			h1 << element(s, 2, DELIMITER).toInt() << element(s, 3, DELIMITER).toInt();
-			w2 << element(s, 4, DELIMITER).toInt() << element(s, 5, DELIMITER).toInt();
+			w1 << s.section(DELIMITER, 0, 0).toInt() << s.section(DELIMITER, 1, 1).toInt();
+			h1 << s.section(DELIMITER, 2, 2).toInt() << s.section(DELIMITER, 3, 3).toInt();
+			w2 << s.section(DELIMITER, 4, 4).toInt() << s.section(DELIMITER, 5, 5).toInt();
 			s1->setSizes(w1);
 			s2->setSizes(h1);
 			s3->setSizes(w2);

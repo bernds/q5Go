@@ -2316,11 +2316,11 @@ bool MainWindow::reStoreWindowSize(QString strKey, bool store)
 			{
 				viewFullscreen->setOn(false);
 				QPoint p;
-				p.setX(element(s, 0, DELIMITER).toInt());
-				p.setY(element(s, 1, DELIMITER).toInt());
+				p.setX(s.section(DELIMITER, 0, 0).toInt());
+				p.setY(s.section(DELIMITER, 1, 1).toInt());
 				QSize sz;
-				sz.setWidth(element(s, 2, DELIMITER).toInt());
-				sz.setHeight(element(s, 3, DELIMITER).toInt());
+				sz.setWidth(s.section(DELIMITER, 2, 2).toInt());
+				sz.setHeight(s.section(DELIMITER, 3, 3).toInt());
 				resize(sz);
 				move(p);
 			}
@@ -2344,15 +2344,15 @@ bool MainWindow::reStoreWindowSize(QString strKey, bool store)
 				{
 					int i, j;
 
-					i = element(s, 2, DELIMITER).toInt();
-					j = element(s, 3, DELIMITER).toInt();
+					i = s.section(DELIMITER, 2, 2).toInt();
+					j = s.section(DELIMITER, 3, 3).toInt();
 					QValueList<int> w1;
 					w1 << i << j;
 					splitter_comment->setSizes(w1);
 
 					w1.clear();
-					i = element(s, 0, DELIMITER).toInt();
-					j = element(s, 1, DELIMITER).toInt();
+					i = s.section(DELIMITER, 0, 0).toInt();
+					j = s.section(DELIMITER, 1, 1).toInt();
 					if (i && j)
 						w1 << i << j;
 					splitter->setSizes(w1);
