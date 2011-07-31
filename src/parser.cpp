@@ -896,12 +896,12 @@ InfoType Parser::cmd9(QString &line)
 	// 9 Setting your . to Banana  [text] (idle: 0 minutes)
 	else if (line.contains("Setting your . to"))
 	{
-		QString busy = element(line, 0, "[", "]");
-		if (busy)
+		QRegExp textre("\\[([^\\]]+)]");
+		if (textre.indexIn(line) != -1)
 		{
-			QString player = element(line, 4, " ");
+			QString player = line.section(' ', 4, 4);
 			// true = player
-			emit signal_talk(player, "[" + busy + "]", true);
+			emit signal_talk(player, "[" + textre.cap(1) + "]", true);
 		}
 	}
 	// NNGS: 9 Messages: (after 'message' cmd)
@@ -1057,7 +1057,7 @@ InfoType Parser::cmd9(QString &line)
 	}
 	else if (line.contains("Last Access"))
 	{
-		statsPlayer->idle = element(line, 4, " ")+ " " + element(line, 5, " ")+" " + element(line, 6, " ");
+		statsPlayer->idle = line.section(':', 1).trimmed();
 		emit signal_statsPlayer(statsPlayer);
 		return IT_OTHER ;
 	}
@@ -1085,14 +1085,14 @@ InfoType Parser::cmd9(QString &line)
 	}
 	else if ((line.contains("Country:"))||(line.contains("From:")))   //IGS || LGS
 	{
-		statsPlayer->country = element(line, 0, " ","EOL");
+		statsPlayer->country = line.section(':', 1).trimmed();
 		emit signal_statsPlayer(statsPlayer);
 		return IT_OTHER ; 
 	}
 
 	else if (line.contains("Defaults"))    //IGS
 	{
-		statsPlayer->extInfo = element(line, 2, " ","EOL");
+		statsPlayer->extInfo = line.section(':', 1).trimmed();
 		emit signal_statsPlayer(statsPlayer);
 		return IT_OTHER ; 
 	}
@@ -1121,20 +1121,20 @@ InfoType Parser::cmd9(QString &line)
 
 	else if (line.contains("Playing in game:"))       //IGS and LGS
 	{
-		statsPlayer->play_str = element(line, 3, " ");
+		statsPlayer->play_str = line.section(':', 1).trimmed();
 		emit signal_statsPlayer(statsPlayer);
 		return IT_OTHER ;
 	}
 	else if (line.contains("(playing game"))       //WING
 	{
-		statsPlayer->play_str = element(line, 1, " ",":");
+		statsPlayer->play_str = line.section(':', 1).trimmed();
 		emit signal_statsPlayer(statsPlayer);
 		return IT_OTHER ;
 	}
                 
 	else if (line.contains("Rated Games:"))
 	{
-		statsPlayer->rated = element(line, 2, " ");
+		statsPlayer->rated = line.section(':', 1).trimmed();
 		emit signal_statsPlayer(statsPlayer);
 		return IT_OTHER ;
 	}
