@@ -7,6 +7,7 @@
 
 #include "globals.h"
 #include <qstringlist.h>
+#include <qmap.h>
 
 class Matrix
 {
@@ -45,13 +46,12 @@ public:
 	
 protected:
 	void init();
-	void initMarkTexts();
-	QStringList::Iterator getMarkTextIterator(int x, int y);
 	
 private:
+	typedef QMap<long, QString> mapType;
 	short **matrix;
 	int size;
-	QStringList *markTexts;
+	mapType markTexts;
 };
 
 #endif

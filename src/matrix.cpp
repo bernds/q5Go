@@ -37,8 +37,6 @@ Matrix::~Matrix()
 	for (int i=0; i<size; i++)
 		delete [] matrix[i];
 	delete [] matrix;
-	
-	delete markTexts;
 }
 
 void Matrix::init()
@@ -54,14 +52,6 @@ void Matrix::init()
 		for (int j=0; j<size; j++)
 			matrix[i][j] = stoneNone;
 	}
-	
-	markTexts = NULL;
-}
-
-void Matrix::initMarkTexts()
-{
-	markTexts = new QStringList();
-	CHECK_PTR(markTexts);
 }
 
 void Matrix::clear()
@@ -129,10 +119,10 @@ void Matrix::debug() const
 		cout << (i+1)%10 << " ";
 	cout << endl;
 	
-	if (markTexts != NULL && !markTexts->isEmpty())
+	if (markTexts.size() != 0)
 	{
-		cout << markTexts->count() << " mark texts in the storage.\n";
-		for (QStringList::Iterator it=markTexts->begin(); it != markTexts->end(); ++it)
+		cout << markTexts.size() << " mark texts in the storage.\n";
+		for (mapType::const_iterator it = markTexts.constBegin(); it != markTexts.constEnd(); ++it)
 			cout << (QString)(*it) << endl;
 	}
 }
@@ -195,13 +185,8 @@ void Matrix::removeMark(int x, int y)
 		y > 0 && y <= size);
 	
 	matrix[x-1][y-1] %= 10;
-	
-	if (markTexts != NULL && !markTexts->isEmpty())
-	{
-		QStringList::Iterator it = getMarkTextIterator(x, y);
-		if (it != NULL)
-			markTexts->remove(it);
-	}
+
+	markTexts.remove (coordsToKey(x, y));
 }
 
 void Matrix::clearAllMarks()
@@ -211,12 +196,8 @@ void Matrix::clearAllMarks()
 	for (int i=0; i<size; i++)
 		for (int j=0; j<size; j++)
 			matrix[i][j] %= 10;
-		
-		if (markTexts != NULL)
-		{
-			delete markTexts;
-			markTexts = NULL;
-		}
+
+	markTexts.clear ();
 }
 
 void Matrix::clearTerritoryMarks()
@@ -253,76 +234,16 @@ void Matrix::setMarkText(int x, int y, const QString &txt)
 {
 	ASSERT(x > 0 && x <= size &&
 		y > 0 && y <= size);
-	
-	// We only create the markTexts list if we really need it.
-	if (markTexts == NULL)
-		initMarkTexts();
-	
-	QStringList::Iterator it = getMarkTextIterator(x, y);
-	if (it != NULL)  // Mark already exists at this position, remove old text.
-		markTexts->remove(it);
-	
-	QString tmp = QString::number(coordsToKey(x, y)) + "#" + txt;
-	markTexts->append(tmp);
-}
 
-QStringList::Iterator Matrix::getMarkTextIterator(int x, int y)
-{
-	if (markTexts == NULL)
-		return NULL;
-	
-	QString s, tmp;
-	int pos, tmpX, tmpY, counter=0;
-	bool check = false;
-	long key;
-	QStringList::Iterator it;
-	
-	for (it=markTexts->begin(); it != markTexts->end(); ++it)
-	{
-		s = (QString)(*it);
-		
-		// Get the splitting '#', everything left of it is our key.
-		pos = s.find('#');
-		if (pos == -1)  // Whoops
-		{
-			qWarning("   *** Corrupt text marks in matrix! ***");
-			continue;
-		}
-		
-		// Transform key to coordinates
-		tmp = s.left(pos);
-		key = tmp.toLong(&check);
-		if (!check)
-		{
-			qWarning("   *** Corrupt text marks in matrix! ***");
-			continue;
-		}
-		keyToCoords(key, tmpX, tmpY);
-		
-		// This is our hit?
-		if (tmpX == x && tmpY == y)
-			return it;
-		
-		// Nope, wasn't
-		counter++;
-	}
-	return NULL;
+	markTexts[coordsToKey(x, y)] = txt;
 }
 
 const QString Matrix::getMarkText(int x, int y)
 {
-	// We didn't store any texts in this matrix.
-	if (markTexts == NULL || markTexts->isEmpty())
-		return NULL;
-	
-	QStringList::Iterator it = getMarkTextIterator(x, y);
-	if (it == NULL)  // Nope, this entry does not exist.
-		return NULL;
-	
-	QString s = (QString)(*it);
-	s = s.right(s.length() - s.find('#') - 1);
-	
-	return s;
+	long key = coordsToKey(x, y);
+	if (!markTexts.contains (key))
+		return QString::null;
+	return markTexts[key];
 }
 
 const QString Matrix::saveMarks()
