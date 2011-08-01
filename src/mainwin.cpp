@@ -1047,7 +1047,7 @@ void ClientWindow::sendTextToApp(const QString &txt)
 			onlineCount = 0;
 			oneSecondTimer = startTimer(1000);
 			// init shouts
-			slot_talk("Shouts*", 0, false);
+			slot_talk("Shouts*", QString::null, false);
 			
 			qgoif->get_qgo()->playConnectSound();
 			break;
@@ -1103,7 +1103,7 @@ void ClientWindow::sendTextToApp(const QString &txt)
         currentCommand->txt="stats";
 
        // if (!talklist.current())
-            slot_talk( parser->get_statsPlayer()->name,0,true);
+	slot_talk( parser->get_statsPlayer()->name, QString::null,true);
         
         //else if (parser->get_statsPlayer()->name != talklist.current()->get_name())
         //    slot_talk( parser->get_statsPlayer()->name,0,true);
@@ -2116,7 +2116,7 @@ void ClientWindow::slot_playerPopup(int i)
 		case 2:
     		case 3:
 			// talk and stats at the same time
-			slot_talk(player_name, 0, true);
+			slot_talk(player_name, QString::null, true);
       			//slot_sendcommand("stats " + lv_popupPlayer->text(1), false);
 			break;
 
@@ -2483,7 +2483,8 @@ void ClientWindow::slot_talk(const QString &name, const QString &text, bool ispl
 	}
 
 	// check if it was a channel message
-	if (autoAnswer &= (isplayer && autoAwayMessage && !name.contains('*') && text[0] == '>'))
+	autoAnswer &= (isplayer && autoAwayMessage && !name.contains('*') && text[0] == '>');
+	if (autoAnswer)
 	{
 		// send when qGo is NOT the active application - TO DO
 		sendcommand("tell " + name + " [I'm away right now]");
@@ -2498,7 +2499,7 @@ void ClientWindow::slot_talk(const QString &name, const QString &text, bool ispl
 	}
 
 	// play a sound - not for shouts
-	if ((text[0] == '>' && bonus || !dlg->get_le()->hasFocus()) && !name.contains('*'))
+	if ((!text.isNull() && text[0] == '>' && bonus || !dlg->get_le()->hasFocus()) && !name.contains('*'))
 	{
 		qgoif->get_qgo()->playTalkSound();
 
