@@ -1,46 +1,46 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 
 
-EXTRA_DIST = click.wav connect.wav enter.wav gameend.wav leave.wav match.wav pass.wav say.wav stone.wav talk.wav tictoc.wav 
+EXTRA_DIST = click.wav connect.wav enter.wav gameend.wav leave.wav match.wav pass.wav say.wav stone.wav talk.wav tictoc.wav
 
 install-data-local:
-	$(mkinstalldirs) $(datadir)/qGo/sounds/
-	$(INSTALL_DATA) $(srcdir)/click.wav $(datadir)/qGo/sounds/
-	$(mkinstalldirs) $(datadir)/qGo/sounds/
-	$(INSTALL_DATA) $(srcdir)/connect.wav $(datadir)/qGo/sounds/
-	$(mkinstalldirs) $(datadir)/qGo/sounds/
-	$(INSTALL_DATA) $(srcdir)/enter.wav $(datadir)/qGo/sounds/
-	$(mkinstalldirs) $(datadir)/qGo/sounds/
-	$(INSTALL_DATA) $(srcdir)/gameend.wav $(datadir)/qGo/sounds/
-	$(mkinstalldirs) $(datadir)/qGo/sounds/
-	$(INSTALL_DATA) $(srcdir)/leave.wav $(datadir)/qGo/sounds/
-	$(mkinstalldirs) $(datadir)/qGo/sounds/
-	$(INSTALL_DATA) $(srcdir)/match.wav $(datadir)/qGo/sounds/
-	$(mkinstalldirs) $(datadir)/qGo/sounds/
-	$(INSTALL_DATA) $(srcdir)/pass.wav $(datadir)/qGo/sounds/
-	$(mkinstalldirs) $(datadir)/qGo/sounds/
-	$(INSTALL_DATA) $(srcdir)/say.wav $(datadir)/qGo/sounds/
-	$(mkinstalldirs) $(datadir)/qGo/sounds/
-	$(INSTALL_DATA) $(srcdir)/stone.wav $(datadir)/qGo/sounds/
-	$(mkinstalldirs) $(datadir)/qGo/sounds/
-	$(INSTALL_DATA) $(srcdir)/talk.wav $(datadir)/qGo/sounds/
-	$(mkinstalldirs) $(datadir)/qGo/sounds/
-	$(INSTALL_DATA) $(srcdir)/tictoc.wav $(datadir)/qGo/sounds/
+	$(mkinstalldirs) $(pkgdatadir)/sounds/
+	$(INSTALL_DATA) $(srcdir)/click.wav $(pkgdatadir)/sounds/
+	$(mkinstalldirs) $(pkgdatadir)/sounds/
+	$(INSTALL_DATA) $(srcdir)/connect.wav $(pkgdatadir)/sounds/
+	$(mkinstalldirs) $(pkgdatadir)/sounds/
+	$(INSTALL_DATA) $(srcdir)/enter.wav $(pkgdatadir)/sounds/
+	$(mkinstalldirs) $(pkgdatadir)/sounds/
+	$(INSTALL_DATA) $(srcdir)/gameend.wav $(pkgdatadir)/sounds/
+	$(mkinstalldirs) $(pkgdatadir)/sounds/
+	$(INSTALL_DATA) $(srcdir)/leave.wav $(pkgdatadir)/sounds/
+	$(mkinstalldirs) $(pkgdatadir)/sounds/
+	$(INSTALL_DATA) $(srcdir)/match.wav $(pkgdatadir)/sounds/
+	$(mkinstalldirs) $(pkgdatadir)/sounds/
+	$(INSTALL_DATA) $(srcdir)/pass.wav $(pkgdatadir)/sounds/
+	$(mkinstalldirs) $(pkgdatadir)/sounds/
+	$(INSTALL_DATA) $(srcdir)/say.wav $(pkgdatadir)/sounds/
+	$(mkinstalldirs) $(pkgdatadir)/sounds/
+	$(INSTALL_DATA) $(srcdir)/stone.wav $(pkgdatadir)/sounds/
+	$(mkinstalldirs) $(pkgdatadir)/sounds/
+	$(INSTALL_DATA) $(srcdir)/talk.wav $(pkgdatadir)/sounds/
+	$(mkinstalldirs) $(pkgdatadir)/sounds/
+	$(INSTALL_DATA) $(srcdir)/tictoc.wav $(pkgdatadir)/sounds/
 
 uninstall-local:
-	-rm -f $(datadir)/qGo/sounds/
-	-rm -f $(datadir)/qGo/sounds/
-	-rm -f $(datadir)/qGo/sounds/
-	-rm -f $(datadir)/qGo/sounds/
-	-rm -f $(datadir)/qGo/sounds/
-	-rm -f $(datadir)/qGo/sounds/
-	-rm -f $(datadir)/qGo/sounds/
-	-rm -f $(datadir)/qGo/sounds/
-	-rm -f $(datadir)/qGo/sounds/
-	-rm -f $(datadir)/qGo/sounds/
-	-rm -f $(datadir)/qGo/sounds/
+	-rm -f $(pkgdatadir)/sounds/
+	-rm -f $(pkgdatadir)/sounds/
+	-rm -f $(pkgdatadir)/sounds/
+	-rm -f $(pkgdatadir)/sounds/
+	-rm -f $(pkgdatadir)/sounds/
+	-rm -f $(pkgdatadir)/sounds/
+	-rm -f $(pkgdatadir)/sounds/
+	-rm -f $(pkgdatadir)/sounds/
+	-rm -f $(pkgdatadir)/sounds/
+	-rm -f $(pkgdatadir)/sounds/
+	-rm -f $(pkgdatadir)/sounds/
 
 ####### kdevelop will overwrite this part!!! (end)############
-Soundsdir = $(datadir)/qGo/sounds
+Soundsdir = $(pkgdatadir)/sounds
 Sounds_DATA = click.wav connect.wav enter.wav gameend.wav leave.wav match.wav \
 	pass.wav say.wav stone.wav talk.wav tictoc.wav

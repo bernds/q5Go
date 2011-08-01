@@ -220,7 +220,7 @@ bool qGo::testSound(bool showmsg)
 #else
 	// BUG 1165950 -- it may be better to use binreloc rather than
 	// DATADIR
-	list << DATADIR "/" PACKAGE "/sounds"
+	list << DATADIR "/sounds"
 	     << setting->program_dir + "/sounds"
 		<< "./share/" PACKAGE "/sounds"
 		<< "/usr/share/" PACKAGE "/sounds"

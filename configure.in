@@ -9,14 +9,15 @@ AC_INIT(acinclude.m4) dnl a source file from your sub dir
 dnl This is so we can use kde-common
 AC_CONFIG_AUX_DIR(admin)
 
-dnl CPPFLAGS="$CPPFLAGS -DDATADIR=\"$(datadir)\""
-CPPFLAGS="-DDATADIR='\"${datadir}\"' $CPPFLAGS"
+AC_PROG_CXX
+AC_OBJEXT
+AC_EXEEXT
 
 AC_CANONICAL_SYSTEM 
 AC_C_BIGENDIAN
 
 dnl Automake doc recommends to do this only here. (Janos)
-AM_INIT_AUTOMAKE(qgo,0.2.2)
+AM_INIT_AUTOMAKE(q4go,4.0.0)
 
 dnl KDE_SET_PREFIX
 
@@ -49,8 +50,22 @@ dnl for NLS support. Call them in this order!
 dnl WITH_NLS is for the po files
 AM_KDE_WITH_NLS
 
-KDE_USE_QT(3)
-AC_PATH_QT
+dnl Look for Qt4 libs
+PKG_CHECK_MODULES([QT4], ["QtCore QtGui QtXml Qt3Support"], [], [
+	AC_MSG_ERROR([Qt4 libs not found])])
+dnl Look for moc, either on $PATH or in $QTDIR/bin
+AC_PATH_PROG(MOC, moc, , $PATH:$QTDIR/bin)
+if test -z "$MOC" ; then
+    AC_MSG_ERROR([Cannot find 'moc'])
+fi
+AC_PATH_PROG(UIC, uic3, , $PATH:$QTDIR/bin)
+if test -z "$UIC" ; then
+    AC_MSG_ERROR([Cannot find 'uic3'])
+fi
+
+CXXFLAGS="$CXXFLAGS $QT4_CFLAGS"
+
+AC_SUBST(QT4_LIBS)
 
 dnl KDE_NEED_FLEX dnl __kdevelop__
 dnl AC_PROG_YACC dnl __kdevelop__
@@ -72,5 +87,9 @@ AC_CONFIG_FILES([ src/pics/Makefile ])
 AC_CONFIG_FILES([ src/sounds/Makefile ])
 AC_CONFIG_FILES([ src/translations/Makefile ])
 AC_CONFIG_FILES([ templates/Makefile ])
+
+dnl CPPFLAGS="$CPPFLAGS -DDATADIR=\"$(datadir)\""
+# @@@ fix this
+CPPFLAGS="-DDATADIR='\"${prefix}/share/${PACKAGE}\"' $CPPFLAGS"
 
 AC_OUTPUT()

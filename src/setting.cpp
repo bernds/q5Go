@@ -1,7 +1,7 @@
 /*
  * settings.cpp
  */
-#define DATADIR "/local/install/share/games"
+
 #include "setting.h"
 #include "config.h"
 #include "defines.h"
@@ -464,12 +464,12 @@ QString Setting::getTranslationsDirectory()
 
 	list << applicationPath + "/translations"
 		<< program_dir + "/translations"
-		<< "C:/Program Files/qGo/translations"
-		<< "D:/Program Files/qGo/translations"
-		<< "E:/Program Files/qGo/translations"
-		<< "C:/Programme/qGo/translations"
-		<< "D:/Programme/qGo/translations"
-		<< "E:/Programme/qGo/translations"
+		<< "C:/Program Files/q4Go/translations"
+		<< "D:/Program Files/q4Go/translations"
+		<< "E:/Program Files/q4Go/translations"
+		<< "C:/Programme/q4Go/translations"
+		<< "D:/Programme/q4Go/translations"
+		<< "E:/Programme/q4Go/translations"
 		<< "./translations";
 #elif defined(Q_OS_MACX)
 	//get the bundle path and find our resources
@@ -478,7 +478,7 @@ QString Setting::getTranslationsDirectory()
 	list << (QString)CFStringGetCStringPtr(bundlePath, CFStringGetSystemEncoding())		
 		+ "/Contents/Resources";
 #else
-	list	<< DATADIR "/" PACKAGE "/translations"
+	list	<< DATADIR "/translations"
 		<< program_dir + "/translations"
 		<< "./share/" PACKAGE "/translations"
 		<< "/usr/share/" PACKAGE "/translations"
