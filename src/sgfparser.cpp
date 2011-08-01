@@ -63,42 +63,12 @@ public:
 	
 	virtual int find(const char *c, unsigned int index) const
 	{
-		if (index >= strLength)
-			return -1;
-		
-		// Offset. Hope that is enough. TODO Long comments check?
-		unsigned int l = index+STR_OFFSET<strLength ? index+STR_OFFSET : strLength,
-			cl = strlen(c),
-			i,
-			found;
-		
-		do {
-			found = i = 0;
-			do {
-				if (Str.at(index+i) != c[i])
-					break;
-				found ++;
-				if (found == cl)
-					return index;
-			} while (i++ < cl);
-		} while (index++ < l);
-		if (index == l)
-			return -1;
-		return index;
+		return Str.indexOf (c, index);
 	}
 	
 	virtual int find(char c, unsigned int index) const
 	{
-		if (index >= strLength)
-			return -1;
-
-		// Offset. Hope that is enough. TODO Long comments check?
-		unsigned int l = index+STR_OFFSET<strLength ? index+STR_OFFSET : strLength;
-		
-		while (Str.at(index) != c && index++ < l);
-		if (index == l)
-			return -1;
-		return index;
+		return Str.indexOf (c, index);
 	}
 	
 	virtual unsigned int length() const
