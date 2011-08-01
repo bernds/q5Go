@@ -3,6 +3,15 @@
 */
 
 #include "qgo.h"
+//Added by qt3to4:
+#include <QLabel>
+#include <QPixmap>
+#include <QCloseEvent>
+#include <Q3GridLayout>
+#include <Q3ValueList>
+#include <QKeyEvent>
+#include <Q3VBoxLayout>
+#include <Q3PopupMenu>
 #include "mainwin.h"
 #include "mainwindow.h"
 #include "mainwidget.h"
@@ -22,24 +31,27 @@
 #include "move.h"
 #include "qnewgamedlg.h"
 #include "qgo_interface.h"
-#include <qaccel.h>
+#include <Q3Accel>
+#include <Q3Action>
 #include <qmenubar.h>
-#include <qtoolbar.h>
+#include <q3toolbar.h>
 #include <qstatusbar.h>
 #include <qmessagebox.h>
 #include <qapplication.h>
-#include <qlistbox.h>
-#include <qwhatsthis.h>
+#include <q3listbox.h>
+#include <q3whatsthis.h>
+#if 0
 #include <qplatinumstyle.h>
 #include <qmotifstyle.h>
 #include <qmotifplusstyle.h>
 #include <qcdestyle.h>
 #include <qsgistyle.h>
-#include <qfiledialog.h>
+#endif
+#include <q3filedialog.h>
 #include <qcheckbox.h>
 #include <qsplitter.h>
 //#include <qmultilineedit.h>
-#include <qtextedit.h>
+#include <q3textedit.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
 #include <qcombobox.h>
@@ -90,8 +102,8 @@
 
 
 
-MainWindow::MainWindow(QWidget* parent, const char* name, WFlags f)
-: QMainWindow(parent, name, f)
+MainWindow::MainWindow(QWidget* parent, const char* name, Qt::WFlags f)
+: Q3MainWindow(parent, name, f)
 {
 
   // this is very dirty : we do this because there seem to be no clean way to backtrack to the ClientWindow, which has stored the style :-(  
@@ -103,7 +115,7 @@ MainWindow::MainWindow(QWidget* parent, const char* name, WFlags f)
   
   
 	isFullScreen = 0;
-	setFocusPolicy(QWidget::StrongFocus);
+	setFocusPolicy(Qt::StrongFocus);
 	
 	setIcon(setting->image0);
 
@@ -137,21 +149,21 @@ MainWindow::MainWindow(QWidget* parent, const char* name, WFlags f)
 		setting->readIntEntry("VIEW_COMMENT") == 0 && setting->readIntEntry("BOARDVERTCOMMENT_0"))
 	{
 		// show vertical comment
-		splitter = new QSplitter(Horizontal, this);
+		splitter = new QSplitter(Qt::Horizontal, this);
 		mainWidget = new MainWidget(splitter, "MainWidget");
-		splitter_comment = new QSplitter(Vertical, splitter);
+		splitter_comment = new QSplitter(Qt::Vertical, splitter);
 	}
 	else
 	{
-		splitter = new QSplitter(Vertical, this);
+		splitter = new QSplitter(Qt::Vertical, this);
 		mainWidget = new MainWidget(splitter, "MainWidget");
-		splitter_comment = new QSplitter(Horizontal, splitter);
+		splitter_comment = new QSplitter(Qt::Horizontal, splitter);
 	}
 	splitter->setOpaqueResize(false);
 
 //	mainWidget = new MainWidget(splitter, "MainWidget");
 	
-	mainWidgetGuiLayout = new QGridLayout(mainWidget, 1, 1, 0, 0);
+	mainWidgetGuiLayout = new Q3GridLayout(mainWidget, 1, 1, 0, 0);
 	if (setting->readBoolEntry("SIDEBAR_LEFT"))
 	{
 		mainWidgetGuiLayout->addWidget(mainWidget->toolsFrame, 0, 0);
@@ -171,26 +183,26 @@ MainWindow::MainWindow(QWidget* parent, const char* name, WFlags f)
 	
 	//commentEdit = new QTextEdit(splitter_comment, "comments");
 	QWidget *commentWidget = new QWidget(splitter_comment);
-	QVBoxLayout *commentLayout = new QVBoxLayout(commentWidget, 0,0,"commentLayout");
-	commentEdit = new QTextEdit(commentWidget,  "comments");
+	Q3VBoxLayout *commentLayout = new Q3VBoxLayout(commentWidget, 0,0,"commentLayout");
+	commentEdit = new Q3TextEdit(commentWidget,  "comments");
 	commentLayout->addWidget(commentEdit);
 	commentEdit2 = new QLineEdit( commentWidget, "commentEdit2" );
 	commentLayout->addWidget(commentEdit2);
 
-	ListView_observers = new QListView(splitter_comment, "observers");
+	ListView_observers = new Q3ListView(splitter_comment, "observers");
 	splitter->setResizeMode(mainWidget, QSplitter::KeepSize);
 	splitter_comment->setResizeMode(ListView_observers, QSplitter::KeepSize);
 	ListView_observers->addColumn(tr("Observers") + "     ");
-	ListView_observers->setProperty("focusPolicy", (int)QListView::NoFocus );
-	ListView_observers->setProperty("resizePolicy", (int)QListView::AutoOneFit );
+	ListView_observers->setProperty("focusPolicy", (int)Qt::NoFocus );
+	ListView_observers->setProperty("resizePolicy", (int)Q3ListView::AutoOneFit );
 	ListView_observers->addColumn(tr("Rk"));
-	ListView_observers->setProperty("focusPolicy", (int)QListView::NoFocus );
-	ListView_observers->setProperty("resizePolicy", (int)QListView::AutoOneFit );
+	ListView_observers->setProperty("focusPolicy", (int)Qt::NoFocus );
+	ListView_observers->setProperty("resizePolicy", (int)Q3ListView::AutoOneFit );
 	ListView_observers->setSorting(1);
 	// disable sorting; else sort rank would sort by rank string (col 2) instead of rank key (col 3, invisible)
 	ListView_observers->setSorting(-1);
 
-	commentEdit->setWordWrap(QTextEdit::WidgetWidth);
+	commentEdit->setWordWrap(Q3TextEdit::WidgetWidth);
 	//commentEdit2 = mainWidget->commentEdit2;
 	//commentEdit2 = new QLineEdit( boardFrame, "commentEdit2" );
 
@@ -439,84 +451,84 @@ void MainWindow::initActions()
 	* Global actions
 	*/
 	// Escape focus: Escape key to get the focus from comment field to main window.
- 	escapeFocus = new QAction(this);
-	escapeFocus->setAccel(Key_Escape);
+ 	escapeFocus = new Q3Action(this);
+	escapeFocus->setAccel(Qt::Key_Escape);
 	connect(escapeFocus, SIGNAL(activated()), this, SLOT(setFocus()));
 	
 	// Toggle game mode: Normal / Edit - Ctrl-E
-	toggleEdit = new QAction(this);
-	toggleEdit->setAccel(QAccel::stringToKey(tr("Ctrl+E")));
+	toggleEdit = new Q3Action(this);
+	toggleEdit->setAccel(Q3Accel::stringToKey(tr("Ctrl+E")));
 	// connect in constructor, as we need the mainwidget instance first.
 	
 	// Toggle through the marks - Ctrl-T
-	toggleMarks = new QAction(this);
-	toggleMarks->setAccel(QAccel::stringToKey(tr("Ctrl+T")));
+	toggleMarks = new Q3Action(this);
+	toggleMarks->setAccel(Q3Accel::stringToKey(tr("Ctrl+T")));
 	connect(toggleMarks, SIGNAL(activated()), this, SLOT(slotToggleMarks()));
 	
 	/*
 	* Menu File
 	*/
 	// File New Board
-	fileNewBoard = new QAction(tr("New"), fileNewboardIcon, tr("New &Board"),
-		QAccel::stringToKey(tr("Ctrl+B")), this);
+	fileNewBoard = new Q3Action(tr("New"), fileNewboardIcon, tr("New &Board"),
+		Q3Accel::stringToKey(tr("Ctrl+B")), this);
 	fileNewBoard->setStatusTip(tr("Creates a new board"));
 	fileNewBoard->setWhatsThis(tr("New\n\nCreates a new board."));
 	connect(fileNewBoard, SIGNAL(activated()), this, SLOT(slotFileNewBoard()));
 	
 	// File New Game
-	fileNew = new QAction(tr("New game"), fileNewIcon, tr("&New game"),
-		QAccel::stringToKey(tr("Ctrl+N")), this);
+	fileNew = new Q3Action(tr("New game"), fileNewIcon, tr("&New game"),
+		Q3Accel::stringToKey(tr("Ctrl+N")), this);
 	fileNew->setStatusTip(tr("Creates a new game on this board"));
 	fileNew->setWhatsThis(tr("New\n\nCreates a new game on this board."));
 	connect(fileNew, SIGNAL(activated()), this, SLOT(slotFileNewGame()));
 	
 	// File Open
-	fileOpen = new QAction(tr("Open"), fileOpenIcon, tr("&Open"),
-		QAccel::stringToKey(tr("Ctrl+O")), this);
+	fileOpen = new Q3Action(tr("Open"), fileOpenIcon, tr("&Open"),
+		Q3Accel::stringToKey(tr("Ctrl+O")), this);
 	fileOpen->setStatusTip(tr("Open a sgf file"));
 	fileOpen->setWhatsThis(tr("Open\n\nOpen a sgf file."));
 	connect(fileOpen, SIGNAL(activated()), this, SLOT(slotFileOpen()));
 	
 	// File Save
-	fileSave = new QAction(tr("Save"), fileSaveIcon, tr("&Save"),
-		QAccel::stringToKey(tr("Ctrl+S")), this);
+	fileSave = new Q3Action(tr("Save"), fileSaveIcon, tr("&Save"),
+		Q3Accel::stringToKey(tr("Ctrl+S")), this);
 	fileSave->setStatusTip(tr("Save a sgf file"));
 	fileSave->setWhatsThis(tr("Save\n\nSave a sgf file."));
 	connect(fileSave, SIGNAL(activated()), this, SLOT(slotFileSave()));
 	
 	// File SaveAs
-	fileSaveAs = new QAction(tr("Save As"), fileSaveAsIcon, tr("Save &As"), 0, this);
+	fileSaveAs = new Q3Action(tr("Save As"), fileSaveAsIcon, tr("Save &As"), 0, this);
 	fileSaveAs->setStatusTip(tr("Save a sgf file under a new name"));
 	fileSaveAs->setWhatsThis(tr("Save As\n\nSave a sgf file under a new name."));
 	connect(fileSaveAs, SIGNAL(activated()), this, SLOT(slotFileSaveAs()));
 	
 	// File Close
-	fileClose = new QAction(tr("Close"), tr("&Close"), QAccel::stringToKey(tr("Ctrl+W")), this);
+	fileClose = new Q3Action(tr("Close"), tr("&Close"), Q3Accel::stringToKey(tr("Ctrl+W")), this);
 	fileClose->setStatusTip(tr("Close this board"));
 	fileClose->setWhatsThis(tr("Exit\n\nClose this board."));
 	connect(fileClose, SIGNAL(activated()), this, SLOT(slotFileClose()));
 	
 	// File ImportASCII
-	fileImportASCII = new QAction(tr("Import ASCII"), charIcon, tr("Import &ASCII"), 0, this);
+	fileImportASCII = new Q3Action(tr("Import ASCII"), charIcon, tr("Import &ASCII"), 0, this);
 	fileImportASCII->setStatusTip(tr("Import an ASCII file as new variation"));
 	fileImportASCII->setWhatsThis(tr("Import ASCII\n\nImport an ASCII file as new variation."));
 	connect(fileImportASCII, SIGNAL(activated()), this, SLOT(slotFileImportASCII()));
 
 	// File ImportASCIIClipB
-	fileImportASCIIClipB = new QAction(tr("Import ASCII from clipboard"), charIcon,
+	fileImportASCIIClipB = new Q3Action(tr("Import ASCII from clipboard"), charIcon,
 		tr("Import ASCII from &clipboard"), 0, this);
 	fileImportASCIIClipB->setStatusTip(tr("Import an ASCII board as new variation from the clipboard"));
 	fileImportASCIIClipB->setWhatsThis(tr("Import ASCII from clipboard\n\nImport an ASCII file as new variation from the clipboard."));
 	connect(fileImportASCIIClipB, SIGNAL(activated()), this, SLOT(slotFileImportASCIIClipB()));
 	
 	// File ExportASCII
-	fileExportASCII = new QAction(tr("Export ASCII"), charIcon, tr("&Export ASCII"), 0, this);
+	fileExportASCII = new Q3Action(tr("Export ASCII"), charIcon, tr("&Export ASCII"), 0, this);
 	fileExportASCII->setStatusTip(tr("Export current board to ASCII"));
 	fileExportASCII->setWhatsThis(tr("Export ASCII\n\nExport current board to ASCII."));
 	connect(fileExportASCII, SIGNAL(activated()), this, SLOT(slotFileExportASCII()));
 	
 	// File ImportSgfClipB
-	fileImportSgfClipB = new QAction(tr("Import SGF from clipboard"), fileOpenIcon,
+	fileImportSgfClipB = new Q3Action(tr("Import SGF from clipboard"), fileOpenIcon,
 		tr("Import SGF &from clipboard"), 0, this);
 	fileImportSgfClipB->setStatusTip(tr("Import a complete game in SGF format from clipboard"));
 	fileImportSgfClipB->setWhatsThis(tr("Import SGF from clipboard\n\n"
@@ -524,7 +536,7 @@ void MainWindow::initActions()
 	connect(fileImportSgfClipB, SIGNAL(activated()), this, SLOT(slotFileImportSgfClipB()));
 	
 	// File ExportSgfClipB
-	fileExportSgfClipB = new QAction(tr("Export SGF to clipboard"), fileSaveIcon,
+	fileExportSgfClipB = new Q3Action(tr("Export SGF to clipboard"), fileSaveIcon,
 		tr("Export SGF &to clipboard"), 0, this);
 	fileExportSgfClipB->setStatusTip(tr("Export a complete game in SGF format to clipboard"));
 	fileExportSgfClipB->setWhatsThis(tr("Export SGF to clipboard\n\n"
@@ -532,21 +544,21 @@ void MainWindow::initActions()
 	connect(fileExportSgfClipB, SIGNAL(activated()), this, SLOT(slotFileExportSgfClipB()));
 	
 	// File ExportPic
-	fileExportPic = new QAction(tr("Export Image"), transformIcon, tr("Export &Image"), 0, this);
+	fileExportPic = new Q3Action(tr("Export Image"), transformIcon, tr("Export &Image"), 0, this);
 	fileExportPic->setStatusTip(tr("Export current board to an image"));
 	fileExportPic->setWhatsThis(tr("Export Image\n\nExport current board to an image."));
 	connect(fileExportPic, SIGNAL(activated()), this, SLOT(slotFileExportPic()));
 	
 	// File ExportPic
-	fileExportPicClipB = new QAction(tr("Export Image to clipboard"), transformIcon,
+	fileExportPicClipB = new Q3Action(tr("Export Image to clipboard"), transformIcon,
 		tr("E&xport Image to clipboard"), 0, this);
 	fileExportPicClipB->setStatusTip(tr("Export current board to the clipboard as image"));
 	fileExportPicClipB->setWhatsThis(tr("Export Image to clipboard\n\nExport current board to the clipboard as image."));
 	connect(fileExportPicClipB, SIGNAL(activated()), this, SLOT(slotFileExportPicClipB()));
 	
 	// File Quit
-	fileQuit = new QAction(tr("Exit"), exitIcon, tr("E&xit"),
-		QAccel::stringToKey(tr("Ctrl+Q")), this);
+	fileQuit = new Q3Action(tr("Exit"), exitIcon, tr("E&xit"),
+		Q3Accel::stringToKey(tr("Ctrl+Q")), this);
 	fileQuit->setStatusTip(tr("Quits the application"));
 	fileQuit->setWhatsThis(tr("Exit\n\nQuits the application."));
 	connect(fileQuit, SIGNAL(activated()), this, SLOT(slotFileClose()));//(qGo*)qApp, SLOT(quit()));
@@ -555,56 +567,56 @@ void MainWindow::initActions()
 	* Menu Edit
 	*/
 	// Edit cut
-	editCut = new QAction(tr("Cut"), cutIcon, tr("&Cut"),
-		QAccel::stringToKey(tr("Ctrl+X")), this);
+	editCut = new Q3Action(tr("Cut"), cutIcon, tr("&Cut"),
+		Q3Accel::stringToKey(tr("Ctrl+X")), this);
 	editCut->setStatusTip(tr("Cut this and all following positions"));
 	editCut->setWhatsThis(tr("Cut\n\nCut this and all following positions."));
 	connect(editCut, SIGNAL(activated()), this, SLOT(slotEditCut()));
 	
 	// Edit paste
-	editPaste = new QAction(tr("Paste"), pasteIcon, tr("&Paste"),
-		QAccel::stringToKey(tr("Ctrl+P")), this);
+	editPaste = new Q3Action(tr("Paste"), pasteIcon, tr("&Paste"),
+		Q3Accel::stringToKey(tr("Ctrl+P")), this);
 	editPaste->setStatusTip(tr("Paste as son of the current move"));
 	editPaste->setWhatsThis(tr("Paste\n\nPaste as son of the current move."));
 	connect(editPaste, SIGNAL(activated()), this, SLOT(slotEditPaste()));
 	
 	// Edit paste as brother
-	editPasteBrother = new QAction(tr("Paste as brother"), tr("Paste as &brother"), 0, this);
+	editPasteBrother = new Q3Action(tr("Paste as brother"), tr("Paste as &brother"), 0, this);
 	editPasteBrother->setStatusTip(tr("Paste as brother of the current move"));
 	editPasteBrother->setWhatsThis(tr("Paste\n\nPaste as brother of the current move."));
 	connect(editPasteBrother, SIGNAL(activated()), this, SLOT(slotEditPasteBrother()));
 	
 	// Edit delete
-	editDelete = new QAction(tr("Delete"), deleteIcon, tr("&Delete"),
-		QAccel::stringToKey(tr("Ctrl+D")), this);
+	editDelete = new Q3Action(tr("Delete"), deleteIcon, tr("&Delete"),
+		Q3Accel::stringToKey(tr("Ctrl+D")), this);
 	editDelete->setStatusTip(tr("Delete this and all following positions"));
 	editDelete->setWhatsThis(tr("Delete\n\nDelete this and all following positions."));
 	connect(editDelete, SIGNAL(activated()), this, SLOT(slotEditDelete()));
 	
 	// QQQ Toggle Hide Stones
-	editHideStones = new QAction(tr("Toggle Hiding"), tr("Toggle &Hiding"),
-		QAccel::stringToKey(tr("Alt+F2")), this);
+	editHideStones = new Q3Action(tr("Toggle Hiding"), tr("Toggle &Hiding"),
+		Q3Accel::stringToKey(tr("Alt+F2")), this);
 	editHideStones->setStatusTip(tr("Toggle to Hide all Stones in the board."));
 	editHideStones->setWhatsThis(tr("Toggle to Hide Stones\n\nToggle to Hide all Stones in the board."));
 	connect(editHideStones, SIGNAL(activated()), this, SLOT(slotEditHideStones()));
 	
 	// Edit number moves
-	editNumberMoves = new QAction(tr("Number Moves"), tr("&Number Moves"),
-		QAccel::stringToKey(tr("Shift+F2")), this);
+	editNumberMoves = new Q3Action(tr("Number Moves"), tr("&Number Moves"),
+		Q3Accel::stringToKey(tr("Shift+F2")), this);
 	editNumberMoves->setStatusTip(tr("Mark all moves with the number of their turn"));
 	editNumberMoves->setWhatsThis(tr("Number moves\n\nMark all moves with the number of their turn."));
 	connect(editNumberMoves, SIGNAL(activated()), this, SLOT(slotEditNumberMoves()));
 	
 	// Edit mark brothers
-	editMarkBrothers = new QAction(tr("Mark brothers"), tr("Mark &brothers"),
-		QAccel::stringToKey(tr("Shift+F3")), this);
+	editMarkBrothers = new Q3Action(tr("Mark brothers"), tr("Mark &brothers"),
+		Q3Accel::stringToKey(tr("Shift+F3")), this);
 	editMarkBrothers->setStatusTip(tr("Mark all brothers of the current move"));
 	editMarkBrothers->setWhatsThis(tr("Mark brothers\n\nMark all brothers of the current move."));
 	connect(editMarkBrothers, SIGNAL(activated()), this, SLOT(slotEditMarkBrothers()));
 	
 	// Edit mark sons
-	editMarkSons = new QAction(tr("Mark sons"), tr("Mark &sons"),
-		QAccel::stringToKey(tr("Shift+F4")), this);
+	editMarkSons = new Q3Action(tr("Mark sons"), tr("Mark &sons"),
+		Q3Accel::stringToKey(tr("Shift+F4")), this);
 	editMarkSons->setStatusTip(tr("Mark all sons of the current move"));
 	editMarkSons->setWhatsThis(tr("Mark sons\n\nMark all sons of the current move."));
 	connect(editMarkSons, SIGNAL(activated()), this, SLOT(slotEditMarkSons()));
@@ -613,106 +625,106 @@ void MainWindow::initActions()
 	* Menu Navigation
 	*/
 	// Navigation Backward
-	navBackward = new QAction(tr("Previous move (Left)"), leftArrowIcon, tr("&Previous move") + "\t" + tr("Left"),
+	navBackward = new Q3Action(tr("Previous move (Left)"), leftArrowIcon, tr("&Previous move") + "\t" + tr("Left"),
 		0, this);
 	navBackward->setStatusTip(tr("To previous move"));
 	navBackward->setWhatsThis(tr("Previous move\n\nMove one move backward."));
 	connect(navBackward, SIGNAL(activated()), this, SLOT(slotNavBackward()));
 	
 	// Navigation Forward
-	navForward = new QAction(tr("Next move (Right)"), rightArrowIcon, tr("&Next move") + "\t" + tr("Right"), 0, this);
+	navForward = new Q3Action(tr("Next move (Right)"), rightArrowIcon, tr("&Next move") + "\t" + tr("Right"), 0, this);
 	navForward->setStatusTip(tr("To next move"));
 	navForward->setWhatsThis(tr("Next move\n\nMove one move forward."));
 	connect(navForward, SIGNAL(activated()), this, SLOT(slotNavForward()));
 	
 	// Navigation First
-	navFirst = new QAction(tr("First move (Home)"), two_leftArrowIcon, tr("&First move") + "\t" + tr("Home"), 0, this);
+	navFirst = new Q3Action(tr("First move (Home)"), two_leftArrowIcon, tr("&First move") + "\t" + tr("Home"), 0, this);
 	navFirst->setStatusTip(tr("To first move"));
 	navFirst->setWhatsThis(tr("First move\n\nMove to first move."));
 	connect(navFirst, SIGNAL(activated()), this, SLOT(slotNavFirst()));
 	
 	// Navigation Last
-	navLast = new QAction(tr("Last move (End)"), two_rightArrowIcon, tr("&Last move") + "\t" + tr("End"), 0, this);
+	navLast = new Q3Action(tr("Last move (End)"), two_rightArrowIcon, tr("&Last move") + "\t" + tr("End"), 0, this);
 	navLast->setStatusTip(tr("To last move"));
 	navLast->setWhatsThis(tr("Last move\n\nMove to last move."));
 	connect(navLast, SIGNAL(activated()), this, SLOT(slotNavLast()));
 	
 	// Navigation previous variation
-	navPrevVar = new QAction(tr("Previous variation (Up)"), prevVarIcon, tr("P&revious variation") + "\t" + tr("Up"), 0, this);
+	navPrevVar = new Q3Action(tr("Previous variation (Up)"), prevVarIcon, tr("P&revious variation") + "\t" + tr("Up"), 0, this);
 	navPrevVar->setStatusTip(tr("To previous variation"));
 	navPrevVar->setWhatsThis(tr("Previous variation\n\nMove to the previous variation of this move."));
 	connect(navPrevVar, SIGNAL(activated()), this, SLOT(slotNavPrevVar()));
 	
 	// Navigation next variation
-	navNextVar = new QAction(tr("Next variation (Down)"), nextVarIcon, tr("N&ext variation") + "\t" + tr("Down"), 0, this);
+	navNextVar = new Q3Action(tr("Next variation (Down)"), nextVarIcon, tr("N&ext variation") + "\t" + tr("Down"), 0, this);
 	navNextVar->setStatusTip(tr("To next variation"));
 	navNextVar->setWhatsThis(tr("Next variation\n\nMove to the next variation of this move."));
 	connect(navNextVar, SIGNAL(activated()), this, SLOT(slotNavNextVar()));
 	
 	// Navigation main branch
-	navMainBranch = new QAction(tr("Main Branch"), mainBranchIcon, tr("&Main branch"), Key_Insert, this);
+	navMainBranch = new Q3Action(tr("Main Branch"), mainBranchIcon, tr("&Main branch"), Qt::Key_Insert, this);
 	navMainBranch->setStatusTip(tr("To main branch"));
 	navMainBranch->setWhatsThis(tr("Main Branch\n\nMove to the main branch where variation started."));
 	connect(navMainBranch, SIGNAL(activated()), this, SLOT(slotNavMainBranch()));
 	
 	// Navigation variation start
-	navStartVar = new QAction(tr("Variation start"), startVarIcon, tr("Variation &start"), Key_PageUp, this);
+	navStartVar = new Q3Action(tr("Variation start"), startVarIcon, tr("Variation &start"), Qt::Key_PageUp, this);
 	navStartVar->setStatusTip(tr("To top of variation"));
 	navStartVar->setWhatsThis(tr("Variation start\n\nMove to the top variation of this branch."));
 	connect(navStartVar, SIGNAL(activated()), this, SLOT(slotNavStartVar()));
 	
 	// Navigation next branch
-	navNextBranch = new QAction(tr("Next branch"), nextBranchIcon, tr("Next &branch"), Key_PageDown, this);
+	navNextBranch = new Q3Action(tr("Next branch"), nextBranchIcon, tr("Next &branch"), Qt::Key_PageDown, this);
 	navNextBranch->setStatusTip(tr("To next branch starting a variation"));
 	navNextBranch->setWhatsThis(tr("Next branch\n\nMove to the next branch starting a variation."));
 	connect(navNextBranch, SIGNAL(activated()), this, SLOT(slotNavNextBranch()));
 	
 	// Navigation goto Nth move
-	navNthMove = new QAction(tr("Goto move"), tr("&Goto Move"), QAccel::stringToKey(tr("Ctrl+G")) , this);
+	navNthMove = new Q3Action(tr("Goto move"), tr("&Goto Move"), Q3Accel::stringToKey(tr("Ctrl+G")) , this);
 	navNthMove->setStatusTip(tr("Goto a move of main branch by number"));
 	navNthMove->setWhatsThis(tr("Goto move\n\nGoto a move of main branch by number."));
 	connect(navNthMove, SIGNAL(activated()), this, SLOT(slotNavNthMove()));
 	
 	// Navigation Autoplay
-	navAutoplay = new QAction(tr("Autoplay"), autoplayIcon, tr("&Autoplay"),
-		QAccel::stringToKey(tr("Ctrl+A")), this, 0, true);
+	navAutoplay = new Q3Action(tr("Autoplay"), autoplayIcon, tr("&Autoplay"),
+		Q3Accel::stringToKey(tr("Ctrl+A")), this, 0, true);
 	navAutoplay->setOn(false);
 	navAutoplay->setStatusTip(tr("Start/Stop autoplaying current game"));
 	navAutoplay->setWhatsThis(tr("Autoplay\n\nStart/Stop autoplaying current game."));
 	connect(navAutoplay, SIGNAL(toggled(bool)), this, SLOT(slotNavAutoplay(bool)));
 	
 	// Navigation empty branch
-	navEmptyBranch = new QAction(tr("Empty branch"), tr("Empt&y branch"), 0, this);
+	navEmptyBranch = new Q3Action(tr("Empty branch"), tr("Empt&y branch"), 0, this);
 	navEmptyBranch->setStatusTip(tr("Create an empty branch"));
 	navEmptyBranch->setWhatsThis(tr("Empty branch\n\nCreate an empty branch."));
 	connect(navEmptyBranch, SIGNAL(activated()), this, SLOT(slotNavEmptyBranch()));
 	
 	// Navigation duplicate move
-	navCloneNode = new QAction(tr("Duplicate move"), tr("D&uplicate move"), 0, this);
+	navCloneNode = new Q3Action(tr("Duplicate move"), tr("D&uplicate move"), 0, this);
 	navCloneNode->setStatusTip(tr("Copies and duplicates this move"));
 	navCloneNode->setWhatsThis(tr("Duplicate move\n\nCopies and duplicates this move."));
 	connect(navCloneNode, SIGNAL(activated()), this, SLOT(slotNavCloneNode()));
 	
 	// Navigation swap variations
-	navSwapVariations = new QAction(tr("Swap variations"), tr("S&wap variations"), 0, this);
+	navSwapVariations = new Q3Action(tr("Swap variations"), tr("S&wap variations"), 0, this);
 	navSwapVariations->setStatusTip(tr("Swap current move with previous variation"));
 	navSwapVariations->setWhatsThis(tr("Swap variations\n\nSwap current move with previous variation."));
 	connect(navSwapVariations, SIGNAL(activated()), this, SLOT(slotNavSwapVariations()));
 	
 	// Navigation previous comment
-	navPrevComment = new QAction(tr("Previous commented move"), previousCommentIcon, tr("Previous &commented move") , 0, this);        //added eb
+	navPrevComment = new Q3Action(tr("Previous commented move"), previousCommentIcon, tr("Previous &commented move") , 0, this);        //added eb
 	navPrevComment->setStatusTip(tr("To previous comment"));
 	navPrevComment->setWhatsThis(tr("Previous comment\n\nMove to the previous move that has a comment"));
 	connect(navPrevComment, SIGNAL(activated()), this, SLOT(slotNavPrevComment()));
 
 	// Navigation next comment
-	navNextComment = new QAction(tr("Next commented move"), nextCommentIcon, tr("Next c&ommented move") , 0, this);
+	navNextComment = new Q3Action(tr("Next commented move"), nextCommentIcon, tr("Next c&ommented move") , 0, this);
 	navNextComment->setStatusTip(tr("To next comment"));
 	navNextComment->setWhatsThis(tr("Next comment\n\nMove to the next move that has a comment"));
 	connect(navNextComment, SIGNAL(activated()), this, SLOT(slotNavNextComment()));                                            // end add eb
 
   // Navigation to clicked intersection                       added eb 11
-	navIntersection = new QAction(tr("Goto stone at clicked move"), navIntersectionIcon, tr("Goto clic&ked move") , 0, this);
+	navIntersection = new Q3Action(tr("Goto stone at clicked move"), navIntersectionIcon, tr("Goto clic&ked move") , 0, this);
 	navIntersection->setStatusTip(tr("To clicked move"));
 	navIntersection->setWhatsThis(tr("Click on a board intersection\n\nMove to the stone played at this intersection (if any)"));
 	connect(navIntersection, SIGNAL(activated()), this, SLOT(slotNavIntersection()));                                            // end add eb
@@ -722,24 +734,24 @@ void MainWindow::initActions()
 	* Menu Settings
 	*/
 	// Settings Preferences
-	setPreferences = new QAction(tr("Preferences"), prefsIcon, tr("&Preferences"),
-		QAccel::stringToKey(tr("Alt+P")), this);
+	setPreferences = new Q3Action(tr("Preferences"), prefsIcon, tr("&Preferences"),
+		Q3Accel::stringToKey(tr("Alt+P")), this);
 	setPreferences->setStatusTip(tr("Edit the preferences"));
 	setPreferences->setWhatsThis(tr("Preferences\n\nEdit the applications preferences."));
 	connect(setPreferences, SIGNAL(activated()), this, SLOT(slotSetPreferences()));
 	
 	// Setings GameInfo
-	setGameInfo = new QAction(tr("Game Info"), infoIcon, tr("&Game Info"),
-		QAccel::stringToKey(tr("Ctrl+I")), this);
+	setGameInfo = new Q3Action(tr("Game Info"), infoIcon, tr("&Game Info"),
+		Q3Accel::stringToKey(tr("Ctrl+I")), this);
 	setGameInfo->setStatusTip(tr("Display game information"));
 	setGameInfo->setWhatsThis(tr("Game Info\n\nDisplay game information."));
 	connect(setGameInfo, SIGNAL(activated()), this, SLOT(slotSetGameInfo()));
 	
 	//Toggling sound
-	QIconSet  OIC;
-	OIC.setPixmap ( sound_offIcon, QIconSet::Automatic, QIconSet::Normal, QIconSet::On);
-	OIC.setPixmap ( sound_onIcon, QIconSet::Automatic, QIconSet::Normal, QIconSet::Off );
-	soundToggle = new QAction(tr("Mute stones sound"), OIC, tr("&Mute stones sound"),0, this,0,true);
+	QIcon  OIC;
+	OIC.setPixmap ( sound_offIcon, QIcon::Automatic, QIcon::Normal, QIcon::On);
+	OIC.setPixmap ( sound_onIcon, QIcon::Automatic, QIcon::Normal, QIcon::Off );
+	soundToggle = new Q3Action(tr("Mute stones sound"), OIC, tr("&Mute stones sound"),0, this,0,true);
 	soundToggle->setOn(!setting->readBoolEntry("SOUND_STONE"));
 	soundToggle->setStatusTip(tr("Toggle stones sound on/off"));
 	soundToggle->setWhatsThis(tr("Stones sound\n\nToggle stones sound on/off\nthis toggles only the stones sounds"));
@@ -752,76 +764,76 @@ void MainWindow::initActions()
 	* Menu View
 	*/
 	// View Filebar toggle
-	viewFileBar = new QAction(tr("File toolbar"), tr("&File toolbar"), 0, this, 0, true);
+	viewFileBar = new Q3Action(tr("File toolbar"), tr("&File toolbar"), 0, this, 0, true);
 	viewFileBar->setOn(true);
 	viewFileBar->setStatusTip(tr("Enables/disables the file toolbar"));
 	viewFileBar->setWhatsThis(tr("File toolbar\n\nEnables/disables the file toolbar."));
 	connect(viewFileBar, SIGNAL(toggled(bool)), this, SLOT(slotViewFileBar(bool)));
 	
 	// View Toolbar toggle
-	viewToolBar = new QAction(tr("Navigation toolbar"), tr("Navigation &toolbar"), 0, this, 0, true);
+	viewToolBar = new Q3Action(tr("Navigation toolbar"), tr("Navigation &toolbar"), 0, this, 0, true);
 	viewToolBar->setOn(true);
 	viewToolBar->setStatusTip(tr("Enables/disables the navigation toolbar"));
 	viewToolBar->setWhatsThis(tr("Navigation toolbar\n\nEnables/disables the navigation toolbar."));
 	connect(viewToolBar, SIGNAL(toggled(bool)), this, SLOT(slotViewToolBar(bool)));
 	
 	// View Editbar toggle
-	viewEditBar = new QAction(tr("Edit toolbar"), tr("&Edit toolbar"), 0, this, 0, true);
+	viewEditBar = new Q3Action(tr("Edit toolbar"), tr("&Edit toolbar"), 0, this, 0, true);
 	viewEditBar->setOn(true);
 	viewEditBar->setStatusTip(tr("Enables/disables the edit toolbar"));
 	viewEditBar->setWhatsThis(tr("Edit toolbar\n\nEnables/disables the edit toolbar."));
 	connect(viewEditBar, SIGNAL(toggled(bool)), this, SLOT(slotViewEditBar(bool)));
 	
 	// View Menubar toggle
-	viewMenuBar = new QAction(tr("Menubar"), tr("&Menubar"),
-		QAccel::stringToKey(tr("F7")), this, 0, true);
+	viewMenuBar = new Q3Action(tr("Menubar"), tr("&Menubar"),
+		Q3Accel::stringToKey(tr("F7")), this, 0, true);
 	viewMenuBar->setOn(true);
 	viewMenuBar->setStatusTip(tr("Enables/disables the menubar"));
 	viewMenuBar->setWhatsThis(tr("Menubar\n\nEnables/disables the menubar."));
 	connect(viewMenuBar, SIGNAL(toggled(bool)), this, SLOT(slotViewMenuBar(bool)));
 	
 	// View Statusbar toggle
-	viewStatusBar = new QAction(tr("Statusbar"), tr("&Statusbar"), 0, this, 0, true);
+	viewStatusBar = new Q3Action(tr("Statusbar"), tr("&Statusbar"), 0, this, 0, true);
 	viewStatusBar->setOn(true);
 	viewStatusBar->setStatusTip(tr("Enables/disables the statusbar"));
 	viewStatusBar->setWhatsThis(tr("Statusbar\n\nEnables/disables the statusbar."));
 	connect(viewStatusBar, SIGNAL(toggled(bool)), this, SLOT(slotViewStatusBar(bool)));
 	
 	// View Coordinates toggle
-	viewCoords = new QAction(tr("Coordinates"),coordsIcon, tr("C&oordinates"),
-		QAccel::stringToKey(tr("F8")), this, 0, true);
+	viewCoords = new Q3Action(tr("Coordinates"),coordsIcon, tr("C&oordinates"),
+		Q3Accel::stringToKey(tr("F8")), this, 0, true);
 	viewCoords->setOn(false);
 	viewCoords->setStatusTip(tr("Enables/disables the coordinates"));
 	viewCoords->setWhatsThis(tr("Coordinates\n\nEnables/disables the coordinates."));
 	connect(viewCoords, SIGNAL(toggled(bool)), this, SLOT(slotViewCoords(bool)));
 	
 	// View Slider toggle
-	viewSlider = new QAction(tr("Slider"), tr("Sli&der"),
-		QAccel::stringToKey(tr("Ctrl+F8")), this, 0, true);
+	viewSlider = new Q3Action(tr("Slider"), tr("Sli&der"),
+		Q3Accel::stringToKey(tr("Ctrl+F8")), this, 0, true);
 	viewSlider->setOn(false);
 	viewSlider->setStatusTip(tr("Enables/disables the slider"));
 	viewSlider->setWhatsThis(tr("Slider\n\nEnables/disables the slider."));
 	connect(viewSlider, SIGNAL(toggled(bool)), this, SLOT(slotViewSlider(bool)));
 	
 	// View Sidebar toggle
-	viewSidebar = new QAction(tr("Sidebar"), tr("Side&bar"),
-		QAccel::stringToKey(tr("F9")), this, 0, true);
+	viewSidebar = new Q3Action(tr("Sidebar"), tr("Side&bar"),
+		Q3Accel::stringToKey(tr("F9")), this, 0, true);
 	viewSidebar->setOn(true);
 	viewSidebar->setStatusTip(tr("Enables/disables the sidebar"));
 	viewSidebar->setWhatsThis(tr("Sidebar\n\nEnables/disables the sidebar."));
 	connect(viewSidebar, SIGNAL(toggled(bool)), this, SLOT(slotViewSidebar(bool)));
 	
 	// View Comment toggle
-	viewComment = new QAction(tr("Comment"), tr("&Comment"),
-		QAccel::stringToKey(tr("F10")), this, 0, true);
+	viewComment = new Q3Action(tr("Comment"), tr("&Comment"),
+		Q3Accel::stringToKey(tr("F10")), this, 0, true);
 	viewComment->setOn(true);
 	viewComment->setStatusTip(tr("Enables/disables the comment field"));
 	viewComment->setWhatsThis(tr("Comment field\n\nEnables/disables the comment field."));
 	connect(viewComment, SIGNAL(toggled(bool)), this, SLOT(slotViewComment(bool)));
 	
 	// View Vertical Comment toggle
-	viewVertComment = new QAction(tr("Vertical comment"), tr("&Vertical comment"),
-		QAccel::stringToKey(tr("Shift+F10")), this, 0, true);
+	viewVertComment = new Q3Action(tr("Vertical comment"), tr("&Vertical comment"),
+		Q3Accel::stringToKey(tr("Shift+F10")), this, 0, true);
 	viewVertComment->setOn(setting->readIntEntry("VIEW_COMMENT") == 2 ||
 		setting->readIntEntry("VIEW_COMMENT") == 0 && setting->readIntEntry("BOARDVERTCOMMENT_0"));
 	viewVertComment->setStatusTip(tr("Enables/disables a vertical direction of the comment field"));
@@ -830,38 +842,38 @@ void MainWindow::initActions()
 	connect(viewVertComment, SIGNAL(toggled(bool)), this, SLOT(slotViewVertComment(bool)));
 	
 	// View Pin comment
-	viewPinComment = new QAction(tr("Pin comment"), tr("&Pin comment"),
-		QAccel::stringToKey(tr("Ctrl+F10")), this, 0, true);
+	viewPinComment = new Q3Action(tr("Pin comment"), tr("&Pin comment"),
+		Q3Accel::stringToKey(tr("Ctrl+F10")), this, 0, true);
 	viewPinComment->setOn(false);
 	viewPinComment->setStatusTip(tr("Enables/disables pinning the comment field"));
 	viewPinComment->setWhatsThis(tr("Pin comment field\n\nEnables/disables pinning the comment field."));
 	connect(viewPinComment, SIGNAL(toggled(bool)), this, SLOT(slotViewPinComment(bool)));
 	
 	// View Increase Size
-	viewIncreaseSize = new QAction(tr("Zoom In"), increaseIcon, tr("Zoom &In"),
-		QAccel::stringToKey(tr("Alt++")), this);
+	viewIncreaseSize = new Q3Action(tr("Zoom In"), increaseIcon, tr("Zoom &In"),
+		Q3Accel::stringToKey(tr("Alt++")), this);
 	viewIncreaseSize->setStatusTip(tr("Zooms in the board"));
 	viewIncreaseSize->setWhatsThis(tr("Zoom In\n\nZooms in the board."));
 	connect(viewIncreaseSize, SIGNAL(activated()), this, SLOT(slotViewIncreaseSize()));
 	
 	// View Decrease Size
-	viewDecreaseSize = new QAction(tr("Zoom Out"), decreaseIcon, tr("Zoom &Out"),
-		QAccel::stringToKey(tr("Alt+-")), this);
+	viewDecreaseSize = new Q3Action(tr("Zoom Out"), decreaseIcon, tr("Zoom &Out"),
+		Q3Accel::stringToKey(tr("Alt+-")), this);
 	viewDecreaseSize->setStatusTip(tr("Zooms out the board"));
 	viewDecreaseSize->setWhatsThis(tr("Zoom Out\n\nZooms out the board."));
 	connect(viewDecreaseSize, SIGNAL(activated()), this, SLOT(slotViewDecreaseSize()));
 	
 	// View Save Size
-	viewSaveSize = new QAction(tr("Save size"), tr("Save si&ze"), 
-		QAccel::stringToKey("Alt+0"), this, 0, false);
+	viewSaveSize = new Q3Action(tr("Save size"), tr("Save si&ze"), 
+		Q3Accel::stringToKey("Alt+0"), this, 0, false);
 	viewSaveSize->setStatusTip(tr("Save the current window size"));
 	viewSaveSize->setWhatsThis(tr("Save size\n\n"
 		"Saves the current window size and restores it on the next program start.\n\nUse ALT + <number key> to store own sizes\nRestore with CTRL + <number key>\n\n<0> is default value at program start.\n<9> is default for edit window."));
 	connect(viewSaveSize, SIGNAL(activated()), this, SLOT(slotViewSaveSize()));
 	
 	// View Fullscreen
-	viewFullscreen = new QAction(tr("Fullscreen"), fullscreenIcon, tr("&Fullscreen"),
-		QAccel::stringToKey(tr("F11")), this, 0, true);
+	viewFullscreen = new Q3Action(tr("Fullscreen"), fullscreenIcon, tr("&Fullscreen"),
+		Q3Accel::stringToKey(tr("F11")), this, 0, true);
 	viewFullscreen->setOn(false);
 	viewFullscreen->setStatusTip(tr("Enable/disable fullscreen mode"));
 	viewFullscreen->setWhatsThis(tr("Fullscreen\n\nEnable/disable fullscreen mode."));
@@ -871,26 +883,26 @@ void MainWindow::initActions()
 	* Menu Help
 	*/
 	// Help Manual
-	helpManual = new QAction(tr("Manual"), manualIcon, tr("&Manual"),
-		QAccel::stringToKey(tr("F1")), this);
+	helpManual = new Q3Action(tr("Manual"), manualIcon, tr("&Manual"),
+		Q3Accel::stringToKey(tr("F1")), this);
 	helpManual->setStatusTip(tr("Opens the manual"));
 	helpManual->setWhatsThis(tr("Help\n\nOpens the manual of the application."));
 	connect(helpManual, SIGNAL(activated()), this, SLOT(slotHelpManual()));
 	
 	// Sound Info
-	helpSoundInfo = new QAction(tr("Sound Info"), tr("&Sound"), 0, this);
+	helpSoundInfo = new Q3Action(tr("Sound Info"), tr("&Sound"), 0, this);
 	helpSoundInfo->setStatusTip(tr("Short info on sound availability"));
 	helpSoundInfo->setWhatsThis(tr("Sound Info\n\nViews a message box with a short comment about sound."));
 	connect(helpSoundInfo, SIGNAL(activated()), this, SLOT(slotHelpSoundInfo()));
 	
 	// Help About
-	helpAboutApp = new QAction(tr("About"), tr("&About..."), 0, this);
+	helpAboutApp = new Q3Action(tr("About"), tr("&About..."), 0, this);
 	helpAboutApp->setStatusTip(tr("About the application"));
 	helpAboutApp->setWhatsThis(tr("About\n\nAbout the application."));
 	connect(helpAboutApp, SIGNAL(activated()), this, SLOT(slotHelpAbout()));
 	
 	// Help AboutQt
-	helpAboutQt = new QAction(tr("About Qt"), tr("About &Qt..."), 0, this);
+	helpAboutQt = new Q3Action(tr("About Qt"), tr("About &Qt..."), 0, this);
 	helpAboutQt->setStatusTip(tr("About Qt"));
 	helpAboutQt->setWhatsThis(tr("About Qt\n\nAbout Qt."));
 	connect(helpAboutQt, SIGNAL(activated()), this, SLOT(slotHelpAboutQt()));
@@ -916,13 +928,13 @@ void MainWindow::initActions()
 void MainWindow::initMenuBar()
 {
 //#ifdef USE_XPM
-	QIconSet wtIcon(QPixmap(const_cast<const char**>(contexthelp_xpm)));
+	QIcon wtIcon(QPixmap(const_cast<const char**>(contexthelp_xpm)));
 //#else
 //	QIconSet wtIcon(QPixmap(ICON_WHATSTHIS));
 //#endif
 	
 	// submenu Import/Export
-	importExportMenu = new QPopupMenu();
+	importExportMenu = new Q3PopupMenu();
 	importExportMenu->insertTearOffHandle();
 	fileImportASCII->addTo(importExportMenu);
 	fileImportASCIIClipB->addTo(importExportMenu);
@@ -935,7 +947,7 @@ void MainWindow::initMenuBar()
 	fileExportPicClipB->addTo(importExportMenu);
 	
 	// menuBar entry fileMenu
-	fileMenu = new QPopupMenu();
+	fileMenu = new Q3PopupMenu();
 	fileMenu->insertTearOffHandle();
 	fileNewBoard->addTo(fileMenu);
 	fileNew->addTo(fileMenu);
@@ -949,7 +961,7 @@ void MainWindow::initMenuBar()
 	fileQuit->addTo(fileMenu);
 	
 	// menuBar entry editMenu
-	editMenu = new QPopupMenu();
+	editMenu = new Q3PopupMenu();
 	editMenu->insertTearOffHandle();
 	editCut->addTo(editMenu);
 	editPaste->addTo(editMenu);
@@ -962,7 +974,7 @@ void MainWindow::initMenuBar()
 	editMarkSons->addTo(editMenu);
 	
 	// menuBar entry navMenu
-	navMenu = new QPopupMenu();
+	navMenu = new Q3PopupMenu();
 	navMenu->insertTearOffHandle();
 	navFirst->addTo(navMenu);
 	navBackward->addTo(navMenu);
@@ -987,7 +999,7 @@ void MainWindow::initMenuBar()
 
 	
 	// menuBar entry settingsMenu
-	settingsMenu = new QPopupMenu();
+	settingsMenu = new Q3PopupMenu();
 	settingsMenu->insertTearOffHandle();
 	setPreferences->addTo(settingsMenu);
 	setGameInfo->addTo(settingsMenu);
@@ -995,7 +1007,7 @@ void MainWindow::initMenuBar()
 	soundToggle->addTo(settingsMenu);
 	
 	// menuBar entry viewMenu
-	viewMenu = new QPopupMenu();
+	viewMenu = new Q3PopupMenu();
 	viewMenu->insertTearOffHandle();
 	viewFileBar->addTo(viewMenu);
 	viewToolBar->addTo(viewMenu);
@@ -1017,9 +1029,9 @@ void MainWindow::initMenuBar()
 	viewFullscreen->addTo(viewMenu);
 	
 	// menuBar entry helpMenu
-	helpMenu = new QPopupMenu();
+	helpMenu = new Q3PopupMenu();
 	helpManual->addTo(helpMenu);
-	helpMenu->insertItem(wtIcon, tr("What's &This?"), this, SLOT(whatsThis()), SHIFT+Key_F1);
+	helpMenu->insertItem(wtIcon, tr("What's &This?"), this, SLOT(whatsThis()), Qt::SHIFT+Qt::Key_F1);
 	helpMenu->insertSeparator();
 	helpSoundInfo->addTo(helpMenu);
 	helpMenu->insertSeparator();
@@ -1039,7 +1051,7 @@ void MainWindow::initMenuBar()
 void MainWindow::initToolBar()
 {
 	// File toolbar
-	fileBar = new QToolBar(this, "filebar");
+	fileBar = new Q3ToolBar(this, "filebar");
 	
 	fileNew->addTo(fileBar);
 	fileOpen->addTo(fileBar);
@@ -1047,7 +1059,7 @@ void MainWindow::initToolBar()
 	fileSaveAs->addTo(fileBar);
 	
 	// Navigation toolbar
-	toolBar = new QToolBar(this, "toolbar");
+	toolBar = new Q3ToolBar(this, "toolbar");
 	
 	navFirst->addTo(toolBar);
 	navBackward->addTo(toolBar);
@@ -1078,7 +1090,7 @@ void MainWindow::initToolBar()
 	toolBar->addSeparator();
 
 	
-	QWhatsThis::whatsThisButton(toolBar);
+	Q3WhatsThis::whatsThisButton(toolBar);
 	
 	toolBar->addSeparator();
 
@@ -1086,7 +1098,7 @@ void MainWindow::initToolBar()
 	setGameInfo->addTo(toolBar);
 	
 	// Edit toolbar
-	editBar = new QToolBar(this, "editbar");
+	editBar = new Q3ToolBar(this, "editbar");
 	
 	editCut->addTo(editBar);
 	editPaste->addTo(editBar);
@@ -1105,36 +1117,36 @@ void MainWindow::initStatusBar()
 	
 	// The turn widget
 	statusTurn = new QLabel(statusBar());
-	statusTurn->setAlignment(AlignCenter | SingleLine);
+	statusTurn->setAlignment(Qt::AlignCenter | Qt::TextSingleLine);
 	statusTurn->setText(" 0 ");
 	statusBar()->addWidget(statusTurn, 0, true);  // Permanent indicator
 	QToolTip::add(statusTurn, tr("Current move"));
-	QWhatsThis::add(statusTurn, tr("Move\nDisplays the number of the current turn and the last move played."));
+	Q3WhatsThis::add(statusTurn, tr("Move\nDisplays the number of the current turn and the last move played."));
 	
 	// The nav widget
 	statusNav = new QLabel(statusBar());
-	statusNav->setAlignment(AlignCenter | SingleLine);
+	statusNav->setAlignment(Qt::AlignCenter | Qt::TextSingleLine);
 	statusNav->setText(" 0/0 ");
 	statusBar()->addWidget(statusNav, 0, true);  // Permanent indicator
 	QToolTip::add(statusNav, tr("Brothers / sons"));
-	QWhatsThis::add(statusNav, tr("Navigation\nShows the brothers and sons of the current move."));
+	Q3WhatsThis::add(statusNav, tr("Navigation\nShows the brothers and sons of the current move."));
 	
 	// The mode widget
 	statusMode = new QLabel(statusBar());
-	statusMode->setAlignment(AlignCenter | SingleLine);
+	statusMode->setAlignment(Qt::AlignCenter | Qt::TextSingleLine);
 	statusMode->setText(" " + QObject::tr("N", "Board status line: normal mode") + " ");
 	statusBar()->addWidget(statusMode, 0, true);  // Permanent indicator
 	QToolTip::add(statusMode, tr("Current mode"));
-	QWhatsThis::add(statusMode,
+	Q3WhatsThis::add(statusMode,
 		tr("Mode\nShows the current mode. 'N' for normal mode, 'E' for edit mode."));
 	
 	// The mark widget
 	statusMark = new QLabel(statusBar());
-	statusMark->setAlignment(AlignCenter | SingleLine);
+	statusMark->setAlignment(Qt::AlignCenter | Qt::TextSingleLine);
 	statusMark->setText(" - ");
 	statusBar()->addWidget(statusMark, 0, true);  // Permanent indicator
 	QToolTip::add(statusMark, tr("Current edit mark"));
-	QWhatsThis::add(statusMark, tr("Mark\nShows the current edit mark. '-' in normal mode."));
+	Q3WhatsThis::add(statusMark, tr("Mark\nShows the current edit mark. '-' in normal mode."));
 }
 
 void MainWindow::slotFileNewBoard()
@@ -1200,7 +1212,7 @@ void MainWindow::slotFileOpen()
 {
 	if (!checkModified())
 		return;
-	QString fileName(QFileDialog::getOpenFileName(setting->readEntry("LAST_DIR"),
+	QString fileName(Q3FileDialog::getOpenFileName(setting->readEntry("LAST_DIR"),
 		tr("SGF Files (*.sgf *.SGF);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)"), this));
 	if (fileName.isEmpty())
 		return;
@@ -1293,19 +1305,16 @@ bool MainWindow::doSave(QString fileName, bool force)
 {
 	if (!force)
   	{
-     		if  (fileName == NULL ||
-			fileName.isNull() ||
-          		fileName.isEmpty() ||
-          		QDir(fileName).exists())
+     		if  (fileName.isNull() || fileName.isEmpty() || QDir(fileName).exists())
             	{
               		QString base = board->getCandidateFileName();
-              		if (fileName == NULL || fileName.isNull() || fileName.isEmpty())
+              		if (fileName.isNull() || fileName.isEmpty())
                 		fileName = base;
               		else
                 		fileName.append(base);
 
 		}
-		fileName = QFileDialog::getSaveFileName(fileName, tr("SGF Files (*.sgf);;All Files (*)"), this);
+		fileName = Q3FileDialog::getSaveFileName(fileName, tr("SGF Files (*.sgf);;All Files (*)"), this);
 	}
 	
 	if (fileName.isEmpty())
@@ -1368,7 +1377,7 @@ void MainWindow::slotFileExportSgfClipB()
 
 void MainWindow::slotFileImportASCII()
 {
-	QString fileName(QFileDialog::getOpenFileName(QString::null,
+	QString fileName(Q3FileDialog::getOpenFileName(QString::null,
 		tr("Text Files (*.txt);;All Files (*)"),
 		this));
 	if (fileName.isEmpty())
@@ -1395,7 +1404,7 @@ void MainWindow::slotFileExportASCII()
 void MainWindow::slotFileExportPic()
 {
    QString *filter = new QString("");
-   QString fileName = QFileDialog::getSaveFileName(
+   QString fileName = Q3FileDialog::getSaveFileName(
     "",
 		"PNG (*.png);;BMP (*.bmp);;XPM (*.xpm);;XBM (*.xbm);;PNM (*.pnm);;GIF (*.gif);;JPEG (*.jpeg);;MNG (*.mng)",
 		this,
@@ -1840,9 +1849,9 @@ void MainWindow::updateBoard()
 		viewVertComment->setOn(setting->readIntEntry("VIEW_COMMENT") == 2);
 	}
 
-	
+#if 0 // @@@
 	QToolTip::setEnabled(setting->readBoolEntry("TOOLTIPS"));
-
+#endif
 	if (timer->isActive())
 	{
 		if (setting->readBoolEntry("SGF_TIME_TAGS") && board->getGameData()->timeSystem != none)
@@ -2036,9 +2045,9 @@ void MainWindow::slotViewComment(bool toggle)
 void MainWindow::slotViewVertComment(bool toggle)
 {
 	setting->writeIntEntry("VIEW_COMMENT", toggle ? 2 : 1);
-	splitter->setOrientation(toggle ? Horizontal : Vertical);
+	splitter->setOrientation(toggle ? Qt::Horizontal : Qt::Vertical);
 	splitter->setResizeMode(mainWidget, QSplitter::KeepSize);
-	splitter_comment->setOrientation(!toggle ? Horizontal : Vertical);
+	splitter_comment->setOrientation(!toggle ? Qt::Horizontal : Qt::Vertical);
 	splitter_comment->setResizeMode(ListView_observers, QSplitter::KeepSize);
 }
 
@@ -2079,7 +2088,7 @@ void MainWindow::slotViewPinComment(bool toggle)
 	}
 	else
 	{
-		commentEdit->reparent(this, WType_TopLevel, QPoint(0, 0), true);
+		commentEdit->reparent(this, Qt::WType_TopLevel, QPoint(0, 0), true);
 		commentEdit->setGeometry(200, 100, 400, 200);
 		viewComment->setOn(true);
 		viewVertComment->setEnabled(false);
@@ -2159,7 +2168,7 @@ void MainWindow::slotTimerForward()
 		int pos1 = 0;
 		int pos2;
 		seconds = 0;
-		switch (tmp.contains(":"))
+		switch (tmp.count(":"))
 		{
 			case 2:
 				// case: 0:23:56
@@ -2235,7 +2244,7 @@ void MainWindow::slotTimerForward()
 		statusBar()->message(tr("Autoplay stopped."));
 	}
 }
-/*
+#if 0
 void MainWindow::setApplicationStyle()
 {
 	if (setting->readIntEntry("STYLE") < 0 || setting->readIntEntry("STYLE") > 6)
@@ -2276,7 +2285,7 @@ void MainWindow::setApplicationStyle()
 		qWarning("Unrecognized style!");
 	}
 }
-*/
+#endif
 // store and restore window properties
 bool MainWindow::reStoreWindowSize(QString strKey, bool store)
 {
@@ -2345,7 +2354,7 @@ bool MainWindow::reStoreWindowSize(QString strKey, bool store)
 
 					i = s.section(DELIMITER, 2, 2).toInt();
 					j = s.section(DELIMITER, 3, 3).toInt();
-					QValueList<int> w1;
+					Q3ValueList<int> w1;
 					w1 << i << j;
 					splitter_comment->setSizes(w1);
 
@@ -2382,17 +2391,17 @@ bool MainWindow::reStoreWindowSize(QString strKey, bool store)
 void MainWindow::keyPressEvent(QKeyEvent *e)
 {
 	// check for window resize command = number button
-	if (e->key() >= Key_0 && e->key() <= Key_9)
+	if (e->key() >= Qt::Key_0 && e->key() <= Qt::Key_9)
 	{
-		QString strKey = QString::number(e->key() - Key_0);
+		QString strKey = QString::number(e->key() - Qt::Key_0);
 		
-		if (e->state() & AltButton)
+		if (e->state() & Qt::AltModifier)
 		{
 			// true -> store
 			reStoreWindowSize(strKey, true);
 			return;
 		}
-		else if (e->state() & ControlButton)
+		else if (e->state() & Qt::ControlModifier)
 		{
 			// false -> restore
 			if (!reStoreWindowSize(strKey, false))
@@ -2437,32 +2446,32 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
 #endif
 */
 		
-	case Key_Left:
+	case Qt::Key_Left:
 		if (localGame || (getBoard()->getGameMode() == modeObserve))
 			slotNavBackward();
 		break;
 		
-	case Key_Right:
+	case Qt::Key_Right:
 		if (localGame || (getBoard()->getGameMode() == modeObserve))
 			slotNavForward();
 		break;
 		
-	case Key_Up:
+	case Qt::Key_Up:
 		if (localGame)
 			slotNavPrevVar();
 		break;
 		
-	case Key_Down:
+	case Qt::Key_Down:
 		if (localGame)
 			slotNavNextVar();
 		break;
 		
-	case Key_Home:
+	case Qt::Key_Home:
 		if (localGame || (getBoard()->getGameMode() == modeObserve))
 			slotNavFirst();
 		break;
 		
-	case Key_End:
+	case Qt::Key_End:
 		if (localGame || (getBoard()->getGameMode() == modeObserve))
 			slotNavLast();
 		break;
@@ -2579,7 +2588,7 @@ void MainWindow::slot_editBoardInNewWindow()
 	// create update button
 	w->getInterfaceHandler()->refreshButton->setText(tr("Update"));
 	QToolTip::add(w->getInterfaceHandler()->refreshButton, tr("Update from online game"));
-	QWhatsThis::add(w->getInterfaceHandler()->refreshButton, tr("Update from online game to local board and supersede own changes."));
+	Q3WhatsThis::add(w->getInterfaceHandler()->refreshButton, tr("Update from online game to local board and supersede own changes."));
 	w->getInterfaceHandler()->refreshButton->setEnabled(true);
 	connect(w->getInterfaceHandler()->refreshButton, SIGNAL(clicked()), this, SLOT(slotFileExportSgfClipB()));
 	connect(w->getInterfaceHandler()->refreshButton, SIGNAL(clicked()), w, SLOT(slotFileImportSgfClipB()));
@@ -2601,7 +2610,7 @@ void MainWindow::addObserver(const QString &name)
 	QString rank = name.section(' ', 1, 1);
 	QString rankkey = rkToKey(rank) + name_without_rank;
 	
-	new QListViewItem(ListView_observers, name_without_rank, rank, rankkey);
+	new Q3ListViewItem(ListView_observers, name_without_rank, rank, rankkey);
 //	ListView_observer->addItem
 }
 

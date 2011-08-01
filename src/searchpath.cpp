@@ -11,10 +11,12 @@
 //
 #include "searchpath.h"
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 SearchPath::SearchPath () : QObject ()
 {
-  directoryList = QPtrList<QDir>();
+  directoryList = Q3PtrList<QDir>();
   directoryList.setAutoDelete(true);
 }
 

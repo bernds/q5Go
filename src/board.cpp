@@ -6,6 +6,13 @@
 #include "config.h"
 #include "setting.h"
 #include "qgo.h"
+//Added by qt3to4:
+#include <Q3PtrList>
+#include <QPixmap>
+#include <QResizeEvent>
+#include <QMouseEvent>
+#include <QEvent>
+#include <QWheelEvent>
 #include "board.h"
 #include "globals.h"
 #include "mark.h"
@@ -22,12 +29,12 @@
 #include <qapplication.h>
 #include <qclipboard.h>
 #include <qpainter.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qlineedit.h>
 #include <qcursor.h>
 
-Board::Board(QWidget *parent, const char *name, QCanvas* c)
-: QCanvasView(c, parent, name)
+Board::Board(QWidget *parent, const char *name, Q3Canvas* c)
+: Q3CanvasView(c, parent, name)
 {
 	viewport()->setMouseTracking(TRUE);
 	
@@ -46,7 +53,7 @@ Board::Board(QWidget *parent, const char *name, QCanvas* c)
 	CHECK_PTR(imageHandler);
 	
 	// Init the canvas
-	canvas = new QCanvas(this, "MainCanvas");
+	canvas = new Q3Canvas(this, "MainCanvas");
 	CHECK_PTR(canvas);
 	canvas->setDoubleBuffering(TRUE);
 	canvas->resize(BOARD_X, BOARD_Y);
@@ -55,11 +62,11 @@ Board::Board(QWidget *parent, const char *name, QCanvas* c)
 	gatter = new Gatter(canvas, board_size);
 
 	// Init data storage for marks and ghosts
-	marks = new QPtrList<Mark>;
+	marks = new Q3PtrList<Mark>;
 	marks->setAutoDelete(TRUE);
 	lastMoveMark = NULL;
 	
-	ghosts = new QList<Stone>;
+	ghosts = new Q3PtrList<Stone>;
 	ghosts->setAutoDelete(TRUE);
 	
 	// Init the gatter size and the imagehandler pixmaps
@@ -71,7 +78,7 @@ Board::Board(QWidget *parent, const char *name, QCanvas* c)
 	nodeResultsDlg = NULL;
 	fastLoad = false;
 	isModified = false;
-	mouseState = NoButton;
+	mouseState = Qt::NoButton;
 	for (int i=0; i<400; i++)
 	{
 		if (i < 52)
@@ -129,8 +136,8 @@ Board::~Board()
     offset = table_size * 2/100 ;  // distance from edge of wooden board to playing area (grids + space for stones on 1st & last line)
 
 
-    QCanvasText *coordV = new QCanvasText(QString::number(board_size), canvas);
-    QCanvasText *coordH = new QCanvasText("A", canvas);
+    Q3CanvasText *coordV = new Q3CanvasText(QString::number(board_size), canvas);
+    Q3CanvasText *coordH = new Q3CanvasText("A", canvas);
     int coord_width = coordV->boundingRect().width();
     int coord_height = coordH->boundingRect().height();
 
@@ -178,9 +185,9 @@ void Board::resizeBoard(int w, int h)
     imageHandler->rescale(square_size);//, setting->readBoolEntry("SMALL_STONES"));
 
     // Delete gatter lines and update stones positions
-    QCanvasItemList list = canvas->allItems();
-    QCanvasItem *item;
-    QCanvasItemList::Iterator it;
+    Q3CanvasItemList list = canvas->allItems();
+    Q3CanvasItem *item;
+    Q3CanvasItemList::Iterator it;
     for(it = list.begin(); it != list.end(); ++it)
     {
 		item = *it;
@@ -266,7 +273,7 @@ void Board::drawBackground()
     //table.setPixmap(*(ImageHandler::getTablePixmap()));
     //painter.flush();
     painter.begin(&all);
-    painter.setPen(NoPen);
+    painter.setPen(Qt::NoPen);
     //painter.fillRect(0, 0, w, h, table);
     painter.drawTiledPixmap (0, 0, w, h,*(ImageHandler::getTablePixmap(setting->readEntry("SKIN_TABLE"))));
     //painter.fillRect(
@@ -400,10 +407,10 @@ void Board::drawStarPoint(int x, int y)
     if (size < 6)
 		size = 6;
 
-    QCanvasEllipse *circle;
+    Q3CanvasEllipse *circle;
     
-    circle = new QCanvasEllipse(canvas);
-    circle->setBrush(black);
+    circle = new Q3CanvasEllipse(canvas);
+    circle->setBrush(Qt::black);
     circle->setSize(size, size);
     circle->setX(offsetX + square_size * (x-1));
     circle->setY(offsetY + square_size * (y-1));
@@ -413,7 +420,7 @@ void Board::drawStarPoint(int x, int y)
 
  void Board::drawCoordinates()
 {
-    QCanvasText *coord;
+    Q3CanvasText *coord;
     int i;
     //const int off = 2,
     const int coord_centre = (offset - square_size/2 )/2; // centres the coordinates text within the remaining space at table edge
@@ -427,12 +434,12 @@ void Board::drawStarPoint(int x, int y)
 			txt = QString(QChar(static_cast<const char>('a' + i)));
 		else
 			txt = QString::number(board_size - i);
-		coord = new QCanvasText(txt, canvas);
+		coord = new Q3CanvasText(txt, canvas);
 		coord->setX(offsetX - offset + coord_centre - coord->boundingRect().width()/2 );
 		coord->setY(offsetY + square_size * i - coord->boundingRect().height()/2);
 		coord->show();
 		// Right side
-		coord = new QCanvasText(txt, canvas);
+		coord = new Q3CanvasText(txt, canvas);
     		coord->setX(offsetX + board_pixel_size + offset - coord_centre - coord->boundingRect().width()/2 );
 		coord->setY(offsetY + square_size * i - coord->boundingRect().height()/2);
 		coord->show();
@@ -446,12 +453,12 @@ void Board::drawStarPoint(int x, int y)
 		else
 			txt = QString(QChar(static_cast<const char>('A' + (i<8?i:i+1))));
 		// Top
-		coord = new QCanvasText(txt, canvas);
+		coord = new Q3CanvasText(txt, canvas);
 		coord->setX(offsetX + square_size * i - coord->boundingRect().width()/2);
 		coord->setY(offsetY - offset + coord_centre - coord->boundingRect().height()/2 );
 		coord->show();
 		// Bottom
-		coord = new QCanvasText(txt, canvas);
+		coord = new Q3CanvasText(txt, canvas);
 		coord->setX(offsetX + square_size * i - coord->boundingRect().width()/2);
 		coord->setY(offsetY + offset + board_pixel_size - coord_centre - coord->boundingRect().height()/2  );
 		coord->show();
@@ -461,11 +468,11 @@ void Board::drawStarPoint(int x, int y)
 void Board::hideStones()  // QQQ
 {
     isHidingStones ^= true;
-    QIntDict<Stone>* stones = boardHandler->getStoneHandler()->getAllStones();
+    Q3IntDict<Stone>* stones = boardHandler->getStoneHandler()->getAllStones();
     if (stones->isEmpty())
         return;
     
-    QIntDictIterator<Stone> it(*stones);
+    Q3IntDictIterator<Stone> it(*stones);
     Stone *s;
     while (s = it.current()) {
         if (isHidingStones) {
@@ -580,7 +587,7 @@ void Board::debug()
 #endif
 	
 #if 0
-    QCanvasItemList list = canvas->allItems();
+    Q3CanvasItemList list = canvas->allItems();
     int numC = list.count() - 42;  // 19 + 19 + 4
 	
     int numS = boardHandler->getStoneHandler()->numStones();
@@ -680,14 +687,14 @@ void Board::contentsWheelEvent(QWheelEvent *e)
     // Needs an extra check on variable mouseState as state() does not work on Windows.
     if (e->delta() != 120) // QQQ weel down to next
     {
-		if (e->state() == RightButton || mouseState == RightButton)
+		if (e->state() == Qt::RightButton || mouseState == Qt::RightButton)
 			nextVariation();
 		else
 			nextMove();
     }
     else
     {
-		if (e->state() == RightButton || mouseState == RightButton)
+		if (e->state() == Qt::RightButton || mouseState == Qt::RightButton)
 			previousVariation();
 		else
 			previousMove();
@@ -702,7 +709,7 @@ void Board::contentsWheelEvent(QWheelEvent *e)
 
 void Board::contentsMouseReleaseEvent(QMouseEvent* e)
 {
-	mouseState = NoButton;
+	mouseState = Qt::NoButton;
     
 	int 	x = convertCoordsToPoint(e->x(), offsetX),
 		y = convertCoordsToPoint(e->y(), offsetY);
@@ -749,27 +756,27 @@ void Board::contentsMousePressEvent(QMouseEvent *e)
     // Button gesture outside the board?
     if (x < 1 || x > board_size || y < 1 || y > board_size)
     {
-		if (e->button() == LeftButton &&
-			e->state() == RightButton)
+		if (e->button() == Qt::LeftButton &&
+			e->state() == Qt::RightButton)
 			previousMove();
-		else if (e->button() == RightButton &&
-			e->state() == LeftButton)
+		else if (e->button() == Qt::RightButton &&
+			e->state() == Qt::LeftButton)
 			nextMove();
-		else if (e->button() == LeftButton &&
-			e->state() == MidButton)
+		else if (e->button() == Qt::LeftButton &&
+			e->state() == Qt::MidButton)
 			gotoVarStart();
-		else if (e->button() == RightButton &&
-			e->state() == MidButton)
+		else if (e->button() == Qt::RightButton &&
+			e->state() == Qt::MidButton)
 			gotoNextBranch();
 		
 		return;
     }
 	
     // Lock accidental gesture over board
-    if ((e->button() == LeftButton && e->state() == RightButton) ||
-		(e->button() == RightButton && e->state() == LeftButton) ||
-		(e->button() == LeftButton && e->state() == MidButton) ||
-		(e->button() == RightButton && e->state() == MidButton))
+    if ((e->button() == Qt::LeftButton && e->state() == Qt::RightButton) ||
+		(e->button() == Qt::RightButton && e->state() == Qt::LeftButton) ||
+		(e->button() == Qt::LeftButton && e->state() == Qt::MidButton) ||
+		(e->button() == Qt::RightButton && e->state() == Qt::MidButton))
 		return;
   
     
@@ -798,21 +805,21 @@ void Board::contentsMousePressEvent(QMouseEvent *e)
     case modeNormal:
 		switch (e->button())
 		{
-		case LeftButton:
-			if (e->state() == ShiftButton)   // Shift: Find move in main branch
+		case Qt::LeftButton:
+			if (e->state() == Qt::ShiftModifier)   // Shift: Find move in main branch
 			{
 				navIntersectionStatus = false;
 				boardHandler->findMoveByPos(x, y);                                 //SL added eb 11
 				return;
 			}
-			else if (e->state() == ControlButton)  // Control: Find move in all following variations
+			else if (e->state() == Qt::ControlModifier)  // Control: Find move in all following variations
 			{
 				if (boardHandler->findMoveInVar(x, y))  // Results found?
 				{
 					// Init dialog if not yet done
 					if (nodeResultsDlg == NULL)
 					{
-						nodeResultsDlg = new NodeResults(this, "noderesult", WType_TopLevel);
+						nodeResultsDlg = new NodeResults(this, "noderesult", Qt::WType_TopLevel);
 						connect(nodeResultsDlg, SIGNAL(doFump(Move*)), this, SLOT(gotoMove(Move*)));
 					}
 					nodeResultsDlg->setNodes(boardHandler->nodeResults);
@@ -828,8 +835,8 @@ void Board::contentsMousePressEvent(QMouseEvent *e)
 			
 			break;
 			
-		case RightButton:
-			if (e->state() == ShiftButton)  // Shift: Find move in this branch
+		case Qt::RightButton:
+			if (e->state() == Qt::ShiftModifier)  // Shift: Find move in this branch
 			{
 				boardHandler->findMoveByPosInVar(x, y);
 				return;
@@ -844,14 +851,14 @@ void Board::contentsMousePressEvent(QMouseEvent *e)
 	case modeEdit:
 		switch (e->button())
 		{
-		case LeftButton:
+		case Qt::LeftButton:
 			if (boardHandler->getMarkType() == markNone)
 				boardHandler->addStone(stoneBlack, x, y);
 			else
 			{
 				// Shift-click setting a text mark
 				if (boardHandler->getMarkType() == markText &&
-					e->state() == ShiftButton)
+					e->state() == Qt::ShiftModifier)
 				{
 					// Dont open dialog if a text mark already exists
 					Mark *m;
@@ -872,7 +879,7 @@ void Board::contentsMousePressEvent(QMouseEvent *e)
 				canvas->update();
 			}
 			break;
-		case RightButton:
+		case Qt::RightButton:
 			if (boardHandler->getMarkType() == markNone)
 				boardHandler->addStone(stoneWhite, x, y);
 			else
@@ -889,12 +896,12 @@ void Board::contentsMousePressEvent(QMouseEvent *e)
 	case modeScore:
 		switch (e->button())
 		{
-		case LeftButton:
+		case Qt::LeftButton:
 			if (get_isLocalGame())
 				boardHandler->markDeadStone(x, y);  // Mark or unmark as dead
 			emit signal_addStone(stoneBlack, x, y); // the client accepts a coordinate in scoring mode
 			break;
-		case RightButton:
+		case Qt::RightButton:
 			if (get_isLocalGame())
 				boardHandler->markSeki(x, y);  // Mark group as alive in seki
 			emit signal_addStone(stoneBlack, x, y); // the client accepts a coordinate in scoring mode
@@ -999,10 +1006,10 @@ void Board::changeSize()
 
 void Board::hideAllStones()
 {
-    QCanvasItemList list = canvas->allItems();
-    QCanvasItem *item;
+    Q3CanvasItemList list = canvas->allItems();
+    Q3CanvasItem *item;
     
-    QCanvasItemList::Iterator it;
+    Q3CanvasItemList::Iterator it;
     for(it = list.begin(); it != list.end(); ++it)
     {
 		item = *it;
@@ -1110,13 +1117,13 @@ void Board::setMark(int x, int y, MarkType t, bool update, QString txt, bool ove
 		lastMoveMark->posY() == y)
 		removeLastMoveMark();
 	
-    QColor col = black;
+    QColor col = Qt::black;
 	
     // Black stone or black ghost underlying? Then we need a white mark.
     if ((boardHandler->hasStone(x, y) == 1 &&
 		boardHandler->getStoneHandler()->getStoneAt(x, y)->getColor() == stoneBlack) ||
 		(setting->readIntEntry("VAR_GHOSTS") && hasVarGhost(stoneBlack, x, y)))
-		col = white;
+		col = Qt::white;
     
     short n = -1;
 	
@@ -1139,7 +1146,7 @@ void Board::setMark(int x, int y, MarkType t, bool update, QString txt, bool ove
 		break;
 		
     case markText:
-		if (txt == NULL)
+		if (txt.isNull())
 		{
 			n = 0;
 			while (letterPool[n] && n < 51)
@@ -1168,7 +1175,7 @@ void Board::setMark(int x, int y, MarkType t, bool update, QString txt, bool ove
 		break;
 		
     case markNumber:
-		if (txt == NULL)
+		if (txt.isNull())
 		{
 			n = 0;
 			while (numberPool[n] && n < 399)
@@ -1297,10 +1304,10 @@ void Board::updateLastMove(StoneColor c, int x, int y)
 	{
 		if (isHidingStones)
 			lastMoveMark = new MarkRedCircle(x, y, square_size, canvas,
-				c == stoneBlack ? white : black, true); // QQQ
+				c == stoneBlack ? Qt::white : Qt::black, true); // QQQ
 		else
 			lastMoveMark = new MarkCross(x, y, square_size, canvas,
-				c == stoneBlack ? white : black, true);
+				c == stoneBlack ? Qt::white : Qt::black, true);
 
 
 		ASSERT(lastMoveMark);
@@ -1338,9 +1345,9 @@ void Board::checkLastMoveMark(int x, int y)
     {
 		if (m->posX() == x && m->posY() == y &&
 			m->rtti() != RTTI_MARK_TERR &&
-			m->getColor() == white)
+			m->getColor() == Qt::white)
 		{
-			m->setColor(black);
+			m->setColor(Qt::black);
 			break;
 		}
     }
@@ -1361,7 +1368,7 @@ void Board::updateMarkColor(StoneColor c, int x, int y)
     {
 		if (m->posX() == x && m->posY() == y && m->rtti() != RTTI_MARK_TERR)
 		{
-			m->setColor(c == stoneBlack ? white : black);
+			m->setColor(c == stoneBlack ? Qt::white : Qt::black);
 			break;
 		}
     }
@@ -1494,7 +1501,7 @@ void Board::updateCaption()
 	if (getInterfaceHandler())
 	{
 		bool simple = boardHandler->getGameData()->rankWhite.length() == 0 && boardHandler->getGameData()->rankBlack.length() == 0;
-		QGroupBox *gb = getInterfaceHandler()->normalTools->whiteFrame;
+		Q3GroupBox *gb = getInterfaceHandler()->normalTools->whiteFrame;
 		QString player = boardHandler->getGameData()->playerWhite;
 		if (simple && player == tr("White"))
 			gb->setTitle(tr("White"));	
@@ -1713,7 +1720,7 @@ QString Board::getCandidateFileName()
  /**
   * Initialises the gatter intersections and hoshis points
   **/
-Gatter::Gatter(QCanvas *Canvas, int size)
+Gatter::Gatter(Q3Canvas *Canvas, int size)
 {
 	int i,j;
 
@@ -1724,7 +1731,7 @@ Gatter::Gatter(QCanvas *Canvas, int size)
 	HGatter.reserve(board_size);
 	for (i=0; i<board_size; i++)
 	{	
-		std::vector<QCanvasLine *> row,col;
+		std::vector<Q3CanvasLine *> row,col;
 		row.reserve(board_size);
 		col.reserve(board_size);
 		VGatter.push_back(row);
@@ -1732,8 +1739,8 @@ Gatter::Gatter(QCanvas *Canvas, int size)
 		
 		for (j=0; j<board_size; j++)
 		{
-			VGatter[i].push_back(new QCanvasLine(canvas));
-			HGatter[i].push_back(new QCanvasLine(canvas));
+			VGatter[i].push_back(new Q3CanvasLine(canvas));
+			HGatter[i].push_back(new Q3CanvasLine(canvas));
 			CHECK_PTR(VGatter[i][j]);
 			CHECK_PTR(HGatter[i][j]);
 		}
@@ -1745,18 +1752,18 @@ Gatter::Gatter(QCanvas *Canvas, int size)
 	int high = board_size + 1 - edge_dist;
 	if (board_size % 2 && board_size > 9)
 	{
-		hoshisList.insert(middle*board_size + low , new QCanvasEllipse(canvas));
-		hoshisList.insert(middle*board_size + middle , new QCanvasEllipse(canvas));
-		hoshisList.insert(middle*board_size + high , new QCanvasEllipse(canvas));
-		hoshisList.insert(low*board_size + middle , new QCanvasEllipse(canvas));
-		hoshisList.insert(high*board_size + middle , new QCanvasEllipse(canvas));
+		hoshisList.insert(middle*board_size + low , new Q3CanvasEllipse(canvas));
+		hoshisList.insert(middle*board_size + middle , new Q3CanvasEllipse(canvas));
+		hoshisList.insert(middle*board_size + high , new Q3CanvasEllipse(canvas));
+		hoshisList.insert(low*board_size + middle , new Q3CanvasEllipse(canvas));
+		hoshisList.insert(high*board_size + middle , new Q3CanvasEllipse(canvas));
 	}
-	hoshisList.insert(low*board_size + low ,new QCanvasEllipse(canvas));
-	hoshisList.insert(high*board_size + low , new QCanvasEllipse(canvas));
-	hoshisList.insert(high*board_size + high , new QCanvasEllipse(canvas));
-	hoshisList.insert(low*board_size + high ,new QCanvasEllipse(canvas));
+	hoshisList.insert(low*board_size + low ,new Q3CanvasEllipse(canvas));
+	hoshisList.insert(high*board_size + low , new Q3CanvasEllipse(canvas));
+	hoshisList.insert(high*board_size + high , new Q3CanvasEllipse(canvas));
+	hoshisList.insert(low*board_size + high ,new Q3CanvasEllipse(canvas));
 
-	QIntDictIterator<QCanvasEllipse> it( hoshisList );
+	Q3IntDictIterator<Q3CanvasEllipse> it( hoshisList );
 	for ( ; it.current(); ++it )
         	it.current()->setBrush(Qt::black);
 
@@ -1786,7 +1793,7 @@ Gatter::~Gatter()
 	VGatter.clear();	
 	HGatter.clear();
 
-	QIntDictIterator<QCanvasEllipse> it( hoshisList );
+	Q3IntDictIterator<Q3CanvasEllipse> it( hoshisList );
 	for ( ; it.current(); ++it )
         	delete it.current(); 
 
@@ -1800,7 +1807,7 @@ Gatter::~Gatter()
 void Gatter::resize(int offsetX, int offsetY, int square_size)
 {
 	int i,j;
-	QCanvasEllipse *e;
+	Q3CanvasEllipse *e;
 
 	int size = square_size / 5;
 	// Round size top be even
@@ -1840,7 +1847,7 @@ void Gatter::resize(int offsetX, int offsetY, int square_size)
 void Gatter::showAll()
 {
 	int i,j;
-	QCanvasEllipse *e;
+	Q3CanvasEllipse *e;
 
 	for (i=0; i<board_size; i++)
 		for (j=0; j<board_size; j++)
@@ -1849,7 +1856,7 @@ void Gatter::showAll()
 			HGatter[i][j]->show();
 		}
 
-	QIntDictIterator<QCanvasEllipse> it( hoshisList );
+	Q3IntDictIterator<Q3CanvasEllipse> it( hoshisList );
 	for ( ; it.current(); ++it )
         	it.current()->show();
 }
@@ -1859,7 +1866,7 @@ void Gatter::showAll()
   **/
 void Gatter::hide(int i, int j)
 {
-	QCanvasEllipse *e;
+	Q3CanvasEllipse *e;
 	
 	if (( i<1) || (i > board_size) || ( j<1) || (j > board_size))
 		return;
@@ -1878,7 +1885,7 @@ void Gatter::hide(int i, int j)
   **/
 void Gatter::show(int i, int j)
 {
-	QCanvasEllipse *e;
+	Q3CanvasEllipse *e;
 
 	if (( i<1) || (i > board_size) || ( j<1) || (j > board_size))
 		return;

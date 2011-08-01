@@ -7,7 +7,7 @@
 
 #include "globals.h"
 #include <qstring.h>
-#include <qintdict.h>
+#include <q3intdict.h>
 
 class Matrix;
 
@@ -70,7 +70,7 @@ public:
 	
 	Move *brother, *son, *parent, *marker;
 	bool checked;
-	QIntDict<FastLoadMark> *fastLoadMarkDict;
+	Q3IntDict<FastLoadMark> *fastLoadMarkDict;
   bool isPassMove();
 
   

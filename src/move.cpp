@@ -175,7 +175,7 @@ void Move::insertFastLoadMark(int x, int y, MarkType markType, const QString &tx
 {
 	if (fastLoadMarkDict == NULL)
 	{
-		fastLoadMarkDict = new QIntDict<FastLoadMark>;
+		fastLoadMarkDict = new Q3IntDict<FastLoadMark>;
 		fastLoadMarkDict->setAutoDelete(TRUE);
 	}
 	

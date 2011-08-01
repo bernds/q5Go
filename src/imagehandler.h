@@ -5,8 +5,10 @@
 #ifndef IMAGEDATA_H
 #define IMAGEDATA_H
 
-#include <qcanvas.h>
+#include <q3canvas.h>
 #include <qimage.h>
+//Added by qt3to4:
+#include <QPixmap>
 #include "defines.h"
 #include <cmath>
 #include <cstdlib>
@@ -31,9 +33,9 @@ public:
 	void rescale(int size);//, bool smallerStones);
 	static QPixmap* getBoardPixmap(QString );//skinType s = skinLight);
 	static QPixmap* getTablePixmap(QString );//) { return tablePixmap; }
-	QCanvasPixmapArray* getStonePixmaps() const { return stonePixmaps; }
-	QCanvasPixmapArray* getGhostPixmaps() const { return ghostPixmaps; }
-	static QCanvasPixmapArray* getAlternateGhostPixmaps() { return altGhostPixmaps; }
+	Q3CanvasPixmapArray* getStonePixmaps() const { return stonePixmaps; }
+	Q3CanvasPixmapArray* getGhostPixmaps() const { return ghostPixmaps; }
+	static Q3CanvasPixmapArray* getAlternateGhostPixmaps() { return altGhostPixmaps; }
 	void ghostImage(QImage *img);
 
 	void icopy(int *im, QImage &qim, int w, int h);
@@ -48,8 +50,8 @@ protected:
 	void scaleBoardPixmap(QPixmap *pix, int size);
 	
 private:    
-	QCanvasPixmapArray *stonePixmaps, *ghostPixmaps;
-	static QCanvasPixmapArray *altGhostPixmaps;
+	Q3CanvasPixmapArray *stonePixmaps, *ghostPixmaps;
+	static Q3CanvasPixmapArray *altGhostPixmaps;
 	static QPixmap *tablePixmap;
 	static QPixmap *woodPixmap1;//, *woodPixmap2, *woodPixmap3, *woodPixmap4, *woodPixmap5;
 	static int classCounter;

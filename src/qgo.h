@@ -10,11 +10,11 @@
 #include "setting.h"
 #include "qobject.h"
 #include "defines.h"
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include "searchpath.h"
 
 #ifdef Q_WS_WIN
-#include <qfiledialog.h>
+#include <q3filedialog.h>
 #endif
 
 #ifdef Q_OS_LINUX
@@ -67,7 +67,7 @@ public:
 	bool testSound(bool);
 
 private:
-	QPtrList<MainWindow> *boardList;
+	Q3PtrList<MainWindow> *boardList;
 	HelpViewer *helpViewer;
 	QSound *clickSound;
 //	QSound *autoplaySound;

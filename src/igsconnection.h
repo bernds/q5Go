@@ -9,7 +9,7 @@
 
 #include "igsinterface.h"
 #include <qobject.h>
-#include <qsocket.h>
+#include <QTcpSocket>
 #include <qstring.h>
 
 class QTextCodec;
@@ -42,7 +42,7 @@ signals:
 	void signal_setBytesOut(int);
 
 protected:
-	virtual bool checkPrompt();
+	virtual bool checkPrompt(const QString &);
 //	void convertBlockToLines();
 	
 	void sendTextToApp(QString txt);
@@ -57,9 +57,11 @@ private slots:
 	void OnError(int);
 
 private:
-	QSocket *qsocket;
+	QTcpSocket *qsocket;
 	QTextCodec *textCodec;
 
+	int len_saved_data;
+	char *saved_data;
 	//struct USERINFO {
 	QString username;
 	QString password;
@@ -71,8 +73,6 @@ private:
 		SESSION,	// logged in
 		AUTH_FAILED	// wrong user/pass  
 	} authState;
-
-	QString bufferLineRest;
 };
 
 #endif

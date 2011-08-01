@@ -12,7 +12,7 @@
 #include "sgfparser.h"
 #include "stonehandler.h"           //SL added eb 10
 #include "qgtp.h"
-#include <qptrstack.h>
+#include <q3ptrstack.h>
 
 #define MARK_TERRITORY_DONE_BLACK 997
 #define MARK_TERRITORY_DONE_WHITE 998
@@ -80,16 +80,17 @@ public:
 	void setModeSGF(GameMode mode) { gameMode = mode; }
 	MarkType getMarkType() const { return markType; }
 	void setMarkType(MarkType t) { markType = t; }
-	void editMark(int x, int y, MarkType t, const QString &txt=0);
+	void editMark(int x, int y, MarkType t, const QString &txt=QString::null);
 	int getNumBrothers() { return tree->getNumBrothers(); }
 	int getNumSons() { return tree->getNumSons(); }
 	bool hasParent();
 	bool hasPrevBrother() { return tree->hasPrevBrother(); }
 	bool hasNextBrother() { return tree->hasNextBrother(); }
-	void updateComment(QString text=0);
+	void updateComment(QString text=QString::null);
 	void updateCurrentMatrix(StoneColor c, int x, int y);
-	bool loadSGF(const QString &fileName, const QString &filter=0, bool fastLoad=false);
-	bool openComputerSession(QNewGameDlg *dlg, const QString &fileName, const QString &filter=0,const QString &computer_path=0); //SL added eb 12
+	bool loadSGF(const QString &fileName, const QString &filter=QString::null, bool fastLoad=false);
+	bool openComputerSession(QNewGameDlg *dlg, const QString &fileName,
+				 const QString &filter=QString::null,const QString &computer_path=QString::null); //SL added eb 12
 	bool saveBoard(const QString &fileName);
 	void exportASCII();
 	bool importASCII(const QString &fileName, bool fromClipBoard=false);
@@ -120,7 +121,7 @@ public:
 	bool display_incoming_move;     //SL added eb 9
 	bool getDisplay_incoming_move() { return display_incoming_move;} ;  //SL added eb 9
   
-	QPtrStack<Move> *nodeResults;
+	Q3PtrStack<Move> *nodeResults;
 
 protected:
 	void addMove(StoneColor c, int x, int y, bool clearMarks = true);

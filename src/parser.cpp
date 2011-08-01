@@ -20,8 +20,8 @@ Parser::Parser() : QObject()
 	aGame = new Game;
 	aGameInfo = new GameInfo;
 	memory = 0;
-	memory_str = QString();
-	myname = QString();
+	memory_str = QString::null;
+	myname = QString::null;
 
 	// init
 	gsName = GS_UNKNOWN;
@@ -49,7 +49,7 @@ InfoType Parser::put_line(const QString &txt)
 		// skip empty lines but write message if
 		// a) not logged in
 		// b) help files
-		if (gsName == GS_UNKNOWN || memory_str && memory_str.contains("File"))
+		if (gsName == GS_UNKNOWN || memory_str.contains("File"))
 		{
 			emit signal_message(txt);
 			return MESSAGE;
@@ -175,12 +175,12 @@ InfoType Parser::put_line(const QString &txt)
 	// get command type:
 	bool ok;
 	int cmd_nr = line.section(' ', 0, 0).toInt(&ok);
-	if (!ok && memory_str && memory_str.contains("CHANNEL"))
+	if (!ok && memory_str.contains("CHANNEL"))
 	{
 		// special case: channel info
 		cmd_nr = 9;
 	}
-	else if (!ok || memory_str && memory_str.contains("File") && !line.contains("File"))
+	else if (!ok || memory_str.contains("File") && !line.contains("File"))
 	{
 		// memory_str == "File": This is a help message!
 		// skip action if entering client mode
@@ -193,7 +193,8 @@ InfoType Parser::put_line(const QString &txt)
 		else
 			emit signal_message(txt);
 
-		if (line.find("#>") != -1 && memory_str && !memory_str.contains("File"))
+		if (line.find("#>") != -1
+		    && !memory_str.isNull() && !memory_str.contains("File"))
 			return NOCLIENTMODE;
 
 		return MESSAGE;
@@ -300,9 +301,9 @@ InfoType Parser::put_line(const QString &txt)
 // PROMPT
 InfoType Parser::cmd1(const QString &line)
 {
-	if (memory_str && (memory_str.contains("File")||memory_str.contains("STATS")))
+	if (memory_str.contains("File") || memory_str.contains("STATS"))
 		// if ready this cannont be a help message
-		memory_str = QString();
+		memory_str = QString::null;
 	emit signal_message("\n");  
 	return READY;
 }
@@ -362,7 +363,7 @@ InfoType Parser::cmd5(const QString &line)
 				
 		if (memory_str.contains(myname + " request"))
 		{
-			memory_str = "";
+			memory_str = QString::null;
 			return MESSAGE;
 		}
 
@@ -438,16 +439,16 @@ InfoType Parser::cmd7(const QString &line)
 // "8 File"
 InfoType Parser::cmd8(const QString &line)
 {
-	if (memory_str && memory_str.contains("File"))
+	if (memory_str.contains("File"))
 	{
 		// toggle
-		memory_str = QString();
+		memory_str = QString::null;
 		memory = 0;
 	}
-	else if (memory != 0 && memory_str && memory_str == "CHANNEL")
+	else if (memory != 0 && memory_str == "CHANNEL")
 	{
 		emit signal_channelinfo(memory, line);
-		memory_str = QString();
+		memory_str = QString::null;
 		return IT_OTHER;
 	}
 
@@ -569,13 +570,13 @@ InfoType Parser::cmd9(QString &line)
 		}
 //				return IT_OTHER;
 	}
-	else if (memory != 0 && memory_str && memory_str == "CHANNEL")
+	else if (memory != 0 && memory_str == "CHANNEL")
 	{
 		emit signal_channelinfo(memory, line);
 
 		// reset memory
 		memory = 0;
-		memory_str = QString();
+		memory_str = QString::null;
 //				return IT_OTHER;
 	}
 	// IGS: channelinfo
@@ -683,7 +684,7 @@ InfoType Parser::cmd9(QString &line)
 	else if (line.contains("and set komi to"))
 	{
 		// suggest message ...
-		if (!memory_str)
+		if (memory_str.isNull())
 			// something went wrong...
 			return IT_OTHER;
 
@@ -710,7 +711,7 @@ InfoType Parser::cmd9(QString &line)
 		else if (newline.contains("9x 9"))
 		{
 			size = 9;
-			memory_str = QString();
+			memory_str = QString::null;
 		}
 
 		if (p1_play_white)
@@ -874,12 +875,12 @@ InfoType Parser::cmd9(QString &line)
 		else
 		{
 			// don't work correct at IGS!!!
-			int i = line.contains(',');
-			qDebug() << QString("observing %1 games").arg(i+1) << std::endl;
-//					emit signal_addToObservationList(i+1);
+			int i = line.count(',');
+			qDebug() << QString("observing %1 games").arg(i+1);
+//			emit signal_addToObservationList(i+1);
 		}
 
-//				return IT_OTHER;
+//		return IT_OTHER;
 	}
 	// 9 1 minutes were added to your opponents clock
 	else if (line.contains("minutes were added"))
@@ -963,21 +964,21 @@ InfoType Parser::cmd9(QString &line)
 			return KIBITZ;
 		}
 	}
-	else if (memory_str && memory_str == "observe" && line.contains("."))
+	else if (memory_str == "observe" && line.contains("."))
 	{
 //				QString cnt = line.section(' ', 1, 1);
 		emit signal_kibitz(memory, "00", "");
 
 		memory = 0;
-		memory_str = QString();
+		memory_str = QString::null;
 
 		return KIBITZ;
 	}
-	else if (memory_str && memory_str == "observe")
+	else if (memory_str == "observe")
 	{
 		QString name;
 		QString rank;
-		for (int i = 0; name = line.section(' ', i, i); i++)
+		for (int i = 0; !(name = line.section(' ', i, i)).isEmpty(); i++)
 		{
 			++i;
 			rank = line.section(' ', i, i);
@@ -1246,13 +1247,13 @@ InfoType Parser::cmd11(const QString &line)
 	}
 	else
 	{
-		if (!memory_str)
+		if (memory_str.isNull())
 			// something went wrong...
 			return IT_OTHER;
 
 		emit signal_kibitz(memory, memory_str, line);
 		memory = 0;
-		memory_str = QString();
+		memory_str = QString::null;
 	}
 	return KIBITZ;
 }
@@ -1263,10 +1264,10 @@ InfoType Parser::cmd11(const QString &line)
 // 14 File
 InfoType Parser::cmd14(const QString &line)
 {
-	if (memory_str && memory_str.contains("File"))
+	if (memory_str.contains("File"))
 	{
 		// toggle
-		memory_str = QString();
+		memory_str = QString::null;
 		memory = 0;
 	}
 	else if (line.contains("File"))
@@ -1313,9 +1314,10 @@ InfoType Parser::cmd15(const QString &line)
 		{
 			// contiue removing
 			emit signal_removestones(0, aGameInfo->nr);
-			memory_str = QString();
+			memory_str = QString::null;
 		}
-		else if ((memory_str || gsName == IGS || gsName == WING ) && (aGameInfo->bname == myname || aGameInfo->wname == myname))
+		else if ((!memory_str.isNull() || gsName == IGS || gsName == WING )
+			 && (aGameInfo->bname == myname || aGameInfo->wname == myname))
 		{
 			// if a stored game is restarted then send start message first
 			// -> continuation of case 9
@@ -1328,7 +1330,7 @@ InfoType Parser::cmd15(const QString &line)
 			emit signal_move(aGame);
 
 			// reset memory
-			memory_str = QString();
+			memory_str = QString::null;
 		}
 
 		// it's a kind of time info
@@ -1459,7 +1461,7 @@ InfoType Parser::cmd21(const QString &line)
 			aGame->brank = "??";
 			aGame->mv = line.section(' ', 6, 6).remove('}');
 			aGame->Sz = "@";
-			aGame->H = QString();
+			aGame->H = QString::null;
 			aGame->running = true;
 					
 			emit signal_game(aGame);
@@ -1487,7 +1489,7 @@ InfoType Parser::cmd21(const QString &line)
 
 			// for information
 			aGame->Sz = line.section(' ', 5).remove('}');
-			if (!aGame->Sz)
+			if (aGame->Sz.isEmpty())
 				aGame->Sz = "-";
 			else if (aGame->Sz.find(":") != -1)
 				aGame->Sz.remove(0,2);
@@ -1526,7 +1528,7 @@ InfoType Parser::cmd21(const QString &line)
 		aGame->brank = re.cap(5);
 		aGame->mv = "-";
 		aGame->Sz = "-";
-		aGame->H = QString();
+		aGame->H = QString::null;
 		aGame->running = true;
 
 		if (gsName == WING && aGame->wname == aGame->bname)
@@ -1743,7 +1745,7 @@ InfoType Parser::cmd27(const QString &txt)
 			emit signal_player(aPlayer, true);
 		}
 		else
-			qDebug() << "WING - player27 dropped (1): " << txt << std::endl;
+			qDebug() << "WING - player27 dropped (1): " << txt;
 
 		// position of delimiter between two players
 		pos = txt.find('|');
@@ -1775,7 +1777,7 @@ InfoType Parser::cmd27(const QString &txt)
 			emit signal_player(aPlayer, true);
 		}
 		else
-			qDebug() << "WING - player27 dropped (2): " << txt << std::endl;
+			qDebug() << "WING - player27 dropped (2): " << txt;
 	}
 	else
 	{
@@ -1807,7 +1809,7 @@ InfoType Parser::cmd27(const QString &txt)
 			emit signal_player(aPlayer, true);
 		}
 		else
-			qDebug() << "player27 dropped (1): " << txt << std::endl;
+			qDebug() << "player27 dropped (1): " << txt;
 
 		// position of delimiter between two players
 		pos = txt.find('|');
@@ -1840,7 +1842,7 @@ InfoType Parser::cmd27(const QString &txt)
 			emit signal_player(aPlayer, true);
 		}
 		else
-			qDebug() << "player27 dropped (2): " << txt << std::endl;
+			qDebug() << "player27 dropped (2): " << txt;
 	}
 
 	return PLAYER27;
@@ -2007,10 +2009,10 @@ InfoType Parser::cmd42(const QString &txt)
 	//                    9               10                   11    12
 	//                    Idle            Flags
 			     "([A-Za-z0-9]+) +([^ ]{,2}) +default  ([TF])(.*)?");
-	if(re.match(txt) < 0)
+	if(re.indexIn(txt) < 0)
 	{
-		qDebug() << txt.utf8().data() << std::endl;
-		qDebug() << "No match" << std::endl;
+		qDebug() << txt.utf8().data();
+		qDebug() << "No match";
 		return IT_OTHER;
 	}
 	// 42       Neil  <None>          USA      12k  136/  86  -   -    0s    -X default  T BWN 0-9 19-19 60-60 60-3600 25-25 0-0 0-0 0-0
@@ -2143,7 +2145,7 @@ InfoType Parser::cmd49(const QString &line)
 		QString game = line.section(' ', 1, 1);
 		QString who = line.section(' ', 2, 2);
 		emit signal_removestones(pt, game);
-		if (game)
+		if (!game.isEmpty())
 		{
 			pt = "removing @ " + pt;
 			emit signal_kibitz(game.toInt(), who, pt);

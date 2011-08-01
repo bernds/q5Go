@@ -1,7 +1,10 @@
 TEMPLATE	      = app
 CONFIG		     += qt warn_on release thread
-INTERFACES	      = clientwindow_gui.ui \
-			gui_dialog.ui \
+FORMS =			
+
+#The following line was changed from INTERFACES to FORMS3 by qt3to4
+FORMS3	      = gui_dialog.ui \
+ clientwindow_gui.ui \
 			gameinfo_gui.ui \
 			newgame_gui.ui \
 			newlocalgame_gui.ui \
@@ -156,3 +159,8 @@ INSTALLS += html
 target.path = /usr/local/bin
 INSTALLS += target
 }
+#The following line was inserted by qt3to4
+QT += xml network  qt3support 
+#The following line was inserted by qt3to4
+CONFIG += uic3
+

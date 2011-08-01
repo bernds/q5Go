@@ -8,17 +8,20 @@
 #include "board.h"
 #include "imagehandler.h"
 #include <stdlib.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3PtrList>
 
 StoneHandler::StoneHandler(BoardHandler *bh)
 : boardHandler(bh)
 {
 	CHECK_PTR(boardHandler);
 	
-	stones = new QIntDict<Stone>(367);  // prime number larger than 361 (19*19)
+	stones = new Q3IntDict<Stone>(367);  // prime number larger than 361 (19*19)
 	// TODO: Dynamic for different board size?
 	stones->setAutoDelete(TRUE);
 	
-	groups = new QPtrList<Group>;
+	groups = new Q3PtrList<Group>;
 	groups->setAutoDelete(TRUE);
 	
 	workingOnNewMove = false;
@@ -214,10 +217,10 @@ bool StoneHandler::checkPosition(Stone *stone, Matrix *m, bool koStone)
 			int stoneCounter = 0;
 			
 			// Erase the stones of this group from the stones table.
-			QListIterator<Stone> it(*tmp);
-			for (; it.current(); ++it)
+			QListIterator<Stone *> it(*tmp);
+			while (it.hasNext())
 			{
-				Stone *s = it.current();
+				Stone *s = it.next();
 				CHECK_PTR(s);
 				if (workingOnNewMove)
 					boardHandler->updateCurrentMatrix(stoneNone, s->posX(), s->posY());
@@ -320,7 +323,7 @@ int StoneHandler::countLiberties(Group *group, Matrix *m)     //SL added eb 8
 //	CHECK_PTR(m); // SL added eb 8
   
 	int liberties = 0;
-	QValueList<int> libCounted;
+	Q3ValueList<int> libCounted;
 	
 	// Walk through the horizontal and vertial directions, counting the
 	// liberties of this group.
@@ -347,7 +350,7 @@ int StoneHandler::countLiberties(Group *group, Matrix *m)     //SL added eb 8
 	return liberties;
 }
 
-void StoneHandler::checkNeighbourLiberty(int x, int y, QValueList<int> &libCounted, int &liberties, Matrix *m)    //SL added eb 8
+void StoneHandler::checkNeighbourLiberty(int x, int y, Q3ValueList<int> &libCounted, int &liberties, Matrix *m)    //SL added eb 8
 {
 	if (!x || !y)
 		return;
@@ -384,7 +387,7 @@ int StoneHandler::countLibertiesOnMatrix(Group *group, Matrix *m)
 	CHECK_PTR(m);
 	
 	int liberties = 0;
-	QValueList<int> libCounted;
+	Q3ValueList<int> libCounted;
 	
 	// Walk through the horizontal and vertial directions, counting the
 	// liberties of this group.
@@ -411,7 +414,7 @@ int StoneHandler::countLibertiesOnMatrix(Group *group, Matrix *m)
 	return liberties;
 }
 
-void StoneHandler::checkNeighbourLibertyOnMatrix(int x, int y, QValueList<int> &libCounted, int &liberties, Matrix *m)
+void StoneHandler::checkNeighbourLibertyOnMatrix(int x, int y, Q3ValueList<int> &libCounted, int &liberties, Matrix *m)
 {
 	if (!x || !y)
 		return;
@@ -580,7 +583,7 @@ void StoneHandler::checkAllPositions()
 	
 	groups->clear();
 	
-	QIntDictIterator<Stone> it(*stones);
+	Q3IntDictIterator<Stone> it(*stones);
 	Stone *s;
 	
 	// Unmark stones as checked
@@ -607,7 +610,7 @@ void StoneHandler::debug()
 	qDebug("StoneHandler::debug()");
 	
 #if 0
-	QIntDictIterator<Stone> its(*stones);
+	Q3IntDictIterator<Stone> its(*stones);
 	Stone *s;
 	
 	while (its.current())
@@ -618,7 +621,7 @@ void StoneHandler::debug()
 	}
 #endif
 	
-	QListIterator<Group> it(*groups);
+	Q3PtrListIterator<Group> it(*groups);
 	for (; it.current(); ++it)
 	{
 		Group *g = it.current();
@@ -645,10 +648,10 @@ bool StoneHandler::removeDeadGroup(int x, int y, int &caps, StoneColor &col, boo
 	caps = g->count();
 	
 	// Mark stones of this group as dead or alive again
-	QListIterator<Stone> it(*g);
-	for (; it.current(); ++it)
+	QListIterator<Stone *> it(*g);
+	while (it.hasNext())
 	{
-		s = it.current();
+		Stone *s = it.next();
 		CHECK_PTR(s);
 		s->setDead(dead);
 		if (dead)
@@ -683,10 +686,10 @@ bool StoneHandler::markSekiGroup(int x, int y, int &caps, StoneColor &col, bool 
 	CHECK_PTR(g);
 	
 	// Mark stones of this group as seki
-	QListIterator<Stone> it(*g);
-	for (; it.current(); ++it)
+	QListIterator<Stone *> it(*g);
+	while (it.hasNext())
 	{
-		s = it.current();
+		Stone *s = it.next();
 		CHECK_PTR(s);
 		if (seki && s->isDead())
 			caps ++;
@@ -709,7 +712,7 @@ bool StoneHandler::markSekiGroup(int x, int y, int &caps, StoneColor &col, bool 
 
 void StoneHandler::removeDeadMarks()
 {
-	QIntDictIterator<Stone> it(*stones);
+	Q3IntDictIterator<Stone> it(*stones);
 	Stone *s;
 	
 	while (it.current())
@@ -729,7 +732,7 @@ void StoneHandler::removeDeadMarks()
 
 void StoneHandler::updateDeadMarks(int &black, int &white)
 {
-	QIntDictIterator<Stone> it(*stones);
+	Q3IntDictIterator<Stone> it(*stones);
 	Stone *s;
 	
 	while (it.current())

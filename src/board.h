@@ -13,11 +13,16 @@
 #include "boardhandler.h"
 #include "stone.h"
 #include "move.h"
-#include <qcanvas.h>
+#include <q3canvas.h>
 #include <qdatetime.h>
 #include <qpainter.h>
-#include <qptrlist.h>
-#include <qintdict.h>
+#include <q3ptrlist.h>
+#include <q3intdict.h>
+//Added by qt3to4:
+#include <QWheelEvent>
+#include <QResizeEvent>
+#include <QMouseEvent>
+#include <QEvent>
 
 class ImageHandler;
 class Mark;
@@ -31,7 +36,7 @@ class QNewGameDlg;
 class Gatter
 {
 public:
-	Gatter(QCanvas *Canvas, int board_size);
+	Gatter(Q3Canvas *Canvas, int board_size);
 	~Gatter();
 	void hide (int x, int y);
 	void show (int x, int y);
@@ -40,19 +45,19 @@ public:
 
 private:
 	int board_size;
-	QCanvas *canvas;
-	std::vector< std::vector<QCanvasLine *> > VGatter, HGatter ;
-	QIntDict<QCanvasEllipse> hoshisList ;
+	Q3Canvas *canvas;
+	std::vector< std::vector<Q3CanvasLine *> > VGatter, HGatter ;
+	Q3IntDict<Q3CanvasEllipse> hoshisList ;
 };
 
 
 
-class Board : public QCanvasView
+class Board : public Q3CanvasView
 {
 	Q_OBJECT
 
 public:
-	Board(QWidget *parent=0, const char *name=0, QCanvas* c=0);
+	Board(QWidget *parent=0, const char *name=0, Q3Canvas* c=0);
 	~Board();
 	void clearData();
 	void initGame(GameData *d, bool sgf=false);
@@ -68,7 +73,7 @@ public:
 	QString getCandidateFileName();
 	void hideAllStones();
 	void hideAllMarks();
-	bool openSGF(const QString &fileName, const QString &filter=0);
+	bool openSGF(const QString &fileName, const QString &filter = QString::null);
 	bool saveBoard(const QString &fileName) { return boardHandler->saveBoard(fileName); }
 	void setShowCoords(bool b);
 	void setShowSGFCoords(bool b);
@@ -80,7 +85,7 @@ public:
 	GameMode getGameMode() { return boardHandler->getGameMode(); }
 	void setMarkType(MarkType t) { boardHandler->setMarkType(t); }
 	MarkType getMarkType() const { return boardHandler->getMarkType(); }
-	void setMark(int x, int y, MarkType t, bool update=true, QString txt=0, bool overlay=true);
+	void setMark(int x, int y, MarkType t, bool update=true, QString txt = QString::null, bool overlay=true);
 	void removeMark(int x, int y, bool update=true);
 	void setMarkText(int x, int y, const QString &txt);
 	Mark* hasMark(int x, int y);
@@ -193,7 +198,7 @@ protected:
 
 
 private:
-	QCanvas *canvas;
+	Q3Canvas *canvas;
 	Gatter *gatter;
 	ImageHandler *imageHandler;
 	BoardHandler *boardHandler;
@@ -203,8 +208,8 @@ private:
 	bool showCursor;
 	bool antiClicko;
 	bool gatter_created;
-	QList<Mark> *marks;
-	QList<Stone> *ghosts;
+	Q3PtrList<Mark> *marks;
+	Q3PtrList<Stone> *ghosts;
 	Mark *lastMoveMark;
 	bool numberPool[400];
 	bool letterPool[52];
@@ -212,7 +217,7 @@ private:
 	short curX, curY;
 	
 	QTime wheelTime;
-	ButtonState mouseState;
+	Qt::ButtonState mouseState;
 	NodeResults *nodeResultsDlg;
 	
 	bool isHidingStones; // QQQ

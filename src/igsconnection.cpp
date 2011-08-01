@@ -9,19 +9,23 @@
  */
 
 
-#include "igsconnection.h"
-#include <qgbkcodec.h> 
 #include <qtextcodec.h>
 #include <qtimer.h>
+#include <QHostAddress>
+#include "defines.h"
+#include "igsconnection.h"
 
 IGSConnection::IGSConnection() : IGSInterface()
 { 
 	authState = LOGIN;
 
-	qsocket = new QSocket(this);
+	qsocket = new QTcpSocket(this);
 	CHECK_PTR(qsocket);
 
 	textCodec = 0;
+
+	saved_data = 0;
+	len_saved_data = 0;
 
 	username = "";
 	password = "";
@@ -49,41 +53,17 @@ void IGSConnection::sendTextToApp(QString txt)
 }
 
 // check for 'Login:' (and Password)
-bool IGSConnection::checkPrompt()
+bool IGSConnection::checkPrompt(const QString &line)
 {
-	// prompt can be login prompt or usermode prompt
-		
-	if (bufferLineRest.length() < 4)
-	{
-		qDebug(QString("IGSConnection::checkPrompt called with string of size %1").arg(bufferLineRest.length()));
-
-		if (authState == PASSWORD)
-		{
-			int b = qsocket->bytesAvailable();
-			if (!b)
-			{
-				qsocket->waitForMore(500);
-				b = qsocket->bytesAvailable();
-//				if (!b)
-//					return false;
-			}
-
-			while (b-- > 0)
-				bufferLineRest += qsocket->getch();
-		}
-		else
-			return false; 
-	}
-
 	switch (authState)
 	{
 		case LOGIN:
-			if (bufferLineRest.find("Login:") != -1)
+			if (line.find("Login:") != -1)
 			{
 				qDebug("Login: found");
 				
 				// tell application what to send
-				sendTextToApp(bufferLineRest);
+				sendTextToApp(line);
 				if (!username.isEmpty())
 				{
 					sendTextToApp("...sending: {" + QString(username) + "}");
@@ -92,26 +72,27 @@ bool IGSConnection::checkPrompt()
 				}
 
 				// next state
-				if (password)
-					authState = PASSWORD;
-				else
+				if (password.isNull ())
 					authState = SESSION;
+				else
+					authState = PASSWORD;
 				return true;
 			}
 			break;
 
 		case PASSWORD:
-			if ((bufferLineRest.find("Password:") != -1) || (bufferLineRest.find("1 1") != -1))
+			if ((line.find("Password:") != -1) || (line.find("1 1") != -1))
 			{
-				qDebug("Password or 1 1: found , strlen = %d", bufferLineRest.length());
+				qDebug() << "Password or 1 1: found: " << line;
 				sendTextToApp(tr("...send password"));
+				qDebug() << "send password " << password;
 				sendTextToHost(password, true);
 
 				// next state
 				authState = SESSION;
 				return true;
 			}
-			else if (bufferLineRest.find("guest account") != -1)
+			else if (line.find("guest account") != -1)
 			{
 				authState = SESSION;
 				return true;
@@ -145,50 +126,72 @@ void IGSConnection::OnConnected()
 // We got data to read
 void IGSConnection::OnReadyRead()
 {
-//*
-//	qDebug("OnReadyRead....");
-	while (qsocket->canReadLine())
+	qDebug("OnReadyRead....");
+	for (;;)
 	{
-		int size = qsocket->bytesAvailable() + 1;
-		char *c = new char[size];
-		int bytes = qsocket->readLine(c, size);
-		QString x = textCodec->toUnicode(c);
-		delete[] c;
-		if (x.isEmpty())
-		{
-			qDebug("READ:NULL");
+		int available = qsocket->bytesAvailable();
+		if (available == 0)
 			return;
-		}
 
-		// some statistics
+		if (!qsocket->canReadLine()) {
+			char *new_data = new char[available + len_saved_data];
+			if (saved_data) {
+				memcpy (new_data, saved_data, len_saved_data);
+				delete[] saved_data;
+			}
+			int nread = qsocket->read (new_data + len_saved_data, available);
+			if (nread < available)
+				qDebug () << "available " << available << " but read " << nread;
+			saved_data = new_data;
+			len_saved_data += nread;
+
+			if (authState == LOGIN && len_saved_data == 7)
+			{
+				qDebug("looking for 'Login:'");
+				QString y = QString::fromAscii(saved_data, len_saved_data);
+
+				qDebug() << "Collected: " << y;
+				if (checkPrompt(y)) {
+					delete[] saved_data;
+					saved_data = 0;
+					len_saved_data = 0;
+				}
+			}
+		}
+		while (qsocket->canReadLine())
+		{
+			int size = qsocket->bytesAvailable() + 1;
+			char *c = new char[size + len_saved_data];
+			if (len_saved_data)
+				memcpy (c, saved_data, len_saved_data);
+			int bytes = qsocket->readLine(c + len_saved_data, size);
+			QString x = textCodec->toUnicode(c);
+			delete[] c;
+			len_saved_data = 0;
+			if (saved_data)
+				delete[] saved_data;
+			saved_data = 0;
+			if (x.isEmpty())
+			{
+				qDebug("READ:NULL");
+				return;
+			}
+
+			// some statistics
 //		emit signal_setBytesIn(x.length());
 
-		x.truncate(x.length()-2);
+			x.truncate(x.length()-2);
 
-		sendTextToApp(x);
+			sendTextToApp(x);
 
-		if (authState == PASSWORD)
-		{
-			bufferLineRest = x;
-			checkPrompt();
-			qDebug("PASSWORD***");
+			if (authState == PASSWORD)
+			{
+				checkPrompt(x);
+				qDebug("PASSWORD***");
+			}
 		}
 	}
-	
-	if (authState == LOGIN && qsocket->bytesAvailable() == 7)
-	{
-		QString y;
-		qDebug("looking for 'Login:'");
-		while (qsocket->bytesAvailable())
-			y += qsocket->getch();
-		
-		if (y)
-		{
-			qDebug("Collected: " + y);
-			bufferLineRest = y;
-			checkPrompt();
-		}
-	}
+
 //*/
 //	convertBlockToLines();
 }
@@ -223,11 +226,11 @@ void IGSConnection::OnError(int i)
 {
 	switch (i)
 	{
-		case QSocket::ErrConnectionRefused: qDebug("ERROR: connection refused...");
+		case QTcpSocket::ErrConnectionRefused: qDebug("ERROR: connection refused...");
 			break;
-		case QSocket::ErrHostNotFound: qDebug("ERROR: host not found...");
+		case QTcpSocket::ErrHostNotFound: qDebug("ERROR: host not found...");
 			break;
-		case QSocket::ErrSocketRead: qDebug("ERROR: socket read...");
+		case QTcpSocket::ErrSocketRead: qDebug("ERROR: socket read...");
 			break;
 		default: qDebug("ERROR: unknown Error...");
 			break;
@@ -243,7 +246,7 @@ void IGSConnection::OnError(int i)
 bool IGSConnection::isConnected()
 {
 //	qDebug("IGSConnection::isConnected()");
-	return qsocket->state() == QSocket::Connection;
+	return qsocket->state() == QTcpSocket::Connection;
 }
 
 void IGSConnection::sendTextToHost(QString txt, bool ignoreCodec)
@@ -255,6 +258,7 @@ void IGSConnection::sendTextToHost(QString txt, bool ignoreCodec)
 	*	Therefore, we pretend to ignore the codec when passing username or password
 	*/
 
+	qDebug () << ">> " << txt;
 	if (ignoreCodec)
 	{
 
@@ -264,17 +268,17 @@ void IGSConnection::sendTextToHost(QString txt, bool ignoreCodec)
         	if ((len = qsocket->writeBlock(txt2, strlen(txt2) * sizeof(char))) != -1)
 			qsocket->writeBlock("\r\n", 2);
 		else
-			qWarning(QString("*** failed sending to host: %1").arg(txt2));
+			qWarning() << QString("*** failed sending to host: %1").arg(txt2);
 	}
 
 	else 
 	{
-		QCString raw = textCodec->fromUnicode(txt);
+		QByteArray raw = textCodec->fromUnicode(txt);
 
-		if (qsocket->writeBlock(raw.data(), raw.size() - 1) != -1)
+		if (qsocket->writeBlock(raw.data(), raw.size()) != -1)
 			qsocket->writeBlock("\r\n", 2);
 		else
-			qWarning(QString("*** failed sending to host: %1").arg(txt));
+			qWarning() << QString("*** failed sending to host: %1").arg(txt);
 	}
 }
 
@@ -291,7 +295,7 @@ void IGSConnection::setTextCodec(QString codec)
 
 bool IGSConnection::openConnection(const char *host, unsigned int port, const char *user, const char *pass)
 {
-	if (qsocket->state() != QSocket::Idle ) {
+	if (qsocket->state() != QTcpSocket::Idle ) {
 		qDebug("Called IGSConnection::openConnection while in state %d", qsocket->state());
 		return false;
 	}
@@ -304,21 +308,22 @@ bool IGSConnection::openConnection(const char *host, unsigned int port, const ch
 	username = user;
 	password = pass;
 	
-	qDebug("Connecting to %s %d as [%s], [%s]...", host, port, username.latin1(), (password ? "***" : "NULL"));
-	sendTextToApp(tr("Trying to connect to %1 %2").arg(host,port));
+	qDebug("Connecting to %s %d as [%s], [%s]...", host, port, username.latin1(),
+	       (password.isNull () ? NULL : "***"));
+	sendTextToApp(tr("Trying to connect to %1 %2").arg(host).arg(port));
 
 	ASSERT(host != 0);
 	ASSERT(port != 0);
 	int len = qstrlen(host);
 	if ((len > 0) && (len < 200)) // otherwise host points to junk
 		qsocket->connectToHost(host, (Q_UINT16) port);
-	return qsocket->state() != QSocket::Idle;
+	return qsocket->state() != QTcpSocket::Idle;
 }
 
 bool IGSConnection::closeConnection()
 {
 	// We have no connection?
-	if (qsocket->state() == QSocket::Idle)
+	if (qsocket->state() == QTcpSocket::Idle)
 		return false;
 
 	qDebug("Disconnecting...");
@@ -327,7 +332,7 @@ bool IGSConnection::closeConnection()
 	qsocket->close();
 
 	// Closing succeeded, return message
-	if (qsocket->state() == QSocket::Idle)
+	if (qsocket->state() == QTcpSocket::Idle)
 	{
 		authState = LOGIN;
 		sendTextToApp("Connection closed.\n");

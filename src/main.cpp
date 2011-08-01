@@ -19,25 +19,25 @@
 #include <qdialog.h>
 #include <qpushbutton.h>
 #include <qmessagebox.h>
-#include <qfiledialog.h>
+#include <q3filedialog.h>
 #include <qdir.h>
-#include <qlistview.h>
+#include <q3listview.h>
 #include <qcheckbox.h>
-#include <qtextstream.h>
-#include <qtextedit.h>
+#include <q3textstream.h>
+#include <q3textedit.h>
 #include <qstring.h>
 #include <qobject.h>
 
-#include <qmainwindow.h>
+#include <q3mainwindow.h>
 #include <qaction.h>
-#include <qdragobject.h>
+#include <q3dragobject.h>
 #include <qstyle.h>
 
 // global
 Setting *setting = 0;
 
 #ifdef OWN_DEBUG_MODE
-QTextEdit *view =0 ;
+Q3TextEdit *view =0 ;
 #endif
 
 /*
@@ -93,7 +93,7 @@ int main(int argc, char **argv)
 
 	QApplication myapp(argc, argv);
 
-	QString style =  myapp.style().name();
+	QString style =  myapp.style()->name();
   
 #ifdef OWN_DEBUG_MODE
 	qInstallMsgHandler(myMessageHandler);
@@ -106,8 +106,8 @@ int main(int argc, char **argv)
 	// get application path
 	QFileInfo program(argv[0]);
 	QString program_dir = program.dirPath(true);
-	qDebug() << "main:qt->PROGRAM.DIRPATH = " << program_dir << std::endl;
-	qDebug() << "style = " << style << std::endl;
+	qDebug() << "main:qt->PROGRAM.DIRPATH = " << program_dir;
+	qDebug() << "style = " << style;
 	
 	// restore last setting
 	setting = new Setting();                
@@ -120,10 +120,10 @@ int main(int argc, char **argv)
 	QTranslator trans(0);
 	QString lang = setting->getLanguage();
 	//const char *lang = setting->getLanguage();
-	qDebug() << "Checking for language settings..." << lang << std::endl;
+	qDebug() << "Checking for language settings..." << lang;
 	QString tr_dir = setting->getTranslationsDirectory(), loc;
 	
-	if (lang == NULL)
+	if (lang.isNull ())
 	{
 		qDebug("No language settings found, using system locale %s", QTextCodec::locale());
 		loc = QString("qgo_") + QTextCodec::locale();
@@ -143,7 +143,7 @@ int main(int argc, char **argv)
 	else if (strcmp(lang.ascii(), "en") && strcmp(lang.ascii(), "C"))  // Skip warning for en and C default.
 		qWarning("Failed to find translation file for %s", lang.ascii());
 
-	ClientWindow *mainWindow = new ClientWindow(0, 0, 1);
+	ClientWindow *mainWindow = new ClientWindow(0, 0, Qt::Window);
 
 #ifdef OWN_DEBUG_MODE
 	// restore size and pos

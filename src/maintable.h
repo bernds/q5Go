@@ -13,32 +13,35 @@
 #include <qpushbutton.h>
 #include <qlayout.h>
 //#include <qmultilineedit.h>
-#include <qtextedit.h> //eb16
+#include <q3textedit.h> //eb16
 #include <qtabwidget.h>
-#include <qmainwindow.h>
+#include <q3mainwindow.h>
 #include <qcombobox.h>
+//Added by qt3to4:
+#include <QEvent>
+#include <Q3GridLayout>
 
 class MainTable;
 
-class MainAppWidget : public QMainWindow
+class MainAppWidget : public Q3MainWindow
 {
 	Q_OBJECT
 
 public:
-	MainAppWidget( QWidget* parent = 0, const char* name = 0, WFlags fl = 
-WType_TopLevel );
+	MainAppWidget( QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 
+Qt::WType_TopLevel );
 	~MainAppWidget();
 
 	MainTable* mainTable;
 	QComboBox* cb_cmdLine;
-	QMainWindow* MyCustomWidget1;
+	Q3MainWindow* MyCustomWidget1;
 
 public slots:
 	virtual void slot_cmdactivated(const QString&);
 	virtual void slot_cmdactivated_int(int);
 
 protected:
-	QGridLayout* MainAppWidgetLayout;
+	Q3GridLayout* MainAppWidgetLayout;
 
 protected slots:
 	virtual void languageChange();
@@ -50,10 +53,10 @@ class MainTable : public QWidget
 	Q_OBJECT
 		
 public:
-	MainTable( QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+	MainTable( QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0 );
 	~MainTable();
 	
-	QTextEdit* MultiLineEdit2;
+	Q3TextEdit* MultiLineEdit2;
 	PlayerTable* ListView_players;
 	QTabWidget* TabWidget_mini;
 	QTabWidget* TabWidget_players;
@@ -62,15 +65,15 @@ public:
 	GamesTable* ListView_games;
 	QTabWidget* TabWidget_mini_2;
 	QWidget* shout;
-	QTextEdit* MultiLineEdit3;
+	Q3TextEdit* MultiLineEdit3;
 	QPushButton* pb_releaseTalkTabs;
 	QSplitter *s1, *s2, *s3;
 	
 protected:
-	QGridLayout* mainTableLayout;
-	QGridLayout* gamesLayout;
-	QGridLayout* playersLayout;
-	QGridLayout* shoutLayout;
+	Q3GridLayout* mainTableLayout;
+	Q3GridLayout* gamesLayout;
+	Q3GridLayout* playersLayout;
+	Q3GridLayout* shoutLayout;
 	bool event( QEvent* );
 };
 

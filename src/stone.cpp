@@ -7,15 +7,15 @@
 #include "imagehandler.h"
 #include <stdlib.h>
 
-Stone::Stone(QCanvasPixmapArray *a, QCanvas *canvas, StoneColor c, int x, int y, int numberOfImages, bool has_shadow)
-: QCanvasSprite(a, canvas), color(c), myX(x), myY(y)
+Stone::Stone(Q3CanvasPixmapArray *a, Q3Canvas *canvas, StoneColor c, int x, int y, int numberOfImages, bool has_shadow)
+: Q3CanvasSprite(a, canvas), color(c), myX(x), myY(y)
 {
 	setFrame(color == stoneBlack ? 0 : (rand() % numberOfImages) + 1);
 	
 	shadow = NULL;
 	
 	if (has_shadow) {
-		shadow = new QCanvasSprite(a, canvas);
+		shadow = new Q3CanvasSprite(a, canvas);
 		shadow->setFrame(numberOfImages + 1);
 		shadow->setZ(4);
 	}
@@ -51,7 +51,7 @@ void Stone::toggleOneColorGo(bool oneColor)
 void Stone::setX(double x)
 {
 	int offset;
-	QCanvasSprite::setX(x);
+	Q3CanvasSprite::setX(x);
 	if (shadow) {
 		 offset = shadow->boundingRect().width();
 		 shadow->setX(x - offset / 8);
@@ -62,7 +62,7 @@ void Stone::setX(double x)
 
 void Stone::setY(double y)
 {
-	QCanvasSprite::setY(y);
+	Q3CanvasSprite::setY(y);
 	int offset;
 	if (shadow) {
 		 offset = shadow->boundingRect().height();
@@ -73,14 +73,14 @@ void Stone::setY(double y)
 
 void Stone::hide()
 {
-	QCanvasSprite::hide();
+	Q3CanvasSprite::hide();
 	if (shadow) 	 shadow->hide();
 	
 }
 
 void Stone::show()
 {
-	QCanvasSprite::show();
+	Q3CanvasSprite::show();
 	if (shadow) 	 shadow->show();
 	
 }

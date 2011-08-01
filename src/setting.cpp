@@ -1,19 +1,21 @@
 /*
  * settings.cpp
  */
-
+#define DATADIR "/local/install/share/games"
 #include "setting.h"
 #include "config.h"
 #include "defines.h"
 #include "globals.h"
 #include "icons.h"
 #include <qfile.h>
-#include <qtextstream.h>
+#include <q3textstream.h>
 #include <qdir.h>
 #include <qfont.h>
 #include <qcolor.h>
 #include <qstringlist.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 //#ifdef USE_XPM
 #include ICON_APPICON
@@ -180,15 +182,15 @@ void Setting::loadSettings()
 	QFile file;
 
 	// set under Linux
-	settingHomeDir = QString(getenv("HOME"));
-	if (!settingHomeDir)
+	const char *p = getenv("HOME");
+	if (p == NULL)
 		// set under Windows
-		settingHomeDir = QString(getenv("USERPROFILE"));
-	if (!settingHomeDir)
+		p = getenv("USERPROFILE");
+	if (p == NULL)
 	{
 		// however...
 		qDebug("HOME and/or USERPROFILE are not set");
-		settingHomeDir = QDir::homeDirPath();
+		QString settingHomeDir = QDir::homeDirPath();
 		file.setName(settingHomeDir + "/.qgoclientrc");
 		if (file.exists())
 		{
@@ -203,26 +205,26 @@ void Setting::loadSettings()
 			file.setName(settingHomeDir + "/." + PACKAGE + "rc");
 	}
 	else
-		file.setName(settingHomeDir + "/." + PACKAGE + "rc");
+		file.setName(QString(p) + "/." + PACKAGE + "rc");
 
-	if (!file.exists() || !file.open(IO_ReadOnly))
+	if (!file.exists() || !file.open(QIODevice::ReadOnly))
 	{
-		qDebug() << "Failed loading settings: " << file.name() << std::endl;
+		qDebug() << "Failed loading settings: " << file.name();
 
 		// maybe old file available
 		file.setName(QDir::homeDirPath() + "/.qgoclientrc");
 
-		if (!file.exists() || !file.open(IO_ReadOnly))
+		if (!file.exists() || !file.open(QIODevice::ReadOnly))
 		{
 			qWarning("Failed loading settings: " + file.name());
 			return;
 		}
 	}
 
-	qDebug() << "Use settings: " << file.name() << std::endl;
+	qDebug() << "Use settings: " << file.name();
 
 	// read file
-	QTextStream txt(&file);
+	Q3TextStream txt(&file);
 	QString s;
 	int pos, pos1, pos2;
 	while (!txt.eof())
@@ -250,18 +252,18 @@ void Setting::loadSettings()
 	updateFont(fontClocks, "FONT_CLOCK");
 	updateFont(fontConsole, "FONT_CONSOLE");
  	s = readEntry("COLOR_BK");
-	if (s)
+	if (!s.isNull())
 		colorBackground = QColor(s);
 	s = readEntry("COLOR_ALT_BK");
-	if (s)
+	if (!s.isNull())
 		colorAltBackground = QColor(s);
-	s=readEntry("CHARSET");
-	charset->blackStone = s.constref(0);
-	charset->emptyPoint = s.constref(1);
-	charset->hBorder = s.constref(2);
-	charset->starPoint = s.constref(3);
-	charset->vBorder = s.constref(4);
-	charset->whiteStone = s.constref(5);  
+	s = readEntry("CHARSET");
+	charset->blackStone = s.at(0).toAscii();
+	charset->emptyPoint = s.at(1).toAscii();
+	charset->hBorder = s.at(2).toAscii();
+	charset->starPoint = s.at(3).toAscii();
+	charset->vBorder = s.at(4).toAscii();
+	charset->whiteStone = s.at(5).toAscii();
 }
 
 QString Setting::fontToString(QFont f)
@@ -282,7 +284,7 @@ void Setting::updateFont(QFont &font, QString entry)
 {
 	// do font stuff
 	QString s = readEntry(entry);
-	if (!s)
+	if (s.isNull())
 		return;
 #ifdef Q_WS_X11_xxx
 	font.setRawName(s);
@@ -350,9 +352,9 @@ void Setting::saveSettings()
 
 	QFile file(settingHomeDir + "/." + PACKAGE + "rc");
     
-	if (file.open(IO_WriteOnly))
+	if (file.open(QIODevice::WriteOnly))
 	{
-		QTextStream txtfile(&file);
+		Q3TextStream txtfile(&file);
 
 		// write list to file: KEY [TXT]
 		Parameter *par;
@@ -400,8 +402,8 @@ QString Setting::readEntry(const QString &key)
 		if (par->key() == key)
 			return par->txt();
 
-	qDebug() << "Setting::readEntry(): " << key << " == 0" << std::endl;
-	return NULL;
+	qDebug() << "Setting::readEntry(): " << key << " == 0";
+	return QString::null;
 }
 
 void Setting::clearList(void)
@@ -498,19 +500,21 @@ QString Setting::getTranslationsDirectory()
 //const char* Setting::getLanguage()
 QString Setting::getLanguage()
 {
-	QString l =  readEntry("LANG");
-	QString env = QString(getenv("LANG"));
-	
-	if (env) 
-		env = env.left(2);
+	QString l = readEntry("LANG");
 	
 	//const char *hop[2];
 	//hop[0] = char(12)  ;
-		
-	if ((l.isEmpty()) || (l == QString("Default")))
-		return  env ;
+
+	if (l.isEmpty() || l == QString("Default"))
+	{
+		const char *p = getenv("LANG");
+	
+		if (p == NULL)
+			return QString::null;
+		return QString(p).left(2);
+	}
 	else
-		return readEntry("LANG"); //.latin1();
+		return l; //.latin1();
 	//return readEntry("LANG") == NULL ? getenv("LANG") : readEntry("LANG").latin1(); }
 }
 

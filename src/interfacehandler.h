@@ -7,12 +7,14 @@
 
 #include "defines.h"
 #include "board.h"
-
-class QAction;
+//Added by qt3to4:
+#include <QLabel>
+#include <Q3Frame>
+#include <Q3Action>
 class QLabel;
-class QTextEdit;
+class Q3TextEdit;
 class QLineEdit;
-class QFrame;
+class Q3Frame;
 class Board;
 class QWidget;
 class QString;
@@ -54,18 +56,18 @@ public:
 	void setSliderMax(int n);
 
 	QLabel *moveNumLabel, *turnLabel, *varLabel, *capturesBlack, *capturesWhite;
-	QAction *navBackward,  *navForward, *navFirst, *navLast, *navNextVar, *navIntersection, //SL added eb 11
+	Q3Action *navBackward,  *navForward, *navFirst, *navLast, *navNextVar, *navIntersection, //SL added eb 11
 		*navPrevVar, *navStartVar, *navNextBranch, *navMainBranch, *navNthMove, *navAutoplay,
 		*editCut, *editPaste, *editPasteBrother, *editDelete,
 		*navEmptyBranch, *navCloneNode, *navSwapVariations, *navPrevComment, *navNextComment,
  		*fileImportASCII, *fileImportASCIIClipB, *fileImportSgfClipB, *fileNew, *fileNewBoard, *fileOpen ;
-	QTextEdit *commentEdit;
+	Q3TextEdit *commentEdit;
 	QLineEdit *commentEdit2;
 //	EditTools *editTools;
 	NormalTools *normalTools;
 //	TeachTools *teachTools;
 	ScoreTools *scoreTools;
-	QFrame *toolsFrame;
+	Q3Frame *toolsFrame;
 	Board *board;
 	QLabel *statusMode, *statusTurn, *statusMark, *statusNav;
 	QPushButton /**modeButton,*/ *scoreButton, *passButton, *undoButton, *resignButton, 

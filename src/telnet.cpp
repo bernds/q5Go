@@ -10,7 +10,7 @@
 #include <qmessagebox.h>
 #include <qlineedit.h>
 #include <qmenubar.h>
-#include <qaccel.h>
+#include <q3accel.h>
 
 
 TelnetInterface *telnetIF;
@@ -96,7 +96,9 @@ void TelnetConnection::setHost(const QString h, const QString lg, const QString 
 	password = pw;
 	codec = cdc;
 	
-	qDebug("SELECTED %s %d, %s, %s", host.latin1(), port, loginName.latin1(), (password ? "***" : "NULL"));
+	qDebug("SELECTED %s %d, %s, %s",
+	       host.latin1(), port, loginName.latin1(),
+	       password.isNull() ? "NULL" : "***");
 }
 
 void TelnetConnection::slotHostQuit()

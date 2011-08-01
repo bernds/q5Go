@@ -5,10 +5,10 @@
 #ifndef TREE_H
 #define TREE_H
 
-#include <qptrstack.h>
+#include <q3ptrstack.h>
 class Move;
 
-template<class type> class QPtrStack;
+template<class type> class Q3PtrStack;
 
 class Tree
 {
@@ -40,7 +40,7 @@ public:
 	Move* findMoveInMainBranch(int x, int y) { return findMove(root, x, y, false); }
 	Move* findMoveInBranch(int x, int y) { return findMove(current, x, y, true); }
 	Move* findLastMoveInMainBranch();   //SL added eb 9
-	void traverseFind(Move *m, int x, int y, QPtrStack<Move> &result);
+	void traverseFind(Move *m, int x, int y, Q3PtrStack<Move> &result);
 	
 protected:
 	Move* findMove(Move *start, int x, int y, bool checkmarker);

@@ -24,27 +24,32 @@
 #include <qdialog.h>
 #include <qpushbutton.h>
 #include <qmessagebox.h>
-#include <qfiledialog.h>
+#include <q3filedialog.h>
 #include <qdir.h>
 #include <qlabel.h>
-#include <qlistview.h>
+#include <q3listview.h>
 #include <qcheckbox.h>
-#include <qtextstream.h>
-#include <qtextview.h>
+#include <q3textstream.h>
+#include <q3textview.h>
 //#include <qmultilineedit.h>
-#include <qtextedit.h>
-#include <qtextbrowser.h> 
+#include <q3textedit.h>
+#include <q3textbrowser.h> 
 #include <qstring.h>
 #include <qobject.h>
-#include <qdragobject.h>
+#include <q3dragobject.h>
 #include <qevent.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
-#include <qtextstream.h>
+#include <q3whatsthis.h>
+#include <q3textstream.h>
 #include <qstatusbar.h>
-#include <qtoolbar.h>
+#include <q3toolbar.h>
 #include <qmenubar.h>                //SL added eb 3
-#include <qptrlist.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <QTimerEvent>
+#include <QKeyEvent>
+#include <QPixmap>
+#include <Q3PopupMenu>
 
 //#include <qstyle.h>
 
@@ -69,7 +74,7 @@ class ClientWindow : public ClientWindowGui
 	Q_OBJECT
 
 public:
-	ClientWindow(QMainWindow* parent, const char* name, WFlags fl=WType_TopLevel);
+	ClientWindow(Q3MainWindow* parent, const char* name, Qt::WFlags fl=Qt::WType_TopLevel);
 	~ClientWindow();
 
 	int sendTextFromApp(const QString&, bool localecho=true);
@@ -80,7 +85,7 @@ public:
 
 	QString getPlayerRk(QString);
 	QString getPlayerExcludeListEntry(QString);
-	void openLocalBoard(QString file=0) { qgoif->set_localboard(file); }
+	void openLocalBoard(QString file = QString::null) { qgoif->set_localboard(file); }
 	void openLocalGame() { qgoif->set_localgame(); }
 	void openPreferences() { qgoif->openPreferences(); }
 	void saveMenuFrame(QPoint p, QSize s) { menu_p = p; menu_s = s; }
@@ -102,7 +107,7 @@ public:
 //	QSortedList<Host>  hostlist;
 //	QPtrList<Host>  hostlist;
 	HostList hostlist;
-	QButtonGroup *userButtonGroup ;
+	Q3ButtonGroup *userButtonGroup ;
   
 	QString  defaultStyle ;
 
@@ -172,7 +177,7 @@ public slots:
 	void slot_room(const QString&, bool );
 	void slot_enterRoom(const QString& );
 	void slot_leaveRoom();
-	void slot_RoomListClicked(QListBoxItem*);
+	void slot_RoomListClicked(Q3ListBoxItem*);
 	void slot_addSeekCondition(const QString&, const QString&, const QString&, const QString&, const QString&);
 	void slot_clearSeekCondition();
 	void slot_cancelSeek();
@@ -181,12 +186,12 @@ public slots:
 	void slot_SeekList(const QString&, const QString&);
 	
 	// gamestable/playertable:
-	virtual void slot_mouse_games(int, QListViewItem*, const QPoint&, int);
-	virtual void slot_mouse_players(int, QListViewItem*, const QPoint&, int);
-	virtual void slot_click_games(QListViewItem*);
-	virtual void slot_click_players(QListViewItem*);
-	virtual void slot_menu_games(QListViewItem*, const QPoint&, int);
-	virtual void slot_menu_players(QListViewItem*, const QPoint&, int);
+	virtual void slot_mouse_games(int, Q3ListViewItem*, const QPoint&, int);
+	virtual void slot_mouse_players(int, Q3ListViewItem*, const QPoint&, int);
+	virtual void slot_click_games(Q3ListViewItem*);
+	virtual void slot_click_players(Q3ListViewItem*);
+	virtual void slot_menu_games(Q3ListViewItem*, const QPoint&, int);
+	virtual void slot_menu_players(Q3ListViewItem*, const QPoint&, int);
 //	void slot_moveOver_players();
 //	void slot_moveOver_games();
 	void slot_playerContentsMoving(int x, int y);
@@ -248,9 +253,9 @@ private:
 	bool               tn_wait_for_tn_ready;
 	//	bool               tn_active;
 	ChannelList        channellist;
-	QPtrList<Talk>     talklist;
-	QPtrList<GameDialog> matchlist;
-	QPtrList<sendBuf>  sendBuffer;
+	Q3PtrList<Talk>     talklist;
+	Q3PtrList<GameDialog> matchlist;
+	Q3PtrList<sendBuf>  sendBuffer;
 	sendBuf            *currentCommand;
 
 	//	QStatusBar         *statusBar;
@@ -299,6 +304,7 @@ private:
 	// event filter
 	virtual bool	eventFilter(QObject *obj, QEvent *ev);
  	int		seekButtonTimer ;
+	int oneSecondTimer;
 
   	// menus
 	QPixmap 	exitIcon, fileNewboardIcon, fileNewIcon, fileOpenIcon, fileSaveIcon, fileSaveAsIcon,                       
@@ -308,9 +314,8 @@ private:
 
 	QPixmap 	seekingIcon[4];
 
-	QPopupMenu	*seekMenu;                        //SL add eb 6
+	Q3PopupMenu	*seekMenu;                        //SL add eb 6
 	//QStringList 	*seekConditionList ;
-
 };
 
 #endif

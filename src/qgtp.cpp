@@ -18,7 +18,7 @@ email                :
 
 //#include <unistd.h>
 #include <stdlib.h>
-#include <qprocess.h>
+#include <q3process.h>
 #include "defines.h"
 #include "qgtp.h"
 
@@ -62,7 +62,7 @@ int QGtp::openGtpSession(QString filename, int size, float komi, int handicap, i
 {
 	_cpt = 1;
 	
-    programProcess = new QProcess();
+    programProcess = new Q3Process();
     
     programProcess->clearArguments();
     programProcess->addArgument(filename);
@@ -161,7 +161,7 @@ void QGtp::slot_readFromStdout()
 // exit
 void QGtp::slot_processExited()
 {
-	qDebug() << _cpt << " quit" << std::endl;
+	qDebug() << _cpt << " quit";
 	sprintf (outFile, "%d quit\n", _cpt);
 	fflush(outFile);
 	//	return waitResponse();
@@ -214,15 +214,15 @@ QGtp::waitResponse()
 	}
 	*/
 
-	buff = _response[0];
+	QChar r0 = _response[0];
 	if ((pos = _response.find(' ')) < 1)
 		pos = 1;
 	number = _response.mid(1,pos).toInt();
 	_response = _response.right(_response.length() - pos - 1);
 
-	qDebug() << QString("** QGtp::waitResponse(): [%1]").arg(_response) << std::endl;
+	qDebug() << QString("** QGtp::waitResponse(): [%1]").arg(_response);
 
-	if (buff == '?') //symbole=='?')
+	if (r0 == '?') //symbole=='?')
 	{
 		return FAIL;
 	}
@@ -244,7 +244,7 @@ QGtp::waitResponse()
 int
 QGtp::name ()
 {
-	qDebug() << _cpt << " name" << std::endl;
+	qDebug() << _cpt << " name";
 	sprintf (outFile, "%d name\n", _cpt);
 	fflush(outFile);
 	return waitResponse();
@@ -258,7 +258,7 @@ QGtp::name ()
 int
 QGtp::protocolVersion ()
 {
-	qDebug() << _cpt << " protocol_version" << std::endl;
+	qDebug() << _cpt << " protocol_version";
 	sprintf (outFile, "%d protocol_version\n", _cpt);
 	fflush(outFile);
 	return waitResponse();
@@ -277,7 +277,7 @@ int msglen = strlen(s);
 	*/
 	_cpt++;
 
-	qDebug() << "flush -> " << s << std::endl;
+	qDebug() << "flush -> " << s;
 	programProcess->writeToStdin(QString(s));
 	
 	

@@ -17,10 +17,12 @@
 #include <qobject.h>
 #include <qstring.h>
 #include <qtimer.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 // from qGo:
 #include "qgo.h"
+//Added by qt3to4:
+#include <QTimerEvent>
 #include "mainwindow.h"
 //#include "qgoclient_interface.h"
 
@@ -156,7 +158,7 @@ public slots:
 	void slot_ttMark(bool);
 
 private:
-	bool        timer_running;
+	int timer_id;
 	bool		game_paused;
 	bool        have_gameData;
 	bool        sent_movescmd;
@@ -201,7 +203,7 @@ public:
 	void set_myName(const QString &n) { myName = n; }
 	qGo  *get_qgo() { return qgo; };
 	void set_gsName(GSName n) { gsName = n; }
-	void set_localboard(QString file=0);
+	void set_localboard(QString file=QString::null);
 	void set_localgame();
 	void openPreferences(int tab=-1);
 	QWidget *get_parent() { return parent; }
@@ -236,7 +238,7 @@ public slots:
 	void set_observe(const QString&);
 
 protected:
-	bool parse_move(int src, GameInfo* gi=0, Game* g=0, QString txt=0);
+	bool parse_move(int src, GameInfo* gi=0, Game* g=0, QString txt=QString::null);
 
 private:
 	qGo     *qgo;
@@ -244,7 +246,7 @@ private:
 	// actual pointer, for speedup reason
 	qGoBoard *qgobrd;
 	QString  myName;
-	QList<qGoBoard> *boardlist;
+	Q3PtrList<qGoBoard> *boardlist;
 	GSName   gsName;
 	int      localBoardCounter;
 //	int      lockObserveCmd;

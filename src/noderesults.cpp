@@ -6,20 +6,20 @@
 #include "move.h"
 #include "icons.h"
 #include <qpixmap.h>
-#include <qiconview.h>
+#include <q3iconview.h>
 #include <qpushbutton.h>
-#include <qptrstack.h>
+#include <q3ptrstack.h>
 
 //#ifdef USE_XPM
 #include ICON_NODE_BLACK
 #include ICON_NODE_WHITE
 //#endif
 
-class NodeResultItem : public QIconViewItem
+class NodeResultItem : public Q3IconViewItem
 {
 public:
-	NodeResultItem(QIconView *parent, Move *m)
-		: QIconViewItem(parent), move(m)
+	NodeResultItem(Q3IconView *parent, Move *m)
+		: Q3IconViewItem(parent), move(m)
 	{
 		setText(QPushButton::tr("Move") + " " + QString::number(m->getMoveNumber()));
 		if (m->getColor() == stoneBlack)
@@ -55,11 +55,11 @@ public:
 *  Constructs a NodeResults which is a child of 'parent', with the 
 *  name 'name' and widget flags set to 'f' 
 */
-NodeResults::NodeResults( QWidget* parent,  const char* name, WFlags fl )
+NodeResults::NodeResults( QWidget* parent,  const char* name, Qt::WFlags fl )
 : NodeResultsGUI( parent, name, fl )
 {
 	resize(200, 200);
-	closeButton->setAccel(Key_Escape);
+	closeButton->setAccel(Qt::Key_Escape);
 }
 
 /*  
@@ -77,7 +77,7 @@ clear();
 }
 */
 
-void NodeResults::setNodes(QPtrStack<Move> *nodes)
+void NodeResults::setNodes(Q3PtrStack<Move> *nodes)
 {
 	qDebug("NodeResults::setNodes(QPtrStack<Move> *nodes)");
 	
@@ -87,7 +87,7 @@ void NodeResults::setNodes(QPtrStack<Move> *nodes)
 		new NodeResultItem(IconView, nodes->pop());
 }
 
-void NodeResults::fump(QIconViewItem *item)
+void NodeResults::fump(Q3IconViewItem *item)
 {
 	qDebug( "NodeResults::fump(QIconViewItem*)" );
 	

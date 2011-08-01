@@ -6,7 +6,8 @@
 #define PREFERENCESDIALOG_H
 
 #include "preferences_gui.h"
-#include <qptrlist.h>
+#include <q3ptrlist.h>
+#include <Q3ListView>
 
 class QIntValidator;
 class MainWindow;
@@ -17,7 +18,7 @@ class PreferencesDialog : public PreferencesDialogGui
 	Q_OBJECT
 
 public:
-	PreferencesDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0);
+	PreferencesDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0);
 	~PreferencesDialog();
 
 //	static QString fontToString(QFont f);
@@ -36,8 +37,8 @@ public slots:
 	virtual void slot_delete_button();
 	virtual void slot_textChanged(const QString&);
 	virtual void slot_text_buttonChanged(const QString&);
-	virtual void slot_clickedListView(QListViewItem*, const QPoint&, int);
-	virtual void slot_clicked_buttonListView(QListViewItem*, const QPoint&, int);
+	virtual void slot_clickedListView(Q3ListViewItem*, const QPoint&, int);
+	virtual void slot_clicked_buttonListView(Q3ListViewItem*, const QPoint&, int);
 	virtual void slot_clickedSoundCheckBox(int boxID);
 	virtual void slot_apply();
 	virtual void startHelpMode();

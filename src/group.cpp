@@ -9,9 +9,8 @@
 Group::Group()
 {
     liberties = 0;
-    setAutoDelete(FALSE);
 }
-
+#if 0
 int Group::compareItems(Item d1, Item d2)
 {
 	Stone *s1 = static_cast<Stone*>(d1);
@@ -27,46 +26,45 @@ int Group::compareItems(Item d1, Item d2)
 
 	return 1;
 }
+#endif
 
 bool Group::isAttachedTo(Stone *s)
 {
-    CHECK_PTR(s);
+	CHECK_PTR(s);
 
-    int stoneX = s->posX(),
-	      stoneY = s->posY(),
-	      x, y;
-    StoneColor col = s->getColor(), c;
-    Stone *tmp;
+	int stoneX = s->posX();
+	int stoneY = s->posY();
+	int x, y;
+	StoneColor col = s->getColor(), c;
+	Stone *tmp;
 
-    if (isEmpty())
+	if (isEmpty())
 		return false;
 
-    for (unsigned int i=0; i<count(); i++)
-    {
+	for (unsigned int i=0; i<size(); i++)
+	{
 		tmp = at(i);
 		x = tmp->posX();
 		y = tmp->posY();
 		c = tmp->getColor();
 		if (((stoneX == x && (stoneY == y-1 || stoneY == y+1)) ||
-			 (stoneY == y && (stoneX == x-1 || stoneX == x+1))) &&
-			 c == col)
+		     (stoneY == y && (stoneX == x-1 || stoneX == x+1))) &&
+		    c == col)
 			return true;
-    }    
-    
-    return false;
+	}    
+
+	return false;
 }
 
 #ifndef NO_DEBUG
 void Group::debug()
 {
 	qDebug(QString("Count: %1 - Liberties: %2").arg(count()).arg(liberties));
-	Stone *s;
 
-	QListIterator<Stone> it(*this);
-
-	for (; it.current(); ++it)
+	const_iterator i;
+	for (i = constBegin(); i != constEnd(); i++)
 	{
-		s = it.current();
+		Stone *s = *i;
 		qDebug(" (%d, %d) %s", s->posX(), s->posY(),
 		s->getColor() == stoneBlack ? "B" : "W");
 	}	

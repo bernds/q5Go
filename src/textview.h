@@ -15,7 +15,7 @@ class TextView : public TextViewGUI
 	Q_OBJECT
 		
 public:
-	TextView(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0);
+	TextView(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0);
 	~TextView();
 	void setMatrix(Matrix *m, ASCII_Import *charset);
 	

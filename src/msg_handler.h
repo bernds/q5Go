@@ -13,12 +13,12 @@
 
 
 #include <qapplication.h>
-#include <qtextedit.h>
+#include <q3textedit.h>
 
 void myMessageHandler(QtMsgType, const char*);
 
 #ifdef OWN_DEBUG_MODE
-extern QTextEdit *view;
+extern Q3TextEdit *view;
 extern QApplication myapp;
 #endif
 

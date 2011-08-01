@@ -9,27 +9,33 @@
 #include "board.h"
 #include "mainwidget.h"
 #include "setting.h"
-#include <qmainwindow.h>
-#include <qaction.h>
+#include <q3mainwindow.h>
 #include <qlayout.h>
-#include <qlistview.h>
+#include <q3listview.h>
+//Added by qt3to4:
+#include <QCloseEvent>
+#include <Q3GridLayout>
+#include <QLabel>
+#include <Q3PopupMenu>
+#include <QKeyEvent>
+#include <Q3Action>
 
 class Board;
 class InterfaceHandler;
 class QSplitter;
-class QMultiLineEdit;
+class Q3MultiLineEdit;
 class StatusTip;
 class qGoIF;
 class QNewGameDlg; //SL added eb 12
 
 struct ASCII_Import;
 
-class MainWindow : public QMainWindow
+class MainWindow : public Q3MainWindow
 {
 	Q_OBJECT
 		
 public:
-	MainWindow(QWidget* parent = 0, const char* name = 0, WFlags f = WType_TopLevel);
+	MainWindow(QWidget* parent = 0, const char* name = 0, Qt::WFlags f = Qt::WType_TopLevel);
 	~MainWindow();
 	InterfaceHandler* getInterfaceHandler() const { return interfaceHandler; }
 	Board* getBoard() const { return board; }
@@ -48,13 +54,13 @@ public:
 	void updateBoard();
 	void addObserver(const QString &name);
 	void clearObserver() { ListView_observers->clear(); }
-	QListView *getListView_observers() { return ListView_observers; }
+	Q3ListView *getListView_observers() { return ListView_observers; }
 	void updateObserverCnt();
 	void setParent(qGoIF *w) { parent_ = w; }
 	qGoIF *getParent() { return parent_; }
 	void dlgSetPreferences(int tab=-1);
-	QAction *get_fileQuit() { return fileQuit; }
-	QAction *get_fileClose() { return fileClose; }
+	Q3Action *get_fileQuit() { return fileQuit; }
+	Q3Action *get_fileClose() { return fileClose; }
 	int blackPlayerType, whitePlayerType ;
 	bool doSave(QString fileName, bool force=false);
 
@@ -153,37 +159,37 @@ private:
 	
 	QSplitter *splitter, *splitter_comment;
 //	QMultiLineEdit *commentEdit;
-	QTextEdit *commentEdit;
+	Q3TextEdit *commentEdit;
 	QLineEdit *commentEdit2;
-	QListView *ListView_observers;
+	Q3ListView *ListView_observers;
 	
-	QToolBar *fileBar, *toolBar, *editBar;
-	
-	QPopupMenu *fileMenu, *importExportMenu, *editMenu, *navMenu, *settingsMenu, *viewMenu, *helpMenu;
-	
-	QAction *escapeFocus, *toggleEdit, *toggleMarks;
-	QAction *fileNewBoard,*fileNew, *fileOpen, *fileSave, *fileSaveAs, *fileClose,
+	Q3ToolBar *fileBar, *toolBar, *editBar;
+
+	Q3PopupMenu *fileMenu, *importExportMenu, *editMenu, *navMenu, *settingsMenu, *viewMenu, *helpMenu;
+
+	Q3Action *escapeFocus, *toggleEdit, *toggleMarks;
+	Q3Action *fileNewBoard,*fileNew, *fileOpen, *fileSave, *fileSaveAs, *fileClose,
 		*fileImportASCII, *fileImportASCIIClipB,*fileExportASCII,
 		*fileImportSgfClipB, *fileExportSgfClipB,
 		*fileExportPic, *fileExportPicClipB,
 		*fileQuit ;
-	QAction *editCut, *editPaste, *editPasteBrother, *editDelete, *editHideStones, //QQQ
+	Q3Action *editCut, *editPaste, *editPasteBrother, *editDelete, *editHideStones, //QQQ
 		*editNumberMoves, *editMarkBrothers,
 		*editMarkSons;
-	QAction *navBackward, *navForward, *navFirst, *navLast, *navNextVar, *navPrevVar,
+	Q3Action *navBackward, *navForward, *navFirst, *navLast, *navNextVar, *navPrevVar,
 		*navMainBranch, *navStartVar, *navNextBranch, *navNthMove, *navAutoplay, *navEmptyBranch,
 		*navCloneNode, *navSwapVariations, *navNextComment, *navPrevComment, *navIntersection ;       //SL added eb 11                               // added eb the 2 last
-	QAction *setPreferences, *setGameInfo, *soundToggle;
-	QAction *viewFileBar, *viewToolBar, *viewEditBar, *viewMenuBar, *viewStatusBar, *viewCoords,
+	Q3Action *setPreferences, *setGameInfo, *soundToggle;
+	Q3Action *viewFileBar, *viewToolBar, *viewEditBar, *viewMenuBar, *viewStatusBar, *viewCoords,
 		*viewSlider, *viewSidebar, *viewComment, *viewVertComment, *viewPinComment, *viewIncreaseSize,
 		*viewDecreaseSize, *viewSaveSize, *viewFullscreen;
-	QAction *helpManual, *helpSoundInfo, *helpAboutApp, *helpAboutQt;
+	Q3Action *helpManual, *helpSoundInfo, *helpAboutApp, *helpAboutQt;
 	QTimer *timer;
 	
 	float timerIntervals[6];
 	bool isFullScreen;
 
-	QGridLayout *mainWidgetGuiLayout;
+	Q3GridLayout *mainWidgetGuiLayout;
 };
 
 #endif

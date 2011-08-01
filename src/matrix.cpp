@@ -4,6 +4,7 @@
 
 #include "matrix.h"
 #include <stdlib.h>
+#include <QString>
 #ifndef NO_DEBUG
 #include <iostream>
 #endif
@@ -66,64 +67,68 @@ void Matrix::clear()
 #ifndef NO_DEBUG
 void Matrix::debug() const
 {
+	QDebug dbg = qDebug ();
 	ASSERT(size > 0 && size <= 36);
 	
 	int i, j;
-	
-	cout << "\n  ";
-	for (i=0; i<size; i++)
-		cout << (i+1)%10 << " ";
-	cout << endl;
-	
+
+	{
+		QDebug dbg1 = qDebug ();
+		qDebug () << "\n  ";
+		for (i=0; i<size; i++)
+			dbg1 << (i+1)%10 << " ";
+	}
 	for (i=0; i<size; i++)
 	{
-		cout << (i+1)%10 << " ";
+		QDebug dbg2 = qDebug ();
+		dbg2 << (i+1)%10 << " ";
 		for (j=0; j<size; j++)
 		{
 #if 1
 			switch (abs(matrix[j][i]))
 			{
 			case stoneNone:
-			case stoneErase: cout << ". "; break;
-			case stoneBlack: cout << "B "; break;
-			case stoneWhite: cout << "W "; break;
-			case markSquare*10: cout << "[ "; break;
-			case markCircle*10: cout << "O "; break;
-			case markTriangle*10: cout << "T "; break;
-			case markCross*10: cout << "X "; break;
-			case markText*10: cout << "A "; break;
-			case markNumber*10: cout << "1 "; break;
-			case markSquare*10+stoneBlack: cout << "S "; break;
-			case markCircle*10+stoneBlack: cout << "C "; break;
-			case markTriangle*10+stoneBlack: cout << "D "; break;
-			case markCross*10+stoneBlack: cout << "R "; break;
-			case markText*10+stoneBlack: cout << "A "; break;
-			case markNumber*10+stoneBlack: cout << "N "; break;
-			case markSquare*10+stoneWhite: cout << "s "; break;
-			case markCircle*10+stoneWhite: cout << "c "; break;
-			case markTriangle*10+stoneWhite: cout << "d "; break;
-			case markCross*10+stoneWhite: cout << "r "; break;
-			case markText*10+stoneWhite: cout << "a "; break;
-			case markNumber*10+stoneWhite: cout << "n "; break;
-			default: cout << "? ";
+			case stoneErase: dbg2 << ". "; break;
+			case stoneBlack: dbg2 << "B "; break;
+			case stoneWhite: dbg2 << "W "; break;
+			case markSquare*10: dbg2 << "[ "; break;
+			case markCircle*10: dbg2 << "O "; break;
+			case markTriangle*10: dbg2 << "T "; break;
+			case markCross*10: dbg2 << "X "; break;
+			case markText*10: dbg2 << "A "; break;
+			case markNumber*10: dbg2 << "1 "; break;
+			case markSquare*10+stoneBlack: dbg2 << "S "; break;
+			case markCircle*10+stoneBlack: dbg2 << "C "; break;
+			case markTriangle*10+stoneBlack: dbg2 << "D "; break;
+			case markCross*10+stoneBlack: dbg2 << "R "; break;
+			case markText*10+stoneBlack: dbg2 << "A "; break;
+			case markNumber*10+stoneBlack: dbg2 << "N "; break;
+			case markSquare*10+stoneWhite: dbg2 << "s "; break;
+			case markCircle*10+stoneWhite: dbg2 << "c "; break;
+			case markTriangle*10+stoneWhite: dbg2 << "d "; break;
+			case markCross*10+stoneWhite: dbg2 << "r "; break;
+			case markText*10+stoneWhite: dbg2 << "a "; break;
+			case markNumber*10+stoneWhite: dbg2 << "n "; break;
+			default: dbg2 << "? ";
 			}
 #else
-			cout << matrix[j][i] << " ";
+			dbg2 << matrix[j][i] << " ";
 #endif
 		}
-		cout << (i+1)%10 << endl;
+		dbg2 << (i+1)%10;
 	}
-	
-	cout << "  ";
-	for (i=0; i<size; i++)
-		cout << (i+1)%10 << " ";
-	cout << endl;
-	
+
+	{
+		QDebug dbg3 = qDebug ();
+		dbg3 << "  ";
+		for (i=0; i<size; i++)
+			dbg3 << (i+1)%10 << " ";
+	}		
 	if (markTexts.size() != 0)
 	{
-		cout << markTexts.size() << " mark texts in the storage.\n";
+		qDebug () << markTexts.size() << " mark texts in the storage.";
 		for (mapType::const_iterator it = markTexts.constBegin(); it != markTexts.constEnd(); ++it)
-			cout << (QString)(*it) << endl;
+			qDebug () << (QString)(*it);
 	}
 }
 #endif

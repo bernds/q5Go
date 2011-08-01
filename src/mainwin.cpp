@@ -9,6 +9,9 @@
 #include "gamestable.h"
 #include "gamedialog.h"
 #include "qgo_interface.h"
+//Added by qt3to4:
+#include <QTimerEvent>
+#include <QKeyEvent>
 #include "komispinbox.h"
 #include "icons.h"
 #include "igsconnection.h"
@@ -24,29 +27,24 @@
 #include <qlineedit.h>
 #include <qevent.h>
 #include <qstatusbar.h>
-#include <qmainwindow.h>
+#include <q3mainwindow.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
-#include <qvaluelist.h>
-#include <qpopupmenu.h>
-#include <qtextstream.h>
-#include <qeucjpcodec.h> 
-#include <qjiscodec.h> 
-#include <qsjiscodec.h>
-#include <qgbkcodec.h>
-#include <qeuckrcodec.h>
-#include <qtsciicodec.h>
+#include <q3whatsthis.h>
+#include <q3valuelist.h>
+#include <q3popupmenu.h>
+#include <q3textstream.h>
 #include <qpalette.h>
-#include <qaccel.h>
+#include <q3accel.h>
 #include <qtoolbutton.h>
-#include <qiconset.h>
+#include <qicon.h>
 #include <qpixmap.h>
-#include <qbuttongroup.h> 
-#include <qobjectlist.h> 
-#include <qlistbox.h> 
+#include <q3buttongroup.h> 
+#include <qobject.h> 
+#include <q3listbox.h> 
 #include <qmovie.h> 
 #include <qradiobutton.h>
 
+#define QGO_NOSTYLES
 #ifndef QGO_NOSTYLES
 #include <qplatinumstyle.h>
 #include <qmotifstyle.h>
@@ -55,7 +53,9 @@
 #include <qsgistyle.h>
 #endif
 
-#include <qptrlist.h>
+#include <Q3Dict>
+
+#include <q3ptrlist.h>
 
 
 /*
@@ -63,8 +63,8 @@
  */
 
 
-ClientWindow::ClientWindow(QMainWindow *parent, const char* name, WFlags fl)
-	: ClientWindowGui( parent, name, fl )
+ClientWindow::ClientWindow(Q3MainWindow *parent, const char* name, Qt::WFlags fl)
+	: ClientWindowGui( parent, name, fl ), seekButtonTimer (0), oneSecondTimer (0)
 {
 
 
@@ -107,7 +107,7 @@ ClientWindow::ClientWindow(QMainWindow *parent, const char* name, WFlags fl)
 	setIcon(setting->image0);
 	myAccount = new Account(this);
 	
-	defaultStyle = qApp->style().name() ;
+	defaultStyle = qApp->style()->name() ;
 	// this is very dirty : we do this because there seem to be no clean way to backtrack from MainWindow to the defaultStyle :-(
 	setting->writeEntry("DEFAULT_STYLE",defaultStyle ) ;
   
@@ -170,24 +170,24 @@ ClientWindow::ClientWindow(QMainWindow *parent, const char* name, WFlags fl)
 	connect(parser, SIGNAL(signal_refresh(int)),this, SLOT(slot_refresh(int)));
 
 	// connect mouse to games table/player table
-	connect(ListView_games, SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
-	                        SLOT(slot_menu_games(QListViewItem*, const QPoint&, int)));
+	connect(ListView_games, SIGNAL(contextMenuRequested(Q3ListViewItem*, const QPoint&, int)),
+	                        SLOT(slot_menu_games(Q3ListViewItem*, const QPoint&, int)));
 
 	// doubleclick
-	connect(ListView_games, SIGNAL(doubleClicked(QListViewItem*)),
-							SLOT(slot_click_games(QListViewItem*)));
+	connect(ListView_games, SIGNAL(doubleClicked(Q3ListViewItem*)),
+							SLOT(slot_click_games(Q3ListViewItem*)));
 
  	// move
 /*	connect(ListView_games, SIGNAL(onViewport()),
 							SLOT(slot_moveOver_games()));
 */
   
-	connect(ListView_players, SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
-							SLOT(slot_menu_players(QListViewItem*, const QPoint&, int)));
+	connect(ListView_players, SIGNAL(contextMenuRequested(Q3ListViewItem*, const QPoint&, int)),
+							SLOT(slot_menu_players(Q3ListViewItem*, const QPoint&, int)));
 
 	// doubleclick
-	connect(ListView_players, SIGNAL(doubleClicked(QListViewItem*)),
-							SLOT(slot_click_players(QListViewItem*)));
+	connect(ListView_players, SIGNAL(doubleClicked(Q3ListViewItem*)),
+							SLOT(slot_click_players(Q3ListViewItem*)));
 
  	// move
 /*	connect(ListView_players, SIGNAL(onViewport()),
@@ -240,8 +240,12 @@ ClientWindow::ClientWindow(QMainWindow *parent, const char* name, WFlags fl)
 				setting->writeEntry("HOSTWINDOW", 0);
 
 				i = 0;
-				while ((s = setting->readEntry("HOST" + QString::number(++i))) != NULL)
+				for (;;)
 				{
+					QString s = setting->readEntry("HOST" + QString::number(++i));
+					if (s.isNull())
+						break;
+
 					// check if 4 delimiters in s
 					if (s.contains(DELIMITER) == 4)
 					{
@@ -266,8 +270,11 @@ ClientWindow::ClientWindow(QMainWindow *parent, const char* name, WFlags fl)
 
 	// restore: hostlist
 	i = 0;
-	while ((s = setting->readEntry("HOST" + QString::number(++i) + "a")) != NULL)
+	for (;;)
 	{
+		QString s = setting->readEntry("HOST" + QString::number(++i) + "a");
+		if (s.isNull ())
+			break;
 		hostlist.inSort(new Host(setting->readEntry("HOST" + QString::number(i) + "a"),
 			                     setting->readEntry("HOST" + QString::number(i) + "b"),
 			                     setting->readIntEntry("HOST" + QString::number(i) + "c"),
@@ -280,7 +287,7 @@ ClientWindow::ClientWindow(QMainWindow *parent, const char* name, WFlags fl)
 	QString w = setting->readEntry("ACTIVEHOST");
 	// int cb_connect
 	slot_cbconnect(QString());
-	if (w)
+	if (!w.isNull ())
 		// set host if available
 		slot_cbconnect(w);
 
@@ -288,12 +295,15 @@ ClientWindow::ClientWindow(QMainWindow *parent, const char* name, WFlags fl)
   i = 0;
   QToolButton *b;
   QPixmap p;
-  userButtonGroup = new   QButtonGroup(this);
+  userButtonGroup = new   Q3ButtonGroup(this);
   userButtonGroup->hide();
   connect( userButtonGroup, SIGNAL(clicked(int)), SLOT(slotUserButtonClicked(int)) );
-  
-  while ((s = setting->readEntry("USER" + QString::number(++i) + "_1")) != NULL)
+
+  for (;;)
   {
+	  QString s = setting->readEntry("USER" + QString::number(++i) + "_1");
+	  if (s.isNull())
+		  break;
     	b=new QToolButton(UserToolbar) ;
     	b->setText(setting->readEntry("USER" + QString::number(i) + "_1"));   //label of the button : for display
     	b->setTextLabel(setting->readEntry("USER" + QString::number(i) + "_1"));   //duplicated  for storage
@@ -330,7 +340,7 @@ ClientWindow::ClientWindow(QMainWindow *parent, const char* name, WFlags fl)
 	s = setting->readEntry("CLIENTSPLITTER");
 	if (s.length() > 5)
 	{
-		QValueList<int> w1, h1, w2;
+		Q3ValueList<int> w1, h1, w2;
 		w1 << s.section(DELIMITER, 0, 0).toInt() << s.section(DELIMITER, 1, 1).toInt();
 		h1 << s.section(DELIMITER, 2, 2).toInt() << s.section(DELIMITER, 3, 3).toInt();
 		w2 << s.section(DELIMITER, 4, 4).toInt() << s.section(DELIMITER, 5, 5).toInt();
@@ -482,8 +492,6 @@ ClientWindow::ClientWindow(QMainWindow *parent, const char* name, WFlags fl)
 */
 	slot_updateFont();
 
-	QToolTip::setGloballyEnabled(true);
-
 	// install an event filter
 	qApp->installEventFilter(this);
 }
@@ -509,56 +517,56 @@ void ClientWindow::initStatusBar(QWidget* /*parent*/)
 
 	// Standard Text instead of "message" cause WhatsThisButten overlaps
 	statusMessage = new QLabel(statusBar());
-	statusMessage->setAlignment(AlignCenter | SingleLine);
+	statusMessage->setAlignment(Qt::AlignCenter | Qt::SingleLine);
 	statusMessage->setText("");
 	statusBar()->addWidget(statusMessage, 0, true);  // Permanent indicator
 /*
 	// What's this
 	statusWhatsThis = new QLabel(statusBar);
-	statusWhatsThis->setAlignment(AlignCenter | SingleLine);
+	statusWhatsThis->setAlignment(Qt::AlignCenter | Qt::SingleLine);
 	statusWhatsThis->setText("WHATSTHIS");
 	statusBar->addWidget(statusWhatsThis, 0, true);  // Permanent indicator
 	QWhatsThis::whatsThisButton(statusWhatsThis);
 */
 	// The users widget
 	statusUsers = new QLabel(statusBar());
-	statusUsers->setAlignment(AlignCenter | SingleLine);
+	statusUsers->setAlignment(Qt::AlignCenter | Qt::SingleLine);
 	statusUsers->setText(" P: 0 / 0 ");
 	statusBar()->addWidget(statusUsers, 0, true);  // Permanent indicator
 	QToolTip::add(statusUsers, tr("Current online players / watched players"));
-	QWhatsThis::add(statusUsers, tr("Displays the number of current online players\nand the number of online players you are watching.\nA player you are watching has an entry in the 'watch player:' field."));
+	Q3WhatsThis::add(statusUsers, tr("Displays the number of current online players\nand the number of online players you are watching.\nA player you are watching has an entry in the 'watch player:' field."));
 
 	// The games widget
 	statusGames = new QLabel(statusBar());
-	statusGames->setAlignment(AlignCenter | SingleLine);
+	statusGames->setAlignment(Qt::AlignCenter | Qt::SingleLine);
 	statusGames->setText(" G: 0 / 0 ");
 	statusBar()->addWidget(statusGames, 0, true);  // Permanent indicator
 	QToolTip::add(statusGames, tr("Current online games / observed games + matches"));
-	QWhatsThis::add(statusGames, tr("Displays the number of games currently played on this server and the number of games you are observing or playing"));
+	Q3WhatsThis::add(statusGames, tr("Displays the number of games currently played on this server and the number of games you are observing or playing"));
 
 	// The server widget
 	statusServer = new QLabel(statusBar());
-	statusServer->setAlignment(AlignCenter | SingleLine);
+	statusServer->setAlignment(Qt::AlignCenter | Qt::SingleLine);
 	statusServer->setText(" OFFLINE ");
 	statusBar()->addWidget(statusServer, 0, true);  // Permanent indicator
 	QToolTip::add(statusServer, tr("Current server"));
-	QWhatsThis::add(statusServer, tr("Displays the current server's name or OFFLINE if you are not connected to the internet."));
+	Q3WhatsThis::add(statusServer, tr("Displays the current server's name or OFFLINE if you are not connected to the internet."));
 
 	// The channel widget
 	statusChannel = new QLabel(statusBar());
-	statusChannel->setAlignment(AlignCenter | SingleLine);
+	statusChannel->setAlignment(Qt::AlignCenter | Qt::SingleLine);
 	statusChannel->setText("");
 	statusBar()->addWidget(statusChannel, 0, true);  // Permanent indicator
 	QToolTip::add(statusChannel, tr("Current channels and users"));
-	QWhatsThis::add(statusChannel, tr("Displays the current channels you are in and the number of users inthere.\nThe tooltip text contains the channels' title and users' names"));
+	Q3WhatsThis::add(statusChannel, tr("Displays the current channels you are in and the number of users inthere.\nThe tooltip text contains the channels' title and users' names"));
 
 	// Online Time
 	statusOnlineTime = new QLabel(statusBar());
-	statusOnlineTime->setAlignment(AlignCenter | SingleLine);
+	statusOnlineTime->setAlignment(Qt::AlignCenter | Qt::SingleLine);
 	statusOnlineTime->setText(" 00:00 ");
 	statusBar()->addWidget(statusOnlineTime, 0, true);  // Permanent indicator
 	QToolTip::add(statusOnlineTime, tr("Online Time"));
-	QWhatsThis::add(statusOnlineTime, tr("Displays the current online time.\n(A) -> auto answer\n(Hold) -> hold the line"));
+	Q3WhatsThis::add(statusOnlineTime, tr("Displays the current online time.\n(A) -> auto answer\n(Hold) -> hold the line"));
 }
 
 void ClientWindow::timerEvent(QTimerEvent* e)
@@ -576,7 +584,7 @@ void ClientWindow::timerEvent(QTimerEvent* e)
 	if (e->timerId() == seekButtonTimer)
 	{	
 		imagecounter = (imagecounter+1) % 4;
-		toolSeek->setIconSet(QIconSet(seekingIcon[imagecounter]));
+		toolSeek->setIconSet(QIcon(seekingIcon[imagecounter]));
 		return;
 	}
 
@@ -644,7 +652,7 @@ void ClientWindow::timerEvent(QTimerEvent* e)
 		else if (myAccount->get_gsname() == IGS && holdTheLine)
 		{
 			sendcommand("ayt", false);
-			qDebug() << statusOnlineTime->text() << " ayt" << std::endl;
+			qDebug() << statusOnlineTime->text() << " ayt";
 		}
 	}
 
@@ -712,7 +720,7 @@ void ClientWindow::timerEvent(QTimerEvent* e)
 // slot_connect: emitted when connect button has toggled
 void ClientWindow::slot_connect(bool b)
 {
-qDebug() << "connect " << (int)b << std::endl;
+qDebug() << "connect " << (int)b;
 	if (b)
 	{
 		// create instance of telnetConnection
@@ -733,7 +741,15 @@ qDebug() << "connect " << (int)b << std::endl;
 void ClientWindow::slot_connclosed()
 {
 	// no Timers in offline mode!
-	killTimers();
+	if (seekButtonTimer) {
+		qDebug() << "killing seekButtonTimer " << seekButtonTimer;
+		killTimer(seekButtonTimer);
+	}
+	if (oneSecondTimer) {
+		qDebug() << "killing oneSecondTimer " << oneSecondTimer;
+		killTimer(oneSecondTimer);
+	}
+	seekButtonTimer = oneSecondTimer = 0;
 
 	// set to offline:
 	myAccount->set_offline();
@@ -749,7 +765,7 @@ void ClientWindow::slot_connclosed()
 	qgoif->set_initIF();
 
 	qDebug("slot_connclosed()");
-	qDebug() << statusOnlineTime->text() << " -> slot_connclosed()" << std::endl;
+	qDebug() << statusOnlineTime->text() << " -> slot_connclosed()";
 
 	qgoif->get_qgo()->playConnectSound();
 
@@ -780,8 +796,11 @@ void ClientWindow::saveSettings()
 		setting->writeEntry("HOST" + QString::number(i) + "e", h->password());
 		setting->writeEntry("HOST" + QString::number(i) + "f", h->codec());
 	}
-	while (setting->readEntry("HOST" + QString::number(++i) + "a"))
+	for (;;)
 	{
+		QString s = setting->readEntry("HOST" + QString::number(++i) + "a");
+		if (s.isNull ())
+			break;
 		// delete unused entries
 		setting->writeEntry("HOST" + QString::number(i) + "a", QString());
 		setting->writeEntry("HOST" + QString::number(i) + "b", QString());
@@ -792,28 +811,28 @@ void ClientWindow::saveSettings()
 	}
 
    // set the user toolbar list
-   i=0 ; 
-   QObjectList *bl = UserToolbar->queryList( "QToolButton" ,NULL,true,false);
-   QToolButton *b0 ;
- 
-	 for ( b0 = (QToolButton*)bl->first(); b0 != 0; b0 = (QToolButton*)bl->next())
-      {
-        i++ ;
-        setting->writeEntry("USER" + QString::number(i) + "_1",b0->textLabel());
-        setting->writeEntry("USER" + QString::number(i) + "_2",b0->caption());
-			  setting->writeEntry("USER" + QString::number(i) + "_3",QToolTip::textFor (b0) );
-        setting->writeEntry("USER" + QString::number(i) + "_4",b0->iconText());
-      }   
+   QObjectList bl = UserToolbar->queryList( "QToolButton" ,NULL,true,false);
 
-    while (setting->readEntry("USER" + QString::number(++i) + "_1"))
-	    {
-        setting->writeEntry("USER" + QString::number(i) + "_1",QString());
-        setting->writeEntry("USER" + QString::number(i) + "_2",QString());
-			  setting->writeEntry("USER" + QString::number(i) + "_3",QString());
-        setting->writeEntry("USER" + QString::number(i) + "_4",QString());
-      }   
+   QListIterator<QObject *> bli(bl);
+   while (bli.hasNext ())
+   {
+	   QToolButton *b0 = (QToolButton*)bli.next();
+	   setting->writeEntry("USER" + QString::number(i) + "_1",b0->textLabel());
+	   setting->writeEntry("USER" + QString::number(i) + "_2",b0->caption());
+	   setting->writeEntry("USER" + QString::number(i) + "_3",b0->toolTip() );
+	   setting->writeEntry("USER" + QString::number(i) + "_4",b0->iconText());
+   }
 
-        
+   for (;;)
+   {
+	   QString s = setting->readEntry("USER" + QString::number(++i) + "_1");
+	   if (s.isNull ())
+		   break;
+	   setting->writeEntry("USER" + QString::number(i) + "_1",QString());
+	   setting->writeEntry("USER" + QString::number(i) + "_2",QString());
+	   setting->writeEntry("USER" + QString::number(i) + "_3",QString());
+	   setting->writeEntry("USER" + QString::number(i) + "_4",QString());
+   }
 	// save current connection if at least one host exists
 	if (!hostlist.isEmpty())
 		setting->writeEntry("ACTIVEHOST",cb_connect->currentText());
@@ -1026,9 +1045,9 @@ void ClientWindow::sendTextToApp(const QString &txt)
 
 			// start timer: event every second
 			onlineCount = 0;
-			startTimer(1000);
+			oneSecondTimer = startTimer(1000);
 			// init shouts
-			slot_talk("Shouts*", 0, true);
+			slot_talk("Shouts*", 0, false);
 			
 			qgoif->get_qgo()->playConnectSound();
 			break;
@@ -1127,7 +1146,7 @@ void ClientWindow::sendTextToApp(const QString &txt)
 	// Scroll at bottom of text, set cursor to end of line
 	MultiLineEdit_messages->insertLine(txt);
 */
-	qDebug() << txt << std::endl;
+	qDebug() << txt;
 }
 
 // used for singleShot actions
@@ -1258,12 +1277,12 @@ void ClientWindow::sendcommand(const QString &cmd, bool localecho)
 	}
 
 	// echo
-	if (localecho)
+	if (1 || localecho)
 	{
 		// add to Messages, anyway
 		// Scroll at bottom of text, set cursor to end of line
-		qDebug() << cmd << std::endl;
-    slot_message(cmd,Qt::blue);
+		qDebug() << "CMD: " << cmd;
+		slot_message(cmd,Qt::blue);
 	}
 
 	// send to Host
@@ -1288,7 +1307,7 @@ void ClientWindow::slot_toolbaractivated(const QString &cmd)
 // return pressed in edit line -> command to send
 void ClientWindow::slot_cmdactivated(const QString &cmd)
 {
-	if (!cmd)
+	if (cmd.isNull ())
 		return;
 
 qDebug("cmd_valid: %i", (int)cmd_valid);
@@ -1312,7 +1331,7 @@ qDebug("cmd_valid: %i", (int)cmd_valid);
 
 			qDebug("found cmd: observe");
 			testcmd = cmdLine.section(' ', 1, 1);
-			if (testcmd)
+			if (!testcmd.isEmpty())
 			{
 //				qgoif->set_observe(testcmd);
 				sendcommand("games " + testcmd);
@@ -1373,7 +1392,7 @@ void ClientWindow::slot_cbconnect(const QString &txt)
 	Host *h = NULL;
 	int i=1;
 
-	if (!text)
+	if (text.isNull())
 	{
 		// txt empty: update combobox - server table has been edited...
 		// keep current host
@@ -1514,9 +1533,9 @@ void ClientWindow::setColumnsForExtUserInfo()
 		ListView_players->addColumn(tr("Lost"));
 		ListView_players->addColumn(tr("Country"));
 		ListView_players->addColumn(tr("Match prefs"));
-		ListView_players->setColumnAlignment(7, AlignRight);
-		ListView_players->setColumnAlignment(8, AlignRight);
-		ListView_players->setColumnAlignment(9, AlignRight);
+		ListView_players->setColumnAlignment(7, Qt::AlignRight);
+		ListView_players->setColumnAlignment(8, Qt::AlignRight);
+		ListView_players->setColumnAlignment(9, Qt::AlignRight);
 	}
 }
 
@@ -1732,7 +1751,7 @@ void ClientWindow::slot_gamesPopup(int i)
 }
 
 // doubleclick actions...
-void ClientWindow::slot_click_games(QListViewItem *lv)
+void ClientWindow::slot_click_games(Q3ListViewItem *lv)
 {
 	// do actions if button clicked on item
 	slot_mouse_games(3, lv, QPoint(), 0);
@@ -1745,7 +1764,7 @@ void ClientWindow::slot_moveOver_games()
 	qDebug("move over games list...");
 } */
 // doubleclick actions...
-void ClientWindow::slot_menu_games(QListViewItem *lv, const QPoint &pt, int 
+void ClientWindow::slot_menu_games(Q3ListViewItem *lv, const QPoint &pt, int 
 /*column*/)
 {
 	// emulate right button
@@ -1753,14 +1772,14 @@ void ClientWindow::slot_menu_games(QListViewItem *lv, const QPoint &pt, int
 qDebug("games list double clicked");
 }
 // mouse click on ListView_games
-void ClientWindow::slot_mouse_games(int button, QListViewItem *lv, const QPoint& /*pt*/, int /*column*/)
+void ClientWindow::slot_mouse_games(int button, Q3ListViewItem *lv, const QPoint& /*pt*/, int /*column*/)
 {
-	static QPopupMenu *puw = 0;
+	static Q3PopupMenu *puw = 0;
 	
 	// create popup window
 	if (!puw)
 	{
-		puw = new QPopupMenu(0, 0);
+		puw = new Q3PopupMenu(0, 0);
 		puw->insertItem(tr("observe"), this, SLOT(slot_gamesPopup(int)), 0, 1);
 		puw->insertItem(tr("stats W"), this, SLOT(slot_gamesPopup(int)), 0, 2);
 		puw->insertItem(tr("stats B"), this, SLOT(slot_gamesPopup(int)), 0, 3);
@@ -2128,11 +2147,11 @@ void ClientWindow::slot_playerPopup(int i)
 			QString line;
 			QString name;
 			bool found = false;
-			int cnt = cpy.contains(';');
+			int cnt = cpy.count(';');
 			for (int i = 0; i < cnt; i++)
 			{
 				name = cpy.section(';', i, i);
-				if (name)
+				if (!name.isEmpty())
 				{
 					if (name == lv_popupPlayer->text(1))
 						// skip player if found
@@ -2183,11 +2202,11 @@ void ClientWindow::slot_playerPopup(int i)
 			QString line;
 			QString name;
 			bool found = false;
-			int cnt = cpy.contains(';');
+			int cnt = cpy.count(';');
 			for (int i = 0; i < cnt; i++)
 			{
 				name = cpy.section(';', i, i);
-				if (name)
+				if (!name.isEmpty())
 				{
 					if (name == lv_popupPlayer->text(1))
 						// skip player if found
@@ -2238,8 +2257,8 @@ void ClientWindow::slot_playerPopup(int i)
 			bool found = false;
 
 			// emulate mouse click
-			QListViewItemIterator lv(ListView_games);
-			for (QListViewItem *lvi; (lvi = lv.current());)
+			Q3ListViewItemIterator lv(ListView_games);
+			for (Q3ListViewItem *lvi; (lvi = lv.current());)
 			{
 				// compare game ids
 				if (lv_popupPlayer->text(3) == lvi->text(0))
@@ -2275,7 +2294,7 @@ void ClientWindow::slot_playerPopup(int i)
 }
 
 // doubleclick...
-void ClientWindow::slot_click_players(QListViewItem *lv)
+void ClientWindow::slot_click_players(Q3ListViewItem *lv)
 {
 	// emulate right button
 	slot_mouse_players(3, lv, QPoint(), 0);
@@ -2286,21 +2305,21 @@ void ClientWindow::slot_click_players(QListViewItem *lv)
 	qDebug("move over player list...");
 } */
 // mouse menus
-void ClientWindow::slot_menu_players(QListViewItem *lv, const QPoint& pt, int)
+void ClientWindow::slot_menu_players(Q3ListViewItem *lv, const QPoint& pt, int)
 {
 	// emulate right button
 	if (lv)
 		slot_mouse_players(2, lv, pt, 0);
 }
 // mouse click on ListView_players
-void ClientWindow::slot_mouse_players(int button, QListViewItem *lv, const QPoint& /*pt */, int /*column*/)
+void ClientWindow::slot_mouse_players(int button, Q3ListViewItem *lv, const QPoint& /*pt */, int /*column*/)
 {
-	static QPopupMenu *puw = 0;
+	static Q3PopupMenu *puw = 0;
 	lv_popupPlayer = static_cast<PlayerTableItem*>(lv);
 	// create popup window
 	if (!puw)
 	{
-		puw = new QPopupMenu(0, 0);
+		puw = new Q3PopupMenu(0, 0);
 		puw->insertItem(tr("match"), this, SLOT(slot_playerPopup(int)), 0, 1);
 		puw->insertItem(tr("match within his prefs"), this, SLOT(slot_playerPopup(int)), 0, 11);
 		puw->insertItem(tr("talk"), this, SLOT(slot_playerPopup(int)), 0, 2);
@@ -2402,7 +2421,7 @@ void ClientWindow::slot_talk(const QString &name, const QString &text, bool ispl
 	bool bonus = false;
 	bool autoAnswer = true;
 
-	if (text && text != "@@@")
+	if (!text.isNull () && text != "@@@")
 		// text given or player logged in
 		txt = text;
 	else if (text == "@@@" && isplayer)
@@ -2624,7 +2643,7 @@ void ClientWindow::reStoreWindowSize(QString strKey, bool store)
 		s = setting->readEntry("CLIENTSPLITTER_" + strKey);
 		if (s.length() > 5)
 		{
-			QValueList<int> w1, h1, w2;
+			Q3ValueList<int> w1, h1, w2;
 			w1 << s.section(DELIMITER, 0, 0).toInt() << s.section(DELIMITER, 1, 1).toInt();
 			h1 << s.section(DELIMITER, 2, 2).toInt() << s.section(DELIMITER, 3, 3).toInt();
 			w2 << s.section(DELIMITER, 4, 4).toInt() << s.section(DELIMITER, 5, 5).toInt();
@@ -2666,21 +2685,21 @@ bool ClientWindow::eventFilter(QObject *obj, QEvent *ev)
 
 //qDebug(QString("eventFilter: keyPress %1").arg(key));
 
-		if (key >= Key_0 && key <= Key_9)
-		{
+	    if (key >= Qt::Key_0 && key <= Qt::Key_9)
+	    {
 //qDebug("eventFilter: keyPress -> 0..9");
-			QString strKey = QString::number(key - Key_0);
+			QString strKey = QString::number(key - Qt::Key_0);
 
 			if (obj == cb_cmdLine || obj->parent() && obj->parent() == cb_cmdLine || obj == this)
 			{
-				if (keyEvent->state() & AltButton)
+				if (keyEvent->state() & Qt::AltButton)
 				{
 qDebug("eventFilter: keyPress -> Alt + 0..9");
 					// store sizes
 					reStoreWindowSize(strKey, true);
 					return true;
 				}
-				else if (keyEvent->state() & ControlButton)
+				else if (keyEvent->state() & Qt::ControlButton)
 				{
 qDebug("eventFilter: keyPress -> Control + 0..9");
 					// restore sizes
@@ -2689,7 +2708,7 @@ qDebug("eventFilter: keyPress -> Control + 0..9");
 				}
 			}
 		}
-		else if (key == Key_F1)
+		else if (key == Qt::Key_F1)
 		{
 			// help
 			qgoif->get_qgo()->openManual();
@@ -2755,7 +2774,7 @@ void ClientWindow::keyPressEvent(QKeyEvent *e)
 */
 	switch (e->key())
 	{
-		case Key_Up:  // Scroll up in history
+		case Qt::Key_Up:  // Scroll up in history
 			qDebug("UP");
 /*			if (historyCounter > 0)
 				historyCounter --;
@@ -2764,7 +2783,7 @@ void ClientWindow::keyPressEvent(QKeyEvent *e)
 			LineEdit1->setText(historyList->operator[](historyCounter));
 */			break;
 
-		case Key_Down:  // Scroll down in history
+		case Qt::Key_Down:  // Scroll down in history
 			qDebug("DOWN");
 /*			historyCounter ++;
 			if (historyCounter > historyList->count())
@@ -2772,23 +2791,23 @@ void ClientWindow::keyPressEvent(QKeyEvent *e)
 			LineEdit1->setText(historyList->operator[](historyCounter));
 */			break;
 
-		case Key_PageUp:
+		case Qt::Key_PageUp:
 			qDebug("PAGE UP");
 			// TODO: pageUp/pageDown are protected.  :(
 			// MultiLineEdit1->pageUp(); 
 			break;
 
-		case Key_PageDown:
+		case Qt::Key_PageDown:
 			qDebug("PAGE DOWN");
 			// MultiLineEdit1->pageDown();
 			break;
 
-		case Key_F1:
+		case Qt::Key_F1:
 			// help
 			qgoif->get_qgo()->openManual();
 			break;
 
-		case Key_Escape:
+		case Qt::Key_Escape:
 			cb_cmdLine->setFocus();
 			cb_cmdLine->setCurrentItem(0);
 			break;
@@ -2813,7 +2832,7 @@ void ClientWindow::initActions()
 	connect( cb_cmdLine, SIGNAL( activated(int) ), this, SLOT( slot_cmdactivated_int(int) ) );
 	connect( cb_cmdLine, SIGNAL( activated(const QString&) ), this, SLOT( slot_cmdactivated(const QString&) ) );
 
-	QWhatsThis::add(ListView_games, tr("Table of games\n\n"
+	Q3WhatsThis::add(ListView_games, tr("Table of games\n\n"
 		"right click to observe\n\n"
 		"Symbol explanation: (click on tab to sort by)\n"
 		"Id\tgame number\n"
@@ -2828,7 +2847,7 @@ void ClientWindow::initActions()
 		"(Ob)\tnumber of observers at last refresh\n\n"
 		"This table can be updated by 'Refresh games'"));
 
-	QWhatsThis::add(ListView_players, tr("Table of players\n\n"
+	Q3WhatsThis::add(ListView_players, tr("Table of players\n\n"
 		"right click for menu\n\n"
 		"Symbol explanation: (click on tab to sort by)\n"
 		"Stat\tplayer's stats:\n"
@@ -2920,44 +2939,44 @@ void ClientWindow::initToolBar()
 	//connect( toolConnect, SIGNAL( toggled(bool) ), this, SLOT( slot_connect(bool) ) );  //end add eb 5
   
     
-	QIconSet  OIC,OIC2, OIC3 ;//= new QIconSet;
+	QIcon  OIC,OIC2, OIC3 ;//= new QIconSet;
 
-	OIC.setPixmap ( NotOpenIcon, QIconSet::Automatic, QIconSet::Normal, QIconSet::Off);
-	OIC.setPixmap ( OpenIcon, QIconSet::Automatic, QIconSet::Normal, QIconSet::On );
+	OIC.setPixmap ( NotOpenIcon, QIcon::Automatic, QIcon::Normal, QIcon::Off);
+	OIC.setPixmap ( OpenIcon, QIcon::Automatic, QIcon::Normal, QIcon::On );
 
 	setOpenMode->setIconSet(OIC);
 
-	OIC2.setPixmap (NotLookingIcon, QIconSet::Automatic, QIconSet::Normal, QIconSet::Off);
-	OIC2.setPixmap (LookingIcon, QIconSet::Automatic, QIconSet::Normal, QIconSet::On );
+	OIC2.setPixmap (NotLookingIcon, QIcon::Automatic, QIcon::Normal, QIcon::Off);
+	OIC2.setPixmap (LookingIcon, QIcon::Automatic, QIcon::Normal, QIcon::On );
 	setLookingMode->setIconSet(OIC2);
 
-	OIC.setPixmap ( NotQuietIcon, QIconSet::Automatic, QIconSet::Normal, QIconSet::Off);
-	OIC.setPixmap ( QuietIcon, QIconSet::Automatic, QIconSet::Normal, QIconSet::On);
+	OIC.setPixmap ( NotQuietIcon, QIcon::Automatic, QIcon::Normal, QIcon::Off);
+	OIC.setPixmap ( QuietIcon, QIcon::Automatic, QIcon::Normal, QIcon::On);
 	setQuietMode->setIconSet(OIC);
   
-	OIC3.setPixmap ( NotSeekingIcon, QIconSet::Automatic, QIconSet::Normal, QIconSet::Off);
-	OIC3.setPixmap ( seekingIcon[0], QIconSet::Automatic, QIconSet::Normal, QIconSet::On);
+	OIC3.setPixmap ( NotSeekingIcon, QIcon::Automatic, QIcon::Normal, QIcon::Off);
+	OIC3.setPixmap ( seekingIcon[0], QIcon::Automatic, QIcon::Normal, QIcon::On);
 
 	toolSeek->setIconSet(OIC3);
-	seekMenu = new QPopupMenu();
+	seekMenu = new Q3PopupMenu();
 	toolSeek->setPopup(seekMenu);
 	toolSeek->setPopupDelay(1);
 
-	tb = QWhatsThis::whatsThisButton(Toolbar);
+	tb = Q3WhatsThis::whatsThisButton(Toolbar);
 	//tb->setProperty( "geometry", QRect(0, 0, 20, 20));
 
 	//added the icons
-	refreshPlayers->setIconSet(QIconSet(RefreshPlayersIcon));
-	refreshGames->setIconSet(QIconSet(RefreshGamesIcon));
-	fileNew->setIconSet(QIconSet(fileNewIcon));
-	fileNewBoard->setIconSet(QIconSet(fileNewboardIcon));
-	fileOpen->setIconSet(QIconSet(fileOpenIcon));
-	fileQuit->setIconSet(QIconSet(exitIcon));
-	computerPlay->setIconSet(QIconSet(ComputerPlayIcon));
-	Connect->setIconSet(QIconSet(connectedIcon));
-	Disconnect->setIconSet(QIconSet(disconnectedIcon));
-	helpManual->setIconSet(QIconSet(manualIcon));
-	setPreferences->setIconSet(QIconSet(prefsIcon));
+	refreshPlayers->setIconSet(QIcon(RefreshPlayersIcon));
+	refreshGames->setIconSet(QIcon(RefreshGamesIcon));
+	fileNew->setIconSet(QIcon(fileNewIcon));
+	fileNewBoard->setIconSet(QIcon(fileNewboardIcon));
+	fileOpen->setIconSet(QIcon(fileOpenIcon));
+	fileQuit->setIconSet(QIcon(exitIcon));
+	computerPlay->setIconSet(QIcon(ComputerPlayIcon));
+	Connect->setIconSet(QIcon(connectedIcon));
+	Disconnect->setIconSet(QIcon(disconnectedIcon));
+	helpManual->setIconSet(QIcon(manualIcon));
+	setPreferences->setIconSet(QIcon(prefsIcon));
 	setIcon(qgoIcon);
 
   UserToolbar->show();
@@ -3008,7 +3027,7 @@ void ClientWindow::slotFileOpen()
 {
 	//if (!checkModified())
 	//	return;
-	QString fileName(QFileDialog::getOpenFileName(setting->readEntry("LAST_DIR"),
+	QString fileName(Q3FileDialog::getOpenFileName(setting->readEntry("LAST_DIR"),
 		tr("SGF Files (*.sgf *.SGF);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)"), this));
 	if (fileName.isEmpty())
 		return;
@@ -3069,11 +3088,12 @@ void ClientWindow::slotViewStatusBar(bool toggle)
 
 void ClientWindow::slotViewMenuBar(bool toggle)
 {
+#if 0
 	if (!toggle)
 		menuBar->hide();
 	else
 		menuBar->show();
-
+#endif
 	setting->writeBoolEntry("MAINMENUBAR", toggle);
 
 	statusBar()->message(tr("Ready."));
@@ -3149,7 +3169,7 @@ void ClientWindow::slot_statsPlayer(Player *p)
 void ClientWindow::slot_room(const QString& room, bool b)
 {
 	//do we already have the same room number in list ?
-	if (RoomList->findItem(room.left(3), Qt::BeginsWith ))
+	if (RoomList->findItem(room.left(3), Q3ListView::BeginsWith ))
 		return;
 	//so far, we just create the room if it is open
 	if (!b)
@@ -3178,7 +3198,7 @@ void ClientWindow::slot_leaveRoom()
 }	
 
 
-void ClientWindow::slot_RoomListClicked(QListBoxItem *qli)
+void ClientWindow::slot_RoomListClicked(Q3ListBoxItem *qli)
 {
 	slot_enterRoom(qli->text().section(":",0,0));
 }	
@@ -3215,7 +3235,7 @@ void ClientWindow::slot_cancelSeek()
 	toolSeek->setOn(false);
 	toolSeek->setPopup(seekMenu);
 	toolSeek->setPopupDelay(1);
-	toolSeek->setIconSet(QIconSet(NotSeekingIcon));
+	toolSeek->setIconSet(QIcon(NotSeekingIcon));
 	killTimer(seekButtonTimer);
 	seekButtonTimer = 0;
 }

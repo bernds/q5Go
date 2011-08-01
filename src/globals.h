@@ -119,5 +119,4 @@ struct FastLoadMark
 extern QString applicationPath;
 #endif
 
-
 #endif

@@ -94,13 +94,9 @@ struct ASCII_Import
 	char blackStone, whiteStone, starPoint, emptyPoint, hBorder, vBorder;
 };
 
-#include <iostream>
-#include <fstream>
+#define CHECK_PTR(x) do {} while (0)
+#define ASSERT(x)  do {} while (0)
 
-#ifdef DODEBUG
-inline std::ostream &qDebug() { return std::cout; }
-#else
-inline std::ofstream &qDebug() { static std::ofstream fish("/dev/null"); return fish; }
-#endif
+#include <QDebug>
 
 #endif

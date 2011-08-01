@@ -5,9 +5,11 @@
 #include "mark.h"
 #include "imagehandler.h"
 #include "qgo.h"
+//Added by qt3to4:
+#include <Q3PointArray>
 #include "setting.h"
 #include <qpainter.h>
-#include <qcanvas.h>
+#include <q3canvas.h>
 
 /*
 * Mark
@@ -26,8 +28,8 @@ Mark::~Mark()
 * MarkSquare
 */
 
-MarkSquare::MarkSquare(int x, int y, int size, QCanvas *canvas, QColor col)
-: QCanvasRectangle(canvas),
+MarkSquare::MarkSquare(int x, int y, int size, Q3Canvas *canvas, QColor col)
+: Q3CanvasRectangle(canvas),
 Mark(x, y)
 {
 	double size_d = (double)size;
@@ -47,8 +49,8 @@ Mark(x, y)
 * MarkCircle
 */
 
-MarkCircle::MarkCircle(int x, int y, int size, QCanvas *canvas, QColor col, bool s)
-: QCanvasEllipse(canvas),
+MarkCircle::MarkCircle(int x, int y, int size, Q3Canvas *canvas, QColor col, bool s)
+: Q3CanvasEllipse(canvas),
 Mark(x, y),
 small(s)
 {
@@ -85,14 +87,14 @@ void MarkCircle::setSize(double x, double y)
 		y *= m;
 	}
  
-	QCanvasEllipse::setSize((int)x, (int)y);
+	Q3CanvasEllipse::setSize((int)x, (int)y);
 }
 
 /*
 * MarkTriangle
 */
-MarkTriangle::MarkTriangle(int x, int y, int s, QCanvas *canvas, QColor col)
-: QCanvasPolygon(canvas),
+MarkTriangle::MarkTriangle(int x, int y, int s, Q3Canvas *canvas, QColor col)
+: Q3CanvasPolygon(canvas),
 Mark(x, y)
 {
 	if (setting->readBoolEntry("BOLD_MARKS"))
@@ -116,7 +118,7 @@ void MarkTriangle::setSize(double w, double)
 	else
 		size = (int)(w*0.55);
 	
-	QPointArray pa(3);
+	Q3PointArray pa(3);
 	pa[0] = QPoint(0, 0);
 	pa[1] = QPoint(size/2, -size);
 	pa[2] = QPoint(size, 0);
@@ -127,8 +129,8 @@ void MarkTriangle::setSize(double w, double)
 * MarkCross
 */
 
-MarkCross::MarkCross(int x, int y, int s, QCanvas *canvas, QColor col, bool plus)
-: QCanvasLine(canvas),
+MarkCross::MarkCross(int x, int y, int s, Q3Canvas *canvas, QColor col, bool plus)
+: Q3CanvasLine(canvas),
 Mark(x, y), size(s)
 {
 	plussign = plus;
@@ -185,7 +187,7 @@ void MarkCross::setSize(double w, double)
 
 void MarkCross::setColor(const QColor &col)
 {
-	QCanvasLine::setPen(col);
+	Q3CanvasLine::setPen(col);
 	if (ol != NULL)
 		ol->setPen(col);
 }
@@ -198,8 +200,8 @@ bool MarkText::useBold = false;
 unsigned int MarkText::maxLength = 1;
 
 MarkText::MarkText(ImageHandler  *ih, int x, int y, int size, const QString &txt,
-			 QCanvas *canvas, QColor col, short c, bool bold, bool  overlay)
-			 : QCanvasText(txt, canvas),
+			 Q3Canvas *canvas, QColor col, short c, bool bold, bool  overlay)
+			 : Q3CanvasText(txt, canvas),
 			 Mark(x, y), curSize(size), counter(c)
 {
 	rect = NULL;

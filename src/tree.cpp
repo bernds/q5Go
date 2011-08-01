@@ -6,7 +6,7 @@
 #include "move.h"
 #include "qgo.h"
 #include <iostream>
-#include <qptrstack.h>
+#include <q3ptrstack.h>
 
 using namespace std;
 Tree::Tree(int board_size)
@@ -286,8 +286,8 @@ void Tree::clear()
 void Tree::traverseClear(Move *m)
 {
 	CHECK_PTR(m);
-	QPtrStack<Move> stack;
-	QPtrStack<Move> trash;
+	Q3PtrStack<Move> stack;
+	Q3PtrStack<Move> trash;
 	trash.setAutoDelete(TRUE);
 	Move *t = NULL;
 	
@@ -311,10 +311,10 @@ void Tree::traverseClear(Move *m)
 
 // Find a move starting from the given in the argument in the all following branches
 // Results are saved into the reference variable result.
-void Tree::traverseFind(Move *m, int x, int y, QPtrStack<Move> &result)
+void Tree::traverseFind(Move *m, int x, int y, Q3PtrStack<Move> &result)
 {
 	CHECK_PTR(m);
-	QPtrStack<Move> stack;
+	Q3PtrStack<Move> stack;
 	Move *t = NULL;
 	
 	// Traverse the tree and drop every node into stack result
@@ -357,7 +357,7 @@ int Tree::count()
 	if (root == NULL)
 		return 0;
 	
-	QPtrStack<Move> stack;
+	Q3PtrStack<Move> stack;
 	int counter = 0;
 	Move *t = NULL;
 	

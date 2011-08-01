@@ -15,7 +15,7 @@ class MainWidget : public MainWidgetGui
 	Q_OBJECT
 		
 public:
-	MainWidget(QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+	MainWidget(QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0 );
 	~MainWidget();
 	
 	void toggleSlider(bool);

@@ -21,7 +21,7 @@
 #include "komispinbox.h"
 #include <qmessagebox.h>
 #include <stdio.h>
-#include <qfiledialog.h>
+#include <q3filedialog.h>
 
 
 /* 
@@ -86,7 +86,7 @@ void QNewGameDlg::slotOk()
 	if (_handicap == 1)
 	{
 		QMessageBox msg(tr("Error"),tr("You entered an invalid Handicap (1 is not legal)"), QMessageBox::Warning,
-			QMessageBox::Ok | QMessageBox::Default, QMessageBox::NoButton, QMessageBox::NoButton);
+			QMessageBox::Ok | QMessageBox::Default, Qt::NoButton, Qt::NoButton);
 		msg.exec();
 		QDialog::reject();
 	}
@@ -241,7 +241,7 @@ void QNewGameDlg::init()
 
 void QNewGameDlg::slotGetFileName()
 {
-  	QString getFileName(QFileDialog::getOpenFileName("",//setting->readEntry("LAST_DIR"),
+  	QString getFileName(Q3FileDialog::getOpenFileName("",//setting->readEntry("LAST_DIR"),
 		tr("SGF Files (*.sgf);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)"), this));
 	if (getFileName.isEmpty())
 		return;

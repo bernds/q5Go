@@ -5,12 +5,12 @@
 #ifndef STONEHANDLER_H
 #define STONEHANDLER_H
 
-#include <qintdict.h>
-#include <qvaluelist.h>
+#include <q3intdict.h>
+#include <q3valuelist.h>
 #include "defines.h"
 #include "matrix.h"
 #include "stone.h"
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 class Group;
 class BoardHandler;
@@ -27,7 +27,7 @@ public:
 	bool removeStone(int x, int y, bool hide=false);
 	int hasStone(int x, int y);
 	Stone* getStoneAt(int x, int y) { return stones->find(Matrix::coordsToKey(x, y)); }
-	QIntDict<Stone>* getAllStones() const { return stones; }
+	Q3IntDict<Stone>* getAllStones() const { return stones; }
 	bool updateAll(Matrix *m, bool toDraw=true);
 	void checkAllPositions();
 	bool removeDeadGroup(int x, int y, int &caps, StoneColor &col, bool &dead);
@@ -50,12 +50,12 @@ protected:
   	Group* checkNeighbour(int x, int y, StoneColor color, Group *group);
 	int countLiberties(Group *group, Matrix *m);      //SL added eb 8
 	int countLibertiesOnMatrix(Group *group, Matrix *m);
-	void checkNeighbourLiberty(int x, int y, QValueList<int> &libCounted, int &liberties, Matrix *m);
-	void checkNeighbourLibertyOnMatrix(int x, int y, QValueList<int> &libCounted, int &liberties, Matrix *m);
+	void checkNeighbourLiberty(int x, int y, Q3ValueList<int> &libCounted, int &liberties, Matrix *m);
+	void checkNeighbourLibertyOnMatrix(int x, int y, Q3ValueList<int> &libCounted, int &liberties, Matrix *m);
 	
 private:
-	QIntDict<Stone> *stones;
-	QPtrList<Group> *groups;
+	Q3IntDict<Stone> *stones;
+	Q3PtrList<Group> *groups;
 	bool workingOnNewMove;
 	BoardHandler *boardHandler;
 };

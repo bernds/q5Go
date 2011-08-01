@@ -14,11 +14,13 @@
 #include <qaction.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
-#include <qtextedit.h>
-#include <qbuttongroup.h>
+#include <q3textedit.h>
+#include <q3buttongroup.h>
 #include <qlineedit.h>
 #include <qslider.h>
 #include <qtabwidget.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 //#ifdef USE_XPM
 #include ICON_NODE_BLACK
@@ -551,13 +553,13 @@ normalTools->capturesFrame->setTitle(QObject::tr("Captures"));
 scored_flag = false;
 }
 	*/
-    capturesBlack->setText(QString::number(black));
-    capturesWhite->setText(QString::number(white));
+    capturesBlack->setText(QString::number(Qt::black));
+    capturesWhite->setText(QString::number(Qt::white));
 }
 
 void InterfaceHandler::setTimes(const QString &btime, const QString &bstones, const QString &wtime, const QString &wstones)
 {
-	if (btime)
+	if (!btime.isEmpty())
 	{
 		if (bstones != QString("-1"))
 			normalTools->pb_timeBlack->setText(btime + " / " + bstones);
@@ -565,7 +567,7 @@ void InterfaceHandler::setTimes(const QString &btime, const QString &bstones, co
 			normalTools->pb_timeBlack->setText(btime);
 	}
 
-	if (wtime)
+	if (!wtime.isEmpty())
 	{
 		if (wstones != QString("-1"))
 			normalTools->pb_timeWhite->setText(wtime + " / " + wstones);

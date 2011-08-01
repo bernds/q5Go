@@ -15,7 +15,7 @@
 //#if (QT_VERSION < 0x030000)
 //#include <qsortedlist.h>
 //#else
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 //#endif
 
 // delimiters for variables in settings file
@@ -68,22 +68,18 @@ public:
 	bool readBoolEntry(const QString &s)
 	{
 		QString e = readEntry(s);
-		return (e && (e == "1"));
+		return e == "1";
 	}
 	int  readIntEntry(const QString &s)
 	{
 		bool ok;
 		QString e = readEntry(s);
-		if (!e)
+		if (e.isNull ())
 			return 0;
-		else
-		{
-			int i = e.toInt(&ok);
-			if (ok)
-				return i;
-			else
-				return 0;
-		}
+		int i = e.toInt(&ok);
+		if (ok)
+			return i;
+		return 0;
 	}
 	void clearList(void);
 
@@ -126,7 +122,7 @@ protected:
 //#if (QT_VERSION < 0x030000)
 //	QSortedList<Parameter> list;
 //#else
-	QPtrList<Parameter> list;
+	Q3PtrList<Parameter> list;
 //#endif
 
 private:

@@ -3,10 +3,13 @@
 */
 
 #include "qgo.h"
+//Added by qt3to4:
+#include <Q3PtrList>
 #include "helpviewer.h"
 #include "board.h"
 #include "mainwindow.h"
 #include "setting.h"
+#include "defines.h"
 
 #include "config.h"
 #include <qmessagebox.h>
@@ -23,7 +26,7 @@
 
 qGo::qGo() : QObject()
 {
-	boardList = new QPtrList<MainWindow>;
+	boardList = new Q3PtrList<MainWindow>;
 	boardList->setAutoDelete(false);
 	helpViewer = NULL;
 	clickSound = NULL;
@@ -273,7 +276,7 @@ bool qGo::testSound(bool showmsg)
 				 "be asked\nanymore except you install qGo again into a different directory.\n"
 				 "To abort this procedure, click 'Cancel' in the following dialog."));
     
-	applicationPath = QFileDialog::getExistingDirectory(NULL, NULL, "appdir", tr("qGo directory"), true);
+	applicationPath = Q3FileDialog::getExistingDirectory(NULL, NULL, "appdir", tr("qGo directory"), true);
 	
 	if (applicationPath.isNull() || applicationPath.isEmpty())
 	{

@@ -4,7 +4,7 @@
 
 #include "misc.h"
 #include <qregexp.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 
 // convert rk to key for sorting;

@@ -5,6 +5,7 @@
 #include "qgo.h"
 #include "sgfparser.h"
 #include "boardhandler.h"
+#include "config.h"
 #include "board.h"
 #include "move.h"
 #include "tree.h"
@@ -15,21 +16,14 @@
 #include <config.h>
 #endif
 #include <qfile.h>
-#include <qtextstream.h>
-#include <qprogressdialog.h>
+#include <q3textstream.h>
+#include <q3progressdialog.h>
 #include "xmlparser.h"
 #include "parserdefs.h"
 #include <qmessagebox.h>
-#include <qbig5codec.h>
-#include <qeucjpcodec.h> 
-#include <qjiscodec.h> 
-#include <qsjiscodec.h>
-#include <qgbkcodec.h>
-#include <qeuckrcodec.h>
-#include <qtsciicodec.h>
-#include <qstrlist.h>
+#include <q3strlist.h>
 #include <qregexp.h>
-#include <qptrstack.h>
+#include <q3ptrstack.h>
 
 #define STR_OFFSET 2000
 /* #define DEBUG_CODEC */
@@ -237,7 +231,7 @@ bool SGFParser::parseString(const QString &toParse)
 
 QString SGFParser::loadFile(const QString &fileName)
 {
-	qDebug() << "Trying to load file " << fileName << std::endl;
+	qDebug() << "Trying to load file " << fileName;
 	
 	QFile file(fileName);
 	
@@ -247,13 +241,13 @@ QString SGFParser::loadFile(const QString &fileName)
 		return NULL;
 	}
 	
-	if (!file.open(IO_ReadOnly))
+	if (!file.open(QIODevice::ReadOnly))
 	{
 		QMessageBox::warning(0, PACKAGE, Board::tr("Could not open file:") + " " + fileName);
 		return NULL;
 	}
 	
-	QTextStream txt(&file);
+	Q3TextStream txt(&file);
 	if (!initStream(&txt))
 	{
 		QMessageBox::critical(0, PACKAGE, Board::tr("Invalid text encoding given. Please check preferences!"));
@@ -274,11 +268,11 @@ QString SGFParser::loadFile(const QString &fileName)
 	return toParse;
 }
 
-bool SGFParser::initStream(QTextStream *stream)
+bool SGFParser::initStream(Q3TextStream *stream)
 {
 	QTextCodec *codec = NULL;
 	
-	stream->setEncoding(QTextStream::Locale);
+	stream->setEncoding(Q3TextStream::Locale);
 #ifdef DEBUG_CODEC
 	QMessageBox::information(0, "LOCALE", QTextCodec::locale());
 #endif
@@ -295,51 +289,51 @@ bool SGFParser::initStream(QTextStream *stream)
 #ifdef DEBUG_CODEC
 		QMessageBox::information(0, "CODEC", "Big5");
 #endif
-#ifndef Q_WS_WIN
-		codec = new QBig5Codec();
-#endif
+		codec = QTextCodec::codecForName("Big5");
 		break;
 
 	case codecEucJP:
 #ifdef DEBUG_CODEC
 		QMessageBox::information(0, "CODEC", "EUC JP");
 #endif
-		codec = new QEucJpCodec();
+		codec = QTextCodec::codecForName("EUC-JP");
 		break;
 		
 	case codecJIS:
 #ifdef DEBUG_CODEC
 		QMessageBox::information(0, "CODEC", "JIS");
 #endif
-		codec = new QJisCodec();
+		/* ??? */
+		codec = QTextCodec::codecForName("JIS X 0201");
 		break;
 		
 	case codecSJIS:
 #ifdef DEBUG_CODEC
 		QMessageBox::information(0, "CODEC", "Shift JIS");
 #endif
-		codec = new QSjisCodec();
+		codec = QTextCodec::codecForName("Shift-JIS");
 		break;
 		
 	case codecEucKr:
 #ifdef DEBUG_CODEC
 		QMessageBox::information(0, "CODEC", "EUC KR");
 #endif
-		codec = new QEucKrCodec();
+		codec = QTextCodec::codecForName("EUC-KR");
 		break;
 		
 	case codecGBK:
 #ifdef DEBUG_CODEC
 		QMessageBox::information(0, "CODEC", "GBK");
 #endif
-		codec = new QGbkCodec();
+		/* ??? */
+		codec = QTextCodec::codecForName("GB18030-0");
 		break;
 		
 	case codecTscii:
 #ifdef DEBUG_CODEC
 		QMessageBox::information(0, "CODEC", "TSCII");
 #endif
-		codec = new QTsciiCodec();
+		codec = QTextCodec::codecForName("TSCII");
 		break;
 		
 	default:
@@ -387,9 +381,9 @@ bool SGFParser::doParse(const QString &toParseStr, bool fastLoad)
 	QString moveStr, commentStr;
 	Position *position;
 	MoveNum *moveNum;
-	QPtrStack<Move> stack;
-	QPtrStack<MoveNum> movesStack;
-	QPtrStack<Position> toRemove;
+	Q3PtrStack<Move> stack;
+	Q3PtrStack<MoveNum> movesStack;
+	Q3PtrStack<Position> toRemove;
 	stack.setAutoDelete(FALSE);
 	movesStack.setAutoDelete(TRUE);
 	toRemove.setAutoDelete(TRUE);
@@ -399,7 +393,7 @@ bool SGFParser::doParse(const QString &toParseStr, bool fastLoad)
 	
 	bool cancel = false;
 	int progressCounter = 0;
-	QProgressDialog progress(Board::tr("Reading sgf file..."), Board::tr("Abort"), strLength,
+	Q3ProgressDialog progress(Board::tr("Reading sgf file..."), Board::tr("Abort"), strLength,
 		boardHandler->board, "progress", true);
 	
 	// qDebug("File length = %d", strLength);
@@ -732,7 +726,7 @@ if (tree->getCurrent()->getTimeinfo())
 						// rare case: root contains move or placed stone:
 						if (remember_root)
 						{
-							qDebug() << "root contains stone -> node created" << std::endl;
+							qDebug() << "root contains stone -> node created";
 							boardHandler->createMoveSGF();
 							unknownProperty = QString();
 							isRoot = false;
@@ -744,8 +738,8 @@ if (tree->getCurrent()->getTimeinfo())
 					case editWhite:
 					case editErase:
 					{
-						x = toParse->at(pos+1) - 'a' + 1;
-						y = toParse->at(pos+2) - 'a' + 1;
+						x = toParse->at(pos+1).toAscii() - 'a' + 1;
+						y = toParse->at(pos+2).toAscii() - 'a' + 1;
 
 						int x1, y1;
 						bool compressed_list;
@@ -753,8 +747,8 @@ if (tree->getCurrent()->getTimeinfo())
 						// check for compressed lists
 						if (toParse->at(pos+3) == ':')
 						{
-							x1 = toParse->at(pos+4) - 'a' + 1;
-							y1 = toParse->at(pos+5) - 'a' + 1;
+							x1 = toParse->at(pos+4).toAscii() - 'a' + 1;
+							y1 = toParse->at(pos+5).toAscii() - 'a' + 1;
 							compressed_list = true;
 						}
 						else
@@ -825,7 +819,7 @@ if (tree->getCurrent()->getTimeinfo())
 						{
 							if (static_cast<unsigned int>(pos) > strLength-1)
 							{
-								qDebug() << "SGF: Nodename string ended immediately" << std::endl;
+								qDebug() << "SGF: Nodename string ended immediately";
 								delete toParse;
 								return corruptSgf(pos, "SGF: Nodename string ended immediately");
 							}
@@ -860,7 +854,7 @@ if (tree->getCurrent()->getTimeinfo())
 						}
 
 						// qDebug("Comment read: %s", commentStr.latin1());
-						if (commentStr)
+						if (!commentStr.isEmpty())
 							// add comment; skip 'C[]'
 							tree->getCurrent()->setNodeName(commentStr);
 						pos++;
@@ -877,7 +871,7 @@ if (tree->getCurrent()->getTimeinfo())
 						{
 							if (static_cast<unsigned int>(pos) > strLength-1)
 							{
-								qDebug() << "SGF: Comment string ended immediately" << std::endl;
+								qDebug() << "SGF: Comment string ended immediately";
 								delete toParse;
 								return corruptSgf(pos, "SGF: Comment string ended immediately");
 							}
@@ -909,7 +903,7 @@ if (tree->getCurrent()->getTimeinfo())
 						}
 
 						// qDebug("Comment read: %s", commentStr.latin1());
-						if (commentStr)
+						if (!commentStr.isEmpty ())
 						{
 							// add comment; skip 'C[]'
 							tree->getCurrent()->setComment(commentStr);
@@ -958,7 +952,7 @@ if (tree->getCurrent()->getTimeinfo())
 						{
 							if (static_cast<unsigned int>(pos) > strLength-1)
 							{
-								qDebug() << "SGF: Unknown property ended immediately" << std::endl;
+								qDebug() << "SGF: Unknown property ended immediately";
 								delete toParse;
 								return corruptSgf(pos, "SGF: Unknown property ended immediately");
 							}
@@ -971,7 +965,7 @@ if (tree->getCurrent()->getTimeinfo())
 							commentStr.append("]");
 
 						// qDebug("Comment read: %s", commentStr.latin1());
-						if (commentStr && !skip)
+						if (!commentStr.isEmpty() && !skip)
 						{
 							// cumulate unknown properties; skip empty property 'XZ[]'
 							unknownProperty += commentStr;
@@ -988,8 +982,8 @@ if (tree->getCurrent()->getTimeinfo())
 						while (toParse->at(pos) == '[' &&
 							static_cast<unsigned int>(pos) < strLength)
 						{
-							x = toParse->at(pos+1) - 'a' + 1;
-							y = toParse->at(pos+2) - 'a' + 1;
+							x = toParse->at(pos+1).toAscii() - 'a' + 1;
+							y = toParse->at(pos+2).toAscii() - 'a' + 1;
 							// qDebug("MARK: %d at %d/%d", markType, x, y);
 							pos += 3;
 							
@@ -1039,8 +1033,8 @@ check = false;
 								// check for compressed lists
 								if (toParse->at(pos) == ':')
 								{
-									x1 = toParse->at(pos+1) - 'a' + 1;
-									y1 = toParse->at(pos+2) - 'a' + 1;
+									x1 = toParse->at(pos+1).toAscii() - 'a' + 1;
+									y1 = toParse->at(pos+2).toAscii() - 'a' + 1;
 									compressed_list = true;
 								}
 								else
@@ -1206,7 +1200,7 @@ bool SGFParser::parseProperty(const QString &toParse, const QString &prop, QStri
 	pos += 2;
 	if (toParse[pos] != '[')
 		return corruptSgf(pos);
-	while (toParse[++pos] != "]" && pos < strLength)
+	while (toParse[++pos] != ']' && pos < strLength)
 		result.append(toParse[pos]);
 	if (pos > strLength)
 		return corruptSgf(pos);
@@ -1356,7 +1350,7 @@ bool SGFParser::initGame(const QString &toParse, const QString &fileName)
 				gameData->byoPeriods = tmp.left(pos1).toInt();
 				gameData->byoStones = 0;
 
-				qDebug() << QString("byoyomi time system: %1 Periods at %2 seconds").arg(gameData->byoPeriods).arg(gameData->byoTime) << std::endl;
+				qDebug() << QString("byoyomi time system: %1 Periods at %2 seconds").arg(gameData->byoPeriods).arg(gameData->byoTime);
 			}
 		}
 		else if (tmp.contains(":"))
@@ -1372,7 +1366,7 @@ bool SGFParser::initGame(const QString &toParse, const QString &fileName)
 				gameData->byoPeriods = t/gameData->byoTime;
 				gameData->byoStones = 0;
 
-				qDebug() << QString("byoyomi time system: %1 Periods at %2 seconds").arg(gameData->byoPeriods).arg(gameData->byoTime) << std::endl;
+				qDebug() << QString("byoyomi time system: %1 Periods at %2 seconds").arg(gameData->byoPeriods).arg(gameData->byoTime);
 			}
 		}
 		else if (tmp.contains("Canadian"))
@@ -1387,7 +1381,7 @@ bool SGFParser::initGame(const QString &toParse, const QString &fileName)
 				gameData->byoTime = time.toInt();
 				gameData->byoStones = tmp.left(pos1).toInt();
 
-				qDebug() << QString("Canadian time system: %1 seconds at %2 stones").arg(gameData->byoTime).arg(gameData->byoStones) << std::endl;
+				qDebug() << QString("Canadian time system: %1 seconds at %2 stones").arg(gameData->byoTime).arg(gameData->byoStones);
 			}
 		}
 
@@ -1423,7 +1417,7 @@ bool SGFParser::exportSGFtoClipB(QString *str, Tree *tree)
 	
 	if (stream != NULL)
 		delete stream;
-	stream = new QTextStream(str, IO_WriteOnly);
+	stream = new Q3TextStream(str, QIODevice::WriteOnly);
 	
 	bool res = writeStream(tree);
 	
@@ -1438,7 +1432,7 @@ bool SGFParser::doWrite(const QString &fileName, Tree *tree)
 	
 	QFile file(fileName);
 	
-	if (!file.open(IO_WriteOnly))
+	if (!file.open(QIODevice::WriteOnly))
 	{
 		QMessageBox::warning(0, PACKAGE, Board::tr("Could not open file:") + " " + fileName);
 		return false;
@@ -1446,7 +1440,7 @@ bool SGFParser::doWrite(const QString &fileName, Tree *tree)
 	
 	if (stream != NULL)
 		delete stream;
-	stream = new QTextStream(&file);
+	stream = new Q3TextStream(&file);
 	
 	bool res = writeStream(tree);
 	
@@ -1576,7 +1570,7 @@ void SGFParser::traverse(Move *t, GameData *gameData)
 
 bool SGFParser::parseASCII(const QString &fileName, ASCII_Import *charset, bool isFilename)
 {
-	QTextStream *txt = NULL;
+	Q3TextStream *txt = NULL;
 	bool result = false;
 	asciiOffsetX = asciiOffsetY = 0;
 	
@@ -1614,14 +1608,14 @@ bool SGFParser::parseASCII(const QString &fileName, ASCII_Import *charset, bool 
 			return false;
 		}
 		
-		if (!file.open(IO_ReadOnly))
+		if (!file.open(QIODevice::ReadOnly))
 		{
 			QMessageBox::warning(0, PACKAGE, Board::tr("Could not open file:") + " " + fileName);
 			delete txt;
 			return false;
 		}
 		
-		txt = new QTextStream(&file);
+		txt = new Q3TextStream(&file);
 		if (!initStream(txt))
 		{
 			QMessageBox::critical(0, PACKAGE, Board::tr("Invalid text encoding given. Please check preferences!"));
@@ -1642,7 +1636,7 @@ bool SGFParser::parseASCII(const QString &fileName, ASCII_Import *charset, bool 
 		}
 		
 		QString buf(fileName);
-		txt = new QTextStream(buf, IO_ReadOnly);
+		txt = new Q3TextStream(buf, QIODevice::ReadOnly);
 		if (!initStream(txt))
 		{
 			QMessageBox::critical(0, PACKAGE, Board::tr("Invalid text encoding given. Please check preferences!"));
@@ -1657,11 +1651,11 @@ bool SGFParser::parseASCII(const QString &fileName, ASCII_Import *charset, bool 
 	return result;
 }
 
-bool SGFParser::parseASCIIStream(QTextStream *stream, ASCII_Import *charset)
+bool SGFParser::parseASCIIStream(Q3TextStream *stream, ASCII_Import *charset)
 {
 	CHECK_PTR(stream);
 	
-	QStrList asciiLines;
+	Q3StrList asciiLines;
 	asciiLines.setAutoDelete(TRUE);
 	
 	int i=0, first=-1, last=-1, y=1;
@@ -1693,7 +1687,7 @@ bool SGFParser::parseASCIIStream(QTextStream *stream, ASCII_Import *charset)
 
 		// do some fast checks: one line string?
 qDebug("no standard ASCII file");
-		int nr = ascii.contains("0") + ascii.contains("b") + ascii.contains("w");
+		int nr = ascii.count("0") + ascii.count("b") + ascii.count("w");
 		if (nr == 81)
 		{
 qDebug("found 9x9");
@@ -1714,7 +1708,7 @@ qDebug("found 19x19");
 		}
 		else
 		{
-qDebug() << QString("found nr == %1").arg(nr) << std::endl;
+qDebug() << QString("found nr == %1").arg(nr);
 			return false;
 		}
 
@@ -1751,7 +1745,7 @@ qDebug() << QString("found nr == %1").arg(nr) << std::endl;
 	if (first == -1 && last != -1)
 		asciiOffsetY = boardHandler->board->getBoardSize() - last;
 	
-	QStrListIterator it(asciiLines);
+	Q3StrListIterator it(asciiLines);
 	for (; it.current() && y < boardHandler->board->getBoardSize(); ++it)
 		if (!doASCIIParse(it.current(), y, charset))
 			return false;

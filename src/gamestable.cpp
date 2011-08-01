@@ -6,17 +6,17 @@
 #include "misc.h"
 #include "setting.h"
 
-#include <qheader.h>
-#include <qlistview.h>
+#include <q3header.h>
+#include <q3listview.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qvariant.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qwidget.h>
 
-GamesTable::GamesTable( QWidget *parent, const char *name, bool /*modal*/, WFlags fl)
-	: QListView(parent, name, fl)
+GamesTable::GamesTable( QWidget *parent, const char *name, bool /*modal*/, Qt::WFlags fl)
+	: Q3ListView(parent, name, fl)
 {
 	addColumn(QObject::tr("Id", "GamesTable Id number"));
 	addColumn(QObject::tr("White", "GamesTable White name"));
@@ -30,18 +30,18 @@ GamesTable::GamesTable( QWidget *parent, const char *name, bool /*modal*/, WFlag
 	addColumn(QObject::tr("By", "GamesTable Byoyomi time"));
 	addColumn(QObject::tr("FR", "GamesTable Free/Rated type of game"));
 	addColumn(QObject::tr("Ob", "GamesTable number of Observers"));
-	setColumnAlignment(0, AlignRight);
-	setColumnAlignment(1, AlignLeft);
-	setColumnAlignment(3, AlignLeft);
-	setColumnAlignment(5, AlignRight);
-	setColumnAlignment(6, AlignRight);
-	setColumnAlignment(7, AlignRight);
-	setColumnAlignment(8, AlignRight);
-	setColumnAlignment(9, AlignRight);
-	setColumnAlignment(10, AlignRight);
-	setColumnAlignment(11, AlignRight);
-	setProperty("focusPolicy", (int)QListView::NoFocus );
-	setProperty("resizePolicy", (int)QListView::AutoOneFit );
+	setColumnAlignment(0, Qt::AlignRight);
+	setColumnAlignment(1, Qt::AlignLeft);
+	setColumnAlignment(3, Qt::AlignLeft);
+	setColumnAlignment(5, Qt::AlignRight);
+	setColumnAlignment(6, Qt::AlignRight);
+	setColumnAlignment(7, Qt::AlignRight);
+	setColumnAlignment(8, Qt::AlignRight);
+	setColumnAlignment(9, Qt::AlignRight);
+	setColumnAlignment(10, Qt::AlignRight);
+	setColumnAlignment(11, Qt::AlignRight);
+	setProperty("focusPolicy", Qt::NoFocus );
+	setProperty("resizePolicy", AutoOneFit );
 
 	// set sorting order for games by wrank
 	setSorting(2);
@@ -61,12 +61,12 @@ GamesTable::~GamesTable()
  */
 
 GamesTableItem::GamesTableItem(GamesTable *parent, const char* name)
-	: QListViewItem(parent, name)  
+	: Q3ListViewItem(parent, name)  
 {
 }
 
 GamesTableItem::GamesTableItem(GamesTableItem *parent, const char* name)
-	: QListViewItem(parent, name)  
+	: Q3ListViewItem(parent, name)  
 {
 }
 
@@ -74,12 +74,12 @@ GamesTableItem::GamesTableItem(GamesTable *parent, QString label1, QString label
                 QString label3, QString label4, QString label5,
                 QString label6, QString label7, QString label8,
 				QString label9, QString label10, QString label11, QString label12, QString label13)
-	: QListViewItem(parent, label1, label2, label3, label4, label5, label6, label7, label8)
+	: Q3ListViewItem(parent, label1, label2, label3, label4, label5, label6, label7, label8)
 {
 
 	
 	// set name for watch/mark and ";" for correct recognition
-	if (label13)
+	if (!label13.isNull())
 	{
 		int len = label13.length() - 1;
 		watched = label13[len] == 'W';
@@ -92,26 +92,25 @@ GamesTableItem::GamesTableItem(GamesTable *parent, QString label1, QString label
 	}
 
 	// QListViewItem only supports up to 8 labels, check for the rest
-	if (label9)
-	{
-		setText(8, label9);
-		if (label10)
-		{
-			setText(9, label10);
-			if (label11)
-			{
-				setText(10, label11);
-				if (label12)
-				{
-					setText(11, label12);
-					if (label13)
-					{
-						setText(12, label13);
-					}
-				}
-			}
-		}
-	}
+	if (label9.isNull ())
+		return;
+	setText(8, label9);
+
+	if (label10.isNull ())
+		return;
+	setText(9, label10);
+
+	if (label11.isNull ())
+		return;
+	setText(10, label11);
+
+	if (label12.isNull ())
+		return;
+	setText(11, label12);
+
+	if (label13.isNull ())
+		return;
+	setText(12, label13);
 }
 
 GamesTableItem::~GamesTableItem()
@@ -134,14 +133,14 @@ void GamesTableItem::paintCell( QPainter *p, const QColorGroup &cg,
 
 	_cg.setColor(QColorGroup::Background, setting->colorBackground);
 
-	QListViewItem::paintCell(p, _cg, column, width, alignment);
+	Q3ListViewItem::paintCell(p, _cg, column, width, alignment);
 
 //	_cg.setColor(QColorGroup::Text, c);
 }
 
 void GamesTableItem::ownRepaint()
 {
-	if (text(12))
+	if (!text(12).isNull ())
 	{
 		its_me = text(12).at(0) == 'A';
 		watched = text(12).at(text(7).length()-1) == 'W';

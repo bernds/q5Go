@@ -3,13 +3,15 @@
 */
 
 #include "qgo.h"
+//Added by qt3to4:
+#include <QPixmap>
 #include "mainwidget.h"
 #include "interfacehandler.h"
 #include "normaltools_gui.h"
 #include "scoretools_gui.h"
 #include "defines.h"
 #include "icons.h"
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qslider.h>
@@ -26,7 +28,7 @@
 *  Constructs a MainWidget which is a child of 'parent', with the 
 *  name 'name' and widget flags set to 'f' 
 */
-MainWidget::MainWidget(QWidget* parent,  const char* name, WFlags fl )
+MainWidget::MainWidget(QWidget* parent,  const char* name, Qt::WFlags fl )
 : MainWidgetGui( parent, name, fl )
 {
 	connect(toolsTabWidget,

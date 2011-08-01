@@ -19,7 +19,7 @@
 #define QGTP_H
 
 #include <qapplication.h>
-#include <qprocess.h>
+#include <q3process.h>
 //#include "global.h"
 
 #define IGTP_BUFSIZE 2048    /* Size of the response buffer */
@@ -47,7 +47,7 @@ public:
  	****************************/
 	QString getLastMessage();
 	int openGtpSession(QString filename, int size, float komi, int handicap, int level);
-	QProcess  * programProcess ;
+	Q3Process  * programProcess ;
 	void fflush(char * s);
 
 	/****************************

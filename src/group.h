@@ -5,11 +5,11 @@
 #ifndef GROUP_H
 #define GROUP_H
 
-#include <qptrlist.h>
+#include <QList>
 
 class Stone;
 
-class Group : public QPtrList<Stone>
+class Group : public QList<Stone *>
 {
 public:
 	Group();
@@ -17,7 +17,6 @@ public:
 	
 	int getLiberties() const { return liberties; }
 	void setLiberties(int l) { liberties = l; }
-	virtual int compareItems(Item d1, Item d2);
 	bool isAttachedTo(Stone *s);
 #ifndef NO_DEBUG
 	void debug();

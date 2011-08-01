@@ -5,11 +5,11 @@
 #include "config.h"
 #include "textview.h"
 #include "matrix.h"
-#include <qmultilineedit.h>
-#include <qtextedit.h>
+#include <q3multilineedit.h>
+#include <q3textedit.h>
 #include <qmessagebox.h>
-#include <qfiledialog.h>
-#include <qtextstream.h>
+#include <q3filedialog.h>
+#include <q3textstream.h>
 #include <qclipboard.h> 
 #include <qapplication.h>
 
@@ -20,10 +20,10 @@
 *  The dialog will by default be modeless, unless you set 'modal' to
 *  TRUE to construct a modal dialog.
 */
-TextView::TextView(QWidget* parent, const char* name, bool modal, WFlags fl)
+TextView::TextView(QWidget* parent, const char* name, bool modal, Qt::WFlags fl)
 : TextViewGUI( parent, name, modal, fl )
 {
-	textEdit->setWordWrap(QTextEdit::FixedColumnWidth);
+	textEdit->setWordWrap(Q3TextEdit::FixedColumnWidth);
 	textEdit->setWrapColumnOrWidth(80);
 	QFont f("fixed", 10);
 	f.setStyleHint(QFont::TypeWriter);
@@ -43,7 +43,7 @@ TextView::~TextView()
 */
 void TextView::saveMe()
 {
-	QString fileName(QFileDialog::getSaveFileName(QString::null,
+	QString fileName(Q3FileDialog::getSaveFileName(QString::null,
 		tr("Text Files (*.txt);;All Files (*)"),
 		this));
 	if (fileName.isEmpty())
@@ -58,7 +58,7 @@ void TextView::saveMe()
 			tr("Yes"), tr("No"), 0, 0, 1) == 1)
 			return;
 		
-		if (!file.open(IO_WriteOnly))
+		if (!file.open(QIODevice::WriteOnly))
 		{
 			QString s;
 			s.sprintf(tr("Failed to write to file") + " %s", fileName.latin1());
@@ -66,7 +66,7 @@ void TextView::saveMe()
 			return;
 		}
 		
-		QTextStream stream(&file);
+		Q3TextStream stream(&file);
 		stream << textEdit->text();
 		file.close();
 }

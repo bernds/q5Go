@@ -19,7 +19,7 @@
 #include <qclipboard.h> 
 #include <qlabel.h>
 #include <qmessagebox.h>
-#include <qptrstack.h>
+#include <q3ptrstack.h>
 
 #define MARK_TERRITORY_VISITED     99
 #define MARK_TERRITORY_DAME       999
@@ -564,10 +564,10 @@ void BoardHandler::updateMove(Move *m, bool ignore_update)
 		}
 		addStoneSGF(m->getColor(), m->getX(), m->getY());
 		
-		QIntDict<FastLoadMark> *d = m->fastLoadMarkDict;
+		Q3IntDict<FastLoadMark> *d = m->fastLoadMarkDict;
 		if (d != NULL && !d->isEmpty())
 		{
-			QIntDictIterator<FastLoadMark> it(*d);
+			Q3IntDictIterator<FastLoadMark> it(*d);
 			while (it.current())
 			{
 				m->getMatrix()->insertMark(it.current()->x,
@@ -1459,7 +1459,7 @@ bool BoardHandler::openComputerSession(QNewGameDlg *dlg,const QString &fileName,
 //		QString mesg = QString(QObject::tr("Error opening program: %1\n")).arg(gtp->getLastMessage());
 		QMessageBox msg(QObject::tr("Error"), //mesg,
 			QString(QObject::tr("Error opening program: %1")).arg(gtp->getLastMessage()),
-			QMessageBox::Warning, QMessageBox::Ok | QMessageBox::Default, QMessageBox::NoButton, QMessageBox::NoButton);
+			QMessageBox::Warning, QMessageBox::Ok | QMessageBox::Default, Qt::NoButton, Qt::NoButton);
 		msg.setActiveWindow();
 		msg.raise();
 		msg.exec();
@@ -1469,13 +1469,13 @@ bool BoardHandler::openComputerSession(QNewGameDlg *dlg,const QString &fileName,
 	//if (dlg->getHandicap())
 	// setHandicap(dlg->getHandicap());
 
-	if (!(fileName.isNull() || fileName.isEmpty()))
+	if (!(fileName.isNull() || fileName.isEmpty())) {
 
 		if (!sgfParser->parse(fileName, filter, false))
 			return false;
 		else
 			gtp->loadsgf(fileName);
-
+	}
 	
 	prepareComputerBoard();  
 
@@ -1498,7 +1498,7 @@ void BoardHandler::updateComment(QString text)
 	if (board->get_isLocalGame())
 	{
 		// local game: comment field is input field containing only string of current node
-		if (!text)
+		if (text.isEmpty())
 			comment = board->getInterfaceHandler()->getComment();
 		else
 			return;
@@ -1506,12 +1506,12 @@ void BoardHandler::updateComment(QString text)
 	else
 	{
 		// online game: comment field shows all kibitzes since the beginning
-		if (!text)
+		if (text.isEmpty())
 			return;
 		else if (!text.contains('\n'))
 		{
 			comment = tree->getCurrent()->getComment();
-			if (comment)
+			if (!comment.isEmpty())
 				comment += '\n';
 			comment += text;
 		}
@@ -2017,7 +2017,7 @@ bool BoardHandler::findMoveInVar(int x, int y)
 	// Init stack if not yet done
 	if (nodeResults == NULL)
 	{
-		nodeResults = new QPtrStack<Move>;
+		nodeResults = new Q3PtrStack<Move>;
 		nodeResults->setAutoDelete(FALSE);
 	}
 	

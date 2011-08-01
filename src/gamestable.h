@@ -7,28 +7,32 @@
 
 #include <qvariant.h>
 #include <qdialog.h>
-#include <qlistview.h>
-class QVBoxLayout; 
-class QHBoxLayout; 
-class QGridLayout; 
-class QListViewItem;
+#include <q3listview.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3GridLayout>
+#include <Q3HBoxLayout>
+class Q3VBoxLayout; 
+class Q3HBoxLayout; 
+class Q3GridLayout; 
+class Q3ListViewItem;
 class QPushButton;
 
-class GamesTable : public QListView
+class GamesTable : public Q3ListView
 { 
 	Q_OBJECT
 
 public:
-	GamesTable(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0);
+	GamesTable(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0);
 	~GamesTable();
 	void set_watch(QString);
 	void set_mark(QString);
 
 public slots:
-	virtual void slot_mouse_games(int, QListViewItem*, const QPoint&, int) {};
+	virtual void slot_mouse_games(int, Q3ListViewItem*, const QPoint&, int) {};
 };
 
-class GamesTableItem : public QListViewItem
+class GamesTableItem : public Q3ListViewItem
 { 
 public:
 

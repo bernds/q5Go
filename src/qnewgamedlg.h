@@ -19,8 +19,8 @@
 #define QNEWGAMEDLG_H
 
 #include <qcombobox.h>
-#include <qframe.h>
-#include <qgroupbox.h>
+#include <q3frame.h>
+#include <q3groupbox.h>
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qpushbutton.h>
@@ -28,7 +28,7 @@
 #include <qlayout.h>
 #include <qvariant.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qcheckbox.h>
 
 

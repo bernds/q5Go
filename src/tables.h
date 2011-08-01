@@ -10,14 +10,16 @@
 #include "talk_gui.h"
 #include <qstring.h>
 #include <qobject.h>
-#include <qlistview.h>
+#include <q3listview.h>
 //#include <qmultilineedit.h>
-#include <qtextedit.h>        //eb16
+#include <q3textedit.h>        //eb16
 #include <qlineedit.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qwidget.h>
 #include <qpalette.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 //-----------
 
@@ -46,9 +48,9 @@ public:
 	{
 		if (this->nr == nr_)
 		{
-			if (title_)
+			if (!title_.isNull ())
 				this->title = title_;
-			if (users_)
+			if (!users_.isNull ())
 				this->users = users_;
 			if (count_)
 				this->count = count_;
@@ -66,7 +68,7 @@ public:
 		{ return (this->get_nr() < h->get_nr()); };
 };
 
-class ChannelList : public QPtrList<Channel>
+class ChannelList : public Q3PtrList<Channel>
 {
 public:
 	ChannelList() {};
@@ -94,7 +96,7 @@ private:
 public:
 	Talk(const QString&, QWidget*, bool isplayer = true);
 	~Talk();
-	QTextEdit      *get_mle() const { return MultiLineEdit1; } //eb16
+	Q3TextEdit      *get_mle() const { return MultiLineEdit1; } //eb16
 	QLineEdit      *get_le() const {return LineEdit1; }
 	QWidget        *get_tabWidget()  { return this; }
 //	QPushButton    *get_pb() const { return pb_releaseTalkTab; }
@@ -147,7 +149,7 @@ private:
 	QString cdc;
 };
 
-class HostList : public QPtrList<Host>
+class HostList : public Q3PtrList<Host>
 {
 public:
 	HostList() {};

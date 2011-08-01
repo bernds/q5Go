@@ -15,7 +15,7 @@
 #include <qfile.h>
 #include <qdir.h>
 #include <qobject.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 class SearchPath : public QObject
 {
@@ -33,7 +33,7 @@ public:
 	SearchPath& operator<<(QStringList& list);
 
  private:
-	QPtrList<QDir> directoryList;
+	Q3PtrList<QDir> directoryList;
 };
 
 #endif

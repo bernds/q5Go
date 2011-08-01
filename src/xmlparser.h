@@ -5,7 +5,7 @@
 #include <qxml.h>
 #include "parserdefs.h"
 #include "move.h"
-#include <qptrstack.h>
+#include <q3ptrstack.h>
 
 class BoardHandler;
 class Tree;
@@ -39,9 +39,9 @@ protected:
 	
 private:
 	BoardHandler *boardHandler;
-	QPtrStack<Position> toRemove;
-	QPtrStack<Move> stack;
-	QPtrStack<MoveNum> movesStack;
+	Q3PtrStack<Position> toRemove;
+	Q3PtrStack<Move> stack;
+	Q3PtrStack<MoveNum> movesStack;
 	int moves;
 	Position *position;
 	MoveNum *moveNum;

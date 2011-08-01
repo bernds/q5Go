@@ -9,31 +9,34 @@
 #include "icons.h"
 
 //#include <qmultilineedit.h>
-#include <qtextedit.h>
+#include <q3textedit.h>
 #include <qpushbutton.h>
 #include <qtabwidget.h>
 #include <qlayout.h>
 #include <qvariant.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
-#include <qmainwindow.h>
+#include <q3whatsthis.h>
+#include <q3mainwindow.h>
 #include <qcombobox.h>
 #include <qimage.h>
 #include <qpixmap.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <QEvent>
 
 /* 
  *  Constructs a MainAppWidget as a child of 'parent', with the 
  *  name 'name' and widget flags set to 'f'.
  *
  */
-MainAppWidget::MainAppWidget( QWidget* parent, const char* name, WFlags fl )
-	: QMainWindow( parent, name, fl )
+MainAppWidget::MainAppWidget( QWidget* parent, const char* name, Qt::WFlags fl )
+	: Q3MainWindow( parent, name, fl )
 {
 	(void)statusBar();
 	if ( !name )
 	setName( "MainAppWidget" );
 	setCentralWidget( new QWidget( this, "qt_central_widget" ) );
-	MainAppWidgetLayout = new QGridLayout( centralWidget(), 1, 1, 2, 2, "MainAppWidgetLayout"); 
+	MainAppWidgetLayout = new Q3GridLayout( centralWidget(), 1, 1, 2, 2, "MainAppWidgetLayout"); 
 
 	mainTable = new MainTable( centralWidget(), "mainTable" );
 
@@ -47,7 +50,7 @@ MainAppWidget::MainAppWidget( QWidget* parent, const char* name, WFlags fl )
 
 	languageChange();
 	resize( QSize(483, 574).expandedTo(minimumSizeHint()) );
-	clearWState( WState_Polished );
+	setAttribute( Qt::WA_WState_Polished, false );
 
 	// signals and slots connections
 	connect( cb_cmdLine, SIGNAL( activated(int) ), this, SLOT( slot_cmdactivated_int(int) ) );
@@ -71,7 +74,7 @@ MainAppWidget::~MainAppWidget()
 void MainAppWidget::languageChange()
 {
 	setProperty( "caption", tr( "MainAppWidget" ) );
-	QWhatsThis::add( cb_cmdLine, tr( "Command line\n"
+	Q3WhatsThis::add( cb_cmdLine, tr( "Command line\n"
 		"\n"
 		"Type <command>+<ENTER> to send to Go server. If not online use 'connect' button first.\n"
 		"\n"
@@ -91,29 +94,29 @@ void MainAppWidget::slot_cmdactivated_int(int)
 }
 
 
-MainTable::MainTable(QWidget* parent,  const char* name, WFlags fl)
+MainTable::MainTable(QWidget* parent,  const char* name, Qt::WFlags fl)
     : QWidget(parent, name, fl)
 {
-	s1 = new QSplitter(Horizontal, this);
-	s2 = new QSplitter(Vertical, s1);
-	s3 = new QSplitter(Vertical, s1);
+	s1 = new QSplitter(Qt::Horizontal, this);
+	s2 = new QSplitter(Qt::Vertical, s1);
+	s3 = new QSplitter(Qt::Vertical, s1);
 
-	mainTableLayout = new QGridLayout(this); 
+	mainTableLayout = new Q3GridLayout(this); 
 	mainTableLayout->setSpacing(6);
 	mainTableLayout->setMargin(0);
 
 	TabWidget_mini = new QTabWidget(s3, "TabWidget_mini");
 	TabWidget_mini->setProperty("sizePolicy", QSizePolicy((QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, TabWidget_mini->sizePolicy().hasHeightForWidth()));
-	TabWidget_mini->setProperty("focusPolicy", (int)QTabWidget::NoFocus);
+	TabWidget_mini->setProperty("focusPolicy", (int)Qt::NoFocus);
 
 	games = new QWidget(TabWidget_mini, "games");
-	gamesLayout = new QGridLayout(games); 
+	gamesLayout = new Q3GridLayout(games); 
 	gamesLayout->setSpacing(6);
 	gamesLayout->setMargin(0);
 
 	ListView_games = new GamesTable(games, "ListView_games");
 	ListView_games->setProperty("sizePolicy", QSizePolicy((QSizePolicy::SizeType)7, (QSizePolicy::SizeType)5, ListView_games->sizePolicy().hasHeightForWidth()));
-	QWhatsThis::add(ListView_games, tr("Table of games\n\n"
+	Q3WhatsThis::add(ListView_games, tr("Table of games\n\n"
 		"right click to observe\n\n"
 		"Symbol explanation: (click on tab to sort by)\n"
 		"Id\tgame number\n"
@@ -131,25 +134,25 @@ MainTable::MainTable(QWidget* parent,  const char* name, WFlags fl)
 	gamesLayout->addWidget(ListView_games, 0, 0);
 	TabWidget_mini->insertTab(games, tr("Games"));
 
-	MultiLineEdit2 = new QTextEdit(s3, "MultiLineEdit2");
+	MultiLineEdit2 = new Q3TextEdit(s3, "MultiLineEdit2");
 	s3->setResizeMode(MultiLineEdit2, QSplitter::KeepSize);
 	MultiLineEdit2->setCurrentFont(setting->fontComments);
-	MultiLineEdit2->setProperty("focusPolicy", (int)QTextEdit::NoFocus);
+	MultiLineEdit2->setProperty("focusPolicy", (int)Qt::NoFocus);
 	MultiLineEdit2->setProperty("readOnly", QVariant(TRUE, 0));
 	QToolTip::add(MultiLineEdit2, tr("relevant messages from/to server"));
 
 	TabWidget_players = new QTabWidget(s2, "TabWidget_mini");
 	TabWidget_players->setProperty("sizePolicy", QSizePolicy((QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, TabWidget_mini->sizePolicy().hasHeightForWidth()));
-	TabWidget_players->setProperty("focusPolicy", (int)QTabWidget::NoFocus);
+	TabWidget_players->setProperty("focusPolicy", (int)Qt::NoFocus);
 
 	players = new QWidget(TabWidget_players, "players");
-	playersLayout = new QGridLayout(players); 
+	playersLayout = new Q3GridLayout(players); 
 	playersLayout->setSpacing(6);
 	playersLayout->setMargin(0);
 
 	ListView_players = new PlayerTable(players, "ListView_players");
 	ListView_players->setProperty("sizePolicy", QSizePolicy((QSizePolicy::SizeType)1, (QSizePolicy::SizeType)7, ListView_players->sizePolicy().hasHeightForWidth()));
-	QWhatsThis::add(ListView_players, tr("Table of players\n\n"
+	Q3WhatsThis::add(ListView_players, tr("Table of players\n\n"
 		"right click for menu\n\n"
 		"Symbol explanation: (click on tab to sort by)\n"
 		"Stat\tplayer's stats:\n"
@@ -193,24 +196,24 @@ MainTable::MainTable(QWidget* parent,  const char* name, WFlags fl)
 	TabWidget_mini_2 = new QTabWidget(s2, "TabWidget_mini_2");
 	s2->setResizeMode(TabWidget_mini_2, QSplitter::KeepSize);
 	TabWidget_mini_2->setProperty("sizePolicy", QSizePolicy((QSizePolicy::SizeType)1, (QSizePolicy::SizeType)7, TabWidget_mini_2->sizePolicy().hasHeightForWidth()));
-	TabWidget_mini_2->setProperty("focusPolicy", (int)QTabWidget::NoFocus);
+	TabWidget_mini_2->setProperty("focusPolicy", (int)Qt::NoFocus);
 	TabWidget_mini_2->setProperty("tabPosition", (int)QTabWidget::Bottom);
 
 	shout = new QWidget(TabWidget_mini_2, "shout");
-	shoutLayout = new QGridLayout(shout); 
+	shoutLayout = new Q3GridLayout(shout); 
 	shoutLayout->setSpacing(6);
 	shoutLayout->setMargin(0);
 
-	MultiLineEdit3 = new QTextEdit(shout, "MultiLineEdit3");
+	MultiLineEdit3 = new Q3TextEdit(shout, "MultiLineEdit3");
 	MultiLineEdit3->setCurrentFont(setting->fontComments);
-	MultiLineEdit3->setProperty("focusPolicy", (int)QTextEdit::NoFocus);
+	MultiLineEdit3->setProperty("focusPolicy", (int)Qt::NoFocus);
 	MultiLineEdit3->setProperty("readOnly", QVariant(TRUE, 0));
 	QToolTip::add(MultiLineEdit3, tr("Log online-time and name of arriving message"));
 
 	shoutLayout->addWidget(MultiLineEdit3, 0, 0);
 
 	pb_releaseTalkTabs = new QPushButton(tr("Close all talk tabs"), shout, "HideAllTalkTabs");
-	QWhatsThis::add(pb_releaseTalkTabs, tr("Close all tabs containing a player's name (without '*'). The messages will not be deleted. "
+	Q3WhatsThis::add(pb_releaseTalkTabs, tr("Close all tabs containing a player's name (without '*'). The messages will not be deleted. "
 		"If you want to see it again click with right button on player's name and choose talk (same as '#24 *name*')"));
 
 	shoutLayout->addWidget(pb_releaseTalkTabs, 1, 0);

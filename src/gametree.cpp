@@ -18,10 +18,10 @@
 #include <qapplication.h>
 #include <qclipboard.h>
 #include <qpainter.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 
-GameTree::GameTree(QWidget *parent, const char *name, QCanvas* c)
-: QCanvasView(c, parent, name)
+GameTree::GameTree(QWidget *parent, const char *name, Q3Canvas* c)
+: Q3CanvasView(c, parent, name)
 {
 }
 

@@ -5,6 +5,8 @@
 #include "tip.h"
 #include "board.h"
 #include "qgo.h"
+//Added by qt3to4:
+#include <QLabel>
 
 /*
 * Tip
@@ -43,7 +45,7 @@ void Tip::maybeTip(const QPoint &pos)
 StatusTip::StatusTip(QWidget *parent)
 : QLabel(parent)
 {
-	setAlignment(AlignCenter | SingleLine);
+	setAlignment(Qt::AlignCenter | Qt::TextSingleLine);
 }
 
 StatusTip::~StatusTip()

@@ -13,12 +13,12 @@
 #include <qspinbox.h>
 #include <qvariant.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qradiobutton.h>
 
-GameDialog::GameDialog(QWidget* parent, const char* name, bool modal, WFlags fl)
+GameDialog::GameDialog(QWidget* parent, const char* name, bool modal, Qt::WFlags fl)
 	: NewGameDialog(parent, name, modal, fl)
 {
 	have_suggestdata = false;
@@ -116,7 +116,7 @@ qDebug("#### GameDialog::slot_pbsuggest()");
 	// two cases: suggest command unknown / suggest command doesn't work - you are not rated
 	if (!have_suggestdata)
 	{
-		if (!oppRk)
+		if (oppRk.isNull())
 		{
 			// cannot calculate without opponent's rank
 			qWarning("*** No opponent rk given!");
@@ -454,7 +454,7 @@ qDebug("#### GameDialog::slot_matchcreate()");
 void GameDialog::slot_notopen(const QString &opponent)
 {
 qDebug("#### GameDialog::slot_notopen()");
-	if (!opponent)
+	if (opponent.isNull())
 	{
 		// IGS: no player named -> check if offering && focus set
 		if (buttonOffer->isOn())// && QWidget::hasFocus())

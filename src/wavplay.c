@@ -172,7 +172,7 @@ int wavplay(char *argv,ErrFunc erf) {
 	 */
 errxit:	e = errno;					/* Save errno value */
 
-  fprintf(stdout, "error %s : \n",sys_errlist[errno]);
+  fprintf(stdout, "error %s : \n",strerror (errno));
 	if ( wfile != NULL )
 		WavClose(wfile,NULL);			/* Don't report errors here */
 	if ( dfile != NULL )

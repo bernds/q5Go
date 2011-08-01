@@ -5,7 +5,10 @@
 #include "helpviewer.h"
 #include "icons.h"
 #include "setting.h"
-#include <qtoolbar.h>
+#include "config.h"
+#include <q3toolbar.h>
+//Added by qt3to4:
+#include <QPixmap>
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -17,15 +20,15 @@
 #include ICON_HOME
 //#endif
 
-HelpViewer::HelpViewer(QWidget* parent, const char* name, WFlags f)
-    : QMainWindow(parent, name, f)
+HelpViewer::HelpViewer(QWidget* parent, const char* name, Qt::WFlags f)
+    : Q3MainWindow(parent, name, f)
 {
     resize(600, 480);
     setCaption(PACKAGE " " VERSION " Manual");
 
     setIcon(setting->image0);
 
-    browser = new QTextBrowser(this);
+    browser = new Q3TextBrowser(this);
     
     QStringList strList;
 
@@ -59,7 +62,7 @@ HelpViewer::~HelpViewer()
 
 void HelpViewer::initToolBar()
 {
-    toolBar = new QToolBar(this, "toolbar");
+    toolBar = new Q3ToolBar(this, "toolbar");
        
     QPixmap iconHome, iconExit;
 
@@ -74,7 +77,7 @@ void HelpViewer::initToolBar()
 */
     buttonClose = new QToolButton(iconExit, "Close (Escape)", "Close", this, 
 SLOT(close()), toolBar);
-    buttonClose->setAccel(Key_Escape);
+    buttonClose->setAccel(Qt::Key_Escape);
     buttonHome = new QToolButton(iconHome, "Home", "Home", browser, 
 SLOT(home()), toolBar);
 }

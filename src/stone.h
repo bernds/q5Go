@@ -6,12 +6,13 @@
 #define STONE_H
 
 #include "defines.h"
-#include <qcanvas.h>
+#include <q3canvas.h>
 
-class Stone : public QCanvasSprite
+class Stone : public Q3CanvasSprite
 {
 public:
-	Stone(QCanvasPixmapArray *a, QCanvas *canvas, StoneColor c, int x, int y, int numberOfImages=WHITE_STONES_NB, bool has_shadow=false);
+	Stone(Q3CanvasPixmapArray *a, Q3Canvas *canvas, StoneColor c, int x, int y,
+	      int numberOfImages=WHITE_STONES_NB, bool has_shadow=false);
 	~Stone() ;
 	
 	StoneColor getColor() const { return color; }
@@ -33,7 +34,7 @@ public:
 	
 	bool checked;
 	
-	QCanvasSprite *shadow;
+	Q3CanvasSprite *shadow;
 	
 private:
 	StoneColor color;

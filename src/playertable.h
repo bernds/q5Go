@@ -8,27 +8,27 @@
 #include "tables.h"
 
 #include <qvariant.h>
-#include <qlistview.h>
+#include <q3listview.h>
 
 
-class PlayerTable : public QListView
+class PlayerTable : public Q3ListView
 { 
 	Q_OBJECT
 
 public:
-	PlayerTable(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0);
+	PlayerTable(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0);
 	~PlayerTable() {};
 //	virtual void setSorting ( int column, bool ascending = TRUE );
 	void showOpen(bool show);
 
 public slots:
-	virtual void slot_mouse_players(int, QListViewItem*, const QPoint&, int) {};
+	virtual void slot_mouse_players(int, Q3ListViewItem*, const QPoint&, int) {};
 	
 	
 };
 
 
-class PlayerTableItem : public QListViewItem
+class PlayerTableItem : public Q3ListViewItem
 { 
 public:
 
@@ -61,7 +61,7 @@ public:
 
 protected:
 //	virtual QString key(int, bool) const;
-	virtual int compare( QListViewItem *p, int col, bool ascending ) const;
+	virtual int compare( Q3ListViewItem *p, int col, bool ascending ) const;
 	virtual void paintCell(QPainter *p, const QColorGroup &cg, int column, int width, int alignment);
 
 	bool open;

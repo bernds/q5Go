@@ -11,7 +11,7 @@
 #include <qlineedit.h>
 //#include <qmultilineedit.h>
 //#include <qtextedit.h>
-#include <qtextbrowser.h> 
+#include <q3textbrowser.h> 
 #include <qlayout.h>
 #include <qwidget.h>
 #include <math.h>
@@ -25,8 +25,8 @@ void ClientWindow::prepare_tables(InfoType cmd)
 	{
 		case WHO: // delete player table
 		{
-			QListViewItemIterator lv(ListView_players);
-			for (QListViewItem *lvi; (lvi = lv.current());)
+			Q3ListViewItemIterator lv(ListView_players);
+			for (Q3ListViewItem *lvi; (lvi = lv.current());)
 			{
 				lv++;
 				delete lvi;
@@ -43,8 +43,8 @@ void ClientWindow::prepare_tables(InfoType cmd)
 
 		case GAMES: // delete games table
 		{
-			QListViewItemIterator lv(ListView_games);
-			for (QListViewItem *lvi; (lvi = lv.current());)
+			Q3ListViewItemIterator lv(ListView_games);
+			for (Q3ListViewItem *lvi; (lvi = lv.current());)
 			{
 				lv++;
 				delete lvi;
@@ -83,8 +83,8 @@ void ClientWindow::prepare_tables(InfoType cmd)
 // return the rank of a given name
 QString ClientWindow::getPlayerRk(QString player)
 {
-	QListViewItemIterator lvp(ListView_players);
-	QListViewItem *lvpi;
+	Q3ListViewItemIterator lvp(ListView_players);
+	Q3ListViewItem *lvpi;
 
 	// look for players in playerlist
 	for (; (lvpi = lvp.current()); lvp++)
@@ -96,17 +96,17 @@ QString ClientWindow::getPlayerRk(QString player)
 		}
 	}
 
-	return 0;
+	return QString::null;
 }
 
 // check for exclude list entry of a given name
 QString ClientWindow::getPlayerExcludeListEntry(QString player)
 {
-	QListViewItemIterator lvp(ListView_players);
-	QListViewItem *lvpi;
+	Q3ListViewItemIterator lvp(ListView_players);
+	Q3ListViewItem *lvpi;
 
 	if (DODEBUG)
-		qDebug() << QString("getPlayerExcludeListEntry(%1)").arg(player) << std::endl;
+		qDebug() << QString("getPlayerExcludeListEntry(%1)").arg(player);
 
 	// look for players in playerlist
 	for (; (lvpi = lvp.current()); lvp++)
@@ -115,20 +115,20 @@ QString ClientWindow::getPlayerExcludeListEntry(QString player)
 		if (lvpi->text(1) == player)
 		{
 			if (DODEBUG)
-				qDebug() << QString("text(1) = %1, player = %2").arg(lvpi->text(1)).arg(player) << std::endl;
+				qDebug() << QString("text(1) = %1, player = %2").arg(lvpi->text(1)).arg(player);
 
 			return lvpi->text(6);
 		}
 	}
 
-	return 0;
+	return QString::null;
 }
 
 // take a new game from parser
 void ClientWindow::slot_game(Game* g)
 {
 	// insert into ListView
-	QListViewItemIterator lv(ListView_games);
+	Q3ListViewItemIterator lv(ListView_games);
 
 	if (g->running)
 	{
@@ -138,7 +138,7 @@ void ClientWindow::slot_game(Game* g)
 		// check if game already exists
 		if (!playerListEmpty)
 		{
-			QListViewItemIterator lvii = lv;
+			Q3ListViewItemIterator lvii = lv;
 			for (GamesTableItem *lvi; (lvi = static_cast<GamesTableItem*>(lvii.current())) && !found;)
 			{
 				lvii++;
@@ -150,10 +150,10 @@ void ClientWindow::slot_game(Game* g)
 				}
 			}
 		}
-		else if (!g->H && !myAccount->num_games)
+		else if (g->H.isEmpty() && !myAccount->num_games)
 		{
 			// skip games until initial table has loaded
-			qDebug() << "game skipped because no init table" << std::endl;
+			qDebug() << "game skipped because no init table";
 			return;
 		}
 
@@ -161,7 +161,7 @@ void ClientWindow::slot_game(Game* g)
 		QString myMark = "B";
 		
 		// check if exclude entry is done later
-		if (g->H) //g->status.length() > 1)
+		if (!g->H.isEmpty()) //g->status.length() > 1)
 		{
 			QString emw;
 			QString emb;
@@ -171,19 +171,19 @@ void ClientWindow::slot_game(Game* g)
 			emb = getPlayerExcludeListEntry(g->bname);
 
 			// ensure that my game is listed first
-			if (emw && emw == "M" || emb && emb == "M")
+			if (emw == "M" || emb == "M")
 			{
 				myMark = "A";
 				excludeMark = "M";
 
 				// I'm playing, thus I'm open, except teaching games
-				if (emw && emw && (emw != "M" || emb != "M"))
+				if (emw != "M" || emb != "M")
 				{
 					// checkbox open
 					slot_checkbox(0, true);
 				}
 			}
-			else if (emw && emw == "W" || emb && emb == "W")
+			else if (emw == "W" || emb == "W")
 			{
 				excludeMark = "W";
 			}
@@ -213,7 +213,7 @@ void ClientWindow::slot_game(Game* g)
 		{
 			// from GAMES command or game info{...}
 
-			if (g->H)
+			if (!g->H.isEmpty())
 			{
 				lv = new GamesTableItem(ListView_games,
 					g->nr,
@@ -251,10 +251,10 @@ void ClientWindow::slot_game(Game* g)
 		}
 
 		// update player info if this is not a 'who'-result or if it's me
-		if (!g->H || myMark == "A") //g->status.length() < 2)
+		if (g->H.isEmpty() || myMark == "A") //g->status.length() < 2)
 		{
-			QListViewItemIterator lvp(ListView_players);
-			QListViewItem *lvpi;
+			Q3ListViewItemIterator lvp(ListView_players);
+			Q3ListViewItem *lvpi;
 			int found = 0;
 
 			// look for players in playerlist
@@ -299,7 +299,7 @@ void ClientWindow::slot_game(Game* g)
 
 		if (g->nr != "@")
 		{
-			for (QListViewItem *lvi; (lvi = lv.current()) && !found;)
+			for (Q3ListViewItem *lvi; (lvi = lv.current()) && !found;)
 			{
 				lv++;
 				// compare game id
@@ -316,7 +316,7 @@ void ClientWindow::slot_game(Game* g)
 		}
 		else
 		{
-			for (QListViewItem *lvi; (lvi = lv.current()) && !found;)
+			for (Q3ListViewItem *lvi; (lvi = lv.current()) && !found;)
 			{
 				lv++;
 				// look for name
@@ -341,8 +341,8 @@ void ClientWindow::slot_game(Game* g)
 			myAccount->num_games--;
 			statusGames->setText(" G: " + QString::number(myAccount->num_games) + " / " + QString::number(myAccount->num_observedgames) + " ");
 
-			QListViewItemIterator lvp(ListView_players);
-			QListViewItem *lvpi;
+			Q3ListViewItemIterator lvp(ListView_players);
+			Q3ListViewItem *lvpi;
 			int found = 0;
 
 			// look for players in playerlist
@@ -366,10 +366,10 @@ void ClientWindow::slot_player(Player *p, bool cmdplayers)
 {
 	// insert into ListView
 
-  	QListViewItemIterator lv(ListView_players);  
+  	Q3ListViewItemIterator lv(ListView_players);  
 
 	QPoint pp(0,0);
-	QListViewItem *topViewItem = ListView_players->itemAt(pp);
+	Q3ListViewItem *topViewItem = ListView_players->itemAt(pp);
   	bool deleted_topViewItem = false;
   
 	if (p->online)
@@ -412,7 +412,7 @@ void ClientWindow::slot_player(Player *p, bool cmdplayers)
 
 					if (p->name == myAccount->acc_name)
 					{
-						qDebug() << "updating my account info... (1)" << std::endl;
+						qDebug() << "updating my account info... (1)";
 						// checkbox open
 						bool b = (p->info.contains('X') == 0);
 						slot_checkbox(0, b);
@@ -441,7 +441,7 @@ void ClientWindow::slot_player(Player *p, bool cmdplayers)
 		}
 		else if (!cmdplayers && !myAccount->num_players)
 		{
-			qDebug() << "player skipped because no init table" << std::endl;
+			qDebug() << "player skipped because no init table";
 			// skip players until initial table has loaded
 			return;
 		}
@@ -450,7 +450,7 @@ void ClientWindow::slot_player(Player *p, bool cmdplayers)
 		QString mark;
 
 		// check for watched players
-		if (watch && watch.contains(";" + p->name + ";"))
+		if (watch.contains(";" + p->name + ";"))
 		{
 			mark = "W";
 
@@ -467,7 +467,7 @@ void ClientWindow::slot_player(Player *p, bool cmdplayers)
 			myAccount->num_watchedplayers++;
 		}
 		// check for excluded players
-		else if (exclude && exclude.contains(";" + p->name + ";"))
+		else if (exclude.contains(";" + p->name + ";"))
 		{
 			mark = "X";
 		}
@@ -477,7 +477,7 @@ void ClientWindow::slot_player(Player *p, bool cmdplayers)
 		{
 			if (p->name == myAccount->acc_name)
 			{
-				qDebug() << "updating my account info...(2)" << std::endl;
+				qDebug() << "updating my account info...(2)";
 				// checkbox open
 				bool b = (p->info.contains('X') == 0);
 				slot_checkbox(0, b);
@@ -545,7 +545,7 @@ void ClientWindow::slot_player(Player *p, bool cmdplayers)
 	{
 		// {... has disconnected}
 		bool found = false;
-		for (QListViewItem *lvi; (lvi = lv.current()) && !found;)
+		for (Q3ListViewItem *lvi; (lvi = lv.current()) && !found;)
 		{
 			lv++;
 			// compare names
@@ -602,8 +602,8 @@ void ClientWindow::slot_addToObservationList(int flag)
 // get channelinfo: ch nr + people
 void ClientWindow::slot_channelinfo(int nr, const QString &txt)
 {
-	qDebug() << "slot_channelinfo(): " << txt << std::endl;
-	QString tipstring;
+	qDebug() << "slot_channelinfo(): " << txt;
+	QString tipstring("");
 	Channel *h;
 	Channel *ch = 0;
 
@@ -671,7 +671,7 @@ void ClientWindow::slot_channelinfo(int nr, const QString &txt)
 	if (flag_add)
 	{
 		QString text = txt.simplifyWhiteSpace();
-		int count = text.contains(" ") + 1;
+		int count = text.count(" ") + 1;
 		// set user list and user count
 		ch->set_channel(nr, QString(), txt, count);
 	}
@@ -690,7 +690,7 @@ void ClientWindow::slot_channelinfo(int nr, const QString &txt)
 		if (h->get_users().length() > 2)
 		{
 			// check if users are available; skipped if only title
-			if (tipstring)
+			if (!tipstring.isEmpty())
 				tipstring += "\n";
 			tipstring += QString("%1: %2\n%3: %4").arg(h->get_nr()).arg(h->get_title()).arg(h->get_nr()).arg(h->get_users());
 			if (statusChannel->text().length() > 2)
@@ -796,7 +796,7 @@ void ClientWindow::slot_playerContentsMoving(int /*x*/, int /*y*/)
 void ClientWindow::slot_gamesContentsMoving(int /*x*/, int /*y*/)
 {
 	QPoint p(0,0);
-	QListViewItem *i = ListView_games->itemAt(p);
+	Q3ListViewItem *i = ListView_games->itemAt(p);
 
 	if (i)
 	{
@@ -827,8 +827,7 @@ Account::~Account()
 // set caption
 void Account::set_caption()
 {
-	if ((gsName == GS_UNKNOWN) ||
-		  (!acc_name))
+	if (gsName == GS_UNKNOWN || acc_name.isNull())
 	{
 		// server unknown or no account name
 		// -> standard caption
@@ -874,7 +873,7 @@ void Account::set_gsname(GSName gs)
 	}
 
 	// set account name
-	if (!acc_name)
+	if (acc_name.isNull())
 	{
 		// acc_name should be set...
 		acc_name.sprintf("Lulu");
@@ -901,8 +900,8 @@ void Account::set_status(Status s)
 void Account::set_offline()
 {
 	gsName = GS_UNKNOWN;
-	svname = (QString) NULL;
-	acc_name = (QString) NULL;
+	svname = QString::null;
+	acc_name = QString::null;
 	status = OFFLINE;
 
 	set_caption();
@@ -1043,19 +1042,15 @@ void Talk::write(const QString &text) const
 	QString txt;
 
 	// check which text to display
-	if (text)
+	if (!text.isEmpty())
 		// ok, text given
 		txt = text;
-	else if (LineEdit1->text())
-	{
-		// take txt of edit field
+	else {
 		txt = LineEdit1->text();
+
+		if (txt.isEmpty())
+			return;
 		LineEdit1->clear();
-	}
-	else
-	{
-		// no text found...
-		return;
 	}
 
 	// Scroll at bottom of text, set cursor to end of line

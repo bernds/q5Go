@@ -5,10 +5,12 @@
 #include "preferences.h"
 #include "mainwindow.h"
 #include "qgo.h"
+//Added by qt3to4:
+#include <QPixmap>
 #include "mainwin.h"
-#include <qlistbox.h>
+#include <q3listbox.h>
 #include <qcheckbox.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qcombobox.h>
 #include <qlineedit.h>
 #include <qfontdialog.h>
@@ -21,11 +23,11 @@
 #include <stdlib.h>
 #include <time.h>
 #include <qvalidator.h>
-#include <qlistview.h>
-#include <qbuttongroup.h>
+#include <q3listview.h>
+#include <q3buttongroup.h>
 #include <qtooltip.h> 
 #include <qtoolbutton.h>
-#include <qobjectlist.h>
+#include <qobject.h>
 #include <qspinbox.h>
 
 #ifdef Q_OS_MACX
@@ -40,7 +42,7 @@
 *  The dialog will by default be modeless, unless you set 'modal' to
 *  TRUE to construct a modal dialog.
 */
-PreferencesDialog::PreferencesDialog(QWidget* parent,  const char* name, bool modal, WFlags fl)
+PreferencesDialog::PreferencesDialog(QWidget* parent,  const char* name, bool modal, Qt::WFlags fl)
 	: PreferencesDialogGui( parent, name, modal, fl )
 {
 
@@ -61,7 +63,7 @@ PreferencesDialog::PreferencesDialog(QWidget* parent,  const char* name, bool mo
 
 	// set connection titles to listview
 	for (Host *h = parent_cw->hostlist.first(); h != 0; h = parent_cw->hostlist.next())
-		new QListViewItem(ListView_hosts,
+		new Q3ListViewItem(ListView_hosts,
 			h->title(),
 			h->host(),
 			QString::number(h->port()),
@@ -69,24 +71,25 @@ PreferencesDialog::PreferencesDialog(QWidget* parent,  const char* name, bool mo
 			(h->password().length() ? "***" : ""));
 		//cb_title->insertItem(h->title());
 
-   // set the user toolbar list 
-   QPixmap p;
-   QToolButton *b0 ;
-   QListViewItem *lvi;
-   QObjectList *bl = parent_cw->UserToolbar->queryList( "QToolButton" ,NULL,true,false);
+	// set the user toolbar list 
+	QPixmap p;
+	Q3ListViewItem *lvi;
+	QObjectList bl = parent_cw->UserToolbar->queryList( "QToolButton" ,NULL,true,false);
     
-	 for ( b0 = (QToolButton*)bl->first(); b0 != 0; b0 = (QToolButton*)bl->next())
-      {
-      lvi = new  QListViewItem(ListView_buttons,
-			  "", //first column is for pixmap
-        b0->textLabel(),
-        b0->caption(),
-			  QToolTip::textFor (b0),
-        b0->iconText() );
-
-        if (p.load(b0->iconText()))
-          lvi->setPixmap(0,p);
-      }      
+	QListIterator<QObject *> bli(bl);
+	while (bli.hasNext ())
+	{
+		QToolButton *b0 = (QToolButton*)bli.next();
+		lvi = new  Q3ListViewItem(ListView_buttons,
+					  "", //first column is for pixmap
+					  b0->textLabel(),
+					  b0->caption(),
+					  b0->toolTip(),
+					  b0->iconText() );
+		
+		if (p.load(b0->iconText()))
+			lvi->setPixmap(0,p);
+	}
 	// init random-number generator
 	srand( (unsigned)time( NULL ) );
 
@@ -156,7 +159,7 @@ void PreferencesDialog::slot_apply()
 
 void PreferencesDialog::startHelpMode()
 {
-	QWhatsThis::enterWhatsThisMode();
+	Q3WhatsThis::enterWhatsThisMode();
 }
 
 void PreferencesDialog::selectFont(int selector)
@@ -289,14 +292,14 @@ void PreferencesDialog::saveSizes()
 void PreferencesDialog::insertStandardHosts()
 {
 	// standard hosts
-	new QListViewItem(ListView_hosts, "-- Aurora --");
-	new QListViewItem(ListView_hosts, "-- CTN --");
-	new QListViewItem(ListView_hosts, "-- CWS --");
-	new QListViewItem(ListView_hosts, "-- EGF --");
-	new QListViewItem(ListView_hosts, "-- IGS --");
-	new QListViewItem(ListView_hosts, "-- LGS --");
-	new QListViewItem(ListView_hosts, "-- NNGS --");
-	new QListViewItem(ListView_hosts, "-- WING --");
+	new Q3ListViewItem(ListView_hosts, "-- Aurora --");
+	new Q3ListViewItem(ListView_hosts, "-- CTN --");
+	new Q3ListViewItem(ListView_hosts, "-- CWS --");
+	new Q3ListViewItem(ListView_hosts, "-- EGF --");
+	new Q3ListViewItem(ListView_hosts, "-- IGS --");
+	new Q3ListViewItem(ListView_hosts, "-- LGS --");
+	new Q3ListViewItem(ListView_hosts, "-- NNGS --");
+	new Q3ListViewItem(ListView_hosts, "-- WING --");
 }
 
 // button "add" clicked or "ok" pressed
@@ -334,7 +337,7 @@ void PreferencesDialog::slot_add()
 				ComboBox_codec->currentText()));
 		// create entry in listview
 		if (!found)
-			new QListViewItem(ListView_hosts,
+			new Q3ListViewItem(ListView_hosts,
 				LineEdit_title->text(),
 				LineEdit_host->text(),
 				QString::number(tmp),
@@ -381,8 +384,8 @@ void PreferencesDialog::slot_delete()
 	}
 
 	// set connection titles to listview
-	QListViewItemIterator lv(ListView_hosts);
-	for (QListViewItem *lvi; (lvi = lv.current());)
+	Q3ListViewItemIterator lv(ListView_hosts);
+	for (Q3ListViewItem *lvi; (lvi = lv.current());)
 	{
 		lv++;
 		delete lvi;
@@ -392,7 +395,7 @@ void PreferencesDialog::slot_delete()
 	slot_cbtitle(QString());
 
 	for (h = parent_cw->hostlist.first(); h != 0; h = parent_cw->hostlist.next())
-		new QListViewItem(ListView_hosts,
+		new Q3ListViewItem(ListView_hosts,
 			h->title(),
 			h->host(),
 			QString::number(h->port()),
@@ -407,7 +410,7 @@ void PreferencesDialog::slot_new()
 	slot_cbtitle(QString());
 }
 
-void PreferencesDialog::slot_clickedListView(QListViewItem *lvi, const QPoint&, int)
+void PreferencesDialog::slot_clickedListView(Q3ListViewItem *lvi, const QPoint&, int)
 {
 	if (!lvi)
 		return;
@@ -540,9 +543,9 @@ void PreferencesDialog::slot_textChanged(const QString &title)
 // play the sound if check box has been clicked
 void PreferencesDialog::slot_clickedSoundCheckBox(int boxID)
 {
-	qDebug() << "boxID = " << QString::number(boxID) << std::endl;
-	QButton *cb = soundButtonGroups->find(boxID);
-	qDebug() << "button text = " << cb->text() << std::endl;
+	qDebug() << "boxID = " << QString::number(boxID);
+	QAbstractButton *cb = soundButtonGroups->find(boxID);
+	qDebug() << "button text = " << cb->text();
 
 	if (cb->text() == tr("Stones"))
 		setting->qgo->playClick();
@@ -572,7 +575,7 @@ void PreferencesDialog::slot_clickedSoundCheckBox(int boxID)
 
 void PreferencesDialog::slot_getComputerPath()
 {
-	QString fileName(QFileDialog::getOpenFileName(setting->readEntry("LAST_DIR"),
+	QString fileName(Q3FileDialog::getOpenFileName(setting->readEntry("LAST_DIR"),
 		tr("All Files (*)"), this));
 	if (fileName.isEmpty())
 		return;
@@ -593,7 +596,7 @@ void PreferencesDialog::slot_getGobanPicturePath()
 #else
 	QString path = setting->readEntry("LAST_DIR");
 #endif
-	QString fileName(QFileDialog::getOpenFileName(path,
+	QString fileName(Q3FileDialog::getOpenFileName(path,
 		tr("Images (*.png *.xpm *.jpg)"), this));
 	if (fileName.isEmpty())
 		return;
@@ -614,7 +617,7 @@ void PreferencesDialog::slot_getTablePicturePath()
 #else
 	QString path = setting->readEntry("LAST_DIR");
 #endif
-	QString fileName(QFileDialog::getOpenFileName(path,
+	QString fileName(Q3FileDialog::getOpenFileName(path,
 		tr("Images (*.png *.xpm *.jpg)"), this));
 	if (fileName.isEmpty())
 		return;
@@ -624,7 +627,7 @@ void PreferencesDialog::slot_getTablePicturePath()
 
 void PreferencesDialog::slot_getPixmapPath()
 {
-	QString fileName(QFileDialog::getOpenFileName("",tr("Images (*.png *.jpg *.xpm *.ico)"), this));
+	QString fileName(Q3FileDialog::getOpenFileName("",tr("Images (*.png *.jpg *.xpm *.ico)"), this));
 	if (fileName.isEmpty())
 		return;
 
@@ -657,16 +660,17 @@ void PreferencesDialog::slot_new_button()
 // button "add" clicked or "ok" pressed
 void PreferencesDialog::slot_add_button()
 {
-	QToolButton *b,*b0;
-	QObjectList *bl = parent_cw->UserToolbar->queryList( "QToolButton" ,NULL,true,false);
+	QObjectList bl = parent_cw->UserToolbar->queryList( "QToolButton" ,NULL,true,false);
 	bool found = false;
 	// check if at least title and host inserted
 	if (!LineEdit_label->text().isEmpty() && !LineEdit_command->text().isEmpty())
 	{
 	// check if label already exists
 
-		for ( b0 = (QToolButton*)bl->first(); (b0 != 0) && !found; b0 = (QToolButton*)bl->next())
+		QListIterator<QObject *> bli(bl);
+		while (bli.hasNext ())
 		{
+			QToolButton *b0 = (QToolButton*)bli.next();
       			if (b0->textLabel() == LineEdit_label->text())
 			{
 				found = true;
@@ -678,7 +682,7 @@ void PreferencesDialog::slot_add_button()
 
 		QPixmap p;
 
-		b=new QToolButton(parent_cw->UserToolbar) ;
+		QToolButton *b = new QToolButton(parent_cw->UserToolbar) ;
 		b->setTextLabel(LineEdit_label->text());   //label of the button
 		b->setText(LineEdit_label->text());
 		b->setCaption(LineEdit_command->text()); //dirty but handy
@@ -693,7 +697,7 @@ void PreferencesDialog::slot_add_button()
 
 		if (!found)
 		{
-			QListViewItem *buttonItem = new QListViewItem(ListView_buttons,
+			Q3ListViewItem *buttonItem = new Q3ListViewItem(ListView_buttons,
 					"",
 					LineEdit_label->text(),
 					LineEdit_command->text(),
@@ -714,7 +718,7 @@ void PreferencesDialog::slot_add_button()
 }
 
 
-void PreferencesDialog::slot_clicked_buttonListView(QListViewItem *lvi, const QPoint&, int)
+void PreferencesDialog::slot_clicked_buttonListView(Q3ListViewItem *lvi, const QPoint&, int)
 {
 	if (!lvi)
 		return;
@@ -733,22 +737,23 @@ void PreferencesDialog::slot_clicked_buttonListView(QListViewItem *lvi, const QP
 
 void PreferencesDialog::slot_delete_button()
 {
-	QObjectList *bl = parent_cw->UserToolbar->queryList( "QToolButton" ,NULL,true,false);
+	QObjectList bl = parent_cw->UserToolbar->queryList( "QToolButton" ,NULL,true,false);
 	bool found=false;
-	QToolButton  *b0;
 	
 	// check if at least title and host inserted
 	if (!LineEdit_label->text().isEmpty() )//&& !LineEdit_command->text().isEmpty())
 	{
 		// check if label already exists
 		
-		QListViewItem *lvi = ListView_buttons->findItem(LineEdit_label->text(),1);
+		Q3ListViewItem *lvi = ListView_buttons->findItem(LineEdit_label->text(),1);
 		
 		// if found, remove old item and clear fields       
 		if(lvi)
 		{
-			for ( b0 = (QToolButton*)bl->first(); (b0 != 0) && !found; b0 = (QToolButton*)bl->next())
+			QListIterator<QObject *> bli(bl);
+			while (bli.hasNext ())
 			{
+				QToolButton *b0 = (QToolButton*)bli.next();
 				//QString sb= b0->text();
 				//QString sl = LineEdit_label->text();
 				if (b0->textLabel() == LineEdit_label->text())
