@@ -3157,7 +3157,7 @@ void ClientWindow::slot_statsPlayer(Player *p)
 	 
 	 // stored either idle time or last access	 
 	 dlg->stats_idle->setText(p->idle);
-	 dlg->Label_Idle->setText(p->idle.at(0).isDigit() ? "Idle :": "Last log :");
+	 dlg->Label_Idle->setText(!p->idle.isEmpty() && p->idle.at(0).isDigit() ? "Idle :": "Last log :");
 
 	 
         }   
