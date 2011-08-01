@@ -17,7 +17,7 @@ AC_CANONICAL_SYSTEM
 AC_C_BIGENDIAN
 
 dnl Automake doc recommends to do this only here. (Janos)
-AM_INIT_AUTOMAKE(q4go,4.0.0)
+AM_INIT_AUTOMAKE(q4go,0.1)
 
 dnl KDE_SET_PREFIX
 

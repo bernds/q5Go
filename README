@@ -1,3 +1,14 @@
+q4Go 0.1
+
+This is a port of the last qGo (1.5.2) sources from CVS to Qt4. It should be
+considered alpha quality. The motivation is simply a personal feeling that
+the new GUI in qGo2 is a step backwards, and Qt3 is getting increasingly less
+supported.
+
+This port was done by Bernd Schmidt <bernds_cb1@t-online.de>.
+
+Below is the old README:
+
 qGo 1.5.2
 ---------
 

@@ -4524,7 +4524,7 @@ fi
 
 # Define the identity of the package.
  PACKAGE=q4go
- VERSION=4.0.0
+ VERSION=0.1
 
 
 cat >>confdefs.h <<_ACEOF
