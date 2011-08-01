@@ -644,7 +644,7 @@ void ClientWindow::timerEvent(QTimerEvent* e)
 		else if (myAccount->get_gsname() == IGS && holdTheLine)
 		{
 			sendcommand("ayt", false);
-			qDebug(QString("%1 -> ayt").arg(statusOnlineTime->text()));
+			qDebug() << statusOnlineTime->text() << " ayt" << std::endl;
 		}
 	}
 
@@ -712,7 +712,7 @@ void ClientWindow::timerEvent(QTimerEvent* e)
 // slot_connect: emitted when connect button has toggled
 void ClientWindow::slot_connect(bool b)
 {
-qDebug("connect %i", (int)b);
+qDebug() << "connect " << (int)b << std::endl;
 	if (b)
 	{
 		// create instance of telnetConnection
@@ -749,7 +749,7 @@ void ClientWindow::slot_connclosed()
 	qgoif->set_initIF();
 
 	qDebug("slot_connclosed()");
-	qDebug(QString("%1 -> slot_connclosed()").arg(statusOnlineTime->text()));
+	qDebug() << statusOnlineTime->text() << " -> slot_connclosed()" << std::endl;
 
 	qgoif->get_qgo()->playConnectSound();
 
@@ -1127,8 +1127,7 @@ void ClientWindow::sendTextToApp(const QString &txt)
 	// Scroll at bottom of text, set cursor to end of line
 	MultiLineEdit_messages->insertLine(txt);
 */
-	if (DODEBUG)
-		qDebug(txt);
+	qDebug() << txt << std::endl;
 }
 
 // used for singleShot actions
@@ -1263,8 +1262,7 @@ void ClientWindow::sendcommand(const QString &cmd, bool localecho)
 	{
 		// add to Messages, anyway
 		// Scroll at bottom of text, set cursor to end of line
-		if (DODEBUG)
-			qDebug(cmd);
+		qDebug() << cmd << std::endl;
     slot_message(cmd,Qt::blue);
 	}
 

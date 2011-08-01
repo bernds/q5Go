@@ -19,6 +19,7 @@ email                :
 //#include <unistd.h>
 #include <stdlib.h>
 #include <qprocess.h>
+#include "defines.h"
 #include "qgtp.h"
 
 #ifdef Q_WS_WIN
@@ -160,7 +161,7 @@ void QGtp::slot_readFromStdout()
 // exit
 void QGtp::slot_processExited()
 {
-	qDebug(QString("%1 quit").arg(_cpt));
+	qDebug() << _cpt << " quit" << std::endl;
 	sprintf (outFile, "%d quit\n", _cpt);
 	fflush(outFile);
 	//	return waitResponse();
@@ -219,7 +220,7 @@ QGtp::waitResponse()
 	number = _response.mid(1,pos).toInt();
 	_response = _response.right(_response.length() - pos - 1);
 
-	qDebug(QString("** QGtp::waitResponse(): [%1]").arg(_response));
+	qDebug() << QString("** QGtp::waitResponse(): [%1]").arg(_response) << std::endl;
 
 	if (buff == '?') //symbole=='?')
 	{
@@ -243,7 +244,7 @@ QGtp::waitResponse()
 int
 QGtp::name ()
 {
-	qDebug(QString("%1 name").arg(_cpt));
+	qDebug() << _cpt << " name" << std::endl;
 	sprintf (outFile, "%d name\n", _cpt);
 	fflush(outFile);
 	return waitResponse();
@@ -257,7 +258,7 @@ QGtp::name ()
 int
 QGtp::protocolVersion ()
 {
-	qDebug(QString("%1 protocol_version").arg(_cpt));
+	qDebug() << _cpt << " protocol_version" << std::endl;
 	sprintf (outFile, "%d protocol_version\n", _cpt);
 	fflush(outFile);
 	return waitResponse();
@@ -276,7 +277,7 @@ int msglen = strlen(s);
 	*/
 	_cpt++;
 
-	qDebug(QString("flush -> %1").arg(s));
+	qDebug() << "flush -> " << s << std::endl;
 	programProcess->writeToStdin(QString(s));
 	
 	

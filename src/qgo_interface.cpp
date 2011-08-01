@@ -186,7 +186,7 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 
 		// computer game
 		case 6: game_id = ++localBoardCounter; //txt.toInt();
-			qDebug(QString("computer game no. %1").arg(game_id));
+			qDebug() << QString("computer game no. %1").arg(game_id) << std::endl;
 			break;      
 
 		// remove all boards! -> if connection is closed
@@ -560,7 +560,7 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 				{
 					qgobrd->get_win()->getBoard()->getGameData()->result = rs;
 					qgobrd->send_kibitz(rs);
-					qDebug("Result: " + rs);
+					qDebug() << "Result: " << rs << std::endl;
 				}
 
 				if (g->Sz.contains("adjourned") && qgobrd->get_bplayer() && qgobrd->get_wplayer())
@@ -568,7 +568,7 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 					if (qgobrd->get_bplayer() == myName || qgobrd->get_wplayer() == myName)
 						// can only reload own games
 						qgobrd->get_win()->getInterfaceHandler()->refreshButton->setText(tr("LOAD"));
-					qDebug("game adjourned... #" + QString::number(qgobrd->get_id()));
+					qDebug() << "game adjourned... #" << QString::number(qgobrd->get_id()) << std::endl;
 					qgobrd->set_adj(true);
 					qgobrd->set_id(10000);
 					qgobrd->clearObserverList();
@@ -654,7 +654,7 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 						// I'm black, so check before the first move if komi, handi, free is correct
 						if (qgobrd->get_requests_set())
 						{
-							qDebug("qGoIF::parse_move() : check_requests");
+							qDebug() << "qGoIF::parse_move() : check_requests" << std::endl;
 							qgobrd->check_requests();
 						}
 					}
@@ -829,7 +829,7 @@ void qGoIF::slot_matchsettings(const QString &id, const QString &handicap, const
 	}
 
 	qb->set_requests(handicap, komi, kt);
-	qDebug(QString("qGoIF::slot_matchsettings: h=%1, k=%2, kt=%3").arg(handicap).arg(komi).arg(kt));
+	qDebug() << QString("qGoIF::slot_matchsettings: h=%1, k=%2, kt=%3").arg(handicap).arg(komi).arg(kt) << std::endl;
 }
 
 void qGoIF::slot_title(const QString &title)
@@ -885,7 +885,7 @@ void qGoIF::slot_komi(const QString &nr, const QString &komi, bool isrequest)
 			// check if same opponent twice (IGS problem...)
 			if (move_number_memo == qb->get_mv_counter() && komi_memo  && komi_memo == komi)
 			{
-				qDebug(QString("...request skipped: opponent %1 wants komi %2").arg(nr).arg(komi));
+				qDebug() << QString("...request skipped: opponent %1 wants komi %2").arg(nr).arg(komi) << std::endl;
 				return;
 			}
 
@@ -969,7 +969,7 @@ void qGoIF::slot_closeevent()
 		return;
 	}
 
-	qDebug(QString("qGoIF::slot_closeevent() -> game %1").arg(qb->get_id()));
+	qDebug() << QString("qGoIF::slot_closeevent() -> game %1").arg(qb->get_id()) << std::endl;
 
 	// destroy timers
 	qb->set_stopTimer();
@@ -1086,7 +1086,7 @@ void qGoIF::slot_requestDialog(const QString &yes, const QString &no, const QStr
 
 		if (mb.exec() == QMessageBox::Yes)
 		{
-			qDebug(QString(QString("qGoIF::slot_requestDialog(): emit %1").arg(yes)));
+			qDebug() << QString("qGoIF::slot_requestDialog(): emit %1").arg(yes) << std::endl;
 			emit signal_sendcommand(yes, false);
 		}
 	}
@@ -1105,12 +1105,12 @@ void qGoIF::slot_requestDialog(const QString &yes, const QString &no, const QStr
 
 		if (mb.exec() == QMessageBox::Yes)
 		{
-			qDebug(QString(QString("qGoIF::slot_requestDialog(): emit %1").arg(yes)));
+			qDebug() << QString("qGoIF::slot_requestDialog(): emit %1").arg(yes) << std::endl;
 			emit signal_sendcommand(yes, false);
 		}
 		else
 		{
-			qDebug(QString(QString("qGoIF::slot_requestDialog(): emit %1").arg(no)));
+			qDebug() << QString("qGoIF::slot_requestDialog(): emit %1").arg(no) << std::endl;
 			emit signal_sendcommand(no, false);
 		}
 	}
@@ -1295,7 +1295,7 @@ const QString &komi)
 		}
 		// send kibitz string after counting
 		if (txt.toInt() == (int) line.length() - 1)
-			/*send_kibitz*/ qDebug(tr("Game Status: W:") + QString::number(wcount) + " " + tr("B:") + QString::number(bcount));
+			/*send_kibitz*/ qDebug() << tr("Game Status: W:") << QString::number(wcount) << " " << tr("B:") << QString::number(bcount) << std::endl;
 
 		// show territory
 		qb->get_win()->getBoard()->updateCanvas();
@@ -1610,7 +1610,7 @@ void qGoBoard::set_komi(const QString &k)
 	else
 		k_ = k;
 
-	qDebug(QString("set komi to %1").arg(k_));
+	qDebug() << "set komi to " << k_ << std::endl;
 
 	gd.komi = k_.toFloat();
 	win->getBoard()->setGameData(&gd);
@@ -1893,8 +1893,8 @@ void qGoBoard::set_move(StoneColor sc, QString pt, QString mv_nr)
 		if (!pt)
 		{
 			// case: undo
-			qDebug("set_move(): UNDO in game " + QString::number(id));
-			qDebug("...mv_nr = " + mv_nr);
+			qDebug() << "set_move(): UNDO in game " << QString::number(id) << std::endl;
+			qDebug() << "...mv_nr = " << mv_nr << std::endl;
 
 			                                                                       //added eb 9
 			Move *m=win->getBoard()->getBoardHandler()->getTree()->getCurrent();
@@ -1953,7 +1953,7 @@ void qGoBoard::set_move(StoneColor sc, QString pt, QString mv_nr)
 			// if black has not already done - maybe too late here???
 			if (requests_set)
 			{
-				qDebug(QString("qGoBoard::set_move() : check_requests at move %1").arg(mv_counter));
+				qDebug() << "qGoBoard::set_move() : check_requests at move " << mv_counter << std::endl;
 				check_requests();
 			}
 		}
@@ -2127,7 +2127,7 @@ void qGoBoard::send_kibitz(const QString msg)
 	}
 
 	// skip my own messages
-qDebug("msg.find(myName) = " + QString::number(msg.find(myName)));
+qDebug() << "msg.find(myName) = " << QString::number(msg.find(myName)) << std::endl;
 //	if (msg.find(myName) == 0)
 //		return;
 
@@ -2463,8 +2463,8 @@ void qGoBoard::slot_doRefresh()
 
 void qGoBoard::set_requests(const QString &handicap, const QString &komi, assessType kt)
 {
-qDebug("set req_handicap to " + handicap);
-qDebug("set req_komi to " + komi);
+qDebug() << "set req_handicap to " << handicap << std::endl;
+qDebug() << "set req_komi to " << komi << std::endl;
 	req_handicap = handicap;
 	req_komi = komi;
 	req_free = kt;
@@ -2482,7 +2482,7 @@ void qGoBoard::check_requests()
 	if (gd.handicap != req_handicap.toInt())
 	{
 		emit signal_sendcommand("handicap " + req_handicap, false);
-		qDebug("Requested handicap: " + req_handicap);
+		qDebug() << "Requested handicap: " << req_handicap << std::endl;
 	}
 	else
 		qDebug("Handicap settings ok...");

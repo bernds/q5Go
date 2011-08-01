@@ -18,7 +18,6 @@
 #include <qtooltip.h>
 #include <qpalette.h>
 
-
 // prepare tables (clear, ...)
 void ClientWindow::prepare_tables(InfoType cmd)
 {
@@ -107,7 +106,7 @@ QString ClientWindow::getPlayerExcludeListEntry(QString player)
 	QListViewItem *lvpi;
 
 	if (DODEBUG)
-		qDebug(QString("getPlayerExcludeListEntry(%1)").arg(player));
+		qDebug() << QString("getPlayerExcludeListEntry(%1)").arg(player) << std::endl;
 
 	// look for players in playerlist
 	for (; (lvpi = lvp.current()); lvp++)
@@ -116,7 +115,7 @@ QString ClientWindow::getPlayerExcludeListEntry(QString player)
 		if (lvpi->text(1) == player)
 		{
 			if (DODEBUG)
-				qDebug(QString("text(1) = %1, player = %2").arg(lvpi->text(1)).arg(player));
+				qDebug() << QString("text(1) = %1, player = %2").arg(lvpi->text(1)).arg(player) << std::endl;
 
 			return lvpi->text(6);
 		}
@@ -154,7 +153,7 @@ void ClientWindow::slot_game(Game* g)
 		else if (!g->H && !myAccount->num_games)
 		{
 			// skip games until initial table has loaded
-			qDebug("game skipped because no init table");
+			qDebug() << "game skipped because no init table" << std::endl;
 			return;
 		}
 
@@ -413,7 +412,7 @@ void ClientWindow::slot_player(Player *p, bool cmdplayers)
 
 					if (p->name == myAccount->acc_name)
 					{
-						qDebug("updating my account info... (1)");
+						qDebug() << "updating my account info... (1)" << std::endl;
 						// checkbox open
 						bool b = (p->info.contains('X') == 0);
 						slot_checkbox(0, b);
@@ -442,7 +441,7 @@ void ClientWindow::slot_player(Player *p, bool cmdplayers)
 		}
 		else if (!cmdplayers && !myAccount->num_players)
 		{
-			qDebug("player skipped because no init table");
+			qDebug() << "player skipped because no init table" << std::endl;
 			// skip players until initial table has loaded
 			return;
 		}
@@ -478,7 +477,7 @@ void ClientWindow::slot_player(Player *p, bool cmdplayers)
 		{
 			if (p->name == myAccount->acc_name)
 			{
-				qDebug("updating my account info...(2)");
+				qDebug() << "updating my account info...(2)" << std::endl;
 				// checkbox open
 				bool b = (p->info.contains('X') == 0);
 				slot_checkbox(0, b);
@@ -603,7 +602,7 @@ void ClientWindow::slot_addToObservationList(int flag)
 // get channelinfo: ch nr + people
 void ClientWindow::slot_channelinfo(int nr, const QString &txt)
 {
-	qDebug("slot_channelinfo(): " + txt);
+	qDebug() << "slot_channelinfo(): " << txt << std::endl;
 	QString tipstring;
 	Channel *h;
 	Channel *ch = 0;
@@ -816,7 +815,7 @@ Account::Account(QWidget* parent)
 {
 	// init
 	this->parent = parent;
-	standard.sprintf(PACKAGE + QString("V") + VERSION);
+	standard = PACKAGE + QString("V") + VERSION;
 
 	set_offline();
 }

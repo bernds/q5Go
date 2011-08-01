@@ -540,9 +540,9 @@ void PreferencesDialog::slot_textChanged(const QString &title)
 // play the sound if check box has been clicked
 void PreferencesDialog::slot_clickedSoundCheckBox(int boxID)
 {
-	qDebug("boxID = " + QString::number(boxID));
+	qDebug() << "boxID = " << QString::number(boxID) << std::endl;
 	QButton *cb = soundButtonGroups->find(boxID);
-	qDebug("button text = " + cb->text());
+	qDebug() << "button text = " << cb->text() << std::endl;
 
 	if (cb->text() == tr("Stones"))
 		setting->qgo->playClick();

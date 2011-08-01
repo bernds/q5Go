@@ -31,7 +31,6 @@
 #include <qregexp.h>
 #include <qptrstack.h>
 
-
 #define STR_OFFSET 2000
 /* #define DEBUG_CODEC */
 
@@ -238,7 +237,7 @@ bool SGFParser::parseString(const QString &toParse)
 
 QString SGFParser::loadFile(const QString &fileName)
 {
-	qDebug("Trying to load file <%s>", fileName.latin1());
+	qDebug() << "Trying to load file " << fileName << std::endl;
 	
 	QFile file(fileName);
 	
@@ -733,7 +732,7 @@ if (tree->getCurrent()->getTimeinfo())
 						// rare case: root contains move or placed stone:
 						if (remember_root)
 						{
-							qDebug("root contains stone -> node created");
+							qDebug() << "root contains stone -> node created" << std::endl;
 							boardHandler->createMoveSGF();
 							unknownProperty = QString();
 							isRoot = false;
@@ -826,7 +825,7 @@ if (tree->getCurrent()->getTimeinfo())
 						{
 							if (static_cast<unsigned int>(pos) > strLength-1)
 							{
-								qDebug("SGF: Nodename string ended immediately");
+								qDebug() << "SGF: Nodename string ended immediately" << std::endl;
 								delete toParse;
 								return corruptSgf(pos, "SGF: Nodename string ended immediately");
 							}
@@ -878,7 +877,7 @@ if (tree->getCurrent()->getTimeinfo())
 						{
 							if (static_cast<unsigned int>(pos) > strLength-1)
 							{
-								qDebug("SGF: Comment string ended immediately");
+								qDebug() << "SGF: Comment string ended immediately" << std::endl;
 								delete toParse;
 								return corruptSgf(pos, "SGF: Comment string ended immediately");
 							}
@@ -959,7 +958,7 @@ if (tree->getCurrent()->getTimeinfo())
 						{
 							if (static_cast<unsigned int>(pos) > strLength-1)
 							{
-								qDebug("SGF: Unknown property ended immediately");
+								qDebug() << "SGF: Unknown property ended immediately" << std::endl;
 								delete toParse;
 								return corruptSgf(pos, "SGF: Unknown property ended immediately");
 							}
@@ -1357,7 +1356,7 @@ bool SGFParser::initGame(const QString &toParse, const QString &fileName)
 				gameData->byoPeriods = tmp.left(pos1).toInt();
 				gameData->byoStones = 0;
 
-				qDebug(QString("byoyomi time system: %1 Periods at %2 seconds").arg(gameData->byoPeriods).arg(gameData->byoTime));
+				qDebug() << QString("byoyomi time system: %1 Periods at %2 seconds").arg(gameData->byoPeriods).arg(gameData->byoTime) << std::endl;
 			}
 		}
 		else if (tmp.contains(":"))
@@ -1373,7 +1372,7 @@ bool SGFParser::initGame(const QString &toParse, const QString &fileName)
 				gameData->byoPeriods = t/gameData->byoTime;
 				gameData->byoStones = 0;
 
-				qDebug(QString("byoyomi time system: %1 Periods at %2 seconds").arg(gameData->byoPeriods).arg(gameData->byoTime));
+				qDebug() << QString("byoyomi time system: %1 Periods at %2 seconds").arg(gameData->byoPeriods).arg(gameData->byoTime) << std::endl;
 			}
 		}
 		else if (tmp.contains("Canadian"))
@@ -1388,7 +1387,7 @@ bool SGFParser::initGame(const QString &toParse, const QString &fileName)
 				gameData->byoTime = time.toInt();
 				gameData->byoStones = tmp.left(pos1).toInt();
 
-				qDebug(QString("Canadian time system: %1 seconds at %2 stones").arg(gameData->byoTime).arg(gameData->byoStones));
+				qDebug() << QString("Canadian time system: %1 seconds at %2 stones").arg(gameData->byoTime).arg(gameData->byoStones) << std::endl;
 			}
 		}
 
@@ -1715,7 +1714,7 @@ qDebug("found 19x19");
 		}
 		else
 		{
-qDebug(QString("found nr == %1").arg(nr));
+qDebug() << QString("found nr == %1").arg(nr) << std::endl;
 			return false;
 		}
 

@@ -18,8 +18,8 @@ public:
 	GameDialog(QWidget* parent = 0, const char* name = 0, bool modal = true, WFlags fl = 0);
 	~GameDialog();
 	void set_gsName(GSName g) { gsname = g; }
-	void set_oppRk(QString &rk) { oppRk = rk; qDebug("oppRk: " + rk); }
-	void set_myRk(QString &rk) { myRk = rk; qDebug("myRk: " + rk); }
+	void set_oppRk(QString &rk) { oppRk = rk; qDebug() << "oppRk: " << rk << std::endl; }
+	void set_myRk(QString &rk) { myRk = rk; qDebug() << "myRk: " << rk << std::endl; }
 	void set_myName(QString &name) { myName = name; }
 	void set_is_nmatch (bool b) { is_nmatch = b; }
 

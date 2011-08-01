@@ -94,4 +94,13 @@ struct ASCII_Import
 	char blackStone, whiteStone, starPoint, emptyPoint, hBorder, vBorder;
 };
 
+#include <iostream>
+#include <fstream>
+
+#ifdef DODEBUG
+inline std::ostream &qDebug() { return std::cout; }
+#else
+inline std::ofstream &qDebug() { static std::ofstream fish("/dev/null"); return fish; }
+#endif
+
 #endif

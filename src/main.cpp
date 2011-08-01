@@ -106,8 +106,8 @@ int main(int argc, char **argv)
 	// get application path
 	QFileInfo program(argv[0]);
 	QString program_dir = program.dirPath(true);
-	qDebug("main:qt->PROGRAM.DIRPATH = " + program_dir);
-	qDebug("style = " + style);
+	qDebug() << "main:qt->PROGRAM.DIRPATH = " << program_dir << std::endl;
+	qDebug() << "style = " << style << std::endl;
 	
 	// restore last setting
 	setting = new Setting();                
@@ -120,7 +120,7 @@ int main(int argc, char **argv)
 	QTranslator trans(0);
 	QString lang = setting->getLanguage();
 	//const char *lang = setting->getLanguage();
-	qDebug(QString("Checking for language settings...") + lang);
+	qDebug() << "Checking for language settings..." << lang << std::endl;
 	QString tr_dir = setting->getTranslationsDirectory(), loc;
 	
 	if (lang == NULL)

@@ -207,7 +207,7 @@ void Setting::loadSettings()
 
 	if (!file.exists() || !file.open(IO_ReadOnly))
 	{
-		qDebug("Failed loading settings: " + file.name());
+		qDebug() << "Failed loading settings: " << file.name() << std::endl;
 
 		// maybe old file available
 		file.setName(QDir::homeDirPath() + "/.qgoclientrc");
@@ -219,7 +219,7 @@ void Setting::loadSettings()
 		}
 	}
 
-	qDebug("Use settings: " + file.name());
+	qDebug() << "Use settings: " << file.name() << std::endl;
 
 	// read file
 	QTextStream txt(&file);
@@ -400,7 +400,7 @@ QString Setting::readEntry(const QString &key)
 		if (par->key() == key)
 			return par->txt();
 
-	qDebug("Setting::readEntry(): " + key + " == 0");
+	qDebug() << "Setting::readEntry(): " << key << " == 0" << std::endl;
 	return NULL;
 }
 

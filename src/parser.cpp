@@ -875,7 +875,7 @@ InfoType Parser::cmd9(QString &line)
 		{
 			// don't work correct at IGS!!!
 			int i = line.contains(',');
-			qDebug(QString("observing %1 games").arg(i+1));
+			qDebug() << QString("observing %1 games").arg(i+1) << std::endl;
 //					emit signal_addToObservationList(i+1);
 		}
 
@@ -1743,7 +1743,7 @@ InfoType Parser::cmd27(const QString &txt)
 			emit signal_player(aPlayer, true);
 		}
 		else
-			qDebug("WING - player27 dropped (1): " + txt);
+			qDebug() << "WING - player27 dropped (1): " << txt << std::endl;
 
 		// position of delimiter between two players
 		pos = txt.find('|');
@@ -1775,7 +1775,7 @@ InfoType Parser::cmd27(const QString &txt)
 			emit signal_player(aPlayer, true);
 		}
 		else
-			qDebug("WING - player27 dropped (2): " + txt);
+			qDebug() << "WING - player27 dropped (2): " << txt << std::endl;
 	}
 	else
 	{
@@ -1807,7 +1807,7 @@ InfoType Parser::cmd27(const QString &txt)
 			emit signal_player(aPlayer, true);
 		}
 		else
-			qDebug("player27 dropped (1): " + txt);
+			qDebug() << "player27 dropped (1): " << txt << std::endl;
 
 		// position of delimiter between two players
 		pos = txt.find('|');
@@ -1840,7 +1840,7 @@ InfoType Parser::cmd27(const QString &txt)
 			emit signal_player(aPlayer, true);
 		}
 		else
-			qDebug("player27 dropped (2): " + txt);
+			qDebug() << "player27 dropped (2): " << txt << std::endl;
 	}
 
 	return PLAYER27;
@@ -2009,8 +2009,8 @@ InfoType Parser::cmd42(const QString &txt)
 			     "([A-Za-z0-9]+) +([^ ]{,2}) +default  ([TF])(.*)?");
 	if(re.match(txt) < 0)
 	{
-		qDebug("%s\n", txt.utf8().data());
-		qDebug("No match\n");
+		qDebug() << txt.utf8().data() << std::endl;
+		qDebug() << "No match" << std::endl;
 		return IT_OTHER;
 	}
 	// 42       Neil  <None>          USA      12k  136/  86  -   -    0s    -X default  T BWN 0-9 19-19 60-60 60-3600 25-25 0-0 0-0 0-0
