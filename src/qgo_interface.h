@@ -219,7 +219,7 @@ public slots:
 	void slot_move(Game*);
 	void slot_computer_game(QNewGameDlg*);
 	void slot_kibitz(int, const QString&, const QString&);
-	void slot_title(const QString&);
+	void slot_title(const GameInfo *, const QString&);
 	void slot_komi(const QString&, const QString&, bool);
 	void slot_freegame(bool);
 	void slot_matchcreate(const QString&, const QString&);

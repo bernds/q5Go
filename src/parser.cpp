@@ -432,7 +432,7 @@ InfoType Parser::cmd7(const QString &line)
 
 	emit signal_game(aGame);
 	emit signal_move(aGame);
-			
+
 	return GAME7;
 }
 
@@ -599,8 +599,11 @@ InfoType Parser::cmd9(QString &line)
 	}
 	else if (line.contains("Game is titled:"))
 	{
+		// This is preceded by a command 15 move, which has left the game ID
+		// in aGameInfo.
 		QString t = line.section(':', 1);
-		emit signal_title(t);
+		qDebug() << "got game title " << t << " for " << aGameInfo->nr;
+		emit signal_title(aGameInfo, t);
 		return IT_OTHER;
 	}
 	else if (line.contains("offers a new komi "))

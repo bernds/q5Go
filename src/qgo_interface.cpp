@@ -837,30 +837,24 @@ void qGoIF::slot_matchsettings(const QString &id, const QString &handicap, const
 	qDebug() << QString("qGoIF::slot_matchsettings: h=%1, k=%2, kt=%3").arg(handicap).arg(komi).arg(kt);
 }
 
-void qGoIF::slot_title(const QString &title)
+void qGoIF::slot_title(const GameInfo *gi, const QString &title)
 {
-	// title message follows to move message -> not reliable
-	// only teaching games can have a title
+	// This used to check that only teaching games can have a title.
+	// However, it seems that we can reliably identify boards by game
+	// ID - see parser.cpp.
 
-	// seek board
-	int found = 0;
-	qGoBoard *qb_save = 0;
 	qGoBoard *qb = boardlist->first();
 	while (qb)
 	{
-		if (//!qb->get_haveTitle() &&
-			(qb->get_wplayer() == qb->get_bplayer() ||
-			 qb->get_gameData().freegame == TEACHING))
+		if (qb->get_id() == gi->nr.toInt()
+		    && (qb->get_Mode() == modeMatch || qb->get_Mode() == modeTeach
+			|| qb->get_Mode() == modeObserve))
 		{
-			qb_save = qb;
-			found++;
+			qb->set_title(title);
+			return;
 		}
 		qb = boardlist->next();
-	}
-
-	// set title if only one teaching game (with or without title) found
-	if (found == 1 && qb_save)
-		qb_save->set_title(title);
+	}	
 }
 
 // komi set or requested
@@ -1247,7 +1241,9 @@ const QString &komi)
 	{
 		qb = boardlist->first();
 		// find right board - slow, but just once a game
-		while (qb != NULL && qb->get_wplayer() != txt && qb->get_bplayer() != txt)
+		while (qb != NULL
+		       && ((qb->get_wplayer() != txt && qb->get_bplayer() != txt
+			    || (qb->get_Mode() != modeMatch && qb->get_Mode() != modeTeach))))
 			qb = boardlist->next();
 
 		if (qb && qb->get_wplayer() == txt)

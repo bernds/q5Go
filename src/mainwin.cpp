@@ -406,7 +406,7 @@ ClientWindow::ClientWindow(Q3MainWindow *parent, const char* name, Qt::WFlags fl
 	connect(parser, SIGNAL(signal_move(GameInfo*)), qgoif, SLOT(slot_move(GameInfo*)));
 	connect(parser, SIGNAL(signal_move(Game*)), qgoif, SLOT(slot_move(Game*)));
 	connect(parser, SIGNAL(signal_kibitz(int, const QString&, const QString&)), qgoif, SLOT(slot_kibitz(int, const QString&, const QString&)));
-	connect(parser, SIGNAL(signal_title(const QString&)), qgoif, SLOT(slot_title(const QString&)));
+	connect(parser, SIGNAL(signal_title(const GameInfo *, const QString&)), qgoif, SLOT(slot_title(const GameInfo *, const QString&)));
 	connect(parser, SIGNAL(signal_komi(const QString&, const QString&, bool)), qgoif, SLOT(slot_komi(const QString&, const QString&, bool)));
 	connect(parser, SIGNAL(signal_freegame(bool)), qgoif, SLOT(slot_freegame(bool)));
 	connect(parser, SIGNAL(signal_matchcreate(const QString&, const QString&)), qgoif, SLOT(slot_matchcreate(const QString&, const QString&)));
