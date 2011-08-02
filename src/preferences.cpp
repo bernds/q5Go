@@ -43,12 +43,12 @@
 *  TRUE to construct a modal dialog.
 */
 PreferencesDialog::PreferencesDialog(QWidget* parent,  const char* name, bool modal, Qt::WFlags fl)
-	: PreferencesDialogGui( parent, name, modal, fl )
+	: QDialog ( parent, name, modal, fl )
 {
+	setupUi(this);
+	ListView_buttons->setColumnWidth(4,0);
 
-  ListView_buttons->setColumnWidth(4,0);
-
-  // pointer to ClientWindow
+	// pointer to ClientWindow
 	parent_cw = setting->cw;
 	CHECK_PTR(parent_cw);
 
@@ -153,6 +153,7 @@ PreferencesDialog::~PreferencesDialog()
 
 void PreferencesDialog::slot_apply()
 {
+	qDebug() << "onApply";
 	((MainWindow*)parentWidget())->preferencesSave(this);
 	((MainWindow*)parentWidget())->preferencesAccept();
 }
@@ -541,10 +542,8 @@ void PreferencesDialog::slot_textChanged(const QString &title)
 }
 
 // play the sound if check box has been clicked
-void PreferencesDialog::slot_clickedSoundCheckBox(int boxID)
+void PreferencesDialog::on_soundButtonGroup_buttonClicked(QAbstractButton *cb)
 {
-	qDebug() << "boxID = " << QString::number(boxID);
-	QAbstractButton *cb = soundButtonGroups->find(boxID);
 	qDebug() << "button text = " << cb->text();
 
 	if (cb->text() == tr("Stones"))

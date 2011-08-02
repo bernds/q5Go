@@ -5,20 +5,6 @@
 #ifndef MAINWIN_H
 #define MAINWIN_H
 
-#include "clientwindow_gui.h"
-#include "gui_dialog.h"
-#include "setting.h"
-#include "tables.h"
-#include "config.h"
-#include "telnet.h"
-#include "igsinterface.h"
-#include "parser.h"
-#include "gs_globals.h"
-#include "gamedialog.h"
-#include "maintable.h"
-#include "gamestable.h"
-#include "playertable.h"
-#include "mainwindow.h"
 #include <qwidget.h>
 #include <qapplication.h>
 #include <qdialog.h>
@@ -51,6 +37,21 @@
 #include <QPixmap>
 #include <Q3PopupMenu>
 
+#include "clientwindow_gui.h"
+#include "miscdialogs.h"
+#include "setting.h"
+#include "tables.h"
+#include "config.h"
+#include "telnet.h"
+#include "igsinterface.h"
+#include "parser.h"
+#include "gs_globals.h"
+#include "gamedialog.h"
+#include "maintable.h"
+#include "gamestable.h"
+#include "playertable.h"
+#include "mainwindow.h"
+
 //#include <qstyle.h>
 
 class GamesTable;
@@ -69,7 +70,7 @@ private:
 	bool localecho;
 };
 
-class ClientWindow : public ClientWindowGui
+class ClientWindow : public Q3MainWindow, public Ui::ClientWindowGui
 {
 	Q_OBJECT
 

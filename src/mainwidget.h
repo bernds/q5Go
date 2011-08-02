@@ -1,16 +1,15 @@
 #ifndef MAINWIDGET_H
 #define MAINWIDGET_H
 
+#include "misctools.h"
 #include "mainwidget_gui.h"
 #include "interfacehandler.h"
 #include "setting.h"
 #include "defines.h"
 
 //class InterfaceHandler;
-class NormalTools;
-class ScoreTools;
 
-class MainWidget : public MainWidgetGui
+class MainWidget : public QWidget, public Ui::MainWidgetGui
 { 
 	Q_OBJECT
 		
@@ -26,7 +25,6 @@ public:
 	void doRealScore(bool);
 
 	InterfaceHandler *interfaceHandler;
-	ScoreTools *scoreTools;
 
 public slots:
 	void slot_toolsTabChanged(QWidget*);

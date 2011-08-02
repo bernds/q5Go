@@ -13,7 +13,7 @@ class QIntValidator;
 class MainWindow;
 class ClientWindow;
 
-class PreferencesDialog : public PreferencesDialogGui
+class PreferencesDialog : public QDialog, public Ui::PreferencesDialogGui
 { 
 	Q_OBJECT
 
@@ -28,6 +28,7 @@ signals:
 	void signal_delHost(const QString&);
 
 public slots:
+	void on_soundButtonGroup_buttonClicked(QAbstractButton *);
 	virtual void slot_cbtitle(const QString&);
 	virtual void slot_new();
 	virtual void slot_add();
@@ -39,7 +40,6 @@ public slots:
 	virtual void slot_text_buttonChanged(const QString&);
 	virtual void slot_clickedListView(Q3ListViewItem*, const QPoint&, int);
 	virtual void slot_clicked_buttonListView(Q3ListViewItem*, const QPoint&, int);
-	virtual void slot_clickedSoundCheckBox(int boxID);
 	virtual void slot_apply();
 	virtual void startHelpMode();
 	virtual void selectFont(int);

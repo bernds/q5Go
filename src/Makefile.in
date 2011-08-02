@@ -68,16 +68,7 @@ am__objects_1 = board.$(OBJEXT) boardhandler.$(OBJEXT) \
 	searchpath.$(OBJEXT)
 am__objects_2 =
 am_q4go_OBJECTS = $(am__objects_1) $(am__objects_2)
-am__objects_3 = clientwindow_gui.uic.$(OBJEXT) \
-	gameinfo_gui.uic.$(OBJEXT) gui_dialog.uic.$(OBJEXT) \
-	mainwidget_gui.uic.$(OBJEXT) newgame_gui.uic.$(OBJEXT) \
-	newlocalgame_gui.uic.$(OBJEXT) noderesults_gui.uic.$(OBJEXT) \
-	normaltools_gui.uic.$(OBJEXT) nthmove_gui.uic.$(OBJEXT) \
-	preferences_gui.uic.$(OBJEXT) qnewgamedlg_gui.uic.$(OBJEXT) \
-	scoretools_gui.uic.$(OBJEXT) talk_gui.uic.$(OBJEXT) \
-	textedit_gui.uic.$(OBJEXT) textview_gui.uic.$(OBJEXT)
-am__objects_4 = $(am__objects_3)
-am__objects_5 = clientwindow_gui.moc.$(OBJEXT) \
+am__objects_3 = clientwindow_gui.moc.$(OBJEXT) \
 	gameinfo_gui.moc.$(OBJEXT) gui_dialog.moc.$(OBJEXT) \
 	mainwidget_gui.moc.$(OBJEXT) newgame_gui.moc.$(OBJEXT) \
 	newlocalgame_gui.moc.$(OBJEXT) noderesults_gui.moc.$(OBJEXT) \
@@ -85,20 +76,21 @@ am__objects_5 = clientwindow_gui.moc.$(OBJEXT) \
 	preferences_gui.moc.$(OBJEXT) qnewgamedlg_gui.moc.$(OBJEXT) \
 	scoretools_gui.moc.$(OBJEXT) talk_gui.moc.$(OBJEXT) \
 	textedit_gui.moc.$(OBJEXT) textview_gui.moc.$(OBJEXT)
-am__objects_6 = board.moc.$(OBJEXT) gamedialog.moc.$(OBJEXT) \
+am__objects_4 = board.moc.$(OBJEXT) gamedialog.moc.$(OBJEXT) \
 	gamestable.moc.$(OBJEXT) gametree.moc.$(OBJEXT) \
 	helpviewer.moc.$(OBJEXT) icons.moc.$(OBJEXT) \
 	igsconnection.moc.$(OBJEXT) maintable.moc.$(OBJEXT) \
 	mainwidget.moc.$(OBJEXT) mainwindow.moc.$(OBJEXT) \
-	mainwin.moc.$(OBJEXT) noderesults.moc.$(OBJEXT) \
+	mainwin.moc.$(OBJEXT) miscdialogs.moc.$(OBJEXT) \
+	misctools.moc.$(OBJEXT) noderesults.moc.$(OBJEXT) \
 	parser.moc.$(OBJEXT) playertable.moc.$(OBJEXT) \
 	preferences.moc.$(OBJEXT) qgo.moc.$(OBJEXT) \
 	qgo_interface.moc.$(OBJEXT) qgtp.moc.$(OBJEXT) \
 	qnewgamedlg.moc.$(OBJEXT) searchpath.moc.$(OBJEXT) \
 	tables.moc.$(OBJEXT) telnet.moc.$(OBJEXT) \
 	textview.moc.$(OBJEXT) tip.moc.$(OBJEXT)
-am__objects_7 = $(am__objects_5) $(am__objects_6)
-nodist_q4go_OBJECTS = $(am__objects_4) $(am__objects_7)
+am__objects_5 = $(am__objects_3) $(am__objects_4)
+nodist_q4go_OBJECTS = $(am__objects_5)
 q4go_OBJECTS = $(am_q4go_OBJECTS) $(nodist_q4go_OBJECTS)
 am__DEPENDENCIES_1 =
 q4go_DEPENDENCIES = $(am__DEPENDENCIES_1)
@@ -305,9 +297,9 @@ INCLUDES = $(all_includes)
 q4go_METASOURCES = AUTO
 KDE_OPTIONS = qtonly
 DISTHEADERS_MOC = board.h gamedialog.h gamestable.h gametree.h helpviewer.h icons.h \
-	igsconnection.h maintable.h mainwidget.h mainwindow.h mainwin.h noderesults.h \
-	parser.h playertable.h preferences.h qgo.h qgo_interface.h qgtp.h qnewgamedlg.h \
-	searchpath.h tables.h telnet.h textview.h tip.h
+	igsconnection.h maintable.h mainwidget.h mainwindow.h mainwin.h miscdialogs.h \
+	misctools.h noderesults.h parser.h playertable.h preferences.h qgo.h \
+	qgo_interface.h qgtp.h qnewgamedlg.h searchpath.h tables.h telnet.h textview.h tip.h
 
 DISTHEADERS_NOMOC = boardhandler.h config.h defines.h  globals.h group.h gs_globals.h \
 	igsinterface.h imagehandler.h interfacehandler.h komispinbox.h mark.h \
@@ -331,11 +323,11 @@ FORMS = clientwindow_gui.ui gameinfo_gui.ui gui_dialog.ui mainwidget_gui.ui newg
 FORMHEADERS = $(FORMS:.ui=.h)
 MOC_CC = $(FORMS:.ui=.moc.cc) $(DISTHEADERS_MOC:.h=.moc.cc)
 UIC_CC = $(FORMS:.ui=.uic.cc)
-BUILT_SOURCES = $(FORMHEADERS) $(UIC_CC) $(MOC_CC)
+BUILT_SOURCES = $(FORMHEADERS) $(MOC_CC)
 CLEANFILES = $(BUILT_SOURCES)
 EXTRA_DIST = $(FORMS)
 q4go_SOURCES = $(DISTSOURCES) $(DISTHEADERS_MOC) $(DISTHEADERS_NO_MOC)
-nodist_q4go_SOURCES = $(UIC_CC) $(MOC_CC)
+nodist_q4go_SOURCES = $(MOC_CC)
 SUBDIRS = pics translations sounds
 q4go_LDFLAGS = $(all_libraries) $(USER_LDFLAGS)
 q4go_LDADD = $(LIBSOCKET) $(LIB_QPE) $(LIB_QT) $(QT4_LIBS)
@@ -433,18 +425,15 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/board.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/boardhandler.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/clientwindow_gui.moc.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/clientwindow_gui.uic.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gamedialog.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gamedialog.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gameinfo_gui.moc.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gameinfo_gui.uic.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gamestable.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gamestable.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gametree.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gametree.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/group.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gui_dialog.moc.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gui_dialog.uic.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/helpviewer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/helpviewer.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/icons.moc.Po@am__quote@
@@ -458,7 +447,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mainwidget.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mainwidget.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mainwidget_gui.moc.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mainwidget_gui.uic.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mainwin.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mainwin.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mainwindow.Po@am__quote@
@@ -466,20 +454,17 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mark.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/matrix.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/misc.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/miscdialogs.moc.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/misctools.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/move.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/msg_handler.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/newgame_gui.moc.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/newgame_gui.uic.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/newlocalgame_gui.moc.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/newlocalgame_gui.uic.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/noderesults.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/noderesults.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/noderesults_gui.moc.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/noderesults_gui.uic.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/normaltools_gui.moc.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/normaltools_gui.uic.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/nthmove_gui.moc.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/nthmove_gui.uic.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parser.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/playertable.Po@am__quote@
@@ -487,7 +472,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/preferences.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/preferences.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/preferences_gui.moc.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/preferences_gui.uic.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/qgo.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/qgo.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/qgo_interface.Po@am__quote@
@@ -497,9 +481,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/qnewgamedlg.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/qnewgamedlg.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/qnewgamedlg_gui.moc.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/qnewgamedlg_gui.uic.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/scoretools_gui.moc.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/scoretools_gui.uic.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/searchpath.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/searchpath.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/setting.Po@am__quote@
@@ -509,15 +491,12 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tables.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tables.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/talk_gui.moc.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/talk_gui.uic.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/telnet.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/telnet.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/textedit_gui.moc.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/textedit_gui.uic.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/textview.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/textview.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/textview_gui.moc.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/textview_gui.uic.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tip.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tip.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tree.Po@am__quote@

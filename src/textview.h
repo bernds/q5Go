@@ -10,7 +10,7 @@
 
 class Matrix;
 
-class TextView : public TextViewGUI
+class TextView : public QDialog, public Ui::TextViewGUI
 { 
 	Q_OBJECT
 		

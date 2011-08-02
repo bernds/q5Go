@@ -1,166 +1,127 @@
-<!DOCTYPE UI><UI>
-<class>TextViewGUI</class>
-<widget>
-    <class>QDialog</class>
-    <property stdset="1">
-        <name>name</name>
-        <cstring>TextViewGUI</cstring>
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0" stdsetdef="1">
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>TextViewGUI</class>
+  <widget class="QDialog" name="TextViewGUI">
+    <property name="geometry">
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>372</width>
+        <height>411</height>
+      </rect>
     </property>
-    <property stdset="1">
-        <name>geometry</name>
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>372</width>
-            <height>411</height>
-        </rect>
+    <property name="windowTitle">
+      <string>Text View</string>
     </property>
-    <property stdset="1">
-        <name>caption</name>
-        <string>Text View</string>
-    </property>
-    <vbox>
-        <property stdset="1">
-            <name>margin</name>
-            <number>11</number>
-        </property>
-        <property stdset="1">
-            <name>spacing</name>
+    <layout class="QVBoxLayout">
+      <property name="margin">
+        <number>11</number>
+      </property>
+      <property name="spacing">
+        <number>6</number>
+      </property>
+      <item>
+        <widget class="Q3MultiLineEdit" name="textEdit">
+          <property name="minimumSize">
+            <size>
+              <width>350</width>
+              <height>350</height>
+            </size>
+          </property>
+        </widget>
+      </item>
+      <item>
+        <layout class="QHBoxLayout">
+          <property name="margin">
+            <number>0</number>
+          </property>
+          <property name="spacing">
             <number>6</number>
-        </property>
-        <widget>
-            <class>QMultiLineEdit</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>textEdit</cstring>
-            </property>
-            <property stdset="1">
-                <name>minimumSize</name>
+          </property>
+          <item>
+            <spacer name="Horizontal Spacing2">
+              <property name="sizeHint">
                 <size>
-                    <width>350</width>
-                    <height>350</height>
+                  <width>20</width>
+                  <height>20</height>
                 </size>
-            </property>
-        </widget>
-        <widget>
-            <class>QLayoutWidget</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>Layout2</cstring>
-            </property>
-            <hbox>
-                <property stdset="1">
-                    <name>margin</name>
-                    <number>0</number>
-                </property>
-                <property stdset="1">
-                    <name>spacing</name>
-                    <number>6</number>
-                </property>
-                <spacer>
-                    <property>
-                        <name>name</name>
-                        <cstring>Horizontal Spacing2</cstring>
-                    </property>
-                    <property stdset="1">
-                        <name>orientation</name>
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property stdset="1">
-                        <name>sizeType</name>
-                        <enum>Expanding</enum>
-                    </property>
-                    <property>
-                        <name>sizeHint</name>
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget>
-                    <class>QPushButton</class>
-                    <property stdset="1">
-                        <name>name</name>
-                        <cstring>buttonToClip</cstring>
-                    </property>
-                    <property stdset="1">
-                        <name>text</name>
-                        <string>&amp;To clipboard</string>
-                    </property>
-                    <property>
-                        <name>toolTip</name>
-                        <string>Copy position to clipboard</string>
-                    </property>
-                </widget>
-                <widget>
-                    <class>QPushButton</class>
-                    <property stdset="1">
-                        <name>name</name>
-                        <cstring>buttonSave</cstring>
-                    </property>
-                    <property stdset="1">
-                        <name>text</name>
-                        <string>&amp;Save</string>
-                    </property>
-                    <property>
-                        <name>toolTip</name>
-                        <string>Save position to file</string>
-                    </property>
-                </widget>
-                <widget>
-                    <class>QPushButton</class>
-                    <property stdset="1">
-                        <name>name</name>
-                        <cstring>buttonClose</cstring>
-                    </property>
-                    <property stdset="1">
-                        <name>text</name>
-                        <string>&amp;Close</string>
-                    </property>
-                    <property stdset="1">
-                        <name>autoDefault</name>
-                        <bool>true</bool>
-                    </property>
-                    <property stdset="1">
-                        <name>default</name>
-                        <bool>true</bool>
-                    </property>
-                    <property>
-                        <name>toolTip</name>
-                        <string>Close this window</string>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
-    </vbox>
-</widget>
-<connections>
-    <connection>
-        <sender>buttonClose</sender>
-        <signal>clicked()</signal>
-        <receiver>TextViewGUI</receiver>
-        <slot>accept()</slot>
-    </connection>
-    <connection>
-        <sender>buttonSave</sender>
-        <signal>clicked()</signal>
-        <receiver>TextViewGUI</receiver>
-        <slot>saveMe()</slot>
-    </connection>
-    <connection>
-        <sender>buttonToClip</sender>
-        <signal>clicked()</signal>
-        <receiver>TextViewGUI</receiver>
-        <slot>toClipboard()</slot>
-    </connection>
-    <slot access="public">toClipboard()</slot>
-    <slot access="public">saveMe()</slot>
-</connections>
-<tabstops>
+              </property>
+              <property name="sizeType">
+                <enum>QSizePolicy::Expanding</enum>
+              </property>
+              <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+              </property>
+            </spacer>
+          </item>
+          <item>
+            <widget class="QPushButton" name="buttonToClip">
+              <property name="text">
+                <string>&amp;To clipboard</string>
+              </property>
+              <property name="toolTip">
+                <string>Copy position to clipboard</string>
+              </property>
+            </widget>
+          </item>
+          <item>
+            <widget class="QPushButton" name="buttonSave">
+              <property name="text">
+                <string>&amp;Save</string>
+              </property>
+              <property name="toolTip">
+                <string>Save position to file</string>
+              </property>
+            </widget>
+          </item>
+          <item>
+            <widget class="QPushButton" name="buttonClose">
+              <property name="text">
+                <string>&amp;Close</string>
+              </property>
+              <property name="autoDefault">
+                <bool>true</bool>
+              </property>
+              <property name="default">
+                <bool>true</bool>
+              </property>
+              <property name="toolTip">
+                <string>Close this window</string>
+              </property>
+            </widget>
+          </item>
+        </layout>
+      </item>
+    </layout>
+  </widget>
+  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+  <tabstops>
     <tabstop>textEdit</tabstop>
     <tabstop>buttonToClip</tabstop>
     <tabstop>buttonSave</tabstop>
     <tabstop>buttonClose</tabstop>
-</tabstops>
-</UI>
+  </tabstops>
+  <connections>
+    <connection>
+      <sender>buttonClose</sender>
+      <signal>clicked()</signal>
+      <receiver>TextViewGUI</receiver>
+      <slot>accept()</slot>
+    </connection>
+    <connection>
+      <sender>buttonSave</sender>
+      <signal>clicked()</signal>
+      <receiver>TextViewGUI</receiver>
+      <slot>saveMe()</slot>
+    </connection>
+    <connection>
+      <sender>buttonToClip</sender>
+      <signal>clicked()</signal>
+      <receiver>TextViewGUI</receiver>
+      <slot>toClipboard()</slot>
+    </connection>
+  </connections>
+</ui>

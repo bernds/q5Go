@@ -79,7 +79,7 @@ public:
 
 //-----------
 
-class Talk : public TalkGui
+class Talk : public QDialog, public Ui::TalkGui
 {
 	Q_OBJECT
 

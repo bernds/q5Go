@@ -21,8 +21,9 @@
 *  TRUE to construct a modal dialog.
 */
 TextView::TextView(QWidget* parent, const char* name, bool modal, Qt::WFlags fl)
-: TextViewGUI( parent, name, modal, fl )
+  : QDialog( parent, name, modal, fl )
 {
+	setupUi(this);
 	textEdit->setWordWrap(Q3TextEdit::FixedColumnWidth);
 	textEdit->setWrapColumnOrWidth(80);
 	QFont f("fixed", 10);

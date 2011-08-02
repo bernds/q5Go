@@ -10,7 +10,7 @@
 #include "defines.h"
 #include "misc.h"
 
-class GameDialog : public NewGameDialog
+class GameDialog : public QDialog, public Ui::NewGameDialog
 { 
 	Q_OBJECT
 

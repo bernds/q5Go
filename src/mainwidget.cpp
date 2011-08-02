@@ -29,18 +29,19 @@
 *  name 'name' and widget flags set to 'f' 
 */
 MainWidget::MainWidget(QWidget* parent,  const char* name, Qt::WFlags fl )
-: MainWidgetGui( parent, name, fl )
+: QWidget( parent, name, fl )
 {
+	setupUi(this);
 	connect(toolsTabWidget,
 		SIGNAL(currentChanged(QWidget*)),
 		SLOT(slot_toolsTabChanged(QWidget*)));
 
 	normalTools->show();
 
-	scoreTools = new ScoreTools(tab_ns, "scoreTools");
-//	scoreTools->setSizePolicy(QSizePolicy((QSizePolicy::SizeType)5, (QSizePolicy::SizeType)0,
+//	scoreTools = new ScoreTools(tab_ns, "scoreTools");
+//	scoreTools->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred));
 //	scoreTools->sizePolicy().hasHeightForWidth()));
-	scoreTools->setMinimumSize(QSize(80, 230));
+//	scoreTools->setMinimumSize(QSize(80, 230));
 	scoreTools->hide();
 	
 	interfaceHandler = new InterfaceHandler();

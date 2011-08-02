@@ -8817,8 +8817,8 @@ fi
 if test -z "$MOC" ; then
     as_fn_error $? "Cannot find 'moc'" "$LINENO" 5
 fi
-# Extract the first word of "uic3", so it can be a program name with args.
-set dummy uic3; ac_word=$2
+# Extract the first word of "uic", so it can be a program name with args.
+set dummy uic; ac_word=$2
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
 $as_echo_n "checking for $ac_word... " >&6; }
 if ${ac_cv_path_UIC+:} false; then :
@@ -8859,7 +8859,7 @@ fi
 
 
 if test -z "$UIC" ; then
-    as_fn_error $? "Cannot find 'uic3'" "$LINENO" 5
+    as_fn_error $? "Cannot find 'uic'" "$LINENO" 5
 fi
 
 CXXFLAGS="$CXXFLAGS $QT4_CFLAGS"

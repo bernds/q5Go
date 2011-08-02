@@ -19,8 +19,9 @@
 #include <qradiobutton.h>
 
 GameDialog::GameDialog(QWidget* parent, const char* name, bool modal, Qt::WFlags fl)
-	: NewGameDialog(parent, name, modal, fl)
+	: QDialog(parent, name, modal)
 {
+	setupUi(this);
 	have_suggestdata = false;
 	gsname = GS_UNKNOWN;
 //	komiSpin->setValue(55);

@@ -38,7 +38,7 @@
 //#include "gothic.h"
 
 
-class QNewGameDlg : public QNewGameDlgGui
+class QNewGameDlg : public QDialog, public Ui::QNewGameDlgGui
 {
     Q_OBJECT
 

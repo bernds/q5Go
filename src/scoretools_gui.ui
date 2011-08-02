@@ -1,516 +1,337 @@
-<!DOCTYPE UI><UI>
-<class>ScoreTools</class>
-<widget>
-    <class>QWidget</class>
-    <property stdset="1">
-        <name>name</name>
-        <cstring>ScoreTools</cstring>
-    </property>
-    <property>
-        <name>geometry</name>
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>126</width>
-            <height>233</height>
-        </rect>
-    </property>
-    <property>
-        <name>sizePolicy</name>
-        <sizepolicy>
-            <hsizetype>5</hsizetype>
-            <vsizetype>5</vsizetype>
-        </sizepolicy>
-    </property>
-    <property>
-        <name>caption</name>
-        <string>ScoreTools</string>
-    </property>
-    <property>
-        <name>layoutMargin</name>
-    </property>
-    <property>
-        <name>layoutSpacing</name>
-    </property>
-    <grid>
-        <property>
-            <name>margin</name>
-            <number>0</number>
-        </property>
-        <property>
-            <name>spacing</name>
-            <number>6</number>
-        </property>
-        <widget row="0"  column="0" >
-            <class>QFrame</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>Frame1</cstring>
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ScoreTools</class>
+ <widget class="QWidget" name="ScoreTools">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>162</width>
+    <height>322</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>138</width>
+    <height>260</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>6</number>
+   </property>
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="title">
+      <string>White</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_4">
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <layout class="QHBoxLayout" name="_3">
+          <property name="spacing">
+           <number>6</number>
+          </property>
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="TextLabel0">
+            <property name="text">
+             <string>Komi:</string>
             </property>
-            <property>
-                <name>sizePolicy</name>
-                <sizepolicy>
-                    <hsizetype>5</hsizetype>
-                    <vsizetype>5</vsizetype>
-                </sizepolicy>
+            <property name="wordWrap">
+             <bool>false</bool>
             </property>
-            <property>
-                <name>frameShape</name>
-                <enum>StyledPanel</enum>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="komi">
+            <property name="text">
+             <string>0</string>
             </property>
-            <property>
-                <name>frameShadow</name>
-                <enum>Raised</enum>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
-            <property>
-                <name>layoutMargin</name>
+            <property name="wordWrap">
+             <bool>false</bool>
             </property>
-            <property>
-                <name>layoutSpacing</name>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="_5">
+          <property name="spacing">
+           <number>6</number>
+          </property>
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="TextLabel1">
+            <property name="text">
+             <string>Terr.:</string>
             </property>
-            <grid>
-                <property>
-                    <name>margin</name>
-                    <number>6</number>
-                </property>
-                <property>
-                    <name>spacing</name>
-                    <number>6</number>
-                </property>
-                <widget row="0"  column="0" >
-                    <class>QGroupBox</class>
-                    <property stdset="1">
-                        <name>name</name>
-                        <cstring>whiteFrame</cstring>
-                    </property>
-                    <property>
-                        <name>title</name>
-                        <string>White</string>
-                    </property>
-                    <property>
-                        <name>alignment</name>
-                        <set>AlignTop|AlignLeft</set>
-                    </property>
-                    <property>
-                        <name>hAlign</name>
-                    </property>
-                    <property>
-                        <name>layoutMargin</name>
-                    </property>
-                    <property>
-                        <name>layoutSpacing</name>
-                    </property>
-                    <property>
-                        <name>vAlign</name>
-                    </property>
-                    <property>
-                        <name>wordwrap</name>
-                    </property>
-                    <grid>
-                        <property>
-                            <name>margin</name>
-                            <number>11</number>
-                        </property>
-                        <property>
-                            <name>spacing</name>
-                            <number>6</number>
-                        </property>
-                        <widget row="3"  column="0" >
-                            <class>QLayoutWidget</class>
-                            <property stdset="1">
-                                <name>name</name>
-                                <cstring>Layout7</cstring>
-                            </property>
-                            <hbox>
-                                <property>
-                                    <name>margin</name>
-                                    <number>0</number>
-                                </property>
-                                <property>
-                                    <name>spacing</name>
-                                    <number>6</number>
-                                </property>
-                                <widget>
-                                    <class>QLabel</class>
-                                    <property stdset="1">
-                                        <name>name</name>
-                                        <cstring>TextLabel3</cstring>
-                                    </property>
-                                    <property>
-                                        <name>text</name>
-                                        <string>Total:</string>
-                                    </property>
-                                </widget>
-                                <widget>
-                                    <class>QLabel</class>
-                                    <property stdset="1">
-                                        <name>name</name>
-                                        <cstring>totalWhite</cstring>
-                                    </property>
-                                    <property>
-                                        <name>text</name>
-                                        <string>0</string>
-                                    </property>
-                                    <property>
-                                        <name>alignment</name>
-                                        <set>AlignVCenter|AlignRight</set>
-                                    </property>
-                                    <property>
-                                        <name>hAlign</name>
-                                    </property>
-                                    <property>
-                                        <name>vAlign</name>
-                                    </property>
-                                </widget>
-                            </hbox>
-                        </widget>
-                        <widget row="2"  column="0" >
-                            <class>QLayoutWidget</class>
-                            <property stdset="1">
-                                <name>name</name>
-                                <cstring>Layout3</cstring>
-                            </property>
-                            <hbox>
-                                <property>
-                                    <name>margin</name>
-                                    <number>0</number>
-                                </property>
-                                <property>
-                                    <name>spacing</name>
-                                    <number>6</number>
-                                </property>
-                                <widget>
-                                    <class>QLabel</class>
-                                    <property stdset="1">
-                                        <name>name</name>
-                                        <cstring>TextLabel2</cstring>
-                                    </property>
-                                    <property>
-                                        <name>text</name>
-                                        <string>Cap:</string>
-                                    </property>
-                                </widget>
-                                <widget>
-                                    <class>QLabel</class>
-                                    <property stdset="1">
-                                        <name>name</name>
-                                        <cstring>capturesWhite</cstring>
-                                    </property>
-                                    <property>
-                                        <name>text</name>
-                                        <string>0</string>
-                                    </property>
-                                    <property>
-                                        <name>alignment</name>
-                                        <set>AlignVCenter|AlignRight</set>
-                                    </property>
-                                    <property>
-                                        <name>hAlign</name>
-                                    </property>
-                                    <property>
-                                        <name>vAlign</name>
-                                    </property>
-                                </widget>
-                            </hbox>
-                        </widget>
-                        <widget row="1"  column="0" >
-                            <class>QLayoutWidget</class>
-                            <property stdset="1">
-                                <name>name</name>
-                                <cstring>Layout2</cstring>
-                            </property>
-                            <property>
-                                <name>layoutSpacing</name>
-                            </property>
-                            <hbox>
-                                <property>
-                                    <name>margin</name>
-                                    <number>0</number>
-                                </property>
-                                <property>
-                                    <name>spacing</name>
-                                    <number>6</number>
-                                </property>
-                                <widget>
-                                    <class>QLabel</class>
-                                    <property stdset="1">
-                                        <name>name</name>
-                                        <cstring>TextLabel1</cstring>
-                                    </property>
-                                    <property>
-                                        <name>text</name>
-                                        <string>Terr.:</string>
-                                    </property>
-                                </widget>
-                                <widget>
-                                    <class>QLabel</class>
-                                    <property stdset="1">
-                                        <name>name</name>
-                                        <cstring>terrWhite</cstring>
-                                    </property>
-                                    <property>
-                                        <name>text</name>
-                                        <string>0</string>
-                                    </property>
-                                    <property>
-                                        <name>alignment</name>
-                                        <set>AlignVCenter|AlignRight</set>
-                                    </property>
-                                    <property>
-                                        <name>hAlign</name>
-                                    </property>
-                                    <property>
-                                        <name>layoutMargin</name>
-                                    </property>
-                                    <property>
-                                        <name>vAlign</name>
-                                    </property>
-                                </widget>
-                            </hbox>
-                        </widget>
-                        <widget row="0"  column="0" >
-                            <class>QLayoutWidget</class>
-                            <property stdset="1">
-                                <name>name</name>
-                                <cstring>Layout2_2</cstring>
-                            </property>
-                            <property>
-                                <name>layoutSpacing</name>
-                            </property>
-                            <hbox>
-                                <property>
-                                    <name>margin</name>
-                                    <number>0</number>
-                                </property>
-                                <property>
-                                    <name>spacing</name>
-                                    <number>6</number>
-                                </property>
-                                <widget>
-                                    <class>QLabel</class>
-                                    <property stdset="1">
-                                        <name>name</name>
-                                        <cstring>TextLabel0</cstring>
-                                    </property>
-                                    <property>
-                                        <name>text</name>
-                                        <string>Komi:</string>
-                                    </property>
-                                </widget>
-                                <widget>
-                                    <class>QLabel</class>
-                                    <property stdset="1">
-                                        <name>name</name>
-                                        <cstring>komi</cstring>
-                                    </property>
-                                    <property>
-                                        <name>text</name>
-                                        <string>0</string>
-                                    </property>
-                                    <property>
-                                        <name>alignment</name>
-                                        <set>AlignVCenter|AlignRight</set>
-                                    </property>
-                                    <property>
-                                        <name>hAlign</name>
-                                    </property>
-                                    <property>
-                                        <name>layoutMargin</name>
-                                    </property>
-                                    <property>
-                                        <name>vAlign</name>
-                                    </property>
-                                </widget>
-                            </hbox>
-                        </widget>
-                    </grid>
-                </widget>
-                <widget row="1"  column="0" >
-                    <class>QGroupBox</class>
-                    <property stdset="1">
-                        <name>name</name>
-                        <cstring>blackFrame</cstring>
-                    </property>
-                    <property>
-                        <name>title</name>
-                        <string>Black</string>
-                    </property>
-                    <property>
-                        <name>layoutMargin</name>
-                    </property>
-                    <grid>
-                        <property>
-                            <name>margin</name>
-                            <number>11</number>
-                        </property>
-                        <property>
-                            <name>spacing</name>
-                            <number>6</number>
-                        </property>
-                        <widget row="0"  column="0" >
-                            <class>QLayoutWidget</class>
-                            <property stdset="1">
-                                <name>name</name>
-                                <cstring>Layout6</cstring>
-                            </property>
-                            <hbox>
-                                <property>
-                                    <name>margin</name>
-                                    <number>0</number>
-                                </property>
-                                <property>
-                                    <name>spacing</name>
-                                    <number>6</number>
-                                </property>
-                                <widget>
-                                    <class>QLabel</class>
-                                    <property stdset="1">
-                                        <name>name</name>
-                                        <cstring>TextLabel4</cstring>
-                                    </property>
-                                    <property>
-                                        <name>text</name>
-                                        <string>Terr.:</string>
-                                    </property>
-                                </widget>
-                                <widget>
-                                    <class>QLabel</class>
-                                    <property stdset="1">
-                                        <name>name</name>
-                                        <cstring>terrBlack</cstring>
-                                    </property>
-                                    <property>
-                                        <name>text</name>
-                                        <string>0</string>
-                                    </property>
-                                    <property>
-                                        <name>alignment</name>
-                                        <set>AlignVCenter|AlignRight</set>
-                                    </property>
-                                    <property>
-                                        <name>hAlign</name>
-                                    </property>
-                                    <property>
-                                        <name>vAlign</name>
-                                    </property>
-                                </widget>
-                            </hbox>
-                        </widget>
-                        <widget row="1"  column="0" >
-                            <class>QLayoutWidget</class>
-                            <property stdset="1">
-                                <name>name</name>
-                                <cstring>Layout15</cstring>
-                            </property>
-                            <hbox>
-                                <property>
-                                    <name>margin</name>
-                                    <number>0</number>
-                                </property>
-                                <property>
-                                    <name>spacing</name>
-                                    <number>6</number>
-                                </property>
-                                <widget>
-                                    <class>QLabel</class>
-                                    <property stdset="1">
-                                        <name>name</name>
-                                        <cstring>TextLabel5</cstring>
-                                    </property>
-                                    <property>
-                                        <name>text</name>
-                                        <string>Cap:</string>
-                                    </property>
-                                    <property>
-                                        <name>alignment</name>
-                                        <set>AlignVCenter|AlignLeft</set>
-                                    </property>
-                                    <property>
-                                        <name>hAlign</name>
-                                    </property>
-                                    <property>
-                                        <name>vAlign</name>
-                                    </property>
-                                </widget>
-                                <widget>
-                                    <class>QLabel</class>
-                                    <property stdset="1">
-                                        <name>name</name>
-                                        <cstring>capturesBlack</cstring>
-                                    </property>
-                                    <property>
-                                        <name>text</name>
-                                        <string>0</string>
-                                    </property>
-                                    <property>
-                                        <name>alignment</name>
-                                        <set>AlignVCenter|AlignRight</set>
-                                    </property>
-                                    <property>
-                                        <name>hAlign</name>
-                                    </property>
-                                    <property>
-                                        <name>vAlign</name>
-                                    </property>
-                                </widget>
-                            </hbox>
-                        </widget>
-                        <widget row="2"  column="0" >
-                            <class>QLayoutWidget</class>
-                            <property stdset="1">
-                                <name>name</name>
-                                <cstring>Layout14</cstring>
-                            </property>
-                            <hbox>
-                                <property>
-                                    <name>margin</name>
-                                    <number>0</number>
-                                </property>
-                                <property>
-                                    <name>spacing</name>
-                                    <number>6</number>
-                                </property>
-                                <widget>
-                                    <class>QLabel</class>
-                                    <property stdset="1">
-                                        <name>name</name>
-                                        <cstring>TextLabel6</cstring>
-                                    </property>
-                                    <property>
-                                        <name>text</name>
-                                        <string>Total:</string>
-                                    </property>
-                                    <property>
-                                        <name>layoutMargin</name>
-                                    </property>
-                                </widget>
-                                <widget>
-                                    <class>QLabel</class>
-                                    <property stdset="1">
-                                        <name>name</name>
-                                        <cstring>totalBlack</cstring>
-                                    </property>
-                                    <property>
-                                        <name>text</name>
-                                        <string>0</string>
-                                    </property>
-                                    <property>
-                                        <name>alignment</name>
-                                        <set>AlignVCenter|AlignRight</set>
-                                    </property>
-                                    <property>
-                                        <name>hAlign</name>
-                                    </property>
-                                    <property>
-                                        <name>vAlign</name>
-                                    </property>
-                                </widget>
-                            </hbox>
-                        </widget>
-                    </grid>
-                </widget>
-            </grid>
-        </widget>
-    </grid>
-</widget>
-</UI>
+            <property name="wordWrap">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="terrWhite">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="_4">
+          <property name="spacing">
+           <number>6</number>
+          </property>
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="TextLabel2">
+            <property name="text">
+             <string>Cap:</string>
+            </property>
+            <property name="wordWrap">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="capturesWhite">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="_2">
+          <property name="spacing">
+           <number>6</number>
+          </property>
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="TextLabel3">
+            <property name="text">
+             <string>Total:</string>
+            </property>
+            <property name="wordWrap">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="totalWhite">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="title">
+      <string>Black</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_5">
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <layout class="QHBoxLayout" name="_7">
+          <property name="spacing">
+           <number>6</number>
+          </property>
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="TextLabel5">
+            <property name="text">
+             <string>Cap:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="capturesBlack">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="_8">
+          <property name="spacing">
+           <number>6</number>
+          </property>
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="TextLabel6">
+            <property name="text">
+             <string>Total:</string>
+            </property>
+            <property name="wordWrap">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="totalBlack">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="_6">
+          <property name="spacing">
+           <number>6</number>
+          </property>
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="TextLabel4">
+            <property name="text">
+             <string>Terr.:</string>
+            </property>
+            <property name="wordWrap">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="terrBlack">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>93</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

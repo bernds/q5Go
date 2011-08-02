@@ -35,11 +35,10 @@
 
 
 
-//QNewGameDlg::QNewGameDlg( QWidget* parent,  const char* name, bool modal, WFlags fl )
-//    : QDialog( parent, name, modal, fl )
 QNewGameDlg::QNewGameDlg( QWidget* parent,  const char* name)
-    : QNewGameDlgGui( parent, name, true )
+    : QDialog( parent, name, true )
 {
+	setupUi(this);
 	init();
 //	initDialog();
 

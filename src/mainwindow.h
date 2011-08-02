@@ -5,10 +5,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "preferences.h"
-#include "board.h"
-#include "mainwidget.h"
-#include "setting.h"
 #include <q3mainwindow.h>
 #include <qlayout.h>
 #include <q3listview.h>
@@ -19,6 +15,12 @@
 #include <Q3PopupMenu>
 #include <QKeyEvent>
 #include <Q3Action>
+
+#include "preferences.h"
+#include "board.h"
+#include "mainwidget.h"
+#include "setting.h"
+#include "miscdialogs.h"
 
 class Board;
 class InterfaceHandler;

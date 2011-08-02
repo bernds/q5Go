@@ -7,9 +7,9 @@ q4go_METASOURCES = AUTO
 KDE_OPTIONS = qtonly
 
 DISTHEADERS_MOC = board.h gamedialog.h gamestable.h gametree.h helpviewer.h icons.h \
-	igsconnection.h maintable.h mainwidget.h mainwindow.h mainwin.h noderesults.h \
-	parser.h playertable.h preferences.h qgo.h qgo_interface.h qgtp.h qnewgamedlg.h \
-	searchpath.h tables.h telnet.h textview.h tip.h
+	igsconnection.h maintable.h mainwidget.h mainwindow.h mainwin.h miscdialogs.h \
+	misctools.h noderesults.h parser.h playertable.h preferences.h qgo.h \
+	qgo_interface.h qgtp.h qnewgamedlg.h searchpath.h tables.h telnet.h textview.h tip.h
 
 DISTHEADERS_NOMOC = boardhandler.h config.h defines.h  globals.h group.h gs_globals.h \
 	igsinterface.h imagehandler.h interfacehandler.h komispinbox.h mark.h \
@@ -34,12 +34,12 @@ FORMHEADERS = $(FORMS:.ui=.h)
 MOC_CC = $(FORMS:.ui=.moc.cc) $(DISTHEADERS_MOC:.h=.moc.cc)
 UIC_CC = $(FORMS:.ui=.uic.cc)
 
-BUILT_SOURCES = $(FORMHEADERS) $(UIC_CC) $(MOC_CC)
+BUILT_SOURCES = $(FORMHEADERS) $(MOC_CC)
 CLEANFILES = $(BUILT_SOURCES)
 EXTRA_DIST = $(FORMS)
 
 q4go_SOURCES = $(DISTSOURCES) $(DISTHEADERS_MOC) $(DISTHEADERS_NO_MOC)
-nodist_q4go_SOURCES = $(UIC_CC) $(MOC_CC)
+nodist_q4go_SOURCES = $(MOC_CC)
 
 ####### kdevelop will overwrite this part!!! (end)############
 bin_PROGRAMS = q4go

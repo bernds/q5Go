@@ -56,8 +56,9 @@ public:
 *  name 'name' and widget flags set to 'f' 
 */
 NodeResults::NodeResults( QWidget* parent,  const char* name, Qt::WFlags fl )
-: NodeResultsGUI( parent, name, fl )
+	: QWidget(parent, name, fl)
 {
+	setupUi(this);
 	resize(200, 200);
 	closeButton->setAccel(Qt::Key_Escape);
 }

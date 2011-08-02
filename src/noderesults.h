@@ -9,7 +9,7 @@
 template<class type> class Q3PtrStack;
 class Move;
 
-class NodeResults : public NodeResultsGUI
+class NodeResults : public QWidget, public Ui::NodeResultsGUI
 { 
 	Q_OBJECT
 		

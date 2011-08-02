@@ -983,9 +983,10 @@ int ChannelList::compareItems(Item d1, Item d2)
 
 int Talk::counter = 0;
 
-Talk::Talk(const QString &playername, QWidget * /* parent */, bool isplayer)
-	: TalkGui()
+Talk::Talk(const QString &playername, QWidget *parent, bool isplayer)
+  : QDialog (parent, playername)
 {
+	setupUi(this);
 	name = playername;
 
 	// create a new tab

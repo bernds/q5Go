@@ -1,39 +1,37 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
-<class>Debug_Dialog</class>
-<widget class="QDialog">
-    <property name="name">
-        <cstring>Debug_Dialog</cstring>
-    </property>
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0" stdsetdef="1">
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>Debug_Dialog</class>
+  <widget class="QDialog" name="Debug_Dialog">
     <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>336</width>
-            <height>680</height>
-        </rect>
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>336</width>
+        <height>680</height>
+      </rect>
     </property>
-    <property name="caption">
-        <string>Debug</string>
+    <property name="windowTitle">
+      <string>Debug</string>
     </property>
-    <grid>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <property name="margin">
-            <number>0</number>
-        </property>
-        <property name="spacing">
-            <number>0</number>
-        </property>
-        <widget class="QTextEdit" row="0" column="0">
-            <property name="name">
-                <cstring>TextView1</cstring>
-            </property>
-            <property name="readOnly">
-                <bool>true</bool>
-            </property>
+    <layout class="QGridLayout">
+      <property name="margin">
+        <number>0</number>
+      </property>
+      <property name="spacing">
+        <number>0</number>
+      </property>
+      <item row="0" column="0">
+        <widget class="Q3TextEdit" name="TextView1">
+          <property name="readOnly">
+            <bool>true</bool>
+          </property>
         </widget>
-    </grid>
-</widget>
-<layoutdefaults spacing="6" margin="11"/>
-</UI>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11"/>
+  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+</ui>

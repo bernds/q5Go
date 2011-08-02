@@ -64,9 +64,9 @@
 
 
 ClientWindow::ClientWindow(Q3MainWindow *parent, const char* name, Qt::WFlags fl)
-	: ClientWindowGui( parent, name, fl ), seekButtonTimer (0), oneSecondTimer (0)
+	: Q3MainWindow( parent, name, fl ), seekButtonTimer (0), oneSecondTimer (0)
 {
-
+	setupUi(this);
 
 	prefsIcon= QPixmap(qembed_findImage("package_settings"));//QPixmap(ICON_PREFS);
 //	infoIcon= QPixmap(ICON_GAMEINFO);

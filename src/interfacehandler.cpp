@@ -2,15 +2,6 @@
 * interfacehandler.cpp
 */
 
-#include "defines.h"
-#include "interfacehandler.h"
-#include "board.h"
-#include "textedit_gui.h"
-#include "normaltools_gui.h"
-#include "scoretools_gui.h"
-#include "mainwidget.h"
-#include "icons.h"
-#include "move.h"
 #include <qaction.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
@@ -21,6 +12,17 @@
 #include <qtabwidget.h>
 //Added by qt3to4:
 #include <QPixmap>
+
+#include "defines.h"
+#include "interfacehandler.h"
+#include "board.h"
+#include "textedit_gui.h"
+#include "normaltools_gui.h"
+#include "scoretools_gui.h"
+#include "mainwidget.h"
+#include "icons.h"
+#include "move.h"
+#include "miscdialogs.h"
 
 //#ifdef USE_XPM
 #include ICON_NODE_BLACK

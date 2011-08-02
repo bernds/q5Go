@@ -1,154 +1,116 @@
-<!DOCTYPE UI><UI>
-<class>TextEditDialog</class>
-<widget>
-    <class>QDialog</class>
-    <property stdset="1">
-        <name>name</name>
-        <cstring>TextEditDialog</cstring>
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0" stdsetdef="1">
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>TextEditDialog</class>
+  <widget class="QDialog" name="TextEditDialog">
+    <property name="geometry">
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>190</width>
+        <height>100</height>
+      </rect>
     </property>
-    <property stdset="1">
-        <name>geometry</name>
+    <property name="minimumSize">
+      <size>
+        <width>190</width>
+        <height>100</height>
+      </size>
+    </property>
+    <property name="maximumSize">
+      <size>
+        <width>190</width>
+        <height>100</height>
+      </size>
+    </property>
+    <property name="windowTitle">
+      <string>Text Label</string>
+    </property>
+    <widget class="QLabel" name="TextLabel1">
+      <property name="geometry">
         <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>190</width>
-            <height>100</height>
+          <x>10</x>
+          <y>10</y>
+          <width>148</width>
+          <height>15</height>
         </rect>
-    </property>
-    <property stdset="1">
-        <name>minimumSize</name>
-        <size>
-            <width>190</width>
-            <height>100</height>
-        </size>
-    </property>
-    <property stdset="1">
-        <name>maximumSize</name>
-        <size>
-            <width>190</width>
-            <height>100</height>
-        </size>
-    </property>
-    <property stdset="1">
-        <name>caption</name>
-        <string>Text Label</string>
-    </property>
-    <property>
-        <name>layoutMargin</name>
-    </property>
-    <property>
-        <name>layoutSpacing</name>
-    </property>
-    <widget>
-        <class>QLabel</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>TextLabel1</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>10</x>
-                <y>10</y>
-                <width>148</width>
-                <height>15</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>Enter the text for this label:</string>
-        </property>
+      </property>
+      <property name="text">
+        <string>Enter the text for this label:</string>
+      </property>
+      <property name="wordWrap">
+        <bool>false</bool>
+      </property>
     </widget>
-    <widget>
-        <class>QLineEdit</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>textLineEdit</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>10</x>
-                <y>30</y>
-                <width>170</width>
-                <height>23</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>maxLength</name>
-            <number>20</number>
-        </property>
+    <widget class="QLineEdit" name="textLineEdit">
+      <property name="geometry">
+        <rect>
+          <x>10</x>
+          <y>30</y>
+          <width>170</width>
+          <height>23</height>
+        </rect>
+      </property>
+      <property name="maxLength">
+        <number>20</number>
+      </property>
     </widget>
-    <widget>
-        <class>QPushButton</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>buttonOk</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>10</x>
-                <y>60</y>
-                <width>80</width>
-                <height>32</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>&amp;OK</string>
-        </property>
-        <property stdset="1">
-            <name>autoDefault</name>
-            <bool>true</bool>
-        </property>
-        <property stdset="1">
-            <name>default</name>
-            <bool>true</bool>
-        </property>
+    <widget class="QPushButton" name="buttonOk">
+      <property name="geometry">
+        <rect>
+          <x>10</x>
+          <y>60</y>
+          <width>80</width>
+          <height>32</height>
+        </rect>
+      </property>
+      <property name="text">
+        <string>&amp;OK</string>
+      </property>
+      <property name="autoDefault">
+        <bool>true</bool>
+      </property>
+      <property name="default">
+        <bool>true</bool>
+      </property>
     </widget>
-    <widget>
-        <class>QPushButton</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>buttonCancel</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>100</x>
-                <y>60</y>
-                <width>80</width>
-                <height>32</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>&amp;Cancel</string>
-        </property>
-        <property stdset="1">
-            <name>autoDefault</name>
-            <bool>true</bool>
-        </property>
+    <widget class="QPushButton" name="buttonCancel">
+      <property name="geometry">
+        <rect>
+          <x>100</x>
+          <y>60</y>
+          <width>80</width>
+          <height>32</height>
+        </rect>
+      </property>
+      <property name="text">
+        <string>&amp;Cancel</string>
+      </property>
+      <property name="autoDefault">
+        <bool>true</bool>
+      </property>
     </widget>
-</widget>
-<connections>
-    <connection>
-        <sender>buttonOk</sender>
-        <signal>clicked()</signal>
-        <receiver>TextEditDialog</receiver>
-        <slot>accept()</slot>
-    </connection>
-    <connection>
-        <sender>buttonCancel</sender>
-        <signal>clicked()</signal>
-        <receiver>TextEditDialog</receiver>
-        <slot>reject()</slot>
-    </connection>
-</connections>
-<tabstops>
+  </widget>
+  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+  <tabstops>
     <tabstop>textLineEdit</tabstop>
     <tabstop>buttonOk</tabstop>
     <tabstop>buttonCancel</tabstop>
-</tabstops>
-</UI>
+  </tabstops>
+  <connections>
+    <connection>
+      <sender>buttonOk</sender>
+      <signal>clicked()</signal>
+      <receiver>TextEditDialog</receiver>
+      <slot>accept()</slot>
+    </connection>
+    <connection>
+      <sender>buttonCancel</sender>
+      <signal>clicked()</signal>
+      <receiver>TextEditDialog</receiver>
+      <slot>reject()</slot>
+    </connection>
+  </connections>
+</ui>
