@@ -140,6 +140,8 @@ Setting::Setting()
 	charset->hBorder = '|';
 	charset->vBorder = '-';
 
+	qDebug() << "new charset " << charset->blackStone << charset->whiteStone << charset->starPoint << charset->emptyPoint;
+
 	addImportAsBrother = false;
 	fastLoad = false;
 	language = "Default";
@@ -258,12 +260,15 @@ void Setting::loadSettings()
 	if (!s.isNull())
 		colorAltBackground = QColor(s);
 	s = readEntry("CHARSET");
-	charset->blackStone = s.at(0).toAscii();
-	charset->emptyPoint = s.at(1).toAscii();
-	charset->hBorder = s.at(2).toAscii();
-	charset->starPoint = s.at(3).toAscii();
-	charset->vBorder = s.at(4).toAscii();
-	charset->whiteStone = s.at(5).toAscii();
+	// Cope with nul characters written to the config file by qGo.
+	if (!s.isNull() && s.at(0).toAscii() != '\0') {
+		charset->blackStone = s.at(0).toAscii();
+		charset->emptyPoint = s.at(1).toAscii();
+		charset->hBorder = s.at(2).toAscii();
+		charset->starPoint = s.at(3).toAscii();
+		charset->vBorder = s.at(4).toAscii();
+		charset->whiteStone = s.at(5).toAscii();
+	}
 }
 
 QString Setting::fontToString(QFont f)
@@ -340,7 +345,8 @@ void Setting::saveSettings()
 	cs += QChar(charset->starPoint);
 	cs += QChar(charset->vBorder);
 	cs += QChar(charset->whiteStone);
-    
+
+	qDebug() << "CHARSET " << cs;
 	writeEntry("CHARSET", cs);
 
 	writeEntry("COLOR_BK", colorBackground.name());
