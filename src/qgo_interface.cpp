@@ -265,11 +265,6 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 				qgobrd,
 				SLOT(slot_closeevent()));
 			// connect with board (qGoBoard)
-/*			connect(qgobrd,
-				SIGNAL(signal_closeevent(int)),
-				this,
-				SLOT(slot_closeevent(int)));
-*/
 			//  board -> to kibitz or say
 			connect(qgobrd->get_win()->getBoard(),
 				SIGNAL(signal_sendcomment(const QString&)),
@@ -300,14 +295,16 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 				SIGNAL(signal_pass()),
 				qgobrd,
 				SLOT(slot_doPass()));
-/*			connect(qgobrd->get_win()->get_fileClose(),
+#if 0
+			connect(qgobrd->get_win()->get_fileClose(),
 				SIGNAL(activated()),
 				qgobrd,
 				SLOT(slot_doAdjourn()));
 			connect(qgobrd->get_win()->get_fileQuit(),
 				SIGNAL(activated()),
 				qgobrd,
-				SLOT(slot_doAdjourn())); */
+				SLOT(slot_doAdjourn()));
+#endif
 			connect(qgobrd->get_win()->getBoard(),
 				SIGNAL(signal_adjourn()),
 				qgobrd,
@@ -476,8 +473,8 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 				{
 					return false;
 				}
-				
-				/*
+
+#if 0
 				if (g->Sz.contains("adjourned"))
 					qgobrd->send_kibitz(tr("Game has adjourned"));
 				else if (g->Sz.contains("White forfeits"))
@@ -488,8 +485,9 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 					qgobrd->send_kibitz(tr("White resigns"));
 				else if (g->Sz.contains("Black resigns"))
 					qgobrd->send_kibitz(tr("Black resigns"));
-				else */
-				qgobrd->send_kibitz(g->Sz);
+				else
+#endif
+					qgobrd->send_kibitz(g->Sz);
 
 				// set correct result entry
 				QString rs = QString::null;
@@ -594,13 +592,14 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 					qgobrd->get_win()->getInterfaceHandler()->toggleMode();
 					qgobrd->get_win()->getInterfaceHandler()->toggleMode();
 
+#if 0
 					//autosave ?
-					//if ((setting->readBoolEntry("AUTOSAVE")) && (owngame == modeObserve)) 
-					//{
-					//	qgobrd->get_win()->doSave(qgobrd->get_win()->getBoard()->getCandidateFileName(),true);
-					//	qDebug("Game saved");
-					//}
-
+					if ((setting->readBoolEntry("AUTOSAVE")) && (owngame == modeObserve)) 
+					{
+						qgobrd->get_win()->doSave(qgobrd->get_win()->getBoard()->getCandidateFileName(),true);
+						qDebug("Game saved");
+					}
+#endif
 					// but allow to use "say" cmd if it was an own game
 					//if (owngame == modeMatch)
 					bool doSave = ((setting->readBoolEntry("AUTOSAVE")) && (owngame == modeObserve)) ||
@@ -610,11 +609,13 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 					//else
 					//	qgo->playGameEndSound();
 
-					/*{
+#if 0
+					{
 							// allow 'say' command
 						qgobrd->get_win()->getInterfaceHandler()->commentEdit2->setReadOnly(false);
 						qgobrd->get_win()->getInterfaceHandler()->commentEdit2->setDisabled(false);
-					}*/
+					}
+#endif
 				}
 
 				// decrease number of observed games
@@ -1371,11 +1372,6 @@ void qGoIF::set_localboard(QString file)
 		SIGNAL(signal_closeevent()),
 		qb,
 		SLOT(slot_closeevent()));
-	// connect with board (qGoBoard)
-/*	connect(qb,
-		SIGNAL(signal_closeevent(int)),
-		this,
-		SLOT(slot_closeevent(int)));*/
 }
 
 // set independent local board + open game
@@ -1398,11 +1394,6 @@ void qGoIF::set_localgame()
 		SIGNAL(signal_closeevent()),
 		qb,
 		SLOT(slot_closeevent()));
-	// connect with board (qGoBoard)
-/*	connect(qb,
-		SIGNAL(signal_closeevent(int)),
-		this,
-		SLOT(slot_closeevent(int)));*/
 }
 
 // direct access to preferences dialog
