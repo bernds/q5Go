@@ -143,12 +143,12 @@ qDebug("#### GameDialog::slot_pbsuggest()");
 			diff = 9;
 
 		if (diff == 0)
-			komiSpin->setValue(55);
+			komiSpin->setValue(5.5);
 		else if (diff == 1)
-			komiSpin->setValue(5);
+			komiSpin->setValue(0.5);
 		else
 		{
-			komiSpin->setValue(5);
+			komiSpin->setValue(0.5);
 			handicapSpin->setValue(diff);
 		}
 	}
