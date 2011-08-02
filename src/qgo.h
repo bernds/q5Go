@@ -12,18 +12,15 @@
 #include "defines.h"
 #include <q3ptrlist.h>
 #include "searchpath.h"
+#include "audio.h"
 
 #ifdef Q_WS_WIN
 #include <q3filedialog.h>
 #endif
 
-#ifdef Q_OS_LINUX
-#include "wavplay.h"
-#endif
-
 
 class HelpViewer;
-class QSound;
+
 extern "C" {extern  void play(const char *Pathname); }    //SL added eb 7
 
 
@@ -69,18 +66,18 @@ public:
 private:
 	Q3PtrList<MainWindow> *boardList;
 	HelpViewer *helpViewer;
-	QSound *clickSound;
-//	QSound *autoplaySound;
-	QSound *talkSound;
-	QSound *matchSound;
-	QSound *passSound;
-	QSound *gameEndSound;
-	QSound *timeSound;
-	QSound *saySound;
-	QSound *enterSound;
-	QSound *leaveSound;
-	QSound *connectSound;
-	QSound *retrieveSound(const char *, SearchPath&);
+	Sound *clickSound;
+//	Sound *autoplaySound;
+	Sound *talkSound;
+	Sound *matchSound;
+	Sound *passSound;
+	Sound *gameEndSound;
+	Sound *timeSound;
+	Sound *saySound;
+	Sound *enterSound;
+	Sound *leaveSound;
+	Sound *connectSound;
+	Sound *retrieveSound(const char *, SearchPath&);
 	bool   soundsFound();
 };
 

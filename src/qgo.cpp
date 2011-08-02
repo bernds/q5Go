@@ -10,10 +10,10 @@
 #include "mainwindow.h"
 #include "setting.h"
 #include "defines.h"
+#include "audio.h"
 
 #include "config.h"
 #include <qmessagebox.h>
-#include <qsound.h>
 #include <qdir.h>
 #include <qmessagebox.h>
 #include <qlineedit.h>
@@ -143,7 +143,7 @@ void qGo::updateFont()
 	emit signal_updateFont();
 }
 
-QSound * qGo::retrieveSound(const char * filename, SearchPath& sp)
+Sound * qGo::retrieveSound(const char * filename, SearchPath& sp)
 {
   	QFile qfile(filename);
   	QFile * foundFile = sp.findFile(qfile);
@@ -153,13 +153,13 @@ QSound * qGo::retrieveSound(const char * filename, SearchPath& sp)
     		QString msg(filename);
     		msg.append(" not found");
     		qDebug(msg);
-    		return (QSound *) NULL;
+    		return (Sound *) NULL;
   	}
 	else 
 	{
 		msg.append(" found : " + foundFile->name());
 		qDebug(msg);
-    		return new QSound(foundFile->name());
+    		return SoundFactory::newSound(foundFile->name());
   	}
 }
 
@@ -308,12 +308,7 @@ void qGo::playClick()
 {
 	if (clickSound) //setting->readBoolEntry("SOUND_STONE") && clickSound)
 	{                                                                      //added eb 7
-#ifdef Q_OS_LINUX
-		if (!clickSound->isAvailable())
-			play(clickSound->fileName().latin1());
-		else
-#endif
-			clickSound->play();
+		clickSound->play();
 	}                                                                      //end add eb 7
 }
 
@@ -321,12 +316,7 @@ void qGo::playAutoPlayClick()
 {
 	if (setting->readBoolEntry("SOUND_AUTOPLAY") && clickSound)
 	{                                                                      //added eb 7
-#ifdef Q_OS_LINUX
-		if (!clickSound->isAvailable())
-			play(clickSound->fileName().latin1());
-		else
-#endif
-			clickSound->play();
+		clickSound->play();
 	}                                                                      //end add eb 7
 }
 
@@ -334,12 +324,7 @@ void qGo::playTalkSound()
 {
 	if (setting->readBoolEntry("SOUND_TALK") && talkSound)
 	{                                                                      //added eb 7
-#ifdef Q_OS_LINUX
-		if (!talkSound->isAvailable())
-			play(talkSound->fileName().latin1());
-		else
-#endif
-			talkSound->play();
+		talkSound->play();
 	}                                                                      //end add eb 7
 }
 
@@ -347,12 +332,7 @@ void qGo::playMatchSound()
 {
 	if (setting->readBoolEntry("SOUND_MATCH") && matchSound)
 	{                                                                      //added eb 7
-#ifdef Q_OS_LINUX
-		if (!matchSound->isAvailable())
-			play(matchSound->fileName().latin1());
-		else
-#endif
-			matchSound->play();
+		matchSound->play();
 	}                                                                      //end add eb 7
 }
 
@@ -360,12 +340,7 @@ void qGo::playPassSound()
 {
 	if (setting->readBoolEntry("SOUND_PASS") && passSound)
 	{                                                                      //added eb 7
-#ifdef Q_OS_LINUX
-		if (!passSound->isAvailable())
-			play(passSound->fileName().latin1());
-		else
-#endif
-			passSound->play();
+		passSound->play();
 	}                                                                      //end add eb 7
 }
 
@@ -373,12 +348,7 @@ void qGo::playGameEndSound()
 {
 	if (setting->readBoolEntry("SOUND_GAMEEND") && gameEndSound)
 	{                                                                      //added eb 7
-#ifdef Q_OS_LINUX
-		if (!gameEndSound->isAvailable())
-			play(gameEndSound->fileName().latin1());
-		else
-#endif
-			gameEndSound->play();
+		gameEndSound->play();
 	}                                                                      //end add eb 7
 }
 
@@ -386,12 +356,7 @@ void qGo::playTimeSound()
 {
 	if (setting->readBoolEntry("SOUND_TIME") && timeSound)
 	{                                                                      //added eb 7
-#ifdef Q_OS_LINUX
-		if (!timeSound->isAvailable())
-			play(timeSound->fileName().latin1());
-		else
-#endif
-			timeSound->play();
+		timeSound->play();
 	}                                                                      //end add eb 7
 }
 
@@ -399,12 +364,7 @@ void qGo::playSaySound()
 {
 	if (setting->readBoolEntry("SOUND_SAY") && saySound)
 	{                                                                      //added eb 7
-#ifdef Q_OS_LINUX
-		if (!saySound->isAvailable())
-			play(saySound->fileName().latin1());
-		else
-#endif
-			saySound->play();
+		saySound->play();
 	}                                                                      //end add eb 7
 }
 
@@ -412,12 +372,7 @@ void qGo::playEnterSound()
 {
 	if (setting->readBoolEntry("SOUND_ENTER") && enterSound)
 	{                                                                      //added eb 7
-#ifdef Q_OS_LINUX
-		if (!enterSound->isAvailable())
-			play(enterSound->fileName().latin1());
-		else
-#endif
-			enterSound->play();
+		enterSound->play();
 	}                                                                      //end add eb 7
 }
 
@@ -425,27 +380,15 @@ void qGo::playLeaveSound()
 {
 	if (setting->readBoolEntry("SOUND_LEAVE") && leaveSound)
 	{                                                                      //added eb 7
-#ifdef Q_OS_LINUX
-		if (!leaveSound->isAvailable())
-			play(leaveSound->fileName().latin1());
-		else
-#endif
-			leaveSound->play();
+		leaveSound->play();
 	}                                                                      //end add eb 7
 }
 
 void qGo::playConnectSound()
 {
-
-
 	if (setting->readBoolEntry("SOUND_CONNECT") && connectSound)
 	{                                                                      //added eb 7
-#ifdef Q_OS_LINUX
-		if (!connectSound->isAvailable())
-			play(connectSound->fileName().latin1());
-		else
-#endif
-			connectSound->play();
+		connectSound->play();
 	}                                                                      //end add eb 7
 }
 
@@ -453,12 +396,7 @@ void qGo::playDisConnectSound()
 {
 	if (setting->readBoolEntry("SOUND_DISCONNECT") && connectSound)
 	{                                                                      //added eb 7
-#ifdef Q_OS_LINUX
-		if (!connectSound->isAvailable())
-			play(connectSound->fileName().latin1());
-		else
-#endif
-			connectSound->play();
+		connectSound->play();
 	}                                                                      //end add eb 7
 }
 

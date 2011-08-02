@@ -6,7 +6,7 @@ q4go_METASOURCES = AUTO
 
 KDE_OPTIONS = qtonly
 
-DISTHEADERS_MOC = board.h gamedialog.h gamestable.h gametree.h helpviewer.h icons.h \
+DISTHEADERS_MOC = audio.h board.h gamedialog.h gamestable.h gametree.h helpviewer.h icons.h \
 	igsconnection.h maintable.h mainwidget.h mainwindow.h mainwin.h miscdialogs.h \
 	misctools.h noderesults.h parser.h playertable.h preferences.h qgo.h \
 	qgo_interface.h qgtp.h qnewgamedlg.h searchpath.h tables.h telnet.h textview.h tip.h
@@ -14,17 +14,16 @@ DISTHEADERS_MOC = board.h gamedialog.h gamestable.h gametree.h helpviewer.h icon
 DISTHEADERS_NOMOC = boardhandler.h config.h defines.h  globals.h group.h gs_globals.h \
 	igsinterface.h imagehandler.h interfacehandler.h komispinbox.h mark.h \
 	matrix.h misc.h move.h msg_handler.h parserdefs.h setting.h sgfparser.h stone.h \
-	stonehandler.h tree.h wavfile.h wavplay.h xmlparser.h
+	stonehandler.h tree.h xmlparser.h
 
-DISTSOURCES = board.cpp boardhandler.cpp gamedialog.cpp \
+DISTSOURCES = audio.cpp alsa.cpp board.cpp boardhandler.cpp gamedialog.cpp \
 		gamestable.cpp gametree.cpp group.cpp helpviewer.cpp \
 		igsconnection.cpp imagehandler.cpp interfacehandler.cpp main.cpp maintable.cpp \
 		mainwidget.cpp  mainwin.cpp mainwindow.cpp mark.cpp matrix.cpp \
 		misc.cpp move.cpp msg_handler.cpp noderesults.cpp parser.cpp \
 		playertable.cpp preferences.cpp qgo.cpp qgo_interface.cpp qgtp.cpp \
 		qnewgamedlg.cpp setting.cpp sgfparser.cpp stone.cpp stonehandler.cpp tables.cpp \
-		telnet.cpp textview.cpp tip.cpp tree.cpp wavfile.c wavplay.c xmlparser.cpp \
-		searchpath.cpp
+		telnet.cpp textview.cpp tip.cpp tree.cpp xmlparser.cpp searchpath.cpp
 
 FORMS = clientwindow_gui.ui gameinfo_gui.ui gui_dialog.ui mainwidget_gui.ui newgame_gui.ui \
 	newlocalgame_gui.ui noderesults_gui.ui normaltools_gui.ui nthmove_gui.ui preferences_gui.ui \

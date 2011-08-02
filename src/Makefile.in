@@ -51,9 +51,10 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am__objects_1 = board.$(OBJEXT) boardhandler.$(OBJEXT) \
-	gamedialog.$(OBJEXT) gamestable.$(OBJEXT) gametree.$(OBJEXT) \
-	group.$(OBJEXT) helpviewer.$(OBJEXT) igsconnection.$(OBJEXT) \
+am__objects_1 = audio.$(OBJEXT) alsa.$(OBJEXT) board.$(OBJEXT) \
+	boardhandler.$(OBJEXT) gamedialog.$(OBJEXT) \
+	gamestable.$(OBJEXT) gametree.$(OBJEXT) group.$(OBJEXT) \
+	helpviewer.$(OBJEXT) igsconnection.$(OBJEXT) \
 	imagehandler.$(OBJEXT) interfacehandler.$(OBJEXT) \
 	main.$(OBJEXT) maintable.$(OBJEXT) mainwidget.$(OBJEXT) \
 	mainwin.$(OBJEXT) mainwindow.$(OBJEXT) mark.$(OBJEXT) \
@@ -64,8 +65,7 @@ am__objects_1 = board.$(OBJEXT) boardhandler.$(OBJEXT) \
 	setting.$(OBJEXT) sgfparser.$(OBJEXT) stone.$(OBJEXT) \
 	stonehandler.$(OBJEXT) tables.$(OBJEXT) telnet.$(OBJEXT) \
 	textview.$(OBJEXT) tip.$(OBJEXT) tree.$(OBJEXT) \
-	wavfile.$(OBJEXT) wavplay.$(OBJEXT) xmlparser.$(OBJEXT) \
-	searchpath.$(OBJEXT)
+	xmlparser.$(OBJEXT) searchpath.$(OBJEXT)
 am__objects_2 =
 am_q4go_OBJECTS = $(am__objects_1) $(am__objects_2)
 am__objects_3 = clientwindow_gui.moc.$(OBJEXT) \
@@ -76,19 +76,19 @@ am__objects_3 = clientwindow_gui.moc.$(OBJEXT) \
 	preferences_gui.moc.$(OBJEXT) qnewgamedlg_gui.moc.$(OBJEXT) \
 	scoretools_gui.moc.$(OBJEXT) talk_gui.moc.$(OBJEXT) \
 	textedit_gui.moc.$(OBJEXT) textview_gui.moc.$(OBJEXT)
-am__objects_4 = board.moc.$(OBJEXT) gamedialog.moc.$(OBJEXT) \
-	gamestable.moc.$(OBJEXT) gametree.moc.$(OBJEXT) \
-	helpviewer.moc.$(OBJEXT) icons.moc.$(OBJEXT) \
-	igsconnection.moc.$(OBJEXT) maintable.moc.$(OBJEXT) \
-	mainwidget.moc.$(OBJEXT) mainwindow.moc.$(OBJEXT) \
-	mainwin.moc.$(OBJEXT) miscdialogs.moc.$(OBJEXT) \
-	misctools.moc.$(OBJEXT) noderesults.moc.$(OBJEXT) \
-	parser.moc.$(OBJEXT) playertable.moc.$(OBJEXT) \
-	preferences.moc.$(OBJEXT) qgo.moc.$(OBJEXT) \
-	qgo_interface.moc.$(OBJEXT) qgtp.moc.$(OBJEXT) \
-	qnewgamedlg.moc.$(OBJEXT) searchpath.moc.$(OBJEXT) \
-	tables.moc.$(OBJEXT) telnet.moc.$(OBJEXT) \
-	textview.moc.$(OBJEXT) tip.moc.$(OBJEXT)
+am__objects_4 = audio.moc.$(OBJEXT) board.moc.$(OBJEXT) \
+	gamedialog.moc.$(OBJEXT) gamestable.moc.$(OBJEXT) \
+	gametree.moc.$(OBJEXT) helpviewer.moc.$(OBJEXT) \
+	icons.moc.$(OBJEXT) igsconnection.moc.$(OBJEXT) \
+	maintable.moc.$(OBJEXT) mainwidget.moc.$(OBJEXT) \
+	mainwindow.moc.$(OBJEXT) mainwin.moc.$(OBJEXT) \
+	miscdialogs.moc.$(OBJEXT) misctools.moc.$(OBJEXT) \
+	noderesults.moc.$(OBJEXT) parser.moc.$(OBJEXT) \
+	playertable.moc.$(OBJEXT) preferences.moc.$(OBJEXT) \
+	qgo.moc.$(OBJEXT) qgo_interface.moc.$(OBJEXT) \
+	qgtp.moc.$(OBJEXT) qnewgamedlg.moc.$(OBJEXT) \
+	searchpath.moc.$(OBJEXT) tables.moc.$(OBJEXT) \
+	telnet.moc.$(OBJEXT) textview.moc.$(OBJEXT) tip.moc.$(OBJEXT)
 am__objects_5 = $(am__objects_3) $(am__objects_4)
 nodist_q4go_OBJECTS = $(am__objects_5)
 q4go_OBJECTS = $(am_q4go_OBJECTS) $(nodist_q4go_OBJECTS)
@@ -101,14 +101,6 @@ DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/admin/depcomp
 am__depfiles_maybe = depfiles
 am__mv = mv -f
-COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-LTCOMPILE = $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
-	--mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
-	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-CCLD = $(CC)
-LINK = $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link \
-	$(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
@@ -118,6 +110,14 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link \
 	$(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) \
 	-o $@
+COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+LTCOMPILE = $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
+	--mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
+	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+CCLD = $(CC)
+LINK = $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link \
+	$(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 SOURCES = $(q4go_SOURCES) $(nodist_q4go_SOURCES)
 DIST_SOURCES = $(q4go_SOURCES)
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
@@ -296,7 +296,7 @@ top_srcdir = @top_srcdir@
 INCLUDES = $(all_includes)
 q4go_METASOURCES = AUTO
 KDE_OPTIONS = qtonly
-DISTHEADERS_MOC = board.h gamedialog.h gamestable.h gametree.h helpviewer.h icons.h \
+DISTHEADERS_MOC = audio.h board.h gamedialog.h gamestable.h gametree.h helpviewer.h icons.h \
 	igsconnection.h maintable.h mainwidget.h mainwindow.h mainwin.h miscdialogs.h \
 	misctools.h noderesults.h parser.h playertable.h preferences.h qgo.h \
 	qgo_interface.h qgtp.h qnewgamedlg.h searchpath.h tables.h telnet.h textview.h tip.h
@@ -304,17 +304,16 @@ DISTHEADERS_MOC = board.h gamedialog.h gamestable.h gametree.h helpviewer.h icon
 DISTHEADERS_NOMOC = boardhandler.h config.h defines.h  globals.h group.h gs_globals.h \
 	igsinterface.h imagehandler.h interfacehandler.h komispinbox.h mark.h \
 	matrix.h misc.h move.h msg_handler.h parserdefs.h setting.h sgfparser.h stone.h \
-	stonehandler.h tree.h wavfile.h wavplay.h xmlparser.h
+	stonehandler.h tree.h xmlparser.h
 
-DISTSOURCES = board.cpp boardhandler.cpp gamedialog.cpp \
+DISTSOURCES = audio.cpp alsa.cpp board.cpp boardhandler.cpp gamedialog.cpp \
 		gamestable.cpp gametree.cpp group.cpp helpviewer.cpp \
 		igsconnection.cpp imagehandler.cpp interfacehandler.cpp main.cpp maintable.cpp \
 		mainwidget.cpp  mainwin.cpp mainwindow.cpp mark.cpp matrix.cpp \
 		misc.cpp move.cpp msg_handler.cpp noderesults.cpp parser.cpp \
 		playertable.cpp preferences.cpp qgo.cpp qgo_interface.cpp qgtp.cpp \
 		qnewgamedlg.cpp setting.cpp sgfparser.cpp stone.cpp stonehandler.cpp tables.cpp \
-		telnet.cpp textview.cpp tip.cpp tree.cpp wavfile.c wavplay.c xmlparser.cpp \
-		searchpath.cpp
+		telnet.cpp textview.cpp tip.cpp tree.cpp xmlparser.cpp searchpath.cpp
 
 FORMS = clientwindow_gui.ui gameinfo_gui.ui gui_dialog.ui mainwidget_gui.ui newgame_gui.ui \
 	newlocalgame_gui.ui noderesults_gui.ui normaltools_gui.ui nthmove_gui.ui preferences_gui.ui \
@@ -337,7 +336,7 @@ all: $(BUILT_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
 
 .SUFFIXES:
-.SUFFIXES: .h .ui .moc.cc .uic.cc .c .cc .cpp .lo .o .obj
+.SUFFIXES: .h .ui .moc.cc .uic.cc .cc .cpp .lo .o .obj
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -421,6 +420,9 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/alsa.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/audio.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/audio.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/board.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/board.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/boardhandler.Po@am__quote@
@@ -500,30 +502,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tip.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tip.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tree.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/wavfile.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/wavplay.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xmlparser.Po@am__quote@
-
-.c.o:
-@am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(COMPILE) -c $<
-
-.c.obj:
-@am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(COMPILE) -c `$(CYGPATH_W) '$<'`
-
-.c.lo:
-@am__fastdepCC_TRUE@	$(LTCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
 
 .cc.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

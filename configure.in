@@ -37,6 +37,8 @@ CXXFLAGS="$NOOPT_CXXFLAGS" dnl __kdevelop[noopt]__
 CFLAGS="$NOOPT_CFLAGS" dnl __kdevelop[noopt]__
 dnl CXXFLAGS="$CXXFLAGS $USE_EXCEPTIONS" dnl __kdevelop[exc]__
 
+AC_CHECK_LIB(asound,snd_pcm_info)
+
 AC_ENABLE_SHARED(yes)
 AC_ENABLE_STATIC(no)
 KDE_PROG_LIBTOOL

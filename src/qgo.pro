@@ -64,8 +64,6 @@ HEADERS		      = config.h \
 			textview.h \
 			tip.h \
 			tree.h
-unix:HEADERS	     +=	wavplay.h \
-			wavfile.h
 SOURCES		      = gamedialog.cpp \
 			gamestable.cpp \
 			gametree.cpp \
@@ -105,8 +103,6 @@ SOURCES		      = gamedialog.cpp \
 			textview.cpp \
 			tip.cpp \
 			tree.cpp
-unix:SOURCES	     +=	wavplay.c \
-			wavfile.c
 TARGET                = qGo
 unix:INCLUDEPATH      += .
 win32:INCLUDEPATH     += .
