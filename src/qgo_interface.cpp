@@ -605,7 +605,9 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 					bool doSave = ((setting->readBoolEntry("AUTOSAVE")) && (owngame == modeObserve)) ||
 							((setting->readBoolEntry("AUTOSAVE_PLAYED")) && (owngame == modeMatch)); 
 					wrapupMatchGame(qgobrd, doSave);
-					QMessageBox::information(qgobrd->get_win() , tr("Game n° ") + QString::number(-qgobrd->get_id()), extended_rs);
+					if (owngame != modeObserve)
+						QMessageBox::information(qgobrd->get_win(),
+									 tr("Game n° ") + QString::number(-qgobrd->get_id()), extended_rs);
 					//else
 					//	qgo->playGameEndSound();
 
