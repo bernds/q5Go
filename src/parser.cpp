@@ -8,8 +8,6 @@
 #include <qregexp.h>
 #include <iostream>
 using namespace std;
-#define trimmed stripWhiteSpace
-#define indexIn search
 
 // Parsing of Go Server messages
 Parser::Parser() : QObject()
@@ -1587,7 +1585,8 @@ InfoType Parser::cmd22(const QString &line)
 	else
 	{
 		QString row = line.section(':', 0, 0).trimmed();
-		QString results = line.section(' ', 1, 1);
+		QString results = line.section(':', 1, 1).trimmed();
+		qDebug() << row << " " << results;
 		emit signal_result(row, results, false, 0);
 	}
 

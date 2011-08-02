@@ -1245,7 +1245,7 @@ const QString &komi)
 		// find right board - slow, but just once a game
 		while (qb != NULL
 		       && ((qb->get_wplayer() != txt && qb->get_bplayer() != txt
-			    || (qb->get_Mode() != modeMatch && qb->get_Mode() != modeTeach))))
+			    && qb->get_Mode() != modeEdit)))
 			qb = boardlist->next();
 
 		if (qb && qb->get_wplayer() == txt)
