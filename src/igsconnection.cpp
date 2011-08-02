@@ -35,8 +35,7 @@ IGSConnection::IGSConnection() : IGSInterface()
 	connect(qsocket, SIGNAL(readyRead()), SLOT(OnReadyRead()));
 	connect(qsocket, SIGNAL(connectionClosed()), SLOT(OnConnectionClosed()));
 	connect(qsocket, SIGNAL(delayedCloseFinished()), SLOT(OnDelayedCloseFinish()));
-	connect(qsocket, SIGNAL(bytesWritten(int)), SLOT(OnBytesWritten(int)));
-	connect(qsocket, SIGNAL(error(int)), SLOT(OnError(int)));
+	connect(qsocket, SIGNAL(error(QAbstractSocket::SocketError)), SLOT(OnError(QAbstractSocket::SocketError)));
 }
 
 IGSConnection::~IGSConnection()
@@ -216,21 +215,15 @@ void IGSConnection::OnDelayedCloseFinish()
 	sendTextToApp("Connection closed.\n");
 }
 
-void IGSConnection::OnBytesWritten(int /*nbytes*/)
-{
-//	qDebug("%d BYTES WRITTEN", nbytes);
-//	emit signal_setBytesOut(nbytes);
-}
-
-void IGSConnection::OnError(int i)
+void IGSConnection::OnError(QAbstractSocket::SocketError i)
 {
 	switch (i)
 	{
-		case QTcpSocket::ErrConnectionRefused: qDebug("ERROR: connection refused...");
+		case QAbstractSocket::ErrConnectionRefused: qDebug("ERROR: connection refused...");
 			break;
-		case QTcpSocket::ErrHostNotFound: qDebug("ERROR: host not found...");
+		case QAbstractSocket::ErrHostNotFound: qDebug("ERROR: host not found...");
 			break;
-		case QTcpSocket::ErrSocketRead: qDebug("ERROR: socket read...");
+		case QAbstractSocket::ErrSocketRead: qDebug("ERROR: socket read...");
 			break;
 		default: qDebug("ERROR: unknown Error...");
 			break;

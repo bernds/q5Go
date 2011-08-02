@@ -53,8 +53,7 @@ private slots:
 	void OnReadyRead();
 	void OnConnectionClosed();
 	void OnDelayedCloseFinish();
-	void OnBytesWritten(int);
-	void OnError(int);
+	void OnError(QAbstractSocket::SocketError);
 
 private:
 	QTcpSocket *qsocket;
