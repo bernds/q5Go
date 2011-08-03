@@ -11,13 +11,13 @@ DISTHEADERS_MOC = audio.h board.h gamedialog.h gamestable.h gametree.h helpviewe
 	misctools.h noderesults.h parser.h playertable.h preferences.h qgo.h \
 	qgo_interface.h qgtp.h qnewgamedlg.h searchpath.h tables.h telnet.h textview.h tip.h
 
-DISTHEADERS_NOMOC = boardhandler.h config.h defines.h  globals.h group.h gs_globals.h \
+DISTHEADERS_NOMOC = boardhandler.h config.h defines.h gatter.h globals.h group.h gs_globals.h \
 	igsinterface.h imagehandler.h interfacehandler.h komispinbox.h mark.h \
 	matrix.h misc.h move.h msg_handler.h parserdefs.h setting.h sgfparser.h stone.h \
 	stonehandler.h tree.h xmlparser.h
 
 DISTSOURCES = audio.cpp alsa.cpp board.cpp boardhandler.cpp gamedialog.cpp \
-		gamestable.cpp gametree.cpp group.cpp helpviewer.cpp \
+		gamestable.cpp gametree.cpp gatter.cpp group.cpp helpviewer.cpp \
 		igsconnection.cpp imagehandler.cpp interfacehandler.cpp main.cpp maintable.cpp \
 		mainwidget.cpp  mainwin.cpp mainwindow.cpp mark.cpp matrix.cpp \
 		misc.cpp move.cpp msg_handler.cpp noderesults.cpp parser.cpp \

@@ -53,8 +53,8 @@ am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am__objects_1 = audio.$(OBJEXT) alsa.$(OBJEXT) board.$(OBJEXT) \
 	boardhandler.$(OBJEXT) gamedialog.$(OBJEXT) \
-	gamestable.$(OBJEXT) gametree.$(OBJEXT) group.$(OBJEXT) \
-	helpviewer.$(OBJEXT) igsconnection.$(OBJEXT) \
+	gamestable.$(OBJEXT) gametree.$(OBJEXT) gatter.$(OBJEXT) \
+	group.$(OBJEXT) helpviewer.$(OBJEXT) igsconnection.$(OBJEXT) \
 	imagehandler.$(OBJEXT) interfacehandler.$(OBJEXT) \
 	main.$(OBJEXT) maintable.$(OBJEXT) mainwidget.$(OBJEXT) \
 	mainwin.$(OBJEXT) mainwindow.$(OBJEXT) mark.$(OBJEXT) \
@@ -304,13 +304,13 @@ DISTHEADERS_MOC = audio.h board.h gamedialog.h gamestable.h gametree.h helpviewe
 	misctools.h noderesults.h parser.h playertable.h preferences.h qgo.h \
 	qgo_interface.h qgtp.h qnewgamedlg.h searchpath.h tables.h telnet.h textview.h tip.h
 
-DISTHEADERS_NOMOC = boardhandler.h config.h defines.h  globals.h group.h gs_globals.h \
+DISTHEADERS_NOMOC = boardhandler.h config.h defines.h gatter.h globals.h group.h gs_globals.h \
 	igsinterface.h imagehandler.h interfacehandler.h komispinbox.h mark.h \
 	matrix.h misc.h move.h msg_handler.h parserdefs.h setting.h sgfparser.h stone.h \
 	stonehandler.h tree.h xmlparser.h
 
 DISTSOURCES = audio.cpp alsa.cpp board.cpp boardhandler.cpp gamedialog.cpp \
-		gamestable.cpp gametree.cpp group.cpp helpviewer.cpp \
+		gamestable.cpp gametree.cpp gatter.cpp group.cpp helpviewer.cpp \
 		igsconnection.cpp imagehandler.cpp interfacehandler.cpp main.cpp maintable.cpp \
 		mainwidget.cpp  mainwin.cpp mainwindow.cpp mark.cpp matrix.cpp \
 		misc.cpp move.cpp msg_handler.cpp noderesults.cpp parser.cpp \
@@ -438,6 +438,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gamestable.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gametree.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gametree.moc.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gatter.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/group.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gui_dialog.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/helpviewer.Po@am__quote@

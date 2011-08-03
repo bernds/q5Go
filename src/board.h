@@ -8,11 +8,6 @@
 #include <vector>
 #include <map>
 
-#include "defines.h"
-#include "setting.h"
-#include "boardhandler.h"
-#include "stone.h"
-#include "move.h"
 #include <q3canvas.h>
 #include <qdatetime.h>
 #include <qpainter.h>
@@ -24,6 +19,13 @@
 #include <QMouseEvent>
 #include <QEvent>
 
+#include "defines.h"
+#include "setting.h"
+#include "boardhandler.h"
+#include "stone.h"
+#include "move.h"
+#include "gatter.h"
+
 class ImageHandler;
 class Mark;
 class Tip;
@@ -31,25 +33,6 @@ class InterfaceHandler;
 class GameData;
 class NodeResults;
 class QNewGameDlg;
-
-
-class Gatter
-{
-public:
-	Gatter(Q3Canvas *Canvas, int board_size);
-	~Gatter();
-	void hide (int x, int y);
-	void show (int x, int y);
-	void resize(int offsetX, int offsetY, int square_size);
-	void showAll();
-
-private:
-	int board_size;
-	Q3Canvas *canvas;
-	std::vector< std::vector<Q3CanvasLine *> > VGatter, HGatter ;
-	Q3IntDict<Q3CanvasEllipse> hoshisList ;
-};
-
 
 
 class Board : public Q3CanvasView

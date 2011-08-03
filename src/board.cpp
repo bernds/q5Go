@@ -3,9 +3,14 @@
 */
 #include <vector>
 
-#include "config.h"
-#include "setting.h"
-#include "qgo.h"
+#include <qmessagebox.h>
+#include <qapplication.h>
+#include <qclipboard.h>
+#include <qpainter.h>
+#include <q3groupbox.h>
+#include <qlineedit.h>
+#include <qcursor.h>
+
 //Added by qt3to4:
 #include <Q3PtrList>
 #include <QPixmap>
@@ -13,6 +18,10 @@
 #include <QMouseEvent>
 #include <QEvent>
 #include <QWheelEvent>
+
+#include "config.h"
+#include "setting.h"
+#include "qgo.h"
 #include "board.h"
 #include "globals.h"
 #include "mark.h"
@@ -25,13 +34,6 @@
 #include "normaltools_gui.h"
 #include "mainwindow.h"
 #include "noderesults.h"
-#include <qmessagebox.h>
-#include <qapplication.h>
-#include <qclipboard.h>
-#include <qpainter.h>
-#include <q3groupbox.h>
-#include <qlineedit.h>
-#include <qcursor.h>
 
 Board::Board(QWidget *parent, const char *name, Q3Canvas* c)
 : Q3CanvasView(c, parent, name)
@@ -1715,187 +1717,5 @@ QString Board::getCandidateFileName()
 		//fileName = fileName + ".sgf";
 	} 
 	return dir + result + ".sgf";
-}
-
- /**
-  * Initialises the gatter intersections and hoshis points
-  **/
-Gatter::Gatter(Q3Canvas *Canvas, int size)
-{
-	int i,j;
-
-	board_size = size;
-	canvas=Canvas;	
-
-	VGatter.reserve(board_size);
-	HGatter.reserve(board_size);
-	for (i=0; i<board_size; i++)
-	{	
-		std::vector<Q3CanvasLine *> row,col;
-		row.reserve(board_size);
-		col.reserve(board_size);
-		VGatter.push_back(row);
-		HGatter.push_back(col);
-		
-		for (j=0; j<board_size; j++)
-		{
-			VGatter[i].push_back(new Q3CanvasLine(canvas));
-			HGatter[i].push_back(new Q3CanvasLine(canvas));
-			CHECK_PTR(VGatter[i][j]);
-			CHECK_PTR(HGatter[i][j]);
-		}
-	}
-	
-	int edge_dist = (board_size > 12 ? 4 : 3);
-	int low = edge_dist;
-	int middle = (board_size + 1) / 2;
-	int high = board_size + 1 - edge_dist;
-	if (board_size % 2 && board_size > 9)
-	{
-		hoshisList.insert(middle*board_size + low , new Q3CanvasEllipse(canvas));
-		hoshisList.insert(middle*board_size + middle , new Q3CanvasEllipse(canvas));
-		hoshisList.insert(middle*board_size + high , new Q3CanvasEllipse(canvas));
-		hoshisList.insert(low*board_size + middle , new Q3CanvasEllipse(canvas));
-		hoshisList.insert(high*board_size + middle , new Q3CanvasEllipse(canvas));
-	}
-	hoshisList.insert(low*board_size + low ,new Q3CanvasEllipse(canvas));
-	hoshisList.insert(high*board_size + low , new Q3CanvasEllipse(canvas));
-	hoshisList.insert(high*board_size + high , new Q3CanvasEllipse(canvas));
-	hoshisList.insert(low*board_size + high ,new Q3CanvasEllipse(canvas));
-
-	Q3IntDictIterator<Q3CanvasEllipse> it( hoshisList );
-	for ( ; it.current(); ++it )
-        	it.current()->setBrush(Qt::black);
-
-	showAll();
-}
-
-
- /**
-  * Destroys the gatter
-  **/
-Gatter::~Gatter()
-{
-	int i,j; 
-
-
-	for (i=0; i<board_size; i++)
- 	{
-		for (j=0; j<board_size; j++)
- 		{
- 			delete VGatter[i][j];
-			delete HGatter[i][j];
-		} 
-	VGatter[i].clear();
-	HGatter[i].clear();	
-	}
-
-	VGatter.clear();	
-	HGatter.clear();
-
-	Q3IntDictIterator<Q3CanvasEllipse> it( hoshisList );
-	for ( ; it.current(); ++it )
-        	delete it.current(); 
-
-}
-
-
-
- /**
-  * Calculates the gatter intersections and hoshis position
-  **/
-void Gatter::resize(int offsetX, int offsetY, int square_size)
-{
-	int i,j;
-	Q3CanvasEllipse *e;
-
-	int size = square_size / 5;
-	// Round size top be even
-	if (size % 2 > 0)
-		size--;
-	if (size < 6)
-		size = 6;
-
-
-	for (i=0; i<board_size; i++)
-		for (j=0; j<board_size; j++)
-		{
-			HGatter[i][j]->setPoints(int(offsetX + square_size * ( i - 0.5*(i!=0))), 
-						offsetY + square_size * j,
-						int(offsetX + square_size * ( i + 0.5 * (i+1 != board_size))), 
-						offsetY + square_size * j );
-			
-			VGatter[i][j]->setPoints(offsetX + square_size *  i, 
-						int(offsetY + square_size * ( j - 0.5*(j!=0))),
-						offsetX + square_size *  i, 
-						int(offsetY + square_size * ( j + 0.5 * (j+1 != board_size)))); 
-			
-			e=hoshisList.find(board_size*(i+1)+j+1);
-			if (e)
-			{
-				e->setSize(size, size);
-    				e->setX(offsetX + square_size * i);
-    				e->setY(offsetY + square_size * j);
-			}
-		}
-
-}
-
- /**
-  * Resets all interctions and hoshis to be shown
-  **/
-void Gatter::showAll()
-{
-	int i,j;
-	Q3CanvasEllipse *e;
-
-	for (i=0; i<board_size; i++)
-		for (j=0; j<board_size; j++)
-		{
-			VGatter[i][j]->show();
-			HGatter[i][j]->show();
-		}
-
-	Q3IntDictIterator<Q3CanvasEllipse> it( hoshisList );
-	for ( ; it.current(); ++it )
-        	it.current()->show();
-}
-
- /**
-  * Hides an intersection (when placing a letter mark)
-  **/
-void Gatter::hide(int i, int j)
-{
-	Q3CanvasEllipse *e;
-	
-	if (( i<1) || (i > board_size) || ( j<1) || (j > board_size))
-		return;
-
-	VGatter[i-1][j-1]->hide();
-	HGatter[i-1][j-1]->hide();
-
-	e=hoshisList.find(board_size*i+j);
-	if (e)
-		e->hide();
-
-}
-
- /**
-  * shows an intersection (when removing a letter mark)
-  **/
-void Gatter::show(int i, int j)
-{
-	Q3CanvasEllipse *e;
-
-	if (( i<1) || (i > board_size) || ( j<1) || (j > board_size))
-		return;
-
-	VGatter[i-1][j-1]->show();
-	HGatter[i-1][j-1]->show();
-
-	e=hoshisList.find(board_size*i+j);
-	if (e)
-		e->show();
-
 }
 
