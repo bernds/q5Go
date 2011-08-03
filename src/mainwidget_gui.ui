@@ -2232,6 +2232,9 @@ N/S	normal/score tools
 E	edit tools
 TG	teach tools / game tree</string>
       </property>
+      <property name="currentIndex">
+       <number>1</number>
+      </property>
       <widget class="QWidget" name="tab_ns">
        <attribute name="title">
         <string>NS</string>
@@ -2291,6 +2294,52 @@ When in edit mode, you can choose what you want to edit, like setting stones or 
         <property name="exclusive">
          <bool>true</bool>
         </property>
+        <widget class="QPushButton" name="stoneButton">
+         <property name="geometry">
+          <rect>
+           <x>22</x>
+           <y>17</y>
+           <width>30</width>
+           <height>28</height>
+          </rect>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>30</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
+         <property name="toolTip">
+          <string>Stone</string>
+         </property>
+         <property name="whatsThis">
+          <string>Stone
+
+Edit stones on the board. Left click for a black, right click for a white stone.</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="q4go.qrc">
+           <normaloff>:/MainWidgetGui/images/mainwidget/image6.png</normaloff>:/MainWidgetGui/images/mainwidget/image6.png</iconset>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+        </widget>
         <widget class="QPushButton" name="squareButton">
          <property name="geometry">
           <rect>
@@ -2325,6 +2374,10 @@ Edit square marks on the board. Left click sets a mark, right click removes it.<
          </property>
          <property name="text">
           <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="q4go.qrc">
+           <normaloff>:/MainWidgetGui/images/mainwidget/image0.png</normaloff>:/MainWidgetGui/images/mainwidget/image0.png</iconset>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -2365,24 +2418,22 @@ Edit circle marks on the board. Left click sets a mark, right click removes it.<
          <property name="text">
           <string/>
          </property>
+         <property name="icon">
+          <iconset resource="q4go.qrc">
+           <normaloff>:/MainWidgetGui/images/mainwidget/image1.png</normaloff>:/MainWidgetGui/images/mainwidget/image1.png</iconset>
+         </property>
          <property name="checkable">
           <bool>true</bool>
          </property>
         </widget>
-        <widget class="QPushButton" name="labelLetterButton">
+        <widget class="QPushButton" name="triangleButton">
          <property name="geometry">
           <rect>
            <x>22</x>
-           <y>119</y>
+           <y>85</y>
            <width>30</width>
            <height>28</height>
           </rect>
-         </property>
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
          </property>
          <property name="maximumSize">
           <size>
@@ -2394,15 +2445,19 @@ Edit circle marks on the board. Left click sets a mark, right click removes it.<
           <enum>Qt::NoFocus</enum>
          </property>
          <property name="toolTip">
-          <string>Letter</string>
+          <string>Triangle</string>
          </property>
          <property name="whatsThis">
-          <string>Letter
+          <string>Triangle
 
-Edit letter marks on the board. Left click sets a mark, right click removes it. Shift-click lets you edit a custom text.</string>
+Edit triangle marks on the board. Left click sets a mark, right click removes it.</string>
          </property>
          <property name="text">
           <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="q4go.qrc">
+           <normaloff>:/MainWidgetGui/images/mainwidget/image4.png</normaloff>:/MainWidgetGui/images/mainwidget/image4.png</iconset>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -2443,18 +2498,28 @@ Edit cross marks on the board. Left click sets a mark, right click removes it.</
          <property name="text">
           <string/>
          </property>
+         <property name="icon">
+          <iconset resource="q4go.qrc">
+           <normaloff>:/MainWidgetGui/images/mainwidget/image3.png</normaloff>:/MainWidgetGui/images/mainwidget/image3.png</iconset>
+         </property>
          <property name="checkable">
           <bool>true</bool>
          </property>
         </widget>
-        <widget class="QPushButton" name="triangleButton">
+        <widget class="QPushButton" name="labelLetterButton">
          <property name="geometry">
           <rect>
            <x>22</x>
-           <y>85</y>
+           <y>119</y>
            <width>30</width>
            <height>28</height>
           </rect>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
          <property name="maximumSize">
           <size>
@@ -2466,15 +2531,19 @@ Edit cross marks on the board. Left click sets a mark, right click removes it.</
           <enum>Qt::NoFocus</enum>
          </property>
          <property name="toolTip">
-          <string>Triangle</string>
+          <string>Letter</string>
          </property>
          <property name="whatsThis">
-          <string>Triangle
+          <string>Letter
 
-Edit triangle marks on the board. Left click sets a mark, right click removes it.</string>
+Edit letter marks on the board. Left click sets a mark, right click removes it. Shift-click lets you edit a custom text.</string>
          </property>
          <property name="text">
           <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="q4go.qrc">
+           <normaloff>:/MainWidgetGui/images/mainwidget/image2.png</normaloff>:/MainWidgetGui/images/mainwidget/image2.png</iconset>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -2515,88 +2584,35 @@ Edit Number marks on the board. Left click sets a mark, right click removes it.<
          <property name="text">
           <string/>
          </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-        </widget>
-        <widget class="QPushButton" name="stoneButton">
-         <property name="geometry">
-          <rect>
-           <x>22</x>
-           <y>17</y>
-           <width>30</width>
-           <height>28</height>
-          </rect>
-         </property>
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>30</width>
-           <height>30</height>
-          </size>
-         </property>
-         <property name="focusPolicy">
-          <enum>Qt::NoFocus</enum>
-         </property>
-         <property name="toolTip">
-          <string>Stone</string>
-         </property>
-         <property name="whatsThis">
-          <string>Stone
-
-Edit stones on the board. Left click for a black, right click for a white stone.</string>
-         </property>
-         <property name="text">
-          <string/>
+         <property name="icon">
+          <iconset resource="q4go.qrc">
+           <normaloff>:/MainWidgetGui/images/mainwidget/image5.png</normaloff>:/MainWidgetGui/images/mainwidget/image5.png</iconset>
          </property>
          <property name="checkable">
           <bool>true</bool>
          </property>
-         <property name="checked">
-          <bool>false</bool>
-         </property>
         </widget>
-        <widget class="QPushButton" name="colorButton">
-         <property name="geometry">
-          <rect>
-           <x>69</x>
-           <y>17</y>
-           <width>30</width>
-           <height>28</height>
-          </rect>
-         </property>
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>30</width>
-           <height>30</height>
-          </size>
-         </property>
-         <property name="focusPolicy">
-          <enum>Qt::NoFocus</enum>
-         </property>
-         <property name="toolTip">
-          <string>Color of next move</string>
-         </property>
-         <property name="whatsThis">
-          <string>Color
-
-Set the color of next move. If left untouched, default color is chosen.</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
+       </widget>
+       <widget class="QToolButton" name="colorButton">
+        <property name="geometry">
+         <rect>
+          <x>69</x>
+          <y>17</y>
+          <width>30</width>
+          <height>28</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>...</string>
+        </property>
+        <property name="icon">
+         <iconset resource="q4go.qrc">
+          <normaloff>:/images/node_black.xpm</normaloff>
+          <normalon>:/images/node_white.xpm</normalon>:/images/node_black.xpm</iconset>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
        </widget>
       </widget>
       <widget class="QWidget" name="tab_tg">
@@ -2797,7 +2813,9 @@ After placing and/or undo release button for returning to starting point automat
  <tabstops>
   <tabstop>slider</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="q4go.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>passButton</sender>

@@ -397,20 +397,12 @@ void InterfaceHandler::setMarkType(int m)
 		if (board->getBoardHandler()->getBlackTurn())
 		{
 			current->setPLinfo(stoneWhite);
-//#ifndef USE_XPM
-//			mainWidget->colorButton->setPixmap(QPixmap(ICON_NODE_WHITE));
-//#else
-			mainWidget->colorButton->setPixmap(QPixmap(const_cast<const char**>(node_white_xpm)));
-//#endif
+			mainWidget->colorButton->setChecked (true);
 		}
 		else
 		{
 			current->setPLinfo(stoneBlack);
-//#ifndef USE_XPM
-//			mainWidget->colorButton->setPixmap(QPixmap(ICON_NODE_BLACK));
-//#else
-			mainWidget->colorButton->setPixmap(QPixmap(const_cast<const char**>(node_black_xpm)));
-//#endif
+			mainWidget->colorButton->setChecked (false);
 		}
 
 		// check if set color is natural color:

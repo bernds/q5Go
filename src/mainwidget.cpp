@@ -119,19 +119,11 @@ void MainWidget::slot_toolsTabChanged(QWidget * /*w*/)
 			// set color of next move
 			if (interfaceHandler->board->getBoardHandler()->getBlackTurn())
 			{
-//#ifndef USE_XPM
-//				colorButton->setPixmap(QPixmap(ICON_NODE_BLACK));
-//#else
-				colorButton->setPixmap(QPixmap(const_cast<const char**>(node_black_xpm)));
-//#endif
+				colorButton->setChecked (false);
 			}
 			else
 			{
-//#ifndef USE_XPM
-//				colorButton->setPixmap(QPixmap(ICON_NODE_WHITE));
-//#else
-				colorButton->setPixmap(QPixmap(const_cast<const char**>(node_white_xpm)));
-//#endif
+				colorButton->setChecked (true);
 			}
 
 			interfaceHandler->toggleMode();
@@ -209,6 +201,11 @@ void MainWidget::toggleGameMode()
 void MainWidget::setMarkType(int m)
 {
 	interfaceHandler->setMarkType(m);
+}
+
+void MainWidget::on_colorButton_clicked(bool checked)
+{
+	interfaceHandler->setMarkType(7);
 }
 
 void MainWidget::doPass()

@@ -90,7 +90,9 @@ am__objects_4 = audio.moc.$(OBJEXT) board.moc.$(OBJEXT) \
 	searchpath.moc.$(OBJEXT) tables.moc.$(OBJEXT) \
 	telnet.moc.$(OBJEXT) textview.moc.$(OBJEXT) tip.moc.$(OBJEXT)
 am__objects_5 = $(am__objects_3) $(am__objects_4)
-nodist_q4go_OBJECTS = $(am__objects_5)
+am__objects_6 = q4go.rcc.$(OBJEXT)
+am__objects_7 = $(am__objects_6)
+nodist_q4go_OBJECTS = $(am__objects_5) $(am__objects_7)
 q4go_OBJECTS = $(am_q4go_OBJECTS) $(nodist_q4go_OBJECTS)
 am__DEPENDENCIES_1 =
 q4go_DEPENDENCIES = $(am__DEPENDENCIES_1)
@@ -225,6 +227,7 @@ PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 QT4_CFLAGS = @QT4_CFLAGS@
 QT4_LIBS = @QT4_LIBS@
 RANLIB = @RANLIB@
+RCC = @RCC@
 REPO = @REPO@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
@@ -319,24 +322,25 @@ FORMS = clientwindow_gui.ui gameinfo_gui.ui gui_dialog.ui mainwidget_gui.ui newg
 	newlocalgame_gui.ui noderesults_gui.ui normaltools_gui.ui nthmove_gui.ui preferences_gui.ui \
 	qnewgamedlg_gui.ui scoretools_gui.ui talk_gui.ui textedit_gui.ui textview_gui.ui 
 
+RESOURCES = q4go.qrc
 FORMHEADERS = $(FORMS:.ui=.h)
 MOC_CC = $(FORMS:.ui=.moc.cc) $(DISTHEADERS_MOC:.h=.moc.cc)
-UIC_CC = $(FORMS:.ui=.uic.cc)
-BUILT_SOURCES = $(FORMHEADERS) $(MOC_CC)
+RCC_CC = $(RESOURCES:.qrc=.rcc.cc)
+BUILT_SOURCES = $(FORMHEADERS) $(MOC_CC) $(RCC_CC)
 CLEANFILES = $(BUILT_SOURCES)
 EXTRA_DIST = $(FORMS)
 q4go_SOURCES = $(DISTSOURCES) $(DISTHEADERS_MOC) $(DISTHEADERS_NO_MOC)
-nodist_q4go_SOURCES = $(MOC_CC)
+nodist_q4go_SOURCES = $(MOC_CC) $(RCC_CC)
 SUBDIRS = pics translations sounds
 q4go_LDFLAGS = $(all_libraries) $(USER_LDFLAGS)
 q4go_LDADD = $(LIBSOCKET) $(LIB_QPE) $(LIB_QT) $(QT4_LIBS)
 METASOURCES = AUTO
-SUFFIXES = .h .ui .moc.cc .uic.cc
+SUFFIXES = .h .ui .moc.cc .uic.cc .qrc .rcc.cc
 all: $(BUILT_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
 
 .SUFFIXES:
-.SUFFIXES: .h .ui .moc.cc .uic.cc .cc .cpp .lo .o .obj
+.SUFFIXES: .h .ui .moc.cc .uic.cc .qrc .rcc.cc .cc .cpp .lo .o .obj
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -474,6 +478,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/preferences.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/preferences.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/preferences_gui.moc.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/q4go.rcc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/qgo.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/qgo.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/qgo_interface.Po@am__quote@
@@ -879,10 +884,8 @@ uninstall-am: uninstall-binPROGRAMS
 .h.moc.cc:
 	$(MOC) -o $@ $<
 
-%.uic.cc : %.moc.cc
-
-.ui.uic.cc:
-	$(UIC) -o $@ -impl $*.h $<
+.qrc.rcc.cc:
+	$(RCC) -o $@ $<
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

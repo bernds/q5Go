@@ -35,7 +35,7 @@ struct ASCII_Import;
 class MainWindow : public Q3MainWindow
 {
 	Q_OBJECT
-		
+
 public:
 	MainWindow(QWidget* parent = 0, const char* name = 0, Qt::WFlags f = Qt::WType_TopLevel);
 	~MainWindow();

@@ -1,0 +1,33 @@
+<RCC>
+  <qresource prefix="/MainWidgetGui">
+    <file>images/mainwidget/image0.png</file>
+    <file>images/mainwidget/image1.png</file>
+    <file>images/mainwidget/image2.png</file>
+    <file>images/mainwidget/image3.png</file>
+    <file>images/mainwidget/image4.png</file>
+    <file>images/mainwidget/image5.png</file>
+    <file>images/mainwidget/image6.png</file>
+  </qresource>
+  <qresource prefix="/">
+    <file>images/node_black.xpm</file>
+    <file>images/node_white.xpm</file>
+  </qresource>
+  <qresource prefix="/QNewGameDlgGui">
+    <file>images/qnewgamedlg/image0.png</file>
+    <file>images/qnewgamedlg/image1.png</file>
+    <file>images/qnewgamedlg/image2.png</file>
+  </qresource>
+  <qresource prefix="/TalkGui">
+    <file>images/talk/image0.png</file>
+    <file>images/talk/image1.png</file>
+  </qresource>
+  <qresource prefix="/PreferencesDialogGui">
+    <file>images/preferences/image0.png</file>
+    <file>images/preferences/image1.png</file>
+  </qresource>
+  <qresource prefix="/ClientWindowGui">
+    <file>images/clientwindow/image0.png</file>
+    <file>images/clientwindow/image1.xpm</file>
+    <file>images/clientwindow/image2.png</file>
+  </qresource>
+</RCC>

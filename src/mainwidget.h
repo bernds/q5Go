@@ -27,6 +27,7 @@ public:
 	InterfaceHandler *interfaceHandler;
 
 public slots:
+	void on_colorButton_clicked(bool);
 	void slot_toolsTabChanged(QWidget*);
 	virtual void setMarkType(int);
 	virtual void doPass();

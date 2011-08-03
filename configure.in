@@ -64,6 +64,10 @@ AC_PATH_PROG(UIC, uic, , $PATH:$QTDIR/bin)
 if test -z "$UIC" ; then
     AC_MSG_ERROR([Cannot find 'uic'])
 fi
+AC_PATH_PROG(RCC, rcc, , $PATH:$QTDIR/bin)
+if test -z "$RCC" ; then
+    AC_MSG_ERROR([Cannot find 'rcc'])
+fi
 
 CXXFLAGS="$CXXFLAGS $QT4_CFLAGS"
 

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>619</width>
-    <height>660</height>
+    <height>662</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -50,6 +50,10 @@
        </property>
        <property name="text">
         <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="q4go.qrc">
+         <normaloff>:/PreferencesDialogGui/images/preferences/image0.png</normaloff>:/PreferencesDialogGui/images/preferences/image0.png</iconset>
        </property>
        <property name="autoDefault">
         <bool>true</bool>
@@ -177,7 +181,7 @@ After placing and/or undo release button for returning to starting point automat
       <string/>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="InterfaceTabWidget">
       <attribute name="title">
@@ -807,6 +811,10 @@ Set it with the file chooser</string>
               </property>
               <property name="text">
                <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="q4go.qrc">
+                <normaloff>:/PreferencesDialogGui/images/preferences/image1.png</normaloff>:/PreferencesDialogGui/images/preferences/image1.png</iconset>
               </property>
              </widget>
             </item>
@@ -1591,6 +1599,10 @@ If the picture is not set, or unvalid, a default goban is used by qgo</string>
               <property name="text">
                <string/>
               </property>
+              <property name="icon">
+               <iconset resource="q4go.qrc">
+                <normaloff>:/PreferencesDialogGui/images/preferences/image1.png</normaloff>:/PreferencesDialogGui/images/preferences/image1.png</iconset>
+              </property>
              </widget>
             </item>
            </layout>
@@ -1628,6 +1640,10 @@ If the picture is not set, or unvalid, a default picture is used by qgo</string>
              <widget class="QPushButton" name="TablePicturePathButton">
               <property name="text">
                <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="q4go.qrc">
+                <normaloff>:/PreferencesDialogGui/images/preferences/image1.png</normaloff>:/PreferencesDialogGui/images/preferences/image1.png</iconset>
               </property>
              </widget>
             </item>
@@ -2029,6 +2045,10 @@ This will display realistic 3D stones with stripes and shadow</string>
              <widget class="QPushButton" name="ComputerPathButton">
               <property name="text">
                <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="q4go.qrc">
+                <normaloff>:/PreferencesDialogGui/images/preferences/image1.png</normaloff>:/PreferencesDialogGui/images/preferences/image1.png</iconset>
               </property>
              </widget>
             </item>
@@ -5130,7 +5150,9 @@ up to :</string>
   <tabstop>fontConsoleButton</tabstop>
   <tabstop>colorBackgroundButton</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="q4go.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonApply</sender>

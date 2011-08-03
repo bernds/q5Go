@@ -29,16 +29,19 @@ FORMS = clientwindow_gui.ui gameinfo_gui.ui gui_dialog.ui mainwidget_gui.ui newg
 	newlocalgame_gui.ui noderesults_gui.ui normaltools_gui.ui nthmove_gui.ui preferences_gui.ui \
 	qnewgamedlg_gui.ui scoretools_gui.ui talk_gui.ui textedit_gui.ui textview_gui.ui 
 
+RESOURCES = q4go.qrc
+
+
 FORMHEADERS = $(FORMS:.ui=.h)
 MOC_CC = $(FORMS:.ui=.moc.cc) $(DISTHEADERS_MOC:.h=.moc.cc)
-UIC_CC = $(FORMS:.ui=.uic.cc)
+RCC_CC = $(RESOURCES:.qrc=.rcc.cc)
 
-BUILT_SOURCES = $(FORMHEADERS) $(MOC_CC)
+BUILT_SOURCES = $(FORMHEADERS) $(MOC_CC) $(RCC_CC)
 CLEANFILES = $(BUILT_SOURCES)
 EXTRA_DIST = $(FORMS)
 
 q4go_SOURCES = $(DISTSOURCES) $(DISTHEADERS_MOC) $(DISTHEADERS_NO_MOC)
-nodist_q4go_SOURCES = $(MOC_CC)
+nodist_q4go_SOURCES = $(MOC_CC) $(RCC_CC)
 
 ####### kdevelop will overwrite this part!!! (end)############
 bin_PROGRAMS = q4go
@@ -55,9 +58,7 @@ METASOURCES = AUTO
 .h.moc.cc:
 	$(MOC) -o $@ $<
 
-%.uic.cc : %.moc.cc
+.qrc.rcc.cc:
+	$(RCC) -o $@ $<
 
-.ui.uic.cc:
-	$(UIC) -o $@ -impl $*.h $<
-
-SUFFIXES = .h .ui .moc.cc .uic.cc
+SUFFIXES = .h .ui .moc.cc .uic.cc .qrc .rcc.cc
