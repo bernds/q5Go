@@ -7,7 +7,7 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QCloseEvent>
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <Q3ValueList>
 #include <QKeyEvent>
 #include <Q3VBoxLayout>
@@ -163,7 +163,7 @@ MainWindow::MainWindow(QWidget* parent, const char* name, Qt::WFlags f)
 
 //	mainWidget = new MainWidget(splitter, "MainWidget");
 	
-	mainWidgetGuiLayout = new Q3GridLayout(mainWidget, 1, 1, 0, 0);
+	mainWidgetGuiLayout = new QGridLayout(mainWidget, 1, 1, 0, 0);
 	if (setting->readBoolEntry("SIDEBAR_LEFT"))
 	{
 		mainWidgetGuiLayout->addWidget(mainWidget->toolsFrame, 0, 0);

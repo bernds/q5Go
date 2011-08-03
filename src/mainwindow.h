@@ -10,7 +10,7 @@
 #include <q3listview.h>
 //Added by qt3to4:
 #include <QCloseEvent>
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <QLabel>
 #include <Q3PopupMenu>
 #include <QKeyEvent>
@@ -191,7 +191,7 @@ private:
 	float timerIntervals[6];
 	bool isFullScreen;
 
-	Q3GridLayout *mainWidgetGuiLayout;
+	QGridLayout *mainWidgetGuiLayout;
 };
 
 #endif
