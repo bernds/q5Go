@@ -192,7 +192,7 @@ void Setting::loadSettings()
 	{
 		// however...
 		qDebug("HOME and/or USERPROFILE are not set");
-		QString settingHomeDir = QDir::homeDirPath();
+		settingHomeDir = QDir::homeDirPath();
 		file.setName(settingHomeDir + "/.qgoclientrc");
 		if (file.exists())
 		{
@@ -207,7 +207,10 @@ void Setting::loadSettings()
 			file.setName(settingHomeDir + "/." + PACKAGE + "rc");
 	}
 	else
-		file.setName(QString(p) + "/." + PACKAGE + "rc");
+	{
+		settingHomeDir = QString (p);
+		file.setName(settingHomeDir + "/." + PACKAGE + "rc");
+	}
 
 	if (!file.exists() || !file.open(QIODevice::ReadOnly))
 	{
