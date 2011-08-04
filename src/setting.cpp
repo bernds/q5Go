@@ -261,7 +261,7 @@ void Setting::loadSettings()
 		colorAltBackground = QColor(s);
 	s = readEntry("CHARSET");
 	// Cope with nul characters written to the config file by qGo.
-	if (!s.isNull() && s.at(0).toAscii() != '\0') {
+	if (s.length() >= 6 && s.at(0).toAscii() != '\0') {
 		charset->blackStone = s.at(0).toAscii();
 		charset->emptyPoint = s.at(1).toAscii();
 		charset->hBorder = s.at(2).toAscii();
