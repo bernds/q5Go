@@ -424,8 +424,6 @@ void InterfaceHandler::setMarkType(int m)
 
 void InterfaceHandler::clearData()
 {
-    // qDebug("void InterfaceHandler::clearData()");
-	
     clearComment();
     setMoveData(0, true, 0, 0, false, false, false);
 //    modeButton->setOn(false);
@@ -535,20 +533,20 @@ const QString InterfaceHandler::getStatusMarkText(MarkType t)
 
 void InterfaceHandler::setCaptures(float black, float white, bool /*scored*/)
 {
-/*
-if (scored && !scored_flag)
-{
-normalTools->capturesFrame->setTitle(QObject::tr("Points"));
-scored_flag = true;
-}
-else if (!scored && scored_flag)
-{
-normalTools->capturesFrame->setTitle(QObject::tr("Captures"));
-scored_flag = false;
-}
-	*/
-    capturesBlack->setText(QString::number(Qt::black));
-    capturesWhite->setText(QString::number(Qt::white));
+#if 0
+	if (scored && !scored_flag)
+	{
+		normalTools->capturesFrame->setTitle(QObject::tr("Points"));
+		scored_flag = true;
+	}
+	else if (!scored && scored_flag)
+	{
+		normalTools->capturesFrame->setTitle(QObject::tr("Captures"));
+		scored_flag = false;
+	}
+#endif
+	capturesBlack->setText(QString::number(black));
+	capturesWhite->setText(QString::number(white));
 }
 
 void InterfaceHandler::setTimes(const QString &btime, const QString &bstones, const QString &wtime, const QString &wstones)
@@ -703,6 +701,7 @@ void InterfaceHandler::restoreToolbarButtons()
 
 void InterfaceHandler::setScore(int terrB, int capB, int terrW, int capW, float komi)
 {
+	qDebug() << "setScore " << capW << " " << capB;
 	scoreTools->komi->setText(QString::number(komi));
 	scoreTools->terrWhite->setText(QString::number(terrW));
 	scoreTools->capturesWhite->setText(QString::number(capW));
