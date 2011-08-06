@@ -979,7 +979,7 @@ InfoType Parser::cmd9(QString &line)
 	{
 		QString name;
 		QString rank;
-		for (int i = 0; !(name = line.section(' ', i, i)).isEmpty(); i++)
+		for (int i = 0; !(name = line.section(' ', i, i, QString::SectionSkipEmpty)).isEmpty(); i++)
 		{
 			++i;
 			rank = line.section(' ', i, i);
@@ -1242,7 +1242,7 @@ InfoType Parser::cmd11(const QString &line)
 	if (line.contains("Kibitz"))
 	{
 		// who is kibitzer
-		memory_str = line.section(':', 0).mid(7);
+		memory_str = line.section(':', 0, 0).mid(7);
 		// game number
 		memory = line.section(' ', -1).remove('[').remove(']').toInt();
 	}
