@@ -1670,7 +1670,6 @@ void MainWindow::dlgSetPreferences(int tab)
 	dlg.addBrotherCheckBox->setChecked(setting->addImportAsBrother);
 	
 	// SGF Loading tab
-	dlg.fastLoadCheckBox->setChecked(board->fastLoad);
 	dlg.rememberDirCheckBox->setChecked(setting->readBoolEntry("REM_DIR"));
 	dlg.codecListBox->setCurrentItem(setting->readIntEntry("CODEC"));
 
@@ -1783,7 +1782,6 @@ bool MainWindow::preferencesSave(PreferencesDialog *dlg)
 	setting->charset->hBorder = dlg->hBorderEdit->text().at(0).latin1();
 	setting->charset->vBorder = dlg->vBorderEdit->text().at(0).latin1();
 	setting->addImportAsBrother = dlg->addBrotherCheckBox->isChecked();
-	setting->fastLoad = dlg->fastLoadCheckBox->isChecked();
 	setting->writeBoolEntry("REM_DIR", dlg->rememberDirCheckBox->isChecked());
 	setting->writeBoolEntry("ANTICLICKO", dlg->antiClickoCheckBox->isChecked());
 	setting->writeBoolEntry("VAR_FONT", dlg->variableFontCheckBox->isChecked());
@@ -1860,9 +1858,6 @@ void MainWindow::updateBoard()
 			timer->changeInterval(int(timerIntervals[setting->readIntEntry("TIMER_INVERVAL")] * 1000));
 	}
 	
-	// SGF Loading tab
-	board->fastLoad = setting->fastLoad;
-
 	slotViewLeftSidebar();
 	board->setVariationDisplay(static_cast<VariationDisplay>(setting->readIntEntry("VAR_GHOSTS")));
 	board->setShowCursor(setting->readBoolEntry("CURSOR"));
