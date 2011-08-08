@@ -270,6 +270,7 @@ MainWindow::MainWindow(QWidget* parent, const char* name, Qt::WFlags f)
 	// restore board window
 	reStoreWindowSize("0", false);
 
+	toolBar->setFocus();
 	updateFont();
 }
 
