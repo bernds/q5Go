@@ -1324,8 +1324,8 @@ void Board::updateLastMove(StoneColor c, int x, int y)
 
 void Board::setCurStoneColor()
 {
-    // Switch the color of the ghost stone cursor
-    if (curStone != NULL)
+	// Switch the color of the ghost stone cursor
+	if (curStone != NULL)
 		curStone->setColor(boardHandler->getBlackTurn() ? stoneBlack : stoneWhite);
 }
 
@@ -1555,30 +1555,6 @@ void Board::exportPicture(const QString &fileName, const QString &filter, bool t
     
     if (!pix.save(fileName, filter))
 		QMessageBox::warning(this, PACKAGE, tr("Failed to save image!"));
-}
-
-void Board::countScore()
-{
-    // Switch to score mode
-    boardHandler->setMode(modeScore);
-	
-#if 0
-    // Don't clean the board from existing territory marks and dead stones.
-    boardHandler->getStoneHandler()->removeDeadMarks();
-    boardHandler->getTree()->getCurrent()->getMatrix()->clearTerritoryMarks();
-	
-    boardHandler->countScore();
-#else
-    // Instead count the dead stones and add them to the captures. This way we keep
-    // existing scoring (Cgoban2) and don't need to mark the dead stones again.
-    int caps_black=0, caps_white=0;
-    boardHandler->getStoneHandler()->updateDeadMarks(caps_black, caps_white);
-	
-    boardHandler->enterScoreMode(caps_black, caps_white);
-    boardHandler->countScore();
-#endif
-	
-    setModified();
 }
 
 void Board::doCountDone()

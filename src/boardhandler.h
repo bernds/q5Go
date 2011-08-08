@@ -135,7 +135,7 @@ protected:
 private:
 	StoneHandler *stoneHandler;               
 	SGFParser *sgfParser;
-	int currentMove, capturesBlack, capturesWhite, caps_black, caps_white;
+	int currentMove, capturesBlack, capturesWhite;
 	Tree *tree;
 //	Move *lastValidMove;                      //SL added eb 9
 	GameMode gameMode;

@@ -118,7 +118,6 @@ public:
 		{ return boardHandler->importASCII(fileName, fromClipboard); }
 	bool importSGFClipboard() { return boardHandler->importSGFClipboard(); }
 	bool exportSGFtoClipB() { return boardHandler->exportSGFtoClipB(); }
-	void countScore();
 	void doCountDone();
 	void hideStones(); // QQQ
 	void numberMoves() { boardHandler->numberMoves(); }

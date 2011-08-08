@@ -276,7 +276,7 @@ qDebug("MainWidget::doRealScore()");
 		normalTools->hide();
 		scoreTools->show();
 //		interfaceHandler->board->setMode(modeScore);
-		interfaceHandler->board->countScore();
+		interfaceHandler->board->getBoardHandler()->countScore();
 	}
 	else
 	{

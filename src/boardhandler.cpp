@@ -1699,117 +1699,138 @@ void BoardHandler::setCaptures(StoneColor c, int n)
 
 void BoardHandler::countScore()
 {
-	tree->getCurrent()->getMatrix()->clearTerritoryMarks();
+	// Switch to score mode
+	setMode(modeScore);
+
+	Matrix * current_matrix = tree->getCurrent()->getMatrix();
+	current_matrix->clearTerritoryMarks();
 
 	// capturesBlack -= caps_black;
 	// capturesWhite -= caps_white;
+	capturesBlack = tree->getCurrent()->getCapturesBlack();
+	capturesWhite = tree->getCurrent()->getCapturesWhite();
+
+	tree->getCurrent()->setScored(true);
 
 	// Copy the current matrix
-	Matrix *m = new Matrix(*(tree->getCurrent()->getMatrix()));
+	Matrix *m = new Matrix(*current_matrix);
 	CHECK_PTR(m);
 
 	// Do some cleanups, we only need stones
 	m->absMatrix();
 	m->clearAllMarks();
-	
+
+	int caps_white = 0, caps_black = 0;
+	int sz = board->getBoardSize();
+
 	// Mark all dead stones in the matrix with negative number
-	int i=0, j=0;
-	for (i=0; i<board->getBoardSize(); i++)
-		for (j=0; j<board->getBoardSize(); j++)
+	int i, j;
+	for (i = 0; i < sz; i++)
+		for (j = 0; j < sz; j++)
 			if (stoneHandler->hasStone(i+1, j+1) == 1)
-				if (stoneHandler->getStoneAt(i+1, j+1)->isDead())
+			{
+				Stone *s = stoneHandler->getStoneAt(i+1, j+1);
+				if (s->isDead()) {
+					if (m->at(i, j) == stoneBlack)
+						caps_white++;
+					else
+						caps_black++;
 					m->set(i, j, m->at(i, j) * -1);
-				else if (stoneHandler->getStoneAt(i+1, j+1)->isSeki())
+				}
+				else if (s->isSeki())
 					m->set(i, j, m->at(i, j) * MARK_SEKI);
-				
-				int terrWhite = 0, terrBlack = 0;
-				
-				while (m != NULL)
+			}
+
+	int terrWhite = 0, terrBlack = 0;
+			  
+	while (m != NULL)
+	{
+		bool found = false;
+					
+		for (i = 0; i < sz; i++)
+		{
+			for (j = 0; j < sz; j++)
+			{
+				if (m->at(i, j) <= 0)
 				{
-					bool found = false;
-					
-					for (i=0; i<board->getBoardSize(); i++)
-					{
-						for (j=0; j<board->getBoardSize(); j++)
-						{
-							if (m->at(i, j) <= 0)
-							{
-								found = true;
-								break;
-							}
-						}
-						if (found)
-							break;
-					}
-					
-					if (!found)
-						break;
-					
-					// Traverse the enclosed territory. Resulting color is in col afterwards
-					StoneColor col = stoneNone;
-					traverseTerritory(m, i, j, col);
-					
-					// Now turn the result into real territory or dame points
-					for (i=0; i<board->getBoardSize(); i++)
-					{
-						for (j=0; j<board->getBoardSize(); j++)
-						{
-							if (m->at(i, j) == MARK_TERRITORY_VISITED)
-							{
-							    // Black territory
-							    if (col == stoneBlack)
-							    {
-									tree->getCurrent()->getMatrix()->removeMark(i+1, j+1);
-									tree->getCurrent()->getMatrix()->insertMark(i+1, j+1, markTerrBlack);
-									terrBlack ++;
-									m->set(i, j, MARK_TERRITORY_DONE_BLACK);
-							    }
-							    // White territory
-							    else if (col == stoneWhite)
-							    {
-									tree->getCurrent()->getMatrix()->removeMark(i+1, j+1);
-									tree->getCurrent()->getMatrix()->insertMark(i+1, j+1, markTerrWhite);
-									terrWhite ++;
-									m->set(i, j, MARK_TERRITORY_DONE_WHITE);
-							    }
-							    // Dame
-							    else
-								    m->set(i, j, MARK_TERRITORY_DAME);
-							}
-						}
-					}
+					found = true;
+					break;
 				}
-
-				// Finally, remove all false eyes that have been marked as territory. This
-				// has to be here, as in the above loop we did not find all dame points yet.
-				for (i = 0; i < board->getBoardSize(); i++) {
-				    for (j = 0; j < board->getBoardSize(); j++) {
-					if (m->at(i, j) == MARK_TERRITORY_DONE_BLACK ||
-					    m->at(i, j) == MARK_TERRITORY_DONE_WHITE) {
-					    int col = (m->at(i, j) == MARK_TERRITORY_DONE_BLACK ? stoneBlack : stoneWhite);
-					    if (stoneHandler->checkFalseEye(m, i, j, col)) {
-						tree->getCurrent()->getMatrix()->removeMark(i + 1, j + 1);
-						if (col == stoneBlack)
-						    terrBlack--;
-						else
-						    terrWhite--;
-					    }
+			}
+			if (found)
+				break;
+		}
+					
+		if (!found)
+			break;
+					
+		// Traverse the enclosed territory. Resulting color is in col afterwards
+		StoneColor col = stoneNone;
+		traverseTerritory(m, i, j, col);
+					
+		// Now turn the result into real territory or dame points
+		for (i = 0; i < sz; i++)
+		{
+			for (j = 0; j < sz; j++)
+			{
+				if (m->at(i, j) == MARK_TERRITORY_VISITED)
+				{
+					// Black territory
+					if (col == stoneBlack)
+					{
+						tree->getCurrent()->getMatrix()->removeMark(i+1, j+1);
+						tree->getCurrent()->getMatrix()->insertMark(i+1, j+1, markTerrBlack);
+						terrBlack ++;
+						m->set(i, j, MARK_TERRITORY_DONE_BLACK);
 					}
-				    }
+					// White territory
+					else if (col == stoneWhite)
+					{
+						tree->getCurrent()->getMatrix()->removeMark(i+1, j+1);
+						tree->getCurrent()->getMatrix()->insertMark(i+1, j+1, markTerrWhite);
+						terrWhite ++;
+						m->set(i, j, MARK_TERRITORY_DONE_WHITE);
+					}
+					// Dame
+					else
+						m->set(i, j, MARK_TERRITORY_DAME);
 				}
+			}
+		}
+	}
 
-				// Mark the move having territory marks
-				tree->getCurrent()->setTerritoryMarked(true);
-				// Paint the territory on the board
-				stoneHandler->updateAll(tree->getCurrent()->getMatrix());
-				board->updateCanvas();
+	// Finally, remove all false eyes that have been marked as territory. This
+	// has to be here, as in the above loop we did not find all dame points yet.
+	for (i = 0; i < board->getBoardSize(); i++) {
+		for (j = 0; j < board->getBoardSize(); j++) {
+			if (m->at(i, j) == MARK_TERRITORY_DONE_BLACK ||
+			    m->at(i, j) == MARK_TERRITORY_DONE_WHITE) {
+				int col = (m->at(i, j) == MARK_TERRITORY_DONE_BLACK ? stoneBlack : stoneWhite);
+				if (stoneHandler->checkFalseEye(m, i, j, col)) {
+					tree->getCurrent()->getMatrix()->removeMark(i + 1, j + 1);
+					if (col == stoneBlack)
+						terrBlack--;
+					else
+						terrWhite--;
+				}
+			}
+		}
+	}
+
+	// Mark the move having territory marks
+	tree->getCurrent()->setTerritoryMarked(true);
+	// Paint the territory on the board
+	stoneHandler->updateAll(tree->getCurrent()->getMatrix());
+	board->updateCanvas();
 				
-				// Update Interface
-				board->getInterfaceHandler()->setScore(terrBlack, capturesBlack + caps_black,
-					terrWhite, capturesWhite+ caps_white,
-					gameData->komi);
-				
-				delete m;
+	// Update Interface
+	board->getInterfaceHandler()->setScore(terrBlack, capturesBlack + caps_black,
+					       terrWhite, capturesWhite + caps_white,
+					       gameData->komi);
+
+	delete m;
+
+	board->setModified();
 }
 
 void BoardHandler::traverseTerritory(Matrix *m, int x, int y, StoneColor &col)
@@ -1870,11 +1891,6 @@ bool BoardHandler::checkNeighbourTerritory(Matrix *m, const int &x, const int &y
 
 void BoardHandler::enterScoreMode(int cb, int cw)
 {
-	capturesBlack = tree->getCurrent()->getCapturesBlack();
-	capturesWhite = tree->getCurrent()->getCapturesWhite();
-	caps_black = cb;
-	caps_white = cw;
-	tree->getCurrent()->setScored(true);
 }
 
 void BoardHandler::leaveScoreMode()
@@ -1891,9 +1907,7 @@ void BoardHandler::leaveScoreMode()
 	stoneHandler->removeDeadMarks();
 	markedDead = false;
 	
-	updateMove(tree->getCurrent());
-	
-	caps_black = caps_white = 0;
+	updateMove(tree->getCurrent());	
 }
 
 void BoardHandler::markDeadStone(int x, int y)
