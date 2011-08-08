@@ -191,7 +191,7 @@ QGtp::waitResponse()
 		usleep(100000);
 #endif
 */
-	} while (_response.length() == 0 || _response == buff);
+	} while (_response.isEmpty() || _response == buff);
 	
 	/*
 	inFile=new QTextStream(programProcess->readStdout(),IO_ReadOnly);
