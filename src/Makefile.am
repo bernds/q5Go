@@ -14,7 +14,7 @@ DISTHEADERS_MOC = audio.h board.h gamedialog.h gamestable.h gametree.h helpviewe
 DISTHEADERS_NOMOC = boardhandler.h config.h defines.h gatter.h globals.h group.h gs_globals.h \
 	igsinterface.h imagehandler.h interfacehandler.h komispinbox.h mark.h \
 	matrix.h misc.h move.h msg_handler.h parserdefs.h setting.h sgfparser.h stone.h \
-	stonehandler.h tree.h xmlparser.h
+	stonehandler.h tree.h
 
 DISTSOURCES = audio.cpp alsa.cpp board.cpp boardhandler.cpp gamedialog.cpp \
 		gamestable.cpp gametree.cpp gatter.cpp group.cpp helpviewer.cpp \
@@ -23,7 +23,7 @@ DISTSOURCES = audio.cpp alsa.cpp board.cpp boardhandler.cpp gamedialog.cpp \
 		misc.cpp move.cpp msg_handler.cpp noderesults.cpp parser.cpp \
 		playertable.cpp preferences.cpp qgo.cpp qgo_interface.cpp qgtp.cpp \
 		qnewgamedlg.cpp setting.cpp sgfparser.cpp stone.cpp stonehandler.cpp tables.cpp \
-		telnet.cpp textview.cpp tip.cpp tree.cpp xmlparser.cpp searchpath.cpp
+		telnet.cpp textview.cpp tip.cpp tree.cpp searchpath.cpp
 
 FORMS = clientwindow_gui.ui gameinfo_gui.ui gui_dialog.ui mainwidget_gui.ui newgame_gui.ui \
 	newlocalgame_gui.ui noderesults_gui.ui normaltools_gui.ui nthmove_gui.ui preferences_gui.ui \

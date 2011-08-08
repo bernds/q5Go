@@ -492,15 +492,8 @@ void BoardHandler::createMoveSGF(GameMode mode, bool brother)
 	
 	Move *m;
 	
-	if (!board->fastLoad)
-	{
-		Matrix *mat = tree->getCurrent()->getMatrix();
-		m = new Move(stoneBlack, -1, -1, tree->getCurrent()->getMoveNumber()+1, mode, *mat);
-	}
-	else
-	{
-		m = new Move(stoneBlack, -1, -1, tree->getCurrent()->getMoveNumber()+1, mode);
-	}
+	Matrix *mat = tree->getCurrent()->getMatrix();
+	m = new Move(stoneBlack, -1, -1, tree->getCurrent()->getMoveNumber()+1, mode, *mat);
 	
 	if (!brother && tree->hasSon(m))
 	{
@@ -509,7 +502,7 @@ void BoardHandler::createMoveSGF(GameMode mode, bool brother)
 		return;
 	}
 	
-	if (!board->fastLoad && mode == modeNormal)
+	if (mode == modeNormal)
 		m->getMatrix()->clearAllMarks();
 	
 	if (!brother)
@@ -545,47 +538,7 @@ void BoardHandler::updateMove(Move *m, bool ignore_update)
 		m = tree->getCurrent();
 	}
 	//qDebug("BoardHandler::updateMove(Move *m)");
-	
-	// Fastloading. Create matrix for current move and insert marks
-	if (!m->checked)
-	{
-		qDebug("NOT CHECKED");
-		if (m->parent != NULL)
-		{
-#ifndef NO_DEBUG
-			if (tree->getCurrent()->getMatrix() != NULL)
-			{
-				qFatal("MOVE HAS A MATRIX BUT SHOULD NOT!");
-			}
-#endif
-			Matrix *dad = m->parent->getMatrix();
-			Matrix *neu = new Matrix(*dad);
-			m->setMatrix(neu);
-		}
-		addStoneSGF(m->getColor(), m->getX(), m->getY());
-		
-		Q3IntDict<FastLoadMark> *d = m->fastLoadMarkDict;
-		if (d != NULL && !d->isEmpty())
-		{
-			Q3IntDictIterator<FastLoadMark> it(*d);
-			while (it.current())
-			{
-				m->getMatrix()->insertMark(it.current()->x,
-					it.current()->y,
-					it.current()->t);
-				if (it.current()->t == markText && !(it.current()->txt).isNull())
-					m->getMatrix()->setMarkText(it.current()->x,
-					it.current()->y,
-					it.current()->txt);
-				++it;
-			}
-			delete d;
-			m->fastLoadMarkDict = NULL;
-		}
-		
-		m->checked = true;
-	}
-	
+
 	CHECK_PTR(m);
 	currentMove = m->getMoveNumber();
 	int brothers = getNumBrothers();
@@ -1365,8 +1318,7 @@ void BoardHandler::doPass(bool sgf)
 			c = tree->getCurrent()->parent->getColor() == stoneBlack ? stoneWhite : stoneBlack;
 		else
 			c = stoneBlack;
-		if (!board->fastLoad)
-			editMove(c, 20, 20);
+		editMove(c, 20, 20);
 	}
 	
 	if (hasParent())
@@ -1438,17 +1390,17 @@ bool BoardHandler::getBlackTurn()
 	return true;
 }
 
-bool BoardHandler::loadSGF(const QString &fileName, const QString &filter, bool fastLoad)
+bool BoardHandler::loadSGF(const QString &fileName)
 {
 	// Load the sgf file
-	if (!sgfParser->parse(fileName, filter, fastLoad))
+	if (!sgfParser->parse(fileName))
 		return false;
 	
 	prepareBoard();
 	return true;
 }
 
-bool BoardHandler::openComputerSession(QNewGameDlg *dlg,const QString &fileName, const QString &filter,const QString &computer_path)             //added eb 12
+bool BoardHandler::openComputerSession(QNewGameDlg *dlg,const QString &fileName, const QString &computer_path)
 {
   // now we start the dialog
 	gtp = new QGtp() ;
@@ -1471,7 +1423,7 @@ bool BoardHandler::openComputerSession(QNewGameDlg *dlg,const QString &fileName,
 
 	if (!(fileName.isNull() || fileName.isEmpty())) {
 
-		if (!sgfParser->parse(fileName, filter, false))
+		if (!sgfParser->parse(fileName))
 			return false;
 		else
 			gtp->loadsgf(fileName);

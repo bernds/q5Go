@@ -56,7 +56,7 @@ public:
 	QString getCandidateFileName();
 	void hideAllStones();
 	void hideAllMarks();
-	bool openSGF(const QString &fileName, const QString &filter = QString::null);
+	bool openSGF(const QString &fileName);
 	bool saveBoard(const QString &fileName) { return boardHandler->saveBoard(fileName); }
 	void setShowCoords(bool b);
 	void setShowSGFCoords(bool b);
@@ -138,7 +138,7 @@ public:
 	void set_isLocalGame(bool isLocal);
 	bool get_isLocalGame() { return isLocalGame; }
 	void refreshDisplay() { Move *m = boardHandler->getTree()->getCurrent(); updateLastMove(m->getColor(), m->getX(), m->getY()); }
-	bool startComputerPlay(QNewGameDlg *dlg,const QString &fileName, const QString &filter, const QString &computer_path);
+	bool startComputerPlay(QNewGameDlg *dlg,const QString &fileName, const QString &computer_path);
 	void set_antiClicko(bool b) { antiClicko = b; }
 
 

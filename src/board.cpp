@@ -1035,11 +1035,11 @@ void Board::hideAllMarks()
     }
 }
 
-bool Board::openSGF(const QString &fileName, const QString &filter)
+bool Board::openSGF(const QString &fileName)
 {
 	
     // Load the sgf
-    if (!boardHandler->loadSGF(fileName, filter, fastLoad))
+    if (!boardHandler->loadSGF(fileName))
 		return false;
 	
     canvas->update();
@@ -1047,14 +1047,14 @@ bool Board::openSGF(const QString &fileName, const QString &filter)
     return true;
 }
 
-bool Board::startComputerPlay(QNewGameDlg * dlg,const QString &fileName, const QString &filter,const QString &computer_path)
+bool Board::startComputerPlay(QNewGameDlg * dlg,const QString &fileName, const QString &computer_path)
 {
 
      // Clean up everything and get to last move
     //clearData();
     
     // Initiate the dialog with computer
-    if (!boardHandler->openComputerSession(dlg,fileName,filter,computer_path))
+    if (!boardHandler->openComputerSession(dlg,fileName,computer_path))
     		return false;
    
     canvas->update();

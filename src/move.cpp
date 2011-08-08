@@ -18,7 +18,6 @@ Move::Move(int board_size)
 	terrMarked = false;
 	capturesBlack = capturesWhite = 0;
 	checked = true;
-	fastLoadMarkDict = NULL;
 	scored = false;
 	scoreWhite = scoreBlack = 0;
 	PLinfo = false;
@@ -36,7 +35,6 @@ Move::Move(StoneColor c, int mx, int my, int n, GameMode mode, const Matrix &mat
 	capturesBlack = capturesWhite = 0;
 	terrMarked = false;
 	checked = true;
-	fastLoadMarkDict = NULL;
 	scored = false;
 	scoreWhite = scoreBlack = 0;
 	PLinfo = false;
@@ -46,27 +44,9 @@ Move::Move(StoneColor c, int mx, int my, int n, GameMode mode, const Matrix &mat
 	matrix->absMatrix();
 }
 
-Move::Move(StoneColor c, int mx, int my, int n, GameMode mode, const QString &s)
-: stoneColor(c), x(mx), y(my), moveNum(n), gameMode(mode), comment(s)
-{
-	brother = NULL;
-	son = NULL;
-	parent = NULL;
-	marker = NULL;
-	capturesBlack = capturesWhite = 0;
-	terrMarked = false;
-	checked = false;
-	matrix = NULL;
-	fastLoadMarkDict = NULL;
-	scored = false;
-	scoreWhite = scoreBlack = 0;
-	PLinfo = false;
-}
-
 Move::~Move()
 {
 	delete matrix;
-	delete fastLoadMarkDict;
 }
 
 // We do not overwrite the operator == as well, as this is used to compare the
@@ -169,23 +149,6 @@ const QString Move::saveMove(bool isRoot)
 	}
 	
 	return str;
-}
-
-void Move::insertFastLoadMark(int x, int y, MarkType markType, const QString &txt)
-{
-	if (fastLoadMarkDict == NULL)
-	{
-		fastLoadMarkDict = new Q3IntDict<FastLoadMark>;
-		fastLoadMarkDict->setAutoDelete(TRUE);
-	}
-	
-	FastLoadMark *flm = new FastLoadMark;
-	flm->x = x;
-	flm->y = y;
-	flm->t = markType;
-	flm->txt = txt;
-	
-	fastLoadMarkDict->insert(Matrix::coordsToKey(x, y), flm);
 }
 
 bool Move::isPassMove()

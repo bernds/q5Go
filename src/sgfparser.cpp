@@ -18,7 +18,6 @@
 #include <qfile.h>
 #include <q3textstream.h>
 #include <q3progressdialog.h>
-#include "xmlparser.h"
 #include "parserdefs.h"
 #include <qmessagebox.h>
 #include <q3strlist.h>
@@ -147,15 +146,13 @@ SGFParser::SGFParser(BoardHandler *bh)
 {
 	CHECK_PTR(boardHandler);
 	stream = NULL;
-	xmlParser = NULL;
 }
 
 SGFParser::~SGFParser()
 {
-	delete xmlParser;
 }
 
-bool SGFParser::parse(const QString &fileName, const QString &filter, bool fastLoad)
+bool SGFParser::parse(const QString &fileName)
 {
 	if (fileName.isNull() || fileName.isEmpty())
 	{
@@ -172,23 +169,9 @@ bool SGFParser::parse(const QString &fileName, const QString &filter, bool fastL
 //	if (toParse.find("White[") != -1)  // Do a quick test if this is necassary.
 //		convertOldSgf(toParse);
 	
-	// Check for filter, if given
-	if (!filter.isNull())
-	{
-		// XML
-		if (filter == Board::tr("XML"))
-		{
-			// Init xmlparser if not yet done
-			if (xmlParser == NULL)
-				xmlParser = new XMLParser(boardHandler);
-			xmlParser->parse(fileName);
-			return true;
-		}
-	}
-	
 	if (!initGame(toParse, fileName))
 		return corruptSgf();
-	return doParse(toParse, fastLoad);
+	return doParse(toParse);
 }
 
 // Called from clipboard SGF import
@@ -316,7 +299,7 @@ bool SGFParser::initStream(Q3TextStream *stream)
 	return true;
 }
 
-bool SGFParser::doParse(const QString &toParseStr, bool fastLoad)
+bool SGFParser::doParse(const QString &toParseStr)
 {
 	if (toParseStr.isNull() || toParseStr.isEmpty())
 	{
@@ -459,8 +442,7 @@ bool SGFParser::doParse(const QString &toParseStr, bool fastLoad)
 				
 				moves = x;
 				
-				if (!fastLoad)
-					boardHandler->getStoneHandler()->updateAll(m->getMatrix(), false);
+				boardHandler->getStoneHandler()->updateAll(m->getMatrix(), false);
 				
 				tree->setCurrent(m);
 			}
@@ -738,25 +720,11 @@ if (tree->getCurrent()->getTimeinfo())
 									boardHandler->doPass(true);
 								else if (prop == editErase)
 								{
-									if (!fastLoad)
-										boardHandler->removeStone(i, j, true, false);
-									else
-									{
-										tree->getCurrent()->setX(0);
-										tree->getCurrent()->setY(0);
-										tree->getCurrent()->setColor(stoneNone);
-									}
+									boardHandler->removeStone(i, j, true, false);
 								}
 								else
 								{
-									if (!fastLoad)
-										boardHandler->addStoneSGF(black ? stoneBlack : stoneWhite, i, j, new_node);
-									else
-									{
-										tree->getCurrent()->setX(i);
-										tree->getCurrent()->setY(j);
-										tree->getCurrent()->setColor(black? stoneBlack : stoneWhite);
-									}
+									boardHandler->addStoneSGF(black ? stoneBlack : stoneWhite, i, j, new_node);
 								}
 								// tree->getCurrent()->getMatrix()->debug();
 								// qDebug("ADDING MOVE %s %d/%d", black?"B":"W", x, y);
@@ -973,27 +941,17 @@ if (tree->getCurrent()->getTimeinfo())
 								// It might me a number mark?
 								bool check = false;
 								moveStr.toInt(&check);  // Try to convert to Integer
-// treat integers as characters...
-check = false;
+								// treat integers as characters...
+								check = false;
 								
-								if (!fastLoad)
-								{
-									if (check)
-										tree->getCurrent()->getMatrix()->
-										insertMark(x, y, markNumber);  // Worked, its a number
-									else
-										tree->getCurrent()->getMatrix()->
-										insertMark(x, y, markType);    // Nope, its a letter
+								if (check)
 									tree->getCurrent()->getMatrix()->
-										setMarkText(x, y, moveStr);
-								}
+										insertMark(x, y, markNumber);  // Worked, its a number
 								else
-								{
-									if (check)  // Number
-										tree->getCurrent()->insertFastLoadMark(x, y, markNumber);
-									else        // Text
-										tree->getCurrent()->insertFastLoadMark(x, y, markType, moveStr);
-								}
+									tree->getCurrent()->getMatrix()->
+										insertMark(x, y, markType);    // Nope, its a letter
+								tree->getCurrent()->getMatrix()->
+									setMarkText(x, y, moveStr);
 							}
 							else
 							{
@@ -1020,10 +978,7 @@ check = false;
 								for (i = x; i <= x1; i++)
 									for (j = y; j <= y1; j++)
 									{
-										if (!fastLoad)
-											tree->getCurrent()->getMatrix()->insertMark(i, j, markType);
-										else
-											tree->getCurrent()->insertFastLoadMark(i, j, markType);
+										tree->getCurrent()->getMatrix()->insertMark(i, j, markType);
 
 										// auto increment for old property 'L'
 										if (old_label)

@@ -16,7 +16,6 @@ class Move
 public:
 	Move(int board_size);
 	Move(StoneColor c, int mx, int my, int n, GameMode mode, const Matrix &mat, const QString &s=NULL);
-	Move(StoneColor c, int mx, int my, int n, GameMode mode, const QString &s=NULL);
 	~Move();
 	
 	bool equals(Move *m);
@@ -50,7 +49,6 @@ public:
 	const QString saveMove(bool isRoot);
 	bool isTerritoryMarked() const { return terrMarked; }
 	void setTerritoryMarked(bool b=true) { terrMarked = b; }
-	void insertFastLoadMark(int x, int y, MarkType markType, const QString &txt=0);
 	bool isScored() const { return scored; }
 	void setScore(float b, float w) { scored = true; scoreBlack = b; scoreWhite = w; }
 	void setScored(bool b=true) { scored = b; }
@@ -70,7 +68,6 @@ public:
 	
 	Move *brother, *son, *parent, *marker;
 	bool checked;
-	Q3IntDict<FastLoadMark> *fastLoadMarkDict;
   bool isPassMove();
 
   

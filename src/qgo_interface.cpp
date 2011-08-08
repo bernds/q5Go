@@ -770,7 +770,7 @@ void qGoIF::slot_computer_game(QNewGameDlg * dlg)
 	}
 #endif
 
-	if (!qgobrd->get_win()->startComputerPlay(dlg,dlg->fileName, qgobrd->get_win()->getFileExtension(dlg->fileName), computerPath))
+	if (!qgobrd->get_win()->startComputerPlay(dlg,dlg->fileName, computerPath))
 	{
 		// computer program failed -> end game
 		slot_closeevent();

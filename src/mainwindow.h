@@ -44,7 +44,7 @@ public:
 //	void setApplicationStyle();
 	bool preferencesAccept();
 	void doOpen(const QString &fileName, const QString &filter=0, bool storedir=true);
-	bool startComputerPlay(QNewGameDlg * dlg,const QString &fileName, const QString &filter, const QString &computer_path);
+	bool startComputerPlay(QNewGameDlg * dlg,const QString &fileName, const QString &computer_path);
 	int checkModified(bool interactive=true);
 	void updateFont();
 	static QString getFileExtension(const QString &fileName, bool defaultExt=true);

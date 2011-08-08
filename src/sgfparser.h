@@ -14,7 +14,6 @@ class Tree;
 class Q3TextStream;
 class Move;
 struct ASCII_Import;
-class XMLParser;
 class GameData;
 
 class SGFParser
@@ -23,7 +22,7 @@ public:
 	SGFParser(BoardHandler *bh);
 	~SGFParser();
 
-	bool parse(const QString &fileName, const QString &filter=QString::null, bool fastLoad=false);
+	bool parse(const QString &fileName);
 	bool parseString(const QString &toParse);
 	bool doWrite(const QString &fileName, Tree *tree);
 	bool exportSGFtoClipB(QString *str, Tree *tree);
@@ -31,7 +30,7 @@ public:
     
 protected:
 	QString loadFile(const QString &fileName);
-	bool doParse(const QString &toParseStr, bool fastLoad=false);
+	bool doParse(const QString &toParseStr);
 	bool corruptSgf(int where=0, QString reason=QString::null);
 	int minPos(int n1, int n2, int n3);
 	bool initGame(const QString &toParse, const QString &fileName);
@@ -49,7 +48,6 @@ private:
 	BoardHandler *boardHandler;
 	Q3TextStream *stream;
 	bool isRoot;
-	XMLParser *xmlParser;
 	int asciiOffsetX, asciiOffsetY;
 };
 

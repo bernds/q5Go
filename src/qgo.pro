@@ -57,7 +57,6 @@ HEADERS		      = config.h \
 			qgtp.h \
 			qnewgamedlg.h \
 			sgfparser.h \
-			xmlparser.h \
 			searchpath.h \
 			stone.h \
 			stonehandler.h \
@@ -96,7 +95,6 @@ SOURCES		      = gamedialog.cpp \
 			qgtp.cpp \
 			qnewgamedlg.cpp \
 			sgfparser.cpp \
-			xmlparser.cpp \
 			searchpath.cpp \
 			stone.cpp \
 			stonehandler.cpp \

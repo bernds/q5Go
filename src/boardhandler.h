@@ -88,9 +88,9 @@ public:
 	bool hasNextBrother() { return tree->hasNextBrother(); }
 	void updateComment(QString text=QString::null);
 	void updateCurrentMatrix(StoneColor c, int x, int y);
-	bool loadSGF(const QString &fileName, const QString &filter=QString::null, bool fastLoad=false);
+	bool loadSGF(const QString &fileName);
 	bool openComputerSession(QNewGameDlg *dlg, const QString &fileName,
-				 const QString &filter=QString::null,const QString &computer_path=QString::null); //SL added eb 12
+				 const QString &computer_path=QString::null); //SL added eb 12
 	bool saveBoard(const QString &fileName);
 	void exportASCII();
 	bool importASCII(const QString &fileName, bool fromClipBoard=false);

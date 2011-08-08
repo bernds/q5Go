@@ -1245,11 +1245,11 @@ void MainWindow::doOpen(const QString &fileName, const QString &filter, bool sto
 	if (setting->readBoolEntry("REM_DIR") && storedir)
 		rememberLastDir(fileName);
 	
-	if (board->openSGF(fileName, filter))
+	if (board->openSGF(fileName))
 		statusBar()->message(fileName + " " + tr("loaded."));
 }
 
-bool MainWindow::startComputerPlay(QNewGameDlg * dlg, const QString &fileName, const QString &filter, const QString &computer_path)
+bool MainWindow::startComputerPlay(QNewGameDlg * dlg, const QString &fileName, const QString &computer_path)
 {
 	GameData *d = new GameData;
 	d->size = dlg->getSize();
@@ -1273,7 +1273,7 @@ bool MainWindow::startComputerPlay(QNewGameDlg * dlg, const QString &fileName, c
 	//if (fileName.isNull() || fileName.isEmpty())
 	//	board->initGame(d);
 
-	if (!board->startComputerPlay(dlg,fileName, filter, computer_path))
+	if (!board->startComputerPlay(dlg,fileName, computer_path))
 		return false;
 
 	return true;
