@@ -105,7 +105,7 @@ void QNewGameDlg::slotHandicapChanged()
 
 void QNewGameDlg::slotKomiChanged()
 {
-    _komi=(float)komiSpin->value() / 10.0;
+	_komi=(float)komiSpin->value();
 }
 
 void QNewGameDlg::slotLevelBlackChanged()
