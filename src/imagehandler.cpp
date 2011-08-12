@@ -36,7 +36,7 @@
 QPixmap* ImageHandler::woodPixmap1 = NULL;
 
 QPixmap* ImageHandler::tablePixmap = NULL;
-Q3CanvasPixmapArray* ImageHandler::altGhostPixmaps = NULL;
+QList<QPixmap> *ImageHandler::altGhostPixmaps = NULL;
 int ImageHandler::classCounter = 0;
 
 
@@ -382,58 +382,33 @@ void ImageHandler::paintWhiteStone (QImage &wi, int d, int stone_render)//bool s
 
 ImageHandler::ImageHandler()
 {
-    // Load the pixmaps
-//#ifdef USE_XPM
-    if (tablePixmap == NULL)
-		tablePixmap = new QPixmap(const_cast<const char**>(table_xpm));
-    if (woodPixmap1 == NULL)
-		woodPixmap1 = new QPixmap(const_cast<const char**>(wood_xpm));
-/*
-#else
-    if (tablePixmap == NULL)
-		tablePixmap = new QPixmap(TABLE_PIC);
-    if (woodPixmap1 == NULL)
-		woodPixmap1 = new QPixmap(WOOD_PIC);
-#endif
-*/
-    if (tablePixmap == NULL || tablePixmap->isNull())
+	tablePixmap = new QPixmap(const_cast<const char**>(table_xpm));
+	woodPixmap1 = new QPixmap(const_cast<const char**>(wood_xpm));
+	if (tablePixmap == NULL || tablePixmap->isNull())
 		qFatal("Could not load pixmaps.");
     
-    stonePixmaps = NULL;
-    ghostPixmaps = NULL;
-	
-    // Init the alternate ghost pixmaps
-    if (altGhostPixmaps == NULL)
-    {
-//#ifdef USE_XPM
+	// Init the alternate ghost pixmaps
+	if (altGhostPixmaps == NULL)
+	{
+		altGhostPixmaps = new QList<QPixmap>;
+
 		QPixmap alt1(const_cast<const char**>(alt_ghost_black_xpm));
 		QPixmap alt2(const_cast<const char**>(alt_ghost_white_xpm));
-/*
-#else
-		QPixmap alt1(ALT_GHOST_BLACK);
-		QPixmap alt2(ALT_GHOST_WHITE);
-#endif
-*/
+
 		if (alt1.isNull() || alt2.isNull())
 			qFatal("Could not load alt_ghost pixmaps.");
-		Q3PtrList<QPixmap> list;
-		list.append(&alt1);
-		list.append(&alt2);
-		Q3PtrList<QPoint> hotspots;
-		hotspots.append(new QPoint(alt1.width()/2, alt1.height()/2));
-		hotspots.append(new QPoint(alt2.width()/2, alt2.height()/2));
-		altGhostPixmaps = new Q3CanvasPixmapArray(list, hotspots);
-    }
-    CHECK_PTR(altGhostPixmaps);
+		altGhostPixmaps->append(alt1);
+		altGhostPixmaps->append(alt2);
+	}
 	
-    classCounter ++;
+	classCounter ++;
 }
 
 ImageHandler::~ImageHandler()
 {
-    classCounter --;
-    if (classCounter == 0)
-    {
+	classCounter --;
+	if (classCounter == 0)
+	{
 		delete woodPixmap1;
 		woodPixmap1 = NULL;
 
@@ -441,10 +416,7 @@ ImageHandler::~ImageHandler()
 		tablePixmap = NULL;
 		delete altGhostPixmaps;
 		altGhostPixmaps = NULL;
-    }
-	
-    delete stonePixmaps;
-    delete ghostPixmaps;
+	}
 }
 
 QPixmap* ImageHandler::getBoardPixmap(QString filename) //skinType s)
@@ -480,76 +452,49 @@ void ImageHandler::init(int size)
 	//bool stripes = setting->readBoolEntry("STONES_SHELLS");
 	int stone_look = setting->readIntEntry("STONES_LOOK");
 
-	Q3PtrList<QPixmap> list, ghostlist;
-	QImage iw1 = QImage(size, size, 32);
-	Q3PtrList<QPoint> hotspots, ghotspots ;
-	QPoint point(size/2, size/2);
-
 	//black stone
-	QImage ib = QImage(size, size, 32);
-	ib.setAlphaBuffer(TRUE);
+	QImage ib = QImage(size, size, QImage::Format_ARGB32);
+
 	paintBlackStone(ib, size, stone_look);
-	QPixmap *ibp = new QPixmap();
-	ibp->convertFromImage(ib, 
-		Qt::PreferDither | 
-		Qt::DiffuseAlphaDither | 
-		Qt::DiffuseDither);
-	list.append(ibp);
-	hotspots.append(&point);
+
+	stonePixmaps.append(QPixmap::fromImage(ib,
+						Qt::PreferDither | 
+						Qt::DiffuseAlphaDither | 
+						Qt::DiffuseDither));
 
 	QImage gb(ib);
 	ghostImage(&gb);
-	ghostlist.append(new Q3CanvasPixmap(gb));
-	ghotspots.append(&point);
+	ghostPixmaps.append(QPixmap::fromImage(gb));
 
 	// white stones	
-	for (int i=1 ;	i<=WHITE_STONES_NB;	i++)
+	for (int i = 1; i <= WHITE_STONES_NB; i++)
 	{
-		iw1 = QImage(size, size, 32);
-		iw1.setAlphaBuffer(TRUE);
-		paintWhiteStone(iw1, size, stone_look);//stripes);
-		QPixmap *iw1p = new QPixmap();
-		iw1p->convertFromImage(iw1, 
-			Qt::PreferDither | 
-			Qt::DiffuseAlphaDither | 
-			Qt::DiffuseDither);
-		list.append(iw1p);
-		hotspots.append(&point);
+		QImage iw1(size, size, QImage::Format_ARGB32);
+		paintWhiteStone(iw1, size, stone_look);
+		stonePixmaps.append(QPixmap::fromImage (iw1,
+							 Qt::PreferDither | 
+							 Qt::DiffuseAlphaDither | 
+							 Qt::DiffuseDither));
 
 		QImage gw1(iw1);
 		ghostImage(&gw1);
-		ghostlist.append(new Q3CanvasPixmap(gw1));
-		ghotspots.append(&point);
+		ghostPixmaps.append(QPixmap::fromImage(gw1));
 	}
 	
 	//shadow under the stones
-	QImage is = QImage(size, size, 32);
-	is.setAlphaBuffer(TRUE);	
-	if (stone_look ==3) //shadow)
+	QImage is = QImage(size, size, QImage::Format_ARGB32);
+	if (stone_look == 3)
 		paintShadowStone(is, size);
 	else
-		is.reset();
-	QPixmap *isp = new QPixmap();
-	ibp->convertFromImage(is, 
-		Qt::PreferDither | 
-		Qt::DiffuseAlphaDither | 
-		Qt::DiffuseDither);
-	list.append(isp);
-	hotspots.append(&point);
-
-	// Assemble the data in the QCanvasPixmapArray
-	stonePixmaps = new Q3CanvasPixmapArray(list, hotspots);
-	
-	ghostPixmaps = new Q3CanvasPixmapArray(ghostlist, ghotspots);
-	
-	
+		is.fill(0);
+	stonePixmaps.append(QPixmap::fromImage(is,
+					       Qt::PreferDither | 
+					       Qt::DiffuseAlphaDither | 
+					       Qt::DiffuseDither));
 }
 
-void ImageHandler::rescale(int size)//, bool smallerStones)
+void ImageHandler::rescale(int size)
 {
-	CHECK_PTR(stonePixmaps);
-	CHECK_PTR(ghostPixmaps);
-
 	size = size + 1;
 
 	//bool shadow = setting->readBoolEntry("STONES_SHADOW");
@@ -557,41 +502,42 @@ void ImageHandler::rescale(int size)//, bool smallerStones)
 	int stone_look = setting->readIntEntry("STONES_LOOK");
 
 	//repaint black stones
-	QImage ib = QImage(size, size, 32);
-	ib.setAlphaBuffer(TRUE);
+	QImage ib = QImage(size, size, QImage::Format_ARGB32);
 	paintBlackStone(ib, size, stone_look);
-	stonePixmaps->setImage(0, new Q3CanvasPixmap(ib));
-	stonePixmaps->image(0)->setOffset(size/2, size/2);
+	stonePixmaps[0].convertFromImage(ib, Qt::PreferDither | 
+					 Qt::DiffuseAlphaDither | 
+					 Qt::DiffuseDither);
 	QImage gb(ib);
 	ghostImage(&gb);
-	ghostPixmaps->setImage(0, new Q3CanvasPixmap(gb));
-	ghostPixmaps->image(0)->setOffset(size/2, size/2);
+	ghostPixmaps[0].convertFromImage(gb, Qt::PreferDither | 
+					 Qt::DiffuseAlphaDither | 
+					 Qt::DiffuseDither);
 
 	// white stones	
-	QImage iw1 = QImage(size, size, 32);
-	iw1.setAlphaBuffer(TRUE);
-	
-	for (int i=1 ;	i<=WHITE_STONES_NB;	i++)
+	for (int i = 1; i <= WHITE_STONES_NB; i++)
 	{
-		paintWhiteStone(iw1, size, stone_look);//stripes);
-		stonePixmaps->setImage(i, new Q3CanvasPixmap(iw1));
-		stonePixmaps->image(i)->setOffset(size/2, size/2);
+		QImage iw1 = QImage(size, size, QImage::Format_ARGB32);
+		paintWhiteStone(iw1, size, stone_look);
+		stonePixmaps[i].convertFromImage(iw1, Qt::PreferDither | 
+						 Qt::DiffuseAlphaDither | 
+						 Qt::DiffuseDither);
 		QImage gw1(iw1);
 		ghostImage(&gw1);
-		ghostPixmaps->setImage(i, new Q3CanvasPixmap(gw1));
-		ghostPixmaps->image(i)->setOffset(size/2, size/2);
+		ghostPixmaps[i].convertFromImage(gw1, Qt::PreferDither | 
+						 Qt::DiffuseAlphaDither | 
+						 Qt::DiffuseDither);
 	}
 	
 	// shadow
-	QImage is = QImage(size, size, 32);
-	is.setAlphaBuffer(TRUE);
+	QImage is = QImage(size, size, QImage::Format_ARGB32);
 	if (stone_look == 3)//shadow) 
 		paintShadowStone(is, size);
 	else
-		is.reset();
-	stonePixmaps->setImage(WHITE_STONES_NB +1, new Q3CanvasPixmap(is));
-	stonePixmaps->image(WHITE_STONES_NB +1)->setOffset(size/2, size/2);
-
+		is.fill(0);
+	stonePixmaps[WHITE_STONES_NB+1].convertFromImage(is, Qt::PreferDither | 
+							 Qt::DiffuseAlphaDither | 
+							 Qt::DiffuseDither);
+#if 0
 	// QQQ add transparency image
 	int adding = 1+WHITE_STONES_NB; // black stone + white stone + shadow
 	QImage alpha = QImage(size, size, 32);
@@ -599,27 +545,23 @@ void ImageHandler::rescale(int size)//, bool smallerStones)
 	alpha.reset();
 	stonePixmaps->setImage(adding+1, new Q3CanvasPixmap(alpha));
 	stonePixmaps->image(adding+1)->setOffset(size/2, size/2);
+#endif
 }
 
 void ImageHandler::ghostImage(QImage *img)
 {
-    img->setAlphaBuffer(true);
-    img->convertDepth(32);
+	int w = img->width();
+	int h = img->height();
 
-       
-    int w = img->width(),
-		h = img->height(),
-		x, y;
-
-    for (y=0; y<h; y++)
-    {
+	for (int y = 0; y < h; y++)
+	{
 		uint *line = (uint*)img->scanLine(y);
-		for (x=0; x<w; x++)
+		for (int x = 0; x < w; x++)
 		{
 			//if ((x%2 && !(y%2)) || (!(x%2) && y%2))
 			{
 				line[x] = qRgba(qRed(line[x]), qGreen(line[x]), qBlue(line[x]), (line[x] ? 125 : 0));
 			}
 		}
-    }
+	}
 }

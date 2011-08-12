@@ -30,29 +30,28 @@
  /**
   * Initialises the gatter intersections and hoshis points
   **/
-Gatter::Gatter(Q3Canvas *Canvas, int size)
+Gatter::Gatter(QGraphicsScene *Canvas, int size)
 {
 	int i,j;
 
 	board_size = size;
-	canvas=Canvas;	
 
 	VGatter.reserve(board_size);
 	HGatter.reserve(board_size);
 	for (i=0; i<board_size; i++)
 	{	
-		std::vector<Q3CanvasLine *> row,col;
+		std::vector<QGraphicsLineItem *> row,col;
 		row.reserve(board_size);
 		col.reserve(board_size);
 		VGatter.push_back(row);
 		HGatter.push_back(col);
 		
 		for (j=0; j<board_size; j++)
-		{
-			VGatter[i].push_back(new Q3CanvasLine(canvas));
-			HGatter[i].push_back(new Q3CanvasLine(canvas));
-			CHECK_PTR(VGatter[i][j]);
-			CHECK_PTR(HGatter[i][j]);
+		{	
+			VGatter[i].push_back(new QGraphicsLineItem(0,Canvas));
+			HGatter[i].push_back(new QGraphicsLineItem(0,Canvas));
+			Q_CHECK_PTR(VGatter[i][j]);
+			Q_CHECK_PTR(HGatter[i][j]);
 		}
 	}
 	
@@ -62,24 +61,29 @@ Gatter::Gatter(Q3Canvas *Canvas, int size)
 	int high = board_size + 1 - edge_dist;
 	if (board_size % 2 && board_size > 9)
 	{
-		hoshisList.insert(middle*board_size + low , new Q3CanvasEllipse(canvas));
-		hoshisList.insert(middle*board_size + middle , new Q3CanvasEllipse(canvas));
-		hoshisList.insert(middle*board_size + high , new Q3CanvasEllipse(canvas));
-		hoshisList.insert(low*board_size + middle , new Q3CanvasEllipse(canvas));
-		hoshisList.insert(high*board_size + middle , new Q3CanvasEllipse(canvas));
+		hoshisList.insert(middle*board_size + low , new QGraphicsEllipseItem(0,Canvas));
+		hoshisList.insert(middle*board_size + middle , new QGraphicsEllipseItem(0,Canvas));
+		hoshisList.insert(middle*board_size + high , new QGraphicsEllipseItem(0,Canvas));
+		hoshisList.insert(low*board_size + middle , new QGraphicsEllipseItem(0,Canvas));
+		hoshisList.insert(high*board_size + middle , new QGraphicsEllipseItem(0,Canvas));
 	}
-	hoshisList.insert(low*board_size + low ,new Q3CanvasEllipse(canvas));
-	hoshisList.insert(high*board_size + low , new Q3CanvasEllipse(canvas));
-	hoshisList.insert(high*board_size + high , new Q3CanvasEllipse(canvas));
-	hoshisList.insert(low*board_size + high ,new Q3CanvasEllipse(canvas));
+	hoshisList.insert(low*board_size + low ,new QGraphicsEllipseItem(0,Canvas));
+	hoshisList.insert(high*board_size + low , new QGraphicsEllipseItem(0,Canvas));
+	hoshisList.insert(high*board_size + high , new QGraphicsEllipseItem(0,Canvas));
+	hoshisList.insert(low*board_size + high ,new QGraphicsEllipseItem(0,Canvas));
 
-	Q3IntDictIterator<Q3CanvasEllipse> it( hoshisList );
-	for ( ; it.current(); ++it )
-        	it.current()->setBrush(Qt::black);
+
+	QMapIterator<int,QGraphicsEllipseItem*> it( hoshisList );
+
+	for ( ; it.hasNext() ; )
+	{
+		it.next();
+		it.value()->setBrush(Qt::SolidPattern);
+		it.value()->setPen(Qt::NoPen);
+	}
 
 	showAll();
 }
-
 
  /**
   * Destroys the gatter
@@ -103,10 +107,7 @@ Gatter::~Gatter()
 	VGatter.clear();	
 	HGatter.clear();
 
-	Q3IntDictIterator<Q3CanvasEllipse> it( hoshisList );
-	for ( ; it.current(); ++it )
-        	delete it.current(); 
-
+	hoshisList.clear();
 }
 
 
@@ -117,38 +118,44 @@ Gatter::~Gatter()
 void Gatter::resize(int offsetX, int offsetY, int square_size)
 {
 	int i,j;
-	Q3CanvasEllipse *e;
-
+	QGraphicsEllipseItem *e;
+	QMapIterator<int,QGraphicsEllipseItem*> it( hoshisList );
+	
 	int size = square_size / 5;
-	// Round size top be even
-	if (size % 2 > 0)
-		size--;
-	if (size < 6)
-		size = 6;
 
+	// Round size top be odd (hoshis)
+	if (size % 2 == 0)
+		size--;
+	if ((size < 7) && (size>2))
+		size = 7;
+	else if (size <= 2)
+		size = 3;
+	
 
 	for (i=0; i<board_size; i++)
 		for (j=0; j<board_size; j++)
 		{
-			HGatter[i][j]->setPoints(int(offsetX + square_size * ( i - 0.5*(i!=0))), 
+
+			HGatter[i][j]->setLine(int(offsetX + square_size * ( i - 0.5*(i!=0))), 
 						offsetY + square_size * j,
 						int(offsetX + square_size * ( i + 0.5 * (i+1 != board_size))), 
 						offsetY + square_size * j );
 			
-			VGatter[i][j]->setPoints(offsetX + square_size *  i, 
+			VGatter[i][j]->setLine(offsetX + square_size *  i, 
 						int(offsetY + square_size * ( j - 0.5*(j!=0))),
 						offsetX + square_size *  i, 
 						int(offsetY + square_size * ( j + 0.5 * (j+1 != board_size)))); 
 			
-			e=hoshisList.find(board_size*(i+1)+j+1);
-			if (e)
+			
+			if (hoshisList.contains(board_size*(i+1)+j+1))
 			{
-				e->setSize(size, size);
-    				e->setX(offsetX + square_size * i);
-    				e->setY(offsetY + square_size * j);
+				e = hoshisList.value(board_size*(i+1)+j+1);
+				e->setRect(offsetX + square_size * i - size/2,
+					offsetY + square_size * j- size/2,
+					size , 
+					size );
 			}
 		}
-
 }
 
  /**
@@ -157,7 +164,6 @@ void Gatter::resize(int offsetX, int offsetY, int square_size)
 void Gatter::showAll()
 {
 	int i,j;
-	Q3CanvasEllipse *e;
 
 	for (i=0; i<board_size; i++)
 		for (j=0; j<board_size; j++)
@@ -166,9 +172,13 @@ void Gatter::showAll()
 			HGatter[i][j]->show();
 		}
 
-	Q3IntDictIterator<Q3CanvasEllipse> it( hoshisList );
-	for ( ; it.current(); ++it )
-        	it.current()->show();
+	QMapIterator<int,QGraphicsEllipseItem*> it( hoshisList );
+
+	for ( ; it.hasNext() ; )
+	{
+		it.next();
+		it.value()->show();
+	}
 }
 
  /**
@@ -176,7 +186,7 @@ void Gatter::showAll()
   **/
 void Gatter::hide(int i, int j)
 {
-	Q3CanvasEllipse *e;
+	QGraphicsEllipseItem *e;
 	
 	if (( i<1) || (i > board_size) || ( j<1) || (j > board_size))
 		return;
@@ -184,9 +194,11 @@ void Gatter::hide(int i, int j)
 	VGatter[i-1][j-1]->hide();
 	HGatter[i-1][j-1]->hide();
 
-	e=hoshisList.find(board_size*i+j);
-	if (e)
+	if (hoshisList.contains(board_size*i + j))
+	{
+		e = hoshisList.value(board_size*i+j);
 		e->hide();
+	}
 
 }
 
@@ -195,7 +207,7 @@ void Gatter::hide(int i, int j)
   **/
 void Gatter::show(int i, int j)
 {
-	Q3CanvasEllipse *e;
+	QGraphicsEllipseItem *e;
 
 	if (( i<1) || (i > board_size) || ( j<1) || (j > board_size))
 		return;
@@ -203,9 +215,10 @@ void Gatter::show(int i, int j)
 	VGatter[i-1][j-1]->show();
 	HGatter[i-1][j-1]->show();
 
-	e=hoshisList.find(board_size*i+j);
-	if (e)
+	if (hoshisList.contains(board_size*i + j))
+	{
+		e = hoshisList.value(board_size*i+j);
 		e->show();
-
+	}
 }
 

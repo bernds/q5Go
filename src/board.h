@@ -8,7 +8,7 @@
 #include <vector>
 #include <map>
 
-#include <q3canvas.h>
+#include <QGraphicsView>
 #include <qdatetime.h>
 #include <qpainter.h>
 #include <q3ptrlist.h>
@@ -35,13 +35,14 @@ class NodeResults;
 class QNewGameDlg;
 
 
-class Board : public Q3CanvasView
+class Board : public QGraphicsView
 {
 	Q_OBJECT
 
 public:
-	Board(QWidget *parent=0, const char *name=0, Q3Canvas* c=0);
+	Board(QWidget *parent=0, QGraphicsScene *c = 0);
 	~Board();
+	void setupCoords();
 	void clearData();
 	void initGame(GameData *d, bool sgf=false);
 	void setModified(bool m=true);
@@ -55,6 +56,7 @@ public:
 	void decreaseSize();
 	QString getCandidateFileName();
 	void hideAllStones();
+	void showAllStones();
 	void hideAllMarks();
 	bool openSGF(const QString &fileName);
 	bool saveBoard(const QString &fileName) { return boardHandler->saveBoard(fileName); }
@@ -169,18 +171,17 @@ protected:
 	void drawStarPoint(int x, int y);
 	void resizeBoard(int w, int h);
 	int convertCoordsToPoint(int c, int o);
-	void contentsMousePressEvent(QMouseEvent *e);
-	void contentsMouseReleaseEvent(QMouseEvent*);
-	void contentsMouseMoveEvent(QMouseEvent *e);
-	void contentsWheelEvent(QWheelEvent *e);
+	void mousePressEvent(QMouseEvent *e);
+	void mouseReleaseEvent(QMouseEvent*);
+	void mouseMoveEvent(QMouseEvent *e);
+	void mouseWheelEvent(QWheelEvent *e);
 	void leaveEvent(QEvent*);
 	void resizeEvent(QResizeEvent*);
 	void updateMarkColor(StoneColor c, int x, int y);
 
-
-
 private:
-	Q3Canvas *canvas;
+	QGraphicsScene *canvas;
+	QList<QGraphicsSimpleTextItem*> *hCoords1, *hCoords2 ,*vCoords1, *vCoords2;
 	Gatter *gatter;
 	ImageHandler *imageHandler;
 	BoardHandler *boardHandler;

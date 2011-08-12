@@ -5,7 +5,6 @@
 #ifndef IMAGEDATA_H
 #define IMAGEDATA_H
 
-#include <q3canvas.h>
 #include <qimage.h>
 //Added by qt3to4:
 #include <QPixmap>
@@ -30,12 +29,12 @@ public:
 	~ImageHandler();
 	
 	void init(int size);
-	void rescale(int size);//, bool smallerStones);
-	static QPixmap* getBoardPixmap(QString );//skinType s = skinLight);
-	static QPixmap* getTablePixmap(QString );//) { return tablePixmap; }
-	Q3CanvasPixmapArray* getStonePixmaps() const { return stonePixmaps; }
-	Q3CanvasPixmapArray* getGhostPixmaps() const { return ghostPixmaps; }
-	static Q3CanvasPixmapArray* getAlternateGhostPixmaps() { return altGhostPixmaps; }
+	void rescale(int size);
+	static QPixmap* getBoardPixmap(QString );
+	static QPixmap* getTablePixmap(QString );
+	const QList<QPixmap> *getStonePixmaps() const { return &stonePixmaps; }
+	const QList<QPixmap> *getGhostPixmaps() const { return &ghostPixmaps; }
+	static QList<QPixmap> *getAlternateGhostPixmaps() { return altGhostPixmaps; }
 	void ghostImage(QImage *img);
 
 	void icopy(int *im, QImage &qim, int w, int h);
@@ -49,9 +48,9 @@ public:
 protected:
 	void scaleBoardPixmap(QPixmap *pix, int size);
 	
-private:    
-	Q3CanvasPixmapArray *stonePixmaps, *ghostPixmaps;
-	static Q3CanvasPixmapArray *altGhostPixmaps;
+private:
+	QList<QPixmap> stonePixmaps, ghostPixmaps;
+	static QList<QPixmap> *altGhostPixmaps;
 	static QPixmap *tablePixmap;
 	static QPixmap *woodPixmap1;//, *woodPixmap2, *woodPixmap3, *woodPixmap4, *woodPixmap5;
 	static int classCounter;

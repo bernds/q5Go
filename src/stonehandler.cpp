@@ -95,7 +95,7 @@ int StoneHandler::hasStone(int x, int y)
 	if ((s = stones->find(Matrix::coordsToKey(x, y))) == NULL)
 		return 0;
 	
-	if (s->visible())
+	if (s->isVisible())
 		return 1;
 	
 	return -1;
@@ -107,7 +107,7 @@ bool StoneHandler::checkPosition(Stone *stone, Matrix *m, bool koStone)
 	//CHECK_PTR(stone);
  // CHECK_PTR(m); // SL added eb 8
  
-	if (!stone->visible())
+	if (!stone->isVisible())
 		return true;
 	
 	Group *active = NULL;
@@ -266,7 +266,7 @@ Group* StoneHandler::assembleGroup(Stone *stone, Matrix *m)
 	{
 		stone = group->at(mark);
 		// we use preferably the matrix
-		if ((m==NULL && stone->visible())|| (m!= NULL || m->at(stone->posX() - 1, stone->posY() - 1) != stoneNone ))
+		if ((m==NULL && stone->isVisible())|| (m!= NULL || m->at(stone->posX() - 1, stone->posY() - 1) != stoneNone ))
 		{
 			int stoneX = stone->posX(),
 				stoneY = stone->posY();
@@ -306,7 +306,7 @@ Group* StoneHandler::checkNeighbour(int x, int y, StoneColor color, Group *group
    visible = (m->at(x - 1, y - 1) != stoneNone); //SL added eb 9 We do this in order not to pass a null matrix to the matrix->at function (seen in handicap games)
 
   // again we priviledge matrix over stone visibility (we might be browsing a game)
-	if (tmp != NULL && tmp->getColor() == color && (tmp->visible()|| visible)) //SL added eb 8
+	if (tmp != NULL && tmp->getColor() == color && (tmp->isVisible()|| visible)) //SL added eb 8
 	{
 		if (!group->contains(tmp))
 		{
@@ -363,7 +363,7 @@ void StoneHandler::checkNeighbourLiberty(int x, int y, Q3ValueList<int> &libCoun
 	  if (x <= boardHandler->board->getBoardSize() && y <= boardHandler->board->getBoardSize() && x >= 0 && y >= 0 &&
 		  !libCounted.contains(100*x + y) &&
   		((s = stones->find(Matrix::coordsToKey(x, y))) == NULL ||
-	  	!s->visible()))
+	  	!s->isVisible()))
 	  {
 		  libCounted.append(100*x + y);
 		  liberties ++;
@@ -464,7 +464,7 @@ bool StoneHandler::updateAll(Matrix *m, bool toDraw)
 					modified = true;
 					break;
 				}
-				else if (!stone->visible())
+				else if (!stone->isVisible())
 				{
 					stone->show();
 					modified = true;
@@ -485,7 +485,7 @@ bool StoneHandler::updateAll(Matrix *m, bool toDraw)
 					modified = true;
 					break;
 				}
-				else if (!stone->visible())
+				else if (!stone->isVisible())
 				{
 					stone->show();
 					modified = true;
@@ -502,7 +502,7 @@ bool StoneHandler::updateAll(Matrix *m, bool toDraw)
 			case stoneNone:
 			case stoneErase:
 				if ((stone = stones->find(Matrix::coordsToKey(x, y))) != NULL &&
-					stone->visible())
+					stone->isVisible())
 				{
 					stone->hide();
 					modified = true;
@@ -656,13 +656,13 @@ bool StoneHandler::removeDeadGroup(int x, int y, int &caps, StoneColor &col, boo
 		s->setDead(dead);
 		if (dead)
 		{
-			s->setSequence(boardHandler->board->getImageHandler()->getGhostPixmaps());
-			s->shadow->hide();
+			s->togglePixmap(boardHandler->board->getImageHandler()->getGhostPixmaps(),
+					false);
 		}
 		else
 		{
-			s->setSequence(boardHandler->board->getImageHandler()->getStonePixmaps());
-			s->shadow->show();
+			s->togglePixmap(boardHandler->board->getImageHandler()->getStonePixmaps(),
+					true);
 		}
 	}
 	
@@ -696,13 +696,13 @@ bool StoneHandler::markSekiGroup(int x, int y, int &caps, StoneColor &col, bool 
 		s->setSeki(seki);
 		if (seki)
 		{
-			s->setSequence(boardHandler->board->getImageHandler()->getGhostPixmaps());
-			s->shadow->hide();
+			s->togglePixmap(boardHandler->board->getImageHandler()->getGhostPixmaps(),
+					false);
 		}	
 		else
 		{
-			s->setSequence(boardHandler->board->getImageHandler()->getStonePixmaps());
-			s->shadow->show();
+			s->togglePixmap(boardHandler->board->getImageHandler()->getStonePixmaps(),
+					true);
 		}
 	}
 	
@@ -723,8 +723,8 @@ void StoneHandler::removeDeadMarks()
 		{
 			s->setDead(false);
 			s->setSeki(false);
-			s->setSequence(boardHandler->board->getImageHandler()->getStonePixmaps());
-			s->shadow->show();
+			s->togglePixmap(boardHandler->board->getImageHandler()->getStonePixmaps(),
+					true);
 		}
 		++it;
 	}

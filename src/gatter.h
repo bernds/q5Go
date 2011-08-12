@@ -28,12 +28,12 @@
 #include <vector>
 
 #include <QtGui>
-#include <q3intdict.h>
+#include <QMap>
 
 class Gatter
 {
 public:
-	Gatter(Q3Canvas *Canvas, int board_size);
+	Gatter(QGraphicsScene *Canvas, int board_size);
 	~Gatter();
 	void hide (int x, int y);
 	void show (int x, int y);
@@ -42,9 +42,9 @@ public:
 
 private:
 	int board_size;
-	Q3Canvas *canvas;
-	std::vector< std::vector<Q3CanvasLine *> > VGatter, HGatter ;
-	Q3IntDict<Q3CanvasEllipse> hoshisList ;
+	QGraphicsScene *canvas;
+	std::vector< std::vector<QGraphicsLineItem *> > VGatter, HGatter ;
+	QMap<int,QGraphicsEllipseItem*> hoshisList ;
 };
 
 #endif

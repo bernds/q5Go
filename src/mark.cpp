@@ -9,7 +9,6 @@
 #include <Q3PointArray>
 #include "setting.h"
 #include <qpainter.h>
-#include <q3canvas.h>
 
 /*
 * Mark
@@ -28,9 +27,8 @@ Mark::~Mark()
 * MarkSquare
 */
 
-MarkSquare::MarkSquare(int x, int y, int size, Q3Canvas *canvas, QColor col)
-: Q3CanvasRectangle(canvas),
-Mark(x, y)
+MarkSquare::MarkSquare(int x, int y, double size, QGraphicsScene *canvas, QColor col)
+: QGraphicsRectItem(0,canvas), Mark(x, y)
 {
 	double size_d = (double)size;
 
@@ -42,30 +40,22 @@ Mark(x, y)
 	else
 		setPen(QPen(col, 1));
 	setSize(size_d, size_d);
-	setZ(10);
+	setZValue(10);
 }
 
 /*
 * MarkCircle
 */
 
-MarkCircle::MarkCircle(int x, int y, int size, Q3Canvas *canvas, QColor col, bool s)
-: Q3CanvasEllipse(canvas),
-Mark(x, y),
-small(s)
+MarkCircle::MarkCircle(int x, int y, double size, QGraphicsScene *canvas, QColor col, bool s)
+: QGraphicsEllipseItem(0, canvas), Mark(x, y), small(s)
 {
 	if (setting->readBoolEntry("BOLD_MARKS"))
 		setPen(QPen(col, 2));
 	else
 		setPen(QPen(col, 1));
 	setSize((double)size, (double)size);
-	setZ(10);
-}
-
-void MarkCircle::drawShape(QPainter & p)
-{
-	p.setPen(pen());
-	p.drawEllipse(int(x()-width()/2.0+0.5), int(y()-height()/2.0+0.5), width(), height());
+	setZValue(10);
 }
 
 void MarkCircle::setSize(double x, double y)
@@ -87,28 +77,22 @@ void MarkCircle::setSize(double x, double y)
 		y *= m;
 	}
  
-	Q3CanvasEllipse::setSize((int)x, (int)y);
+	QGraphicsEllipseItem::setRect(rect().x(), rect().y(), x, y);
 }
 
 /*
 * MarkTriangle
 */
-MarkTriangle::MarkTriangle(int x, int y, int s, Q3Canvas *canvas, QColor col)
-: Q3CanvasPolygon(canvas),
-Mark(x, y)
+MarkTriangle::MarkTriangle(int x, int y, double s, QGraphicsScene *canvas, QColor col)
+: QGraphicsPolygonItem(0, canvas), Mark(x, y)
 {
 	if (setting->readBoolEntry("BOLD_MARKS"))
 		setPen(QPen(col, 2));
 	else
 		setPen(QPen(col, 1));
-	setSize((double)s, (double)s);
-	setZ(10);
-}
-
-void MarkTriangle::drawShape(QPainter &p)
-{
-	p.setPen(pen());
-	p.drawPolygon(poly);
+	pa = QPolygon(3);
+	setSize(s, s);
+	setZValue(10);
 }
 
 void MarkTriangle::setSize(double w, double)
@@ -118,20 +102,18 @@ void MarkTriangle::setSize(double w, double)
 	else
 		size = (int)(w*0.55);
 	
-	Q3PointArray pa(3);
-	pa[0] = QPoint(0, 0);
-	pa[1] = QPoint(size/2, -size);
-	pa[2] = QPoint(size, 0);
-	setPoints(pa);
+	pa.setPoint(0,(int)(size/2), 0);
+	pa.setPoint(1,0, (int)size);
+	pa.setPoint(2,(int)size, (int)size);
+	setPolygon(pa);
 }
 
 /*
 * MarkCross
 */
 
-MarkCross::MarkCross(int x, int y, int s, Q3Canvas *canvas, QColor col, bool plus)
-: Q3CanvasLine(canvas),
-Mark(x, y), size(s)
+MarkCross::MarkCross(int x, int y, double s, QGraphicsScene *canvas, QColor col, bool plus)
+: QGraphicsLineItem(0, canvas), Mark(x, y), size(s)
 {
 	plussign = plus;
 	ol = NULL;
@@ -144,15 +126,15 @@ Mark(x, y), size(s)
 
 	setPen(QPen(col, penWidth));
 	setSize((double)s, (double)s);
-	setZ(10);
+	setZValue(10);
 	
 	ol = new MarkOtherLine(canvas);
 	if (plussign)
-		ol->setPoints(0, size/2, size, size/2);
+		ol->setLine(0, size/2, size, size/2);
 	else
-		ol->setPoints(0, size, size, 0);
+		ol->setLine(0, size, size, 0);
 	ol->setPen(QPen(col, penWidth));
-	ol->setZ(10);
+	ol->setZValue(10);
 	ol->show();
 }
 
@@ -160,7 +142,10 @@ MarkCross::~MarkCross()
 {
 	if (ol != NULL)
 		ol->hide();
+#if 0
+	// qGo2 has a comment about double free.
 	delete ol;
+#endif
 	hide();
 }
 
@@ -173,21 +158,21 @@ void MarkCross::setSize(double w, double)
 	
 	if (plussign)
 	{
-		setPoints(size/2, 0, size/2, size);
+		setLine(size/2, 0, size/2, size);
 		if (ol != NULL)
-			ol->setPoints(0, size/2, size, size/2);
+			ol->setLine(0, size/2, size, size/2);
 	}
 	else
 	{
-		setPoints(0, 0, size, size);
+		setLine(0, 0, size, size);
 		if (ol != NULL)
-			ol->setPoints(0, size, size, 0);
+			ol->setLine(0, size, size, 0);
 	}
 }
 
 void MarkCross::setColor(const QColor &col)
 {
-	Q3CanvasLine::setPen(col);
+	QGraphicsLineItem::setPen(col);
 	if (ol != NULL)
 		ol->setPen(col);
 }
@@ -197,14 +182,13 @@ void MarkCross::setColor(const QColor &col)
 */
 
 bool MarkText::useBold = false;
-unsigned int MarkText::maxLength = 1;
+int MarkText::maxLength = 1;
 
-MarkText::MarkText(ImageHandler  *ih, int x, int y, int size, const QString &txt,
-			 Q3Canvas *canvas, QColor col, short c, bool bold, bool  overlay)
-			 : Q3CanvasText(txt, canvas),
+MarkText::MarkText( int x, int y, double size, const QString &txt,
+			 QGraphicsScene *canvas, QColor col, short c, bool bold, bool  /*overlay*/)
+			 : QGraphicsSimpleTextItem(txt,0, canvas),
 			 Mark(x, y), curSize(size), counter(c)
 {
-	rect = NULL;
 	useBold = bold;
 	
 	if (text().length() > maxLength)
@@ -212,48 +196,12 @@ MarkText::MarkText(ImageHandler  *ih, int x, int y, int size, const QString &txt
 	
 	setSize(size, size);
 	setColor(col);
-/*	
-	QPixmap * pix = new QPixmap(width, height);
-	pix->fill(Qt::white);
-	//bitBlt((QPaintDevice *)(pix),0,0,(QPaintDevice *)(ih->getBoardPixmap(setting->readEntry("SKIN"))),x,y,width,height,Qt::CopyROP);
-	//bitBlt((QPaintDevice *)(pix),0,0,(QPaintDevice *)(ih->getTablePixmap(setting->readEntry("SKIN_TABLE"))),x,y,5,5,Qt::CopyROP,false);
-	copyBlt(pix,0,0,ih->getTablePixmap(setting->readEntry("SKIN_TABLE")),size * (x-1) - width/2,size * (y-1) - height/2,8,8);
-	//pix.fill((QWidget *)(canvas), x,y);
 
-	if (overlay)
-	{
-	
-	// we use a rectangle under the letter so as not to have the underlying grid
-	// lines interfere with the letter
-	// The only case where it is not set to 'true' is when a pass move is indicated,
-	// bottom right off the board. This is an 'over'kill
-	
-		CHECK_PTR(canvas);
-		rect = new QCanvasRectangle(canvas);
-		CHECK_PTR(rect);
-		rect->setPen(NoPen);
-		CHECK_PTR(ih);
-		rect->setSize(width, height);
-		//rect->setX(size * (x-1) - width/2);
-		//rect->setX(size * (y-1) - height/2);
-		//rect->setBrush(QBrush(white, *(ih->getBoardPixmap(static_cast<skinType>(setting->readIntEntry("SKIN"))))));
-		rect->setBrush(QBrush(white, *(ih->getBoardPixmap(setting->readEntry("SKIN")))));
-		
-		rect->setZ(1);
-//		rect->show();
-	}
-
-*/
-
-	setZ(10);
+	setZValue(10);
 }
 
 MarkText::~MarkText()
 {
-	if (rect != NULL)
-		rect->hide();
-	delete rect;
-	hide();
 }
 
 void MarkText::setSize(double x, double)
@@ -276,7 +224,4 @@ void MarkText::setSize(double x, double)
 
 	width = boundingRect().width();
 	height = boundingRect().height();
-
-	if (rect != NULL)
-		rect->setSize(width, height);
 }
