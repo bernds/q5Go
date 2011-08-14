@@ -477,7 +477,7 @@ qDebug("#### GameDialog::slot_notopen()");
 }
 
 // if opponent has requestet for handicap, komi and/or free game
-void GameDialog::slot_komirequest(const QString &opponent, int h, int k, bool free)
+void GameDialog::slot_komirequest(const QString &opponent, int h, float k, bool free)
 {
 qDebug("#### GameDialog::slot_komirequest()");
 	if (playerOpponentEdit->text() == opponent)//(playerWhiteEdit->isReadOnly() && playerBlackEdit->text() == opponent ||	    playerBlackEdit->isReadOnly() && playerWhiteEdit->text() == opponent)

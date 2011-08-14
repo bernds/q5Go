@@ -41,7 +41,7 @@ public slots:
 	void slot_suggest(const QString&, const QString&, const QString&, const QString&, int);
 	void slot_matchcreate(const QString&, const QString&);
 	void slot_notopen(const QString&);
-	void slot_komirequest(const QString&, int, int, bool);
+	void slot_komirequest(const QString&, int, float, bool);
 	void slot_opponentopen(const QString&);
 	void slot_dispute(const QString&, const QString&);
 

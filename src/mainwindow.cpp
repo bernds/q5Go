@@ -1168,7 +1168,7 @@ void MainWindow::slotFileNewGame()
 		{
 			GameData *d = new GameData;
 			d->size = dlg.boardSizeSpin->value();
-			d->komi = (float)dlg.komiSpin->value() / 10.0;
+			d->komi = dlg.komiSpin->value();
 			d->handicap = dlg.handicapSpin->value();
 			d->playerBlack = dlg.playerBlackEdit->text();
 			d->rankBlack = dlg.playerBlackRkEdit->text();
@@ -1190,7 +1190,7 @@ void MainWindow::slotFileNewGame()
 		{
 			GameData *d = new GameData;
 			d->size = dlg.boardSizeSpin->value();
-			d->komi = (float)dlg.komiSpin->value() / 10.0;
+			d->komi = dlg.komiSpin->value();
 			d->handicap = dlg.handicapSpin->value();
 //			d->playerBlack = dlg.playerBlackEdit->text();
 //			d->playerWhite = dlg.playerWhiteEdit->text();
@@ -1892,7 +1892,7 @@ void MainWindow::slotSetGameInfo()
 	dlg.playerBlackEdit->setText(board->getGameData()->playerBlack);
 	dlg.whiteRankEdit->setText(board->getGameData()->rankWhite);
 	dlg.blackRankEdit->setText(board->getGameData()->rankBlack);
-	dlg.komiSpin->setValue((int)(board->getGameData()->komi * 10.0));
+	dlg.komiSpin->setValue(board->getGameData()->komi);
 	dlg.handicapSpin->setValue(board->getGameData()->handicap);
 	dlg.resultEdit->setText(board->getGameData()->result);
 	dlg.dateEdit->setText(board->getGameData()->date);
@@ -1906,7 +1906,7 @@ void MainWindow::slotSetGameInfo()
 		board->getGameData()->playerBlack = dlg.playerBlackEdit->text();
 		board->getGameData()->rankWhite = dlg.whiteRankEdit->text();
 		board->getGameData()->rankBlack = dlg.blackRankEdit->text();
-		board->getGameData()->komi = (float)dlg.komiSpin->value() / 10.0;
+		board->getGameData()->komi = dlg.komiSpin->value();
 		board->getGameData()->handicap = dlg.handicapSpin->value();
 		board->getGameData()->result = dlg.resultEdit->text();
 		board->getGameData()->date = dlg.dateEdit->text();

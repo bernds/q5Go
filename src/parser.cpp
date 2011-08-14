@@ -1617,7 +1617,7 @@ InfoType Parser::cmd24(const QString &line)
 		QString opp = re.cap(1);
 		QString h = re.cap(2);
 		QString k = re.cap(3);
-		int komi = (int) (k.toFloat() * 10);
+		float komi = k.toFloat();
 
 		emit signal_komirequest(opp, h.toInt(), komi, free);
 		emit signal_message(line);

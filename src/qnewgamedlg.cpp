@@ -173,7 +173,7 @@ bool QNewGameDlg::getOneColorGo()
 
 float QNewGameDlg::getKomi()
 {
-	return (float)komiSpin->value() / 10.0;//_komi;
+	return komiSpin->value();//_komi;
 }
 
 int QNewGameDlg::getLevelBlack()

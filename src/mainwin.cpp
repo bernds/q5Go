@@ -1907,9 +1907,9 @@ void ClientWindow::slot_matchrequest(const QString &line, bool myrequest)
 			dlg,
 			SLOT(slot_notopen(const QString&)));
 		connect(parser,
-			SIGNAL(signal_komirequest(const QString&, int, int, bool)),
+			SIGNAL(signal_komirequest(const QString&, int, float, bool)),
 			dlg,
-			SLOT(slot_komirequest(const QString&, int, int, bool)));
+			SLOT(slot_komirequest(const QString&, int, float, bool)));
 		connect(parser,
 			SIGNAL(signal_opponentopen(const QString&)),
 			dlg,
@@ -1993,7 +1993,7 @@ void ClientWindow::slot_matchrequest(const QString &line, bool myrequest)
 		dlg->boardSizeSpin->setValue(setting->readIntEntry("DEFAULT_SIZE"));
 		dlg->timeSpin->setValue(setting->readIntEntry("DEFAULT_TIME"));
 		dlg->byoTimeSpin->setValue(setting->readIntEntry("DEFAULT_BY"));
-		dlg->komiSpin->setValue(setting->readIntEntry("DEFAULT_KOMI")*10+5);
+		dlg->komiSpin->setValue(setting->readIntEntry("DEFAULT_KOMI")+0.5);
 
 		dlg->slot_pbsuggest();
 	}
@@ -2499,7 +2499,7 @@ void ClientWindow::slot_talk(const QString &name, const QString &text, bool ispl
 	}
 
 	// play a sound - not for shouts
-	if ((!text.isNull() && text[0] == '>' && bonus || !dlg->get_le()->hasFocus()) && !name.contains('*'))
+	if ((!text.isEmpty() && text[0] == '>' && bonus || !dlg->get_le()->hasFocus()) && !name.contains('*'))
 	{
 		qgoif->get_qgo()->playTalkSound();
 

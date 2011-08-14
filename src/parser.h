@@ -44,7 +44,7 @@ signals:
 	void signal_matchcreate(const QString&, const QString&);
 	void signal_notopen(const QString&);
 	void signal_removestones(const QString&, const QString&);
-	void signal_komirequest(const QString&, int, int, bool);
+	void signal_komirequest(const QString&, int, float, bool);
 	void signal_opponentopen(const QString&);
 	void signal_result(const QString&, const QString&, bool, const QString&);
 	void signal_requestDialog(const QString&, const QString&, const QString&, const QString&);
