@@ -140,10 +140,13 @@ void GamesTableItem::paintCell( QPainter *p, const QColorGroup &cg,
 
 void GamesTableItem::ownRepaint()
 {
-	if (!text(12).isNull ())
+	if (!text(12).isEmpty ())
 	{
 		its_me = text(12).at(0) == 'A';
-		watched = text(12).at(text(7).length()-1) == 'W';
+		if (text(7).isEmpty())
+			watched = false;
+		else
+			watched = text(12).at(text(7).length()-1) == 'W';
 	}
 	else
 	{
