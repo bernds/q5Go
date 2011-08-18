@@ -132,8 +132,9 @@ void Board::setupCoords(void)
 			vTxt = QString(QChar(static_cast<const char>('a' + i)));
 			hTxt = QString(QChar(static_cast<const char>('a' + i)));
 		} else {
+			int real_i = i < 8 ? i : i + 1;
 			vTxt = QString::number(i + 1);
-			hTxt = QString(QChar(static_cast<const char>('A' + i)));
+			hTxt = QString(QChar(static_cast<const char>('A' + real_i)));
 		}
 
 		vCoords1->append(new QGraphicsSimpleTextItem(vTxt, 0, canvas));
@@ -158,7 +159,7 @@ Board::~Board()
     delete imageHandler;
 }
 
- void Board::calculateSize()
+void Board::calculateSize()
 {
 	// Calculate the size values
 
@@ -404,14 +405,15 @@ void Board::drawCoordinates()
 	int i;
 
 	// centres the coordinates text within the remaining space at table edge
-	const int coord_centre = (offset - square_size/2 )/2;
+	const int coord_centre = offset - square_size/2;
 	QString txt;
 
 	for (i=0; i<board_size; i++)
 	{
 		// Left side
 		coord = vCoords1->at(i);
-		coord->setPos(offsetX - offset + coord_centre - coord->boundingRect().width()/2 , offsetY + square_size * i - coord->boundingRect().height()/2);
+		coord->setPos(offsetX - offset + coord_centre - coord->boundingRect().width()/2,
+			      offsetY + square_size * (board_size - i - 1) - coord->boundingRect().height()/2);
 
 		if (showCoords)
 			coord->show();
@@ -419,9 +421,9 @@ void Board::drawCoordinates()
 			coord->hide();
 
 		// Right side
-		
 		coord = vCoords2->at(i);
-    		coord->setPos(offsetX + board_pixel_size + offset - coord_centre - coord->boundingRect().width()/2 , offsetY + square_size * i - coord->boundingRect().height()/2);
+    		coord->setPos(offsetX + board_pixel_size + offset - coord_centre - coord->boundingRect().width()/2,
+			      offsetY + square_size * (board_size - i - 1) - coord->boundingRect().height()/2);
 
 		if (showCoords)
 			coord->show();
@@ -430,16 +432,18 @@ void Board::drawCoordinates()
 
 		// Top
 		coord = hCoords1->at(i);
-		coord->setPos(offsetX + square_size * i - coord->boundingRect().width()/2 , offsetY - offset + coord_centre - coord->boundingRect().height()/2 );
+		coord->setPos(offsetX + square_size * i - coord->boundingRect().width()/2,
+			      offsetY - offset + coord_centre - coord->boundingRect().height()/2 );
 		
 		if (showCoords)
 			coord->show();
 		else
 			coord->hide();
-		
+
 		// Bottom
 		coord = hCoords2->at(i);
-		coord->setPos(offsetX + square_size * i - coord->boundingRect().width()/2 ,offsetY + offset + board_pixel_size - coord_centre - coord->boundingRect().height()/2  );
+		coord->setPos(offsetX + square_size * i - coord->boundingRect().width()/2,
+			      offsetY + offset + board_pixel_size - coord_centre - coord->boundingRect().height()/2);
 		
 		if (showCoords)
 			coord->show();
