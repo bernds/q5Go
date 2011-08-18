@@ -1372,7 +1372,7 @@ InfoType Parser::cmd15(const QString &line)
 	}
 	else
 	{
-		QRegExp movere ("(\\d+)\\s*\\(([BW])\\):\\s*([^\\s]*).*");
+		QRegExp movere ("(\\d+)\\s*\\(([BW])\\):\\s*([^\\s].*)");
 
 		if (!movere.exactMatch (line)) {
 			return IT_OTHER;
