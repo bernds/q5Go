@@ -1,7 +1,7 @@
-q4Go 0.1
+q4Go 0.2
 
 This is a port of the last qGo (1.5.2) sources from CVS to Qt4. It should be
-considered alpha quality. The motivation is simply a personal feeling that
+considered beta quality. The motivation is simply a personal feeling that
 the new GUI in qGo2 is a step backwards, and Qt3 is getting increasingly less
 supported.
 
