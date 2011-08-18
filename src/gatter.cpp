@@ -115,7 +115,7 @@ Gatter::~Gatter()
  /**
   * Calculates the gatter intersections and hoshis position
   **/
-void Gatter::resize(int offsetX, int offsetY, int square_size)
+void Gatter::resize(int offsetX, int offsetY, double square_size)
 {
 	int i,j;
 	QGraphicsEllipseItem *e;

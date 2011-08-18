@@ -49,7 +49,8 @@ Board::Board(QWidget *parent, QGraphicsScene *c)
 	showSGFCoords = setting->readBoolEntry("SGF_BOARD_COORDS");
 	antiClicko = setting->readBoolEntry("ANTICLICKO");
 
-	
+	setStyleSheet( "QGraphicsView { border-style: none; }" ); 
+
 	// Create a BoardHandler instance.
 	boardHandler = new BoardHandler(this);
 	CHECK_PTR(boardHandler);
@@ -61,7 +62,6 @@ Board::Board(QWidget *parent, QGraphicsScene *c)
 	// Init the canvas
 	canvas = new QGraphicsScene(0,0, BOARD_X, BOARD_Y,this);
 	setScene(canvas);
-	
 	gatter = new Gatter(canvas, board_size);
 
 	// Init data storage for marks and ghosts
@@ -159,51 +159,47 @@ Board::~Board()
     delete imageHandler;
 }
 
+// distance from table edge to wooden board edge
+const int Board::margin = 2;
+
+// distance from coords to surrounding elements
+const int Board::coord_margin = 4;
+
 void Board::calculateSize()
 {
 	// Calculate the size values
 
-	// distance from table edge to wooden board edge
-	const int 	margin = 2;
 	int w = (int)canvas->width() - margin * 2;
 	int h = (int)canvas->height() - margin * 2;
 		
-	int table_size = (w < h ? w : h );
+	table_size = w < h ? w : h;
 
-	// distance from edge of wooden board to playing area (grids + space for stones on 1st & last line)
-	offset = table_size * 2/100 ;  
-
-
-	QGraphicsSimpleTextItem *coordV = new QGraphicsSimpleTextItem(QString::number(board_size),0, canvas);
-	QGraphicsSimpleTextItem *coordH = new QGraphicsSimpleTextItem("A",0, canvas);
-	int coord_width = (int)coordV->boundingRect().width();
-	int coord_height = (int)coordH->boundingRect().height();
+	QGraphicsSimpleTextItem coordV (QString::number(board_size), 0, canvas);
+	QGraphicsSimpleTextItem coordH ("A", 0, canvas);
+	int coord_width = (int)coordV.boundingRect().width();
+	int coord_height = (int)coordH.boundingRect().height();
 
 	// space for coodinates if shown
-	int coord_offset =  (coord_width < coord_height ? coord_height : coord_width);
-
-	if (showCoords)
-		offset = coord_offset + 2 ;
+	coord_offset = coord_width < coord_height ? coord_height : coord_width;
 
 	//we need 1 more virtual 'square' for the stones on 1st and last line getting off the grid
-	square_size = (table_size - 2*offset) / (board_size);  
-
+	if (showCoords)
+		square_size = (table_size - 2 * (coord_offset + coord_margin * 2));
+	else
+		square_size = table_size;
+	square_size /= (float)board_size;
 	// Should not happen, but safe is safe.
 	if (square_size == 0)
 		  square_size = 1;
 
 	// grid size
-	board_pixel_size = square_size * (board_size-1) + 1 ;    
-	offset =  (table_size - board_pixel_size)/2;   
+	board_pixel_size = square_size * (board_size - 1);
+	offset = (table_size - board_pixel_size)/2;
 
 	// Center the board in canvas
 
 	offsetX = margin + (w - board_pixel_size) / 2;
 	offsetY = margin + (h - board_pixel_size) / 2;
-
-	//deletes the samples
-	delete coordV;
-	delete coordH;
 }
 
 void Board::resizeBoard(int w, int h)
@@ -309,9 +305,9 @@ void Board::drawBackground()
 {
 	QSettings settings;
 
-	int 	w = (int)canvas->width(),
-		h = (int)canvas->height();
-	
+	int w = (int)canvas->width();
+	int h = (int)canvas->height();
+
 	// Create pixmap of appropriate size
 	//QPixmap all(w, h);
 	QImage image(w, h, QImage::Format_RGB32);
@@ -325,73 +321,61 @@ void Board::drawBackground()
 
 	painter.drawTiledPixmap (0, 0, w, h,*(ImageHandler::getTablePixmap(  settings.value("SKIN_TABLE").toString())));
 
-	painter.drawTiledPixmap (
-		offsetX - offset,
-		offsetY - offset,
-		board_pixel_size + offset*2,
-		board_pixel_size + offset*2,
-		* (ImageHandler::getBoardPixmap(settings.value("SKIN").toString())));
+	painter.drawTiledPixmap (offsetX - offset, offsetY - offset, table_size, table_size,
+				 * (ImageHandler::getBoardPixmap(settings.value("SKIN").toString())));
 
 	painter.end();
 
+	// Modify the edges of the board so they appear slightly three-dimensional.
 	//QImage image = all.toImage();
 	int lighter=20;
 	int darker=60;
 	int width = 3; 
 
-	int x,y;
-	for(x=0;x<width;x++)
-		for (y= offsetY - offset +x ; y<offsetY + board_pixel_size + offset-x ;y++)
+	for(int x = 0; x < width; x++)
+		for (int yi = x; yi < table_size - x; yi++)
 		{
-			image.setPixel(
-				offsetX - offset+x , 
-				y, 
-				QColor(image.pixel(offsetX - offset+x,y)).dark(int(100 + darker*(width-x)*(width-x)/width/width)).rgb());
+			int y = yi + offsetY - offset;
+			int x1 = offsetX - offset + x;
+			image.setPixel(x1, y,
+				       QColor(image.pixel(x1,y)).dark(int(100 + darker*(width-x)*(width-x)/width/width)).rgb());
 
-			image.setPixel(
-				offsetX + board_pixel_size + offset-x -1, 
-				y,
-				QColor(image.pixel(offsetX + board_pixel_size + offset-x-1,y)).light(100+ int(lighter*(width-x)*(width-x)/width/width)).rgb());
+			int x2 = offsetX - offset + table_size - x - 1;
+			image.setPixel(x2, y,
+				       QColor(image.pixel(x2,y)).light(100+ int(lighter*(width-x)*(width-x)/width/width)).rgb());
+		}
+	for(int y = 0; y < width; y++)
+		for (int xi = y; xi < table_size - y; xi++)
+		{
+			int x = xi + offsetX - offset;
+			int y1 = offsetY - offset + y;
+			image.setPixel(x, y1,
+				       QColor(image.pixel(x, y1)).light(int(100 + lighter*(width-y)*(width-y)/width/width)).rgb());
+			int y2 = offsetY - offset + table_size - y - 1;
+			image.setPixel(x, y2,
+				       QColor(image.pixel(x, y2)).dark(100+ int(darker*(width-y)*(width-y)/width/width)).rgb());
 		}
 
-	for(y=0;y<width;y++)
-		for (x= offsetX - offset +y ; x<offsetX + board_pixel_size + offset-y ;x++)
-		{
-			image.setPixel(
-				x,
-				offsetY - offset+y , 
-				QColor(image.pixel(x,offsetY - offset+y)).light(int(100 + lighter*(width-y)*(width-y)/width/width)).rgb());
-
-			image.setPixel(
-				x,
-				offsetY + board_pixel_size + offset-y -1, 
-				QColor(image.pixel(x,offsetY + board_pixel_size + offset-y-1)).dark(100+ int(darker*(width-y)*(width-y)/width/width)).rgb());
-		}
-
-
+	// Draw a shadow below the board
 	width = 10;
 	darker=50;
 
-	for(x=0;(x<=width)&&(offsetX - offset-x >0) ;x++)
-		for (y= offsetY - offset+x ; (y<offsetY + board_pixel_size + offset+x)&&(y<h) ;y++)
+	for (int x = 0; x <= width && offsetX - offset - x > 0; x++)
+		for (int yi = x; yi < table_size - x; yi++)
 		{
-			image.setPixel(
-				offsetX - offset-1-x  , 
-				y, 
-				QColor(image.pixel(offsetX - offset-1-x,y)).dark(int(100 + darker*(width-x)/width)).rgb());
+			int y = yi + offsetY - offset;
+			image.setPixel(offsetX - offset - 1 - x, y,
+				       QColor(image.pixel(offsetX - offset - 1 - x,y)).dark(int(100 + darker*(width-x)/width)).rgb());
 		}
 
-	for(y=0;(y<=width)&&(offsetY + board_pixel_size + offset+y+1<h);y++)
-		for (x= (offsetX - offset - y > 0 ? offsetX - offset - y:0) ; x<offsetX + board_pixel_size + offset-y ;x++)
+	for (int y = 0; y <= width && offsetY + board_pixel_size + offset + y + 1 < h;y++)
+		for (int x = (offsetX - offset - y > 0 ? offsetX - offset - y : 0); x < offsetX + board_pixel_size + offset-y ;x++)
 		{
-			image.setPixel(
-				x,
-				offsetY + board_pixel_size + offset+y +1, 
+			image.setPixel(x, offsetY + board_pixel_size + offset + y +1, 
 				QColor(image.pixel(x,offsetY + board_pixel_size + offset+y+1)).dark(100+ int(darker*(width-y)/width)).rgb());
 		}
 
-	//redraws the image on a brush to set the background
-	canvas->setBackgroundBrush ( QBrush(image));
+	canvas->setBackgroundBrush(QBrush(image));
 }
 
 void Board::drawGatter()
@@ -405,7 +389,7 @@ void Board::drawCoordinates()
 	int i;
 
 	// centres the coordinates text within the remaining space at table edge
-	const int coord_centre = offset - square_size/2;
+	const int coord_centre = coord_offset/2 + coord_margin;
 	QString txt;
 
 	for (i=0; i<board_size; i++)

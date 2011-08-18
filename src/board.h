@@ -185,7 +185,10 @@ private:
 	Gatter *gatter;
 	ImageHandler *imageHandler;
 	BoardHandler *boardHandler;
-	int board_size, offset, offsetX, offsetY, square_size, board_pixel_size;
+	static const int margin, coord_margin;
+	int board_size, offset, offsetX, offsetY, board_pixel_size, table_size;
+	int coord_offset;
+	double square_size;
 	bool showCoords;
 	bool showSGFCoords;
 	bool showCursor;

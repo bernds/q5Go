@@ -37,7 +37,7 @@ public:
 	~Gatter();
 	void hide (int x, int y);
 	void show (int x, int y);
-	void resize(int offsetX, int offsetY, int square_size);
+	void resize(int offsetX, int offsetY, double square_size);
 	void showAll();
 
 private:
