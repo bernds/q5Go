@@ -5,19 +5,8 @@
 #ifndef TIP_H
 #define TIP_H
 
-#include <qtooltip.h>
-#include <qlabel.h>
-/* UNUSED
-class Tip : public QToolTip
-{
-public:
-	Tip(QWidget *parent);
-	virtual ~Tip();
+#include <QLabel>
 
-protected:
-	void maybeTip(const QPoint &p);
-};
-*/
 class StatusTip : public QLabel
 {
 	Q_OBJECT

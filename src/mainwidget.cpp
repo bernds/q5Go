@@ -7,8 +7,6 @@
 #include <QPixmap>
 #include "mainwidget.h"
 #include "interfacehandler.h"
-#include "normaltools_gui.h"
-#include "scoretools_gui.h"
 #include "defines.h"
 #include "icons.h"
 #include <q3buttongroup.h>

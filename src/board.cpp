@@ -30,8 +30,6 @@
 #include "tip.h"
 #include "interfacehandler.h"
 #include "move.h"
-#include "scoretools_gui.h"
-#include "normaltools_gui.h"
 #include "mainwindow.h"
 #include "noderesults.h"
 

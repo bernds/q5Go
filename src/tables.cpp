@@ -1,7 +1,6 @@
 /*
  *   tables.cpp = part of mainwindow
  */
-#include "talk_gui.h"
 #include "tables.h"
 #include "mainwin.h"
 #include "maintable.h"
