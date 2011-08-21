@@ -8,15 +8,6 @@
 #include "misc.h"
 #include "defines.h"
 #include "komispinbox.h"
-#include <qlineedit.h>
-#include <qpushbutton.h>
-#include <qspinbox.h>
-#include <qvariant.h>
-#include <qtooltip.h>
-#include <q3whatsthis.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qradiobutton.h>
 
 GameDialog::GameDialog(QWidget* parent, const char* name, bool modal, Qt::WFlags fl)
 	: QDialog(parent, name, modal)

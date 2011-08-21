@@ -7,15 +7,7 @@
 #include "playertable.h"
 #include "gamestable.h"
 #include "gs_globals.h"
-#include <qlineedit.h>
-//#include <qmultilineedit.h>
-//#include <qtextedit.h>
-#include <q3textbrowser.h> 
-#include <qlayout.h>
-#include <qwidget.h>
 #include <math.h>
-#include <qtooltip.h>
-#include <qpalette.h>
 
 // prepare tables (clear, ...)
 void ClientWindow::prepare_tables(InfoType cmd)

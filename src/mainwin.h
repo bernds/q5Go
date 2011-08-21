@@ -5,37 +5,7 @@
 #ifndef MAINWIN_H
 #define MAINWIN_H
 
-#include <qwidget.h>
-#include <qapplication.h>
-#include <qdialog.h>
-#include <qpushbutton.h>
-#include <qmessagebox.h>
-#include <q3filedialog.h>
-#include <qdir.h>
-#include <qlabel.h>
-#include <q3listview.h>
-#include <qcheckbox.h>
-#include <q3textstream.h>
-#include <q3textview.h>
-//#include <qmultilineedit.h>
-#include <q3textedit.h>
-#include <q3textbrowser.h> 
-#include <qstring.h>
-#include <qobject.h>
-#include <q3dragobject.h>
-#include <qevent.h>
-#include <qtooltip.h>
-#include <q3whatsthis.h>
-#include <q3textstream.h>
-#include <qstatusbar.h>
-#include <q3toolbar.h>
-#include <qmenubar.h>                //SL added eb 3
-#include <q3ptrlist.h>
-//Added by qt3to4:
-#include <QTimerEvent>
-#include <QKeyEvent>
-#include <QPixmap>
-#include <Q3PopupMenu>
+#include <Q3FileDialog>
 
 #include "clientwindow_gui.h"
 #include "miscdialogs.h"
