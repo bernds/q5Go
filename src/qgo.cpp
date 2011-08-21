@@ -246,7 +246,7 @@ bool qGo::testSound(bool showmsg)
 	connectSound = retrieveSound("connect.wav", sp);
 
 #ifdef Q_WS_WIN
-	if (soundsFound() && !applicationPath) 
+	if (soundsFound() && applicationPath.isEmpty())
 	{
 	  QFile qFile = QFile(connectSound->fileName()); // QQQ
 	  QDir * dir = sp.findDirContainingFile(qFile); // QQQ
@@ -267,7 +267,8 @@ bool qGo::testSound(bool showmsg)
 		" /usr/share/" + PACKAGE + "/sounds/, " + tr("depending on your installation."));
 #else
 
-	if (applicationPath = setting->readEntry("PATH_SOUND"))
+	applicationPath = setting->readEntry("PATH_SOUND");
+	if (applicationPath.isEmpty())
 		return testSound(false);
 
 	QMessageBox::information(0, PACKAGE, tr("Sound files not found.") + "\n" +
