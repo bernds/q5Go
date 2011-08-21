@@ -1,9 +1,6 @@
 TEMPLATE	      = app
 CONFIG		     += qt warn_on release thread
-FORMS =			
-
-#The following line was changed from INTERFACES to FORMS3 by qt3to4
-FORMS3	      = gui_dialog.ui \
+FORMS	      = gui_dialog.ui \
  clientwindow_gui.ui \
 			gameinfo_gui.ui \
 			newgame_gui.ui \
@@ -62,7 +59,12 @@ HEADERS		      = config.h \
 			stonehandler.h \
 			textview.h \
 			tip.h \
-			tree.h
+			tree.h \
+    gatter.h \
+    misctools.h \
+    miscdialogs.h \
+    audio.h \
+    alsa.h
 SOURCES		      = gamedialog.cpp \
 			gamestable.cpp \
 			gametree.cpp \
@@ -100,12 +102,16 @@ SOURCES		      = gamedialog.cpp \
 			stonehandler.cpp \
 			textview.cpp \
 			tip.cpp \
-			tree.cpp
-TARGET                = qGo
+			tree.cpp \
+    gatter.cpp \
+    audio.cpp
+TARGET                = q4go
 unix:INCLUDEPATH      += .
 win32:INCLUDEPATH     += .
-win32:QMAKE_CFLAGS   += -GX -Gf
-win32:QMAKE_CXXFLAGS += -GX -Gf
+#win32:QMAKE_CFLAGS   += -GX -Gf
+#win32:QMAKE_CXXFLAGS += -GX -Gf
+!win32:SOURCES        += alsa.cpp
+
 DISTFILES            += *.dsw \
 			pics/* \
 			sounds/*.wav \
@@ -155,6 +161,6 @@ INSTALLS += target
 }
 #The following line was inserted by qt3to4
 QT += xml network  qt3support 
-#The following line was inserted by qt3to4
-CONFIG += uic3
 
+RESOURCES += \
+    q4go.qrc
