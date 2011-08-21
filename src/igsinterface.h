@@ -5,7 +5,7 @@
 #ifndef IGSINTERFACE_H
 #define IGSINTERFACE_H
 
-#include <qstring.h>
+#include <QString>
 
 
 // maybe this should be elsewhere ...

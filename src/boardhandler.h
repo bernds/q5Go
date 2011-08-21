@@ -5,6 +5,8 @@
 #ifndef BOARDHANDLER_H
 #define BOARDHANDLER_H
 
+#include <Q3PtrStack>
+
 #include "defines.h"
 #include "tree.h"
 #include "globals.h"
@@ -12,7 +14,6 @@
 #include "sgfparser.h"
 #include "stonehandler.h"           //SL added eb 10
 #include "qgtp.h"
-#include <q3ptrstack.h>
 
 #define MARK_TERRITORY_DONE_BLACK 997
 #define MARK_TERRITORY_DONE_WHITE 998

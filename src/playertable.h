@@ -7,8 +7,8 @@
 
 #include "tables.h"
 
-#include <qvariant.h>
-#include <q3listview.h>
+#include <QVariant>
+#include <Q3ListView>
 
 
 class PlayerTable : public Q3ListView

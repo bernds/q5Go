@@ -18,20 +18,6 @@
 #ifndef QNEWGAMEDLG_H
 #define QNEWGAMEDLG_H
 
-#include <qcombobox.h>
-#include <q3frame.h>
-#include <q3groupbox.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
-#include <qspinbox.h>
-#include <qlayout.h>
-#include <qvariant.h>
-#include <qtooltip.h>
-#include <q3whatsthis.h>
-#include <qcheckbox.h>
-
-
 #include <qdialog.h>
 #include "qnewgamedlg_gui.h"
 //#include "global.h"

@@ -5,8 +5,8 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include <qstring.h>
-#include <qobject.h>
+#include <QString>
+#include <QObject>
 #include "gs_globals.h"
 #include "tables.h"
 #include "qgo_interface.h"

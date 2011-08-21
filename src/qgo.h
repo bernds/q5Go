@@ -5,19 +5,18 @@
 #ifndef QGO_H
 #define QGO_H
 
+#include <QObject>
+#include <Q3PtrList>
+#ifdef Q_WS_WIN
+#include <Q3FileDialog>
+#endif
+
 #include "globals.h"
 #include "mainwindow.h"
 #include "setting.h"
-#include "qobject.h"
 #include "defines.h"
-#include <q3ptrlist.h>
 #include "searchpath.h"
 #include "audio.h"
-
-#ifdef Q_WS_WIN
-#include <q3filedialog.h>
-#endif
-
 
 class HelpViewer;
 

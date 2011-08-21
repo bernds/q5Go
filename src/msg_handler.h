@@ -12,8 +12,8 @@
 
 
 
-#include <qapplication.h>
-#include <q3textedit.h>
+#include <QApplication>
+#include <Q3TextEdit>
 
 void myMessageHandler(QtMsgType, const char*);
 

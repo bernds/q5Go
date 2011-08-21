@@ -2,9 +2,13 @@
 * qgo.cpp
 */
 
-#include "qgo.h"
 //Added by qt3to4:
 #include <Q3PtrList>
+#include <QDir>
+#include <QMessageBox>
+#include <QLineEdit>
+
+#include "qgo.h"
 #include "helpviewer.h"
 #include "board.h"
 #include "mainwindow.h"
@@ -13,10 +17,6 @@
 #include "audio.h"
 
 #include "config.h"
-#include <qmessagebox.h>
-#include <qdir.h>
-#include <qmessagebox.h>
-#include <qlineedit.h>
 #include "searchpath.h"
 
 #ifdef Q_OS_MACX

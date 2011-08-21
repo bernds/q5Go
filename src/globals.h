@@ -7,8 +7,8 @@
 
 #include "defines.h"
 #include "parserdefs.h"
-#include <qstring.h>
-#include <qobject.h>
+#include <QString>
+#include <QObject>
 
 /*
 * Global structs
