@@ -129,8 +129,8 @@ public:
 #ifndef NO_DEBUG
 	void debug();
 #endif
-    
-	bool fastLoad, isModified, lockResize; 
+
+	bool fastLoad, isModified, lockResize;
 	void sendcomment(const QString &text) { emit signal_sendcomment(text); }
 
 	// in case of match
@@ -149,7 +149,7 @@ public slots:
 	void modifiedComment();
 	void changeSize();
 	void gotoMove(Move *m) { boardHandler->gotoMove(m); }
-    
+
 signals:
 	void coordsChanged(int, int, int,bool);
 	void signal_sendcomment(const QString&);
@@ -201,11 +201,11 @@ private:
 	bool letterPool[52];
 	Stone *curStone;
 	short curX, curY;
-	
+
 	QTime wheelTime;
 	Qt::ButtonState mouseState;
 	NodeResults *nodeResultsDlg;
-	
+
 	bool isHidingStones; // QQQ
 
 #ifdef Q_WS_WIN

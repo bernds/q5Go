@@ -39,22 +39,22 @@ Gatter::Gatter(QGraphicsScene *Canvas, int size)
 	VGatter.reserve(board_size);
 	HGatter.reserve(board_size);
 	for (i=0; i<board_size; i++)
-	{	
+	{
 		std::vector<QGraphicsLineItem *> row,col;
 		row.reserve(board_size);
 		col.reserve(board_size);
 		VGatter.push_back(row);
 		HGatter.push_back(col);
-		
+
 		for (j=0; j<board_size; j++)
-		{	
+		{
 			VGatter[i].push_back(new QGraphicsLineItem(0,Canvas));
 			HGatter[i].push_back(new QGraphicsLineItem(0,Canvas));
 			Q_CHECK_PTR(VGatter[i][j]);
 			Q_CHECK_PTR(HGatter[i][j]);
 		}
 	}
-	
+
 	int edge_dist = (board_size > 12 ? 4 : 3);
 	int low = edge_dist;
 	int middle = (board_size + 1) / 2;
@@ -90,7 +90,7 @@ Gatter::Gatter(QGraphicsScene *Canvas, int size)
   **/
 Gatter::~Gatter()
 {
-	int i,j; 
+	int i,j;
 
 
 	for (i=0; i<board_size; i++)
@@ -99,12 +99,12 @@ Gatter::~Gatter()
  		{
  			delete VGatter[i][j];
 			delete HGatter[i][j];
-		} 
+		}
 	VGatter[i].clear();
-	HGatter[i].clear();	
+	HGatter[i].clear();
 	}
 
-	VGatter.clear();	
+	VGatter.clear();
 	HGatter.clear();
 
 	hoshisList.clear();
@@ -120,7 +120,7 @@ void Gatter::resize(int offsetX, int offsetY, double square_size)
 	int i,j;
 	QGraphicsEllipseItem *e;
 	QMapIterator<int,QGraphicsEllipseItem*> it( hoshisList );
-	
+
 	int size = square_size / 5;
 
 	// Round size top be odd (hoshis)
@@ -130,29 +130,29 @@ void Gatter::resize(int offsetX, int offsetY, double square_size)
 		size = 7;
 	else if (size <= 2)
 		size = 3;
-	
+
 
 	for (i=0; i<board_size; i++)
 		for (j=0; j<board_size; j++)
 		{
 
-			HGatter[i][j]->setLine(int(offsetX + square_size * ( i - 0.5*(i!=0))), 
+			HGatter[i][j]->setLine(int(offsetX + square_size * ( i - 0.5*(i!=0))),
 						offsetY + square_size * j,
-						int(offsetX + square_size * ( i + 0.5 * (i+1 != board_size))), 
+						int(offsetX + square_size * ( i + 0.5 * (i+1 != board_size))),
 						offsetY + square_size * j );
-			
-			VGatter[i][j]->setLine(offsetX + square_size *  i, 
+
+			VGatter[i][j]->setLine(offsetX + square_size *  i,
 						int(offsetY + square_size * ( j - 0.5*(j!=0))),
-						offsetX + square_size *  i, 
-						int(offsetY + square_size * ( j + 0.5 * (j+1 != board_size)))); 
-			
-			
+						offsetX + square_size *  i,
+						int(offsetY + square_size * ( j + 0.5 * (j+1 != board_size))));
+
+
 			if (hoshisList.contains(board_size*(i+1)+j+1))
 			{
 				e = hoshisList.value(board_size*(i+1)+j+1);
 				e->setRect(offsetX + square_size * i - size/2,
 					offsetY + square_size * j- size/2,
-					size , 
+					size ,
 					size );
 			}
 		}
@@ -187,7 +187,7 @@ void Gatter::showAll()
 void Gatter::hide(int i, int j)
 {
 	QGraphicsEllipseItem *e;
-	
+
 	if (( i<1) || (i > board_size) || ( j<1) || (j > board_size))
 		return;
 
