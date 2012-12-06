@@ -49,16 +49,16 @@ Board::Board(QWidget *parent, QGraphicsScene *c)
 	showSGFCoords = setting->readBoolEntry("SGF_BOARD_COORDS");
 	antiClicko = setting->readBoolEntry("ANTICLICKO");
 
-	setStyleSheet( "QGraphicsView { border-style: none; }" ); 
+	setStyleSheet( "QGraphicsView { border-style: none; }" );
 
 	// Create a BoardHandler instance.
 	boardHandler = new BoardHandler(this);
 	CHECK_PTR(boardHandler);
-	
+
 	// Create an ImageHandler instance.
 	imageHandler = new ImageHandler();
 	CHECK_PTR(imageHandler);
-	
+
 	// Init the canvas
 	canvas = new QGraphicsScene(0,0, BOARD_X, BOARD_Y,this);
 	setScene(canvas);
@@ -76,7 +76,7 @@ Board::Board(QWidget *parent, QGraphicsScene *c)
 	calculateSize();
 
 	imageHandler->init(square_size);
-	
+
 	// Initialize some class variables
 	nodeResultsDlg = NULL;
 	fastLoad = false;
@@ -88,43 +88,38 @@ Board::Board(QWidget *parent, QGraphicsScene *c)
 			letterPool[i] = false;
 		numberPool[i] = false;
 	}
-	
+
 	//coordsTip = new Tip(this);
 #ifdef Q_WS_WIN
 	resizeDelayFlag = false;
 #endif
 	curX = curY = -1;
 	showCursor = setting->readBoolEntry("CURSOR");
-	
+
 	isLocalGame = true;
-	
+
 	// Init the ghost cursor stone
 	curStone = new Stone(imageHandler->getGhostPixmaps(), canvas, stoneBlack, 0, 0);
 	curStone->setZValue(4);
-	curStone->hide();                       
+	curStone->hide();
 
 	lockResize = false;
 	navIntersectionStatus = false;
-  
+
 	updateCaption();
 	gatter_created = false;
-	
+
 	isHidingStones = false; // QQQ
 	setupCoords();
 	setFocusPolicy(Qt::NoFocus);
 }
 
 
-void Board::setupCoords(void)
+void Board::setupCoords()
 {
 	QString hTxt,vTxt;
 
 	// Init the coordinates
-	vCoords1 = new QList<QGraphicsSimpleTextItem*>;
-	hCoords1 = new QList<QGraphicsSimpleTextItem*>;
-	vCoords2 = new QList<QGraphicsSimpleTextItem*>;
-	hCoords2 = new QList<QGraphicsSimpleTextItem*>;
-	
 	for (int i=0; i<board_size; i++)
 	{
 		if (showSGFCoords)
@@ -137,21 +132,33 @@ void Board::setupCoords(void)
 			hTxt = QString(QChar(static_cast<const char>('A' + real_i)));
 		}
 
-		vCoords1->append(new QGraphicsSimpleTextItem(vTxt, 0, canvas));
-		hCoords1->append(new QGraphicsSimpleTextItem(hTxt, 0, canvas));
-		vCoords2->append(new QGraphicsSimpleTextItem(vTxt, 0, canvas));
-		hCoords2->append(new QGraphicsSimpleTextItem(hTxt, 0, canvas));
+		vCoords1.append(new QGraphicsSimpleTextItem(vTxt, 0, canvas));
+		hCoords1.append(new QGraphicsSimpleTextItem(hTxt, 0, canvas));
+		vCoords2.append(new QGraphicsSimpleTextItem(vTxt, 0, canvas));
+		hCoords2.append(new QGraphicsSimpleTextItem(hTxt, 0, canvas));
 	}
+}
+
+void Board::clearCoords()
+{
+	QList<QGraphicsSimpleTextItem*>::const_iterator i;
+#define FREE_ARRAY_OF_POINTERS(a)							\
+	for (i = a.begin(); i != a.end(); ++i)					\
+		delete *i;											\
+	a.clear();												\
+
+	FREE_ARRAY_OF_POINTERS(vCoords1);
+	FREE_ARRAY_OF_POINTERS(hCoords1);
+	FREE_ARRAY_OF_POINTERS(vCoords2);
+	FREE_ARRAY_OF_POINTERS(hCoords2);
 }
 
 Board::~Board()
 {
-//    delete coordsTip;
+	clearData();
     delete curStone;
     delete boardHandler;
-    marks->clear();
     delete marks;
-    ghosts->clear();
     delete ghosts;
     delete lastMoveMark;
     delete canvas;
@@ -171,7 +178,7 @@ void Board::calculateSize()
 
 	int w = (int)canvas->width() - margin * 2;
 	int h = (int)canvas->height() - margin * 2;
-		
+
 	table_size = w < h ? w : h;
 
 	QGraphicsSimpleTextItem coordV (QString::number(board_size), 0, canvas);
@@ -240,7 +247,7 @@ void Board::resizeBoard(int w, int h)
 		{
 			Stone *s = (Stone*)item;
 			s->setColor(s->getColor());
-			s->setPos(offsetX + square_size * (s->posX() - 1) - s->pixmap().width()/2, 
+			s->setPos(offsetX + square_size * (s->posX() - 1) - s->pixmap().width()/2,
 				offsetY + square_size * (s->posY() - 1) - s->pixmap().height()/2 );
 
 			//TODO introduce a ghost list in the stone class so that this becomes redundant code
@@ -248,7 +255,7 @@ void Board::resizeBoard(int w, int h)
 				s->togglePixmap(imageHandler->getGhostPixmaps(), FALSE);
 
 
-			
+
 		}
 		else if (item->type() >= RTTI_MARK_SQUARE &&
 			item->type() <= RTTI_MARK_TERR)
@@ -275,15 +282,15 @@ void Board::resizeBoard(int w, int h)
 
 	/* FIXME sometimes this draws the lines after/on top of the marks.
 	 * moving it earlier doesn't fix anything */
-	
+
 	// Redraw the board
 	drawBackground();
 	drawGatter();
 //	if (showCoords && !isDisplayBoard)
 	drawCoordinates();
 
-	// Redraw the mark on the last played stone                             
-	updateLastMove(m_save->getColor(), m_save->getX(), m_save->getY());     //SL added eb 7  
+	// Redraw the mark on the last played stone
+	updateLastMove(m_save->getColor(), m_save->getX(), m_save->getY());     //SL added eb 7
 }
 
 void Board::resizeEvent(QResizeEvent*)
@@ -330,7 +337,7 @@ void Board::drawBackground()
 	//QImage image = all.toImage();
 	int lighter=20;
 	int darker=60;
-	int width = 3; 
+	int width = 3;
 
 	for(int x = 0; x < width; x++)
 		for (int yi = x; yi < table_size - x; yi++)
@@ -371,7 +378,7 @@ void Board::drawBackground()
 	for (int y = 0; y <= width && offsetY + board_pixel_size + offset + y + 1 < h;y++)
 		for (int x = (offsetX - offset - y > 0 ? offsetX - offset - y : 0); x < offsetX + board_pixel_size + offset-y ;x++)
 		{
-			image.setPixel(x, offsetY + board_pixel_size + offset + y +1, 
+			image.setPixel(x, offsetY + board_pixel_size + offset + y +1,
 				QColor(image.pixel(x,offsetY + board_pixel_size + offset+y+1)).dark(100+ int(darker*(width-y)/width)).rgb());
 		}
 
@@ -395,7 +402,7 @@ void Board::drawCoordinates()
 	for (i=0; i<board_size; i++)
 	{
 		// Left side
-		coord = vCoords1->at(i);
+		coord = vCoords1.at(i);
 		coord->setPos(offsetX - offset + coord_centre - coord->boundingRect().width()/2,
 			      offsetY + square_size * (board_size - i - 1) - coord->boundingRect().height()/2);
 
@@ -405,7 +412,7 @@ void Board::drawCoordinates()
 			coord->hide();
 
 		// Right side
-		coord = vCoords2->at(i);
+		coord = vCoords2.at(i);
     		coord->setPos(offsetX + board_pixel_size + offset - coord_centre - coord->boundingRect().width()/2,
 			      offsetY + square_size * (board_size - i - 1) - coord->boundingRect().height()/2);
 
@@ -415,20 +422,20 @@ void Board::drawCoordinates()
 			coord->hide();
 
 		// Top
-		coord = hCoords1->at(i);
+		coord = hCoords1.at(i);
 		coord->setPos(offsetX + square_size * i - coord->boundingRect().width()/2,
 			      offsetY - offset + coord_centre - coord->boundingRect().height()/2 );
-		
+
 		if (showCoords)
 			coord->show();
 		else
 			coord->hide();
 
 		// Bottom
-		coord = hCoords2->at(i);
+		coord = hCoords2.at(i);
 		coord->setPos(offsetX + square_size * i - coord->boundingRect().width()/2,
 			      offsetY + offset + board_pixel_size - coord_centre - coord->boundingRect().height()/2);
-		
+
 		if (showCoords)
 			coord->show();
 		else
@@ -473,9 +480,9 @@ Stone* Board::addStoneSprite(StoneColor c, int x, int y, bool &shown)
 	if (t == 0)
 	{
 		// qDebug("*** Did not find any stone at %d, %d.", x, y);
- 			
+
 		Stone *s = new Stone(imageHandler->getStonePixmaps(), canvas, c, x, y,WHITE_STONES_NB,true);
-			
+
 		if (isHidingStones) { // QQQ
 			s->hide();
 		}
@@ -483,40 +490,40 @@ Stone* Board::addStoneSprite(StoneColor c, int x, int y, bool &shown)
 			if (boardHandler->getGameData()->oneColorGo)
 				s->toggleOneColorGo(true);
 		}
-              
+
 		CHECK_PTR(s);
-			
+
 		s->setPos(offsetX + square_size * (x-1.5), offsetY + square_size * (y-1.5));
- 
-			
+
+
 		// Change color of a mark on this spot to white, if we have a black stone
 		if (c == stoneBlack)
 			updateMarkColor(stoneBlack, x, y);
-			
+
 		return s;
 	}
 	else if (t == -1)
 	{
 		// Stone exists, but is hidden. Show it and check correct color
-	
+
 		Stone *s = boardHandler->getStoneHandler()->getStoneAt(x, y);
 		CHECK_PTR(s);
-			
+
 		// qDebug("*** Found a hidden stone at %d, %d (%s).", x, y,
-			
+
 		// Check if the color is correct
 		if (s->getColor() != c)
 			s->setColor(c);
 		s->show();
 		shown = true;
-			
+
 		// Change color of a mark on this spot to white, if we have a black stone
 		if (c == stoneBlack)
 			updateMarkColor(stoneBlack, x, y);
-			
+
 		return s;
 	}
-    
+
 	return NULL;  // Oops
 }
 
@@ -524,7 +531,7 @@ Stone* Board::addStoneSprite(StoneColor c, int x, int y, bool &shown)
 void Board::debug()
 {
     qDebug("Board::debug()");
-	
+
 #if 1
     Mark *m = NULL;
     for (m=marks->first(); m != NULL; m=marks->next())
@@ -532,7 +539,7 @@ void Board::debug()
 		qDebug("posX:%d posY:%d  rtti:%d", m->posX(), m->posY(), m->type());
     }
 #endif
-	
+
 
 #if 1
     boardHandler->debug();
@@ -559,7 +566,7 @@ void Board::mouseMoveEvent(QMouseEvent *e)
 {
     int x = convertCoordsToPoint(e->x(), offsetX),
 		y = convertCoordsToPoint(e->y(), offsetY);
-    
+
     // Outside the valid board?
     if (x < 1 || x > board_size || y < 1 || y > board_size)
     {
@@ -568,21 +575,21 @@ void Board::mouseMoveEvent(QMouseEvent *e)
 		curX = curY = -1;
 		return;
     }
-	
+
     // Nothing changed
     if (curX == (short)x && curY == (short)y)
 		return;
-	
+
     // Update the statusbar coords tip
     emit coordsChanged(x, y, board_size,showSGFCoords);
-	
+
     // Remember if the cursor was hidden meanwhile.
     // If yes, we need to repaint it at the old position.
     bool flag = curX == -1;
-	
+
     curX = (short)x;
     curY = (short)y;
-    
+
     if (!showCursor || //setting->readBoolEntry("CURSOR") ||
 		(boardHandler->getGameMode() == modeEdit &&
 		boardHandler->getMarkType() != markNone) ||
@@ -595,16 +602,16 @@ void Board::mouseMoveEvent(QMouseEvent *e)
 
     bool notMyTurn = 	(curStone->getColor() == stoneBlack && !myColorIsBlack ||
 			 curStone->getColor() == stoneWhite && myColorIsBlack);
-    
-    if (navIntersectionStatus ||              
+
+    if (navIntersectionStatus ||
         boardHandler->getGameMode() == modeObserve ||
 	( boardHandler->getGameMode() == modeMatch && notMyTurn) ||
 	( boardHandler->getGameMode() == modeComputer && notMyTurn))
-	
+
 		curStone->hide();
     else
 		curStone->show();
-    
+
     canvas->update();
 }
 
@@ -615,11 +622,11 @@ void Board::mouseWheelEvent(QWheelEvent *e)
 		boardHandler->getGameMode() == modeMatch ||
 		boardHandler->getGameMode() == modeTeach)
 		return;
-    
+
     // Check delay
     if (QTime::currentTime() < wheelTime)
 		return;
-	
+
     // Needs an extra check on variable mouseState as state() does not work on Windows.
     if (e->delta() != 120) // QQQ weel down to next
     {
@@ -635,28 +642,28 @@ void Board::mouseWheelEvent(QWheelEvent *e)
 		else
 			previousMove();
     }
-    
+
     // Delay of 100 msecs to avoid too fast scrolling
     wheelTime = QTime::currentTime();
     wheelTime = wheelTime.addMSecs(50);
-    
+
     e->accept();
 }
 
 void Board::mouseReleaseEvent(QMouseEvent* e)
 {
 	mouseState = Qt::NoButton;
-    
+
 	int 	x = convertCoordsToPoint(e->x(), offsetX),
 		y = convertCoordsToPoint(e->y(), offsetY);
-	
+
 	//qDebug("Mouse should be released after %d,%03d", wheelTime.second(),wheelTime.msec());
 	//qDebug("Mouse released at time         %d,%03d", QTime::currentTime().second(),QTime::currentTime().msec());
-	
-	if ( 	(boardHandler->getGameMode()==modeMatch) && 
+
+	if ( 	(boardHandler->getGameMode()==modeMatch) &&
     		(QTime::currentTime() > wheelTime))
-	{	
-		
+	{
+
 		if (boardHandler->getBlackTurn())
 		{
 			if (myColorIsBlack)
@@ -672,18 +679,18 @@ void Board::mouseReleaseEvent(QMouseEvent* e)
 				boardHandler->addStone(stoneWhite, x, y);
 				emit signal_addStone(stoneWhite, x, y);
 			}
-		}  
-	
+		}
+
 	}
-	
-	
-	 
+
+
+
 }
 
 void Board::mousePressEvent(QMouseEvent *e)
 {
     mouseState = e->button();
-    
+
     int x = convertCoordsToPoint(e->x(), offsetX),
 		y = convertCoordsToPoint(e->y(), offsetY);
 
@@ -702,18 +709,18 @@ void Board::mousePressEvent(QMouseEvent *e)
 		else if (e->button() == Qt::RightButton &&
 			e->state() == Qt::MidButton)
 			gotoNextBranch();
-		
+
 		return;
     }
-	
+
     // Lock accidental gesture over board
     if ((e->button() == Qt::LeftButton && e->state() == Qt::RightButton) ||
 		(e->button() == Qt::RightButton && e->state() == Qt::LeftButton) ||
 		(e->button() == Qt::LeftButton && e->state() == Qt::MidButton) ||
 		(e->button() == Qt::RightButton && e->state() == Qt::MidButton))
 		return;
-  
-    
+
+
     // Ok, we are inside the board, and it was no gesture.
 
     // We just handle the case of getting where the mouse was clicked
@@ -721,13 +728,13 @@ void Board::mousePressEvent(QMouseEvent *e)
     {
         navIntersectionStatus = false;
 
-//   *** Several unsuccessfull tries with clean method ***        
+//   *** Several unsuccessfull tries with clean method ***
 //      unsetCursor();
 //      setCursor(ArrowCursor);
 //      this->topLevelWidget()->setCursor(ArrowCursor);
 //   *** Therefore we apply thick method :
 
-        QApplication::restoreOverrideCursor();  
+        QApplication::restoreOverrideCursor();
         boardHandler->findMoveByPos(x, y);                                 //SL added eb 11
 	return;
 	}                         // end add eb 11
@@ -766,9 +773,9 @@ void Board::mousePressEvent(QMouseEvent *e)
 				boardHandler->addStone(stoneBlack, x, y);
 			else
 				boardHandler->addStone(stoneWhite, x, y);
-			
+
 			break;
-			
+
 		case Qt::RightButton:
 			if (e->state() == Qt::ShiftModifier)  // Shift: Find move in this branch
 			{
@@ -776,12 +783,12 @@ void Board::mousePressEvent(QMouseEvent *e)
 				return;
 			}
 			break;
-			
+
 		default:
 			break;
 		}
 		break;
-		
+
 	case modeEdit:
 		switch (e->button())
 		{
@@ -826,7 +833,7 @@ void Board::mousePressEvent(QMouseEvent *e)
 			break;
 		}
 		break;
-		
+
 	case modeScore:
 		switch (e->button())
 		{
@@ -844,19 +851,19 @@ void Board::mousePressEvent(QMouseEvent *e)
 			break;
 		}
 		break;
-		
+
 	case modeObserve:
 		// do nothing but observe
 		break;
-		
+
 	case modeMatch:
 		// Delay of 250 msecs to avoid clickos
     		wheelTime = QTime::currentTime();
     		//qDebug("Mouse pressed at time %d,%03d", wheelTime.second(),wheelTime.msec());
 		if (antiClicko)
 			wheelTime = wheelTime.addMSecs(250);
-		
-		
+
+
 		/*if (boardHandler->getBlackTurn())
 		{
 			if (myColorIsBlack)
@@ -876,7 +883,7 @@ void Board::mousePressEvent(QMouseEvent *e)
 		break;
 
 	case modeComputer:                          //added eb 12
-	
+
 
 		if (boardHandler->getBlackTurn())
 		{
@@ -896,7 +903,7 @@ void Board::mousePressEvent(QMouseEvent *e)
 		}
 		break;                                   // end add eb 12
 
-        		
+
 	case modeTeach:
 		if (boardHandler->getBlackTurn())
 		{
@@ -909,7 +916,7 @@ void Board::mousePressEvent(QMouseEvent *e)
 			emit signal_addStone(stoneWhite, x, y);
 		}
 		break;
-		
+
 	default:
 		qWarning("   *** Invalid game mode! ***");
     }
@@ -980,7 +987,7 @@ void Board::hideAllMarks()
 {
     MarkText::maxLength = 1;
     marks->clear();
-		
+
     gatter->showAll();
 
     for (int i=0; i<400; i++)
@@ -993,11 +1000,11 @@ void Board::hideAllMarks()
 
 bool Board::openSGF(const QString &fileName)
 {
-	
+
     // Load the sgf
     if (!boardHandler->loadSGF(fileName))
 		return false;
-	
+
     canvas->update();
     setModified(false);
     return true;
@@ -1008,11 +1015,11 @@ bool Board::startComputerPlay(QNewGameDlg * dlg,const QString &fileName, const Q
 
      // Clean up everything and get to last move
     //clearData();
-    
+
     // Initiate the dialog with computer
     if (!boardHandler->openComputerSession(dlg,fileName,computer_path))
     		return false;
-   
+
     canvas->update();
     setModified(false);
     return true;
@@ -1035,6 +1042,7 @@ void Board::clearData()
 		delete nodeResultsDlg;
 		nodeResultsDlg = NULL;
     }
+	clearCoords();
 }
 
 void Board::updateComment()
@@ -1057,7 +1065,7 @@ void Board::setMark(int x, int y, MarkType t, bool update, QString txt, bool ove
 {
     if (x == -1 || y == -1)
 		return;
-	
+
     Mark *m;
 
     // We already have a mark on this spot? If it is of the same type,
@@ -1066,43 +1074,43 @@ void Board::setMark(int x, int y, MarkType t, bool update, QString txt, bool ove
     {
 		if (m->getType() == t && m->getType() != markText)  // Text labels are overwritten
 			return;
-		
+
 		removeMark(x, y, update);
     }
-    
+
     if (lastMoveMark != NULL &&
 		lastMoveMark->posX() == x &&
 		lastMoveMark->posY() == y)
 		removeLastMoveMark();
-	
+
     QColor col = Qt::black;
-	
+
     // Black stone or black ghost underlying? Then we need a white mark.
     if ((boardHandler->hasStone(x, y) == 1 &&
 		boardHandler->getStoneHandler()->getStoneAt(x, y)->getColor() == stoneBlack) ||
 		(setting->readIntEntry("VAR_GHOSTS") && hasVarGhost(stoneBlack, x, y)))
 		col = Qt::white;
-    
+
     short n = -1;
-	
+
     switch(t)
     {
     case markSquare:
 		m = new MarkSquare(x, y, square_size, canvas, col);
 		break;
-		
+
     case markCircle:
 		m = new MarkCircle(x, y, square_size, canvas, col, true);//setting->readBoolEntry("SMALL_STONES"));
         break;
-		
+
     case markTriangle:
 		m = new MarkTriangle(x, y, square_size, canvas, col);
 		break;
-		
+
     case markCross:
 		m = new MarkCross(x, y, square_size, canvas, col);
 		break;
-		
+
     case markText:
 		if (txt.isNull())
 		{
@@ -1110,9 +1118,9 @@ void Board::setMark(int x, int y, MarkType t, bool update, QString txt, bool ove
 			while (letterPool[n] && n < 51)
 				n++;
 			letterPool[n] = true;
-			
+
 			txt = QString(QChar(static_cast<const char>('A' + (n>=26 ? n+6 : n))));
-			
+
 			// Update matrix with this letter
 			boardHandler->getTree()->getCurrent()->getMatrix()->setMarkText(x, y, txt);
 		}
@@ -1124,25 +1132,25 @@ void Board::setMark(int x, int y, MarkType t, bool update, QString txt, bool ove
 				n = txt[0].latin1() - 'A';
 			else if (txt[0] >= 'a' && txt[0] <= 'a')
 				n = txt[0].latin1() - 'a' + 26;
-			
+
 			if (n > -1)
 				letterPool[n] = true;
 		}
 		m = new MarkText(x, y, square_size, txt, canvas, col, n, false, overlay);
 		gatter->hide(x,y);//setMarkText(x, y, txt);
 		break;
-		
+
     case markNumber:
 		if (txt.isNull())
 		{
 			n = 0;
 			while (numberPool[n] && n < 399)
 				n++;
-			
+
 			txt = QString::number(n+1);
-			
+
 			// Update matrix with this letter
-			boardHandler->getTree()->getCurrent()->getMatrix()->setMarkText(x, y, txt);	    
+			boardHandler->getTree()->getCurrent()->getMatrix()->setMarkText(x, y, txt);
 		}
 		else
 			n = txt.toInt() - 1;
@@ -1151,7 +1159,7 @@ void Board::setMark(int x, int y, MarkType t, bool update, QString txt, bool ove
 		setMarkText(x, y, txt);
 		gatter->hide(x,y);
 		break;
-		
+
     case markTerrBlack:
 		m = new MarkTerr(x, y, square_size, stoneBlack, canvas);
 		if (boardHandler->hasStone(x, y) == 1)
@@ -1164,7 +1172,7 @@ void Board::setMark(int x, int y, MarkType t, bool update, QString txt, bool ove
 		}
 		boardHandler->getTree()->getCurrent()->setScored(true);
 		break;
-		
+
     case markTerrWhite:
 		m = new MarkTerr(x, y, square_size, stoneWhite, canvas);
 		if (boardHandler->hasStone(x, y) == 1)
@@ -1177,18 +1185,18 @@ void Board::setMark(int x, int y, MarkType t, bool update, QString txt, bool ove
 		}
 		boardHandler->getTree()->getCurrent()->setScored(true);
 		break;
-		
+
     default:
 		qWarning("   *** Board::setMark() - Bad mark type! ***");
 		return;
     }
-	
+
     CHECK_PTR(m);
     m->setPos(offsetX + square_size * (x-1) - m->getSizeX()/2, offsetY + square_size * (y-1) - m->getSizeY()/2);
     m->show();
-	
+
     marks->append(m);
-	
+
     if (update)
 		boardHandler->editMark(x, y, t, txt);
 }
@@ -1196,12 +1204,12 @@ void Board::setMark(int x, int y, MarkType t, bool update, QString txt, bool ove
 void Board::removeMark(int x, int y, bool update)
 {
     Mark *m = NULL;
-	
+
     if (lastMoveMark != NULL &&
 		lastMoveMark->posX() == x &&
 		lastMoveMark->posY() == y)
 		removeLastMoveMark();
-	
+
     for (m=marks->first(); m != NULL; m=marks->next())
     {
 		if (m->posX() == x && m->posY() == y)
@@ -1213,7 +1221,7 @@ void Board::removeMark(int x, int y, bool update)
 				else if (m->getType() == markNumber)
 					numberPool[m->getCounter()] = false;
 			}
-			
+
 			marks->remove(m);
 			gatter->show(x,y);
 			if (update)
@@ -1226,27 +1234,27 @@ void Board::removeMark(int x, int y, bool update)
 void Board::setMarkText(int x, int y, const QString &txt)
 {
     Mark *m;
-    
+
     // Oops, no mark here, or no text mark
     if (txt.isNull() || txt.isEmpty() ||
 		(m = hasMark(x, y)) == NULL || m->getType() != markText)
 		return;
-	
+
     m->setText(txt);
     // Adjust the position on the board, if the text size has changed.
     m->setSize((double)square_size, (double)square_size);
     m->setPos(offsetX + square_size * (x-1) - m->getSizeX()/2, offsetY + square_size * (y-1) - m->getSizeY()/2);
-	
+
 }
 
 Mark* Board::hasMark(int x, int y)
 {
     Mark *m = NULL;
-	
+
     for (m=marks->first(); m != NULL; m=marks->next())
 		if (m->posX() == x && m->posY() == y)
 			return m;
-		
+
 		return NULL;
 }
 
@@ -1296,7 +1304,7 @@ void Board::removeLastMoveMark()
 void Board::checkLastMoveMark(int x, int y)
 {
     Mark *m = NULL;
-    
+
     for (m=marks->first(); m != NULL; m=marks->next())
     {
 		if (m->posX() == x && m->posY() == y &&
@@ -1307,19 +1315,19 @@ void Board::checkLastMoveMark(int x, int y)
 			break;
 		}
     }
-	
+
     if (lastMoveMark == NULL ||
 		lastMoveMark->posX() != x ||
 		lastMoveMark->posY() != y)
 		return;
-	
+
     removeLastMoveMark();
 }
 
 void Board::updateMarkColor(StoneColor c, int x, int y)
 {
     Mark *m = NULL;
-	
+
     for (m=marks->first(); m != NULL; m=marks->next())
     {
 		if (m->posX() == x && m->posY() == y && m->type() != RTTI_MARK_TERR)
@@ -1333,16 +1341,16 @@ void Board::updateMarkColor(StoneColor c, int x, int y)
 void Board::setVarGhost(StoneColor c, int x, int y)
 {
 	Stone *s = NULL;
-	
+
 	if (setting->readIntEntry("VAR_GHOSTS") == vardisplayGhost)
 		s = new Stone(imageHandler->getGhostPixmaps(), canvas, c, x, y);
 	else if (setting->readIntEntry("VAR_GHOSTS") == vardisplaySmallStone)
 		s = new Stone(imageHandler->getAlternateGhostPixmaps(), canvas, c, x, y, 1);
 	else
 		return;
-	
+
 	ghosts->append(s);
-    
+
 	if (x == 20 && y == 20)  // Pass
 	{
 		s->setPos(offsetX + square_size * (board_size+1),
@@ -1407,18 +1415,19 @@ void Board::setShowSGFCoords(bool b)
 void Board::initGame(GameData *d, bool sgf)
 {
 	CHECK_PTR(d);
-	
+
 	int oldsize = board_size;
 	board_size = d->size;
-	
+
 	// Clear up everything
 	clearData();
-	
+
 	// Different board size? Redraw the canvas.
 	if (board_size != oldsize)
 	{
 		delete gatter;
-		gatter = new Gatter(canvas, board_size);	
+		gatter = new Gatter(canvas, board_size);
+		setupCoords();
 		changeSize();
 	}
 
@@ -1430,7 +1439,7 @@ void Board::setModified(bool m)
 {
     if (m == isModified || boardHandler->getGameMode() == modeObserve)
 		return;
- 
+
     isModified = m;
     updateCaption();
 }
@@ -1460,7 +1469,7 @@ void Board::updateCaption()
 		Q3GroupBox *gb = getInterfaceHandler()->normalTools->whiteFrame;
 		QString player = boardHandler->getGameData()->playerWhite;
 		if (simple && player == tr("White"))
-			gb->setTitle(tr("White"));	
+			gb->setTitle(tr("White"));
 		else
 		{
 			// truncate to 12 characters max
@@ -1470,14 +1479,14 @@ void Board::updateCaption()
 				player = tr("W") + ": " + player + " " + boardHandler->getGameData()->rankWhite;
 			else
 				player = tr("W") + ": " + player;
-			
+
 			gb->setTitle(player);
 		}
 
 		gb = getInterfaceHandler()->normalTools->blackFrame;
 		player = boardHandler->getGameData()->playerBlack;
 		if (simple && player == tr("Black"))
-			gb->setTitle(tr("Black"));	
+			gb->setTitle(tr("Black"));
 		else
 		{
 			// truncate to 12 characters max
@@ -1487,7 +1496,7 @@ void Board::updateCaption()
 				player = tr("B") + ": " + player + " " + boardHandler->getGameData()->rankBlack;
 			else
 				player = tr("B") + ": " + player;
-			
+
 			gb->setTitle(player);
 		}
 	}
@@ -1500,35 +1509,35 @@ void Board::exportPicture(const QString &fileName, const QString &filter, bool t
 		offsetY - offset + 2 ,
 		board_pixel_size + offset*2,
 		board_pixel_size + offset*2);
-    
+
     if (toClipboard)
     {
 		QApplication::clipboard()->setPixmap(pix);
 		return;
     }
-    
+
     if (!pix.save(fileName, filter))
 		QMessageBox::warning(this, PACKAGE, tr("Failed to save image!"));
 }
 
 void Board::doCountDone()
-{ 
+{
     float komi = getGameData()->komi;
     int capW = getInterfaceHandler()->scoreTools->capturesWhite->text().toInt(),
 		capB = getInterfaceHandler()->scoreTools->capturesBlack->text().toInt(),
 		terrW = getInterfaceHandler()->scoreTools->terrWhite->text().toInt(),
 		terrB = getInterfaceHandler()->scoreTools->terrBlack->text().toInt();
-	
+
     float totalWhite = capW + terrW + komi;
     int totalBlack = capB + terrB;
     float result = 0;
     QString rs;
-	
+
     QString s;
     s.sprintf(tr("White") + "\n%d + %d + %.1f = %.1f\n\n" + tr("Black") + "\n%d + %d = %d\n\n",
 		terrW, capW, komi, totalWhite,
 		terrB, capB, totalBlack);
-    
+
     if (totalBlack > totalWhite)
     {
 		result = totalBlack - totalWhite;
@@ -1546,14 +1555,14 @@ void Board::doCountDone()
 		rs = tr("Jigo");
 		s.append(rs);
     }
-	
+
     //if (QMessageBox::information(this, PACKAGE " - " + tr("Game Over"), s, tr("Ok"), tr("Update gameinfo")) == 1)
 		boardHandler->getGameData()->result = rs;
-  
+
     boardHandler->getTree()->getCurrent()->setTerritoryMarked(false);
     boardHandler->getTree()->getCurrent()->setScore(totalBlack, totalWhite);
 
-    emit signal_done();        
+    emit signal_done();
 }
 
 int Board::getCurrentMoveNumber() const
@@ -1594,9 +1603,9 @@ void Board::set_isLocalGame(bool isLocal)
 		((MainWindow*)topLevelWidget())->getListView_observers()->show();
 }
 
-void Board::navIntersection()          
+void Board::navIntersection()
 {
-   
+
  /***** several unsuccessful tries with clean method
  //   unsetCursor();
  //   this->topLevelWidget()->unsetCursor();
@@ -1604,12 +1613,12 @@ void Board::navIntersection()
  // this is debug code to check if we can catch the corrrect cursor
     if (this->topLevelWidget()->ownCursor())
       qDebug("cursor = top");
-      
+
     bool b;
     int i= 0;
     QWidget *w = this;
     do {
-      
+
       if (w->ownCursor())
           qDebug("cursor = %d",i);
        i++  ;
@@ -1617,12 +1626,12 @@ void Board::navIntersection()
     while (w=w->parentWidget(true)) ;
 
     qDebug("stack %d ",i-1);
-      
+
     setCursor(pointingHandCursor);
 
-  *** Therefore we apply thick method  :           */    
+  *** Therefore we apply thick method  :           */
     QApplication::setOverrideCursor( QCursor(Qt::pointingHandCursor) );
-      
+
     navIntersectionStatus = true;
 
 }
@@ -1645,7 +1654,7 @@ QString Board::getCandidateFileName()
 		//number = Q.number(i++);
 		result = base + "-"+ QString::number(i++);
 		//fileName = fileName + ".sgf";
-	} 
+	}
 	return dir + result + ".sgf";
 }
 

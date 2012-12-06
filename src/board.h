@@ -42,7 +42,6 @@ class Board : public QGraphicsView
 public:
 	Board(QWidget *parent=0, QGraphicsScene *c = 0);
 	~Board();
-	void setupCoords();
 	void clearData();
 	void initGame(GameData *d, bool sgf=false);
 	void setModified(bool m=true);
@@ -129,8 +128,8 @@ public:
 #ifndef NO_DEBUG
 	void debug();
 #endif
-    
-	bool fastLoad, isModified, lockResize; 
+
+	bool fastLoad, isModified, lockResize;
 	void sendcomment(const QString &text) { emit signal_sendcomment(text); }
 
 	// in case of match
@@ -149,7 +148,7 @@ public slots:
 	void modifiedComment();
 	void changeSize();
 	void gotoMove(Move *m) { boardHandler->gotoMove(m); }
-    
+
 signals:
 	void coordsChanged(int, int, int,bool);
 	void signal_sendcomment(const QString&);
@@ -180,8 +179,11 @@ protected:
 	void updateMarkColor(StoneColor c, int x, int y);
 
 private:
+	void setupCoords();
+	void clearCoords();
+
 	QGraphicsScene *canvas;
-	QList<QGraphicsSimpleTextItem*> *hCoords1, *hCoords2 ,*vCoords1, *vCoords2;
+	QList<QGraphicsSimpleTextItem*> hCoords1, hCoords2 ,vCoords1, vCoords2;
 	Gatter *gatter;
 	ImageHandler *imageHandler;
 	BoardHandler *boardHandler;
@@ -201,11 +203,11 @@ private:
 	bool letterPool[52];
 	Stone *curStone;
 	short curX, curY;
-	
+
 	QTime wheelTime;
 	Qt::ButtonState mouseState;
 	NodeResults *nodeResultsDlg;
-	
+
 	bool isHidingStones; // QQQ
 
 #ifdef Q_WS_WIN
