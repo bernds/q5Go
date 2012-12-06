@@ -107,6 +107,9 @@ Gatter::~Gatter()
 	VGatter.clear();
 	HGatter.clear();
 
+	for (QMap<int,QGraphicsEllipseItem*>::const_iterator i = hoshisList.begin();
+		 i != hoshisList.end(); ++i)
+		delete *i;
 	hoshisList.clear();
 }
 

@@ -118,11 +118,6 @@ void Board::setupCoords()
 	QString hTxt,vTxt;
 
 	// Init the coordinates
-	vCoords1 = new QList<QGraphicsSimpleTextItem*>;
-	hCoords1 = new QList<QGraphicsSimpleTextItem*>;
-	vCoords2 = new QList<QGraphicsSimpleTextItem*>;
-	hCoords2 = new QList<QGraphicsSimpleTextItem*>;
-	
 	for (int i=0; i<board_size; i++)
 	{
 		if (showSGFCoords)
@@ -135,21 +130,33 @@ void Board::setupCoords()
 			hTxt = QString(QChar(static_cast<const char>('A' + real_i)));
 		}
 
-		vCoords1->append(new QGraphicsSimpleTextItem(vTxt, 0, canvas));
-		hCoords1->append(new QGraphicsSimpleTextItem(hTxt, 0, canvas));
-		vCoords2->append(new QGraphicsSimpleTextItem(vTxt, 0, canvas));
-		hCoords2->append(new QGraphicsSimpleTextItem(hTxt, 0, canvas));
+		vCoords1.append(new QGraphicsSimpleTextItem(vTxt, 0, canvas));
+		hCoords1.append(new QGraphicsSimpleTextItem(hTxt, 0, canvas));
+		vCoords2.append(new QGraphicsSimpleTextItem(vTxt, 0, canvas));
+		hCoords2.append(new QGraphicsSimpleTextItem(hTxt, 0, canvas));
 	}
+}
+
+void Board::clearCoords()
+{
+	QList<QGraphicsSimpleTextItem*>::const_iterator i;
+#define FREE_ARRAY_OF_POINTERS(a)							\
+	for (i = a.begin(); i != a.end(); ++i)					\
+		delete *i;											\
+	a.clear();												\
+
+	FREE_ARRAY_OF_POINTERS(vCoords1);
+	FREE_ARRAY_OF_POINTERS(hCoords1);
+	FREE_ARRAY_OF_POINTERS(vCoords2);
+	FREE_ARRAY_OF_POINTERS(hCoords2);
 }
 
 Board::~Board()
 {
-//    delete coordsTip;
+	clearData();
     delete curStone;
     delete boardHandler;
-    marks->clear();
     delete marks;
-    ghosts->clear();
     delete ghosts;
     delete lastMoveMark;
     delete canvas;
@@ -393,7 +400,7 @@ void Board::drawCoordinates()
 	for (i=0; i<board_size; i++)
 	{
 		// Left side
-		coord = vCoords1->at(i);
+		coord = vCoords1.at(i);
 		coord->setPos(offsetX - offset + coord_centre - coord->boundingRect().width()/2,
 			      offsetY + square_size * (board_size - i - 1) - coord->boundingRect().height()/2);
 
@@ -403,7 +410,7 @@ void Board::drawCoordinates()
 			coord->hide();
 
 		// Right side
-		coord = vCoords2->at(i);
+		coord = vCoords2.at(i);
     		coord->setPos(offsetX + board_pixel_size + offset - coord_centre - coord->boundingRect().width()/2,
 			      offsetY + square_size * (board_size - i - 1) - coord->boundingRect().height()/2);
 
@@ -413,20 +420,20 @@ void Board::drawCoordinates()
 			coord->hide();
 
 		// Top
-		coord = hCoords1->at(i);
+		coord = hCoords1.at(i);
 		coord->setPos(offsetX + square_size * i - coord->boundingRect().width()/2,
 			      offsetY - offset + coord_centre - coord->boundingRect().height()/2 );
-		
+
 		if (showCoords)
 			coord->show();
 		else
 			coord->hide();
 
 		// Bottom
-		coord = hCoords2->at(i);
+		coord = hCoords2.at(i);
 		coord->setPos(offsetX + square_size * i - coord->boundingRect().width()/2,
 			      offsetY + offset + board_pixel_size - coord_centre - coord->boundingRect().height()/2);
-		
+
 		if (showCoords)
 			coord->show();
 		else
@@ -1033,6 +1040,7 @@ void Board::clearData()
 		delete nodeResultsDlg;
 		nodeResultsDlg = NULL;
     }
+	clearCoords();
 }
 
 void Board::updateComment()
@@ -1416,7 +1424,8 @@ void Board::initGame(GameData *d, bool sgf)
 	if (board_size != oldsize)
 	{
 		delete gatter;
-		gatter = new Gatter(canvas, board_size);	
+		gatter = new Gatter(canvas, board_size);
+		setupCoords();
 		changeSize();
 	}
 
