@@ -23,6 +23,7 @@
 #include <q3strlist.h>
 #include <qregexp.h>
 #include <q3ptrstack.h>
+#include <algorithm>
 
 #define STR_OFFSET 2000
 /* #define DEBUG_CODEC */
@@ -1173,10 +1174,19 @@ bool SGFParser::initGame(const QString &toParse, const QString &fileName)
 	// Board size
 	if (!parseProperty(toParse, "SZ", tmp))
 		return false;
-	if (!tmp.isEmpty())
-		gameData->size = tmp.toInt();
-	else
+	int columns, rows;
+	switch(sscanf(tmp.toAscii().constData(), "%d:%d", &columns, &rows))
+	{
+	case 2:
+		// different size is not supported, so use the maximum
+		gameData->size = std::max(columns, rows);
+		break;
+	case 1:
+		gameData->size = columns;
+		break;
+	default:
 		gameData->size = 19;
+	}
 
 	// Komi
 	if (!parseProperty(toParse, "KM", tmp))
