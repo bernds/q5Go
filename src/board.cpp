@@ -1420,14 +1420,11 @@ void Board::initGame(GameData *d, bool sgf)
 	// Clear up everything
 	clearData();
 
-	// Different board size? Redraw the canvas.
-	if (board_size != oldsize)
-	{
-		delete gatter;
-		gatter = new Gatter(canvas, board_size);
-		setupCoords();
-		changeSize();
-	}
+	// and setup back
+	delete gatter;
+	gatter = new Gatter(canvas, board_size);
+	setupCoords();
+	changeSize();
 
 	boardHandler->initGame(d, sgf);
 	updateCaption();
