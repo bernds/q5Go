@@ -9,7 +9,7 @@
 #include "setting.h"
 #include "boardhandler.h"
 #include "stone.h"
-#include <q3canvas.h>
+#include <Q3Canvas>
 
 class ImageHandler;
 class Mark;

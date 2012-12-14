@@ -5,7 +5,7 @@
 #ifndef MISC_H
 #define MISC_H
 
-#include <qstring.h>
+#include <QString>
 
 // some useful functions
 

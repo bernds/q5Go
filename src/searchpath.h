@@ -12,10 +12,10 @@
 #ifndef SEARCHPATH_H
 #define SEARCHPATH_H
 
-#include <qfile.h>
-#include <qdir.h>
-#include <qobject.h>
-#include <q3ptrlist.h>
+#include <QFile>
+#include <QDir>
+#include <QObject>
+#include <Q3PtrList>
 
 class SearchPath : public QObject
 {

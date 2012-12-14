@@ -5,9 +5,9 @@
 #ifndef GAMESTABLE_H
 #define GAMESTABLE_H
 
-#include <qvariant.h>
-#include <qdialog.h>
-#include <q3listview.h>
+#include <QVariant>
+#include <QDialog>
+#include <Q3ListView>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <Q3GridLayout>

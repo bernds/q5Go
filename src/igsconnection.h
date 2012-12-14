@@ -8,9 +8,9 @@
 #define IGSCONNECTION_H
 
 #include "igsinterface.h"
-#include <qobject.h>
+#include <QObject>
 #include <QTcpSocket>
-#include <qstring.h>
+#include <QString>
 
 class QTextCodec;
 

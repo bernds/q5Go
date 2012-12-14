@@ -2,9 +2,13 @@
 * qgo.cpp
 */
 
-#include "qgo.h"
 //Added by qt3to4:
 #include <Q3PtrList>
+#include <QDir>
+#include <QMessageBox>
+#include <QLineEdit>
+
+#include "qgo.h"
 #include "helpviewer.h"
 #include "board.h"
 #include "mainwindow.h"
@@ -13,10 +17,6 @@
 #include "audio.h"
 
 #include "config.h"
-#include <qmessagebox.h>
-#include <qdir.h>
-#include <qmessagebox.h>
-#include <qlineedit.h>
 #include "searchpath.h"
 
 #ifdef Q_OS_MACX
@@ -246,7 +246,7 @@ bool qGo::testSound(bool showmsg)
 	connectSound = retrieveSound("connect.wav", sp);
 
 #ifdef Q_WS_WIN
-	if (soundsFound() && !applicationPath) 
+	if (soundsFound() && applicationPath.isEmpty())
 	{
 	  QFile qFile = QFile(connectSound->fileName()); // QQQ
 	  QDir * dir = sp.findDirContainingFile(qFile); // QQQ
@@ -267,7 +267,8 @@ bool qGo::testSound(bool showmsg)
 		" /usr/share/" + PACKAGE + "/sounds/, " + tr("depending on your installation."));
 #else
 
-	if (applicationPath = setting->readEntry("PATH_SOUND"))
+	applicationPath = setting->readEntry("PATH_SOUND");
+	if (applicationPath.isEmpty())
 		return testSound(false);
 
 	QMessageBox::information(0, PACKAGE, tr("Sound files not found.") + "\n" +

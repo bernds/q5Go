@@ -14,7 +14,6 @@
 #include "misc.h"
 #include "config.h"
 #include "interfacehandler.h"
-#include "normaltools_gui.h"
 #include "move.h"
 #include "qnewgamedlg.h"
 #include <qlabel.h>

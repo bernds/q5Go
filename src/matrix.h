@@ -6,8 +6,8 @@
 #define MATRIX_H
 
 #include "globals.h"
-#include <qstringlist.h>
-#include <qmap.h>
+#include <QStringList>
+#include <QMap>
 
 class Matrix
 {

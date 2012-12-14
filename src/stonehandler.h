@@ -5,12 +5,12 @@
 #ifndef STONEHANDLER_H
 #define STONEHANDLER_H
 
-#include <q3intdict.h>
-#include <q3valuelist.h>
+#include <Q3IntDict>
+#include <Q3ValueList>
+#include <Q3PtrList>
 #include "defines.h"
 #include "matrix.h"
 #include "stone.h"
-#include <q3ptrlist.h>
 
 class Group;
 class BoardHandler;

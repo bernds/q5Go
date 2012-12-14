@@ -1,7 +1,6 @@
 /*
  *   mainwin.cpp - qGoClient's main window (cont. in tables.cpp)
  */
-#include "clientwindow_gui.h"
 #include "mainwin.h"
 #include "defines.h"
 #include "maintable.h"

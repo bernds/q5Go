@@ -5,7 +5,7 @@
 #ifndef TELNET_H
 #define TELNET_H
 
-#include <qobject.h>
+#include <QObject>
 
 class IGSInterface;
 

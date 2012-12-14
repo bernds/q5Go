@@ -8,17 +8,8 @@
 #include "gs_globals.h"
 #include "parser.h"
 #include "talk_gui.h"
-#include <qstring.h>
-#include <qobject.h>
-#include <q3listview.h>
-//#include <qmultilineedit.h>
-#include <q3textedit.h>        //eb16
-#include <qlineedit.h>
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qwidget.h>
-#include <qpalette.h>
-//Added by qt3to4:
+#include <QString>
+#include <QObject>
 #include <Q3PtrList>
 
 //-----------

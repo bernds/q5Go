@@ -9,10 +9,10 @@
 #include <map>
 
 #include <QGraphicsView>
-#include <qdatetime.h>
-#include <qpainter.h>
-#include <q3ptrlist.h>
-#include <q3intdict.h>
+#include <QDateTime>
+#include <QPainter>
+#include <Q3PtrList>
+#include <Q3IntDict>
 //Added by qt3to4:
 #include <QWheelEvent>
 #include <QResizeEvent>

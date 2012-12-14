@@ -5,7 +5,7 @@
 #ifndef IMAGEDATA_H
 #define IMAGEDATA_H
 
-#include <qimage.h>
+#include <QImage>
 //Added by qt3to4:
 #include <QPixmap>
 #include "defines.h"

@@ -5,30 +5,10 @@
 #include "preferences.h"
 #include "mainwindow.h"
 #include "qgo.h"
-//Added by qt3to4:
 #include <QPixmap>
+#include <Q3FileDialog>
+#include <Q3WhatsThis>
 #include "mainwin.h"
-#include <q3listbox.h>
-#include <qcheckbox.h>
-#include <q3whatsthis.h>
-#include <qcombobox.h>
-#include <qlineedit.h>
-#include <qfontdialog.h>
-#include <qcolordialog.h>
-#include <qcolor.h>
-#include <qpalette.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qtextcodec.h>
-#include <stdlib.h>
-#include <time.h>
-#include <qvalidator.h>
-#include <q3listview.h>
-#include <q3buttongroup.h>
-#include <qtooltip.h> 
-#include <qtoolbutton.h>
-#include <qobject.h>
-#include <qspinbox.h>
 
 #ifdef Q_OS_MACX
 #include <CoreFoundation/CFString.h>

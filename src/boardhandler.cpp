@@ -12,7 +12,6 @@
 #include "interfacehandler.h"
 #include "matrix.h"
 #include "textview.h"
-#include "normaltools_gui.h"
 #include "setting.h"
 #include "qnewgamedlg.h"
 #include <qapplication.h>
