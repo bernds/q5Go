@@ -23,6 +23,7 @@
 #include <q3strlist.h>
 #include <qregexp.h>
 #include <q3ptrstack.h>
+#include <algorithm>
 
 #define STR_OFFSET 2000
 /* #define DEBUG_CODEC */
@@ -38,7 +39,7 @@ public:
 	MyString()
 	{
 	}
-	
+
 	MyString(const QString &src)
 	{
 		Str = src;
@@ -48,35 +49,35 @@ public:
 	virtual ~MyString()
 	{
 	}
-	
+
 	virtual const QChar at(uint i) const { return Str.at(i); }
-	
+
 	virtual uint next_nonspace (uint i) const
 	{
 		// ignore lower characters, too
-		while (at(i).isSpace() || // == ' ' || at(i) == '\n' || at(i) == '\t' || 
+		while (at(i).isSpace() || // == ' ' || at(i) == '\n' || at(i) == '\t' ||
 			   at(i) >= 'a' && at(i) <= 'z')
 			i++;
 		return i;
 	}
-	
+
 	virtual int find(const char *c, unsigned int index) const
 	{
 		return Str.indexOf (c, index);
 	}
-	
+
 	virtual int find(char c, unsigned int index) const
 	{
 		return Str.indexOf (c, index);
 	}
-	
+
 	virtual unsigned int length() const
 	{
 		return strLength;
 	}
-	
+
 	unsigned int strLength;
-	
+
 private:
 	QString Str;
 };
@@ -89,24 +90,24 @@ public:
 		Str = src.latin1();
 		strLength = src.length();
 	}
-	
+
 	virtual ~MySimpleString()
 	{
 	}
-	
+
 	const QChar at(uint i) const { return Str[i]; }
-	
+
 	int find(const char *c, unsigned int index) const
 	{
 		if (index >= strLength)
 			return -1;
-		
+
 		// Offset. Hope that is enough. TODO Long comments check?
 		unsigned int l = index+STR_OFFSET<strLength ? index+STR_OFFSET : strLength,
 			cl = strlen(c),
 			i,
 			found;
-		
+
 		do {
 			found = i = 0;
 			do {
@@ -121,23 +122,23 @@ public:
 			return -1;
 		return index;
 	}
-	
+
 	int find(char c, unsigned int index) const
 	{
 		if (index >= strLength)
 			return -1;
-		
+
 		// Offset. Hope that is enough. TODO Long comments check?
 		unsigned int l = index+STR_OFFSET<strLength ? index+STR_OFFSET : strLength;
-		
+
 		while (Str[index] != c && index++ < l);
 		if (index == l)
 			return -1;
 		return index;
 	}
-	
+
 private:
-	const char* Str;    
+	const char* Str;
 };
 // End dirty ugly hack. :*)
 
@@ -159,16 +160,16 @@ bool SGFParser::parse(const QString &fileName)
 		qWarning("No filename given!");
 		return false;
 	}
-	
+
 	CHECK_PTR(boardHandler);
-	
+
 	QString toParse = loadFile(fileName);
 	if (toParse.isNull() || toParse.isEmpty())
 		return false;
 	// Convert old sgf/mgt format into new
 //	if (toParse.find("White[") != -1)  // Do a quick test if this is necassary.
 //		convertOldSgf(toParse);
-	
+
 	if (!initGame(toParse, fileName))
 		return corruptSgf();
 	return doParse(toParse);
@@ -185,34 +186,34 @@ bool SGFParser::parseString(const QString &toParse)
 QString SGFParser::loadFile(const QString &fileName)
 {
 	qDebug() << "Trying to load file " << fileName;
-	
+
 	QFile file(fileName);
-	
+
 	if (!file.exists())
 	{
 		QMessageBox::warning(0, PACKAGE, Board::tr("Could not find file:") + " " + fileName);
 		return NULL;
 	}
-	
+
 	if (!file.open(QIODevice::ReadOnly))
 	{
 		QMessageBox::warning(0, PACKAGE, Board::tr("Could not open file:") + " " + fileName);
 		return NULL;
 	}
-	
+
 	Q3TextStream txt(&file);
 	if (!initStream(&txt))
 	{
 		QMessageBox::critical(0, PACKAGE, Board::tr("Invalid text encoding given. Please check preferences!"));
 		return NULL;
 	}
-	
+
 	QString toParse;
-	
+
 	// Read file in string toParse
 	while (!txt.eof())
 		toParse.append(txt.readLine() + "\n");
-	
+
 	file.close();
 #ifdef DEBUG_CODEC
 	QMessageBox::information(0, "READING", toParse);
@@ -224,12 +225,12 @@ QString SGFParser::loadFile(const QString &fileName)
 bool SGFParser::initStream(Q3TextStream *stream)
 {
 	QTextCodec *codec = NULL;
-	
+
 	stream->setEncoding(Q3TextStream::Locale);
 #ifdef DEBUG_CODEC
 	QMessageBox::information(0, "LOCALE", QTextCodec::locale());
 #endif
-	
+
 	switch (static_cast<Codec>(setting->readIntEntry("CODEC")))
 	{
 	case codecNone:
@@ -237,7 +238,7 @@ bool SGFParser::initStream(Q3TextStream *stream)
 		QMessageBox::information(0, "CODEC", "NONE");
 #endif
 		break;
-		
+
 	case codecBig5:
 #ifdef DEBUG_CODEC
 		QMessageBox::information(0, "CODEC", "Big5");
@@ -251,7 +252,7 @@ bool SGFParser::initStream(Q3TextStream *stream)
 #endif
 		codec = QTextCodec::codecForName("EUC-JP");
 		break;
-		
+
 	case codecJIS:
 #ifdef DEBUG_CODEC
 		QMessageBox::information(0, "CODEC", "JIS");
@@ -259,21 +260,21 @@ bool SGFParser::initStream(Q3TextStream *stream)
 		/* ??? */
 		codec = QTextCodec::codecForName("JIS X 0201");
 		break;
-		
+
 	case codecSJIS:
 #ifdef DEBUG_CODEC
 		QMessageBox::information(0, "CODEC", "Shift JIS");
 #endif
 		codec = QTextCodec::codecForName("Shift-JIS");
 		break;
-		
+
 	case codecEucKr:
 #ifdef DEBUG_CODEC
 		QMessageBox::information(0, "CODEC", "EUC KR");
 #endif
 		codec = QTextCodec::codecForName("EUC-KR");
 		break;
-		
+
 	case codecGBK:
 #ifdef DEBUG_CODEC
 		QMessageBox::information(0, "CODEC", "GBK");
@@ -281,21 +282,21 @@ bool SGFParser::initStream(Q3TextStream *stream)
 		/* ??? */
 		codec = QTextCodec::codecForName("GB18030-0");
 		break;
-		
+
 	case codecTscii:
 #ifdef DEBUG_CODEC
 		QMessageBox::information(0, "CODEC", "TSCII");
 #endif
 		codec = QTextCodec::codecForName("TSCII");
 		break;
-		
+
 	default:
 		return false;
 	}
-	
+
 	if (codec != NULL && stream != NULL)
 		stream->setCodec(codec);
-	
+
 	return true;
 }
 
@@ -306,14 +307,14 @@ bool SGFParser::doParse(const QString &toParseStr)
 		qWarning("Failed loading from file. Is it empty?");
 		return false;
 	}
-	
+
 	const MyString *toParse = NULL;
 	if (static_cast<Codec>(setting->readIntEntry("CODEC")) == codecNone)
 		toParse = new MySimpleString(toParseStr);
 	else
 		toParse = new MyString(toParseStr);
 	CHECK_PTR(toParse);
-	
+
 	int pos = 0,
 		posVarBegin = 0,
 		posVarEnd = 0,
@@ -341,16 +342,16 @@ bool SGFParser::doParse(const QString &toParseStr)
 	movesStack.setAutoDelete(TRUE);
 	toRemove.setAutoDelete(TRUE);
 	Tree *tree = boardHandler->getTree();
-	
+
 	state = stateVarBegin;
-	
+
 	bool cancel = false;
 	int progressCounter = 0;
 	Q3ProgressDialog progress(Board::tr("Reading sgf file..."), Board::tr("Abort"), strLength,
 		boardHandler->board, "progress", true);
-	
+
 	// qDebug("File length = %d", strLength);
-	
+
 	progress.setProgress(0);
 	QString sss="";
 	do {
@@ -363,13 +364,13 @@ bool SGFParser::doParse(const QString &toParseStr)
 				break;
 			}
 		}
-		
+
 		// qDebug("POINTER = %d: %c", pointer, toParse->Str[pointer]);
-		
+
 		posVarBegin = toParse->find('(', pointer);
 		posVarEnd = toParse->find(')', pointer);
 		posNode = toParse->find(';', pointer);
-		
+
 		pos = minPos(posVarBegin, posVarEnd, posNode);
 		// qDebug("VarBegin %d, VarEnd %d, Move %d, MINPOS %d", posVarBegin, posVarEnd, posNode, pos);
 
@@ -380,21 +381,21 @@ bool SGFParser::doParse(const QString &toParseStr)
 		// Node -> VarEnd
 		if (state == stateNode && pos == posVarEnd)
 			state = stateVarEnd;
-		
+
 		// Node -> VarBegin
 		if (state == stateNode && pos == posVarBegin)
 			state = stateVarBegin;
-		
+
 		// VarBegin -> Node
 		else if (state == stateVarBegin && pos == posNode)
 			state = stateNode;
-		
+
 		// VarEnd -> VarBegin
 		else if (state == stateVarEnd && pos == posVarBegin)
 			state = stateVarBegin;
-		
+
 		// qDebug("State after switch = %d", state);
-		
+
 		// Do the work
 		switch (state)
 		{
@@ -404,33 +405,33 @@ bool SGFParser::doParse(const QString &toParseStr)
 				delete toParse;
 				return corruptSgf(pos);
 			}
-			
+
 			// qDebug("Var BEGIN at %d, moves = %d", pos, moves);
-			
+
 			stack.push(tree->getCurrent());
 			moveNum = new MoveNum;
 			moveNum->n = moves;
 			movesStack.push(moveNum);
 			pointer = pos + 1;
 			break;
-			
+
 		case stateVarEnd:
 			if (pos != posVarEnd)
 			{
 				delete toParse;
 				return corruptSgf(pos);
 			}
-			
+
 			// qDebug("VAR END");
-			
+
 			if (!movesStack.isEmpty() && !stack.isEmpty())
 			{
 				Move *m = stack.pop();
 				CHECK_PTR(m);
 				x = movesStack.pop()->n;
-				
+
 				// qDebug("Var END at %d, moves = %d, moves from stack = %d", pos, moves, x);
-				
+
 				for (i=moves; i > x; i--)
 				{
 					position = toRemove.pop();
@@ -439,28 +440,28 @@ bool SGFParser::doParse(const QString &toParseStr)
 					boardHandler->getStoneHandler()->removeStone(position->x, position->y);
 					// qDebug("Removing %d %d from stoneHandler.", position->x, position->y);
 				}
-				
+
 				moves = x;
-				
+
 				boardHandler->getStoneHandler()->updateAll(m->getMatrix(), false);
-				
+
 				tree->setCurrent(m);
 			}
 			pointer = pos + 1;
 			break;
-			
+
 		case stateNode:
 			if (pos != posNode)
 			{
 				delete toParse;
 				return corruptSgf(pos);
 			}
-			
+
 			// qDebug("Node at %d", pos);
 			commentStr = QString();
 			setup = false;
 			markType = markNone;
-			
+
 			// Create empty node
 			remember_root = isRoot;
 			if (!isRoot)
@@ -473,18 +474,18 @@ if (tree->getCurrent()->getTimeinfo())
 			}
 			else
 				isRoot = false;
-			
+
 			new_node = true;
-			
+
 			Property prop;
 			pos ++;
 
 			do {
 				uint tmppos=0;
 				pos = toParse->next_nonspace (pos);
-				
+
 				// qDebug("READING PROPERTY AT %d: %c", pos, toParse->at(pos));
-				
+
 				// if (toParse->find("B[", pos) == pos)
 				if (toParse->at(pos) == 'B' && toParse->at(tmppos = toParse->next_nonspace (pos + 1)) == '[')
 				{
@@ -639,9 +640,9 @@ if (tree->getCurrent()->getTimeinfo())
 					pos = toParse->next_nonspace (pos);
 //qDebug("SGF: next nonspace (1st):" + QString(toParse->at(pos)) + QString(toParse->at(pos+1)) + QString(toParse->at(pos+2)));
 				}
-				
+
 				// qDebug("FOUND PROP %d, pos at %d now", prop, pos);
-				
+
 				// Next is one or more '[xx]'.
 				// Only one in a move property, several in a setup propery
 				do {
@@ -650,7 +651,7 @@ if (tree->getCurrent()->getTimeinfo())
 						delete toParse;
 						return corruptSgf(pos);
 					}
-					
+
 					// Empty type
 					if (toParse->at(pos+1) == ']')
 					{
@@ -658,7 +659,7 @@ if (tree->getCurrent()->getTimeinfo())
 						if (prop == moveBlack || prop == moveWhite)
 						{
 							boardHandler->doPass(true);
-							
+
 							// Remember this move for later, to remove from the matrix.
 							position = new Position;
 							position->x = x;
@@ -666,11 +667,11 @@ if (tree->getCurrent()->getTimeinfo())
 							toRemove.push(position);
 							moves ++;
 						}
-						
+
 						pos += 2;
 						continue;
 					}
-					
+
 					switch (prop)
 					{
 					case moveBlack:
@@ -709,9 +710,9 @@ if (tree->getCurrent()->getTimeinfo())
 							y1 = y;
 							compressed_list = false;
 						}
-						
+
 						boardHandler->setModeSGF(setup || compressed_list ? modeEdit : modeNormal);
-						
+
 						int i, j;
 						for (i = x; i <= x1; i++)
 							for (j = y; j <= y1; j++)
@@ -728,7 +729,7 @@ if (tree->getCurrent()->getTimeinfo())
 								}
 								// tree->getCurrent()->getMatrix()->debug();
 								// qDebug("ADDING MOVE %s %d/%d", black?"B":"W", x, y);
-								
+
 								// Remember this move for later, to remove from the matrix.
 								position = new Position;
 								position->x = i;
@@ -736,9 +737,9 @@ if (tree->getCurrent()->getTimeinfo())
 								toRemove.push(position);
 								moves ++;
 							}
-						
+
 						new_node = false;
-						
+
 						if (compressed_list)
 							// Advance pos by 7
 							pos += 7;
@@ -747,12 +748,12 @@ if (tree->getCurrent()->getTimeinfo())
 							pos += 4;
 						break;
 					}
-						
+
 					case nodeName:
 					{
 						commentStr = QString();
 						bool skip = false;
-						
+
 						while (toParse->at(++pos) != ']')
 						{
 							if (static_cast<unsigned int>(pos) > strLength-1)
@@ -803,7 +804,7 @@ if (tree->getCurrent()->getTimeinfo())
 					{
 						commentStr = QString();
 						bool skip = false;
-						
+
 						while (toParse->at(++pos) != ']' ||
 							(toParse->at(pos-1) == '\\' && toParse->at(pos) == ']'))
 						{
@@ -924,7 +925,7 @@ if (tree->getCurrent()->getTimeinfo())
 							y = toParse->at(pos+2).toAscii() - 'a' + 1;
 							// qDebug("MARK: %d at %d/%d", markType, x, y);
 							pos += 3;
-							
+
 							// 'LB' property? Then we need to get the text
 							if (markType == markText && !old_label)
 							{
@@ -943,7 +944,7 @@ if (tree->getCurrent()->getTimeinfo())
 								moveStr.toInt(&check);  // Try to convert to Integer
 								// treat integers as characters...
 								check = false;
-								
+
 								if (check)
 									tree->getCurrent()->getMatrix()->
 										insertMark(x, y, markNumber);  // Worked, its a number
@@ -971,9 +972,9 @@ if (tree->getCurrent()->getTimeinfo())
 									y1 = y;
 									compressed_list = false;
 								}
-								
+
 //								boardHandler->setModeSGF(setup || compressed_list ? modeEdit : modeNormal);
-								
+
 								int i, j;
 								for (i = x; i <= x1; i++)
 									for (j = y; j <= y1; j++)
@@ -1055,28 +1056,28 @@ if (tree->getCurrent()->getTimeinfo())
 			    pos++;
         sss= toParse->at(pos);
 		} while (setup && toParse->at(pos) == '[');
-		
+
 		//tree->getCurrent()->getMatrix()->debug();
 		while (toParse->at(pos).isSpace())
 			pos++;
 
 	    } while (toParse->at(pos) != ';' && toParse->at(pos) != '(' && toParse->at(pos) != ')' &&
 		    static_cast<unsigned int>(pos) < strLength);
-	    
+
 	    // Advance pointer
 	    pointer = pos;
-	    
+
 	    break;
-	    
+
 	default:
 		delete toParse;
 		return corruptSgf(pointer);
 	}
-	
+
     } while (pointer < strLength && pos >= 0);
-    
+
     progress.setProgress(strLength);
-    
+
     delete toParse;
     return !cancel;
 }
@@ -1092,23 +1093,23 @@ bool SGFParser::corruptSgf(int where, QString reason)
 int SGFParser::minPos(int n1, int n2, int n3)
 {
 	int min;
-	
+
 	if (n1 != -1)
 		min = n1;
 	else if (n2 != -1)
 		min = n2;
 	else
 		min = n3;
-	
+
 	if (n1 < min && n1 != -1)
 		min = n1;
-	
+
 	if (n2 < min && n2 != -1)
 		min = n2;
-	
+
 	if (n3 < min && n3 != -1)
 		min = n3;
-	
+
 	return min;
 }
 
@@ -1117,11 +1118,11 @@ bool SGFParser::parseProperty(const QString &toParse, const QString &prop, QStri
 {
 	int pos, strLength=toParse.length();
 	result = "";
-	
+
 	pos = toParse.find(prop+"[");
 	if (pos == -1)
 		return true;
-	
+
 	pos += 2;
 	if (toParse[pos] != '[')
 		return corruptSgf(pos);
@@ -1129,7 +1130,7 @@ bool SGFParser::parseProperty(const QString &toParse, const QString &prop, QStri
 		result.append(toParse[pos]);
 	if (pos > strLength)
 		return corruptSgf(pos);
-	
+
 	return true;
 }
 
@@ -1161,7 +1162,7 @@ bool SGFParser::initGame(const QString &toParse, const QString &fileName)
 		gameData->playerBlack = tmp;
 	else
 		gameData->playerBlack = "Black";
-	
+
 	// Black player rank
 	if (!parseProperty(toParse, "BR", tmp))
 		return false;
@@ -1169,15 +1170,24 @@ bool SGFParser::initGame(const QString &toParse, const QString &fileName)
 		gameData->rankBlack = tmp;
 	else
 		gameData->rankBlack = "";
-	
+
 	// Board size
 	if (!parseProperty(toParse, "SZ", tmp))
 		return false;
-	if (!tmp.isEmpty())
-		gameData->size = tmp.toInt();
-	else
+	int columns, rows;
+	switch(sscanf(tmp.toAscii().constData(), "%d:%d", &columns, &rows))
+	{
+	case 2:
+		// different size is not supported, so use the maximum
+		gameData->size = std::max(columns, rows);
+		break;
+	case 1:
+		gameData->size = columns;
+		break;
+	default:
 		gameData->size = 19;
-	
+	}
+
 	// Komi
 	if (!parseProperty(toParse, "KM", tmp))
 		return false;
@@ -1185,7 +1195,7 @@ bool SGFParser::initGame(const QString &toParse, const QString &fileName)
 		gameData->komi = tmp.toFloat();
 	else
 		gameData->komi = 0.0;
-	
+
 	// Handicap
 	if (!parseProperty(toParse, "HA", tmp))
 		return false;
@@ -1193,7 +1203,7 @@ bool SGFParser::initGame(const QString &toParse, const QString &fileName)
 		gameData->handicap = tmp.toInt();
 	else
 		gameData->handicap = 0;
-	
+
 	// Result
 	if (!parseProperty(toParse, "RE", tmp))
 		return false;
@@ -1201,7 +1211,7 @@ bool SGFParser::initGame(const QString &toParse, const QString &fileName)
 		gameData->result = tmp;
 	else
 		gameData->result = "";
-	
+
 	// Date
 	if (!parseProperty(toParse, "DT", tmp))
 		return false;
@@ -1209,7 +1219,7 @@ bool SGFParser::initGame(const QString &toParse, const QString &fileName)
 		gameData->date = tmp;
 	else
 		gameData->date = "";
-	
+
 	// Place
 	if (!parseProperty(toParse, "PC", tmp))
 		return false;
@@ -1217,7 +1227,7 @@ bool SGFParser::initGame(const QString &toParse, const QString &fileName)
 		gameData->place = tmp;
 	else
 		gameData->place = "";
-	
+
 	// Copyright
 	if (!parseProperty(toParse, "CP", tmp))
 		return false;
@@ -1225,7 +1235,7 @@ bool SGFParser::initGame(const QString &toParse, const QString &fileName)
 		gameData->copyright = tmp;
 	else
 		gameData->copyright = "";
-	
+
 	// Game Name
 	if (!parseProperty(toParse, "GN", tmp))
 		return false;
@@ -1330,22 +1340,22 @@ bool SGFParser::initGame(const QString &toParse, const QString &fileName)
 	gameData->gameNumber = 0;
 
 	gameData->fileName = fileName;
-	
+
 	boardHandler->board->initGame(gameData, true);  // Set sgf flag
-	
+
 	return true;
 }
 
 bool SGFParser::exportSGFtoClipB(QString *str, Tree *tree)
 {
 	CHECK_PTR(tree);
-	
+
 	if (stream != NULL)
 		delete stream;
 	stream = new Q3TextStream(str, QIODevice::WriteOnly);
-	
+
 	bool res = writeStream(tree);
-	
+
 	delete stream;
 	stream = NULL;
 	return res;
@@ -1354,21 +1364,21 @@ bool SGFParser::exportSGFtoClipB(QString *str, Tree *tree)
 bool SGFParser::doWrite(const QString &fileName, Tree *tree)
 {
 	CHECK_PTR(tree);
-	
+
 	QFile file(fileName);
-	
+
 	if (!file.open(QIODevice::WriteOnly))
 	{
 		QMessageBox::warning(0, PACKAGE, Board::tr("Could not open file:") + " " + fileName);
 		return false;
 	}
-	
+
 	if (stream != NULL)
 		delete stream;
 	stream = new Q3TextStream(&file);
-	
+
 	bool res = writeStream(tree);
-	
+
 	file.flush();
 	file.close();
 	delete stream;
@@ -1385,17 +1395,17 @@ bool SGFParser::writeStream(Tree *tree)
 		delete stream;
 		return false;
 	}
-	
+
 	Move *root = tree->getRoot();
 	if (root == NULL)
 		return false;
-	
+
 	GameData *gameData = boardHandler->getGameData();
-	
+
 	// Traverse the tree recursive in pre-order
 	isRoot = true;
 	traverse(root, gameData);
-	
+
 	return true;
 }
 
@@ -1417,37 +1427,37 @@ void SGFParser::writeGameHeader(GameData *gameData)
 		<< "HA[" << gameData->handicap << "]"			// Handicap
 		<< "KM[" << gameData->komi << "]";				// Komi
 //		<< endl;
-	
+
 	if (gameData->timelimit != 0)
 		*stream << "TM[" << gameData->timelimit << "]";		// Timelimit
-	
+
 	if (!gameData->overtime.isEmpty())
 		*stream << "OT[" << gameData->overtime << "]" << endl;		// Overtime
-	
+
 	if (!gameData->playerWhite.isEmpty())
 		*stream << "PW[" << gameData->playerWhite << "]";  // White name
-	
+
 	if (!gameData->rankWhite.isEmpty())
 		*stream << "WR[" << gameData->rankWhite << "]";    // White rank
-	
+
 	if (!gameData->playerBlack.isEmpty())
 		*stream << "PB[" << gameData->playerBlack << "]";  // Black name
-	
+
 	if (!gameData->rankBlack.isEmpty())
 		*stream << "BR[" << gameData->rankBlack << "]";    // Black rank
-	
+
 	if (!gameData->result.isEmpty())
 		*stream << "RE[" << gameData->result << "]";       // Result
-	
+
 	if (!gameData->date.isEmpty())
 		*stream << "DT[" << gameData->date << "]";         // Date
-	
+
 	if (!gameData->place.isEmpty())
 		*stream << "PC[" << gameData->place << "]";         // Place
-	
+
 	if (!gameData->copyright.isEmpty())
 		*stream << "CP[" << gameData->copyright << "]";    // Copyright
-	
+
 	*stream << endl;
 }
 
@@ -1455,7 +1465,7 @@ void SGFParser::traverse(Move *t, GameData *gameData)
 {
 	*stream << "(";
 	int col = -1, cnt = 6;
-	
+
 	do {
 		if (isRoot)
 		{
@@ -1479,7 +1489,7 @@ void SGFParser::traverse(Move *t, GameData *gameData)
 			*stream << txt;
 			col++;
 		}
-		
+
 		Move *tmp = t->son;
 		if (tmp != NULL && tmp->brother != NULL)
 		{
@@ -1498,7 +1508,7 @@ bool SGFParser::parseASCII(const QString &fileName, ASCII_Import *charset, bool 
 	Q3TextStream *txt = NULL;
 	bool result = false;
 	asciiOffsetX = asciiOffsetY = 0;
-	
+
 #if 0
 	qDebug("BLACK STONE CHAR %c\n"
 		"WHITE STONE CHAR %c\n"
@@ -1513,18 +1523,18 @@ bool SGFParser::parseASCII(const QString &fileName, ASCII_Import *charset, bool 
 		charset->hBorder,
 		charset->vBorder);
 #endif
-	
+
 	if (isFilename)  // Load from file
 	{
 		QFile file;
-		
+
 		if (fileName.isNull() || fileName.isEmpty())
 		{
 			QMessageBox::warning(0, PACKAGE, Board::tr("No filename given!"));
 			delete txt;
 			return false;
 		}
-		
+
 		file.setName(fileName);
 		if (!file.exists())
 		{
@@ -1532,14 +1542,14 @@ bool SGFParser::parseASCII(const QString &fileName, ASCII_Import *charset, bool 
 			delete txt;
 			return false;
 		}
-		
+
 		if (!file.open(QIODevice::ReadOnly))
 		{
 			QMessageBox::warning(0, PACKAGE, Board::tr("Could not open file:") + " " + fileName);
 			delete txt;
 			return false;
 		}
-		
+
 		txt = new Q3TextStream(&file);
 		if (!initStream(txt))
 		{
@@ -1547,7 +1557,7 @@ bool SGFParser::parseASCII(const QString &fileName, ASCII_Import *charset, bool 
 			delete txt;
 			return false;
 		}
-		
+
 		result = parseASCIIStream(txt, charset);
 		file.close();
 	}
@@ -1559,7 +1569,7 @@ bool SGFParser::parseASCII(const QString &fileName, ASCII_Import *charset, bool 
 			delete txt;
 			return false;
 		}
-		
+
 		QString buf(fileName);
 		txt = new Q3TextStream(buf, QIODevice::ReadOnly);
 		if (!initStream(txt))
@@ -1568,10 +1578,10 @@ bool SGFParser::parseASCII(const QString &fileName, ASCII_Import *charset, bool 
 			delete txt;
 			return false;
 		}
-		
+
 		result = parseASCIIStream(txt, charset);
 	}
-	
+
 	delete txt;
 	return result;
 }
@@ -1579,22 +1589,22 @@ bool SGFParser::parseASCII(const QString &fileName, ASCII_Import *charset, bool 
 bool SGFParser::parseASCIIStream(Q3TextStream *stream, ASCII_Import *charset)
 {
 	CHECK_PTR(stream);
-	
+
 	Q3StrList asciiLines;
 	asciiLines.setAutoDelete(TRUE);
-	
+
 	int i=0, first=-1, last=-1, y=1;
 	bool flag=false;
 	QString dummy = QString(QChar(charset->vBorder)).append(charset->vBorder).append(charset->vBorder);  // "---"
-	
+
 	while (!stream->atEnd())
 	{
 		QString tmp = stream->readLine();
 		asciiLines.append(tmp.latin1());
-		
+
 		if (tmp.find('.') != -1)
 			flag = true;
-		
+
 		if (tmp.find(dummy) != -1)
 		{
 			if (first == -1 && !flag)
@@ -1664,17 +1674,17 @@ qDebug() << QString("found nr == %1").arg(nr);
 		asciiLines.clear();
 		return true;
 	}
-	
-	// qDebug("Y: FIRST = %d, LAST = %d", first, last);   
-	
+
+	// qDebug("Y: FIRST = %d, LAST = %d", first, last);
+
 	if (first == -1 && last != -1)
 		asciiOffsetY = boardHandler->board->getBoardSize() - last;
-	
+
 	Q3StrListIterator it(asciiLines);
 	for (; it.current() && y < boardHandler->board->getBoardSize(); ++it)
 		if (!doASCIIParse(it.current(), y, charset))
 			return false;
-		
+
 	asciiLines.clear();
 	return true;
 }
@@ -1682,25 +1692,25 @@ qDebug() << QString("found nr == %1").arg(nr);
 bool SGFParser::doASCIIParse(const QString &toParse, int &y, ASCII_Import *charset)
 {
 	int pos, x = 0, length = toParse.length();
-	
+
 	if (!checkBoardSize(toParse, charset))
 		return false;
-	
+
 	for (pos=toParse.find(charset->emptyPoint, 0); pos<length; pos++)
 	{
 		// qDebug("READING %d/%d", x, y);
 		if (x >= boardHandler->board->getBoardSize() - asciiOffsetX)  // Abort if right edge of board reached
 			break;
-		
+
 		// Empty point or star point
 		if (toParse[pos] == charset->emptyPoint ||
 			toParse[pos] == charset->starPoint)
 			x++;
-		
+
 		// Right border
 		else if (x>0 && toParse[pos] == charset->hBorder)
 			break;
-		
+
 		// White stone
 		else if (toParse[pos] == charset->whiteStone && x && y)
 		{
@@ -1708,7 +1718,7 @@ bool SGFParser::doASCIIParse(const QString &toParse, int &y, ASCII_Import *chars
 			// qDebug("W %d/%d", x, y);
 			boardHandler->addStone(stoneWhite, asciiOffsetX+x, asciiOffsetY+y);
 		}
-		
+
 		// Black stone
 		else if (toParse[pos] == charset->blackStone && x && y)
 		{
@@ -1716,7 +1726,7 @@ bool SGFParser::doASCIIParse(const QString &toParse, int &y, ASCII_Import *chars
 			// qDebug("B %d/%d", x, y);
 			boardHandler->addStone(stoneBlack, asciiOffsetX+x, asciiOffsetY+y);
 		}
-		
+
 		// Text label: a-z
 		else if (toParse[pos] >= 'a' && toParse[pos] <= 'z')
 		{
@@ -1724,7 +1734,7 @@ bool SGFParser::doASCIIParse(const QString &toParse, int &y, ASCII_Import *chars
 			// qDebug("MARK: %d/%d - %c", x, y, toParse[pos].latin1());
 			boardHandler->editMark(asciiOffsetX+x, asciiOffsetY+y, markText, toParse[pos]);
 		}
-		
+
 		// Number label: 1-9
 		else if (toParse[pos] >= '1' && toParse[pos] <= '9')
 		{
@@ -1733,10 +1743,10 @@ bool SGFParser::doASCIIParse(const QString &toParse, int &y, ASCII_Import *chars
 			boardHandler->editMark(asciiOffsetX+x, asciiOffsetY+y, markNumber, toParse[pos]);
 		}
 	}
-	
+
 	if (x)
 		y++;
-	
+
 	return true;
 }
 
@@ -1745,15 +1755,15 @@ bool SGFParser::checkBoardSize(const QString &toParse, ASCII_Import *charset)
 	// Determine x offset
 	int left = toParse.find(charset->hBorder),
 		right = toParse.find(charset->hBorder, left+1);
-	
+
 	// qDebug("Left = %d, Right = %d", left, right);
-	
+
 	if (right == -1)
 	{
 		int first = toParse.find(charset->emptyPoint),
 			tmp = toParse.find(charset->starPoint);
 		first = first > tmp && tmp != -1 ? tmp : first;
-		
+
 		if (left > first)
 			asciiOffsetX = boardHandler->board->getBoardSize() - (left - first)/2 - ((left-first)%2 ? 1 : 0);
 		else
@@ -1769,6 +1779,6 @@ bool SGFParser::checkBoardSize(const QString &toParse, ASCII_Import *charset)
 	}
 	else
 		asciiOffsetX = 0;
-	
+
 	return true;
 }
