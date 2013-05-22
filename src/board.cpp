@@ -153,7 +153,6 @@ void Board::clearCoords()
 
 Board::~Board()
 {
-	clearData();
     delete curStone;
     delete boardHandler;
     delete marks;
