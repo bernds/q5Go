@@ -254,9 +254,10 @@ MainWindow::MainWindow(QWidget* parent, const char* name, Qt::WFlags f)
 	timerIntervals[3] = 2.0;
 	timerIntervals[4] = 3.0;
 	timerIntervals[5] = 5.0;
-	
+
 	updateBoard();
 
+	mainWidget->setGameMode (modeNormal);
 	// restore board window
 	reStoreWindowSize("0", false);
 

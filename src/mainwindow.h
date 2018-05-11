@@ -48,7 +48,9 @@ public:
 	int checkModified(bool interactive=true);
 	void updateFont();
 	static QString getFileExtension(const QString &fileName, bool defaultExt=true);
-	void doScore(bool toggle) { mainWidget->doScore(toggle); }
+#if 0
+	void doScore(bool toggle) { mainWidget->doRealScore(toggle); }
+#endif
 	void doRealScore(bool toggle) { mainWidget->doRealScore(toggle); }
 	MainWidget *getMainWidget() { return mainWidget; }
 	bool reStoreWindowSize(QString, bool);

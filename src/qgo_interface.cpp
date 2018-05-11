@@ -396,8 +396,8 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 			if ((game_id == 0) && (src != 6)) //SL added eb 12
 				// set local board
 				qgobrd->set_Mode_real (modeNormal); // ??? was mode 5, identical to mode 1 ??
-			//else if (src==0)
-			//	qgobrd->set_Mode_real (modeObserve); // special case when not triggered by the 'observe' command (trail, for instance)
+			else if (src==0)
+				qgobrd->set_Mode_real (modeObserve); // special case when not triggered by the 'observe' command (trail, for instance)
 			else
 				qgobrd->set_Mode(src);
 
@@ -528,7 +528,7 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 						re1 = -re1;
 						wfirst = !wfirst;
 					}
-					
+
 					if (re1 < 0.2)
 					{
 						rs = "Jigo";
@@ -626,10 +626,10 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 					// board has been closed by mistake
 					if (g->bname == g->wname)
 						// teach
-						qgobrd->set_Mode(4);
+						qgobrd->set_Mode_real (modeTeach);
 					else
 						// match
-						qgobrd->set_Mode(3);
+						qgobrd->set_Mode (modeMatch);
 				}
 				else if (g->bname == g->wname && !g->bname.contains('*'))
 				{
@@ -1342,7 +1342,7 @@ void qGoIF::set_localboard(QString file)
 	qGoBoard *qb = new qGoBoard(this, qgo);
 	qb->set_id(0);
 	// normal mode
-	qb->set_Mode(1);
+	qb->set_Mode_real (modeNormal);
 	if (file == "/19/")
 	{
 		qb->set_komi("5.5");
@@ -1371,7 +1371,7 @@ void qGoIF::set_localgame()
 	qGoBoard *qb = new qGoBoard(this, qgo);
 	qb->set_id(0);
 	// normal mode
-	qb->set_Mode(1);
+	qb->set_Mode_real (modeNormal);
 	qb->get_win()->slotFileOpen();
 //	qb->get_win()->setOnlineMenu(false);
 
@@ -1792,20 +1792,19 @@ void qGoBoard::set_Mode_real(GameMode mode)
 		win->getBoard()->set_isLocalGame(false);
 		break;
 	case modeTeach:
-		gameMode = modeTeach;
 		win->getBoard()->set_isLocalGame(false);
 		break;
 	case modeComputer:
-		gameMode = modeComputer;
 		win->getBoard()->set_isLocalGame(true);
 		break;
 	}
 
-	win->setGameMode(gameMode);
+	win->setGameMode(mode);
 }
 
 void qGoBoard::set_Mode(int src)
 {
+  fprintf (stderr, "Set mode: %d\n", src);
 	switch (src)
 	{
 	case 1:

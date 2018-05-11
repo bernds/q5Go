@@ -195,16 +195,12 @@ void MainWidget::on_colorButton_clicked(bool checked)
 
 void MainWidget::doPass()
 {
-	if (interfaceHandler->board->getGameMode() == modeScore)
-	{
-		interfaceHandler->board->doCountDone();
-/*		if (scoreButton->text() != QString(tr("Edit")))
-		{
-			scoreButton->toggle();
-		}*/
-	}
-	else
-		interfaceHandler->board->doPass();
+	interfaceHandler->board->doPass();
+}
+
+void MainWidget::doCountDone()
+{
+	interfaceHandler->board->doCountDone();
 }
 
 void MainWidget::doResign()
@@ -232,7 +228,7 @@ void MainWidget::doRealScore(bool toggle)
 	static GameMode rememberMode;
 	static int      rememberTab;
 
-qDebug("MainWidget::doRealScore()");
+	qDebug("MainWidget::doRealScore()");
 	if (toggle)
 	{
 		rememberMode = interfaceHandler->board->getGameMode();
@@ -242,7 +238,8 @@ qDebug("MainWidget::doRealScore()");
 		setToolsTabWidget(tabTeachGameTree, tabDisable);
 		if (scoreButton->text() == QString(tr("Edit")))
 		{
-			passButton->setText(tr("Done"));
+			passButton->hide ();
+			doneButton->show ();
 			scoreButton->setEnabled(false);
 
       			if (rememberMode==modeComputer)
@@ -250,12 +247,10 @@ qDebug("MainWidget::doRealScore()");
         			adjournButton->setEnabled(false);
         			resignButton->setEnabled(false);
         			undoButton->setEnabled(false);
-      			}      
-		}
-    
-		else
-			passButton->setEnabled(false);
-			
+      			}
+		} else
+			passButton->setEnabled (false);
+
 		interfaceHandler->disableToolbarButtons();
 //		editTools->hide();
 		normalTools->hide();
@@ -270,12 +265,13 @@ qDebug("MainWidget::doRealScore()");
 		setToolsTabWidget(tabTeachGameTree, tabEnable);
 		if (scoreButton->text() == QString(tr("Edit")))
 		{
-			passButton->setText(tr("Pass"));
+			passButton->show ();
+			doneButton->hide ();
 			scoreButton->setEnabled(true);
 		}
 		else
 			passButton->setEnabled(true);
-			
+
 		interfaceHandler->restoreToolbarButtons();
 		scoreTools->hide();
 		normalTools->show();
@@ -288,34 +284,11 @@ qDebug("MainWidget::doRealScore()");
 	}
 }
 	
-void MainWidget::doScore(bool toggle)
+void MainWidget::doEdit()
 {
-	static bool     skipNextSignal;
-
-qDebug("MainWidget::doScore()");
-	if (scoreButton->text() == QString(tr("Edit")))
-	{
-		if (scoreButton->isOn())
-		{
-			// online mode -> don't score, open new Window instead
-			interfaceHandler->board->doEditBoardInNewWindow();
-			// setOn() causes a signal which has to be skipped over
-			skipNextSignal = true;
-			
-			scoreButton->setOn(false);
-			return;
-		}
-		
-		if (skipNextSignal)
-		{
-			// skip over this one incoming signal
-			skipNextSignal = false;
-			return;
-		}
-	}
-
-	// offline mode -> scoring
-	doRealScore(toggle);
+	qDebug("MainWidget::doEdit()");
+	// online mode -> don't score, open new Window instead
+	interfaceHandler->board->doEditBoardInNewWindow();
 }
 
 void MainWidget::sliderChanged(int n)
@@ -358,14 +331,15 @@ void MainWidget::setFont(const QFont &font)
 
 void MainWidget::setGameMode(GameMode mode)
 {
-	switch (mode)
-	{
+	switch (mode) {
 	case modeEdit:
 //		modeButton->setEnabled(true);
 		setToolsTabWidget(tabEdit, tabEnable);
 		setToolsTabWidget(tabTeachGameTree, tabDisable);
 		scoreButton->setEnabled(true);
-		scoreButton->setText(QObject::tr("Score", "button label"));
+		scoreButton->show ();
+		editButton->hide ();
+		doneButton->hide ();
 		passButton->setEnabled(true);
 		undoButton->setDisabled(true); // for later: undo button -> one step back
 		resignButton->setDisabled(true);
@@ -377,9 +351,11 @@ void MainWidget::setGameMode(GameMode mode)
 //		modeButton->setEnabled(true);
 		setToolsTabWidget(tabEdit, tabEnable);
 		setToolsTabWidget(tabTeachGameTree, tabDisable);
-		scoreButton->setDisabled(true);
-		scoreButton->setText(QObject::tr("Score", "button label"));
-		passButton->setDisabled(true);
+		scoreButton->setEnabled(true);
+		scoreButton->show ();
+		editButton->hide ();
+		doneButton->hide ();
+		passButton->setEnabled(true);
 		undoButton->setDisabled(true);
 		resignButton->setDisabled(true);
 		adjournButton->setDisabled(true);
@@ -390,8 +366,10 @@ void MainWidget::setGameMode(GameMode mode)
 //		modeButton->setDisabled(true);
 		setToolsTabWidget(tabEdit, tabDisable);
 		setToolsTabWidget(tabTeachGameTree, tabDisable);
-		scoreButton->setEnabled(true);
-		scoreButton->setText(QObject::tr("Edit", "button label"));
+		scoreButton->setEnabled(false);
+		scoreButton->hide ();
+		editButton->show ();
+		doneButton->hide ();
 		passButton->setDisabled(true);
 		undoButton->setDisabled(true);
 		resignButton->setDisabled(true);
@@ -403,10 +381,11 @@ void MainWidget::setGameMode(GameMode mode)
 //		modeButton->setDisabled(true);
 		setToolsTabWidget(tabEdit, tabDisable);
 		setToolsTabWidget(tabTeachGameTree, tabDisable);
-		scoreButton->setEnabled(true);
-		scoreButton->setText(QObject::tr("Edit", "button label"));
+		scoreButton->setEnabled(false);
+		scoreButton->hide ();
+		editButton->show ();
+		doneButton->hide ();
 		passButton->setEnabled(true);
-		passButton->setText(QObject::tr("Pass", "button label"));
 		undoButton->setEnabled(true);
 		resignButton->setEnabled(true);
 		adjournButton->setEnabled(true);
@@ -417,10 +396,11 @@ void MainWidget::setGameMode(GameMode mode)
 //		modeButton->setDisabled(true);
 		setToolsTabWidget(tabEdit, tabDisable);
 		setToolsTabWidget(tabTeachGameTree, tabDisable);
-		scoreButton->setEnabled(true);
-		scoreButton->setText(QObject::tr("Edit", "button label"));
+		scoreButton->setEnabled(false);
+		scoreButton->hide ();
+		editButton->show ();
+		doneButton->hide ();
 		passButton->setEnabled(true);
-		passButton->setText(QObject::tr("Pass", "button label"));
 		undoButton->setEnabled(true);
 		resignButton->setEnabled(true);
 		adjournButton->setEnabled(false);
@@ -431,10 +411,11 @@ void MainWidget::setGameMode(GameMode mode)
 //		modeButton->setDisabled(true);
 		setToolsTabWidget(tabEdit, tabDisable);
 		setToolsTabWidget(tabTeachGameTree, tabEnable);
-		scoreButton->setEnabled(true);
-		scoreButton->setText(QObject::tr("Edit", "button label"));
+		scoreButton->setEnabled(false);
+		scoreButton->hide ();
+		editButton->show ();
+		doneButton->hide ();
 		passButton->setEnabled(true);
-		passButton->setText(QObject::tr("Pass", "button label"));
 		undoButton->setEnabled(true);
 		resignButton->setEnabled(true);
 		adjournButton->setEnabled(true);
@@ -446,7 +427,9 @@ void MainWidget::setGameMode(GameMode mode)
 		setToolsTabWidget(tabEdit, tabDisable);
 //		setToolsTabWidget(tabNormalScore);
 		scoreButton->setEnabled(true);
-		scoreButton->setText(QObject::tr("Score", "button label"));
+		scoreButton->hide ();
+		editButton->hide ();
+		doneButton->show ();
 		passButton->setDisabled(true);
 		undoButton->setEnabled(true);
 		resignButton->setDisabled(true);

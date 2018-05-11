@@ -24,7 +24,6 @@ public:
 	void toggleSliderSignal(bool b) { sliderSignalToggle = b; }
 	virtual void setFont(const QFont &font);
 	void setToolsTabWidget(enum tabType=tabNormalScore, enum tabState=tabSet);
-	void doRealScore(bool);
 	GameMode toggleMode();
 	void setGameMode (GameMode);
 
@@ -35,11 +34,13 @@ public slots:
 	void slot_toolsTabChanged(QWidget*);
 	virtual void setMarkType(int);
 	virtual void doPass();
+	virtual void doCountDone();
 	virtual void doUndo();// { interfaceHandler->board->doUndo(); }
 	virtual void doAdjourn();// { interfaceHandler->board->doAdjourn(); }
 	virtual void doResign();// { interfaceHandler->board->doResign(); }
 	virtual void doRefresh();// { interfaceHandler->board->doRefresh(); }
-	virtual void doScore(bool);
+	virtual void doRealScore(bool);
+	virtual void doEdit();
 	virtual void sliderChanged(int);
 
 private:

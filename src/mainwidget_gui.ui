@@ -1729,18 +1729,48 @@ Send adjournment request to your opponent. If he accept it, the game will be adj
            <enum>Qt::NoFocus</enum>
           </property>
           <property name="toolTip">
-           <string>Request adjournment</string>
+           <string>Score the game</string>
           </property>
           <property name="whatsThis">
-           <string>Adjourn.
-
-Send adjournment request to your opponent. If he accept it, the game will be adjourned and saved.</string>
+           <string>Switch to coring mode.</string>
           </property>
           <property name="text">
            <string>Score</string>
           </property>
           <property name="checkable">
            <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="doneButton">
+          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+          <property name="toolTip">
+           <string>Accept the score and end the game.</string>
+          </property>
+          <property name="whatsThis">
+           <string>Accept the score, leave scoring mode and end the game.</string>
+          </property>
+          <property name="text">
+           <string>Done</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="editButton">
+          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+          <property name="toolTip">
+           <string>Edit the game in a new window.</string>
+          </property>
+          <property name="whatsThis">
+           <string>Open a window with an offline copy of the game for editing.</string>
+          </property>
+          <property name="text">
+           <string>Edit</string>
           </property>
          </widget>
         </item>
@@ -2936,7 +2966,39 @@ After placing and/or undo release button for returning to starting point automat
    <sender>scoreButton</sender>
    <signal>toggled(bool)</signal>
    <receiver>MainWidgetGui</receiver>
-   <slot>doScore(bool)</slot>
+   <slot>doRealScore(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWidgetGui</receiver>
+   <slot>doEdit()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>doneButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWidgetGui</receiver>
+   <slot>doCountDone()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>20</x>
