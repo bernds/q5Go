@@ -100,19 +100,17 @@ int main(int argc, char **argv)
 	Debug_Dialog *nonModal = new Debug_Dialog();
 	view = nonModal->TextView1;
 #endif
-	
 
-	
 	// get application path
 	QFileInfo program(argv[0]);
 	QString program_dir = program.dirPath(true);
 	qDebug() << "main:qt->PROGRAM.DIRPATH = " << program_dir;
 	qDebug() << "style = " << style;
-	
+
 	// restore last setting
-	setting = new Setting();                
+	setting = new Setting();
 	setting->program_dir = program_dir;
-	
+
 	// load values from file
 	setting->loadSettings();
 
@@ -122,7 +120,7 @@ int main(int argc, char **argv)
 	//const char *lang = setting->getLanguage();
 	qDebug() << "Checking for language settings..." << lang;
 	QString tr_dir = setting->getTranslationsDirectory(), loc;
-	
+
 	if (lang.isNull ())
 	{
 		qDebug("No language settings found, using system locale %s", QTextCodec::locale());
@@ -134,7 +132,7 @@ int main(int argc, char **argv)
 		qDebug(QString("Language settings found: ")+ lang);
 		loc = QString("qgo_") + lang;
 	}
-	
+
 	if (trans.load(loc, tr_dir))
 	{
 		qDebug("Translation loaded.");

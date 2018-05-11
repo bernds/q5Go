@@ -135,7 +135,7 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 						qb->setGameData();
 						qb->setMode();
 						qb->set_adj(false);
-						qb->get_win()->getInterfaceHandler()->toggleMode();
+//						qb->get_win()->toggleMode();
 						qb->set_runTimer();
 						qb->set_sentmovescmd(true);
 						emit signal_sendcommand("moves " + g->nr, false);
@@ -188,7 +188,7 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 		// computer game
 		case 6: game_id = ++localBoardCounter; //txt.toInt();
 			qDebug() << QString("computer game no. %1").arg(game_id);
-			break;      
+			break;
 
 		// remove all boards! -> if connection is closed
 		// but: set options for local actions
@@ -202,10 +202,7 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 //				qgobrd->get_win()->setOnlineMenu(false);
 
 				// set board editable...
-				qgobrd->set_Mode(1);
-				// toggle score 2x
-				qgobrd->get_win()->getInterfaceHandler()->toggleMode();
-				qgobrd->get_win()->getInterfaceHandler()->toggleMode();
+				qgobrd->set_Mode_real (modeNormal);
 
 				boardlist->remove();
 				qgobrd = boardlist->current();
@@ -252,8 +249,9 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 				return false;
 			}
 
-			boardlist->append(new qGoBoard(this, qgo));
-			qgobrd = boardlist->current();
+			qgobrd = new qGoBoard(this, qgo);
+			boardlist->append(qgobrd);
+
 //			qgobrd->get_win()->setOnlineMenu(true);
 
 			CHECK_PTR(qgobrd);
@@ -284,7 +282,7 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 				SIGNAL(signal_2passes(const QString&,const QString& )),
 				this,
 				SLOT(slot_removestones(const QString&, const QString&)));
-            
+
 			connect(qgobrd,
 				SIGNAL(signal_sendcommand(const QString&, bool)),
 				this,
@@ -397,9 +395,9 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 			qgobrd->set_myName(myName);
 			if ((game_id == 0) && (src != 6)) //SL added eb 12
 				// set local board
-				qgobrd->set_Mode(5);
+				qgobrd->set_Mode_real (modeNormal); // ??? was mode 5, identical to mode 1 ??
 			//else if (src==0)
-			//	qgobrd->set_Mode(2); // special case when not triggered by the 'observe' command (trail, for instance)
+			//	qgobrd->set_Mode_real (modeObserve); // special case when not triggered by the 'observe' command (trail, for instance)
 			else
 				qgobrd->set_Mode(src);
 
@@ -586,10 +584,7 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 //					qgobrd->get_win()->setOnlineMenu(false);
 
 					// set board editable...
-					qgobrd->set_Mode(1);
-					// toggle score 2x
-					qgobrd->get_win()->getInterfaceHandler()->toggleMode();
-					qgobrd->get_win()->getInterfaceHandler()->toggleMode();
+					qgobrd->set_Mode_real (modeNormal);
 
 #if 0
 					//autosave ?
@@ -1358,8 +1353,7 @@ void qGoIF::set_localboard(QString file)
 	else
 		qb->get_win()->doOpen(file, 0, false);
 //	qb->get_win()->setOnlineMenu(false);
-	qb->get_win()->getInterfaceHandler()->toggleMode();
-	qb->get_win()->getInterfaceHandler()->toggleMode();
+	qb->get_win()->setGameMode (modeNormal);
 
 	boardlist->append(qb);
 	qb->set_id(++localBoardCounter);
@@ -1380,8 +1374,6 @@ void qGoIF::set_localgame()
 	qb->set_Mode(1);
 	qb->get_win()->slotFileOpen();
 //	qb->get_win()->setOnlineMenu(false);
-	qb->get_win()->getInterfaceHandler()->toggleMode();
-	qb->get_win()->getInterfaceHandler()->toggleMode();
 
 	boardlist->append(qb);
 	qb->set_id(++localBoardCounter);
@@ -1398,7 +1390,6 @@ void qGoIF::openPreferences(int tab)
 {
 	MainWindow *win = new MainWindow(0, PACKAGE);
 
-	win->setParent(this);
 	win->dlgSetPreferences(tab);
 
 	delete win;
@@ -1466,7 +1457,6 @@ qGoBoard::qGoBoard(qGoIF *parent, qGo *qgo_) : QObject()
 	requests_set = false;
 	haveTitle = false;
 	win = new MainWindow(0, PACKAGE);
-	win->setParent(parent);
 
 	ExtendedTeachingGame = false;
 	IamTeacher = false;
@@ -1572,7 +1562,7 @@ void qGoBoard::set_game(Game *g)
 	setMode();
 	initGame();
 	setMode();
-	win->getInterfaceHandler()->toggleMode();
+//	win->toggleMode();
 	have_gameData = true;
 
 	// needed for correct sound
@@ -1788,47 +1778,62 @@ void qGoBoard::addtime_w(int m)
 	win->getInterfaceHandler()->setTimes(bt, b_stones, secToTime(wt_i), w_stones);
 }
 
+void qGoBoard::set_Mode_real(GameMode mode)
+{
+	switch (mode)
+	{
+	case modeNormal:
+		win->getBoard()->set_isLocalGame(true);
+		break;
+	case modeObserve:
+		win->getBoard()->set_isLocalGame(false);
+		break;
+	case modeMatch:
+		win->getBoard()->set_isLocalGame(false);
+		break;
+	case modeTeach:
+		gameMode = modeTeach;
+		win->getBoard()->set_isLocalGame(false);
+		break;
+	case modeComputer:
+		gameMode = modeComputer;
+		win->getBoard()->set_isLocalGame(true);
+		break;
+	}
+
+	win->setGameMode(gameMode);
+}
+
 void qGoBoard::set_Mode(int src)
 {
 	switch (src)
 	{
-		case 0:
-			break;
-		case 1:
-			gameMode = modeNormal;
-			win->getBoard()->set_isLocalGame(true);
-			break;
-		case 2:
-			gameMode = modeObserve;
-			win->getBoard()->set_isLocalGame(false);
-			break;
-		case 3:
-			gameMode = modeMatch;
-			win->getBoard()->set_isLocalGame(false);
-			break;
+	case 1:
+		set_Mode_real (modeNormal);
+		break;
+	case 2:
+		set_Mode_real (modeObserve);
+		break;
+	case 3:
+		set_Mode_real (modeMatch);
+		break;
 
-		case 4:
-			gameMode = modeTeach;
-			win->getBoard()->set_isLocalGame(false);
-			break;
+	case 4:
+		set_Mode_real (modeTeach);
+		win->getBoard()->set_isLocalGame(false);
+		break;
 
-		case 5:
-			// for game 0; local game
-			gameMode = modeNormal;
-			// correct button states
-			win->getBoard()->setMode(gameMode);
-			win->getInterfaceHandler()->toggleMode();
-			win->getInterfaceHandler()->toggleMode();
-			win->getBoard()->set_isLocalGame(true);
-			return;
+	case 5:
+		// for game 0; local game
+		set_Mode_real (modeNormal);
+		return;
 
-		case 6:                                       //added eb 12
-			gameMode = modeComputer;
-			win->getBoard()->set_isLocalGame(true);
-			break;                                      //end add eb 12
+	case 6:
+		set_Mode_real (modeComputer);
+		break;
+	default:
+		break;
 	}
-
-	win->getBoard()->setMode(gameMode);
 }
 
 void qGoBoard::set_move(StoneColor sc, QString pt, QString mv_nr)
@@ -2320,8 +2325,7 @@ void qGoBoard::playComputer(StoneColor c)
         break;
 
     default :
-    	; 	
-	
+    	;
    }
 
    QString computer_answer = win->getBoard()->getBoardHandler()->getGtp()->getLastMessage();
@@ -2345,7 +2349,7 @@ void qGoBoard::playComputer(StoneColor c)
 	win->getBoard()->getBoardHandler()->getGameData()->result = (myColorIsBlack ? "B+R" : "W+R");
 	slot_DoneComputer();
 	return ;
-	}	
+	}
    
    
    set_move(c==stoneBlack ? stoneWhite : stoneBlack , computer_answer, mv_nr);
@@ -2644,16 +2648,14 @@ void qGoBoard::slot_ttOpponentSelected(const QString &opponent)
 		if (opp == myName)
 		{
 			IamPupil = true;
-			// set up match
-			set_Mode(3);
+			set_Mode_real(modeMatch);
 			win->getBoard()->set_myColorIsBlack(mv_counter % 2);
 			set_myColorIsBlack(mv_counter % 2);
 		}
 		else
 		{
 			IamPupil = false;
-			// reset to observer
-			set_Mode(2);
+			set_Mode_real(modeObserve);
 		}
 	}
 }
@@ -2689,14 +2691,12 @@ void qGoBoard::slot_ttControls(bool on)
 		if (on)
 		{
 			// pupil is able to play both colors
-			// set up teach
-			set_Mode(4);
+			set_Mode_real (modeTeach);
 		}
 		else
 		{
 			// pupil has only one color
-			// set up match
-			set_Mode(3);
+			set_Mode_real (modeMatch);
 		}
 
 		// check whether controls key has been clicked or has been toggled by command

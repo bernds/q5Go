@@ -129,7 +129,7 @@ protected:
 	void editMove(StoneColor c, int x, int y);
 //	void updateMove(Move *m=0);
 	void updateVariationGhosts();
-	void createNode(const Matrix &mat, bool brother=false, bool setEditMode=true);
+	void createNode(const Matrix &mat, bool brother=false);
 	void traverseTerritory(Matrix *m, int x, int y, StoneColor &col);
 	bool checkNeighbourTerritory(Matrix *m, const int &x, const int &y, StoneColor &col);
 

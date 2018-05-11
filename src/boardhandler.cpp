@@ -1192,33 +1192,11 @@ void BoardHandler::pasteNode(bool brother)
 	board->setModified();
 }
 
-void BoardHandler::clearNode(bool brother)
+void BoardHandler::createNode(const Matrix &mat, bool brother)
 {
-	// Matrix *mat = new Matrix(board->getBoardSize());
-	// CHECK_PTR(mat);
-	Matrix mat(board->getBoardSize());
-	
-	createNode(mat, brother);
-}
-
-void BoardHandler::duplicateNode()
-{
-	// Matrix *mat = tree->getCurrent()->getMatrix();
-	// CHECK_PTR(mat);
-	
-	Matrix mat(*(tree->getCurrent()->getMatrix()));
-	
-	createNode(mat, true);
-}
-
-void BoardHandler::createNode(const Matrix &mat, bool brother, bool setEditMode)
-{
-	if (setEditMode)
-		board->getInterfaceHandler()->setEditMode();
-	
 	Move *m = new Move(stoneNone, -1, -1, currentMove, modeEdit, mat);
 	CHECK_PTR(m);
-	
+
 	// Remove all marks from this new move.
 	board->hideAllMarks();
 	board->removeLastMoveMark();
@@ -1520,6 +1498,7 @@ void BoardHandler::exportASCII()
 
 bool BoardHandler::importASCII(const QString &fileName, bool fromClipboard)
 {
+#if 0
 	QString filenameORstring = fromClipboard ? QApplication::clipboard()->text() : fileName;  
 	
 	if (gameMode == modeScore)
@@ -1535,6 +1514,7 @@ bool BoardHandler::importASCII(const QString &fileName, bool fromClipboard)
 	board->setModified();
 	
 	return true;
+#endif
 }
 
 bool BoardHandler::importSGFClipboard()
@@ -1582,7 +1562,7 @@ void BoardHandler::setHandicap(int handicap)
 	// change: handicap is first move
 	if (handicap > 1)
 	{
-		createNode(*tree->getCurrent()->getMatrix(), false, false);
+		createNode(*tree->getCurrent()->getMatrix(), false);
 		/* Move should already be set to 0 by board handler and the placement
 		 * of handicap stones won't change that */
 		//currentMove++;

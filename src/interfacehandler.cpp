@@ -43,177 +43,6 @@ InterfaceHandler::~InterfaceHandler()
     delete buttonState;
 }
 
-GameMode InterfaceHandler::toggleMode()
-{
-	GameMode mode = board->getGameMode();
-	
-	switch (mode)
-	{
-	case modeEdit:
-		board->setMode(modeNormal);
-//		modeButton->setEnabled(true);
-		mainWidget->setToolsTabWidget(tabEdit, tabEnable);
-		mainWidget->setToolsTabWidget(tabTeachGameTree, tabDisable);
-		scoreButton->setEnabled(true);
-		scoreButton->setText(QObject::tr("Score", "button label"));
-		passButton->setEnabled(true);
-		undoButton->setDisabled(true); // for later: undo button -> one step back
-		resignButton->setDisabled(true);
-		adjournButton->setDisabled(true);
-		refreshButton->setDisabled(true);
-		commentEdit->setReadOnly(false);
-		//commentEdit2->setReadOnly(true);
-		commentEdit2->setDisabled(true);
-		statusMode->setText(" " + QObject::tr("N", "Board status line: normal mode") + " ");
-		statusMark->setText(" - ");
-		return modeNormal;
-		
-	case modeNormal:
-		board->setMode(modeEdit);
-//		modeButton->setEnabled(true);
-		mainWidget->setToolsTabWidget(tabEdit, tabEnable);
-		mainWidget->setToolsTabWidget(tabTeachGameTree, tabDisable);
-		scoreButton->setDisabled(true);
-		scoreButton->setText(QObject::tr("Score", "button label"));
-		passButton->setDisabled(true);
-		undoButton->setDisabled(true);
-		resignButton->setDisabled(true);
-		adjournButton->setDisabled(true);
-		refreshButton->setDisabled(true);
-		commentEdit->setReadOnly(false);
-		//commentEdit2->setReadOnly(true);
-		commentEdit2->setDisabled(true);
-		statusMode->setText(" " + QObject::tr("E", "Board status line: edit mode") + " ");
-		statusMark->setText(getStatusMarkText(board->getMarkType()));
-		return modeEdit;
-		
-	case modeObserve:
-		board->setMode(modeObserve);
-//		modeButton->setDisabled(true);
-		mainWidget->setToolsTabWidget(tabEdit, tabDisable);
-		mainWidget->setToolsTabWidget(tabTeachGameTree, tabDisable);
-		scoreButton->setEnabled(true);
-		scoreButton->setText(QObject::tr("Edit", "button label"));
-		passButton->setDisabled(true);
-		undoButton->setDisabled(true);
-		resignButton->setDisabled(true);
-		adjournButton->setDisabled(true);
-		refreshButton->setEnabled(true);
-		commentEdit->setReadOnly(true);
-		commentEdit2->setReadOnly(false);
-		commentEdit2->setDisabled(false);
-    		editCut->setEnabled(false);
-    		editDelete->setEnabled(false);
-		fileNew->setEnabled(false);
-		fileNewBoard->setEnabled(false);
-		fileOpen->setEnabled(false);
-		statusMode->setText(" " + QObject::tr("O", "Board status line: observe mode") + " ");
-		statusMark->setText(getStatusMarkText(board->getMarkType()));
-		return modeObserve;
-		
-	case modeMatch : 
-		board->setMode(modeMatch);
-//		modeButton->setDisabled(true);
-		mainWidget->setToolsTabWidget(tabEdit, tabDisable);
-		mainWidget->setToolsTabWidget(tabTeachGameTree, tabDisable);
-		scoreButton->setEnabled(true);
-		scoreButton->setText(QObject::tr("Edit", "button label"));
-		passButton->setEnabled(true);
-		passButton->setText(QObject::tr("Pass", "button label"));
-		undoButton->setEnabled(true);
-		resignButton->setEnabled(true);
-		adjournButton->setEnabled(true);
-		refreshButton->setEnabled(true);
-		commentEdit->setReadOnly(true);
-		commentEdit2->setReadOnly(false);
-		commentEdit2->setDisabled(false);
-		fileNew->setEnabled(false);
-		fileNewBoard->setEnabled(false);
-		fileOpen->setEnabled(false);
-		statusMode->setText(" " + QObject::tr("P", "Board status line: play mode") + " ");
-		statusMark->setText(getStatusMarkText(board->getMarkType()));
-		return modeMatch;
-
-	case   modeComputer :           // added eb 12
-		board->setMode(modeComputer);
-//		modeButton->setDisabled(true);
-		mainWidget->setToolsTabWidget(tabEdit, tabDisable);
-		mainWidget->setToolsTabWidget(tabTeachGameTree, tabDisable);
-		scoreButton->setEnabled(true);
-		scoreButton->setText(QObject::tr("Edit", "button label"));
-		passButton->setEnabled(true);
-		passButton->setText(QObject::tr("Pass", "button label"));
-		undoButton->setEnabled(true);
-		resignButton->setEnabled(true);
-		adjournButton->setEnabled(false);
-		refreshButton->setEnabled(false);
-		commentEdit->setReadOnly(true);
-		commentEdit2->setReadOnly(false);
-		commentEdit2->setDisabled(false);
-		fileNew->setEnabled(false);
-		fileNewBoard->setEnabled(false);
-		fileOpen->setEnabled(false);
-		statusMode->setText(" " + QObject::tr("P", "Board status line: play mode") + " ");
-		statusMark->setText(getStatusMarkText(board->getMarkType()));
-		return modeComputer;               //end add eb 12
-      		
-	case modeTeach:
-		board->setMode(modeTeach);
-//		modeButton->setDisabled(true);
-		mainWidget->setToolsTabWidget(tabEdit, tabDisable);
-		mainWidget->setToolsTabWidget(tabTeachGameTree, tabEnable);
-		scoreButton->setEnabled(true);
-		scoreButton->setText(QObject::tr("Edit", "button label"));
-		passButton->setEnabled(true);
-		passButton->setText(QObject::tr("Pass", "button label"));
-		undoButton->setEnabled(true);
-		resignButton->setEnabled(true);
-		adjournButton->setEnabled(true);
-		refreshButton->setEnabled(true);
-		commentEdit->setReadOnly(true);
-		commentEdit2->setReadOnly(false);
-		commentEdit2->setDisabled(false);
-		fileNew->setEnabled(false);
-		fileNewBoard->setEnabled(false);
-		fileOpen->setEnabled(false);
-		statusMode->setText(" " + QObject::tr("T", "Board status line: teach mode") + " ");
-		statusMark->setText(getStatusMarkText(board->getMarkType()));
-		return modeTeach;
-		
-	case modeScore:
-//		modeButton->setDisabled(true);
-		mainWidget->setToolsTabWidget(tabEdit, tabDisable);
-//		mainWidget->setToolsTabWidget(tabNormalScore);
-		scoreButton->setEnabled(true);
-		scoreButton->setText(QObject::tr("Score", "button label"));
-		passButton->setDisabled(true);
-		undoButton->setEnabled(true);
-		resignButton->setDisabled(true);
-		adjournButton->setEnabled(true);
-		refreshButton->setEnabled(true);
-		commentEdit->setReadOnly(true);
-		//commentEdit2->setReadOnly(true);
-		commentEdit2->setDisabled(true);
-		statusMode->setText(" " + QObject::tr("S", "Board status line: score mode") + " ");
-		statusMark->setText(getStatusMarkText(board->getMarkType()));
-		return modeScore;
-		
-	default:
-		return modeNormal;
-	}
-}
-
-void InterfaceHandler::setEditMode()
-{
-//    modeButton->setOn(true);
-	mainWidget->setToolsTabWidget(tabEdit);
-//    normalTools->hide();
-//    editTools->show();
-    board->setMode(modeEdit);
-    statusMode->setText(" " + QObject::tr("E", "Board status line: edit mode") + " ");
-    statusMark->setText(getStatusMarkText(board->getMarkType()));
-}
-
 void InterfaceHandler::setMoveData(int n, bool black, int brothers, int sons, bool hasParent,
 								   bool hasPrev, bool hasNext, int lastX, int lastY)
 {
@@ -410,26 +239,25 @@ void InterfaceHandler::setMarkType(int m)
 		board->setCurStoneColor();
 		return;
 	}
-		
+
     default:
 		return;
     }
-	
-    statusMark->setText(getStatusMarkText(t));
+
     board->setMarkType(t);
 }
 
 void InterfaceHandler::clearData()
 {
-    clearComment();
-    setMoveData(0, true, 0, 0, false, false, false);
+	clearComment();
+	setMoveData(0, true, 0, 0, false, false, false);
 //    modeButton->setOn(false);
-	  mainWidget->setToolsTabWidget(tabNormalScore);
-    mainWidget->editButtonGroup->setButton(0);
+	mainWidget->setToolsTabWidget(tabNormalScore);
+	mainWidget->editButtonGroup->setButton(0);
 //    editTools->hide();
-    normalTools->capturesBlack->setText("0");
-    normalTools->capturesWhite->setText("0");
-	
+	normalTools->capturesBlack->setText("0");
+	normalTools->capturesWhite->setText("0");
+
     if (board->getGameMode() != modeObserve && 
 		board->getGameMode() != modeMatch &&
 		board->getGameMode() != modeTeach)
@@ -485,47 +313,6 @@ void InterfaceHandler::toggleMarks()
 		cur = 0;
     mainWidget->editButtonGroup->setButton(cur);
     setMarkType(cur);
-}
-
-const QString InterfaceHandler::getStatusMarkText(MarkType t)
-{
-    QString txt;
-    
-    switch(t)
-    {
-    case markNone:
-		txt = " S ";
-		break;
-		
-    case markSquare:
-		txt = " Q ";
-		break;
-		
-    case markCircle:
-		txt = " C ";
-		break;
-		
-    case markTriangle:
-		txt = " T ";
-		break;
-		
-    case markCross:
-		txt = " X ";
-		break;
-		
-    case markText:
-		txt = " A ";
-		break;
-		
-    case markNumber:
-		txt = " 1 ";
-		break;
-		
-    default:
-		txt = " ? ";
-    }
-    
-    return txt;
 }
 
 void InterfaceHandler::setCaptures(float black, float white, bool /*scored*/)
@@ -657,8 +444,6 @@ void InterfaceHandler::disableToolbarButtons()
     navAutoplay->setEnabled(false);
     editCut->setEnabled(false);
     editDelete->setEnabled(false);
-    navEmptyBranch->setEnabled(false);
-    navCloneNode->setEnabled(false);
     navSwapVariations->setEnabled(false);
     fileImportASCII->setEnabled(false);
     fileImportASCIIClipB->setEnabled(false);
@@ -688,8 +473,6 @@ void InterfaceHandler::restoreToolbarButtons()
 	navAutoplay->setEnabled(true);
 	editCut->setEnabled(true);
 	editDelete->setEnabled(true);
-	navEmptyBranch->setEnabled(true);
-	navCloneNode->setEnabled(true);
 	navSwapVariations->setEnabled(true);
 	fileImportASCII->setEnabled(true);
 	fileImportASCIIClipB->setEnabled(true);

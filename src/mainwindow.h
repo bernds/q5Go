@@ -58,13 +58,12 @@ public:
 	void clearObserver() { ListView_observers->clear(); }
 	Q3ListView *getListView_observers() { return ListView_observers; }
 	void updateObserverCnt();
-	void setParent(qGoIF *w) { parent_ = w; }
-	qGoIF *getParent() { return parent_; }
 	void dlgSetPreferences(int tab=-1);
 	Q3Action *get_fileQuit() { return fileQuit; }
 	Q3Action *get_fileClose() { return fileClose; }
 	int blackPlayerType, whitePlayerType ;
 	bool doSave(QString fileName, bool force=false);
+	void setGameMode (GameMode);
 
 protected:
 	void initActions();
@@ -76,7 +75,8 @@ protected:
 //	bool doSave(QString fileName, bool force=false);
 	void rememberLastDir(const QString &file);
 //  bool eventFilter( QObject *obj, QEvent *ev ); //SL added eb 11
-	
+	const QString getStatusMarkText(MarkType t);
+
 signals:
 	void signal_closeevent();
 	
@@ -117,8 +117,6 @@ public slots:
 	void slotNavNextBranch();
 	void slotNavNthMove();
 	void slotNavAutoplay(bool toggle);
-	void slotNavEmptyBranch();
-	void slotNavCloneNode();
 	void slotNavSwapVariations();
 	void slotSetPreferences();
 	void slotSetGameInfo();

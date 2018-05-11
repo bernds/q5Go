@@ -32,8 +32,6 @@ public:
 	InterfaceHandler();
 	~InterfaceHandler();
 	void clearData();
-	GameMode toggleMode();
-	void setEditMode();
 	void setMarkType(int m);
 	void setMoveData(int n, bool black, int brothers, int sons, bool hasParent,
 		bool hasPrev, bool hasNext, int lastX=-1, int lastY=-1);
@@ -48,7 +46,6 @@ public:
 	QString getTextLabelInput(QWidget *parent, const QString &oldText);
 	void showEditGroup();
 	void toggleMarks();
-	const QString getStatusMarkText(MarkType t);
 	void disableToolbarButtons();
 	void restoreToolbarButtons();
 	void setScore(int terrB, int capB, int terrW, int capW, float komi=0);
@@ -59,7 +56,7 @@ public:
 	Q3Action *navBackward,  *navForward, *navFirst, *navLast, *navNextVar, *navIntersection, //SL added eb 11
 		*navPrevVar, *navStartVar, *navNextBranch, *navMainBranch, *navNthMove, *navAutoplay,
 		*editCut, *editPaste, *editPasteBrother, *editDelete,
-		*navEmptyBranch, *navCloneNode, *navSwapVariations, *navPrevComment, *navNextComment,
+	        *navSwapVariations, *navPrevComment, *navNextComment,
  		*fileImportASCII, *fileImportASCIIClipB, *fileImportSgfClipB, *fileNew, *fileNewBoard, *fileOpen ;
 	Q3TextEdit *commentEdit;
 	QLineEdit *commentEdit2;
@@ -69,7 +66,7 @@ public:
 	ScoreTools *scoreTools;
 	Q3Frame *toolsFrame;
 	Board *board;
-	QLabel *statusMode, *statusTurn, *statusMark, *statusNav;
+	QLabel *statusTurn, *statusNav;
 	QPushButton /**modeButton,*/ *scoreButton, *passButton, *undoButton, *resignButton, 
 		*adjournButton, *refreshButton;
 	ButtonState *buttonState;

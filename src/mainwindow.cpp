@@ -128,15 +128,13 @@ MainWindow::MainWindow(QWidget* parent, const char* name, Qt::WFlags f)
 		viewToolBar->setOn(false);
 	if (!setting->readBoolEntry("EDITBAR"))
 		viewEditBar->setOn(false);
-	
+
 	if (!setting->readBoolEntry("STATUSBAR"))
 		viewStatusBar->setOn(false); //statusBar()->hide();
-	
+
 	if (!setting->readBoolEntry("MENUBAR"))
 		viewMenuBar->setOn(false); //menuBar()->hide();
 
-		
-		
 	interfaceHandler = 0;
 
 	// VIEW_COMMENT: 0 = see BOARDVERTCOMMENT, 1 = hor, 2 = ver
@@ -146,13 +144,13 @@ MainWindow::MainWindow(QWidget* parent, const char* name, Qt::WFlags f)
 	{
 		// show vertical comment
 		splitter = new QSplitter(Qt::Horizontal, this);
-		mainWidget = new MainWidget(splitter, "MainWidget");
+		mainWidget = new MainWidget(this, splitter, "MainWidget");
 		splitter_comment = new QSplitter(Qt::Vertical, splitter);
 	}
 	else
 	{
 		splitter = new QSplitter(Qt::Vertical, this);
-		mainWidget = new MainWidget(splitter, "MainWidget");
+		mainWidget = new MainWidget(this, splitter, "MainWidget");
 		splitter_comment = new QSplitter(Qt::Horizontal, splitter);
 	}
 	splitter->setOpaqueResize(false);
@@ -233,16 +231,12 @@ MainWindow::MainWindow(QWidget* parent, const char* name, Qt::WFlags f)
 	interfaceHandler->editPaste = editPaste;
 	interfaceHandler->editPasteBrother = editPasteBrother;
 	interfaceHandler->editDelete = editDelete;
-	interfaceHandler->navEmptyBranch = navEmptyBranch;
-	interfaceHandler->navCloneNode = navCloneNode;
 	interfaceHandler->navNthMove = navNthMove;
 	interfaceHandler->navAutoplay = navAutoplay;
 	interfaceHandler->navSwapVariations = navSwapVariations;
 	interfaceHandler->commentEdit = commentEdit;
 	interfaceHandler->commentEdit2 = commentEdit2;
-	interfaceHandler->statusMode = statusMode;
 	interfaceHandler->statusTurn = statusTurn;
-	interfaceHandler->statusMark = statusMark;
 	interfaceHandler->statusNav = statusNav;
 	interfaceHandler->slider = mainWidget->slider;
 	interfaceHandler->mainWidget = mainWidget;
@@ -278,7 +272,6 @@ MainWindow::~MainWindow()
 	delete splitter;
 
 	// status bar
-	delete statusMark;
 	delete statusMode;
 	delete statusNav;
 	delete statusTurn;
@@ -338,8 +331,6 @@ MainWindow::~MainWindow()
 	delete navIntersection; //SL added eb 11
 	delete navNthMove;
 	delete navAutoplay;
-	delete navEmptyBranch;
-	delete navCloneNode;
 	delete navSwapVariations;
 	delete setPreferences;
 	delete setGameInfo;
@@ -690,18 +681,6 @@ void MainWindow::initActions()
 	navAutoplay->setWhatsThis(tr("Autoplay\n\nStart/Stop autoplaying current game."));
 	connect(navAutoplay, SIGNAL(toggled(bool)), this, SLOT(slotNavAutoplay(bool)));
 	
-	// Navigation empty branch
-	navEmptyBranch = new Q3Action(tr("Empty branch"), tr("Empt&y branch"), 0, this);
-	navEmptyBranch->setStatusTip(tr("Create an empty branch"));
-	navEmptyBranch->setWhatsThis(tr("Empty branch\n\nCreate an empty branch."));
-	connect(navEmptyBranch, SIGNAL(activated()), this, SLOT(slotNavEmptyBranch()));
-	
-	// Navigation duplicate move
-	navCloneNode = new Q3Action(tr("Duplicate move"), tr("D&uplicate move"), 0, this);
-	navCloneNode->setStatusTip(tr("Copies and duplicates this move"));
-	navCloneNode->setWhatsThis(tr("Duplicate move\n\nCopies and duplicates this move."));
-	connect(navCloneNode, SIGNAL(activated()), this, SLOT(slotNavCloneNode()));
-	
 	// Navigation swap variations
 	navSwapVariations = new Q3Action(tr("Swap variations"), tr("S&wap variations"), 0, this);
 	navSwapVariations->setStatusTip(tr("Swap current move with previous variation"));
@@ -987,8 +966,6 @@ void MainWindow::initMenuBar()
 	navNthMove->addTo(navMenu);
 	navAutoplay->addTo(navMenu);
 	navMenu->insertSeparator();
-	navEmptyBranch->addTo(navMenu);
-	navCloneNode->addTo(navMenu);
 	navSwapVariations->addTo(navMenu);
  	navMenu->insertSeparator();		//added eb
 	navPrevComment->addTo(navMenu);
@@ -1136,14 +1113,6 @@ void MainWindow::initStatusBar()
 	QToolTip::add(statusMode, tr("Current mode"));
 	Q3WhatsThis::add(statusMode,
 		tr("Mode\nShows the current mode. 'N' for normal mode, 'E' for edit mode."));
-	
-	// The mark widget
-	statusMark = new QLabel(statusBar());
-	statusMark->setAlignment(Qt::AlignCenter | Qt::TextSingleLine);
-	statusMark->setText(" - ");
-	statusBar()->addWidget(statusMark, 0, true);  // Permanent indicator
-	QToolTip::add(statusMark, tr("Current edit mark"));
-	Q3WhatsThis::add(statusMark, tr("Mark\nShows the current edit mark. '-' in normal mode."));
 }
 
 void MainWindow::slotFileNewBoard()
@@ -1573,17 +1542,6 @@ void MainWindow::slotNavAutoplay(bool toggle)
 			timer->start(int(timerIntervals[setting->readIntEntry("TIMER_INTERVAL")] * 1000));
 		statusBar()->message(tr("Autoplay started."));
 	}
-}
-
-void MainWindow::slotNavEmptyBranch()
-{
-	board->clearNode();
-}
-
-void MainWindow::slotNavCloneNode()
-{
-	board->duplicateNode();
-	statusBar()->message(tr("Variation duplicated."));
 }
 
 void MainWindow::slotNavSwapVariations()
@@ -2575,8 +2533,8 @@ void MainWindow::slot_editBoardInNewWindow()
 	w->reStoreWindowSize("9", false);
 	
 	CHECK_PTR(w);
-	w->getInterfaceHandler()->toggleMode();
-	w->getInterfaceHandler()->toggleMode();
+	w->setGameMode (modeNormal);
+
 	// create update button
 	w->getInterfaceHandler()->refreshButton->setText(tr("Update"));
 	QToolTip::add(w->getInterfaceHandler()->refreshButton, tr("Update from online game"));
@@ -2611,5 +2569,80 @@ void MainWindow::slotSoundToggle(bool toggle)
 	board->getBoardHandler()->local_stone_sound = !toggle ;
 }
 
+void MainWindow::setGameMode(GameMode mode)
+{
+	mainWidget->setGameMode (mode);
+	switch (mode)
+	{
+	case modeEdit:
+//		modeButton->setEnabled(true);
+		commentEdit->setReadOnly(false);
+		//commentEdit2->setReadOnly(true);
+		commentEdit2->setDisabled(true);
+		statusMode->setText(" " + QObject::tr("N", "Board status line: normal mode") + " ");
+		break;
 
+	case modeNormal:
+//		modeButton->setEnabled(true);
+		commentEdit->setReadOnly(false);
+		//commentEdit2->setReadOnly(true);
+		commentEdit2->setDisabled(true);
+		statusMode->setText(" " + QObject::tr("E", "Board status line: edit mode") + " ");
+		break;
+
+	case modeObserve:
+//		modeButton->setDisabled(true);
+		commentEdit->setReadOnly(true);
+		commentEdit2->setReadOnly(false);
+		commentEdit2->setDisabled(false);
+    		editCut->setEnabled(false);
+    		editDelete->setEnabled(false);
+		fileNew->setEnabled(false);
+		fileNewBoard->setEnabled(false);
+		fileOpen->setEnabled(false);
+		statusMode->setText(" " + QObject::tr("O", "Board status line: observe mode") + " ");
+		break;
+
+	case modeMatch:
+//		modeButton->setDisabled(true);
+		commentEdit->setReadOnly(true);
+		commentEdit2->setReadOnly(false);
+		commentEdit2->setDisabled(false);
+		fileNew->setEnabled(false);
+		fileNewBoard->setEnabled(false);
+		fileOpen->setEnabled(false);
+		statusMode->setText(" " + QObject::tr("P", "Board status line: play mode") + " ");
+		break;
+
+	case modeComputer:           // added eb 12
+//		modeButton->setDisabled(true);
+		commentEdit->setReadOnly(true);
+		commentEdit2->setReadOnly(false);
+		commentEdit2->setDisabled(false);
+		fileNew->setEnabled(false);
+		fileNewBoard->setEnabled(false);
+		fileOpen->setEnabled(false);
+		statusMode->setText(" " + QObject::tr("P", "Board status line: play mode") + " ");
+		break;
+
+	case modeTeach:
+//		modeButton->setDisabled(true);
+		commentEdit->setReadOnly(true);
+		commentEdit2->setReadOnly(false);
+		commentEdit2->setDisabled(false);
+		fileNew->setEnabled(false);
+		fileNewBoard->setEnabled(false);
+		fileOpen->setEnabled(false);
+		statusMode->setText(" " + QObject::tr("T", "Board status line: teach mode") + " ");
+		break;
+
+	case modeScore:
+//		modeButton->setDisabled(true);
+		commentEdit->setReadOnly(true);
+		//commentEdit2->setReadOnly(true);
+		commentEdit2->setDisabled(true);
+		statusMode->setText(" " + QObject::tr("S", "Board status line: score mode") + " ");
+		break;
+	}
+}
 

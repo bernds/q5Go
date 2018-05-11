@@ -80,8 +80,6 @@ MainWindow* qGo::addBoardWindow(MainWindow *w)
 	{
 		qWarning("*** BOARD HAS NO PARENT");
 		w = new MainWindow(0, PACKAGE);
-		w->getInterfaceHandler()->toggleMode();
-		w->getInterfaceHandler()->toggleMode();
 	}
 	w->show();
 	boardList->append(w);

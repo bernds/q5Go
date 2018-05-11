@@ -81,6 +81,7 @@ public:
 	void set_game(Game *g);
 
 	void set_Mode(int);
+	void set_Mode_real (GameMode);
 	GameMode get_Mode() { return gameMode; }
 	void set_move(StoneColor, QString, QString);
 	void send_kibitz(const QString);
