@@ -625,6 +625,7 @@ am__EXEEXT_TRUE
 LTLIBOBJS
 LIBOBJS
 TOPSUBDIRS
+qtchooser
 RCC
 UIC
 MOC
@@ -8156,7 +8157,7 @@ test x"$pic_mode" = xno && libtool_flags="$libtool_flags --prefer-non-pic"
 case $host in
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 8159 "configure"' > conftest.$ac_ext
+  echo '#line 8160 "configure"' > conftest.$ac_ext
   if { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_compile\""; } >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -8971,6 +8972,55 @@ fi
 
 if test -z "$RCC" ; then
     as_fn_error $? "Cannot find 'rcc'" "$LINENO" 5
+fi
+
+# Extract the first word of "qtchooser", so it can be a program name with args.
+set dummy qtchooser; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_path_qtchooser+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  case $qtchooser in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_qtchooser="$qtchooser" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+as_dummy="$PATH:$QTDIR/bin"
+for as_dir in $as_dummy
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_qtchooser="$as_dir/$ac_word$ac_exec_ext"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+  ;;
+esac
+fi
+qtchooser=$ac_cv_path_qtchooser
+if test -n "$qtchooser"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $qtchooser" >&5
+$as_echo "$qtchooser" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+if test -z "QTCHOOSER" ; then
+    as_fn_error $? "Cannot find 'qtchooser'" "$LINENO" 5
+else
+    MOC='qtchooser -run-tool=moc -qt=qt4'
+    UIC='qtchooser -run-tool=uic -qt=qt4'
+    RCC='qtchooser -run-tool=rcc -qt=qt4'
 fi
 
 CXXFLAGS="$CXXFLAGS $QT4_CFLAGS"

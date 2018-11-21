@@ -69,6 +69,15 @@ if test -z "$RCC" ; then
     AC_MSG_ERROR([Cannot find 'rcc'])
 fi
 
+AC_PATH_PROG(qtchooser, qtchooser, , $PATH:$QTDIR/bin)
+if test -z "QTCHOOSER" ; then
+    AC_MSG_ERROR([Cannot find 'qtchooser'])
+else
+    MOC='qtchooser -run-tool=moc -qt=qt4'
+    UIC='qtchooser -run-tool=uic -qt=qt4'
+    RCC='qtchooser -run-tool=rcc -qt=qt4'
+fi
+
 CXXFLAGS="$CXXFLAGS $QT4_CFLAGS"
 
 AC_SUBST(QT4_LIBS)
