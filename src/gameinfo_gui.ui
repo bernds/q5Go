@@ -85,7 +85,7 @@
         </layout>
       </item>
       <item row="0" column="0">
-        <widget class="Q3Frame" name="Frame1">
+        <widget class="QFrame" name="Frame1">
           <property name="sizePolicy" stdset="0">
             <sizepolicy>
               <hsizetype>5</hsizetype>
@@ -189,7 +189,7 @@
         </widget>
       </item>
       <item row="1" column="0">
-        <widget class="Q3Frame" name="Frame2">
+        <widget class="QFrame" name="Frame2">
           <property name="frameShape" stdset="0">
             <enum>QFrame::StyledPanel</enum>
           </property>
