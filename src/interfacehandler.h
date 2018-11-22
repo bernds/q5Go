@@ -9,12 +9,9 @@
 #include "board.h"
 //Added by qt3to4:
 #include <QLabel>
-#include <Q3Frame>
-#include <Q3Action>
 class QLabel;
 class Q3TextEdit;
 class QLineEdit;
-class Q3Frame;
 class Board;
 class QWidget;
 class QString;
@@ -64,7 +61,7 @@ public:
 	NormalTools *normalTools;
 //	TeachTools *teachTools;
 	ScoreTools *scoreTools;
-	Q3Frame *toolsFrame;
+	QFrame *toolsFrame;
 	Board *board;
 	QLabel *statusTurn, *statusNav;
 	QPushButton /**modeButton,*/ *scoreButton, *passButton, *undoButton, *resignButton, 

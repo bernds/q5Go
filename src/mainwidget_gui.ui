@@ -22,7 +22,7 @@
   <property name="windowTitle">
    <string>MainWidgetGui</string>
   </property>
-  <widget class="Q3Frame" name="boardFrame">
+  <widget class="QFrame" name="boardFrame">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -36,9 +36,6 @@
    </property>
    <property name="frameShadow">
     <enum>QFrame::Raised</enum>
-   </property>
-   <property name="margin">
-    <number>0</number>
    </property>
    <layout class="QGridLayout">
     <property name="margin">
@@ -180,7 +177,7 @@ Maximum game move the slider can currently show.</string>
     </item>
    </layout>
   </widget>
-  <widget class="Q3Frame" name="toolsFrame">
+  <widget class="QFrame" name="toolsFrame">
    <property name="geometry">
     <rect>
      <x>460</x>
@@ -2660,7 +2657,7 @@ Edit Number marks on the board. Left click sets a mark, right click removes it.<
          <number>2</number>
         </property>
         <item row="0" column="0">
-         <widget class="Q3Frame" name="Frame9_2">
+         <widget class="QFrame" name="Frame9_2">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -2807,12 +2804,6 @@ After placing and/or undo release button for returning to starting point automat
    <class>Q3GroupBox</class>
    <extends>QGroupBox</extends>
    <header>Qt3Support/Q3GroupBox</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>Q3Frame</class>
-   <extends>QFrame</extends>
-   <header>Qt3Support/Q3Frame</header>
    <container>1</container>
   </customwidget>
   <customwidget>
