@@ -14,7 +14,7 @@
 #include <QLabel>
 #include <Q3PopupMenu>
 #include <QKeyEvent>
-#include <Q3Action>
+#include <QAction>
 
 #include "preferences.h"
 #include "board.h"
@@ -28,11 +28,11 @@ class QSplitter;
 class Q3MultiLineEdit;
 class StatusTip;
 class qGoIF;
-class QNewGameDlg; //SL added eb 12
+class QNewGameDlg;
 
 struct ASCII_Import;
 
-class MainWindow : public Q3MainWindow
+class MainWindow : public QMainWindow
 {
 	Q_OBJECT
 
@@ -61,8 +61,8 @@ public:
 	Q3ListView *getListView_observers() { return ListView_observers; }
 	void updateObserverCnt();
 	void dlgSetPreferences(int tab=-1);
-	Q3Action *get_fileQuit() { return fileQuit; }
-	Q3Action *get_fileClose() { return fileClose; }
+	QAction *get_fileQuit() { return fileQuit; }
+	QAction *get_fileClose() { return fileClose; }
 	int blackPlayerType, whitePlayerType ;
 	bool doSave(QString fileName, bool force=false);
 	void setGameMode (GameMode);
@@ -81,7 +81,7 @@ protected:
 
 signals:
 	void signal_closeevent();
-	
+
 public slots:
 	void slotFileNewBoard();
 	void slotFileNewGame();
@@ -111,9 +111,9 @@ public slots:
 	void slotNavLastByTime();
 	void slotNavNextVar();
 	void slotNavPrevVar();
-	void slotNavNextComment();      //added
-	void slotNavPrevComment();      //end add
-	void slotNavIntersection(); //SL added eb 11
+	void slotNavNextComment();
+	void slotNavPrevComment();
+	void slotNavIntersection();
 	void slotNavMainBranch();
 	void slotNavStartVar();
 	void slotNavNextBranch();
@@ -154,40 +154,40 @@ private:
 	InterfaceHandler *interfaceHandler;
 	MainWidget *mainWidget;
   	QString style;
-	
+
 	//	HelpViewer *helpViewer;
 	StatusTip *statusTip;
 	QLabel *statusMode, *statusTurn, *statusMark, *statusNav;
-	
+
 	QSplitter *splitter, *splitter_comment;
 //	QMultiLineEdit *commentEdit;
 	Q3TextEdit *commentEdit;
 	QLineEdit *commentEdit2;
 	Q3ListView *ListView_observers;
-	
-	Q3ToolBar *fileBar, *toolBar, *editBar;
 
-	Q3PopupMenu *fileMenu, *importExportMenu, *editMenu, *navMenu, *settingsMenu, *viewMenu, *helpMenu;
+	QToolBar *fileBar, *toolBar, *editBar;
 
-	Q3Action *escapeFocus, *toggleEdit, *toggleMarks;
-	Q3Action *fileNewBoard,*fileNew, *fileOpen, *fileSave, *fileSaveAs, *fileClose,
+	QMenu *fileMenu, *importExportMenu, *editMenu, *navMenu, *settingsMenu, *viewMenu, *helpMenu;
+
+	QAction *escapeFocus, *toggleEdit, *toggleMarks;
+	QAction *fileNewBoard,*fileNew, *fileOpen, *fileSave, *fileSaveAs, *fileClose,
 		*fileImportASCII, *fileImportASCIIClipB,*fileExportASCII,
 		*fileImportSgfClipB, *fileExportSgfClipB,
 		*fileExportPic, *fileExportPicClipB,
 		*fileQuit ;
-	Q3Action *editCut, *editPaste, *editPasteBrother, *editDelete, *editHideStones, //QQQ
+	QAction *editCut, *editPaste, *editPasteBrother, *editDelete, *editHideStones, //QQQ
 		*editNumberMoves, *editMarkBrothers,
 		*editMarkSons;
-	Q3Action *navBackward, *navForward, *navFirst, *navLast, *navNextVar, *navPrevVar,
+	QAction *navBackward, *navForward, *navFirst, *navLast, *navNextVar, *navPrevVar,
 		*navMainBranch, *navStartVar, *navNextBranch, *navNthMove, *navAutoplay, *navEmptyBranch,
 		*navCloneNode, *navSwapVariations, *navNextComment, *navPrevComment, *navIntersection ;       //SL added eb 11                               // added eb the 2 last
-	Q3Action *setPreferences, *setGameInfo, *soundToggle;
-	Q3Action *viewFileBar, *viewToolBar, *viewEditBar, *viewMenuBar, *viewStatusBar, *viewCoords,
+	QAction *setPreferences, *setGameInfo, *soundToggle;
+	QAction *viewFileBar, *viewToolBar, *viewEditBar, *viewMenuBar, *viewStatusBar, *viewCoords,
 		*viewSlider, *viewSidebar, *viewComment, *viewVertComment, *viewPinComment, *viewIncreaseSize,
 		*viewDecreaseSize, *viewSaveSize, *viewFullscreen;
-	Q3Action *helpManual, *helpSoundInfo, *helpAboutApp, *helpAboutQt;
+	QAction *helpManual, *helpSoundInfo, *helpAboutApp, *helpAboutQt;
 	QTimer *timer;
-	
+
 	float timerIntervals[6];
 	bool isFullScreen;
 
