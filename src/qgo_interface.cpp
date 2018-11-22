@@ -249,7 +249,7 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 				return false;
 			}
 
-			qgobrd = new qGoBoard(this, qgo);
+			qgobrd = new qGoBoard(qgo);
 			boardlist->append(qgobrd);
 
 //			qgobrd->get_win()->setOnlineMenu(true);
@@ -1339,7 +1339,7 @@ void qGoIF::slot_undo(const QString &player, const QString &move)
 // set independent local board
 void qGoIF::set_localboard(QString file)
 {
-	qGoBoard *qb = new qGoBoard(this, qgo);
+	qGoBoard *qb = new qGoBoard(qgo);
 	qb->set_id(0);
 	// normal mode
 	qb->set_Mode_real (modeNormal);
@@ -1368,7 +1368,7 @@ void qGoIF::set_localboard(QString file)
 // set independent local board + open game
 void qGoIF::set_localgame()
 {
-	qGoBoard *qb = new qGoBoard(this, qgo);
+	qGoBoard *qb = new qGoBoard(qgo);
 	qb->set_id(0);
 	// normal mode
 	qb->set_Mode_real (modeNormal);
@@ -1446,7 +1446,7 @@ void qGoIF::wrapupMatchGame(qGoBoard * qgobrd, bool doSave)
 
 
 // add new board window
-qGoBoard::qGoBoard(qGoIF *parent, qGo *qgo_) : QObject()
+qGoBoard::qGoBoard(qGo *qgo_) : QObject()
 {
 	qDebug("::qGoBoard()");
 	have_gameData = false;

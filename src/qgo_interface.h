@@ -62,7 +62,7 @@ class qGoBoard : public QObject
 	Q_OBJECT
 
 public:
-	qGoBoard(qGoIF*, qGo*);
+	qGoBoard(qGo*);
 	~qGoBoard();
 	int get_id() const { return id; }
 	void set_id(int i) { id = i; gd.gameNumber = i; }
