@@ -56,7 +56,6 @@ int main(int argc, char **argv)
 	bool found_sgf = false;
 	bool found_sgf_file = false;
 	QString sgf_file;
-	bool found_menu = false;
 
 	// look for arguments
 	int ac = argc;
@@ -166,26 +165,23 @@ int main(int argc, char **argv)
 	if (found_debug)
 		mainWindow->DODEBUG = true;
 
-	if (found_sgf)
-	{
-		// show only board, hide client
-		if (found_sgf_file)
-		{
-			qDebug("file to open: " + sgf_file);
-			mainWindow->openLocalBoard(sgf_file);
-		}
-		else
-			mainWindow->openLocalBoard();
-		mainWindow->hide();
-	}
+	mainWindow->hide();
 
 	// set main widget
 	myapp.setMainWidget(mainWindow);
 
 	QObject::connect(&myapp, SIGNAL(lastWindowClosed()), mainWindow, SLOT(quit()));
 
-	if (!found_sgf && !found_menu)
-	{
+	if (found_sgf) {
+		qGoBoard *qb = new qGoBoard();
+		qb->set_id(0);
+		qb->set_Mode_real (modeNormal);
+		// Default value.
+		qb->set_komi("6.5");
+		if (found_sgf_file)
+			qb->get_win()->doOpen(sgf_file, 0, false);
+		qb->get_win()->setGameMode (modeNormal);
+	} else {
 		mainWindow->setCaption(PACKAGE1 + QString(" V") + VERSION);
 		mainWindow->show();
 	}
