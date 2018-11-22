@@ -36,7 +36,6 @@ public:
 	void openManual();
 	int checkModified();
 	void updateAllBoardSettings();
-	void loadSound() { testSound(false); }
 	void playClick();
 	void playAutoPlayClick();
 	void playTalkSound();
@@ -78,6 +77,9 @@ private:
 	Sound *connectSound;
 	Sound *retrieveSound(const char *, SearchPath&);
 	bool   soundsFound();
+	void loadSound() { testSound(false); }
 };
+
+extern qGo *qgo;
 
 #endif

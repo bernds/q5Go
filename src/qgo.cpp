@@ -39,6 +39,7 @@ qGo::qGo() : QObject()
 	enterSound = NULL;
 	leaveSound = NULL;
 	connectSound = NULL;
+	loadSound ();
 }
 
 qGo::~qGo()

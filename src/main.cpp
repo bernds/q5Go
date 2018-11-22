@@ -33,6 +33,8 @@
 #include <q3dragobject.h>
 #include <qstyle.h>
 
+qGo *qgo;
+
 // global
 Setting *setting = 0;
 

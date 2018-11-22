@@ -62,7 +62,7 @@ class qGoBoard : public QObject
 	Q_OBJECT
 
 public:
-	qGoBoard(qGo*);
+	qGoBoard();
 	~qGoBoard();
 	int get_id() const { return id; }
 	void set_id(int i) { id = i; gd.gameNumber = i; }
@@ -106,7 +106,6 @@ public:
 	void dec_mv_counter() { mv_counter--; }
 	int get_mv_counter() { return mv_counter; }
 	bool get_requests_set() { return requests_set; }
-	qGo* get_qgo() { return qgo; }
 	void set_gsName(GSName g) { gsName = g; }
 	void addtime_b(int m);
 	void addtime_w(int m);
@@ -170,7 +169,6 @@ private:
 	//GameData    gd;
 	int         id;
 	MainWindow  *win;
-	qGo         *qgo;
 	int         mv_counter;
 	int	        stated_mv_count ;
 	bool		    sound;
@@ -202,7 +200,6 @@ public:
 //	bool set_observe(QString);
 	void set_initIF();
 	void set_myName(const QString &n) { myName = n; }
-	qGo  *get_qgo() { return qgo; };
 	void set_gsName(GSName n) { gsName = n; }
 	void set_localboard(QString file=QString::null);
 	void set_localgame();
@@ -242,7 +239,6 @@ protected:
 	bool parse_move(int src, GameInfo* gi=0, Game* g=0, QString txt=QString::null);
 
 private:
-	qGo     *qgo;
 	QWidget *parent;
 	// actual pointer, for speedup reason
 	qGoBoard *qgobrd;

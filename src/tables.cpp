@@ -447,7 +447,7 @@ void ClientWindow::slot_player(Player *p, bool cmdplayers)
 
 			// sound for entering - no sound while "who" cmd is executing
 			if (!cmdplayers)
-				qgoif->get_qgo()->playEnterSound();
+				qgo->playEnterSound();
 			else if (p->name == myAccount->acc_name)
 				// it's me
 				// - only possible if 'who'/'user' cmd is executing
@@ -545,7 +545,7 @@ void ClientWindow::slot_player(Player *p, bool cmdplayers)
 				// check if it was a watched player
 				if (lvi->text(6) == "W")
 				{
-					qgoif->get_qgo()->playLeaveSound();
+					qgo->playLeaveSound();
 					myAccount->num_watchedplayers--;
 				}
 

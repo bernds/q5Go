@@ -417,7 +417,7 @@ ClientWindow::ClientWindow(Q3MainWindow *parent, const char* name, Qt::WFlags fl
  	connect(this, SIGNAL(signal_computer_game(QNewGameDlg*)), qgoif, SLOT(slot_computer_game(QNewGameDlg*)));//SL added eb 12
 	connect(qgoif, SIGNAL(signal_sendcommand(const QString&, bool)), this, SLOT(slot_sendcommand(const QString&, bool)));
 	connect(qgoif, SIGNAL(signal_addToObservationList(int)), this, SLOT(slot_addToObservationList(int)));
-	connect(qgoif->get_qgo(), SIGNAL(signal_updateFont()), this, SLOT(slot_updateFont()));
+	connect(qgo, SIGNAL(signal_updateFont()), this, SLOT(slot_updateFont()));
 	connect(parser, SIGNAL(signal_timeAdded(int, bool)), qgoif, SLOT(slot_timeAdded(int, bool)));
 	//connect(parser, SIGNAL(signal_undoRequest(const QString&)), qgoif, SLOT(slot_undoRequest(const QString&)));
 
@@ -766,7 +766,7 @@ void ClientWindow::slot_connclosed()
 	qDebug("slot_connclosed()");
 	qDebug() << statusOnlineTime->text() << " -> slot_connclosed()";
 
-	qgoif->get_qgo()->playConnectSound();
+	qgo->playConnectSound();
 
 	// show current Server name in status bar
 	statusServer->setText(" OFFLINE ");
@@ -1048,7 +1048,7 @@ void ClientWindow::sendTextToApp(const QString &txt)
 			// init shouts
 			slot_talk("Shouts*", QString::null, false);
 			
-			qgoif->get_qgo()->playConnectSound();
+			qgo->playConnectSound();
 			break;
 
 		// end of 'who'/'user' cmd
@@ -1856,7 +1856,7 @@ void ClientWindow::slot_matchrequest(const QString &line, bool myrequest)
 		opponent = line.section(' ', 1, 1);
 
 		// play sound
-		qgoif->get_qgo()->playMatchSound();
+		qgo->playMatchSound();
 	}
 	else
 	{
@@ -2500,7 +2500,7 @@ void ClientWindow::slot_talk(const QString &name, const QString &text, bool ispl
 	// play a sound - not for shouts
 	if ((!text.isEmpty() && text[0] == '>' && bonus || !dlg->get_le()->hasFocus()) && !name.contains('*'))
 	{
-		qgoif->get_qgo()->playTalkSound();
+		qgo->playTalkSound();
 
 		// set cursor to last line
 		//dlg->get_mle()->setCursorPosition(dlg->get_mle()->lines(), 999); //eb16
@@ -2512,7 +2512,7 @@ void ClientWindow::slot_talk(const QString &name, const QString &text, bool ispl
 	}
 	else if (name == tr("msg*"))
 	{
-		qgoif->get_qgo()->playTalkSound();
+		qgo->playTalkSound();
 
 		// set cursor to last line
 //		dlg->get_mle()->setCursorPosition(dlg->get_mle()->numLines(), 999); //eb16
@@ -2711,7 +2711,7 @@ qDebug("eventFilter: keyPress -> Control + 0..9");
 		else if (key == Qt::Key_F1)
 		{
 			// help
-			qgoif->get_qgo()->openManual();
+			qgo->openManual();
 		}
 	}
 
@@ -2804,7 +2804,7 @@ void ClientWindow::keyPressEvent(QKeyEvent *e)
 
 		case Qt::Key_F1:
 			// help
-			qgoif->get_qgo()->openManual();
+			qgo->openManual();
 			break;
 
 		case Qt::Key_Escape:

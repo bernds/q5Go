@@ -52,9 +52,6 @@ qGoIF::qGoIF(QWidget *p) : QObject()
 	boardlist = new Q3PtrList<qGoBoard>;
 	boardlist->setAutoDelete(false);
 	localBoardCounter = 10000;
-
-	// init sound (all sounds!)
-	qgo->loadSound();
 }
 
 qGoIF::~qGoIF()
@@ -249,7 +246,7 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 				return false;
 			}
 
-			qgobrd = new qGoBoard(qgo);
+			qgobrd = new qGoBoard();
 			boardlist->append(qgobrd);
 
 //			qgobrd->get_win()->setOnlineMenu(true);
@@ -1339,7 +1336,7 @@ void qGoIF::slot_undo(const QString &player, const QString &move)
 // set independent local board
 void qGoIF::set_localboard(QString file)
 {
-	qGoBoard *qb = new qGoBoard(qgo);
+	qGoBoard *qb = new qGoBoard();
 	qb->set_id(0);
 	// normal mode
 	qb->set_Mode_real (modeNormal);
@@ -1368,7 +1365,7 @@ void qGoIF::set_localboard(QString file)
 // set independent local board + open game
 void qGoIF::set_localgame()
 {
-	qGoBoard *qb = new qGoBoard(qgo);
+	qGoBoard *qb = new qGoBoard();
 	qb->set_id(0);
 	// normal mode
 	qb->set_Mode_real (modeNormal);
@@ -1446,7 +1443,7 @@ void qGoIF::wrapupMatchGame(qGoBoard * qgobrd, bool doSave)
 
 
 // add new board window
-qGoBoard::qGoBoard(qGo *qgo_) : QObject()
+qGoBoard::qGoBoard() : QObject()
 {
 	qDebug("::qGoBoard()");
 	have_gameData = false;
@@ -1479,7 +1476,6 @@ qGoBoard::qGoBoard(qGo *qgo_) : QObject()
 	chk_b = -2;
 	chk_w = -2;
 #endif
-	qgo = qgo_;
 	qgo->addBoardWindow(win);
 
 	// disable some Menu items
