@@ -100,7 +100,6 @@ public slots:
 	void slotEditPaste();
 	void slotEditPasteBrother();
 	void slotEditDelete();
-	void slotEditHideStones(); // QQQ
 	void slotEditNumberMoves();
 	void slotEditMarkBrothers();
 	void slotEditMarkSons();
@@ -175,8 +174,7 @@ private:
 		*fileImportSgfClipB, *fileExportSgfClipB,
 		*fileExportPic, *fileExportPicClipB,
 		*fileQuit ;
-	QAction *editCut, *editPaste, *editPasteBrother, *editDelete, *editHideStones, //QQQ
-		*editNumberMoves, *editMarkBrothers,
+	QAction *editCut, *editPaste, *editPasteBrother, *editDelete, *editNumberMoves, *editMarkBrothers,
 		*editMarkSons;
 	QAction *navBackward, *navForward, *navFirst, *navLast, *navNextVar, *navPrevVar,
 		*navMainBranch, *navStartVar, *navNextBranch, *navNthMove, *navAutoplay, *navEmptyBranch,

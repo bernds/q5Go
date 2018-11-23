@@ -120,7 +120,6 @@ public:
 	bool importSGFClipboard() { return boardHandler->importSGFClipboard(); }
 	bool exportSGFtoClipB() { return boardHandler->exportSGFtoClipB(); }
 	void doCountDone();
-	void hideStones(); // QQQ
 	void numberMoves() { boardHandler->numberMoves(); }
 	void markVariations(bool sons) { boardHandler->markVariations(sons); }
 	void setBoardSize(int s) { board_size = s; }

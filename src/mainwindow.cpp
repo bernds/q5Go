@@ -314,7 +314,6 @@ MainWindow::~MainWindow()
 	delete editPaste;
 	delete editPasteBrother;
 	delete editDelete;
-	delete editHideStones; //QQQ
 	delete editNumberMoves;
 	delete editMarkBrothers;
 	delete editMarkSons;
@@ -578,13 +577,6 @@ void MainWindow::initActions()
 	editDelete->setStatusTip(tr("Delete this and all following positions"));
 	editDelete->setWhatsThis(tr("Delete\n\nDelete this and all following positions."));
 	connect(editDelete, SIGNAL(activated()), this, SLOT(slotEditDelete()));
-
-	// QQQ Toggle Hide Stones
-	editHideStones = new QAction(tr("Toggle &Hiding"), this);
-	editHideStones->setShortcut (Qt::ALT + Qt::Key_F2);
-	editHideStones->setStatusTip(tr("Toggle to Hide all Stones in the board."));
-	editHideStones->setWhatsThis(tr("Toggle to Hide Stones\n\nToggle to Hide all Stones in the board."));
-	connect(editHideStones, SIGNAL(activated()), this, SLOT(slotEditHideStones()));
 
 	// Edit number moves
 	editNumberMoves = new QAction(tr("&Number Moves"), this);
@@ -957,7 +949,6 @@ void MainWindow::initMenuBar()
 	editPasteBrother->addTo(editMenu);
 	editDelete->addTo(editMenu);
 	editMenu->insertSeparator();
-	editHideStones->addTo(editMenu); //QQQ
 	editNumberMoves->addTo(editMenu);
 	editMarkBrothers->addTo(editMenu);
 	editMarkSons->addTo(editMenu);
@@ -1435,11 +1426,6 @@ void MainWindow::slotEditPasteBrother()
 void MainWindow::slotEditDelete()
 {
 	board->deleteNode();
-}
-
-void MainWindow::slotEditHideStones() // QQQ
-{
-	board->hideStones();
 }
 
 void MainWindow::slotEditNumberMoves()

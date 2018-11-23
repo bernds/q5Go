@@ -440,15 +440,6 @@ void Board::drawCoordinates()
 	}
 }
 
-void Board::hideStones()  // QQQ
-{
-	isHidingStones ^= true;
-	if (isHidingStones)
-		hideAllStones();
-	else
-		showAllStones();
-}
-
 Stone* Board::addStoneSprite(StoneColor c, int x, int y, bool &shown)
 {
 	if (x < 1 || x > board_size || y < 1 || y > board_size)
