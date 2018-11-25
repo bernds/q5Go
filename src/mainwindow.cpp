@@ -1535,7 +1535,7 @@ void MainWindow::slotNavAutoplay(bool toggle)
 		else if (setting->readIntEntry("TIMER_INTERVAL") > 10)
 			setting->writeIntEntry("TIMER_INTERVAL", 10);
 		// check if time info available from sgf file
-		if (setting->readBoolEntry("SGF_TIME_TAGS") && board->getGameData()->timeSystem != none)
+		if (setting->readBoolEntry("SGF_TIME_TAGS") && board->getGameData()->timeSystem != time_none)
 			// set time to 1 sec
 			timer->start(1000);
 		else
@@ -1808,7 +1808,7 @@ void MainWindow::updateBoard()
 #endif
 	if (timer->isActive())
 	{
-		if (setting->readBoolEntry("SGF_TIME_TAGS") && board->getGameData()->timeSystem != none)
+		if (setting->readBoolEntry("SGF_TIME_TAGS") && board->getGameData()->timeSystem != time_none)
 			timer->changeInterval(1000);
 		else
 			timer->changeInterval(int(timerIntervals[setting->readIntEntry("TIMER_INVERVAL")] * 1000));
@@ -2100,7 +2100,7 @@ void MainWindow::slotTimerForward()
 	static int eventCounter = 0;
 	static int moveHasTimeInfo = 0;
 
-	if (timer->isActive() && setting->readBoolEntry("SGF_TIME_TAGS") && board->getGameData()->timeSystem != none)
+	if (timer->isActive() && setting->readBoolEntry("SGF_TIME_TAGS") && board->getGameData()->timeSystem != time_none)
 	{
 		bool isBlacksTurn = board->getBoardHandler()->getBlackTurn();
 

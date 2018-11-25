@@ -1527,7 +1527,7 @@ void qGoBoard::set_game(Game *g)
 	
 	else
 	{
-		gd.timeSystem = none;
+		gd.timeSystem = time_none;
 		gd.byoTime = 0;
 		gd.byoStones = 0;
 		gd.timelimit = 0;

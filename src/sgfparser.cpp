@@ -1263,7 +1263,7 @@ bool SGFParser::initGame(const QString &toParse, const QString &fileName)
 	else
 	{
 		gameData->timelimit = 0;
-		gameData->timeSystem = none;
+		gameData->timeSystem = time_none;
 	}
 
 	// Overtime == time system
@@ -1326,13 +1326,13 @@ bool SGFParser::initGame(const QString &toParse, const QString &fileName)
 		if (gameData->byoTime <= 0)
 		{
 			gameData->byoTime = 0;
-//			gameData->timeSystem = none;
+//			gameData->timeSystem = time_none;
 		}
 	}
 	else
 	{
 		gameData->overtime = "";
-//		gameData->timeSystem = none;
+//		gameData->timeSystem = time_none;
 		gameData->byoStones = 0;
 	}
 
