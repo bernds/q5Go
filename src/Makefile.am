@@ -7,7 +7,7 @@ q4go_METASOURCES = AUTO
 KDE_OPTIONS = qtonly
 
 DISTHEADERS_MOC = audio.h board.h gamedialog.h gamestable.h gametree.h helpviewer.h icons.h \
-	igsconnection.h maintable.h mainwidget.h mainwindow.h mainwin.h miscdialogs.h \
+	igsconnection.h mainwidget.h mainwindow.h mainwin.h miscdialogs.h \
 	misctools.h noderesults.h parser.h playertable.h preferences.h qgo.h \
 	qgo_interface.h qgtp.h qnewgamedlg.h searchpath.h tables.h telnet.h textview.h tip.h
 
@@ -18,7 +18,7 @@ DISTHEADERS_NOMOC = boardhandler.h config.h defines.h gatter.h globals.h group.h
 
 DISTSOURCES = audio.cpp alsa.cpp board.cpp boardhandler.cpp gamedialog.cpp \
 		gamestable.cpp gametree.cpp gatter.cpp group.cpp helpviewer.cpp \
-		igsconnection.cpp imagehandler.cpp interfacehandler.cpp main.cpp maintable.cpp \
+		igsconnection.cpp imagehandler.cpp interfacehandler.cpp main.cpp \
 		mainwidget.cpp  mainwin.cpp mainwindow.cpp mark.cpp matrix.cpp \
 		misc.cpp move.cpp msg_handler.cpp noderesults.cpp parser.cpp \
 		playertable.cpp preferences.cpp qgo.cpp qgo_interface.cpp qgtp.cpp \

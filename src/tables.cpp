@@ -3,7 +3,6 @@
  */
 #include "tables.h"
 #include "mainwin.h"
-#include "maintable.h"
 #include "playertable.h"
 #include "gamestable.h"
 #include "gs_globals.h"

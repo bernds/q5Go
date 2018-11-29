@@ -3,7 +3,6 @@
  */
 #include "mainwin.h"
 #include "defines.h"
-#include "maintable.h"
 #include "playertable.h"
 #include "gamestable.h"
 #include "gamedialog.h"

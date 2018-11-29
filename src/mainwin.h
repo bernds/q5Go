@@ -17,7 +17,6 @@
 #include "parser.h"
 #include "gs_globals.h"
 #include "gamedialog.h"
-#include "maintable.h"
 #include "gamestable.h"
 #include "playertable.h"
 #include "mainwindow.h"

@@ -73,16 +73,15 @@ am__objects_1 = audio.$(OBJEXT) alsa.$(OBJEXT) board.$(OBJEXT) \
 	gamestable.$(OBJEXT) gametree.$(OBJEXT) gatter.$(OBJEXT) \
 	group.$(OBJEXT) helpviewer.$(OBJEXT) igsconnection.$(OBJEXT) \
 	imagehandler.$(OBJEXT) interfacehandler.$(OBJEXT) \
-	main.$(OBJEXT) maintable.$(OBJEXT) mainwidget.$(OBJEXT) \
-	mainwin.$(OBJEXT) mainwindow.$(OBJEXT) mark.$(OBJEXT) \
-	matrix.$(OBJEXT) misc.$(OBJEXT) move.$(OBJEXT) \
-	msg_handler.$(OBJEXT) noderesults.$(OBJEXT) parser.$(OBJEXT) \
-	playertable.$(OBJEXT) preferences.$(OBJEXT) qgo.$(OBJEXT) \
-	qgo_interface.$(OBJEXT) qgtp.$(OBJEXT) qnewgamedlg.$(OBJEXT) \
-	setting.$(OBJEXT) sgfparser.$(OBJEXT) stone.$(OBJEXT) \
-	stonehandler.$(OBJEXT) tables.$(OBJEXT) telnet.$(OBJEXT) \
-	textview.$(OBJEXT) tip.$(OBJEXT) tree.$(OBJEXT) \
-	searchpath.$(OBJEXT)
+	main.$(OBJEXT) mainwidget.$(OBJEXT) mainwin.$(OBJEXT) \
+	mainwindow.$(OBJEXT) mark.$(OBJEXT) matrix.$(OBJEXT) \
+	misc.$(OBJEXT) move.$(OBJEXT) msg_handler.$(OBJEXT) \
+	noderesults.$(OBJEXT) parser.$(OBJEXT) playertable.$(OBJEXT) \
+	preferences.$(OBJEXT) qgo.$(OBJEXT) qgo_interface.$(OBJEXT) \
+	qgtp.$(OBJEXT) qnewgamedlg.$(OBJEXT) setting.$(OBJEXT) \
+	sgfparser.$(OBJEXT) stone.$(OBJEXT) stonehandler.$(OBJEXT) \
+	tables.$(OBJEXT) telnet.$(OBJEXT) textview.$(OBJEXT) \
+	tip.$(OBJEXT) tree.$(OBJEXT) searchpath.$(OBJEXT)
 am__objects_2 =
 am_q4go_OBJECTS = $(am__objects_1) $(am__objects_2)
 am__objects_3 = clientwindow_gui.moc.$(OBJEXT) \
@@ -97,15 +96,15 @@ am__objects_4 = audio.moc.$(OBJEXT) board.moc.$(OBJEXT) \
 	gamedialog.moc.$(OBJEXT) gamestable.moc.$(OBJEXT) \
 	gametree.moc.$(OBJEXT) helpviewer.moc.$(OBJEXT) \
 	icons.moc.$(OBJEXT) igsconnection.moc.$(OBJEXT) \
-	maintable.moc.$(OBJEXT) mainwidget.moc.$(OBJEXT) \
-	mainwindow.moc.$(OBJEXT) mainwin.moc.$(OBJEXT) \
-	miscdialogs.moc.$(OBJEXT) misctools.moc.$(OBJEXT) \
-	noderesults.moc.$(OBJEXT) parser.moc.$(OBJEXT) \
-	playertable.moc.$(OBJEXT) preferences.moc.$(OBJEXT) \
-	qgo.moc.$(OBJEXT) qgo_interface.moc.$(OBJEXT) \
-	qgtp.moc.$(OBJEXT) qnewgamedlg.moc.$(OBJEXT) \
-	searchpath.moc.$(OBJEXT) tables.moc.$(OBJEXT) \
-	telnet.moc.$(OBJEXT) textview.moc.$(OBJEXT) tip.moc.$(OBJEXT)
+	mainwidget.moc.$(OBJEXT) mainwindow.moc.$(OBJEXT) \
+	mainwin.moc.$(OBJEXT) miscdialogs.moc.$(OBJEXT) \
+	misctools.moc.$(OBJEXT) noderesults.moc.$(OBJEXT) \
+	parser.moc.$(OBJEXT) playertable.moc.$(OBJEXT) \
+	preferences.moc.$(OBJEXT) qgo.moc.$(OBJEXT) \
+	qgo_interface.moc.$(OBJEXT) qgtp.moc.$(OBJEXT) \
+	qnewgamedlg.moc.$(OBJEXT) searchpath.moc.$(OBJEXT) \
+	tables.moc.$(OBJEXT) telnet.moc.$(OBJEXT) \
+	textview.moc.$(OBJEXT) tip.moc.$(OBJEXT)
 am__objects_5 = $(am__objects_3) $(am__objects_4)
 am__objects_6 = q4go.rcc.$(OBJEXT)
 am__objects_7 = $(am__objects_6)
@@ -323,7 +322,7 @@ INCLUDES = $(all_includes)
 q4go_METASOURCES = AUTO
 KDE_OPTIONS = qtonly
 DISTHEADERS_MOC = audio.h board.h gamedialog.h gamestable.h gametree.h helpviewer.h icons.h \
-	igsconnection.h maintable.h mainwidget.h mainwindow.h mainwin.h miscdialogs.h \
+	igsconnection.h mainwidget.h mainwindow.h mainwin.h miscdialogs.h \
 	misctools.h noderesults.h parser.h playertable.h preferences.h qgo.h \
 	qgo_interface.h qgtp.h qnewgamedlg.h searchpath.h tables.h telnet.h textview.h tip.h
 
@@ -334,7 +333,7 @@ DISTHEADERS_NOMOC = boardhandler.h config.h defines.h gatter.h globals.h group.h
 
 DISTSOURCES = audio.cpp alsa.cpp board.cpp boardhandler.cpp gamedialog.cpp \
 		gamestable.cpp gametree.cpp gatter.cpp group.cpp helpviewer.cpp \
-		igsconnection.cpp imagehandler.cpp interfacehandler.cpp main.cpp maintable.cpp \
+		igsconnection.cpp imagehandler.cpp interfacehandler.cpp main.cpp \
 		mainwidget.cpp  mainwin.cpp mainwindow.cpp mark.cpp matrix.cpp \
 		misc.cpp move.cpp msg_handler.cpp noderesults.cpp parser.cpp \
 		playertable.cpp preferences.cpp qgo.cpp qgo_interface.cpp qgtp.cpp \
@@ -475,8 +474,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/imagehandler.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/interfacehandler.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/maintable.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/maintable.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mainwidget.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mainwidget.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mainwidget_gui.moc.Po@am__quote@
