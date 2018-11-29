@@ -17,7 +17,7 @@ void ClientWindow::prepare_tables(InfoType cmd)
 		case WHO: // delete player table
 		{
 			Q3ListViewItemIterator lv(ListView_players);
-			for (Q3ListViewItem *lvi; (lvi = lv.current());)
+			for (Q3ListViewItem *lvi; (lvi = (*lv));)
 			{
 				lv++;
 				delete lvi;
@@ -35,7 +35,7 @@ void ClientWindow::prepare_tables(InfoType cmd)
 		case GAMES: // delete games table
 		{
 			Q3ListViewItemIterator lv(ListView_games);
-			for (Q3ListViewItem *lvi; (lvi = lv.current());)
+			for (Q3ListViewItem *lvi; (lvi = (*lv));)
 			{
 				lv++;
 				delete lvi;
@@ -53,7 +53,7 @@ void ClientWindow::prepare_tables(InfoType cmd)
 			channellist.clear();
 			statusChannel->setText("");
 /*			QListViewItemIterator lv(ListView_ch);
-			for (QListViewItem *lvi; (lvi = lv.current());)
+			for (QListViewItem *lvi; (lvi = (*lv));)
 			{
 				lv++;
 				delete lvi;
@@ -78,7 +78,7 @@ QString ClientWindow::getPlayerRk(QString player)
 	Q3ListViewItem *lvpi;
 
 	// look for players in playerlist
-	for (; (lvpi = lvp.current()); lvp++)
+	for (; (lvpi = *lvp); lvp++)
 	{
 		// check if names are identical
 		if (lvpi->text(1) == player)
@@ -100,7 +100,7 @@ QString ClientWindow::getPlayerExcludeListEntry(QString player)
 		qDebug() << QString("getPlayerExcludeListEntry(%1)").arg(player);
 
 	// look for players in playerlist
-	for (; (lvpi = lvp.current()); lvp++)
+	for (; (lvpi = *lvp); lvp++)
 	{
 		// check if names are identical
 		if (lvpi->text(1) == player)
@@ -232,9 +232,9 @@ void ClientWindow::slot_game(Game* g)
 					g->Sz);
 			}
 
-			lv.current()->setText(12, myMark + rkToKey(g->wrank) + g->wname.lower() + ":" + excludeMark);
+			(*lv)->setText(12, myMark + rkToKey(g->wrank) + g->wname.lower() + ":" + excludeMark);
 
-			static_cast<GamesTableItem*>(lv.current())->ownRepaint();
+			static_cast<GamesTableItem*>((*lv))->ownRepaint();
 
 			// increase number of games
 			myAccount->num_games++;
@@ -249,7 +249,7 @@ void ClientWindow::slot_game(Game* g)
 			int found = 0;
 
 			// look for players in playerlist
-			for (; (lvpi = lvp.current()) && found < 2;)
+			for (; (lvpi = *lvp) && found < 2;)
 			{
 				// check if names are identical
 				if (lvpi->text(1) == g->wname || lvpi->text(1) == g->bname)
@@ -263,16 +263,16 @@ void ClientWindow::slot_game(Game* g)
 						// no rank given in case of continued game -> set rank in games table
 						if (lvpi->text(1) == g->wname)
 						{
-							lv.current()->setText(2, lvpi->text(2));
+							(*lv)->setText(2, lvpi->text(2));
 							// correct sorting of col 2 -> set col 12
-							lv.current()->setText(12, myMark + rkToKey(lvpi->text(2)) + lvpi->text(1).lower() + ":" + excludeMark);
+							(*lv)->setText(12, myMark + rkToKey(lvpi->text(2)) + lvpi->text(1).lower() + ":" + excludeMark);
 						}
 
 						// no else case! bplayer could be identical to wplayer!
 						if (lvpi->text(1) == g->bname)
-							lv.current()->setText(4, lvpi->text(2));
+							(*lv)->setText(4, lvpi->text(2));
 
-						static_cast<GamesTableItem*>(lv.current())->ownRepaint();
+						static_cast<GamesTableItem*>((*lv))->ownRepaint();
 					}
 				}
 
@@ -290,7 +290,7 @@ void ClientWindow::slot_game(Game* g)
 
 		if (g->nr != "@")
 		{
-			for (Q3ListViewItem *lvi; (lvi = lv.current()) && !found;)
+			for (Q3ListViewItem *lvi; (lvi = (*lv)) && !found;)
 			{
 				lv++;
 				// compare game id
@@ -307,7 +307,7 @@ void ClientWindow::slot_game(Game* g)
 		}
 		else
 		{
-			for (Q3ListViewItem *lvi; (lvi = lv.current()) && !found;)
+			for (Q3ListViewItem *lvi; (lvi = (*lv)) && !found;)
 			{
 				lv++;
 				// look for name
@@ -337,7 +337,7 @@ void ClientWindow::slot_game(Game* g)
 			int found = 0;
 
 			// look for players in playerlist
-			for (; (lvpi = lvp.current()) && found < 2;)
+			for (; (lvpi = *lvp) && found < 2;)
 			{
 				// check if numbers are identical
 				if (lvpi->text(3) == game_id)
@@ -368,7 +368,7 @@ void ClientWindow::slot_player(Player *p, bool cmdplayers)
 		// check if it's an empty list, i.e. all items deleted before
 		if (cmdplayers && !playerListEmpty)
 		{
-			for (PlayerTableItem *lvi; (lvi = static_cast<PlayerTableItem*>(lv.current()));)
+			for (PlayerTableItem *lvi; (lvi = static_cast<PlayerTableItem*>((*lv)));)
 			{
 				lv++;
 				// compare names
@@ -536,7 +536,7 @@ void ClientWindow::slot_player(Player *p, bool cmdplayers)
 	{
 		// {... has disconnected}
 		bool found = false;
-		for (Q3ListViewItem *lvi; (lvi = lv.current()) && !found;)
+		for (Q3ListViewItem *lvi; (lvi = (*lv)) && !found;)
 		{
 			lv++;
 			// compare names
