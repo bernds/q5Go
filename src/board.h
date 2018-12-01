@@ -194,7 +194,6 @@ private:
 	bool showSGFCoords;
 	bool showCursor;
 	bool antiClicko;
-	bool gatter_created;
 	Q3PtrList<Mark> *marks;
 	Q3PtrList<Stone> *ghosts;
 	Mark *lastMoveMark;

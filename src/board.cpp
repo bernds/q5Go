@@ -105,7 +105,6 @@ Board::Board(QWidget *parent, QGraphicsScene *c)
 	navIntersectionStatus = false;
 
 	updateCaption();
-	gatter_created = false;
 
 	isHidingStones = false; // QQQ
 	setupCoords();
