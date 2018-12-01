@@ -1359,8 +1359,8 @@ static struct EmbedImage {
 
 static const QImage& qembed_findImage( const QString& name )
 {
-    static Q3Dict<QImage> dict;
-    QImage* img = dict.find( name );
+    static QHash<QString, QImage *> dict;
+    QImage* img = dict.value ( name );
     if ( !img ) {
 	for ( int i = 0; embed_image_vec[i].data; i++ ) {
 	    if ( strcmp(embed_image_vec[i].name, name.latin1()) == 0 ) {

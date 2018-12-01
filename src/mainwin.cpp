@@ -51,10 +51,6 @@
 #include <qsgistyle.h>
 #endif
 
-#include <Q3Dict>
-
-#include <q3ptrlist.h>
-
 
 /*
  *   Clientwindow = MainWidget
