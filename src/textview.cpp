@@ -2,14 +2,14 @@
 * textview.cpp
 */
 
+#include <QFileDialog>
+#include <QTextStream>
+#include <QTextEdit>
+
 #include "config.h"
 #include "textview.h"
 #include "matrix.h"
-#include <q3multilineedit.h>
-#include <q3textedit.h>
 #include <qmessagebox.h>
-#include <q3filedialog.h>
-#include <q3textstream.h>
 #include <qclipboard.h> 
 #include <qapplication.h>
 
@@ -24,8 +24,8 @@ TextView::TextView(QWidget* parent, const char* name, bool modal, Qt::WFlags fl)
   : QDialog( parent, name, modal, fl )
 {
 	setupUi(this);
-	textEdit->setWordWrap(Q3TextEdit::FixedColumnWidth);
-	textEdit->setWrapColumnOrWidth(80);
+	textEdit->setWordWrapMode(QTextOption::WordWrap);
+	textEdit->setLineWrapColumnOrWidth(80);
 	QFont f("fixed", 10);
 	f.setStyleHint(QFont::TypeWriter);
 	textEdit->setFont(f);
@@ -44,7 +44,7 @@ TextView::~TextView()
 */
 void TextView::saveMe()
 {
-	QString fileName(Q3FileDialog::getSaveFileName(QString::null,
+	QString fileName(QFileDialog::getSaveFileName(QString::null,
 		tr("Text Files (*.txt);;All Files (*)"),
 		this));
 	if (fileName.isEmpty())
@@ -67,7 +67,7 @@ void TextView::saveMe()
 			return;
 		}
 		
-		Q3TextStream stream(&file);
+		QTextStream stream(&file);
 		stream << textEdit->text();
 		file.close();
 }
