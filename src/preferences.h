@@ -6,7 +6,6 @@
 #define PREFERENCESDIALOG_H
 
 #include "preferences_gui.h"
-#include <Q3PtrList>
 #include <Q3ListView>
 
 class QIntValidator;

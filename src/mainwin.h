@@ -37,12 +37,12 @@ private:
 	bool localecho;
 };
 
-class ClientWindow : public Q3MainWindow, public Ui::ClientWindowGui
+class ClientWindow : public QMainWindow, public Ui::ClientWindowGui
 {
 	Q_OBJECT
 
 public:
-	ClientWindow(Q3MainWindow* parent, const char* name, Qt::WFlags fl=Qt::WType_TopLevel);
+	ClientWindow(QMainWindow* parent, const char* name, Qt::WFlags fl=Qt::WType_TopLevel);
 	~ClientWindow();
 
 	int sendTextFromApp(const QString&, bool localecho=true);
@@ -284,6 +284,8 @@ private:
 
 	Q3PopupMenu	*seekMenu;                        //SL add eb 6
 	//QStringList 	*seekConditionList ;
+
+	QAction *whatsThis;
 };
 
 #endif

@@ -11,6 +11,7 @@
 #include <QKeyEvent>
 #include <QVBoxLayout>
 #include <QMenu>
+#include <QWhatsThis>
 
 #include "qgo.h"
 #include "mainwin.h"
@@ -36,7 +37,7 @@
 #include <qmessagebox.h>
 #include <qapplication.h>
 #include <q3listbox.h>
-#include <q3whatsthis.h>
+
 #if 0
 #include <qplatinumstyle.h>
 #include <qmotifstyle.h>
@@ -352,6 +353,7 @@ MainWindow::~MainWindow()
 	delete helpSoundInfo;
 	delete helpAboutApp;
 	delete helpAboutQt;
+	delete whatsThis;
 }
 
 void MainWindow::initActions()
@@ -1069,8 +1071,8 @@ void MainWindow::initToolBar()
 
 	toolBar->addSeparator();
 
-
-	Q3WhatsThis::whatsThisButton(toolBar);
+	whatsThis = QWhatsThis::createAction (this);
+	whatsThis->addTo (toolBar);
 
 	toolBar->addSeparator();
 
@@ -1101,7 +1103,7 @@ void MainWindow::initStatusBar()
 	statusTurn->setText(" 0 ");
 	statusBar()->addWidget(statusTurn, 0, true);  // Permanent indicator
 	QToolTip::add(statusTurn, tr("Current move"));
-	Q3WhatsThis::add(statusTurn, tr("Move\nDisplays the number of the current turn and the last move played."));
+	QWhatsThis::add(statusTurn, tr("Move\nDisplays the number of the current turn and the last move played."));
 	
 	// The nav widget
 	statusNav = new QLabel(statusBar());
@@ -1109,7 +1111,7 @@ void MainWindow::initStatusBar()
 	statusNav->setText(" 0/0 ");
 	statusBar()->addWidget(statusNav, 0, true);  // Permanent indicator
 	QToolTip::add(statusNav, tr("Brothers / sons"));
-	Q3WhatsThis::add(statusNav, tr("Navigation\nShows the brothers and sons of the current move."));
+	QWhatsThis::add(statusNav, tr("Navigation\nShows the brothers and sons of the current move."));
 	
 	// The mode widget
 	statusMode = new QLabel(statusBar());
@@ -1117,7 +1119,7 @@ void MainWindow::initStatusBar()
 	statusMode->setText(" " + QObject::tr("N", "Board status line: normal mode") + " ");
 	statusBar()->addWidget(statusMode, 0, true);  // Permanent indicator
 	QToolTip::add(statusMode, tr("Current mode"));
-	Q3WhatsThis::add(statusMode,
+	QWhatsThis::add(statusMode,
 		tr("Mode\nShows the current mode. 'N' for normal mode, 'E' for edit mode."));
 }
 
@@ -2536,7 +2538,7 @@ void MainWindow::slot_editBoardInNewWindow()
 	// create update button
 	w->getInterfaceHandler()->refreshButton->setText(tr("Update"));
 	QToolTip::add(w->getInterfaceHandler()->refreshButton, tr("Update from online game"));
-	Q3WhatsThis::add(w->getInterfaceHandler()->refreshButton, tr("Update from online game to local board and supersede own changes."));
+	QWhatsThis::add(w->getInterfaceHandler()->refreshButton, tr("Update from online game to local board and supersede own changes."));
 	w->getInterfaceHandler()->refreshButton->setEnabled(true);
 	connect(w->getInterfaceHandler()->refreshButton, SIGNAL(clicked()), this, SLOT(slotFileExportSgfClipB()));
 	connect(w->getInterfaceHandler()->refreshButton, SIGNAL(clicked()), w, SLOT(slotFileImportSgfClipB()));

@@ -4,7 +4,7 @@
   <comment></comment>
   <exportmacro></exportmacro>
   <class>ClientWindowGui</class>
-  <widget class="Q3MainWindow" name="ClientWindowGui">
+  <widget class="QMainWindow" name="ClientWindowGui">
     <property name="geometry">
       <rect>
         <x>0</x>
@@ -676,10 +676,15 @@ This will take effect after refreshing the players list.</string>
         </item>
       </layout>
     </widget>
-    <widget class="Q3ToolBar" name="Toolbar">
-      <property name="horizontallyStretchable">
-        <bool>false</bool>
+    <widget class="QToolBar" name="FileToolbar">
+      <property name="label">
+        <string>File toolbar</string>
       </property>
+      <addaction name="fileNewBoard"/>
+      <addaction name="fileOpen"/>
+      <addaction name="computerPlay"/>
+    </widget>
+    <widget class="QToolBar" name="Toolbar">
       <property name="label">
         <string>main toolbar</string>
       </property>
@@ -767,15 +772,7 @@ Set the handicap range you wish when seeking a game. See 'seek' button for more<
           </property>
         </item>
       </widget>
-      <addaction name="fileNewBoard"/>
-      <addaction name="fileOpen"/>
-      <addaction name="computerPlay"/>
       <addaction name="separator"/>
-      <addaction name="toolConnect"/>
-      <addaction name="cb_connect"/>
-      <addaction name="separator"/>
-      <addaction name="toolSeek"/>
-      <addaction name="cb_seek_handicap"/>
       <addaction name="setLookingMode"/>
       <addaction name="setQuietMode"/>
       <addaction name="setOpenMode"/>
@@ -783,7 +780,7 @@ Set the handicap range you wish when seeking a game. See 'seek' button for more<
       <addaction name="refreshPlayers"/>
       <addaction name="refreshGames"/>
     </widget>
-    <widget class="Q3ToolBar" name="UserToolbar">
+    <widget class="QToolBar" name="UserToolbar">
       <property name="label">
         <string>user defined toolbar</string>
       </property>

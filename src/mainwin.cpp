@@ -1,6 +1,11 @@
 /*
  *   mainwin.cpp - qGoClient's main window (cont. in tables.cpp)
  */
+
+#include <QMainWindow>
+#include <QFileDialog>
+#include <QWhatsThis>
+
 #include "mainwin.h"
 #include "defines.h"
 #include "playertable.h"
@@ -25,13 +30,10 @@
 #include <qlineedit.h>
 #include <qevent.h>
 #include <qstatusbar.h>
-#include <q3mainwindow.h>
 #include <qtooltip.h>
-#include <q3whatsthis.h>
 #include <q3popupmenu.h>
 #include <q3textstream.h>
 #include <qpalette.h>
-#include <q3accel.h>
 #include <qtoolbutton.h>
 #include <qicon.h>
 #include <qpixmap.h>
@@ -56,8 +58,8 @@
  */
 
 
-ClientWindow::ClientWindow(Q3MainWindow *parent, const char* name, Qt::WFlags fl)
-	: Q3MainWindow( parent, name, fl ), seekButtonTimer (0), oneSecondTimer (0)
+ClientWindow::ClientWindow(QMainWindow *parent, const char* name, Qt::WFlags fl)
+	: QMainWindow( parent, name, fl ), seekButtonTimer (0), oneSecondTimer (0)
 {
 	setupUi(this);
 
@@ -284,37 +286,36 @@ ClientWindow::ClientWindow(Q3MainWindow *parent, const char* name, Qt::WFlags fl
 		// set host if available
 		slot_cbconnect(w);
 
-  //restore user buttons list
-  i = 0;
-  QToolButton *b;
-  QPixmap p;
-  userButtonGroup = new   Q3ButtonGroup(this);
-  userButtonGroup->hide();
-  connect( userButtonGroup, SIGNAL(clicked(int)), SLOT(slotUserButtonClicked(int)) );
+	//restore user buttons list
+	i = 0;
+	QToolButton *b;
+	QPixmap p;
+	userButtonGroup = new   Q3ButtonGroup(this);
+	userButtonGroup->hide();
+	connect( userButtonGroup, SIGNAL(clicked(int)), SLOT(slotUserButtonClicked(int)) );
 
-  for (;;)
-  {
-	  QString s = setting->readEntry("USER" + QString::number(++i) + "_1");
-	  if (s.isNull())
-		  break;
-    	b=new QToolButton(UserToolbar) ;
-    	b->setText(setting->readEntry("USER" + QString::number(i) + "_1"));   //label of the button : for display
-    	b->setTextLabel(setting->readEntry("USER" + QString::number(i) + "_1"));   //duplicated  for storage
-    	b->setCaption(setting->readEntry("USER" + QString::number(i) + "_2")); //dirty but handy
-    	QToolTip::add(b,setting->readEntry("USER" + QString::number(i) + "_3"));
-   	 b->setIconText(setting->readEntry("USER" + QString::number(i) + "_4"));  //dirty but handy    
-    	b->setMinimumWidth(25);
-    	if (p.load(b->iconText()))
-      		b->setPixmap(p);
-    	userButtonGroup->insert(b,-1);
-  }
+	for (;;)
+	{
+		QString s = setting->readEntry("USER" + QString::number(++i) + "_1");
+		if (s.isNull())
+			break;
+		b=new QToolButton(UserToolbar) ;
+		b->setText(setting->readEntry("USER" + QString::number(i) + "_1"));   //label of the button : for display
+		b->setTextLabel(setting->readEntry("USER" + QString::number(i) + "_1"));   //duplicated  for storage
+		b->setCaption(setting->readEntry("USER" + QString::number(i) + "_2")); //dirty but handy
+		QToolTip::add(b,setting->readEntry("USER" + QString::number(i) + "_3"));
+		b->setIconText(setting->readEntry("USER" + QString::number(i) + "_4"));  //dirty but handy
+		b->setMinimumWidth(25);
+		if (p.load(b->iconText()))
+			b->setPixmap(p);
+		userButtonGroup->insert(b,-1);
+	}
 
-  //restore players list filters
-  whoBox1->setCurrentItem(setting->readIntEntry("WHO_1"));
-  whoBox2->setCurrentItem(setting->readIntEntry("WHO_2"));
-  whoOpenCheck->setChecked(setting->readIntEntry("WHO_CB"));
+	//restore players list filters
+	whoBox1->setCurrentItem(setting->readIntEntry("WHO_1"));
+	whoBox2->setCurrentItem(setting->readIntEntry("WHO_2"));
+	whoOpenCheck->setChecked(setting->readIntEntry("WHO_CB"));
 
-    
 	// restore size of client window
 	s = setting->readEntry("CLIENTWINDOW");
 	if (s.length() > 5)
@@ -394,7 +395,7 @@ ClientWindow::ClientWindow(Q3MainWindow *parent, const char* name, Qt::WFlags fl
 	// create qGo Interface for board handling
 	qgoif = new qGoIF(this);
 	// qGo Interface
-	
+
 	connect(parser, SIGNAL(signal_set_observe( const QString&)), qgoif, SLOT(set_observe(const QString&)));
 	connect(parser, SIGNAL(signal_move(GameInfo*)), qgoif, SLOT(slot_move(GameInfo*)));
 	connect(parser, SIGNAL(signal_move(Game*)), qgoif, SLOT(slot_move(Game*)));
@@ -527,7 +528,7 @@ void ClientWindow::initStatusBar(QWidget* /*parent*/)
 	statusUsers->setText(" P: 0 / 0 ");
 	statusBar()->addWidget(statusUsers, 0, true);  // Permanent indicator
 	QToolTip::add(statusUsers, tr("Current online players / watched players"));
-	Q3WhatsThis::add(statusUsers, tr("Displays the number of current online players\nand the number of online players you are watching.\nA player you are watching has an entry in the 'watch player:' field."));
+	QWhatsThis::add(statusUsers, tr("Displays the number of current online players\nand the number of online players you are watching.\nA player you are watching has an entry in the 'watch player:' field."));
 
 	// The games widget
 	statusGames = new QLabel(statusBar());
@@ -535,7 +536,7 @@ void ClientWindow::initStatusBar(QWidget* /*parent*/)
 	statusGames->setText(" G: 0 / 0 ");
 	statusBar()->addWidget(statusGames, 0, true);  // Permanent indicator
 	QToolTip::add(statusGames, tr("Current online games / observed games + matches"));
-	Q3WhatsThis::add(statusGames, tr("Displays the number of games currently played on this server and the number of games you are observing or playing"));
+	QWhatsThis::add(statusGames, tr("Displays the number of games currently played on this server and the number of games you are observing or playing"));
 
 	// The server widget
 	statusServer = new QLabel(statusBar());
@@ -543,7 +544,7 @@ void ClientWindow::initStatusBar(QWidget* /*parent*/)
 	statusServer->setText(" OFFLINE ");
 	statusBar()->addWidget(statusServer, 0, true);  // Permanent indicator
 	QToolTip::add(statusServer, tr("Current server"));
-	Q3WhatsThis::add(statusServer, tr("Displays the current server's name or OFFLINE if you are not connected to the internet."));
+	QWhatsThis::add(statusServer, tr("Displays the current server's name or OFFLINE if you are not connected to the internet."));
 
 	// The channel widget
 	statusChannel = new QLabel(statusBar());
@@ -551,7 +552,7 @@ void ClientWindow::initStatusBar(QWidget* /*parent*/)
 	statusChannel->setText("");
 	statusBar()->addWidget(statusChannel, 0, true);  // Permanent indicator
 	QToolTip::add(statusChannel, tr("Current channels and users"));
-	Q3WhatsThis::add(statusChannel, tr("Displays the current channels you are in and the number of users inthere.\nThe tooltip text contains the channels' title and users' names"));
+	QWhatsThis::add(statusChannel, tr("Displays the current channels you are in and the number of users inthere.\nThe tooltip text contains the channels' title and users' names"));
 
 	// Online Time
 	statusOnlineTime = new QLabel(statusBar());
@@ -559,7 +560,7 @@ void ClientWindow::initStatusBar(QWidget* /*parent*/)
 	statusOnlineTime->setText(" 00:00 ");
 	statusBar()->addWidget(statusOnlineTime, 0, true);  // Permanent indicator
 	QToolTip::add(statusOnlineTime, tr("Online Time"));
-	Q3WhatsThis::add(statusOnlineTime, tr("Displays the current online time.\n(A) -> auto answer\n(Hold) -> hold the line"));
+	QWhatsThis::add(statusOnlineTime, tr("Displays the current online time.\n(A) -> auto answer\n(Hold) -> hold the line"));
 }
 
 void ClientWindow::timerEvent(QTimerEvent* e)
@@ -803,29 +804,27 @@ void ClientWindow::saveSettings()
 		setting->writeEntry("HOST" + QString::number(i) + "f", QString());
 	}
 
-   // set the user toolbar list
-   QObjectList bl = UserToolbar->queryList( "QToolButton" ,NULL,true,false);
+	// set the user toolbar list
+	QObjectList bl = UserToolbar->queryList( "QToolButton" ,NULL,true,false);
 
-   QListIterator<QObject *> bli(bl);
-   while (bli.hasNext ())
-   {
-	   QToolButton *b0 = (QToolButton*)bli.next();
-	   setting->writeEntry("USER" + QString::number(i) + "_1",b0->textLabel());
-	   setting->writeEntry("USER" + QString::number(i) + "_2",b0->caption());
-	   setting->writeEntry("USER" + QString::number(i) + "_3",b0->toolTip() );
-	   setting->writeEntry("USER" + QString::number(i) + "_4",b0->iconText());
-   }
+	QListIterator<QObject *> bli(bl);
+	while (bli.hasNext ()) {
+		  QToolButton *b0 = (QToolButton*)bli.next();
+		  setting->writeEntry("USER" + QString::number(i) + "_1",b0->textLabel());
+		  setting->writeEntry("USER" + QString::number(i) + "_2",b0->caption());
+		  setting->writeEntry("USER" + QString::number(i) + "_3",b0->toolTip() );
+		  setting->writeEntry("USER" + QString::number(i) + "_4",b0->iconText());
+	}
 
-   for (;;)
-   {
-	   QString s = setting->readEntry("USER" + QString::number(++i) + "_1");
-	   if (s.isNull ())
-		   break;
-	   setting->writeEntry("USER" + QString::number(i) + "_1",QString());
-	   setting->writeEntry("USER" + QString::number(i) + "_2",QString());
-	   setting->writeEntry("USER" + QString::number(i) + "_3",QString());
-	   setting->writeEntry("USER" + QString::number(i) + "_4",QString());
-   }
+	for (;;) {
+		QString s = setting->readEntry("USER" + QString::number(++i) + "_1");
+		if (s.isNull ())
+			break;
+		setting->writeEntry("USER" + QString::number(i) + "_1",QString());
+		setting->writeEntry("USER" + QString::number(i) + "_2",QString());
+		setting->writeEntry("USER" + QString::number(i) + "_3",QString());
+		setting->writeEntry("USER" + QString::number(i) + "_4",QString());
+	}
 	// save current connection if at least one host exists
 	if (!hostlist.isEmpty())
 		setting->writeEntry("ACTIVEHOST",cb_connect->currentText());
@@ -2826,7 +2825,7 @@ void ClientWindow::initActions()
 	connect( cb_cmdLine, SIGNAL( activated(int) ), this, SLOT( slot_cmdactivated_int(int) ) );
 	connect( cb_cmdLine, SIGNAL( activated(const QString&) ), this, SLOT( slot_cmdactivated(const QString&) ) );
 
-	Q3WhatsThis::add(ListView_games, tr("Table of games\n\n"
+	QWhatsThis::add(ListView_games, tr("Table of games\n\n"
 		"right click to observe\n\n"
 		"Symbol explanation: (click on tab to sort by)\n"
 		"Id\tgame number\n"
@@ -2841,7 +2840,7 @@ void ClientWindow::initActions()
 		"(Ob)\tnumber of observers at last refresh\n\n"
 		"This table can be updated by 'Refresh games'"));
 
-	Q3WhatsThis::add(ListView_players, tr("Table of players\n\n"
+	QWhatsThis::add(ListView_players, tr("Table of players\n\n"
 		"right click for menu\n\n"
 		"Symbol explanation: (click on tab to sort by)\n"
 		"Stat\tplayer's stats:\n"
@@ -2956,8 +2955,8 @@ void ClientWindow::initToolBar()
 	toolSeek->setPopup(seekMenu);
 	toolSeek->setPopupDelay(1);
 
-	tb = Q3WhatsThis::whatsThisButton(Toolbar);
-	//tb->setProperty( "geometry", QRect(0, 0, 20, 20));
+	whatsThis = QWhatsThis::createAction (this);
+	whatsThis->addTo (Toolbar);
 
 	//added the icons
 	refreshPlayers->setIconSet(QIcon(RefreshPlayersIcon));

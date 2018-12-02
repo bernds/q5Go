@@ -5,7 +5,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <q3mainwindow.h>
 #include <qlayout.h>
 #include <q3listview.h>
 //Added by qt3to4:
@@ -183,7 +182,7 @@ private:
 	QAction *viewFileBar, *viewToolBar, *viewEditBar, *viewMenuBar, *viewStatusBar, *viewCoords,
 		*viewSlider, *viewSidebar, *viewComment, *viewVertComment, *viewPinComment, *viewIncreaseSize,
 		*viewDecreaseSize, *viewSaveSize, *viewFullscreen;
-	QAction *helpManual, *helpSoundInfo, *helpAboutApp, *helpAboutQt;
+	QAction *helpManual, *helpSoundInfo, *helpAboutApp, *helpAboutQt, *whatsThis;
 	QTimer *timer;
 
 	float timerIntervals[6];

@@ -2,12 +2,13 @@
 * preferences.cpp
 */
 
+#include <QPixmap>
+#include <QFileDialog>
+#include <QWhatsThis>
+
 #include "preferences.h"
 #include "mainwindow.h"
 #include "qgo.h"
-#include <QPixmap>
-#include <QFileDialog>
-#include <Q3WhatsThis>
 #include "mainwin.h"
 
 #ifdef Q_OS_MACX
@@ -140,7 +141,7 @@ void PreferencesDialog::slot_apply()
 
 void PreferencesDialog::startHelpMode()
 {
-	Q3WhatsThis::enterWhatsThisMode();
+	QWhatsThis::enterWhatsThisMode();
 }
 
 void PreferencesDialog::selectFont(int selector)
