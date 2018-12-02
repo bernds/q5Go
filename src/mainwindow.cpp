@@ -8,7 +8,6 @@
 #include <QPixmap>
 #include <QCloseEvent>
 #include <QGridLayout>
-#include <Q3ValueList>
 #include <QKeyEvent>
 #include <Q3VBoxLayout>
 #include <QMenu>
@@ -2294,7 +2293,7 @@ bool MainWindow::reStoreWindowSize(QString strKey, bool store)
 
 				viewVertComment->setOn(setting->readIntEntry("VIEW_COMMENT") == 2 ||
 					setting->readIntEntry("VIEW_COMMENT") == 0 && setting->readIntEntry("BOARDVERTCOMMENT_" + strKey));
-				
+
 				// restore splitter in board window
 				s = setting->readEntry("BOARDSPLITTER_" + strKey);
 				if (s.length() > 5)
@@ -2303,7 +2302,7 @@ bool MainWindow::reStoreWindowSize(QString strKey, bool store)
 
 					i = s.section(DELIMITER, 2, 2).toInt();
 					j = s.section(DELIMITER, 3, 3).toInt();
-					Q3ValueList<int> w1;
+					QList<int> w1;
 					w1 << i << j;
 					splitter_comment->setSizes(w1);
 

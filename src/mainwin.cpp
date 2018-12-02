@@ -28,7 +28,6 @@
 #include <q3mainwindow.h>
 #include <qtooltip.h>
 #include <q3whatsthis.h>
-#include <q3valuelist.h>
 #include <q3popupmenu.h>
 #include <q3textstream.h>
 #include <qpalette.h>
@@ -334,7 +333,7 @@ ClientWindow::ClientWindow(Q3MainWindow *parent, const char* name, Qt::WFlags fl
 	s = setting->readEntry("CLIENTSPLITTER");
 	if (s.length() > 5)
 	{
-		Q3ValueList<int> w1, h1, w2;
+		QList<int> w1, h1, w2;
 		w1 << s.section(DELIMITER, 0, 0).toInt() << s.section(DELIMITER, 1, 1).toInt();
 		h1 << s.section(DELIMITER, 2, 2).toInt() << s.section(DELIMITER, 3, 3).toInt();
 		w2 << s.section(DELIMITER, 4, 4).toInt() << s.section(DELIMITER, 5, 5).toInt();
@@ -2638,7 +2637,7 @@ void ClientWindow::reStoreWindowSize(QString strKey, bool store)
 		s = setting->readEntry("CLIENTSPLITTER_" + strKey);
 		if (s.length() > 5)
 		{
-			Q3ValueList<int> w1, h1, w2;
+			QList<int> w1, h1, w2;
 			w1 << s.section(DELIMITER, 0, 0).toInt() << s.section(DELIMITER, 1, 1).toInt();
 			h1 << s.section(DELIMITER, 2, 2).toInt() << s.section(DELIMITER, 3, 3).toInt();
 			w2 << s.section(DELIMITER, 4, 4).toInt() << s.section(DELIMITER, 5, 5).toInt();
