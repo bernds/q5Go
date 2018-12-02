@@ -9,7 +9,7 @@
 #include <QCloseEvent>
 #include <QGridLayout>
 #include <QKeyEvent>
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include <QMenu>
 
 #include "qgo.h"
@@ -177,7 +177,7 @@ MainWindow::MainWindow(QWidget* parent, const char* name, Qt::WFlags f)
 
 	//commentEdit = new QTextEdit(splitter_comment, "comments");
 	QWidget *commentWidget = new QWidget(splitter_comment);
-	Q3VBoxLayout *commentLayout = new Q3VBoxLayout(commentWidget, 0,0,"commentLayout");
+	QVBoxLayout *commentLayout = new QVBoxLayout(commentWidget, 0,0,"commentLayout");
 	commentEdit = new Q3TextEdit(commentWidget,  "comments");
 	commentLayout->addWidget(commentEdit);
 	commentEdit2 = new QLineEdit( commentWidget, "commentEdit2" );
