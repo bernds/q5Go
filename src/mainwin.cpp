@@ -3022,7 +3022,7 @@ void ClientWindow::slotFileOpen()
 {
 	//if (!checkModified())
 	//	return;
-	QString fileName(Q3FileDialog::getOpenFileName(setting->readEntry("LAST_DIR"),
+	QString fileName(QFileDialog::getOpenFileName(setting->readEntry("LAST_DIR"),
 		tr("SGF Files (*.sgf *.SGF);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)"), this));
 	if (fileName.isEmpty())
 		return;

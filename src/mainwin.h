@@ -5,8 +5,6 @@
 #ifndef MAINWIN_H
 #define MAINWIN_H
 
-#include <Q3FileDialog>
-
 #include "clientwindow_gui.h"
 #include "miscdialogs.h"
 #include "setting.h"

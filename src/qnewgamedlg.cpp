@@ -15,13 +15,13 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <QFileDialog>
 #include "qnewgamedlg.h"
 #include "defines.h"
 #include "setting.h"
 #include "komispinbox.h"
 #include <qmessagebox.h>
 #include <stdio.h>
-#include <q3filedialog.h>
 
 
 /* 
@@ -240,7 +240,7 @@ void QNewGameDlg::init()
 
 void QNewGameDlg::slotGetFileName()
 {
-  	QString getFileName(Q3FileDialog::getOpenFileName("",//setting->readEntry("LAST_DIR"),
+  	QString getFileName(QFileDialog::getOpenFileName("",//setting->readEntry("LAST_DIR"),
 		tr("SGF Files (*.sgf);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)"), this));
 	if (getFileName.isEmpty())
 		return;

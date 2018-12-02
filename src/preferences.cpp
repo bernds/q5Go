@@ -6,7 +6,7 @@
 #include "mainwindow.h"
 #include "qgo.h"
 #include <QPixmap>
-#include <Q3FileDialog>
+#include <QFileDialog>
 #include <Q3WhatsThis>
 #include "mainwin.h"
 
@@ -554,7 +554,7 @@ void PreferencesDialog::on_soundButtonGroup_buttonClicked(QAbstractButton *cb)
 
 void PreferencesDialog::slot_getComputerPath()
 {
-	QString fileName(Q3FileDialog::getOpenFileName(setting->readEntry("LAST_DIR"),
+	QString fileName(QFileDialog::getOpenFileName(setting->readEntry("LAST_DIR"),
 		tr("All Files (*)"), this));
 	if (fileName.isEmpty())
 		return;
@@ -575,7 +575,7 @@ void PreferencesDialog::slot_getGobanPicturePath()
 #else
 	QString path = setting->readEntry("LAST_DIR");
 #endif
-	QString fileName(Q3FileDialog::getOpenFileName(path,
+	QString fileName(QFileDialog::getOpenFileName(path,
 		tr("Images (*.png *.xpm *.jpg)"), this));
 	if (fileName.isEmpty())
 		return;
@@ -596,7 +596,7 @@ void PreferencesDialog::slot_getTablePicturePath()
 #else
 	QString path = setting->readEntry("LAST_DIR");
 #endif
-	QString fileName(Q3FileDialog::getOpenFileName(path,
+	QString fileName(QFileDialog::getOpenFileName(path,
 		tr("Images (*.png *.xpm *.jpg)"), this));
 	if (fileName.isEmpty())
 		return;
@@ -606,7 +606,7 @@ void PreferencesDialog::slot_getTablePicturePath()
 
 void PreferencesDialog::slot_getPixmapPath()
 {
-	QString fileName(Q3FileDialog::getOpenFileName("",tr("Images (*.png *.jpg *.xpm *.ico)"), this));
+	QString fileName(QFileDialog::getOpenFileName("",tr("Images (*.png *.jpg *.xpm *.ico)"), this));
 	if (fileName.isEmpty())
 		return;
 

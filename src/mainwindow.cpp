@@ -2,8 +2,8 @@
 * mainwindow.cpp - qGo's main window
 */
 
-#include "qgo.h"
-//Added by qt3to4:
+#include <QFileDialog>
+
 #include <QLabel>
 #include <QPixmap>
 #include <QCloseEvent>
@@ -12,6 +12,8 @@
 #include <QKeyEvent>
 #include <Q3VBoxLayout>
 #include <QMenu>
+
+#include "qgo.h"
 #include "mainwin.h"
 #include "mainwindow.h"
 #include "mainwidget.h"
@@ -43,7 +45,6 @@
 #include <qcdestyle.h>
 #include <qsgistyle.h>
 #endif
-#include <q3filedialog.h>
 #include <qcheckbox.h>
 #include <qsplitter.h>
 //#include <qmultilineedit.h>
@@ -1184,7 +1185,7 @@ void MainWindow::slotFileOpen()
 {
 	if (!checkModified())
 		return;
-	QString fileName(Q3FileDialog::getOpenFileName(setting->readEntry("LAST_DIR"),
+	QString fileName(QFileDialog::getOpenFileName(setting->readEntry("LAST_DIR"),
 		tr("SGF Files (*.sgf *.SGF);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)"), this));
 	if (fileName.isEmpty())
 		return;
@@ -1286,7 +1287,7 @@ bool MainWindow::doSave(QString fileName, bool force)
                 		fileName.append(base);
 
 		}
-		fileName = Q3FileDialog::getSaveFileName(fileName, tr("SGF Files (*.sgf);;All Files (*)"), this);
+		fileName = QFileDialog::getSaveFileName(fileName, tr("SGF Files (*.sgf);;All Files (*)"), this);
 	}
 	
 	if (fileName.isEmpty())
@@ -1349,7 +1350,7 @@ void MainWindow::slotFileExportSgfClipB()
 
 void MainWindow::slotFileImportASCII()
 {
-	QString fileName(Q3FileDialog::getOpenFileName(QString::null,
+	QString fileName(QFileDialog::getOpenFileName(QString::null,
 		tr("Text Files (*.txt);;All Files (*)"),
 		this));
 	if (fileName.isEmpty())
@@ -1376,7 +1377,7 @@ void MainWindow::slotFileExportASCII()
 void MainWindow::slotFileExportPic()
 {
    QString *filter = new QString("");
-   QString fileName = Q3FileDialog::getSaveFileName(
+   QString fileName = QFileDialog::getSaveFileName(
     "",
 		"PNG (*.png);;BMP (*.bmp);;XPM (*.xpm);;XBM (*.xbm);;PNM (*.pnm);;GIF (*.gif);;JPEG (*.jpeg);;MNG (*.mng)",
 		this,

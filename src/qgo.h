@@ -7,9 +7,6 @@
 
 #include <QObject>
 #include <Q3PtrList>
-#ifdef Q_WS_WIN
-#include <Q3FileDialog>
-#endif
 
 #include "globals.h"
 #include "mainwindow.h"

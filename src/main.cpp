@@ -19,7 +19,6 @@
 #include <qdialog.h>
 #include <qpushbutton.h>
 #include <qmessagebox.h>
-#include <q3filedialog.h>
 #include <qdir.h>
 #include <q3listview.h>
 #include <qcheckbox.h>

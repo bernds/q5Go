@@ -276,7 +276,7 @@ bool qGo::testSound(bool showmsg)
 				 "be asked\nanymore except you install qGo again into a different directory.\n"
 				 "To abort this procedure, click 'Cancel' in the following dialog."));
     
-	applicationPath = Q3FileDialog::getExistingDirectory(NULL, NULL, "appdir", tr("qGo directory"), true);
+	applicationPath = QFileDialog::getExistingDirectory(NULL, NULL, "appdir", tr("qGo directory"), true);
 	
 	if (applicationPath.isNull() || applicationPath.isEmpty())
 	{
