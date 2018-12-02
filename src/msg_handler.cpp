@@ -16,11 +16,11 @@ void myMessageHandler(QtMsgType type, const char *msg)
 
 	switch (type)
 	{
-	case QtDebugMsg:		view->append("Debug: "  + (QString) msg + "\n");
+	case QtDebugMsg:		view->append("Debug: "  + (QString) msg);
 		break;
-	case QtWarningMsg:	view->append((QString) "Warning: " + (QString) msg + (QString) "\n");
+	case QtWarningMsg:	view->append((QString) "Warning: " + (QString) msg);
 		break;
-	case QtFatalMsg:		view->append((QString) "Fatal: " + (QString) msg + (QString) "\n");
+	case QtFatalMsg:		view->append((QString) "Fatal: " + (QString) msg);
 		break;
 	}
 }

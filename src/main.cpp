@@ -23,8 +23,6 @@
 #include <qdir.h>
 #include <q3listview.h>
 #include <qcheckbox.h>
-#include <q3textstream.h>
-#include <q3textedit.h>
 #include <qstring.h>
 #include <qobject.h>
 
@@ -39,7 +37,7 @@ qGo *qgo;
 Setting *setting = 0;
 
 #ifdef OWN_DEBUG_MODE
-Q3TextEdit *view =0 ;
+QTextEdit *view =0 ;
 #endif
 
 /*
