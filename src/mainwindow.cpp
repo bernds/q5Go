@@ -122,18 +122,18 @@ MainWindow::MainWindow(QWidget* parent, const char* name, Qt::WFlags f)
 	bool bb=setting->readBoolEntry("FILEBAR");
 	bb=false;
 	if (!setting->readBoolEntry("FILEBAR"))
-		viewFileBar->setOn(false);
+		viewFileBar->setChecked(false);
 	if (!setting->readBoolEntry("TOOLBAR"))
-		viewToolBar->setOn(false);
+		viewToolBar->setChecked(false);
 	if (!setting->readBoolEntry("EDITBAR"))
-		viewEditBar->setOn(false);
+		viewEditBar->setChecked(false);
 
 	if (!setting->readBoolEntry("STATUSBAR"))
-		viewStatusBar->setOn(false); //statusBar()->hide();
+		viewStatusBar->setChecked(false); //statusBar()->hide();
 
 #if 0
 	if (!setting->readBoolEntry("MENUBAR"))
-		viewMenuBar->setOn(false); //menuBar()->hide();
+		viewMenuBar->setChecked(false); //menuBar()->hide();
 #endif
 
 	interfaceHandler = 0;
@@ -672,7 +672,7 @@ void MainWindow::initActions()
 	navAutoplay = new QAction(autoplayIcon, tr("&Autoplay"), this);
 	navAutoplay->setCheckable (true);
 	navAutoplay->setShortcut (QKeySequence (Qt::CTRL + Qt::Key_A));
-	navAutoplay->setOn(false);
+	navAutoplay->setChecked(false);
 	navAutoplay->setStatusTip(tr("Start/Stop autoplaying current game"));
 	navAutoplay->setWhatsThis(tr("Autoplay\n\nStart/Stop autoplaying current game."));
 	connect(navAutoplay, SIGNAL(toggled(bool)), this, SLOT(slotNavAutoplay(bool)));
@@ -724,7 +724,7 @@ void MainWindow::initActions()
 	OIC.setPixmap ( sound_onIcon, QIcon::Automatic, QIcon::Normal, QIcon::Off );
 	soundToggle = new QAction(OIC, tr("&Mute stones sound"), this);
 	soundToggle->setCheckable (true);
-	soundToggle->setOn(!setting->readBoolEntry("SOUND_STONE"));
+	soundToggle->setChecked(!setting->readBoolEntry("SOUND_STONE"));
 	soundToggle->setStatusTip(tr("Toggle stones sound on/off"));
 	soundToggle->setWhatsThis(tr("Stones sound\n\nToggle stones sound on/off\nthis toggles only the stones sounds"));
 	connect(soundToggle, SIGNAL(toggled(bool)), this, SLOT(slotSoundToggle(bool)));
@@ -735,7 +735,7 @@ void MainWindow::initActions()
 	// View Filebar toggle
 	viewFileBar = new QAction(tr("&File toolbar"), this);
 	viewFileBar->setCheckable (true);
-	viewFileBar->setOn(true);
+	viewFileBar->setChecked(true);
 	viewFileBar->setStatusTip(tr("Enables/disables the file toolbar"));
 	viewFileBar->setWhatsThis(tr("File toolbar\n\nEnables/disables the file toolbar."));
 	connect(viewFileBar, SIGNAL(toggled(bool)), this, SLOT(slotViewFileBar(bool)));
@@ -743,7 +743,7 @@ void MainWindow::initActions()
 	// View Toolbar toggle
 	viewToolBar = new QAction(tr("Navigation &toolbar"), this);
 	viewToolBar->setCheckable (true);
-	viewToolBar->setOn(true);
+	viewToolBar->setChecked(true);
 	viewToolBar->setStatusTip(tr("Enables/disables the navigation toolbar"));
 	viewToolBar->setWhatsThis(tr("Navigation toolbar\n\nEnables/disables the navigation toolbar."));
 	connect(viewToolBar, SIGNAL(toggled(bool)), this, SLOT(slotViewToolBar(bool)));
@@ -751,7 +751,7 @@ void MainWindow::initActions()
 	// View Editbar toggle
 	viewEditBar = new QAction(tr("&Edit toolbar"), this);
 	viewEditBar->setCheckable (true);
-	viewEditBar->setOn(true);
+	viewEditBar->setChecked(true);
 	viewEditBar->setStatusTip(tr("Enables/disables the edit toolbar"));
 	viewEditBar->setWhatsThis(tr("Edit toolbar\n\nEnables/disables the edit toolbar."));
 	connect(viewEditBar, SIGNAL(toggled(bool)), this, SLOT(slotViewEditBar(bool)));
@@ -761,7 +761,7 @@ void MainWindow::initActions()
 	viewMenuBar = new QAction(tr("&Menubar"), this);
 	viewMenuBar->setCheckable (true);
 	viewMenuBar->setShortcut (Qt::Key_F7);
-	viewMenuBar->setOn(true);
+	viewMenuBar->setChecked(true);
 	viewMenuBar->setStatusTip(tr("Enables/disables the menubar"));
 	viewMenuBar->setWhatsThis(tr("Menubar\n\nEnables/disables the menubar."));
 	connect(viewMenuBar, SIGNAL(toggled(bool)), this, SLOT(slotViewMenuBar(bool)));
@@ -770,7 +770,7 @@ void MainWindow::initActions()
 	// View Statusbar toggle
 	viewStatusBar = new QAction(tr("&Statusbar"), this);
 	viewStatusBar->setCheckable (true);
-	viewStatusBar->setOn(true);
+	viewStatusBar->setChecked(true);
 	viewStatusBar->setStatusTip(tr("Enables/disables the statusbar"));
 	viewStatusBar->setWhatsThis(tr("Statusbar\n\nEnables/disables the statusbar."));
 	connect(viewStatusBar, SIGNAL(toggled(bool)), this, SLOT(slotViewStatusBar(bool)));
@@ -779,7 +779,7 @@ void MainWindow::initActions()
 	viewCoords = new QAction(coordsIcon, tr("C&oordinates"), this);
 	viewCoords->setCheckable (true);
 	viewCoords->setShortcut (Qt::Key_F8);
-	viewCoords->setOn(false);
+	viewCoords->setChecked(false);
 	viewCoords->setStatusTip(tr("Enables/disables the coordinates"));
 	viewCoords->setWhatsThis(tr("Coordinates\n\nEnables/disables the coordinates."));
 	connect(viewCoords, SIGNAL(toggled(bool)), this, SLOT(slotViewCoords(bool)));
@@ -788,7 +788,7 @@ void MainWindow::initActions()
 	viewSlider = new QAction(tr("Sli&der"), this);
 	viewSlider->setCheckable (true);
 	viewSlider->setShortcut (Qt::CTRL + Qt::Key_F8);
-	viewSlider->setOn(false);
+	viewSlider->setChecked(false);
 	viewSlider->setStatusTip(tr("Enables/disables the slider"));
 	viewSlider->setWhatsThis(tr("Slider\n\nEnables/disables the slider."));
 	connect(viewSlider, SIGNAL(toggled(bool)), this, SLOT(slotViewSlider(bool)));
@@ -797,7 +797,7 @@ void MainWindow::initActions()
 	viewSidebar = new QAction(tr("Side&bar"), this);
 	viewSidebar->setCheckable (true);
 	viewSidebar->setShortcut (Qt::Key_F9);
-	viewSidebar->setOn(true);
+	viewSidebar->setChecked(true);
 	viewSidebar->setStatusTip(tr("Enables/disables the sidebar"));
 	viewSidebar->setWhatsThis(tr("Sidebar\n\nEnables/disables the sidebar."));
 	connect(viewSidebar, SIGNAL(toggled(bool)), this, SLOT(slotViewSidebar(bool)));
@@ -806,7 +806,7 @@ void MainWindow::initActions()
 	viewComment = new QAction(tr("&Comment"), this);
 	viewComment->setCheckable (true);
 	viewComment->setShortcut (Qt::Key_F10);
-	viewComment->setOn(true);
+	viewComment->setChecked(true);
 	viewComment->setStatusTip(tr("Enables/disables the comment field"));
 	viewComment->setWhatsThis(tr("Comment field\n\nEnables/disables the comment field."));
 	connect(viewComment, SIGNAL(toggled(bool)), this, SLOT(slotViewComment(bool)));
@@ -815,7 +815,7 @@ void MainWindow::initActions()
 	viewVertComment = new QAction(tr("&Vertical comment"), this);
 	viewVertComment->setCheckable (true);
 	viewVertComment->setShortcut (Qt::SHIFT + Qt::Key_F10);
-	viewVertComment->setOn(setting->readIntEntry("VIEW_COMMENT") == 2 ||
+	viewVertComment->setChecked(setting->readIntEntry("VIEW_COMMENT") == 2 ||
 		setting->readIntEntry("VIEW_COMMENT") == 0 && setting->readIntEntry("BOARDVERTCOMMENT_0"));
 	viewVertComment->setStatusTip(tr("Enables/disables a vertical direction of the comment field"));
 	viewVertComment->setWhatsThis(tr("Vertical comment field\n\n"
@@ -826,7 +826,7 @@ void MainWindow::initActions()
 	viewPinComment = new QAction(tr("&Pin comment"), this);
 	viewPinComment->setCheckable (true);
 	viewPinComment->setShortcut (Qt::CTRL + Qt::Key_F10);
-	viewPinComment->setOn(false);
+	viewPinComment->setChecked(false);
 	viewPinComment->setStatusTip(tr("Enables/disables pinning the comment field"));
 	viewPinComment->setWhatsThis(tr("Pin comment field\n\nEnables/disables pinning the comment field."));
 	connect(viewPinComment, SIGNAL(toggled(bool)), this, SLOT(slotViewPinComment(bool)));
@@ -857,7 +857,7 @@ void MainWindow::initActions()
 	viewFullscreen = new QAction(fullscreenIcon, tr("&Fullscreen"), this);
 	viewFullscreen->setCheckable (true);
 	viewFullscreen->setShortcut (Qt::Key_F11);
-	viewFullscreen->setOn(false);
+	viewFullscreen->setChecked(false);
 	viewFullscreen->setStatusTip(tr("Enable/disable fullscreen mode"));
 	viewFullscreen->setWhatsThis(tr("Fullscreen\n\nEnable/disable fullscreen mode."));
 	connect(viewFullscreen, SIGNAL(toggled(bool)), this, SLOT(slotViewFullscreen(bool)));
@@ -1792,17 +1792,17 @@ bool MainWindow::preferencesSave(PreferencesDialog *dlg)
 void MainWindow::updateBoard()
 {
 
-	viewSlider->setOn(setting->readBoolEntry("SLIDER"));
-	viewSidebar->setOn(setting->readBoolEntry("SIDEBAR"));
-	viewCoords->setOn(setting->readBoolEntry("BOARD_COORDS"));
+	viewSlider->setChecked(setting->readBoolEntry("SLIDER"));
+	viewSidebar->setChecked(setting->readBoolEntry("SIDEBAR"));
+	viewCoords->setChecked(setting->readBoolEntry("BOARD_COORDS"));
 	board->setShowSGFCoords(setting->readBoolEntry("SGF_BOARD_COORDS"));
 	board->set_antiClicko(setting->readBoolEntry("ANTICLICKO"));
-	viewComment->setOn(setting->readIntEntry("VIEW_COMMENT"));
+	viewComment->setChecked(setting->readIntEntry("VIEW_COMMENT"));
 
 	if (setting->readIntEntry("VIEW_COMMENT"))
 	{
 //		viewVertComment->setEnabled(true);
-		viewVertComment->setOn(setting->readIntEntry("VIEW_COMMENT") == 2);
+		viewVertComment->setChecked(setting->readIntEntry("VIEW_COMMENT") == 2);
 	}
 
 #if 0 // @@@
@@ -2033,14 +2033,14 @@ void MainWindow::slotViewPinComment(bool toggle)
 	if (!toggle)
 	{
 		commentEdit->reparent(splitter, QPoint(0, 0), true);
-		viewComment->setOn(true);
+		viewComment->setChecked(true);
 		viewVertComment->setEnabled(true);
 	}
 	else
 	{
 		commentEdit->reparent(this, Qt::WType_TopLevel, QPoint(0, 0), true);
 		commentEdit->setGeometry(200, 100, 400, 200);
-		viewComment->setOn(true);
+		viewComment->setChecked(true);
 		viewVertComment->setEnabled(false);
 	}
 	statusBar()->message(tr("Ready."));
@@ -2147,7 +2147,7 @@ void MainWindow::slotTimerForward()
 		else if (m->son == 0)
 		{
 			timer->stop();
-			navAutoplay->setOn(false);
+			navAutoplay->setChecked(false);
 			statusBar()->message(tr("Autoplay stopped."));
 		}
 		else if (!m->son->getTimeinfo())
@@ -2158,7 +2158,7 @@ void MainWindow::slotTimerForward()
 				!board->nextMove(setting->readBoolEntry("SOUND_AUTOPLAY")))
 			{
 				timer->stop();
-				navAutoplay->setOn(false);
+				navAutoplay->setChecked(false);
 				statusBar()->message(tr("Autoplay stopped."));
 			}
 
@@ -2178,7 +2178,7 @@ void MainWindow::slotTimerForward()
 			if (!board->nextMove(setting->readBoolEntry("SOUND_AUTOPLAY")))
 			{
 				timer->stop();
-				navAutoplay->setOn(false);
+				navAutoplay->setChecked(false);
 				statusBar()->message(tr("Autoplay stopped."));
 			}
 
@@ -2190,7 +2190,7 @@ void MainWindow::slotTimerForward()
 		&& timer->isActive())
 	{
 		timer->stop();
-		navAutoplay->setOn(false);
+		navAutoplay->setChecked(false);
 		statusBar()->message(tr("Autoplay stopped."));
 	}
 }
@@ -2269,10 +2269,10 @@ bool MainWindow::reStoreWindowSize(QString strKey, bool store)
 			board->lockResize = true;
 
 			if (setting->readBoolEntry("BOARDFULLSCREEN_" + strKey))
-				viewFullscreen->setOn(true);
+				viewFullscreen->setChecked(true);
 			else
 			{
-				viewFullscreen->setOn(false);
+				viewFullscreen->setChecked(false);
 				QPoint p;
 				p.setX(s.section(DELIMITER, 0, 0).toInt());
 				p.setY(s.section(DELIMITER, 1, 1).toInt());
@@ -2286,14 +2286,14 @@ bool MainWindow::reStoreWindowSize(QString strKey, bool store)
 			if (setting->readIntEntry("BOARDVERTCOMMENT_" + strKey) == 2)
 			{
 				// do not view comment
-				viewComment->setOn(false);
+				viewComment->setChecked(false);
 			}
 			else
 			{
 				// view comment
-				viewComment->setOn(true);
+				viewComment->setChecked(true);
 
-				viewVertComment->setOn(setting->readIntEntry("VIEW_COMMENT") == 2 ||
+				viewVertComment->setChecked(setting->readIntEntry("VIEW_COMMENT") == 2 ||
 					setting->readIntEntry("VIEW_COMMENT") == 0 && setting->readIntEntry("BOARDVERTCOMMENT_" + strKey));
 
 				// restore splitter in board window

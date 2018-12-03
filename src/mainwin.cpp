@@ -747,8 +747,8 @@ void ClientWindow::slot_connclosed()
 
 	// set to offline:
 	myAccount->set_offline();
-	//pb_connect->setOn(FALSE);
-	toolConnect->setOn(FALSE);
+	//pb_connect->setChecked(FALSE);
+	toolConnect->setChecked(FALSE);
 	seekMenu->clear();
 	slot_cancelSeek();	
 
@@ -769,7 +769,7 @@ void ClientWindow::slot_connclosed()
 	// set menu
 	Connect->setEnabled(true);
 	Disconnect->setEnabled(false);
-	toolConnect->setOn(false);
+	toolConnect->setChecked(false);
 	toolConnect->setPixmap(disconnectedIcon);
 	QToolTip::remove(toolConnect);
 	QToolTip::add(toolConnect, tr("Connect with") + " " + cb_connect->currentText());
@@ -1013,7 +1013,7 @@ void ClientWindow::sendTextToApp(const QString &txt)
 			// set menu
 			Connect->setEnabled(false);
 			Disconnect->setEnabled(true);
-			toolConnect->setOn(true);
+			toolConnect->setChecked(true);
 			toolConnect->setPixmap(connectedIcon);
 			QToolTip::remove(toolConnect);
 			QToolTip::add(toolConnect, tr("Disconnect from") + " " + cb_connect->currentText());
@@ -1439,20 +1439,20 @@ void ClientWindow::slot_checkbox(int nr, bool val)
 	{
 		// open
 		case 0:
-			//toolOpen->setOn(val); 
-			setOpenMode->setOn(val);
+			//toolOpen->setChecked(val); 
+			setOpenMode->setChecked(val);
 			break;
 
 		// looking
 		case 1:
-			//toolLooking->setOn(val); 
-			setLookingMode->setOn(val);
+			//toolLooking->setChecked(val); 
+			setLookingMode->setChecked(val);
 			break;
 
 		// quiet
 		case 2:
-			//toolQuiet->setOn(val); 
-			setQuietMode->setOn(val);
+			//toolQuiet->setChecked(val); 
+			setQuietMode->setChecked(val);
 			break;
 
 		default:
@@ -1465,7 +1465,7 @@ void ClientWindow::slot_checkbox(int nr, bool val)
 void ClientWindow::slot_cblooking()
 {
 	bool val = setLookingMode->isOn(); 
-//	setLookingMode->setOn(val);
+//	setLookingMode->setChecked(val);
 	set_sessionparameter("looking", val);
 	if (val)
 		// if looking then set open
@@ -1477,7 +1477,7 @@ void ClientWindow::slot_cblooking()
 void ClientWindow::slot_cbopen()
 {
 	bool val = setOpenMode->isOn(); 
-//	setOpenMode->setOn(val);
+//	setOpenMode->setChecked(val);
 	set_sessionparameter("open", val);
 	if (!val)
 		// if not open then set close
@@ -1488,7 +1488,7 @@ void ClientWindow::slot_cbopen()
 void ClientWindow::slot_cbquiet()
 {
 	bool val = setQuietMode->isOn(); 
-	//setQuietMode->setOn(val);
+	//setQuietMode->setChecked(val);
   //qDebug("bouton %b",toolQuiet->isOn());
 	set_sessionparameter("quiet", val);
 
@@ -1578,14 +1578,14 @@ void ClientWindow::slot_updateFont()
 	RoomList->setPalette(pal);
 	
 	// init menu
-	viewToolBar->setOn(setting->readBoolEntry("MAINTOOLBAR"));
-	viewUserToolBar->setOn(setting->readBoolEntry("USERTOOLBAR"));
+	viewToolBar->setChecked(setting->readBoolEntry("MAINTOOLBAR"));
+	viewUserToolBar->setChecked(setting->readBoolEntry("USERTOOLBAR"));
 	if (setting->readBoolEntry("MAINMENUBAR"))
 	{
-		viewMenuBar->setOn(false);
-		viewMenuBar->setOn(true);
+		viewMenuBar->setChecked(false);
+		viewMenuBar->setChecked(true);
 	}
-	viewStatusBar->setOn(setting->readBoolEntry("MAINSTATUSBAR"));
+	viewStatusBar->setChecked(setting->readBoolEntry("MAINSTATUSBAR"));
 
 	extUserInfo = setting->readBoolEntry("EXTUSERINFO");
 	setColumnsForExtUserInfo();
@@ -3225,7 +3225,7 @@ void ClientWindow::slot_seek(bool b)
 void ClientWindow::slot_cancelSeek()
 {
 
-	toolSeek->setOn(false);
+	toolSeek->setChecked(false);
 	toolSeek->setPopup(seekMenu);
 	toolSeek->setPopupDelay(1);
 	toolSeek->setIconSet(QIcon(NotSeekingIcon));
@@ -3236,7 +3236,7 @@ void ClientWindow::slot_cancelSeek()
 void ClientWindow::slot_seek(int i)
 {
 
-	toolSeek->setOn(true);
+	toolSeek->setChecked(true);
 	toolSeek->setPopup(NULL);
 
 	//seek entry 1 19 5 3 0

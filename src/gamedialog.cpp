@@ -267,7 +267,7 @@ qDebug("#### GameDialog::slot_offer()");
 	{
 		emit signal_sendcommand("teach " + boardSizeSpin->text(), false);
 		// prepare for future use...
-		buttonOffer->setOn(false);
+		buttonOffer->setChecked(false);
 		buttonDecline->setDisabled(true);
 		buttonCancel->setEnabled(true);
 		buttonOffer->setText(tr("Offer"));
@@ -339,9 +339,9 @@ qDebug("#### GameDialog::slot_decline()");
 	if (buttonOffer->isOn())
 	{
 		// match has been offered
-		// !! there seem to be not "setOn" in the code (apart init, but this should not reach this code)
+		// !! there seem to be not "setChecked" in the code (apart init, but this should not reach this code)
 		emit signal_sendcommand("withdraw", false);
-		buttonOffer->setOn(false);
+		buttonOffer->setChecked(false);
 		buttonOffer->setText(tr("Offer"));
 	}
 /*	else if (playerWhiteEdit->isReadOnly())
@@ -436,7 +436,7 @@ qDebug("#### GameDialog::slot_matchcreate()");
 		emit signal_matchsettings(nr, handicapSpin->text(), komiSpin->text(), kt);
 
 		// close dialog
-		buttonOffer->setOn(false);
+		buttonOffer->setChecked(false);
 		emit accept();
 
 		return;
@@ -451,7 +451,7 @@ qDebug("#### GameDialog::slot_notopen()");
 		// IGS: no player named -> check if offering && focus set
 		if (buttonOffer->isOn())// && QWidget::hasFocus())
 		{
-			buttonOffer->setOn(false);
+			buttonOffer->setChecked(false);
 			buttonOffer->setText(tr("Offer"));
 			buttonDecline->setDisabled(true);
 			buttonCancel->setEnabled(true);
@@ -459,7 +459,7 @@ qDebug("#### GameDialog::slot_notopen()");
 	}
 	else if (playerOpponentEdit->text() == opponent)//(playerWhiteEdit->isReadOnly() && playerBlackEdit->text() == opponent ||	         playerBlackEdit->isReadOnly() && playerWhiteEdit->text() == opponent)
 	{
-		buttonOffer->setOn(false);
+		buttonOffer->setChecked(false);
 		buttonOffer->setText(tr("Offer"));
 		buttonDecline->setDisabled(true);
 		buttonCancel->setEnabled(true);
@@ -485,7 +485,7 @@ qDebug("#### GameDialog::slot_komirequest()");
 			ComboBox_free->setCurrentItem(0);
 
 		buttonOffer->setText(tr("Accept"));
-		buttonOffer->setOn(false);
+		buttonOffer->setChecked(false);
 		buttonCancel->setDisabled(true);
 	}
 	else
@@ -571,9 +571,8 @@ void GameDialog::slot_dispute(const QString &opponent, const QString &line)
 			play_black_button->unsetPalette();
 		}
 
-	buttonOffer->setText(tr("Accept"));
-	buttonOffer->setOn(false);
-	buttonDecline->setEnabled(true);
-	
+		buttonOffer->setText(tr("Accept"));
+		buttonOffer->setChecked(false);
+		buttonDecline->setEnabled(true);
 	}
 }

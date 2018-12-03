@@ -2066,14 +2066,14 @@ void qGoBoard::send_kibitz(const QString msg)
 				// teacher gives controls to pupil
 				haveControls = true;
 				win->getMainWidget()->pb_controls->setEnabled(true);
-				win->getMainWidget()->pb_controls->setOn(true);
+				win->getMainWidget()->pb_controls->setChecked(true);
 			}
 			else if (msg.find("#TC:OFF") != -1)
 			{
 				// teacher takes controls back
 				haveControls = false;
 				win->getMainWidget()->pb_controls->setDisabled(true);
-				win->getMainWidget()->pb_controls->setOn(false);
+				win->getMainWidget()->pb_controls->setChecked(false);
 			}
 		}
 	}
@@ -2084,7 +2084,7 @@ void qGoBoard::send_kibitz(const QString msg)
 		{
 			// pupil gives controls back
 			haveControls = true;
-			win->getMainWidget()->pb_controls->setOn(false);
+			win->getMainWidget()->pb_controls->setChecked(false);
 		}
 		else if (havePupil && msg.section(' ', 0, 0) == ttOpponent.section(' ', 0, 0) &&
 		        (myColorIsBlack && (mv_counter % 2) || !myColorIsBlack && ((mv_counter % 2 + 1) || mv_counter == -1) ||
