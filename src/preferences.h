@@ -17,7 +17,7 @@ class PreferencesDialog : public QDialog, public Ui::PreferencesDialogGui
 	Q_OBJECT
 
 public:
-	PreferencesDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0);
+	PreferencesDialog(QWidget* parent = 0, const char* name = 0, bool modal = false, Qt::WFlags fl = 0);
 	~PreferencesDialog();
 
 //	static QString fontToString(QFont f);

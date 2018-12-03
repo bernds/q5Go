@@ -29,7 +29,7 @@ class QNewGameDlg : public QDialog, public Ui::QNewGameDlgGui
     Q_OBJECT
 
 public:
-//    QNewGameDlg( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+//    QNewGameDlg( QWidget* parent = 0, const char* name = 0, bool modal = false, WFlags fl = 0 );
 	QNewGameDlg( QWidget* parent = 0, const char* name = 0);
 	~QNewGameDlg();
 

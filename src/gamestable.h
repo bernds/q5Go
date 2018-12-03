@@ -23,7 +23,7 @@ class GamesTable : public Q3ListView
 	Q_OBJECT
 
 public:
-	GamesTable(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0);
+	GamesTable(QWidget* parent = 0, const char* name = 0, bool modal = false, Qt::WFlags fl = 0);
 	~GamesTable();
 	void set_watch(QString);
 	void set_mark(QString);

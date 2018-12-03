@@ -72,31 +72,31 @@ bool QAlsaSound::initialise()
 	 */
 	if (!qfile.open(QIODevice::ReadOnly)) {
 		qDebug("Error Opening WAV file %s\n", qfile.fileName().toLatin1().constData());
-		return FALSE;
+		return false;
 	}
 
 	if(!qfile.seek(0L)) {
 		qDebug("Error Rewinding WAV file %s\n", qfile.fileName().toLatin1().constData());
-		return FALSE;		/* Wav file must be seekable device */
+		return false;		/* Wav file must be seekable device */
 	}
 
 	qfile.read(buffer, BUFFERSIZE);
 
 	if (findchunk (buffer, (char*)"RIFF", BUFFERSIZE) != buffer) {
 		qDebug("Bad format: Cannot find RIFF file marker\n");	/* wwg: Report error */
-		return  FALSE ;
+		return  false ;
 	}
 
 	if (! findchunk (buffer, (char *)"WAVE", BUFFERSIZE)) {
 		qDebug("Bad format: Cannot find WAVE file marker\n");	/* wwg: report error */
-		return  FALSE ;
+		return  false ;
 	}
 
 	ptr = findchunk (buffer, (char *)"fmt ", BUFFERSIZE) ;
 
 	if (! ptr) {
 		qDebug("Bad format: Cannot find 'fmt' file marker\n");	/* wwg: report error */
-		return  FALSE ;
+		return  false ;
 	}
 
 	ptr += 4 ;	/* Move past "fmt ".*/
@@ -114,7 +114,7 @@ bool QAlsaSound::initialise()
 
 	if (! ptr) {
 		qDebug("Bad format: unable to find 'data' file marker\n");	/* wwg: report error */
-		return  FALSE ;
+		return  false ;
 	}
 
 	ptr += 4 ;	/* Move past "data".*/
@@ -142,7 +142,7 @@ bool QAlsaSound::initialise()
 			break;
 		default :
 			qDebug("Bad format: %i bits per seconds\n",waveformat.wBitsPerSample );	/* wwg: report error */
-			return  FALSE ;
+			return  false ;
 			break;
 	}
 
@@ -159,7 +159,7 @@ bool QAlsaSound::initialise()
                         qDebug("cannot open audio device %s (%s)\n", 
                                  device,
                                  snd_strerror (err));
-                        return FALSE;
+                        return false;
                 }
 
 
@@ -167,39 +167,39 @@ bool QAlsaSound::initialise()
 
 	if ((err = snd_pcm_nonblock(handle, 1))< 0) {
 			qDebug("Audio : nonblock setting error: %s", snd_strerror(err));
-			return FALSE;
+			return false;
 		}
 	
 
 	/* Init hwparams with full configuration space */
 	if (snd_pcm_hw_params_any(handle, params) < 0) {
 		qDebug("Audio : Can not configure this PCM device.\n");
-		return FALSE;
+		return false;
 		}
 
 
 	err = snd_pcm_hw_params_set_access(handle, params, SND_PCM_ACCESS_RW_INTERLEAVED);
 	if (err < 0) {
 		qDebug("Audio : Access type RW_INTERLEAVED not available");
-		return FALSE;
+		return false;
 	}
 
 	err = snd_pcm_hw_params_set_format(handle, params, format);
 	if (err < 0) {
 		qDebug("Sample format non available");
-		return FALSE;
+		return false;
 	}
 
 	err = snd_pcm_hw_params_set_channels(handle, params, waveformat.wChannels);
 	if (err < 0) {
 		qDebug("Channels count %i non available", waveformat.wChannels);
-		return FALSE;
+		return false;
 	}
 
 	err = snd_pcm_hw_params_set_rate_near(handle, params, &waveformat.dwSamplesPerSec, 0);
 	if (err < 0) {
 		qDebug("Unable to set rate : %d", waveformat.dwSamplesPerSec);
-		return FALSE;
+		return false;
 	}
 
 	assert(err >= 0);	
@@ -207,7 +207,7 @@ bool QAlsaSound::initialise()
 	err = snd_pcm_hw_params(handle, params);
 	if (err < 0) {
 		qDebug("Unable to install hw params:");
-		return FALSE;
+		return false;
 	}
 	
 	chunk_size = 0;
@@ -220,14 +220,14 @@ bool QAlsaSound::initialise()
 	buffer2 = (char *)malloc (buffer_size);
 	if(!buffer2) {
 		qDebug("Unable to allocate memory for sound");
-		return FALSE;
+		return false;
 	}
 	
 	bits_per_sample = snd_pcm_format_physical_width(format);
 	bits_per_frame = bits_per_sample * waveformat.wChannels;
 	chunk_bytes = chunk_size * bits_per_frame / 8;
 	
-	return TRUE ;
+	return true ;
 
 #endif
 }
@@ -305,9 +305,9 @@ char* QAlsaSound::findchunk  (char* pstart, char* fourcc, size_t n)
 
 	while (pstart < pend)
 	{ 	if (*pstart == *fourcc)       /* found match for first char*/
-		{	test = TRUE ;
+		{	test = true ;
 			for (k = 1 ; fourcc [k] != 0 ; k++)
-				test = (test ? ( pstart [k] == fourcc [k] ) : FALSE) ;
+				test = (test ? ( pstart [k] == fourcc [k] ) : false) ;
 			if (test)
 				return  pstart ;
 			} ; /* if*/

@@ -16,15 +16,13 @@ class PlayerTable : public Q3ListView
 	Q_OBJECT
 
 public:
-	PlayerTable(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0);
+	PlayerTable(QWidget* parent = 0, const char* name = 0, bool modal = false, Qt::WFlags fl = 0);
 	~PlayerTable() {};
 //	virtual void setSorting ( int column, bool ascending = TRUE );
 	void showOpen(bool show);
 
 public slots:
 	virtual void slot_mouse_players(int, Q3ListViewItem*, const QPoint&, int) {};
-	
-	
 };
 
 

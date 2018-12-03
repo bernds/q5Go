@@ -248,7 +248,7 @@ void Board::resizeBoard(int w, int h)
 
 			//TODO introduce a ghost list in the stone class so that this becomes redundant code
 			if (s->isDead())
-				s->togglePixmap(imageHandler->getGhostPixmaps(), FALSE);
+				s->togglePixmap(imageHandler->getGhostPixmaps(), false);
 
 
 

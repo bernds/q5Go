@@ -747,10 +747,10 @@ void ClientWindow::slot_connclosed()
 
 	// set to offline:
 	myAccount->set_offline();
-	//pb_connect->setChecked(FALSE);
-	toolConnect->setChecked(FALSE);
+	//pb_connect->setChecked(false);
+	toolConnect->setChecked(false);
 	seekMenu->clear();
-	slot_cancelSeek();	
+	slot_cancelSeek();
 
 	// clear channel
 	prepare_tables(CHANNELS);
