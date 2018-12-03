@@ -2,13 +2,14 @@
  * settings.cpp
  */
 
+#include <QTextStream>
+
 #include "setting.h"
 #include "config.h"
 #include "defines.h"
 #include "globals.h"
 #include "icons.h"
 #include <qfile.h>
-#include <q3textstream.h>
 #include <qdir.h>
 #include <qfont.h>
 #include <qcolor.h>
@@ -60,15 +61,6 @@ QString Setting::getApplicationPath()
 }
 #endif
 
-
-// parameter list comprising key and txt
-Parameter::Parameter(const QString &key, const QString &txt)
-{ 
-	k = key;
-	t = txt;
-}
-
-
 /*
  *   Settings
  */
@@ -77,9 +69,8 @@ Setting::Setting()
 {
 	// list of parameters to be read/saved at start/end
 	// true -> delete items when they are removed
-	list.setAutoDelete(true);
-	clearList();
-  
+	params.clear ();
+
   	// defaults:
 	writeBoolEntry("USE_NMATCH", true);
 	writeBoolEntry("NMATCH_BLACK", true);
@@ -229,10 +220,10 @@ void Setting::loadSettings()
 	qDebug() << "Use settings: " << file.name();
 
 	// read file
-	Q3TextStream txt(&file);
+	QTextStream txt(&file);
 	QString s;
 	int pos, pos1, pos2;
-	while (!txt.eof())
+	while (!txt.atEnd ())
 	{
 		s = txt.readLine();
 		if (s.length() > 2)
@@ -357,81 +348,48 @@ void Setting::saveSettings()
 
 	writeIntEntry("VERSION", SETTING_VERSION);
 
-	list.sort();
-
 	QFile file(settingHomeDir + "/." + PACKAGE + "rc");
-    
+
 	if (file.open(QIODevice::WriteOnly))
 	{
-		Q3TextStream txtfile(&file);
+		QTextStream txtfile(&file);
 
 		// write list to file: KEY [TXT]
-		Parameter *par;
-		for (par = list.first(); par != 0; par = list.next())
-			if (!par->txt().isEmpty() && !par->txt().isNull())
-				txtfile << par->key() << " [" << par->txt() << "]" << endl;
+		QMap<QString, QString>::const_iterator i = params.constBegin();
+		while (i != params.constEnd()) {
+			if (!i.value().isEmpty() && !i.value().isNull())
+				txtfile << i.key() << " [" << i.value() << "]" << endl;
+			++i;
+		}
 
 		file.close();
 	}
 }
 
 // make list entry
-bool Setting::writeEntry(const QString &key, const QString &txt)
+void Setting::writeEntry(const QString &key, const QString &txt)
 {
-	// seek key
-	Parameter *par;
-	for (par = list.first(); par != 0; par = list.next())
-	{
-		if (par->key() == key)
-		{
-			// if found, insert at current pos, and remove old item
-			// store type value
-			par->setPar(key, txt);
-//			list.insert(list.at(), new Parameter(key, txt, ct));
-//			list.next();
-//			list.remove();
-
-			// false -> entry already in list
-			return false;
-		}
-	}
-
-	list.append(new Parameter(key, txt));
-
-	// true -> new entry
-	return true;
+	params[key] = txt;
 }
 
 // return a text entry indexed by key
 QString Setting::readEntry(const QString &key)
 {
-	// seek key
-	Parameter *par;
-	for (par = list.first(); par != 0; par = list.next())
-		if (par->key() == key)
-			return par->txt();
-
-	qDebug() << "Setting::readEntry(): " << key << " == 0";
-	return QString::null;
-}
-
-void Setting::clearList(void)
-{
-	list.clear();
+	return params.value (key);
 }
 
 const QStringList Setting::getAvailableLanguages()
 {
-    // This is ugly, but I want those defines in defines.h, so all settings are in that file
-    const char *available_languages[] = AVAILABLE_LANGUAGES;
-    const int number_of_available_languages = NUMBER_OF_AVAILABLE_LANGUAGES;
-    QStringList list;
-    int i;
+	// This is ugly, but I want those defines in defines.h, so all settings are in that file
+	const char *available_languages[] = AVAILABLE_LANGUAGES;
+	const int number_of_available_languages = NUMBER_OF_AVAILABLE_LANGUAGES;
+	QStringList list;
+	int i;
 
-    for (i=0; i<number_of_available_languages; i++)
+	for (i=0; i<number_of_available_languages; i++)
 		list << available_languages[i];
-	
-    return list;
+
+	return list;
 }
 
 QString Setting::convertNumberToLanguage(int n)
@@ -531,12 +489,12 @@ QString Setting::getLanguage()
 bool Setting::getNewVersionWarning()
 {
 	QString l =  readEntry("NEWVERSIONWARNING");
-	
+
 	if (l == QString(VERSION))
 		return false ;
-		
+
 	writeEntry("NEWVERSIONWARNING", VERSION);
-	
+
 	return true;
 }
 

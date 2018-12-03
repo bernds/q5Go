@@ -12,11 +12,6 @@
 #include <qfont.h>
 #include <qcolor.h>
 #include <qpixmap.h>
-//#if (QT_VERSION < 0x030000)
-//#include <qsortedlist.h>
-//#else
-#include <q3ptrlist.h>
-//#endif
 
 // delimiters for variables in settings file
 // however, this character must not be used in parameters, e.g. host
@@ -31,39 +26,15 @@ class ClientWindow;
 class ImageHandler;
 
 
-class Parameter
-{
-public:
-	Parameter(const QString&, const QString&);
-	~Parameter() {};
-	QString key() const { return k; }
-	QString txt() const { return t; }
-	void setPar(const QString &key, const QString &txt) { k = key; t = txt; }
-	// operators <, ==
-	int operator== (Parameter h)
-		{ return (this->key() == h.key()); };
-	int operator== (Parameter *h)
-		{ return (this->key() == h->key()); };
-	int operator< (Parameter h)
-		{ return (this->key() < h.key()); };
-	int operator< (Parameter *h)
-		{ return (this->key() < h->key()); };
-
-private:
-	QString k;
-	QString t;
-};
-
-
 class Setting
 {
 public:
 	Setting();
 	~Setting();
 
-	bool writeEntry(const QString&, const QString&);
-	bool writeBoolEntry(const QString &s, bool b) { return writeEntry(s, (b ? "1" : "0")); }
-	bool writeIntEntry(const QString &s, int i) { return writeEntry(s, QString::number(i)); }
+	void writeEntry(const QString&, const QString&);
+	void writeBoolEntry(const QString &s, bool b) { writeEntry(s, (b ? "1" : "0")); }
+	void writeIntEntry(const QString &s, int i) { writeEntry(s, QString::number(i)); }
 	QString readEntry(const QString&);
 	bool readBoolEntry(const QString &s)
 	{
@@ -81,7 +52,6 @@ public:
 			return i;
 		return 0;
 	}
-	void clearList(void);
 
 	void loadSettings();
 	void saveSettings();
@@ -119,11 +89,7 @@ public:
 
 
 protected:
-//#if (QT_VERSION < 0x030000)
-//	QSortedList<Parameter> list;
-//#else
-	Q3PtrList<Parameter> list;
-//#endif
+	QMap<QString, QString> params;
 
 private:
 	QString settingHomeDir;
