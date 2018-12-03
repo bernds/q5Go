@@ -2,7 +2,6 @@
 * preferences.cpp
 */
 
-#include <QPixmap>
 #include <QFileDialog>
 #include <QWhatsThis>
 
@@ -52,25 +51,6 @@ PreferencesDialog::PreferencesDialog(QWidget* parent,  const char* name, bool mo
 			(h->password().length() ? "***" : ""));
 		//cb_title->insertItem(h->title());
 
-	// set the user toolbar list 
-	QPixmap p;
-	Q3ListViewItem *lvi;
-	QObjectList bl = parent_cw->UserToolbar->queryList( "QToolButton" ,NULL,true,false);
-    
-	QListIterator<QObject *> bli(bl);
-	while (bli.hasNext ())
-	{
-		QToolButton *b0 = (QToolButton*)bli.next();
-		lvi = new  Q3ListViewItem(ListView_buttons,
-					  "", //first column is for pixmap
-					  b0->textLabel(),
-					  b0->caption(),
-					  b0->toolTip(),
-					  b0->iconText() );
-		
-		if (p.load(b0->iconText()))
-			lvi->setPixmap(0,p);
-	}
 	// init random-number generator
 	srand( (unsigned)time( NULL ) );
 
@@ -285,7 +265,7 @@ void PreferencesDialog::insertStandardHosts()
 }
 
 // button "add" clicked or "ok" pressed
-void PreferencesDialog::slot_add()
+void PreferencesDialog::slot_add_server()
 {
 	// check if at least title and host inserted
 	if (!LineEdit_title->text().isEmpty() && !LineEdit_host->text().isEmpty())
@@ -350,7 +330,7 @@ void PreferencesDialog::slot_add()
 }
 
 // button "delete" clicked
-void PreferencesDialog::slot_delete()
+void PreferencesDialog::slot_delete_server()
 {
 	bool found = false;
 	Host *h;
@@ -387,7 +367,7 @@ void PreferencesDialog::slot_delete()
 	insertStandardHosts();
 }
 
-void PreferencesDialog::slot_new()
+void PreferencesDialog::slot_new_server()
 {
 	slot_cbtitle(QString());
 }
@@ -605,151 +585,12 @@ void PreferencesDialog::slot_getTablePicturePath()
   	LineEdit_Table->setText(fileName);
 }
 
-void PreferencesDialog::slot_getPixmapPath()
-{
-	QString fileName(QFileDialog::getOpenFileName("",tr("Images (*.png *.jpg *.xpm *.ico)"), this));
-	if (fileName.isEmpty())
-		return;
-
-	LineEdit_pixfile->setText(fileName);
-
-	QPixmap p;
-	p.load(fileName);
-  
-	pixmapLabel->setPixmap(p);
-}
-
-
 void PreferencesDialog::slot_text_buttonChanged(const QString &title)
 {
 	if (ListView_buttons->findItem(title,1))
 		pb_add_2->setText(tr("Change"));
 	else
 		pb_add_2->setText(tr("Add"));
-}
-
-void PreferencesDialog::slot_new_button()
-{
-		LineEdit_label->clear();
-		LineEdit_help->clear();
-		LineEdit_pixfile->clear();
-		LineEdit_command->clear();
-    pixmapLabel->setPixmap(NULL);
-}
-
-// button "add" clicked or "ok" pressed
-void PreferencesDialog::slot_add_button()
-{
-	QObjectList bl = parent_cw->UserToolbar->queryList( "QToolButton" ,NULL,true,false);
-	bool found = false;
-	// check if at least title and host inserted
-	if (!LineEdit_label->text().isEmpty() && !LineEdit_command->text().isEmpty())
-	{
-	// check if label already exists
-
-		QListIterator<QObject *> bli(bl);
-		while (bli.hasNext ())
-		{
-			QToolButton *b0 = (QToolButton*)bli.next();
-      			if (b0->textLabel() == LineEdit_label->text())
-			{
-				found = true;
-				// if found, remove old item
-				parent_cw->userButtonGroup->remove(b0);
-				delete b0;
-			}  
-		}
-
-		QPixmap p;
-
-		QToolButton *b = new QToolButton(parent_cw->UserToolbar) ;
-		b->setTextLabel(LineEdit_label->text());   //label of the button
-		b->setText(LineEdit_label->text());
-		b->setCaption(LineEdit_command->text()); //dirty but handy
-		b->setIconText(LineEdit_pixfile->text()); //dirty also but handy
-		QToolTip::add(b,LineEdit_help->text());
-		b->setMinimumWidth(25);
-
-		if ( p.load(LineEdit_pixfile->text()))
-			b->setPixmap(p);
-  
-		parent_cw->userButtonGroup->insert(b,-1);
-
-		if (!found)
-		{
-			Q3ListViewItem *buttonItem = new Q3ListViewItem(ListView_buttons,
-					"",
-					LineEdit_label->text(),
-					LineEdit_command->text(),
-					LineEdit_help->text(),
-			LineEdit_pixfile->text());   
-			buttonItem->setPixmap(0,p);
-		}
-		else
-		{
-			ListView_buttons->currentItem()->setText(1, LineEdit_label->text());
-			ListView_buttons->currentItem()->setText(2, LineEdit_command->text());
-			ListView_buttons->currentItem()->setText(3, LineEdit_help->text());
-			ListView_buttons->currentItem()->setText(4, LineEdit_pixfile->text());
-			ListView_buttons->currentItem()->setPixmap(0,p);
-		}
-	}
-  	slot_new_button();    
-}
-
-
-void PreferencesDialog::slot_clicked_buttonListView(Q3ListViewItem *lvi, const QPoint&, int)
-{
-	if (!lvi)
-		return;
-	LineEdit_label->setText(lvi->text(1));
-	LineEdit_command->setText(lvi->text(2));
-	LineEdit_help->setText(lvi->text(3));
-	LineEdit_pixfile->setText(lvi->text(4));
-  
-
-	QPixmap p;
-	p.load(LineEdit_pixfile->text());
-
-	pixmapLabel->setPixmap(p);
-}
-
-
-void PreferencesDialog::slot_delete_button()
-{
-	QObjectList bl = parent_cw->UserToolbar->queryList( "QToolButton" ,NULL,true,false);
-	bool found=false;
-	
-	// check if at least title and host inserted
-	if (!LineEdit_label->text().isEmpty() )//&& !LineEdit_command->text().isEmpty())
-	{
-		// check if label already exists
-		
-		Q3ListViewItem *lvi = ListView_buttons->findItem(LineEdit_label->text(),1);
-		
-		// if found, remove old item and clear fields       
-		if(lvi)
-		{
-			QListIterator<QObject *> bli(bl);
-			while (bli.hasNext ())
-			{
-				QToolButton *b0 = (QToolButton*)bli.next();
-				//QString sb= b0->text();
-				//QString sl = LineEdit_label->text();
-				if (b0->textLabel() == LineEdit_label->text())
-				{
-					found = true;
-					// if found, remove old item
-					parent_cw->userButtonGroup->remove(b0);
-					delete b0;
-				}
-			}
-			
-			ListView_buttons->takeItem(lvi);
-			slot_new_button();
-		}
-	}
-	
 }
 
 

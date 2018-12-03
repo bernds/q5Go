@@ -286,31 +286,6 @@ ClientWindow::ClientWindow(QMainWindow *parent, const char* name, Qt::WFlags fl)
 		// set host if available
 		slot_cbconnect(w);
 
-	//restore user buttons list
-	i = 0;
-	QToolButton *b;
-	QPixmap p;
-	userButtonGroup = new   Q3ButtonGroup(this);
-	userButtonGroup->hide();
-	connect( userButtonGroup, SIGNAL(clicked(int)), SLOT(slotUserButtonClicked(int)) );
-
-	for (;;)
-	{
-		QString s = setting->readEntry("USER" + QString::number(++i) + "_1");
-		if (s.isNull())
-			break;
-		b=new QToolButton(UserToolbar) ;
-		b->setText(setting->readEntry("USER" + QString::number(i) + "_1"));   //label of the button : for display
-		b->setTextLabel(setting->readEntry("USER" + QString::number(i) + "_1"));   //duplicated  for storage
-		b->setCaption(setting->readEntry("USER" + QString::number(i) + "_2")); //dirty but handy
-		QToolTip::add(b,setting->readEntry("USER" + QString::number(i) + "_3"));
-		b->setIconText(setting->readEntry("USER" + QString::number(i) + "_4"));  //dirty but handy
-		b->setMinimumWidth(25);
-		if (p.load(b->iconText()))
-			b->setPixmap(p);
-		userButtonGroup->insert(b,-1);
-	}
-
 	//restore players list filters
 	whoBox1->setCurrentItem(setting->readIntEntry("WHO_1"));
 	whoBox2->setCurrentItem(setting->readIntEntry("WHO_2"));
@@ -804,27 +779,6 @@ void ClientWindow::saveSettings()
 		setting->writeEntry("HOST" + QString::number(i) + "f", QString());
 	}
 
-	// set the user toolbar list
-	QObjectList bl = UserToolbar->queryList( "QToolButton" ,NULL,true,false);
-
-	QListIterator<QObject *> bli(bl);
-	while (bli.hasNext ()) {
-		  QToolButton *b0 = (QToolButton*)bli.next();
-		  setting->writeEntry("USER" + QString::number(i) + "_1",b0->textLabel());
-		  setting->writeEntry("USER" + QString::number(i) + "_2",b0->caption());
-		  setting->writeEntry("USER" + QString::number(i) + "_3",b0->toolTip() );
-		  setting->writeEntry("USER" + QString::number(i) + "_4",b0->iconText());
-	}
-
-	for (;;) {
-		QString s = setting->readEntry("USER" + QString::number(++i) + "_1");
-		if (s.isNull ())
-			break;
-		setting->writeEntry("USER" + QString::number(i) + "_1",QString());
-		setting->writeEntry("USER" + QString::number(i) + "_2",QString());
-		setting->writeEntry("USER" + QString::number(i) + "_3",QString());
-		setting->writeEntry("USER" + QString::number(i) + "_4",QString());
-	}
 	// save current connection if at least one host exists
 	if (!hostlist.isEmpty())
 		setting->writeEntry("ACTIVEHOST",cb_connect->currentText());
@@ -1579,7 +1533,6 @@ void ClientWindow::slot_updateFont()
 	
 	// init menu
 	viewToolBar->setChecked(setting->readBoolEntry("MAINTOOLBAR"));
-	viewUserToolBar->setChecked(setting->readBoolEntry("USERTOOLBAR"));
 	if (setting->readBoolEntry("MAINMENUBAR"))
 	{
 		viewMenuBar->setChecked(false);
@@ -2905,7 +2858,6 @@ void ClientWindow::initActions()
 	* Menu View
 	*/
 	connect(viewToolBar, SIGNAL(toggled(bool)), this, SLOT(slotViewToolBar(bool)));
-	connect(viewUserToolBar, SIGNAL(toggled(bool)), this, SLOT(slotViewUserToolBar(bool)));
 	connect(viewMenuBar, SIGNAL(toggled(bool)), this, SLOT(slotViewMenuBar(bool)));
 	viewStatusBar->setWhatsThis(tr("Statusbar\n\nEnables/disables the statusbar."));
 	connect(viewStatusBar, SIGNAL(toggled(bool)), this, SLOT(slotViewStatusBar(bool)));
@@ -2971,9 +2923,6 @@ void ClientWindow::initToolBar()
 	helpManual->setIconSet(QIcon(manualIcon));
 	setPreferences->setIconSet(QIcon(prefsIcon));
 	setIcon(qgoIcon);
-
-  UserToolbar->show();
-    
 }
 // SLOTS
 
@@ -3103,25 +3052,6 @@ void ClientWindow::slotViewToolBar(bool toggle)
 
 	statusBar()->message(tr("Ready."));
 }
-
-void ClientWindow::slotViewUserToolBar(bool toggle)
-{
-	if (!toggle)
-		UserToolbar->hide();
-	else
-		UserToolbar->show();
-
-	setting->writeBoolEntry("USERTOOLBAR", toggle);
-
-	statusBar()->message(tr("Ready."));
-}
-
-
-
-void ClientWindow::slotUserButtonClicked(int i)
-{
-  slot_toolbaractivated(userButtonGroup->find(i)->caption());
-}  
 
 void ClientWindow::slot_statsPlayer(Player *p)
 {

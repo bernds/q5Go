@@ -187,8 +187,6 @@ public slots:
 	void slotViewToolBar(bool toggle);
 	void slotViewStatusBar(bool toggle);
 	void slotViewMenuBar(bool toggle);
-	void slotViewUserToolBar(bool toggle);
-	void slotUserButtonClicked(int i);
 
 
 protected slots:

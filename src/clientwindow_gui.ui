@@ -780,11 +780,6 @@ Set the handicap range you wish when seeking a game. See 'seek' button for more<
       <addaction name="refreshPlayers"/>
       <addaction name="refreshGames"/>
     </widget>
-    <widget class="QToolBar" name="UserToolbar">
-      <property name="label">
-        <string>user defined toolbar</string>
-      </property>
-    </widget>
     <widget class="QMenuBar" name="menuBar">
       <widget class="QMenu" name="fileMenu">
         <property name="title">
@@ -1284,23 +1279,6 @@ About Qt.</string>
       </property>
       <property name="shortcut">
         <string>Ctrl+N</string>
-      </property>
-    </action>
-    <action name="viewUserToolBar">
-      <property name="name">
-        <cstring>viewUserToolBar</cstring>
-      </property>
-      <property name="checkable">
-        <bool>true</bool>
-      </property>
-      <property name="checked">
-        <bool>true</bool>
-      </property>
-      <property name="iconText">
-        <string>View user toolbar</string>
-      </property>
-      <property name="text">
-        <string>View &amp;user toolbar</string>
       </property>
     </action>
     <action name="Seek">

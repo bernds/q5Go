@@ -29,16 +29,12 @@ signals:
 public slots:
 	void on_soundButtonGroup_buttonClicked(QAbstractButton *);
 	virtual void slot_cbtitle(const QString&);
-	virtual void slot_new();
-	virtual void slot_add();
-	virtual void slot_delete();
-	virtual void slot_new_button();
-	virtual void slot_add_button();
-	virtual void slot_delete_button();
+	virtual void slot_new_server();
+	virtual void slot_add_server();
+	virtual void slot_delete_server();
 	virtual void slot_textChanged(const QString&);
 	virtual void slot_text_buttonChanged(const QString&);
 	virtual void slot_clickedListView(Q3ListViewItem*, const QPoint&, int);
-	virtual void slot_clicked_buttonListView(Q3ListViewItem*, const QPoint&, int);
 	virtual void slot_apply();
 	virtual void startHelpMode();
 	virtual void selectFont(int);
@@ -47,7 +43,6 @@ public slots:
 	virtual void slot_accept();
 	virtual void slot_reject();
 	virtual void slot_getComputerPath();
-	virtual void slot_getPixmapPath();
 	virtual void slot_getGobanPicturePath();
 	virtual void slot_getTablePicturePath();
 	virtual void slot_main_time_changed(int);

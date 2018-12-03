@@ -5249,22 +5249,6 @@ up to :</string>
    </hints>
   </connection>
   <connection>
-   <sender>ListView_buttons</sender>
-   <signal>clicked(Q3ListViewItem*,QPoint,int)</signal>
-   <receiver>PreferencesDialogGui</receiver>
-   <slot>slot_clicked_buttonListView(Q3ListViewItem*,QPoint,int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>328</x>
-     <y>443</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>ListView_hosts</sender>
    <signal>clicked(Q3ListViewItem*,QPoint,int)</signal>
    <receiver>PreferencesDialogGui</receiver>
@@ -5284,7 +5268,7 @@ up to :</string>
    <sender>pb_add_2</sender>
    <signal>clicked()</signal>
    <receiver>PreferencesDialogGui</receiver>
-   <slot>slot_add_button()</slot>
+   <slot>slot_add_server()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>198</x>
@@ -5300,7 +5284,7 @@ up to :</string>
    <sender>pb_delete_2</sender>
    <signal>clicked()</signal>
    <receiver>PreferencesDialogGui</receiver>
-   <slot>slot_delete_button()</slot>
+   <slot>slot_delete_server()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>254</x>
@@ -5316,7 +5300,7 @@ up to :</string>
    <sender>pb_new_2</sender>
    <signal>clicked()</signal>
    <receiver>PreferencesDialogGui</receiver>
-   <slot>slot_new_button()</slot>
+   <slot>slot_new_server()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>197</x>
