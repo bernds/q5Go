@@ -140,14 +140,7 @@ private:
 	QString cdc;
 };
 
-class HostList : public Q3PtrList<Host>
-{
-public:
-	HostList() {};
-	~HostList() {};
-	
-	virtual int compareItems(Item d1, Item d2);
-};
+typedef QList<Host *> HostList;
 
 //-----------
 

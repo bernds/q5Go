@@ -932,23 +932,6 @@ Host::Host(const QString &title, const QString &host, const unsigned int port, c
  *   List to help keeping things sorted
  */
 
-int HostList::compareItems(Item d1, Item d2)
-{
-	Host *s1 = static_cast<Host*>(d1);
-	Host *s2 = static_cast<Host*>(d2);
-
-	CHECK_PTR(s1);
-	CHECK_PTR(s2);
-
-	if (s1 > s2)
-		return 1;
-	else if (s1 < s2)
-		return -1;
-	else
-		// s1 == s2;
-		return 0;
-}
-
 int ChannelList::compareItems(Item d1, Item d2)
 {
 	Channel *s1 = static_cast<Channel*>(d1);
@@ -997,7 +980,6 @@ Talk::Talk(const QString &playername, QWidget *parent, bool isplayer)
 		delete pb_match;
 		delete stats_layout;
 	}
-	
 }
 
 Talk::~Talk()

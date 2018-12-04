@@ -96,23 +96,21 @@ ClientWindow::ClientWindow(QMainWindow *parent, const char* name, Qt::WFlags fl)
 
 	// init
 
- 
 	DODEBUG = false;
 	DD = 0;
 	setting->cw = this;
 	setIcon(setting->image0);
 	myAccount = new Account(this);
-	
+
 	defaultStyle = qApp->style()->name() ;
 	// this is very dirty : we do this because there seem to be no clean way to backtrack from MainWindow to the defaultStyle :-(
 	setting->writeEntry("DEFAULT_STYLE",defaultStyle ) ;
-  
-	hostlist.setAutoDelete(true);
+
 	cmd_count = 0;
 
 	sendBuffer.setAutoDelete(true);
 	currentCommand = new sendBuf("",0);
-  
+
 	resetCounter();
 	cmd_valid = false;
 	tn_ready = false;
@@ -197,10 +195,9 @@ ClientWindow::ClientWindow(QMainWindow *parent, const char* name, Qt::WFlags fl)
 		setting->loadSettings();
 	}
 
-	// View Statusbar                          
 	initStatusBar(this);
-	// Sets actions
 	initActions();
+
 	// Set menus
 	//initmenus(this);
 	// Sets toolbar
@@ -271,13 +268,14 @@ ClientWindow::ClientWindow(QMainWindow *parent, const char* name, Qt::WFlags fl)
 		QString s = setting->readEntry("HOST" + QString::number(++i) + "a");
 		if (s.isNull ())
 			break;
-		hostlist.inSort(new Host(setting->readEntry("HOST" + QString::number(i) + "a"),
-			                     setting->readEntry("HOST" + QString::number(i) + "b"),
-			                     setting->readIntEntry("HOST" + QString::number(i) + "c"),
-			                     setting->readEntry("HOST" + QString::number(i) + "d"),
-			                     setting->readEntry("HOST" + QString::number(i) + "e"),
-			                     setting->readEntry("HOST" + QString::number(i) + "f")));
+		hostlist.append (new Host(setting->readEntry("HOST" + QString::number(i) + "a"),
+					  setting->readEntry("HOST" + QString::number(i) + "b"),
+					  setting->readIntEntry("HOST" + QString::number(i) + "c"),
+					  setting->readEntry("HOST" + QString::number(i) + "d"),
+					  setting->readEntry("HOST" + QString::number(i) + "e"),
+					  setting->readEntry("HOST" + QString::number(i) + "f")));
 	}
+	std::sort (hostlist.begin (), hostlist.end (), [] (Host *a, Host *b) { return *a < *b; });
 
 	// run slot command to initialize combobox and set host
 	QString w = setting->readEntry("ACTIVEHOST");
@@ -756,7 +754,7 @@ void ClientWindow::saveSettings()
 {
 	// save setting
 	int i = 0;
-	for (Host *h = hostlist.first(); h != 0; h = hostlist.next())
+	for (auto h: hostlist)
 	{
 		i++;
 		setting->writeEntry("HOST" + QString::number(i) + "a", h->title());
@@ -1347,33 +1345,35 @@ void ClientWindow::slot_cbconnect(const QString &txt)
 
 		// refill combobox
 		cb_connect->clear();
-		for (Host *h_ = hostlist.first(); h_ != NULL; h_ = hostlist.next())
+		for (auto h_: hostlist)
 		{
-			cb_connect->insertItem(h_->title());
+			cb_connect->insertItem (h_->title());
 			if (h_->title() == text)
 			{
-						i = cb_connect->count();
-						h = h_;
+				i = cb_connect->count() - 1;
+				h = h_;
 			}
 		}
 	}
 	else
 	{
-		// view active host in cb_connect
-		h = hostlist.first();
-		while (h != NULL && h->title() != text)
-		{
-			h = hostlist.next();
-			i++;
-		}
+		for (auto h_: hostlist)
+			if (h_->title() == text) {
+				h = h_;
+				i = hostlist.indexOf (h_);
+				break;
+			}
 	}
 
-	// view selected host
-	cb_connect->setCurrentItem(i-1);
-
-	// check if host exists
-	if (!h && !(h = hostlist.getFirst()))
+	if (!h) {
+		h = hostlist.first ();
+		i = 0;
+	}
+	if (!h)
 		return;
+
+	// view selected host
+	cb_connect->setCurrentIndex(i);
 
 	// inform telnet about selected host
 	QString lg = h->loginName();

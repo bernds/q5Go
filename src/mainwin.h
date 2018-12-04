@@ -32,7 +32,7 @@ public:
 	QString get_txt() { return txt; }
 	bool get_localecho() { return localecho; }
 	QString txt;
-    
+
 private:
 	bool localecho;
 };

@@ -26,7 +26,6 @@ PreferencesDialog::PreferencesDialog(QWidget* parent,  const char* name, bool mo
 	: QDialog ( parent, name, modal, fl )
 {
 	setupUi(this);
-	ListView_buttons->setColumnWidth(4,0);
 
 	// pointer to ClientWindow
 	parent_cw = setting->cw;
@@ -42,14 +41,8 @@ PreferencesDialog::PreferencesDialog(QWidget* parent,  const char* name, bool mo
 	//parent_cw->hostlist;
 
 	// set connection titles to listview
-	for (Host *h = parent_cw->hostlist.first(); h != 0; h = parent_cw->hostlist.next())
-		new Q3ListViewItem(ListView_hosts,
-			h->title(),
-			h->host(),
-			QString::number(h->port()),
-			h->loginName(),
-			(h->password().length() ? "***" : ""));
-		//cb_title->insertItem(h->title());
+	for (auto h: parent_cw->hostlist)
+		new QListWidgetItem (h->title(), ListView_hosts);
 
 	// init random-number generator
 	srand( (unsigned)time( NULL ) );
@@ -254,17 +247,16 @@ void PreferencesDialog::saveSizes()
 void PreferencesDialog::insertStandardHosts()
 {
 	// standard hosts
-	new Q3ListViewItem(ListView_hosts, "-- Aurora --");
-	new Q3ListViewItem(ListView_hosts, "-- CTN --");
-	new Q3ListViewItem(ListView_hosts, "-- CWS --");
-	new Q3ListViewItem(ListView_hosts, "-- EGF --");
-	new Q3ListViewItem(ListView_hosts, "-- IGS --");
-	new Q3ListViewItem(ListView_hosts, "-- LGS --");
-	new Q3ListViewItem(ListView_hosts, "-- NNGS --");
-	new Q3ListViewItem(ListView_hosts, "-- WING --");
+	new QListWidgetItem("-- Aurora --", ListView_hosts);
+	new QListWidgetItem("-- CTN --", ListView_hosts);
+	new QListWidgetItem("-- CWS --", ListView_hosts);
+	new QListWidgetItem("-- EGF --", ListView_hosts);
+	new QListWidgetItem("-- IGS --", ListView_hosts);
+	new QListWidgetItem("-- LGS --", ListView_hosts);
+	new QListWidgetItem("-- NNGS --", ListView_hosts);
+	new QListWidgetItem("-- WING --", ListView_hosts);
 }
 
-// button "add" clicked or "ok" pressed
 void PreferencesDialog::slot_add_server()
 {
 	// check if at least title and host inserted
@@ -280,48 +272,43 @@ void PreferencesDialog::slot_add_server()
 			qWarning("Failed to convert port to integer!");
 		}
 
-		for (Host *h = parent_cw->hostlist.first(); !found && h != 0; h = parent_cw->hostlist.next())
-		{
+		for (auto h: parent_cw->hostlist)
 			if (h->title() == LineEdit_title->text())
 			{
 				found = true;
 				// if found, insert at current pos, and remove old item
-				parent_cw->hostlist.remove();
+				parent_cw->hostlist.removeOne (h);
+				break;
 			}
-		}
-		
-		// insert host at it's sorted position
-		parent_cw->hostlist.inSort(new Host(LineEdit_title->text(),
-				LineEdit_host->text(),
-				tmp,
-				LineEdit_login->text(),
-				LineEdit_pass->text(),
-				ComboBox_codec->currentText()));
+
+		// insert host at its sorted position
+		parent_cw->hostlist.append(new Host(LineEdit_title->text(),
+						    LineEdit_host->text(),
+						    tmp,
+						    LineEdit_login->text(),
+						    LineEdit_pass->text(),
+						    ComboBox_codec->currentText()));
+		std::sort (parent_cw->hostlist.begin (), parent_cw->hostlist.end (),
+			   [] (Host *a, Host *b) { return *a < *b; });
+
 		// create entry in listview
 		if (!found)
-			new Q3ListViewItem(ListView_hosts,
-				LineEdit_title->text(),
-				LineEdit_host->text(),
-				QString::number(tmp),
-				LineEdit_login->text(),
-				(LineEdit_pass->text().length() ? "***" : ""));
+			new QListWidgetItem(LineEdit_title->text(), ListView_hosts);
 		else
 		{
-			ListView_hosts->currentItem()->setText(0, LineEdit_title->text());
-			ListView_hosts->currentItem()->setText(1, LineEdit_host->text());
-			ListView_hosts->currentItem()->setText(2, QString::number(tmp));
-			ListView_hosts->currentItem()->setText(3, LineEdit_login->text());
-			ListView_hosts->currentItem()->setText(4, (LineEdit_pass->text().length() ? "***" : ""));
+			ListView_hosts->currentItem()->setText(LineEdit_title->text());
 		}
 		ListView_hosts->repaint();
 //			cb_title->insertItem(LineEdit_title->text(), 0);
 
+#if 0
 		// add to ClientWindow hostlist       !!! does not seem to be used !
 		emit signal_addHost(LineEdit_title->text(),
 		                    LineEdit_host->text(),
 		                    tmp,
 		                    LineEdit_login->text(),
 		                    LineEdit_pass->text());
+#endif
 
 	}
 
@@ -329,40 +316,29 @@ void PreferencesDialog::slot_add_server()
 	slot_cbtitle(QString());
 }
 
-// button "delete" clicked
 void PreferencesDialog::slot_delete_server()
 {
 	bool found = false;
 	Host *h;
-	for (h = parent_cw->hostlist.first(); !found && h != 0; h = parent_cw->hostlist.next())
-	{
+	for (auto h: parent_cw->hostlist) {
 		if (h->title() == LineEdit_title->text())
 		{
 			found = true;
 			// if found, delete current entry
-			parent_cw->hostlist.remove();
+			parent_cw->hostlist.removeOne(h);
 			emit signal_delHost(LineEdit_title->text());
+			break;
 		}
 	}
 
 	// set connection titles to listview
-	Q3ListViewItemIterator lv(ListView_hosts);
-	for (Q3ListViewItem *lvi; (lvi = lv.current());)
-	{
-		lv++;
-		delete lvi;
-	}
+	ListView_hosts->clear ();
 
 	// clear entries
 	slot_cbtitle(QString());
 
-	for (h = parent_cw->hostlist.first(); h != 0; h = parent_cw->hostlist.next())
-		new Q3ListViewItem(ListView_hosts,
-			h->title(),
-			h->host(),
-			QString::number(h->port()),
-			h->loginName(),
-			(h->password().length() ? "***" : ""));
+	for (auto h: parent_cw->hostlist)
+		new QListWidgetItem(h->title(), ListView_hosts);
 
 	insertStandardHosts();
 }
@@ -372,12 +348,13 @@ void PreferencesDialog::slot_new_server()
 	slot_cbtitle(QString());
 }
 
-void PreferencesDialog::slot_clickedListView(Q3ListViewItem *lvi, const QPoint&, int)
+void PreferencesDialog::slot_clickedHostList(QListWidgetItem *lvi)
 {
-	if (!lvi)
+	if (!lvi) {
 		return;
+	}
 
-	slot_cbtitle(lvi->text(0));
+	slot_cbtitle (lvi->text());
 }
 
 void PreferencesDialog::slot_cbtitle(const QString &txt)
@@ -466,10 +443,7 @@ void PreferencesDialog::slot_cbtitle(const QString &txt)
 	else if (!txt.isEmpty())
 	{
 		// fill host info of selected title
-		Host *h = parent_cw->hostlist.first();
-		bool found = false;
-		while (h != 0)
-		{
+		for (auto h: parent_cw->hostlist) {
 			if (h->title() == txt)
 			{
 				LineEdit_title->setText(h->title());
@@ -478,28 +452,23 @@ void PreferencesDialog::slot_cbtitle(const QString &txt)
 				LineEdit_login->setText(h->loginName());
 				LineEdit_pass->setText(h->password());
 				ComboBox_codec->setCurrentText(h->codec());
-				found = true;
+				break;
 			}
-
-			h = parent_cw->hostlist.next();
 		}
 	}
 }
 
 void PreferencesDialog::slot_textChanged(const QString &title)
 {
-	bool found = false;
-	Host *h;
-	for (h = parent_cw->hostlist.first(); !found && h != 0; h = parent_cw->hostlist.next())
+	for (auto h: parent_cw->hostlist)
 	{
-		if (h->title() == title)
-			found = true;
+		if (h->title() == title) {
+			pb_add->setText(tr("Change"));
+			return;
+		}
 	}
 
-	if (found)
-		pb_add->setText(tr("Change"));
-	else
-		pb_add->setText(tr("Add"));
+	pb_add->setText(tr("Add"));
 }
 
 // play the sound if check box has been clicked
@@ -584,15 +553,6 @@ void PreferencesDialog::slot_getTablePicturePath()
 
   	LineEdit_Table->setText(fileName);
 }
-
-void PreferencesDialog::slot_text_buttonChanged(const QString &title)
-{
-	if (ListView_buttons->findItem(title,1))
-		pb_add_2->setText(tr("Change"));
-	else
-		pb_add_2->setText(tr("Add"));
-}
-
 
 void PreferencesDialog::slot_main_time_changed(int n)
 {

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>619</width>
-    <height>678</height>
+    <width>664</width>
+    <height>801</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -20,7 +20,16 @@
    <string>Preferences</string>
   </property>
   <layout class="QGridLayout">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>2</number>
+   </property>
+   <property name="topMargin">
+    <number>2</number>
+   </property>
+   <property name="rightMargin">
+    <number>2</number>
+   </property>
+   <property name="bottomMargin">
     <number>2</number>
    </property>
    <property name="spacing">
@@ -31,7 +40,16 @@
      <property name="spacing">
       <number>6</number>
      </property>
-     <property name="margin">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
       <number>0</number>
      </property>
      <item>
@@ -181,7 +199,7 @@ After placing and/or undo release button for returning to starting point automat
       <string/>
      </property>
      <property name="currentIndex">
-      <number>4</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="InterfaceTabWidget">
       <attribute name="title">
@@ -194,7 +212,16 @@ After placing and/or undo release button for returning to starting point automat
           <string>Font</string>
          </property>
          <layout class="QGridLayout">
-          <property name="margin">
+          <property name="leftMargin">
+           <number>6</number>
+          </property>
+          <property name="topMargin">
+           <number>6</number>
+          </property>
+          <property name="rightMargin">
+           <number>6</number>
+          </property>
+          <property name="bottomMargin">
            <number>6</number>
           </property>
           <property name="spacing">
@@ -205,7 +232,16 @@ After placing and/or undo release button for returning to starting point automat
             <property name="spacing">
              <number>6</number>
             </property>
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
@@ -264,7 +300,16 @@ Select the font for the application.</string>
             <property name="spacing">
              <number>6</number>
             </property>
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
@@ -323,7 +368,16 @@ Select the font for marks on the board.</string>
             <property name="spacing">
              <number>6</number>
             </property>
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
@@ -382,7 +436,16 @@ Select font used in all text input/output fields.</string>
             <property name="spacing">
              <number>6</number>
             </property>
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
@@ -435,7 +498,16 @@ Select the font for lists.</string>
             <property name="spacing">
              <number>6</number>
             </property>
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
@@ -497,7 +569,16 @@ Select the font for the clocks.</string>
             <property name="spacing">
              <number>6</number>
             </property>
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
@@ -554,392 +635,6 @@ Select the font for the server console (fixed font preferably).</string>
          </layout>
         </widget>
        </item>
-       <item row="4" column="0" colspan="2">
-        <widget class="Q3GroupBox" name="groupBox27">
-         <property name="title">
-          <string>User buttons toolbar</string>
-         </property>
-         <layout class="QGridLayout">
-          <property name="margin">
-           <number>6</number>
-          </property>
-          <item row="4" column="0">
-           <layout class="QHBoxLayout">
-            <property name="spacing">
-             <number>6</number>
-            </property>
-            <property name="margin">
-             <number>0</number>
-            </property>
-            <item>
-             <spacer name="Spacer3_2">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeType">
-               <enum>QSizePolicy::Expanding</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
-             <layout class="QVBoxLayout">
-              <property name="spacing">
-               <number>6</number>
-              </property>
-              <property name="margin">
-               <number>0</number>
-              </property>
-              <item>
-               <widget class="QPushButton" name="pb_new_2">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="toolTip">
-                 <string>clear form</string>
-                </property>
-                <property name="whatsThis">
-                 <string>New
-
-clear form; doesn't make any changes to the entries</string>
-                </property>
-                <property name="text">
-                 <string>New</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <layout class="QHBoxLayout">
-                <property name="spacing">
-                 <number>6</number>
-                </property>
-                <property name="margin">
-                 <number>0</number>
-                </property>
-                <item>
-                 <widget class="QPushButton" name="pb_add_2">
-                  <property name="toolTip">
-                   <string>add/change current entry</string>
-                  </property>
-                  <property name="whatsThis">
-                   <string>Add or Change
-
-Label 'Change ' appears when title is not unique, i.e. the saved entries with that title will be superseded by the current entries.
-
-Label 'Add' is default. The given entries will be saved under the given title.</string>
-                  </property>
-                  <property name="text">
-                   <string>Add</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="pb_delete_2">
-                  <property name="toolTip">
-                   <string>delete current entry</string>
-                  </property>
-                  <property name="whatsThis">
-                   <string>Delete
-
-Deletes the saved entries with same label
-
-Note: 'Delete' concerns saved records.</string>
-                  </property>
-                  <property name="text">
-                   <string>Delete</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </item>
-          <item row="2" column="0">
-           <layout class="QHBoxLayout">
-            <property name="spacing">
-             <number>6</number>
-            </property>
-            <property name="margin">
-             <number>0</number>
-            </property>
-            <item>
-             <widget class="QLabel" name="TextLabel2_4_2">
-              <property name="minimumSize">
-               <size>
-                <width>70</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>Help text:</string>
-              </property>
-              <property name="wordWrap">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="LineEdit_help">
-              <property name="toolTip">
-               <string>Help text, displayed as tooltip</string>
-              </property>
-              <property name="whatsThis">
-               <string>help text
-
-This text is displayed as tooltip of the created button</string>
-              </property>
-              <property name="maxLength">
-               <number>100</number>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="1" column="0">
-           <layout class="QHBoxLayout">
-            <property name="spacing">
-             <number>6</number>
-            </property>
-            <property name="margin">
-             <number>0</number>
-            </property>
-            <item>
-             <widget class="QLabel" name="TextLabel1_5_2">
-              <property name="minimumSize">
-               <size>
-                <width>70</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>Command:</string>
-              </property>
-              <property name="wordWrap">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="LineEdit_command">
-              <property name="toolTip">
-               <string>command passed to the server</string>
-              </property>
-              <property name="whatsThis">
-               <string>command
-
-the command is passed to the server</string>
-              </property>
-              <property name="maxLength">
-               <number>100</number>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="3" column="0">
-           <layout class="QHBoxLayout">
-            <item>
-             <widget class="QLabel" name="TextLabel3_2_2">
-              <property name="minimumSize">
-               <size>
-                <width>70</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>Pixmap file:</string>
-              </property>
-              <property name="wordWrap">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="LineEdit_pixfile">
-              <property name="toolTip">
-               <string>file path to the button pixmap</string>
-              </property>
-              <property name="whatsThis">
-               <string>file path to the button pixmap
-
-Set it with the file chooser</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="pixmapLabel">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>24</width>
-                <height>24</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>24</width>
-                <height>24</height>
-               </size>
-              </property>
-              <property name="scaledContents">
-               <bool>true</bool>
-              </property>
-              <property name="wordWrap">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="PixmapPathButton">
-              <property name="toolTip">
-               <string>pixmap file chooser</string>
-              </property>
-              <property name="text">
-               <string/>
-              </property>
-              <property name="icon">
-               <iconset resource="q4go.qrc">
-                <normaloff>:/PreferencesDialogGui/images/preferences/image1.png</normaloff>:/PreferencesDialogGui/images/preferences/image1.png</iconset>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="0" column="0">
-           <layout class="QHBoxLayout">
-            <item>
-             <widget class="QLabel" name="TextLabel1_title_2">
-              <property name="minimumSize">
-               <size>
-                <width>70</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>Label:</string>
-              </property>
-              <property name="wordWrap">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="LineEdit_label">
-              <property name="toolTip">
-               <string>Button label</string>
-              </property>
-              <property name="whatsThis">
-               <string>unique label, 
-
-The label is displayed as button text.</string>
-              </property>
-              <property name="maxLength">
-               <number>100</number>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="0" column="1" rowspan="5">
-           <widget class="Q3ListView" name="ListView_buttons">
-            <property name="minimumSize">
-             <size>
-              <width>250</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="toolTip">
-             <string>User defined button list</string>
-            </property>
-            <property name="whatsThis">
-             <string>Button Entries
-
-Select 'New' to clear input fields. After filling in at least label and command use Add/Change.
-
-Select an entry to edit, change (label keeps unchanged) or delete a line.
-</string>
-            </property>
-            <property name="resizePolicy">
-             <enum>Q3ScrollView::AutoOneFit</enum>
-            </property>
-            <property name="allColumnsShowFocus">
-             <bool>true</bool>
-            </property>
-            <column>
-             <property name="text">
-              <string>Pixmap</string>
-             </property>
-             <property name="clickable">
-              <bool>true</bool>
-             </property>
-             <property name="resizable">
-              <bool>true</bool>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Label</string>
-             </property>
-             <property name="clickable">
-              <bool>true</bool>
-             </property>
-             <property name="resizable">
-              <bool>true</bool>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Command</string>
-             </property>
-             <property name="clickable">
-              <bool>true</bool>
-             </property>
-             <property name="resizable">
-              <bool>true</bool>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Help Text</string>
-             </property>
-             <property name="clickable">
-              <bool>true</bool>
-             </property>
-             <property name="resizable">
-              <bool>true</bool>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="clickable">
-              <bool>false</bool>
-             </property>
-             <property name="resizable">
-              <bool>false</bool>
-             </property>
-            </column>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
        <item row="2" column="0">
         <widget class="Q3GroupBox" name="GroupBox8">
          <property name="toolTip">
@@ -962,7 +657,16 @@ If your language is not supported, you might consider translating qGo. Please ch
           <property name="spacing">
            <number>6</number>
           </property>
-          <property name="margin">
+          <property name="leftMargin">
+           <number>11</number>
+          </property>
+          <property name="topMargin">
+           <number>11</number>
+          </property>
+          <property name="rightMargin">
+           <number>11</number>
+          </property>
+          <property name="bottomMargin">
            <number>11</number>
           </property>
           <item>
@@ -1153,7 +857,7 @@ Enable this box when you want to listen a clicking sound when playing a stone on
              <string>Stones</string>
             </property>
             <attribute name="buttonGroup">
-             <string>soundButtonGroup</string>
+             <string notr="true">soundButtonGroup</string>
             </attribute>
            </widget>
           </item>
@@ -1166,7 +870,7 @@ Enable this box when you want to listen a clicking sound when playing a stone on
              <string>Pass</string>
             </property>
             <attribute name="buttonGroup">
-             <string>soundButtonGroup</string>
+             <string notr="true">soundButtonGroup</string>
             </attribute>
            </widget>
           </item>
@@ -1184,7 +888,7 @@ Play a sound when a stone is placed in autoplay mode.</string>
              <string>Autoplay</string>
             </property>
             <attribute name="buttonGroup">
-             <string>soundButtonGroup</string>
+             <string notr="true">soundButtonGroup</string>
             </attribute>
            </widget>
           </item>
@@ -1197,7 +901,7 @@ Play a sound when a stone is placed in autoplay mode.</string>
              <string>Game end</string>
             </property>
             <attribute name="buttonGroup">
-             <string>soundButtonGroup</string>
+             <string notr="true">soundButtonGroup</string>
             </attribute>
            </widget>
           </item>
@@ -1210,7 +914,7 @@ Play a sound when a stone is placed in autoplay mode.</string>
              <string>Say</string>
             </property>
             <attribute name="buttonGroup">
-             <string>soundButtonGroup</string>
+             <string notr="true">soundButtonGroup</string>
             </attribute>
            </widget>
           </item>
@@ -1223,7 +927,7 @@ Play a sound when a stone is placed in autoplay mode.</string>
              <string>Talk</string>
             </property>
             <attribute name="buttonGroup">
-             <string>soundButtonGroup</string>
+             <string notr="true">soundButtonGroup</string>
             </attribute>
            </widget>
           </item>
@@ -1236,7 +940,7 @@ Play a sound when a stone is placed in autoplay mode.</string>
              <string>Enter</string>
             </property>
             <attribute name="buttonGroup">
-             <string>soundButtonGroup</string>
+             <string notr="true">soundButtonGroup</string>
             </attribute>
            </widget>
           </item>
@@ -1249,7 +953,7 @@ Play a sound when a stone is placed in autoplay mode.</string>
              <string>Leave</string>
             </property>
             <attribute name="buttonGroup">
-             <string>soundButtonGroup</string>
+             <string notr="true">soundButtonGroup</string>
             </attribute>
            </widget>
           </item>
@@ -1262,7 +966,7 @@ Play a sound when a stone is placed in autoplay mode.</string>
              <string>Disconnect</string>
             </property>
             <attribute name="buttonGroup">
-             <string>soundButtonGroup</string>
+             <string notr="true">soundButtonGroup</string>
             </attribute>
            </widget>
           </item>
@@ -1275,7 +979,7 @@ Play a sound when a stone is placed in autoplay mode.</string>
              <string>Connect</string>
             </property>
             <attribute name="buttonGroup">
-             <string>soundButtonGroup</string>
+             <string notr="true">soundButtonGroup</string>
             </attribute>
            </widget>
           </item>
@@ -1288,7 +992,7 @@ Play a sound when a stone is placed in autoplay mode.</string>
              <string>Match</string>
             </property>
             <attribute name="buttonGroup">
-             <string>soundButtonGroup</string>
+             <string notr="true">soundButtonGroup</string>
             </attribute>
            </widget>
           </item>
@@ -1305,7 +1009,7 @@ You can set the warning time besides</string>
              <string>Time (secs.)</string>
             </property>
             <attribute name="buttonGroup">
-             <string>soundButtonGroup</string>
+             <string notr="true">soundButtonGroup</string>
             </attribute>
            </widget>
           </item>
@@ -1353,7 +1057,16 @@ You can set the warning time besides</string>
           <string>Board</string>
          </property>
          <layout class="QGridLayout">
-          <property name="margin">
+          <property name="leftMargin">
+           <number>6</number>
+          </property>
+          <property name="topMargin">
+           <number>6</number>
+          </property>
+          <property name="rightMargin">
+           <number>6</number>
+          </property>
+          <property name="bottomMargin">
            <number>6</number>
           </property>
           <property name="spacing">
@@ -1515,7 +1228,16 @@ If activated, all types of marks except characters and numbers on the board will
             <property name="spacing">
              <number>6</number>
             </property>
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
@@ -1559,7 +1281,16 @@ Swaps sidebar and board, thus board is on the left and sidbar is on the right.</
           <string>Goban</string>
          </property>
          <layout class="QGridLayout">
-          <property name="margin">
+          <property name="leftMargin">
+           <number>11</number>
+          </property>
+          <property name="topMargin">
+           <number>11</number>
+          </property>
+          <property name="rightMargin">
+           <number>11</number>
+          </property>
+          <property name="bottomMargin">
            <number>11</number>
           </property>
           <property name="spacing">
@@ -1667,7 +1398,16 @@ If the picture is not set, or unvalid, a default picture is used by qgo</string>
           <property name="spacing">
            <number>0</number>
           </property>
-          <property name="margin">
+          <property name="leftMargin">
+           <number>6</number>
+          </property>
+          <property name="topMargin">
+           <number>6</number>
+          </property>
+          <property name="rightMargin">
+           <number>6</number>
+          </property>
+          <property name="bottomMargin">
            <number>6</number>
           </property>
           <item>
@@ -1698,7 +1438,16 @@ If you press to enter a move on the board, the move will not be acknowledged if 
           <property name="spacing">
            <number>0</number>
           </property>
-          <property name="margin">
+          <property name="leftMargin">
+           <number>6</number>
+          </property>
+          <property name="topMargin">
+           <number>6</number>
+          </property>
+          <property name="rightMargin">
+           <number>6</number>
+          </property>
+          <property name="bottomMargin">
            <number>6</number>
           </property>
           <item>
@@ -1706,7 +1455,16 @@ If you press to enter a move on the board, the move will not be acknowledged if 
             <property name="spacing">
              <number>6</number>
             </property>
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
@@ -1795,7 +1553,16 @@ If not available then interval time is used.</string>
          <property name="spacing">
           <number>6</number>
          </property>
-         <property name="margin">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
           <number>0</number>
          </property>
          <item>
@@ -2011,7 +1778,16 @@ This will display realistic 3D stones with stripes and shadow</string>
           <string>Go Engine</string>
          </property>
          <layout class="QGridLayout">
-          <property name="margin">
+          <property name="leftMargin">
+           <number>11</number>
+          </property>
+          <property name="topMargin">
+           <number>11</number>
+          </property>
+          <property name="rightMargin">
+           <number>11</number>
+          </property>
+          <property name="bottomMargin">
            <number>11</number>
           </property>
           <property name="spacing">
@@ -2022,7 +1798,16 @@ This will display realistic 3D stones with stripes and shadow</string>
             <property name="spacing">
              <number>6</number>
             </property>
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
@@ -2148,7 +1933,16 @@ This will display realistic 3D stones with stripes and shadow</string>
             <property name="spacing">
              <number>6</number>
             </property>
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
@@ -2196,7 +1990,16 @@ This will display realistic 3D stones with stripes and shadow</string>
             <property name="spacing">
              <number>6</number>
             </property>
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
@@ -2767,46 +2570,6 @@ If 'None' is selected, Latin1 encoding will be used, common in western world.
               <height>32767</height>
              </size>
             </property>
-            <item>
-             <property name="text">
-              <string>None</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Big5</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>EUC-JP</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>JIS</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Shift-JIS</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>EUC-KR</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>GBK</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Tamil TSCII</string>
-             </property>
-            </item>
            </widget>
           </item>
           <item>
@@ -2946,7 +2709,16 @@ When importing or exporting ASCII files, use these characters to indicate the gi
           <property name="spacing">
            <number>6</number>
           </property>
-          <property name="margin">
+          <property name="leftMargin">
+           <number>6</number>
+          </property>
+          <property name="topMargin">
+           <number>6</number>
+          </property>
+          <property name="rightMargin">
+           <number>6</number>
+          </property>
+          <property name="bottomMargin">
            <number>6</number>
           </property>
           <item>
@@ -2954,7 +2726,16 @@ When importing or exporting ASCII files, use these characters to indicate the gi
             <property name="spacing">
              <number>6</number>
             </property>
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
@@ -2996,7 +2777,16 @@ When importing or exporting ASCII files, use these characters to indicate the gi
             <property name="spacing">
              <number>6</number>
             </property>
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
@@ -3038,7 +2828,16 @@ When importing or exporting ASCII files, use these characters to indicate the gi
             <property name="spacing">
              <number>6</number>
             </property>
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
@@ -3080,7 +2879,16 @@ When importing or exporting ASCII files, use these characters to indicate the gi
             <property name="spacing">
              <number>6</number>
             </property>
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
@@ -3122,7 +2930,16 @@ When importing or exporting ASCII files, use these characters to indicate the gi
             <property name="spacing">
              <number>6</number>
             </property>
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
@@ -3164,7 +2981,16 @@ When importing or exporting ASCII files, use these characters to indicate the gi
             <property name="spacing">
              <number>6</number>
             </property>
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
@@ -3229,7 +3055,16 @@ When importing or exporting ASCII files, use these characters to indicate the gi
          <property name="spacing">
           <number>6</number>
          </property>
-         <property name="margin">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
           <number>0</number>
          </property>
          <item>
@@ -3269,7 +3104,7 @@ Note: don't use a default server name, i.e. '-- Aurora --' etc.</string>
         </layout>
        </item>
        <item row="0" column="1" rowspan="9">
-        <widget class="Q3ListView" name="ListView_hosts">
+        <widget class="QListWidget" name="ListView_hosts">
          <property name="whatsThis">
           <string>Host Entries
 
@@ -3279,67 +3114,9 @@ Select an entry to edit, change (Title keeps unchanged) or delete a line.
 
 Select one of the predefined hosts -- xxx -- and add a title to use it.</string>
          </property>
-         <property name="resizePolicy">
-          <enum>Q3ScrollView::AutoOneFit</enum>
-         </property>
-         <property name="allColumnsShowFocus">
+         <property name="allColumnsShowFocus" stdset="0">
           <bool>true</bool>
          </property>
-         <column>
-          <property name="text">
-           <string>Title</string>
-          </property>
-          <property name="clickable">
-           <bool>true</bool>
-          </property>
-          <property name="resizable">
-           <bool>true</bool>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Host</string>
-          </property>
-          <property name="clickable">
-           <bool>true</bool>
-          </property>
-          <property name="resizable">
-           <bool>true</bool>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Port</string>
-          </property>
-          <property name="clickable">
-           <bool>true</bool>
-          </property>
-          <property name="resizable">
-           <bool>true</bool>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Name</string>
-          </property>
-          <property name="clickable">
-           <bool>true</bool>
-          </property>
-          <property name="resizable">
-           <bool>true</bool>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Password</string>
-          </property>
-          <property name="clickable">
-           <bool>true</bool>
-          </property>
-          <property name="resizable">
-           <bool>true</bool>
-          </property>
-         </column>
         </widget>
        </item>
        <item row="1" column="0">
@@ -3347,7 +3124,16 @@ Select one of the predefined hosts -- xxx -- and add a title to use it.</string>
          <property name="spacing">
           <number>6</number>
          </property>
-         <property name="margin">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
           <number>0</number>
          </property>
          <item>
@@ -3394,7 +3180,16 @@ Use a valid hostname or ip address. Instead of typing it one of the predefined h
          <property name="spacing">
           <number>6</number>
          </property>
-         <property name="margin">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
           <number>0</number>
          </property>
          <item>
@@ -3435,7 +3230,16 @@ Port address is defined for each go server. It's a fixed number. See Host for pr
          <property name="spacing">
           <number>6</number>
          </property>
-         <property name="margin">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
           <number>0</number>
          </property>
          <item>
@@ -3478,7 +3282,16 @@ others:		guest</string>
          <property name="spacing">
           <number>6</number>
          </property>
-         <property name="margin">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
           <number>0</number>
          </property>
          <item>
@@ -3595,7 +3408,16 @@ New users: leave blank!</string>
             <property name="spacing">
              <number>6</number>
             </property>
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
@@ -3624,7 +3446,16 @@ clear form; doesn't make any changes to the entries</string>
               <property name="spacing">
                <number>6</number>
               </property>
-              <property name="margin">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
                <number>0</number>
               </property>
               <item>
@@ -4167,7 +3998,16 @@ Click to get a new, editable offline window.</string>
           <property name="spacing">
            <number>6</number>
           </property>
-          <property name="margin">
+          <property name="leftMargin">
+           <number>11</number>
+          </property>
+          <property name="topMargin">
+           <number>11</number>
+          </property>
+          <property name="rightMargin">
+           <number>11</number>
+          </property>
+          <property name="bottomMargin">
            <number>11</number>
           </property>
           <item>
@@ -4210,7 +4050,16 @@ On IGS only.</string>
           <property name="spacing">
            <number>6</number>
           </property>
-          <property name="margin">
+          <property name="leftMargin">
+           <number>11</number>
+          </property>
+          <property name="topMargin">
+           <number>11</number>
+          </property>
+          <property name="rightMargin">
+           <number>11</number>
+          </property>
+          <property name="bottomMargin">
            <number>11</number>
           </property>
           <item>
@@ -4365,7 +4214,16 @@ Use semicolon &quot;;&quot; as delimiter (no spaces)</string>
                      <property name="spacing">
                       <number>6</number>
                      </property>
-                     <property name="margin">
+                     <property name="leftMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="bottomMargin">
                       <number>0</number>
                      </property>
                      <item>
@@ -4426,7 +4284,16 @@ Use semicolon &quot;;&quot; as delimiter (no spaces)</string>
                      <property name="spacing">
                       <number>6</number>
                      </property>
-                     <property name="margin">
+                     <property name="leftMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="bottomMargin">
                       <number>0</number>
                      </property>
                      <item>
@@ -4522,7 +4389,16 @@ negotiation</string>
                      <property name="spacing">
                       <number>6</number>
                      </property>
-                     <property name="margin">
+                     <property name="leftMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="bottomMargin">
                       <number>0</number>
                      </property>
                      <item>
@@ -4607,7 +4483,16 @@ time :</string>
                      <property name="spacing">
                       <number>6</number>
                      </property>
-                     <property name="margin">
+                     <property name="leftMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="bottomMargin">
                       <number>0</number>
                      </property>
                      <item>
@@ -4714,7 +4599,16 @@ time:</string>
                      <property name="spacing">
                       <number>6</number>
                      </property>
-                     <property name="margin">
+                     <property name="leftMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="bottomMargin">
                       <number>0</number>
                      </property>
                      <item>
@@ -4796,7 +4690,16 @@ up to :</string>
                      <property name="spacing">
                       <number>6</number>
                      </property>
-                     <property name="margin">
+                     <property name="leftMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="bottomMargin">
                       <number>0</number>
                      </property>
                      <item>
@@ -4928,7 +4831,16 @@ up to :</string>
                      <property name="spacing">
                       <number>6</number>
                      </property>
-                     <property name="margin">
+                     <property name="leftMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="bottomMargin">
                       <number>0</number>
                      </property>
                      <item>
@@ -5044,11 +4956,13 @@ up to :</string>
    <class>Q3ListBox</class>
    <extends>Q3Frame</extends>
    <header>q3listbox.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
-   <class>Q3ListView</class>
+   <class>QListWidget</class>
    <extends>Q3Frame</extends>
    <header>q3listview.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>
@@ -5217,22 +5131,6 @@ up to :</string>
    </hints>
   </connection>
   <connection>
-   <sender>LineEdit_label</sender>
-   <signal>textChanged(QString)</signal>
-   <receiver>PreferencesDialogGui</receiver>
-   <slot>slot_text_buttonChanged(QString)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>110</x>
-     <y>444</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>LineEdit_title</sender>
    <signal>textChanged(QString)</signal>
    <receiver>PreferencesDialogGui</receiver>
@@ -5250,9 +5148,9 @@ up to :</string>
   </connection>
   <connection>
    <sender>ListView_hosts</sender>
-   <signal>clicked(Q3ListViewItem*,QPoint,int)</signal>
+   <signal>itemClicked(QListWidgetItem*)</signal>
    <receiver>PreferencesDialogGui</receiver>
-   <slot>slot_clickedListView(Q3ListViewItem*,QPoint,int)</slot>
+   <slot>slot_clickedHostList(QListWidgetItem*)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>326</x>
@@ -5265,7 +5163,7 @@ up to :</string>
    </hints>
   </connection>
   <connection>
-   <sender>pb_add_2</sender>
+   <sender>pb_add</sender>
    <signal>clicked()</signal>
    <receiver>PreferencesDialogGui</receiver>
    <slot>slot_add_server()</slot>
@@ -5281,7 +5179,7 @@ up to :</string>
    </hints>
   </connection>
   <connection>
-   <sender>pb_delete_2</sender>
+   <sender>pb_delete</sender>
    <signal>clicked()</signal>
    <receiver>PreferencesDialogGui</receiver>
    <slot>slot_delete_server()</slot>
