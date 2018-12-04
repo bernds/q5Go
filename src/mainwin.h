@@ -75,8 +75,7 @@ public:
 //	QSortedList<Host>  hostlist;
 //	QPtrList<Host>  hostlist;
 	HostList hostlist;
-	Q3ButtonGroup *userButtonGroup ;
-  
+
 	QString  defaultStyle ;
 
 signals:
