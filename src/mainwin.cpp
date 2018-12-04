@@ -2429,7 +2429,7 @@ void ClientWindow::slot_talk(const QString &name, const QString &text, bool ispl
 	}
 
 	// check if it was a channel message
-	autoAnswer &= (isplayer && autoAwayMessage && !name.contains('*') && text[0] == '>');
+	autoAnswer &= (isplayer && autoAwayMessage && !name.contains('*') && (!text.isEmpty () && text[0] == '>'));
 	if (autoAnswer)
 	{
 		// send when qGo is NOT the active application - TO DO
