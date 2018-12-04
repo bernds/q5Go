@@ -55,7 +55,6 @@ public:
 	QString getPlayerExcludeListEntry(QString);
 	void openLocalBoard(QString file = QString::null) { qgoif->set_localboard(file); }
 	void openLocalGame() { qgoif->set_localgame(); }
-	void openPreferences() { qgoif->openPreferences(); }
 	void saveMenuFrame(QPoint p, QSize s) { menu_p = p; menu_s = s; }
 	void savePrefFrame(QPoint p, QSize s) { pref_p = p; pref_s = s; }
 	QPoint getMenuPos() { return menu_p; }
@@ -70,6 +69,10 @@ public:
 	void setBytesIn(int i) { if (i == -1) bytesIn = 0; else bytesIn += i; }
 	void setBytesOut(int i) { if (i == -1) bytesOut = 0; else bytesOut += i; }
 	void saveSettings();
+
+	bool preferencesAccept();
+	bool preferencesSave(PreferencesDialog*);
+	void dlgSetPreferences(int tab=-1);
 
 	bool DODEBUG;
 //	QSortedList<Host>  hostlist;
@@ -151,7 +154,7 @@ public slots:
 	void slot_seek(int i);
 	void slot_seek(bool);
 	void slot_SeekList(const QString&, const QString&);
-	
+
 	// gamestable/playertable:
 	virtual void slot_mouse_games(int, Q3ListViewItem*, const QPoint&, int);
 	virtual void slot_mouse_players(int, Q3ListViewItem*, const QPoint&, int);
@@ -168,10 +171,10 @@ public slots:
 	// gamedialog, qgoif
 	void slot_sendcommand(const QString&, bool);
 	//menus
-	void slotFileNewBoard();        
+	void slotFileNewBoard();
 	void slotFileNewGame();
 	void slotFileOpen();
-	void slotComputerPlay();        
+	void slotComputerPlay();
 
 	void slotHelpManual();
 	void slotHelpSoundInfo();
@@ -230,14 +233,14 @@ private:
 	// timing aids
 	void 		timerEvent(QTimerEvent*);
 	int		counter;
-	
+
 	// reset internal counter (quarter hour) for timing functions of class ClientWindow
 	void		resetCounter() { counter = 899; }
 
 	void initStatusBar(QWidget*);
-	//void initmenus(QWidget*);                      
+	//void initmenus(QWidget*);
 	void initToolBar();
-	void initActions();                            
+	void initActions();
 
 
 	void keyPressEvent(QKeyEvent*);
@@ -272,10 +275,10 @@ private:
 	int oneSecondTimer;
 
   	// menus
-	QPixmap 	exitIcon, fileNewboardIcon, fileNewIcon, fileOpenIcon, fileSaveIcon, fileSaveAsIcon,                       
+	QPixmap 	exitIcon, fileNewboardIcon, fileNewIcon, fileOpenIcon, fileSaveIcon, fileSaveAsIcon,
 			connectedIcon,disconnectedIcon, prefsIcon, qgoIcon, manualIcon,
 			OpenIcon, LookingIcon, QuietIcon, NotOpenIcon, NotLookingIcon, NotQuietIcon, NotSeekingIcon,
-			RefreshPlayersIcon,  RefreshGamesIcon, ComputerPlayIcon;  
+			RefreshPlayersIcon,  RefreshGamesIcon, ComputerPlayIcon;
 
 	QPixmap 	seekingIcon[4];
 
@@ -284,5 +287,7 @@ private:
 
 	QAction *whatsThis;
 };
+
+extern ClientWindow *client_window;
 
 #endif

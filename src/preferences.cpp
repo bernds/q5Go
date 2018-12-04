@@ -115,8 +115,8 @@ PreferencesDialog::~PreferencesDialog()
 void PreferencesDialog::slot_apply()
 {
 	qDebug() << "onApply";
-	((MainWindow*)parentWidget())->preferencesSave(this);
-	((MainWindow*)parentWidget())->preferencesAccept();
+	client_window->preferencesSave(this);
+	client_window->preferencesAccept();
 }
 
 void PreferencesDialog::startHelpMode()

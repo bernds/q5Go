@@ -203,7 +203,6 @@ public:
 	void set_gsName(GSName n) { gsName = n; }
 	void set_localboard(QString file=QString::null);
 	void set_localgame();
-	void openPreferences(int tab=-1);
 	QWidget *get_parent() { return parent; }
 	void wrapupMatchGame(qGoBoard *, bool);
 

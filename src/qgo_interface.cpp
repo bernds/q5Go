@@ -1382,16 +1382,6 @@ void qGoIF::set_localgame()
 		SLOT(slot_closeevent()));
 }
 
-// direct access to preferences dialog
-void qGoIF::openPreferences(int tab)
-{
-	MainWindow *win = new MainWindow(0, PACKAGE);
-
-	win->dlgSetPreferences(tab);
-
-	delete win;
-}
-
 // time has been added
 void qGoIF::slot_timeAdded(int time, bool toMe)
 {

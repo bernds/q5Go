@@ -41,7 +41,6 @@ public:
 	InterfaceHandler* getInterfaceHandler() const { return interfaceHandler; }
 	Board* getBoard() const { return board; }
 //	void setApplicationStyle();
-	bool preferencesAccept();
 	void doOpen(const QString &fileName, const QString &filter=0, bool storedir=true);
 	bool startComputerPlay(QNewGameDlg * dlg,const QString &fileName, const QString &computer_path);
 	int checkModified(bool interactive=true);
@@ -53,13 +52,11 @@ public:
 	void doRealScore(bool toggle) { mainWidget->doRealScore(toggle); }
 	MainWidget *getMainWidget() { return mainWidget; }
 	bool reStoreWindowSize(QString, bool);
-	bool preferencesSave(PreferencesDialog*);
 	void updateBoard();
 	void addObserver(const QString &name);
 	void clearObserver() { ListView_observers->clear(); }
 	Q3ListView *getListView_observers() { return ListView_observers; }
 	void updateObserverCnt();
-	void dlgSetPreferences(int tab=-1);
 	QAction *get_fileQuit() { return fileQuit; }
 	QAction *get_fileClose() { return fileClose; }
 	int blackPlayerType, whitePlayerType ;
@@ -118,7 +115,6 @@ public slots:
 	void slotNavNthMove();
 	void slotNavAutoplay(bool toggle);
 	void slotNavSwapVariations();
-	void slotSetPreferences();
 	void slotSetGameInfo();
 	void slotViewFileBar(bool toggle);
 	void slotViewToolBar(bool toggle);

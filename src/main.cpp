@@ -139,14 +139,14 @@ int main(int argc, char **argv)
 	else if (strcmp(lang.ascii(), "en") && strcmp(lang.ascii(), "C"))  // Skip warning for en and C default.
 		qWarning("Failed to find translation file for %s", lang.ascii());
 
-	ClientWindow *mainWindow = new ClientWindow(0, 0, Qt::Window);
+	client_window = new ClientWindow(0, 0, Qt::Window);
 
 #ifdef OWN_DEBUG_MODE
 	// restore size and pos
-	if (mainWindow->getViewSize().width() > 0)
+	if (client_window->getViewSize().width() > 0)
 	{
-		nonModal->resize(mainWindow->getViewSize());
-		nonModal->move(mainWindow->getViewPos());
+		nonModal->resize(client_window->getViewSize());
+		nonModal->move(client_window->getViewPos());
 	}
 
 	if (found_debug)
@@ -155,19 +155,19 @@ int main(int argc, char **argv)
 		nonModal->hide();
 
 	// for storing size
-	mainWindow->setDebugDialog(nonModal);
+	client_window->setDebugDialog(nonModal);
 #endif
 
 	// if debugging allow enhanced output
 	if (found_debug)
-		mainWindow->DODEBUG = true;
+		client_window->DODEBUG = true;
 
-	mainWindow->hide();
+	client_window->hide();
 
 	// set main widget
-	myapp.setMainWidget(mainWindow);
+	myapp.setMainWidget(client_window);
 
-	QObject::connect(&myapp, SIGNAL(lastWindowClosed()), mainWindow, SLOT(quit()));
+	QObject::connect(&myapp, SIGNAL(lastWindowClosed()), client_window, SLOT(quit()));
 
 	if (found_sgf) {
 		qGoBoard *qb = new qGoBoard();
@@ -179,12 +179,12 @@ int main(int argc, char **argv)
 			qb->get_win()->doOpen(sgf_file, 0, false);
 		qb->get_win()->setGameMode (modeNormal);
 	} else {
-		mainWindow->setCaption(PACKAGE1 + QString(" V") + VERSION);
-		mainWindow->show();
+		client_window->setCaption(PACKAGE1 + QString(" V") + VERSION);
+		client_window->show();
 	}
 	
 	if (setting->getNewVersionWarning())
-		QMessageBox::warning(mainWindow ,PACKAGE,NEWVERSIONWARNING);//PACKAGE, NEWVERSIONWARNING);
+		QMessageBox::warning(client_window ,PACKAGE,NEWVERSIONWARNING);//PACKAGE, NEWVERSIONWARNING);
 	
 	
 	return myapp.exec();
