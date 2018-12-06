@@ -10,7 +10,6 @@
 //Added by qt3to4:
 #include <QLabel>
 class QLabel;
-class Q3TextEdit;
 class QLineEdit;
 class Board;
 class QWidget;
@@ -55,7 +54,7 @@ public:
 		*editDelete,
 	        *navSwapVariations, *navPrevComment, *navNextComment,
  		*fileImportASCII, *fileImportASCIIClipB, *fileImportSgfClipB, *fileNew, *fileNewBoard, *fileOpen ;
-	Q3TextEdit *commentEdit;
+	QTextEdit *commentEdit;
 	QLineEdit *commentEdit2;
 //	EditTools *editTools;
 	NormalTools *normalTools;

@@ -176,7 +176,7 @@ MainWindow::MainWindow(QWidget* parent, const char* name, Qt::WFlags f)
 	//commentEdit = new QTextEdit(splitter_comment, "comments");
 	QWidget *commentWidget = new QWidget(splitter_comment);
 	QVBoxLayout *commentLayout = new QVBoxLayout(commentWidget, 0,0,"commentLayout");
-	commentEdit = new Q3TextEdit(commentWidget,  "comments");
+	commentEdit = new QTextEdit(commentWidget,  "comments");
 	commentLayout->addWidget(commentEdit);
 	commentEdit2 = new QLineEdit( commentWidget, "commentEdit2" );
 	commentLayout->addWidget(commentEdit2);
@@ -194,7 +194,7 @@ MainWindow::MainWindow(QWidget* parent, const char* name, Qt::WFlags f)
 	// disable sorting; else sort rank would sort by rank string (col 2) instead of rank key (col 3, invisible)
 	ListView_observers->setSorting(-1);
 
-	commentEdit->setWordWrap(Q3TextEdit::WidgetWidth);
+	commentEdit->setWordWrapMode(QTextOption::WordWrap);
 	//commentEdit2 = mainWidget->commentEdit2;
 	//commentEdit2 = new QLineEdit( boardFrame, "commentEdit2" );
 

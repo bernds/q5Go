@@ -29,7 +29,6 @@ class QNewGameDlg : public QDialog, public Ui::QNewGameDlgGui
     Q_OBJECT
 
 public:
-//    QNewGameDlg( QWidget* parent = 0, const char* name = 0, bool modal = false, WFlags fl = 0 );
 	QNewGameDlg( QWidget* parent = 0, const char* name = 0);
 	~QNewGameDlg();
 
@@ -86,9 +85,9 @@ protected:
 */
   	void init();
 
-    bool _oneColorGo;
-    int _size, _handicap, _levelBlack, _levelWhite,_time;
-    int _playerWhiteType, _playerBlackType;
+	bool _oneColorGo;
+	int _size, _handicap, _levelBlack, _levelWhite,_time;
+	int _playerWhiteType, _playerBlackType;
 	float _komi;
 	QString _playerWhiteName, _playerBlackName;
 

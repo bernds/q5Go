@@ -87,7 +87,7 @@ private:
 public:
 	Talk(const QString&, QWidget*, bool isplayer = true);
 	~Talk();
-	Q3TextEdit      *get_mle() const { return MultiLineEdit1; } //eb16
+	QTextEdit      *get_mle() const { return MultiLineEdit1; } //eb16
 	QLineEdit      *get_le() const {return LineEdit1; }
 	QWidget        *get_tabWidget()  { return this; }
 //	QPushButton    *get_pb() const { return pb_releaseTalkTab; }

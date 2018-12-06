@@ -95,7 +95,7 @@ closes the tab (and dialog)</string>
     </layout>
    </item>
    <item row="1" column="0">
-    <widget class="Q3TextEdit" name="MultiLineEdit1">
+    <widget class="QTextEdit" name="MultiLineEdit1">
      <property name="toolTip">
       <string>dialog with this player</string>
      </property>
@@ -114,7 +114,7 @@ in this box you see the conversation with the player whose name appears on the t
     </widget>
    </item>
    <item row="0" column="0">
-    <widget class="Q3Frame" name="stats_layout">
+    <widget class="QFrame" name="stats_layout">
      <property name="frameShape">
       <enum>QFrame::StyledPanel</enum>
      </property>
@@ -522,19 +522,6 @@ in this box you see the conversation with the player whose name appears on the t
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <customwidgets>
-  <customwidget>
-   <class>Q3Frame</class>
-   <extends>QFrame</extends>
-   <header>Qt3Support/Q3Frame</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>Q3TextEdit</class>
-   <extends>Q3Frame</extends>
-   <header>q3textedit.h</header>
-  </customwidget>
- </customwidgets>
  <resources>
   <include location="q4go.qrc"/>
  </resources>

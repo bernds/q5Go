@@ -150,7 +150,7 @@ private:
 
 	QSplitter *splitter, *splitter_comment;
 //	QMultiLineEdit *commentEdit;
-	Q3TextEdit *commentEdit;
+	QTextEdit *commentEdit;
 	QLineEdit *commentEdit2;
 	Q3ListView *ListView_observers;
 
