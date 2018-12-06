@@ -225,11 +225,11 @@ void QNewGameDlg::init()
 	_time = 0;//Gothic::time;
 	_oneColorGo = false;
 
-	_WhiteTypeComboBox->insertItem(tr("Human"));
-	_WhiteTypeComboBox->insertItem(tr("Computer"));
+	_WhiteTypeComboBox->addItem(tr("Human"));
+	_WhiteTypeComboBox->addItem(tr("Computer"));
 	_WhiteTypeComboBox->setCurrentIndex(_playerWhiteType);
-	_BlackTypeComboBox->insertItem(tr("Human"));
-	_BlackTypeComboBox->insertItem(tr("Computer"));
+	_BlackTypeComboBox->addItem(tr("Human"));
+	_BlackTypeComboBox->addItem(tr("Computer"));
 	_BlackTypeComboBox->setCurrentIndex(_playerBlackType);
 	_SizeSpinBox->setValue(_size);
 	_HandicapSpinBox->setValue(_handicap);
