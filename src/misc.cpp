@@ -4,8 +4,6 @@
 
 #include "misc.h"
 #include <qregexp.h>
-#include <q3ptrlist.h>
-
 
 // convert rk to key for sorting;
 // if integer is true, then result can be used to calculate handicap
