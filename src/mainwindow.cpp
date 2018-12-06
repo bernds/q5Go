@@ -865,101 +865,101 @@ void MainWindow::initMenuBar()
 	// submenu Import/Export
 	importExportMenu = new QMenu();
 	importExportMenu->insertTearOffHandle();
-	fileImportASCII->addTo(importExportMenu);
-	fileImportASCIIClipB->addTo(importExportMenu);
-	fileExportASCII->addTo(importExportMenu);
+	importExportMenu->addAction (fileImportASCII);
+	importExportMenu->addAction (fileImportASCIIClipB);
+	importExportMenu->addAction (fileExportASCII);
 	importExportMenu->insertSeparator();
-	fileImportSgfClipB->addTo(importExportMenu);
-	fileExportSgfClipB->addTo(importExportMenu);
+	importExportMenu->addAction (fileImportSgfClipB);
+	importExportMenu->addAction (fileExportSgfClipB);
 	importExportMenu->insertSeparator();
-	fileExportPic->addTo(importExportMenu);
-	fileExportPicClipB->addTo(importExportMenu);
+	importExportMenu->addAction (fileExportPic);
+	importExportMenu->addAction (fileExportPicClipB);
 	
 	// menuBar entry fileMenu
 	fileMenu = new QMenu();
 	fileMenu->insertTearOffHandle();
-	fileNewBoard->addTo(fileMenu);
-	fileNew->addTo(fileMenu);
-	fileOpen->addTo(fileMenu);
-	fileSave->addTo(fileMenu);
-	fileSaveAs->addTo(fileMenu);
-	fileClose->addTo(fileMenu);
+	fileMenu->addAction (fileNewBoard);
+	fileMenu->addAction (fileNew);
+	fileMenu->addAction (fileOpen);
+	fileMenu->addAction (fileSave);
+	fileMenu->addAction (fileSaveAs);
+	fileMenu->addAction (fileClose);
 	fileMenu->insertSeparator();
 	fileMenu->insertItem(tr("&Import/Export"), importExportMenu);
 	fileMenu->insertSeparator();
-	fileQuit->addTo(fileMenu);
+	fileMenu->addAction (fileQuit);
 	
 	// menuBar entry editMenu
 	editMenu = new QMenu();
 	editMenu->insertTearOffHandle();
-	editDelete->addTo(editMenu);
+	editMenu->addAction (editDelete);
 	editMenu->insertSeparator();
-	editNumberMoves->addTo(editMenu);
-	editMarkBrothers->addTo(editMenu);
-	editMarkSons->addTo(editMenu);
+	editMenu->addAction (editNumberMoves);
+	editMenu->addAction (editMarkBrothers);
+	editMenu->addAction (editMarkSons);
 	
 	// menuBar entry navMenu
 	navMenu = new QMenu();
 	navMenu->insertTearOffHandle();
-	navFirst->addTo(navMenu);
-	navBackward->addTo(navMenu);
-	navForward->addTo(navMenu);
-	navLast->addTo(navMenu);
+	navMenu->addAction (navFirst);
+	navMenu->addAction (navBackward);
+	navMenu->addAction (navForward);
+	navMenu->addAction (navLast);
 	navMenu->insertSeparator();
-	navMainBranch->addTo(navMenu);
-	navStartVar->addTo(navMenu);
-	navPrevVar->addTo(navMenu);
-	navNextVar->addTo(navMenu);
-	navNextBranch->addTo(navMenu);
+	navMenu->addAction (navMainBranch);
+	navMenu->addAction (navStartVar);
+	navMenu->addAction (navPrevVar);
+	navMenu->addAction (navNextVar);
+	navMenu->addAction (navNextBranch);
 	navMenu->insertSeparator();
-	navNthMove->addTo(navMenu);
-	navAutoplay->addTo(navMenu);
+	navMenu->addAction (navNthMove);
+	navMenu->addAction (navAutoplay);
 	navMenu->insertSeparator();
-	navSwapVariations->addTo(navMenu);
+	navMenu->addAction (navSwapVariations);
  	navMenu->insertSeparator();		//added eb
-	navPrevComment->addTo(navMenu);
-	navNextComment->addTo(navMenu);		// end add
+	navMenu->addAction (navPrevComment);
+	navMenu->addAction (navNextComment);		// end add
 
 	
 	// menuBar entry settingsMenu
 	settingsMenu = new QMenu();
 	settingsMenu->insertTearOffHandle();
-	setPreferences->addTo(settingsMenu);
-	setGameInfo->addTo(settingsMenu);
+	settingsMenu->addAction (setPreferences);
+	settingsMenu->addAction (setGameInfo);
 	settingsMenu->insertSeparator();
-	soundToggle->addTo(settingsMenu);
+	settingsMenu->addAction (soundToggle);
 	
 	// menuBar entry viewMenu
 	viewMenu = new QMenu();
 	viewMenu->insertTearOffHandle();
-	viewFileBar->addTo(viewMenu);
-	viewToolBar->addTo(viewMenu);
-	viewEditBar->addTo(viewMenu);
+	viewMenu->addAction (viewFileBar);
+	viewMenu->addAction (viewToolBar);
+	viewMenu->addAction (viewEditBar);
 #if 0
-	viewMenuBar->addTo(viewMenu);
+	viewMenu->addAction (viewMenuBar);
 #endif
-	viewStatusBar->addTo(viewMenu);
-	viewCoords->addTo(viewMenu);
-	viewSlider->addTo(viewMenu);
-	viewSidebar->addTo(viewMenu);
-	viewComment->addTo(viewMenu);
-	viewVertComment->addTo(viewMenu);
-	viewPinComment->addTo(viewMenu);
+	viewMenu->addAction (viewStatusBar);
+	viewMenu->addAction (viewCoords);
+	viewMenu->addAction (viewSlider);
+	viewMenu->addAction (viewSidebar);
+	viewMenu->addAction (viewComment);
+	viewMenu->addAction (viewVertComment);
+	viewMenu->addAction (viewPinComment);
 	viewMenu->insertSeparator();
 	viewMenu->insertSeparator();
-	viewSaveSize->addTo(viewMenu);
+	viewMenu->addAction (viewSaveSize);
 	viewMenu->insertSeparator();
-	viewFullscreen->addTo(viewMenu);
+	viewMenu->addAction (viewFullscreen);
 	
 	// menuBar entry helpMenu
 	helpMenu = new QMenu();
-	helpManual->addTo(helpMenu);
+	helpMenu->addAction (helpManual);
 	helpMenu->insertItem(wtIcon, tr("What's &This?"), this, SLOT(whatsThis()), Qt::SHIFT+Qt::Key_F1);
 	helpMenu->insertSeparator();
-	helpSoundInfo->addTo(helpMenu);
+	helpMenu->addAction (helpSoundInfo);
 	helpMenu->insertSeparator();
-	helpAboutApp->addTo(helpMenu);
-	helpAboutQt->addTo(helpMenu);
+	helpMenu->addAction (helpAboutApp);
+	helpMenu->addAction (helpAboutQt);
 	
 	// menubar configuration
 	menuBar()->insertItem(tr("&File"), fileMenu);
@@ -976,53 +976,53 @@ void MainWindow::initToolBar()
 	// File toolbar
 	fileBar = addToolBar ("filebar");
 
-	fileNew->addTo(fileBar);
-	fileOpen->addTo(fileBar);
-	fileSave->addTo(fileBar);
-	fileSaveAs->addTo(fileBar);
+	fileBar->addAction (fileNew);
+	fileBar->addAction (fileOpen);
+	fileBar->addAction (fileSave);
+	fileBar->addAction (fileSaveAs);
 
 	// Navigation toolbar
 	toolBar = addToolBar ("toolbar");
 
-	navFirst->addTo(toolBar);
-	navBackward->addTo(toolBar);
-	navForward->addTo(toolBar);
-	navLast->addTo(toolBar);
+	toolBar->addAction (navFirst);
+	toolBar->addAction (navBackward);
+	toolBar->addAction (navForward);
+	toolBar->addAction (navLast);
 
 	toolBar->addSeparator();
 
-	navMainBranch->addTo(toolBar);
-	navStartVar->addTo(toolBar);
-	navPrevVar->addTo(toolBar);
-	navNextVar->addTo(toolBar);
-	navNextBranch->addTo(toolBar);
+	toolBar->addAction (navMainBranch);
+	toolBar->addAction (navStartVar);
+	toolBar->addAction (navPrevVar);
+	toolBar->addAction (navNextVar);
+	toolBar->addAction (navNextBranch);
 
 	toolBar->addSeparator();
-	navPrevComment->addTo(toolBar);        // added eb 2
-	navNextComment->addTo(toolBar);
-	navIntersection->addTo(toolBar);       //SL added eb 11
+	toolBar->addAction (navPrevComment);        // added eb 2
+	toolBar->addAction (navNextComment);
+	toolBar->addAction (navIntersection);       //SL added eb 11
 	toolBar->addSeparator();               //end add eb 2
 
-	navAutoplay->addTo(toolBar);
+	toolBar->addAction (navAutoplay);
 
 	toolBar->addSeparator();
 
-	soundToggle->addTo(toolBar);
-	viewCoords->addTo(toolBar);
+	toolBar->addAction (soundToggle);
+	toolBar->addAction (viewCoords);
 
 	toolBar->addSeparator();
 
 	whatsThis = QWhatsThis::createAction (this);
-	whatsThis->addTo (toolBar);
+	toolBar->addAction (whatsThis);
 
 	toolBar->addSeparator();
 
-//	setPreferences->addTo(toolBar);
-	setGameInfo->addTo(toolBar);
+//	toolBar->addAction (setPreferences);
+	toolBar->addAction (setGameInfo);
 
 	// Edit toolbar
 	editBar = addToolBar ("editbar");
-	editDelete->addTo(editBar);
+	editBar->addAction (editDelete);
 }
 
 void MainWindow::initStatusBar()
