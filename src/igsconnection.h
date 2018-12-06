@@ -30,8 +30,6 @@ public:
 
 	virtual bool closeConnection();
 	virtual void sendTextToHost(QString txt, bool ignoreCodec=false);
-	
-	virtual const char* getUsername();
 
 	virtual void setTextCodec(QString codec);
 

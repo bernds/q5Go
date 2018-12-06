@@ -39,7 +39,6 @@ public:
 	virtual bool openConnection(const char *host, unsigned port, const char *user=0, const char *pass=0)=0;
 	virtual bool closeConnection()=0;
 	virtual void sendTextToHost(QString, bool)=0;
-	virtual const char* getUsername()=0;
 	virtual void setTextCodec(QString)=0;
 };
 #endif

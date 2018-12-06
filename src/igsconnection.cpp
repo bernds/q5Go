@@ -335,7 +335,3 @@ bool IGSConnection::closeConnection()
 	return true;
 }
 
-const char* IGSConnection::getUsername ()
-{
-	return (const char*) username;
-}
