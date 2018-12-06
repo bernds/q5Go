@@ -177,18 +177,18 @@ QString GamesTableItem::key(int column, bool /*ascending*/) const
 		case 0:
 		case 5:
 		case 11:
-			return text(column).stripWhiteSpace().rightJustify(3, '0') + text(12);
+			return text(column).trimmed().rightJustified(3, '0') + text(12);
 			break;
 
 		// Sz, By
 		case 6:
 		case 9:
-			return text(column).stripWhiteSpace().rightJustify(2, '0') + text(12);
+			return text(column).trimmed().rightJustified(2, '0') + text(12);
 			break;
 
 		// K
 		case 7:
-			return text(column).stripWhiteSpace().rightJustify(5, '0') + text(12);
+			return text(column).trimmed().rightJustified(5, '0') + text(12);
 			break;
 			
 		default:

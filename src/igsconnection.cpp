@@ -57,7 +57,7 @@ bool IGSConnection::checkPrompt(const QString &line)
 	switch (authState)
 	{
 		case LOGIN:
-			if (line.find("Login:") != -1)
+			if (line.indexOf("Login:") != -1)
 			{
 				qDebug("Login: found");
 				
@@ -80,7 +80,7 @@ bool IGSConnection::checkPrompt(const QString &line)
 			break;
 
 		case PASSWORD:
-			if ((line.find("Password:") != -1) || (line.find("1 1") != -1))
+			if ((line.indexOf("Password:") != -1) || (line.indexOf("1 1") != -1))
 			{
 				qDebug() << "Password or 1 1: found: " << line;
 				sendTextToApp(tr("...send password"));
@@ -91,7 +91,7 @@ bool IGSConnection::checkPrompt(const QString &line)
 				authState = SESSION;
 				return true;
 			}
-			else if (line.find("guest account") != -1)
+			else if (line.indexOf("guest account") != -1)
 			{
 				authState = SESSION;
 				return true;

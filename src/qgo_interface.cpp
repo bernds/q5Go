@@ -503,8 +503,8 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 					// calculate result first
 					int posw, posb;
 					float re1, re2;
-					posw = g->Sz.find("W ");
-					posb = g->Sz.find("B ");
+					posw = g->Sz.indexOf("W ");
+					posb = g->Sz.indexOf("B ");
 					bool wfirst = posw < posb;
 
 					if (!wfirst)
@@ -1487,7 +1487,7 @@ void qGoBoard::set_game(Game *g)
 	gd.playerWhite = g->wname;
 	gd.rankBlack = g->brank;
 	gd.rankWhite = g->wrank;
-//	QString status = g->Sz.simplifyWhiteSpace();
+//	QString status = g->Sz.simplified();
 	gd.size = g->Sz.toInt();
 	gd.handicap = g->H.toInt();
 	gd.komi = g->K.toFloat();
@@ -1903,7 +1903,7 @@ void qGoBoard::set_move(StoneColor sc, QString pt, QString mv_nr)
 
 	if (pt.contains("Handicap"))
 	{
-		QString handi = pt.simplifyWhiteSpace();
+		QString handi = pt.simplified();
 		int h = handi.section(' ', 1, 1).toInt();
 
 		// check if handicap is set with initGame() - game data from server do not
@@ -2038,11 +2038,11 @@ void qGoBoard::send_kibitz(const QString msg)
 	if (ExtendedTeachingGame && !IamTeacher)
 	{
 		// get msgs from teacher
-		if (msg.find("#OP:") != -1)
+		if (msg.indexOf("#OP:") != -1)
 		{
 			// opponent has been selected
 			QString opp;
-			opp = msg.section(':', 2, -1).remove(QRegExp("\\(.*$")).stripWhiteSpace();
+			opp = msg.section(':', 2, -1).remove(QRegExp("\\(.*$")).trimmed();
 
 			if (opp == "0")
 				slot_ttOpponentSelected(tr("-- none --"));
@@ -2051,14 +2051,14 @@ void qGoBoard::send_kibitz(const QString msg)
 		}
 		else if (IamPupil)
 		{
-			if (msg.find("#TC:ON") != -1)
+			if (msg.indexOf("#TC:ON") != -1)
 			{
 				// teacher gives controls to pupil
 				haveControls = true;
 				win->getMainWidget()->pb_controls->setEnabled(true);
 				win->getMainWidget()->pb_controls->setChecked(true);
 			}
-			else if (msg.find("#TC:OFF") != -1)
+			else if (msg.indexOf("#TC:OFF") != -1)
 			{
 				// teacher takes controls back
 				haveControls = false;
@@ -2070,7 +2070,7 @@ void qGoBoard::send_kibitz(const QString msg)
 	else if (ExtendedTeachingGame && IamTeacher)
 	{
 		// get msgs from pupil
-		if (msg.find("#OC:OFF") != -1)
+		if (msg.indexOf("#OC:OFF") != -1)
 		{
 			// pupil gives controls back
 			haveControls = true;
@@ -2085,7 +2085,7 @@ void qGoBoard::send_kibitz(const QString msg)
 			//   it's ensured that yyy [rk] didn't send forged message
 			//   e.g.: yyy [rk]: xxx[rk]: S1 (3)
 			QString s;
-			s = msg.section(':', 1, -1).remove(QRegExp("\\(.*$")).stripWhiteSpace().upper();
+			s = msg.section(':', 1, -1).remove(QRegExp("\\(.*$")).trimmed().upper();
 
 			// check whether it's a position
 			// e.g. B1, A17, NOT: ok, yes
@@ -2102,8 +2102,8 @@ void qGoBoard::send_kibitz(const QString msg)
 	}
 
 	// skip my own messages
-qDebug() << "msg.find(myName) = " << QString::number(msg.find(myName));
-//	if (msg.find(myName) == 0)
+qDebug() << "msg.indexOf(myName) = " << QString::number(msg.indexOf(myName));
+//	if (msg.indexOf(myName) == 0)
 //		return;
 
 	// normal stuff...
@@ -2125,11 +2125,11 @@ qDebug("qGoBoard::send_kibitz()");
 void qGoBoard::slot_sendcomment(const QString &comment)
 {
 	// # has to be at the first position
-	if (comment.find("#") == 0)
+	if (comment.indexOf("#") == 0)
 	{
 		qDebug("detected (#) -> send command");
 		QString testcmd = comment;
-		testcmd = testcmd.remove(0, 1).stripWhiteSpace();
+		testcmd = testcmd.remove(0, 1).trimmed();
 		emit signal_sendcommand(testcmd, true);
 		return;
 	}

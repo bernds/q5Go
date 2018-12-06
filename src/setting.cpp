@@ -229,11 +229,11 @@ void Setting::loadSettings()
 		if (s.length() > 2)
 		{
 			// ' ' is delitmiter between key and txt
-			pos = s.find(' ');
+			pos = s.indexOf(' ');
 			// find first '['
-			pos1 = s.find('[');
+			pos1 = s.indexOf('[');
 			// find last ']'
-			pos2 = s.findRev(']');
+			pos2 = s.lastIndexOf(']');
 			writeEntry(s.left(pos), s.mid(pos1 + 1, pos2 - pos1 - 1));
 		}
 	}

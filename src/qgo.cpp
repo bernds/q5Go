@@ -250,7 +250,7 @@ bool qGo::testSound(bool showmsg)
 	  QFile qFile = QFile(connectSound->fileName()); // QQQ
 	  QDir * dir = sp.findDirContainingFile(qFile); // QQQ
 	  QString s = dir->dirName();
-	  applicationPath = s.left(s.find("/sounds"));
+	  applicationPath = s.left(s.indexOf("/sounds"));
 	  // QMessageBox::information(0, "SAVING", applicationPath);
 	}
 			

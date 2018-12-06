@@ -109,7 +109,7 @@ const QString Move::saveMove(bool isRoot)
 		// text
 		QString tmp = comment;
 		int pos = 0;
-		while ((pos = tmp.find("]", pos)) != -1 && static_cast<unsigned int>(pos) < tmp.length())
+		while ((pos = tmp.indexOf("]", pos)) != -1 && static_cast<unsigned int>(pos) < tmp.length())
 		{
 			tmp.replace(pos, 1, "\\]");
 			pos += 2;

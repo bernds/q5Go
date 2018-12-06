@@ -167,7 +167,7 @@ bool SGFParser::parse(const QString &fileName)
 	if (toParse.isNull() || toParse.isEmpty())
 		return false;
 	// Convert old sgf/mgt format into new
-//	if (toParse.find("White[") != -1)  // Do a quick test if this is necassary.
+//	if (toParse.indexOf("White[") != -1)  // Do a quick test if this is necassary.
 //		convertOldSgf(toParse);
 
 	if (!initGame(toParse, fileName))
@@ -1119,7 +1119,7 @@ bool SGFParser::parseProperty(const QString &toParse, const QString &prop, QStri
 	int pos, strLength=toParse.length();
 	result = "";
 
-	pos = toParse.find(prop+"[");
+	pos = toParse.indexOf(prop+"[");
 	if (pos == -1)
 		return true;
 
@@ -1277,9 +1277,9 @@ bool SGFParser::initGame(const QString &toParse, const QString &fileName)
 			// type: OT[5x30 byo-yomi]
 			gameData->timeSystem = byoyomi;
 			int pos1, pos2;
-			if ((pos1 = tmp.find("x")) != -1)
+			if ((pos1 = tmp.indexOf("x")) != -1)
 			{
-				pos2 = tmp.find("byo");
+				pos2 = tmp.indexOf("byo");
 				QString time = tmp.mid(pos1+1, pos2-pos1-1);
 				gameData->byoTime = time.toInt();
 				gameData->byoPeriods = tmp.left(pos1).toInt();
@@ -1293,7 +1293,7 @@ bool SGFParser::initGame(const QString &toParse, const QString &fileName)
 			// type: OT[3:30] = byo-yomi?;
 			int pos1;
 			gameData->timeSystem = byoyomi;
-			if ((pos1 = tmp.find(":")) != -1)
+			if ((pos1 = tmp.indexOf(":")) != -1)
 			{
 				QString time = tmp.left(pos1);
 				int t = time.toInt()*60 + tmp.right(tmp.length() - pos1 - 1).toInt();
@@ -1309,9 +1309,9 @@ bool SGFParser::initGame(const QString &toParse, const QString &fileName)
 			// type: OT[25/300 Canadian]
 			gameData->timeSystem = canadian;
 			int pos1, pos2;
-			if ((pos1 = tmp.find("/")) != -1)
+			if ((pos1 = tmp.indexOf("/")) != -1)
 			{
-				pos2 = tmp.find("Can");
+				pos2 = tmp.indexOf("Can");
 				QString time = tmp.mid(pos1+1, pos2-pos1-1);
 				gameData->byoTime = time.toInt();
 				gameData->byoStones = tmp.left(pos1).toInt();
@@ -1602,10 +1602,10 @@ bool SGFParser::parseASCIIStream(Q3TextStream *stream, ASCII_Import *charset)
 		QString tmp = stream->readLine();
 		asciiLines.append(tmp.latin1());
 
-		if (tmp.find('.') != -1)
+		if (tmp.indexOf('.') != -1)
 			flag = true;
 
-		if (tmp.find(dummy) != -1)
+		if (tmp.indexOf(dummy) != -1)
 		{
 			if (first == -1 && !flag)
 				first = i;
@@ -1696,7 +1696,7 @@ bool SGFParser::doASCIIParse(const QString &toParse, int &y, ASCII_Import *chars
 	if (!checkBoardSize(toParse, charset))
 		return false;
 
-	for (pos=toParse.find(charset->emptyPoint, 0); pos<length; pos++)
+	for (pos=toParse.indexOf(charset->emptyPoint, 0); pos<length; pos++)
 	{
 		// qDebug("READING %d/%d", x, y);
 		if (x >= boardHandler->board->getBoardSize() - asciiOffsetX)  // Abort if right edge of board reached
@@ -1753,15 +1753,15 @@ bool SGFParser::doASCIIParse(const QString &toParse, int &y, ASCII_Import *chars
 bool SGFParser::checkBoardSize(const QString &toParse, ASCII_Import *charset)
 {
 	// Determine x offset
-	int left = toParse.find(charset->hBorder),
-		right = toParse.find(charset->hBorder, left+1);
+	int left = toParse.indexOf(charset->hBorder),
+		right = toParse.indexOf(charset->hBorder, left+1);
 
 	// qDebug("Left = %d, Right = %d", left, right);
 
 	if (right == -1)
 	{
-		int first = toParse.find(charset->emptyPoint),
-			tmp = toParse.find(charset->starPoint);
+		int first = toParse.indexOf(charset->emptyPoint),
+			tmp = toParse.indexOf(charset->starPoint);
 		first = first > tmp && tmp != -1 ? tmp : first;
 
 		if (left > first)

@@ -660,7 +660,7 @@ void ClientWindow::slot_channelinfo(int nr, const QString &txt)
 	// now insert channel to list
 	if (flag_add)
 	{
-		QString text = txt.simplifyWhiteSpace();
+		QString text = txt.simplified();
 		int count = text.count(" ") + 1;
 		// set user list and user count
 		ch->set_channel(nr, QString(), txt, count);
@@ -973,7 +973,7 @@ Talk::Talk(const QString &playername, QWidget *parent, bool isplayer)
 	LineEdit1->setFont(setting->fontComments);
 
 	// do not add a button for shouts* or channels tab
-	if ( (name.find('*') != -1) || (!isplayer))
+	if ( (name.indexOf('*') != -1) || (!isplayer))
 	{
 
 		delete pb_releaseTalkTab;

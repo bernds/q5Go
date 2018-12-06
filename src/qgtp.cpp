@@ -149,7 +149,7 @@ void QGtp::slot_readFromStdout()
 	while (programProcess->canReadLineStdout())
 	{
 		buff=programProcess->readLineStdout();
-		buff=buff.stripWhiteSpace();
+		buff=buff.trimmed();
 		if (buff.length() != 0)
 		{
 			_response = buff;
@@ -203,7 +203,7 @@ QGtp::waitResponse()
 	} while(number !=_cpt);
 	*/
 	
-	//	_response=buff.stripWhiteSpace();
+	//	_response=buff.trimmed();
 //	qDebug(QString("** QGtp::waitResponse(): [%1]").arg(_response));
 	/*	
 	buff=programProcess->readLineStdout();
@@ -215,7 +215,7 @@ QGtp::waitResponse()
 	*/
 
 	QChar r0 = _response[0];
-	if ((pos = _response.find(' ')) < 1)
+	if ((pos = _response.indexOf(' ')) < 1)
 		pos = 1;
 	number = _response.mid(1,pos).toInt();
 	_response = _response.right(_response.length() - pos - 1);

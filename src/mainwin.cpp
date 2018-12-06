@@ -1133,7 +1133,7 @@ int ClientWindow::sendTextFromApp(const QString &txt, bool localecho)
 //qDebug("SENDBUFFER send: " + s->get_txt());
 
 			// hold the line if cmd is sent; 'ayt' is autosend cmd
-			if (s->get_txt().find("ayt") != -1)
+			if (s->get_txt().indexOf("ayt") != -1)
 				resetCounter();
 			if (s->get_localecho())
 				sendTextToApp(CONSOLECMDPREFIX + QString(" ") + s->get_txt());
@@ -1181,10 +1181,10 @@ void ClientWindow::sendcommand(const QString &cmd, bool localecho)
 	QString testcmd = cmd;
 
 	// for testing
-	if (cmd.find("#") == 0)
+	if (cmd.indexOf("#") == 0)
 	{
 		qDebug("detected TEST (#) command");
-		testcmd = testcmd.remove(0, 1).stripWhiteSpace();
+		testcmd = testcmd.remove(0, 1).trimmed();
 
 		// help
 		if (testcmd.length() <= 1)
@@ -1260,13 +1260,13 @@ qDebug("cmd_valid: %i", (int)cmd_valid);
 	if (cmd_valid)
 	{
 		// clear field, and restore the blank line at top
-    cb_cmdLine->removeItem(1);
-    cb_cmdLine->insertItem("",0);
-    cb_cmdLine->clearEdit();
-    
+		cb_cmdLine->removeItem(1);
+		cb_cmdLine->insertItem("",0);
+		cb_cmdLine->clearEdit();
+
 		// echo & send
 		QString cmdLine = cmd;
-		sendcommand(cmdLine.stripWhiteSpace(),true);
+		sendcommand(cmdLine.trimmed(),true);
 		cmd_valid = false;
 
 		// check for known commands
@@ -2089,7 +2089,7 @@ void ClientWindow::slot_playerPopup(int i)
 		case 6:
 		{
 			// toggle watch list
-			QString cpy = setting->readEntry("WATCH").simplifyWhiteSpace() + ";";
+			QString cpy = setting->readEntry("WATCH").simplified() + ";";
 			QString line;
 			QString name;
 			bool found = false;
@@ -2144,7 +2144,7 @@ void ClientWindow::slot_playerPopup(int i)
 		case 7:
 		{
 			// toggle exclude list
-			QString cpy = setting->readEntry("EXCLUDE").simplifyWhiteSpace() + ";";
+			QString cpy = setting->readEntry("EXCLUDE").simplified() + ";";
 			QString line;
 			QString name;
 			bool found = false;
@@ -2332,7 +2332,7 @@ void ClientWindow::slot_pbRelTabs()
 	Talk *dlg = talklist.first();
 	while (dlg)
 	{
-		if (dlg->get_name().find('*') == -1)
+		if (dlg->get_name().indexOf('*') == -1)
 		{
 			TabWidget_mini_2->removePage(dlg->get_tabWidget());
 			dlg->pageActive = false;
@@ -3216,7 +3216,7 @@ void ClientWindow::slot_SeekList(const QString& player, const QString& condition
 	if ((Rk.right(1) != "?") && (Rk.right(1) != "+"))
 		Rk.append(" ");
 
-	slot_message(player.leftJustify(15,' ',true) + Rk.rightJustify(5) +  " : " + condition);
+	slot_message(player.leftJustified(15,' ',true) + Rk.rightJustified(5) +  " : " + condition);
 }
 
 /*

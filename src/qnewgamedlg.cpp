@@ -76,9 +76,9 @@ void QNewGameDlg::slotCancel()
 void QNewGameDlg::slotOk()
 {
 
-	if (getPlayerBlackName().simplifyWhiteSpace().isEmpty())
+	if (getPlayerBlackName().simplified().isEmpty())
 		_playerBlackName = getPlayerBlackType() == HUMAN ? tr("Human") : tr("Computer");
-	if (getPlayerWhiteName().simplifyWhiteSpace().isEmpty())
+	if (getPlayerWhiteName().simplified().isEmpty())
 		_playerWhiteName = getPlayerWhiteType() == HUMAN ? tr("Human") : tr("Computer");
 
 

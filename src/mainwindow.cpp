@@ -1203,7 +1203,7 @@ QString MainWindow::getFileExtension(const QString &fileName, bool defaultExt)
 	
 	int pos=0, oldpos=-1, len = fileName.length();
 	
-	while ((pos = fileName.find('.', ++pos)) != -1 && pos < len)
+	while ((pos = fileName.indexOf('.', ++pos)) != -1 && pos < len)
 		oldpos = pos;
 	
 	if (oldpos != -1)
@@ -1870,11 +1870,11 @@ void MainWindow::slotTimerForward()
 		{
 			case 2:
 				// case: 0:23:56
-				pos1 = tmp.find(":") ;
+				pos1 = tmp.indexOf(":") ;
 				seconds += tmp.left(pos1).toInt()*3600;
 				pos1++;
 			case 1:
-				pos2 = tmp.findRev(":", -1);
+				pos2 = tmp.lastIndexOf(":", -1);
 				seconds += tmp.mid(pos1, pos2-pos1).toInt()*60;
 				seconds += tmp.mid(pos2+1, 2).toInt();
 				break;
@@ -1883,7 +1883,7 @@ void MainWindow::slotTimerForward()
 			seconds = -seconds;
 		seconds--;
 
-		int openMoves = ((pos1 = tmp.find("/")) != -1 ? tmp.right(tmp.length() - pos1 - 1).toInt() : -1);
+		int openMoves = ((pos1 = tmp.indexOf("/")) != -1 ? tmp.right(tmp.length() - pos1 - 1).toInt() : -1);
 
 		// set stones using sgf's time info
 		Move *m = board->getBoardHandler()->getTree()->getCurrent();
@@ -2232,7 +2232,7 @@ void MainWindow::rememberLastDir(const QString &file)
 {
 	int pos = 0, lastpos = -1;
 	
-	while ((pos =  file.find('/', pos)) != -1 && pos++ < static_cast<int>(file.length()))
+	while ((pos =  file.indexOf('/', pos)) != -1 && pos++ < static_cast<int>(file.length()))
 		lastpos = pos;
 	
 	if (lastpos == -1)

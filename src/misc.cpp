@@ -17,11 +17,11 @@ QString rkToKey(QString txt, bool integer)
 	if (integer)
 	{
 		// NR
-		if (rk == "NR") 
+		if (rk == "NR")
 			return "0000";
-		
+
 		// BC ( IGS new rating stops at 23 k = BC )
-		if (rk == "BC") 
+		if (rk == "BC")
 			return "0800";
 
 		// get number
@@ -33,38 +33,38 @@ QString rkToKey(QString txt, bool integer)
 			return "0000";
 
 		// check for k,d,p
-		if (rk.find("k") != -1)
+		if (rk.indexOf("k") != -1)
 		{
-			pt = (31 - pt)*100 ;//+ ( (rk.find("+") != -1) ? 10:0) ;
+			pt = (31 - pt)*100 ;//+ ( (rk.indexOf("+") != -1) ? 10:0) ;
 		}
-		else if (rk.find("d") != -1)
+		else if (rk.indexOf("d") != -1)
 		{
-			/* Former code replaced 
+			/* Former code replaced
 			// 7d == 1p
 			if (pt > 7)
-				pt = 3670 + (pt - 6)*30 + ((rk.find("+") != -1) ? 10:0);
+				pt = 3670 + (pt - 6)*30 + ((rk.indexOf("+") != -1) ? 10:0);
 			else
-				pt = 3000 + pt*100 + ((rk.find("+") != -1) ? 10:0);
+				pt = 3000 + pt*100 + ((rk.indexOf("+") != -1) ? 10:0);
 			*/
 
 			/* New formula */
-			pt = 3000 + pt*100 ;//+ ((rk.find("+") != -1) ? 10:0);
+			pt = 3000 + pt*100 ;//+ ((rk.indexOf("+") != -1) ? 10:0);
 		}
-		else if (rk.find("p") != -1)
+		else if (rk.indexOf("p") != -1)
 		{
-			
-			/* Former code replaced 
+
+			/* Former code replaced
 			// 7d == 1p
-			pt = 3670 + pt*30; 
+			pt = 3670 + pt*30;
 			*/
 			/* New formula : still 7d ~ 1p */
-			pt = 3600 + pt*100 ;//+ ((rk.find("+") != -1) ? 10:0);
-		
+			pt = 3600 + pt*100 ;//+ ((rk.indexOf("+") != -1) ? 10:0);
+
 		}
 		else
 			return "0000";
 
-		buffer = QString::number(pt).rightJustify(4, '0');
+		buffer = QString::number(pt).rightJustified(4, '0');
 		return buffer;
 	}
 	else
@@ -72,24 +72,24 @@ QString rkToKey(QString txt, bool integer)
 		// NR
 		if (rk == "NR")
 			return "nr";
-		
+
 		// check for k,d,p
-		if (rk.find("k") != -1)
+		if (rk.indexOf("k") != -1)
 			keyStr = "c";
-		else if (rk.find("d") != -1)
+		else if (rk.indexOf("d") != -1)
 			keyStr = "b";
-		else if (rk.find("p") != -1)
+		else if (rk.indexOf("p") != -1)
 			keyStr = "a";
 		else
 			keyStr = "z";
-		
+
 		// get number
 		QString buffer = rk;
 		buffer.replace(QRegExp("[pdk+?\\*\\s]"), "");
 		if (buffer.length() < 2)
 		{
 			keyStr += "0";
-			
+
 			// reverse sort order for dan/pro players
 			if ((keyStr == "a0") || (keyStr == "b0"))
 			{
@@ -102,4 +102,3 @@ QString rkToKey(QString txt, bool integer)
 		return keyStr + buffer;
 	}
 }
-
