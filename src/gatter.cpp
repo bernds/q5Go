@@ -21,7 +21,9 @@
 
 
 #include <vector>
-#include <QtGui>
+#include <QGraphicsScene>
+#include <QGraphicsEllipseItem>
+#include <QGraphicsLineItem>
 
 #include "defines.h"
 #include "gatter.h"
@@ -30,7 +32,7 @@
  /**
   * Initialises the gatter intersections and hoshis points
   **/
-Gatter::Gatter(QGraphicsScene *Canvas, int size)
+Gatter::Gatter(QGraphicsScene *canvas, int size)
 {
 	int i,j;
 
@@ -48,29 +50,31 @@ Gatter::Gatter(QGraphicsScene *Canvas, int size)
 
 		for (j=0; j<board_size; j++)
 		{
-			VGatter[i].push_back(new QGraphicsLineItem(0,Canvas));
-			HGatter[i].push_back(new QGraphicsLineItem(0,Canvas));
+			QGraphicsLineItem *t1, *t2;
+			VGatter[i].push_back(t1 = new QGraphicsLineItem());
+			HGatter[i].push_back(t2 = new QGraphicsLineItem());
+			canvas->addItem (t1);
+			canvas->addItem (t2);
 			Q_CHECK_PTR(VGatter[i][j]);
 			Q_CHECK_PTR(HGatter[i][j]);
 		}
 	}
-
 	int edge_dist = (board_size > 12 ? 4 : 3);
 	int low = edge_dist;
 	int middle = (board_size + 1) / 2;
 	int high = board_size + 1 - edge_dist;
 	if (board_size % 2 && board_size > 9)
 	{
-		hoshisList.insert(middle*board_size + low , new QGraphicsEllipseItem(0,Canvas));
-		hoshisList.insert(middle*board_size + middle , new QGraphicsEllipseItem(0,Canvas));
-		hoshisList.insert(middle*board_size + high , new QGraphicsEllipseItem(0,Canvas));
-		hoshisList.insert(low*board_size + middle , new QGraphicsEllipseItem(0,Canvas));
-		hoshisList.insert(high*board_size + middle , new QGraphicsEllipseItem(0,Canvas));
+		hoshisList.insert(middle*board_size + low, new QGraphicsEllipseItem());
+		hoshisList.insert(middle*board_size + middle, new QGraphicsEllipseItem());
+		hoshisList.insert(middle*board_size + high, new QGraphicsEllipseItem());
+		hoshisList.insert(low*board_size + middle, new QGraphicsEllipseItem());
+		hoshisList.insert(high*board_size + middle, new QGraphicsEllipseItem());
 	}
-	hoshisList.insert(low*board_size + low ,new QGraphicsEllipseItem(0,Canvas));
-	hoshisList.insert(high*board_size + low , new QGraphicsEllipseItem(0,Canvas));
-	hoshisList.insert(high*board_size + high , new QGraphicsEllipseItem(0,Canvas));
-	hoshisList.insert(low*board_size + high ,new QGraphicsEllipseItem(0,Canvas));
+	hoshisList.insert(low*board_size + low ,new QGraphicsEllipseItem());
+	hoshisList.insert(high*board_size + low, new QGraphicsEllipseItem());
+	hoshisList.insert(high*board_size + high, new QGraphicsEllipseItem());
+	hoshisList.insert(low*board_size + high, new QGraphicsEllipseItem());
 
 
 	QMapIterator<int,QGraphicsEllipseItem*> it( hoshisList );
@@ -80,6 +84,7 @@ Gatter::Gatter(QGraphicsScene *Canvas, int size)
 		it.next();
 		it.value()->setBrush(Qt::SolidPattern);
 		it.value()->setPen(Qt::NoPen);
+		canvas->addItem (it.value());
 	}
 
 	showAll();
