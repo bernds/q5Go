@@ -20,10 +20,11 @@
 *  The dialog will by default be modeless, unless you set 'modal' to
 *  TRUE to construct a modal dialog.
 */
-TextView::TextView(QWidget* parent, const char* name, bool modal, Qt::WFlags fl)
-  : QDialog( parent, name, modal, fl )
+TextView::TextView(QWidget* parent)
+  : QDialog (parent)
 {
-	setupUi(this);
+	setupUi (this);
+	setModal (true);
 	textEdit->setWordWrapMode(QTextOption::WordWrap);
 	textEdit->setLineWrapColumnOrWidth(80);
 	QFont f("fixed", 10);
