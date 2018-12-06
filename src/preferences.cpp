@@ -22,8 +22,8 @@
 *  The dialog will by default be modeless, unless you set 'modal' to
 *  TRUE to construct a modal dialog.
 */
-PreferencesDialog::PreferencesDialog(QWidget* parent,  const char* name, bool modal, Qt::WFlags fl)
-	: QDialog ( parent, name, modal, fl )
+PreferencesDialog::PreferencesDialog(QWidget* parent,  const char* name, bool modal)
+	: QDialog ( parent)
 {
 	setupUi(this);
 
