@@ -11,17 +11,11 @@
 //
 #include "searchpath.h"
 #include <qstringlist.h>
-//Added by qt3to4:
-#include <Q3PtrList>
-
-SearchPath::SearchPath () : QObject ()
-{
-  directoryList = Q3PtrList<QDir>();
-  directoryList.setAutoDelete(true);
-}
 
 SearchPath::~SearchPath ()
 {
+  for (auto it: directoryList)
+    delete it;
   directoryList.clear();
 }
 
@@ -39,8 +33,7 @@ QFile * SearchPath::findFile(QFile &file)
 
 QDir * SearchPath::findDirContainingFile(QFile &file)
 {
-  QDir *dir;
-  for (dir = directoryList.first(); dir; dir = directoryList.next()) {
+  for (auto dir: directoryList) {
     if (! dir->exists() )
       continue;
     if (dir->exists(file.name()))
@@ -66,10 +59,9 @@ SearchPath& SearchPath::operator<<(const char* string)
 
 SearchPath& SearchPath::operator<<(QStringList& list)
 {
-  for (QStringList::Iterator it = list.begin(); it != list.end(); ++it)
+  for (auto it: list)
     {
-      QString str = *it;
-      *this << str;
+      *this << it;
     }
   return *this;
 }

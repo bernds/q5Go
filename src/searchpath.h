@@ -15,15 +15,14 @@
 #include <QFile>
 #include <QDir>
 #include <QObject>
-#include <Q3PtrList>
 
 class SearchPath : public QObject
 {
 	Q_OBJECT
 
-public:
+	QList<QDir *> directoryList;
 
-	SearchPath();
+public:
 	~SearchPath();
 	QFile * findFile(QFile &);
 	QDir * findDirContainingFile(QFile &);
@@ -31,9 +30,6 @@ public:
 	SearchPath& operator<<(QDir&);
 	SearchPath& operator<<(const char*);
 	SearchPath& operator<<(QStringList& list);
-
- private:
-	Q3PtrList<QDir> directoryList;
 };
 
 #endif
