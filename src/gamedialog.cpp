@@ -404,7 +404,7 @@ qDebug("#### GameDialog::slot_changed()");
 	{
 //		cb_free->setChecked(true);
 //		cb_free->setEnabled(false);
-		ComboBox_free->setCurrentItem(1);
+		ComboBox_free->setCurrentIndex(1);
 //		ComboBox_free->setEnabled(false);
 	}
 	else
@@ -480,9 +480,9 @@ qDebug("#### GameDialog::slot_komirequest()");
 		komiSpin->setValue(k);
 //		cb_free->setChecked(true);
 		if (free)
-			ComboBox_free->setCurrentItem(1);
+			ComboBox_free->setCurrentIndex(1);
 		else
-			ComboBox_free->setCurrentItem(0);
+			ComboBox_free->setCurrentIndex(0);
 
 		buttonOffer->setText(tr("Accept"));
 		buttonOffer->setChecked(false);

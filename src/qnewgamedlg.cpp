@@ -125,8 +125,8 @@ void QNewGameDlg::slotPlayerBlackNameChanged()
 
 void QNewGameDlg::slotPlayerBlackTypeChanged()
 {
-	_playerBlackType=_BlackTypeComboBox->currentItem();
-	if (_BlackTypeComboBox->currentItem()==HUMAN)
+	_playerBlackType=_BlackTypeComboBox->currentIndex();
+	if (_BlackTypeComboBox->currentIndex()==HUMAN)
 		_BlackLevelSpinBox->setDisabled(true);
 	else
 		_BlackLevelSpinBox->setEnabled(true);
@@ -139,8 +139,8 @@ void QNewGameDlg::slotPlayerWhiteNameChanged()
 
 void QNewGameDlg::slotPlayerWhiteTypeChanged()
 {
-    _playerWhiteType=_WhiteTypeComboBox->currentItem();
-	if (_WhiteTypeComboBox->currentItem()==HUMAN)
+    _playerWhiteType=_WhiteTypeComboBox->currentIndex();
+	if (_WhiteTypeComboBox->currentIndex()==HUMAN)
 		_WhiteLevelSpinBox->setDisabled(true);
 	else
 		_WhiteLevelSpinBox->setEnabled(true);
@@ -227,10 +227,10 @@ void QNewGameDlg::init()
 
 	_WhiteTypeComboBox->insertItem(tr("Human"));
 	_WhiteTypeComboBox->insertItem(tr("Computer"));
-	_WhiteTypeComboBox->setCurrentItem(_playerWhiteType);
+	_WhiteTypeComboBox->setCurrentIndex(_playerWhiteType);
 	_BlackTypeComboBox->insertItem(tr("Human"));
 	_BlackTypeComboBox->insertItem(tr("Computer"));
-	_BlackTypeComboBox->setCurrentItem(_playerBlackType);
+	_BlackTypeComboBox->setCurrentIndex(_playerBlackType);
 	_SizeSpinBox->setValue(_size);
 	_HandicapSpinBox->setValue(_handicap);
 

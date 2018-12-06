@@ -2017,7 +2017,7 @@ void qGoBoard::send_kibitz(const QString msg)
 			if (havePupil && ttOpponent != tr("-- none --"))
 			{
 				win->getMainWidget()->cb_opponent->insertItem(ttOpponent, 1);
-				win->getMainWidget()->cb_opponent->setCurrentItem(1);
+				win->getMainWidget()->cb_opponent->setCurrentIndex(1);
 			}
 
 			win->clearObserver();
@@ -2614,10 +2614,10 @@ void qGoBoard::slot_ttOpponentSelected(const QString &opponent)
 		int cnt = cb->count();
 		for (int i = 0; i < cnt && !found; i++)
 		{
-			cb->setCurrentItem(i);
+			cb->setCurrentIndex(i);
 			if (cb->currentText() == opponent)
 			{
-				cb->setCurrentItem(i);
+				cb->setCurrentIndex(i);
 				found = true;
 			}
 		}
@@ -2625,7 +2625,7 @@ void qGoBoard::slot_ttOpponentSelected(const QString &opponent)
 		if (!found)
 		{
 			cb->insertItem(opponent, cnt);
-			cb->setCurrentItem(cnt);
+			cb->setCurrentIndex(cnt);
 		}
 
 		// check if it's me

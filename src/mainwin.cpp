@@ -286,8 +286,8 @@ ClientWindow::ClientWindow(QMainWindow *parent, const char* name, Qt::WFlags fl)
 		slot_cbconnect(w);
 
 	//restore players list filters
-	whoBox1->setCurrentItem(setting->readIntEntry("WHO_1"));
-	whoBox2->setCurrentItem(setting->readIntEntry("WHO_2"));
+	whoBox1->setCurrentIndex(setting->readIntEntry("WHO_1"));
+	whoBox2->setCurrentIndex(setting->readIntEntry("WHO_2"));
 	whoOpenCheck->setChecked(setting->readIntEntry("WHO_CB"));
 
 	// restore size of client window
@@ -820,8 +820,8 @@ void ClientWindow::saveSettings()
 
 	setting->writeBoolEntry("EXTUSERINFO", extUserInfo);
 
-  setting->writeIntEntry("WHO_1", whoBox1->currentItem());
-  setting->writeIntEntry("WHO_2", whoBox2->currentItem());
+  setting->writeIntEntry("WHO_1", whoBox1->currentIndex());
+  setting->writeIntEntry("WHO_2", whoBox2->currentIndex());
   setting->writeBoolEntry("WHO_CB", whoOpenCheck->isChecked());
   
 	// write settings to file
@@ -1537,15 +1537,15 @@ void ClientWindow::slot_refresh(int i)
 		case 0:
 			// send "WHO" command
       			//set the params of "who command"
-			if ((whoBox1->currentItem() >1)  || (whoBox2->currentItem() >1))
+			if ((whoBox1->currentIndex() >1)  || (whoBox2->currentIndex() >1))
         		{
-				wparam.append(whoBox1->currentItem()==1 ? "9p" : whoBox1->currentText());
-				if ((whoBox1->currentItem())  && (whoBox2->currentItem()))
+				wparam.append(whoBox1->currentIndex()==1 ? "9p" : whoBox1->currentText());
+				if ((whoBox1->currentIndex())  && (whoBox2->currentIndex()))
 					wparam.append("-");
 
-				wparam.append(whoBox2->currentItem()==1 ? "9p" : whoBox2->currentText());
+				wparam.append(whoBox2->currentIndex()==1 ? "9p" : whoBox2->currentText());
          		} 
-			else if ((whoBox1->currentItem())  || (whoBox2->currentItem()))
+			else if ((whoBox1->currentIndex())  || (whoBox2->currentIndex()))
         			wparam.append("1p-9p");
 			else
 				wparam.append(((myAccount->get_gsname() == IGS) ? "9p-BC" : " "));
@@ -2685,7 +2685,7 @@ void ClientWindow::keyPressEvent(QKeyEvent *e)
 		{
 			QString tmpTxt = cb_cmdLine->currentText();
 			tmpTxt.truncate(tmpTxt.length() - 1);
-			cb_cmdLine->changeItem(tmpTxt, cb_cmdLine->currentItem());
+			cb_cmdLine->changeItem(tmpTxt, cb_cmdLine->currentIndex());
 		}
 
 		e->accept();
@@ -2729,7 +2729,7 @@ void ClientWindow::keyPressEvent(QKeyEvent *e)
 
 		case Qt::Key_Escape:
 			cb_cmdLine->setFocus();
-			cb_cmdLine->setCurrentItem(0);
+			cb_cmdLine->setCurrentIndex(0);
 			break;
 
 		default:
@@ -3150,7 +3150,7 @@ void ClientWindow::slot_seek(int i)
 	//childish, but we want to have an animated icon there
 	seekButtonTimer = startTimer(200);
 
-	switch (cb_seek_handicap->currentItem())
+	switch (cb_seek_handicap->currentIndex())
 	{
 		case 0 :
 			send_seek.append("1 1 0");
@@ -3235,13 +3235,13 @@ void ClientWindow::dlgSetPreferences(int tab)
 	}
 
 	// Interface tab
-//	dlg.styleListBox->setCurrentItem(setting->readIntEntry("STYLE"));
-//	dlg.woodListBox->setCurrentItem(setting->readIntEntry("SKIN"));
+//	dlg.styleListBox->setCurrentIndex(setting->readIntEntry("STYLE"));
+//	dlg.woodListBox->setCurrentIndex(setting->readIntEntry("SKIN"));
 	dlg.LineEdit_goban->setText(setting->readEntry("SKIN"));
 	dlg.LineEdit_Table->setText(setting->readEntry("SKIN_TABLE"));
 	dlg.languageComboBox->insertStringList(setting->getAvailableLanguages());
-	dlg.languageComboBox->setCurrentItem(setting->convertLanguageCodeToNumber());
-	dlg.commentComboBox->setCurrentItem(setting->readIntEntry("VIEW_COMMENT"));
+	dlg.languageComboBox->setCurrentIndex(setting->convertLanguageCodeToNumber());
+	dlg.commentComboBox->setCurrentIndex(setting->readIntEntry("VIEW_COMMENT"));
 //	dlg.stonesShadowCheckBox->setChecked(setting->readBoolEntry("STONES_SHADOW"));
 	dlg.radioButtonStones_2D->setChecked((setting->readIntEntry("STONES_LOOK")==1));
 	dlg.radioButtonStones_3D->setChecked((setting->readIntEntry("STONES_LOOK")==2));
@@ -3260,7 +3260,7 @@ void ClientWindow::dlgSetPreferences(int tab)
 	dlg.leaveSoundCheckBox->setChecked(setting->readBoolEntry("SOUND_LEAVE"));
 	dlg.disConnectSoundCheckBox->setChecked(setting->readBoolEntry("SOUND_DISCONNECT"));
 	dlg.connectSoundCheckBox->setChecked(setting->readBoolEntry("SOUND_CONNECT"));
-	dlg.variationComboBox->setCurrentItem(setting->readIntEntry("VAR_GHOSTS"));
+	dlg.variationComboBox->setCurrentIndex(setting->readIntEntry("VAR_GHOSTS"));
 	dlg.coordsCheckBox->setChecked(setting->readBoolEntry("BOARD_COORDS"));
 	dlg.sgfCoordsCheckBox->setChecked(setting->readBoolEntry("SGF_BOARD_COORDS"));
 	dlg.toolTipCoordsCheckBox->setChecked(setting->readBoolEntry("BOARD_COORDS_TIP"));
@@ -3270,7 +3270,7 @@ void ClientWindow::dlgSetPreferences(int tab)
 	dlg.adjustFontSizeCheckBox->setChecked(setting->readBoolEntry("ADJ_FONT"));
 	//dlg.smallerStonesCheckBox->setChecked(setting->readBoolEntry("SMALL_STONES"));
 	dlg.tooltipsCheckBox->setChecked(!(setting->readBoolEntry("TOOLTIPS")));
-	dlg.timerComboBox->setCurrentItem(setting->readIntEntry("TIMER_INTERVAL"));
+	dlg.timerComboBox->setCurrentIndex(setting->readIntEntry("TIMER_INTERVAL"));
 	dlg.BYTimeSpin->setValue(setting->readIntEntry("BY_TIMER"));
 	dlg.sgfTimeTagsCheckBox->setChecked(setting->readBoolEntry("SGF_TIME_TAGS"));
 	dlg.sliderCheckBox->setChecked(setting->readBoolEntry("SLIDER"));
@@ -3350,12 +3350,12 @@ bool ClientWindow::preferencesSave(PreferencesDialog *dlg)
 {
 	ASSERT (dlg);
 
-//	setting->writeIntEntry("STYLE", dlg->styleListBox->currentItem());
-//	setting->writeIntEntry("SKIN", dlg->woodListBox->currentItem());
+//	setting->writeIntEntry("STYLE", dlg->styleListBox->currentIndex());
+//	setting->writeIntEntry("SKIN", dlg->woodListBox->currentIndex());
 	setting->writeEntry("SKIN", dlg->LineEdit_goban->text());
 	setting->writeEntry("SKIN_TABLE", dlg->LineEdit_Table->text());
-	setting->writeEntry("LANG", setting->convertNumberToLanguage(dlg->languageComboBox->currentItem()));
-	setting->writeIntEntry("VIEW_COMMENT", dlg->commentComboBox->currentItem());
+	setting->writeEntry("LANG", setting->convertNumberToLanguage(dlg->languageComboBox->currentIndex()));
+	setting->writeIntEntry("VIEW_COMMENT", dlg->commentComboBox->currentIndex());
 //	setting->writeBoolEntry("STONES_SHADOW", dlg->stonesShadowCheckBox->isChecked());
 //	setting->writeBoolEntry("STONES_SHELLS", dlg->stonesShellsCheckBox->isChecked());
 	int i = 3;
@@ -3377,7 +3377,7 @@ bool ClientWindow::preferencesSave(PreferencesDialog *dlg)
 	setting->writeBoolEntry("SOUND_LEAVE", dlg->leaveSoundCheckBox->isChecked());
 	setting->writeBoolEntry("SOUND_DISCONNECT", dlg->disConnectSoundCheckBox->isChecked());
 	setting->writeBoolEntry("SOUND_CONNECT", dlg->connectSoundCheckBox->isChecked());
-	setting->writeIntEntry("VAR_GHOSTS", dlg->variationComboBox->currentItem());
+	setting->writeIntEntry("VAR_GHOSTS", dlg->variationComboBox->currentIndex());
 	setting->writeBoolEntry("BOARD_COORDS", dlg->coordsCheckBox->isChecked());
 	setting->writeBoolEntry("SGF_BOARD_COORDS", dlg->sgfCoordsCheckBox->isChecked());
 	setting->writeBoolEntry("SLIDER", dlg->sliderCheckBox->isChecked());
@@ -3391,7 +3391,7 @@ bool ClientWindow::preferencesSave(PreferencesDialog *dlg)
 	//setting->writeBoolEntry("SMALL_STONES", dlg->smallerStonesCheckBox->isChecked());
 	setting->writeBoolEntry("TOOLTIPS", !(dlg->tooltipsCheckBox->isChecked()));
 	setting->writeIntEntry("BY_TIMER", dlg->BYTimeSpin->text().toInt());
-	setting->writeIntEntry("TIMER_INTERVAL", dlg->timerComboBox->currentItem());
+	setting->writeIntEntry("TIMER_INTERVAL", dlg->timerComboBox->currentIndex());
 	setting->writeBoolEntry("SGF_TIME_TAGS", dlg->sgfTimeTagsCheckBox->isChecked());
 	setting->charset->blackStone = dlg->blackStoneEdit->text().at(0).latin1();
 	setting->charset->whiteStone = dlg->whiteStoneEdit->text().at(0).latin1();
