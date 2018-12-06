@@ -12,7 +12,6 @@
 #include <qfile.h>
 #include <qdir.h>
 #include <qfont.h>
-#include <qcolor.h>
 #include <qstringlist.h>
 #include <qstring.h>
 //Added by qt3to4:
@@ -142,8 +141,6 @@ Setting::Setting()
 	fontLists = QFont();
 	fontClocks = QFont();
   	fontConsole= QFont("Fixed");
-	colorBackground = QColor("white");
-	colorAltBackground = QColor(242,242,242,QColor::Rgb);	
 
 	// init
 	qgo = 0;
@@ -240,19 +237,13 @@ void Setting::loadSettings()
 
 	file.close();
 
-	// init fonts and colors
+	// init fonts
 	updateFont(fontStandard, "FONT_MAIN");
 	updateFont(fontMarks, "FONT_MARK");
 	updateFont(fontComments, "FONT_COMMENT");
 	updateFont(fontLists, "FONT_LIST");
 	updateFont(fontClocks, "FONT_CLOCK");
 	updateFont(fontConsole, "FONT_CONSOLE");
- 	s = readEntry("COLOR_BK");
-	if (!s.isNull())
-		colorBackground = QColor(s);
-	s = readEntry("COLOR_ALT_BK");
-	if (!s.isNull())
-		colorAltBackground = QColor(s);
 	s = readEntry("CHARSET");
 	// Cope with nul characters written to the config file by qGo.
 	if (s.length() >= 6 && s.at(0).toAscii() != '\0') {
@@ -323,7 +314,7 @@ void Setting::saveSettings()
 {
 //	if (readBoolEntry("REM_FONT"))
 //	{
-	// add fonts and colors
+	// add fonts
 	writeEntry("FONT_MAIN", fontToString(fontStandard));
 	writeEntry("FONT_MARK", fontToString(fontMarks));
 	writeEntry("FONT_COMMENT", fontToString(fontComments));
@@ -342,9 +333,6 @@ void Setting::saveSettings()
 
 	qDebug() << "CHARSET " << cs;
 	writeEntry("CHARSET", cs);
-
-	writeEntry("COLOR_BK", colorBackground.name());
-	writeEntry("COLOR_ALT_BK", colorAltBackground.name());
 
 	writeIntEntry("VERSION", SETTING_VERSION);
 

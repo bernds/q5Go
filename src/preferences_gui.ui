@@ -635,55 +635,6 @@ Select the font for the server console (fixed font preferably).</string>
          </layout>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="Q3GroupBox" name="GroupBox8">
-         <property name="toolTip">
-          <string>Set application language</string>
-         </property>
-         <property name="whatsThis">
-          <string>Set application language
-
-Choose your language for qGo.
-If 'System default' is selected, qGo will use the standard language of your system. On Linux this will check the environment variable LANG, on Windows simply the language you have set in your preferences.
-
-This change will take effect only after qGo has been restarted.
-
-If your language is not supported, you might consider translating qGo. Please check the qGo homepage at http://qgo.sourceforge.net</string>
-         </property>
-         <property name="title">
-          <string>Language</string>
-         </property>
-         <layout class="QHBoxLayout">
-          <property name="spacing">
-           <number>6</number>
-          </property>
-          <property name="leftMargin">
-           <number>11</number>
-          </property>
-          <property name="topMargin">
-           <number>11</number>
-          </property>
-          <property name="rightMargin">
-           <number>11</number>
-          </property>
-          <property name="bottomMargin">
-           <number>11</number>
-          </property>
-          <item>
-           <widget class="QComboBox" name="languageComboBox">
-            <property name="focusPolicy">
-             <enum>Qt::TabFocus</enum>
-            </property>
-            <item>
-             <property name="text">
-              <string>System default</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
        <item row="3" column="0">
         <spacer name="spacer10_2">
          <property name="orientation">
@@ -715,127 +666,6 @@ If your language is not supported, you might consider translating qGo. Please ch
           </size>
          </property>
         </spacer>
-       </item>
-       <item row="2" column="1">
-        <widget class="Q3ButtonGroup" name="ButtonGroup4">
-         <property name="title">
-          <string>Color</string>
-         </property>
-         <layout class="QHBoxLayout">
-          <item>
-           <layout class="QHBoxLayout">
-            <item>
-             <widget class="QLabel" name="colorLabel">
-              <property name="minimumSize">
-               <size>
-                <width>80</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="toolTip">
-               <string>Current background color</string>
-              </property>
-              <property name="text">
-               <string>Background</string>
-              </property>
-              <property name="wordWrap">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="colorBackgroundButton">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>32767</width>
-                <height>32767</height>
-               </size>
-              </property>
-              <property name="focusPolicy">
-               <enum>Qt::TabFocus</enum>
-              </property>
-              <property name="toolTip">
-               <string>Select new color</string>
-              </property>
-              <property name="whatsThis">
-               <string>Select new color
-
-Select the color for dialog background in the application.</string>
-              </property>
-              <property name="text">
-               <string/>
-              </property>
-              <property name="checkable">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QHBoxLayout">
-            <item>
-             <widget class="QLabel" name="colorLabel_2">
-              <property name="minimumSize">
-               <size>
-                <width>80</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="toolTip">
-               <string>Current background color</string>
-              </property>
-              <property name="text">
-               <string>Alternate (lists)</string>
-              </property>
-              <property name="wordWrap">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="colorAltBackgroundButton">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>32767</width>
-                <height>32767</height>
-               </size>
-              </property>
-              <property name="focusPolicy">
-               <enum>Qt::TabFocus</enum>
-              </property>
-              <property name="toolTip">
-               <string>Select new color</string>
-              </property>
-              <property name="whatsThis">
-               <string>Select new color
-
-Select the color for dialog background in the application.</string>
-              </property>
-              <property name="text">
-               <string/>
-              </property>
-              <property name="checkable">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
        </item>
        <item row="0" column="0">
         <widget class="QGroupBox" name="soundButtonGroups">
@@ -1039,6 +869,55 @@ You can set the warning time besides</string>
             <property name="value">
              <number>10</number>
             </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="2">
+        <widget class="Q3GroupBox" name="GroupBox8">
+         <property name="toolTip">
+          <string>Set application language</string>
+         </property>
+         <property name="whatsThis">
+          <string>Set application language
+
+Choose your language for qGo.
+If 'System default' is selected, qGo will use the standard language of your system. On Linux this will check the environment variable LANG, on Windows simply the language you have set in your preferences.
+
+This change will take effect only after qGo has been restarted.
+
+If your language is not supported, you might consider translating qGo. Please check the qGo homepage at http://qgo.sourceforge.net</string>
+         </property>
+         <property name="title">
+          <string>Language</string>
+         </property>
+         <layout class="QHBoxLayout">
+          <property name="spacing">
+           <number>6</number>
+          </property>
+          <property name="leftMargin">
+           <number>11</number>
+          </property>
+          <property name="topMargin">
+           <number>11</number>
+          </property>
+          <property name="rightMargin">
+           <number>11</number>
+          </property>
+          <property name="bottomMargin">
+           <number>11</number>
+          </property>
+          <item>
+           <widget class="QComboBox" name="languageComboBox">
+            <property name="focusPolicy">
+             <enum>Qt::TabFocus</enum>
+            </property>
+            <item>
+             <property name="text">
+              <string>System default</string>
+             </property>
+            </item>
            </widget>
           </item>
          </layout>
@@ -4958,12 +4837,6 @@ up to :</string>
    <header>q3listbox.h</header>
    <container>1</container>
   </customwidget>
-  <customwidget>
-   <class>QListWidget</class>
-   <extends>Q3Frame</extends>
-   <header>q3listview.h</header>
-   <container>1</container>
-  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>tabWidget</tabstop>
@@ -4980,7 +4853,6 @@ up to :</string>
   <tabstop>fontListsButton</tabstop>
   <tabstop>fontClocksButton</tabstop>
   <tabstop>fontConsoleButton</tabstop>
-  <tabstop>colorBackgroundButton</tabstop>
  </tabstops>
  <resources>
   <include location="q4go.qrc"/>
@@ -5059,38 +4931,6 @@ up to :</string>
     <hint type="sourcelabel">
      <x>518</x>
      <y>654</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>colorAltBackgroundButton</sender>
-   <signal>clicked()</signal>
-   <receiver>PreferencesDialogGui</receiver>
-   <slot>selectAltColor()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>546</x>
-     <y>280</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>colorBackgroundButton</sender>
-   <signal>clicked()</signal>
-   <receiver>PreferencesDialogGui</receiver>
-   <slot>selectColor()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>384</x>
-     <y>280</y>
     </hint>
     <hint type="destinationlabel">
      <x>20</x>
@@ -5187,38 +5027,6 @@ up to :</string>
     <hint type="sourcelabel">
      <x>254</x>
      <y>589</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pb_new_2</sender>
-   <signal>clicked()</signal>
-   <receiver>PreferencesDialogGui</receiver>
-   <slot>slot_new_server()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>197</x>
-     <y>559</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>PixmapPathButton</sender>
-   <signal>clicked()</signal>
-   <receiver>PreferencesDialogGui</receiver>
-   <slot>slot_getPixmapPath()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>268</x>
-     <y>528</y>
     </hint>
     <hint type="destinationlabel">
      <x>20</x>

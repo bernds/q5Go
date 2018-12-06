@@ -69,14 +69,6 @@ PreferencesDialog::PreferencesDialog(QWidget* parent,  const char* name, bool mo
 	fontListsButton->setFont(setting->fontLists);
 	fontClocksButton->setFont(setting->fontClocks);
 	fontConsoleButton->setFont(setting->fontConsole);
-  
-	QPalette pal = colorBackgroundButton->palette();
-	pal.setColor(QColorGroup::Button, setting->colorBackground);
-	colorBackgroundButton->setPalette(pal);
-
-	pal = colorAltBackgroundButton->palette();
-	pal.setColor(QColorGroup::Button, setting->colorAltBackground);
-	colorAltBackgroundButton->setPalette(pal);
 
 #ifdef QGO_NOSTYLES
 	styleListBox->setDisabled(true);
@@ -186,36 +178,6 @@ void PreferencesDialog::selectFont(int selector)
     
 	default:
 		break;
-	}
-}
-
-void PreferencesDialog::selectColor()
-{
-	// Open a font dialog to select a new font
-	QColor c = QColorDialog::getColor(setting->colorBackground, this);
-	if (c.isValid())  // Accepted
-	{
-		setting->colorBackground = c;
-
-		// set button color
-		QPalette pal = colorBackgroundButton->palette();
-		pal.setColor(QColorGroup::Button, setting->colorBackground);
-		colorBackgroundButton->setPalette(pal);
-	}
-}
-
-void PreferencesDialog::selectAltColor()
-{
-	// Open a font dialog to select a new font
-	QColor c = QColorDialog::getColor(setting->colorAltBackground, this);
-	if (c.isValid())  // Accepted
-	{
-		setting->colorAltBackground = c;
-
-		// set button color
-		QPalette pal = colorAltBackgroundButton->palette();
-		pal.setColor(QColorGroup::Button, setting->colorAltBackground);
-		colorAltBackgroundButton->setPalette(pal);
 	}
 }
 

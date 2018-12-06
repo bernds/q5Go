@@ -34,8 +34,6 @@ public slots:
 	virtual void slot_apply();
 	virtual void startHelpMode();
 	virtual void selectFont(int);
-	virtual void selectColor();
-	virtual void selectAltColor();
 	virtual void slot_accept();
 	virtual void slot_reject();
 	virtual void slot_textChanged (const QString &);

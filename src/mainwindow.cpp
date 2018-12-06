@@ -55,7 +55,6 @@
 #include <qslider.h>
 #include <qlineedit.h>
 #include <qtimer.h>
-#include <qpalette.h>
 #include <qtabwidget.h>
 #include <qlayout.h>
 
@@ -2171,15 +2170,6 @@ void MainWindow::updateFont()
 	mainWidget->setFont(setting->fontStandard);
 	mainWidget->normalTools->pb_timeWhite->setFont(setting->fontClocks);
 	mainWidget->normalTools->pb_timeBlack->setFont(setting->fontClocks);
-
-	// set some colors
-	QPalette pal = commentEdit2->palette();
-	pal.setColor(QColorGroup::Base, setting->colorBackground);
-	commentEdit2->setPalette(pal);
-	ListView_observers->setPalette(pal);
-	pal = commentEdit->palette();
-	pal.setColor(QColorGroup::Base, setting->colorBackground);
-	commentEdit->setPalette(pal);
 }
 
 // used in slot_editBoardInNewWindow()

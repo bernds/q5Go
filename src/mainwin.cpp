@@ -1510,28 +1510,6 @@ void ClientWindow::slot_updateFont()
 	// standard
 	setFont(setting->fontStandard);
 
-	// set some colors
-	QPalette pal = MultiLineEdit2->palette();
-	pal.setColor(QColorGroup::Base, setting->colorBackground);
-	MultiLineEdit2->setPalette(pal);
-	MultiLineEdit3->setPalette(pal);
-	// talklist
-	Talk *dlg;
-	for (dlg = talklist.first(); dlg != 0; dlg = talklist.next())
-		dlg->setTalkWindowColor(pal);
-		
-	pal = cb_cmdLine->palette();
-	pal.setColor(QColorGroup::Base, setting->colorBackground);
-	cb_cmdLine->setPalette(pal);
-	pal = ListView_players->palette();
-	pal.setColor(QColorGroup::Base, setting->colorBackground);
-	ListView_players->setPalette(pal);
-	ListView_games->setPalette(pal);
-	pal = cb_connect->palette();
-	pal.setColor(QColorGroup::Base, setting->colorBackground);
-	cb_connect->setPalette(pal);
-	RoomList->setPalette(pal);
-	
 	// init menu
 	viewToolBar->setChecked(setting->readBoolEntry("MAINTOOLBAR"));
 	if (setting->readBoolEntry("MAINMENUBAR"))
@@ -2395,30 +2373,25 @@ void ClientWindow::slot_talk(const QString &name, const QString &text, bool ispl
 		// not found -> create new dialog
 		if (!dlg)
 		{
-			talklist.insert(0, new Talk(name, 0, isplayer));     
+			talklist.insert(0, new Talk(name, 0, isplayer));
 			dlg = talklist.current();
 			connect(dlg, SIGNAL(signal_talkto(QString&, QString&)), this, SLOT(slot_talkto(QString&, QString&)));
 			connect(dlg, SIGNAL(signal_matchrequest(const QString&,bool)), this, SLOT(slot_matchrequest(const QString&,bool)));
-      
+
 			// make new multiline field
 			TabWidget_mini_2->addTab(dlg->get_tabWidget(), dlg->get_name());
-			
+
 			if (name != tr("Shouts*"))
 				TabWidget_mini_2->showPage(dlg->get_tabWidget());
-				
+
 			dlg->pageActive = true;
 			connect(dlg->get_le(), SIGNAL(returnPressed()), dlg, SLOT(slot_returnPressed()));
 			connect(dlg, SIGNAL(signal_pbRelOneTab(QWidget*)), this, SLOT(slot_pbRelOneTab(QWidget*)));
 
-			QPalette pal = dlg->get_mle()->palette();
-			pal.setColor(QColorGroup::Base, setting->colorBackground);
-			dlg->get_mle()->setPalette(pal);
-			dlg->get_le()->setPalette(pal);
-			
+
 			//if (!name.isEmpty() && name != tr("Shouts*") && currentCommand->get_txt() !="stats")
 			if (!name.isEmpty() && isplayer)
 				slot_sendcommand("stats " + name, false);    // automatically request stats
-      
 		}
 
 		CHECK_PTR(dlg);
