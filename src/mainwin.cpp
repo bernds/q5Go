@@ -481,7 +481,7 @@ void ClientWindow::initStatusBar(QWidget* /*parent*/)
 //	statusBar->resize(-1, 20);
 	statusBar()->show();
 	statusBar()->setSizeGripEnabled(false);
-	statusBar()->message(tr("Ready."));  // Normal indicator
+	statusBar()->showMessage(tr("Ready."));  // Normal indicator
 
 	// Standard Text instead of "message" cause WhatsThisButten overlaps
 	statusMessage = new QLabel(statusBar());
@@ -2541,7 +2541,7 @@ void ClientWindow::reStoreWindowSize(QString strKey, bool store)
 			QString::number(s3->sizes().last()));
       //QString::number(mainTable->s3->sizes().last()));
       
-		statusBar()->message(tr("Window size saved.") + " (" + strKey + ")");
+		statusBar()->showMessage(tr("Window size saved.") + " (" + strKey + ")");
 	}
 	else
 	{
@@ -2572,7 +2572,7 @@ void ClientWindow::reStoreWindowSize(QString strKey, bool store)
 			s3->setSizes(w2);
 		}
 
-		statusBar()->message(tr("Window size restored.") + " (" + strKey + ")");
+		statusBar()->showMessage(tr("Window size restored.") + " (" + strKey + ")");
 	}
 }
 /*
@@ -2999,7 +2999,7 @@ void ClientWindow::slotViewStatusBar(bool toggle)
 
 	setting->writeBoolEntry("MAINSTATUSBAR", toggle);
 
-	statusBar()->message(tr("Ready."));
+	statusBar()->showMessage(tr("Ready."));
 }
 
 void ClientWindow::slotViewMenuBar(bool toggle)
@@ -3012,7 +3012,7 @@ void ClientWindow::slotViewMenuBar(bool toggle)
 #endif
 	setting->writeBoolEntry("MAINMENUBAR", toggle);
 
-	statusBar()->message(tr("Ready."));
+	statusBar()->showMessage(tr("Ready."));
 }
 
 void ClientWindow::slotViewToolBar(bool toggle)  
@@ -3024,7 +3024,7 @@ void ClientWindow::slotViewToolBar(bool toggle)
 
 	setting->writeBoolEntry("MAINTOOLBAR", toggle);
 
-	statusBar()->message(tr("Ready."));
+	statusBar()->showMessage(tr("Ready."));
 }
 
 void ClientWindow::slot_statsPlayer(Player *p)
@@ -3077,17 +3077,16 @@ void ClientWindow::slot_room(const QString& room, bool b)
 
 void ClientWindow::slot_enterRoom(const QString& room)
 {
-	
-	sendcommand("join " + room);	
-	
+	sendcommand("join " + room);
+
 	if (room == "0")
-		statusBar()->message(tr("rooms left"));
+		statusBar()->showMessage(tr("rooms left"));
 	else
-		statusBar()->message(tr("Room ")+ room);
-	
+		statusBar()->showMessage(tr("Room ")+ room);
+
 	//refresh the players table
-	slot_refresh(0);		
-}	
+	slot_refresh(0);
+}
 
 void ClientWindow::slot_leaveRoom()
 {

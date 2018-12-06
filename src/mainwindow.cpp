@@ -1034,7 +1034,7 @@ void MainWindow::initStatusBar()
 	statusBar()->addWidget(statusTip);
 	//statusBar()->show();
 	statusBar()->setSizeGripEnabled(true);
-	statusBar()->message(tr("Ready."));  // Normal indicator
+	statusBar()->showMessage(tr("Ready."));  // Normal indicator
 	connect(statusTip, SIGNAL(clearStatusBar()), statusBar(), SLOT(clear()));
 	
 	// The turn widget
@@ -1119,7 +1119,7 @@ void MainWindow::slotFileNewGame()
 	interfaceHandler->normalTools->komi->setText(QString::number(board->getGameData()->komi));
 	interfaceHandler->normalTools->handicap->setText(QString::number(board->getGameData()->handicap));
 	
-	statusBar()->message(tr("New board prepared."));
+	statusBar()->showMessage(tr("New board prepared."));
 }
 
 void MainWindow::slotFileOpen()
@@ -1160,7 +1160,7 @@ void MainWindow::doOpen(const QString &fileName, const QString &filter, bool sto
 		rememberLastDir(fileName);
 	
 	if (board->openSGF(fileName))
-		statusBar()->message(fileName + " " + tr("loaded."));
+		statusBar()->showMessage(fileName + " " + tr("loaded."));
 }
 
 bool MainWindow::startComputerPlay(QNewGameDlg * dlg, const QString &fileName, const QString &computer_path)
@@ -1255,7 +1255,7 @@ bool MainWindow::doSave(QString fileName, bool force)
 			return false;
 		}
 		
-	statusBar()->message(fileName + " " + tr("saved."));
+	statusBar()->showMessage(fileName + " " + tr("saved."));
 	board->setModified(false);
 	return true;
 }
@@ -1278,7 +1278,7 @@ void MainWindow::slotFileImportSgfClipB()
 	if (!board->importSGFClipboard())
 		QMessageBox::warning(this, PACKAGE, tr("Cannot load from clipboard. Is it empty?"));
 	else
-		statusBar()->message(tr("SGF imported."));
+		statusBar()->showMessage(tr("SGF imported."));
 }
 
 void MainWindow::slotFileExportSgfClipB()
@@ -1286,7 +1286,7 @@ void MainWindow::slotFileExportSgfClipB()
 	if (!board->exportSGFtoClipB())
 		QMessageBox::warning(this, PACKAGE, tr("Failed to export SGF to clipboard."));
 	else
-		statusBar()->message(tr("SGF exported."));
+		statusBar()->showMessage(tr("SGF exported."));
 }
 
 void MainWindow::slotFileImportASCII()
@@ -1298,7 +1298,7 @@ void MainWindow::slotFileImportASCII()
 		return;
 	
 	board->importASCII(fileName);
-	statusBar()->message(tr("ASCII imported."));
+	statusBar()->showMessage(tr("ASCII imported."));
 }
 
 void MainWindow::slotFileImportASCIIClipB()
@@ -1306,13 +1306,13 @@ void MainWindow::slotFileImportASCIIClipB()
 	if (!board->importASCII(NULL, true))
 		QMessageBox::warning(this, PACKAGE, tr("Importing ASCII failed. Clipboard empty?"));
 	else
-		statusBar()->message(tr("ASCII imported."));
+		statusBar()->showMessage(tr("ASCII imported."));
 }
 
 void MainWindow::slotFileExportASCII()
 {
 	board->exportASCII();
-	statusBar()->message(tr("Ready."));
+	statusBar()->showMessage(tr("Ready."));
 }
 
 void MainWindow::slotFileExportPic()
@@ -1453,7 +1453,7 @@ void MainWindow::slotNavAutoplay(bool toggle)
 	if (!toggle)
 	{
 		timer->stop();
-		statusBar()->message(tr("Autoplay stopped."));
+		statusBar()->showMessage(tr("Autoplay stopped."));
 	}
 	else
 	{
@@ -1468,16 +1468,16 @@ void MainWindow::slotNavAutoplay(bool toggle)
 		else
 			// set time interval as selected
 			timer->start(int(timerIntervals[setting->readIntEntry("TIMER_INTERVAL")] * 1000));
-		statusBar()->message(tr("Autoplay started."));
+		statusBar()->showMessage(tr("Autoplay started."));
 	}
 }
 
 void MainWindow::slotNavSwapVariations()
 {
 	if (board->swapVariations())
-		statusBar()->message(tr("Variations swapped."));
+		statusBar()->showMessage(tr("Variations swapped."));
 	else
-		statusBar()->message(tr("No previous variation available."));
+		statusBar()->showMessage(tr("No previous variation available."));
 }
 
 void MainWindow::updateBoard()
@@ -1561,7 +1561,7 @@ void MainWindow::slotViewFileBar(bool toggle)
 	
 	setting->writeBoolEntry("FILEBAR", toggle);
 	
-	statusBar()->message(tr("Ready."));
+	statusBar()->showMessage(tr("Ready."));
 }
 
 void MainWindow::slotViewToolBar(bool toggle)
@@ -1574,7 +1574,7 @@ void MainWindow::slotViewToolBar(bool toggle)
 
 	setting->writeBoolEntry("TOOLBAR", toggle);
 	
-	statusBar()->message(tr("Ready."));
+	statusBar()->showMessage(tr("Ready."));
 }
 
 void MainWindow::slotViewEditBar(bool toggle)
@@ -1586,7 +1586,7 @@ void MainWindow::slotViewEditBar(bool toggle)
 
 	setting->writeBoolEntry("EDITBAR", toggle);
 
-	statusBar()->message(tr("Ready."));
+	statusBar()->showMessage(tr("Ready."));
 }
 
 void MainWindow::slotViewMenuBar(bool toggle)
@@ -1595,7 +1595,7 @@ void MainWindow::slotViewMenuBar(bool toggle)
 
 	setting->writeBoolEntry("MENUBAR", toggle);
 
-	statusBar()->message(tr("Ready."));
+	statusBar()->showMessage(tr("Ready."));
 }
 
 void MainWindow::slotViewStatusBar(bool toggle)
@@ -1615,7 +1615,7 @@ void MainWindow::slotViewStatusBar(bool toggle)
 	
 	setting->writeBoolEntry("STATUSBAR", toggle);
 	
-	statusBar()->message(tr("Ready."));
+	statusBar()->showMessage(tr("Ready."));
 }
 
 void MainWindow::slotViewCoords(bool toggle)
@@ -1625,7 +1625,7 @@ void MainWindow::slotViewCoords(bool toggle)
 	else
 		board->setShowCoords(true);
 	
-	statusBar()->message(tr("Ready."));
+	statusBar()->showMessage(tr("Ready."));
 }
 
 void MainWindow::slotViewSlider(bool toggle)
@@ -1635,7 +1635,7 @@ void MainWindow::slotViewSlider(bool toggle)
 	else
 		mainWidget->toggleSlider(true);
 	
-	statusBar()->message(tr("Ready."));
+	statusBar()->showMessage(tr("Ready."));
 }
 
 void MainWindow::slotViewComment(bool toggle)
@@ -1662,7 +1662,7 @@ void MainWindow::slotViewComment(bool toggle)
 		setFocus();
 	}
 	
-	statusBar()->message(tr("Ready."));
+	statusBar()->showMessage(tr("Ready."));
 }
 
 void MainWindow::slotViewVertComment(bool toggle)
@@ -1698,7 +1698,7 @@ void MainWindow::slotViewSidebar(bool toggle)
 	interfaceHandler->toggleSidebar(toggle);
 	setting->writeBoolEntry("SIDEBAR", toggle);
 
-	statusBar()->message(tr("Ready."));
+	statusBar()->showMessage(tr("Ready."));
 }
 
 void MainWindow::slotViewPinComment(bool toggle)
@@ -1716,7 +1716,7 @@ void MainWindow::slotViewPinComment(bool toggle)
 		viewComment->setChecked(true);
 		viewVertComment->setEnabled(false);
 	}
-	statusBar()->message(tr("Ready."));
+	statusBar()->showMessage(tr("Ready."));
 }
 
 void MainWindow::slotViewSaveSize()
@@ -1811,7 +1811,7 @@ void MainWindow::slotTimerForward()
 		{
 			timer->stop();
 			navAutoplay->setChecked(false);
-			statusBar()->message(tr("Autoplay stopped."));
+			statusBar()->showMessage(tr("Autoplay stopped."));
 		}
 		else if (!m->son->getTimeinfo())
 		{
@@ -1822,7 +1822,7 @@ void MainWindow::slotTimerForward()
 			{
 				timer->stop();
 				navAutoplay->setChecked(false);
-				statusBar()->message(tr("Autoplay stopped."));
+				statusBar()->showMessage(tr("Autoplay stopped."));
 			}
 
 			// indicate move to have time Info
@@ -1842,7 +1842,7 @@ void MainWindow::slotTimerForward()
 			{
 				timer->stop();
 				navAutoplay->setChecked(false);
-				statusBar()->message(tr("Autoplay stopped."));
+				statusBar()->showMessage(tr("Autoplay stopped."));
 			}
 
 			if (moveHasTimeInfo > 0)
@@ -1854,7 +1854,7 @@ void MainWindow::slotTimerForward()
 	{
 		timer->stop();
 		navAutoplay->setChecked(false);
-		statusBar()->message(tr("Autoplay stopped."));
+		statusBar()->showMessage(tr("Autoplay stopped."));
 	}
 }
 #if 0
@@ -1920,7 +1920,7 @@ bool MainWindow::reStoreWindowSize(QString strKey, bool store)
 			QString::number(splitter_comment->sizes().first()) + DELIMITER +
 			QString::number(splitter_comment->sizes().last()));
 		
-		statusBar()->message(tr("Window size saved.") + " (" + strKey + ")");
+		statusBar()->showMessage(tr("Window size saved.") + " (" + strKey + ")");
 	}
 	else
 	{
@@ -1988,7 +1988,7 @@ bool MainWindow::reStoreWindowSize(QString strKey, bool store)
 			board->lockResize = false;
 			board->changeSize();
 
-			statusBar()->message(tr("Window size restored.") + " (" + strKey + ")");
+			statusBar()->showMessage(tr("Window size restored.") + " (" + strKey + ")");
 
 			// update current move
 			board->refreshDisplay();
