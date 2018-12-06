@@ -893,11 +893,12 @@ void MainWindow::initMenuBar()
 	editMenu = new QMenu();
 	editMenu->insertTearOffHandle();
 	editMenu->addAction (editDelete);
-	editMenu->insertSeparator();
 	editMenu->addAction (editNumberMoves);
 	editMenu->addAction (editMarkBrothers);
 	editMenu->addAction (editMarkSons);
-	
+
+	editMenu->insertSeparator(editNumberMoves);
+
 	// menuBar entry navMenu
 	navMenu = new QMenu();
 	navMenu->insertTearOffHandle();
@@ -905,30 +906,31 @@ void MainWindow::initMenuBar()
 	navMenu->addAction (navBackward);
 	navMenu->addAction (navForward);
 	navMenu->addAction (navLast);
-	navMenu->insertSeparator();
 	navMenu->addAction (navMainBranch);
 	navMenu->addAction (navStartVar);
 	navMenu->addAction (navPrevVar);
 	navMenu->addAction (navNextVar);
 	navMenu->addAction (navNextBranch);
-	navMenu->insertSeparator();
 	navMenu->addAction (navNthMove);
 	navMenu->addAction (navAutoplay);
-	navMenu->insertSeparator();
 	navMenu->addAction (navSwapVariations);
- 	navMenu->insertSeparator();		//added eb
 	navMenu->addAction (navPrevComment);
-	navMenu->addAction (navNextComment);		// end add
+	navMenu->addAction (navNextComment);
 
-	
+	navMenu->insertSeparator(navMainBranch);
+	navMenu->insertSeparator(navNthMove);
+	navMenu->insertSeparator(navSwapVariations);
+	navMenu->insertSeparator(navPrevComment);
+
 	// menuBar entry settingsMenu
 	settingsMenu = new QMenu();
 	settingsMenu->insertTearOffHandle();
 	settingsMenu->addAction (setPreferences);
 	settingsMenu->addAction (setGameInfo);
-	settingsMenu->insertSeparator();
 	settingsMenu->addAction (soundToggle);
-	
+
+	settingsMenu->insertSeparator(soundToggle);
+
 	// menuBar entry viewMenu
 	viewMenu = new QMenu();
 	viewMenu->insertTearOffHandle();
@@ -945,29 +947,29 @@ void MainWindow::initMenuBar()
 	viewMenu->addAction (viewComment);
 	viewMenu->addAction (viewVertComment);
 	viewMenu->addAction (viewPinComment);
-	viewMenu->insertSeparator();
-	viewMenu->insertSeparator();
 	viewMenu->addAction (viewSaveSize);
-	viewMenu->insertSeparator();
 	viewMenu->addAction (viewFullscreen);
-	
+
+	viewMenu->insertSeparator(viewSaveSize);
+	viewMenu->insertSeparator(viewFullscreen);
+
 	// menuBar entry helpMenu
 	helpMenu = new QMenu();
 	helpMenu->addAction (helpManual);
 	helpMenu->insertItem(wtIcon, tr("What's &This?"), this, SLOT(whatsThis()), Qt::SHIFT+Qt::Key_F1);
-	helpMenu->insertSeparator();
 	helpMenu->addAction (helpSoundInfo);
-	helpMenu->insertSeparator();
 	helpMenu->addAction (helpAboutApp);
 	helpMenu->addAction (helpAboutQt);
-	
+
+	helpMenu->insertSeparator(helpSoundInfo);
+	helpMenu->insertSeparator(helpAboutApp);
+
 	// menubar configuration
 	menuBar()->insertItem(tr("&File"), fileMenu);
 	menuBar()->insertItem(tr("&Edit"), editMenu);
 	menuBar()->insertItem(tr("&Navigation"), navMenu);
 	menuBar()->insertItem(tr("&Settings"), settingsMenu);
 	menuBar()->insertItem(tr("&View"), viewMenu);
-	menuBar()->insertSeparator();
 	menuBar()->insertItem(tr("&Help"), helpMenu);
 }
 
