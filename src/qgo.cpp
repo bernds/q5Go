@@ -46,7 +46,7 @@ qGo::~qGo()
 {
 	boardList->clear();
 	delete boardList;
-	
+
 	delete helpViewer;
 	delete clickSound;
 
@@ -103,7 +103,7 @@ void qGo::removeBoardWindow(MainWindow *w)
 void qGo::openManual()
 {
 	if (helpViewer == NULL)
-		helpViewer = new HelpViewer(0, "helpviewer");
+		helpViewer = new HelpViewer(0);
 	helpViewer->show();
 	helpViewer->raise();
 }

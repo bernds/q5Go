@@ -5,25 +5,26 @@
 #ifndef HELPVIEWER_H
 #define HELPVIEWER_H
 
-#include <q3mainwindow.h>
-#include <q3textbrowser.h>
-#include <qtoolbutton.h>
+#include <QMainWindow>
+#include <QToolBar>
+#include <QTextBrowser>
+#include <QAction>
 
-class HelpViewer : public Q3MainWindow
+class HelpViewer : public QMainWindow
 {
 	Q_OBJECT
-		
+
 public:
-	HelpViewer(QWidget* parent = 0, const char* name = 0, Qt::WFlags f = Qt::WType_TopLevel);
+	HelpViewer(QWidget* parent = 0);
 	~HelpViewer();
-	
+
 protected:
 	void initToolBar();
-	
+
 private:
-	Q3TextBrowser *browser;
-	Q3ToolBar *toolBar;
-	QToolButton *buttonHome, *buttonClose;
+	QTextBrowser *browser;
+	QToolBar *toolBar;
+	QAction *buttonHome, *buttonClose;
 };
 
 #endif

@@ -6,7 +6,6 @@
 #include "icons.h"
 #include "setting.h"
 #include "config.h"
-#include <q3toolbar.h>
 //Added by qt3to4:
 #include <QPixmap>
 #ifdef HAVE_CONFIG_H
@@ -20,16 +19,16 @@
 #include ICON_HOME
 //#endif
 
-HelpViewer::HelpViewer(QWidget* parent, const char* name, Qt::WFlags f)
-    : Q3MainWindow(parent, name, f)
+HelpViewer::HelpViewer(QWidget* parent)
+    : QMainWindow(parent)
 {
     resize(600, 480);
-    setCaption(PACKAGE " " VERSION " Manual");
 
-    setIcon(setting->image0);
+    setWindowTitle(PACKAGE " " VERSION " Manual");
+    setWindowIcon(setting->image0);
 
-    browser = new Q3TextBrowser(this);
-    
+    browser = new QTextBrowser(this);
+
     QStringList strList;
 
 #ifdef Q_WS_WIN
@@ -49,8 +48,8 @@ HelpViewer::HelpViewer(QWidget* parent, const char* name, Qt::WFlags f)
 	    << "./html/";
 #endif
 
-    browser->mimeSourceFactory()->setFilePath(strList);
-    browser->setSource("index.html");
+    browser->setSearchPaths(strList);
+    browser->setSource(QUrl ("index.html"));
     setCentralWidget(browser);
 
     initToolBar();
@@ -62,23 +61,26 @@ HelpViewer::~HelpViewer()
 
 void HelpViewer::initToolBar()
 {
-    toolBar = new Q3ToolBar(this, "toolbar");
-       
-    QPixmap iconHome, iconExit;
+	toolBar = new QToolBar(this);
 
-//#ifdef USE_XPM
-    iconHome = QPixmap(const_cast<const char**>(gohome_xpm));
-    iconExit = QPixmap(const_cast<const char**>(exit_xpm));
-/*
-#else
-    iconHome = QPixmap(ICON_HOME);
-    iconExit = QPixmap(ICON_EXIT);
-#endif
-*/
-    buttonClose = new QToolButton(iconExit, "Close (Escape)", "Close", this, 
-SLOT(close()), toolBar);
-    buttonClose->setAccel(Qt::Key_Escape);
-    buttonHome = new QToolButton(iconHome, "Home", "Home", browser, 
-SLOT(home()), toolBar);
+	QPixmap iconHome, iconExit;
+
+	//#ifdef USE_XPM
+	iconHome = QPixmap(const_cast<const char**>(gohome_xpm));
+	iconExit = QPixmap(const_cast<const char**>(exit_xpm));
+	/*
+	  #else
+	  iconHome = QPixmap(ICON_HOME);
+	  iconExit = QPixmap(ICON_EXIT);
+	  #endif
+	*/
+	buttonClose = new QAction(iconExit, "Close", this);
+	connect (buttonClose, SIGNAL(activated ()), this, SLOT(close()));
+	buttonClose->setShortcut (Qt::Key_Escape);
+	toolBar->addAction (buttonClose);
+
+	buttonHome = new QAction(iconHome, "Home", this);
+	connect (buttonHome, SIGNAL(activated ()), browser, SLOT(home()));
+	toolBar->addAction (buttonHome);
 }
 
