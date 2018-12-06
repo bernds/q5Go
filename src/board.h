@@ -51,8 +51,6 @@ public:
 	InterfaceHandler* getInterfaceHandler();
 	Stone* addStoneSprite(StoneColor c, int x, int y, bool &shown);
 	void updateCanvas() { canvas->update(); }
-	void increaseSize();
-	void decreaseSize();
 	QString getCandidateFileName();
 	void hideAllStones();
 	void showAllStones();
@@ -92,8 +90,6 @@ public:
 	void gotoNthMove(int n) { boardHandler->gotoNthMove(n); }
 	void gotoNthMoveInVar(int n) { boardHandler->gotoNthMoveInVar(n); }
 	void navIntersection();
-	void cutNode() { boardHandler->cutNode(); }
-	void pasteNode(bool brother=false) { boardHandler->pasteNode(brother); }
 	void deleteNode() { boardHandler->deleteNode(); }
 	void clearNode() { boardHandler->clearNode(); }
 	void duplicateNode() { boardHandler->duplicateNode(); }

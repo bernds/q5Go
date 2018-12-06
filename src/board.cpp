@@ -909,24 +909,6 @@ void Board::mousePressEvent(QMouseEvent *e)
     }
 }
 
-void Board::increaseSize()
-{
-#if 0 // Later.  Maybe.
-    resizeBoard(canvas->width() + 20, canvas->height() + 20);
-#endif
-}
-
-void Board::decreaseSize()
-{
-#if 0
-    QSize s (width()-5, height()-5);
-    if (canvas->width() - 20 < s.width() ||
-		canvas->height() - 20 < s.height())
-		return;
-    resizeBoard(canvas->width() - 20, canvas->height() - 20);
-#endif
-}
-
 void Board::changeSize()
 {
 #ifdef Q_WS_WIN

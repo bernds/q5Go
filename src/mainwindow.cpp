@@ -85,8 +85,6 @@
 #include ICON_CUT
 #include ICON_PASTE
 #include ICON_DELETE
-#include ICON_INCREASE_SIZE
-#include ICON_DECREASE_SIZE
 #include ICON_FULLSCREEN
 #include ICON_WHATSTHIS
 #include ICON_MANUAL
@@ -228,9 +226,6 @@ MainWindow::MainWindow(QWidget* parent, const char* name, Qt::WFlags f)
 	interfaceHandler->navPrevComment = navPrevComment;
 	interfaceHandler->navNextComment = navNextComment;
 	interfaceHandler->navIntersection = navIntersection;
-	interfaceHandler->editCut = editCut;
-	interfaceHandler->editPaste = editPaste;
-	interfaceHandler->editPasteBrother = editPasteBrother;
 	interfaceHandler->editDelete = editDelete;
 	interfaceHandler->navNthMove = navNthMove;
 	interfaceHandler->navAutoplay = navAutoplay;
@@ -311,9 +306,6 @@ MainWindow::~MainWindow()
 	delete fileExportPic;
 	delete fileExportPicClipB;
 	delete fileQuit;
-	delete editCut;
-	delete editPaste;
-	delete editPasteBrother;
 	delete editDelete;
 	delete editNumberMoves;
 	delete editMarkBrothers;
@@ -345,8 +337,6 @@ MainWindow::~MainWindow()
 	delete viewComment;
 	delete viewVertComment;
 	delete viewPinComment;
-	delete viewIncreaseSize;
-	delete viewDecreaseSize;
 	delete viewSaveSize;
 	delete viewFullscreen;
 	delete helpManual;
@@ -360,11 +350,11 @@ void MainWindow::initActions()
 {
 	// Load the pixmaps
 	QPixmap exitIcon, fileNewboardIcon, fileNewIcon, fileOpenIcon, fileSaveIcon, fileSaveAsIcon,
-		transformIcon, charIcon, cutIcon, pasteIcon, deleteIcon,
+		transformIcon, charIcon, deleteIcon,
 		nextCommentIcon, previousCommentIcon, navIntersectionIcon,
 		rightArrowIcon, leftArrowIcon,two_rightArrowIcon, two_leftArrowIcon,
 		prevVarIcon, nextVarIcon, startVarIcon,	mainBranchIcon, nextBranchIcon, autoplayIcon,
-		prefsIcon, infoIcon, increaseIcon, decreaseIcon, fullscreenIcon, manualIcon,
+		prefsIcon, infoIcon, fullscreenIcon, manualIcon,
 		coordsIcon, sound_onIcon, sound_offIcon;
 //#ifdef USE_XPM
 	prefsIcon = QPixmap(const_cast<const char**>(package_settings_xpm));
@@ -377,8 +367,6 @@ void MainWindow::initActions()
 	fileSaveAsIcon = QPixmap(const_cast<const char**>(filesaveas_xpm));
 	transformIcon = QPixmap(const_cast<const char**>(transform_xpm));
 	charIcon = QPixmap(const_cast<const char**>(charset_xpm));
-	cutIcon = QPixmap(const_cast<const char**>(editcut_xpm));
-	pasteIcon = QPixmap(const_cast<const char**>(editpaste_xpm));
 	deleteIcon = QPixmap(const_cast<const char**>(editdelete_xpm));
 	rightArrowIcon = QPixmap(const_cast<const char**>(rightarrow_xpm));
 	leftArrowIcon = QPixmap(const_cast<const char**>(leftarrow_xpm));
@@ -391,8 +379,6 @@ void MainWindow::initActions()
 	mainBranchIcon = QPixmap(const_cast<const char**>(start_xpm));
 	startVarIcon = QPixmap(const_cast<const char**>(top_xpm));
 	nextBranchIcon = QPixmap(const_cast<const char**>(bottom_xpm));
-	increaseIcon = QPixmap(const_cast<const char**>(viewmagplus_xpm));
-	decreaseIcon = QPixmap(const_cast<const char**>(viewmagminus_xpm));
 	fullscreenIcon = QPixmap(const_cast<const char**>(window_fullscreen_xpm));
 	manualIcon = QPixmap(const_cast<const char**>(help_xpm));
 	autoplayIcon = QPixmap(const_cast<const char**>(player_pause_xpm));
@@ -412,8 +398,6 @@ void MainWindow::initActions()
 	fileSaveAsIcon = QPixmap(ICON_FILESAVEAS);
 	transformIcon = QPixmap(ICON_TRANSFORM);
 	charIcon = QPixmap(ICON_CHARSET);
-	cutIcon = QPixmap(ICON_CUT);
-	pasteIcon = QPixmap(ICON_PASTE);
 	deleteIcon = QPixmap(ICON_DELETE);
 	rightArrowIcon = QPixmap(ICON_RIGHTARROW);
 	leftArrowIcon = QPixmap(ICON_LEFTARROW);
@@ -426,8 +410,6 @@ void MainWindow::initActions()
 	startVarIcon = QPixmap(ICON_START_VAR);
 	mainBranchIcon = QPixmap(ICON_MAIN_BRANCH);
 	nextBranchIcon = QPixmap(ICON_NEXT_BRANCH);
-	increaseIcon = QPixmap(ICON_INCREASE_SIZE);
-	decreaseIcon = QPixmap(ICON_DECREASE_SIZE);
 	fullscreenIcon = QPixmap(ICON_FULLSCREEN);
 	manualIcon = QPixmap(ICON_MANUAL);
 	autoplayIcon = QPixmap(ICON_AUTOPLAY);
@@ -553,25 +535,6 @@ void MainWindow::initActions()
 	/*
 	* Menu Edit
 	*/
-	// Edit cut
-	editCut = new QAction(cutIcon, tr("&Cut"), this);
-	editCut->setShortcut (QKeySequence (Qt::CTRL + Qt::Key_X));
-	editCut->setStatusTip(tr("Cut this and all following positions"));
-	editCut->setWhatsThis(tr("Cut\n\nCut this and all following positions."));
-	connect(editCut, SIGNAL(activated()), this, SLOT(slotEditCut()));
-
-	// Edit paste
-	editPaste = new QAction(pasteIcon, tr("&Paste"), this);
-	editPaste->setShortcut (QKeySequence (Qt::CTRL + Qt::Key_P));
-	editPaste->setStatusTip(tr("Paste as son of the current move"));
-	editPaste->setWhatsThis(tr("Paste\n\nPaste as son of the current move."));
-	connect(editPaste, SIGNAL(activated()), this, SLOT(slotEditPaste()));
-
-	// Edit paste as brother
-	editPasteBrother = new QAction(tr("Paste as &brother"), this);
-	editPasteBrother->setStatusTip(tr("Paste as brother of the current move"));
-	editPasteBrother->setWhatsThis(tr("Paste\n\nPaste as brother of the current move."));
-	connect(editPasteBrother, SIGNAL(activated()), this, SLOT(slotEditPasteBrother()));
 
 	// Edit delete
 	editDelete = new QAction (deleteIcon, tr("&Delete"), this);
@@ -831,20 +794,6 @@ void MainWindow::initActions()
 	viewPinComment->setWhatsThis(tr("Pin comment field\n\nEnables/disables pinning the comment field."));
 	connect(viewPinComment, SIGNAL(toggled(bool)), this, SLOT(slotViewPinComment(bool)));
 
-	// View Increase Size
-	viewIncreaseSize = new QAction(increaseIcon, tr("Zoom &In"), this);
-	viewIncreaseSize->setShortcut (Qt::ALT + Qt::Key_Plus);
-	viewIncreaseSize->setStatusTip(tr("Zooms in the board"));
-	viewIncreaseSize->setWhatsThis(tr("Zoom In\n\nZooms in the board."));
-	connect(viewIncreaseSize, SIGNAL(activated()), this, SLOT(slotViewIncreaseSize()));
-
-	// View Decrease Size
-	viewDecreaseSize = new QAction(decreaseIcon, tr("Zoom &Out"), this);
-	viewDecreaseSize->setShortcut (Qt::ALT + Qt::Key_Minus);
-	viewDecreaseSize->setStatusTip(tr("Zooms out the board"));
-	viewDecreaseSize->setWhatsThis(tr("Zoom Out\n\nZooms out the board."));
-	connect(viewDecreaseSize, SIGNAL(activated()), this, SLOT(slotViewDecreaseSize()));
-
 	// View Save Size
 	viewSaveSize = new QAction(tr("Save si&ze"), this);
 	viewSaveSize->setShortcut (Qt::ALT + Qt::Key_0);
@@ -904,8 +853,6 @@ void MainWindow::initActions()
 	navPrevComment->setEnabled(false);
 	navNextComment->setEnabled(false);
   	navIntersection->setEnabled(false);     //SL added eb 11
-	editPaste->setEnabled(false);
-	editPasteBrother->setEnabled(false);
 }
 
 void MainWindow::initMenuBar()
@@ -946,9 +893,6 @@ void MainWindow::initMenuBar()
 	// menuBar entry editMenu
 	editMenu = new QMenu();
 	editMenu->insertTearOffHandle();
-	editCut->addTo(editMenu);
-	editPaste->addTo(editMenu);
-	editPasteBrother->addTo(editMenu);
 	editDelete->addTo(editMenu);
 	editMenu->insertSeparator();
 	editNumberMoves->addTo(editMenu);
@@ -1003,8 +947,6 @@ void MainWindow::initMenuBar()
 	viewVertComment->addTo(viewMenu);
 	viewPinComment->addTo(viewMenu);
 	viewMenu->insertSeparator();
-	viewIncreaseSize->addTo(viewMenu);
-	viewDecreaseSize->addTo(viewMenu);
 	viewMenu->insertSeparator();
 	viewSaveSize->addTo(viewMenu);
 	viewMenu->insertSeparator();
@@ -1081,9 +1023,6 @@ void MainWindow::initToolBar()
 
 	// Edit toolbar
 	editBar = addToolBar ("editbar");
-
-	editCut->addTo(editBar);
-	editPaste->addTo(editBar);
 	editDelete->addTo(editBar);
 }
 
@@ -1408,21 +1347,6 @@ void MainWindow::slotFileExportPic()
 void MainWindow::slotFileExportPicClipB()
 {
 	board->exportPicture(NULL, NULL, true);	
-}
-
-void MainWindow::slotEditCut()
-{
-	board->cutNode();
-}
-
-void MainWindow::slotEditPaste()
-{
-	board->pasteNode();
-}
-
-void MainWindow::slotEditPasteBrother()
-{
-	board->pasteNode(true);
 }
 
 void MainWindow::slotEditDelete()
@@ -1794,16 +1718,6 @@ void MainWindow::slotViewPinComment(bool toggle)
 	statusBar()->message(tr("Ready."));
 }
 
-void MainWindow::slotViewIncreaseSize()
-{
-	board->increaseSize();
-}
-
-void MainWindow::slotViewDecreaseSize()
-{
-	board->decreaseSize();
-}
-
 void MainWindow::slotViewSaveSize()
 {
 	reStoreWindowSize("0", true);
@@ -1815,7 +1729,7 @@ void MainWindow::slotViewFullscreen(bool toggle)
 		showNormal();
 	else
 		showFullScreen();
-	
+
 	isFullScreen = toggle;
 }
 
@@ -2343,7 +2257,6 @@ void MainWindow::setGameMode(GameMode mode)
 		commentEdit->setReadOnly(true);
 		commentEdit2->setReadOnly(false);
 		commentEdit2->setDisabled(false);
-    		editCut->setEnabled(false);
     		editDelete->setEnabled(false);
 		fileNew->setEnabled(false);
 		fileNewBoard->setEnabled(false);

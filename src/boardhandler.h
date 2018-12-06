@@ -68,8 +68,6 @@ public:
 	void gotoNthMove(int n);
 	void gotoNthMoveInVar(int n);
 	void gotoMove(Move *m);
-	void cutNode();
-	void pasteNode(bool brother=false);
 	void deleteNode();
 	void clearNode(bool brother=true);
 	void duplicateNode();

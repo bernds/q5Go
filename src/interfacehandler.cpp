@@ -29,7 +29,7 @@
 struct ButtonState
 {
     bool navPrevVar, navNextVar, navBackward, navForward, navFirst, navStartVar, navMainBranch,
-		navLast, navNextBranch, navPrevComment, navNextComment, navIntersection, editPaste, editPasteBrother; // SL added eb 11
+		navLast, navNextBranch, navPrevComment, navNextComment, navIntersection; // SL added eb 11
 };
 
 InterfaceHandler::InterfaceHandler()
@@ -267,8 +267,6 @@ void InterfaceHandler::clearData()
     }
     normalTools->show();
     scoreButton->setOn(false);
-    editPaste->setEnabled(false);
-    editPasteBrother->setEnabled(false);
     slider->setValue(0);
     setSliderMax(SLIDER_INIT);
     scored_flag = false;
@@ -434,15 +432,8 @@ void InterfaceHandler::disableToolbarButtons()
     buttonState->navIntersection = navIntersection->isEnabled(); // added eb 111
 	  navIntersection->setEnabled(false);                          // end add eb 11
 
-    buttonState->editPaste = editPaste->isEnabled();
-    editPaste->setEnabled(false);
-	
-    buttonState->editPasteBrother = editPasteBrother->isEnabled();
-    editPasteBrother->setEnabled(false);
-    
     navNthMove->setEnabled(false);
     navAutoplay->setEnabled(false);
-    editCut->setEnabled(false);
     editDelete->setEnabled(false);
     navSwapVariations->setEnabled(false);
     fileImportASCII->setEnabled(false);
@@ -465,13 +456,10 @@ void InterfaceHandler::restoreToolbarButtons()
 	navNextBranch->setEnabled(buttonState->navNextBranch);
 	navPrevComment->setEnabled(buttonState->navPrevComment);
 	navNextComment->setEnabled(buttonState->navNextComment);
-  navIntersection->setEnabled(buttonState->navNextComment);  // SL added eb 11
-	editPaste->setEnabled(buttonState->editPaste);
-	editPasteBrother->setEnabled(buttonState->editPasteBrother);
-	
+	navIntersection->setEnabled(buttonState->navNextComment);  // SL added eb 11
+
 	navNthMove->setEnabled(true);
 	navAutoplay->setEnabled(true);
-	editCut->setEnabled(true);
 	editDelete->setEnabled(true);
 	navSwapVariations->setEnabled(true);
 	fileImportASCII->setEnabled(true);
@@ -489,20 +477,6 @@ void InterfaceHandler::setScore(int terrB, int capB, int terrW, int capW, float 
 	scoreTools->terrBlack->setText(QString::number(terrB));
 	scoreTools->capturesBlack->setText(QString::number(capB));
 	scoreTools->totalBlack->setText(QString::number(terrB + capB));
-}
-
-void InterfaceHandler::setClipboard(bool b)
-{
-    if (b)  // Clipboard filled
-    {
-		editPaste->setEnabled(true);
-		editPasteBrother->setEnabled(true);
-    }
-    else    // Clipboard filled
-    {
-		editPaste->setEnabled(false);
-		editPasteBrother->setEnabled(false);
-    }
 }
 
 void InterfaceHandler::setSliderMax(int n)

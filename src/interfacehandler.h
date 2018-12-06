@@ -52,7 +52,7 @@ public:
 	QLabel *moveNumLabel, *turnLabel, *varLabel, *capturesBlack, *capturesWhite;
 	QAction *navBackward,  *navForward, *navFirst, *navLast, *navNextVar, *navIntersection, //SL added eb 11
 		*navPrevVar, *navStartVar, *navNextBranch, *navMainBranch, *navNthMove, *navAutoplay,
-		*editCut, *editPaste, *editPasteBrother, *editDelete,
+		*editDelete,
 	        *navSwapVariations, *navPrevComment, *navNextComment,
  		*fileImportASCII, *fileImportASCIIClipB, *fileImportSgfClipB, *fileNew, *fileNewBoard, *fileOpen ;
 	Q3TextEdit *commentEdit;

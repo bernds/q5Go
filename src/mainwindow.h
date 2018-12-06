@@ -92,9 +92,6 @@ public slots:
 	void slotFileExportSgfClipB();
 	void slotFileExportPic();
 	void slotFileExportPicClipB();
-	void slotEditCut();
-	void slotEditPaste();
-	void slotEditPasteBrother();
 	void slotEditDelete();
 	void slotEditNumberMoves();
 	void slotEditMarkBrothers();
@@ -128,8 +125,6 @@ public slots:
 	void slotViewComment(bool toggle);
 	void slotViewVertComment(bool toggle);
 	void slotViewPinComment(bool toggle);
-	void slotViewIncreaseSize();
-	void slotViewDecreaseSize();
 	void slotViewSaveSize();
 	void slotViewFullscreen(bool toggle);
 	void slotHelpManual();
@@ -169,8 +164,7 @@ private:
 		*fileImportSgfClipB, *fileExportSgfClipB,
 		*fileExportPic, *fileExportPicClipB,
 		*fileQuit ;
-	QAction *editCut, *editPaste, *editPasteBrother, *editDelete, *editNumberMoves, *editMarkBrothers,
-		*editMarkSons;
+	QAction *editDelete, *editNumberMoves, *editMarkBrothers, *editMarkSons;
 	QAction *navBackward, *navForward, *navFirst, *navLast, *navNextVar, *navPrevVar,
 		*navMainBranch, *navStartVar, *navNextBranch, *navNthMove, *navAutoplay, *navEmptyBranch,
 		*navCloneNode, *navSwapVariations, *navNextComment, *navPrevComment, *navIntersection ;       //SL added eb 11                               // added eb the 2 last
