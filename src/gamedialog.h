@@ -5,6 +5,8 @@
 #ifndef GAMEDIALOG_H
 #define GAMEDIALOG_H
 
+#include <QButtonGroup>
+
 #include "newgame_gui.h"
 #include "gs_globals.h"
 #include "defines.h"
@@ -15,7 +17,7 @@ class GameDialog : public QDialog, public Ui::NewGameDialog
 	Q_OBJECT
 
 public:
-	GameDialog(QWidget* parent = 0, const char* name = 0, bool modal = true, Qt::WFlags fl = 0);
+	GameDialog(QWidget* parent, const char *name);
 	~GameDialog();
 	void set_gsName(GSName g) { gsname = g; }
 	void set_oppRk(QString &rk) { oppRk = rk; qDebug() << "oppRk: " << rk; }
@@ -57,6 +59,7 @@ private:
 	QString myName;
 	bool komi_request;
 	bool is_nmatch;
+	QButtonGroup buttongroup;
 };
 
 #endif

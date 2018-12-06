@@ -9,10 +9,12 @@
 #include "defines.h"
 #include "komispinbox.h"
 
-GameDialog::GameDialog(QWidget* parent, const char* name, bool modal, Qt::WFlags fl)
-	: QDialog(parent, name, modal)
+GameDialog::GameDialog(QWidget* parent, const char *name)
+	: QDialog(parent), buttongroup (this)
 {
 	setupUi(this);
+	setModal (true);
+	setWindowTitle (name);
 	have_suggestdata = false;
 	gsname = GS_UNKNOWN;
 //	komiSpin->setValue(55);
@@ -24,6 +26,11 @@ GameDialog::GameDialog(QWidget* parent, const char* name, bool modal, Qt::WFlags
 //  timeSpin->setValue(setting->readIntEntry("DEFAULT_TIME"));
 //  byoTimeSpin->setValue(setting->readIntEntry("DEFAULT_BY"));
 //	cb_free->setChecked(true);
+
+	buttongroup.addButton (play_white_button);
+	buttongroup.addButton (play_black_button);
+	buttongroup.addButton (play_nigiri_button);
+	buttongroup.setExclusive (true);
 }
 
 GameDialog::~GameDialog()

@@ -1796,9 +1796,9 @@ void ClientWindow::slot_matchrequest(const QString &line, bool myrequest)
 
 	if (!dlg)
 	{
-		matchlist.insert(0, new GameDialog(0, tr("New Game"), false));
+		matchlist.insert(0, new GameDialog(0, tr("New Game")));
 		dlg = matchlist.current();
-		
+
 		if (myAccount->get_gsname() == NNGS ||
 			myAccount->get_gsname() == LGS)
 		{
@@ -1808,7 +1808,7 @@ void ClientWindow::slot_matchrequest(const QString &line, bool myrequest)
 				dlg,
 				SLOT(slot_suggest(const QString&, const QString&, const QString&, const QString&, int)));
 		}
-		
+
 		connect(dlg,SIGNAL(signal_removeDialog(dlg)), this, SLOT(slot_removeDialog(dlg)));
 
 		connect(dlg,

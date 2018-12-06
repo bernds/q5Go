@@ -423,13 +423,7 @@
               </widget>
             </item>
             <item row="2" column="0" rowspan="1" colspan="4">
-              <widget class="Q3ButtonGroup" name="buttonGroup1">
-                <property name="frameShadow">
-                  <enum>Q3GroupBox::Plain</enum>
-                </property>
-                <property name="lineWidth">
-                  <number>0</number>
-                </property>
+              <widget class="QGroupBox" name="buttonGroup1">
                 <property name="title">
                   <string>You play</string>
                 </property>
@@ -438,9 +432,6 @@
                 </property>
                 <property name="checkable">
                   <bool>false</bool>
-                </property>
-                <property name="exclusive">
-                  <bool>true</bool>
                 </property>
                 <layout class="QGridLayout">
                   <item row="0" column="1">
