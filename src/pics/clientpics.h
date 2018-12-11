@@ -1325,36 +1325,37 @@ static const QRgb seeking4_ctable[] = {
 
 static struct EmbedImage {
     int width, height, depth;
+    QImage::Format format;
     const unsigned char *data;
     int numColors;
     const QRgb *colorTable;
     bool alpha;
     const char *name;
 } embed_image_vec[] = {
-    { 32, 32, 32, (const unsigned char*)Bowl_data, 0, 0, true, "Bowl" },
-    { 22, 22, 32, (const unsigned char*)computerplay_data, 0, 0, true, "computerplay" },
-    { 32, 32, 32, (const unsigned char*)connected_data, 0, 0, true, "connected" },
-    { 32, 32, 32, (const unsigned char*)connect_no_data, 0, 0, true, "connect_no" },
-    { 22, 22, 32, (const unsigned char*)exit_data, 0, 0, true, "exit" },
-    { 22, 22, 32, (const unsigned char*)filenew_data, 0, 0, true, "filenew" },
-    { 22, 22, 32, (const unsigned char*)fileopen_data, 0, 0, true, "fileopen" },
-    { 22, 22, 32, (const unsigned char*)help_data, 0, 0, true, "help" },
-    { 36, 36, 32, (const unsigned char*)looking_data, 0, 0, true, "looking" },
-    { 22, 22, 32, (const unsigned char*)newboard_data, 0, 0, true, "newboard" },
-    { 36, 36, 32, (const unsigned char*)not_looking_data, 0, 0, true, "not_looking" },
-    { 22, 22, 32, (const unsigned char*)not_open_data, 0, 0, true, "not_open" },
-    { 22, 22, 32, (const unsigned char*)not_quiet_data, 0, 0, true, "not_quiet" },
-    { 22, 22, 32, (const unsigned char*)not_seeking_data, 0, 0, true, "not_seeking" },
-    { 22, 22, 32, (const unsigned char*)open_data, 0, 0, true, "open" },
-    { 32, 32, 32, (const unsigned char*)package_settings_data, 0, 0, true, "package_settings" },
-    { 22, 22, 32, (const unsigned char*)quiet_data, 0, 0, true, "quiet" },
-    { 32, 32, 32, (const unsigned char*)refresh_games_data, 0, 0, true, "refresh_games" },
-    { 32, 32, 32, (const unsigned char*)refresh_players_data, 0, 0, true, "refresh_players" },
-    { 22, 22, 8, (const unsigned char*)seeking1_data, 249, seeking1_ctable, true, "seeking1" },
-    { 22, 22, 8, (const unsigned char*)seeking2_data, 249, seeking2_ctable, true, "seeking2" },
-    { 22, 22, 8, (const unsigned char*)seeking3_data, 249, seeking3_ctable, true, "seeking3" },
-    { 22, 22, 8, (const unsigned char*)seeking4_data, 249, seeking4_ctable, true, "seeking4" },
-    { 0, 0, 0, 0, 0, 0, 0, 0 }
+    { 32, 32, 32, QImage::Format_ARGB32, (const unsigned char*)Bowl_data, 0, 0, true, "Bowl" },
+    { 22, 22, 32, QImage::Format_ARGB32, (const unsigned char*)computerplay_data, 0, 0, true, "computerplay" },
+    { 32, 32, 32, QImage::Format_ARGB32, (const unsigned char*)connected_data, 0, 0, true, "connected" },
+    { 32, 32, 32, QImage::Format_ARGB32, (const unsigned char*)connect_no_data, 0, 0, true, "connect_no" },
+    { 22, 22, 32, QImage::Format_ARGB32, (const unsigned char*)exit_data, 0, 0, true, "exit" },
+    { 22, 22, 32, QImage::Format_ARGB32, (const unsigned char*)filenew_data, 0, 0, true, "filenew" },
+    { 22, 22, 32, QImage::Format_ARGB32, (const unsigned char*)fileopen_data, 0, 0, true, "fileopen" },
+    { 22, 22, 32, QImage::Format_ARGB32, (const unsigned char*)help_data, 0, 0, true, "help" },
+    { 36, 36, 32, QImage::Format_ARGB32, (const unsigned char*)looking_data, 0, 0, true, "looking" },
+    { 22, 22, 32, QImage::Format_ARGB32, (const unsigned char*)newboard_data, 0, 0, true, "newboard" },
+    { 36, 36, 32, QImage::Format_ARGB32, (const unsigned char*)not_looking_data, 0, 0, true, "not_looking" },
+    { 22, 22, 32, QImage::Format_ARGB32, (const unsigned char*)not_open_data, 0, 0, true, "not_open" },
+    { 22, 22, 32, QImage::Format_ARGB32, (const unsigned char*)not_quiet_data, 0, 0, true, "not_quiet" },
+    { 22, 22, 32, QImage::Format_ARGB32, (const unsigned char*)not_seeking_data, 0, 0, true, "not_seeking" },
+    { 22, 22, 32, QImage::Format_ARGB32, (const unsigned char*)open_data, 0, 0, true, "open" },
+    { 32, 32, 32, QImage::Format_ARGB32, (const unsigned char*)package_settings_data, 0, 0, true, "package_settings" },
+    { 22, 22, 32, QImage::Format_ARGB32, (const unsigned char*)quiet_data, 0, 0, true, "quiet" },
+    { 32, 32, 32, QImage::Format_ARGB32, (const unsigned char*)refresh_games_data, 0, 0, true, "refresh_games" },
+    { 32, 32, 32, QImage::Format_ARGB32, (const unsigned char*)refresh_players_data, 0, 0, true, "refresh_players" },
+    { 22, 22, 8, QImage::Format_Indexed8, (const unsigned char*)seeking1_data, 249, seeking1_ctable, true, "seeking1" },
+    { 22, 22, 8, QImage::Format_Indexed8, (const unsigned char*)seeking2_data, 249, seeking2_ctable, true, "seeking2" },
+    { 22, 22, 8, QImage::Format_Indexed8, (const unsigned char*)seeking3_data, 249, seeking3_ctable, true, "seeking3" },
+    { 22, 22, 8, QImage::Format_Indexed8, (const unsigned char*)seeking4_data, 249, seeking4_ctable, true, "seeking4" },
+    { 0, 0, 0, QImage::Format_Invalid, 0, 0, 0, 0 }
 };
 
 static const QImage& qembed_findImage( const QString& name )
@@ -1363,16 +1364,18 @@ static const QImage& qembed_findImage( const QString& name )
     QImage* img = dict.value ( name );
     if ( !img ) {
 	for ( int i = 0; embed_image_vec[i].data; i++ ) {
-	    if ( strcmp(embed_image_vec[i].name, name.latin1()) == 0 ) {
+	    if ( strcmp(embed_image_vec[i].name, name.toLatin1()) == 0 ) {
 		img = new QImage((uchar*)embed_image_vec[i].data,
 			    embed_image_vec[i].width,
 			    embed_image_vec[i].height,
-			    embed_image_vec[i].depth,
-			    (QRgb*)embed_image_vec[i].colorTable,
-			    embed_image_vec[i].numColors,
-			    QImage::BigEndian );
-		if ( embed_image_vec[i].alpha )
-		    img->setAlphaBuffer( true );
+			    embed_image_vec[i].format);
+		const QRgb *colortable = embed_image_vec[i].colorTable;
+		if (colortable) {
+		    QVector<QRgb> vec;
+		    for (int j = 0; j < embed_image_vec[i].numColors; j++)
+			vec.push_back (colortable[j]);
+		    img->setColorTable (vec);
+		}
 		dict.insert( name, img );
 		break;
 	    }
