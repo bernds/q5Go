@@ -69,7 +69,7 @@ void qGo::quit()
 		1, 0)))
 	{
 		//	qApp->quit();
-		qDebug("Program quits now...");
+		qDebug() << "Program quits now...";
 	}
 	
 	//    emit signal_leave_qgo();
@@ -151,14 +151,14 @@ Sound * qGo::retrieveSound(const char * filename, SearchPath& sp)
 	{
     		QString msg(filename);
     		msg.append(" not found");
-    		qDebug(msg);
+    		qDebug() << msg;
     		return (Sound *) NULL;
   	}
 	else 
 	{
-		msg.append(" found : " + foundFile->name());
-		qDebug(msg);
-    		return SoundFactory::newSound(foundFile->name());
+		msg.append(" found : " + foundFile->fileName());
+		qDebug() << msg;
+    		return SoundFactory::newSound(foundFile->fileName());
   	}
 }
 

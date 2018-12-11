@@ -180,7 +180,7 @@ void Setting::loadSettings()
 	{
 		// however...
 		qDebug("HOME and/or USERPROFILE are not set");
-		settingHomeDir = QDir::homeDirPath();
+		settingHomeDir = QDir::homePath();
 		file.setName(settingHomeDir + "/.qgoclientrc");
 		if (file.exists())
 		{
@@ -205,7 +205,7 @@ void Setting::loadSettings()
 		qDebug() << "Failed loading settings: " << file.name();
 
 		// maybe old file available
-		file.setName(QDir::homeDirPath() + "/.qgoclientrc");
+		file.setName(QDir::homePath() + "/.qgoclientrc");
 
 		if (!file.exists() || !file.open(QIODevice::ReadOnly))
 		{
@@ -430,7 +430,7 @@ QString Setting::getTranslationsDirectory()
 	//get the bundle path and find our resources
 	CFURLRef bundleRef = CFBundleCopyBundleURL(CFBundleGetMainBundle());
 	CFStringRef bundlePath = CFURLCopyFileSystemPath(bundleRef, kCFURLPOSIXPathStyle);
-	list << (QString)CFStringGetCStringPtr(bundlePath, CFStringGetSystemEncoding())		
+	list << (QString)CFStringGetCStringPtr(bundlePath, CFStringGetSystemEncoding())
 		+ "/Contents/Resources";
 #else
 	list	<< DATADIR "/translations"
@@ -445,8 +445,8 @@ QString Setting::getTranslationsDirectory()
 		QDir d(*it);
 		if (d.exists())
 		{
-			qDebug("Translations found in %s", d.absPath().latin1());
-			return d.absPath();
+			qDebug("Translations found in %s", d.absolutePath().latin1());
+			return d.absolutePath();
 		}
     }
     return "./translations";  // Hoping for the best...
