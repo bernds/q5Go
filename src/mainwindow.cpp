@@ -863,20 +863,21 @@ void MainWindow::initMenuBar()
 //#endif
 	
 	// submenu Import/Export
-	importExportMenu = new QMenu();
+	importExportMenu = new QMenu(tr("&Import/Export"));
 	importExportMenu->insertTearOffHandle();
 	importExportMenu->addAction (fileImportASCII);
 	importExportMenu->addAction (fileImportASCIIClipB);
 	importExportMenu->addAction (fileExportASCII);
-	importExportMenu->insertSeparator();
 	importExportMenu->addAction (fileImportSgfClipB);
 	importExportMenu->addAction (fileExportSgfClipB);
-	importExportMenu->insertSeparator();
 	importExportMenu->addAction (fileExportPic);
 	importExportMenu->addAction (fileExportPicClipB);
-	
+
+	importExportMenu->insertSeparator(fileImportSgfClipB);
+	importExportMenu->insertSeparator(fileExportPic);
+
 	// menuBar entry fileMenu
-	fileMenu = new QMenu();
+	fileMenu = new QMenu(tr("&File"));
 	fileMenu->insertTearOffHandle();
 	fileMenu->addAction (fileNewBoard);
 	fileMenu->addAction (fileNew);
@@ -884,13 +885,15 @@ void MainWindow::initMenuBar()
 	fileMenu->addAction (fileSave);
 	fileMenu->addAction (fileSaveAs);
 	fileMenu->addAction (fileClose);
-	fileMenu->insertSeparator();
-	fileMenu->insertItem(tr("&Import/Export"), importExportMenu);
-	fileMenu->insertSeparator();
+	// Some slight weirdness in the construction here since we
+	// can't insert a separator before a menu.
+	fileMenu->insertSeparator(fileQuit);
+	fileMenu->addMenu (importExportMenu);
+	fileMenu->insertSeparator(fileQuit);
 	fileMenu->addAction (fileQuit);
-	
+
 	// menuBar entry editMenu
-	editMenu = new QMenu();
+	editMenu = new QMenu(tr("&Edit"));
 	editMenu->insertTearOffHandle();
 	editMenu->addAction (editDelete);
 	editMenu->addAction (editNumberMoves);
@@ -900,7 +903,7 @@ void MainWindow::initMenuBar()
 	editMenu->insertSeparator(editNumberMoves);
 
 	// menuBar entry navMenu
-	navMenu = new QMenu();
+	navMenu = new QMenu(tr("&Navigation"));
 	navMenu->insertTearOffHandle();
 	navMenu->addAction (navFirst);
 	navMenu->addAction (navBackward);
@@ -923,7 +926,7 @@ void MainWindow::initMenuBar()
 	navMenu->insertSeparator(navPrevComment);
 
 	// menuBar entry settingsMenu
-	settingsMenu = new QMenu();
+	settingsMenu = new QMenu(tr("&Settings"));
 	settingsMenu->insertTearOffHandle();
 	settingsMenu->addAction (setPreferences);
 	settingsMenu->addAction (setGameInfo);
@@ -932,7 +935,7 @@ void MainWindow::initMenuBar()
 	settingsMenu->insertSeparator(soundToggle);
 
 	// menuBar entry viewMenu
-	viewMenu = new QMenu();
+	viewMenu = new QMenu(tr("&View"));
 	viewMenu->insertTearOffHandle();
 	viewMenu->addAction (viewFileBar);
 	viewMenu->addAction (viewToolBar);
@@ -954,7 +957,7 @@ void MainWindow::initMenuBar()
 	viewMenu->insertSeparator(viewFullscreen);
 
 	// menuBar entry helpMenu
-	helpMenu = new QMenu();
+	helpMenu = new QMenu(tr("&Help"));
 	helpMenu->addAction (helpManual);
 	helpMenu->insertItem(wtIcon, tr("What's &This?"), this, SLOT(whatsThis()), Qt::SHIFT+Qt::Key_F1);
 	helpMenu->addAction (helpSoundInfo);
@@ -965,12 +968,12 @@ void MainWindow::initMenuBar()
 	helpMenu->insertSeparator(helpAboutApp);
 
 	// menubar configuration
-	menuBar()->insertItem(tr("&File"), fileMenu);
-	menuBar()->insertItem(tr("&Edit"), editMenu);
-	menuBar()->insertItem(tr("&Navigation"), navMenu);
-	menuBar()->insertItem(tr("&Settings"), settingsMenu);
-	menuBar()->insertItem(tr("&View"), viewMenu);
-	menuBar()->insertItem(tr("&Help"), helpMenu);
+	menuBar()->addMenu(fileMenu);
+	menuBar()->addMenu(editMenu);
+	menuBar()->addMenu(navMenu);
+	menuBar()->addMenu(settingsMenu);
+	menuBar()->addMenu(viewMenu);
+	menuBar()->addMenu(helpMenu);
 }
 
 void MainWindow::initToolBar()
