@@ -124,7 +124,6 @@ public slots:
 	void slotViewSidebar(bool toggle);
 	void slotViewComment(bool toggle);
 	void slotViewVertComment(bool toggle);
-	void slotViewPinComment(bool toggle);
 	void slotViewSaveSize();
 	void slotViewFullscreen(bool toggle);
 	void slotHelpManual();
@@ -170,8 +169,7 @@ private:
 		*navCloneNode, *navSwapVariations, *navNextComment, *navPrevComment, *navIntersection ;       //SL added eb 11                               // added eb the 2 last
 	QAction *setPreferences, *setGameInfo, *soundToggle;
 	QAction *viewFileBar, *viewToolBar, *viewEditBar, *viewMenuBar, *viewStatusBar, *viewCoords,
-		*viewSlider, *viewSidebar, *viewComment, *viewVertComment, *viewPinComment, *viewIncreaseSize,
-		*viewDecreaseSize, *viewSaveSize, *viewFullscreen;
+		*viewSlider, *viewSidebar, *viewComment, *viewVertComment, *viewSaveSize, *viewFullscreen;
 	QAction *helpManual, *helpSoundInfo, *helpAboutApp, *helpAboutQt, *whatsThis;
 	QTimer *timer;
 

@@ -335,7 +335,6 @@ MainWindow::~MainWindow()
 	delete viewSidebar;
 	delete viewComment;
 	delete viewVertComment;
-	delete viewPinComment;
 	delete viewSaveSize;
 	delete viewFullscreen;
 	delete helpManual;
@@ -784,15 +783,6 @@ void MainWindow::initActions()
 		"Enables/disables a vertical direction of the comment field.\n\nNote: This setting is temporary for this board. In order to set permanent horizontal/vertical comment use 'Preferences'."));
 	connect(viewVertComment, SIGNAL(toggled(bool)), this, SLOT(slotViewVertComment(bool)));
 
-	// View Pin comment
-	viewPinComment = new QAction(tr("&Pin comment"), this);
-	viewPinComment->setCheckable (true);
-	viewPinComment->setShortcut (Qt::CTRL + Qt::Key_F10);
-	viewPinComment->setChecked(false);
-	viewPinComment->setStatusTip(tr("Enables/disables pinning the comment field"));
-	viewPinComment->setWhatsThis(tr("Pin comment field\n\nEnables/disables pinning the comment field."));
-	connect(viewPinComment, SIGNAL(toggled(bool)), this, SLOT(slotViewPinComment(bool)));
-
 	// View Save Size
 	viewSaveSize = new QAction(tr("Save si&ze"), this);
 	viewSaveSize->setShortcut (Qt::ALT + Qt::Key_0);
@@ -949,7 +939,6 @@ void MainWindow::initMenuBar()
 	viewMenu->addAction (viewSidebar);
 	viewMenu->addAction (viewComment);
 	viewMenu->addAction (viewVertComment);
-	viewMenu->addAction (viewPinComment);
 	viewMenu->addAction (viewSaveSize);
 	viewMenu->addAction (viewFullscreen);
 
@@ -1701,24 +1690,6 @@ void MainWindow::slotViewSidebar(bool toggle)
 	interfaceHandler->toggleSidebar(toggle);
 	setting->writeBoolEntry("SIDEBAR", toggle);
 
-	statusBar()->showMessage(tr("Ready."));
-}
-
-void MainWindow::slotViewPinComment(bool toggle)
-{
-	if (!toggle)
-	{
-		commentEdit->reparent(splitter, QPoint(0, 0), true);
-		viewComment->setChecked(true);
-		viewVertComment->setEnabled(true);
-	}
-	else
-	{
-		commentEdit->reparent(this, Qt::WType_TopLevel, QPoint(0, 0), true);
-		commentEdit->setGeometry(200, 100, 400, 200);
-		viewComment->setChecked(true);
-		viewVertComment->setEnabled(false);
-	}
 	statusBar()->showMessage(tr("Ready."));
 }
 
