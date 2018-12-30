@@ -245,16 +245,16 @@ void ClientWindow::slot_game(Game* g)
 		{
 			Q3ListViewItemIterator lvp(ListView_players);
 			Q3ListViewItem *lvpi;
-			int found = 0;
+			int pl_found = 0;
 
 			// look for players in playerlist
-			for (; (lvpi = *lvp) && found < 2;)
+			for (; (lvpi = *lvp) && pl_found < 2;)
 			{
 				// check if names are identical
 				if (lvpi->text(1) == g->wname || lvpi->text(1) == g->bname)
 				{
 					lvpi->setText(3, g->nr);
-					found++;
+					pl_found++;
 
 					// check if players has a rank
 					if (g->wrank == "??" || g->brank == "??")
@@ -333,16 +333,16 @@ void ClientWindow::slot_game(Game* g)
 
 			Q3ListViewItemIterator lvp(ListView_players);
 			Q3ListViewItem *lvpi;
-			int found = 0;
+			int pl_found = 0;
 
 			// look for players in playerlist
-			for (; (lvpi = *lvp) && found < 2;)
+			for (; (lvpi = *lvp) && pl_found < 2;)
 			{
 				// check if numbers are identical
 				if (lvpi->text(3) == game_id)
 				{
 					lvpi->setText(3, "-");
-					found++;
+					pl_found++;
 				}
 
 				lvp++;
