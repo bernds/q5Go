@@ -344,69 +344,37 @@ void MainWindow::initActions()
 		prevVarIcon, nextVarIcon, startVarIcon,	mainBranchIcon, nextBranchIcon, autoplayIcon,
 		prefsIcon, infoIcon, fullscreenIcon, manualIcon,
 		coordsIcon, sound_onIcon, sound_offIcon;
-//#ifdef USE_XPM
-	prefsIcon = QPixmap(const_cast<const char**>(package_settings_xpm));
-	infoIcon = QPixmap(const_cast<const char**>(idea_xpm));
-	exitIcon = QPixmap(const_cast<const char**>(exit_xpm));
-	fileNewboardIcon = QPixmap(const_cast<const char**>(newboard_xpm));
-	fileNewIcon = QPixmap(const_cast<const char**>(filenew_xpm));
-	fileOpenIcon = QPixmap(const_cast<const char**>(fileopen_xpm));
-	fileSaveIcon = QPixmap(const_cast<const char**>(filesave_xpm));
-	fileSaveAsIcon = QPixmap(const_cast<const char**>(filesaveas_xpm));
-	transformIcon = QPixmap(const_cast<const char**>(transform_xpm));
-	charIcon = QPixmap(const_cast<const char**>(charset_xpm));
-	deleteIcon = QPixmap(const_cast<const char**>(editdelete_xpm));
-	rightArrowIcon = QPixmap(const_cast<const char**>(rightarrow_xpm));
-	leftArrowIcon = QPixmap(const_cast<const char**>(leftarrow_xpm));
-	nextCommentIcon = QPixmap(const_cast<const char**>(rightcomment_xpm));
-	previousCommentIcon = QPixmap(const_cast<const char**>(leftcomment_xpm));     
-	two_rightArrowIcon = QPixmap(const_cast<const char**>(two_rightarrow_xpm));
-	two_leftArrowIcon = QPixmap(const_cast<const char**>(two_leftarrow_xpm));
-	nextVarIcon = QPixmap(const_cast<const char**>(down_xpm));
-	prevVarIcon = QPixmap(const_cast<const char**>(up_xpm));
-	mainBranchIcon = QPixmap(const_cast<const char**>(start_xpm));
-	startVarIcon = QPixmap(const_cast<const char**>(top_xpm));
-	nextBranchIcon = QPixmap(const_cast<const char**>(bottom_xpm));
-	fullscreenIcon = QPixmap(const_cast<const char**>(window_fullscreen_xpm));
-	manualIcon = QPixmap(const_cast<const char**>(help_xpm));
-	autoplayIcon = QPixmap(const_cast<const char**>(player_pause_xpm));
-	navIntersectionIcon  = QPixmap(const_cast<const char**>(navIntersection_xpm));  //SL added eb 11
-  	coordsIcon= QPixmap(const_cast<const char**>(coords_xpm)); 
-	sound_onIcon= QPixmap(const_cast<const char**>(sound_on_xpm)); 
-	sound_offIcon= QPixmap(const_cast<const char**>(sound_off_xpm)); 
-/*
-#else
-	prefsIcon = QPixmap(ICON_PREFS);
-	infoIcon = QPixmap(ICON_GAMEINFO);
-	exitIcon = QPixmap(ICON_EXIT);
-	fileNewboardIcon = QPixmap(ICON_FILENEWBOARD);
-	fileNewIcon = QPixmap(ICON_FILENEW);
-	fileOpenIcon = QPixmap(ICON_FILEOPEN);
-	fileSaveIcon = QPixmap(ICON_FILESAVE);
-	fileSaveAsIcon = QPixmap(ICON_FILESAVEAS);
-	transformIcon = QPixmap(ICON_TRANSFORM);
-	charIcon = QPixmap(ICON_CHARSET);
-	deleteIcon = QPixmap(ICON_DELETE);
-	rightArrowIcon = QPixmap(ICON_RIGHTARROW);
-	leftArrowIcon = QPixmap(ICON_LEFTARROW);
-	nextCommentIcon = QPixmap(ICON_RIGHTCOMMENT);                   //added eb
-	previousCommentIcon = QPixmap(ICON_LEFTCOMMENT);                   //added eb
-	two_rightArrowIcon = QPixmap(ICON_TWO_RIGHTARROW);
-	two_leftArrowIcon = QPixmap(ICON_TWO_LEFTARROW);
-	nextVarIcon = QPixmap(ICON_NEXT_VAR);
-	prevVarIcon = QPixmap(ICON_PREV_VAR);
-	startVarIcon = QPixmap(ICON_START_VAR);
-	mainBranchIcon = QPixmap(ICON_MAIN_BRANCH);
-	nextBranchIcon = QPixmap(ICON_NEXT_BRANCH);
-	fullscreenIcon = QPixmap(ICON_FULLSCREEN);
-	manualIcon = QPixmap(ICON_MANUAL);
-	autoplayIcon = QPixmap(ICON_AUTOPLAY);
-	navIntersectionIcon  = QPixmap(ICON_NAV_INTERSECTION);  
-	coordsIcon = QPixmap(ICON_COORDS);
-  	sound_onIcon = QPixmap(ICON_SOUND_ON);
-	sound_offIcon = QPixmap(ICON_SOUND_Off);
-#endif
-*/
+
+	prefsIcon = QPixmap(package_settings_xpm);
+	infoIcon = QPixmap(idea_xpm);
+	exitIcon = QPixmap(exit_xpm);
+	fileNewboardIcon = QPixmap(newboard_xpm);
+	fileNewIcon = QPixmap(filenew_xpm);
+	fileOpenIcon = QPixmap(fileopen_xpm);
+	fileSaveIcon = QPixmap(filesave_xpm);
+	fileSaveAsIcon = QPixmap(filesaveas_xpm);
+	transformIcon = QPixmap(transform_xpm);
+	charIcon = QPixmap(charset_xpm);
+	deleteIcon = QPixmap(editdelete_xpm);
+	rightArrowIcon = QPixmap(rightarrow_xpm);
+	leftArrowIcon = QPixmap(leftarrow_xpm);
+	nextCommentIcon = QPixmap(rightcomment_xpm);
+	previousCommentIcon = QPixmap(leftcomment_xpm);
+	two_rightArrowIcon = QPixmap(two_rightarrow_xpm);
+	two_leftArrowIcon = QPixmap(two_leftarrow_xpm);
+	nextVarIcon = QPixmap(down_xpm);
+	prevVarIcon = QPixmap(up_xpm);
+	mainBranchIcon = QPixmap(start_xpm);
+	startVarIcon = QPixmap(top_xpm);
+	nextBranchIcon = QPixmap(bottom_xpm);
+	fullscreenIcon = QPixmap(window_fullscreen_xpm);
+	manualIcon = QPixmap(help_xpm);
+	autoplayIcon = QPixmap(player_pause_xpm);
+	navIntersectionIcon  = QPixmap(navIntersection_xpm);  //SL added eb 11
+  	coordsIcon= QPixmap(coords_xpm);
+	sound_onIcon= QPixmap(sound_on_xpm);
+	sound_offIcon= QPixmap(sound_off_xpm);
+
 	/*
 	* Global actions
 	*/
@@ -836,12 +804,8 @@ void MainWindow::initActions()
 
 void MainWindow::initMenuBar()
 {
-//#ifdef USE_XPM
-	QIcon wtIcon(QPixmap(const_cast<const char**>(contexthelp_xpm)));
-//#else
-//	QIconSet wtIcon(QPixmap(ICON_WHATSTHIS));
-//#endif
-	
+	QPixmap wtIcon(contexthelp_xpm);
+
 	// submenu Import/Export
 	importExportMenu = new QMenu(tr("&Import/Export"));
 	importExportMenu->insertTearOffHandle();
