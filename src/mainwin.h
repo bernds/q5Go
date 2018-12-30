@@ -99,6 +99,8 @@ public slots:
 	void slot_pbRelOneTab(QWidget*);
 	void slot_statsPlayer(Player*);
 
+	void slot_whoopen (bool);
+
 	// QWidget
 //	virtual void resizeEvent (QResizeEvent *);
 
@@ -156,12 +158,12 @@ public slots:
 	void slot_SeekList(const QString&, const QString&);
 
 	// gamestable/playertable:
-	virtual void slot_mouse_games(int, Q3ListViewItem*, const QPoint&, int);
-	virtual void slot_mouse_players(int, Q3ListViewItem*, const QPoint&, int);
-	virtual void slot_click_games(Q3ListViewItem*);
-	virtual void slot_click_players(Q3ListViewItem*);
-	virtual void slot_menu_games(Q3ListViewItem*, const QPoint&, int);
-	virtual void slot_menu_players(Q3ListViewItem*, const QPoint&, int);
+	virtual void slot_mouse_games(int, QTreeWidgetItem*);
+	virtual void slot_mouse_players(int, QTreeWidgetItem*);
+	virtual void slot_click_games(QTreeWidgetItem*);
+	virtual void slot_click_players(QTreeWidgetItem *);
+	virtual void slot_menu_games(const QPoint&);
+	virtual void slot_menu_players(const QPoint&);
 //	void slot_moveOver_players();
 //	void slot_moveOver_games();
 	void slot_playerContentsMoving(int x, int y);
@@ -242,6 +244,7 @@ private:
 	void initToolBar();
 	void initActions();
 
+	int toggle_player_state (const char *list, const QString &symbol);
 
 	void keyPressEvent(QKeyEvent*);
 //	void keyReleaseEvent(QKeyEvent*);

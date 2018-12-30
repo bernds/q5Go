@@ -144,64 +144,6 @@ typedef QList<Host *> HostList;
 
 //-----------
 
-class Player
-{
-public:
-	Player() {};
-	~Player() {};
-	// #> Info Name Idle Rank | Info Name Idle Rank 
-	QString info;
-	QString name;
-	QString idle;
-	QString rank;
-	QString play_str;
-	QString obs_str;
-	QString extInfo;
-	QString won;
-	QString lost;
-	QString country;
-	QString nmatch_settings;
-  	QString rated;
-	QString address;
-	int     playing;
-	int     observing;
-	bool 	nmatch;
-	bool    online;
-	// BWN 0-9 19-19 60-60 600-600 25-25 0-0 0-0 0-0
-	bool nmatch_black, nmatch_white, nmatch_nigiri;
-	int 	nmatch_handicapMin, nmatch_handicapMax, 
-		nmatch_timeMin, nmatch_timeMax, 
-		nmatch_BYMin, nmatch_BYMax, 
-		nmatch_stonesMin, nmatch_stonesMax,
-		nmatch_KoryoMin, nmatch_KoryoMax;
-
-};
-
-//-----------
-
-class Game
-{
-public:
-	Game() {};
-	~Game() {};
-	// #> [##] white name [ rk ] black name [ rk ] (Move size H Komi BY FR) (###) 
-	QString nr;
-	QString	wname;
-	QString	wrank;
-	QString	bname;
-	QString	brank;
-//	QString status;
-	QString	mv;
-	QString Sz;
-	QString H;
-	QString K;
-	QString By;
-	QString FR;
-	QString ob;
-	bool    running;
-  bool oneColorGo ;
-};
-
 //-----------
 
 class Account

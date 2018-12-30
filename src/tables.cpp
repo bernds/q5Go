@@ -15,12 +15,7 @@ void ClientWindow::prepare_tables(InfoType cmd)
 	{
 		case WHO: // delete player table
 		{
-			Q3ListViewItemIterator lv(ListView_players);
-			for (Q3ListViewItem *lvi; (lvi = (*lv));)
-			{
-				lv++;
-				delete lvi;
-			}
+			ListView_players->clear ();
 
 			// set number of players to 0
 			myAccount->num_players = 0;
@@ -33,8 +28,9 @@ void ClientWindow::prepare_tables(InfoType cmd)
 
 		case GAMES: // delete games table
 		{
-			Q3ListViewItemIterator lv(ListView_games);
-			for (Q3ListViewItem *lvi; (lvi = (*lv));)
+			ListView_games->clear ();
+			QTreeWidgetItemIterator lv(ListView_games);
+			for (QTreeWidgetItem *lvi; (lvi = *lv);)
 			{
 				lv++;
 				delete lvi;
@@ -52,7 +48,7 @@ void ClientWindow::prepare_tables(InfoType cmd)
 			channellist.clear();
 			statusChannel->setText("");
 /*			QListViewItemIterator lv(ListView_ch);
-			for (QListViewItem *lvi; (lvi = (*lv));)
+			for (QListViewItem *lvi; (lvi = *lv);)
 			{
 				lv++;
 				delete lvi;
@@ -73,8 +69,8 @@ void ClientWindow::prepare_tables(InfoType cmd)
 // return the rank of a given name
 QString ClientWindow::getPlayerRk(QString player)
 {
-	Q3ListViewItemIterator lvp(ListView_players);
-	Q3ListViewItem *lvpi;
+	QTreeWidgetItemIterator lvp(ListView_players);
+	QTreeWidgetItem *lvpi;
 
 	// look for players in playerlist
 	for (; (lvpi = *lvp); lvp++)
@@ -92,8 +88,8 @@ QString ClientWindow::getPlayerRk(QString player)
 // check for exclude list entry of a given name
 QString ClientWindow::getPlayerExcludeListEntry(QString player)
 {
-	Q3ListViewItemIterator lvp(ListView_players);
-	Q3ListViewItem *lvpi;
+	QTreeWidgetItemIterator lvp(ListView_players);
+	QTreeWidgetItem *lvpi;
 
 	if (DODEBUG)
 		qDebug() << QString("getPlayerExcludeListEntry(%1)").arg(player);
@@ -118,7 +114,7 @@ QString ClientWindow::getPlayerExcludeListEntry(QString player)
 void ClientWindow::slot_game(Game* g)
 {
 	// insert into ListView
-	Q3ListViewItemIterator lv(ListView_games);
+	QTreeWidgetItemIterator lv(ListView_games);
 
 	if (g->running)
 	{
@@ -128,8 +124,8 @@ void ClientWindow::slot_game(Game* g)
 		// check if game already exists
 		if (!playerListEmpty)
 		{
-			Q3ListViewItemIterator lvii = lv;
-			for (GamesTableItem *lvi; (lvi = static_cast<GamesTableItem*>(lvii.current())) && !found;)
+			QTreeWidgetItemIterator lvii = lv;
+			for (GamesTableItem *lvi; (lvi = static_cast<GamesTableItem*>(*lvii)) && !found;)
 			{
 				lvii++;
 				// compare game id
@@ -149,7 +145,7 @@ void ClientWindow::slot_game(Game* g)
 
 		QString excludeMark = "";
 		QString myMark = "B";
-		
+
 		// check if exclude entry is done later
 		if (!g->H.isEmpty()) //g->status.length() > 1)
 		{
@@ -178,118 +174,63 @@ void ClientWindow::slot_game(Game* g)
 				excludeMark = "W";
 			}
 		}
-		
-		if (found)
-		{
-			// supersede entry
-			//lvi_mem->setText(0, g->nr);
-			lvi_mem->setText(1, g->wname);
-			lvi_mem->setText(2, g->wrank);
-			lvi_mem->setText(3, g->bname);
-			lvi_mem->setText(4, g->brank);
-			lvi_mem->setText(5, g->mv);
-			lvi_mem->setText(6, g->Sz);
-			lvi_mem->setText(7, g->H);
-			lvi_mem->setText(8, g->K);
-			lvi_mem->setText(9, g->By);
-			lvi_mem->setText(10, g->FR);
-			lvi_mem->setText(11, g->ob);
-//			lvi_mem->setText(6, g->status + " (" + g->ob + ")");
-			lvi_mem->setText(12, myMark + rkToKey(g->wrank) + g->wname.lower() + ":" + excludeMark);
-
-			lvi_mem->ownRepaint();
-		}
-		else
-		{
-			// from GAMES command or game info{...}
-
-			if (!g->H.isEmpty())
-			{
-				lv = new GamesTableItem(ListView_games,
-					g->nr,
-					" " + g->wname,
-					g->wrank,
-					" " + g->bname,
-					g->brank,
-					g->mv,
-					g->Sz,
-					g->H,
-					g->K,
-					g->By,
-					g->FR,
-					g->ob);
-			}
-			else
-			{
-				lv = new GamesTableItem(ListView_games,
-					g->nr,
-					" " + g->wname,
-					g->wrank,
-					" " + g->bname,
-					g->brank,
-					g->mv,
-					g->Sz);
-			}
-
-			(*lv)->setText(12, myMark + rkToKey(g->wrank) + g->wname.lower() + ":" + excludeMark);
-
-			static_cast<GamesTableItem*>((*lv))->ownRepaint();
-
-			// increase number of games
-			myAccount->num_games++;
-			statusGames->setText(" G: " + QString::number(myAccount->num_games) + " / " + QString::number(myAccount->num_observedgames) + " ");
-		}
 
 		// update player info if this is not a 'who'-result or if it's me
 		if (g->H.isEmpty() || myMark == "A") //g->status.length() < 2)
 		{
-			Q3ListViewItemIterator lvp(ListView_players);
-			Q3ListViewItem *lvpi;
+			QTreeWidgetItemIterator lvp(ListView_players);
+			PlayerTableItem *lvpi;
 			int pl_found = 0;
 
 			// look for players in playerlist
-			for (; (lvpi = *lvp) && pl_found < 2;)
-			{
+			for (; (lvpi = static_cast<PlayerTableItem *>(*lvp)) && pl_found < 2;) {
 				// check if names are identical
-				if (lvpi->text(1) == g->wname || lvpi->text(1) == g->bname)
-				{
-					lvpi->setText(3, g->nr);
+				if (lvpi->text(1) == g->wname || lvpi->text(1) == g->bname) {
 					pl_found++;
+					Player pl = lvpi->get_player ();
+					pl.play_str = g->nr;
+					lvpi->update_player (pl);
 
 					// check if players has a rank
 					if (g->wrank == "??" || g->brank == "??")
 					{
 						// no rank given in case of continued game -> set rank in games table
 						if (lvpi->text(1) == g->wname)
-						{
-							(*lv)->setText(2, lvpi->text(2));
-							// correct sorting of col 2 -> set col 12
-							(*lv)->setText(12, myMark + rkToKey(lvpi->text(2)) + lvpi->text(1).lower() + ":" + excludeMark);
-						}
+							g->wrank = lvpi->text(2);
 
 						// no else case! bplayer could be identical to wplayer!
 						if (lvpi->text(1) == g->bname)
-							(*lv)->setText(4, lvpi->text(2));
-
-						static_cast<GamesTableItem*>((*lv))->ownRepaint();
+							g->brank = lvpi->text(2);
 					}
 				}
 
 				lvp++;
 			}
 
-			ListView_games->sort();
+//			ListView_games->sortItems (3, Qt::AscendingOrder);
 		}
-	}
-	else
-	{
+		QString rkw = myMark + rkToKey(g->wrank) + g->wname.toLower() + ":" + excludeMark;
+		QString rkb = myMark + rkToKey(g->brank) + g->bname.toLower() + ":" + excludeMark;
+		g->sort_rk_w = rkw;
+		g->sort_rk_b = rkb;
+		if (found) {
+			lvi_mem->update_game (*g);
+		} else {
+			// from GAMES command or game info{...}
+			GamesTableItem *gti = new GamesTableItem(ListView_games, *g);
+
+			// increase number of games
+			myAccount->num_games++;
+			statusGames->setText(" G: " + QString::number(myAccount->num_games) + " / " + QString::number(myAccount->num_observedgames) + " ");
+		}
+
+	} else {
 		// from game info {...}
 		bool found = false;
 		QString game_id;
 
-		if (g->nr != "@")
-		{
-			for (Q3ListViewItem *lvi; (lvi = (*lv)) && !found;)
+		if (g->nr != "@") {
+			for (QTreeWidgetItem *lvi; (lvi = *lv) && !found;)
 			{
 				lv++;
 				// compare game id
@@ -297,17 +238,14 @@ void ClientWindow::slot_game(Game* g)
 				{
 					lv++;
 					delete lvi;
-					found = true;;
+					found = true;
 				}
 			}
 
 			// used for player update below
 			game_id = g->nr;
-		}
-		else
-		{
-			for (Q3ListViewItem *lvi; (lvi = (*lv)) && !found;)
-			{
+		} else {
+			for (QTreeWidgetItem *lvi; (lvi = *lv) && !found;) {
 				lv++;
 				// look for name
 				if (lvi->text(1) == myAccount->acc_name ||
@@ -318,7 +256,7 @@ void ClientWindow::slot_game(Game* g)
 
 					lv++;
 					delete lvi;
-					found = true;;
+					found = true;
 				}
 			}
 		}
@@ -331,18 +269,18 @@ void ClientWindow::slot_game(Game* g)
 			myAccount->num_games--;
 			statusGames->setText(" G: " + QString::number(myAccount->num_games) + " / " + QString::number(myAccount->num_observedgames) + " ");
 
-			Q3ListViewItemIterator lvp(ListView_players);
-			Q3ListViewItem *lvpi;
+			QTreeWidgetItemIterator lvp(ListView_players);
+			PlayerTableItem *lvpi;
 			int pl_found = 0;
 
 			// look for players in playerlist
-			for (; (lvpi = *lvp) && pl_found < 2;)
-			{
+			for (; (lvpi = static_cast<PlayerTableItem *>(*lvp)) && pl_found < 2;) {
 				// check if numbers are identical
-				if (lvpi->text(3) == game_id)
-				{
-					lvpi->setText(3, "-");
+				if (lvpi->text(3) == game_id) {
 					pl_found++;
+					Player pl = lvpi->get_player ();
+					pl.play_str = "-";
+					lvpi->update_player (pl);
 				}
 
 				lvp++;
@@ -356,18 +294,18 @@ void ClientWindow::slot_player(Player *p, bool cmdplayers)
 {
 	// insert into ListView
 
-  	Q3ListViewItemIterator lv(ListView_players);  
-
+  	QTreeWidgetItemIterator lv(ListView_players);
+#if 0
 	QPoint pp(0,0);
-	Q3ListViewItem *topViewItem = ListView_players->itemAt(pp);
+	QTreeWidgetItem *topViewItem = ListView_players->itemAt(pp);
   	bool deleted_topViewItem = false;
-  
+#endif
 	if (p->online)
 	{
 		// check if it's an empty list, i.e. all items deleted before
 		if (cmdplayers && !playerListEmpty)
 		{
-			for (PlayerTableItem *lvi; (lvi = static_cast<PlayerTableItem*>((*lv)));)
+			for (PlayerTableItem *lvi; (lvi = static_cast<PlayerTableItem*>(*lv));)
 			{
 				lv++;
 				// compare names
@@ -377,27 +315,16 @@ void ClientWindow::slot_player(Player *p, bool cmdplayers)
 					if (p->info != "??")
 					{
 						// new entry has more info
-						lvi->setText(0, p->info);
-						//p->name,
-						lvi->setText(2, p->rank);
-						lvi->setText(3, p->play_str);
-						lvi->setText(4, p->obs_str);
-						lvi->setText(5, p->idle);
-						//mark,
-						lvi->setText(12, rkToKey(p->rank) + p->name.lower());
+						p->mark = lvi->text (6);
+						p->sort_rk = rkToKey(p->rank) + p->name.toLower();
+						lvi->update_player (*p);
 
-						if (extUserInfo && myAccount->get_gsname() == IGS)
-						{
-							lvi->setText(7, p->extInfo);
-							lvi->setText(8, p->won);
-							lvi->setText(9, p->lost);
-							lvi->setText(10, p->country);
-							lvi->setText(11, p->nmatch_settings);
-						}
-						lvi->set_nmatchSettings(p);					
+#if 0
+						lvi->set_nmatchSettings(p);
 						//lvi->nmatch = p->nmatch;
 
 						lvi->ownRepaint();
+#endif
 					}
 
 					if (p->name == myAccount->acc_name)
@@ -487,45 +414,15 @@ void ClientWindow::slot_player(Player *p, bool cmdplayers)
 				mark = "M";
 			}
 		}
-
-
-		// from WHO command or {... has connected}
-		if (extUserInfo && myAccount->get_gsname() == IGS)
-		{
-			PlayerTableItem *lv1 = new PlayerTableItem(ListView_players,
-					p->info,
-					p->name,
-					p->rank,
-					p->play_str,
-					p->obs_str,
-					p->idle,
-					mark,
-					p->extInfo,
-					p->won,
-					p->lost,
-					p->country,
-					p->nmatch_settings);
-			lv1->setText(12, rkToKey(p->rank) + p->name.lower());
-			lv1->set_nmatchSettings(p);
-		}
-		else
-		{
-			PlayerTableItem *lv1 = new PlayerTableItem(ListView_players,
-					p->info,
-					p->name,
-					p->rank,
-					p->play_str,
-					p->obs_str,
-					p->idle,
-					mark);
-			lv1->setText(12, rkToKey(p->rank) + p->name.lower());
-			lv1->set_nmatchSettings(p);
-		}
-
+		p->mark = mark;
+		p->sort_rk = rkToKey(p->rank) + p->name.toLower();
+		PlayerTableItem *lv1 = new PlayerTableItem(ListView_players, *p);
+#if 0
+		lv1->set_nmatchSettings(p);
+#endif
 		// increase number of players
 		myAccount->num_players++;
 		statusUsers->setText(" P: " + QString::number(myAccount->num_players) + " / " + QString::number(myAccount->num_watchedplayers) + " ");
-		
 
 		//if (!cmdplayers)
 		//	ListView_players->sort() ;
@@ -535,7 +432,7 @@ void ClientWindow::slot_player(Player *p, bool cmdplayers)
 	{
 		// {... has disconnected}
 		bool found = false;
-		for (Q3ListViewItem *lvi; (lvi = (*lv)) && !found;)
+		for (QTreeWidgetItem *lvi; (lvi = *lv) && !found;)
 		{
 			lv++;
 			// compare names
@@ -549,8 +446,10 @@ void ClientWindow::slot_player(Player *p, bool cmdplayers)
 				}
 
 				lv++;
+#if 0
 				if (lvi == topViewItem)     // are we trying to delete the 'anchor' of the list viewport ?
 					deleted_topViewItem = true  ;
+#endif
 				delete lvi;
 				found = true;;
 
@@ -561,14 +460,16 @@ void ClientWindow::slot_player(Player *p, bool cmdplayers)
 		}
 
 		if (!found)
-			qWarning("disconnected player not found: " + p->name);
+			qWarning() << "disconnected player not found: " << p->name;
 	}
 
+#if 0
 	if (! deleted_topViewItem) //don't try to refer to a deleted element ...
 	{
 		int ip = topViewItem->itemPos();
 		ListView_players->setContentsPos(0,ip);
 	}
+#endif
 }
 
 
@@ -785,8 +686,9 @@ void ClientWindow::slot_playerContentsMoving(int /*x*/, int /*y*/)
 // correct viewport
 void ClientWindow::slot_gamesContentsMoving(int /*x*/, int /*y*/)
 {
+#if 0
 	QPoint p(0,0);
-	Q3ListViewItem *i = ListView_games->itemAt(p);
+	QTreeWidgetItem *i = ListView_games->itemAt(p);
 
 	if (i)
 	{
@@ -794,8 +696,8 @@ void ClientWindow::slot_gamesContentsMoving(int /*x*/, int /*y*/)
 		ListView_games->setSelected(i, true);
 		ListView_games->clearSelection();
 	}
+#endif
 }
-
 
 /*
  *   account & caption

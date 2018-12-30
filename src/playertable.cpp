@@ -2,165 +2,152 @@
  *   playertable.cpp
  */
 
+#include <QHeaderView>
+
 #include "playertable.h"
 #include "misc.h"
 #include "setting.h"
 
-#include <q3header.h>
-#include <qvariant.h>
-#include <q3whatsthis.h>
-#include <qevent.h>
-#include <q3listview.h>
 
-
-PlayerTable::PlayerTable(QWidget *parent, const char *name, bool /*modal*/, Qt::WFlags fl)
-	: Q3ListView(parent, name, fl)
+PlayerTable::PlayerTable(QWidget *parent)
+	: QTreeWidget (parent)
 {
-	addColumn(QObject::tr("Stat", "PlayerTable: status [X!SQ]"));
-	addColumn(QObject::tr("Name", "PlayerTable: player's name"));
-	addColumn(QObject::tr("Rk", "PlayerTable: rank"));
-	addColumn(QObject::tr("pl", "PlayerTable: playing in game"));
-	addColumn(QObject::tr("ob", "PlayerTable: observing game"));
-	addColumn(QObject::tr("Idle", "PlayerTable: idle time"));
-	addColumn("X");
-	setColumnAlignment(3, Qt::AlignRight);
-	setColumnAlignment(4, Qt::AlignRight);
-	setColumnAlignment(5, Qt::AlignRight);
-	setColumnAlignment(6, Qt::AlignRight);
-	setProperty( "focusPolicy", Qt::NoFocus );
-	setProperty( "resizePolicy", (int)Q3ListView::AutoOneFit );
+	setColumnCount (12);
+
+	QStringList headers;
+	headers <<  tr ("Stat") << tr ("Name") << tr ("Rk") << tr ("pl") << tr ("ob") << tr ("Idle") << tr ("X") << tr ("Info") << tr ("Won") << tr ("Lost") << tr ("Country") << tr ("Match prefs");
+	setHeaderLabels (headers);
+	header()->setResizeMode(QHeaderView::ResizeToContents);
+
+	setFocusPolicy (Qt::NoFocus);
+	setContextMenuPolicy (Qt::CustomContextMenu);
+
+	setUniformRowHeights (true);
+	setAlternatingRowColors (true);
 
 	// set sorting order for players by rank
-	setSorting(2);
-	setAllColumnsShowFocus(true);
+	setAllColumnsShowFocus (true);
+	sortItems (2, Qt::AscendingOrder);
 }
 
-
-void PlayerTable::showOpen(bool show)
+void PlayerTable::mouseDoubleClickEvent(QMouseEvent *e)
 {
-	Q3ListViewItemIterator lv(this);
-	
-	for (; lv.current() ;lv++)
+	printf ("doubleclick\n");
+	if (e->button () == Qt::LeftButton) {
+		QTreeWidgetItem *item = itemAt (e->pos ());
+		printf ("item %p\n", item);
+		if (item)
+			emit signal_doubleClicked (item);
+	}
+}
+
+void PlayerTable::showOpen(bool checked)
+{
+	QTreeWidgetItemIterator lv(this);
+
+	for (; *lv; lv++)
 	{
 		// player is not open or is playing a match
-		if ((lv.current()->text(0).contains('X')) || (!lv.current()->text(3).contains('-')))
-			lv.current()->setVisible(!show);
-		
+		if ((*lv)->text(0).contains('X') || !(*lv)->text(3).contains('-'))
+			(*lv)->setHidden (checked);
+		else
+			(*lv)->setHidden (false);
 	}
-
 }
+
 /*
  *   PlayerTableItem
  */
-
+#if 0
 PlayerTableItem::PlayerTableItem(PlayerTable *parent, const char* name)
-	: Q3ListViewItem(parent, name)  
+	: QTreeWidgetItem(parent, name)
 {
 ;
 }
 
 PlayerTableItem::PlayerTableItem(PlayerTableItem *parent, const char* name)
-	: Q3ListViewItem(parent, name)  
+	: QTreeWidgetItem(parent, name)
 {
 ;
 }
+#endif
 
-PlayerTableItem::PlayerTableItem(PlayerTable *parent, QString label1, QString label2,
-                QString label3, QString label4, QString label5,
-                QString label6, QString label7, QString label8,
-				QString label9, QString label10, QString label11, QString label12, QString label13)
-	: Q3ListViewItem(parent, label1, label2, label3, label4, label5, label6, label7, label8)
+PlayerTableItem::PlayerTableItem(PlayerTable *parent, const Player &p)
+	: QTreeWidgetItem(parent), m_p (p)
 {
-	open = label1.contains('X') == 0;
-	if (!label7.isNull())
-	{
-		watched = label7[0] == 'W';
-		its_me = label7[0] == 'M';
-		exclude = label7[0] == 'X';
-	}
-	else
-	{
-		watched = false;
-		its_me = false;
-		exclude = false;
-	}
+	setTextAlignment(3, Qt::AlignRight);
+	setTextAlignment(4, Qt::AlignRight);
+	setTextAlignment(5, Qt::AlignRight);
+	setTextAlignment(6, Qt::AlignRight);
+	setTextAlignment(7, Qt::AlignRight);
+	setTextAlignment(8, Qt::AlignRight);
+	setTextAlignment(9, Qt::AlignRight);
+
+	ownRepaint ();
 	seeking = false;
-	
-	// QListViewItem only supports up to 8 labels, check for the rest
-	if (label9.isNull())
-		return;
-	setText(8, label9);
-
-	if (label10.isNull())
-		return;
-	setText(9, label10);
-
-	if (label11.isNull())
-		return;
-	setText(10, label11);
-
-	if (label12.isNull())
-		return;
-	setText(11, label12);
-
-	if (label13.isNull())
-		return;
-	setText(12, label13);
 }
 
 PlayerTableItem::~PlayerTableItem()
 {
 }
 
-void PlayerTableItem::paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment )
+QVariant PlayerTableItem::data (int column, int role) const
 {
-	QColorGroup _cg( cg );
+	if (role == Qt::ForegroundRole) {
+		if (its_me)
+			return QBrush (Qt::blue);
+		else if (watched)
+			return QBrush (Qt::darkGreen);
+		else if (!open)
+			return QBrush (Qt::gray);
+		else if (exclude)
+			return QBrush (Qt::red);
+		else if (seeking)
+			return QBrush (Qt::magenta);
+		return QVariant ();
+	} else if (role == Qt::TextAlignmentRole) {
+		return column < 3 ? Qt::AlignLeft : Qt::AlignRight;
+	}
 
-
-	if (itemPos() % (2*height()))
-		_cg.setColor(QColorGroup::Base, setting->colorAltBackground);//QColor::QColor(242,242,242,QColor::Rgb));//cg.color(QColorGroup::Midlight));//QColor::QColor("AliceBlue")); 
-  
-	if (its_me)
-		_cg.setColor(QColorGroup::Text, Qt::blue);
-	else if (watched)
-		_cg.setColor(QColorGroup::Text, Qt::darkGreen);
-	else if (!open)
-		_cg.setColor(QColorGroup::Text, Qt::gray);
-	else if (exclude)
-		_cg.setColor(QColorGroup::Text, Qt::red);
-	else if (seeking)
-		_cg.setColor(QColorGroup::Text, Qt::magenta);
-
-	Q3ListViewItem::paintCell(p, _cg, column, width, alignment);
-
+	if (role != Qt::DisplayRole)
+		return QVariant ();
+	switch (column) {
+	case 0: return m_p.info;
+	case 1: return m_p.name;
+	case 2: return m_p.rank;
+	case 3: return m_p.play_str;
+	case 4: return m_p.obs_str;
+	case 5: return m_p.idle;
+	case 6: return m_p.mark;
+	case 7: return m_p.extInfo;
+	case 8: return m_p.won;
+	case 9: return m_p.lost;
+	case 10: return m_p.country;
+	case 11: return m_p.nmatch_settings;
+	case 12: return m_p.sort_rk;
+	default: return QVariant ();
+	}
 }
 
 void PlayerTableItem::ownRepaint()
 {
-	open = text(0).contains('X') == 0;
-	if (!text(6).isNull())
-	{
-		watched = text(6).at(0) == 'W';
-		its_me = text(6).at(0) == 'M';
-		exclude = text(6).at(0) == 'X';
-	}
-	else
-	{
-		watched = false;
-		its_me = false;
-		exclude = false;
-	}
+	open = m_p.info.contains('X') == 0;
+	watched = m_p.mark.contains ('W');
+	its_me = m_p.mark.contains ('M');
+	exclude = m_p.mark.contains ('X');
 }
 
-int PlayerTableItem::compare(  Q3ListViewItem *p, int col, bool ascending ) const
+bool PlayerTableItem::operator<(const QTreeWidgetItem &other) const
 {
-	if (col == 2)
-		return  text(12).compare( p->text(12) );
+	int column = treeWidget()->sortColumn();
+	int col_adj = column == 2 ? 12 : column;
+	const QString &t1 = text (col_adj);
+	const QString &t2 = other.text (col_adj);
 
-	return  Q3ListViewItem::compare( p, col , ascending );
+	return t1 < t2;
 }
 
-
+#if 0
 void PlayerTableItem::set_nmatchSettings(Player *p)
 {
 	nmatch = p->nmatch;
@@ -180,6 +167,5 @@ void PlayerTableItem::set_nmatchSettings(Player *p)
 	nmatch_KoryoMax = 	p->nmatch_KoryoMax ;
 
 	nmatch_settings =  !(p->nmatch_settings == "No match conditions");
-
 }
-
+#endif

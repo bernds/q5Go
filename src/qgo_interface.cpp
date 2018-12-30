@@ -7,7 +7,7 @@
 #include <QTimerEvent>
 #include "mainwindow.h"
 #include "qgo_interface.h"
-#include "tables.h"
+#include "gamestable.h"
 #include "defines.h"
 #include "globals.h"
 #include "gs_globals.h"

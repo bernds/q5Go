@@ -8,66 +8,108 @@
 #include "tables.h"
 
 #include <QVariant>
-#include <Q3ListView>
+#include <QTreeWidget>
 
 
-class PlayerTable : public Q3ListView
-{ 
+class PlayerTable : public QTreeWidget
+{
 	Q_OBJECT
 
 public:
-	PlayerTable(QWidget* parent = 0, const char* name = 0, bool modal = false, Qt::WFlags fl = 0);
+	PlayerTable(QWidget* parent = 0);
 	~PlayerTable() {};
 //	virtual void setSorting ( int column, bool ascending = TRUE );
 	void showOpen(bool show);
 
+	void resize_columns ()
+	{
+#if 0
+		for (int i = 0; i < columnCount (); i++)
+			resizeColumnToContents (i);
+#endif
+	}
+
+private:
+	void mouseDoubleClickEvent(QMouseEvent *e);
+
 public slots:
-	virtual void slot_mouse_players(int, Q3ListViewItem*, const QPoint&, int) {};
+	virtual void slot_mouse_players(const QPoint&) {};
+
+ signals:
+	void signal_doubleClicked (QTreeWidgetItem *);
 };
 
-
-class PlayerTableItem : public Q3ListViewItem
-{ 
+class Player
+{
 public:
+	Player() {};
+	~Player() {};
+	// #> Info Name Idle Rank | Info Name Idle Rank 
+	QString info;
+	QString name;
+	QString idle;
+	QString rank;
+	QString play_str;
+	QString obs_str;
+	QString extInfo;
+	QString won;
+	QString lost;
+	QString country;
+	QString nmatch_settings;
+  	QString rated;
+	QString address;
+	QString mark;
+	QString sort_rk;
 
-	PlayerTableItem(PlayerTable *parent, const char *name = 0);
-	PlayerTableItem(PlayerTableItem *parent, const char *name = 0);
-	PlayerTableItem(PlayerTable *parent, QString label1, QString label2 = QString::null,
-		QString label3 = QString::null, QString label4 = QString::null,
-		QString label5 = QString::null, QString label6 = QString::null,
-		QString label7 = QString::null, QString label8 = QString::null,
-		QString label9 = QString::null, QString label10 = QString::null,
-		QString label11 = QString::null, QString label12 = QString::null,
-		QString label13 = QString::null);
-	~PlayerTableItem();
-
-	void ownRepaint();
-	void replace() ;
-	void set_nmatchSettings(Player *p);
-
-	bool nmatch;
-
+	int     playing;
+	int     observing;
+	bool 	nmatch;
+	bool    online;
 	// BWN 0-9 19-19 60-60 600-600 25-25 0-0 0-0 0-0
-	bool nmatch_black, nmatch_white, nmatch_nigiri, nmatch_settings;
+	bool nmatch_black, nmatch_white, nmatch_nigiri;
 	int 	nmatch_handicapMin, nmatch_handicapMax, 
 		nmatch_timeMin, nmatch_timeMax, 
 		nmatch_BYMin, nmatch_BYMax, 
 		nmatch_stonesMin, nmatch_stonesMax,
 		nmatch_KoryoMin, nmatch_KoryoMax;
 
-	//bool isOpen() {return open;}
+	bool has_nmatch_settings () { return nmatch_settings != "No match conditions"; }
+};
+
+class PlayerTableItem : public QTreeWidgetItem
+{
+	Player m_p;
+	QString m_rk;
+public:
+
+	PlayerTableItem(PlayerTable *parent, const Player &);
+	~PlayerTableItem();
+
+	void update_player (const Player &p) { m_p = p; ownRepaint (); emitDataChanged (); }
+	Player get_player () const { return m_p; }
+	void ownRepaint();
+	void replace() ;
+
+	virtual QVariant data (int column, int role) const override;
+	virtual bool operator< (const QTreeWidgetItem &other) const override;
+private:
+	void set_foreground (const QBrush &col)
+	{
+		QBrush b (col);
+		for (int i = 0; i < columnCount (); i++)
+			setForeground (i, b);
+	}
 
 protected:
 //	virtual QString key(int, bool) const;
-	virtual int compare( Q3ListViewItem *p, int col, bool ascending ) const;
-	virtual void paintCell(QPainter *p, const QColorGroup &cg, int column, int width, int alignment);
+//	virtual bool operator<(const QListWidgetItem *other) const;
+//	virtual void paintCell(QPainter *p, const QColorGroup &cg, int column, int width, int alignment);
 
 	bool open;
 	bool watched;
 	bool exclude;
 	bool its_me;
 	bool seeking;
-
 };
 
 #endif // PLAYERTABLE_H

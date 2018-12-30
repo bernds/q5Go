@@ -7,50 +7,85 @@
 
 #include <QVariant>
 #include <QDialog>
-#include <Q3ListView>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3GridLayout>
-#include <Q3HBoxLayout>
-class Q3VBoxLayout; 
-class Q3HBoxLayout; 
-class Q3GridLayout; 
-class Q3ListViewItem;
-class QPushButton;
+#include <QTreeWidget>
 
-class GamesTable : public Q3ListView
-{ 
+class Game
+{
+public:
+	Game() {};
+	~Game() {};
+	// #> [##] white name [ rk ] black name [ rk ] (Move size H Komi BY FR) (###) 
+	QString nr;
+	QString	wname;
+	QString	wrank;
+	QString	bname;
+	QString	brank;
+//	QString status;
+	QString	mv;
+	QString Sz;
+	QString H;
+	QString K;
+	QString By;
+	QString FR;
+	QString ob;
+	QString sort_rk_w, sort_rk_b;
+	bool running;
+	bool oneColorGo;
+};
+
+class GamesTable : public QTreeWidget
+{
 	Q_OBJECT
+	QStringList headers;
 
 public:
-	GamesTable(QWidget* parent = 0, const char* name = 0, bool modal = false, Qt::WFlags fl = 0);
+	GamesTable(QWidget* parent = 0);
 	~GamesTable();
 	void set_watch(QString);
 	void set_mark(QString);
 
+
+	void resize_columns ()
+	{
+#if 0
+		for (int i = 0; i < columnCount (); i++)
+			resizeColumnToContents (i);
+#endif
+	}
+
+private:
+	void mouseDoubleClickEvent(QMouseEvent *e);
+
 public slots:
-	virtual void slot_mouse_games(int, Q3ListViewItem*, const QPoint&, int) {};
+	virtual void slot_mouse_games(const QPoint&) {};
+
+ signals:
+	void signal_doubleClicked (QTreeWidgetItem *);
 };
 
-class GamesTableItem : public Q3ListViewItem
-{ 
+class GamesTableItem : public QTreeWidgetItem
+{
+	Game m_game;
 public:
-
-	GamesTableItem(GamesTable *parent, const char *name = 0);
-	GamesTableItem(GamesTableItem *parent, const char *name = 0);
-	GamesTableItem(GamesTable *parent, QString label1, QString label2 = QString::null,
-		QString label3 = QString::null, QString label4 = QString::null,
-		QString label5 = QString::null, QString label6 = QString::null,
-		QString label7 = QString::null, QString label8 = QString::null,
-		QString label9 = QString::null, QString label10 = QString::null,
-		QString label11 = QString::null, QString label12 = QString::null,
-		QString label13 = QString::null);
+	GamesTableItem(GamesTable *parent, const Game &g);
 	~GamesTableItem();
+	Game get_game () { return m_game; }
+	void update_game (const Game &g) { m_game = g; ownRepaint (); emitDataChanged (); }
 	void ownRepaint();
+	virtual bool operator< (const QTreeWidgetItem &other) const override;
+	virtual QVariant data (int column, int role) const override;
+ private:
+	void set_foreground (const QColor &col)
+	{
+		QBrush b (col);
+		for (int i = 0; i < columnCount (); i++)
+			setForeground (i, b);
+	}
 
 protected:
-	virtual QString key(int, bool) const;
+#if 0
 	virtual void paintCell(QPainter *p, const QColorGroup &cg, int column, int width, int alignment);
+#endif
 
 	bool watched;
 	bool its_me;

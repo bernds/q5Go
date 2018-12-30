@@ -2,197 +2,124 @@
  *  gamestable.cpp
  */
 
+#include <QHeaderView>
+#include <QMouseEvent>
 #include "gamestable.h"
 #include "misc.h"
 #include "setting.h"
 
-#include <q3header.h>
-#include <q3listview.h>
-#include <qpushbutton.h>
-#include <qlayout.h>
-#include <qvariant.h>
-#include <qtooltip.h>
-#include <q3whatsthis.h>
-#include <qwidget.h>
-
-GamesTable::GamesTable( QWidget *parent, const char *name, bool /*modal*/, Qt::WFlags fl)
-	: Q3ListView(parent, name, fl)
+GamesTable::GamesTable (QWidget *parent)
+	: QTreeWidget(parent)
 {
-	addColumn(QObject::tr("Id", "GamesTable Id number"));
-	addColumn(QObject::tr("White", "GamesTable White name"));
-	addColumn(QObject::tr("WR", "GamesTable White Rank"));
-	addColumn(QObject::tr("Black", "GamesTable Black name"));
-	addColumn(QObject::tr("BR", "GamesTable Black Rank"));
-	addColumn(QObject::tr("Mv", "GamesTable Move"));
-	addColumn(QObject::tr("Sz", "GamesTable Size"));
-	addColumn(QObject::tr("H", "GamesTable Handicap"));
-	addColumn(QObject::tr("K", "GamesTable Komi"));
-	addColumn(QObject::tr("By", "GamesTable Byoyomi time"));
-	addColumn(QObject::tr("FR", "GamesTable Free/Rated type of game"));
-	addColumn(QObject::tr("Ob", "GamesTable number of Observers"));
-	setColumnAlignment(0, Qt::AlignRight);
-	setColumnAlignment(1, Qt::AlignLeft);
-	setColumnAlignment(3, Qt::AlignLeft);
-	setColumnAlignment(5, Qt::AlignRight);
-	setColumnAlignment(6, Qt::AlignRight);
-	setColumnAlignment(7, Qt::AlignRight);
-	setColumnAlignment(8, Qt::AlignRight);
-	setColumnAlignment(9, Qt::AlignRight);
-	setColumnAlignment(10, Qt::AlignRight);
-	setColumnAlignment(11, Qt::AlignRight);
-	setProperty("focusPolicy", Qt::NoFocus );
-	setProperty("resizePolicy", AutoOneFit );
+	setColumnCount (12);
 
-	// set sorting order for games by wrank
-	setSorting(2);
+	headers <<  tr ("Id") << tr ("White") << tr ("WR") << tr ("Black") << tr ("BR") << tr ("Mv") << tr ("Sz") << tr ("H") << tr ("K") << tr ("By") << tr ("FR") << tr ("Ob");
+	setHeaderLabels (headers);
+	header()->setResizeMode(QHeaderView::ResizeToContents);
+
+	setFocusPolicy (Qt::NoFocus);
+	setContextMenuPolicy (Qt::CustomContextMenu);
 	setAllColumnsShowFocus(true);
 
+	setUniformRowHeights (true);
+	setAlternatingRowColors (true);
 	//setItemMargin(2);
-
+	sortItems (2, Qt::AscendingOrder);
 }
 
-GamesTable::~GamesTable()
+GamesTable::~GamesTable ()
 {
 }
 
+void GamesTable::mouseDoubleClickEvent (QMouseEvent *e)
+{
+	printf ("doubleclick\n");
+	if (e->button () == Qt::LeftButton) {
+		QTreeWidgetItem *item = itemAt (e->pos ());
+		printf ("item %p\n", item);
+		if (item)
+			emit signal_doubleClicked (item);
+	}
+}
 
 /*
  *   GamesTableItem
  */
 
-GamesTableItem::GamesTableItem(GamesTable *parent, const char* name)
-	: Q3ListViewItem(parent, name)  
+GamesTableItem::GamesTableItem (GamesTable *parent, const Game &g)
+	: QTreeWidgetItem(parent), m_game (g)
 {
-}
-
-GamesTableItem::GamesTableItem(GamesTableItem *parent, const char* name)
-	: Q3ListViewItem(parent, name)  
-{
-}
-
-GamesTableItem::GamesTableItem(GamesTable *parent, QString label1, QString label2,
-                QString label3, QString label4, QString label5,
-                QString label6, QString label7, QString label8,
-				QString label9, QString label10, QString label11, QString label12, QString label13)
-	: Q3ListViewItem(parent, label1, label2, label3, label4, label5, label6, label7, label8)
-{
-
-	
-	// set name for watch/mark and ";" for correct recognition
-	if (!label13.isNull())
-	{
-		int len = label13.length() - 1;
-		watched = label13[len] == 'W';
-		its_me = label13[0] == 'A';
-	}
-	else
-	{
-		watched = false;
-		its_me = false;
-	}
-
-	// QListViewItem only supports up to 8 labels, check for the rest
-	if (label9.isNull ())
-		return;
-	setText(8, label9);
-
-	if (label10.isNull ())
-		return;
-	setText(9, label10);
-
-	if (label11.isNull ())
-		return;
-	setText(10, label11);
-
-	if (label12.isNull ())
-		return;
-	setText(11, label12);
-
-	if (label13.isNull ())
-		return;
-	setText(12, label13);
+	ownRepaint ();
 }
 
 GamesTableItem::~GamesTableItem()
 {
 }
 
-void GamesTableItem::paintCell( QPainter *p, const QColorGroup &cg,
-				 int column, int width, int alignment )
+QVariant GamesTableItem::data (int column, int role) const
 {
-	QColorGroup _cg( cg );
-//	QColor c = _cg.text();
-
-  if (itemPos() % (2*height()))
-    _cg.setColor(QColorGroup::Base, setting->colorAltBackground);//QColor::QColor(242,242,242,QColor::Rgb));//cg.color(QColorGroup::Midlight));//QColor::QColor("AliceBlue")); 
-
-	if (its_me)
-		_cg.setColor(QColorGroup::Text, Qt::blue);
-	else if (watched)
-		_cg.setColor(QColorGroup::Text, Qt::red);
-
-	_cg.setColor(QColorGroup::Background, setting->colorBackground);
-
-	Q3ListViewItem::paintCell(p, _cg, column, width, alignment);
-
-//	_cg.setColor(QColorGroup::Text, c);
+	if (role == Qt::ForegroundRole) {
+		if (its_me)
+			return QBrush (Qt::blue);
+		else if (watched)
+			return QBrush (Qt::red);
+		return QVariant ();
+	} else if (role == Qt::TextAlignmentRole) {
+		return column < 5 && column != 0 ? Qt::AlignLeft : Qt::AlignRight;
+	}
+	if (role != Qt::DisplayRole)
+		return QVariant ();
+	switch (column) {
+	case 0: return m_game.nr;
+	case 1: return m_game.wname;
+	case 2: return m_game.wrank;
+	case 3: return m_game.bname;
+	case 4: return m_game.brank;
+	case 5: return m_game.mv;
+	case 6: return m_game.Sz;
+	case 7: return m_game.H;
+	case 8: return m_game.K;
+	case 9: return m_game.By;
+	case 10: return m_game.FR;
+	case 11: return m_game.ob;
+	case 12: return m_game.sort_rk_w;
+	case 14: return m_game.sort_rk_b;
+	default: return QVariant ();
+	}
 }
 
 void GamesTableItem::ownRepaint()
 {
-	if (!text(12).isEmpty ())
+	watched = false;
+	its_me = false;
+	if (!m_game.sort_rk_w.isEmpty ())
 	{
-		its_me = text(12).at(0) == 'A';
+		its_me = m_game.sort_rk_w.at(0) == 'A';
+#if 0 /* @@@ None of this works?  */
 		if (text(7).isEmpty())
 			watched = false;
 		else
 			watched = text(12).at(text(7).length()-1) == 'W';
-	}
-	else
-	{
-		watched = false;
-		its_me = false;
+#endif
 	}
 }
 
-// for correct sorting by rk and optionally txt
-QString GamesTableItem::key(int column, bool /*ascending*/) const
+bool GamesTableItem::operator<(const QTreeWidgetItem &other) const
 {
-	switch (column)
-	{
+	int column = treeWidget()->sortColumn();
+	int adj_col = column == 2 || column == 4 ? column + 10 : column;
+	const QString t1 = text (adj_col).trimmed ();
+	const QString t2 = other.text (adj_col).trimmed ();
 
-		// rank, however, considered to be most used...
-		case 2:
-			// return invisible column's text
-			return text(12);
+	if (column == 2 || column == 4)
+		return t1 < t2;
 
-		// rank w/b
-		// case 2 is original here, but it's slow
-//		case 2:
-		case 4:
-			return rkToKey(text(column)) + text(column - 1).lower();
-			break;
+	const QString r1 = m_game.sort_rk_w;
+	const QString r2 = other.text (12);
 
-		// id, move, observe, Ob
-		case 0:
-		case 5:
-		case 11:
-			return text(column).trimmed().rightJustified(3, '0') + text(12);
-			break;
-
-		// Sz, By
-		case 6:
-		case 9:
-			return text(column).trimmed().rightJustified(2, '0') + text(12);
-			break;
-
-		// K
-		case 7:
-			return text(column).trimmed().rightJustified(5, '0') + text(12);
-			break;
-			
-		default:
-			return text(column).lower() + text(12);
-			break;
-	}
+	if (column == 0 || column == 5 || column == 6 || column == 7 || column == 9 || column == 11) {
+		// id, move, observe, Sz, H, By, Ob
+		return t1.rightJustified (8, '0') + r1 < t2.rightJustified (8, '0') + r2;
+	} else
+		return t1 + r1 < t2 + r2;
 }

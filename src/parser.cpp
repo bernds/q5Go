@@ -4,7 +4,8 @@
 
 #include "parser.h"
 #include "qgo_interface.h"
-#include "tables.h"
+#include "gamestable.h"
+#include "playertable.h"
 #include <qregexp.h>
 #include <iostream>
 using namespace std;

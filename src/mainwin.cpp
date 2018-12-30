@@ -163,30 +163,18 @@ ClientWindow::ClientWindow(QMainWindow *parent, const char* name, Qt::WFlags fl)
 	connect(parser, SIGNAL(signal_SeekList(const QString&, const QString&)),this,SLOT(slot_SeekList(const QString&, const QString&)));
 	connect(parser, SIGNAL(signal_refresh(int)),this, SLOT(slot_refresh(int)));
 
-	// connect mouse to games table/player table
-	connect(ListView_games, SIGNAL(contextMenuRequested(Q3ListViewItem*, const QPoint&, int)),
-	                        SLOT(slot_menu_games(Q3ListViewItem*, const QPoint&, int)));
-
 	// doubleclick
-	connect(ListView_games, SIGNAL(doubleClicked(Q3ListViewItem*)),
-							SLOT(slot_click_games(Q3ListViewItem*)));
+	connect(ListView_games, SIGNAL(signal_doubleClicked(QTreeWidgetItem*)), this,
+		SLOT(slot_click_games(QTreeWidgetItem*)));
+	connect(ListView_players, SIGNAL(signal_doubleClicked(QTreeWidgetItem *)), this,
+		SLOT(slot_click_players(QTreeWidgetItem*)));
 
- 	// move
-/*	connect(ListView_games, SIGNAL(onViewport()),
-							SLOT(slot_moveOver_games()));
-*/
-  
-	connect(ListView_players, SIGNAL(contextMenuRequested(Q3ListViewItem*, const QPoint&, int)),
-							SLOT(slot_menu_players(Q3ListViewItem*, const QPoint&, int)));
+	connect(ListView_players, SIGNAL(customContextMenuRequested(const QPoint&)),
+		this, SLOT(slot_menu_players(const QPoint&)));
+	connect(ListView_games, SIGNAL(customContextMenuRequested(const QPoint&)),
+		this, SLOT(slot_menu_games(const QPoint&)));
 
-	// doubleclick
-	connect(ListView_players, SIGNAL(doubleClicked(Q3ListViewItem*)),
-							SLOT(slot_click_players(Q3ListViewItem*)));
-
- 	// move
-/*	connect(ListView_players, SIGNAL(onViewport()),
-							SLOT(slot_moveOver_players()));
-*/
+	connect(whoOpenCheck, SIGNAL(toggled(bool)), this, SLOT(slot_whoopen(bool)));
 
 	// restore last setting
 	if (!setting)
@@ -820,10 +808,10 @@ void ClientWindow::saveSettings()
 
 	setting->writeBoolEntry("EXTUSERINFO", extUserInfo);
 
-  setting->writeIntEntry("WHO_1", whoBox1->currentIndex());
-  setting->writeIntEntry("WHO_2", whoBox2->currentIndex());
-  setting->writeBoolEntry("WHO_CB", whoOpenCheck->isChecked());
-  
+	setting->writeIntEntry("WHO_1", whoBox1->currentIndex());
+	setting->writeIntEntry("WHO_2", whoBox2->currentIndex());
+	setting->writeBoolEntry("WHO_CB", whoOpenCheck->isChecked());
+
 	// write settings to file
 	setting->saveSettings();
 }
@@ -838,10 +826,8 @@ void ClientWindow::quit()
 // distribute text from telnet session and local commands to tables
 void ClientWindow::sendTextToApp(const QString &txt)
 {
-#if (QT_VERSION > 0x030006)
 	static int store_sort_col = -1;
 	static int store_games_sort_col = -1;
-#endif
 	static bool player7active = false;
 
 	// put text to parser
@@ -858,11 +844,10 @@ void ClientWindow::sendTextToApp(const QString &txt)
 	if (player7active && it_ != GAME7)
 	{
 		player7active = false;
+		ListView_games->setSortingEnabled (true);
 		if (store_games_sort_col != -1)
-			ListView_games->setSorting(store_games_sort_col);
+			ListView_games->sortItems (store_games_sort_col, Qt::AscendingOrder);
 		store_games_sort_col = -1;
-
-		ListView_games->sort();
 	}
 
 	switch (it_)
@@ -909,7 +894,7 @@ void ClientWindow::sendTextToApp(const QString &txt)
 			} while (sendTextFromApp(NULL) != 0);
 
 			// check if tables are sorted
-#if (QT_VERSION > 0x030006)
+#if 0 && (QT_VERSION > 0x030006)
 			if (ListView_players->sortColumn() == -1)
 				ListView_players->setSorting(2);
 			if (ListView_games->sortColumn() == -1)
@@ -1000,24 +985,20 @@ void ClientWindow::sendTextToApp(const QString &txt)
 		// end of 'who'/'user' cmd
 		case PLAYER42_END:
 		case PLAYER27_END:
-			// anyway, end of fast filling
+			ListView_players->setSortingEnabled (true);
 			if (store_sort_col != -1)
-				ListView_players->setSorting(store_sort_col);
-
-			store_sort_col = -1;
+				ListView_players->sortItems (store_sort_col, Qt::AscendingOrder);
 
 			if (myAccount->get_gsname()==IGS)
 				ListView_players->showOpen(whoOpenCheck->isChecked());
-			ListView_players->sort();
 			playerListEmpty = false;
 			break;
 
 		// skip table if initial table is to be loaded
 		case PLAYER27_START:
 		case PLAYER42_START:
-			// disable sorting for fast operation; store sort column index
-			store_sort_col = ListView_players->sortColumn();
-			ListView_players->setSorting(-1);
+			store_sort_col = ListView_players->sortColumn ();
+			ListView_players->setSortingEnabled (false);
 
 			if (playerListEmpty)
 				prepare_tables(WHO);
@@ -1031,8 +1012,8 @@ void ClientWindow::sendTextToApp(const QString &txt)
 			if (playerListEmpty)
 			{
 				// only if playerListEmpty, else PLAYERXX_END would not arise
-				store_games_sort_col = ListView_games->sortColumn();
-				ListView_games->setSorting(-1);
+				store_games_sort_col = ListView_games->sortColumn ();
+				ListView_games->setSortingEnabled (false);
 			}
 			break;
 
@@ -1459,7 +1440,7 @@ void ClientWindow::slot_cbquiet()
 // switch between 'who' and 'user' cmds
 void ClientWindow::setColumnsForExtUserInfo()
 {
-	
+#if 0 /* @@@ Disabled for now.  Realistically, no one will use anything but IGS.  */
 	if (!extUserInfo || (myAccount->get_gsname() != IGS) )
 	{
 		// set player table's columns to 'who' mode
@@ -1469,7 +1450,7 @@ void ClientWindow::setColumnsForExtUserInfo()
 		ListView_players->removeColumn(8);
 		ListView_players->removeColumn(7);
 	}
-	else if ( ListView_players->columns()  < 9 )  
+	else if ( ListView_players->columns()  < 9 )
 	{
 		// set player table's columns to 'user' mode
 		// first: remove invisible column
@@ -1484,6 +1465,7 @@ void ClientWindow::setColumnsForExtUserInfo()
 		ListView_players->setColumnAlignment(8, Qt::AlignRight);
 		ListView_players->setColumnAlignment(9, Qt::AlignRight);
 	}
+#endif
 }
 
 // switch between 'who' and 'user' cmds
@@ -1544,12 +1526,11 @@ void ClientWindow::slot_refresh(int i)
 					wparam.append("-");
 
 				wparam.append(whoBox2->currentIndex()==1 ? "9p" : whoBox2->currentText());
-         		} 
+         		}
 			else if ((whoBox1->currentIndex())  || (whoBox2->currentIndex()))
         			wparam.append("1p-9p");
 			else
 				wparam.append(((myAccount->get_gsname() == IGS) ? "9p-BC" : " "));
-				
 
 			if (whoOpenCheck->isChecked())
 				wparam.append(((myAccount->get_gsname() == WING) ? "O" : "o"));//wparam.append(" o");
@@ -1577,6 +1558,12 @@ void ClientWindow::slot_refresh(int i)
 			break;
 	}
 
+}
+
+void ClientWindow::slot_whoopen (bool checked)
+{
+	if (myAccount->get_gsname() == IGS)
+		ListView_players->showOpen(checked);
 }
 
 // refresh games
@@ -1607,99 +1594,81 @@ void ClientWindow::slot_pbrefreshplayers()
 
 void ClientWindow::slot_gamesPopup(int i)
 {
+	QString t1 = lv_popupGames->text(1);
+	QString t3 = lv_popupGames->text(3);
+	QString player_nameW = t1.right(1) == "*" ? t1.left (t1.length() - 1) : t1;
+	QString player_nameB = t3.right(1) == "*" ? t3.left( t3.length() -1 ) : t3;
 
-	QString player_nameW = (lv_popupGames->text(1).right(1) == "*" ? lv_popupGames->text(1).left( lv_popupGames->text(1).length() -1 ):lv_popupGames->text(1));
-
-	QString player_nameB = (lv_popupGames->text(3).right(1) == "*" ? lv_popupGames->text(3).left( lv_popupGames->text(3).length() -1 ):lv_popupGames->text(3));
-
-	switch (i)
-	{
-		case 1:
-			// observe
-			if (lv_popupGames)
+	switch (i) {
+	case 1:
+		// observe
+		if (lv_popupGames)
+		{
+			// set up game for observing
+			//if (qgoif->set_observe(lv_popupGames->text(0)))
 			{
-				// set up game for observing
-				//if (qgoif->set_observe(lv_popupGames->text(0)))
+				QString gameID = lv_popupGames->text(0);
+				// if game is set up new -> get moves
+				//   set game to observe
+				sendcommand("observe " + gameID);
+
+				// check if enough data here
+				if (lv_popupGames->text(7).length() == 0)
 				{
-					QString gameID = lv_popupGames->text(0);
-					// if game is set up new -> get moves
-					//   set game to observe
-					sendcommand("observe " + gameID);
+					// LGS sends the needed information, anyway
+					if (myAccount->get_gsname() != LGS)
+						sendcommand("games " + gameID);
+				}
+				else
+				{
+					//   complete game info
+					Game g = lv_popupGames->get_game ();
+					g.running = true;
+					g.oneColorGo = false;
 
-					// check if enough data here
-					if (lv_popupGames->text(7).length() == 0)
-					{
-						// LGS sends the needed information, anyway
-						if (myAccount->get_gsname() != LGS)
-							sendcommand("games " + gameID);
-					}
-					else
-					{
-						//   complete game info
-						Game g;
-						g.nr = lv_popupGames->text(0);
-						g.wname = lv_popupGames->text(1);
-						g.wrank = lv_popupGames->text(2);
-						g.bname = lv_popupGames->text(3);
-						g.brank = lv_popupGames->text(4);
-						g.mv = lv_popupGames->text(5);
-						g.Sz = lv_popupGames->text(6);
-						g.H = lv_popupGames->text(7);
-						g.K = lv_popupGames->text(8);
-						g.By = lv_popupGames->text(9);
-						g.FR = lv_popupGames->text(10);
-						g.ob = lv_popupGames->text(11);
-						g.running = true;
-            					g.oneColorGo = false;
-            
-
-						emit signal_move(&g);
-					}
+					emit signal_move(&g);
 				}
 			}
+		}
 		break;
 
-		case 2:
-			// stats
-			slot_sendcommand("stats " + player_nameW, false);
-			break;
+	case 2:
+		// stats
+		slot_sendcommand("stats " + player_nameW, false);
+		break;
 
-		case 3:
-			// stats
-			slot_sendcommand("stats " + player_nameB, false);
-			break;
+	case 3:
+		// stats
+		slot_sendcommand("stats " + player_nameB, false);
+		break;
 
-		default:
-			break;
+	default:
+		break;
 	}
 }
 
 // doubleclick actions...
-void ClientWindow::slot_click_games(Q3ListViewItem *lv)
+void ClientWindow::slot_click_games(QTreeWidgetItem *lv)
 {
 	// do actions if button clicked on item
-	slot_mouse_games(3, lv, QPoint(), 0);
-qDebug("games list double clicked");
+	slot_mouse_games(3, lv);
+	qDebug("games list double clicked");
 }
-// move over ListView
-/*
-void ClientWindow::slot_moveOver_games()
+
+void ClientWindow::slot_menu_games(const QPoint &pt)
 {
-	qDebug("move over games list...");
-} */
-// doubleclick actions...
-void ClientWindow::slot_menu_games(Q3ListViewItem *lv, const QPoint &pt, int 
-/*column*/)
-{
+	QTreeWidgetItem *item = ListView_games->itemAt (pt);
 	// emulate right button
-	slot_mouse_games(2, lv, pt, 0);
-qDebug("games list double clicked");
+	if (item)
+		slot_mouse_games(2, item);
+	qDebug("games list double clicked");
 }
+
 // mouse click on ListView_games
-void ClientWindow::slot_mouse_games(int button, Q3ListViewItem *lv, const QPoint& /*pt*/, int /*column*/)
+void ClientWindow::slot_mouse_games(int button, QTreeWidgetItem *lv)
 {
-	static Q3PopupMenu *puw = 0;
-	
+	static QMenu *puw = 0;
+
 	// create popup window
 	if (!puw)
 	{
@@ -1873,7 +1842,7 @@ void ClientWindow::slot_matchrequest(const QString &line, bool myrequest)
 		dlg->handicapSpin->setEnabled(false);
 
 		dlg->buttonDecline->setDisabled(true);
-		
+
 		// my request: free/rated game is also requested
 		//dlg->cb_free->setChecked(true);
 
@@ -1885,23 +1854,25 @@ void ClientWindow::slot_matchrequest(const QString &line, bool myrequest)
 		bool is_nmatch = false;
 
 		// we want to make sure the player is selected, because the match request may come from an other command (match button on the tab dialog)
-		QString lv_popup_name ;
+		QString lv_popup_name;
 
-		if (lv_popupPlayer )
+		Player p;
+		if (lv_popupPlayer)
 		{
-			lv_popup_name = (lv_popupPlayer->text(1).right(1) == "*" ? lv_popupPlayer->text(1).left( lv_popupPlayer->text(1).length() -1 ):lv_popupPlayer->text(1));
-		
+			p = lv_popupPlayer->get_player ();
+			const QString txt1 = lv_popupPlayer->text(1);
+			lv_popup_name = (txt1.right(1) == "*" ? txt1.left(txt1.length() -1 ) : txt1);
 
-			is_nmatch = ((lv_popupPlayer->nmatch ) &&  (lv_popup_name == opponent));// && setting->readBoolEntry("USE_NMATCH");
+			is_nmatch = p.nmatch && lv_popup_name == opponent;// && setting->readBoolEntry("USE_NMATCH");
 		}
 
 		dlg->set_is_nmatch(is_nmatch);
 
-		if ( (is_nmatch) && (lv_popupPlayer->nmatch_settings ))
+		if (is_nmatch && p.has_nmatch_settings ())
 		{
-			dlg->timeSpin->setRange((int)(lv_popupPlayer->nmatch_timeMin/60), (int)(lv_popupPlayer->nmatch_timeMax/60));
-			dlg->byoTimeSpin->setRange((int)(lv_popupPlayer->nmatch_BYMin/60), (int)(lv_popupPlayer->nmatch_BYMax/60));
-			dlg->handicapSpin->setRange(lv_popupPlayer->nmatch_handicapMin,lv_popupPlayer->nmatch_handicapMax);
+			dlg->timeSpin->setRange((int)(p.nmatch_timeMin/60), (int)(p.nmatch_timeMax/60));
+			dlg->byoTimeSpin->setRange((int)(p.nmatch_BYMin/60), (int)(p.nmatch_BYMax/60));
+			dlg->handicapSpin->setRange(p.nmatch_handicapMin, p.nmatch_handicapMax);
 		}
 		else
 		{
@@ -1964,15 +1935,14 @@ void ClientWindow::slot_matchrequest(const QString &line, bool myrequest)
 			dlg->boardSizeSpin->setRange(1,19);
 			dlg->boardSizeSpin->setValue(size.toInt());
 		}
-		
 
 		QString rk = getPlayerRk(opponent);
 		dlg->set_oppRk(rk);
 		QString myrk = myAccount->get_rank();
 		dlg->set_myRk(myrk);
 
-		dlg->playerOpponentEdit->setText(opponent);		
-		dlg->playerOpponentEdit->setReadOnly(true);		
+		dlg->playerOpponentEdit->setText(opponent);
+		dlg->playerOpponentEdit->setReadOnly(true);
 		dlg->playerOpponentRkEdit->setText(rk);
 		dlg->set_myName( myAccount->acc_name);
 
@@ -2001,7 +1971,7 @@ void ClientWindow::slot_matchrequest(const QString &line, bool myrequest)
 			dlg->play_nigiri_button->setChecked(true);
 		}
 		else
-			dlg->play_white_button->setChecked(true);		
+			dlg->play_white_button->setChecked(true);
 
 		dlg->buttonDecline->setEnabled(true);
 		dlg->buttonOffer->setText(tr("Accept"));
@@ -2015,6 +1985,61 @@ void ClientWindow::slot_matchrequest(const QString &line, bool myrequest)
 	dlg->raise();
 }
 
+int ClientWindow::toggle_player_state (const char *list, const QString &symbol)
+{
+	int change = 0;
+	// toggle watch list
+	QString cpy = setting->readEntry(list).simplified() + ";";
+	QString line;
+	QString name;
+	bool found = false;
+	int cnt = cpy.count(';');
+	Player p = lv_popupPlayer->get_player ();
+
+	for (int i = 0; i < cnt; i++)
+	{
+		name = cpy.section(';', i, i);
+		if (!name.isEmpty())
+		{
+			if (name == p.name)
+				// skip player if found
+				found = true;
+			else
+				line += name + ";";
+		}
+	}
+	if (!found)
+	{
+		// not found -> add to list
+		line += lv_popupPlayer->text(1);
+		// update player list
+		if (p.mark != "M")
+		{
+			change = 1;
+			p.mark = symbol;
+		}
+	}
+	else if (line.length() > 0)
+	{
+		// skip one ";"
+		line.truncate(line.length() - 1);
+	}
+
+	if (found)
+	{
+		if (p.mark != "M")
+		{
+			change = -1;
+			p.mark = "";
+		}
+	}
+
+	setting->writeEntry(list, line);
+
+	lv_popupPlayer->update_player (p);
+	return change;
+}
+
 // result of player popup
 void ClientWindow::slot_playerPopup(int i)
 {
@@ -2024,17 +2049,17 @@ void ClientWindow::slot_playerPopup(int i)
 		return;
 	}
 
-  // some invited players on IGS get a * after their name
-  QString player_name = (lv_popupPlayer->text(1).right(1) == "*" ? lv_popupPlayer->text(1).left( lv_popupPlayer->text(1).length() -1 ):lv_popupPlayer->text(1));
-  
-  
+	// some invited players on IGS get a * after their name
+	QString txt1 = lv_popupPlayer->text(1);
+	QString player_name = (txt1.right(1) == "*" ? txt1.left( txt1.length() -1 ) : txt1);
+
 	switch (i)
 	{
 		case 1 :
 		case 11 :
 			// match
 			slot_matchrequest(player_name + " " + lv_popupPlayer->text(2), true);
-			break;			
+			break;
 
 
 		case 2:
@@ -2065,105 +2090,12 @@ void ClientWindow::slot_playerPopup(int i)
 			break;
 
 		case 6:
-		{
-			// toggle watch list
-			QString cpy = setting->readEntry("WATCH").simplified() + ";";
-			QString line;
-			QString name;
-			bool found = false;
-			int cnt = cpy.count(';');
-			for (int i = 0; i < cnt; i++)
-			{
-				name = cpy.section(';', i, i);
-				if (!name.isEmpty())
-				{
-					if (name == lv_popupPlayer->text(1))
-						// skip player if found
-						found = true;
-					else
-						line += name + ";";
-				}
-			}
-
-			if (!found)
-			{
-				// not found -> add to list
-				line += lv_popupPlayer->text(1);
-				// update player list
-				if (lv_popupPlayer->text(6) != "M")
-				{
-					myAccount->num_watchedplayers++;
-					lv_popupPlayer->setText(6, "W");
-				}
-			}
-			else if (line.length() > 0)
-			{
-				// skip one ";"
-				line.truncate(line.length() - 1);
-			}
-
-			if (found)
-			{
-				if (lv_popupPlayer->text(6) != "M")
-				{
-					myAccount->num_watchedplayers--;
-					lv_popupPlayer->setText(6, "");
-				}
-			}
-
-			setting->writeEntry("WATCH", line);
-
-			lv_popupPlayer->ownRepaint();
-			ListView_players->sort();
+			myAccount->num_watchedplayers += toggle_player_state ("WATCH", "W");
 			statusUsers->setText(" P: " + QString::number(myAccount->num_players) + " / " + QString::number(myAccount->num_watchedplayers) + " ");
-		}
 			break;
 
 		case 7:
-		{
-			// toggle exclude list
-			QString cpy = setting->readEntry("EXCLUDE").simplified() + ";";
-			QString line;
-			QString name;
-			bool found = false;
-			int cnt = cpy.count(';');
-			for (int i = 0; i < cnt; i++)
-			{
-				name = cpy.section(';', i, i);
-				if (!name.isEmpty())
-				{
-					if (name == lv_popupPlayer->text(1))
-						// skip player if found
-						found = true;
-					else
-						line += name + ";";
-				}
-			}
-
-			if (!found)
-			{
-				// not found -> add to list
-				line += lv_popupPlayer->text(1);
-				if (lv_popupPlayer->text(6) != "M")
-					lv_popupPlayer->setText(6, "X");
-			}
-			else if (line.length() > 0)
-			{
-				// skip one ";"
-				line.truncate(line.length() - 1);
-			}
-
-			if (found)
-			{
-				if (lv_popupPlayer->text(6) != "M")
-					lv_popupPlayer->setText(6, "");
-			}
-
-			setting->writeEntry("EXCLUDE", line);
-
-			lv_popupPlayer->ownRepaint();
-			ListView_players->sort();
-		}
+			toggle_player_state ("EXCLUDE", "X");
 			break;
 
 		case 8:
@@ -2181,14 +2113,14 @@ void ClientWindow::slot_playerPopup(int i)
 			bool found = false;
 
 			// emulate mouse click
-			Q3ListViewItemIterator lv(ListView_games);
-			for (Q3ListViewItem *lvi; (lvi = lv.current());)
+			QTreeWidgetItemIterator lv(ListView_games);
+			for (QTreeWidgetItem *lvi; lvi = *lv;)
 			{
 				// compare game ids
 				if (lv_popupPlayer->text(3) == lvi->text(0))
 				{
 					// emulate mouse button - doubleclick on games
-					slot_mouse_games(3, lvi, QPoint(), 0);
+					slot_mouse_games(3, lvi);
 					found = true;
 					break;
 				}
@@ -2212,16 +2144,16 @@ void ClientWindow::slot_playerPopup(int i)
 			break;
 		}
 
-		default:   
+		default:
 			break;
 	}
 }
 
 // doubleclick...
-void ClientWindow::slot_click_players(Q3ListViewItem *lv)
+void ClientWindow::slot_click_players(QTreeWidgetItem *lv)
 {
 	// emulate right button
-	slot_mouse_players(3, lv, QPoint(), 0);
+	slot_mouse_players(3, lv);
 }
 // move over ListView
 /*void ClientWindow::slot_moveOver_players()
@@ -2229,14 +2161,15 @@ void ClientWindow::slot_click_players(Q3ListViewItem *lv)
 	qDebug("move over player list...");
 } */
 // mouse menus
-void ClientWindow::slot_menu_players(Q3ListViewItem *lv, const QPoint& pt, int)
+void ClientWindow::slot_menu_players(const QPoint& pt)
 {
+	QTreeWidgetItem *item = ListView_players->itemAt (pt);
 	// emulate right button
-	if (lv)
-		slot_mouse_players(2, lv, pt, 0);
+	if (item)
+		slot_mouse_players(2, item);
 }
 // mouse click on ListView_players
-void ClientWindow::slot_mouse_players(int button, Q3ListViewItem *lv, const QPoint& /*pt */, int /*column*/)
+void ClientWindow::slot_mouse_players(int button, QTreeWidgetItem *lv)
 {
 	static Q3PopupMenu *puw = 0;
 	lv_popupPlayer = static_cast<PlayerTableItem*>(lv);
@@ -2259,10 +2192,10 @@ void ClientWindow::slot_mouse_players(int button, Q3ListViewItem *lv, const QPoi
 		puw->insertItem(tr("toggle exclude list"), this, SLOT(slot_playerPopup(int)), 0, 7);
 
 	}
-	
-	puw->setItemEnabled(11,lv_popupPlayer->nmatch);
+
+	puw->setItemEnabled(11,lv_popupPlayer->get_player ().nmatch);
 //puw->hide();
-	
+
 	// do actions if button clicked on item
 	switch (button)
 	{
@@ -2752,7 +2685,7 @@ void ClientWindow::initActions()
 	connect( cb_cmdLine, SIGNAL( activated(int) ), this, SLOT( slot_cmdactivated_int(int) ) );
 	connect( cb_cmdLine, SIGNAL( activated(const QString&) ), this, SLOT( slot_cmdactivated(const QString&) ) );
 
-	QWhatsThis::add(ListView_games, tr("Table of games\n\n"
+	ListView_games->setWhatsThis (tr("Table of games\n\n"
 		"right click to observe\n\n"
 		"Symbol explanation: (click on tab to sort by)\n"
 		"Id\tgame number\n"
@@ -2767,7 +2700,7 @@ void ClientWindow::initActions()
 		"(Ob)\tnumber of observers at last refresh\n\n"
 		"This table can be updated by 'Refresh games'"));
 
-	QWhatsThis::add(ListView_players, tr("Table of players\n\n"
+	ListView_players->setWhatsThis (tr("Table of players\n\n"
 		"right click for menu\n\n"
 		"Symbol explanation: (click on tab to sort by)\n"
 		"Stat\tplayer's stats:\n"
