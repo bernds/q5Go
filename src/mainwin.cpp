@@ -1180,7 +1180,7 @@ void ClientWindow::sendcommand(const QString &cmd, bool localecho)
 		{
 			// show debug window
 			DD->show();
-			this->setActiveWindow();
+			this->activateWindow();
 		}
 		else if (testcmd.contains("+dbg"))
 		{
@@ -1188,7 +1188,7 @@ void ClientWindow::sendcommand(const QString &cmd, bool localecho)
 			qDebug("*** set Debug on ***");
 			DD->show();
 			DODEBUG = true;
-			this->setActiveWindow();
+			this->activateWindow();
 		}
 		else if (testcmd.contains("-dbg"))
 		{
@@ -1981,7 +1981,7 @@ void ClientWindow::slot_matchrequest(const QString &line, bool myrequest)
 
 	dlg->slot_changed();
 	dlg->show();
-	dlg->setActiveWindow();
+	dlg->activateWindow();
 	dlg->raise();
 }
 

@@ -1070,7 +1070,7 @@ void qGoIF::slot_requestDialog(const QString &yes, const QString &no, const QStr
 			QMessageBox::Yes | QMessageBox::Default,
 			QMessageBox::Cancel | QMessageBox::Escape,
 			Qt::NoButton);
-		mb.setActiveWindow();
+		mb.activateWindow();
 		mb.raise();
 		qgo->playPassSound();
 
@@ -1089,7 +1089,7 @@ void qGoIF::slot_requestDialog(const QString &yes, const QString &no, const QStr
 			QMessageBox::Yes | QMessageBox::Default,
 			QMessageBox::No | QMessageBox::Escape,
 			Qt::NoButton);
-		mb.setActiveWindow();
+		mb.activateWindow();
 		mb.raise();
 		qgo->playPassSound();
 

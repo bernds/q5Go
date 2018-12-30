@@ -1262,7 +1262,7 @@ bool BoardHandler::openComputerSession(QNewGameDlg *dlg,const QString &fileName,
 		QMessageBox msg(QObject::tr("Error"), //mesg,
 			QString(QObject::tr("Error opening program: %1")).arg(gtp->getLastMessage()),
 			QMessageBox::Warning, QMessageBox::Ok | QMessageBox::Default, Qt::NoButton, Qt::NoButton);
-		msg.setActiveWindow();
+		msg.activateWindow();
 		msg.raise();
 		msg.exec();
 
