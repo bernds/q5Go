@@ -800,12 +800,12 @@ void MainWindow::initActions()
 	navPrevComment->setEnabled(false);
 	navNextComment->setEnabled(false);
   	navIntersection->setEnabled(false);     //SL added eb 11
+
+	whatsThis = QWhatsThis::createAction (this);
 }
 
 void MainWindow::initMenuBar()
 {
-	QPixmap wtIcon(contexthelp_xpm);
-
 	// submenu Import/Export
 	importExportMenu = new QMenu(tr("&Import/Export"));
 	importExportMenu->insertTearOffHandle();
@@ -902,7 +902,7 @@ void MainWindow::initMenuBar()
 	// menuBar entry helpMenu
 	helpMenu = new QMenu(tr("&Help"));
 	helpMenu->addAction (helpManual);
-	helpMenu->insertItem(wtIcon, tr("What's &This?"), this, SLOT(whatsThis()), Qt::SHIFT+Qt::Key_F1);
+	helpMenu->addAction (whatsThis);
 	helpMenu->addAction (helpSoundInfo);
 	helpMenu->addAction (helpAboutApp);
 	helpMenu->addAction (helpAboutQt);
@@ -960,9 +960,7 @@ void MainWindow::initToolBar()
 
 	toolBar->addSeparator();
 
-	whatsThis = QWhatsThis::createAction (this);
 	toolBar->addAction (whatsThis);
-
 	toolBar->addSeparator();
 
 //	toolBar->addAction (setPreferences);
