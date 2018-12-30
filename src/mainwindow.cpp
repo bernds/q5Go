@@ -1632,7 +1632,7 @@ void MainWindow::slotViewSlider(bool toggle)
 
 void MainWindow::slotViewComment(bool toggle)
 {
-	setting->writeIntEntry("VIEW_COMMENT", toggle ? viewVertComment->isOn() ? 2 : 1 : 0);
+	setting->writeIntEntry("VIEW_COMMENT", toggle ? viewVertComment->isChecked() ? 2 : 1 : 0);
 	if (!toggle)
 	{
 		commentEdit->hide();
@@ -1879,7 +1879,7 @@ bool MainWindow::reStoreWindowSize(QString strKey, bool store)
 	if (store)
 	{
 		// store window size, format, comment format
-		setting->writeIntEntry("BOARDVERTCOMMENT_" + strKey, !viewComment->isOn() ? 2 : viewVertComment->isOn());
+		setting->writeIntEntry("BOARDVERTCOMMENT_" + strKey, !viewComment->isChecked() ? 2 : viewVertComment->isChecked());
 		setting->writeBoolEntry("BOARDFULLSCREEN_" + strKey, isFullScreen);
 		
 		setting->writeEntry("BOARDWINDOW_" + strKey,
@@ -1956,7 +1956,7 @@ bool MainWindow::reStoreWindowSize(QString strKey, bool store)
 
 			// do some other stuff
 			// maybe not correct set at startup time
-			slotViewCoords(viewCoords->isOn());
+			slotViewCoords(viewCoords->isChecked());
 
 			// ok, resize
 			board->lockResize = false;

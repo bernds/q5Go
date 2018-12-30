@@ -957,8 +957,8 @@ void ClientWindow::sendTextToApp(const QString &txt)
 			QToolTip::add(toolConnect, tr("Disconnect from") + " " + cb_connect->currentText());
 
 			// quiet mode? if yes do clear table before refresh
-			gamesListSteadyUpdate = ! setQuietMode->isOn(); 
-			playerListSteadyUpdate = ! setQuietMode->isOn(); 
+			gamesListSteadyUpdate = ! setQuietMode->isChecked();
+			playerListSteadyUpdate = ! setQuietMode->isChecked();
 
 
 			// enable extended user info features
@@ -1375,19 +1375,19 @@ void ClientWindow::slot_checkbox(int nr, bool val)
 	{
 		// open
 		case 0:
-			//toolOpen->setChecked(val); 
+			//toolOpen->setChecked(val);
 			setOpenMode->setChecked(val);
 			break;
 
 		// looking
 		case 1:
-			//toolLooking->setChecked(val); 
+			//toolLooking->setChecked(val);
 			setLookingMode->setChecked(val);
 			break;
 
 		// quiet
 		case 2:
-			//toolQuiet->setChecked(val); 
+			//toolQuiet->setChecked(val);
 			setQuietMode->setChecked(val);
 			break;
 
@@ -1400,7 +1400,7 @@ void ClientWindow::slot_checkbox(int nr, bool val)
 // checkbox looking cklicked
 void ClientWindow::slot_cblooking()
 {
-	bool val = setLookingMode->isOn(); 
+	bool val = setLookingMode->isChecked();
 //	setLookingMode->setChecked(val);
 	set_sessionparameter("looking", val);
 	if (val)
@@ -1412,7 +1412,7 @@ void ClientWindow::slot_cblooking()
 // checkbox open clicked
 void ClientWindow::slot_cbopen()
 {
-	bool val = setOpenMode->isOn(); 
+	bool val = setOpenMode->isChecked();
 //	setOpenMode->setChecked(val);
 	set_sessionparameter("open", val);
 	if (!val)
@@ -1423,9 +1423,9 @@ void ClientWindow::slot_cbopen()
 // checkbox quiet clicked
 void ClientWindow::slot_cbquiet()
 {
-	bool val = setQuietMode->isOn(); 
+	bool val = setQuietMode->isChecked();
 	//setQuietMode->setChecked(val);
-  //qDebug("bouton %b",toolQuiet->isOn());
+  //qDebug("bouton %b",toolQuiet->isChecked());
 	set_sessionparameter("quiet", val);
 
 	if (val)
@@ -1575,7 +1575,7 @@ void ClientWindow::slot_pbrefreshgames()
 	{
 		// clear table in case of quiet mode
 		slot_refresh(11);
-		gamesListSteadyUpdate = !setQuietMode->isOn(); //!CheckBox_quiet->isChecked();
+		gamesListSteadyUpdate = !setQuietMode->isChecked(); //!CheckBox_quiet->isChecked();
 	}
 }
 
@@ -1588,7 +1588,7 @@ void ClientWindow::slot_pbrefreshplayers()
 	{
 		// clear table in case of quiet mode
 		slot_refresh(10);
-		playerListSteadyUpdate = !setQuietMode->isOn(); //!CheckBox_quiet->isChecked();
+		playerListSteadyUpdate = !setQuietMode->isChecked(); //!CheckBox_quiet->isChecked();
 	}
 }
 

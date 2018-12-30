@@ -173,7 +173,7 @@ void MainWidget::toggleGameMode()
 	{
 //		editTools->hide();
 		normalTools->show();
-//		if (modeButton->isOn())
+//		if (modeButton->isChecked())
 //			modeButton->setOn(false);
 	}
 	else
@@ -275,7 +275,7 @@ void MainWidget::doRealScore(bool toggle)
 		interfaceHandler->restoreToolbarButtons();
 		scoreTools->hide();
 		normalTools->show();
-//		if (modeButton->isOn())
+//		if (modeButton->isChecked())
 //			editTools->show();
 //		else
 //			normalTools->show();

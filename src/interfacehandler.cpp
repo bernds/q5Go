@@ -302,9 +302,9 @@ void InterfaceHandler::toggleMarks()
 {
 	if (board->getGameMode() == modeEdit)
 		return;
-//    if (!modeButton->isOn())
+//    if (!modeButton->isChecked())
 //		return;
-	
+
     int cur = board->getMarkType();
     cur ++;
     if (cur > 6)

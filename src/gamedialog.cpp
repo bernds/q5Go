@@ -343,7 +343,7 @@ qDebug("#### GameDialog::slot_decline()");
 	
 	QString opponent = playerOpponentEdit->text();//(playerWhiteEdit->isReadOnly() ? playerBlackEdit->text():playerWhiteEdit->text());
 
-	if (buttonOffer->isOn())
+	if (buttonOffer->isChecked())
 	{
 		// match has been offered
 		// !! there seem to be not "setChecked" in the code (apart init, but this should not reach this code)
@@ -456,7 +456,7 @@ qDebug("#### GameDialog::slot_notopen()");
 	if (opponent.isNull())
 	{
 		// IGS: no player named -> check if offering && focus set
-		if (buttonOffer->isOn())// && QWidget::hasFocus())
+		if (buttonOffer->isChecked())// && QWidget::hasFocus())
 		{
 			buttonOffer->setChecked(false);
 			buttonOffer->setText(tr("Offer"));
