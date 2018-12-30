@@ -40,7 +40,6 @@ public:
 	~MainWindow();
 	InterfaceHandler* getInterfaceHandler() const { return interfaceHandler; }
 	Board* getBoard() const { return board; }
-//	void setApplicationStyle();
 	void doOpen(const QString &fileName, const QString &filter=0, bool storedir=true);
 	bool startComputerPlay(QNewGameDlg * dlg,const QString &fileName, const QString &computer_path);
 	int checkModified(bool interactive=true);
@@ -141,7 +140,6 @@ private:
 	Board *board;
 	InterfaceHandler *interfaceHandler;
 	MainWidget *mainWidget;
-  	QString style;
 
 	//	HelpViewer *helpViewer;
 	StatusTip *statusTip;

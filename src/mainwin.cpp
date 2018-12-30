@@ -43,15 +43,6 @@
 #include <qmovie.h> 
 #include <qradiobutton.h>
 
-#define QGO_NOSTYLES
-#ifndef QGO_NOSTYLES
-#include <qplatinumstyle.h>
-#include <qmotifstyle.h>
-#include <qmotifplusstyle.h>
-#include <qcdestyle.h>
-#include <qsgistyle.h>
-#endif
-
 ClientWindow *client_window;
 
 /*
@@ -101,10 +92,6 @@ ClientWindow::ClientWindow(QMainWindow *parent, const char* name, Qt::WFlags fl)
 	setting->cw = this;
 	setIcon(setting->image0);
 	myAccount = new Account(this);
-
-	defaultStyle = qApp->style()->name() ;
-	// this is very dirty : we do this because there seem to be no clean way to backtrack from MainWindow to the defaultStyle :-(
-	setting->writeEntry("DEFAULT_STYLE",defaultStyle ) ;
 
 	cmd_count = 0;
 
@@ -385,67 +372,6 @@ ClientWindow::ClientWindow(QMainWindow *parent, const char* name, Qt::WFlags fl)
 	// add menu bar and status bar
 //	MainAppWidgetLayout->addWidget(menuBar, 0, 0);
 
-
-
-/*
-#ifndef QGO_NOSTYLES
-	// set style - same as set up a board with qgoif
-	int style = setting->readEntry("STYLE").toInt();
-	if (style < 0 || style > 6)
-	{
-		setting->writeEntry("STYLE", "0");
-		style = 0;
-	}
-
- 
-  	
-	switch (style)
-	{
-    case 0:
-      //qApp->setStyle(NULL);
-		  break;
-    
-		case 1:
-			qApp->setStyle(new QWindowsStyle);
-			break;
-
-		case 2:
-			qApp->setStyle(new QPlatinumStyle);
-			break;
-
-		case 3:
-			qApp->setStyle(new QMotifStyle);
-			break;
-
-		case 4:
-			qApp->setStyle(new QMotifPlusStyle);
-			break;
-
-#ifdef Q_WS_WIN
-// there seems to be a problem within X11...
-		case 5:
-			qApp->setStyle(new QCDEStyle);
-			break;
-
-		case 6:
-			qApp->setStyle(new QSGIStyle);
-			break;
-#endif
-
-		case 6:
-#if (QT_VERSION > 0x030102)
-			qApp->setStyle(new QWindowsXPStyle);
-#else
-			qApp->setStyle(new QWindowsStyle);
-#endif
-			break;
-
-
-		default:
-			qWarning("Unrecognized style!");
-	}
-#endif
-*/
 	slot_updateFont();
 
 	// install an event filter
@@ -3168,8 +3094,6 @@ void ClientWindow::dlgSetPreferences(int tab)
 	}
 
 	// Interface tab
-//	dlg.styleListBox->setCurrentIndex(setting->readIntEntry("STYLE"));
-//	dlg.woodListBox->setCurrentIndex(setting->readIntEntry("SKIN"));
 	dlg.LineEdit_goban->setText(setting->readEntry("SKIN"));
 	dlg.LineEdit_Table->setText(setting->readEntry("SKIN_TABLE"));
 	dlg.languageComboBox->insertStringList(setting->getAvailableLanguages());
@@ -3283,8 +3207,6 @@ bool ClientWindow::preferencesSave(PreferencesDialog *dlg)
 {
 	ASSERT (dlg);
 
-//	setting->writeIntEntry("STYLE", dlg->styleListBox->currentIndex());
-//	setting->writeIntEntry("SKIN", dlg->woodListBox->currentIndex());
 	setting->writeEntry("SKIN", dlg->LineEdit_goban->text());
 	setting->writeEntry("SKIN_TABLE", dlg->LineEdit_Table->text());
 	setting->writeEntry("LANG", setting->convertNumberToLanguage(dlg->languageComboBox->currentIndex()));
@@ -3384,9 +3306,6 @@ bool ClientWindow::preferencesSave(PreferencesDialog *dlg)
 
 bool ClientWindow::preferencesAccept()
 {
-	// Interface tab
-	//setApplicationStyle();
-
 	// Update all boards with settings
 	setting->qgo->updateAllBoardSettings();
 	setting->qgo->updateFont();

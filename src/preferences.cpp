@@ -70,10 +70,6 @@ PreferencesDialog::PreferencesDialog(QWidget* parent,  const char* name, bool mo
 	fontClocksButton->setFont(setting->fontClocks);
 	fontConsoleButton->setFont(setting->fontConsole);
 
-#ifdef QGO_NOSTYLES
-	styleListBox->setDisabled(true);
-#endif
-
 	// Default codec
 	ComboBox_codec->insertItem("");
 	// The rest by name

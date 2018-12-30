@@ -28,7 +28,6 @@
 #include <q3mainwindow.h>
 #include <qaction.h>
 #include <q3dragobject.h>
-#include <qstyle.h>
 
 qGo *qgo;
 
@@ -91,8 +90,6 @@ int main(int argc, char **argv)
 
 	QApplication myapp(argc, argv);
 
-	QString style =  myapp.style()->name();
-  
 #ifdef OWN_DEBUG_MODE
 	qInstallMsgHandler(myMessageHandler);
 	Debug_Dialog *nonModal = new Debug_Dialog();
@@ -103,7 +100,6 @@ int main(int argc, char **argv)
 	QFileInfo program(argv[0]);
 	QString program_dir = program.dirPath(true);
 	qDebug() << "main:qt->PROGRAM.DIRPATH = " << program_dir;
-	qDebug() << "style = " << style;
 
 	// restore last setting
 	setting = new Setting();

@@ -19,10 +19,7 @@
 #include "playertable.h"
 #include "mainwindow.h"
 
-//#include <qstyle.h>
-
 class GamesTable;
-//class QStyle;
 
 class sendBuf
 {
@@ -78,8 +75,6 @@ public:
 //	QSortedList<Host>  hostlist;
 //	QPtrList<Host>  hostlist;
 	HostList hostlist;
-
-	QString  defaultStyle ;
 
 signals:
 	void signal_cmdsent(const QString&);

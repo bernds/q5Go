@@ -38,13 +38,6 @@
 #include <qapplication.h>
 #include <q3listbox.h>
 
-#if 0
-#include <qplatinumstyle.h>
-#include <qmotifstyle.h>
-#include <qmotifplusstyle.h>
-#include <qcdestyle.h>
-#include <qsgistyle.h>
-#endif
 #include <qcheckbox.h>
 #include <qsplitter.h>
 //#include <qmultilineedit.h>
@@ -99,10 +92,7 @@
 MainWindow::MainWindow(QWidget* parent, const char* name, Qt::WFlags f)
 	: QMainWindow(parent, name, f)
 {
-  // this is very dirty : we do this because there seem to be no clean way to backtrack to the ClientWindow, which has stored the style :-(  
-  style = setting->readEntry("DEFAULT_STYLE") ;
-
-  setProperty("icon", setting->image0);
+	setProperty("icon", setting->image0);
 
 	parent_ = 0;
 
@@ -1831,48 +1821,7 @@ void MainWindow::slotTimerForward()
 		statusBar()->showMessage(tr("Autoplay stopped."));
 	}
 }
-#if 0
-void MainWindow::setApplicationStyle()
-{
-	if (setting->readIntEntry("STYLE") < 0 || setting->readIntEntry("STYLE") > 6)
-		setting->writeEntry("STYLE", "0");
 
-	switch (setting->readIntEntry("STYLE"))
-	{
-	case 0:
-    //qApp->setStyle(NULL);
-    qApp->setStyle(style);
-		break;
-    
-	case 1:
-		qApp->setStyle(new QWindowsStyle);
-		break;
-		
-	case 2:
-		qApp->setStyle(new QPlatinumStyle);
-		break;
-		
-	case 3:
-		qApp->setStyle(new QMotifStyle);
-		break;
-		
-	case 4:
-		qApp->setStyle(new QMotifPlusStyle);
-		break;
-		
-	case 5:
-		//qApp->setStyle(new QCDEStyle);
-		break;
-		
-	case 6:
-		//qApp->setStyle(new QSGIStyle);
-		break;
-		
-	default:
-		qWarning("Unrecognized style!");
-	}
-}
-#endif
 // store and restore window properties
 bool MainWindow::reStoreWindowSize(QString strKey, bool store)
 {
