@@ -1436,7 +1436,7 @@ InfoType Parser::cmd21(const QString &line)
 		aPlayer->obs_str = "-";
 		aPlayer->idle = "-";
 		aPlayer->online = true;
-				
+
 		// false -> no "players" cmd preceded
 		emit signal_player(aPlayer, false);
 		return PLAYER;
@@ -1446,7 +1446,7 @@ InfoType Parser::cmd21(const QString &line)
 		// {xxxx has disconnected}
 		aPlayer->name = line.section(' ', 0, 0).mid(1);
 		aPlayer->online = false;
-				
+
 		emit signal_player(aPlayer, false);
 		return PLAYER;
 	}
@@ -1461,11 +1461,11 @@ InfoType Parser::cmd21(const QString &line)
 			aGame->wrank = "??";
 			aGame->bname = line.section(' ', 4, 4);
 			aGame->brank = "??";
-			aGame->mv = line.section(' ', 6, 6).remove('}');
+			aGame->mv = line.section(' ', 7, 7).remove('}');
 			aGame->Sz = "@";
 			aGame->H = QString::null;
 			aGame->running = true;
-					
+
 			emit signal_game(aGame);
 			emit signal_move(aGame);
 			return GAME;
