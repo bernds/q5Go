@@ -109,7 +109,7 @@ public:
 	int getCurrentMoveNumber() const;
 	GameData* getGameData() { return boardHandler->getGameData(); }
 	void setGameData(GameData *gd) { boardHandler->setGameData(gd); }
-	void exportPicture(const QString &fileName, const QString &filter, bool toClipboard=false);
+	QPixmap grabPicture ();
 	void exportASCII() { boardHandler->exportASCII(); }
 	bool importSGFClipboard() { return boardHandler->importSGFClipboard(); }
 	bool exportSGFtoClipB() { return boardHandler->exportSGFtoClipB(); }

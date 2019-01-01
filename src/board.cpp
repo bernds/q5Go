@@ -1468,22 +1468,13 @@ void Board::updateCaption()
 	}
 }
 
-void Board::exportPicture(const QString &fileName, const QString &filter, bool toClipboard)
+QPixmap Board::grabPicture ()
 {
-    QPixmap pix = QPixmap::grabWidget(this,
-		offsetX - offset + 2,
-		offsetY - offset + 2 ,
-		board_pixel_size + offset*2,
-		board_pixel_size + offset*2);
-
-    if (toClipboard)
-    {
-		QApplication::clipboard()->setPixmap(pix);
-		return;
-    }
-
-    if (!pix.save(fileName, filter))
-		QMessageBox::warning(this, PACKAGE, tr("Failed to save image!"));
+	int minx = offsetX - offset + 2;
+	int miny = offsetY - offset + 2;
+	int maxx = minx + board_pixel_size + offset*2 - 4;
+	int maxy = miny + board_pixel_size + offset*2 - 4;
+	return QPixmap::grabWidget (this, QRect (minx, miny, maxx - minx, maxy - miny));
 }
 
 void Board::doCountDone()

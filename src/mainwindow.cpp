@@ -1238,37 +1238,38 @@ void MainWindow::slotFileExportASCII()
 
 void MainWindow::slotFileExportPic()
 {
-   QString *filter = new QString("");
-   QString fileName = QFileDialog::getSaveFileName(
-    "",
-		"PNG (*.png);;BMP (*.bmp);;XPM (*.xpm);;XBM (*.xbm);;PNM (*.pnm);;GIF (*.gif);;JPEG (*.jpeg);;MNG (*.mng)",
-		this,
-    "qGo",
-    tr("Export image as"),
-    filter,
-    true);
+	QString filter;
+	QString fileName = QFileDialog::getSaveFileName("",
+							"PNG (*.png);;BMP (*.bmp);;XPM (*.xpm);;XBM (*.xbm);;PNM (*.pnm);;GIF (*.gif);;JPEG (*.jpeg);;MNG (*.mng)",
+							this,
+							"qGo",
+							tr("Export image as"),
+							&filter,
+							true);
 
 
-		if (fileName.isEmpty())
+	if (fileName.isEmpty())
+		return;
+
+	//fileName.append(".").append(filter->left(3).lower());
+
+	// Confirm overwriting file.
+	if ( QFile::exists( fileName ) )
+		if (QMessageBox::information(this, PACKAGE,
+					     tr("This file already exists. Do you want to overwrite it?"),
+					     tr("Yes"), tr("No"), 0, 0, 1) == 1)
 			return;
 
-    //fileName.append(".").append(filter->left(3).lower());
-    
-		// Confirm overwriting file.
-		if ( QFile::exists( fileName ) )
-			if (QMessageBox::information(this, PACKAGE,
-				tr("This file already exists. Do you want to overwrite it?"),
-				tr("Yes"), tr("No"), 0, 0, 1) == 1)
-				return;
-			
-			//QString filter = dlg.selectedFilter().left(3);
-			gfx_board->exportPicture(fileName, filter->left(3));
-//	}
+	filter.truncate (3);
+	QPixmap pm = gfx_board->grabPicture ();
+	if (!pm.save (fileName, filter.toLatin1 ()))
+		QMessageBox::warning(this, PACKAGE, tr("Failed to save image!"));
+
 }
 
 void MainWindow::slotFileExportPicClipB()
 {
-	gfx_board->exportPicture(NULL, NULL, true);	
+	QApplication::clipboard()->setPixmap (gfx_board->grabPicture ());
 }
 
 void MainWindow::slotEditDelete()
