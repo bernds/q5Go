@@ -17,7 +17,7 @@ class GameDialog : public QDialog, public Ui::NewGameDialog
 	Q_OBJECT
 
 public:
-	GameDialog(QWidget* parent, const char *name);
+	GameDialog(QWidget* parent, const QString &);
 	~GameDialog();
 	void set_gsName(GSName g) { gsname = g; }
 	void set_oppRk(QString &rk) { oppRk = rk; qDebug() << "oppRk: " << rk; }

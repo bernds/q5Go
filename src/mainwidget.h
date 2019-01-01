@@ -12,11 +12,11 @@
 class MainWindow;
 
 class MainWidget : public QWidget, public Ui::MainWidgetGui
-{ 
+{
 	Q_OBJECT
 
 public:
-	MainWidget(MainWindow *, QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0 );
+	MainWidget(MainWindow *, QWidget* parent = 0);
 	~MainWidget();
 	
 	void toggleSlider(bool);

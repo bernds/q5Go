@@ -22,11 +22,11 @@
 *  The dialog will by default be modeless, unless you set 'modal' to
 *  TRUE to construct a modal dialog.
 */
-PreferencesDialog::PreferencesDialog(QWidget* parent,  const char* name, bool modal)
-	: QDialog ( parent)
+PreferencesDialog::PreferencesDialog(QWidget* parent)
+	: QDialog (parent)
 {
-	setupUi(this);
-
+	setupUi (this);
+	setModal (true);
 	// pointer to ClientWindow
 	parent_cw = setting->cw;
 	CHECK_PTR(parent_cw);

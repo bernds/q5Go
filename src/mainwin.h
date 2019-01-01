@@ -39,7 +39,7 @@ class ClientWindow : public QMainWindow, public Ui::ClientWindowGui
 	Q_OBJECT
 
 public:
-	ClientWindow(QMainWindow* parent, const char* name, Qt::WFlags fl=Qt::WType_TopLevel);
+	ClientWindow(QMainWindow* parent);
 	~ClientWindow();
 
 	int sendTextFromApp(const QString&, bool localecho=true);

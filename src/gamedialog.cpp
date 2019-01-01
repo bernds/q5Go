@@ -9,7 +9,7 @@
 #include "defines.h"
 #include "komispinbox.h"
 
-GameDialog::GameDialog(QWidget* parent, const char *name)
+GameDialog::GameDialog(QWidget* parent, const QString &name)
 	: QDialog(parent), buttongroup (this)
 {
 	setupUi(this);
@@ -339,8 +339,8 @@ qDebug("#### GameDialog::slot_offer()");
 
 void GameDialog::slot_decline()
 {
-qDebug("#### GameDialog::slot_decline()");
-	
+	qDebug("#### GameDialog::slot_decline()");
+
 	QString opponent = playerOpponentEdit->text();//(playerWhiteEdit->isReadOnly() ? playerBlackEdit->text():playerWhiteEdit->text());
 
 	if (buttonOffer->isChecked())

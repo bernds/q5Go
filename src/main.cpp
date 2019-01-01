@@ -135,7 +135,7 @@ int main(int argc, char **argv)
 	else if (strcmp(lang.ascii(), "en") && strcmp(lang.ascii(), "C"))  // Skip warning for en and C default.
 		qWarning("Failed to find translation file for %s", lang.ascii());
 
-	client_window = new ClientWindow(0, 0, Qt::Window);
+	client_window = new ClientWindow(0);
 
 #ifdef OWN_DEBUG_MODE
 	// restore size and pos

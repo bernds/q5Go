@@ -50,8 +50,8 @@ ClientWindow *client_window;
  */
 
 
-ClientWindow::ClientWindow(QMainWindow *parent, const char* name, Qt::WFlags fl)
-	: QMainWindow( parent, name, fl ), seekButtonTimer (0), oneSecondTimer (0)
+ClientWindow::ClientWindow(QMainWindow *parent)
+	: QMainWindow( parent), seekButtonTimer (0), oneSecondTimer (0)
 {
 	setupUi(this);
 
@@ -2963,7 +2963,7 @@ void ClientWindow::send_nmatch_range_parameters()
 
 void ClientWindow::dlgSetPreferences(int tab)
 {
-	PreferencesDialog dlg(this, tr("preferences"), true);
+	PreferencesDialog dlg(this);
 
 	if (tab >= 0)
 	{

@@ -22,12 +22,12 @@
 #include ICON_NODE_WHITE
 //#endif
 
-/* 
-*  Constructs a MainWidget which is a child of 'parent', with the 
-*  name 'name' and widget flags set to 'f' 
-*/
-MainWidget::MainWidget(MainWindow *win, QWidget* parent,  const char* name, Qt::WFlags fl )
-	: QWidget( parent, name, fl ), m_mainwin (win)
+/*
+ *  Constructs a MainWidget which is a child of 'parent', with the
+ *  name 'name' and widget flags set to 'f'
+ */
+MainWidget::MainWidget(MainWindow *win, QWidget* parent)
+	: QWidget (parent), m_mainwin (win)
 {
 	setupUi(this);
 	connect(toolsTabWidget,
