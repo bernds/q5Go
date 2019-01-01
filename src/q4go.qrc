@@ -7,6 +7,10 @@
     <file>images/mainwidget/image4.png</file>
     <file>images/mainwidget/image5.png</file>
     <file>images/mainwidget/image6.png</file>
+    <file>images/mainwidget/1leftarrow.png</file>
+    <file>images/mainwidget/1rightarrow.png</file>
+    <file>images/mainwidget/2leftarrow.png</file>
+    <file>images/mainwidget/2rightarrow.png</file>
   </qresource>
   <qresource prefix="/">
     <file>images/node_black.xpm</file>

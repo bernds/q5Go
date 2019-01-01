@@ -46,7 +46,6 @@ MainWidget::MainWidget(MainWindow *win, QWidget* parent)
 	
 	interfaceHandler->moveNumLabel = moveNumLabel;
 	interfaceHandler->turnLabel = turnLabel;
-	interfaceHandler->varLabel = varLabel;
 //	interfaceHandler->editTools = editTools;
 //	interfaceHandler->modeButton = modeButton;
 	interfaceHandler->passButton = passButton;

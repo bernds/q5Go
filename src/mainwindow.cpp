@@ -165,6 +165,14 @@ MainWindow::MainWindow(QWidget* parent, const char* name, Qt::WFlags f)
 	CHECK_PTR(board);
 	// Connect the mouseMove event of the board with the status bar coords widget
 	connect(gfx_board, SIGNAL(coordsChanged(int, int, int,bool)), statusTip, SLOT(slotStatusTipCoords(int, int, int,bool)));
+	connect(mainWidget->goLastButton, SIGNAL(clicked()), this, SLOT(slotNavLast()));
+	connect(mainWidget->goFirstButton, SIGNAL(clicked()), this, SLOT(slotNavFirst()));
+	connect(mainWidget->goNextButton, SIGNAL(clicked()), this, SLOT(slotNavForward()));
+	connect(mainWidget->goPrevButton, SIGNAL(clicked()), this, SLOT(slotNavBackward()));
+	mainWidget->goPrevButton->setEnabled(false);
+	mainWidget->goNextButton->setEnabled(false);
+	mainWidget->goFirstButton->setEnabled(false);
+	mainWidget->goLastButton->setEnabled(false);
 
 	//commentEdit = new QTextEdit(splitter_comment, "comments");
 	comments_widget = new QWidget (splitter_comment);
@@ -788,6 +796,7 @@ void MainWindow::initActions()
 	navBackward->setEnabled(false);
 	navFirst->setEnabled(false);
 	navLast->setEnabled(false);
+
 	navPrevVar->setEnabled(false);
 	navNextVar->setEnabled(false);
 	navMainBranch->setEnabled(false);
@@ -926,13 +935,6 @@ void MainWindow::initToolBar()
 
 	// Navigation toolbar
 	toolBar = addToolBar ("toolbar");
-
-	toolBar->addAction (navFirst);
-	toolBar->addAction (navBackward);
-	toolBar->addAction (navForward);
-	toolBar->addAction (navLast);
-
-	toolBar->addSeparator();
 
 	toolBar->addAction (navMainBranch);
 	toolBar->addAction (navStartVar);

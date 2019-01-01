@@ -48,7 +48,7 @@ public:
 	void setClipboard(bool b);
 	void setSliderMax(int n);
 
-	QLabel *moveNumLabel, *turnLabel, *varLabel, *capturesBlack, *capturesWhite;
+	QLabel *moveNumLabel, *turnLabel, *capturesBlack, *capturesWhite;
 	QAction *navBackward,  *navForward, *navFirst, *navLast, *navNextVar, *navIntersection, //SL added eb 11
 		*navPrevVar, *navStartVar, *navNextBranch, *navMainBranch, *navNthMove, *navAutoplay,
 		*editDelete,

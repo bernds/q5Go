@@ -61,16 +61,7 @@ void InterfaceHandler::setMoveData(int n, bool black, int brothers, int sons, bo
 		s.append(black ? QObject::tr("W")+" " : QObject::tr("B")+" ");
 		s.append(" " + QObject::tr("Pass") + ")");
     }
-    
-    moveNumLabel->setText(s);
-    statusTurn->setText(" " + s.right(s.length() - 5) + " ");  // Without 'Move '
-	
-    statusNav->setText(" " + QString::number(brothers) + "/" + QString::number(sons));
-    
-    s = black ? QObject::tr("Black to play") : QObject::tr("White to play");
-    turnLabel->setText(s);
-	
-    s = "";
+    s += "\n";
     s.append(QString::number(brothers));
     if (brothers == 1)
 		s.append(" " + QObject::tr("brother") + "\n");
@@ -81,9 +72,17 @@ void InterfaceHandler::setMoveData(int n, bool black, int brothers, int sons, bo
 		s.append(" " + QObject::tr("son"));
     else
 		s.append(" " + QObject::tr("sons"));
-    varLabel->setText(s);
+
+    moveNumLabel->setText(s);
+    statusTurn->setText(" " + s.right(s.length() - 5) + " ");  // Without 'Move '
 	
-	if (board->getGameMode() == modeNormal || board->getGameMode() == modeEdit)
+    statusNav->setText(" " + QString::number(brothers) + "/" + QString::number(sons));
+    
+    s = black ? QObject::tr("Black to play") : QObject::tr("White to play");
+    turnLabel->setText(s);
+
+	GameMode mode = board->getGameMode ();
+	if (mode == modeNormal || mode == modeEdit)
 	{
 		// Update the toolbar buttons
 		navPrevVar->setEnabled(hasPrev);
@@ -94,6 +93,10 @@ void InterfaceHandler::setMoveData(int n, bool black, int brothers, int sons, bo
 		navStartVar->setEnabled(hasParent);
 		navMainBranch->setEnabled(hasParent);
 		navLast->setEnabled(sons);
+		mainWidget->goPrevButton->setEnabled(hasParent);
+		mainWidget->goNextButton->setEnabled(sons);
+		mainWidget->goFirstButton->setEnabled(hasParent);
+		mainWidget->goLastButton->setEnabled(sons);
 		navNextBranch->setEnabled(sons);
 		navSwapVariations->setEnabled(hasPrev);
 		navPrevComment->setEnabled(hasParent);
@@ -102,13 +105,17 @@ void InterfaceHandler::setMoveData(int n, bool black, int brothers, int sons, bo
 		
 		slider->setEnabled(true);
 	}
-	else  if (board->getGameMode() == modeObserve)  // add eb 8
+	else  if (mode == modeObserve)  // add eb 8
 	{
 		// Update the toolbar buttons
 		navBackward->setEnabled(hasParent);
 		navForward->setEnabled(sons);
 		navFirst->setEnabled(hasParent);
 		navLast->setEnabled(sons);
+		mainWidget->goPrevButton->setEnabled(hasParent);
+		mainWidget->goNextButton->setEnabled(sons);
+		mainWidget->goFirstButton->setEnabled(hasParent);
+		mainWidget->goLastButton->setEnabled(sons);
 		navPrevComment->setEnabled(hasParent);
 		navNextComment->setEnabled(sons);
 		navIntersection->setEnabled(true);  //SL added eb 11
@@ -130,9 +137,9 @@ void InterfaceHandler::setMoveData(int n, bool black, int brothers, int sons, bo
   if (slider->maxValue() < n)
 		  setSliderMax(n);
                                                                   // we need to be carefull with the slider
-  if (board->getGameMode() != modeObserve ||                    // normal case, slider is moved
-    (board->getGameMode() == modeObserve && mv >= n) ||       // observing, but browsing (no incoming move)
-    (board->getGameMode() == modeObserve && mv < n && v==n-1))// observing, but at the last move, and an incoming move occurs 
+  if (mode != modeObserve ||                    // normal case, slider is moved
+    (mode == modeObserve && mv >= n) ||       // observing, but browsing (no incoming move)
+    (mode == modeObserve && mv < n && v==n-1))// observing, but at the last move, and an incoming move occurs 
           slider->setValue(n);
           
                                                              // end add eb 8
