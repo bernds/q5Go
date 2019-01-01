@@ -55,35 +55,35 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 {
 	setupUi(this);
 
-	prefsIcon= QPixmap(qembed_findImage("package_settings"));//QPixmap(ICON_PREFS);
+	prefsIcon= QPixmap::fromImage (qembed_findImage("package_settings"));//QPixmap(ICON_PREFS);
 //	infoIcon= QPixmap(ICON_GAMEINFO);
-	exitIcon =  QPixmap(qembed_findImage("exit"));//QPixmap(ICON_EXIT);
-	fileNewboardIcon = QPixmap(qembed_findImage("newboard"));//QPixmap(ICON_FILENEWBOARD);
-	fileNewIcon = QPixmap(qembed_findImage("filenew"));//QPixmap(ICON_FILENEW);
-	fileOpenIcon = QPixmap(qembed_findImage("fileopen"));//QPixmap(ICON_FILEOPEN);
+	exitIcon =  QPixmap::fromImage (qembed_findImage("exit"));//QPixmap(ICON_EXIT);
+	fileNewboardIcon = QPixmap::fromImage (qembed_findImage("newboard"));//QPixmap(ICON_FILENEWBOARD);
+	fileNewIcon = QPixmap::fromImage (qembed_findImage("filenew"));//QPixmap(ICON_FILENEW);
+	fileOpenIcon = QPixmap::fromImage (qembed_findImage("fileopen"));//QPixmap(ICON_FILEOPEN);
 //	fileSaveIcon = QPixmap(ICON_FILESAVE);
 //	fileSaveAsIcon = QPixmap(ICON_FILESAVEAS);
 //	transformIcon = QPixmap(ICON_TRANSFORM);
 //	charIcon = QPixmap(ICON_CHARSET);
-	manualIcon = QPixmap(qembed_findImage("help"));//QPixmap(ICON_MANUAL);
+	manualIcon = QPixmap::fromImage (qembed_findImage("help"));//QPixmap(ICON_MANUAL);
 //	autoplayIcon = QPixmap(ICON_AUTOPLAY);
-	connectedIcon = QPixmap(qembed_findImage("connected"));//QPixmap(ICON_CONNECTED);             
-	disconnectedIcon = QPixmap(qembed_findImage("connect_no"));//QPixmap(ICON_DISCONNECTED);       
-	OpenIcon = QPixmap(qembed_findImage("open"));//QPixmap(ICON_OPEN);              
-	LookingIcon = QPixmap(qembed_findImage("looking"));//QPixmap(ICON_LOOKING);
-	QuietIcon= QPixmap(qembed_findImage("quiet"));//QPixmap(ICON_QUIET);
-	NotOpenIcon = QPixmap(qembed_findImage("not_open"));//QPixmap(ICON_NOT_OPEN);
-	NotLookingIcon = QPixmap(qembed_findImage("not_looking"));//QPixmap(ICON_NOT_LOOKING);
-	NotQuietIcon= QPixmap(qembed_findImage("not_quiet"));//QPixmap(ICON_NOT_QUIET);       
-	RefreshPlayersIcon = QPixmap(qembed_findImage("refresh_players"));//QPixmap(ICON_REFRESH_PLAYERS);    
-	RefreshGamesIcon = QPixmap(qembed_findImage("refresh_games"));//QPixmap(ICON_REFRESH_GAMES);        
-	ComputerPlayIcon = QPixmap(qembed_findImage("computerplay"));//QPixmap(ICON_COMPUTER_PLAY);
-	qgoIcon = QPixmap(qembed_findImage("Bowl"));//QPixmap(ICON_COMPUTER_PLAY);  
-	NotSeekingIcon = QPixmap(qembed_findImage("not_seeking"));
-	seekingIcon[0] = QPixmap(qembed_findImage("seeking1"));
-	seekingIcon[1] = QPixmap(qembed_findImage("seeking2"));
-	seekingIcon[2] = QPixmap(qembed_findImage("seeking3"));
-	seekingIcon[3] = QPixmap(qembed_findImage("seeking4"));
+	connectedIcon = QPixmap::fromImage (qembed_findImage("connected"));//QPixmap(ICON_CONNECTED);
+	disconnectedIcon = QPixmap::fromImage (qembed_findImage("connect_no"));//QPixmap(ICON_DISCONNECTED);
+	OpenIcon = QPixmap::fromImage (qembed_findImage("open"));//QPixmap(ICON_OPEN);
+	LookingIcon = QPixmap::fromImage (qembed_findImage("looking"));//QPixmap(ICON_LOOKING);
+	QuietIcon= QPixmap::fromImage (qembed_findImage("quiet"));//QPixmap(ICON_QUIET);
+	NotOpenIcon = QPixmap::fromImage (qembed_findImage("not_open"));//QPixmap(ICON_NOT_OPEN);
+	NotLookingIcon = QPixmap::fromImage (qembed_findImage("not_looking"));//QPixmap(ICON_NOT_LOOKING);
+	NotQuietIcon= QPixmap::fromImage (qembed_findImage("not_quiet"));//QPixmap(ICON_NOT_QUIET);
+	RefreshPlayersIcon = QPixmap::fromImage (qembed_findImage("refresh_players"));//QPixmap(ICON_REFRESH_PLAYERS);
+	RefreshGamesIcon = QPixmap::fromImage (qembed_findImage("refresh_games"));//QPixmap(ICON_REFRESH_GAMES);
+	ComputerPlayIcon = QPixmap::fromImage (qembed_findImage("computerplay"));//QPixmap(ICON_COMPUTER_PLAY);
+	qgoIcon = QPixmap::fromImage (qembed_findImage("Bowl"));//QPixmap(ICON_COMPUTER_PLAY);
+	NotSeekingIcon = QPixmap::fromImage (qembed_findImage("not_seeking"));
+	seekingIcon[0] = QPixmap::fromImage (qembed_findImage("seeking1"));
+	seekingIcon[1] = QPixmap::fromImage (qembed_findImage("seeking2"));
+	seekingIcon[2] = QPixmap::fromImage (qembed_findImage("seeking3"));
+	seekingIcon[3] = QPixmap::fromImage (qembed_findImage("seeking4"));
 
 	// init
 
