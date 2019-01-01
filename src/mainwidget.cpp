@@ -68,10 +68,10 @@ MainWidget::MainWidget(MainWindow *win, QWidget* parent,  const char* name, Qt::
 	
 	showSlider = true;
 	toggleSlider(setting->readBoolEntry("SLIDER"));
-	slider->setMaxValue(SLIDER_INIT);
+	slider->setMaximum(SLIDER_INIT);
 	sliderRightLabel->setText(QString::number(SLIDER_INIT));
 	sliderSignalToggle = true;
-	
+
 	setFont(setting->fontStandard);
 	normalTools->pb_timeWhite->setFont(setting->fontClocks);
 	normalTools->pb_timeBlack->setFont(setting->fontClocks);

@@ -79,9 +79,9 @@ qDebug("#### GameDialog::slot_swapcolors()");
 	}
 */
 	if(play_white_button->isChecked())
-		play_black_button->setChecked(TRUE);
+		play_black_button->setChecked(true);
 	else
-		play_white_button->setChecked(TRUE);
+		play_white_button->setChecked(true);
 
 }
 

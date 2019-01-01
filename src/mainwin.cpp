@@ -90,7 +90,7 @@ ClientWindow::ClientWindow(QMainWindow *parent, const char* name, Qt::WFlags fl)
 	DODEBUG = false;
 	DD = 0;
 	setting->cw = this;
-	setIcon(setting->image0);
+	setWindowIcon (QIcon (setting->image0));
 	myAccount = new Account(this);
 
 	cmd_count = 0;
@@ -2707,7 +2707,6 @@ void ClientWindow::initActions()
   
 void ClientWindow::initToolBar()
 {
-
 	QToolButton *tb;
 
 
@@ -2755,7 +2754,7 @@ void ClientWindow::initToolBar()
 	Disconnect->setIconSet(QIcon(disconnectedIcon));
 	helpManual->setIconSet(QIcon(manualIcon));
 	setPreferences->setIconSet(QIcon(prefsIcon));
-	setIcon(qgoIcon);
+	setWindowIcon(qgoIcon);
 }
 // SLOTS
 

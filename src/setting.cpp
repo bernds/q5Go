@@ -115,7 +115,7 @@ Setting::Setting()
 	writeIntEntry("DEFAULT_BY", 10);
 	writeIntEntry("BY_TIMER", 10);
 	writeIntEntry("COMPUTER_SIZE", 19);
-	writeEntry("LAST_DIR", QDir::homeDirPath());
+	writeEntry("LAST_DIR", QDir::homePath());
 //#ifdef Q_OS_MACX
 	writeBoolEntry("REM_DIR", true);
 	writeIntEntry("STONES_LOOK", 3);

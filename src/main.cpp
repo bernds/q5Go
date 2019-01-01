@@ -77,7 +77,7 @@ int main(int argc, char **argv)
 		else if (argv[ac] == QString("-desktop"))
 		{
 			// set standard options
-			qApp->setDesktopSettingsAware(true); 
+			qApp->setDesktopSettingsAware(true);
 		}
 		else if (ac && argv[ac][0] != '-')
 		{
@@ -98,7 +98,7 @@ int main(int argc, char **argv)
 
 	// get application path
 	QFileInfo program(argv[0]);
-	QString program_dir = program.dirPath(true);
+	QString program_dir = program.absolutePath ();
 	qDebug() << "main:qt->PROGRAM.DIRPATH = " << program_dir;
 
 	// restore last setting
@@ -175,14 +175,13 @@ int main(int argc, char **argv)
 			qb->get_win()->doOpen(sgf_file, 0, false);
 		qb->get_win()->setGameMode (modeNormal);
 	} else {
-		client_window->setCaption(PACKAGE1 + QString(" V") + VERSION);
+		client_window->setWindowTitle(PACKAGE1 + QString(" V") + VERSION);
 		client_window->show();
 	}
-	
+
 	if (setting->getNewVersionWarning())
 		QMessageBox::warning(client_window ,PACKAGE,NEWVERSIONWARNING);//PACKAGE, NEWVERSIONWARNING);
-	
-	
+
 	return myapp.exec();
 }
 

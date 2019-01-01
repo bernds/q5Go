@@ -109,7 +109,7 @@ MainWindow::MainWindow(QWidget* parent, const char* name, Qt::WFlags f)
 	isFullScreen = 0;
 	setFocusPolicy(Qt::StrongFocus);
 
-	setIcon(setting->image0);
+	setWindowIcon (setting->image0);
 
 	initActions();
 	initMenuBar();

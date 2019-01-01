@@ -227,7 +227,7 @@ bool QAlsaSound::initialise()
 	bits_per_frame = bits_per_sample * waveformat.wChannels;
 	chunk_bytes = chunk_size * bits_per_frame / 8;
 	
-	return true ;
+	return true;
 
 #endif
 }
@@ -305,7 +305,7 @@ char* QAlsaSound::findchunk  (char* pstart, char* fourcc, size_t n)
 
 	while (pstart < pend)
 	{ 	if (*pstart == *fourcc)       /* found match for first char*/
-		{	test = true ;
+		{	test = true;
 			for (k = 1 ; fourcc [k] != 0 ; k++)
 				test = (test ? ( pstart [k] == fourcc [k] ) : false) ;
 			if (test)
