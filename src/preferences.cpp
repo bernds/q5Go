@@ -514,11 +514,11 @@ void PreferencesDialog::slot_getTablePicturePath()
 
 void PreferencesDialog::slot_main_time_changed(int n)
 {
-	timeSpin_Nmatch->setMinValue(n);
+	timeSpin_Nmatch->setMinimum(n);
 }
 
 
 void PreferencesDialog::slot_BY_time_changed(int n)
 {
-	BYSpin_Nmatch->setMinValue(n);
+	BYSpin_Nmatch->setMinimum(n);
 }
