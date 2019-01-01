@@ -10,7 +10,6 @@
 #include <stdlib.h>
 #include <qstring.h>
 #include <qfont.h>
-#include <qcolor.h>
 #include <qpixmap.h>
 
 // delimiters for variables in settings file
@@ -61,7 +60,6 @@ public:
 	bool addImportAsBrother;
 	bool fastLoad;
 	QFont fontStandard, fontMarks, fontComments, fontLists, fontClocks, fontConsole;
-	QColor colorBackground, colorAltBackground;
 	QString language;
 	QString program_dir;
 

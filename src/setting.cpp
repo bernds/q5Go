@@ -129,7 +129,7 @@ Setting::Setting()
 	fontComments = QFont();
 	fontLists = QFont();
 	fontClocks = QFont();
-  	fontConsole= QFont("Fixed");
+  	fontConsole = QFont("Fixed");
 
 	// init
 	qgo = 0;
@@ -151,58 +151,17 @@ Setting::Setting()
 
 Setting::~Setting()
 {
-	// write to file
-//	saveSettings();
 }
 
 void Setting::loadSettings()
 {
-	QFile file;
-
-	// set under Linux
-	const char *p = getenv("HOME");
-	if (p == NULL)
-		// set under Windows
-		p = getenv("USERPROFILE");
-	if (p == NULL)
-	{
-		// however...
-		qDebug("HOME and/or USERPROFILE are not set");
-		settingHomeDir = QDir::homePath();
-		file.setName(settingHomeDir + "/.qgoclientrc");
-		if (file.exists())
-		{
-			// rename, but use it anyway
-			QString oldName = ".qgoclientrc";
-			QString newName = ".qgoclientrc.bak";
-			QDir::home().rename(oldName, newName);
-			file.setName(settingHomeDir + "/.qgoclientrc.bak");
-		}
-		else
-			// file may be already renamed
-			file.setName(settingHomeDir + "/." + PACKAGE + "rc");
-	}
-	else
-	{
-		settingHomeDir = QString (p);
-		file.setName(settingHomeDir + "/." + PACKAGE + "rc");
-	}
+	settingHomeDir = QDir::homePath();
+	QFile file (settingHomeDir + "/." + PACKAGE + "rc");
 
 	if (!file.exists() || !file.open(QIODevice::ReadOnly))
-	{
-		qDebug() << "Failed loading settings: " << file.name();
-
-		// maybe old file available
-		file.setName(QDir::homePath() + "/.qgoclientrc");
-
-		if (!file.exists() || !file.open(QIODevice::ReadOnly))
-		{
-			qWarning("Failed loading settings: " + file.name());
-			return;
-		}
-	}
-
-	qDebug() << "Use settings: " << file.name();
+		qDebug() << "Failed loading settings: " << file.fileName();
+	else
+		qDebug() << "Use settings: " << file.fileName();
 
 	// read file
 	QTextStream txt(&file);
