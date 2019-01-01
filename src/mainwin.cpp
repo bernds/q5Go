@@ -2437,14 +2437,14 @@ bool ClientWindow::eventFilter(QObject *obj, QEvent *ev)
 
 			if (obj == cb_cmdLine || obj->parent() && obj->parent() == cb_cmdLine || obj == this)
 			{
-				if (keyEvent->state() & Qt::AltButton)
+				if (keyEvent->modifiers() & Qt::AltModifier)
 				{
 qDebug("eventFilter: keyPress -> Alt + 0..9");
 					// store sizes
 					reStoreWindowSize(strKey, true);
 					return true;
 				}
-				else if (keyEvent->state() & Qt::ControlButton)
+				else if (keyEvent->modifiers() & Qt::ControlModifier)
 				{
 qDebug("eventFilter: keyPress -> Control + 0..9");
 					// restore sizes
@@ -2466,7 +2466,7 @@ qDebug("eventFilter: keyPress -> Control + 0..9");
 /*
 void ClientWindow::keyReleaseEvent(QKeyEvent *e)
 {
-	if (!(e->state() & AltButton || e->state() & ControlButton))
+	if (!(e->state() & AltModifier || e->state() & ControlModifier))
 	{
 		// release Keyboard
 		releaseKeyboard();
@@ -2477,76 +2477,8 @@ void ClientWindow::keyReleaseEvent(QKeyEvent *e)
 // key pressed
 void ClientWindow::keyPressEvent(QKeyEvent *e)
 {
-/*
-	if (e->state() & AltButton && e->state() & ControlButton)
-	{
-		// AltGr Key
-//		releaseKeyboard();
-	}
-	else if (e->state() & AltButton || e->state() & ControlButton)
-	{
-		// get all keystrokes until both alt and control button release
-//		grabKeyboard();
-	}
-
-	// check for window resize command = number button
-	if (e->key() >= Key_0 && e->key() <= Key_9)
-	{
-		QString strKey = QString::number(e->key() - Key_0);
-
-		if (e->state() & AltButton)
-		{
-			// store sizes
-			reStoreWindowSize(strKey, true);
-		}
-		else if (e->state() & ControlButton)
-		{
-			// restore sizes
-			reStoreWindowSize(strKey, false);
-		}
-
-		// cut last digit from cb_cmdLine
-		if (e->state() & ControlButton || e->state() & AltButton)
-		{
-			QString tmpTxt = cb_cmdLine->currentText();
-			tmpTxt.truncate(tmpTxt.length() - 1);
-			cb_cmdLine->changeItem(tmpTxt, cb_cmdLine->currentIndex());
-		}
-
-		e->accept();
-		return;
-	}
-*/
 	switch (e->key())
 	{
-		case Qt::Key_Up:  // Scroll up in history
-			qDebug("UP");
-/*			if (historyCounter > 0)
-				historyCounter --;
-			if (historyCounter > historyList->count())
-				historyCounter = historyList->count();
-			LineEdit1->setText(historyList->operator[](historyCounter));
-*/			break;
-
-		case Qt::Key_Down:  // Scroll down in history
-			qDebug("DOWN");
-/*			historyCounter ++;
-			if (historyCounter > historyList->count())
-				historyCounter = historyList->count();
-			LineEdit1->setText(historyList->operator[](historyCounter));
-*/			break;
-
-		case Qt::Key_PageUp:
-			qDebug("PAGE UP");
-			// TODO: pageUp/pageDown are protected.  :(
-			// MultiLineEdit1->pageUp(); 
-			break;
-
-		case Qt::Key_PageDown:
-			qDebug("PAGE DOWN");
-			// MultiLineEdit1->pageDown();
-			break;
-
 		case Qt::Key_F1:
 			// help
 			qgo->openManual();
@@ -2562,13 +2494,7 @@ void ClientWindow::keyPressEvent(QKeyEvent *e)
 			break;
 	}
 	e->accept();
-} 
-
-/*
-void ClientWindow::initmenus(QWidget *parent)                              
-{ 
 }
-*/
 
 void ClientWindow::initActions()
 {
