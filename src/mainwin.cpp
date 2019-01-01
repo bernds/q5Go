@@ -3098,7 +3098,6 @@ void ClientWindow::dlgSetPreferences(int tab)
 	dlg.LineEdit_Table->setText(setting->readEntry("SKIN_TABLE"));
 	dlg.languageComboBox->insertStringList(setting->getAvailableLanguages());
 	dlg.languageComboBox->setCurrentIndex(setting->convertLanguageCodeToNumber());
-	dlg.commentComboBox->setCurrentIndex(setting->readIntEntry("VIEW_COMMENT"));
 //	dlg.stonesShadowCheckBox->setChecked(setting->readBoolEntry("STONES_SHADOW"));
 	dlg.radioButtonStones_2D->setChecked((setting->readIntEntry("STONES_LOOK")==1));
 	dlg.radioButtonStones_3D->setChecked((setting->readIntEntry("STONES_LOOK")==2));
@@ -3210,7 +3209,6 @@ bool ClientWindow::preferencesSave(PreferencesDialog *dlg)
 	setting->writeEntry("SKIN", dlg->LineEdit_goban->text());
 	setting->writeEntry("SKIN_TABLE", dlg->LineEdit_Table->text());
 	setting->writeEntry("LANG", setting->convertNumberToLanguage(dlg->languageComboBox->currentIndex()));
-	setting->writeIntEntry("VIEW_COMMENT", dlg->commentComboBox->currentIndex());
 //	setting->writeBoolEntry("STONES_SHADOW", dlg->stonesShadowCheckBox->isChecked());
 //	setting->writeBoolEntry("STONES_SHELLS", dlg->stonesShellsCheckBox->isChecked());
 	int i = 3;

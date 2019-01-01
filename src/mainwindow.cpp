@@ -87,6 +87,18 @@
 #include ICON_SOUND_OFF
 //#endif
 
+/* Return a string to identify the screen.  We use its dimensions.  */
+QString screen_key ()
+{
+#if 0 /* Enabled once building with Qt5.  */
+	QScreen *scr = QApplication::primaryScreen ();
+	QSize sz = scr->size ();
+	return QString::number (sz.width ()) + "x" + QString::number (sz.height ());
+#else
+	return "0";
+#endif
+}
+
 MainWindow::MainWindow(QWidget* parent, const char* name, Qt::WFlags f)
 	: QMainWindow(parent, name, f)
 {
@@ -134,6 +146,7 @@ MainWindow::MainWindow(QWidget* parent, const char* name, Qt::WFlags f)
 		splitter_comment = new QSplitter(Qt::Horizontal, splitter);
 	}
 	splitter->setOpaqueResize(false);
+	splitter_comment->setVisible (viewComment->isChecked ());
 
 	mainWidgetGuiLayout = new QGridLayout(mainWidget);
 	if (setting->readBoolEntry("SIDEBAR_LEFT"))
@@ -236,7 +249,7 @@ MainWindow::MainWindow(QWidget* parent, const char* name, Qt::WFlags f)
 
 	mainWidget->setGameMode (modeNormal);
 	// restore board window
-	reStoreWindowSize("0", false);
+	restoreWindowSize ();
 
 	toolBar->setFocus();
 	updateFont();
@@ -717,11 +730,17 @@ void MainWindow::initActions()
 	viewSidebar->setWhatsThis(tr("Sidebar\n\nEnables/disables the sidebar."));
 	connect(viewSidebar, SIGNAL(toggled(bool)), this, SLOT(slotViewSidebar(bool)));
 
+	QString scrkey = screen_key ();
+	/* Inverted meaning, so that if the option does not exist, we choose the correct default
+	   (visible comment).  */
+	int inv_view_comment = setting->readIntEntry("INV_VIEW_COMMENT_" + scrkey);
+	int vertical = setting->readIntEntry("BOARDVERTCOMMENT_" + scrkey);
+
 	// View Comment toggle
 	viewComment = new QAction(tr("&Comment"), this);
 	viewComment->setCheckable (true);
 	viewComment->setShortcut (Qt::Key_F10);
-	viewComment->setChecked(true);
+	viewComment->setChecked (!inv_view_comment);
 	viewComment->setStatusTip(tr("Enables/disables the comment field"));
 	viewComment->setWhatsThis(tr("Comment field\n\nEnables/disables the comment field."));
 	connect(viewComment, SIGNAL(toggled(bool)), this, SLOT(slotViewComment(bool)));
@@ -730,19 +749,17 @@ void MainWindow::initActions()
 	viewVertComment = new QAction(tr("&Vertical comment"), this);
 	viewVertComment->setCheckable (true);
 	viewVertComment->setShortcut (Qt::SHIFT + Qt::Key_F10);
-	viewVertComment->setChecked(setting->readIntEntry("VIEW_COMMENT") == 2 ||
-		setting->readIntEntry("VIEW_COMMENT") == 0 && setting->readIntEntry("BOARDVERTCOMMENT_0"));
+	viewVertComment->setChecked (vertical);
 	viewVertComment->setStatusTip(tr("Enables/disables a vertical direction of the comment field"));
 	viewVertComment->setWhatsThis(tr("Vertical comment field\n\n"
-		"Enables/disables a vertical direction of the comment field.\n\nNote: This setting is temporary for this board. In order to set permanent horizontal/vertical comment use 'Preferences'."));
+					 "Enables/disables a vertical direction of the comment field."));
 	connect(viewVertComment, SIGNAL(toggled(bool)), this, SLOT(slotViewVertComment(bool)));
 
 	// View Save Size
 	viewSaveSize = new QAction(tr("Save si&ze"), this);
-	viewSaveSize->setShortcut (Qt::ALT + Qt::Key_0);
 	viewSaveSize->setStatusTip(tr("Save the current window size"));
 	viewSaveSize->setWhatsThis(tr("Save size\n\n"
-		"Saves the current window size and restores it on the next program start.\n\nUse ALT + <number key> to store own sizes\nRestore with CTRL + <number key>\n\n<0> is default value at program start.\n<9> is default for edit window."));
+				      "Saves the current window size and restores it on the next program start."));
 	connect(viewSaveSize, SIGNAL(activated()), this, SLOT(slotViewSaveSize()));
 
 	// View Fullscreen
@@ -1428,13 +1445,12 @@ void MainWindow::updateBoard()
 	viewCoords->setChecked(setting->readBoolEntry("BOARD_COORDS"));
 	gfx_board->setShowSGFCoords(setting->readBoolEntry("SGF_BOARD_COORDS"));
 	gfx_board->set_antiClicko(setting->readBoolEntry("ANTICLICKO"));
-	viewComment->setChecked(setting->readIntEntry("VIEW_COMMENT"));
 
-	if (setting->readIntEntry("VIEW_COMMENT"))
-	{
-//		viewVertComment->setEnabled(true);
-		viewVertComment->setChecked(setting->readIntEntry("VIEW_COMMENT") == 2);
-	}
+	QString scrkey = screen_key ();
+	int inv_view_comment = setting->readIntEntry("INV_VIEW_COMMENT_" + scrkey);
+	bool vertical = setting->readIntEntry("BOARDVERTCOMMENT_" + scrkey);
+	viewComment->setChecked(!inv_view_comment);
+	viewVertComment->setChecked (vertical);
 
 #if 0 // @@@
 	QToolTip::setEnabled(setting->readBoolEntry("TOOLTIPS"));
@@ -1579,7 +1595,7 @@ void MainWindow::slotViewSlider(bool toggle)
 
 void MainWindow::slotViewComment(bool toggle)
 {
-	setting->writeIntEntry("VIEW_COMMENT", toggle ? viewVertComment->isChecked() ? 2 : 1 : 0);
+	setting->writeIntEntry("INV_VIEW_COMMENT_" + screen_key (), toggle ? 0 : 1);
 	splitter_comment->setVisible (toggle);
 	setFocus();
 
@@ -1588,7 +1604,7 @@ void MainWindow::slotViewComment(bool toggle)
 
 void MainWindow::slotViewVertComment(bool toggle)
 {
-	setting->writeIntEntry("VIEW_COMMENT", toggle ? 2 : 1);
+	setting->writeIntEntry("BOARDVERTCOMMENT_" + screen_key (), toggle ? 1 : 0);
 	splitter->setOrientation(toggle ? Qt::Horizontal : Qt::Vertical);
 	splitter->setStretchFactor(0, 0);
 	splitter_comment->setOrientation(!toggle ? Qt::Horizontal : Qt::Vertical);
@@ -1624,7 +1640,7 @@ void MainWindow::slotViewSidebar(bool toggle)
 
 void MainWindow::slotViewSaveSize()
 {
-	reStoreWindowSize("0", true);
+	saveWindowSize ();
 }
 
 void MainWindow::slotViewFullscreen(bool toggle)
@@ -1761,142 +1777,100 @@ void MainWindow::slotTimerForward()
 	}
 }
 
-// store and restore window properties
-bool MainWindow::reStoreWindowSize(QString strKey, bool store)
+void MainWindow::saveWindowSize ()
 {
-	if (store)
-	{
-		// store window size, format, comment format
-		setting->writeIntEntry("BOARDVERTCOMMENT_" + strKey, !viewComment->isChecked() ? 2 : viewVertComment->isChecked());
-		setting->writeBoolEntry("BOARDFULLSCREEN_" + strKey, isFullScreen);
-		
-		setting->writeEntry("BOARDWINDOW_" + strKey,
-			QString::number(pos().x()) + DELIMITER +
-			QString::number(pos().y()) + DELIMITER +
-			QString::number(size().width()) + DELIMITER +
-			QString::number(size().height()));
-		
+	QString strKey = screen_key ();
+
+	// store window size, format
+	setting->writeBoolEntry("BOARDFULLSCREEN_" + strKey, isFullScreen);
+
+	setting->writeEntry("BOARDWINDOW_" + strKey,
+			    QString::number(pos().x()) + DELIMITER +
+			    QString::number(pos().y()) + DELIMITER +
+			    QString::number(size().width()) + DELIMITER +
+			    QString::number(size().height()));
+
+	if (viewComment->isChecked ()) {
 		setting->writeEntry("BOARDSPLITTER_" + strKey,
-			QString::number(splitter->sizes().first()) + DELIMITER +
-			QString::number(splitter->sizes().last()) + DELIMITER +
-			QString::number(splitter_comment->sizes().first()) + DELIMITER +
-			QString::number(splitter_comment->sizes().last()));
-		
-		statusBar()->showMessage(tr("Window size saved.") + " (" + strKey + ")");
+				    QString::number(splitter->sizes().first()) + DELIMITER +
+				    QString::number(splitter->sizes().last()) + DELIMITER +
+				    QString::number(splitter_comment->sizes().first()) + DELIMITER +
+				    QString::number(splitter_comment->sizes().last()));
 	}
-	else
-	{
-		// restore board window
-		QString s = setting->readEntry("BOARDWINDOW_" + strKey);
-		if (s.length() > 5)
-		{
-			// do not resize until end of this procedure
-			gfx_board->lockResize = true;
+	statusBar()->showMessage(tr("Window size saved.") + " (" + strKey + ")");
+}
 
-			if (setting->readBoolEntry("BOARDFULLSCREEN_" + strKey))
-				viewFullscreen->setChecked(true);
-			else
-			{
-				viewFullscreen->setChecked(false);
-				QPoint p;
-				p.setX(s.section(DELIMITER, 0, 0).toInt());
-				p.setY(s.section(DELIMITER, 1, 1).toInt());
-				QSize sz;
-				sz.setWidth(s.section(DELIMITER, 2, 2).toInt());
-				sz.setHeight(s.section(DELIMITER, 3, 3).toInt());
-				resize(sz);
-				move(p);
-			}
+bool MainWindow::restoreWindowSize ()
+{
+	QString strKey = screen_key ();
 
-			if (setting->readIntEntry("BOARDVERTCOMMENT_" + strKey) == 2)
-			{
-				// do not view comment
-				viewComment->setChecked(false);
-			}
-			else
-			{
-				// view comment
-				viewComment->setChecked(true);
+	QString s = setting->readEntry("BOARDWINDOW_" + strKey);
+	if (s.length() <= 5)
+		return false;
 
-				viewVertComment->setChecked(setting->readIntEntry("VIEW_COMMENT") == 2 ||
-					setting->readIntEntry("VIEW_COMMENT") == 0 && setting->readIntEntry("BOARDVERTCOMMENT_" + strKey));
+	// do not resize until end of this procedure
+	gfx_board->lockResize = true;
 
-				// restore splitter in board window
-				s = setting->readEntry("BOARDSPLITTER_" + strKey);
-				if (s.length() > 5)
-				{
-					int i, j;
+	if (setting->readBoolEntry("BOARDFULLSCREEN_" + strKey))
+		viewFullscreen->setChecked(true);
+	else {
+		viewFullscreen->setChecked(false);
+		QPoint p;
+		p.setX(s.section(DELIMITER, 0, 0).toInt());
+		p.setY(s.section(DELIMITER, 1, 1).toInt());
+		QSize sz;
+		sz.setWidth(s.section(DELIMITER, 2, 2).toInt());
+		sz.setHeight(s.section(DELIMITER, 3, 3).toInt());
+		resize(sz);
+		move(p);
+	}
 
-					i = s.section(DELIMITER, 2, 2).toInt();
-					j = s.section(DELIMITER, 3, 3).toInt();
-					QList<int> w1;
-					w1 << i << j;
-					splitter_comment->setSizes(w1);
+	if (viewComment->isChecked ()) {
+		// restore splitter in board window
+		s = setting->readEntry("BOARDSPLITTER_" + strKey);
+		if (s.length() > 5) {
+			int i, j;
 
-					w1.clear();
-					i = s.section(DELIMITER, 0, 0).toInt();
-					j = s.section(DELIMITER, 1, 1).toInt();
-					if (i && j)
-						w1 << i << j;
-					splitter->setSizes(w1);
-				}
-			}
+			i = s.section(DELIMITER, 2, 2).toInt();
+			j = s.section(DELIMITER, 3, 3).toInt();
+			QList<int> w1;
+			w1 << i << j;
+			splitter_comment->setSizes(w1);
 
-			// do some other stuff
-			// maybe not correct set at startup time
-			slotViewCoords(viewCoords->isChecked());
-
-			// ok, resize
-			gfx_board->lockResize = false;
-			gfx_board->changeSize();
-
-			statusBar()->showMessage(tr("Window size restored.") + " (" + strKey + ")");
-
-			// update current move
-			gfx_board->refreshDisplay();
+			w1.clear();
+			i = s.section(DELIMITER, 0, 0).toInt();
+			j = s.section(DELIMITER, 1, 1).toInt();
+			if (i && j)
+				w1 << i << j;
+			splitter->setSizes(w1);
 		}
-		else
-			// window sizes not found
-			return false;
 	}
+
+	// do some other stuff
+	// maybe not correct set at startup time
+	slotViewCoords(viewCoords->isChecked());
+
+	// ok, resize
+	gfx_board->lockResize = false;
+	gfx_board->changeSize();
+
+	statusBar()->showMessage(tr("Window size restored.") + " (" + strKey + ")");
+
+	// update current move
+	gfx_board->refreshDisplay();
 
 	return true;
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *e)
 {
-	// check for window resize command = number button
-	if (e->key() >= Qt::Key_0 && e->key() <= Qt::Key_9)
-	{
-		QString strKey = QString::number(e->key() - Qt::Key_0);
-		
-		if (e->state() & Qt::AltModifier)
-		{
-			// true -> store
-			reStoreWindowSize(strKey, true);
-			return;
-		}
-		else if (e->state() & Qt::ControlModifier)
-		{
-			// false -> restore
-			if (!reStoreWindowSize(strKey, false))
-			{
-				// sizes not found -> leave
-				e->ignore();
-				return;
-			}
-			
-			return;
-		}
-	}
-	
 	bool localGame = true;
 	// don't view last moves while observing or playing
 	if (getBoard()->getGameMode() == modeObserve ||
 		getBoard()->getGameMode() == modeMatch ||
 		getBoard()->getGameMode() == modeTeach)
 		localGame = false;
-	
+
 	switch (e->key())
 	{
 /*
@@ -2046,8 +2020,7 @@ void MainWindow::slot_editBoardInNewWindow()
 {
 	// online mode -> don't score, open new Window instead
 	MainWindow *w = setting->qgo->addBoardWindow();
-	w->reStoreWindowSize("9", false);
-	
+
 	CHECK_PTR(w);
 	w->setGameMode (modeNormal);
 

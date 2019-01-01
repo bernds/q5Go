@@ -31,6 +31,8 @@ class QNewGameDlg;
 
 struct ASCII_Import;
 
+extern QString screen_key ();
+
 class MainWindow : public QMainWindow
 {
 	Q_OBJECT
@@ -50,7 +52,8 @@ public:
 #endif
 	void doRealScore(bool toggle) { mainWidget->doRealScore(toggle); }
 	MainWidget *getMainWidget() { return mainWidget; }
-	bool reStoreWindowSize(QString, bool);
+	void saveWindowSize ();
+	bool restoreWindowSize ();
 	void updateBoard();
 	void addObserver(const QString &name);
 	void clearObserver() { ListView_observers->clear(); }
