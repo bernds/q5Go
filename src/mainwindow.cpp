@@ -158,10 +158,10 @@ MainWindow::MainWindow(QWidget* parent, const char* name, Qt::WFlags f)
 		mainWidgetGuiLayout->addWidget(mainWidget->boardFrame, 0, 0);
 	}
 
-	board = mainWidget->board;
+	gfx_board = mainWidget->board;
 	CHECK_PTR(board);
 	// Connect the mouseMove event of the board with the status bar coords widget
-	connect(board, SIGNAL(coordsChanged(int, int, int,bool)), statusTip, SLOT(slotStatusTipCoords(int, int, int,bool)));
+	connect(gfx_board, SIGNAL(coordsChanged(int, int, int,bool)), statusTip, SLOT(slotStatusTipCoords(int, int, int,bool)));
 
 	//commentEdit = new QTextEdit(splitter_comment, "comments");
 	QWidget *commentWidget = new QWidget(splitter_comment);
@@ -188,9 +188,9 @@ MainWindow::MainWindow(QWidget* parent, const char* name, Qt::WFlags f)
 	//commentEdit2 = mainWidget->commentEdit2;
 	//commentEdit2 = new QLineEdit( boardFrame, "commentEdit2" );
 
-	//    connect(commentEdit2, SIGNAL(returnPressed()), board, SLOT(modifiedComment()));
-	connect(commentEdit, SIGNAL(textChanged()), board, SLOT(updateComment()));
-	connect(commentEdit2, SIGNAL(returnPressed()), board, SLOT(updateComment2()));
+	//    connect(commentEdit2, SIGNAL(returnPressed()), gfx_board, SLOT(modifiedComment()));
+	connect(commentEdit, SIGNAL(textChanged()), gfx_board, SLOT(updateComment()));
+	connect(commentEdit2, SIGNAL(returnPressed()), gfx_board, SLOT(updateComment2()));
 
 	// Connect Ctrl-E with MainWidget 'Edit' button. We need this to control the button
 	// even when the sidebar is hidden.
@@ -1017,7 +1017,7 @@ void MainWindow::slotFileNewGame()
 	if (!checkModified())
 		return;
 	
-	if (board->getGameMode() == modeNormal)
+	if (gfx_board->getGameMode() == modeNormal)
 	{
 		NewLocalGameDialog dlg(this, tr("newgame"), true);
 		
@@ -1036,7 +1036,7 @@ void MainWindow::slotFileNewGame()
 			d->fileName = "";
 			d->byoTime = dlg.byoTimeSpin->value();
 			d->style = 1;
-			board->initGame(d);
+			gfx_board->initGame(d);
 		}
 	}
 	else
@@ -1056,12 +1056,12 @@ void MainWindow::slotFileNewGame()
 			d->fileName = "";
 			d->byoTime = dlg.byoTimeSpin->value();
 			d->style = 1;
-			board->initGame(d);
+			gfx_board->initGame(d);
 		}
 	}
 
-	interfaceHandler->normalTools->komi->setText(QString::number(board->getGameData()->komi));
-	interfaceHandler->normalTools->handicap->setText(QString::number(board->getGameData()->handicap));
+	interfaceHandler->normalTools->komi->setText(QString::number(gfx_board->getGameData()->komi));
+	interfaceHandler->normalTools->handicap->setText(QString::number(gfx_board->getGameData()->handicap));
 	
 	statusBar()->showMessage(tr("New board prepared."));
 }
@@ -1103,7 +1103,7 @@ void MainWindow::doOpen(const QString &fileName, const QString &filter, bool sto
 	if (setting->readBoolEntry("REM_DIR") && storedir)
 		rememberLastDir(fileName);
 	
-	if (board->openSGF(fileName))
+	if (gfx_board->openSGF(fileName))
 		statusBar()->showMessage(fileName + " " + tr("loaded."));
 }
 
@@ -1129,9 +1129,9 @@ bool MainWindow::startComputerPlay(QNewGameDlg * dlg, const QString &fileName, c
 
 	
 	//if (fileName.isNull() || fileName.isEmpty())
-	//	board->initGame(d);
+	//	gfx_board->initGame(d);
 
-	if (!board->startComputerPlay(dlg,fileName, computer_path))
+	if (!gfx_board->startComputerPlay(dlg,fileName, computer_path))
 		return false;
 
 	return true;
@@ -1140,7 +1140,7 @@ bool MainWindow::startComputerPlay(QNewGameDlg * dlg, const QString &fileName, c
 bool MainWindow::slotFileSave()
 {
 	QString fileName;
-	if ((fileName = board->getGameData()->fileName).isEmpty())
+	if ((fileName = gfx_board->getGameData()->fileName).isEmpty())
 	{
 		if (setting->readBoolEntry("REM_DIR"))
 			fileName = setting->readEntry("LAST_DIR");
@@ -1149,7 +1149,7 @@ bool MainWindow::slotFileSave()
 		return doSave(fileName, false);
 	}
 	else
-		return doSave(board->getGameData()->fileName, true);
+		return doSave(gfx_board->getGameData()->fileName, true);
 }
 
 bool MainWindow::slotFileSaveAs()
@@ -1165,7 +1165,7 @@ bool MainWindow::doSave(QString fileName, bool force)
   	{
      		if  (fileName.isNull() || fileName.isEmpty() || QDir(fileName).exists())
             	{
-              		QString base = board->getCandidateFileName();
+              		QString base = gfx_board->getCandidateFileName();
               		if (fileName.isNull() || fileName.isEmpty())
                 		fileName = base;
               		else
@@ -1188,19 +1188,19 @@ bool MainWindow::doSave(QString fileName, bool force)
 			tr("Yes"), tr("No"), 0, 0, 1) == 1)
 			return false;
 		
-	board->getGameData()->fileName = fileName;
+	gfx_board->getGameData()->fileName = fileName;
 		
 	if (setting->readBoolEntry("REM_DIR"))
 		rememberLastDir(fileName);
 		
-		if (!board->saveBoard(fileName))
+		if (!gfx_board->saveBoard(fileName))
 		{
 			QMessageBox::warning(this, PACKAGE, tr("Cannot save SGF file."));
 			return false;
 		}
 		
 	statusBar()->showMessage(fileName + " " + tr("saved."));
-	board->setModified(false);
+	gfx_board->setModified(false);
 	return true;
 }
 
@@ -1208,7 +1208,7 @@ void MainWindow::slotFileClose()
 {
 	if (checkModified() == 1)
 	{
-		board->setModified(false);  // Prevent to ask a second time in qGo::quit()
+		gfx_board->setModified(false);  // Prevent to ask a second time in qGo::quit()
 		close();
 	}
 }
@@ -1219,7 +1219,7 @@ void MainWindow::slotFileImportSgfClipB()
 	if (getInterfaceHandler()->refreshButton->text() != tr("Update") && !checkModified())
 		return;
 	
-	if (!board->importSGFClipboard())
+	if (!gfx_board->importSGFClipboard())
 		QMessageBox::warning(this, PACKAGE, tr("Cannot load from clipboard. Is it empty?"));
 	else
 		statusBar()->showMessage(tr("SGF imported."));
@@ -1227,7 +1227,7 @@ void MainWindow::slotFileImportSgfClipB()
 
 void MainWindow::slotFileExportSgfClipB()
 {
-	if (!board->exportSGFtoClipB())
+	if (!gfx_board->exportSGFtoClipB())
 		QMessageBox::warning(this, PACKAGE, tr("Failed to export SGF to clipboard."));
 	else
 		statusBar()->showMessage(tr("SGF exported."));
@@ -1241,13 +1241,13 @@ void MainWindow::slotFileImportASCII()
 	if (fileName.isEmpty())
 		return;
 	
-	board->importASCII(fileName);
+	gfx_board->importASCII(fileName);
 	statusBar()->showMessage(tr("ASCII imported."));
 }
 
 void MainWindow::slotFileImportASCIIClipB()
 {
-	if (!board->importASCII(NULL, true))
+	if (!gfx_board->importASCII(NULL, true))
 		QMessageBox::warning(this, PACKAGE, tr("Importing ASCII failed. Clipboard empty?"));
 	else
 		statusBar()->showMessage(tr("ASCII imported."));
@@ -1255,7 +1255,7 @@ void MainWindow::slotFileImportASCIIClipB()
 
 void MainWindow::slotFileExportASCII()
 {
-	board->exportASCII();
+	gfx_board->exportASCII();
 	statusBar()->showMessage(tr("Ready."));
 }
 
@@ -1285,99 +1285,99 @@ void MainWindow::slotFileExportPic()
 				return;
 			
 			//QString filter = dlg.selectedFilter().left(3);
-			board->exportPicture(fileName, filter->left(3));
+			gfx_board->exportPicture(fileName, filter->left(3));
 //	}
 }
 
 void MainWindow::slotFileExportPicClipB()
 {
-	board->exportPicture(NULL, NULL, true);	
+	gfx_board->exportPicture(NULL, NULL, true);	
 }
 
 void MainWindow::slotEditDelete()
 {
-	board->deleteNode();
+	gfx_board->deleteNode();
 }
 
 void MainWindow::slotEditNumberMoves()
 {
-	board->numberMoves();
+	gfx_board->numberMoves();
 }
 
 void MainWindow::slotEditMarkBrothers()
 {
-	board->markVariations(false);
+	gfx_board->markVariations(false);
 }
 
 void MainWindow::slotEditMarkSons()
 {
-	board->markVariations(true);
+	gfx_board->markVariations(true);
 }
 
 void MainWindow::slotNavBackward()
 {
-	board->previousMove();
+	gfx_board->previousMove();
 }
 
 void MainWindow::slotNavForward()
 {
-	board->nextMove();
+	gfx_board->nextMove();
 }
 
 void MainWindow::slotNavFirst()
 {
-	board->gotoFirstMove();
+	gfx_board->gotoFirstMove();
 }
 
 void MainWindow::slotNavLast()
 {
-	board->gotoLastMove();
+	gfx_board->gotoLastMove();
 }
 
 // this slot is used for edit window to navigate to last made move
 void MainWindow::slotNavLastByTime()
 {
-	board->gotoLastMoveByTime();
+	gfx_board->gotoLastMoveByTime();
 }
 
 void MainWindow::slotNavNextVar()
 {
-	board->nextVariation();
+	gfx_board->nextVariation();
 }
 
 void MainWindow::slotNavPrevVar()
 {
-	board->previousVariation();
+	gfx_board->previousVariation();
 }
 
 void MainWindow::slotNavNextComment()    //added eb
 {
-	board->nextComment();
+	gfx_board->nextComment();
 }
 
 void MainWindow::slotNavPrevComment()
 {
-	board->previousComment();
+	gfx_board->previousComment();
 }                                        //end add eb
 
 void MainWindow::slotNavStartVar()
 {
-	board->gotoVarStart();
+	gfx_board->gotoVarStart();
 }
 
 void MainWindow::slotNavMainBranch()
 {
-	board->gotoMainBranch();
+	gfx_board->gotoMainBranch();
 }
 
 void MainWindow::slotNavNextBranch()
 {
-	board->gotoNextBranch();
+	gfx_board->gotoNextBranch();
 }
 
 void MainWindow::slotNavIntersection()       // added eb 11
 {
-    board->navIntersection();
+    gfx_board->navIntersection();
 }
                                      // end add eb 11
 
@@ -1385,11 +1385,11 @@ void MainWindow::slotNavIntersection()       // added eb 11
 void MainWindow::slotNavNthMove()
 {
 	NthMoveDialog dlg(this, tr("entermove"), true);
-	dlg.moveSpinBox->setValue(board->getCurrentMoveNumber());
+	dlg.moveSpinBox->setValue(gfx_board->getCurrentMoveNumber());
 	dlg.moveSpinBox->setFocus();
-	
+
 	if (dlg.exec() == QDialog::Accepted)
-		board->gotoNthMove(dlg.moveSpinBox->value());
+		gfx_board->gotoNthMove(dlg.moveSpinBox->value());
 }
 
 void MainWindow::slotNavAutoplay(bool toggle)
@@ -1406,7 +1406,7 @@ void MainWindow::slotNavAutoplay(bool toggle)
 		else if (setting->readIntEntry("TIMER_INTERVAL") > 10)
 			setting->writeIntEntry("TIMER_INTERVAL", 10);
 		// check if time info available from sgf file
-		if (setting->readBoolEntry("SGF_TIME_TAGS") && board->getGameData()->timeSystem != time_none)
+		if (setting->readBoolEntry("SGF_TIME_TAGS") && gfx_board->getGameData()->timeSystem != time_none)
 			// set time to 1 sec
 			timer->start(1000);
 		else
@@ -1418,7 +1418,7 @@ void MainWindow::slotNavAutoplay(bool toggle)
 
 void MainWindow::slotNavSwapVariations()
 {
-	if (board->swapVariations())
+	if (gfx_board->swapVariations())
 		statusBar()->showMessage(tr("Variations swapped."));
 	else
 		statusBar()->showMessage(tr("No previous variation available."));
@@ -1430,8 +1430,8 @@ void MainWindow::updateBoard()
 	viewSlider->setChecked(setting->readBoolEntry("SLIDER"));
 	viewSidebar->setChecked(setting->readBoolEntry("SIDEBAR"));
 	viewCoords->setChecked(setting->readBoolEntry("BOARD_COORDS"));
-	board->setShowSGFCoords(setting->readBoolEntry("SGF_BOARD_COORDS"));
-	board->set_antiClicko(setting->readBoolEntry("ANTICLICKO"));
+	gfx_board->setShowSGFCoords(setting->readBoolEntry("SGF_BOARD_COORDS"));
+	gfx_board->set_antiClicko(setting->readBoolEntry("ANTICLICKO"));
 	viewComment->setChecked(setting->readIntEntry("VIEW_COMMENT"));
 
 	if (setting->readIntEntry("VIEW_COMMENT"))
@@ -1445,55 +1445,55 @@ void MainWindow::updateBoard()
 #endif
 	if (timer->isActive())
 	{
-		if (setting->readBoolEntry("SGF_TIME_TAGS") && board->getGameData()->timeSystem != time_none)
+		if (setting->readBoolEntry("SGF_TIME_TAGS") && gfx_board->getGameData()->timeSystem != time_none)
 			timer->changeInterval(1000);
 		else
 			timer->changeInterval(int(timerIntervals[setting->readIntEntry("TIMER_INVERVAL")] * 1000));
 	}
 	
 	slotViewLeftSidebar();
-	board->setVariationDisplay(static_cast<VariationDisplay>(setting->readIntEntry("VAR_GHOSTS")));
-	board->setShowCursor(setting->readBoolEntry("CURSOR"));
-	board->changeSize();  // For smaller stones
+	gfx_board->setVariationDisplay(static_cast<VariationDisplay>(setting->readIntEntry("VAR_GHOSTS")));
+	gfx_board->setShowCursor(setting->readBoolEntry("CURSOR"));
+	gfx_board->changeSize();  // For smaller stones
 }
 
 void MainWindow::slotSetGameInfo()
 {
 	GameInfoDialog dlg(this, "gameinfo", true);
 	
-	dlg.playerWhiteEdit->setText(board->getGameData()->playerWhite);
+	dlg.playerWhiteEdit->setText(gfx_board->getGameData()->playerWhite);
 	
-	dlg.playerBlackEdit->setText(board->getGameData()->playerBlack);
-	dlg.whiteRankEdit->setText(board->getGameData()->rankWhite);
-	dlg.blackRankEdit->setText(board->getGameData()->rankBlack);
-	dlg.komiSpin->setValue(board->getGameData()->komi);
-	dlg.handicapSpin->setValue(board->getGameData()->handicap);
-	dlg.resultEdit->setText(board->getGameData()->result);
-	dlg.dateEdit->setText(board->getGameData()->date);
-	dlg.placeEdit->setText(board->getGameData()->place);
-	dlg.copyrightEdit->setText(board->getGameData()->copyright);
-	dlg.gameNameEdit->setText(board->getGameData()->gameName);
+	dlg.playerBlackEdit->setText(gfx_board->getGameData()->playerBlack);
+	dlg.whiteRankEdit->setText(gfx_board->getGameData()->rankWhite);
+	dlg.blackRankEdit->setText(gfx_board->getGameData()->rankBlack);
+	dlg.komiSpin->setValue(gfx_board->getGameData()->komi);
+	dlg.handicapSpin->setValue(gfx_board->getGameData()->handicap);
+	dlg.resultEdit->setText(gfx_board->getGameData()->result);
+	dlg.dateEdit->setText(gfx_board->getGameData()->date);
+	dlg.placeEdit->setText(gfx_board->getGameData()->place);
+	dlg.copyrightEdit->setText(gfx_board->getGameData()->copyright);
+	dlg.gameNameEdit->setText(gfx_board->getGameData()->gameName);
 
 	if (dlg.exec() == QDialog::Accepted)
 	{
-		board->getGameData()->playerWhite = dlg.playerWhiteEdit->text();
-		board->getGameData()->playerBlack = dlg.playerBlackEdit->text();
-		board->getGameData()->rankWhite = dlg.whiteRankEdit->text();
-		board->getGameData()->rankBlack = dlg.blackRankEdit->text();
-		board->getGameData()->komi = dlg.komiSpin->value();
-		board->getGameData()->handicap = dlg.handicapSpin->value();
-		board->getGameData()->result = dlg.resultEdit->text();
-		board->getGameData()->date = dlg.dateEdit->text();
-		board->getGameData()->place = dlg.placeEdit->text();
-		board->getGameData()->copyright = dlg.copyrightEdit->text();
-		board->getGameData()->gameName = dlg.gameNameEdit->text();
+		gfx_board->getGameData()->playerWhite = dlg.playerWhiteEdit->text();
+		gfx_board->getGameData()->playerBlack = dlg.playerBlackEdit->text();
+		gfx_board->getGameData()->rankWhite = dlg.whiteRankEdit->text();
+		gfx_board->getGameData()->rankBlack = dlg.blackRankEdit->text();
+		gfx_board->getGameData()->komi = dlg.komiSpin->value();
+		gfx_board->getGameData()->handicap = dlg.handicapSpin->value();
+		gfx_board->getGameData()->result = dlg.resultEdit->text();
+		gfx_board->getGameData()->date = dlg.dateEdit->text();
+		gfx_board->getGameData()->place = dlg.placeEdit->text();
+		gfx_board->getGameData()->copyright = dlg.copyrightEdit->text();
+		gfx_board->getGameData()->gameName = dlg.gameNameEdit->text();
 		
-		board->isModified = true;
-		board->updateCaption();  // Update caption in any case
+		gfx_board->isModified = true;
+		gfx_board->updateCaption();  // Update caption in any case
 	}
 
-	interfaceHandler->normalTools->komi->setText(QString::number(board->getGameData()->komi));
-	interfaceHandler->normalTools->handicap->setText(QString::number(board->getGameData()->handicap));
+	interfaceHandler->normalTools->komi->setText(QString::number(gfx_board->getGameData()->komi));
+	interfaceHandler->normalTools->handicap->setText(QString::number(gfx_board->getGameData()->handicap));
 }
 
 void MainWindow::slotViewFileBar(bool toggle)
@@ -1502,22 +1502,21 @@ void MainWindow::slotViewFileBar(bool toggle)
 		fileBar->hide();
 	else
 		fileBar->show();
-	
+
 	setting->writeBoolEntry("FILEBAR", toggle);
-	
+
 	statusBar()->showMessage(tr("Ready."));
 }
 
 void MainWindow::slotViewToolBar(bool toggle)
 {
-
 	if (!toggle)
 		toolBar->hide();
 	else
 		toolBar->show();
 
 	setting->writeBoolEntry("TOOLBAR", toggle);
-	
+
 	statusBar()->showMessage(tr("Ready."));
 }
 
@@ -1548,27 +1547,27 @@ void MainWindow::slotViewStatusBar(bool toggle)
 	{
 		statusBar()->hide();
 		// Disconnect this signal, if the statusbar is hidden, we dont need it
-		//disconnect(board, SIGNAL(coordsChanged(int, int, int)), statusTip, SLOT(slotStatusTipCoords(int, int, int)));
+		//disconnect(gfx_board, SIGNAL(coordsChanged(int, int, int)), statusTip, SLOT(slotStatusTipCoords(int, int, int)));
 	}
 	else
 	{
 		statusBar()->show();
 		// Connect the mouseMove event of the board with the status bar coords widget
-		connect(board, SIGNAL(coordsChanged(int, int, int,bool)), statusTip, SLOT(slotStatusTipCoords(int, int, int,bool)));
+		connect(gfx_board, SIGNAL(coordsChanged(int, int, int,bool)), statusTip, SLOT(slotStatusTipCoords(int, int, int,bool)));
 	}
-	
+
 	setting->writeBoolEntry("STATUSBAR", toggle);
-	
+
 	statusBar()->showMessage(tr("Ready."));
 }
 
 void MainWindow::slotViewCoords(bool toggle)
 {
 	if (!toggle)
-		board->setShowCoords(false);
+		gfx_board->setShowCoords(false);
 	else
-		board->setShowCoords(true);
-	
+		gfx_board->setShowCoords(true);
+
 	statusBar()->showMessage(tr("Ready."));
 }
 
@@ -1578,7 +1577,7 @@ void MainWindow::slotViewSlider(bool toggle)
 		mainWidget->toggleSlider(false);
 	else
 		mainWidget->toggleSlider(true);
-	
+
 	statusBar()->showMessage(tr("Ready."));
 }
 
@@ -1691,9 +1690,9 @@ void MainWindow::slotTimerForward()
 	static int eventCounter = 0;
 	static int moveHasTimeInfo = 0;
 
-	if (timer->isActive() && setting->readBoolEntry("SGF_TIME_TAGS") && board->getGameData()->timeSystem != time_none)
+	if (timer->isActive() && setting->readBoolEntry("SGF_TIME_TAGS") && gfx_board->getGameData()->timeSystem != time_none)
 	{
-		bool isBlacksTurn = board->getBoardHandler()->getBlackTurn();
+		bool isBlacksTurn = gfx_board->getBoardHandler()->getBlackTurn();
 
 		// decrease time info
 		QString tmp;
@@ -1727,12 +1726,12 @@ void MainWindow::slotTimerForward()
 		int openMoves = ((pos1 = tmp.indexOf("/")) != -1 ? tmp.right(tmp.length() - pos1 - 1).toInt() : -1);
 
 		// set stones using sgf's time info
-		Move *m = board->getBoardHandler()->getTree()->getCurrent();
+		Move *m = gfx_board->getBoardHandler()->getTree()->getCurrent();
 
 		interfaceHandler->setTimes(isBlacksTurn, seconds, openMoves);
 
 		if (m->getMoveNumber() == 0)
-			board->nextMove(setting->readBoolEntry("SOUND_AUTOPLAY"));
+			gfx_board->nextMove(setting->readBoolEntry("SOUND_AUTOPLAY"));
 		else if (m->son == 0)
 		{
 			timer->stop();
@@ -1744,7 +1743,7 @@ void MainWindow::slotTimerForward()
 			// no time info at this node; use settings
 			int time = int(timerIntervals[setting->readIntEntry("TIMER_INTERVAL")]);
 			if ((time > 1 && (++eventCounter%time == 0) || time <= 1) &&
-				!board->nextMove(setting->readBoolEntry("SOUND_AUTOPLAY")))
+				!gfx_board->nextMove(setting->readBoolEntry("SOUND_AUTOPLAY")))
 			{
 				timer->stop();
 				navAutoplay->setChecked(false);
@@ -1757,14 +1756,14 @@ void MainWindow::slotTimerForward()
 		else if (m->son->getTimeLeft() >= seconds || moveHasTimeInfo > 0)
 		{
 			// check if byoyomi period changed
-			if (board->getGameData()->timeSystem == canadian &&
+			if (gfx_board->getGameData()->timeSystem == canadian &&
 				m->son->getOpenMoves() > openMoves+1 && moveHasTimeInfo == 0)
 			{
-				if (seconds > (m->son->getTimeLeft() - board->getGameData()->byoTime))
+				if (seconds > (m->son->getTimeLeft() - gfx_board->getGameData()->byoTime))
 					return;
 			}
 
-			if (!board->nextMove(setting->readBoolEntry("SOUND_AUTOPLAY")))
+			if (!gfx_board->nextMove(setting->readBoolEntry("SOUND_AUTOPLAY")))
 			{
 				timer->stop();
 				navAutoplay->setChecked(false);
@@ -1775,7 +1774,7 @@ void MainWindow::slotTimerForward()
 				moveHasTimeInfo--;
 		}
 	}
-	else if ((!board->nextMove(setting->readBoolEntry("SOUND_AUTOPLAY")) || !isActiveWindow())
+	else if ((!gfx_board->nextMove(setting->readBoolEntry("SOUND_AUTOPLAY")) || !isActiveWindow())
 		&& timer->isActive())
 	{
 		timer->stop();
@@ -1814,7 +1813,7 @@ bool MainWindow::reStoreWindowSize(QString strKey, bool store)
 		if (s.length() > 5)
 		{
 			// do not resize until end of this procedure
-			board->lockResize = true;
+			gfx_board->lockResize = true;
 
 			if (setting->readBoolEntry("BOARDFULLSCREEN_" + strKey))
 				viewFullscreen->setChecked(true);
@@ -1870,13 +1869,13 @@ bool MainWindow::reStoreWindowSize(QString strKey, bool store)
 			slotViewCoords(viewCoords->isChecked());
 
 			// ok, resize
-			board->lockResize = false;
-			board->changeSize();
+			gfx_board->lockResize = false;
+			gfx_board->changeSize();
 
 			statusBar()->showMessage(tr("Window size restored.") + " (" + strKey + ")");
 
 			// update current move
-			board->refreshDisplay();
+			gfx_board->refreshDisplay();
 		}
 		else
 			// window sizes not found
@@ -1926,19 +1925,19 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
 		// TODO: DEBUG
 #ifndef NO_DEBUG
 	case Key_W:
-		board->debug();
+		gfx_board->debug();
 		break;
 		
 	case Key_L:
-		board->openSGF("foo.sgf");
+		gfx_board->openSGF("foo.sgf");
 		break;
 		
 	case Key_S:
-		board->saveBoard("foo.sgf");
+		gfx_board->saveBoard("foo.sgf");
 		break;
 		
 	case Key_X:
-		board->openSGF("foo.xml", "XML");
+		gfx_board->openSGF("foo.xml", "XML");
 		break;
 		// /DEBUG
 #endif
@@ -2000,7 +1999,7 @@ void MainWindow::closeEvent(QCloseEvent *e)
 
 int MainWindow::checkModified(bool interactive)
 {
-	if (!board->isModified)
+	if (!gfx_board->isModified)
 		return 1;
 	
 	if (!interactive)
@@ -2012,7 +2011,7 @@ int MainWindow::checkModified(bool interactive)
 		0, 2))
 	{
 	case 0:
-		return slotFileSave() && !board->isModified;
+		return slotFileSave() && !gfx_board->isModified;
 		
 	case 1:
 		return 1;
@@ -2105,12 +2104,13 @@ void MainWindow::addObserver(const QString &name)
 
 void MainWindow::slotSoundToggle(bool toggle)
 {
-	board->getBoardHandler()->local_stone_sound = !toggle ;
+	gfx_board->getBoardHandler()->local_stone_sound = !toggle ;
 }
 
 void MainWindow::setGameMode(GameMode mode)
 {
 	mainWidget->setGameMode (mode);
+
 	switch (mode)
 	{
 	case modeEdit:

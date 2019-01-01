@@ -39,7 +39,7 @@ public:
 	MainWindow(QWidget* parent = 0, const char* name = 0, Qt::WFlags f = Qt::WType_TopLevel);
 	~MainWindow();
 	InterfaceHandler* getInterfaceHandler() const { return interfaceHandler; }
-	Board* getBoard() const { return board; }
+	Board* getBoard() const { return gfx_board; }
 	void doOpen(const QString &fileName, const QString &filter=0, bool storedir=true);
 	bool startComputerPlay(QNewGameDlg * dlg,const QString &fileName, const QString &computer_path);
 	int checkModified(bool interactive=true);
@@ -137,7 +137,7 @@ public slots:
 
 private:
 	qGoIF *parent_;
-	Board *board;
+	Board *gfx_board;
 	InterfaceHandler *interfaceHandler;
 	MainWidget *mainWidget;
 
