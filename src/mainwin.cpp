@@ -119,7 +119,7 @@ ClientWindow::ClientWindow(QMainWindow *parent, const char* name, Qt::WFlags fl)
 	// set focus, clear entry field
 	cb_cmdLine->setFocus();
 	cb_cmdLine->clear();
-	cb_cmdLine->insertItem("");
+	cb_cmdLine->addItem("");
 
 	// create instance of telnetConnection
 	telnetConnection = new TelnetConnection(this);
@@ -463,9 +463,9 @@ void ClientWindow::timerEvent(QTimerEvent* e)
 	//qDebug( "timer event, id %d", e->timerId() );
 
 	if (e->timerId() == seekButtonTimer)
-	{	
+	{
 		imagecounter = (imagecounter+1) % 4;
-		toolSeek->setIconSet(QIcon(seekingIcon[imagecounter]));
+		toolSeek->setIcon(QIcon(seekingIcon[imagecounter]));
 		return;
 	}
 
@@ -1160,8 +1160,8 @@ qDebug("cmd_valid: %i", (int)cmd_valid);
 	{
 		// clear field, and restore the blank line at top
 		cb_cmdLine->removeItem(1);
-		cb_cmdLine->insertItem("",0);
-		cb_cmdLine->clearEdit();
+		cb_cmdLine->insertItem(0, "");
+		cb_cmdLine->clearEditText();
 
 		// echo & send
 		QString cmdLine = cmd;
@@ -1246,7 +1246,7 @@ void ClientWindow::slot_cbconnect(const QString &txt)
 		cb_connect->clear();
 		for (auto h_: hostlist)
 		{
-			cb_connect->insertItem (h_->title());
+			cb_connect->addItem (h_->title());
 			if (h_->title() == text)
 			{
 				i = cb_connect->count() - 1;
@@ -1405,7 +1405,7 @@ void ClientWindow::slot_updateFont()
 	MultiLineEdit2->selectAll();
 	MultiLineEdit2->setCurrentFont(setting->fontConsole);
 	MultiLineEdit2->setTextCursor (c);
-	MultiLineEdit3->setCurrentFont(setting->fontComments); 
+	MultiLineEdit3->setCurrentFont(setting->fontComments);
 	cb_cmdLine->setFont(setting->fontComments);
 
 	// standard
@@ -2635,18 +2635,18 @@ void ClientWindow::initToolBar()
 	whatsThis->addTo (Toolbar);
 
 	//added the icons
-	refreshPlayers->setIconSet(QIcon(RefreshPlayersIcon));
-	refreshGames->setIconSet(QIcon(RefreshGamesIcon));
-	fileNew->setIconSet(QIcon(fileNewIcon));
-	fileNewBoard->setIconSet(QIcon(fileNewboardIcon));
-	fileOpen->setIconSet(QIcon(fileOpenIcon));
-	fileQuit->setIconSet(QIcon(exitIcon));
-	computerPlay->setIconSet(QIcon(ComputerPlayIcon));
-	Connect->setIconSet(QIcon(connectedIcon));
-	Disconnect->setIconSet(QIcon(disconnectedIcon));
-	helpManual->setIconSet(QIcon(manualIcon));
-	setPreferences->setIconSet(QIcon(prefsIcon));
-	setWindowIcon(qgoIcon);
+	refreshPlayers->setIcon(QIcon(RefreshPlayersIcon));
+	refreshGames->setIcon(QIcon(RefreshGamesIcon));
+	fileNew->setIcon(QIcon(fileNewIcon));
+	fileNewBoard->setIcon(QIcon(fileNewboardIcon));
+	fileOpen->setIcon(QIcon(fileOpenIcon));
+	fileQuit->setIcon(QIcon(exitIcon));
+	computerPlay->setIcon(QIcon(ComputerPlayIcon));
+	Connect->setIcon(QIcon(connectedIcon));
+	Disconnect->setIcon(QIcon(disconnectedIcon));
+	helpManual->setIcon(QIcon(manualIcon));
+	setPreferences->setIcon(QIcon(prefsIcon));
+	setWindowIcon (QIcon (qgoIcon));
 }
 // SLOTS
 
@@ -2868,18 +2868,17 @@ void ClientWindow::slot_cancelSeek()
 {
 
 	toolSeek->setChecked(false);
-	toolSeek->setPopup(seekMenu);
-	toolSeek->setPopupDelay(1);
-	toolSeek->setIconSet(QIcon(NotSeekingIcon));
+	toolSeek->setMenu (seekMenu);
+	toolSeek->setPopupMode (QToolButton::InstantPopup);
+	toolSeek->setIcon(QIcon(NotSeekingIcon));
 	killTimer(seekButtonTimer);
 	seekButtonTimer = 0;
 }
 
 void ClientWindow::slot_seek(int i)
 {
-
-	toolSeek->setChecked(true);
-	toolSeek->setPopup(NULL);
+	toolSeek->setChecked (true);
+	toolSeek->setMenu (NULL);
 
 	//seek entry 1 19 5 3 0
 	QString send_seek = 	"seek entry " + 
@@ -2968,15 +2967,14 @@ void ClientWindow::dlgSetPreferences(int tab)
 
 	if (tab >= 0)
 	{
-		// set to default tab - no check for Qt 2.3.x
 		if (dlg.tabWidget->count() <= tab+1)
-			dlg.tabWidget->setCurrentPage(tab);
+			dlg.tabWidget->setCurrentIndex (tab);
 	}
 
 	// Interface tab
 	dlg.LineEdit_goban->setText(setting->readEntry("SKIN"));
 	dlg.LineEdit_Table->setText(setting->readEntry("SKIN_TABLE"));
-	dlg.languageComboBox->insertStringList(setting->getAvailableLanguages());
+	dlg.languageComboBox->insertItems(0, setting->getAvailableLanguages());
 	dlg.languageComboBox->setCurrentIndex(setting->convertLanguageCodeToNumber());
 //	dlg.stonesShadowCheckBox->setChecked(setting->readBoolEntry("STONES_SHADOW"));
 	dlg.radioButtonStones_2D->setChecked((setting->readIntEntry("STONES_LOOK")==1));

@@ -2013,10 +2013,10 @@ void qGoBoard::send_kibitz(const QString msg)
 			//init
 			win->getMainWidget()->cb_opponent->clear();
 			win->getMainWidget()->TextLabel_opponent->setText(tr("opponent:"));
-			win->getMainWidget()->cb_opponent->insertItem(tr("-- none --"));
+			win->getMainWidget()->cb_opponent->addItem(tr("-- none --"));
 			if (havePupil && ttOpponent != tr("-- none --"))
 			{
-				win->getMainWidget()->cb_opponent->insertItem(ttOpponent, 1);
+				win->getMainWidget()->cb_opponent->addItem(ttOpponent, 1);
 				win->getMainWidget()->cb_opponent->setCurrentIndex(1);
 			}
 
@@ -2024,7 +2024,7 @@ void qGoBoard::send_kibitz(const QString msg)
 		}
 		else
 		{
-			win->getMainWidget()->cb_opponent->insertItem(msg.right(msg.length() - 3));
+			win->getMainWidget()->cb_opponent->addItem(msg.right(msg.length() - 3));
 //			int cnt = win->getMainWidget()->cb_opponent->count();
 //			win->getMainWidget()->TextLabel_opponent->setText(tr("opponent:") + " (" + QString::number(cnt-1) + ")");
 
@@ -2085,7 +2085,7 @@ void qGoBoard::send_kibitz(const QString msg)
 			//   it's ensured that yyy [rk] didn't send forged message
 			//   e.g.: yyy [rk]: xxx[rk]: S1 (3)
 			QString s;
-			s = msg.section(':', 1, -1).remove(QRegExp("\\(.*$")).trimmed().upper();
+			s = msg.section(':', 1, -1).remove(QRegExp("\\(.*$")).trimmed().toUpper();
 
 			// check whether it's a position
 			// e.g. B1, A17, NOT: ok, yes
@@ -2624,7 +2624,7 @@ void qGoBoard::slot_ttOpponentSelected(const QString &opponent)
 
 		if (!found)
 		{
-			cb->insertItem(opponent, cnt);
+			cb->insertItem(cnt, opponent);
 			cb->setCurrentIndex(cnt);
 		}
 

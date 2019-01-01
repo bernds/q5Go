@@ -71,11 +71,10 @@ PreferencesDialog::PreferencesDialog(QWidget* parent,  const char* name, bool mo
 	fontConsoleButton->setFont(setting->fontConsole);
 
 	// Default codec
-	ComboBox_codec->insertItem("");
-	// The rest by name
-	QTextCodec *codec;
-	for(int i = 0; (codec = QTextCodec::codecForIndex(i)); ++i)
-		ComboBox_codec->insertItem(codec->name());
+	ComboBox_codec->addItem("");
+	auto codecs = QTextCodec::availableCodecs ();
+	for(auto it: codecs)
+		ComboBox_codec->addItem(it);
 }
 
 /*  
@@ -440,7 +439,7 @@ void PreferencesDialog::on_soundButtonGroup_buttonClicked(QAbstractButton *cb)
 		setting->qgo->playPassSound();
 	else if (cb->text() == tr("Autoplay"))
 		setting->qgo->playAutoPlayClick();
-	else if (cb->text().startsWith(tr("Time"),false))
+	else if (cb->text().startsWith(tr("Time"), Qt::CaseInsensitive))
 		setting->qgo->playTimeSound();
 	else if (cb->text() == tr("Talk"))
 		setting->qgo->playTalkSound();
