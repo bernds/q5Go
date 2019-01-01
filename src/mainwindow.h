@@ -146,7 +146,8 @@ private:
 	QLabel *statusMode, *statusTurn, *statusMark, *statusNav;
 
 	QSplitter *splitter, *splitter_comment;
-//	QMultiLineEdit *commentEdit;
+	QWidget *comments_widget;
+	QLayout *comments_layout;
 	QTextEdit *commentEdit;
 	QLineEdit *commentEdit2;
 	Q3ListView *ListView_observers;

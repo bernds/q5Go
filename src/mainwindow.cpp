@@ -87,8 +87,6 @@
 #include ICON_SOUND_OFF
 //#endif
 
-
-
 MainWindow::MainWindow(QWidget* parent, const char* name, Qt::WFlags f)
 	: QMainWindow(parent, name, f)
 {
@@ -125,27 +123,19 @@ MainWindow::MainWindow(QWidget* parent, const char* name, Qt::WFlags f)
 
 	interfaceHandler = 0;
 
-	// VIEW_COMMENT: 0 = see BOARDVERTCOMMENT, 1 = hor, 2 = ver
-	// BOARDVERCOMMENT: 0 = hor, 1 = ver, 2 = not shown
-	if (setting->readIntEntry("VIEW_COMMENT") == 2 ||
-		setting->readIntEntry("VIEW_COMMENT") == 0 && setting->readIntEntry("BOARDVERTCOMMENT_0"))
-	{
+	if (viewVertComment->isChecked ()) {
 		// show vertical comment
 		splitter = new QSplitter(Qt::Horizontal, this);
-		mainWidget = new MainWidget(this, splitter, "MainWidget");
+		mainWidget = new MainWidget(this, splitter);
 		splitter_comment = new QSplitter(Qt::Vertical, splitter);
-	}
-	else
-	{
+	} else {
 		splitter = new QSplitter(Qt::Vertical, this);
-		mainWidget = new MainWidget(this, splitter, "MainWidget");
+		mainWidget = new MainWidget(this, splitter);
 		splitter_comment = new QSplitter(Qt::Horizontal, splitter);
 	}
 	splitter->setOpaqueResize(false);
 
-//	mainWidget = new MainWidget(splitter, "MainWidget");
-
-	mainWidgetGuiLayout = new QGridLayout(mainWidget, 1, 1, 0, 0);
+	mainWidgetGuiLayout = new QGridLayout(mainWidget);
 	if (setting->readBoolEntry("SIDEBAR_LEFT"))
 	{
 		mainWidgetGuiLayout->addWidget(mainWidget->toolsFrame, 0, 0);
@@ -164,16 +154,15 @@ MainWindow::MainWindow(QWidget* parent, const char* name, Qt::WFlags f)
 	connect(gfx_board, SIGNAL(coordsChanged(int, int, int,bool)), statusTip, SLOT(slotStatusTipCoords(int, int, int,bool)));
 
 	//commentEdit = new QTextEdit(splitter_comment, "comments");
-	QWidget *commentWidget = new QWidget(splitter_comment);
-	QVBoxLayout *commentLayout = new QVBoxLayout(commentWidget, 0,0,"commentLayout");
-	commentEdit = new QTextEdit(commentWidget,  "comments");
-	commentLayout->addWidget(commentEdit);
-	commentEdit2 = new QLineEdit( commentWidget, "commentEdit2" );
-	commentLayout->addWidget(commentEdit2);
+	comments_widget = new QWidget (splitter_comment);
+	comments_layout = new QVBoxLayout (comments_widget);
+	comments_layout->setContentsMargins (0, 0, 0, 0);
+	commentEdit = new QTextEdit;
+	comments_layout->addWidget (commentEdit);
+	commentEdit2 = new QLineEdit;
+	comments_layout->addWidget (commentEdit2);
 
 	ListView_observers = new Q3ListView(splitter_comment, "observers");
-	splitter->setResizeMode(mainWidget, QSplitter::KeepSize);
-	splitter_comment->setResizeMode(ListView_observers, QSplitter::KeepSize);
 	ListView_observers->addColumn(tr("Observers") + "     ");
 	ListView_observers->setProperty("focusPolicy", (int)Qt::NoFocus );
 	ListView_observers->setProperty("resizePolicy", (int)Q3ListView::AutoOneFit );
@@ -191,6 +180,9 @@ MainWindow::MainWindow(QWidget* parent, const char* name, Qt::WFlags f)
 	//    connect(commentEdit2, SIGNAL(returnPressed()), gfx_board, SLOT(modifiedComment()));
 	connect(commentEdit, SIGNAL(textChanged()), gfx_board, SLOT(updateComment()));
 	connect(commentEdit2, SIGNAL(returnPressed()), gfx_board, SLOT(updateComment2()));
+
+	splitter->setStretchFactor (splitter->indexOf (mainWidget), 0);
+	splitter_comment->setStretchFactor(splitter_comment->indexOf (ListView_observers), 0);
 
 	// Connect Ctrl-E with MainWidget 'Edit' button. We need this to control the button
 	// even when the sidebar is hidden.
@@ -254,8 +246,12 @@ MainWindow::~MainWindow()
 {
 	delete timer;
 	delete commentEdit;
+	delete commentEdit2;
 	delete mainWidget;
 	delete splitter;
+	delete splitter_comment;
+	delete comments_layout;
+	delete comments_widget;
 
 	// status bar
 	delete statusMode;
@@ -1584,27 +1580,9 @@ void MainWindow::slotViewSlider(bool toggle)
 void MainWindow::slotViewComment(bool toggle)
 {
 	setting->writeIntEntry("VIEW_COMMENT", toggle ? viewVertComment->isChecked() ? 2 : 1 : 0);
-	if (!toggle)
-	{
-		commentEdit->hide();
-		commentEdit2->hide();
-		viewVertComment->setEnabled(false);
+	splitter_comment->setVisible (toggle);
+	setFocus();
 
-		ListView_observers->hide();
-
-		setFocus();
-	}
-	else
-	{
-		commentEdit->show();
-		commentEdit2->show();
-		viewVertComment->setEnabled(true);
-
-		ListView_observers->show();
-
-		setFocus();
-	}
-	
 	statusBar()->showMessage(tr("Ready."));
 }
 
@@ -1612,16 +1590,16 @@ void MainWindow::slotViewVertComment(bool toggle)
 {
 	setting->writeIntEntry("VIEW_COMMENT", toggle ? 2 : 1);
 	splitter->setOrientation(toggle ? Qt::Horizontal : Qt::Vertical);
-	splitter->setResizeMode(mainWidget, QSplitter::KeepSize);
+	splitter->setStretchFactor(0, 0);
 	splitter_comment->setOrientation(!toggle ? Qt::Horizontal : Qt::Vertical);
-	splitter_comment->setResizeMode(ListView_observers, QSplitter::KeepSize);
+	splitter_comment->setStretchFactor(splitter_comment->indexOf (ListView_observers), 0);
 }
 
 // set sidbar left or right
 void MainWindow::slotViewLeftSidebar()
 {
-	mainWidgetGuiLayout->remove(mainWidget->boardFrame);
-	mainWidgetGuiLayout->remove(mainWidget->toolsFrame);
+	mainWidgetGuiLayout->removeWidget(mainWidget->boardFrame);
+	mainWidgetGuiLayout->removeWidget(mainWidget->toolsFrame);
 
 	if (setting->readBoolEntry("SIDEBAR_LEFT"))
 	{
