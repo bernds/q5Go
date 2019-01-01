@@ -221,7 +221,6 @@ private:
 	Q3PtrList<Talk>     talklist;
 	Q3PtrList<GameDialog> matchlist;
 	Q3PtrList<sendBuf>  sendBuffer;
-	sendBuf            *currentCommand;
 
 	//	QStatusBar         *statusBar;
 	QLabel             *statusUsers, *statusGames, *statusServer, *statusChannel,

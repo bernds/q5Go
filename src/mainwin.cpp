@@ -96,7 +96,6 @@ ClientWindow::ClientWindow(QMainWindow *parent, const char* name, Qt::WFlags fl)
 	cmd_count = 0;
 
 	sendBuffer.setAutoDelete(true);
-	currentCommand = new sendBuf("",0);
 
 	resetCounter();
 	cmd_valid = false;
@@ -781,7 +780,6 @@ void ClientWindow::sendTextToApp(const QString &txt)
 		case READY:
 			// ok, telnet is ready to receive commands
 //			tn_active = false;
-      			currentCommand->txt="";
 			if (!tn_wait_for_tn_ready && !tn_ready)
 			{
 				QTimer::singleShot(200, this, SLOT(set_tn_ready()));
@@ -790,9 +788,7 @@ void ClientWindow::sendTextToApp(const QString &txt)
 			sendTextFromApp(NULL);
 		case WS:
 			// ready or white space -> return
-//      currentCommand->txt="";
 			return;
-			break;
 
 		// echo entered command
 		// echo server enter line
@@ -950,9 +946,8 @@ void ClientWindow::sendTextToApp(const QString &txt)
 			break;
 
 
-    case STATS:
-        // we just received a players name as first line of stats -> create the dialog tab
-        currentCommand->txt="stats";
+	case STATS:
+	  // we just received a players name as first line of stats -> create the dialog tab
 
        // if (!talklist.current())
 	slot_talk( parser->get_statsPlayer()->name, QString::null,true);
@@ -1047,10 +1042,8 @@ int ClientWindow::sendTextFromApp(const QString &txt, bool localecho)
 			tn_ready = false;
 
 			// delete sent command from buffer 
-      //currentCommand->txt = s->get_txt();
       sendBuffer.removeFirst();
 
-      
 			if (valid)
 			{
 				// append current command to send as soon as possible
@@ -1062,8 +1055,7 @@ int ClientWindow::sendTextFromApp(const QString &txt, bool localecho)
 		{
 			// buffer empty -> send direct
 			telnetConnection->sendTextFromApp(txt);
-      //currentCommand->txt = txt;
-      
+
 			if (!txt.contains("ayt"))
 				resetCounter();
 			if (localecho)
@@ -2248,8 +2240,6 @@ void ClientWindow::slot_talk(const QString &name, const QString &text, bool ispl
 			connect(dlg->get_le(), SIGNAL(returnPressed()), dlg, SLOT(slot_returnPressed()));
 			connect(dlg, SIGNAL(signal_pbRelOneTab(QWidget*)), this, SLOT(slot_pbRelOneTab(QWidget*)));
 
-
-			//if (!name.isEmpty() && name != tr("Shouts*") && currentCommand->get_txt() !="stats")
 			if (!name.isEmpty() && isplayer)
 				slot_sendcommand("stats " + name, false);    // automatically request stats
 		}
