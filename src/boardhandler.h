@@ -92,7 +92,6 @@ public:
 				 const QString &computer_path=QString::null); //SL added eb 12
 	bool saveBoard(const QString &fileName);
 	void exportASCII();
-	bool importASCII(const QString &fileName, bool fromClipBoard=false);
 	bool importSGFClipboard();
 	bool exportSGFtoClipB();
 	void createMoveSGF(GameMode mode=modeNormal, bool brother=false);

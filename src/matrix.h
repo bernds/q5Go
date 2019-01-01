@@ -31,7 +31,7 @@ public:
 	void absMatrix();
 	const QString saveMarks();
 	const QString saveEditedMoves(Matrix *parent=0);
-	const QString printMe(ASCII_Import *charset);
+	const QString printMe();
 	static long coordsToKey(int x, int y)
 	{ return x * 100 + y; }
 	static void keyToCoords(long key, int &x, int &y)

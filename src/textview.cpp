@@ -13,9 +13,9 @@
 #include <qclipboard.h> 
 #include <qapplication.h>
 
-/* 
-*  Constructs a TextView which is a child of 'parent', with the 
-*  name 'name' and widget flags set to 'f' 
+/*
+*  Constructs a TextView which is a child of 'parent', with the
+*  name 'name' and widget flags set to 'f'
 *
 *  The dialog will by default be modeless, unless you set 'modal' to
 *  TRUE to construct a modal dialog.
@@ -32,17 +32,17 @@ TextView::TextView(QWidget* parent)
 	textEdit->setFont(f);
 }
 
-/*  
-*  Destroys the object and frees any allocated resources
-*/
+/*
+ *  Destroys the object and frees any allocated resources
+ */
 TextView::~TextView()
 {
 	// no need to delete child widgets, Qt does it all for us
 }
 
-/* 
-* public slot
-*/
+/*
+ * public slot
+ */
 void TextView::saveMe()
 {
 	QString fileName(QFileDialog::getSaveFileName(QString::null,
@@ -50,16 +50,16 @@ void TextView::saveMe()
 		this));
 	if (fileName.isEmpty())
 		return;
-	
+
 	QFile file(fileName);
-	
+
 	// Confirm overwriting file.
 	if (QFile(fileName).exists())
 		if (QMessageBox::information(this, PACKAGE,
 			tr("This file already exists. Do you want to overwrite it?"),
 			tr("Yes"), tr("No"), 0, 0, 1) == 1)
 			return;
-		
+
 		if (!file.open(QIODevice::WriteOnly))
 		{
 			QString s;
@@ -67,16 +67,16 @@ void TextView::saveMe()
 			QMessageBox::warning(this, PACKAGE, s);
 			return;
 		}
-		
+
 		QTextStream stream(&file);
 		stream << textEdit->text();
 		file.close();
 }
 
-void TextView::setMatrix(Matrix *m, ASCII_Import *charset)
+void TextView::setMatrix(Matrix *m)
 {
 	CHECK_PTR(m);
-	textEdit->setText(m->printMe(charset));
+	textEdit->setText(m->printMe());
 }
 
 void TextView::toClipboard()

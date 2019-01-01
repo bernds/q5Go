@@ -86,14 +86,6 @@ enum tabType {tabNormalScore=0, tabEdit, tabTeachGameTree };
 enum tabState {tabSet, tabEnable, tabDisable };
 enum player_type {HUMAN=0,COMPUTER} ;
 
-/*
-* Global structs
-*/
-struct ASCII_Import
-{
-	char blackStone, whiteStone, starPoint, emptyPoint, hBorder, vBorder;
-};
-
 #define CHECK_PTR(x) do {} while (0)
 #define ASSERT(x)  do {} while (0)
 

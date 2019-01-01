@@ -13,7 +13,6 @@ class BoardHandler;
 class Tree;
 class Q3TextStream;
 class Move;
-struct ASCII_Import;
 class GameData;
 
 class SGFParser
@@ -26,8 +25,7 @@ public:
 	bool parseString(const QString &toParse);
 	bool doWrite(const QString &fileName, Tree *tree);
 	bool exportSGFtoClipB(QString *str, Tree *tree);
-	bool parseASCII(const QString &fileName, ASCII_Import *charset, bool isFilename=true);
-    
+
 protected:
 	QString loadFile(const QString &fileName);
 	bool doParse(const QString &toParseStr);
@@ -37,9 +35,6 @@ protected:
 	bool parseProperty(const QString &toParse, const QString &prop, QString &result);
 	void traverse(Move *t, GameData *gameData);
 	void writeGameHeader(GameData *gameData);
-	bool parseASCIIStream(Q3TextStream *stream, ASCII_Import *charset);
-	bool doASCIIParse(const QString &toParse, int &y, ASCII_Import *charset);
-	bool checkBoardSize(const QString &toParse, ASCII_Import *charset);
 //	void convertOldSgf(QString &toParse);
 	bool initStream(Q3TextStream *stream);
 	bool writeStream(Tree *tree);

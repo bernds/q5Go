@@ -28,8 +28,6 @@ class StatusTip;
 class qGoIF;
 class QNewGameDlg;
 
-struct ASCII_Import;
-
 extern QString screen_key ();
 
 class MainWindow : public QMainWindow
@@ -86,8 +84,6 @@ public slots:
 	bool slotFileSave();
 	void slotFileClose();
 	bool slotFileSaveAs();
-	void slotFileImportASCII();
-	void slotFileImportASCIIClipB();
 	void slotFileExportASCII();
 	void slotFileImportSgfClipB();
 	void slotFileExportSgfClipB();
@@ -159,15 +155,14 @@ private:
 	QMenu *fileMenu, *importExportMenu, *editMenu, *navMenu, *settingsMenu, *viewMenu, *helpMenu;
 
 	QAction *escapeFocus, *toggleEdit, *toggleMarks;
-	QAction *fileNewBoard,*fileNew, *fileOpen, *fileSave, *fileSaveAs, *fileClose,
-		*fileImportASCII, *fileImportASCIIClipB,*fileExportASCII,
-		*fileImportSgfClipB, *fileExportSgfClipB,
+	QAction *fileNewBoard, *fileNew, *fileOpen, *fileSave, *fileSaveAs, *fileClose,
+		*fileExportASCII, *fileImportSgfClipB, *fileExportSgfClipB,
 		*fileExportPic, *fileExportPicClipB,
-		*fileQuit ;
+		*fileQuit;
 	QAction *editDelete, *editNumberMoves, *editMarkBrothers, *editMarkSons;
 	QAction *navBackward, *navForward, *navFirst, *navLast, *navNextVar, *navPrevVar,
 		*navMainBranch, *navStartVar, *navNextBranch, *navNthMove, *navAutoplay, *navEmptyBranch,
-		*navCloneNode, *navSwapVariations, *navNextComment, *navPrevComment, *navIntersection ;       //SL added eb 11                               // added eb the 2 last
+		*navCloneNode, *navSwapVariations, *navNextComment, *navPrevComment, *navIntersection;
 	QAction *setPreferences, *setGameInfo, *soundToggle;
 	QAction *viewFileBar, *viewToolBar, *viewEditBar, *viewMenuBar, *viewStatusBar, *viewCoords,
 		*viewSlider, *viewSidebar, *viewComment, *viewVertComment, *viewSaveSize, *viewFullscreen;

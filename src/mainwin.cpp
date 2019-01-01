@@ -3090,15 +3090,6 @@ void ClientWindow::dlgSetPreferences(int tab)
 	dlg.variableFontCheckBox->setChecked(setting->readBoolEntry("VAR_FONT"));
 	dlg.antiClickoCheckBox->setChecked(setting->readBoolEntry("ANTICLICKO"));
 
-	// Import tab
-	dlg.blackStoneEdit->setText(QString(QChar(setting->charset->blackStone)));
-	dlg.whiteStoneEdit->setText(QString(QChar(setting->charset->whiteStone)));
-	dlg.starPointEdit->setText(QString(QChar(setting->charset->starPoint)));
-	dlg.emptyPointEdit->setText(QString(QChar(setting->charset->emptyPoint)));
-	dlg.hBorderEdit->setText(QString(QChar(setting->charset->hBorder)));
-	dlg.vBorderEdit->setText(QString(QChar(setting->charset->vBorder)));
-	dlg.addBrotherCheckBox->setChecked(setting->addImportAsBrother);
-
 	// SGF Loading tab
 	dlg.rememberDirCheckBox->setChecked(setting->readBoolEntry("REM_DIR"));
 	dlg.codecListBox->setCurrentItem(setting->readIntEntry("CODEC"));
@@ -3200,13 +3191,6 @@ bool ClientWindow::preferencesSave(PreferencesDialog *dlg)
 	setting->writeIntEntry("BY_TIMER", dlg->BYTimeSpin->text().toInt());
 	setting->writeIntEntry("TIMER_INTERVAL", dlg->timerComboBox->currentIndex());
 	setting->writeBoolEntry("SGF_TIME_TAGS", dlg->sgfTimeTagsCheckBox->isChecked());
-	setting->charset->blackStone = dlg->blackStoneEdit->text().at(0).latin1();
-	setting->charset->whiteStone = dlg->whiteStoneEdit->text().at(0).latin1();
-	setting->charset->starPoint = dlg->starPointEdit->text().at(0).latin1();
-	setting->charset->emptyPoint = dlg->emptyPointEdit->text().at(0).latin1();
-	setting->charset->hBorder = dlg->hBorderEdit->text().at(0).latin1();
-	setting->charset->vBorder = dlg->vBorderEdit->text().at(0).latin1();
-	setting->addImportAsBrother = dlg->addBrotherCheckBox->isChecked();
 	setting->writeBoolEntry("REM_DIR", dlg->rememberDirCheckBox->isChecked());
 	setting->writeBoolEntry("ANTICLICKO", dlg->antiClickoCheckBox->isChecked());
 	setting->writeBoolEntry("VAR_FONT", dlg->variableFontCheckBox->isChecked());

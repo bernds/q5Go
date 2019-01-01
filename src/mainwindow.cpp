@@ -205,8 +205,6 @@ MainWindow::MainWindow(QWidget* parent, const char* name, Qt::WFlags f)
 
 	interfaceHandler = mainWidget->interfaceHandler;
 	CHECK_PTR(interfaceHandler);
-	interfaceHandler->fileImportASCII = fileImportASCII;
-	interfaceHandler->fileImportASCIIClipB = fileImportASCIIClipB;
 	interfaceHandler->fileImportSgfClipB = fileImportSgfClipB;
 	interfaceHandler->navForward = navForward;
 	interfaceHandler->navBackward = navBackward;
@@ -296,8 +294,6 @@ MainWindow::~MainWindow()
 	delete fileSave;
 	delete fileSaveAs;
 	delete fileClose;
-	delete fileImportASCII;
-	delete fileImportASCIIClipB;
 	delete fileExportASCII;
 	delete fileImportSgfClipB;
 	delete fileExportSgfClipB;
@@ -445,18 +441,6 @@ void MainWindow::initActions()
 	fileClose->setStatusTip(tr("Close this board"));
 	fileClose->setWhatsThis(tr("Exit\n\nClose this board."));
 	connect(fileClose, SIGNAL(activated()), this, SLOT(slotFileClose()));
-
-	// File ImportASCII
-	fileImportASCII = new QAction(charIcon, tr("Import &ASCII"), this);
-	fileImportASCII->setStatusTip(tr("Import an ASCII file as new variation"));
-	fileImportASCII->setWhatsThis(tr("Import ASCII\n\nImport an ASCII file as new variation."));
-	connect(fileImportASCII, SIGNAL(activated()), this, SLOT(slotFileImportASCII()));
-
-	// File ImportASCIIClipB
-	fileImportASCIIClipB = new QAction(charIcon, tr("Import ASCII from &clipboard"), this);
-	fileImportASCIIClipB->setStatusTip(tr("Import an ASCII board as new variation from the clipboard"));
-	fileImportASCIIClipB->setWhatsThis(tr("Import ASCII from clipboard\n\nImport an ASCII file as new variation from the clipboard."));
-	connect(fileImportASCIIClipB, SIGNAL(activated()), this, SLOT(slotFileImportASCIIClipB()));
 
 	// File ExportASCII
 	fileExportASCII = new QAction(charIcon, tr("&Export ASCII"), this);
@@ -822,8 +806,6 @@ void MainWindow::initMenuBar()
 	// submenu Import/Export
 	importExportMenu = new QMenu(tr("&Import/Export"));
 	importExportMenu->insertTearOffHandle();
-	importExportMenu->addAction (fileImportASCII);
-	importExportMenu->addAction (fileImportASCIIClipB);
 	importExportMenu->addAction (fileExportASCII);
 	importExportMenu->addAction (fileImportSgfClipB);
 	importExportMenu->addAction (fileExportSgfClipB);
@@ -1244,26 +1226,6 @@ void MainWindow::slotFileExportSgfClipB()
 		QMessageBox::warning(this, PACKAGE, tr("Failed to export SGF to clipboard."));
 	else
 		statusBar()->showMessage(tr("SGF exported."));
-}
-
-void MainWindow::slotFileImportASCII()
-{
-	QString fileName(QFileDialog::getOpenFileName(QString::null,
-		tr("Text Files (*.txt);;All Files (*)"),
-		this));
-	if (fileName.isEmpty())
-		return;
-	
-	gfx_board->importASCII(fileName);
-	statusBar()->showMessage(tr("ASCII imported."));
-}
-
-void MainWindow::slotFileImportASCIIClipB()
-{
-	if (!gfx_board->importASCII(NULL, true))
-		QMessageBox::warning(this, PACKAGE, tr("Importing ASCII failed. Clipboard empty?"));
-	else
-		statusBar()->showMessage(tr("ASCII imported."));
 }
 
 void MainWindow::slotFileExportASCII()

@@ -121,17 +121,6 @@ Setting::Setting()
 	writeIntEntry("STONES_LOOK", 3);
 //#endif
 
-	// Default ASCII import charset
-	charset = new ASCII_Import();
-	charset->blackStone = '#';
-	charset->whiteStone = 'O';
-	charset->starPoint = ',';
-	charset->emptyPoint = '.';
-	charset->hBorder = '|';
-	charset->vBorder = '-';
-
-	qDebug() << "new charset " << charset->blackStone << charset->whiteStone << charset->starPoint << charset->emptyPoint;
-
 	addImportAsBrother = false;
 	fastLoad = false;
 	language = "Default";
@@ -164,7 +153,6 @@ Setting::~Setting()
 {
 	// write to file
 //	saveSettings();
-	delete charset;
 }
 
 void Setting::loadSettings()
@@ -244,16 +232,6 @@ void Setting::loadSettings()
 	updateFont(fontLists, "FONT_LIST");
 	updateFont(fontClocks, "FONT_CLOCK");
 	updateFont(fontConsole, "FONT_CONSOLE");
-	s = readEntry("CHARSET");
-	// Cope with nul characters written to the config file by qGo.
-	if (s.length() >= 6 && s.at(0).toAscii() != '\0') {
-		charset->blackStone = s.at(0).toAscii();
-		charset->emptyPoint = s.at(1).toAscii();
-		charset->hBorder = s.at(2).toAscii();
-		charset->starPoint = s.at(3).toAscii();
-		charset->vBorder = s.at(4).toAscii();
-		charset->whiteStone = s.at(5).toAscii();
-	}
 }
 
 QString Setting::fontToString(QFont f)
@@ -321,18 +299,6 @@ void Setting::saveSettings()
 	writeEntry("FONT_LIST", fontToString(fontLists));
 	writeEntry("FONT_CLOCK", fontToString(fontClocks));
 	writeEntry("FONT_CONSOLE", fontToString(fontConsole));
-
-	QString cs = "";
-
-	cs += QChar(charset->blackStone);
-	cs += QChar(charset->emptyPoint);
-	cs += QChar(charset->hBorder);
-	cs += QChar(charset->starPoint);
-	cs += QChar(charset->vBorder);
-	cs += QChar(charset->whiteStone);
-
-	qDebug() << "CHARSET " << cs;
-	writeEntry("CHARSET", cs);
 
 	writeIntEntry("VERSION", SETTING_VERSION);
 

@@ -1365,29 +1365,8 @@ void BoardHandler::updateCurrentMatrix(StoneColor c, int x, int y)
 void BoardHandler::exportASCII()
 {
 	TextView dlg(board);
-	dlg.setMatrix(tree->getCurrent()->getMatrix(), setting->charset);
+	dlg.setMatrix(tree->getCurrent()->getMatrix());
 	dlg.exec();
-}
-
-bool BoardHandler::importASCII(const QString &fileName, bool fromClipboard)
-{
-#if 0
-	QString filenameORstring = fromClipboard ? QApplication::clipboard()->text() : fileName;  
-	
-	if (gameMode == modeScore)
-		return false;
-	
-	clearNode(setting->addImportAsBrother);
-	
-	if (!sgfParser->parseASCII(filenameORstring, setting->charset, !fromClipboard))
-		return false;
-	
-	updateMove(tree->getCurrent());
-	
-	board->setModified();
-	
-	return true;
-#endif
 }
 
 bool BoardHandler::importSGFClipboard()

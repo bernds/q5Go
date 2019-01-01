@@ -58,7 +58,6 @@ public:
 	QString fontToString(QFont);
 	void updateFont(QFont&, QString);
 
-	ASCII_Import *charset;
 	bool addImportAsBrother;
 	bool fastLoad;
 	QFont fontStandard, fontMarks, fontComments, fontLists, fontClocks, fontConsole;

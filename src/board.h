@@ -111,8 +111,6 @@ public:
 	void setGameData(GameData *gd) { boardHandler->setGameData(gd); }
 	void exportPicture(const QString &fileName, const QString &filter, bool toClipboard=false);
 	void exportASCII() { boardHandler->exportASCII(); }
-	bool importASCII(const QString &fileName, bool fromClipboard=false)
-		{ return boardHandler->importASCII(fileName, fromClipboard); }
 	bool importSGFClipboard() { return boardHandler->importSGFClipboard(); }
 	bool exportSGFtoClipB() { return boardHandler->exportSGFtoClipB(); }
 	void doCountDone();

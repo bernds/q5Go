@@ -372,21 +372,10 @@ const QString Matrix::saveEditedMoves(Matrix *parent)
 	return sAB + sAW + sAE;
 }
 
-const QString Matrix::printMe(ASCII_Import *charset)
+const QString Matrix::printMe()
 {
 	ASSERT(size > 0 && size <= 36);
-	
-#if 0
-	qDebug("BLACK STONE CHAR %c\n"
-		"WHITE STONE CHAR %c\n"
-		"STAR POINT  CHAR %c\n"
-		"EMPTY POINT CHAR %c\n",
-		charset->blackStone,
-		charset->whiteStone,
-		charset->starPoint,
-		charset->emptyPoint);
-#endif
-	
+
 	int i, j;
 	QString str;
 	
@@ -406,8 +395,8 @@ const QString Matrix::printMe(ASCII_Import *charset)
 		{
 			switch (abs(matrix[j][i] % 10))
 			{
-			case stoneBlack: str += QChar(charset->blackStone); str += " "; break;
-			case stoneWhite: str += QChar(charset->whiteStone); str += " "; break;
+			case stoneBlack: str += 'X'; str += " "; break;
+			case stoneWhite: str += 'O'; str += " "; break;
 			default:
 				// Check for starpoints
 				if (size > 9)  // 10x10 or larger
@@ -422,7 +411,7 @@ const QString Matrix::printMe(ASCII_Import *charset)
 						(i == size-4 && j == (size+1)/2 - 1) ||
 						(i == (size+1)/2 - 1 && j == (size+1)/2 - 1))
 					{
-						str += QChar(charset->starPoint);
+						str += QChar('.');
 						str += " ";
 						break;
 					}
@@ -434,13 +423,13 @@ const QString Matrix::printMe(ASCII_Import *charset)
 						(i == size-3 && j == 2) ||
 						(i == size-3 && j == size-3))
 					{
-						str += QChar(charset->starPoint);
+						str += QChar('.');
 						str += " ";
 						break;
 					}
 				}
 				
-				str += QChar(charset->emptyPoint);
+				str += '.';
 				str += " ";
 				break;
 			}

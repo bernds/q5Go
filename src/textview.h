@@ -17,7 +17,7 @@ class TextView : public QDialog, public Ui::TextViewGUI
 public:
 	TextView(QWidget* parent = 0);
 	~TextView();
-	void setMatrix(Matrix *m, ASCII_Import *charset);
+	void setMatrix(Matrix *m);
 
 public slots:
 	void toClipboard();
