@@ -1264,7 +1264,7 @@ void ClientWindow::slot_cbconnect(const QString &txt)
 			}
 	}
 
-	if (!h) {
+	if (!h && hostlist.length () > 0) {
 		h = hostlist.first ();
 		i = 0;
 	}
@@ -2685,7 +2685,7 @@ void ClientWindow::slotFileNewBoard()
 
 void ClientWindow::slotFileNewGame()
 {   
-  MainWindow *w = setting->qgo->addBoardWindow() ;
+	MainWindow *w = setting->qgo->addBoardWindow() ;
 	w->slotFileNewGame();
 }
 
