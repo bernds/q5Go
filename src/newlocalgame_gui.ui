@@ -30,7 +30,7 @@
         <number>6</number>
       </property>
       <item row="0" column="0">
-        <widget class="Q3Frame" name="Frame13">
+        <widget class="QFrame" name="Frame13">
           <property name="frameShape" stdset="0">
             <enum>QFrame::StyledPanel</enum>
           </property>
@@ -148,7 +148,7 @@
         </layout>
       </item>
       <item row="1" column="0">
-        <widget class="Q3Frame" name="Frame14">
+        <widget class="QFrame" name="Frame14">
           <property name="frameShape" stdset="0">
             <enum>QFrame::StyledPanel</enum>
           </property>
@@ -280,7 +280,7 @@
         </widget>
       </item>
       <item row="2" column="0">
-        <widget class="Q3Frame" name="Frame14_2">
+        <widget class="QFrame" name="Frame14_2">
           <property name="frameShape" stdset="0">
             <enum>QFrame::StyledPanel</enum>
           </property>

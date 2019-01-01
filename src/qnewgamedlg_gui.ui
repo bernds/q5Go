@@ -36,7 +36,7 @@
   </property>
   <layout class="QGridLayout">
    <item row="2" column="0" colspan="2">
-    <widget class="Q3GroupBox" name="IGSgroup_box_2">
+    <widget class="QGroupBox" name="IGSgroup_box_2">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
        <horstretch>0</horstretch>
@@ -69,7 +69,7 @@
     </widget>
    </item>
    <item row="0" column="1">
-    <widget class="Q3GroupBox" name="groupBox1_2">
+    <widget class="QGroupBox" name="groupBox1_2">
      <property name="title">
       <string>Black Player</string>
      </property>
@@ -153,7 +153,7 @@
     </widget>
    </item>
    <item row="1" column="0" colspan="2">
-    <widget class="Q3GroupBox" name="groupBox4">
+    <widget class="QGroupBox" name="groupBox4">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
        <horstretch>0</horstretch>
@@ -292,7 +292,7 @@
     </widget>
    </item>
    <item row="0" column="0">
-    <widget class="Q3GroupBox" name="groupBox1_2_2">
+    <widget class="QGroupBox" name="groupBox1_2_2">
      <property name="title">
       <string>White Player</string>
      </property>
@@ -450,12 +450,6 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
-  <customwidget>
-   <class>Q3GroupBox</class>
-   <extends>QGroupBox</extends>
-   <header>Qt3Support/Q3GroupBox</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>KomiSpinBox</class>
    <extends>QWidget</extends>

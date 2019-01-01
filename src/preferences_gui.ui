@@ -207,7 +207,7 @@ After placing and/or undo release button for returning to starting point automat
       </attribute>
       <layout class="QGridLayout">
        <item row="0" column="1">
-        <widget class="Q3ButtonGroup" name="ButtonGroup3">
+        <widget class="QGroupBox" name="ButtonGroup3">
          <property name="title">
           <string>Font</string>
          </property>
@@ -875,7 +875,7 @@ You can set the warning time besides</string>
         </widget>
        </item>
        <item row="2" column="0" colspan="2">
-        <widget class="Q3GroupBox" name="GroupBox8">
+        <widget class="QGroupBox" name="GroupBox8">
          <property name="toolTip">
           <string>Set application language</string>
          </property>
@@ -931,7 +931,7 @@ If your language is not supported, you might consider translating qGo. Please ch
       </attribute>
       <layout class="QGridLayout">
        <item row="0" column="1" rowspan="3">
-        <widget class="Q3GroupBox" name="boardButtonGroup">
+        <widget class="QGroupBox" name="boardButtonGroup">
          <property name="title">
           <string>Board</string>
          </property>
@@ -1155,7 +1155,7 @@ Swaps sidebar and board, thus board is on the left and sidbar is on the right.</
         </widget>
        </item>
        <item row="3" column="0" colspan="2">
-        <widget class="Q3GroupBox" name="GoEnginegroup_box_2">
+        <widget class="QGroupBox" name="GoEnginegroup_box_2">
          <property name="title">
           <string>Goban</string>
          </property>
@@ -1263,7 +1263,7 @@ If the picture is not set, or unvalid, a default picture is used by qgo</string>
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="Q3GroupBox" name="antiClickoGroup">
+        <widget class="QGroupBox" name="antiClickoGroup">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -1271,7 +1271,7 @@ If the picture is not set, or unvalid, a default picture is used by qgo</string>
           </sizepolicy>
          </property>
          <property name="title">
-          <string>On line games</string>
+          <string>Online games</string>
          </property>
          <layout class="QVBoxLayout">
           <property name="spacing">
@@ -1309,7 +1309,7 @@ If you press to enter a move on the board, the move will not be acknowledged if 
         </widget>
        </item>
        <item row="2" column="0">
-        <widget class="Q3GroupBox" name="autoplayGroup">
+        <widget class="QGroupBox" name="autoplayGroup">
          <property name="title">
           <string>Autoplay</string>
          </property>
@@ -1445,7 +1445,7 @@ If not available then interval time is used.</string>
           <number>0</number>
          </property>
          <item>
-          <widget class="Q3GroupBox" name="GroupBox7">
+          <widget class="QGroupBox" name="GroupBox7">
            <property name="toolTip">
             <string>Display variations</string>
            </property>
@@ -1517,7 +1517,7 @@ Select how to display all brothers of the current move. Either not at all, or as
         </spacer>
        </item>
        <item row="4" column="0" colspan="2">
-        <widget class="Q3ButtonGroup" name="buttonGroup6">
+        <widget class="QGroupBox" name="buttonGroup6">
          <property name="title">
           <string>Stones</string>
          </property>
@@ -1578,7 +1578,7 @@ This will display realistic 3D stones with stripes and shadow</string>
       </attribute>
       <layout class="QGridLayout">
        <item row="0" column="0">
-        <widget class="Q3GroupBox" name="GoEnginegroup_box">
+        <widget class="QGroupBox" name="GoEnginegroup_box">
          <property name="title">
           <string>Go Engine</string>
          </property>
@@ -1650,7 +1650,7 @@ This will display realistic 3D stones with stripes and shadow</string>
        <item row="1" column="0">
         <layout class="QHBoxLayout">
          <item>
-          <widget class="Q3ButtonGroup" name="buttonGroup4">
+          <widget class="QGroupBox" name="buttonGroup4">
            <property name="title">
             <string>Default for White</string>
            </property>
@@ -1680,7 +1680,7 @@ This will display realistic 3D stones with stripes and shadow</string>
           </widget>
          </item>
          <item>
-          <widget class="Q3ButtonGroup" name="buttonGroup5">
+          <widget class="QGroupBox" name="buttonGroup5">
            <property name="title">
             <string>Default for Black</string>
            </property>
@@ -1728,7 +1728,7 @@ This will display realistic 3D stones with stripes and shadow</string>
         </spacer>
        </item>
        <item row="2" column="0">
-        <widget class="Q3GroupBox" name="groupBox25_3">
+        <widget class="QGroupBox" name="groupBox25_3">
          <property name="title">
           <string>Default games settings</string>
          </property>
@@ -2397,7 +2397,7 @@ If 'None' is selected, Latin1 encoding will be used, common in western world.
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="Q3GroupBox" name="groupBox26">
+        <widget class="QGroupBox" name="groupBox26">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -2492,7 +2492,7 @@ When toggled on, the last used directory when loading or saving sgf files will b
         </widget>
        </item>
        <item row="2" column="0" rowspan="2">
-        <widget class="Q3GroupBox" name="GroupBox4">
+        <widget class="QGroupBox" name="GroupBox4">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
            <horstretch>0</horstretch>
@@ -3789,7 +3789,7 @@ Click to get a new, editable offline window.</string>
         </widget>
        </item>
        <item row="9" column="0">
-        <widget class="Q3GroupBox" name="IGSgroup_box">
+        <widget class="QGroupBox" name="IGSgroup_box">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
            <horstretch>0</horstretch>
@@ -3841,7 +3841,7 @@ On IGS only.</string>
         </widget>
        </item>
        <item row="9" column="1">
-        <widget class="Q3GroupBox" name="IGSgroup_box_2">
+        <widget class="QGroupBox" name="IGSgroup_box_2">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
            <horstretch>0</horstretch>
@@ -4740,21 +4740,9 @@ up to :</string>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>Q3GroupBox</class>
-   <extends>QGroupBox</extends>
-   <header>Qt3Support/Q3GroupBox</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>Q3Frame</class>
    <extends>QFrame</extends>
    <header>Qt3Support/Q3Frame</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>Q3ButtonGroup</class>
-   <extends>Q3GroupBox</extends>
-   <header>Qt3Support/Q3ButtonGroup</header>
    <container>1</container>
   </customwidget>
   <customwidget>
