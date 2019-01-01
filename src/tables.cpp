@@ -516,14 +516,12 @@ void ClientWindow::slot_channelinfo(int nr, const QString &txt)
 	else if (txt == QString("*off*"))
 	{
 		// check if channel exists in list
-		bool found = false;
-		for (h = channellist.first(); h != 0 && !found; h = channellist.next())
-		{
+		for (auto h: channellist) {
 			// compare numbers
 			if (h->get_nr() == nr)
 			{
-				found = true;
-				channellist.remove();
+				channellist.removeOne(h);
+				break;
 			}
 		}
 	}
@@ -540,13 +538,13 @@ void ClientWindow::slot_channelinfo(int nr, const QString &txt)
 
 	// check if channel exists in list
 	bool found = false;
-	for (h = channellist.first(); h != 0 && !found; h = channellist.next())
-	{
+	for (auto h: channellist) {
 		// compare numbers
 		if (h->get_nr() == nr)
 		{
 			found = true;
 			ch = h;
+			break;
 		}
 	}
 
@@ -555,7 +553,9 @@ void ClientWindow::slot_channelinfo(int nr, const QString &txt)
 	{
 		// init channel
 		ch = new Channel(nr);
-		channellist.inSort(ch);
+		channellist.append (ch);
+		std::sort (channellist.begin (), channellist.end (),
+			   [] (Channel *a, Channel *b) { return *a < *b; });
 	}
 
 	// now insert channel to list
@@ -572,12 +572,8 @@ void ClientWindow::slot_channelinfo(int nr, const QString &txt)
 		ch->set_channel(nr, txt);
 	}
 
-	// reset tooltip
-	QToolTip::remove(statusChannel);
-
 	// set new tooltip
-	for (h = channellist.first(); h != 0; h = channellist.next())
-	{
+	for (auto h: channellist) {
 		if (h->get_users().length() > 2)
 		{
 			// check if users are available; skipped if only title
@@ -591,7 +587,7 @@ void ClientWindow::slot_channelinfo(int nr, const QString &txt)
 		}
 	}
 
-	QToolTip::add(statusChannel, tipstring);
+	statusChannel->setToolTip (tipstring);
 }
 
 // user buttons
@@ -829,28 +825,6 @@ Host::Host(const QString &title, const QString &host, const unsigned int port, c
 	pw = pass;
 	cdc = cod;
 }
-
-/*
- *   List to help keeping things sorted
- */
-
-int ChannelList::compareItems(Item d1, Item d2)
-{
-	Channel *s1 = static_cast<Channel*>(d1);
-	Channel *s2 = static_cast<Channel*>(d2);
-
-	CHECK_PTR(s1);
-	CHECK_PTR(s2);
-
-	if (s1 > s2)
-		return 1;
-	else if (s1 < s2)
-		return -1;
-	else
-		// s1 == s2;
-		return 0;
-}
-
 
 /*
  *   Talk - Class to handle  Talk Dialog Windows

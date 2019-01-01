@@ -1636,23 +1636,15 @@ void ClientWindow::slot_mouse_games(int button, QTreeWidgetItem *lv)
 
 void ClientWindow::slot_removeMatchDialog(const QString &opponent)
 {
-	// set up match dialog
-	// match_dialog()
 	GameDialog *dlg = NULL;
 
-
-	// seek dialog
-		// look for same opponent
-	dlg = matchlist.first();
-	while (dlg && dlg->playerOpponentEdit->text() != opponent ) //&& dlg->playerBlackEdit->text() != opponent)
-		dlg = matchlist.next();
-
-	if (dlg)
-	{
-    		matchlist.remove();
-    		delete dlg;
-    	}
-}   
+	for (auto it: matchlist)
+		if (it->playerOpponentEdit->text() == opponent) {
+			matchlist.removeOne (it);
+			delete it;
+			break;
+		}
+}
 
 
 void ClientWindow::slot_matchrequest(const QString &line, bool myrequest)
@@ -1678,17 +1670,18 @@ void ClientWindow::slot_matchrequest(const QString &line, bool myrequest)
 	}
 
 	// look for same opponent
-	dlg = matchlist.first();
-	while (dlg && dlg->playerOpponentEdit->text() != opponent)// && dlg->playerBlackEdit->text() != opponent)
-		dlg = matchlist.next();
+	for (auto it: matchlist)
+		if (it->playerOpponentEdit->text() == opponent) {
+			dlg = it;
+			break;
+		}
 
 	if (!dlg)
 	{
-		matchlist.insert(0, new GameDialog(0, tr("New Game")));
-		dlg = matchlist.current();
+		dlg = new GameDialog(0, tr("New Game"));
+		matchlist.append (dlg);
 
-		if (myAccount->get_gsname() == NNGS ||
-			myAccount->get_gsname() == LGS)
+		if (myAccount->get_gsname() == NNGS || myAccount->get_gsname() == LGS)
 		{
 			// now connect suggest signal
 			connect(parser,
@@ -2159,15 +2152,12 @@ void ClientWindow::slot_mouse_players(int button, QTreeWidgetItem *lv)
 void ClientWindow::slot_pbRelTabs()
 {
 	// seek dialog
-	Talk *dlg = talklist.first();
-	while (dlg)
-	{
+	for (auto dlg: talklist) {
 		if (dlg->get_name().indexOf('*') == -1)
 		{
-			TabWidget_mini_2->removePage(dlg->get_tabWidget());
+			TabWidget_mini_2->removeTab (TabWidget_mini_2->indexOf (dlg->get_tabWidget ()));
 			dlg->pageActive = false;
 		}
-		dlg = talklist.next();
 	}
 }
 
@@ -2175,16 +2165,13 @@ void ClientWindow::slot_pbRelTabs()
 void ClientWindow::slot_pbRelOneTab(QWidget *w)
 {
 	// seek dialog
-	Talk *dlg = talklist.first();
-	while (dlg)
-	{
+	for (auto dlg: talklist) {
 		if (dlg->get_tabWidget() == w)
 		{
-			TabWidget_mini_2->removePage(w);
+			TabWidget_mini_2->removeTab (TabWidget_mini_2->indexOf (w));
 			dlg->pageActive = false;
 			return;
 		}
-		dlg = talklist.next();
 	}
 
 }
@@ -2192,7 +2179,6 @@ void ClientWindow::slot_pbRelOneTab(QWidget *w)
  // handle chat boxes in a list
 void ClientWindow::slot_talk(const QString &name, const QString &text, bool isplayer)
 {
-	static Talk *dlg;
 	QString txt;
 	bool bonus = false;
 	bool autoAnswer = true;
@@ -2212,59 +2198,48 @@ void ClientWindow::slot_talk(const QString &name, const QString &text, bool ispl
 		autoAnswer = false;
 	}
 
-	// dialog recently used?
-	if (dlg && dlg->get_name() == name)
-		dlg->write(txt);
-	else if (!name.isEmpty() && name != tr("msg*"))
-	{
-		// seek dialog
-		dlg = talklist.first();
-		while (dlg != NULL && dlg->get_name() != name)
-			dlg = talklist.next();
-
-		// not found -> create new dialog
-		if (!dlg)
-		{
-			talklist.insert(0, new Talk(name, 0, isplayer));
-			dlg = talklist.current();
-			connect(dlg, SIGNAL(signal_talkto(QString&, QString&)), this, SLOT(slot_talkto(QString&, QString&)));
-			connect(dlg, SIGNAL(signal_matchrequest(const QString&,bool)), this, SLOT(slot_matchrequest(const QString&,bool)));
-
-			// make new multiline field
-			TabWidget_mini_2->addTab(dlg->get_tabWidget(), dlg->get_name());
-
-			if (name != tr("Shouts*"))
-				TabWidget_mini_2->showPage(dlg->get_tabWidget());
-
-			dlg->pageActive = true;
-			connect(dlg->get_le(), SIGNAL(returnPressed()), dlg, SLOT(slot_returnPressed()));
-			connect(dlg, SIGNAL(signal_pbRelOneTab(QWidget*)), this, SLOT(slot_pbRelOneTab(QWidget*)));
-
-			if (!name.isEmpty() && isplayer)
-				slot_sendcommand("stats " + name, false);    // automatically request stats
+	Talk *dlg = nullptr;
+	for (auto it: talklist)
+		if (it->get_name () == name) {
+			dlg = it;
+			break;
 		}
 
-		CHECK_PTR(dlg);
-		dlg->write(txt);
+	if (!dlg && !name.isEmpty () && name != tr ("msg*")) {
+		// not found -> create new dialog
+		dlg = new Talk(name, 0, isplayer);
+		talklist.append (dlg);
+
+		connect(dlg, SIGNAL(signal_talkto(QString&, QString&)), this, SLOT(slot_talkto(QString&, QString&)));
+		connect(dlg, SIGNAL(signal_matchrequest(const QString&,bool)), this, SLOT(slot_matchrequest(const QString&,bool)));
+		connect(dlg->get_le(), SIGNAL(returnPressed()), dlg, SLOT(slot_returnPressed()));
+		connect(dlg, SIGNAL(signal_pbRelOneTab(QWidget*)), this, SLOT(slot_pbRelOneTab(QWidget*)));
+
+		dlg->pageActive = false;
+		if (!name.isEmpty() && isplayer)
+			slot_sendcommand("stats " + name, false);    // automatically request stats
 
 		// play sound on new created dialog
 		bonus = true;
-	}
 
+	}
+	if (dlg) {
+		dlg->write(txt);
+		QWidget *w = dlg->get_tabWidget ();
+		if (!dlg->pageActive)
+		{
+			TabWidget_mini_2->addTab(w, dlg->get_name());
+			dlg->pageActive = true;
+			if (name != tr("Shouts*"))
+				TabWidget_mini_2->setCurrentIndex(TabWidget_mini_2->indexOf (w));
+		}
+	}
 	// check if it was a channel message
 	autoAnswer &= (isplayer && autoAwayMessage && !name.contains('*') && (!text.isEmpty () && text[0] == '>'));
 	if (autoAnswer)
 	{
 		// send when qGo is NOT the active application - TO DO
 		sendcommand("tell " + name + " [I'm away right now]");
-	}
-
-	if (!dlg->pageActive)
-	{
-		TabWidget_mini_2->addTab(dlg->get_tabWidget(), dlg->get_name());
-		dlg->pageActive = true;
-		TabWidget_mini_2->showPage(dlg->get_tabWidget());
-		
 	}
 
 	// play a sound - not for shouts
@@ -2878,51 +2853,40 @@ void ClientWindow::slotViewToolBar(bool toggle)
 
 void ClientWindow::slot_statsPlayer(Player *p)
 {
-	 Talk *dlg;
-  
-  if (!p->name.isEmpty())
-	  {
-		// seek dialog
-		  dlg = talklist.first();
-		  while (dlg != NULL && dlg->get_name() != p->name)
-		  	dlg = talklist.next();
+	if (p->name.isEmpty())
+		return;
 
-	  	//  found 
-	  	if (dlg)
-        {
-         dlg->stats_rating->setText(p->rank);
-         dlg->stats_info->setText(p->info);
-         dlg->stats_default->setText(p->extInfo);
-	 dlg->stats_wins->setText(p->won);
-	 dlg->stats_loss->setText(p->lost );
-	 dlg->stats_country->setText(p->country);
-         dlg->stats_playing->setText(p->play_str);
-         dlg->stats_rated->setText(p->rated);
-         dlg->stats_address->setText(p->address);
-	 
-	 // stored either idle time or last access	 
-	 dlg->stats_idle->setText(p->idle);
-	 dlg->Label_Idle->setText(!p->idle.isEmpty() && p->idle.at(0).isDigit() ? "Idle :": "Last log :");
+	for (auto dlg: talklist) {
+		if (dlg->get_name() == p->name) {
+			dlg->stats_rating->setText(p->rank);
+			dlg->stats_info->setText(p->info);
+			dlg->stats_default->setText(p->extInfo);
+			dlg->stats_wins->setText(p->won);
+			dlg->stats_loss->setText(p->lost );
+			dlg->stats_country->setText(p->country);
+			dlg->stats_playing->setText(p->play_str);
+			dlg->stats_rated->setText(p->rated);
+			dlg->stats_address->setText(p->address);
 
-	 
-        }   
-    }
-
-
-  
-}  
+			// stored either idle time or last access
+			dlg->stats_idle->setText(p->idle);
+			dlg->Label_Idle->setText(!p->idle.isEmpty() && p->idle.at(0).isDigit() ? "Idle :": "Last log :");
+		}
+	}
+}
 
 void ClientWindow::slot_room(const QString& room, bool b)
 {
+	QList<QListWidgetItem *> items = RoomList->findItems(room.left(3), Qt::MatchStartsWith);
 	//do we already have the same room number in list ?
-	if (RoomList->findItem(room.left(3), Q3ListView::BeginsWith ))
+	if (items.length () > 0)
 		return;
 	//so far, we just create the room if it is open
 	if (!b)
-		RoomList->insertItem (room,  -1 );
-	
-	//RoomList->item(RoomList->count()-1)->setSelectable(!b);		
-}	
+		RoomList->insertItem (-1, room);
+
+	//RoomList->item(RoomList->count()-1)->setSelectable(!b);
+}
 
 void ClientWindow::slot_enterRoom(const QString& room)
 {
@@ -2940,13 +2904,13 @@ void ClientWindow::slot_enterRoom(const QString& room)
 void ClientWindow::slot_leaveRoom()
 {
 	slot_enterRoom("0");
-}	
+}
 
 
-void ClientWindow::slot_RoomListClicked(Q3ListBoxItem *qli)
+void ClientWindow::slot_RoomListClicked(QListWidgetItem *qli)
 {
 	slot_enterRoom(qli->text().section(":",0,0));
-}	
+}
 
 void ClientWindow::slot_addSeekCondition(const QString& a, const QString& b, const QString& c, const QString& d, const QString& )
 {

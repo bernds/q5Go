@@ -10,7 +10,6 @@
 #include "talk_gui.h"
 #include <QString>
 #include <QObject>
-#include <Q3PtrList>
 
 //-----------
 
@@ -51,22 +50,11 @@ public:
 	// operators <, ==
 	int operator== (Channel h)
 		{ return (this->get_nr() == h.get_nr()); };
-	int operator== (Channel *h)
-		{ return (this->get_nr() == h->get_nr()); };
 	bool operator< (Channel h)
 		{ return (this->get_nr() < h.get_nr()); };
-	bool operator< (Channel *h)
-		{ return (this->get_nr() < h->get_nr()); };
 };
 
-class ChannelList : public Q3PtrList<Channel>
-{
-public:
-	ChannelList() {};
-	~ChannelList() {};
-	
-	virtual int compareItems(Item d1, Item d2);
-};
+typedef QList<Channel *> ChannelList;
 
 //-----------
 
@@ -124,12 +112,8 @@ public:
 	// operators <, ==
 	int operator== (Host h)
 		{ return (this->title() == h.title()); };
-	int operator== (Host *h)
-		{ return (this->title() == h->title()); };
 	bool operator< (Host h)
 		{ return (this->title() < h.title()); };
-	bool operator< (Host *h)
-		{ return (this->title() < h->title()); };
 
 private:
 	QString t;

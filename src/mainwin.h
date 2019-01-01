@@ -144,7 +144,7 @@ public slots:
 	void slot_room(const QString&, bool );
 	void slot_enterRoom(const QString& );
 	void slot_leaveRoom();
-	void slot_RoomListClicked(Q3ListBoxItem*);
+	void slot_RoomListClicked(QListWidgetItem*);
 	void slot_addSeekCondition(const QString&, const QString&, const QString&, const QString&, const QString&);
 	void slot_clearSeekCondition();
 	void slot_cancelSeek();
@@ -217,14 +217,14 @@ private:
 	bool               tn_ready;
 	bool               tn_wait_for_tn_ready;
 	//	bool               tn_active;
-	ChannelList        channellist;
-	Q3PtrList<Talk>     talklist;
-	Q3PtrList<GameDialog> matchlist;
-	Q3PtrList<sendBuf>  sendBuffer;
 
-	//	QStatusBar         *statusBar;
-	QLabel             *statusUsers, *statusGames, *statusServer, *statusChannel,
-	                   *statusOnlineTime, *statusMessage;
+	ChannelList channellist;
+	QList<Talk *> talklist;
+	QList<GameDialog *> matchlist;
+	Q3PtrList<sendBuf> sendBuffer;
+
+	QLabel *statusUsers, *statusGames, *statusServer, *statusChannel;
+	QLabel *statusOnlineTime, *statusMessage;
 
 	// timing aids
 	void 		timerEvent(QTimerEvent*);

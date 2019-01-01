@@ -575,7 +575,7 @@ This will take effect after refreshing the players list.</string>
                       </widget>
                     </item>
                     <item row="0" column="0" rowspan="1" colspan="2">
-                      <widget class="Q3ListBox" name="RoomList"/>
+                      <widget class="QListWidget" name="RoomList"/>
                     </item>
                   </layout>
                 </widget>
@@ -1411,9 +1411,9 @@ displays the message box that appears at launch of a new version</string>
     </connection>
     <connection>
       <sender>RoomList</sender>
-      <signal>doubleClicked(Q3ListBoxItem*)</signal>
+      <signal>itemDoubleClicked(QListWidgetItem*)</signal>
       <receiver>ClientWindowGui</receiver>
-      <slot>slot_RoomListClicked(Q3ListBoxItem*)</slot>
+      <slot>slot_RoomListClicked(QListWidgetItem*)</slot>
     </connection>
     <connection>
       <sender>LeaveRoomButton</sender>
