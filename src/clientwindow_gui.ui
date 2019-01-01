@@ -1375,33 +1375,33 @@ displays the message box that appears at launch of a new version</string>
   <connections>
     <connection>
       <sender>setQuietMode</sender>
-      <signal>activated()</signal>
+      <signal>triggered(bool)</signal>
       <receiver>ClientWindowGui</receiver>
-      <slot>slot_cbquiet()</slot>
+      <slot>slot_cbquiet(bool)</slot>
     </connection>
     <connection>
       <sender>setOpenMode</sender>
-      <signal>activated()</signal>
+      <signal>triggered(bool)</signal>
       <receiver>ClientWindowGui</receiver>
-      <slot>slot_cbopen()</slot>
+      <slot>slot_cbopen(bool)</slot>
     </connection>
     <connection>
       <sender>setLookingMode</sender>
-      <signal>activated()</signal>
+      <signal>triggered(bool)</signal>
       <receiver>ClientWindowGui</receiver>
-      <slot>slot_cblooking()</slot>
+      <slot>slot_cblooking(bool)</slot>
     </connection>
     <connection>
       <sender>refreshGames</sender>
-      <signal>activated()</signal>
+      <signal>triggered(bool)</signal>
       <receiver>ClientWindowGui</receiver>
-      <slot>slot_pbrefreshgames()</slot>
+      <slot>slot_pbrefreshgames(bool)</slot>
     </connection>
     <connection>
       <sender>refreshPlayers</sender>
-      <signal>activated()</signal>
+      <signal>triggered(bool)</signal>
       <receiver>ClientWindowGui</receiver>
-      <slot>slot_pbrefreshplayers()</slot>
+      <slot>slot_pbrefreshplayers(bool)</slot>
     </connection>
     <connection>
       <sender>pb_releaseTalkTabs</sender>

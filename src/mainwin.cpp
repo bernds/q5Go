@@ -1324,7 +1324,7 @@ void ClientWindow::slot_checkbox(int nr, bool val)
 }
 
 // checkbox looking cklicked
-void ClientWindow::slot_cblooking()
+void ClientWindow::slot_cblooking(bool)
 {
 	bool val = setLookingMode->isChecked();
 //	setLookingMode->setChecked(val);
@@ -1336,7 +1336,7 @@ void ClientWindow::slot_cblooking()
 
 
 // checkbox open clicked
-void ClientWindow::slot_cbopen()
+void ClientWindow::slot_cbopen(bool)
 {
 	bool val = setOpenMode->isChecked();
 //	setOpenMode->setChecked(val);
@@ -1347,7 +1347,7 @@ void ClientWindow::slot_cbopen()
 }
 
 // checkbox quiet clicked
-void ClientWindow::slot_cbquiet()
+void ClientWindow::slot_cbquiet(bool)
 {
 	bool val = setQuietMode->isChecked();
 	//setQuietMode->setChecked(val);
@@ -1493,7 +1493,7 @@ void ClientWindow::slot_whoopen (bool checked)
 }
 
 // refresh games
-void ClientWindow::slot_pbrefreshgames()
+void ClientWindow::slot_pbrefreshgames(bool)
 {
 	if (gamesListSteadyUpdate)
 		slot_refresh(1);
@@ -1506,7 +1506,7 @@ void ClientWindow::slot_pbrefreshgames()
 }
 
 // refresh players
-void ClientWindow::slot_pbrefreshplayers()
+void ClientWindow::slot_pbrefreshplayers(bool)
 {
 	if (playerListSteadyUpdate)
 		slot_refresh(0);

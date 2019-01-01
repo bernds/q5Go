@@ -101,14 +101,14 @@ public slots:
 
 	// gui_BaseTable:
 	virtual void slot_cbExtUserInfo();
-	virtual void slot_cblooking();
-	virtual void slot_cbopen();
-	virtual void slot_cbquiet();
+	virtual void slot_cblooking(bool);
+	virtual void slot_cbopen(bool);
+	virtual void slot_cbquiet(bool);
 	virtual void quit();
 	virtual void slot_cbconnect(const QString&);
 	virtual void slot_connect(bool);
-	virtual void slot_pbrefreshgames();
-	virtual void slot_pbrefreshplayers();
+	virtual void slot_pbrefreshgames(bool);
+	virtual void slot_pbrefreshplayers(bool);
 	virtual void slot_toolbaractivated(const QString&);
 	virtual void slot_cmdactivated(const QString&);
 	virtual void slot_cmdactivated_int(int);
