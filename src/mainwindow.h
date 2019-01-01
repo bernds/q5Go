@@ -24,7 +24,6 @@
 class Board;
 class InterfaceHandler;
 class QSplitter;
-class Q3MultiLineEdit;
 class StatusTip;
 class qGoIF;
 class QNewGameDlg;

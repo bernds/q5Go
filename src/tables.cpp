@@ -615,19 +615,19 @@ void ClientWindow::slot_pbuser4()
 // tell, say, kibitz...
 void ClientWindow::slot_message(QString txt, QColor c)
 {
-	//QColor c0 = MultiLineEdit2->color();
-	MultiLineEdit2->setColor(c);
+	MultiLineEdit2->setTextColor(c);
 	slot_message( txt);
-	MultiLineEdit2->setColor(Qt::black);
-}  
+
+	MultiLineEdit2->setTextColor(Qt::black);
+}
 
 
 void ClientWindow::slot_message(QString txt)
 {
 	// Scroll at bottom of text, set cursor to end of line
-	if (MultiLineEdit2->text().endsWith("\n") && txt == "\n")
+	if (MultiLineEdit2->toPlainText().endsWith("\n") && txt == "\n")
 		return ;
-    
+
 	MultiLineEdit2->append(txt);
 }
 
@@ -723,14 +723,14 @@ void Account::set_caption()
 	{
 		// server unknown or no account name
 		// -> standard caption
-		parent->setCaption(standard);
+		parent->setWindowTitle(standard);
 	}
   else
 	{
 		if (status == GUEST)
-			parent->setCaption(svname + " - " + acc_name + " (guest)");
+			parent->setWindowTitle(svname + " - " + acc_name + " (guest)");
 		else
-			parent->setCaption(svname + " - " + acc_name);
+			parent->setWindowTitle(svname + " - " + acc_name);
 	}
 }
 
@@ -769,7 +769,7 @@ void Account::set_gsname(GSName gs)
 	{
 		// acc_name should be set...
 		acc_name.sprintf("Lulu");
-		qWarning("set_gsname() - acc_name not found!");
+		qWarning() << "set_gsname() - acc_name not found!";
 	}
 	
 	if (status == OFFLINE)
@@ -859,9 +859,10 @@ int ChannelList::compareItems(Item d1, Item d2)
 int Talk::counter = 0;
 
 Talk::Talk(const QString &playername, QWidget *parent, bool isplayer)
-  : QDialog (parent, playername)
+  : QDialog (parent)
 {
 	setupUi(this);
+	setWindowTitle (playername);
 	name = playername;
 
 	// create a new tab
@@ -875,9 +876,8 @@ Talk::Talk(const QString &playername, QWidget *parent, bool isplayer)
 	LineEdit1->setFont(setting->fontComments);
 
 	// do not add a button for shouts* or channels tab
-	if ( (name.indexOf('*') != -1) || (!isplayer))
+	if (name.indexOf('*') != -1 || !isplayer)
 	{
-
 		delete pb_releaseTalkTab;
 		delete pb_match;
 		delete stats_layout;
@@ -904,7 +904,7 @@ void Talk::slot_returnPressed()
 
 void Talk::slot_match()
 {
-  QString txt= name+ " " + stats_rating->text();
+	QString txt= name+ " " + stats_rating->text();
 	emit signal_matchrequest(txt,true);
 }
 

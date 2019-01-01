@@ -1409,9 +1409,10 @@ void ClientWindow::slot_updateFont()
 	cb_connect->setFont(setting->fontLists);
 
 	// comment fields
-	MultiLineEdit2->selectAll(true);
+	QTextCursor c = MultiLineEdit2->textCursor ();
+	MultiLineEdit2->selectAll();
 	MultiLineEdit2->setCurrentFont(setting->fontConsole);
-	MultiLineEdit2->selectAll(false);
+	MultiLineEdit2->setTextCursor (c);
 	MultiLineEdit3->setCurrentFont(setting->fontComments); 
 	cb_cmdLine->setFont(setting->fontComments);
 

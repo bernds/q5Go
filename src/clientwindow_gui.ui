@@ -588,7 +588,7 @@ This will take effect after refreshing the players list.</string>
                       <number>0</number>
                     </property>
                     <item>
-                      <widget class="Q3TextBrowser" name="MultiLineEdit3">
+                      <widget class="QTextBrowser" name="MultiLineEdit3">
                         <property name="sizePolicy">
                           <sizepolicy>
                             <hsizetype>7</hsizetype>
@@ -645,7 +645,7 @@ This will take effect after refreshing the players list.</string>
                     <number>0</number>
                   </property>
                   <item row="0" column="0">
-                    <widget class="Q3TextBrowser" name="MultiLineEdit2">
+                    <widget class="QTextBrowser" name="MultiLineEdit2">
                       <property name="sizePolicy">
                         <sizepolicy>
                           <hsizetype>7</hsizetype>
