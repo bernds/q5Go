@@ -6349,64 +6349,6 @@ fi
 
   if test "$GXX" = "yes"; then
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether $CXX supports -fno-exceptions" >&5
-$as_echo_n "checking whether $CXX supports -fno-exceptions... " >&6; }
-kde_cache=`echo fno-exceptions | sed 'y% .=/+-%____p_%'`
-if eval \${kde_cv_prog_cxx_$kde_cache+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-
-
-   ac_ext=cpp
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-ac_link='rm -rf SunWS_cache; ${CXX-g++} -o conftest${ac_exeext} $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&5'
-
-
-  save_CXXFLAGS="$CXXFLAGS"
-  CXXFLAGS="$CXXFLAGS -fno-exceptions"
-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-int
-main ()
-{
- return 0;
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_link "$LINENO"; then :
-  eval "kde_cv_prog_cxx_$kde_cache=yes"
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-  CXXFLAGS="$save_CXXFLAGS"
-  ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-
-fi
-
-if eval "test \"`echo '$kde_cv_prog_cxx_'$kde_cache`\" = yes"; then
- { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
- :
- CXXFLAGS="$CXXFLAGS -fno-exceptions"
-else
- { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
- :
-
-fi
-
-
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether $CXX supports -fno-check-new" >&5
 $as_echo_n "checking whether $CXX supports -fno-check-new... " >&6; }
 kde_cache=`echo fno-check-new | sed 'y% .=/+-%____p_%'`
@@ -8157,7 +8099,7 @@ test x"$pic_mode" = xno && libtool_flags="$libtool_flags --prefer-non-pic"
 case $host in
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 8160 "configure"' > conftest.$ac_ext
+  echo '#line 8102 "configure"' > conftest.$ac_ext
   if { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_compile\""; } >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
