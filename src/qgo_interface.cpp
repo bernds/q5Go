@@ -1179,7 +1179,7 @@ qWarning("slot_removestones(): NON IGS no match");
 
 	if (!pt.isEmpty() && game_id.isEmpty())
 	{
-qDebug("slot_removestones(): pt !game_id");
+		qDebug("slot_removestones(): pt !game_id");
 		// stone coords but no game number:
 		// single match mode, e.g. NNGS
 		while (qb && qb->get_Mode() != modeMatch && qb->get_Mode() != modeTeach)

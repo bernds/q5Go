@@ -95,10 +95,8 @@ void TelnetConnection::setHost(const QString h, const QString lg, const QString 
 	loginName = lg;
 	password = pw;
 	codec = cdc;
-	
-	qDebug("SELECTED %s %d, %s, %s",
-	       host.latin1(), port, loginName.latin1(),
-	       password.isNull() ? "NULL" : "***");
+
+	qDebug() << "SELECTED " << host << port << loginName << (password.isNull() ? "NULL" : "***");
 }
 
 void TelnetConnection::slotHostQuit()

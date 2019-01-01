@@ -406,16 +406,16 @@ QString Setting::getTranslationsDirectory()
 		<< "/usr/local/share/" PACKAGE "/translations"
 		<< "./translations";
 #endif
-    for (QStringList::Iterator it = list.begin(); it != list.end(); ++it)
-    {
+	for (QStringList::Iterator it = list.begin(); it != list.end(); ++it)
+	{
 		QDir d(*it);
 		if (d.exists())
 		{
-			qDebug("Translations found in %s", d.absolutePath().latin1());
+			qDebug() << "Translations found in " << d.absolutePath();
 			return d.absolutePath();
 		}
-    }
-    return "./translations";  // Hoping for the best...
+	}
+	return "./translations";  // Hoping for the best...
 }
 
 //const char* Setting::getLanguage()

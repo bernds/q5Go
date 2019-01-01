@@ -300,9 +300,9 @@ bool IGSConnection::openConnection(const QString &host, unsigned int port, const
 
 	username = user;
 	password = pass;
-	
-	qDebug("Connecting to %s %d as [%s], [%s]...", host, port, username.latin1(),
-	       (password.isNull () ? NULL : "***"));
+
+	qDebug() << "Connecting to " << host << " " << port << " as [" << username << "], ["
+		 << (password.isNull () ? NULL : "***") << "]...\n";
 	sendTextToApp(tr("Trying to connect to %1 %2").arg(host).arg(port));
 
 	ASSERT(host != 0);
