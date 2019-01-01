@@ -8,16 +8,16 @@
 #include "textview_gui.h"
 #include "globals.h"
 
-class Matrix;
-
 class TextView : public QDialog, public Ui::TextViewGUI
 {
 	Q_OBJECT
 
 public:
-	TextView(QWidget* parent = 0);
+	enum class type { exprt, gtp };
+	TextView(QWidget* parent = 0, type m = type::exprt);
 	~TextView();
-	void setMatrix(Matrix *m);
+	void append (const QString &);
+	void set (const QString &);
 
 public slots:
 	void toClipboard();

@@ -1365,7 +1365,7 @@ void BoardHandler::updateCurrentMatrix(StoneColor c, int x, int y)
 void BoardHandler::exportASCII()
 {
 	TextView dlg(board);
-	dlg.setMatrix(tree->getCurrent()->getMatrix());
+	dlg.set (tree->getCurrent()->getMatrix()->printMe ());
 	dlg.exec();
 }
 

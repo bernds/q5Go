@@ -5,31 +5,36 @@
 #include <QFileDialog>
 #include <QTextStream>
 #include <QTextEdit>
+#include <QMessageBox>
+#include <QClipboard>
+#include <QApplication>
 
 #include "config.h"
 #include "textview.h"
-#include "matrix.h"
-#include <qmessagebox.h>
-#include <qclipboard.h> 
-#include <qapplication.h>
 
 /*
-*  Constructs a TextView which is a child of 'parent', with the
-*  name 'name' and widget flags set to 'f'
-*
-*  The dialog will by default be modeless, unless you set 'modal' to
-*  TRUE to construct a modal dialog.
-*/
-TextView::TextView(QWidget* parent)
-  : QDialog (parent)
+ *  Constructs a TextView which is a child of 'parent', with the
+ *  name 'name' and widget flags set to 'f'
+ *
+ *  The dialog will by default be modeless, unless you set 'modal' to
+ *  TRUE to construct a modal dialog.
+ */
+TextView::TextView(QWidget* parent, type t)
+	: QDialog (parent)
 {
-	setupUi (this);
-	setModal (true);
+	setupUi(this);
 	textEdit->setWordWrapMode(QTextOption::WordWrap);
 	textEdit->setLineWrapColumnOrWidth(80);
 	QFont f("fixed", 10);
 	f.setStyleHint(QFont::TypeWriter);
 	textEdit->setFont(f);
+	if (t == type::gtp) {
+		exportBox->setVisible (false);
+		setWindowTitle (tr ("GTP program startup"));
+	} else {
+		gtpBox->setVisible (false);
+		setWindowTitle (tr ("Export to ASCII"));
+	}
 }
 
 /*
@@ -45,9 +50,8 @@ TextView::~TextView()
  */
 void TextView::saveMe()
 {
-	QString fileName(QFileDialog::getSaveFileName(QString::null,
-		tr("Text Files (*.txt);;All Files (*)"),
-		this));
+	QString fileName(QFileDialog::getSaveFileName(this, QString::null,
+		tr("Text Files (*.txt);;All Files (*)")));
 	if (fileName.isEmpty())
 		return;
 
@@ -62,24 +66,27 @@ void TextView::saveMe()
 
 		if (!file.open(QIODevice::WriteOnly))
 		{
-			QString s;
-			s.sprintf(tr("Failed to write to file") + " %s", fileName.latin1());
+			QString s = tr("Failed to write to file ") + fileName;
 			QMessageBox::warning(this, PACKAGE, s);
 			return;
 		}
 
 		QTextStream stream(&file);
-		stream << textEdit->text();
+		stream << textEdit->toPlainText();
 		file.close();
 }
 
-void TextView::setMatrix(Matrix *m)
+void TextView::append (const QString &s)
 {
-	CHECK_PTR(m);
-	textEdit->setText(m->printMe());
+	textEdit->append (s);
+}
+
+void TextView::set (const QString &s)
+{
+	textEdit->setText (s);
 }
 
 void TextView::toClipboard()
 {
-	QApplication::clipboard()->setText(textEdit->text());
+	QApplication::clipboard()->setText(textEdit->toPlainText());
 }
