@@ -869,28 +869,6 @@ void Board::mousePressEvent(QMouseEvent *e)
 		}*/
 		break;
 
-	case modeComputer:                          //added eb 12
-
-
-		if (boardHandler->getBlackTurn())
-		{
-			if (myColorIsBlack)
-			{
-				boardHandler->addStone(stoneBlack, x, y);
-				emit signal_Stone_Computer(stoneBlack, x, y);
-			}
-		}
-		else
-		{
-			if (!myColorIsBlack)
-			{
-				boardHandler->addStone(stoneWhite, x, y);
-				emit signal_Stone_Computer(stoneWhite, x, y);
-			}
-		}
-		break;                                   // end add eb 12
-
-
 	case modeTeach:
 		if (boardHandler->getBlackTurn())
 		{
@@ -973,21 +951,6 @@ bool Board::openSGF(const QString &fileName)
     // Load the sgf
     if (!boardHandler->loadSGF(fileName))
 		return false;
-
-    canvas->update();
-    setModified(false);
-    return true;
-}
-
-bool Board::startComputerPlay(QNewGameDlg * dlg,const QString &fileName, const QString &computer_path)
-{
-
-     // Clean up everything and get to last move
-    //clearData();
-
-    // Initiate the dialog with computer
-    if (!boardHandler->openComputerSession(dlg,fileName,computer_path))
-    		return false;
 
     canvas->update();
     setModified(false);

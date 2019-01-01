@@ -111,7 +111,6 @@ public:
 	void addtime_w(int m);
 	void set_myName(const QString &n) { myName = n; }
 	void clearObserverList() { win->getListView_observers()->clear(); }
-	void playComputer(StoneColor);
 
 	// teaching features
 	bool        ExtendedTeachingGame;
@@ -137,10 +136,6 @@ public slots:
 
 	// Board
 	void slot_addStone(enum StoneColor, int, int);
-	void slot_stoneComputer(enum StoneColor, int, int);    
-	void slot_PassComputer(StoneColor c) ;                 
-	void slot_UndoComputer(StoneColor c) ;                 
- 	void slot_DoneComputer() ;                 
 	void slot_doPass();
 	void slot_doResign();
 	void slot_doUndo();
@@ -214,7 +209,6 @@ public slots:
 	// parser/mainwindow
 	void slot_move(GameInfo*);
 	void slot_move(Game*);
-	void slot_computer_game(QNewGameDlg*);
 	void slot_kibitz(int, const QString&, const QString&);
 	void slot_title(const GameInfo *, const QString&);
 	void slot_komi(const QString&, const QString&, bool);

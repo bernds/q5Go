@@ -182,11 +182,6 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 		case 4: game_id = txt.toInt();
 			break;
 
-		// computer game
-		case 6: game_id = ++localBoardCounter; //txt.toInt();
-			qDebug() << QString("computer game no. %1").arg(game_id);
-			break;
-
 		// remove all boards! -> if connection is closed
 		// but: set options for local actions
 		case -1:
@@ -269,11 +264,6 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 				SIGNAL(signal_addStone(enum StoneColor, int, int)),
 				qgobrd,
 				SLOT(slot_addStone(enum StoneColor, int, int)));
-			// board-> stones (computer game)
-			connect(qgobrd->get_win()->getBoard(),
-				SIGNAL(signal_Stone_Computer(enum StoneColor, int, int)),
-				qgobrd,
-				SLOT(slot_stoneComputer(enum StoneColor, int, int)));
 
 			connect(qgobrd,
 				SIGNAL(signal_2passes(const QString&,const QString& )),
@@ -707,90 +697,6 @@ void qGoIF::slot_move(Game *g)
 	parse_move(1, 0, g);
 }
 
-void qGoIF::slot_computer_game(QNewGameDlg * dlg)
-{
-	Game  g;
-
-	//	g.nr = lv_popupGames->text(0);
-
-	g.wname = dlg->getPlayerWhiteName();
-	//	g.wrank = lv_popupGames->text(2);
-	g.bname = dlg->getPlayerBlackName();
-	//	g.brank = lv_popupGames->text(4);
-	g.mv = "0";
-	g.Sz.setNum(dlg->getSize()); 
-	g.H.setNum(dlg->getHandicap());
-	g.K.setNum(dlg->getKomi());
-	//g.By = lv_popupGames->text(9);
-	//g.FR = lv_popupGames->text(10);
-	//g.ob = lv_popupGames->text(11);
-	g.running = true;
-	g.oneColorGo = dlg->getOneColorGo();
-
-
-	if ((dlg->getPlayerWhiteType()==HUMAN)&&
-		(dlg->getPlayerBlackType()==HUMAN))
-	{
-		QMessageBox::warning(this->get_parent(), PACKAGE, tr("*** Both players are Human ! ***"));
-		return ;
-	}
-
-	parse_move(6, 0, &g);
-	qgobrd->set_game(&g);
-	qgobrd->set_stopTimer();
-	
-	/*
-	* This is creepy ...
-	* for some reason, the function 2 lines below zeroes the 'qgobrd' pointer
-	* This happens when connected to IGS. Hours of trace did not deliver a clue
-	* So we make it dirty : we store the pointer
-	*/
-	
-	qGoBoard *qb = qgobrd;
-
-	QString computerPath = setting->readEntry("COMPUTER_PATH");
-#if defined(Q_OS_MACX)
-	// Default to built-in gnugo on Mac OS X
-	if(computerPath.isNull() || computerPath.isEmpty())
-	{
-	// Default the computer opponent path to built-in gnugo, if available
-	CFURLRef bundleRef = CFBundleCopyBundleURL(CFBundleGetMainBundle());
-	CFStringRef bundlePath = CFURLCopyFileSystemPath(bundleRef, kCFURLPOSIXPathStyle);
-	computerPath = (QString)CFStringGetCStringPtr(bundlePath, CFStringGetSystemEncoding())		
-		+ "/Contents/MacOS/gnugo";
-	}
-#endif
-
-	if (!qgobrd->get_win()->startComputerPlay(dlg,dlg->fileName, computerPath))
-	{
-		// computer program failed -> end game
-		slot_closeevent();
-		return ;
-	}
-
-	/*************************************************** 
-	*	OK, we reset the pointer
-	****************************************************/
-	qgobrd=qb;
-	
-	// if we have loaded a game, we have to overwrite the game settings
-	if (!(dlg->fileName.isNull() || dlg->fileName.isEmpty()))
-	{
-		qgobrd->gd.size = qgobrd->get_win()->getBoard()->getGameData()->size;
-		qgobrd->gd.handicap = qgobrd->get_win()->getBoard()->getGameData()->handicap;
-		qgobrd->gd.playerWhite =qgobrd->get_win()->getBoard()->getGameData()->playerWhite;
-		qgobrd->gd.playerBlack =qgobrd->get_win()->getBoard()->getGameData()->playerBlack;
-	}
-	//qgobrd->set_game(&g);
-	
-		
-	qgobrd->get_win()->getBoard()->set_myColorIsBlack((qgobrd->get_win()->blackPlayerType==HUMAN));
-	qgobrd->set_myColorIsBlack((qgobrd->get_win()->blackPlayerType==HUMAN));
-
-	if (qgobrd->get_win()->getBoard()->get_myColorIsBlack() != qgobrd->get_win()->getBoard()->getBoardHandler()->getBlackTurn())
-		qgobrd->playComputer(qgobrd->get_win()->getBoard()->getBoardHandler()->getBlackTurn() ? stoneWhite : stoneBlack);
-}
-
 // game to observe (mouse click)
 void qGoIF::set_observe(const QString& gameno)
 {
@@ -1120,7 +1026,7 @@ void qGoIF::slot_removestones(const QString &pt, const QString &game_id)
 qDebug("slot_removestones(): !pt !game_id");
 		// search game
 		qb = boardlist->first();
-		while (qb && (qb->get_Mode() != modeMatch) && (qb->get_Mode() != modeComputer))
+		while (qb && qb->get_Mode() != modeMatch)
 			qb = boardlist->next();
 		
 		if (!qb)
@@ -1154,7 +1060,7 @@ qDebug("slot_removestones(): IGS score mode");
 				break;
 
 			default:
-				if ((qb->get_Mode() == modeMatch) || (qb->get_Mode() == modeComputer))
+				if (qb->get_Mode() == modeMatch)
 				{
 qDebug("slot_removestones(): NON IGS counting");
 					// set to count mode
@@ -1780,9 +1686,6 @@ void qGoBoard::set_Mode_real(GameMode mode)
 	case modeTeach:
 		win->getBoard()->set_isLocalGame(false);
 		break;
-	case modeComputer:
-		win->getBoard()->set_isLocalGame(true);
-		break;
 	}
 
 	win->setGameMode(mode);
@@ -1813,9 +1716,6 @@ void qGoBoard::set_Mode(int src)
 		set_Mode_real (modeNormal);
 		return;
 
-	case 6:
-		set_Mode_real (modeComputer);
-		break;
 	default:
 		break;
 	}
@@ -1948,9 +1848,6 @@ void qGoBoard::set_move(StoneColor sc, QString pt, QString mv_nr)
 		// avoid sound problem during execution of "moves" cmd
 		if (stated_mv_count > mv_counter)
 			sound = false;
-
-		else if (gameMode == modeComputer)
-			sound = true;
 
 		win->getBoard()->addStone(sc, i, j, sound);
 		Move *m = win->getBoard()->getBoardHandler()->getTree()->getCurrent();
@@ -2162,236 +2059,32 @@ void qGoBoard::slot_addStone(StoneColor /*c*/, int x, int y)
 		emit signal_sendcommand("kibitz " + QString::number(id) + " " + QString(c1) + QString::number(c2), false);
 	else if (gsName == IGS)
 		emit signal_sendcommand(QString(c1) + QString::number(c2) + " " + QString::number(id), false);
-	else if (!win->getBoard()->getBoardHandler()->getGtp())
+	else
 		emit signal_sendcommand(QString(c1) + QString::number(c2), false);
 }
 
-void qGoBoard::slot_stoneComputer(StoneColor c, int x, int y)
-{
-	if (id < 0)
-		return;
-
-	if (x > 8)
-		x++;
-	char c1 = x - 1 + 'A';
-	//int c2 = gd.size + 1 - y;
-	int c2 =win->getBoard()->getGameData()->size + 1 - y;
-	
-	
-  mv_counter++;
-  
-	switch (c)
-  {
-    case stoneWhite :
-      if (win->getBoard()->getBoardHandler()->getGtp()->playwhite(c1 ,c2))
-        {
-          QMessageBox::warning(win, PACKAGE, tr("Failed to play the stone within program \n") + win->getBoard()->getBoardHandler()->getGtp()->getLastMessage());
-          return;
-        }
-      if (win->blackPlayerType==COMPUTER && (win->getBoard()->getBoardHandler()->getGtp()->getLastMessage() != "illegal move") )
-           playComputer(c);  
-        
-       break;
-        
-    case stoneBlack :
-      if (win->getBoard()->getBoardHandler()->getGtp()->playblack(c1 ,c2))
-        {
-          QMessageBox::warning(win, PACKAGE, tr("Failed to play the stone within program \n") + win->getBoard()->getBoardHandler()->getGtp()->getLastMessage());
-          return;
-        }
-
-      if (win->whitePlayerType==COMPUTER && (win->getBoard()->getBoardHandler()->getGtp()->getLastMessage() != "illegal move"))
-           playComputer(c);   
-      break;  
-     
-    default :
-    	;           
-   }
-}
-
-void qGoBoard::slot_PassComputer(StoneColor c)
-{
-	if (id < 0)
-		return;
-
-  mv_counter++;
-
-  //check if this is the second pass move.
-   if ((win->getBoard()->getBoardHandler()->getTree()->getCurrent()->isPassMove())&&(win->getBoard()->getBoardHandler()->getTree()->getCurrent()->parent->isPassMove()))
-      {
-        emit signal_2passes(0,0);
-        return;
-      }
-  
-  // if simple pass, tell computer and move on
-	switch (c)
-  {
-    case stoneWhite :
-      if (win->getBoard()->getBoardHandler()->getGtp()->playwhitePass())
-        {
-          QMessageBox::warning(win, PACKAGE, tr("Failed to pass within program \n") + win->getBoard()->getBoardHandler()->getGtp()->getLastMessage());
-          return;
-        }
-      if (win->blackPlayerType==COMPUTER)
-           playComputer(c);
-
-       break;
-
-    case stoneBlack :
-      if (win->getBoard()->getBoardHandler()->getGtp()->playblackPass())
-        {
-          QMessageBox::warning(win, PACKAGE, tr("Failed to pass within program \n") + win->getBoard()->getBoardHandler()->getGtp()->getLastMessage());
-          return;
-        }
-
-      if (win->whitePlayerType==COMPUTER)
-           playComputer(c);
-      break;
-
-    default :
-    	;   
-      
-   }
-
-}
-
-void qGoBoard::slot_UndoComputer(StoneColor /*c*/)
-{
-	if (id < 0)
-		return;
-
-  mv_counter++;
-  
-  if (win->getBoard()->getBoardHandler()->getGtp()->undo())
-        {
-          QMessageBox::warning(win, PACKAGE, tr("Failed to undo within program \n") + win->getBoard()->getBoardHandler()->getGtp()->getLastMessage());
-          return;
-        }
-
-  win->getBoard()->deleteNode();
-
-  if (win->getBoard()->getBoardHandler()->getGtp()->undo())
-        {
-          QMessageBox::warning(win, PACKAGE, tr("Failed to undo within program \n") + win->getBoard()->getBoardHandler()->getGtp()->getLastMessage());
-          return;
-        }
-
-  win->getBoard()->deleteNode();
-
-}
-
-
-void qGoBoard::playComputer(StoneColor c)
-{
-
-  // have the computer play a stone of color 'c'
-
-  win->getBoard()->setCursor(Qt::WaitCursor);
-  get_win()->getInterfaceHandler()->passButton->setEnabled(false);
-  get_win()->getInterfaceHandler()->undoButton->setEnabled(false);
-  
-  switch (c)
-  {
-    case stoneWhite :
-
-       if (win->getBoard()->getBoardHandler()->getGtp()->genmoveBlack())
-        {
-          QMessageBox::warning(win, PACKAGE, tr("Failed to have the program play its stone\n") + win->getBoard()->getBoardHandler()->getGtp()->getLastMessage());
-          return;
-        }
-        break;
-
-    case stoneBlack :
-       if (win->getBoard()->getBoardHandler()->getGtp()->genmoveWhite())
-        {
-          QMessageBox::warning(win, PACKAGE, tr("Failed to have the program play its stone\n") + win->getBoard()->getBoardHandler()->getGtp()->getLastMessage());
-          return;
-        }
-        break;
-
-    default :
-    	;
-   }
-
-   QString computer_answer = win->getBoard()->getBoardHandler()->getGtp()->getLastMessage();
-
-   /* Normal procedure would be
-   GameInfo *gi
-
-   gi ....
-   emit signal || parse move(0,qi)
-   */
-   QString mv_nr;
-   mv_nr.setNum(mv_counter+1);
-
-   win->getBoard()->unsetCursor();
-   get_win()->getInterfaceHandler()->passButton->setEnabled(true);
-   get_win()->getInterfaceHandler()->undoButton->setEnabled(true);
-   
-   if (computer_answer == "resign")
-   	{
-	win->getInterfaceHandler()->displayComment((myColorIsBlack ? "White resigned" : "Black resigned"));
-	win->getBoard()->getBoardHandler()->getGameData()->result = (myColorIsBlack ? "B+R" : "W+R");
-	slot_DoneComputer();
-	return ;
-	}
-   
-   
-   set_move(c==stoneBlack ? stoneWhite : stoneBlack , computer_answer, mv_nr);
-
-   //the computer just played. Are we after 2 passes moves ?
- 
-   if ((win->getBoard()->getBoardHandler()->getTree()->getCurrent()->isPassMove())&&(win->getBoard()->getBoardHandler()->getTree()->getCurrent()->parent->isPassMove()))
-      {
-       emit signal_2passes(0,0);
-       return;
-       }
-
-   // trick : if we have the computer play against himself, we recurse ...
-   if (win->blackPlayerType ==   win->whitePlayerType)
-      playComputer( c==stoneBlack ? stoneWhite : stoneBlack);
-   
-}
-
-void qGoBoard::slot_DoneComputer()
-{
-   win->getInterfaceHandler()->passButton->setEnabled(false);
-   win->getInterfaceHandler()->commentEdit->append( win->getBoard()->getBoardHandler()->getGameData()->result); 
-   win->getInterfaceHandler()->restoreToolbarButtons();
-}
 
 
 void qGoBoard::slot_doPass()
 {
-  if (gameMode == modeComputer)
-    slot_PassComputer(myColorIsBlack ? stoneBlack : stoneWhite);
-
-  else  if (id > 0)
-    emit signal_sendcommand("pass", false);
+	if (id > 0)
+		emit signal_sendcommand("pass", false);
 }
 
 void qGoBoard::slot_doResign()
 {
-	if (gameMode == modeComputer)
-    		{
-		win->getInterfaceHandler()->displayComment((myColorIsBlack ? "Black resigned" : "White resigned"));
-		win->getBoard()->getBoardHandler()->getGameData()->result = (myColorIsBlack ? "W+R" : "B+R");
-		slot_DoneComputer();
-		}	
-	else if (id > 0)
+	if (id > 0)
 		emit signal_sendcommand("resign", false);
 }
 
 void qGoBoard::slot_doUndo()
 {
-  	if (gameMode == modeComputer)
-    		slot_UndoComputer(myColorIsBlack ? stoneBlack : stoneWhite);
-    
-  	else if (id > 0)
-		if (gsName ==IGS)
+	if (id > 0) {
+		if (gsName == IGS)
 			emit signal_sendcommand("undoplease", false);
 		else
-			emit signal_sendcommand("undo", false); 
+			emit signal_sendcommand("undo", false);
+	}
 }
 
 void qGoBoard::slot_doAdjourn()
@@ -2403,10 +2096,7 @@ void qGoBoard::slot_doAdjourn()
 
 void qGoBoard::slot_doDone()
 {
-	if(win->getBoard()->getBoardHandler()->getGtp())   //we are now in score mode !
-    		slot_DoneComputer();
-    
-  	else if (id > 0)
+	 if (id > 0)
 		emit signal_sendcommand("done", false);
 }
 

@@ -1104,36 +1104,6 @@ void MainWindow::doOpen(const QString &fileName, const QString &filter, bool sto
 		statusBar()->showMessage(fileName + " " + tr("loaded."));
 }
 
-bool MainWindow::startComputerPlay(QNewGameDlg * dlg, const QString &fileName, const QString &computer_path)
-{
-	GameData *d = new GameData;
-	d->size = dlg->getSize();
-	d->komi = dlg->getKomi();
-	d->handicap = dlg->getHandicap();
-	d->playerBlack = dlg->getPlayerBlackName();
-	//d->rankBlack = dlg.playerBlackRkEdit->text();
-	d->playerWhite = dlg->getPlayerWhiteName();
-	//d->rankWhite = dlg.playerWhiteRkEdit->text();
-	d->gameName = "";
-	d->gameNumber = 0;
-	d->fileName = "";
-	d->byoTime = dlg->getTime();
-	d->style = 1;
-	d->oneColorGo = dlg->getOneColorGo();
-
-	blackPlayerType = dlg->getPlayerBlackType();
-	whitePlayerType = dlg->getPlayerWhiteType();
-
-	
-	//if (fileName.isNull() || fileName.isEmpty())
-	//	gfx_board->initGame(d);
-
-	if (!gfx_board->startComputerPlay(dlg,fileName, computer_path))
-		return false;
-
-	return true;
-}
-
 bool MainWindow::slotFileSave()
 {
 	QString fileName;

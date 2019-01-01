@@ -357,7 +357,6 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	connect(parser, SIGNAL(signal_result(const QString&, const QString&, bool, const QString&)), qgoif, SLOT(slot_result(const QString&, const QString&, bool, const QString&)));
 	connect(parser, SIGNAL(signal_requestDialog(const QString&, const QString&, const QString&, const QString&)), qgoif, SLOT(slot_requestDialog(const QString&, const QString&, const QString&, const QString&)));
 	connect(this, SIGNAL(signal_move(Game*)), qgoif, SLOT(slot_move(Game*)));
- 	connect(this, SIGNAL(signal_computer_game(QNewGameDlg*)), qgoif, SLOT(slot_computer_game(QNewGameDlg*)));//SL added eb 12
 	connect(qgoif, SIGNAL(signal_sendcommand(const QString&, bool)), this, SLOT(slot_sendcommand(const QString&, bool)));
 	connect(qgoif, SIGNAL(signal_addToObservationList(int)), this, SLOT(slot_addToObservationList(int)));
 	connect(qgo, SIGNAL(signal_updateFont()), this, SLOT(slot_updateFont()));
@@ -2715,11 +2714,11 @@ void ClientWindow::slotComputerPlay()
 		return;
 	}
 #endif
+#if 0
 	QNewGameDlg * dlg = new QNewGameDlg(this);
 	if(!(dlg->exec()== QDialog::Accepted))
 		return;
-
-	emit signal_computer_game(dlg);
+#endif
 }
 
 

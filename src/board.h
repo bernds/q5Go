@@ -131,7 +131,6 @@ public:
 	void set_isLocalGame(bool isLocal);
 	bool get_isLocalGame() { return isLocalGame; }
 	void refreshDisplay() { Move *m = boardHandler->getTree()->getCurrent(); updateLastMove(m->getColor(), m->getX(), m->getY()); }
-	bool startComputerPlay(QNewGameDlg *dlg,const QString &fileName, const QString &computer_path);
 	void set_antiClicko(bool b) { antiClicko = b; }
 
 
@@ -146,7 +145,6 @@ signals:
 	void coordsChanged(int, int, int,bool);
 	void signal_sendcomment(const QString&);
 	void signal_addStone(enum StoneColor, int, int);
-	void signal_Stone_Computer(enum StoneColor, int, int);
 	void signal_undo();
 	void signal_adjourn();
 	void signal_resign();

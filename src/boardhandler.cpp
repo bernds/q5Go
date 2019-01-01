@@ -55,7 +55,6 @@ BoardHandler::BoardHandler(Board *b)
 	
 	clipboardNode = NULL;
 	nodeResults = NULL;
-	gtp = NULL;
 
   	// Assume we display events (incoming move when observing)
   	display_incoming_move = true ;
@@ -73,8 +72,6 @@ BoardHandler::~BoardHandler()
 //	delete gameData;
 	if (nodeResults)
 		delete nodeResults;
-	if (gtp)
-		delete gtp;
 }
 
 void BoardHandler::clearData()
@@ -1249,40 +1246,6 @@ bool BoardHandler::loadSGF(const QString &fileName)
 	prepareBoard();
 	return true;
 }
-
-bool BoardHandler::openComputerSession(QNewGameDlg *dlg,const QString &fileName, const QString &computer_path)
-{
-  // now we start the dialog
-	gtp = new QGtp() ;
-
-	if (gtp->openGtpSession(computer_path,dlg->getSize(),dlg->getKomi(),dlg->getHandicap(),dlg->getLevelBlack())==FAIL)
-	{
-		// if gnugo fails
-//		QString mesg = QString(QObject::tr("Error opening program: %1\n")).arg(gtp->getLastMessage());
-		QMessageBox msg(QObject::tr("Error"), //mesg,
-			QString(QObject::tr("Error opening program: %1")).arg(gtp->getLastMessage()),
-			QMessageBox::Warning, QMessageBox::Ok | QMessageBox::Default, Qt::NoButton, Qt::NoButton);
-		msg.activateWindow();
-		msg.raise();
-		msg.exec();
-
-		return false ;
-	}
-	//if (dlg->getHandicap())
-	// setHandicap(dlg->getHandicap());
-
-	if (!(fileName.isNull() || fileName.isEmpty())) {
-
-		if (!sgfParser->parse(fileName))
-			return false;
-		else
-			gtp->loadsgf(fileName);
-	}
-	
-	prepareComputerBoard();  
-
-	return true;
-}                              //end add eb 12
 
 bool BoardHandler::saveBoard(const QString &fileName)
 {

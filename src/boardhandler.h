@@ -13,7 +13,6 @@
 #include "setting.h"
 #include "sgfparser.h"
 #include "stonehandler.h"           //SL added eb 10
-#include "qgtp.h"
 
 #define MARK_TERRITORY_DONE_BLACK 997
 #define MARK_TERRITORY_DONE_WHITE 998
@@ -25,7 +24,6 @@ class SGFParser;
 class Matrix;
 class GameData;
 class InterfaceHandler;
-class QGtp;             //SL added eb 12
 class QNewGameDlg;             //SL added eb 12
 
 class BoardHandler
@@ -41,7 +39,6 @@ public:
 	void checkAllPositions() {stoneHandler->checkAllPositions();}       //SL added eb 10
 	StoneHandler* getStoneHandler() const { return stoneHandler; } 
 	Tree* getTree() const { return tree; }
-	QGtp * getGtp() const { return gtp ;}
 	void initGame(GameData* d, bool sgf=false);
 	void prepareBoard();
 	void prepareComputerBoard();
@@ -88,8 +85,6 @@ public:
 	void updateComment(QString text=QString::null);
 	void updateCurrentMatrix(StoneColor c, int x, int y);
 	bool loadSGF(const QString &fileName);
-	bool openComputerSession(QNewGameDlg *dlg, const QString &fileName,
-				 const QString &computer_path=QString::null); //SL added eb 12
 	bool saveBoard(const QString &fileName);
 	void exportASCII();
 	bool importSGFClipboard();
@@ -140,7 +135,6 @@ private:
 	MarkType markType;
 	GameData *gameData;
 	Move *clipboardNode;
-	QGtp * gtp;                             //SL added eb 12
 };
 
 #endif
