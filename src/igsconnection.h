@@ -7,10 +7,11 @@
 #ifndef IGSCONNECTION_H
 #define IGSCONNECTION_H
 
-#include "igsinterface.h"
 #include <QObject>
 #include <QTcpSocket>
 #include <QString>
+
+#include "igsinterface.h"
 
 class QTextCodec;
 
@@ -26,7 +27,7 @@ public:
 
 	// Implementation of IGSInterface virtual functions
 	virtual bool isConnected();
-	virtual bool openConnection(const char *host, unsigned port, const char *user=0, const char *pass=0);
+	virtual bool openConnection(const QString &host, unsigned port, const QString &user, const QString &pass);
 
 	virtual bool closeConnection();
 	virtual void sendTextToHost(QString txt, bool ignoreCodec=false);

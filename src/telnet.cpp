@@ -22,14 +22,14 @@ TelnetConnection::TelnetConnection(QWidget* parent)
 	port = DEFAULT_PORT;
 	loginName = "guest";
 	password = "";
-	
+
 	// Create IGSConnection instance
 	igsInterface = new IGSConnection();
 	CHECK_PTR(igsInterface);
 	void (*fp)(QString);
 	fp = TelnetInterface::callback;
 	igsInterface->registerCallback(fp);
-	
+
 	// Create TelnetInterface instance
 	telnetIF = new TelnetInterface();
 	CHECK_PTR(telnetIF);
@@ -52,19 +52,19 @@ TelnetConnection::~TelnetConnection()
 	qDebug("TelnetConnection::~TelnetConnection() DONE");
 }
 
-void TelnetConnection::slotHostConnect() 
+void TelnetConnection::slotHostConnect()
 {
 	if (igsInterface->isConnected())
 	{
 		qDebug("Already connected!");
 		return;
 	}
-	
+
 	igsInterface->setTextCodec(codec);
 
 
 // igsInterface->openConnection(host, port);
-	if (!igsInterface->openConnection(host.latin1(), port, loginName, password))
+	if (!igsInterface->openConnection(host, port, loginName, password))
 	{
 		qDebug("Failed to connect to host!");
 	}

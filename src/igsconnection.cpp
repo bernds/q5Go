@@ -60,13 +60,13 @@ bool IGSConnection::checkPrompt(const QString &line)
 			if (line.indexOf("Login:") != -1)
 			{
 				qDebug("Login: found");
-				
+
 				// tell application what to send
 				sendTextToApp(line);
 				if (!username.isEmpty())
 				{
 					sendTextToApp("...sending: {" + QString(username) + "}");
-				
+
 					sendTextToHost(username, true);// + '\n');       // CAREFUL : THIS SOMETIMES CHANGES on IGS
 				}
 
@@ -101,7 +101,7 @@ bool IGSConnection::checkPrompt(const QString &line)
 		default:
 			break;
 	}
-	
+
 	return false;
 }
 
@@ -286,7 +286,7 @@ void IGSConnection::setTextCodec(QString codec)
 
 
 
-bool IGSConnection::openConnection(const char *host, unsigned int port, const char *user, const char *pass)
+bool IGSConnection::openConnection(const QString &host, unsigned int port, const QString &user, const QString &pass)
 {
 	if (qsocket->state() != QTcpSocket::Idle ) {
 		qDebug("Called IGSConnection::openConnection while in state %d", qsocket->state());
