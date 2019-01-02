@@ -402,13 +402,14 @@ void qGo::playDisConnectSound()
 
 void qGo::slotHelpAbout()
 {
-	QString txt = PACKAGE " " VERSION
-		"\n\nCopyright (c) 2001-2006\nPeter Strempel <pstrempel@t-online.de>\nJohannes Mesa <frosla@gmx.at>\nEmmanuel Béranger <yfh2@hotmail.com>\n\n" +
-		tr("GTP code from Goliath, thanks to:") + "\nPALM Thomas\nDINTILHAC Florian\nHIVERT Anthony\nPIOC Sebastien";
-	
+	QString txt = PACKAGE " " VERSION "\n\nCopyright (c) 2001-2006\n";
+	txt +="Peter Strempel <pstrempel@t-online.de>\nJohannes Mesa <frosla@gmx.at>\nEmmanuel Béranger <yfh2@hotmail.com>\n\n";
+	txt += tr("Ported to Qt4 by Bernd Schmidt <bernds_cb1@t-online.de>\n\n");
+	txt += tr("GTP code from Goliath, thanks to:") + "\nPALM Thomas\nDINTILHAC Florian\nHIVERT Anthony\nPIOC Sebastien";
+
 	QString translation = tr("English translation by:\nPeter Strempel\nJohannes Mesa\nEmmanuel Beranger", "Please set your own language and your name! Use your own language!");
 	//if (translation != "English translation by:\nPeter Strempel\nJohannes Mesa\nEmmanuel Béranger")
 		txt += "\n\n" + translation;
-	
+
 	QMessageBox::about(0, tr("About..."), txt);
 }
