@@ -53,7 +53,7 @@ public:
 		*navPrevVar, *navStartVar, *navNextBranch, *navMainBranch, *navNthMove, *navAutoplay,
 		*editDelete,
 	        *navSwapVariations, *navPrevComment, *navNextComment,
- 		*fileImportASCII, *fileImportASCIIClipB, *fileImportSgfClipB, *fileNew, *fileNewBoard, *fileOpen ;
+ 		*fileImportSgfClipB, *fileNew, *fileNewBoard, *fileOpen;
 	QTextEdit *commentEdit;
 	QLineEdit *commentEdit2;
 //	EditTools *editTools;

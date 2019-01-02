@@ -443,8 +443,6 @@ void InterfaceHandler::disableToolbarButtons()
     navAutoplay->setEnabled(false);
     editDelete->setEnabled(false);
     navSwapVariations->setEnabled(false);
-    fileImportASCII->setEnabled(false);
-    fileImportASCIIClipB->setEnabled(false);
     fileImportSgfClipB->setEnabled(false);
 }
 
@@ -469,8 +467,6 @@ void InterfaceHandler::restoreToolbarButtons()
 	navAutoplay->setEnabled(true);
 	editDelete->setEnabled(true);
 	navSwapVariations->setEnabled(true);
-	fileImportASCII->setEnabled(true);
-	fileImportASCIIClipB->setEnabled(true);
 	fileImportSgfClipB->setEnabled(true);
 }
 
