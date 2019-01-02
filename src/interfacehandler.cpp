@@ -480,6 +480,14 @@ void InterfaceHandler::setScore(int terrB, int capB, int terrW, int capW, float 
 	scoreTools->terrBlack->setText(QString::number(terrB));
 	scoreTools->capturesBlack->setText(QString::number(capB));
 	scoreTools->totalBlack->setText(QString::number(terrB + capB));
+
+	double res = (float)terrW + (float)capW + komi - terrB - capB;
+	if (res < 0)
+		scoreTools->result->setText ("B+" + QString::number (-res));
+	else if (res == 0)
+		scoreTools->result->setText ("Jigo");
+	else
+		scoreTools->result->setText ("W+" + QString::number (res));
 }
 
 void InterfaceHandler::setSliderMax(int n)
