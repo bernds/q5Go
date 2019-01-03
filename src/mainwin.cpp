@@ -20,7 +20,6 @@
 #include "igsconnection.h"
 #include "mainwindow.h"
 #include "qnewgamedlg.h"
-#include "./pics/clientpics.h"
 #include <qaction.h>
 #include <qdir.h>
 #include <qcombobox.h>
@@ -55,42 +54,18 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 {
 	setupUi(this);
 
-	prefsIcon= QPixmap::fromImage (qembed_findImage("package_settings"));//QPixmap(ICON_PREFS);
-//	infoIcon= QPixmap(ICON_GAMEINFO);
-	exitIcon =  QPixmap::fromImage (qembed_findImage("exit"));//QPixmap(ICON_EXIT);
-	fileNewboardIcon = QPixmap::fromImage (qembed_findImage("newboard"));//QPixmap(ICON_FILENEWBOARD);
-	fileNewIcon = QPixmap::fromImage (qembed_findImage("filenew"));//QPixmap(ICON_FILENEW);
-	fileOpenIcon = QPixmap::fromImage (qembed_findImage("fileopen"));//QPixmap(ICON_FILEOPEN);
-//	fileSaveIcon = QPixmap(ICON_FILESAVE);
-//	fileSaveAsIcon = QPixmap(ICON_FILESAVEAS);
-//	transformIcon = QPixmap(ICON_TRANSFORM);
-//	charIcon = QPixmap(ICON_CHARSET);
-	manualIcon = QPixmap::fromImage (qembed_findImage("help"));//QPixmap(ICON_MANUAL);
-//	autoplayIcon = QPixmap(ICON_AUTOPLAY);
-	connectedIcon = QPixmap::fromImage (qembed_findImage("connected"));//QPixmap(ICON_CONNECTED);
-	disconnectedIcon = QPixmap::fromImage (qembed_findImage("connect_no"));//QPixmap(ICON_DISCONNECTED);
-	OpenIcon = QPixmap::fromImage (qembed_findImage("open"));//QPixmap(ICON_OPEN);
-	LookingIcon = QPixmap::fromImage (qembed_findImage("looking"));//QPixmap(ICON_LOOKING);
-	QuietIcon= QPixmap::fromImage (qembed_findImage("quiet"));//QPixmap(ICON_QUIET);
-	NotOpenIcon = QPixmap::fromImage (qembed_findImage("not_open"));//QPixmap(ICON_NOT_OPEN);
-	NotLookingIcon = QPixmap::fromImage (qembed_findImage("not_looking"));//QPixmap(ICON_NOT_LOOKING);
-	NotQuietIcon= QPixmap::fromImage (qembed_findImage("not_quiet"));//QPixmap(ICON_NOT_QUIET);
-	RefreshPlayersIcon = QPixmap::fromImage (qembed_findImage("refresh_players"));//QPixmap(ICON_REFRESH_PLAYERS);
-	RefreshGamesIcon = QPixmap::fromImage (qembed_findImage("refresh_games"));//QPixmap(ICON_REFRESH_GAMES);
-	ComputerPlayIcon = QPixmap::fromImage (qembed_findImage("computerplay"));//QPixmap(ICON_COMPUTER_PLAY);
-	qgoIcon = QPixmap::fromImage (qembed_findImage("Bowl"));//QPixmap(ICON_COMPUTER_PLAY);
-	NotSeekingIcon = QPixmap::fromImage (qembed_findImage("not_seeking"));
-	seekingIcon[0] = QPixmap::fromImage (qembed_findImage("seeking1"));
-	seekingIcon[1] = QPixmap::fromImage (qembed_findImage("seeking2"));
-	seekingIcon[2] = QPixmap::fromImage (qembed_findImage("seeking3"));
-	seekingIcon[3] = QPixmap::fromImage (qembed_findImage("seeking4"));
+	seekingIcon[0] = QIcon (":/ClientWindowGui/images/clientwindow/seeking0.png");
+	seekingIcon[1] = QIcon (":/ClientWindowGui/images/clientwindow/seeking1.png");
+	seekingIcon[2] = QIcon (":/ClientWindowGui/images/clientwindow/seeking2.png");
+	seekingIcon[3] = QIcon (":/ClientWindowGui/images/clientwindow/seeking3.png");
+	NotSeekingIcon = QIcon (":/ClientWindowGui/images/clientwindow/not_seeking.png");
 
 	// init
 
 	DODEBUG = false;
 	DD = 0;
 	setting->cw = this;
-	setWindowIcon (QIcon (setting->image0));
+	setWindowIcon (QIcon (":/ClientWindowGui/images/clientwindow/qgo.png"));
 	myAccount = new Account(this);
 
 	cmd_count = 0;
@@ -464,7 +439,7 @@ void ClientWindow::timerEvent(QTimerEvent* e)
 	if (e->timerId() == seekButtonTimer)
 	{
 		imagecounter = (imagecounter+1) % 4;
-		toolSeek->setIcon(QIcon(seekingIcon[imagecounter]));
+		toolSeek->setIcon(seekingIcon[imagecounter]);
 		return;
 	}
 
@@ -656,7 +631,6 @@ void ClientWindow::slot_connclosed()
 	Connect->setEnabled(true);
 	Disconnect->setEnabled(false);
 	toolConnect->setChecked(false);
-	toolConnect->setPixmap(disconnectedIcon);
 	QToolTip::remove(toolConnect);
 	QToolTip::add(toolConnect, tr("Connect with") + " " + cb_connect->currentText());
 }
@@ -873,7 +847,6 @@ void ClientWindow::sendTextToApp(const QString &txt)
 			Connect->setEnabled(false);
 			Disconnect->setEnabled(true);
 			toolConnect->setChecked(true);
-			toolConnect->setPixmap(connectedIcon);
 			QToolTip::remove(toolConnect);
 			QToolTip::add(toolConnect, tr("Disconnect from") + " " + cb_connect->currentText());
 
@@ -2598,54 +2571,17 @@ void ClientWindow::initActions()
   
 void ClientWindow::initToolBar()
 {
-	QToolButton *tb;
-
-
 	//connect( cb_connect, SIGNAL( activated(const QString&) ), this, SLOT( slot_cbconnect(const QString&) ) );
 
 	//  toolConnect->setText(tr("Connect with") + " " + cb_connect->currentText()); 
 	//connect( toolConnect, SIGNAL( toggled(bool) ), this, SLOT( slot_connect(bool) ) );  //end add eb 5
-  
-    
-	QIcon  OIC,OIC2, OIC3 ;//= new QIconSet;
 
-	OIC.setPixmap ( NotOpenIcon, QIcon::Automatic, QIcon::Normal, QIcon::Off);
-	OIC.setPixmap ( OpenIcon, QIcon::Automatic, QIcon::Normal, QIcon::On );
-
-	setOpenMode->setIconSet(OIC);
-
-	OIC2.setPixmap (NotLookingIcon, QIcon::Automatic, QIcon::Normal, QIcon::Off);
-	OIC2.setPixmap (LookingIcon, QIcon::Automatic, QIcon::Normal, QIcon::On );
-	setLookingMode->setIconSet(OIC2);
-
-	OIC.setPixmap ( NotQuietIcon, QIcon::Automatic, QIcon::Normal, QIcon::Off);
-	OIC.setPixmap ( QuietIcon, QIcon::Automatic, QIcon::Normal, QIcon::On);
-	setQuietMode->setIconSet(OIC);
-  
-	OIC3.setPixmap ( NotSeekingIcon, QIcon::Automatic, QIcon::Normal, QIcon::Off);
-	OIC3.setPixmap ( seekingIcon[0], QIcon::Automatic, QIcon::Normal, QIcon::On);
-
-	toolSeek->setIconSet(OIC3);
 	seekMenu = new Q3PopupMenu();
 	toolSeek->setPopup(seekMenu);
 	toolSeek->setPopupDelay(1);
 
 	whatsThis = QWhatsThis::createAction (this);
 	whatsThis->addTo (Toolbar);
-
-	//added the icons
-	refreshPlayers->setIcon(QIcon(RefreshPlayersIcon));
-	refreshGames->setIcon(QIcon(RefreshGamesIcon));
-	fileNew->setIcon(QIcon(fileNewIcon));
-	fileNewBoard->setIcon(QIcon(fileNewboardIcon));
-	fileOpen->setIcon(QIcon(fileOpenIcon));
-	fileQuit->setIcon(QIcon(exitIcon));
-	computerPlay->setIcon(QIcon(ComputerPlayIcon));
-	Connect->setIcon(QIcon(connectedIcon));
-	Disconnect->setIcon(QIcon(disconnectedIcon));
-	helpManual->setIcon(QIcon(manualIcon));
-	setPreferences->setIcon(QIcon(prefsIcon));
-	setWindowIcon (QIcon (qgoIcon));
 }
 // SLOTS
 
@@ -2865,11 +2801,10 @@ void ClientWindow::slot_seek(bool b)
 
 void ClientWindow::slot_cancelSeek()
 {
-
 	toolSeek->setChecked(false);
 	toolSeek->setMenu (seekMenu);
 	toolSeek->setPopupMode (QToolButton::InstantPopup);
-	toolSeek->setIcon(QIcon(NotSeekingIcon));
+	toolSeek->setIcon(NotSeekingIcon);
 	killTimer(seekButtonTimer);
 	seekButtonTimer = 0;
 }

@@ -272,12 +272,7 @@ private:
 	int oneSecondTimer;
 
   	// menus
-	QPixmap 	exitIcon, fileNewboardIcon, fileNewIcon, fileOpenIcon, fileSaveIcon, fileSaveAsIcon,
-			connectedIcon,disconnectedIcon, prefsIcon, qgoIcon, manualIcon,
-			OpenIcon, LookingIcon, QuietIcon, NotOpenIcon, NotLookingIcon, NotQuietIcon, NotSeekingIcon,
-			RefreshPlayersIcon,  RefreshGamesIcon, ComputerPlayIcon;
-
-	QPixmap 	seekingIcon[4];
+	QIcon 	seekingIcon[4], NotSeekingIcon;
 
 	Q3PopupMenu	*seekMenu;                        //SL add eb 6
 	//QStringList 	*seekConditionList ;
