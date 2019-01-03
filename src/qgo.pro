@@ -103,7 +103,11 @@ SOURCES		      = gamedialog.cpp \
 			tree.cpp \
     gatter.cpp \
     audio.cpp
+
+
 TARGET                = q4go
+DATADIR               = $$PREFIX/share/q4go
+
 unix:INCLUDEPATH      += .
 win32:INCLUDEPATH     += .
 #win32:QMAKE_CFLAGS   += -GX -Gf
@@ -117,7 +121,8 @@ DISTFILES            += *.dsw \
 			wav*.h \
 			*.rc \
 			*.ts \
-			qgo.pro
+                        qgo.pro
+DEFINES              += "DATADIR=\\\"$$DATADIR\\\""
 release:DEFINES      += NO_CHECK
 win32:DEFINES        += QT_DLL QT_THREAD_SUPPORT HAVE_CONFIG_H
 win32:RC_FILE	      = qgo.rc
@@ -136,29 +141,31 @@ TRANSLATIONS	      = qgo_cz.ts \
 			qgo_ru.ts\
 			qgo_tr.ts\
 			qgo_zh.ts \
-			qgo_zh_cn.ts 
+                        qgo_zh_cn.ts
+
 !win32 {
-translation.path      = /usr/local/share/qgo/translations
+translation.path      = $$DATADIR/translations
 translation.files     = translations/*
 INSTALLS += translation
 
-sounds.path           = /usr/local/share/qgo/sounds
+sounds.path           = $$DATADIR/sounds
 sounds.files          = sounds/*
 INSTALLS += sounds
 
-documentation.path    = /usr/local/share/doc/qgo
+documentation.path    = $$PREFIX/share/doc/q4go
 documentation.files   = ../AUTHORS ../COPYING ../NEWS ../README ../TODO ../ChangeLog
 INSTALLS += documentation
 
-html.path             = /usr/local/share/doc/qgo/html
+html.path             = $$PREFIX/share//doc/q4go/html
 html.files            = ../html/*
 INSTALLS += html
 
-target.path = /usr/local/bin
+target.path           = $$PREFIX/bin
 INSTALLS += target
 }
+
 #The following line was inserted by qt3to4
-QT += xml network  qt3support 
+QT += xml network  qt3support
 
 RESOURCES += \
     q4go.qrc
