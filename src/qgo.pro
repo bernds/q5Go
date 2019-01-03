@@ -89,6 +89,10 @@ SOURCES		      = gamedialog.cpp \
                         gatter.cpp \
                         audio.cpp
 
+isEmpty(PREFIX) {
+PREFIX = /usr/local
+}
+
 TARGET                = q5go
 DATADIR               = $$PREFIX/share/q5go
 DOCDIR                = $$PREFIX/share/doc/
