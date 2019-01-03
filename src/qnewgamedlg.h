@@ -19,7 +19,7 @@
 #define QNEWGAMEDLG_H
 
 #include <qdialog.h>
-#include "qnewgamedlg_gui.h"
+#include "ui_qnewgamedlg_gui.h"
 //#include "global.h"
 //#include "gothic.h"
 

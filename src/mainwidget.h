@@ -2,7 +2,7 @@
 #define MAINWIDGET_H
 
 #include "misctools.h"
-#include "mainwidget_gui.h"
+#include "ui_mainwidget_gui.h"
 #include "interfacehandler.h"
 #include "setting.h"
 #include "defines.h"

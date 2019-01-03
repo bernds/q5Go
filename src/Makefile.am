@@ -32,8 +32,8 @@ FORMS = clientwindow_gui.ui gameinfo_gui.ui gui_dialog.ui mainwidget_gui.ui newg
 RESOURCES = q4go.qrc
 
 
-FORMHEADERS = $(FORMS:.ui=.h)
-MOC_CC = $(FORMS:.ui=.moc.cc) $(DISTHEADERS_MOC:.h=.moc.cc)
+FORMHEADERS = $(FORMS:%.ui=ui_%.h)
+MOC_CC = $(FORMS:%.ui=ui_%.moc.cc) $(DISTHEADERS_MOC:.h=.moc.cc)
 RCC_CC = $(RESOURCES:.qrc=.rcc.cc)
 
 BUILT_SOURCES = $(FORMHEADERS) $(MOC_CC) $(RCC_CC)
@@ -52,10 +52,10 @@ q4go_LDADD = $(LIBSOCKET) $(LIB_QPE) $(LIB_QT) $(QT4_LIBS)
 
 METASOURCES = AUTO
 
-.ui.h:
+ui_%.h: %.ui
 	$(UIC) -o $@ $<
 
-.h.moc.cc:
+%.moc.cc: %.h
 	$(MOC) -o $@ $<
 
 .qrc.rcc.cc:

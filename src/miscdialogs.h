@@ -4,7 +4,7 @@
 
 #ifndef DEBUGDIALOG_H
 #define DEBUGDIALOG_H
-#include "gui_dialog.h"
+#include "ui_gui_dialog.h"
 
 class Debug_Dialog : public QDialog, public Ui::Debug_Dialog
 {
@@ -19,7 +19,7 @@ public:
 	}
 };
 
-#include "gameinfo_gui.h"
+#include "ui_gameinfo_gui.h"
 class GameInfoDialog : public QDialog, public Ui::GameInfoDialog
 {
 	Q_OBJECT
@@ -33,7 +33,7 @@ public:
 	}
 };
 
-#include "newgame_gui.h"
+#include "ui_newgame_gui.h"
 
 class NewGameDialog : public QDialog, public Ui::NewGameDialog
 {
@@ -48,7 +48,7 @@ public:
 	}
 };
 
-#include "newlocalgame_gui.h"
+#include "ui_newlocalgame_gui.h"
 
 class NewLocalGameDialog : public QDialog, public Ui::NewLocalGameDialog
 {
@@ -63,7 +63,7 @@ public:
 	}
 };
 
-#include "qnewgamedlg_gui.h"
+#include "ui_qnewgamedlg_gui.h"
 
 class QNewGameDlgGui : public QDialog, public Ui::QNewGameDlgGui
 {
@@ -79,7 +79,7 @@ public:
 
 };
 
-#include "nthmove_gui.h"
+#include "ui_nthmove_gui.h"
 
 class NthMoveDialog : public QDialog, public Ui::NthMoveDialog
 {
@@ -94,7 +94,7 @@ public:
 	}
 };
 
-#include "textedit_gui.h"
+#include "ui_textedit_gui.h"
 
 class TextEditDialog : public QDialog, public Ui::TextEditDialog
 {

@@ -5,7 +5,7 @@
 #ifndef TEXTVIEW_H
 #define TEXTVIEW_H
 
-#include "textview_gui.h"
+#include "ui_textview_gui.h"
 #include "globals.h"
 
 class TextView : public QDialog, public Ui::TextViewGUI

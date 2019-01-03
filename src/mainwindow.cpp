@@ -21,7 +21,7 @@
 #include "tip.h"
 #include "setting.h"
 #include "icons.h"
-#include "newgame_gui.h"
+#include "ui_newgame_gui.h"
 #include "interfacehandler.h"
 #include "komispinbox.h"
 #include "parserdefs.h"

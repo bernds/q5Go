@@ -5,7 +5,7 @@
 #ifndef MAINWIN_H
 #define MAINWIN_H
 
-#include "clientwindow_gui.h"
+#include "ui_clientwindow_gui.h"
 #include "miscdialogs.h"
 #include "setting.h"
 #include "tables.h"

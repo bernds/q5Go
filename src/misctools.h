@@ -4,7 +4,7 @@
 
 #ifndef MISCTOOLS_H
 #define MISCTOOLS_H
-#include "scoretools_gui.h"
+#include "ui_scoretools_gui.h"
 
 class Move;
 
@@ -20,7 +20,7 @@ public:
 	}
 };
 
-#include "normaltools_gui.h"
+#include "ui_normaltools_gui.h"
 
 class NormalTools : public QWidget, public Ui::NormalTools
 {

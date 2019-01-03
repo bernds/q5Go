@@ -5,7 +5,7 @@
 #ifndef PREFERENCESDIALOG_H
 #define PREFERENCESDIALOG_H
 
-#include "preferences_gui.h"
+#include "ui_preferences_gui.h"
 
 class QIntValidator;
 class MainWindow;

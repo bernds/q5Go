@@ -4,7 +4,7 @@
 
 #ifndef NODERESULTS_H
 #define NODERESULTS_H
-#include "noderesults_gui.h"
+#include "ui_noderesults_gui.h"
 
 template<class type> class Q3PtrStack;
 class Move;

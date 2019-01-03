@@ -6,11 +6,11 @@
  *
  */
  
-#include "gui_dialog.h"
 #include "config.h"
 #include "mainwin.h"
 #include "msg_handler.h"
 #include "setting.h"
+#include "miscdialogs.h"
 
 #include <qtranslator.h>
 #include <qtextcodec.h>

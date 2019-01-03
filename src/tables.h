@@ -7,7 +7,7 @@
 
 #include "gs_globals.h"
 #include "parser.h"
-#include "talk_gui.h"
+#include "ui_talk_gui.h"
 #include <QString>
 #include <QObject>
 

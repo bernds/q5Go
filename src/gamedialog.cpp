@@ -3,7 +3,6 @@
  */
 //#include "setting.h"
 #include "gamedialog.h"
-#include "newgame_gui.h"
 #include "config.h"
 #include "misc.h"
 #include "defines.h"

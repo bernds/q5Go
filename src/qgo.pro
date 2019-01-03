@@ -41,7 +41,6 @@ HEADERS		      = config.h \
 			imagehandler.h \
 			interfacehandler.h \
 			komispinbox.h \
-			maintable.h \
 			mainwidget.h \
 			mainwindow.h \
 			mark.h \
@@ -85,7 +84,6 @@ SOURCES		      = gamedialog.cpp \
 			helpviewer.cpp \
 			imagehandler.cpp \
 			interfacehandler.cpp \
-			maintable.cpp \
 			mainwidget.cpp \
 			mainwindow.cpp \
 			mark.cpp \

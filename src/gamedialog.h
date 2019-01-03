@@ -7,7 +7,7 @@
 
 #include <QButtonGroup>
 
-#include "newgame_gui.h"
+#include "ui_newgame_gui.h"
 #include "gs_globals.h"
 #include "defines.h"
 #include "misc.h"
