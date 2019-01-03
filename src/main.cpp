@@ -111,29 +111,27 @@ int main(int argc, char **argv)
 	// Load translation
 	QTranslator trans(0);
 	QString lang = setting->getLanguage();
-	//const char *lang = setting->getLanguage();
 	qDebug() << "Checking for language settings..." << lang;
 	QString tr_dir = setting->getTranslationsDirectory(), loc;
 
-	if (lang.isNull ())
+	if (lang.isEmpty ())
 	{
-		qDebug("No language settings found, using system locale %s", QTextCodec::locale());
-		loc = QString("qgo_") + QTextCodec::locale();
-		lang = QTextCodec::locale();
+		QLocale locale = QLocale::system ();
+		qDebug() << "No language settings found, using system locale %s" << locale.name ();
+		loc = QString("qgo_") + QLocale::languageToString (locale.language ());
 	}
 	else
 	{
-		qDebug(QString("Language settings found: ")+ lang);
+		qDebug () << "Language settings found: " + lang;
 		loc = QString("qgo_") + lang;
 	}
 
 	if (trans.load(loc, tr_dir))
 	{
-		qDebug("Translation loaded.");
+		qDebug () << "Translation loaded.";
 		myapp.installTranslator(&trans);
-	}
-	else if (strcmp(lang.ascii(), "en") && strcmp(lang.ascii(), "C"))  // Skip warning for en and C default.
-		qWarning("Failed to find translation file for %s", lang.ascii());
+	} else if (lang != "en" && lang != "C")  // Skip warning for en and C default.
+		qWarning() << "Failed to find translation file for " << lang;
 
 	client_window = new ClientWindow(0);
 
