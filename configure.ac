@@ -31,15 +31,11 @@ dnl generate the config header
 AM_CONFIG_HEADER(config.h) dnl at the distribution this done
 
 dnl Checks for programs.
-AC_CHECK_COMPILERS
+AC_PROG_CXX
 
 CXXFLAGS="$NOOPT_CXXFLAGS" dnl __kdevelop[noopt]__
 CFLAGS="$NOOPT_CFLAGS" dnl __kdevelop[noopt]__
 dnl CXXFLAGS="$CXXFLAGS $USE_EXCEPTIONS" dnl __kdevelop[exc]__
-
-AC_ENABLE_SHARED(yes)
-AC_ENABLE_STATIC(no)
-KDE_PROG_LIBTOOL
 
 all_libraries="$all_libraries $USER_LDFLAGS"
 all_includes="$all_includes $USER_INCLUDES"
