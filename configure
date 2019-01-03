@@ -5511,8 +5511,8 @@ ac_config_files="$ac_config_files src/translations/Makefile"
 ac_config_files="$ac_config_files templates/Makefile"
 
 
-# @@@ fix this
-CPPFLAGS="-DDATADIR='\"${prefix}/share/${PACKAGE}\"' $CPPFLAGS"
+CXXFLAGS="-DDATADIR='\"${prefix}/share/${PACKAGE}\"' $CXXFLAGS"
+CXXFLAGS="-DDOCDIR='\"${prefix}/share/doc/${PACKAGE}\"' $CXXFLAGS"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure

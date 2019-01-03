@@ -95,7 +95,7 @@ PREFIX = /usr/local
 
 TARGET                = q5go
 DATADIR               = $$PREFIX/share/q5go
-DOCDIR                = $$PREFIX/share/doc/
+DOCDIR                = $$PREFIX/share/doc/q5go
 
 unix:INCLUDEPATH      += .
 win32:INCLUDEPATH     += .
@@ -111,6 +111,7 @@ DISTFILES            += *.dsw \
 			*.ts \
                         qgo.pro
 DEFINES              += "DATADIR=\\\"$$DATADIR\\\""
+DEFINES              += "DOCDIR=\\\"$$DOCDIR\\\""
 release:DEFINES      += NO_CHECK
 win32:DEFINES        += QT_DLL QT_THREAD_SUPPORT HAVE_CONFIG_H
 win32:RC_FILE	      = qgo.rc
@@ -140,11 +141,11 @@ sounds.path           = $$DATADIR/sounds
 sounds.files          = sounds/*
 INSTALLS += sounds
 
-documentation.path    = $$DOCDIR/q5go
+documentation.path    = $$DOCDIR/
 documentation.files   = ../AUTHORS ../COPYING ../NEWS ../README ../TODO ../ChangeLog
 INSTALLS += documentation
 
-html.path             = $$DOCDIR/html/q5go
+html.path             = $$DOCDIR/html/
 html.files            = ../html/*
 INSTALLS += html
 

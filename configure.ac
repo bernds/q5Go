@@ -98,7 +98,7 @@ AC_CONFIG_FILES([ src/translations/Makefile ])
 AC_CONFIG_FILES([ templates/Makefile ])
 
 dnl CPPFLAGS="$CPPFLAGS -DDATADIR=\"$(datadir)\""
-# @@@ fix this
-CPPFLAGS="-DDATADIR='\"${prefix}/share/${PACKAGE}\"' $CPPFLAGS"
+CXXFLAGS="-DDATADIR='\"${prefix}/share/${PACKAGE}\"' $CXXFLAGS"
+CXXFLAGS="-DDOCDIR='\"${prefix}/share/doc/${PACKAGE}\"' $CXXFLAGS"
 
 AC_OUTPUT()

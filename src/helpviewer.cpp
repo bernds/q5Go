@@ -41,7 +41,8 @@ HelpViewer::HelpViewer(QWidget* parent)
 	    << "E:/Programme/qGo/html"
 	    << "./html";
 #else
-    strList << "/usr/share/doc/" PACKAGE "/html"
+    strList << DOCDIR "/html"
+            << "/usr/share/doc/" PACKAGE "/html"
 	    << "/usr/doc/" PACKAGE "/html"
 	    << "/usr/local/share/doc/" PACKAGE "/html"
 	    << "/usr/local/doc/" PACKAGE "/html"
@@ -80,7 +81,7 @@ void HelpViewer::initToolBar()
 	toolBar->addAction (buttonClose);
 
 	buttonHome = new QAction(iconHome, "Home", this);
-	connect (buttonHome, SIGNAL(activated ()), browser, SLOT(home()));
+	connect (buttonHome, &QAction::triggered, [=] (bool) { browser->home (); });
 	toolBar->addAction (buttonHome);
 }
 
