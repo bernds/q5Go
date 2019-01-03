@@ -7,18 +7,18 @@
   <widget class="QMainWindow" name="ClientWindowGui">
     <property name="geometry">
       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>773</width>
-        <height>591</height>
+	<x>0</x>
+	<y>0</y>
+	<width>773</width>
+	<height>591</height>
       </rect>
     </property>
     <property name="sizePolicy">
       <sizepolicy>
-        <hsizetype>7</hsizetype>
-        <vsizetype>7</vsizetype>
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
+	<hsizetype>7</hsizetype>
+	<vsizetype>7</vsizetype>
+	<horstretch>0</horstretch>
+	<verstretch>0</verstretch>
       </sizepolicy>
     </property>
     <property name="windowTitle">
@@ -29,653 +29,653 @@
     </property>
     <widget class="QWidget">
       <layout class="QGridLayout">
-        <property name="margin">
-          <number>0</number>
-        </property>
-        <item row="0" column="0">
-          <widget class="QSplitter" name="s1">
-            <property name="sizePolicy">
-              <sizepolicy>
-                <hsizetype>7</hsizetype>
-                <vsizetype>7</vsizetype>
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-              </sizepolicy>
-            </property>
-            <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-            </property>
-            <widget class="QSplitter" name="s2">
-              <property name="orientation">
-                <enum>Qt::Vertical</enum>
-              </property>
-              <widget class="QGroupBox" name="groupBox1">
-                <property name="sizePolicy">
-                  <sizepolicy>
-                    <hsizetype>7</hsizetype>
-                    <vsizetype>7</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                  </sizepolicy>
-                </property>
-                <property name="title">
-                  <string>Players</string>
-                </property>
-                <layout class="QGridLayout">
-                  <property name="margin">
-                    <number>3</number>
-                  </property>
-                  <item row="0" column="0" rowspan="1" colspan="3">
-                    <widget class="PlayerTable" name="ListView_players">
-                      <property name="sizePolicy">
-                        <sizepolicy>
-                          <hsizetype>7</hsizetype>
-                          <vsizetype>7</vsizetype>
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                        </sizepolicy>
-                      </property>
-                      <property name="minimumSize">
-                        <size>
-                          <width>0</width>
-                          <height>10</height>
-                        </size>
-                      </property>
-                    </widget>
-                  </item>
-                  <item row="1" column="1">
-                    <widget class="QComboBox" name="whoBox2">
-                      <property name="currentIndex">
-                        <number>0</number>
-                      </property>
-                      <property name="toolTip" stdset="0">
-                        <string>Select players rank boundaries</string>
-                      </property>
-                      <property name="whatsThis" stdset="0">
-                        <string>Select players ranks boundaries
+	<property name="margin">
+	  <number>0</number>
+	</property>
+	<item row="0" column="0">
+	  <widget class="QSplitter" name="s1">
+	    <property name="sizePolicy">
+	      <sizepolicy>
+		<hsizetype>7</hsizetype>
+		<vsizetype>7</vsizetype>
+		<horstretch>0</horstretch>
+		<verstretch>0</verstretch>
+	      </sizepolicy>
+	    </property>
+	    <property name="orientation">
+	      <enum>Qt::Horizontal</enum>
+	    </property>
+	    <widget class="QSplitter" name="s2">
+	      <property name="orientation">
+		<enum>Qt::Vertical</enum>
+	      </property>
+	      <widget class="QGroupBox" name="groupBox1">
+		<property name="sizePolicy">
+		  <sizepolicy>
+		    <hsizetype>7</hsizetype>
+		    <vsizetype>7</vsizetype>
+		    <horstretch>0</horstretch>
+		    <verstretch>0</verstretch>
+		  </sizepolicy>
+		</property>
+		<property name="title">
+		  <string>Players</string>
+		</property>
+		<layout class="QGridLayout">
+		  <property name="margin">
+		    <number>3</number>
+		  </property>
+		  <item row="0" column="0" rowspan="1" colspan="3">
+		    <widget class="PlayerTable" name="ListView_players">
+		      <property name="sizePolicy">
+			<sizepolicy>
+			  <hsizetype>7</hsizetype>
+			  <vsizetype>7</vsizetype>
+			  <horstretch>0</horstretch>
+			  <verstretch>0</verstretch>
+			</sizepolicy>
+		      </property>
+		      <property name="minimumSize">
+			<size>
+			  <width>0</width>
+			  <height>10</height>
+			</size>
+		      </property>
+		    </widget>
+		  </item>
+		  <item row="1" column="1">
+		    <widget class="QComboBox" name="whoBox2">
+		      <property name="currentIndex">
+			<number>0</number>
+		      </property>
+		      <property name="toolTip" stdset="0">
+			<string>Select players rank boundaries</string>
+		      </property>
+		      <property name="whatsThis" stdset="0">
+			<string>Select players ranks boundaries
 
 Use these lists to select the rank of players you want to see in the list
 This will take effect after refreshing the players list.</string>
-                      </property>
-                      <item>
-                        <property name="text">
-                          <string/>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>1p-9p</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>9d</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>8d</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>7d</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>6d</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>5d</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>4d</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>3d</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>2d</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>1d</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>1k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>2k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>3k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>4k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>5k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>6k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>7k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>8k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>9k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>10k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>11k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>12k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>13k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>14k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>15k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>16k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>17k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>18k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>19k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>20k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>21k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>22k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>23k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>24k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>25k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>26k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>27k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>28k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>29k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>30k</string>
-                        </property>
-                      </item>
-                    </widget>
-                  </item>
-                  <item row="1" column="0">
-                    <widget class="QComboBox" name="whoBox1">
-                      <property name="currentIndex">
-                        <number>0</number>
-                      </property>
-                      <property name="toolTip" stdset="0">
-                        <string>Select players rank boundaries</string>
-                      </property>
-                      <property name="whatsThis" stdset="0">
-                        <string>Select players ranks boundaries
+		      </property>
+		      <item>
+			<property name="text">
+			  <string/>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>1p-9p</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>9d</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>8d</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>7d</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>6d</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>5d</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>4d</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>3d</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>2d</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>1d</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>1k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>2k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>3k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>4k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>5k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>6k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>7k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>8k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>9k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>10k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>11k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>12k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>13k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>14k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>15k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>16k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>17k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>18k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>19k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>20k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>21k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>22k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>23k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>24k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>25k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>26k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>27k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>28k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>29k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>30k</string>
+			</property>
+		      </item>
+		    </widget>
+		  </item>
+		  <item row="1" column="0">
+		    <widget class="QComboBox" name="whoBox1">
+		      <property name="currentIndex">
+			<number>0</number>
+		      </property>
+		      <property name="toolTip" stdset="0">
+			<string>Select players rank boundaries</string>
+		      </property>
+		      <property name="whatsThis" stdset="0">
+			<string>Select players ranks boundaries
 
 Use these lists to select the rank of players you want to see in the list
 This will take effect after refreshing the players list.</string>
-                      </property>
-                      <item>
-                        <property name="text">
-                          <string/>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>1p-9p</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>9d</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>8d</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>7d</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>6d</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>5d</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>4d</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>3d</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>2d</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>1d</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>1k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>2k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>3k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>4k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>5k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>6k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>7k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>8k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>9k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>10k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>11k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>12k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>13k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>14k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>15k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>16k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>17k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>18k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>19k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>20k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>21k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>22k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>23k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>24k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>25k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>26k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>27k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>28k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>29k</string>
-                        </property>
-                      </item>
-                      <item>
-                        <property name="text">
-                          <string>30k</string>
-                        </property>
-                      </item>
-                    </widget>
-                  </item>
-                  <item row="1" column="2">
-                    <widget class="QCheckBox" name="whoOpenCheck">
-                      <property name="text">
-                        <string>open</string>
-                      </property>
-                      <property name="toolTip" stdset="0">
-                        <string>toggle for displaying only open players</string>
-                      </property>
-                      <property name="whatsThis" stdset="0">
-                        <string>Open players
+		      </property>
+		      <item>
+			<property name="text">
+			  <string/>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>1p-9p</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>9d</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>8d</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>7d</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>6d</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>5d</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>4d</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>3d</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>2d</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>1d</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>1k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>2k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>3k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>4k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>5k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>6k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>7k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>8k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>9k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>10k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>11k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>12k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>13k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>14k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>15k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>16k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>17k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>18k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>19k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>20k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>21k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>22k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>23k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>24k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>25k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>26k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>27k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>28k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>29k</string>
+			</property>
+		      </item>
+		      <item>
+			<property name="text">
+			  <string>30k</string>
+			</property>
+		      </item>
+		    </widget>
+		  </item>
+		  <item row="1" column="2">
+		    <widget class="QCheckBox" name="whoOpenCheck">
+		      <property name="text">
+			<string>open</string>
+		      </property>
+		      <property name="toolTip" stdset="0">
+			<string>toggle for displaying only open players</string>
+		      </property>
+		      <property name="whatsThis" stdset="0">
+			<string>Open players
 
 Check this box if you want the list to display only open players (uncheck if you want all players).
 This will take effect after refreshing the players list.</string>
-                      </property>
-                    </widget>
-                  </item>
-                </layout>
-              </widget>
-              <widget class="QTabWidget" name="TabWidget_mini_2">
-                <property name="tabPosition">
-                  <enum>QTabWidget::South</enum>
-                </property>
-                <widget class="QWidget" name="rooms">
-                  <attribute name="title">
-                    <string>Rooms*</string>
-                  </attribute>
-                  <layout class="QGridLayout">
-                    <property name="margin">
-                      <number>0</number>
-                    </property>
-                    <item row="1" column="1">
-                      <widget class="QPushButton" name="LeaveRoomButton">
-                        <property name="maximumSize">
-                          <size>
-                            <width>22</width>
-                            <height>22</height>
-                          </size>
-                        </property>
-                        <property name="text">
-                          <string/>
-                        </property>
-                        <property name="icon">
-                          <pixmap>image1</pixmap>
-                        </property>
-                      </widget>
-                    </item>
-                    <item row="0" column="0" rowspan="1" colspan="2">
-                      <widget class="QListWidget" name="RoomList"/>
-                    </item>
-                  </layout>
-                </widget>
-                <widget class="QWidget" name="messages">
-                  <attribute name="title">
-                    <string>Msg*</string>
-                  </attribute>
-                  <layout class="QVBoxLayout">
-                    <property name="margin">
-                      <number>0</number>
-                    </property>
-                    <item>
-                      <widget class="QTextBrowser" name="MultiLineEdit3">
-                        <property name="sizePolicy">
-                          <sizepolicy>
-                            <hsizetype>7</hsizetype>
-                            <vsizetype>7</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                          </sizepolicy>
-                        </property>
-                      </widget>
-                    </item>
-                    <item>
-                      <widget class="QPushButton" name="pb_releaseTalkTabs">
-                        <property name="text">
-                          <string>Close all talk tabs</string>
-                        </property>
-                      </widget>
-                    </item>
-                  </layout>
-                </widget>
-              </widget>
-            </widget>
-            <widget class="QSplitter" name="s3">
-              <property name="orientation">
-                <enum>Qt::Vertical</enum>
-              </property>
-              <widget class="Q3GroupBox" name="groupBox2">
-                <property name="title">
-                  <string>Games</string>
-                </property>
-                <layout class="QGridLayout">
-                  <property name="margin">
-                    <number>3</number>
-                  </property>
-                  <item row="0" column="0">
-                    <widget class="GamesTable" name="ListView_games">
-                      <property name="sizePolicy">
-                        <sizepolicy>
-                          <hsizetype>7</hsizetype>
-                          <vsizetype>7</vsizetype>
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                        </sizepolicy>
-                      </property>
-                    </widget>
-                  </item>
-                </layout>
-              </widget>
-              <widget class="QWidget" name="layout1">
-                <layout class="QGridLayout">
-                  <property name="margin">
-                    <number>0</number>
-                  </property>
-                  <property name="spacing">
-                    <number>0</number>
-                  </property>
-                  <item row="0" column="0">
-                    <widget class="QTextBrowser" name="MultiLineEdit2">
-                      <property name="sizePolicy">
-                        <sizepolicy>
-                          <hsizetype>7</hsizetype>
-                          <vsizetype>7</vsizetype>
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                        </sizepolicy>
-                      </property>
-                      <property name="toolTip" stdset="0">
-                        <string>relevant messages from/to server</string>
-                      </property>
-                    </widget>
-                  </item>
-                  <item row="1" column="0">
-                    <widget class="QComboBox" name="cb_cmdLine">
-                      <property name="editable">
-                        <bool>true</bool>
-                      </property>
-                      <property name="insertPolicy">
-                        <enum>QComboBox::InsertAtTop</enum>
-                      </property>
-                    </widget>
-                  </item>
-                </layout>
-              </widget>
-            </widget>
-          </widget>
-        </item>
+		      </property>
+		    </widget>
+		  </item>
+		</layout>
+	      </widget>
+	      <widget class="QTabWidget" name="TabWidget_mini_2">
+		<property name="tabPosition">
+		  <enum>QTabWidget::South</enum>
+		</property>
+		<widget class="QWidget" name="rooms">
+		  <attribute name="title">
+		    <string>Rooms*</string>
+		  </attribute>
+		  <layout class="QGridLayout">
+		    <property name="margin">
+		      <number>0</number>
+		    </property>
+		    <item row="1" column="1">
+		      <widget class="QPushButton" name="LeaveRoomButton">
+			<property name="maximumSize">
+			  <size>
+			    <width>22</width>
+			    <height>22</height>
+			  </size>
+			</property>
+			<property name="text">
+			  <string/>
+			</property>
+			<property name="icon">
+			  <pixmap>image1</pixmap>
+			</property>
+		      </widget>
+		    </item>
+		    <item row="0" column="0" rowspan="1" colspan="2">
+		      <widget class="QListWidget" name="RoomList"/>
+		    </item>
+		  </layout>
+		</widget>
+		<widget class="QWidget" name="messages">
+		  <attribute name="title">
+		    <string>Msg*</string>
+		  </attribute>
+		  <layout class="QVBoxLayout">
+		    <property name="margin">
+		      <number>0</number>
+		    </property>
+		    <item>
+		      <widget class="QTextBrowser" name="MultiLineEdit3">
+			<property name="sizePolicy">
+			  <sizepolicy>
+			    <hsizetype>7</hsizetype>
+			    <vsizetype>7</vsizetype>
+			    <horstretch>0</horstretch>
+			    <verstretch>0</verstretch>
+			  </sizepolicy>
+			</property>
+		      </widget>
+		    </item>
+		    <item>
+		      <widget class="QPushButton" name="pb_releaseTalkTabs">
+			<property name="text">
+			  <string>Close all talk tabs</string>
+			</property>
+		      </widget>
+		    </item>
+		  </layout>
+		</widget>
+	      </widget>
+	    </widget>
+	    <widget class="QSplitter" name="s3">
+	      <property name="orientation">
+		<enum>Qt::Vertical</enum>
+	      </property>
+	      <widget class="Q3GroupBox" name="groupBox2">
+		<property name="title">
+		  <string>Games</string>
+		</property>
+		<layout class="QGridLayout">
+		  <property name="margin">
+		    <number>3</number>
+		  </property>
+		  <item row="0" column="0">
+		    <widget class="GamesTable" name="ListView_games">
+		      <property name="sizePolicy">
+			<sizepolicy>
+			  <hsizetype>7</hsizetype>
+			  <vsizetype>7</vsizetype>
+			  <horstretch>0</horstretch>
+			  <verstretch>0</verstretch>
+			</sizepolicy>
+		      </property>
+		    </widget>
+		  </item>
+		</layout>
+	      </widget>
+	      <widget class="QWidget" name="layout1">
+		<layout class="QGridLayout">
+		  <property name="margin">
+		    <number>0</number>
+		  </property>
+		  <property name="spacing">
+		    <number>0</number>
+		  </property>
+		  <item row="0" column="0">
+		    <widget class="QTextBrowser" name="MultiLineEdit2">
+		      <property name="sizePolicy">
+			<sizepolicy>
+			  <hsizetype>7</hsizetype>
+			  <vsizetype>7</vsizetype>
+			  <horstretch>0</horstretch>
+			  <verstretch>0</verstretch>
+			</sizepolicy>
+		      </property>
+		      <property name="toolTip" stdset="0">
+			<string>relevant messages from/to server</string>
+		      </property>
+		    </widget>
+		  </item>
+		  <item row="1" column="0">
+		    <widget class="QComboBox" name="cb_cmdLine">
+		      <property name="editable">
+			<bool>true</bool>
+		      </property>
+		      <property name="insertPolicy">
+			<enum>QComboBox::InsertAtTop</enum>
+		      </property>
+		    </widget>
+		  </item>
+		</layout>
+	      </widget>
+	    </widget>
+	  </widget>
+	</item>
       </layout>
     </widget>
     <widget class="QToolBar" name="FileToolbar">
       <property name="label">
-        <string>File toolbar</string>
+	<string>File toolbar</string>
       </property>
       <addaction name="fileNewBoard"/>
       <addaction name="fileOpen"/>
@@ -683,91 +683,91 @@ This will take effect after refreshing the players list.</string>
     </widget>
     <widget class="QToolBar" name="Toolbar">
       <property name="label">
-        <string>main toolbar</string>
+	<string>main toolbar</string>
       </property>
       <widget class="QToolButton" name="toolConnect">
-        <property name="text">
-          <string/>
-        </property>
-        <property name="checkable">
-          <bool>true</bool>
-        </property>
-        <property name="icon">
-          <iconset>image2</iconset>
-        </property>
-        <property name="whatsThis" stdset="0">
-          <string>Connect
+	<property name="text">
+	  <string/>
+	</property>
+	<property name="checkable">
+	  <bool>true</bool>
+	</property>
+	<property name="icon">
+	  <iconset>image2</iconset>
+	</property>
+	<property name="whatsThis" stdset="0">
+	  <string>Connect
 
 Connect with/Disconnect from selected Go server.</string>
-        </property>
+	</property>
       </widget>
       <widget class="QComboBox" name="cb_connect">
-        <property name="focusPolicy">
-          <enum>Qt::NoFocus</enum>
-        </property>
-        <property name="toolTip" stdset="0">
-          <string>choose server</string>
-        </property>
-        <property name="whatsThis" stdset="0">
-          <string>chose Go server to connect to or use 'Preferences' to add/change a Go server entry</string>
-        </property>
+	<property name="focusPolicy">
+	  <enum>Qt::NoFocus</enum>
+	</property>
+	<property name="toolTip" stdset="0">
+	  <string>choose server</string>
+	</property>
+	<property name="whatsThis" stdset="0">
+	  <string>chose Go server to connect to or use 'Preferences' to add/change a Go server entry</string>
+	</property>
       </widget>
       <widget class="QToolButton" name="toolSeek">
-        <property name="text">
-          <string/>
-        </property>
-        <property name="checkable">
-          <bool>true</bool>
-        </property>
-        <property name="toolTip" stdset="0">
-          <string>Seek game</string>
-        </property>
-        <property name="whatsThis" stdset="0">
-          <string>Seek game
+	<property name="text">
+	  <string/>
+	</property>
+	<property name="checkable">
+	  <bool>true</bool>
+	</property>
+	<property name="toolTip" stdset="0">
+	  <string>Seek game</string>
+	</property>
+	<property name="whatsThis" stdset="0">
+	  <string>Seek game
 
 Use this button to 'seek' a game, with the given time settings (popup menu), and handicap range (list beside)
 The server will automatically launch a game against an opponent with matching settings.</string>
-        </property>
+	</property>
       </widget>
       <widget class="QComboBox" name="cb_seek_handicap">
-        <property name="toolTip" stdset="0">
-          <string>Set the handicap range you want for seeking games</string>
-        </property>
-        <property name="whatsThis" stdset="0">
-          <string>handicap range
+	<property name="toolTip" stdset="0">
+	  <string>Set the handicap range you want for seeking games</string>
+	</property>
+	<property name="whatsThis" stdset="0">
+	  <string>handicap range
 
 Set the handicap range you wish when seeking a game. See 'seek' button for more</string>
-        </property>
-        <item>
-          <property name="text">
-            <string>even</string>
-          </property>
-        </item>
-        <item>
-          <property name="text">
-            <string>within 2 stones</string>
-          </property>
-        </item>
-        <item>
-          <property name="text">
-            <string>within 5 stones</string>
-          </property>
-        </item>
-        <item>
-          <property name="text">
-            <string>anyone</string>
-          </property>
-        </item>
-        <item>
-          <property name="text">
-            <string>same or stronger</string>
-          </property>
-        </item>
-        <item>
-          <property name="text">
-            <string>same or weaker</string>
-          </property>
-        </item>
+	</property>
+	<item>
+	  <property name="text">
+	    <string>even</string>
+	  </property>
+	</item>
+	<item>
+	  <property name="text">
+	    <string>within 2 stones</string>
+	  </property>
+	</item>
+	<item>
+	  <property name="text">
+	    <string>within 5 stones</string>
+	  </property>
+	</item>
+	<item>
+	  <property name="text">
+	    <string>anyone</string>
+	  </property>
+	</item>
+	<item>
+	  <property name="text">
+	    <string>same or stronger</string>
+	  </property>
+	</item>
+	<item>
+	  <property name="text">
+	    <string>same or weaker</string>
+	  </property>
+	</item>
       </widget>
       <addaction name="separator"/>
       <addaction name="setLookingMode"/>
@@ -779,55 +779,55 @@ Set the handicap range you wish when seeking a game. See 'seek' button for more<
     </widget>
     <widget class="QMenuBar" name="menuBar">
       <widget class="QMenu" name="fileMenu">
-        <property name="title">
-          <string>&amp;File</string>
-        </property>
-        <addaction name="fileNewBoard"/>
-        <addaction name="fileNew"/>
-        <addaction name="fileOpen"/>
-        <addaction name="computerPlay"/>
-        <addaction name="separator"/>
-        <addaction name="fileQuit"/>
+	<property name="title">
+	  <string>&amp;File</string>
+	</property>
+	<addaction name="fileNewBoard"/>
+	<addaction name="fileNew"/>
+	<addaction name="fileOpen"/>
+	<addaction name="computerPlay"/>
+	<addaction name="separator"/>
+	<addaction name="fileQuit"/>
       </widget>
       <widget class="QMenu" name="PopupMenu">
-        <property name="title">
-          <string>&amp;Connections</string>
-        </property>
-        <addaction name="Connect"/>
-        <addaction name="Disconnect"/>
-        <addaction name="separator"/>
-        <addaction name="editServers"/>
+	<property name="title">
+	  <string>&amp;Connections</string>
+	</property>
+	<addaction name="Connect"/>
+	<addaction name="Disconnect"/>
+	<addaction name="separator"/>
+	<addaction name="editServers"/>
       </widget>
       <widget class="QMenu" name="PopupMenu_2">
-        <property name="title">
-          <string>&amp;Settings</string>
-        </property>
-        <addaction name="setPreferences"/>
-        <addaction name="separator"/>
-        <addaction name="setLookingMode"/>
-        <addaction name="setOpenMode"/>
-        <addaction name="setQuietMode"/>
+	<property name="title">
+	  <string>&amp;Settings</string>
+	</property>
+	<addaction name="setPreferences"/>
+	<addaction name="separator"/>
+	<addaction name="setLookingMode"/>
+	<addaction name="setOpenMode"/>
+	<addaction name="setQuietMode"/>
       </widget>
       <widget class="QMenu" name="PopupMenu_3">
-        <property name="title">
-          <string>&amp;View</string>
-        </property>
-        <addaction name="viewToolBar"/>
-        <addaction name="viewUserToolBar"/>
-        <addaction name="viewMenuBar"/>
-        <addaction name="viewStatusBar"/>
+	<property name="title">
+	  <string>&amp;View</string>
+	</property>
+	<addaction name="viewToolBar"/>
+	<addaction name="viewUserToolBar"/>
+	<addaction name="viewMenuBar"/>
+	<addaction name="viewStatusBar"/>
       </widget>
       <widget class="QMenu" name="helpMenu">
-        <property name="title">
-          <string>&amp;Help</string>
-        </property>
-        <addaction name="helpManual"/>
-        <addaction name="separator"/>
-        <addaction name="helpSoundInfo"/>
-        <addaction name="separator"/>
-        <addaction name="helpAboutApp"/>
-        <addaction name="helpAboutQt"/>
-        <addaction name="helpNewVersion"/>
+	<property name="title">
+	  <string>&amp;Help</string>
+	</property>
+	<addaction name="helpManual"/>
+	<addaction name="separator"/>
+	<addaction name="helpSoundInfo"/>
+	<addaction name="separator"/>
+	<addaction name="helpAboutApp"/>
+	<addaction name="helpAboutQt"/>
+	<addaction name="helpNewVersion"/>
       </widget>
       <addaction name="fileMenu"/>
       <addaction name="PopupMenu"/>
@@ -837,207 +837,207 @@ Set the handicap range you wish when seeking a game. See 'seek' button for more<
     </widget>
     <action name="fileOpen">
       <property name="name">
-        <cstring>fileOpen</cstring>
+	<cstring>fileOpen</cstring>
       </property>
       <property name="iconText">
-        <string>Open</string>
+	<string>Open</string>
       </property>
       <property name="text">
-        <string>&amp;Open...</string>
+	<string>&amp;Open...</string>
       </property>
       <property name="whatsThis">
-        <string>Open
+	<string>Open
 
 Open a sgf file.</string>
       </property>
       <property name="shortcut">
-        <string>Ctrl+O</string>
+	<string>Ctrl+O</string>
       </property>
     </action>
     <action name="helpManual">
       <property name="name">
-        <cstring>helpManual</cstring>
+	<cstring>helpManual</cstring>
       </property>
       <property name="iconText">
-        <string>Manual</string>
+	<string>Manual</string>
       </property>
       <property name="text">
-        <string>&amp;Manual</string>
+	<string>&amp;Manual</string>
       </property>
       <property name="toolTip">
-        <string>Opens the manual</string>
+	<string>Opens the manual</string>
       </property>
       <property name="whatsThis">
-        <string>Help
+	<string>Help
 
 Opens the manual of the application.</string>
       </property>
       <property name="shortcut">
-        <string>F1</string>
+	<string>F1</string>
       </property>
     </action>
     <action name="helpAboutApp">
       <property name="name">
-        <cstring>helpAboutApp</cstring>
+	<cstring>helpAboutApp</cstring>
       </property>
       <property name="iconText">
-        <string>About</string>
+	<string>About</string>
       </property>
       <property name="text">
-        <string>&amp;About</string>
+	<string>&amp;About</string>
       </property>
       <property name="toolTip">
-        <string>About the application.</string>
+	<string>About the application.</string>
       </property>
       <property name="whatsThis">
-        <string>About
+	<string>About
 
 About the application.</string>
       </property>
       <property name="shortcut">
-        <string/>
+	<string/>
       </property>
     </action>
     <action name="Disconnect">
       <property name="name">
-        <cstring>Disconnect</cstring>
+	<cstring>Disconnect</cstring>
       </property>
       <property name="checkable">
-        <bool>false</bool>
+	<bool>false</bool>
       </property>
       <property name="checked">
-        <bool>false</bool>
+	<bool>false</bool>
       </property>
       <property name="enabled">
-        <bool>true</bool>
+	<bool>true</bool>
       </property>
       <property name="iconText">
-        <string>Disconnect</string>
+	<string>Disconnect</string>
       </property>
       <property name="text">
-        <string>&amp;Disconnect</string>
+	<string>&amp;Disconnect</string>
       </property>
       <property name="toolTip">
-        <string>Disconnect from server</string>
+	<string>Disconnect from server</string>
       </property>
       <property name="whatsThis">
-        <string>Disconnect from server</string>
+	<string>Disconnect from server</string>
       </property>
     </action>
     <action name="setLookingMode">
       <property name="name">
-        <cstring>setLookingMode</cstring>
+	<cstring>setLookingMode</cstring>
       </property>
       <property name="checkable">
-        <bool>true</bool>
+	<bool>true</bool>
       </property>
       <property name="iconText">
-        <string>Looking</string>
+	<string>Looking</string>
       </property>
       <property name="text">
-        <string>&amp;Looking</string>
+	<string>&amp;Looking</string>
       </property>
       <property name="toolTip">
-        <string>toggles looking for matches</string>
+	<string>toggles looking for matches</string>
       </property>
       <property name="whatsThis">
-        <string>If checked then you are looking for matches, that means you are ready to play. After refreshing the player table having a '!' mark indicates to be looking for matches. Clicking this checkbox toggles the mode. You have to be open too, if you are looking. Thus, the Go server sets you open for matches (no 'X')!</string>
+	<string>If checked then you are looking for matches, that means you are ready to play. After refreshing the player table having a '!' mark indicates to be looking for matches. Clicking this checkbox toggles the mode. You have to be open too, if you are looking. Thus, the Go server sets you open for matches (no 'X')!</string>
       </property>
     </action>
     <action name="setOpenMode">
       <property name="name">
-        <cstring>setOpenMode</cstring>
+	<cstring>setOpenMode</cstring>
       </property>
       <property name="checkable">
-        <bool>true</bool>
+	<bool>true</bool>
       </property>
       <property name="iconText">
-        <string>Open</string>
+	<string>Open</string>
       </property>
       <property name="text">
-        <string>&amp;Open</string>
+	<string>&amp;Open</string>
       </property>
       <property name="toolTip">
-        <string>toggles open for matches</string>
+	<string>toggles open for matches</string>
       </property>
       <property name="whatsThis">
-        <string>If checked you are open for matches. After refreshing the player table having a 'X' mark indicates to be NOT open for matches. Clicking this checkbox toggles the mode.</string>
+	<string>If checked you are open for matches. After refreshing the player table having a 'X' mark indicates to be NOT open for matches. Clicking this checkbox toggles the mode.</string>
       </property>
     </action>
     <action name="computerPlay">
       <property name="name">
-        <cstring>computerPlay</cstring>
+	<cstring>computerPlay</cstring>
       </property>
       <property name="iconText">
-        <string>Play with program</string>
+	<string>Play with program</string>
       </property>
       <property name="text">
-        <string>&amp;Play with program</string>
+	<string>&amp;Play with program</string>
       </property>
       <property name="statusTip">
-        <string>Play with program</string>
+	<string>Play with program</string>
       </property>
       <property name="whatsThis">
-        <string>Play with a program
+	<string>Play with a program
 
 Sets a playing session with a pGo program using GTP (like GNUGO)</string>
       </property>
       <property name="shortcut">
-        <string>Ctrl+P</string>
+	<string>Ctrl+P</string>
       </property>
     </action>
     <action name="refreshPlayers">
       <property name="name">
-        <cstring>refreshPlayers</cstring>
+	<cstring>refreshPlayers</cstring>
       </property>
       <property name="iconText">
-        <string>Refresh players</string>
+	<string>Refresh players</string>
       </property>
       <property name="text">
-        <string>Refresh players</string>
+	<string>Refresh players</string>
       </property>
       <property name="toolTip">
-        <string>Get new players table from server</string>
+	<string>Get new players table from server</string>
       </property>
       <property name="whatsThis">
-        <string>Get new players table from server</string>
+	<string>Get new players table from server</string>
       </property>
     </action>
     <action name="refreshGames">
       <property name="name">
-        <cstring>refreshGames</cstring>
+	<cstring>refreshGames</cstring>
       </property>
       <property name="iconText">
-        <string>Refresh Games</string>
+	<string>Refresh Games</string>
       </property>
       <property name="text">
-        <string>Refresh Games</string>
+	<string>Refresh Games</string>
       </property>
       <property name="toolTip">
-        <string>Get new games table from server</string>
+	<string>Get new games table from server</string>
       </property>
       <property name="whatsThis">
-        <string>Get new games table from server</string>
+	<string>Get new games table from server</string>
       </property>
     </action>
     <action name="setQuietMode">
       <property name="name">
-        <cstring>setQuietMode</cstring>
+	<cstring>setQuietMode</cstring>
       </property>
       <property name="checkable">
-        <bool>true</bool>
+	<bool>true</bool>
       </property>
       <property name="iconText">
-        <string>Quiet</string>
+	<string>Quiet</string>
       </property>
       <property name="text">
-        <string>&amp;Quiet</string>
+	<string>&amp;Quiet</string>
       </property>
       <property name="toolTip">
-        <string>toggles system messages</string>
+	<string>toggles system messages</string>
       </property>
       <property name="whatsThis">
-        <string>If checked then you don't receive system messages, that means you are not informed about connecting/disconnecting players, started/finished games etc. Clicking this checkbox toggles the mode. To be quiet is indicated with a 'Q' in the playertable.
+	<string>If checked then you don't receive system messages, that means you are not informed about connecting/disconnecting players, started/finished games etc. Clicking this checkbox toggles the mode. To be quiet is indicated with a 'Q' in the playertable.
 
 Note : some features cannot work if set to quiet (checked box):
 	- sound when watched players enter/leave
@@ -1046,256 +1046,256 @@ Note : some features cannot work if set to quiet (checked box):
     </action>
     <action name="Connect">
       <property name="name">
-        <cstring>Connect</cstring>
+	<cstring>Connect</cstring>
       </property>
       <property name="checkable">
-        <bool>false</bool>
+	<bool>false</bool>
       </property>
       <property name="checked">
-        <bool>false</bool>
+	<bool>false</bool>
       </property>
       <property name="enabled">
-        <bool>true</bool>
+	<bool>true</bool>
       </property>
       <property name="iconText">
-        <string>Connect</string>
+	<string>Connect</string>
       </property>
       <property name="text">
-        <string>&amp;Connect</string>
+	<string>&amp;Connect</string>
       </property>
       <property name="toolTip">
-        <string>Connects to the server</string>
+	<string>Connects to the server</string>
       </property>
       <property name="statusTip">
-        <string>Connects to the server</string>
+	<string>Connects to the server</string>
       </property>
       <property name="whatsThis">
-        <string>Connects to the server</string>
+	<string>Connects to the server</string>
       </property>
     </action>
     <action name="setPreferences">
       <property name="name">
-        <cstring>setPreferences</cstring>
+	<cstring>setPreferences</cstring>
       </property>
       <property name="iconText">
-        <string>Preferences</string>
+	<string>Preferences</string>
       </property>
       <property name="text">
-        <string>Preferences</string>
+	<string>Preferences</string>
       </property>
       <property name="toolTip">
-        <string>Edit the preferences</string>
+	<string>Edit the preferences</string>
       </property>
       <property name="whatsThis">
-        <string>Preferences
+	<string>Preferences
 
 Edit the applications preferences.</string>
       </property>
       <property name="shortcut">
-        <string>Alt+P</string>
+	<string>Alt+P</string>
       </property>
     </action>
     <action name="fileQuit">
       <property name="name">
-        <cstring>fileQuit</cstring>
+	<cstring>fileQuit</cstring>
       </property>
       <property name="iconText">
-        <string>Exit</string>
+	<string>Exit</string>
       </property>
       <property name="text">
-        <string>E&amp;xit</string>
+	<string>E&amp;xit</string>
       </property>
       <property name="toolTip">
-        <string>Quits the application</string>
+	<string>Quits the application</string>
       </property>
       <property name="whatsThis">
-        <string>Exit
+	<string>Exit
 
 Quits the application.</string>
       </property>
       <property name="shortcut">
-        <string>Ctrl+Q</string>
+	<string>Ctrl+Q</string>
       </property>
     </action>
     <action name="fileNewBoard">
       <property name="name">
-        <cstring>fileNewBoard</cstring>
+	<cstring>fileNewBoard</cstring>
       </property>
       <property name="iconText">
-        <string>New Board 19x19</string>
+	<string>New Board 19x19</string>
       </property>
       <property name="text">
-        <string>New &amp;Board 19x19</string>
+	<string>New &amp;Board 19x19</string>
       </property>
       <property name="toolTip">
-        <string>Creates a new board with size 19x19</string>
+	<string>Creates a new board with size 19x19</string>
       </property>
       <property name="whatsThis">
-        <string>New
+	<string>New
 
 Creates a new 19x19 board.</string>
       </property>
       <property name="shortcut">
-        <string>Ctrl+B</string>
+	<string>Ctrl+B</string>
       </property>
     </action>
     <action name="viewToolBar">
       <property name="name">
-        <cstring>viewToolBar</cstring>
+	<cstring>viewToolBar</cstring>
       </property>
       <property name="checkable">
-        <bool>true</bool>
+	<bool>true</bool>
       </property>
       <property name="checked">
-        <bool>true</bool>
+	<bool>true</bool>
       </property>
       <property name="iconText">
-        <string>ToolBar</string>
+	<string>ToolBar</string>
       </property>
       <property name="text">
-        <string>&amp;ToolBar</string>
+	<string>&amp;ToolBar</string>
       </property>
       <property name="toolTip">
-        <string>Enables/disables the toolbar</string>
+	<string>Enables/disables the toolbar</string>
       </property>
       <property name="whatsThis">
-        <string>Navigation toolbar
+	<string>Navigation toolbar
 
 Enables/disables the toolbar.</string>
       </property>
     </action>
     <action name="editServers">
       <property name="name">
-        <cstring>editServers</cstring>
+	<cstring>editServers</cstring>
       </property>
       <property name="iconText">
-        <string>Edit servers</string>
+	<string>Edit servers</string>
       </property>
       <property name="text">
-        <string>&amp;Edit servers</string>
+	<string>&amp;Edit servers</string>
       </property>
       <property name="whatsThis">
-        <string>Edit servers</string>
+	<string>Edit servers</string>
       </property>
     </action>
     <action name="viewMenuBar">
       <property name="name">
-        <cstring>viewMenuBar</cstring>
+	<cstring>viewMenuBar</cstring>
       </property>
       <property name="checkable">
-        <bool>true</bool>
+	<bool>true</bool>
       </property>
       <property name="checked">
-        <bool>true</bool>
+	<bool>true</bool>
       </property>
       <property name="iconText">
-        <string>Menubar</string>
+	<string>Menubar</string>
       </property>
       <property name="text">
-        <string>&amp;Menubar</string>
+	<string>&amp;Menubar</string>
       </property>
       <property name="toolTip">
-        <string>Enables/disables the menubar</string>
+	<string>Enables/disables the menubar</string>
       </property>
       <property name="shortcut">
-        <string>F7</string>
+	<string>F7</string>
       </property>
     </action>
     <action name="viewStatusBar">
       <property name="name">
-        <cstring>viewStatusBar</cstring>
+	<cstring>viewStatusBar</cstring>
       </property>
       <property name="checkable">
-        <bool>true</bool>
+	<bool>true</bool>
       </property>
       <property name="checked">
-        <bool>true</bool>
+	<bool>true</bool>
       </property>
       <property name="iconText">
-        <string>Statusbar</string>
+	<string>Statusbar</string>
       </property>
       <property name="text">
-        <string>&amp;Statusbar</string>
+	<string>&amp;Statusbar</string>
       </property>
       <property name="toolTip">
-        <string>Enables/disables the statusbar</string>
+	<string>Enables/disables the statusbar</string>
       </property>
       <property name="whatsThis">
-        <string>Statusbar
+	<string>Statusbar
 
 Enables/disables the statusbar.</string>
       </property>
     </action>
     <action name="helpSoundInfo">
       <property name="name">
-        <cstring>helpSoundInfo</cstring>
+	<cstring>helpSoundInfo</cstring>
       </property>
       <property name="iconText">
-        <string>Sound</string>
+	<string>Sound</string>
       </property>
       <property name="text">
-        <string>&amp;Sound</string>
+	<string>&amp;Sound</string>
       </property>
       <property name="toolTip">
-        <string>Short info on sound availability</string>
+	<string>Short info on sound availability</string>
       </property>
       <property name="whatsThis">
-        <string>Sound Info
+	<string>Sound Info
 
 Views a message box with a short comment about sound.</string>
       </property>
     </action>
     <action name="helpAboutQt">
       <property name="name">
-        <cstring>helpAboutQt</cstring>
+	<cstring>helpAboutQt</cstring>
       </property>
       <property name="iconText">
-        <string>About Qt</string>
+	<string>About Qt</string>
       </property>
       <property name="text">
-        <string>About &amp;Qt</string>
+	<string>About &amp;Qt</string>
       </property>
       <property name="whatsThis">
-        <string>About Qt
+	<string>About Qt
 
 About Qt.</string>
       </property>
     </action>
     <action name="fileNew">
       <property name="name">
-        <cstring>fileNew</cstring>
+	<cstring>fileNew</cstring>
       </property>
       <property name="iconText">
-        <string>New Board</string>
+	<string>New Board</string>
       </property>
       <property name="text">
-        <string>&amp;New Board</string>
+	<string>&amp;New Board</string>
       </property>
       <property name="whatsThis">
-        <string>Creates a new board</string>
+	<string>Creates a new board</string>
       </property>
       <property name="shortcut">
-        <string>Ctrl+N</string>
+	<string>Ctrl+N</string>
       </property>
     </action>
     <action name="Seek">
       <property name="name">
-        <cstring>Seek</cstring>
+	<cstring>Seek</cstring>
       </property>
       <property name="checkable">
-        <bool>true</bool>
+	<bool>true</bool>
       </property>
       <property name="iconText">
-        <string>Action</string>
+	<string>Action</string>
       </property>
       <property name="text">
-        <string>Action</string>
+	<string>Action</string>
       </property>
       <property name="toolTip">
-        <string>Seek game</string>
+	<string>Seek game</string>
       </property>
       <property name="whatsThis">
-        <string>Seek game
+	<string>Seek game
 
 Use this button to 'seek' a game, with the given time settings (popup menu), and handicap range (list beside)
 The server will automatically launch a game against an opponent with matching settings.</string>
@@ -1303,16 +1303,16 @@ The server will automatically launch a game against an opponent with matching se
     </action>
     <action name="helpNewVersion">
       <property name="name">
-        <cstring>helpNewVersion</cstring>
+	<cstring>helpNewVersion</cstring>
       </property>
       <property name="iconText">
-        <string>New version message</string>
+	<string>New version message</string>
       </property>
       <property name="toolTip">
-        <string>shows new version message</string>
+	<string>shows new version message</string>
       </property>
       <property name="whatsThis">
-        <string>new version message
+	<string>new version message
 
 displays the message box that appears at launch of a new version</string>
       </property>
@@ -1325,13 +1325,13 @@ displays the message box that appears at launch of a new version</string>
       <extends>QWidget</extends>
       <header location="global">gamestable.h</header>
       <sizehint>
-        <width>-1</width>
-        <height>-1</height>
+	<width>-1</width>
+	<height>-1</height>
       </sizehint>
       <container>0</container>
       <sizepolicy>
-        <hordata>5</hordata>
-        <verdata>5</verdata>
+	<hordata>5</hordata>
+	<verdata>5</verdata>
       </sizepolicy>
       <pixmap>image3</pixmap>
     </customwidget>
@@ -1340,13 +1340,13 @@ displays the message box that appears at launch of a new version</string>
       <extends>QWidget</extends>
       <header location="global">playertable.h</header>
       <sizehint>
-        <width>-1</width>
-        <height>-1</height>
+	<width>-1</width>
+	<height>-1</height>
       </sizehint>
       <container>0</container>
       <sizepolicy>
-        <hordata>5</hordata>
-        <verdata>5</verdata>
+	<hordata>5</hordata>
+	<verdata>5</verdata>
       </sizepolicy>
       <pixmap>image3</pixmap>
     </customwidget>
