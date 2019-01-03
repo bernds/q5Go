@@ -2974,7 +2974,7 @@ void ClientWindow::dlgSetPreferences(int tab)
 	// Interface tab
 	dlg.LineEdit_goban->setText(setting->readEntry("SKIN"));
 	dlg.LineEdit_Table->setText(setting->readEntry("SKIN_TABLE"));
-	dlg.languageComboBox->insertItems(0, setting->getAvailableLanguages());
+	dlg.languageComboBox->insertItems(1, setting->getAvailableLanguages());
 	dlg.languageComboBox->setCurrentIndex(setting->convertLanguageCodeToNumber());
 //	dlg.stonesShadowCheckBox->setChecked(setting->readBoolEntry("STONES_SHADOW"));
 	dlg.radioButtonStones_2D->setChecked((setting->readIntEntry("STONES_LOOK")==1));
