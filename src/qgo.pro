@@ -107,6 +107,7 @@ SOURCES		      = gamedialog.cpp \
 
 TARGET                = q4go
 DATADIR               = $$PREFIX/share/q4go
+DOCDIR                = $$PREFIX/share/doc/q4go
 
 unix:INCLUDEPATH      += .
 win32:INCLUDEPATH     += .
@@ -152,11 +153,11 @@ sounds.path           = $$DATADIR/sounds
 sounds.files          = sounds/*
 INSTALLS += sounds
 
-documentation.path    = $$PREFIX/share/doc/q4go
+documentation.path    = $$DOCDIR
 documentation.files   = ../AUTHORS ../COPYING ../NEWS ../README ../TODO ../ChangeLog
 INSTALLS += documentation
 
-html.path             = $$PREFIX/share//doc/q4go/html
+html.path             = $$DOCDIR/html
 html.files            = ../html/*
 INSTALLS += html
 
@@ -164,8 +165,7 @@ target.path           = $$PREFIX/bin
 INSTALLS += target
 }
 
-#The following line was inserted by qt3to4
-QT += xml network  qt3support
+QT += xml network  qt3support multimedia
 
 RESOURCES += \
     q4go.qrc
