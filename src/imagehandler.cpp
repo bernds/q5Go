@@ -182,11 +182,11 @@ void ImageHandler::paintBlackStone (QImage &bi, int d, int stone_render)
 			
 		}
 		
-		// now copy the result in QImages
-		icopy(pb, bi, d, d);
+	// now copy the result in QImages
+	icopy(pb, bi, d, d);
 		
-		// free memory
-		delete[] pb;
+	// free memory
+	delete[] pb;
 }
 
 // shadow under stones
@@ -220,11 +220,11 @@ void ImageHandler::paintShadowStone (QImage &si, int d) {
 			
 		}
 		
-		// now copy the result in QImages
-		icopy(pw, si, d, d);
+	// now copy the result in QImages
+	icopy(pw, si, d, d);
 		
-		// free memory
-		delete[] pw;
+	// free memory
+	delete[] pw;
 }
 
 
