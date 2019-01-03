@@ -1016,7 +1016,7 @@ void MainWindow::slotFileNewGame()
 	
 	if (gfx_board->getGameMode() == modeNormal)
 	{
-		NewLocalGameDialog dlg(this, tr("newgame"), true);
+		NewLocalGameDialog dlg(this);
 		
 		if (dlg.exec() == QDialog::Accepted)
 		{
@@ -1038,7 +1038,7 @@ void MainWindow::slotFileNewGame()
 	}
 	else
 	{
-		NewGameDialog dlg(this, tr("newgame"), true);
+		NewGameDialog dlg(this);
 		
 		if (dlg.exec() == QDialog::Accepted)
 		{
@@ -1332,7 +1332,7 @@ void MainWindow::slotNavIntersection()       // added eb 11
 
 void MainWindow::slotNavNthMove()
 {
-	NthMoveDialog dlg(this, tr("entermove"), true);
+	NthMoveDialog dlg(this);
 	dlg.moveSpinBox->setValue(gfx_board->getCurrentMoveNumber());
 	dlg.moveSpinBox->setFocus();
 
@@ -1406,7 +1406,7 @@ void MainWindow::updateBoard()
 
 void MainWindow::slotSetGameInfo()
 {
-	GameInfoDialog dlg(this, "gameinfo", true);
+	GameInfoDialog dlg(this);
 	
 	dlg.playerWhiteEdit->setText(gfx_board->getGameData()->playerWhite);
 	

@@ -11,11 +11,10 @@ class Debug_Dialog : public QDialog, public Ui::Debug_Dialog
 	Q_OBJECT
 
 public:
-	Debug_Dialog( QWidget* parent = 0, const char* name = 0, bool modal = false)
+	Debug_Dialog( QWidget* parent = 0)
 		: QDialog (parent)
 	{
-		setupUi(this);
-		setModal (modal);
+		setupUi (this);
 	}
 };
 
@@ -25,11 +24,11 @@ class GameInfoDialog : public QDialog, public Ui::GameInfoDialog
 	Q_OBJECT
 
 public:
-	GameInfoDialog( QWidget* parent = 0, const char* name = 0, bool modal = true)
+	GameInfoDialog( QWidget* parent = 0)
 		: QDialog (parent)
 	{
-		setupUi(this);
-		setModal (modal);
+		setupUi (this);
+		setModal (true);
 	}
 };
 
@@ -40,11 +39,11 @@ class NewGameDialog : public QDialog, public Ui::NewGameDialog
 	Q_OBJECT
 
 public:
-	NewGameDialog( QWidget* parent = 0, const char* name = 0, bool modal = true)
+	NewGameDialog( QWidget* parent = 0)
 		: QDialog (parent)
 	{
-		setupUi(this);
-		setModal (modal);
+		setupUi (this);
+		setModal (true);
 	}
 };
 
@@ -55,11 +54,11 @@ class NewLocalGameDialog : public QDialog, public Ui::NewLocalGameDialog
 	Q_OBJECT
 
 public:
-	NewLocalGameDialog( QWidget* parent = 0, const char* name = 0, bool modal = true)
+	NewLocalGameDialog( QWidget* parent = 0)
 		: QDialog (parent)
 	{
-		setupUi(this);
-		setModal (modal);
+		setupUi (this);
+		setModal (true);
 	}
 };
 
@@ -70,11 +69,11 @@ class QNewGameDlgGui : public QDialog, public Ui::QNewGameDlgGui
 	Q_OBJECT
 
 public:
-	QNewGameDlgGui( QWidget* parent = 0, const char* name = 0, bool modal = true)
+	QNewGameDlgGui( QWidget* parent = 0)
 		: QDialog (parent)
 	{
-		setupUi(this);
-		setModal (modal);
+		setupUi (this);
+		setModal (true);
 	}
 
 };
@@ -86,11 +85,11 @@ class NthMoveDialog : public QDialog, public Ui::NthMoveDialog
 	Q_OBJECT
 
 public:
-	NthMoveDialog( QWidget* parent = 0, const char* name = 0, bool modal = true)
+	NthMoveDialog( QWidget* parent = 0)
 		: QDialog (parent)
 	{
-		setupUi(this);
-		setModal (modal);
+		setupUi (this);
+		setModal (true);
 	}
 };
 
@@ -101,10 +100,11 @@ class TextEditDialog : public QDialog, public Ui::TextEditDialog
 	Q_OBJECT
 
 public:
-	TextEditDialog( QWidget* parent = 0, const char* name = 0, bool modal = true)
+	TextEditDialog( QWidget* parent = 0)
 		: QDialog (parent)
 	{
-		setupUi(this);
+		setupUi (this);
+		setModal (true);
 	}
 };
 

@@ -289,7 +289,7 @@ void InterfaceHandler::toggleSidebar(bool toggle)
 
 QString InterfaceHandler::getTextLabelInput(QWidget *parent, const QString &oldText)
 {
-    TextEditDialog dlg(parent, QObject::tr("textedit"), true);
+    TextEditDialog dlg(parent);
     dlg.textLineEdit->setFocus();
     if (!oldText.isNull() && !oldText.isEmpty())
 		dlg.textLineEdit->setText(oldText);
