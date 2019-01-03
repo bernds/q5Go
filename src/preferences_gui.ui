@@ -4431,20 +4431,40 @@ up to :</string>
    </hints>
   </connection>
   <connection>
-   <sender>ButtonGroup3</sender>
-   <signal>clicked(int)</signal>
+   <sender>fontStandardButton</sender>
+   <signal>clicked ()</signal>
    <receiver>PreferencesDialogGui</receiver>
-   <slot>selectFont(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>292</x>
-     <y>46</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
+   <slot>selectStandardFont ()</slot>
+  </connection>
+  <connection>
+   <sender>fontMarksButton</sender>
+   <signal>clicked ()</signal>
+   <receiver>PreferencesDialogGui</receiver>
+   <slot>selectMarksFont ()</slot>
+  </connection>
+  <connection>
+   <sender>fontCommentsButton</sender>
+   <signal>clicked ()</signal>
+   <receiver>PreferencesDialogGui</receiver>
+   <slot>selectCommentsFont ()</slot>
+  </connection>
+  <connection>
+   <sender>fontListsButton</sender>
+   <signal>clicked ()</signal>
+   <receiver>PreferencesDialogGui</receiver>
+   <slot>selectListsFont ()</slot>
+  </connection>
+  <connection>
+   <sender>fontClocksButton</sender>
+   <signal>clicked ()</signal>
+   <receiver>PreferencesDialogGui</receiver>
+   <slot>selectClocksFont ()</slot>
+  </connection>
+  <connection>
+   <sender>fontConsoleButton</sender>
+   <signal>clicked ()</signal>
+   <receiver>PreferencesDialogGui</receiver>
+   <slot>selectConsoleFont ()</slot>
   </connection>
   <connection>
    <sender>buttonHelp</sender>

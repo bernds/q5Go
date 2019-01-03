@@ -34,6 +34,12 @@ public slots:
 	virtual void slot_apply();
 	virtual void startHelpMode();
 	virtual void selectFont(int);
+	virtual void selectStandardFont() { selectFont (0); }
+	virtual void selectMarksFont() { selectFont (1); }
+	virtual void selectCommentsFont() { selectFont (2); }
+	virtual void selectListsFont() { selectFont (3); }
+	virtual void selectClocksFont() { selectFont (4); }
+	virtual void selectConsoleFont() { selectFont (5); }
 	virtual void slot_accept();
 	virtual void slot_reject();
 	virtual void slot_textChanged (const QString &);
