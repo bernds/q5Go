@@ -38,7 +38,16 @@
     <enum>QFrame::Raised</enum>
    </property>
    <layout class="QGridLayout">
-    <property name="margin">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
      <number>0</number>
     </property>
     <property name="spacing">
@@ -49,7 +58,16 @@
       <property name="spacing">
        <number>6</number>
       </property>
-      <property name="margin">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
        <number>0</number>
       </property>
       <item>
@@ -57,11 +75,20 @@
         <property name="spacing">
          <number>0</number>
         </property>
-        <property name="margin">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
          <number>0</number>
         </property>
         <item>
-         <widget class="Board" name="board" native="true">
+         <widget class="Board" name="gfx_board" native="true">
           <property name="minimumSize">
            <size>
             <width>250</width>
@@ -84,11 +111,27 @@ When in score mode, left click to mark a group as dead, right click to mark it a
          </widget>
         </item>
         <item>
+         <widget class="QScrollBar" name="horizontalScrollBar">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
          <layout class="QHBoxLayout">
           <property name="spacing">
            <number>6</number>
           </property>
-          <property name="margin">
+          <property name="leftMargin">
+           <number>1</number>
+          </property>
+          <property name="topMargin">
+           <number>1</number>
+          </property>
+          <property name="rightMargin">
+           <number>1</number>
+          </property>
+          <property name="bottomMargin">
            <number>1</number>
           </property>
           <item>
@@ -183,7 +226,7 @@ Maximum game move the slider can currently show.</string>
      <x>460</x>
      <y>0</y>
      <width>150</width>
-     <height>654</height>
+     <height>647</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -214,7 +257,16 @@ Maximum game move the slider can currently show.</string>
     <property name="spacing">
      <number>6</number>
     </property>
-    <property name="margin">
+    <property name="leftMargin">
+     <number>2</number>
+    </property>
+    <property name="topMargin">
+     <number>2</number>
+    </property>
+    <property name="rightMargin">
+     <number>2</number>
+    </property>
+    <property name="bottomMargin">
      <number>2</number>
     </property>
     <item>
@@ -222,7 +274,16 @@ Maximum game move the slider can currently show.</string>
       <property name="spacing">
        <number>6</number>
       </property>
-      <property name="margin">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
        <number>0</number>
       </property>
       <item>
@@ -690,7 +751,9 @@ Number of the currently displayed move.</string>
          <enum>QFrame::Sunken</enum>
         </property>
         <property name="text">
-         <string>Move 0</string>
+         <string>Move 0
+Variation 1 of 20
+0 child positions</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -765,11 +828,23 @@ Number of the currently displayed move.</string>
       </item>
       <item>
        <layout class="QHBoxLayout" name="stupidThing">
+        <property name="spacing">
+         <number>4</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
         <property name="bottomMargin">
          <number>0</number>
         </property>
         <item>
          <widget class="QLabel" name="turnLabel">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+            <horstretch>1</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="palette">
            <palette>
             <active>
@@ -1234,6 +1309,37 @@ Indicates whether it is black's or white's turn.</string>
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QLabel" name="turnWarning">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="pixmap">
+           <pixmap resource="q4go.qrc">:/MainWidgetGui/images/mainwidget/warning.png</pixmap>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="colorButton">
+          <property name="text">
+           <string>...</string>
+          </property>
+          <property name="icon">
+           <iconset resource="q4go.qrc">
+            <normaloff>:/images/node_black.xpm</normaloff>
+            <normalon>:/images/node_white.xpm</normalon>:/images/node_black.xpm</iconset>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
      </layout>
@@ -1248,7 +1354,16 @@ Indicates whether it is black's or white's turn.</string>
         <property name="spacing">
          <number>0</number>
         </property>
-        <property name="margin">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
          <number>0</number>
         </property>
         <item>
@@ -1370,7 +1485,26 @@ Send adjournment request to your opponent. If he accept it, the game will be adj
            <string>Open a window with an offline copy of the game for editing.</string>
           </property>
           <property name="text">
-           <string>Edit</string>
+           <string>Edit Game</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="editPosButton">
+          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+          <property name="toolTip">
+           <string>Edit the game in a new window.</string>
+          </property>
+          <property name="whatsThis">
+           <string>Freely edit the board position. Edited positions are added below the current one.</string>
+          </property>
+          <property name="text">
+           <string>Edit Position</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -1876,7 +2010,16 @@ TG	teach tools / game tree</string>
         <property name="spacing">
          <number>2</number>
         </property>
-        <property name="margin">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
          <number>0</number>
         </property>
         <item>
@@ -1894,366 +2037,21 @@ TG	teach tools / game tree</string>
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab_e">
-       <attribute name="title">
-        <string>E</string>
-       </attribute>
-       <widget class="Q3ButtonGroup" name="editButtonGroup">
-        <property name="geometry">
-         <rect>
-          <x>1</x>
-          <y>1</y>
-          <width>122</width>
-          <height>170</height>
-         </rect>
-        </property>
-        <property name="toolTip">
-         <string>Change the edit tool</string>
-        </property>
-        <property name="whatsThis">
-         <string>Change the edit mode
-
-When in edit mode, you can choose what you want to edit, like setting stones or certain marks.</string>
-        </property>
-        <property name="title">
-         <string>Edit Tools</string>
-        </property>
-        <property name="frameShape">
-         <enum>Q3GroupBox::Box</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>Q3GroupBox::Sunken</enum>
-        </property>
-        <property name="exclusive">
-         <bool>true</bool>
-        </property>
-        <widget class="QPushButton" name="stoneButton">
-         <property name="geometry">
-          <rect>
-           <x>22</x>
-           <y>17</y>
-           <width>30</width>
-           <height>28</height>
-          </rect>
-         </property>
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>30</width>
-           <height>30</height>
-          </size>
-         </property>
-         <property name="focusPolicy">
-          <enum>Qt::NoFocus</enum>
-         </property>
-         <property name="toolTip">
-          <string>Stone</string>
-         </property>
-         <property name="whatsThis">
-          <string>Stone
-
-Edit stones on the board. Left click for a black, right click for a white stone.</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="icon">
-          <iconset resource="q4go.qrc">
-           <normaloff>:/MainWidgetGui/images/mainwidget/image6.png</normaloff>:/MainWidgetGui/images/mainwidget/image6.png</iconset>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-         <property name="checked">
-          <bool>false</bool>
-         </property>
-        </widget>
-        <widget class="QPushButton" name="squareButton">
-         <property name="geometry">
-          <rect>
-           <x>22</x>
-           <y>51</y>
-           <width>30</width>
-           <height>28</height>
-          </rect>
-         </property>
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>30</width>
-           <height>30</height>
-          </size>
-         </property>
-         <property name="focusPolicy">
-          <enum>Qt::NoFocus</enum>
-         </property>
-         <property name="toolTip">
-          <string>Square</string>
-         </property>
-         <property name="whatsThis">
-          <string>Square
-
-Edit square marks on the board. Left click sets a mark, right click removes it.</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="icon">
-          <iconset resource="q4go.qrc">
-           <normaloff>:/MainWidgetGui/images/mainwidget/image0.png</normaloff>:/MainWidgetGui/images/mainwidget/image0.png</iconset>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-        </widget>
-        <widget class="QPushButton" name="circleButton">
-         <property name="geometry">
-          <rect>
-           <x>69</x>
-           <y>51</y>
-           <width>30</width>
-           <height>28</height>
-          </rect>
-         </property>
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>30</width>
-           <height>30</height>
-          </size>
-         </property>
-         <property name="focusPolicy">
-          <enum>Qt::NoFocus</enum>
-         </property>
-         <property name="toolTip">
-          <string>Circle</string>
-         </property>
-         <property name="whatsThis">
-          <string>Circle
-
-Edit circle marks on the board. Left click sets a mark, right click removes it.</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="icon">
-          <iconset resource="q4go.qrc">
-           <normaloff>:/MainWidgetGui/images/mainwidget/image1.png</normaloff>:/MainWidgetGui/images/mainwidget/image1.png</iconset>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-        </widget>
-        <widget class="QPushButton" name="triangleButton">
-         <property name="geometry">
-          <rect>
-           <x>22</x>
-           <y>85</y>
-           <width>30</width>
-           <height>28</height>
-          </rect>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>30</width>
-           <height>30</height>
-          </size>
-         </property>
-         <property name="focusPolicy">
-          <enum>Qt::NoFocus</enum>
-         </property>
-         <property name="toolTip">
-          <string>Triangle</string>
-         </property>
-         <property name="whatsThis">
-          <string>Triangle
-
-Edit triangle marks on the board. Left click sets a mark, right click removes it.</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="icon">
-          <iconset resource="q4go.qrc">
-           <normaloff>:/MainWidgetGui/images/mainwidget/image4.png</normaloff>:/MainWidgetGui/images/mainwidget/image4.png</iconset>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-        </widget>
-        <widget class="QPushButton" name="crossButton">
-         <property name="geometry">
-          <rect>
-           <x>69</x>
-           <y>85</y>
-           <width>30</width>
-           <height>28</height>
-          </rect>
-         </property>
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>30</width>
-           <height>30</height>
-          </size>
-         </property>
-         <property name="focusPolicy">
-          <enum>Qt::NoFocus</enum>
-         </property>
-         <property name="toolTip">
-          <string>Cross</string>
-         </property>
-         <property name="whatsThis">
-          <string>Cross
-
-Edit cross marks on the board. Left click sets a mark, right click removes it.</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="icon">
-          <iconset resource="q4go.qrc">
-           <normaloff>:/MainWidgetGui/images/mainwidget/image3.png</normaloff>:/MainWidgetGui/images/mainwidget/image3.png</iconset>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-        </widget>
-        <widget class="QPushButton" name="labelLetterButton">
-         <property name="geometry">
-          <rect>
-           <x>22</x>
-           <y>119</y>
-           <width>30</width>
-           <height>28</height>
-          </rect>
-         </property>
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>30</width>
-           <height>30</height>
-          </size>
-         </property>
-         <property name="focusPolicy">
-          <enum>Qt::NoFocus</enum>
-         </property>
-         <property name="toolTip">
-          <string>Letter</string>
-         </property>
-         <property name="whatsThis">
-          <string>Letter
-
-Edit letter marks on the board. Left click sets a mark, right click removes it. Shift-click lets you edit a custom text.</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="icon">
-          <iconset resource="q4go.qrc">
-           <normaloff>:/MainWidgetGui/images/mainwidget/image2.png</normaloff>:/MainWidgetGui/images/mainwidget/image2.png</iconset>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-        </widget>
-        <widget class="QPushButton" name="labelNumberButton">
-         <property name="geometry">
-          <rect>
-           <x>69</x>
-           <y>119</y>
-           <width>30</width>
-           <height>28</height>
-          </rect>
-         </property>
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>30</width>
-           <height>30</height>
-          </size>
-         </property>
-         <property name="focusPolicy">
-          <enum>Qt::NoFocus</enum>
-         </property>
-         <property name="toolTip">
-          <string>Number</string>
-         </property>
-         <property name="whatsThis">
-          <string>Number
-
-Edit Number marks on the board. Left click sets a mark, right click removes it.</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="icon">
-          <iconset resource="q4go.qrc">
-           <normaloff>:/MainWidgetGui/images/mainwidget/image5.png</normaloff>:/MainWidgetGui/images/mainwidget/image5.png</iconset>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </widget>
-       <widget class="QToolButton" name="colorButton">
-        <property name="geometry">
-         <rect>
-          <x>69</x>
-          <y>17</y>
-          <width>30</width>
-          <height>28</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>...</string>
-        </property>
-        <property name="icon">
-         <iconset resource="q4go.qrc">
-          <normaloff>:/images/node_black.xpm</normaloff>
-          <normalon>:/images/node_white.xpm</normalon>:/images/node_black.xpm</iconset>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </widget>
       <widget class="QWidget" name="tab_tg">
        <attribute name="title">
         <string>TG</string>
        </attribute>
        <layout class="QGridLayout">
-        <property name="margin">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
          <number>0</number>
         </property>
         <property name="spacing">
@@ -2280,28 +2078,36 @@ Edit Number marks on the board. Left click sets a mark, right click removes it.<
            <enum>QFrame::Raised</enum>
           </property>
           <layout class="QGridLayout">
-           <property name="margin">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
             <number>0</number>
            </property>
            <property name="spacing">
             <number>2</number>
            </property>
-           <item row="1" column="0">
-            <widget class="GameTree" name="GameTree1" native="true">
-             <property name="minimumSize">
-              <size>
-               <width>80</width>
-               <height>180</height>
-              </size>
-             </property>
-            </widget>
-           </item>
            <item row="0" column="0">
             <layout class="QVBoxLayout">
              <property name="spacing">
               <number>6</number>
              </property>
-             <property name="margin">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
               <number>0</number>
              </property>
              <item>
@@ -2336,7 +2142,16 @@ choose opponent from list to enable him playing with you in a teaching game.</st
                <property name="spacing">
                 <number>6</number>
                </property>
-               <property name="margin">
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
                 <number>0</number>
                </property>
                <item>
@@ -2391,6 +2206,16 @@ After placing and/or undo release button for returning to starting point automat
              </item>
             </layout>
            </item>
+           <item row="1" column="0">
+            <widget class="GameTree" name="GameTree1" native="true">
+             <property name="minimumSize">
+              <size>
+               <width>80</width>
+               <height>180</height>
+              </size>
+             </property>
+            </widget>
+           </item>
           </layout>
          </widget>
         </item>
@@ -2403,18 +2228,6 @@ After placing and/or undo release button for returning to starting point automat
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
-  <customwidget>
-   <class>Q3GroupBox</class>
-   <extends>QGroupBox</extends>
-   <header>Qt3Support/Q3GroupBox</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>Q3ButtonGroup</class>
-   <extends>Q3GroupBox</extends>
-   <header>Qt3Support/Q3ButtonGroup</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>Board</class>
    <extends>QWidget</extends>
@@ -2445,78 +2258,14 @@ After placing and/or undo release button for returning to starting point automat
  </resources>
  <connections>
   <connection>
-   <sender>passButton</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWidgetGui</receiver>
-   <slot>doPass()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>slider</sender>
    <signal>valueChanged(int)</signal>
    <receiver>MainWidgetGui</receiver>
    <slot>sliderChanged(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>undoButton</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWidgetGui</receiver>
-   <slot>doUndo()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>adjournButton</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWidgetGui</receiver>
-   <slot>doAdjourn()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>resignButton</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWidgetGui</receiver>
-   <slot>doResign()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
+     <x>43</x>
+     <y>372</y>
     </hint>
     <hint type="destinationlabel">
      <x>20</x>
@@ -2531,24 +2280,8 @@ After placing and/or undo release button for returning to starting point automat
    <slot>doRefresh()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>editButtonGroup</sender>
-   <signal>clicked(int)</signal>
-   <receiver>MainWidgetGui</receiver>
-   <slot>setMarkType(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
+     <x>468</x>
+     <y>153</y>
     </hint>
     <hint type="destinationlabel">
      <x>20</x>
@@ -2558,13 +2291,13 @@ After placing and/or undo release button for returning to starting point automat
   </connection>
   <connection>
    <sender>scoreButton</sender>
-   <signal>toggled(bool)</signal>
+   <signal>clicked(bool)</signal>
    <receiver>MainWidgetGui</receiver>
    <slot>doRealScore(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
+     <x>468</x>
+     <y>257</y>
     </hint>
     <hint type="destinationlabel">
      <x>20</x>
@@ -2579,8 +2312,8 @@ After placing and/or undo release button for returning to starting point automat
    <slot>doEdit()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
+     <x>468</x>
+     <y>309</y>
     </hint>
     <hint type="destinationlabel">
      <x>20</x>
@@ -2589,14 +2322,14 @@ After placing and/or undo release button for returning to starting point automat
    </hints>
   </connection>
   <connection>
-   <sender>doneButton</sender>
-   <signal>clicked()</signal>
+   <sender>editPosButton</sender>
+   <signal>clicked(bool)</signal>
    <receiver>MainWidgetGui</receiver>
-   <slot>doCountDone()</slot>
+   <slot>doEditPos(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
+     <x>468</x>
+     <y>335</y>
     </hint>
     <hint type="destinationlabel">
      <x>20</x>

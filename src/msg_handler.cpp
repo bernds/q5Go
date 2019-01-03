@@ -6,21 +6,23 @@
 
 
 #ifdef OWN_DEBUG_MODE
-void myMessageHandler(QtMsgType type, const char *msg)
+void myMessageHandler(QtMsgType type, const QMessageLogContext &, const QString &msg)
 {
-	
-	if ((view == NULL) || (myapp.startingUp()) || (myapp.closingDown()))
+	if (view == NULL || myapp.startingUp() || myapp.closingDown())
 		return ;
 
 	//QString msg2 = QString::QString(msg);
 
 	switch (type)
 	{
-	case QtDebugMsg:		view->append("Debug: "  + (QString) msg);
+	case QtDebugMsg:
+		view->append("Debug: "  + msg);
 		break;
-	case QtWarningMsg:	view->append((QString) "Warning: " + (QString) msg);
+	case QtWarningMsg:
+		view->append((QString) "Warning: " + msg);
 		break;
-	case QtFatalMsg:		view->append((QString) "Fatal: " + (QString) msg);
+	case QtFatalMsg:
+		view->append((QString) "Fatal: " + msg);
 		break;
 	}
 }

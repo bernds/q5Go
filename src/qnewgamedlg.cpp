@@ -36,10 +36,11 @@
 
 
 QNewGameDlg::QNewGameDlg( QWidget* parent,  const char* name)
-    : QDialog( parent, name, true )
+	: QDialog (parent)
 {
 	setupUi(this);
 	init();
+	setModal (true);
 //	initDialog();
 
     // signals and slots connections
@@ -56,7 +57,6 @@ QNewGameDlg::QNewGameDlg( QWidget* parent,  const char* name)
     connect( _OkPushButton, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
     connect( _CancelPushButton, SIGNAL( clicked() ), this, SLOT( slotCancel() ) );
     connect( _oneColorGoCheckbox, SIGNAL( clicked() ), this, SLOT( slotOneColorGoClicked() ) );
-
 }
 
 /*  
@@ -240,8 +240,8 @@ void QNewGameDlg::init()
 
 void QNewGameDlg::slotGetFileName()
 {
-  	QString getFileName(QFileDialog::getOpenFileName("",//setting->readEntry("LAST_DIR"),
-		tr("SGF Files (*.sgf);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)"), this));
+	QString getFileName(QFileDialog::getOpenFileName(this, "", //setting->readEntry("LAST_DIR"),
+		tr("SGF Files (*.sgf);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)")));
 	if (getFileName.isEmpty())
 		return;
 

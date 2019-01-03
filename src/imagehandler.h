@@ -35,7 +35,6 @@ public:
 	const QList<QPixmap> *getStonePixmaps() const { return &stonePixmaps; }
 	const QList<QPixmap> *getGhostPixmaps() const { return &ghostPixmaps; }
 	static QList<QPixmap> *getAlternateGhostPixmaps() { return altGhostPixmaps; }
-	void ghostImage(QImage *img);
 
 
 protected:
@@ -49,6 +48,7 @@ private:
 	void paintShadowStone (QImage &si, int d);
 //	void paintWhiteStone2 (QImage &wi, int d, bool stripes);
 	void paintWhiteStone (QImage &wi, int d, int stone_render);//bool noShadow, bool stripes);
+	void ghostImage(QImage *img);
 
 	QList<QPixmap> stonePixmaps, ghostPixmaps;
 	static QList<QPixmap> *altGhostPixmaps;

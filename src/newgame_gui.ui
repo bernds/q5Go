@@ -1,588 +1,729 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ui version="4.0" stdsetdef="1">
-  <author></author>
-  <comment></comment>
-  <exportmacro></exportmacro>
-  <class>NewGameDialog</class>
-  <widget class="QDialog" name="NewGameDialog">
-    <property name="geometry">
-      <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>274</width>
-        <height>380</height>
-      </rect>
-    </property>
-    <property name="maximumSize">
-      <size>
-        <width>300</width>
-        <height>380</height>
-      </size>
-    </property>
-    <property name="windowTitle">
-      <string>New Game</string>
-    </property>
-    <layout class="QGridLayout">
-      <property name="margin">
-        <number>0</number>
+<ui version="5.0">
+ <class>NewGameDialog</class>
+ <widget class="QDialog" name="NewGameDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>283</width>
+    <height>380</height>
+   </rect>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>300</width>
+    <height>380</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>New Game</string>
+  </property>
+  <layout class="QGridLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <property name="spacing">
+    <number>6</number>
+   </property>
+   <item row="5" column="0">
+    <layout class="QHBoxLayout">
+     <property name="spacing">
+      <number>6</number>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <spacer name="Horizontal Spacing2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Expanding</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="buttonDecline">
+       <property name="text">
+        <string>&amp;Decline</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="buttonOffer">
+       <property name="text">
+        <string>&amp;Offer</string>
+       </property>
+       <property name="shortcut">
+        <string>Alt+O</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="autoDefault">
+        <bool>true</bool>
+       </property>
+       <property name="default">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="buttonCancel">
+       <property name="text">
+        <string>&amp;Cancel</string>
+       </property>
+       <property name="autoDefault">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="0">
+    <widget class="QFrame" name="Frame13">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QGridLayout">
+      <property name="leftMargin">
+       <number>11</number>
+      </property>
+      <property name="topMargin">
+       <number>11</number>
+      </property>
+      <property name="rightMargin">
+       <number>11</number>
+      </property>
+      <property name="bottomMargin">
+       <number>11</number>
       </property>
       <property name="spacing">
-        <number>6</number>
+       <number>6</number>
       </property>
-      <item row="1" column="0">
-        <widget class="QFrame" name="Frame14">
-          <property name="frameShape">
-            <enum>QFrame::StyledPanel</enum>
-          </property>
-          <property name="frameShadow">
-            <enum>QFrame::Raised</enum>
-          </property>
-          <layout class="QGridLayout">
-            <property name="margin">
-              <number>11</number>
-            </property>
-            <property name="spacing">
-              <number>6</number>
-            </property>
-            <item row="0" column="0">
-              <layout class="QHBoxLayout">
-                <property name="margin">
-                  <number>0</number>
-                </property>
-                <property name="spacing">
-                  <number>6</number>
-                </property>
-                <item>
-                  <widget class="QLabel" name="TextLabel3">
-                    <property name="text">
-                      <string>Board size:</string>
-                    </property>
-                    <property name="wordWrap">
-                      <bool>false</bool>
-                    </property>
-                  </widget>
-                </item>
-                <item>
-                  <widget class="QSpinBox" name="boardSizeSpin">
-                    <property name="maximumSize">
-                      <size>
-                        <width>60</width>
-                        <height>32767</height>
-                      </size>
-                    </property>
-                    <property name="maximum">
-                      <number>36</number>
-                    </property>
-                    <property name="minimum">
-                      <number>4</number>
-                    </property>
-                    <property name="value">
-                      <number>19</number>
-                    </property>
-                  </widget>
-                </item>
-              </layout>
-            </item>
-            <item row="2" column="0">
-              <layout class="QHBoxLayout">
-                <property name="margin">
-                  <number>0</number>
-                </property>
-                <property name="spacing">
-                  <number>6</number>
-                </property>
-                <item>
-                  <widget class="QLabel" name="TextLabel5">
-                    <property name="text">
-                      <string>Handicap:</string>
-                    </property>
-                    <property name="wordWrap">
-                      <bool>false</bool>
-                    </property>
-                  </widget>
-                </item>
-                <item>
-                  <widget class="QSpinBox" name="handicapSpin">
-                    <property name="maximumSize">
-                      <size>
-                        <width>60</width>
-                        <height>32767</height>
-                      </size>
-                    </property>
-                    <property name="maximum">
-                      <number>13</number>
-                    </property>
-                  </widget>
-                </item>
-              </layout>
-            </item>
-            <item row="1" column="0">
-              <layout class="QHBoxLayout">
-                <property name="margin">
-                  <number>0</number>
-                </property>
-                <property name="spacing">
-                  <number>6</number>
-                </property>
-                <item>
-                  <widget class="QLabel" name="TextLabel4">
-                    <property name="text">
-                      <string>Komi:</string>
-                    </property>
-                    <property name="wordWrap">
-                      <bool>false</bool>
-                    </property>
-                  </widget>
-                </item>
-                <item>
-                  <widget class="KomiSpinBox" name="komiSpin">
-                    <property name="minimumSize">
-                      <size>
-                        <width>20</width>
-                        <height>20</height>
-                      </size>
-                    </property>
-                    <property name="maximumSize">
-                      <size>
-                        <width>60</width>
-                        <height>32767</height>
-                      </size>
-                    </property>
-                    <property name="focusPolicy">
-                      <enum>Qt::StrongFocus</enum>
-                    </property>
-                    <property name="acceptDrops">
-                      <bool>true</bool>
-                    </property>
-                  </widget>
-                </item>
-              </layout>
-            </item>
-          </layout>
-        </widget>
+      <item row="0" column="3">
+       <widget class="QLineEdit" name="playerOpponentRkEdit">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>40</width>
+          <height>32767</height>
+         </size>
+        </property>
+       </widget>
       </item>
-      <item row="2" column="0">
-        <widget class="QFrame" name="Frame14_2">
-          <property name="frameShape">
-            <enum>QFrame::StyledPanel</enum>
-          </property>
-          <property name="frameShadow">
-            <enum>QFrame::Raised</enum>
-          </property>
-          <layout class="QGridLayout">
-            <property name="margin">
-              <number>11</number>
-            </property>
-            <property name="spacing">
-              <number>6</number>
-            </property>
-            <item row="2" column="0">
-              <layout class="QHBoxLayout">
-                <property name="margin">
-                  <number>0</number>
-                </property>
-                <property name="spacing">
-                  <number>6</number>
-                </property>
-                <item>
-                  <widget class="QLabel" name="TextLabel8">
-                    <property name="text">
-                      <string>Free game</string>
-                    </property>
-                    <property name="wordWrap">
-                      <bool>false</bool>
-                    </property>
-                  </widget>
-                </item>
-                <item>
-                  <widget class="QComboBox" name="ComboBox_free">
-                    <property name="maximumSize">
-                      <size>
-                        <width>60</width>
-                        <height>32767</height>
-                      </size>
-                    </property>
-                    <item>
-                      <property name="text">
-                        <string>no</string>
-                      </property>
-                    </item>
-                    <item>
-                      <property name="text">
-                        <string>yes</string>
-                      </property>
-                    </item>
-                  </widget>
-                </item>
-              </layout>
-            </item>
-            <item row="1" column="0">
-              <layout class="QHBoxLayout">
-                <property name="margin">
-                  <number>0</number>
-                </property>
-                <property name="spacing">
-                  <number>6</number>
-                </property>
-                <item>
-                  <widget class="QLabel" name="BY_label">
-                    <property name="text">
-                      <string>Byoyomi Time:</string>
-                    </property>
-                    <property name="wordWrap">
-                      <bool>false</bool>
-                    </property>
-                  </widget>
-                </item>
-                <item>
-                  <widget class="QSpinBox" name="byoTimeSpin">
-                    <property name="maximumSize">
-                      <size>
-                        <width>60</width>
-                        <height>32767</height>
-                      </size>
-                    </property>
-                    <property name="value">
-                      <number>10</number>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                      <string>Additional time for 25 moves; after 25 moves the byoyomi time starts again and again</string>
-                    </property>
-                  </widget>
-                </item>
-              </layout>
-            </item>
-            <item row="0" column="0">
-              <layout class="QHBoxLayout">
-                <property name="margin">
-                  <number>0</number>
-                </property>
-                <property name="spacing">
-                  <number>6</number>
-                </property>
-                <item>
-                  <widget class="QLabel" name="TextLabel6">
-                    <property name="text">
-                      <string>Time:</string>
-                    </property>
-                    <property name="wordWrap">
-                      <bool>false</bool>
-                    </property>
-                  </widget>
-                </item>
-                <item>
-                  <widget class="QSpinBox" name="timeSpin">
-                    <property name="maximumSize">
-                      <size>
-                        <width>60</width>
-                        <height>32767</height>
-                      </size>
-                    </property>
-                    <property name="value">
-                      <number>10</number>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                      <string>Playing time</string>
-                    </property>
-                  </widget>
-                </item>
-              </layout>
-            </item>
-          </layout>
-        </widget>
-      </item>
-      <item row="3" column="0">
-        <layout class="QHBoxLayout">
-          <property name="margin">
-            <number>0</number>
-          </property>
-          <property name="spacing">
-            <number>6</number>
-          </property>
-          <item>
-            <spacer name="Horizontal Spacing2">
-              <property name="sizeHint">
-                <size>
-                  <width>20</width>
-                  <height>20</height>
-                </size>
-              </property>
-              <property name="sizeType">
-                <enum>QSizePolicy::Expanding</enum>
-              </property>
-              <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-              </property>
-            </spacer>
-          </item>
-          <item>
-            <widget class="QPushButton" name="buttonDecline">
-              <property name="text">
-                <string>&amp;Decline</string>
-              </property>
-            </widget>
-          </item>
-          <item>
-            <widget class="QPushButton" name="buttonOffer">
-              <property name="text">
-                <string>&amp;Offer</string>
-              </property>
-              <property name="shortcut">
-                <string>Alt+O</string>
-              </property>
-              <property name="checkable">
-                <bool>true</bool>
-              </property>
-              <property name="autoDefault">
-                <bool>true</bool>
-              </property>
-              <property name="default">
-                <bool>false</bool>
-              </property>
-            </widget>
-          </item>
-          <item>
-            <widget class="QPushButton" name="buttonCancel">
-              <property name="text">
-                <string>&amp;Cancel</string>
-              </property>
-              <property name="autoDefault">
-                <bool>true</bool>
-              </property>
-            </widget>
-          </item>
-        </layout>
+      <item row="0" column="1" colspan="2">
+       <widget class="QLineEdit" name="playerOpponentEdit">
+        <property name="text">
+         <string>Opponent</string>
+        </property>
+       </widget>
       </item>
       <item row="0" column="0">
-        <widget class="QFrame" name="Frame13">
-          <property name="frameShape">
-            <enum>QFrame::StyledPanel</enum>
-          </property>
-          <property name="frameShadow">
-            <enum>QFrame::Raised</enum>
-          </property>
-          <layout class="QGridLayout">
-            <property name="margin">
-              <number>11</number>
-            </property>
-            <property name="spacing">
-              <number>6</number>
-            </property>
-            <item row="0" column="3">
-              <widget class="QLineEdit" name="playerOpponentRkEdit">
-                <property name="sizePolicy">
-                  <sizepolicy>
-                    <hsizetype>0</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                  </sizepolicy>
-                </property>
-                <property name="maximumSize">
-                  <size>
-                    <width>40</width>
-                    <height>32767</height>
-                  </size>
-                </property>
-              </widget>
-            </item>
-            <item row="0" column="1" rowspan="1" colspan="2">
-              <widget class="QLineEdit" name="playerOpponentEdit">
-                <property name="text">
-                  <string>Opponent</string>
-                </property>
-              </widget>
-            </item>
-            <item row="0" column="0">
-              <widget class="QLabel" name="TextLabel2">
-                <property name="maximumSize">
-                  <size>
-                    <width>90</width>
-                    <height>32767</height>
-                  </size>
-                </property>
-                <property name="text">
-                  <string>Game against :</string>
-                </property>
-                <property name="wordWrap">
-                  <bool>false</bool>
-                </property>
-              </widget>
-            </item>
-            <item row="1" column="0">
-              <widget class="QPushButton" name="pb_stats">
-                <property name="text">
-                  <string>S&amp;tats</string>
-                </property>
-                <property name="shortcut">
-                  <string>Alt+T</string>
-                </property>
-                <property name="toolTip" stdset="0">
-                  <string>query the other players stats</string>
-                </property>
-              </widget>
-            </item>
-            <item row="2" column="0" rowspan="1" colspan="4">
-              <widget class="QGroupBox" name="buttonGroup1">
-                <property name="title">
-                  <string>You play</string>
-                </property>
-                <property name="flat">
-                  <bool>true</bool>
-                </property>
-                <property name="checkable">
-                  <bool>false</bool>
-                </property>
-                <layout class="QGridLayout">
-                  <item row="0" column="1">
-                    <widget class="QRadioButton" name="play_white_button">
-                      <property name="text">
-                        <string>White</string>
-                      </property>
-                    </widget>
-                  </item>
-                  <item row="0" column="2">
-                    <widget class="QRadioButton" name="play_nigiri_button">
-                      <property name="text">
-                        <string>Nigiri</string>
-                      </property>
-                    </widget>
-                  </item>
-                  <item row="0" column="0">
-                    <widget class="QRadioButton" name="play_black_button">
-                      <property name="text">
-                        <string>Black</string>
-                      </property>
-                      <property name="checked">
-                        <bool>true</bool>
-                      </property>
-                    </widget>
-                  </item>
-                </layout>
-              </widget>
-            </item>
-            <item row="1" column="2" rowspan="1" colspan="2">
-              <widget class="QPushButton" name="pb_suggest">
-                <property name="text">
-                  <string>&amp;suggest</string>
-                </property>
-                <property name="shortcut">
-                  <string>Alt+S</string>
-                </property>
-                <property name="toolTip" stdset="0">
-                  <string>suggest proper handicap according to players ranks</string>
-                </property>
-              </widget>
-            </item>
-            <item row="1" column="1">
-              <spacer name="spacer3">
-                <property name="sizeHint">
-                  <size>
-                    <width>71</width>
-                    <height>20</height>
-                  </size>
-                </property>
-                <property name="sizeType">
-                  <enum>QSizePolicy::Expanding</enum>
-                </property>
-                <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                </property>
-              </spacer>
-            </item>
-          </layout>
-        </widget>
+       <widget class="QLabel" name="TextLabel2">
+        <property name="maximumSize">
+         <size>
+          <width>90</width>
+          <height>32767</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Game against :</string>
+        </property>
+        <property name="wordWrap">
+         <bool>false</bool>
+        </property>
+       </widget>
       </item>
-    </layout>
-  </widget>
-  <layoutdefault spacing="6" margin="11"/>
-  <customwidgets>
-    <customwidget>
-      <class>KomiSpinBox</class>
-      <extends>QWidget</extends>
-      <header location="global">komispinbox.h</header>
-      <sizehint>
-        <width>-1</width>
-        <height>-1</height>
-      </sizehint>
-      <container>0</container>
-      <sizepolicy>
-        <hordata>1</hordata>
-        <verdata>0</verdata>
-      </sizepolicy>
-      <pixmap>image0</pixmap>
-    </customwidget>
-  </customwidgets>
-  <tabstops>
-    <tabstop>playerOpponentEdit</tabstop>
-    <tabstop>boardSizeSpin</tabstop>
-    <tabstop>komiSpin</tabstop>
-    <tabstop>handicapSpin</tabstop>
-    <tabstop>buttonOffer</tabstop>
-    <tabstop>buttonCancel</tabstop>
-  </tabstops>
-  <images>
-    <image name="image0">
-      <data format="PNG" length="256">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000000c749444154388dad55db1184200c4c180bb81a28c73aad811228c356f42b3792db3cc0db2fc724bb7901dc7b270f27ed17fa5fa9b117b7cd90211f4ba0ac906a7f1453b4d30ca917bb590681552af23f69bfc4ffa71519d2c8f62546ea5ea03738b1c18c33a4d156f0d13f43b61952e4af6d6e8fb3a408f080448419a433d6486d85052fdba892a295f5d45785cd8c51a9d6de6a814a8d2131da51f98e7a3b64ec9da04a8db53d43be3c3c0b22cacf17e4cdb5a931649ceddf34b190cf0aa019f03f1fd3e7457f03b5a66c9ed26e86130000000049454e44ae426082</data>
-    </image>
-  </images>
-  <includes>
-    <include location="local">komispinbox.h</include>
-  </includes>
-  <connections>
-    <connection>
-      <sender>buttonCancel</sender>
-      <signal>clicked()</signal>
-      <receiver>NewGameDialog</receiver>
-      <slot>slot_cancel()</slot>
-    </connection>
-    <connection>
-      <sender>pb_suggest</sender>
-      <signal>clicked()</signal>
-      <receiver>NewGameDialog</receiver>
-      <slot>slot_pbsuggest()</slot>
-    </connection>
-    <connection>
-      <sender>buttonDecline</sender>
-      <signal>clicked()</signal>
-      <receiver>NewGameDialog</receiver>
-      <slot>slot_decline()</slot>
-    </connection>
-    <connection>
-      <sender>byoTimeSpin</sender>
-      <signal>valueChanged(int)</signal>
-      <receiver>NewGameDialog</receiver>
-      <slot>slot_changed()</slot>
-    </connection>
-    <connection>
-      <sender>timeSpin</sender>
-      <signal>valueChanged(int)</signal>
-      <receiver>NewGameDialog</receiver>
-      <slot>slot_changed()</slot>
-    </connection>
-    <connection>
-      <sender>handicapSpin</sender>
-      <signal>valueChanged(int)</signal>
-      <receiver>NewGameDialog</receiver>
-      <slot>slot_changed()</slot>
-    </connection>
-    <connection>
-      <sender>boardSizeSpin</sender>
-      <signal>valueChanged(int)</signal>
-      <receiver>NewGameDialog</receiver>
-      <slot>slot_changed()</slot>
-    </connection>
-    <connection>
-      <sender>buttonOffer</sender>
-      <signal>toggled(bool)</signal>
-      <receiver>NewGameDialog</receiver>
-      <slot>slot_offer(bool)</slot>
-    </connection>
-    <connection>
-      <sender>pb_stats</sender>
-      <signal>clicked()</signal>
-      <receiver>NewGameDialog</receiver>
-      <slot>slot_stats_opponent()</slot>
-    </connection>
-  </connections>
+      <item row="1" column="0">
+       <widget class="QPushButton" name="pb_stats">
+        <property name="toolTip">
+         <string>query the other players stats</string>
+        </property>
+        <property name="text">
+         <string>S&amp;tats</string>
+        </property>
+        <property name="shortcut">
+         <string>Alt+T</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" colspan="4">
+       <widget class="QGroupBox" name="buttonGroup1">
+        <property name="title">
+         <string>You play</string>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+        <property name="checkable">
+         <bool>false</bool>
+        </property>
+        <layout class="QGridLayout">
+         <item row="0" column="1">
+          <widget class="QRadioButton" name="play_white_button">
+           <property name="text">
+            <string>White</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QRadioButton" name="play_nigiri_button">
+           <property name="text">
+            <string>Nigiri</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QRadioButton" name="play_black_button">
+           <property name="text">
+            <string>Black</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="1" column="2" colspan="2">
+       <widget class="QPushButton" name="pb_suggest">
+        <property name="toolTip">
+         <string>suggest proper handicap according to players ranks</string>
+        </property>
+        <property name="text">
+         <string>&amp;suggest</string>
+        </property>
+        <property name="shortcut">
+         <string>Alt+S</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <spacer name="spacer3">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Expanding</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>71</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QFrame" name="Frame14_2">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_3">
+      <item row="0" column="0">
+       <widget class="QLabel" name="TextLabel3">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Board size:</string>
+        </property>
+        <property name="wordWrap">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="4">
+       <widget class="QSpinBox" name="boardSizeSpin">
+        <property name="maximumSize">
+         <size>
+          <width>60</width>
+          <height>32767</height>
+         </size>
+        </property>
+        <property name="minimum">
+         <number>4</number>
+        </property>
+        <property name="maximum">
+         <number>36</number>
+        </property>
+        <property name="value">
+         <number>19</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="TextLabel4">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Komi:</string>
+        </property>
+        <property name="wordWrap">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="4">
+       <widget class="KomiSpinBox" name="komiSpin" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>60</width>
+          <height>32767</height>
+         </size>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::StrongFocus</enum>
+        </property>
+        <property name="acceptDrops">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="TextLabel5">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Handicap:</string>
+        </property>
+        <property name="wordWrap">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="4">
+       <widget class="QSpinBox" name="handicapSpin">
+        <property name="maximumSize">
+         <size>
+          <width>60</width>
+          <height>32767</height>
+         </size>
+        </property>
+        <property name="maximum">
+         <number>13</number>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" rowspan="2">
+       <widget class="QLabel" name="TextLabel6">
+        <property name="text">
+         <string>Time:</string>
+        </property>
+        <property name="wordWrap">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0">
+       <widget class="QLabel" name="BY_label">
+        <property name="text">
+         <string>Byoyomi Time:</string>
+        </property>
+        <property name="wordWrap">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="0">
+       <widget class="QLabel" name="TextLabel8">
+        <property name="text">
+         <string>Free game</string>
+        </property>
+        <property name="wordWrap">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="4">
+       <widget class="QComboBox" name="ComboBox_free">
+        <property name="maximumSize">
+         <size>
+          <width>60</width>
+          <height>32767</height>
+         </size>
+        </property>
+        <item>
+         <property name="text">
+          <string>no</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>yes</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QLabel" name="warn_size">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap>pics/warning.png</pixmap>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="3">
+       <widget class="QLabel" name="warn_hc">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap>pics/warning.png</pixmap>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QLabel" name="warn_komi">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap>pics/warning.png</pixmap>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="3">
+       <widget class="QLabel" name="warn_time">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap>pics/warning.png</pixmap>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="3">
+       <widget class="QLabel" name="warn_byo">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap>pics/warning.png</pixmap>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="3">
+       <widget class="QLabel" name="warn_rated">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap>pics/warning.png</pixmap>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="4">
+       <widget class="QSpinBox" name="byoTimeSpin">
+        <property name="maximumSize">
+         <size>
+          <width>60</width>
+          <height>32767</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Additional time for 25 moves; after 25 moves the byoyomi time starts again and again</string>
+        </property>
+        <property name="value">
+         <number>10</number>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="4">
+       <widget class="QSpinBox" name="timeSpin">
+        <property name="maximumSize">
+         <size>
+          <width>60</width>
+          <height>32767</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Playing time</string>
+        </property>
+        <property name="value">
+         <number>10</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>KomiSpinBox</class>
+   <extends>QWidget</extends>
+   <header location="global">komispinbox.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>playerOpponentEdit</tabstop>
+  <tabstop>buttonOffer</tabstop>
+  <tabstop>buttonCancel</tabstop>
+ </tabstops>
+ <includes>
+  <include location="local">komispinbox.h</include>
+ </includes>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonCancel</sender>
+   <signal>clicked()</signal>
+   <receiver>NewGameDialog</receiver>
+   <slot>slot_cancel()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb_suggest</sender>
+   <signal>clicked()</signal>
+   <receiver>NewGameDialog</receiver>
+   <slot>slot_pbsuggest()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonDecline</sender>
+   <signal>clicked()</signal>
+   <receiver>NewGameDialog</receiver>
+   <slot>slot_decline()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>byoTimeSpin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>NewGameDialog</receiver>
+   <slot>slot_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>timeSpin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>NewGameDialog</receiver>
+   <slot>slot_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>handicapSpin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>NewGameDialog</receiver>
+   <slot>slot_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>boardSizeSpin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>NewGameDialog</receiver>
+   <slot>slot_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>komiSpin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>NewGameDialog</receiver>
+   <slot>slot_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonOffer</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>NewGameDialog</receiver>
+   <slot>slot_offer(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb_stats</sender>
+   <signal>clicked()</signal>
+   <receiver>NewGameDialog</receiver>
+   <slot>slot_stats_opponent()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

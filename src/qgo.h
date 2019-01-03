@@ -6,7 +6,6 @@
 #define QGO_H
 
 #include <QObject>
-#include <Q3PtrList>
 
 #include "globals.h"
 #include "mainwindow.h"
@@ -14,6 +13,7 @@
 #include "defines.h"
 #include "searchpath.h"
 #include "audio.h"
+#include "goboard.h"
 
 class HelpViewer;
 
@@ -28,8 +28,6 @@ public:
 
 	qGo();
 	~qGo();
-	MainWindow* addBoardWindow(MainWindow *w=NULL);
-	void removeBoardWindow(MainWindow*);
 	void openManual();
 	int checkModified();
 	void updateAllBoardSettings();
@@ -59,7 +57,6 @@ public:
 	bool testSound(bool);
 
 private:
-	Q3PtrList<MainWindow> *boardList;
 	HelpViewer *helpViewer;
 	Sound *clickSound;
 //	Sound *autoplaySound;
@@ -78,5 +75,12 @@ private:
 };
 
 extern qGo *qgo;
+
+extern std::shared_ptr<game_record> new_game_dialog (QWidget *);
+extern std::shared_ptr<game_record> record_from_stream (std::istream &isgf);
+extern bool open_window_from_file (const std::string &filename);
+extern void open_local_board (QWidget *, bool);
+extern go_board new_handicap_board (int, int);
+extern std::string get_candidate_filename (const std::string &dir, const game_info &);
 
 #endif

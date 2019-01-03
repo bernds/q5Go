@@ -50,8 +50,6 @@ public:
 
 	QString getPlayerRk(QString);
 	QString getPlayerExcludeListEntry(QString);
-	void openLocalBoard(QString file = QString::null) { qgoif->set_localboard(file); }
-	void openLocalGame() { qgoif->set_localgame(); }
 	void saveMenuFrame(QPoint p, QSize s) { menu_p = p; menu_s = s; }
 	void savePrefFrame(QPoint p, QSize s) { pref_p = p; pref_s = s; }
 	QPoint getMenuPos() { return menu_p; }
@@ -95,7 +93,6 @@ public slots:
 	void slot_statsPlayer(Player*);
 
 	void slot_whoopen (bool);
-
 	// QWidget
 //	virtual void resizeEvent (QResizeEvent *);
 
@@ -104,7 +101,8 @@ public slots:
 	virtual void slot_cblooking(bool);
 	virtual void slot_cbopen(bool);
 	virtual void slot_cbquiet(bool);
-	virtual void quit();
+	virtual void quit(bool);
+	virtual void slot_last_window_closed();
 	virtual void slot_cbconnect(const QString&);
 	virtual void slot_connect(bool);
 	virtual void slot_pbrefreshgames(bool);
@@ -116,7 +114,7 @@ public slots:
 	virtual void slot_excludeplayer(const QString&);
 	virtual void slot_localBoard();
 	virtual void slot_local19();
-	virtual void slot_preferences();
+	virtual void slot_preferences(bool = false);
 //	virtual void slot_userDefinedKeysTextChanged();
 	virtual void slot_pbuser1();
 	virtual void slot_pbuser2();
@@ -168,20 +166,20 @@ public slots:
 	// gamedialog, qgoif
 	void slot_sendcommand(const QString&, bool);
 	//menus
-	void slotFileNewBoard();
-	void slotFileNewGame();
-	void slotFileOpen();
-	void slotComputerPlay();
+	void slotFileNewBoard(bool);
+	void slotFileNewGame(bool);
+	void slotFileOpen(bool);
+	void slotComputerPlay(bool);
 
-	void slotHelpManual();
-	void slotHelpSoundInfo();
-	void slotHelpAbout();
-	void slotHelpAboutQt();
-	void slotNewVersion();
+	void slotHelpManual(bool);
+	void slotHelpSoundInfo(bool);
+	void slotHelpAbout(bool);
+	void slotHelpAboutQt(bool);
+	void slotNewVersion(bool);
 
-	void slotMenuConnect();
-	void slotMenuDisconnect();
-	void slotMenuEditServers();
+	void slotMenuConnect(bool);
+	void slotMenuDisconnect(bool);
+	void slotMenuEditServers(bool);
 
 	void slotViewToolBar(bool toggle);
 	void slotViewStatusBar(bool toggle);
@@ -221,7 +219,7 @@ private:
 	ChannelList channellist;
 	QList<Talk *> talklist;
 	QList<GameDialog *> matchlist;
-	Q3PtrList<sendBuf> sendBuffer;
+	QList<sendBuf *> sendBuffer;
 
 	QLabel *statusUsers, *statusGames, *statusServer, *statusChannel;
 	QLabel *statusOnlineTime, *statusMessage;
@@ -274,12 +272,13 @@ private:
   	// menus
 	QIcon 	seekingIcon[4], NotSeekingIcon;
 
-	Q3PopupMenu	*seekMenu;                        //SL add eb 6
+	QMenu *seekMenu;
 	//QStringList 	*seekConditionList ;
 
 	QAction *whatsThis;
 };
 
+/* Constructed in main, potentially hidden but always present.  */
 extern ClientWindow *client_window;
 
 #endif

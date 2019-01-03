@@ -2,52 +2,51 @@
 * mainwindow.cpp - qGo's main window
 */
 
-#include <QFileDialog>
+#include "qgo.h"
 
+#include <fstream>
+#include <sstream>
+
+//Added by qt3to4:
 #include <QLabel>
 #include <QPixmap>
 #include <QCloseEvent>
 #include <QGridLayout>
 #include <QKeyEvent>
-#include <QVBoxLayout>
 #include <QMenu>
+#include <QFileDialog>
 #include <QWhatsThis>
 
-#include "qgo.h"
 #include "mainwin.h"
 #include "mainwindow.h"
 #include "mainwidget.h"
 #include "board.h"
+#include "sgf.h"
 #include "tip.h"
 #include "setting.h"
 #include "icons.h"
 #include "ui_newgame_gui.h"
-#include "interfacehandler.h"
 #include "komispinbox.h"
 #include "parserdefs.h"
 #include "config.h"
-#include "move.h"
 #include "qnewgamedlg.h"
 #include "qgo_interface.h"
-#include <QShortcut>
 #include <QAction>
 #include <qmenubar.h>
 #include <qtoolbar.h>
 #include <qstatusbar.h>
 #include <qmessagebox.h>
 #include <qapplication.h>
-#include <q3listbox.h>
-
 #include <qcheckbox.h>
 #include <qsplitter.h>
 //#include <qmultilineedit.h>
-#include <q3textedit.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
 #include <qcombobox.h>
 #include <qslider.h>
 #include <qlineedit.h>
 #include <qtimer.h>
+#include <qpalette.h>
 #include <qtabwidget.h>
 #include <qlayout.h>
 
@@ -74,8 +73,6 @@
 #include ICON_START_VAR
 #include ICON_NEXT_BRANCH
 #include ICON_AUTOPLAY
-#include ICON_CUT
-#include ICON_PASTE
 #include ICON_DELETE
 #include ICON_FULLSCREEN
 #include ICON_WHATSTHIS
@@ -87,23 +84,21 @@
 #include ICON_SOUND_OFF
 //#endif
 
+std::list<MainWindow *> main_window_list;
+
 /* Return a string to identify the screen.  We use its dimensions.  */
 QString screen_key ()
 {
-#if 0 /* Enabled once building with Qt5.  */
 	QScreen *scr = QApplication::primaryScreen ();
 	QSize sz = scr->size ();
 	return QString::number (sz.width ()) + "x" + QString::number (sz.height ());
-#else
-	return "0";
-#endif
 }
 
-MainWindow::MainWindow(QWidget* parent, const char* name, Qt::WFlags f)
-	: QMainWindow(parent, name, f)
+MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMode mode)
+	: QMainWindow(parent), m_game (gr), m_ascii_dlg (this)
 {
 	setProperty("icon", setting->image0);
-
+	setAttribute (Qt::WA_DeleteOnClose);
 	parent_ = 0;
 
 	isFullScreen = 0;
@@ -133,7 +128,7 @@ MainWindow::MainWindow(QWidget* parent, const char* name, Qt::WFlags f)
 		viewMenuBar->setChecked(false); //menuBar()->hide();
 #endif
 
-	interfaceHandler = 0;
+	local_stone_sound = setting->readBoolEntry("SOUND_STONE");
 
 	if (viewVertComment->isChecked ()) {
 		// show vertical comment
@@ -149,6 +144,10 @@ MainWindow::MainWindow(QWidget* parent, const char* name, Qt::WFlags f)
 	splitter_comment->setVisible (viewComment->isChecked ());
 
 	mainWidgetGuiLayout = new QGridLayout(mainWidget);
+#if 0
+	mainWidget->removeWidget (mainWidget->toolsFrame);
+	mainWidget->removeWidget (mainWidget->boardFrame);
+#endif
 	if (setting->readBoolEntry("SIDEBAR_LEFT"))
 	{
 		mainWidgetGuiLayout->addWidget(mainWidget->toolsFrame, 0, 0);
@@ -161,7 +160,27 @@ MainWindow::MainWindow(QWidget* parent, const char* name, Qt::WFlags f)
 		mainWidgetGuiLayout->addWidget(mainWidget->boardFrame, 0, 0);
 	}
 
-	gfx_board = mainWidget->board;
+	//commentEdit = new QTextEdit(splitter_comment, "comments");
+	comments_widget = new QWidget (splitter_comment);
+	comments_layout = new QVBoxLayout (comments_widget);
+	comments_layout->setContentsMargins (0, 0, 0, 0);
+	commentEdit = new QTextEdit;
+	commentEdit->setWordWrapMode(QTextOption::WordWrap);
+	comments_layout->addWidget (commentEdit);
+	commentEdit2 = new QLineEdit;
+	comments_layout->addWidget (commentEdit2);
+
+	ListView_observers = new QTreeWidget(splitter_comment);
+	ListView_observers->setFocusPolicy (Qt::NoFocus);
+	QStringList headers;
+	headers << tr("Observers") << tr("Rk");
+	ListView_observers->setHeaderLabels (headers);
+
+	splitter->setStretchFactor (splitter->indexOf (mainWidget), 0);
+	splitter_comment->setStretchFactor(splitter_comment->indexOf (ListView_observers), 0);
+
+	gfx_board = mainWidget->gfx_board;
+
 	CHECK_PTR(board);
 	// Connect the mouseMove event of the board with the status bar coords widget
 	connect(gfx_board, SIGNAL(coordsChanged(int, int, int,bool)), statusTip, SLOT(slotStatusTipCoords(int, int, int,bool)));
@@ -169,81 +188,15 @@ MainWindow::MainWindow(QWidget* parent, const char* name, Qt::WFlags f)
 	connect(mainWidget->goFirstButton, SIGNAL(clicked()), this, SLOT(slotNavFirst()));
 	connect(mainWidget->goNextButton, SIGNAL(clicked()), this, SLOT(slotNavForward()));
 	connect(mainWidget->goPrevButton, SIGNAL(clicked()), this, SLOT(slotNavBackward()));
-	mainWidget->goPrevButton->setEnabled(false);
-	mainWidget->goNextButton->setEnabled(false);
-	mainWidget->goFirstButton->setEnabled(false);
-	mainWidget->goLastButton->setEnabled(false);
 
-	//commentEdit = new QTextEdit(splitter_comment, "comments");
-	comments_widget = new QWidget (splitter_comment);
-	comments_layout = new QVBoxLayout (comments_widget);
-	comments_layout->setContentsMargins (0, 0, 0, 0);
-	commentEdit = new QTextEdit;
-	comments_layout->addWidget (commentEdit);
-	commentEdit2 = new QLineEdit;
-	comments_layout->addWidget (commentEdit2);
-
-	ListView_observers = new Q3ListView(splitter_comment, "observers");
-	ListView_observers->addColumn(tr("Observers") + "     ");
-	ListView_observers->setProperty("focusPolicy", (int)Qt::NoFocus );
-	ListView_observers->setProperty("resizePolicy", (int)Q3ListView::AutoOneFit );
-	ListView_observers->addColumn(tr("Rk"));
-	ListView_observers->setProperty("focusPolicy", (int)Qt::NoFocus );
-	ListView_observers->setProperty("resizePolicy", (int)Q3ListView::AutoOneFit );
-	ListView_observers->setSorting(1);
-	// disable sorting; else sort rank would sort by rank string (col 2) instead of rank key (col 3, invisible)
-	ListView_observers->setSorting(-1);
-
-	commentEdit->setWordWrapMode(QTextOption::WordWrap);
-	//commentEdit2 = mainWidget->commentEdit2;
-	//commentEdit2 = new QLineEdit( boardFrame, "commentEdit2" );
-
-	//    connect(commentEdit2, SIGNAL(returnPressed()), gfx_board, SLOT(modifiedComment()));
-	connect(commentEdit, SIGNAL(textChanged()), gfx_board, SLOT(updateComment()));
-	connect(commentEdit2, SIGNAL(returnPressed()), gfx_board, SLOT(updateComment2()));
-
-	splitter->setStretchFactor (splitter->indexOf (mainWidget), 0);
-	splitter_comment->setStretchFactor(splitter_comment->indexOf (ListView_observers), 0);
-
-	// Connect Ctrl-E with MainWidget 'Edit' button. We need this to control the button
-	// even when the sidebar is hidden.
-//	connect(toggleEdit, SIGNAL(activated()), mainWidget->modeButton, SLOT(animateClick()));
-
+	connect(m_ascii_dlg.cb_coords, &QCheckBox::toggled, this, &MainWindow::slotFileExportASCII);
+	connect(m_ascii_dlg.cb_numbering, &QCheckBox::toggled, this, &MainWindow::slotFileExportASCII);
 	setCentralWidget(splitter);
-
-	interfaceHandler = mainWidget->interfaceHandler;
-	CHECK_PTR(interfaceHandler);
-	interfaceHandler->fileImportSgfClipB = fileImportSgfClipB;
-	interfaceHandler->navForward = navForward;
-	interfaceHandler->navBackward = navBackward;
-	interfaceHandler->navFirst = navFirst;
-	interfaceHandler->navLast = navLast;
-	interfaceHandler->navNextVar = navNextVar;
-	interfaceHandler->navPrevVar = navPrevVar;
-	interfaceHandler->navStartVar = navStartVar;
-	interfaceHandler->navMainBranch = navMainBranch;
-	interfaceHandler->navNextBranch = navNextBranch;
-	interfaceHandler->navPrevComment = navPrevComment;
-	interfaceHandler->navNextComment = navNextComment;
-	interfaceHandler->navIntersection = navIntersection;
-	interfaceHandler->editDelete = editDelete;
-	interfaceHandler->navNthMove = navNthMove;
-	interfaceHandler->navAutoplay = navAutoplay;
-	interfaceHandler->navSwapVariations = navSwapVariations;
-	interfaceHandler->commentEdit = commentEdit;
-	interfaceHandler->commentEdit2 = commentEdit2;
-	interfaceHandler->statusTurn = statusTurn;
-	interfaceHandler->statusNav = statusNav;
-	interfaceHandler->slider = mainWidget->slider;
-	interfaceHandler->mainWidget = mainWidget;
-	interfaceHandler->fileNew = fileNew;
-	interfaceHandler->fileNewBoard = fileNewBoard ;
-	interfaceHandler->fileOpen = fileOpen ;
 
 	// Create a timer instance
 	// timerInterval = 2;  // 1000 msec
 	timer = new QTimer(this);
-	connect(timer, SIGNAL(timeout()), this, SLOT(slotTimerForward()));
+	connect(timer, &QTimer::timeout, this, &MainWindow::slotTimerForward);
 	timerIntervals[0] = (float) 0.1;
 	timerIntervals[1] = 0.5;
 	timerIntervals[2] = 1.0;
@@ -251,26 +204,37 @@ MainWindow::MainWindow(QWidget* parent, const char* name, Qt::WFlags f)
 	timerIntervals[4] = 3.0;
 	timerIntervals[5] = 5.0;
 
-	updateBoard();
-
-	mainWidget->setGameMode (modeNormal);
-	// restore board window
-	restoreWindowSize ();
-
 	toolBar->setFocus();
 	updateFont();
+
+	mainWidget->init_game_record (gr);
+	setGameMode (mode);
+
+	restoreWindowSize ();
+
+	updateCaption (false);
+	updateBoard();
+
+	connect(commentEdit, SIGNAL(textChanged()), this, SLOT(slotUpdateComment()));
+	connect(commentEdit2, SIGNAL(returnPressed()), this, SLOT(slotUpdateComment2()));
+	m_allow_text_update_signal = true;
+
+	main_window_list.push_back (this);
 }
 
 MainWindow::~MainWindow()
 {
+	main_window_list.remove (this);
+
 	delete timer;
 	delete commentEdit;
 	delete commentEdit2;
 	delete mainWidget;
-	delete splitter;
-	delete splitter_comment;
+	delete ListView_observers;
 	delete comments_layout;
 	delete comments_widget;
+	delete splitter_comment;
+	delete splitter;
 
 	// status bar
 	delete statusMode;
@@ -294,8 +258,6 @@ MainWindow::~MainWindow()
 
 	// Actions
 	delete escapeFocus;
-	delete toggleEdit;
-	delete toggleMarks;
 	delete fileNewBoard;
 	delete fileNew;
 	delete fileOpen;
@@ -309,9 +271,14 @@ MainWindow::~MainWindow()
 	delete fileExportPicClipB;
 	delete fileQuit;
 	delete editDelete;
-	delete editNumberMoves;
-	delete editMarkBrothers;
-	delete editMarkSons;
+	delete editStone;
+	delete editCircle;
+	delete editSquare;
+	delete editTriangle;
+	delete editCross;
+	delete editNumber;
+	delete editLetter;
+	delete editGroup;
 	delete navBackward;
 	delete navForward;
 	delete navFirst;
@@ -355,38 +322,37 @@ void MainWindow::initActions()
 		nextCommentIcon, previousCommentIcon, navIntersectionIcon,
 		rightArrowIcon, leftArrowIcon,two_rightArrowIcon, two_leftArrowIcon,
 		prevVarIcon, nextVarIcon, startVarIcon,	mainBranchIcon, nextBranchIcon, autoplayIcon,
-		prefsIcon, infoIcon, fullscreenIcon, manualIcon,
-		coordsIcon, sound_onIcon, sound_offIcon;
+		prefsIcon, infoIcon, fullscreenIcon, manualIcon, coordsIcon, sound_onIcon, sound_offIcon;
 
-	prefsIcon = QPixmap(package_settings_xpm);
-	infoIcon = QPixmap(idea_xpm);
-	exitIcon = QPixmap(exit_xpm);
-	fileNewboardIcon = QPixmap(newboard_xpm);
-	fileNewIcon = QPixmap(filenew_xpm);
-	fileOpenIcon = QPixmap(fileopen_xpm);
-	fileSaveIcon = QPixmap(filesave_xpm);
-	fileSaveAsIcon = QPixmap(filesaveas_xpm);
-	transformIcon = QPixmap(transform_xpm);
-	charIcon = QPixmap(charset_xpm);
-	deleteIcon = QPixmap(editdelete_xpm);
-	rightArrowIcon = QPixmap(rightarrow_xpm);
-	leftArrowIcon = QPixmap(leftarrow_xpm);
-	nextCommentIcon = QPixmap(rightcomment_xpm);
-	previousCommentIcon = QPixmap(leftcomment_xpm);
-	two_rightArrowIcon = QPixmap(two_rightarrow_xpm);
-	two_leftArrowIcon = QPixmap(two_leftarrow_xpm);
-	nextVarIcon = QPixmap(down_xpm);
-	prevVarIcon = QPixmap(up_xpm);
-	mainBranchIcon = QPixmap(start_xpm);
-	startVarIcon = QPixmap(top_xpm);
-	nextBranchIcon = QPixmap(bottom_xpm);
-	fullscreenIcon = QPixmap(window_fullscreen_xpm);
-	manualIcon = QPixmap(help_xpm);
-	autoplayIcon = QPixmap(player_pause_xpm);
-	navIntersectionIcon  = QPixmap(navIntersection_xpm);  //SL added eb 11
-  	coordsIcon= QPixmap(coords_xpm);
-	sound_onIcon= QPixmap(sound_on_xpm);
-	sound_offIcon= QPixmap(sound_off_xpm);
+	prefsIcon = QPixmap((package_settings_xpm));
+	infoIcon = QPixmap((idea_xpm));
+	exitIcon = QPixmap((exit_xpm));
+	fileNewboardIcon = QPixmap((newboard_xpm));
+	fileNewIcon = QPixmap((filenew_xpm));
+	fileOpenIcon = QPixmap((fileopen_xpm));
+	fileSaveIcon = QPixmap((filesave_xpm));
+	fileSaveAsIcon = QPixmap((filesaveas_xpm));
+	transformIcon = QPixmap((transform_xpm));
+	charIcon = QPixmap((charset_xpm));
+	deleteIcon = QPixmap((editdelete_xpm));
+	rightArrowIcon = QPixmap((rightarrow_xpm));
+	leftArrowIcon = QPixmap((leftarrow_xpm));
+	nextCommentIcon = QPixmap((rightcomment_xpm));
+	previousCommentIcon = QPixmap((leftcomment_xpm));
+	two_rightArrowIcon = QPixmap((two_rightarrow_xpm));
+	two_leftArrowIcon = QPixmap((two_leftarrow_xpm));
+	nextVarIcon = QPixmap((down_xpm));
+	prevVarIcon = QPixmap((up_xpm));
+	mainBranchIcon = QPixmap((start_xpm));
+	startVarIcon = QPixmap((top_xpm));
+	nextBranchIcon = QPixmap((bottom_xpm));
+	fullscreenIcon = QPixmap((window_fullscreen_xpm));
+	manualIcon = QPixmap((help_xpm));
+	autoplayIcon = QPixmap((player_pause_xpm));
+	navIntersectionIcon  = QPixmap((navIntersection_xpm));  //SL added eb 11
+	coordsIcon = QPixmap((coords_xpm));
+	sound_onIcon= QPixmap((sound_on_xpm));
+	sound_offIcon= QPixmap((sound_off_xpm));
 
 	/*
 	* Global actions
@@ -394,17 +360,7 @@ void MainWindow::initActions()
 	// Escape focus: Escape key to get the focus from comment field to main window.
  	escapeFocus = new QAction(this);
 	escapeFocus->setShortcut(Qt::Key_Escape);
-	connect(escapeFocus, SIGNAL(activated()), this, SLOT(setFocus()));
-
-	// Toggle game mode: Normal / Edit - Ctrl-E
-	toggleEdit = new QAction(this);
-	toggleEdit->setShortcut(Qt::CTRL + Qt::Key_E);
-	// connect in constructor, as we need the mainwidget instance first.
-
-	// Toggle through the marks - Ctrl-T
-	toggleMarks = new QAction(this);
-	toggleMarks->setShortcut (Qt::CTRL + Qt::Key_T);
-	connect(toggleMarks, SIGNAL(activated()), this, SLOT(slotToggleMarks()));
+	connect(escapeFocus, &QAction::triggered, this, &MainWindow::slotFocus);
 
 	/*
 	* Menu File
@@ -414,80 +370,80 @@ void MainWindow::initActions()
 	fileNewBoard->setShortcut (Qt::CTRL + Qt::Key_B);
 	fileNewBoard->setStatusTip(tr("Creates a new board"));
 	fileNewBoard->setWhatsThis(tr("New\n\nCreates a new board."));
-	connect(fileNewBoard, SIGNAL(activated()), this, SLOT(slotFileNewBoard()));
+	connect(fileNewBoard, &QAction::triggered, this, &MainWindow::slotFileNewBoard);
 
 	// File New Game
 	fileNew = new QAction(fileNewIcon, tr("&New game"), this);
 	fileNew->setShortcut (QKeySequence (Qt::CTRL + Qt::Key_N));
 	fileNew->setStatusTip(tr("Creates a new game on this board"));
 	fileNew->setWhatsThis(tr("New\n\nCreates a new game on this board."));
-	connect(fileNew, SIGNAL(activated()), this, SLOT(slotFileNewGame()));
+	connect(fileNew, &QAction::triggered, this, &MainWindow::slotFileNewGame);
 
 	// File Open
 	fileOpen = new QAction(fileOpenIcon, tr("&Open"), this);
 	fileOpen->setShortcut (QKeySequence (Qt::CTRL + Qt::Key_O));
 	fileOpen->setStatusTip(tr("Open a sgf file"));
 	fileOpen->setWhatsThis(tr("Open\n\nOpen a sgf file."));
-	connect(fileOpen, SIGNAL(activated()), this, SLOT(slotFileOpen()));
+	connect(fileOpen, &QAction::triggered, this, &MainWindow::slotFileOpen);
 
 	// File Save
 	fileSave = new QAction(fileSaveIcon, tr("&Save"), this);
 	fileSave->setShortcut (QKeySequence (Qt::CTRL + Qt::Key_S));
 	fileSave->setStatusTip(tr("Save a sgf file"));
 	fileSave->setWhatsThis(tr("Save\n\nSave a sgf file."));
-	connect(fileSave, SIGNAL(activated()), this, SLOT(slotFileSave()));
+	connect(fileSave, &QAction::triggered, this, &MainWindow::slotFileSave);
 
 	// File SaveAs
 	fileSaveAs = new QAction(fileSaveAsIcon, tr("Save &As"), this);
 	fileSaveAs->setStatusTip(tr("Save a sgf file under a new name"));
 	fileSaveAs->setWhatsThis(tr("Save As\n\nSave a sgf file under a new name."));
-	connect(fileSaveAs, SIGNAL(activated()), this, SLOT(slotFileSaveAs()));
+	connect(fileSaveAs, &QAction::triggered, this, &MainWindow::slotFileSaveAs);
 
 	// File Close
 	fileClose = new QAction(tr("&Close"), this);
 	fileClose->setShortcut (QKeySequence (Qt::CTRL + Qt::Key_W));
 	fileClose->setStatusTip(tr("Close this board"));
 	fileClose->setWhatsThis(tr("Exit\n\nClose this board."));
-	connect(fileClose, SIGNAL(activated()), this, SLOT(slotFileClose()));
+	connect(fileClose, &QAction::triggered, this, &MainWindow::slotFileClose);
 
 	// File ExportASCII
 	fileExportASCII = new QAction(charIcon, tr("&Export ASCII"), this);
 	fileExportASCII->setStatusTip(tr("Export current board to ASCII"));
 	fileExportASCII->setWhatsThis(tr("Export ASCII\n\nExport current board to ASCII."));
-	connect(fileExportASCII, SIGNAL(activated()), this, SLOT(slotFileExportASCII()));
+	connect(fileExportASCII, &QAction::triggered, this, &MainWindow::slotFileExportASCII);
 
 	// File ImportSgfClipB
 	fileImportSgfClipB = new QAction(fileOpenIcon, tr("Import SGF &from clipboard"), this);
 	fileImportSgfClipB->setStatusTip(tr("Import a complete game in SGF format from clipboard"));
 	fileImportSgfClipB->setWhatsThis(tr("Import SGF from clipboard\n\n"
 		"Import a complete game in SGF format from clipboard."));
-	connect(fileImportSgfClipB, SIGNAL(activated()), this, SLOT(slotFileImportSgfClipB()));
+	connect(fileImportSgfClipB, &QAction::triggered, this, &MainWindow::slotFileImportSgfClipB);
 
 	// File ExportSgfClipB
 	fileExportSgfClipB = new QAction(fileSaveIcon, tr("Export SGF &to clipboard"), this);
 	fileExportSgfClipB->setStatusTip(tr("Export a complete game in SGF format to clipboard"));
 	fileExportSgfClipB->setWhatsThis(tr("Export SGF to clipboard\n\n"
 		"Export a complete game in SGF format to clipboard."));
-	connect(fileExportSgfClipB, SIGNAL(activated()), this, SLOT(slotFileExportSgfClipB()));
+	connect(fileExportSgfClipB, &QAction::triggered, this, &MainWindow::slotFileExportSgfClipB);
 
 	// File ExportPic
 	fileExportPic = new QAction(transformIcon, tr("Export &Image"), this);
 	fileExportPic->setStatusTip(tr("Export current board to an image"));
 	fileExportPic->setWhatsThis(tr("Export Image\n\nExport current board to an image."));
-	connect(fileExportPic, SIGNAL(activated()), this, SLOT(slotFileExportPic()));
+	connect(fileExportPic, &QAction::triggered, this, &MainWindow::slotFileExportPic);
 
 	// File ExportPic
 	fileExportPicClipB = new QAction(transformIcon, tr("E&xport Image to clipboard"), this);
 	fileExportPicClipB->setStatusTip(tr("Export current board to the clipboard as image"));
 	fileExportPicClipB->setWhatsThis(tr("Export Image to clipboard\n\nExport current board to the clipboard as image."));
-	connect(fileExportPicClipB, SIGNAL(activated()), this, SLOT(slotFileExportPicClipB()));
+	connect(fileExportPicClipB, &QAction::triggered, this, &MainWindow::slotFileExportPicClipB);
 
 	// File Quit
 	fileQuit = new QAction(exitIcon, tr("E&xit"), this);
 	fileQuit->setShortcut (QKeySequence (Qt::CTRL + Qt::Key_Q));
 	fileQuit->setStatusTip(tr("Quits the application"));
 	fileQuit->setWhatsThis(tr("Exit\n\nQuits the application."));
-	connect(fileQuit, SIGNAL(activated()), this, SLOT(slotFileClose()));//(qGo*)qApp, SLOT(quit()));
+	connect(fileQuit, &QAction::triggered, this, &MainWindow::slotFileClose);//(qGo*)qApp, SLOT(quit);
 
 	/*
 	* Menu Edit
@@ -498,28 +454,90 @@ void MainWindow::initActions()
 	editDelete->setShortcut (QKeySequence (Qt::CTRL + Qt::Key_D));
 	editDelete->setStatusTip(tr("Delete this and all following positions"));
 	editDelete->setWhatsThis(tr("Delete\n\nDelete this and all following positions."));
-	connect(editDelete, SIGNAL(activated()), this, SLOT(slotEditDelete()));
+	connect(editDelete, &QAction::triggered, this, &MainWindow::slotEditDelete);
 
-	// Edit number moves
-	editNumberMoves = new QAction(tr("&Number Moves"), this);
-	editNumberMoves->setShortcut (Qt::SHIFT + Qt::Key_F2);
-	editNumberMoves->setStatusTip(tr("Mark all moves with the number of their turn"));
-	editNumberMoves->setWhatsThis(tr("Number moves\n\nMark all moves with the number of their turn."));
-	connect(editNumberMoves, SIGNAL(activated()), this, SLOT(slotEditNumberMoves()));
+	editStone = new QAction(QIcon (":/BoardWindow/images/boardwindow/editstone.png"), tr("Play stone"), this);
+	editStone->setCheckable (true);
+	editStone->setStatusTip(tr("Normal mode, click to place a stone."));
+	editStone->setWhatsThis(tr("Select normal behaviour in play or edit mode, click to place a stone normally."));
+	connect(editStone, &QAction::triggered, this, &MainWindow::slotEditGroup);
+
+	editTriangle = new QAction(QIcon (":/BoardWindow/images/boardwindow/edittriangle.png"), tr("Set triangle mark"), this);
+	editTriangle->setCheckable (true);
+	editTriangle->setStatusTip(tr("Click places a triangle mark."));
+	editTriangle->setWhatsThis(tr("In play or edit mode, click to place a triangle mark."));
+	connect(editTriangle, &QAction::triggered, this, &MainWindow::slotEditGroup);
+
+	editCircle = new QAction(QIcon (":/BoardWindow/images/boardwindow/editcircle.png"), tr("Set circle mark"), this);
+	editCircle->setCheckable (true);
+	editCircle->setStatusTip(tr("Click places a circle mark."));
+	editCircle->setWhatsThis(tr("In play or edit mode, click to place a circle mark."));
+	connect(editCircle, &QAction::triggered, this, &MainWindow::slotEditGroup);
+
+	editCross = new QAction(QIcon (":/BoardWindow/images/boardwindow/editcross.png"), tr("Set cross mark"), this);
+	editCross->setCheckable (true);
+	editCross->setStatusTip(tr("Click places a cross mark."));
+	editCross->setWhatsThis(tr("In play or edit mode, click to place a cross mark."));
+	connect(editCross, &QAction::triggered, this, &MainWindow::slotEditGroup);
+
+	editSquare = new QAction(QIcon (":/BoardWindow/images/boardwindow/editsquare.png"), tr("Set square mark"), this);
+	editSquare->setCheckable (true);
+	editSquare->setStatusTip(tr("Click places a square mark."));
+	editSquare->setWhatsThis(tr("In play or edit mode, click to place a square mark."));
+	connect(editSquare, &QAction::triggered, this, &MainWindow::slotEditGroup);
+
+	editNumber = new QAction(QIcon (":/BoardWindow/images/boardwindow/editnumber.png"), tr("Set number mark"), this);
+	editNumber->setCheckable (true);
+	editNumber->setStatusTip(tr("Click places a number mark."));
+	editNumber->setWhatsThis(tr("In play or edit mode, click to place a number mark."));
+	connect(editNumber, &QAction::triggered, this, &MainWindow::slotEditGroup);
+
+	editLetter = new QAction(QIcon (":/BoardWindow/images/boardwindow/editletter.png"), tr("Set letter mark"), this);
+	editLetter->setCheckable (true);
+	editLetter->setStatusTip(tr("Click places a letter mark."));
+	editLetter->setWhatsThis(tr("In play or edit mode, click to place a letter mark."));
+	connect(editLetter, &QAction::triggered, this, &MainWindow::slotEditGroup);
+
+	editGroup = new QActionGroup (this);
+	editGroup->addAction (editStone);
+	editGroup->addAction (editCircle);
+	editGroup->addAction (editTriangle);
+	editGroup->addAction (editSquare);
+	editGroup->addAction (editCross);
+	editGroup->addAction (editNumber);
+	editGroup->addAction (editLetter);
+	editStone->setChecked (true);
+
+	edit123 = new QAction(QIcon (":/BoardWindow/images/boardwindow/123.png"), tr("Number moves from here"), this);
+	edit123->setCheckable (true);
+	edit123->setStatusTip(tr("Select to start numbering moves from this position."));
+	edit123->setWhatsThis(tr("Causes the board to display move numbers starting at this position."));
+	connect(edit123, &QAction::triggered, this, &MainWindow::slotEdit123);
+
+	editRectSelect = new QAction(QIcon (":/BoardWindow/images/boardwindow/rect_select.png"), tr("Select rectangle"), this);
+	editRectSelect->setCheckable (true);
+	editRectSelect->setStatusTip(tr("Choose a rectangle to export."));
+	editRectSelect->setWhatsThis(tr("In play or edit mode, click to begin choosing a rectangle to be used when exporting."));
+	connect(editRectSelect, &QAction::toggled, this, &MainWindow::slotEditRectSelect);
+
+	editClearSelect = new QAction(QIcon (":/BoardWindow/images/boardwindow/clear_select.png"), tr("Clear selection"), this);
+	editClearSelect->setStatusTip(tr("Clear selection."));
+	editClearSelect->setWhatsThis(tr("Click to clear the selected rectangle and select the whole board again."));
+	connect(editClearSelect, &QAction::triggered, this, &MainWindow::slotEditClearSelect);
 
 	// Edit mark brothers
 	editMarkBrothers = new QAction(tr("Mark &brothers"), this);
 	editMarkBrothers->setShortcut (Qt::SHIFT + Qt::Key_F3);
 	editMarkBrothers->setStatusTip(tr("Mark all brothers of the current move"));
 	editMarkBrothers->setWhatsThis(tr("Mark brothers\n\nMark all brothers of the current move."));
-	connect(editMarkBrothers, SIGNAL(activated()), this, SLOT(slotEditMarkBrothers()));
+	connect(editMarkBrothers, &QAction::triggered, this, &MainWindow::slotEditMarkBrothers);
 
 	// Edit mark sons
 	editMarkSons = new QAction(tr("Mark &sons"), this);
 	editMarkSons->setShortcut (Qt::SHIFT + Qt::Key_F4);
 	editMarkSons->setStatusTip(tr("Mark all sons of the current move"));
 	editMarkSons->setWhatsThis(tr("Mark sons\n\nMark all sons of the current move."));
-	connect(editMarkSons, SIGNAL(activated()), this, SLOT(slotEditMarkSons()));
+	connect(editMarkSons, &QAction::triggered, this, &MainWindow::slotEditMarkSons);
 
 	/*
 	* Menu Navigation
@@ -528,65 +546,65 @@ void MainWindow::initActions()
 	navBackward = new QAction(leftArrowIcon, tr("&Previous move") + "\t" + tr("Left"), this);
 	navBackward->setStatusTip(tr("To previous move"));
 	navBackward->setWhatsThis(tr("Previous move\n\nMove one move backward."));
-	connect(navBackward, SIGNAL(activated()), this, SLOT(slotNavBackward()));
+	connect(navBackward, &QAction::triggered, this, &MainWindow::slotNavBackward);
 
 	// Navigation Forward
 	navForward = new QAction(rightArrowIcon, tr("&Next move") + "\t" + tr("Right"), this);
 	navForward->setStatusTip(tr("To next move"));
 	navForward->setWhatsThis(tr("Next move\n\nMove one move forward."));
-	connect(navForward, SIGNAL(activated()), this, SLOT(slotNavForward()));
+	connect(navForward, &QAction::triggered, this, &MainWindow::slotNavForward);
 
 	// Navigation First
 	navFirst = new QAction(two_leftArrowIcon, tr("&First move") + "\t" + tr("Home"), this);
 	navFirst->setStatusTip(tr("To first move"));
 	navFirst->setWhatsThis(tr("First move\n\nMove to first move."));
-	connect(navFirst, SIGNAL(activated()), this, SLOT(slotNavFirst()));
+	connect(navFirst, &QAction::triggered, this, &MainWindow::slotNavFirst);
 
 	// Navigation Last
 	navLast = new QAction(two_rightArrowIcon, tr("&Last move") + "\t" + tr("End"), this);
 	navLast->setStatusTip(tr("To last move"));
 	navLast->setWhatsThis(tr("Last move\n\nMove to last move."));
-	connect(navLast, SIGNAL(activated()), this, SLOT(slotNavLast()));
+	connect(navLast, &QAction::triggered, this, &MainWindow::slotNavLast);
 
 	// Navigation previous variation
 	navPrevVar = new QAction(prevVarIcon, tr("P&revious variation") + "\t" + tr("Up"), this);
 	navPrevVar->setStatusTip(tr("To previous variation"));
 	navPrevVar->setWhatsThis(tr("Previous variation\n\nMove to the previous variation of this move."));
-	connect(navPrevVar, SIGNAL(activated()), this, SLOT(slotNavPrevVar()));
+	connect(navPrevVar, &QAction::triggered, this, &MainWindow::slotNavPrevVar);
 
 	// Navigation next variation
 	navNextVar = new QAction(nextVarIcon, tr("N&ext variation") + "\t" + tr("Down"), this);
 	navNextVar->setStatusTip(tr("To next variation"));
 	navNextVar->setWhatsThis(tr("Next variation\n\nMove to the next variation of this move."));
-	connect(navNextVar, SIGNAL(activated()), this, SLOT(slotNavNextVar()));
+	connect(navNextVar, &QAction::triggered, this, &MainWindow::slotNavNextVar);
 
 	// Navigation main branch
 	navMainBranch = new QAction(mainBranchIcon, tr("&Main branch"), this);
 	navMainBranch->setShortcut (Qt::Key_Insert);
 	navMainBranch->setStatusTip(tr("To main branch"));
 	navMainBranch->setWhatsThis(tr("Main Branch\n\nMove to the main branch where variation started."));
-	connect(navMainBranch, SIGNAL(activated()), this, SLOT(slotNavMainBranch()));
+	connect(navMainBranch, &QAction::triggered, this, &MainWindow::slotNavMainBranch);
 
 	// Navigation variation start
 	navStartVar = new QAction(startVarIcon, tr("Variation &start"), this);
 	navStartVar->setShortcut (Qt::Key_PageUp);
 	navStartVar->setStatusTip(tr("To top of variation"));
 	navStartVar->setWhatsThis(tr("Variation start\n\nMove to the top variation of this branch."));
-	connect(navStartVar, SIGNAL(activated()), this, SLOT(slotNavStartVar()));
+	connect(navStartVar, &QAction::triggered, this, &MainWindow::slotNavStartVar);
 
 	// Navigation next branch
 	navNextBranch = new QAction(nextBranchIcon, tr("Next &branch"), this);
 	navNextBranch->setShortcut (Qt::Key_PageDown);
 	navNextBranch->setStatusTip(tr("To next branch starting a variation"));
 	navNextBranch->setWhatsThis(tr("Next branch\n\nMove to the next branch starting a variation."));
-	connect(navNextBranch, SIGNAL(activated()), this, SLOT(slotNavNextBranch()));
+	connect(navNextBranch, &QAction::triggered, this, &MainWindow::slotNavNextBranch);
 
 	// Navigation goto Nth move
 	navNthMove = new QAction(tr("&Goto Move"), this);
 	navNthMove->setShortcut (QKeySequence (Qt::CTRL + Qt::Key_G));
 	navNthMove->setStatusTip(tr("Goto a move of main branch by number"));
 	navNthMove->setWhatsThis(tr("Goto move\n\nGoto a move of main branch by number."));
-	connect(navNthMove, SIGNAL(activated()), this, SLOT(slotNavNthMove()));
+	connect(navNthMove, &QAction::triggered, this, &MainWindow::slotNavNthMove);
 
 	// Navigation Autoplay
 	navAutoplay = new QAction(autoplayIcon, tr("&Autoplay"), this);
@@ -595,31 +613,31 @@ void MainWindow::initActions()
 	navAutoplay->setChecked(false);
 	navAutoplay->setStatusTip(tr("Start/Stop autoplaying current game"));
 	navAutoplay->setWhatsThis(tr("Autoplay\n\nStart/Stop autoplaying current game."));
-	connect(navAutoplay, SIGNAL(toggled(bool)), this, SLOT(slotNavAutoplay(bool)));
+	connect(navAutoplay, &QAction::toggled, this, &MainWindow::slotNavAutoplay);
 
 	// Navigation swap variations
 	navSwapVariations = new QAction(tr("S&wap variations"), this);
 	navSwapVariations->setStatusTip(tr("Swap current move with previous variation"));
 	navSwapVariations->setWhatsThis(tr("Swap variations\n\nSwap current move with previous variation."));
-	connect(navSwapVariations, SIGNAL(activated()), this, SLOT(slotNavSwapVariations()));
+	connect(navSwapVariations, &QAction::triggered, this, &MainWindow::slotNavSwapVariations);
 
 	// Navigation previous comment
 	navPrevComment = new QAction(previousCommentIcon, tr("Previous &commented move"), this);
 	navPrevComment->setStatusTip(tr("To previous comment"));
 	navPrevComment->setWhatsThis(tr("Previous comment\n\nMove to the previous move that has a comment"));
-	connect(navPrevComment, SIGNAL(activated()), this, SLOT(slotNavPrevComment()));
+	connect(navPrevComment, &QAction::triggered, this, &MainWindow::slotNavPrevComment);
 
 	// Navigation next comment
 	navNextComment = new QAction(nextCommentIcon, tr("Next c&ommented move"), this);
 	navNextComment->setStatusTip(tr("To next comment"));
 	navNextComment->setWhatsThis(tr("Next comment\n\nMove to the next move that has a comment"));
-	connect(navNextComment, SIGNAL(activated()), this, SLOT(slotNavNextComment()));
+	connect(navNextComment, &QAction::triggered, this, &MainWindow::slotNavNextComment);
 
 	// Navigation to clicked intersection
 	navIntersection = new QAction(navIntersectionIcon, tr("Goto clic&ked move"), this);
 	navIntersection->setStatusTip(tr("To clicked move"));
 	navIntersection->setWhatsThis(tr("Click on a board intersection\n\nMove to the stone played at this intersection (if any)"));
-	connect(navIntersection, SIGNAL(activated()), this, SLOT(slotNavIntersection()));
+	connect(navIntersection, &QAction::triggered, this, &MainWindow::slotNavIntersection);
 
 	/*
 	* Menu Settings
@@ -629,25 +647,25 @@ void MainWindow::initActions()
 	setPreferences->setShortcut (Qt::ALT + Qt::Key_P);
 	setPreferences->setStatusTip(tr("Edit the preferences"));
 	setPreferences->setWhatsThis(tr("Preferences\n\nEdit the applications preferences."));
-	connect(setPreferences, SIGNAL(activated()), client_window, SLOT(slot_preferences()));
+	connect(setPreferences, &QAction::triggered, client_window, &ClientWindow::slot_preferences);
 
 	// Setings GameInfo
 	setGameInfo = new QAction(infoIcon, tr("&Game Info"), this);
 	setGameInfo->setShortcut (QKeySequence (Qt::CTRL + Qt::Key_I));
 	setGameInfo->setStatusTip(tr("Display game information"));
 	setGameInfo->setWhatsThis(tr("Game Info\n\nDisplay game information."));
-	connect(setGameInfo, SIGNAL(activated()), this, SLOT(slotSetGameInfo()));
+	connect(setGameInfo, &QAction::triggered, this, &MainWindow::slotSetGameInfo);
 
 	//Toggling sound
 	QIcon  OIC;
-	OIC.setPixmap ( sound_offIcon, QIcon::Automatic, QIcon::Normal, QIcon::On);
-	OIC.setPixmap ( sound_onIcon, QIcon::Automatic, QIcon::Normal, QIcon::Off );
+	OIC.addPixmap ( sound_offIcon, QIcon::Normal, QIcon::On);
+	OIC.addPixmap ( sound_onIcon, QIcon::Normal, QIcon::Off );
 	soundToggle = new QAction(OIC, tr("&Mute stones sound"), this);
 	soundToggle->setCheckable (true);
 	soundToggle->setChecked(!setting->readBoolEntry("SOUND_STONE"));
 	soundToggle->setStatusTip(tr("Toggle stones sound on/off"));
 	soundToggle->setWhatsThis(tr("Stones sound\n\nToggle stones sound on/off\nthis toggles only the stones sounds"));
-	connect(soundToggle, SIGNAL(toggled(bool)), this, SLOT(slotSoundToggle(bool)));
+	connect(soundToggle, &QAction::toggled, this, &MainWindow::slotSoundToggle);
 
 	/*
 	* Menu View
@@ -658,7 +676,7 @@ void MainWindow::initActions()
 	viewFileBar->setChecked(true);
 	viewFileBar->setStatusTip(tr("Enables/disables the file toolbar"));
 	viewFileBar->setWhatsThis(tr("File toolbar\n\nEnables/disables the file toolbar."));
-	connect(viewFileBar, SIGNAL(toggled(bool)), this, SLOT(slotViewFileBar(bool)));
+	connect(viewFileBar, &QAction::toggled, this, &MainWindow::slotViewFileBar);
 
 	// View Toolbar toggle
 	viewToolBar = new QAction(tr("Navigation &toolbar"), this);
@@ -666,7 +684,7 @@ void MainWindow::initActions()
 	viewToolBar->setChecked(true);
 	viewToolBar->setStatusTip(tr("Enables/disables the navigation toolbar"));
 	viewToolBar->setWhatsThis(tr("Navigation toolbar\n\nEnables/disables the navigation toolbar."));
-	connect(viewToolBar, SIGNAL(toggled(bool)), this, SLOT(slotViewToolBar(bool)));
+	connect(viewToolBar, &QAction::toggled, this, &MainWindow::slotViewToolBar);
 
 	// View Editbar toggle
 	viewEditBar = new QAction(tr("&Edit toolbar"), this);
@@ -674,17 +692,17 @@ void MainWindow::initActions()
 	viewEditBar->setChecked(true);
 	viewEditBar->setStatusTip(tr("Enables/disables the edit toolbar"));
 	viewEditBar->setWhatsThis(tr("Edit toolbar\n\nEnables/disables the edit toolbar."));
-	connect(viewEditBar, SIGNAL(toggled(bool)), this, SLOT(slotViewEditBar(bool)));
+	connect(viewEditBar, &QAction::toggled, this, &MainWindow::slotViewEditBar);
 
+	viewMenuBar = new QAction(tr("&Menubar"), this);
 #if 0 /* After porting from Q3Action, these no longer trigger when the menu is hidden, so it can't be unhidden.  */
 	// View Menubar toggle
-	viewMenuBar = new QAction(tr("&Menubar"), this);
 	viewMenuBar->setCheckable (true);
 	viewMenuBar->setShortcut (Qt::Key_F7);
 	viewMenuBar->setChecked(true);
 	viewMenuBar->setStatusTip(tr("Enables/disables the menubar"));
 	viewMenuBar->setWhatsThis(tr("Menubar\n\nEnables/disables the menubar."));
-	connect(viewMenuBar, SIGNAL(toggled(bool)), this, SLOT(slotViewMenuBar(bool)));
+	connect(viewMenuBar, &QAction::toggled, this, &MainWindow::slotViewMenuBar);
 #endif
 
 	// View Statusbar toggle
@@ -693,7 +711,7 @@ void MainWindow::initActions()
 	viewStatusBar->setChecked(true);
 	viewStatusBar->setStatusTip(tr("Enables/disables the statusbar"));
 	viewStatusBar->setWhatsThis(tr("Statusbar\n\nEnables/disables the statusbar."));
-	connect(viewStatusBar, SIGNAL(toggled(bool)), this, SLOT(slotViewStatusBar(bool)));
+	connect(viewStatusBar, &QAction::toggled, this, &MainWindow::slotViewStatusBar);
 
 	// View Coordinates toggle
 	viewCoords = new QAction(coordsIcon, tr("C&oordinates"), this);
@@ -702,7 +720,7 @@ void MainWindow::initActions()
 	viewCoords->setChecked(false);
 	viewCoords->setStatusTip(tr("Enables/disables the coordinates"));
 	viewCoords->setWhatsThis(tr("Coordinates\n\nEnables/disables the coordinates."));
-	connect(viewCoords, SIGNAL(toggled(bool)), this, SLOT(slotViewCoords(bool)));
+	connect(viewCoords, &QAction::toggled, this, &MainWindow::slotViewCoords);
 
 	// View Slider toggle
 	viewSlider = new QAction(tr("Sli&der"), this);
@@ -711,7 +729,7 @@ void MainWindow::initActions()
 	viewSlider->setChecked(false);
 	viewSlider->setStatusTip(tr("Enables/disables the slider"));
 	viewSlider->setWhatsThis(tr("Slider\n\nEnables/disables the slider."));
-	connect(viewSlider, SIGNAL(toggled(bool)), this, SLOT(slotViewSlider(bool)));
+	connect(viewSlider, &QAction::toggled, this, &MainWindow::slotViewSlider);
 
 	// View Sidebar toggle
 	viewSidebar = new QAction(tr("Side&bar"), this);
@@ -720,7 +738,7 @@ void MainWindow::initActions()
 	viewSidebar->setChecked(true);
 	viewSidebar->setStatusTip(tr("Enables/disables the sidebar"));
 	viewSidebar->setWhatsThis(tr("Sidebar\n\nEnables/disables the sidebar."));
-	connect(viewSidebar, SIGNAL(toggled(bool)), this, SLOT(slotViewSidebar(bool)));
+	connect(viewSidebar, &QAction::toggled, this, &MainWindow::slotViewSidebar);
 
 	QString scrkey = screen_key ();
 	/* Inverted meaning, so that if the option does not exist, we choose the correct default
@@ -735,9 +753,10 @@ void MainWindow::initActions()
 	viewComment->setChecked (!inv_view_comment);
 	viewComment->setStatusTip(tr("Enables/disables the comment field"));
 	viewComment->setWhatsThis(tr("Comment field\n\nEnables/disables the comment field."));
-	connect(viewComment, SIGNAL(toggled(bool)), this, SLOT(slotViewComment(bool)));
+	connect(viewComment, &QAction::toggled, this, &MainWindow::slotViewComment);
 
 	// View Vertical Comment toggle
+
 	viewVertComment = new QAction(tr("&Vertical comment"), this);
 	viewVertComment->setCheckable (true);
 	viewVertComment->setShortcut (Qt::SHIFT + Qt::Key_F10);
@@ -745,14 +764,14 @@ void MainWindow::initActions()
 	viewVertComment->setStatusTip(tr("Enables/disables a vertical direction of the comment field"));
 	viewVertComment->setWhatsThis(tr("Vertical comment field\n\n"
 					 "Enables/disables a vertical direction of the comment field."));
-	connect(viewVertComment, SIGNAL(toggled(bool)), this, SLOT(slotViewVertComment(bool)));
+	connect(viewVertComment, &QAction::toggled, this, &MainWindow::slotViewVertComment);
 
 	// View Save Size
 	viewSaveSize = new QAction(tr("Save si&ze"), this);
 	viewSaveSize->setStatusTip(tr("Save the current window size"));
 	viewSaveSize->setWhatsThis(tr("Save size\n\n"
-				      "Saves the current window size and restores it on the next program start."));
-	connect(viewSaveSize, SIGNAL(activated()), this, SLOT(slotViewSaveSize()));
+				      "Saves the current window size and restores it on the next program start.\n"));
+	connect(viewSaveSize, &QAction::triggered, this, [=] () { saveWindowSize (); });
 
 	// View Fullscreen
 	viewFullscreen = new QAction(fullscreenIcon, tr("&Fullscreen"), this);
@@ -761,7 +780,7 @@ void MainWindow::initActions()
 	viewFullscreen->setChecked(false);
 	viewFullscreen->setStatusTip(tr("Enable/disable fullscreen mode"));
 	viewFullscreen->setWhatsThis(tr("Fullscreen\n\nEnable/disable fullscreen mode."));
-	connect(viewFullscreen, SIGNAL(toggled(bool)), this, SLOT(slotViewFullscreen(bool)));
+	connect(viewFullscreen, &QAction::toggled, this, &MainWindow::slotViewFullscreen);
 
 	/*
 	* Menu Help
@@ -771,32 +790,31 @@ void MainWindow::initActions()
 	helpManual->setShortcut (Qt::Key_F1);
 	helpManual->setStatusTip(tr("Opens the manual"));
 	helpManual->setWhatsThis(tr("Help\n\nOpens the manual of the application."));
-	connect(helpManual, SIGNAL(activated()), this, SLOT(slotHelpManual()));
+	connect(helpManual, &QAction::triggered, this, &MainWindow::slotHelpManual);
 
 	// Sound Info
 	helpSoundInfo = new QAction(tr("&Sound"), this);
 	helpSoundInfo->setStatusTip(tr("Short info on sound availability"));
 	helpSoundInfo->setWhatsThis(tr("Sound Info\n\nViews a message box with a short comment about sound."));
-	connect(helpSoundInfo, SIGNAL(activated()), this, SLOT(slotHelpSoundInfo()));
+	connect(helpSoundInfo, &QAction::triggered, this, &MainWindow::slotHelpSoundInfo);
 
 	// Help About
 	helpAboutApp = new QAction(tr("&About..."), this);
 	helpAboutApp->setStatusTip(tr("About the application"));
 	helpAboutApp->setWhatsThis(tr("About\n\nAbout the application."));
-	connect(helpAboutApp, SIGNAL(activated()), this, SLOT(slotHelpAbout()));
+	connect(helpAboutApp, &QAction::triggered, this, &MainWindow::slotHelpAbout);
 
 	// Help AboutQt
 	helpAboutQt = new QAction(tr("About &Qt..."), this);
 	helpAboutQt->setStatusTip(tr("About Qt"));
 	helpAboutQt->setWhatsThis(tr("About Qt\n\nAbout Qt."));
-	connect(helpAboutQt, SIGNAL(activated()), this, SLOT(slotHelpAboutQt()));
+	connect(helpAboutQt, &QAction::triggered, this, &MainWindow::slotHelpAboutQt);
 
 	// Disable some toolbuttons at startup
 	navForward->setEnabled(false);
 	navBackward->setEnabled(false);
 	navFirst->setEnabled(false);
 	navLast->setEnabled(false);
-
 	navPrevVar->setEnabled(false);
 	navNextVar->setEnabled(false);
 	navMainBranch->setEnabled(false);
@@ -805,7 +823,7 @@ void MainWindow::initActions()
 	navSwapVariations->setEnabled(false);
 	navPrevComment->setEnabled(false);
 	navNextComment->setEnabled(false);
-  	navIntersection->setEnabled(false);     //SL added eb 11
+	navIntersection->setEnabled(false);
 
 	whatsThis = QWhatsThis::createAction (this);
 }
@@ -814,7 +832,6 @@ void MainWindow::initMenuBar()
 {
 	// submenu Import/Export
 	importExportMenu = new QMenu(tr("&Import/Export"));
-	importExportMenu->insertTearOffHandle();
 	importExportMenu->addAction (fileExportASCII);
 	importExportMenu->addAction (fileImportSgfClipB);
 	importExportMenu->addAction (fileExportSgfClipB);
@@ -826,56 +843,62 @@ void MainWindow::initMenuBar()
 
 	// menuBar entry fileMenu
 	fileMenu = new QMenu(tr("&File"));
-	fileMenu->insertTearOffHandle();
 	fileMenu->addAction (fileNewBoard);
 	fileMenu->addAction (fileNew);
 	fileMenu->addAction (fileOpen);
 	fileMenu->addAction (fileSave);
 	fileMenu->addAction (fileSaveAs);
 	fileMenu->addAction (fileClose);
-	// Some slight weirdness in the construction here since we
-	// can't insert a separator before a menu.
-	fileMenu->insertSeparator(fileQuit);
+	fileMenu->addSeparator ();
 	fileMenu->addMenu (importExportMenu);
-	fileMenu->insertSeparator(fileQuit);
+	fileMenu->addSeparator ();
 	fileMenu->addAction (fileQuit);
 
 	// menuBar entry editMenu
 	editMenu = new QMenu(tr("&Edit"));
-	editMenu->insertTearOffHandle();
 	editMenu->addAction (editDelete);
-	editMenu->addAction (editNumberMoves);
+
+	editMenu->addSeparator ();
+
+	editMenu->addAction (editStone);
+	editMenu->addAction (editTriangle);
+	editMenu->addAction (editSquare);
+	editMenu->addAction (editCircle);
+	editMenu->addAction (editCross);
+	editMenu->addAction (editNumber);
+	editMenu->addAction (editLetter);
+
+	editMenu->addSeparator ();
+
+	editMenu->addAction (editRectSelect);
+	editMenu->addAction (editClearSelect);
+
+	editMenu->addSeparator ();
+
 	editMenu->addAction (editMarkBrothers);
 	editMenu->addAction (editMarkSons);
 
-	editMenu->insertSeparator(editNumberMoves);
-
 	// menuBar entry navMenu
 	navMenu = new QMenu(tr("&Navigation"));
-	navMenu->insertTearOffHandle();
 	navMenu->addAction (navFirst);
 	navMenu->addAction (navBackward);
 	navMenu->addAction (navForward);
 	navMenu->addAction (navLast);
+
+	navMenu->addSeparator ();
 	navMenu->addAction (navMainBranch);
 	navMenu->addAction (navStartVar);
 	navMenu->addAction (navPrevVar);
 	navMenu->addAction (navNextVar);
 	navMenu->addAction (navNextBranch);
-	navMenu->addAction (navNthMove);
-	navMenu->addAction (navAutoplay);
-	navMenu->addAction (navSwapVariations);
-	navMenu->addAction (navPrevComment);
-	navMenu->addAction (navNextComment);
 
-	navMenu->insertSeparator(navMainBranch);
-	navMenu->insertSeparator(navNthMove);
-	navMenu->insertSeparator(navSwapVariations);
-	navMenu->insertSeparator(navPrevComment);
+	navMenu->addSeparator ();
+	navMenu->addAction (navNthMove);
+	navMenu->addAction (navPrevComment);
+	navMenu->addAction (navNextComment);		// end add
 
 	// menuBar entry settingsMenu
 	settingsMenu = new QMenu(tr("&Settings"));
-	settingsMenu->insertTearOffHandle();
 	settingsMenu->addAction (setPreferences);
 	settingsMenu->addAction (setGameInfo);
 	settingsMenu->addAction (soundToggle);
@@ -884,7 +907,6 @@ void MainWindow::initMenuBar()
 
 	// menuBar entry viewMenu
 	viewMenu = new QMenu(tr("&View"));
-	viewMenu->insertTearOffHandle();
 	viewMenu->addAction (viewFileBar);
 	viewMenu->addAction (viewToolBar);
 	viewMenu->addAction (viewEditBar);
@@ -910,7 +932,6 @@ void MainWindow::initMenuBar()
 	helpMenu->addAction (helpSoundInfo);
 	helpMenu->addAction (helpAboutApp);
 	helpMenu->addAction (helpAboutQt);
-
 	helpMenu->insertSeparator(helpSoundInfo);
 	helpMenu->insertSeparator(helpAboutApp);
 
@@ -943,12 +964,8 @@ void MainWindow::initToolBar()
 	toolBar->addAction (navNextBranch);
 
 	toolBar->addSeparator();
-	toolBar->addAction (navPrevComment);        // added eb 2
-	toolBar->addAction (navNextComment);
-	toolBar->addAction (navIntersection);       //SL added eb 11
-	toolBar->addSeparator();               //end add eb 2
-
-	toolBar->addAction (navAutoplay);
+	toolBar->addAction (navIntersection);
+	toolBar->addSeparator();
 
 	toolBar->addSeparator();
 
@@ -960,12 +977,23 @@ void MainWindow::initToolBar()
 	toolBar->addAction (whatsThis);
 	toolBar->addSeparator();
 
-//	toolBar->addAction (setPreferences);
-	toolBar->addAction (setGameInfo);
+//toolBar->addAction (setPreferences);
+toolBar->addAction (setGameInfo);
 
 	// Edit toolbar
 	editBar = addToolBar ("editbar");
+
 	editBar->addAction (editDelete);
+	editBar->addAction (editStone);
+	editBar->addAction (editTriangle);
+	editBar->addAction (editSquare);
+	editBar->addAction (editCircle);
+	editBar->addAction (editCross);
+	editBar->addAction (editNumber);
+	editBar->addAction (editLetter);
+	editBar->addAction (edit123);
+	editBar->addAction (editRectSelect);
+	editBar->addAction (editClearSelect);
 }
 
 void MainWindow::initStatusBar()
@@ -976,102 +1004,118 @@ void MainWindow::initStatusBar()
 	//statusBar()->show();
 	statusBar()->setSizeGripEnabled(true);
 	statusBar()->showMessage(tr("Ready."));  // Normal indicator
-	connect(statusTip, SIGNAL(clearStatusBar()), statusBar(), SLOT(clear()));
-	
+	connect(statusTip, &StatusTip::clearStatusBar, statusBar(), &QStatusBar::clearMessage);
+
 	// The turn widget
 	statusTurn = new QLabel(statusBar());
-	statusTurn->setAlignment(Qt::AlignCenter | Qt::TextSingleLine);
+	statusTurn->setAlignment(Qt::AlignCenter);
 	statusTurn->setText(" 0 ");
-	statusBar()->addWidget(statusTurn, 0, true);  // Permanent indicator
-	QToolTip::add(statusTurn, tr("Current move"));
-	QWhatsThis::add(statusTurn, tr("Move\nDisplays the number of the current turn and the last move played."));
+	statusBar()->addPermanentWidget(statusTurn);
+	statusTurn->setToolTip (tr("Current move"));
+	statusTurn->setWhatsThis (tr("Move\nDisplays the number of the current turn and the last move played."));
 	
 	// The nav widget
 	statusNav = new QLabel(statusBar());
-	statusNav->setAlignment(Qt::AlignCenter | Qt::TextSingleLine);
+	statusNav->setAlignment(Qt::AlignCenter);
 	statusNav->setText(" 0/0 ");
-	statusBar()->addWidget(statusNav, 0, true);  // Permanent indicator
-	QToolTip::add(statusNav, tr("Brothers / sons"));
-	QWhatsThis::add(statusNav, tr("Navigation\nShows the brothers and sons of the current move."));
-	
+	statusBar()->addPermanentWidget(statusNav);
+	statusNav->setToolTip (tr("Brothers / sons"));
+	statusNav->setWhatsThis (tr("Navigation\nShows the brothers and sons of the current move."));
+
 	// The mode widget
 	statusMode = new QLabel(statusBar());
-	statusMode->setAlignment(Qt::AlignCenter | Qt::TextSingleLine);
+	statusMode->setAlignment(Qt::AlignCenter);
 	statusMode->setText(" " + QObject::tr("N", "Board status line: normal mode") + " ");
-	statusBar()->addWidget(statusMode, 0, true);  // Permanent indicator
-	QToolTip::add(statusMode, tr("Current mode"));
-	QWhatsThis::add(statusMode,
-		tr("Mode\nShows the current mode. 'N' for normal mode, 'E' for edit mode."));
+	statusBar()->addPermanentWidget(statusMode);
+	statusMode->setToolTip (tr("Current mode"));
+	statusMode->setWhatsThis (tr("Mode\nShows the current mode. 'N' for normal mode, 'E' for edit mode."));
 }
 
-void MainWindow::slotFileNewBoard()
+void MainWindow::updateCaption (bool modified)
 {
-	setting->qgo->addBoardWindow();
+	// Print caption
+	// example: qGo 0.0.5 - Zotan 8k vs. tgmouse 10k
+	// or if game name is given: qGo 0.0.5 - Kogo's Joseki Dictionary
+	int game_number = 0;
+	QString s;
+	if (modified)
+		s += "* ";
+	if (game_number != 0)
+		s += "(" + QString::number(game_number) + ") ";
+	QString title = QString::fromStdString (m_game->title ());
+	QString player_w = QString::fromStdString (m_game->name_white ());
+	QString player_b = QString::fromStdString (m_game->name_black ());
+	QString rank_w = QString::fromStdString (m_game->rank_white ());
+	QString rank_b = QString::fromStdString (m_game->rank_black ());
+
+	if (title.length () > 0) {
+		s += title;
+	} else {
+		s += player_w;
+		if (rank_w.length () > 0)
+			s += " " + rank_w;
+		s += " " + tr ("vs.") + " ";
+		s += player_b;
+		if (rank_b.length () > 0)
+			s += " " + rank_b;
+	}
+	s += "   " + QString (PACKAGE " " VERSION);
+	setWindowTitle (s);
+
+	bool simple = rank_w.length () == 0 && rank_b.length () == 0;
+
+	player_w.truncate(12);
+	player_w = tr("W") + ": " + player_w;
+	if (rank_w.length () > 0)
+		player_w += " " + rank_w;
+	mainWidget->normalTools->whiteFrame->setTitle(player_w);
+
+	player_b.truncate(12);
+	player_b = tr("B") + ": " + player_b;
+	if (rank_b.length () > 0)
+		player_b += " " + rank_b;
+	mainWidget->normalTools->blackFrame->setTitle(player_b);
+
 }
 
-void MainWindow::slotFileNewGame()
+void MainWindow::slotFileNewBoard (bool)
+{
+	open_local_board (client_window, false);
+}
+
+void MainWindow::slotFileNewGame (bool)
 {
 	if (!checkModified())
 		return;
-	
-	if (gfx_board->getGameMode() == modeNormal)
-	{
-		NewLocalGameDialog dlg(this);
-		
-		if (dlg.exec() == QDialog::Accepted)
-		{
-			GameData *d = new GameData;
-			d->size = dlg.boardSizeSpin->value();
-			d->komi = dlg.komiSpin->value();
-			d->handicap = dlg.handicapSpin->value();
-			d->playerBlack = dlg.playerBlackEdit->text();
-			d->rankBlack = dlg.playerBlackRkEdit->text();
-			d->playerWhite = dlg.playerWhiteEdit->text();
-			d->rankWhite = dlg.playerWhiteRkEdit->text();
-			d->gameName = "";
-			d->gameNumber = 0;
-			d->fileName = "";
-			d->byoTime = dlg.byoTimeSpin->value();
-			d->style = 1;
-			gfx_board->initGame(d);
-		}
-	}
-	else
-	{
-		NewGameDialog dlg(this);
-		
-		if (dlg.exec() == QDialog::Accepted)
-		{
-			GameData *d = new GameData;
-			d->size = dlg.boardSizeSpin->value();
-			d->komi = dlg.komiSpin->value();
-			d->handicap = dlg.handicapSpin->value();
-//			d->playerBlack = dlg.playerBlackEdit->text();
-//			d->playerWhite = dlg.playerWhiteEdit->text();
-			d->gameName = "";
-			d->gameNumber = 0;
-			d->fileName = "";
-			d->byoTime = dlg.byoTimeSpin->value();
-			d->style = 1;
-			gfx_board->initGame(d);
-		}
-	}
 
-	interfaceHandler->normalTools->komi->setText(QString::number(gfx_board->getGameData()->komi));
-	interfaceHandler->normalTools->handicap->setText(QString::number(gfx_board->getGameData()->handicap));
-	
+	/* @@@ choose between new game dialogs */
+	std::shared_ptr<game_record> gr = new_game_dialog (this);
+	if (gr == nullptr)
+		return;
+
+	m_game = gr;
+	setGameMode (modeNormal);
+	mainWidget->init_game_record (gr);
+	updateCaption (false);
+
 	statusBar()->showMessage(tr("New board prepared."));
 }
 
-void MainWindow::slotFileOpen()
+void MainWindow::slotFileOpen (bool)
 {
 	if (!checkModified())
 		return;
-	QString fileName(QFileDialog::getOpenFileName(setting->readEntry("LAST_DIR"),
-		tr("SGF Files (*.sgf *.SGF);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)"), this));
+	QString fileName(QFileDialog::getOpenFileName(this, setting->readEntry("LAST_DIR"),
+		tr("SGF Files (*.sgf *.SGF);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)")));
 	if (fileName.isEmpty())
 		return;
-	doOpen(fileName, getFileExtension(fileName));
+
+	if (setting->readBoolEntry("REM_DIR"))
+		rememberLastDir(fileName);
+
+	QByteArray qba = fileName.toUtf8();
+	if (doOpen(qba.constData ()))
+	  	statusBar()->showMessage(fileName + " " + tr("loaded."));
 }
 
 QString MainWindow::getFileExtension(const QString &fileName, bool defaultExt)
@@ -1081,33 +1125,37 @@ QString MainWindow::getFileExtension(const QString &fileName, bool defaultExt)
 		filter = tr("SGF");
 	else
 		filter = "";
-	
+
 	int pos=0, oldpos=-1, len = fileName.length();
-	
+
 	while ((pos = fileName.indexOf('.', ++pos)) != -1 && pos < len)
 		oldpos = pos;
-	
+
 	if (oldpos != -1)
-		filter = fileName.mid(oldpos+1, fileName.length()-pos).upper();
-	
+		filter = fileName.mid(oldpos+1, fileName.length()-pos).toUpper();
+
 	return filter;
 }
 
-void MainWindow::doOpen(const QString &fileName, const QString &filter, bool storedir)
+bool MainWindow::doOpen(const char *fileName)
 {
-	// qDebug("doOpen - fileName: %s - filter: %s", fileName.latin1(), filter.latin1());
-	
-	if (setting->readBoolEntry("REM_DIR") && storedir)
-		rememberLastDir(fileName);
-	
-	if (gfx_board->openSGF(fileName))
-		statusBar()->showMessage(fileName + " " + tr("loaded."));
+	std::ifstream isgf (fileName);
+	std::shared_ptr<game_record> gr = record_from_stream (isgf);
+	if (gr == nullptr)
+		/* Assume alerts were shown in record_from_stream.  */
+		return false;
+	m_game = gr;
+	setGameMode (modeNormal);
+	mainWidget->init_game_record (gr);
+	updateCaption (false);
+
+	return true;
 }
 
-bool MainWindow::slotFileSave()
+bool MainWindow::slotFileSave (bool)
 {
-	QString fileName;
-	if ((fileName = gfx_board->getGameData()->fileName).isEmpty())
+	QString fileName = QString::fromStdString (m_game->filename ());
+	if (fileName.isEmpty())
 	{
 		if (setting->readBoolEntry("REM_DIR"))
 			fileName = setting->readEntry("LAST_DIR");
@@ -1116,62 +1164,59 @@ bool MainWindow::slotFileSave()
 		return doSave(fileName, false);
 	}
 	else
-		return doSave(gfx_board->getGameData()->fileName, true);
+		return doSave(fileName, true);
 }
 
-bool MainWindow::slotFileSaveAs()
+bool MainWindow::slotFileSaveAs (bool)
 {
-//	if (setting->readBoolEntry("REM_DIR"))
-//		return doSave(setting->readEntry("LAST_DIR"), false);
-	return doSave(0, false);
+	std::string saved_name = m_game->filename ();
+	QString fileName = saved_name == "" ? QString () : QString::fromStdString (saved_name);
+	return doSave (fileName, false);
 }
 
 bool MainWindow::doSave(QString fileName, bool force)
 {
-	if (!force)
+	if (fileName.isNull () || fileName.isEmpty () || !force)
   	{
-     		if  (fileName.isNull() || fileName.isEmpty() || QDir(fileName).exists())
-            	{
-              		QString base = gfx_board->getCandidateFileName();
-              		if (fileName.isNull() || fileName.isEmpty())
-                		fileName = base;
-              		else
-                		fileName.append(base);
+		if (QDir(fileName).exists())
+			fileName = QString::fromStdString (get_candidate_filename (fileName.toStdString (), *m_game));
+		else if (fileName.isNull() || fileName.isEmpty()) {
+			std::string dir = "";
+			if (setting->readBoolEntry("REM_DIR"))
+				dir = setting->readEntry("LAST_DIR").toStdString ();
 
+			fileName = QString::fromStdString (get_candidate_filename (dir, *m_game));
 		}
-		fileName = QFileDialog::getSaveFileName(fileName, tr("SGF Files (*.sgf);;All Files (*)"), this);
+		if (!force)
+			fileName = QFileDialog::getSaveFileName(this, "Save SGF",
+								fileName, tr("SGF Files (*.sgf);;All Files (*)"));
 	}
-	
+
 	if (fileName.isEmpty())
 		return false;
-	
+
 	if (getFileExtension(fileName, false).isEmpty())
 		fileName.append(".sgf");
-	
-	// Confirm overwriting file.
-	if (!force && QFile(fileName).exists())
-		if (QMessageBox::information(this, PACKAGE,
-			tr("This file already exists. Do you want to overwrite it?"),
-			tr("Yes"), tr("No"), 0, 0, 1) == 1)
-			return false;
-		
-	gfx_board->getGameData()->fileName = fileName;
-		
-	if (setting->readBoolEntry("REM_DIR"))
-		rememberLastDir(fileName);
-		
-		if (!gfx_board->saveBoard(fileName))
-		{
-			QMessageBox::warning(this, PACKAGE, tr("Cannot save SGF file."));
-			return false;
-		}
-		
-	statusBar()->showMessage(fileName + " " + tr("saved."));
-	gfx_board->setModified(false);
+
+	std::string sfn = fileName.toStdString ();
+	try {
+		std::ofstream of (sfn);
+		std::string sgf = m_game->to_sgf ();
+		of << sgf;
+		m_game->set_filename (fileName.toStdString ());
+		if (setting->readBoolEntry("REM_DIR"))
+			rememberLastDir(fileName);
+	} catch (...) {
+		QMessageBox::warning(this, PACKAGE, tr("Cannot save SGF file."));
+		return false;
+	}
+
+	statusBar()->showMessage (fileName + " " + tr("saved."));
+	gfx_board->setModified (false);
 	return true;
 }
 
-void MainWindow::slotFileClose()
+void MainWindow::slotFileClose (bool)
 {
 	if (checkModified() == 1)
 	{
@@ -1180,168 +1225,203 @@ void MainWindow::slotFileClose()
 	}
 }
 
-void MainWindow::slotFileImportSgfClipB()
+void MainWindow::slotFileImportSgfClipB(bool)
 {
-	// check wheter it's an edit board during online game
-	if (getInterfaceHandler()->refreshButton->text() != tr("Update") && !checkModified())
+	if (!checkModified ())
 		return;
-	
-	if (!gfx_board->importSGFClipboard())
-		QMessageBox::warning(this, PACKAGE, tr("Cannot load from clipboard. Is it empty?"));
-	else
-		statusBar()->showMessage(tr("SGF imported."));
+
+        QString sgfString = QApplication::clipboard()->text();
+	std::string sgf_str = sgfString.toStdString ();
+	std::stringstream isgf (sgf_str);
+	std::shared_ptr<game_record> gr = record_from_stream (isgf);
+	if (gr == nullptr)
+		/* Assume alerts were shown in record_from_stream.  */
+		return;
+
+	m_game = gr;
+	setGameMode (modeNormal);
+	mainWidget->init_game_record (gr);
+	updateCaption (false);
+	statusBar()->showMessage(tr("SGF imported."));
 }
 
-void MainWindow::slotFileExportSgfClipB()
+void MainWindow::slotFileExportSgfClipB(bool)
 {
-	if (!gfx_board->exportSGFtoClipB())
-		QMessageBox::warning(this, PACKAGE, tr("Failed to export SGF to clipboard."));
-	else
-		statusBar()->showMessage(tr("SGF exported."));
+	std::string sgf = m_game->to_sgf ();
+	QApplication::clipboard()->setText(QString::fromStdString (sgf));
+	statusBar()->showMessage(tr("SGF exported."));
 }
 
-void MainWindow::slotFileExportASCII()
+void MainWindow::slotFileExportASCII(bool)
 {
-	gfx_board->exportASCII();
+	const game_state *st = gfx_board->get_state ();
+	m_ascii_dlg.show ();
+	QString s = gfx_board->render_ascii (m_ascii_dlg.cb_numbering->isChecked (),
+					     m_ascii_dlg.cb_coords->isChecked ());
+	m_ascii_dlg.textEdit->setText (s);
 	statusBar()->showMessage(tr("Ready."));
 }
 
-void MainWindow::slotFileExportPic()
+void MainWindow::slotFileExportPic(bool)
 {
 	QString filter;
-	QString fileName = QFileDialog::getSaveFileName("",
-							"PNG (*.png);;BMP (*.bmp);;XPM (*.xpm);;XBM (*.xbm);;PNM (*.pnm);;GIF (*.gif);;JPEG (*.jpeg);;MNG (*.mng)",
-							this,
-							"qGo",
-							tr("Export image as"),
-							&filter,
-							true);
+	QString fileName = QFileDialog::getSaveFileName(this, tr("Export image as"), "",
+							"PNG (*.png);;BMP (*.bmp);;XPM (*.xpm);;XBM (*.xbm);;PNM (*.pnm);;GIF (*.gif);;JPG (*.jpg);;MNG (*.mng)",
+							&filter);
 
 
 	if (fileName.isEmpty())
 		return;
 
-	//fileName.append(".").append(filter->left(3).lower());
-
-	// Confirm overwriting file.
-	if ( QFile::exists( fileName ) )
-		if (QMessageBox::information(this, PACKAGE,
-					     tr("This file already exists. Do you want to overwrite it?"),
-					     tr("Yes"), tr("No"), 0, 0, 1) == 1)
-			return;
-
 	filter.truncate (3);
+	qDebug () << "filter: " << filter << "\n";
 	QPixmap pm = gfx_board->grabPicture ();
 	if (!pm.save (fileName, filter.toLatin1 ()))
-		QMessageBox::warning(this, PACKAGE, tr("Failed to save image!"));
-
+		QMessageBox::warning (this, PACKAGE, tr("Failed to save image!"));
 }
 
-void MainWindow::slotFileExportPicClipB()
+void MainWindow::slotFileExportPicClipB(bool)
 {
 	QApplication::clipboard()->setPixmap (gfx_board->grabPicture ());
 }
 
-void MainWindow::slotEditDelete()
+void MainWindow::slotEditDelete(bool)
 {
 	gfx_board->deleteNode();
 }
 
-void MainWindow::slotEditNumberMoves()
+void MainWindow::slotEditMarkBrothers(bool)
 {
-	gfx_board->numberMoves();
+	/* @@@ useless? */
 }
 
-void MainWindow::slotEditMarkBrothers()
+void MainWindow::slotEditMarkSons(bool)
 {
-	gfx_board->markVariations(false);
+	/* @@@ useless? */
 }
 
-void MainWindow::slotEditMarkSons()
+void MainWindow::slotEditRectSelect(bool on)
 {
-	gfx_board->markVariations(true);
+	qDebug () << "rectSelect " << on << "\n";
+	gfx_board->set_rect_select (on);
 }
 
-void MainWindow::slotNavBackward()
+void MainWindow::slotEditClearSelect(bool)
+{
+	editRectSelect->setChecked (false);
+	gfx_board->clear_selection ();
+}
+
+void MainWindow::done_rect_select (int, int, int, int)
+{
+	editRectSelect->setChecked (false);
+}
+
+void MainWindow::slotEditGroup (bool)
+{
+	mark m = mark::none;
+	if (editTriangle->isChecked ())
+		m = mark::triangle;
+	else if (editSquare->isChecked ())
+		m = mark::square;
+	else if (editCircle->isChecked ())
+		m = mark::circle;
+	else if (editCross->isChecked ())
+		m = mark::cross;
+	else if (editNumber->isChecked ())
+		m = mark::num;
+	else if (editLetter->isChecked ())
+		m = mark::letter;
+	gfx_board->setMarkType (m);
+}
+
+void MainWindow::slotEdit123 (bool on)
+{
+	gfx_board->set_start_count (on);
+}
+
+void MainWindow::slotNavBackward(bool)
 {
 	gfx_board->previousMove();
 }
 
-void MainWindow::slotNavForward()
+void MainWindow::slotNavForward(bool)
 {
 	gfx_board->nextMove();
 }
 
-void MainWindow::slotNavFirst()
+void MainWindow::slotNavFirst(bool)
 {
 	gfx_board->gotoFirstMove();
 }
 
-void MainWindow::slotNavLast()
+void MainWindow::slotNavLast(bool)
 {
 	gfx_board->gotoLastMove();
 }
 
 // this slot is used for edit window to navigate to last made move
-void MainWindow::slotNavLastByTime()
+void MainWindow::slotNavLastByTime(bool)
 {
 	gfx_board->gotoLastMoveByTime();
 }
 
-void MainWindow::slotNavNextVar()
+void MainWindow::slotNavNextVar(bool)
 {
 	gfx_board->nextVariation();
 }
 
-void MainWindow::slotNavPrevVar()
+void MainWindow::slotNavPrevVar(bool)
 {
 	gfx_board->previousVariation();
 }
 
-void MainWindow::slotNavNextComment()    //added eb
+void MainWindow::slotNavNextComment(bool)    //added eb
 {
 	gfx_board->nextComment();
 }
 
-void MainWindow::slotNavPrevComment()
+void MainWindow::slotNavPrevComment(bool)
 {
 	gfx_board->previousComment();
 }                                        //end add eb
 
-void MainWindow::slotNavStartVar()
+void MainWindow::slotNavStartVar(bool)
 {
 	gfx_board->gotoVarStart();
 }
 
-void MainWindow::slotNavMainBranch()
+void MainWindow::slotNavMainBranch(bool)
 {
 	gfx_board->gotoMainBranch();
 }
 
-void MainWindow::slotNavNextBranch()
+void MainWindow::slotNavNextBranch(bool)
 {
 	gfx_board->gotoNextBranch();
 }
 
-void MainWindow::slotNavIntersection()       // added eb 11
+void MainWindow::slotNavIntersection(bool)
 {
-    gfx_board->navIntersection();
+	gfx_board->navIntersection();
 }
-                                     // end add eb 11
 
 
-void MainWindow::slotNavNthMove()
+void MainWindow::slotNavNthMove(bool)
 {
+#if 0
 	NthMoveDialog dlg(this);
 	dlg.moveSpinBox->setValue(gfx_board->getCurrentMoveNumber());
 	dlg.moveSpinBox->setFocus();
 
 	if (dlg.exec() == QDialog::Accepted)
 		gfx_board->gotoNthMove(dlg.moveSpinBox->value());
+#endif
 }
 
 void MainWindow::slotNavAutoplay(bool toggle)
 {
+#if 0
 	if (!toggle)
 	{
 		timer->stop();
@@ -1362,19 +1442,21 @@ void MainWindow::slotNavAutoplay(bool toggle)
 			timer->start(int(timerIntervals[setting->readIntEntry("TIMER_INTERVAL")] * 1000));
 		statusBar()->showMessage(tr("Autoplay started."));
 	}
+#endif
 }
 
-void MainWindow::slotNavSwapVariations()
+void MainWindow::slotNavSwapVariations(bool)
 {
+#if 0
 	if (gfx_board->swapVariations())
 		statusBar()->showMessage(tr("Variations swapped."));
 	else
 		statusBar()->showMessage(tr("No previous variation available."));
+#endif
 }
 
 void MainWindow::updateBoard()
 {
-
 	viewSlider->setChecked(setting->readBoolEntry("SLIDER"));
 	viewSidebar->setChecked(setting->readBoolEntry("SIDEBAR"));
 	viewCoords->setChecked(setting->readBoolEntry("BOARD_COORDS"));
@@ -1389,7 +1471,6 @@ void MainWindow::updateBoard()
 
 #if 0 // @@@
 	QToolTip::setEnabled(setting->readBoolEntry("TOOLTIPS"));
-#endif
 	if (timer->isActive())
 	{
 		if (setting->readBoolEntry("SGF_TIME_TAGS") && gfx_board->getGameData()->timeSystem != time_none)
@@ -1397,50 +1478,48 @@ void MainWindow::updateBoard()
 		else
 			timer->changeInterval(int(timerIntervals[setting->readIntEntry("TIMER_INVERVAL")] * 1000));
 	}
-	
+#endif
+
 	slotViewLeftSidebar();
+#if 0
 	gfx_board->setVariationDisplay(static_cast<VariationDisplay>(setting->readIntEntry("VAR_GHOSTS")));
-	gfx_board->setShowCursor(setting->readBoolEntry("CURSOR"));
+#endif
 	gfx_board->changeSize();  // For smaller stones
 }
 
-void MainWindow::slotSetGameInfo()
+void MainWindow::slotSetGameInfo(bool)
 {
 	GameInfoDialog dlg(this);
-	
-	dlg.playerWhiteEdit->setText(gfx_board->getGameData()->playerWhite);
-	
-	dlg.playerBlackEdit->setText(gfx_board->getGameData()->playerBlack);
-	dlg.whiteRankEdit->setText(gfx_board->getGameData()->rankWhite);
-	dlg.blackRankEdit->setText(gfx_board->getGameData()->rankBlack);
-	dlg.komiSpin->setValue(gfx_board->getGameData()->komi);
-	dlg.handicapSpin->setValue(gfx_board->getGameData()->handicap);
-	dlg.resultEdit->setText(gfx_board->getGameData()->result);
-	dlg.dateEdit->setText(gfx_board->getGameData()->date);
-	dlg.placeEdit->setText(gfx_board->getGameData()->place);
-	dlg.copyrightEdit->setText(gfx_board->getGameData()->copyright);
-	dlg.gameNameEdit->setText(gfx_board->getGameData()->gameName);
+
+	dlg.gameNameEdit->setText(QString::fromStdString (m_game->title ()));
+	dlg.playerWhiteEdit->setText(QString::fromStdString (m_game->name_white ()));
+	dlg.playerBlackEdit->setText(QString::fromStdString (m_game->name_black ()));
+	dlg.whiteRankEdit->setText(QString::fromStdString (m_game->rank_white ()));
+	dlg.blackRankEdit->setText(QString::fromStdString (m_game->rank_black ()));
+	dlg.resultEdit->setText(QString::fromStdString (m_game->result ()));
+	dlg.dateEdit->setText(QString::fromStdString (m_game->date ()));
+	dlg.placeEdit->setText(QString::fromStdString (m_game->place ()));
+	dlg.copyrightEdit->setText(QString::fromStdString (m_game->copyright ()));
+ 	dlg.komiSpin->setValue(m_game->komi ());
+	dlg.handicapSpin->setValue(m_game->handicap ());
 
 	if (dlg.exec() == QDialog::Accepted)
 	{
-		gfx_board->getGameData()->playerWhite = dlg.playerWhiteEdit->text();
-		gfx_board->getGameData()->playerBlack = dlg.playerBlackEdit->text();
-		gfx_board->getGameData()->rankWhite = dlg.whiteRankEdit->text();
-		gfx_board->getGameData()->rankBlack = dlg.blackRankEdit->text();
-		gfx_board->getGameData()->komi = dlg.komiSpin->value();
-		gfx_board->getGameData()->handicap = dlg.handicapSpin->value();
-		gfx_board->getGameData()->result = dlg.resultEdit->text();
-		gfx_board->getGameData()->date = dlg.dateEdit->text();
-		gfx_board->getGameData()->place = dlg.placeEdit->text();
-		gfx_board->getGameData()->copyright = dlg.copyrightEdit->text();
-		gfx_board->getGameData()->gameName = dlg.gameNameEdit->text();
-		
-		gfx_board->isModified = true;
-		gfx_board->updateCaption();  // Update caption in any case
-	}
+		m_game->set_name_black (dlg.playerBlackEdit->text().toStdString ());
+		m_game->set_name_white (dlg.playerWhiteEdit->text().toStdString ());
+		m_game->set_rank_black (dlg.blackRankEdit->text().toStdString ());
+		m_game->set_rank_white (dlg.whiteRankEdit->text().toStdString ());
+		m_game->set_komi (dlg.komiSpin->value());
+		m_game->set_handicap (dlg.handicapSpin->value());
+		m_game->set_title (dlg.gameNameEdit->text().toStdString ());
+		m_game->set_result (dlg.resultEdit->text().toStdString ());
+		m_game->set_date (dlg.dateEdit->text().toStdString ());
+		m_game->set_place (dlg.placeEdit->text().toStdString ());
+		m_game->set_copyright (dlg.copyrightEdit->text().toStdString ());
 
-	interfaceHandler->normalTools->komi->setText(QString::number(gfx_board->getGameData()->komi));
-	interfaceHandler->normalTools->handicap->setText(QString::number(gfx_board->getGameData()->handicap));
+		mainWidget->update_game_record (m_game);
+		gfx_board->setModified (true);
+	}
 }
 
 void MainWindow::slotViewFileBar(bool toggle)
@@ -1567,15 +1646,10 @@ void MainWindow::slotViewLeftSidebar()
 
 void MainWindow::slotViewSidebar(bool toggle)
 {
-	interfaceHandler->toggleSidebar(toggle);
+	mainWidget->toggleSidebar(toggle);
 	setting->writeBoolEntry("SIDEBAR", toggle);
 
 	statusBar()->showMessage(tr("Ready."));
-}
-
-void MainWindow::slotViewSaveSize()
-{
-	saveWindowSize ();
 }
 
 void MainWindow::slotViewFullscreen(bool toggle)
@@ -1588,49 +1662,44 @@ void MainWindow::slotViewFullscreen(bool toggle)
 	isFullScreen = toggle;
 }
 
-void MainWindow::slotHelpManual()
+void MainWindow::slotHelpManual(bool)
 {
 	setting->qgo->openManual();
 }
 
-void MainWindow::slotHelpSoundInfo()
+void MainWindow::slotHelpSoundInfo(bool)
 {
 	// show info
 	setting->qgo->testSound(true);
 }
 
-void MainWindow::slotHelpAbout()
+void MainWindow::slotHelpAbout(bool)
 {
 	setting->qgo->slotHelpAbout();
 }
 
-void MainWindow::slotHelpAboutQt()
+void MainWindow::slotHelpAboutQt(bool)
 {
 	QMessageBox::aboutQt(this);
 }
 
-void MainWindow::slotToggleMarks()
-{
-	interfaceHandler->toggleMarks();
-}
-
 void MainWindow::slotTimerForward()
 {
+#if 0
 	static int eventCounter = 0;
 	static int moveHasTimeInfo = 0;
-
 	if (timer->isActive() && setting->readBoolEntry("SGF_TIME_TAGS") && gfx_board->getGameData()->timeSystem != time_none)
 	{
-		bool isBlacksTurn = gfx_board->getBoardHandler()->getBlackTurn();
+		bool isBlacksTurn = gfx_board->to_move () == black;
 
 		// decrease time info
 		QString tmp;
 		int seconds;
 
 		if (isBlacksTurn)
-			tmp = interfaceHandler->normalTools->pb_timeBlack->text();
+			tmp = mainWidget->normalTools->pb_timeBlack->text();
 		else
-			tmp = interfaceHandler->normalTools->pb_timeWhite->text();
+			tmp = mainWidget->normalTools->pb_timeWhite->text();
 
 		int pos1 = 0;
 		int pos2;
@@ -1654,14 +1723,17 @@ void MainWindow::slotTimerForward()
 
 		int openMoves = ((pos1 = tmp.indexOf("/")) != -1 ? tmp.right(tmp.length() - pos1 - 1).toInt() : -1);
 
+#if 0 /* @@@ */
 		// set stones using sgf's time info
 		Move *m = gfx_board->getBoardHandler()->getTree()->getCurrent();
 
 		interfaceHandler->setTimes(isBlacksTurn, seconds, openMoves);
 
-		if (m->getMoveNumber() == 0)
-			gfx_board->nextMove(setting->readBoolEntry("SOUND_AUTOPLAY"));
-		else if (m->son == 0)
+		if (m->getMoveNumber() == 0) {
+			gfx_board->nextMove();
+			if (setting->readBoolEntry("SOUND_AUTOPLAY"))
+				setting->qgo->playAutoPlayClick();
+		} else if (m->son == 0)
 		{
 			timer->stop();
 			navAutoplay->setChecked(false);
@@ -1671,12 +1743,16 @@ void MainWindow::slotTimerForward()
 		{
 			// no time info at this node; use settings
 			int time = int(timerIntervals[setting->readIntEntry("TIMER_INTERVAL")]);
-			if ((time > 1 && (++eventCounter%time == 0) || time <= 1) &&
-				!gfx_board->nextMove(setting->readBoolEntry("SOUND_AUTOPLAY")))
-			{
-				timer->stop();
-				navAutoplay->setChecked(false);
-				statusBar()->showMessage(tr("Autoplay stopped."));
+			if (time > 1 && (++eventCounter%time == 0) || time <= 1) {
+				gfx_board->nextMove();
+				if (setting->readBoolEntry("SOUND_AUTOPLAY"))
+					setting->qgo->playAutoPlayClick();
+				/* @@@ if end reached.  */
+				{
+					timer->stop();
+					navAutoplay->setChecked(false);
+					statusBar()->showMessage(tr("Autoplay stopped."));
+				}
 			}
 
 			// indicate move to have time Info
@@ -1691,8 +1767,11 @@ void MainWindow::slotTimerForward()
 				if (seconds > (m->son->getTimeLeft() - gfx_board->getGameData()->byoTime))
 					return;
 			}
+			gfx_board->nextMove();
+			if (setting->readBoolEntry("SOUND_AUTOPLAY"))
+				setting->qgo->playAutoPlayClick();
 
-			if (!gfx_board->nextMove(setting->readBoolEntry("SOUND_AUTOPLAY")))
+			/* @@@ if end reached.  */
 			{
 				timer->stop();
 				navAutoplay->setChecked(false);
@@ -1702,21 +1781,27 @@ void MainWindow::slotTimerForward()
 			if (moveHasTimeInfo > 0)
 				moveHasTimeInfo--;
 		}
+#endif
 	}
-	else if ((!gfx_board->nextMove(setting->readBoolEntry("SOUND_AUTOPLAY")) || !isActiveWindow())
-		&& timer->isActive())
+	else if (!isActiveWindow() && timer->isActive())
 	{
 		timer->stop();
 		navAutoplay->setChecked(false);
 		statusBar()->showMessage(tr("Autoplay stopped."));
+	} else {
+		/* Autoplay here? @@@ */
+		gfx_board->nextMove();
+		if (setting->readBoolEntry("SOUND_AUTOPLAY"))
+			setting->qgo->playAutoPlayClick();
 	}
+#endif
 }
 
-void MainWindow::saveWindowSize ()
+void MainWindow::saveWindowSize()
 {
 	QString strKey = screen_key ();
 
-	// store window size, format
+	// store window size, format, comment format
 	setting->writeBoolEntry("BOARDFULLSCREEN_" + strKey, isFullScreen);
 
 	setting->writeEntry("BOARDWINDOW_" + strKey,
@@ -1739,6 +1824,7 @@ bool MainWindow::restoreWindowSize ()
 {
 	QString strKey = screen_key ();
 
+	// restore board window
 	QString s = setting->readEntry("BOARDWINDOW_" + strKey);
 	if (s.length() <= 5)
 		return false;
@@ -1783,7 +1869,7 @@ bool MainWindow::restoreWindowSize ()
 
 	// do some other stuff
 	// maybe not correct set at startup time
-	slotViewCoords(viewCoords->isChecked());
+	slotViewCoords (viewCoords->isChecked ());
 
 	// ok, resize
 	gfx_board->lockResize = false;
@@ -1792,20 +1878,15 @@ bool MainWindow::restoreWindowSize ()
 	statusBar()->showMessage(tr("Window size restored.") + " (" + strKey + ")");
 
 	// update current move
+#if 0 /* @@@ */
 	gfx_board->refreshDisplay();
+#endif
 
 	return true;
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *e)
 {
-	bool localGame = true;
-	// don't view last moves while observing or playing
-	if (getBoard()->getGameMode() == modeObserve ||
-		getBoard()->getGameMode() == modeMatch ||
-		getBoard()->getGameMode() == modeTeach)
-		localGame = false;
-
 	switch (e->key())
 	{
 /*
@@ -1829,34 +1910,33 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
 		// /DEBUG
 #endif
 */
-		
 	case Qt::Key_Left:
-		if (localGame || (getBoard()->getGameMode() == modeObserve))
+		if (navBackward->isEnabled ())
 			slotNavBackward();
 		break;
-		
+
 	case Qt::Key_Right:
-		if (localGame || (getBoard()->getGameMode() == modeObserve))
+		if (navForward->isEnabled ())
 			slotNavForward();
 		break;
-		
+
 	case Qt::Key_Up:
-		if (localGame)
+		if (navPrevVar->isEnabled ())
 			slotNavPrevVar();
 		break;
-		
+
 	case Qt::Key_Down:
-		if (localGame)
+		if (navNextVar->isEnabled ())
 			slotNavNextVar();
 		break;
-		
+
 	case Qt::Key_Home:
-		if (localGame || (getBoard()->getGameMode() == modeObserve))
+		if (navFirst->isEnabled ())
 			slotNavFirst();
 		break;
-		
+
 	case Qt::Key_End:
-		if (localGame || (getBoard()->getGameMode() == modeObserve))
+		if (navLast->isEnabled ())
 			slotNavLast();
 		break;
 
@@ -1888,10 +1968,10 @@ int MainWindow::checkModified(bool interactive)
 {
 	if (!gfx_board->isModified)
 		return 1;
-	
+
 	if (!interactive)
 		return 0;
-	
+
 	switch (QMessageBox::warning(this, PACKAGE,
 		tr("You modified the game.\nDo you want to save your changes?"),
 		tr("Yes"), tr("No"), tr("Cancel"),
@@ -1899,36 +1979,68 @@ int MainWindow::checkModified(bool interactive)
 	{
 	case 0:
 		return slotFileSave() && !gfx_board->isModified;
-		
+
 	case 1:
 		return 1;
-		
+
 	case 2:
 		return 2;
-		
+
 	default:
 		qWarning("Unknown messagebox input.");
 		return 0;
 	}
-	
+
 	return 1;
 }
 
 void MainWindow::rememberLastDir(const QString &file)
 {
 	int pos = 0, lastpos = -1;
-	
+
 	while ((pos =  file.indexOf('/', pos)) != -1 && pos++ < static_cast<int>(file.length()))
 		lastpos = pos;
-	
+
 	if (lastpos == -1)
 	{
 		setting->writeEntry("LAST_DIR", "");
 	}
 	else
 		setting->writeEntry("LAST_DIR", file.left(lastpos));
-	
+
 	// qDebug("LAST DIR: %s", qGo::getSettings()->lastDir.latin1());
+}
+
+void MainWindow::slotUpdateComment()
+{
+	if (!m_allow_text_update_signal)
+		return;
+	gfx_board->update_comment (commentEdit->toPlainText(), false);
+}
+
+/* Called from an external source to append to the comments window.  */
+void MainWindow::append_comment(const QString &t)
+{
+	bool old = m_allow_text_update_signal;
+	m_allow_text_update_signal = false;
+	commentEdit->append (t);
+	gfx_board->update_comment (t, true);
+	m_allow_text_update_signal = old;
+}
+
+void MainWindow::slotUpdateComment2()
+{
+	QString text = commentEdit2->text();
+
+	// clear entry
+	commentEdit2->setText("");
+
+	// don't show short text
+	if (text.length() < 1)
+		return;
+
+	// emit signal to opponent in online game
+	emit signal_sendcomment (text);
 }
 
 void MainWindow::updateFont()
@@ -1943,39 +2055,57 @@ void MainWindow::updateFont()
 	mainWidget->setFont(setting->fontStandard);
 	mainWidget->normalTools->pb_timeWhite->setFont(setting->fontClocks);
 	mainWidget->normalTools->pb_timeBlack->setFont(setting->fontClocks);
+
+#if 0
+	// set some colors
+	QPalette pal = commentEdit2->palette();
+	pal.setColor(QColorGroup::Base, setting->colorBackground);
+	commentEdit2->setPalette(pal);
+	ListView_observers->setPalette(pal);
+	pal = commentEdit->palette();
+	pal.setColor(QColorGroup::Base, setting->colorBackground);
+	commentEdit->setPalette(pal);
+#endif
 }
 
 // used in slot_editBoardInNewWindow()
-void MainWindow::slot_animateClick()
+void MainWindow::slot_animateClick(bool)
 {
+#if 0
 	getInterfaceHandler()->refreshButton->animateClick();
+#endif
 }
 
-void MainWindow::slot_editBoardInNewWindow()
+void MainWindow::slot_editBoardInNewWindow(bool)
 {
+	std::shared_ptr<game_record> newgr = std::make_shared<game_record> (*m_game);
 	// online mode -> don't score, open new Window instead
-	MainWindow *w = setting->qgo->addBoardWindow();
+	MainWindow *w = new MainWindow (0, newgr);
 
-	CHECK_PTR(w);
-	w->setGameMode (modeNormal);
-
+#if 0 /* @@@ This has never worked.  */
 	// create update button
-	w->getInterfaceHandler()->refreshButton->setText(tr("Update"));
+	w->mainWidget->refreshButton->setText(tr("Update"));
+#if 0
 	QToolTip::add(w->getInterfaceHandler()->refreshButton, tr("Update from online game"));
 	QWhatsThis::add(w->getInterfaceHandler()->refreshButton, tr("Update from online game to local board and supersede own changes."));
-	w->getInterfaceHandler()->refreshButton->setEnabled(true);
-	connect(w->getInterfaceHandler()->refreshButton, SIGNAL(clicked()), this, SLOT(slotFileExportSgfClipB()));
-	connect(w->getInterfaceHandler()->refreshButton, SIGNAL(clicked()), w, SLOT(slotFileImportSgfClipB()));
-	connect(w->getInterfaceHandler()->refreshButton, SIGNAL(clicked()), w, SLOT(slotNavLastByTime()));
+#endif
+	w->mainWidget->refreshButton->setEnabled(true);
+	connect(w->mainWidget->refreshButton, SIGNAL(clicked()), this, SLOT(slotFileExportSgfClipB()));
+	connect(w->mainWidget->refreshButton, SIGNAL(clicked()), w, SLOT(slotFileImportSgfClipB()));
+	connect(w->mainWidget->refreshButton, SIGNAL(clicked()), w, SLOT(slotNavLastByTime()));
 	QTimer::singleShot(100, w, SLOT(slot_animateClick()));
+#endif
+
+	w->slotNavLast ();
+	w->show ();
 }
 
 void MainWindow::updateObserverCnt()
 {
-	ListView_observers->setColumnText(0, tr("Observers") + " (" + QString::number(ListView_observers->childCount()) + ")");
-	ListView_observers->setSorting(2);
-	ListView_observers->sort();
-	ListView_observers->setSorting(-1);
+	QStringList headers;
+	headers << tr("Observers") + " (" + QString::number(ListView_observers->topLevelItemCount()) + ")" << tr("Rk");
+	ListView_observers->setHeaderLabels (headers);
+	ListView_observers->sortItems (2, Qt::AscendingOrder);
 }
 
 void MainWindow::addObserver(const QString &name)
@@ -1983,43 +2113,64 @@ void MainWindow::addObserver(const QString &name)
 	QString name_without_rank = name.section(' ', 0, 0);
 	QString rank = name.section(' ', 1, 1);
 	QString rankkey = rkToKey(rank) + name_without_rank;
-	
-	new Q3ListViewItem(ListView_observers, name_without_rank, rank, rankkey);
-//	ListView_observer->addItem
+
+	QStringList strs;
+	strs << name_without_rank << rank << rankkey;
+
+        new QTreeWidgetItem(ListView_observers, strs);
 }
 
 void MainWindow::slotSoundToggle(bool toggle)
 {
-	gfx_board->getBoardHandler()->local_stone_sound = !toggle ;
+	local_stone_sound = !toggle;
 }
 
 void MainWindow::setGameMode(GameMode mode)
 {
-	mainWidget->setGameMode (mode);
+	if (mode == modeEdit || mode == modeNormal) {
+		editGroup->setEnabled (true);
+	} else {
+		editStone->setChecked (true);
+		editGroup->setEnabled (false);
+	}
+
+	bool enable_nav = mode == modeNormal; /* @@@ teach perhaps? */
+
+	navPrevVar->setEnabled (enable_nav);
+	navNextVar->setEnabled (enable_nav);
+	navBackward->setEnabled (enable_nav);
+	navForward->setEnabled (enable_nav);
+	navFirst->setEnabled (enable_nav);
+	navStartVar->setEnabled (enable_nav);
+	navMainBranch->setEnabled (enable_nav);
+	navLast->setEnabled (enable_nav);
+	navNextBranch->setEnabled (enable_nav);
+	navPrevComment->setEnabled (enable_nav);
+	navNextComment->setEnabled (enable_nav);
+	navIntersection->setEnabled (enable_nav);
+	navNthMove->setEnabled (enable_nav);
+	editDelete->setEnabled (enable_nav);
+	navSwapVariations->setEnabled (enable_nav);
+
+	fileImportSgfClipB->setEnabled (enable_nav);
+
+	bool editable_comments = mode == modeNormal || mode == modeEdit || mode == modeScore || mode == modeComputer;
+	commentEdit->setReadOnly (!editable_comments || mode == modeEdit);
+	// commentEdit->setDisabled (editable_comments);
+	commentEdit2->setEnabled (!editable_comments);
+	commentEdit2->setVisible (!editable_comments);
 
 	switch (mode)
 	{
 	case modeEdit:
-//		modeButton->setEnabled(true);
-		commentEdit->setReadOnly(false);
-		//commentEdit2->setReadOnly(true);
-		commentEdit2->setDisabled(true);
 		statusMode->setText(" " + QObject::tr("N", "Board status line: normal mode") + " ");
 		break;
 
 	case modeNormal:
-//		modeButton->setEnabled(true);
-		commentEdit->setReadOnly(false);
-		//commentEdit2->setReadOnly(true);
-		commentEdit2->setDisabled(true);
 		statusMode->setText(" " + QObject::tr("E", "Board status line: edit mode") + " ");
 		break;
 
 	case modeObserve:
-//		modeButton->setDisabled(true);
-		commentEdit->setReadOnly(true);
-		commentEdit2->setReadOnly(false);
-		commentEdit2->setDisabled(false);
     		editDelete->setEnabled(false);
 		fileNew->setEnabled(false);
 		fileNewBoard->setEnabled(false);
@@ -2028,21 +2179,13 @@ void MainWindow::setGameMode(GameMode mode)
 		break;
 
 	case modeMatch:
-//		modeButton->setDisabled(true);
-		commentEdit->setReadOnly(true);
-		commentEdit2->setReadOnly(false);
-		commentEdit2->setDisabled(false);
 		fileNew->setEnabled(false);
 		fileNewBoard->setEnabled(false);
 		fileOpen->setEnabled(false);
 		statusMode->setText(" " + QObject::tr("P", "Board status line: play mode") + " ");
 		break;
 
-	case modeComputer:           // added eb 12
-//		modeButton->setDisabled(true);
-		commentEdit->setReadOnly(true);
-		commentEdit2->setReadOnly(false);
-		commentEdit2->setDisabled(false);
+	case modeComputer:
 		fileNew->setEnabled(false);
 		fileNewBoard->setEnabled(false);
 		fileOpen->setEnabled(false);
@@ -2050,10 +2193,6 @@ void MainWindow::setGameMode(GameMode mode)
 		break;
 
 	case modeTeach:
-//		modeButton->setDisabled(true);
-		commentEdit->setReadOnly(true);
-		commentEdit2->setReadOnly(false);
-		commentEdit2->setDisabled(false);
 		fileNew->setEnabled(false);
 		fileNewBoard->setEnabled(false);
 		fileOpen->setEnabled(false);
@@ -2063,10 +2202,276 @@ void MainWindow::setGameMode(GameMode mode)
 	case modeScore:
 //		modeButton->setDisabled(true);
 		commentEdit->setReadOnly(true);
-		//commentEdit2->setReadOnly(true);
 		commentEdit2->setDisabled(true);
 		statusMode->setText(" " + QObject::tr("S", "Board status line: score mode") + " ");
 		break;
 	}
+	mainWidget->setGameMode (mode);
 }
 
+void MainWindow::setMoveData (const game_state &gs, const go_board &b, GameMode mode)
+{
+	int sons = gs.n_children ();
+
+	bool is_root_node = gs.root_node_p ();
+
+	switch (mode)
+	{
+	case modeNormal:
+		navPrevVar->setEnabled(gs.has_prev_sibling ());
+		navNextVar->setEnabled(gs.has_next_sibling ());
+		navStartVar->setEnabled(!is_root_node);
+		navMainBranch->setEnabled(!is_root_node);
+		navNextBranch->setEnabled(sons > 0);
+		navSwapVariations->setEnabled(!is_root_node);
+
+		/* fall through */
+	case modeObserve:
+		navBackward->setEnabled(!is_root_node);
+		navForward->setEnabled(sons > 0);
+		navFirst->setEnabled(!is_root_node);
+		navLast->setEnabled(sons > 0);
+		navPrevComment->setEnabled(!is_root_node);
+		navNextComment->setEnabled(sons > 0);
+		navIntersection->setEnabled(true);
+		break;
+
+	case modeScore:
+	case modeEdit:
+		navPrevVar->setEnabled(false);
+		navNextVar->setEnabled(false);
+		navBackward->setEnabled(false);
+		navForward->setEnabled(false);
+		navFirst->setEnabled(false);
+		navStartVar->setEnabled(false);
+		navMainBranch->setEnabled(false);
+		navLast->setEnabled(false);
+		navNextBranch->setEnabled(false);
+		navSwapVariations->setEnabled(false);
+		navPrevComment->setEnabled(false);
+		navNextComment->setEnabled(false);
+		navIntersection->setEnabled(false);
+		break;
+	default:
+		break;
+	}
+
+	/* Refresh comment from move unless we are in a game mode that just keeps
+	   appending to the comment.  */
+	if (!commentEdit->isReadOnly ()) {
+		bool old = m_allow_text_update_signal;
+		m_allow_text_update_signal = false;
+		std::string c = gs.comment ();
+		if (c.size () == 0)
+			commentEdit->clear();
+		else
+			commentEdit->setText(QString::fromStdString (c));
+		m_allow_text_update_signal = old;
+	}
+
+	edit123->setChecked (gs.get_start_count ());
+	mainWidget->setMoveData (gs, b, mode);
+}
+
+void MainWindow::doPass()
+{
+	gfx_board->doPass();
+	emit signal_pass();
+}
+
+void MainWindow::doCountDone()
+{
+	if (gfx_board->getGameMode () == modeScoreRemote) {
+		emit signal_done ();
+		return;
+	}
+
+	float komi = m_game->komi ();
+	int capW = mainWidget->scoreTools->capturesWhite->text().toInt();
+	int capB = mainWidget->scoreTools->capturesBlack->text().toInt();
+	int terrW = mainWidget->scoreTools->terrWhite->text().toInt();
+	int terrB = mainWidget->scoreTools->terrBlack->text().toInt();
+
+	float totalWhite = capW + terrW + komi;
+	int totalBlack = capB + terrB;
+	float result = 0;
+	QString rs;
+
+	QString s;
+	QTextStream (&s) << tr("White") << "\n" << terrW << " + " << capW << " + " << komi << " = " << totalWhite << "\n";
+	QTextStream (&s) << tr("Black") << "\n" << terrB << " + " << capB << " = " << totalBlack << "\n\n";
+
+	if (totalBlack > totalWhite) {
+		result = totalBlack - totalWhite;
+		s.append(tr("Black wins with %1").arg(result));
+		rs = "B+" + QString::number(result);
+	} else if (totalWhite > totalBlack) {
+		result = totalWhite - totalBlack;
+		s.append(tr("White wins with %1").arg(result));
+		rs = "W+" + QString::number(result);
+	} else {
+		rs = tr("Jigo");
+		s.append(rs);
+	}
+
+	std::string old_result = m_game->result ();
+	std::string new_result = rs.toStdString ();
+	if (old_result != "" && old_result != new_result) {
+		QMessageBox::StandardButton choice;
+		choice = QMessageBox::warning(this, PACKAGE,
+					      tr("Game result differs from the one stored.\nOverwrite stored game result?"),
+					      QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+		if (choice == QMessageBox::Yes)
+			m_game->set_result (rs.toStdString ());
+	}
+	//if (QMessageBox::information(this, PACKAGE " - " + tr("Game Over"), s, tr("Ok"), tr("Update gameinfo")) == 1)
+
+	gfx_board->doCountDone();
+	mainWidget->doRealScore (false);
+}
+
+void MainWindow::doResign()
+{
+	emit signal_resign();
+}
+
+void MainWindow::doUndo()
+{
+	emit signal_undo();
+}
+
+void MainWindow::doAdjourn()
+{
+	emit signal_adjourn();
+}
+
+
+MainWindow_GTP::MainWindow_GTP (QWidget *parent, std::shared_ptr<game_record> gr, const QString &program,
+				bool b_is_comp, bool w_is_comp)
+	: MainWindow (parent, gr, modeComputer), Gtp_Controller (this)
+{
+	gfx_board->set_player_colors (!w_is_comp, !b_is_comp);
+	m_gtp = create_gtp (program, m_game->boardsize (), m_game->komi (), m_game->handicap (), 10);
+}
+
+MainWindow_GTP::~MainWindow_GTP ()
+{
+	delete m_gtp;
+}
+
+void MainWindow_GTP::gtp_startup_success ()
+{
+	show ();
+	if (!gfx_board->player_to_move_p ())
+		m_gtp->request_move (gfx_board->to_move ());
+}
+
+void MainWindow_GTP::gtp_played_move (int x, int y)
+{
+	if (local_stone_sound)
+		qgo->playClick();
+	gfx_board->play_external_move (x, y);
+}
+
+void MainWindow_GTP::gtp_played_pass ()
+{
+	if (local_stone_sound)
+		qgo->playPassSound();
+	const game_state *st = gfx_board->get_state ();
+	gfx_board->play_external_pass ();
+	if (st->was_pass_p ()) {
+		m_gtp->quit ();
+		/* As of now, we're disconnected, and the scoring function should
+		   remember normal mode.  */
+		setGameMode (modeNormal);
+		mainWidget->doRealScore (true);
+	}
+}
+
+void MainWindow_GTP::gtp_played_resign ()
+{
+	if (gfx_board->player_is (black)) {
+		m_game->set_result ("B+R");
+	} else {
+		m_game->set_result ("W+R");
+	}
+
+	setGameMode (modeNormal);
+	m_gtp->quit();
+	gfx_board->set_player_colors (true, true);
+}
+
+void MainWindow_GTP::gtp_failure (const gtp_exception &e)
+{
+	if (gfx_board->getGameMode () != modeComputer)
+		return;
+	show ();
+	setGameMode (modeNormal);
+	gfx_board->set_player_colors (true, true);
+	QMessageBox msg(QString (QObject::tr("Error")),
+			e.errmsg (),
+			QMessageBox::Warning, QMessageBox::Ok | QMessageBox::Default,
+			Qt::NoButton, Qt::NoButton);
+	msg.activateWindow();
+	msg.raise();
+	msg.exec();
+}
+
+void MainWindow_GTP::gtp_exited ()
+{
+	if (gfx_board->getGameMode () == modeComputer) {
+		setGameMode (modeNormal);
+		gfx_board->set_player_colors (true, true);
+		show ();
+		QMessageBox::warning (0, PACKAGE, QObject::tr ("GTP process exited unexpectedly."));
+	}
+}
+
+void MainWindow_GTP::player_move (stone_color col, int x, int y)
+{
+	/* @@@ Could make sounds configurable in normal mode, but probably it's just
+	   obnoxious and unwanted.  */
+	if (gfx_board->getGameMode () != modeNormal && local_stone_sound)
+		qgo->playClick();
+
+	if (gfx_board->getGameMode () != modeComputer)
+		return;
+	m_gtp->played_move (col, x, y);
+	m_gtp->request_move (col == black ? white : black);
+}
+
+
+void MainWindow_GTP::doPass ()
+{
+	if (gfx_board->getGameMode () != modeComputer) {
+		MainWindow::doPass ();
+		return;
+	}
+	if (!gfx_board->player_to_move_p ())
+		return;
+	const game_state *st = gfx_board->get_state ();
+	stone_color col = gfx_board->to_move ();
+	MainWindow::doPass ();
+	m_gtp->played_move_pass (col);
+	if (st->was_pass_p ()) {
+		m_gtp->quit ();
+		/* As of now, we're disconnected, and the scoring function should
+		   remember normal mode.  */
+		setGameMode (modeNormal);
+		mainWidget->doRealScore (true);
+	} else
+		m_gtp->request_move (col == black ? white : black);
+}
+
+void MainWindow_GTP::doResign ()
+{
+	stone_color col = gfx_board->to_move ();
+	MainWindow::doResign();
+	setGameMode (modeNormal);
+	gfx_board->set_player_colors (true, true);
+	m_gtp->quit();
+	if (gfx_board->player_is (black))
+		m_game->set_result ("W+R");
+	else
+		m_game->set_result ("B+R");
+}

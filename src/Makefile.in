@@ -54,7 +54,7 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 target_triplet = @target@
-bin_PROGRAMS = q4go$(EXEEXT)
+bin_PROGRAMS = q5go$(EXEEXT)
 subdir = src
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -69,28 +69,25 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am__objects_1 = audio.$(OBJEXT) alsa.$(OBJEXT) board.$(OBJEXT) \
-	boardhandler.$(OBJEXT) gamedialog.$(OBJEXT) \
-	gamestable.$(OBJEXT) gametree.$(OBJEXT) gatter.$(OBJEXT) \
-	group.$(OBJEXT) helpviewer.$(OBJEXT) igsconnection.$(OBJEXT) \
-	imagehandler.$(OBJEXT) interfacehandler.$(OBJEXT) \
-	main.$(OBJEXT) mainwidget.$(OBJEXT) mainwin.$(OBJEXT) \
-	mainwindow.$(OBJEXT) mark.$(OBJEXT) matrix.$(OBJEXT) \
-	misc.$(OBJEXT) move.$(OBJEXT) msg_handler.$(OBJEXT) \
-	noderesults.$(OBJEXT) parser.$(OBJEXT) playertable.$(OBJEXT) \
-	preferences.$(OBJEXT) qgo.$(OBJEXT) qgo_interface.$(OBJEXT) \
-	qgtp.$(OBJEXT) qnewgamedlg.$(OBJEXT) setting.$(OBJEXT) \
-	sgfparser.$(OBJEXT) stone.$(OBJEXT) stonehandler.$(OBJEXT) \
-	tables.$(OBJEXT) telnet.$(OBJEXT) textview.$(OBJEXT) \
-	tip.$(OBJEXT) tree.$(OBJEXT) searchpath.$(OBJEXT)
+	goboard.$(OBJEXT) gamedialog.$(OBJEXT) gamestable.$(OBJEXT) \
+	gametree.$(OBJEXT) gatter.$(OBJEXT) helpviewer.$(OBJEXT) \
+	igsconnection.$(OBJEXT) imagehandler.$(OBJEXT) main.$(OBJEXT) \
+	mainwidget.$(OBJEXT) mainwin.$(OBJEXT) mainwindow.$(OBJEXT) \
+	misc.$(OBJEXT) msg_handler.$(OBJEXT) parser.$(OBJEXT) \
+	playertable.$(OBJEXT) preferences.$(OBJEXT) qgo.$(OBJEXT) \
+	qgo_interface.$(OBJEXT) qgtp.$(OBJEXT) qnewgamedlg.$(OBJEXT) \
+	setting.$(OBJEXT) sgfload.$(OBJEXT) sgf2board.$(OBJEXT) \
+	stone.$(OBJEXT) tables.$(OBJEXT) telnet.$(OBJEXT) \
+	textview.$(OBJEXT) tip.$(OBJEXT) searchpath.$(OBJEXT)
 am__objects_2 =
-am_q4go_OBJECTS = $(am__objects_1) $(am__objects_2)
-am__objects_3 = audio.moc.$(OBJEXT) board.moc.$(OBJEXT) \
-	gamedialog.moc.$(OBJEXT) gamestable.moc.$(OBJEXT) \
-	gametree.moc.$(OBJEXT) helpviewer.moc.$(OBJEXT) \
-	icons.moc.$(OBJEXT) igsconnection.moc.$(OBJEXT) \
-	mainwidget.moc.$(OBJEXT) mainwindow.moc.$(OBJEXT) \
-	mainwin.moc.$(OBJEXT) miscdialogs.moc.$(OBJEXT) \
-	misctools.moc.$(OBJEXT) noderesults.moc.$(OBJEXT) \
+am_q5go_OBJECTS = $(am__objects_1) $(am__objects_2)
+am__objects_3 = audio.moc.$(OBJEXT) bitarray.moc.$(OBJEXT) \
+	board.moc.$(OBJEXT) gamedialog.moc.$(OBJEXT) \
+	gamestable.moc.$(OBJEXT) gametree.moc.$(OBJEXT) \
+	helpviewer.moc.$(OBJEXT) icons.moc.$(OBJEXT) \
+	igsconnection.moc.$(OBJEXT) mainwidget.moc.$(OBJEXT) \
+	mainwindow.moc.$(OBJEXT) mainwin.moc.$(OBJEXT) \
+	miscdialogs.moc.$(OBJEXT) misctools.moc.$(OBJEXT) \
 	parser.moc.$(OBJEXT) playertable.moc.$(OBJEXT) \
 	preferences.moc.$(OBJEXT) qgo.moc.$(OBJEXT) \
 	qgo_interface.moc.$(OBJEXT) qgtp.moc.$(OBJEXT) \
@@ -100,12 +97,12 @@ am__objects_3 = audio.moc.$(OBJEXT) board.moc.$(OBJEXT) \
 am__objects_4 = $(am__objects_2) $(am__objects_3)
 am__objects_5 = q4go.rcc.$(OBJEXT)
 am__objects_6 = $(am__objects_5)
-nodist_q4go_OBJECTS = $(am__objects_4) $(am__objects_6)
-q4go_OBJECTS = $(am_q4go_OBJECTS) $(nodist_q4go_OBJECTS)
+nodist_q5go_OBJECTS = $(am__objects_4) $(am__objects_6)
+q5go_OBJECTS = $(am_q5go_OBJECTS) $(nodist_q5go_OBJECTS)
 am__DEPENDENCIES_1 =
-q4go_DEPENDENCIES = $(am__DEPENDENCIES_1)
-q4go_LINK = $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link \
-	$(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(q4go_LDFLAGS) $(LDFLAGS) \
+q5go_DEPENDENCIES = $(am__DEPENDENCIES_1)
+q5go_LINK = $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link \
+	$(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(q5go_LDFLAGS) $(LDFLAGS) \
 	-o $@
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/admin/depcomp
@@ -128,8 +125,8 @@ LTCOMPILE = $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link \
 	$(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(q4go_SOURCES) $(nodist_q4go_SOURCES)
-DIST_SOURCES = $(q4go_SOURCES)
+SOURCES = $(q5go_SOURCES) $(nodist_q5go_SOURCES)
+DIST_SOURCES = $(q5go_SOURCES)
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	html-recursive info-recursive install-data-recursive \
 	install-dvi-recursive install-exec-recursive \
@@ -237,8 +234,8 @@ PATH_SEPARATOR = @PATH_SEPARATOR@
 PKG_CONFIG = @PKG_CONFIG@
 PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
 PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
-QT4_CFLAGS = @QT4_CFLAGS@
-QT4_LIBS = @QT4_LIBS@
+QT5_CFLAGS = @QT5_CFLAGS@
+QT5_LIBS = @QT5_LIBS@
 RANLIB = @RANLIB@
 RCC = @RCC@
 REPO = @REPO@
@@ -311,29 +308,29 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 INCLUDES = $(all_includes)
-q4go_METASOURCES = AUTO
+q5go_METASOURCES = AUTO
 KDE_OPTIONS = qtonly
-DISTHEADERS_MOC = audio.h board.h gamedialog.h gamestable.h gametree.h helpviewer.h icons.h \
+DISTHEADERS_MOC = audio.h bitarray.h board.h gamedialog.h gamestable.h gametree.h helpviewer.h icons.h \
 	igsconnection.h mainwidget.h mainwindow.h mainwin.h miscdialogs.h \
-	misctools.h noderesults.h parser.h playertable.h preferences.h qgo.h \
+	misctools.h parser.h playertable.h preferences.h qgo.h \
 	qgo_interface.h qgtp.h qnewgamedlg.h searchpath.h tables.h telnet.h textview.h tip.h
 
-DISTHEADERS_NOMOC = boardhandler.h config.h defines.h gatter.h globals.h group.h gs_globals.h \
-	igsinterface.h imagehandler.h interfacehandler.h komispinbox.h mark.h \
-	matrix.h misc.h move.h msg_handler.h parserdefs.h setting.h sgfparser.h stone.h \
-	stonehandler.h tree.h
+DISTHEADERS_NOMOC = goboard.h config.h defines.h gatter.h globals.h gs_globals.h \
+	igsinterface.h imagehandler.h komispinbox.h mark.h \
+	matrix.h misc.h move.h msg_handler.h parserdefs.h setting.h sgf.h sgfparser.h stone.h \
+	tree.h
 
-DISTSOURCES = audio.cpp alsa.cpp board.cpp boardhandler.cpp gamedialog.cpp \
-		gamestable.cpp gametree.cpp gatter.cpp group.cpp helpviewer.cpp \
-		igsconnection.cpp imagehandler.cpp interfacehandler.cpp main.cpp \
-		mainwidget.cpp  mainwin.cpp mainwindow.cpp mark.cpp matrix.cpp \
-		misc.cpp move.cpp msg_handler.cpp noderesults.cpp parser.cpp \
+DISTSOURCES = audio.cpp alsa.cpp board.cpp goboard.cc gamedialog.cpp \
+		gamestable.cpp gametree.cpp gatter.cpp helpviewer.cpp \
+		igsconnection.cpp imagehandler.cpp main.cpp \
+		mainwidget.cpp  mainwin.cpp mainwindow.cpp \
+		misc.cpp msg_handler.cpp parser.cpp \
 		playertable.cpp preferences.cpp qgo.cpp qgo_interface.cpp qgtp.cpp \
-		qnewgamedlg.cpp setting.cpp sgfparser.cpp stone.cpp stonehandler.cpp tables.cpp \
-		telnet.cpp textview.cpp tip.cpp tree.cpp searchpath.cpp
+		qnewgamedlg.cpp setting.cpp  sgfload.cc sgf2board.cc \
+		stone.cpp tables.cpp telnet.cpp textview.cpp tip.cpp searchpath.cpp
 
 FORMS = clientwindow_gui.ui gameinfo_gui.ui gui_dialog.ui mainwidget_gui.ui newgame_gui.ui \
-	newlocalgame_gui.ui noderesults_gui.ui normaltools_gui.ui nthmove_gui.ui preferences_gui.ui \
+	newlocalgame_gui.ui normaltools_gui.ui nthmove_gui.ui preferences_gui.ui \
 	qnewgamedlg_gui.ui scoretools_gui.ui talk_gui.ui textedit_gui.ui textview_gui.ui 
 
 RESOURCES = q4go.qrc
@@ -343,11 +340,11 @@ RCC_CC = $(RESOURCES:.qrc=.rcc.cc)
 BUILT_SOURCES = $(FORMHEADERS) $(MOC_CC) $(RCC_CC)
 CLEANFILES = $(BUILT_SOURCES)
 EXTRA_DIST = $(FORMS)
-q4go_SOURCES = $(DISTSOURCES) $(DISTHEADERS_MOC) $(DISTHEADERS_NO_MOC)
-nodist_q4go_SOURCES = $(MOC_CC) $(RCC_CC)
+q5go_SOURCES = $(DISTSOURCES) $(DISTHEADERS_MOC) $(DISTHEADERS_NO_MOC)
+nodist_q5go_SOURCES = $(MOC_CC) $(RCC_CC)
 SUBDIRS = pics translations sounds
-q4go_LDFLAGS = $(all_libraries) $(USER_LDFLAGS)
-q4go_LDADD = $(LIBSOCKET) $(LIB_QPE) $(LIB_QT) $(QT4_LIBS)
+q5go_LDFLAGS = $(all_libraries) $(USER_LDFLAGS)
+q5go_LDADD = $(LIBSOCKET) $(LIB_QPE) $(LIB_QT) $(QT5_LIBS)
 METASOURCES = AUTO
 SUFFIXES = .h .ui .moc.cc .uic.cc .qrc .rcc.cc
 all: $(BUILT_SOURCES)
@@ -431,9 +428,9 @@ clean-binPROGRAMS:
 	list=`for p in $$list; do echo "$$p"; done | sed 's/$(EXEEXT)$$//'`; \
 	echo " rm -f" $$list; \
 	rm -f $$list
-q4go$(EXEEXT): $(q4go_OBJECTS) $(q4go_DEPENDENCIES) $(EXTRA_q4go_DEPENDENCIES) 
-	@rm -f q4go$(EXEEXT)
-	$(q4go_LINK) $(q4go_OBJECTS) $(q4go_LDADD) $(LIBS)
+q5go$(EXEEXT): $(q5go_OBJECTS) $(q5go_DEPENDENCIES) $(EXTRA_q5go_DEPENDENCIES) 
+	@rm -f q5go$(EXEEXT)
+	$(q5go_LINK) $(q5go_OBJECTS) $(q5go_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -444,9 +441,9 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/alsa.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/audio.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/audio.moc.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/bitarray.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/board.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/board.moc.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/boardhandler.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gamedialog.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gamedialog.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gamestable.Po@am__quote@
@@ -454,14 +451,13 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gametree.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gametree.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gatter.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/group.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/goboard.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/helpviewer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/helpviewer.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/icons.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/igsconnection.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/igsconnection.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/imagehandler.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/interfacehandler.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mainwidget.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mainwidget.moc.Po@am__quote@
@@ -469,15 +465,10 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mainwin.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mainwindow.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mainwindow.moc.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mark.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/matrix.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/misc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/miscdialogs.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/misctools.moc.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/move.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/msg_handler.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/noderesults.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/noderesults.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parser.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/playertable.Po@am__quote@
@@ -496,9 +487,9 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/searchpath.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/searchpath.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/setting.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sgfparser.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sgf2board.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sgfload.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stone.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stonehandler.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tables.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tables.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/telnet.Po@am__quote@
@@ -507,7 +498,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/textview.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tip.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tip.moc.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tree.Po@am__quote@
 
 .cc.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

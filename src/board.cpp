@@ -2,17 +2,15 @@
 * board.cpp
 */
 #include <vector>
+#include <fstream>
 
 #include <qmessagebox.h>
 #include <qapplication.h>
 #include <qclipboard.h>
 #include <qpainter.h>
-#include <q3groupbox.h>
 #include <qlineedit.h>
 #include <qcursor.h>
 
-//Added by qt3to4:
-#include <Q3PtrList>
 #include <QPixmap>
 #include <QResizeEvent>
 #include <QMouseEvent>
@@ -24,23 +22,19 @@
 #include "qgo.h"
 #include "board.h"
 #include "globals.h"
-#include "mark.h"
 #include "imagehandler.h"
-#include "stonehandler.h"
 #include "tip.h"
-#include "interfacehandler.h"
-#include "move.h"
 #include "mainwindow.h"
-#include "noderesults.h"
+#include "miscdialogs.h"
 
 Board::Board(QWidget *parent, QGraphicsScene *c)
-: QGraphicsView(c, parent)
+	: QGraphicsView(c, parent), m_game (nullptr)
 {
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-	viewport()->setMouseTracking(TRUE);
-	setUpdatesEnabled(TRUE);
+	viewport()->setMouseTracking(true);
+	setUpdatesEnabled(true);
 
 	board_size = DEFAULT_BOARD_SIZE;
 	showCoords = setting->readBoolEntry("BOARD_COORDS");
@@ -48,10 +42,6 @@ Board::Board(QWidget *parent, QGraphicsScene *c)
 	antiClicko = setting->readBoolEntry("ANTICLICKO");
 
 	setStyleSheet( "QGraphicsView { border-style: none; }" );
-
-	// Create a BoardHandler instance.
-	boardHandler = new BoardHandler(this);
-	CHECK_PTR(boardHandler);
 
 	// Create an ImageHandler instance.
 	imageHandler = new ImageHandler();
@@ -62,51 +52,43 @@ Board::Board(QWidget *parent, QGraphicsScene *c)
 	setScene(canvas);
 	gatter = new Gatter(canvas, board_size);
 
-	// Init data storage for marks and ghosts
-	marks = new Q3PtrList<Mark>;
-	marks->setAutoDelete(TRUE);
-	lastMoveMark = NULL;
-
-	ghosts = new Q3PtrList<Stone>;
-	ghosts->setAutoDelete(TRUE);
-
 	// Init the gatter size and the imagehandler pixmaps
 	calculateSize();
 
 	imageHandler->init(square_size);
 
 	// Initialize some class variables
-	nodeResultsDlg = NULL;
 	fastLoad = false;
 	isModified = false;
 	mouseState = Qt::NoButton;
-	for (int i=0; i<400; i++)
-	{
-		if (i < 52)
-			letterPool[i] = false;
-		numberPool[i] = false;
-	}
 
 	//coordsTip = new Tip(this);
 #ifdef Q_WS_WIN
 	resizeDelayFlag = false;
 #endif
 	curX = curY = -1;
-	showCursor = setting->readBoolEntry("CURSOR");
 
 	isLocalGame = true;
-
-	// Init the ghost cursor stone
-	curStone = new Stone(imageHandler->getGhostPixmaps(), canvas, stoneBlack, 0, 0);
-	curStone->setZValue(4);
-	curStone->hide();
 
 	lockResize = false;
 	navIntersectionStatus = false;
 
-	updateCaption();
-
 	isHidingStones = false; // QQQ
+
+	canvas->addItem (coverTop = new QGraphicsRectItem ());
+	canvas->addItem (coverBot = new QGraphicsRectItem ());
+	canvas->addItem (coverLeft = new QGraphicsRectItem ());
+	canvas->addItem (coverRight = new QGraphicsRectItem ());
+
+	coverTop->setBrush (QColor (0, 0, 0, 128));
+	coverBot->setBrush (QColor (0, 0, 0, 128));
+	coverLeft->setBrush (QColor (0, 0, 0, 128));
+	coverRight->setBrush (QColor (0, 0, 0, 128));
+	coverTop->setPen (QColor (0, 0, 0, 0));
+	coverBot->setPen (QColor (0, 0, 0, 0));
+	coverLeft->setPen (QColor (0, 0, 0, 0));
+	coverRight->setPen (QColor (0, 0, 0, 0));
+
 	setupCoords();
 	setFocusPolicy(Qt::NoFocus);
 }
@@ -129,10 +111,15 @@ void Board::setupCoords()
 			hTxt = QString(QChar(static_cast<const char>('A' + real_i)));
 		}
 
-		vCoords1.append(new QGraphicsSimpleTextItem(vTxt, 0, canvas));
-		hCoords1.append(new QGraphicsSimpleTextItem(hTxt, 0, canvas));
-		vCoords2.append(new QGraphicsSimpleTextItem(vTxt, 0, canvas));
-		hCoords2.append(new QGraphicsSimpleTextItem(hTxt, 0, canvas));
+		QGraphicsSimpleTextItem *t;
+		vCoords1.append(t = new QGraphicsSimpleTextItem(vTxt));
+		canvas->addItem (t);
+		hCoords1.append(t = new QGraphicsSimpleTextItem(hTxt));
+		canvas->addItem (t);
+		vCoords2.append(t = new QGraphicsSimpleTextItem(vTxt));
+		canvas->addItem (t);
+		hCoords2.append(t = new QGraphicsSimpleTextItem(hTxt));
+		canvas->addItem (t);
 	}
 }
 
@@ -152,14 +139,9 @@ void Board::clearCoords()
 
 Board::~Board()
 {
-    delete curStone;
-    delete boardHandler;
-    delete marks;
-    delete ghosts;
-    delete lastMoveMark;
-    delete canvas;
-    delete nodeResultsDlg;
-    delete imageHandler;
+	clear_stones ();
+	delete canvas;
+	delete imageHandler;
 }
 
 // distance from table edge to wooden board edge
@@ -177,8 +159,10 @@ void Board::calculateSize()
 
 	table_size = w < h ? w : h;
 
-	QGraphicsSimpleTextItem coordV (QString::number(board_size), 0, canvas);
-	QGraphicsSimpleTextItem coordH ("A", 0, canvas);
+	QGraphicsSimpleTextItem coordV (QString::number(board_size));
+	QGraphicsSimpleTextItem coordH ("A");
+	canvas->addItem (&coordV);
+	canvas->addItem (&coordH);
 	int coord_width = (int)coordV.boundingRect().width();
 	int coord_height = (int)coordH.boundingRect().height();
 
@@ -205,99 +189,38 @@ void Board::calculateSize()
 	offsetY = margin + (h - board_pixel_size) / 2;
 }
 
-void Board::resizeBoard(int w, int h)
+void Board::resizeBoard (int w, int h)
 {
 	if (w < 30 || h < 30)
 		return;
 
-	Move *m_save = boardHandler->getTree()->getCurrent();
-
 	// Resize canvas
-	canvas->setSceneRect(0,0,w,h);
+	canvas->setSceneRect (0, 0, w, h);
 
 	// Recalculate the size values
-	calculateSize();
+	calculateSize ();
 
 	// Rescale the pixmaps in the ImageHandler
-	imageHandler->rescale(square_size);
-
-	// Delete gatter lines and update stones positions
-	QList<QGraphicsItem *> list = canvas->items();
-	QGraphicsItem *item;
-
-	QListIterator<QGraphicsItem *> it( list );
-
-
-	for (; it.hasNext();)
-	{
-		item = it.next();
-		/*
-		 * Coordinates : type = 9
-		 */
-//		if (item->type() == 9)// || item->type() == 3)// || item->rtti() == 7)
-//		{
-//			item->hide();
-//			delete item;
-//		}
-		/*else*/ if (item->type() == RTTI_STONE)
-		{
-			Stone *s = (Stone*)item;
-			s->setColor(s->getColor());
-			s->setPos(offsetX + square_size * (s->posX() - 1) - s->pixmap().width()/2,
-				offsetY + square_size * (s->posY() - 1) - s->pixmap().height()/2 );
-
-			//TODO introduce a ghost list in the stone class so that this becomes redundant code
-			if (s->isDead())
-				s->togglePixmap(imageHandler->getGhostPixmaps(), false);
-
-
-
-		}
-		else if (item->type() >= RTTI_MARK_SQUARE &&
-			item->type() <= RTTI_MARK_TERR)
-		{
-			Mark *m;
-			switch(item->type())
-			{
-			case RTTI_MARK_SQUARE: m = (MarkSquare*)item; break;
-			case RTTI_MARK_CIRCLE: m = (MarkCircle*)item;/* m->setSmall(setting->readBoolEntry("SMALL_MARKS")); */break;
-			case RTTI_MARK_TRIANGLE: m = (MarkTriangle*)item; break;
-			case RTTI_MARK_CROSS: m = (MarkCross*)item; break;
-			case RTTI_MARK_TEXT: m = (MarkText*)item; break;
-			case RTTI_MARK_NUMBER: m = (MarkNumber*)item; break;
-			case RTTI_MARK_TERR: m = (MarkTerr*)item; break;
-			default: continue;
-			}
-			m->setSize(square_size, square_size);
-			m->setPos(offsetX + square_size * (m->posX() - 1) - m->getSizeX()/2.0,
-				offsetY + square_size * (m->posY() - 1) - m->getSizeY()/2.0);
-		 }
-	}
-
-//	boardHandler->gotoMove(m_save);
-
-	/* FIXME sometimes this draws the lines after/on top of the marks.
-	 * moving it earlier doesn't fix anything */
+	imageHandler->rescale (square_size);
 
 	// Redraw the board
-	drawBackground();
-	drawGatter();
-//	if (showCoords && !isDisplayBoard)
-	drawCoordinates();
+	drawBackground ();
+	drawGatter ();
+	drawCoordinates ();
+	updateCovers ();
 
-	// Redraw the mark on the last played stone
-	updateLastMove(m_save->getColor(), m_save->getX(), m_save->getY());     //SL added eb 7
+	sync_appearance ();
 }
 
 void Board::resizeEvent(QResizeEvent*)
 {
 #ifdef _WS_WIN_x
-    if (!resizeDelayFlag)
-    {
+	if (!resizeDelayFlag)
+	{
 		resizeDelayFlag = true;
 		// not necessary?
 		QTimer::singleShot(50, this, SLOT(changeSize()));
-    }
+	}
 #else
 	if (!lockResize)
 		changeSize();
@@ -439,336 +362,980 @@ void Board::drawCoordinates()
 	}
 }
 
-Stone* Board::addStoneSprite(StoneColor c, int x, int y, bool &shown)
+/* Handle a click on the Done button.  Return true if we should return to normal mode.  */
+bool Board::doCountDone()
 {
-	if (x < 1 || x > board_size || y < 1 || y > board_size)
-	{
-		qWarning("Board::addStoneSprite() - Invalid stone: %d %d", x, y);
-		return NULL;
-	}
+	game_state *new_st = m_state->add_child_edit (*m_edit_board, m_edit_to_move, true);
+	m_state->transfer_observers (new_st);
 
-	int t = boardHandler->hasStone(x, y);
-	if (t == 1) {
-		// Stone exists and is visible
-		// qDebug("*** Already a stone at %d, %d.", x, y);
-		if (boardHandler->display_incoming_move)
-			return NULL;
-		else      // we are observig a game, and we are just observing a sone that is
-			// taken later. A new incoming stone is played there.
-			// Ok, this is BAD.
+	return true;
+}
+
+void Board::setMode (GameMode mode)
+{
+	game_state *new_st = m_state;
+
+	GameMode old_mode = m_game_mode;
+	m_game_mode = mode;
+
+	if (mode == modeScore || mode == modeScoreRemote || mode == modeEdit) {
+		m_edit_board = new go_board (m_state->get_board ());
+		m_edit_changed = false;
+		m_edit_to_move = m_state->to_move ();
+		if (mode == modeScore || mode == modeScoreRemote) {
+			m_edit_board->calc_scoring_markers_complex ();
+		}
+	} else if (old_mode == modeScore || old_mode == modeScoreRemote) {
+		/* The only way the scored board is added to the game tree is through
+		   doCountDone.  This may have happened at this point; in any case,
+		   discard the board now.  */
+		delete m_edit_board;
+		m_edit_board = nullptr;
+ 	} else if (mode == modeNormal && old_mode == modeEdit) {
+		m_edit_board->identify_units ();
+		/* Normally, we add an edited board as a new child.  However, when the original position
+		   was the root node, or an edit node, and has no children yet, just update it in-place.
+		   It can be debated whether this behaviour would be surprising to users, but it seems like
+		   the most useful way to handle the situation.  */
+		if (m_state->n_children () == 0
+		    && (m_state->root_node_p () || m_state->was_edit_p ()))
 		{
-			Stone *s = boardHandler->getStoneHandler()->getStoneAt(x, y);
-			CHECK_PTR(s);
-			s->setColor(c);
-			s->setPos(x, y);
-			return s;
-		}
+			m_state->replace (*m_edit_board, m_edit_to_move);
+		} else if (m_state->to_move () != m_edit_to_move || m_state->get_board () != *m_edit_board)
+			new_st = m_state->add_child_edit (*m_edit_board, m_edit_to_move);
+		delete m_edit_board;
+		m_edit_board = nullptr;
 	}
-	if (t == 0)
-	{
-		// qDebug("*** Did not find any stone at %d, %d.", x, y);
+	if (new_st != m_state)
+		m_state->transfer_observers (new_st);
 
-		Stone *s = new Stone(imageHandler->getStonePixmaps(), canvas, c, x, y,WHITE_STONES_NB,true);
+	/* Always needed when changing modes to update toolbar buttons etc.  */
+	sync_appearance (false);
+}
 
-		if (isHidingStones) { // QQQ
-			s->hide();
+bool Board::show_cursor_p ()
+{
+	if (!setting->readBoolEntry("CURSOR") || navIntersectionStatus)
+		return false;
+
+	if (m_mark_rect || m_request_mark_rect)
+		return false;
+
+	GameMode mode = m_game_mode;
+	if (m_edit_mark != mark::none)
+		return false;
+
+	if (mode == modeScore || mode == modeObserve)
+		return false;
+
+	if (!player_to_move_p ())
+		return false;
+
+	return true;
+}
+
+/* Construct ASCII diagrams suitable for use on lifein19x19.com.
+   Moves can be numbered 1-10.  When we do numbering, we split the moves up
+   into a suitable number of diagrams, inserting breaks when 10 moves are
+   exceeded or a stone is placed on an intersection which previously
+   held something else.
+
+   This should really be part of game_state, but there is the added complication
+   of the m_edit_board.  */
+
+QString Board::render_ascii (bool do_number, bool coords)
+{
+	int sz = m_game->boardsize ();
+	QString result;
+
+	int *count_map = new int[sz * sz]();
+	game_state *startpos = m_state;
+	if (do_number && m_edit_board == nullptr && !m_state->get_start_count ()) {
+		startpos = m_state;
+		while (startpos
+		       && (startpos->was_move_p () || startpos->root_node_p ())
+		       && !startpos->get_start_count ())
+		{
+			startpos = startpos->prev_move ();
 		}
-		else {
-			if (boardHandler->getGameData()->oneColorGo)
-				s->toggleOneColorGo(true);
+		if (startpos == nullptr || (!startpos->was_move_p () && !startpos->root_node_p ()))
+			startpos = m_state;
+	}
+	int moves = 1;
+	do {
+		const go_board &b = m_edit_board == nullptr ? startpos->get_board () : *m_edit_board;
+
+		int n_mv = 0;
+		game_state *next = startpos;
+		memset (count_map, 0, sz * sz * sizeof *count_map);
+		while (next != m_state && n_mv < 10) {
+			game_state *nx2 = next->next_move ();
+			int x = nx2->get_move_x ();
+			int y = nx2->get_move_y ();
+			int bp = b.bitpos (x, y);
+			if (count_map[bp] != 0 || b.stone_at (x, y) != none)
+				break;
+			next = nx2;
+			count_map[bp] = ++n_mv;
 		}
 
-		CHECK_PTR(s);
+		result += "[go]$$";
+		result += startpos->to_move () == black ? "B" : "W";
+		if (coords) {
+			result += "c" + QString::number (sz);
+		}
+		if (moves > 1) {
+			result += "m" + QString::number (moves);
+		}
+		result += "\n";
+		if (m_rect_y1 == 1) {
+			result += "$$";
+			if (m_rect_x1 == 1)
+				result += " +";
+			for (int i = 0; i < m_rect_x2 - m_rect_x1 + 1; i++)
+				result += "--";
+			if (m_rect_x2 == sz)
+				result += "-+";
+			result += "\n";
+		}
+		for (int y = m_rect_y1; y <= m_rect_y2; y++) {
+			result += "$$";
+			if (m_rect_x1 == 1)
+				result += " |";
+			for (int x = m_rect_x1; x <= m_rect_x2; x++) {
+				int bp = b.bitpos (x - 1, y - 1);
+				int v = count_map[bp];
+				if (v != 0) {
+					result += " " + QString::number (v % 10);
+				} else {
+					stone_color c = b.stone_at (x - 1, y - 1);
+					mark m = b.mark_at (x - 1, y - 1);
+					mextra me = b.mark_extra_at (x - 1, y - 1);
+					char rslt[] = " .";
+					if (c == none) {
+						if (m == mark::letter && me < 26)
+							rslt[1] = 'a' + me;
+						else switch (m) {
+						case mark::circle: rslt[1] = 'C'; break;
+						case mark::square: rslt[1] = 'S'; break;
+						case mark::triangle: rslt[1] = 'T'; break;
+						case mark::cross: rslt[1] = 'M'; break;
+						default: break;
+						}
+					} else {
+						switch (m) {
+						case mark::square: rslt[1] = c == black ? '#' : '@'; break;
+						case mark::triangle: rslt[1] = c == black ? 'Y' : 'Q'; break;
+						case mark::circle: rslt[1] = c == black ? 'B' : 'W'; break;
+						case mark::cross: rslt[1] = c == black ? 'Z' : 'P'; break;
+						default: rslt[1] = c == black ? 'X' : 'O'; break;
+						}
+					}
+					result += rslt;
+				}
+			}
+			if (m_rect_x2 == sz)
+				result += " |";
+			result += "\n";
+		}
+		if (m_rect_y2 == sz) {
+			result += "$$";
+			if (m_rect_x1 == 1)
+				result += " +";
+			for (int i = 0; i < m_rect_x2 - m_rect_x1 + 1; i++)
+				result += "--";
+			if (m_rect_x2 == sz)
+				result += "-+";
+			result += "\n";
+		}
+		result += "[/go]\n";
+		startpos = next;
+		moves += n_mv;
+	} while (startpos != m_state);
+	return result;
+}
 
-		s->setPos(offsetX + square_size * (x-1.5), offsetY + square_size * (y-1.5));
+static QString convert_letter_mark (mextra extra)
+{
+	if (extra < 27)
+		return QString ('A' + extra);
+	else
+		return QString ('a' + extra - 26);
+}
 
+/* The central function for synchronizing visual appearance with the abstract board data.  */
+void Board::sync_appearance (bool board_only)
+{
+	const go_board &b = m_edit_board == nullptr ? m_state->get_board () : *m_edit_board;
+	stone_color to_move = m_edit_board == nullptr ? m_state->to_move () : m_edit_to_move;
 
-		// Change color of a mark on this spot to white, if we have a black stone
-		if (c == stoneBlack)
-			updateMarkColor(stoneBlack, x, y);
+	const go_board &vars = m_state->sibling_moves ();
+	const bit_array st_w = b.get_stones_w ();
+	const bit_array st_b = b.get_stones_b ();
+	int sz = b.size ();
 
-		return s;
+	/* Look back through previous moves to see if we should do numbering.  */
+	int n_back = 0;
+	int *count_map = new int[sz * sz]();
+	game_state *startpos = nullptr;
+	if (m_edit_board == nullptr && !m_state->get_start_count () && m_state->was_move_p ()) {
+		startpos = m_state;
+		while (startpos
+		       && (startpos->was_move_p () || startpos->root_node_p ())
+		       && !startpos->get_start_count ())
+		{
+			if (startpos->root_node_p ()) {
+				startpos = nullptr;
+				break;
+			}
+			int x = startpos->get_move_x ();
+			int y = startpos->get_move_y ();
+			int bp = b.bitpos (x, y);
+			count_map[bp] = ++n_back;
+			startpos = startpos->prev_move ();
+		}
+		if (startpos && !startpos->was_move_p () && !startpos->root_node_p ())
+			startpos = nullptr;
 	}
-	else if (t == -1)
-	{
-		// Stone exists, but is hidden. Show it and check correct color
+	m_used_letters.clear ();
+	m_used_numbers.clear ();
 
-		Stone *s = boardHandler->getStoneHandler()->getStoneAt(x, y);
-		CHECK_PTR(s);
+	gatter->showAll ();
 
-		// qDebug("*** Found a hidden stone at %d, %d (%s).", x, y,
+	for (int x = 0; x < sz; x++)
+		for (int y = 0; y < sz; y++) {
+			int bp = b.bitpos (x, y);
+			stone_gfx *s = m_stones[bp];
+			stone_color sc = b.stone_at (x, y);
+			stone_type type = stone_type::live;
+			mark mark_at_pos = b.mark_at (x, y);
+			mextra extra = b.mark_extra_at (x, y);
 
-		// Check if the color is correct
-		if (s->getColor() != c)
-			s->setColor(c);
-		s->show();
-		shown = true;
+			/* If we don't have a real stone, check for various possibilities of
+			   ghost stones.  First, the mouse cursor, then territory marks,
+			   then variation display.  */
+			if (sc == none) {
+				if (x == curX && y == curY && show_cursor_p ()) {
+					sc = to_move;
+					/* @@@ */
+					if (m_game_mode == modeEdit)
+						sc = black;
+					type = stone_type::var;
+				}
+			} else if (mark_at_pos == mark::terr || mark_at_pos == mark::falseeye)
+				type = stone_type::var;
 
-		// Change color of a mark on this spot to white, if we have a black stone
-		if (c == stoneBlack)
-			updateMarkColor(stoneBlack, x, y);
+			if (sc == none) {
+				sc = vars.stone_at (x, y);
+				if (sc != none)
+					type = stone_type::var;
+			}
+			if (sc == none) {
+				if (s) {
+					s->hide ();
+					s = nullptr;
+				}
+			}
+			if (sc != none) {
+				if (s == nullptr)
+					s = new stone_gfx (canvas, imageHandler, sc, type, bp);
+				else
+					s->set_appearance (sc, type);
+				s->show ();
+			}
+			if (s) {
+				s->set_center(offsetX + square_size * x, offsetY + square_size * y);
+				m_stones[bp] = s;
+			}
+			mark mark_type = mark::none;
+			QColor mark_col = sc == black ? Qt::white : Qt::black;
+			mark_gfx *m = m_marks[bp];
+			mark_text *text_mark = m_text_marks[bp];
+			QString mark_str;
+			/* Used to ensure that all move numbers indicators have the same font size,
+			   appropriately sized for the longest number.  */
+			int len_override = 0;
 
-		return s;
-	}
+			/* Now look at marks.  First, an artificial (not recorded) one for the last move,
+			   or for numbering moves.  */
+			if (m_edit_board == nullptr && m_state->was_move_p ()) {
+				if (startpos) {
+					int bp = b.bitpos (x, y);
+					int v = count_map[bp];
+					if (v != 0) {
+						v = n_back - v + 1;
+						mark_type = mark::text;
+						mark_str = QString::number (v);
+						len_override = n_back > 99 ? 3 : n_back > 9 ? 2 : 1;
+					}
+				} else {
+					int last_x = m_state->get_move_x ();
+					int last_y = m_state->get_move_y ();
+					if (last_x == x && last_y == y)
+						mark_type = mark::move;
+				}
+			}
+			if (mark_type == mark::none) {
+				mark_type = mark_at_pos;
+			}
+			if (mark_type == mark::text) {
+				mark_str = QString::fromStdString (b.mark_text_at (x, y));
+			}
 
-	return NULL;  // Oops
+			/* Convert the large number of conceptual marks into a smaller set of
+			   visual ones.  */
+
+			/* @@@ Could think about making these two look different.  Using red
+			   as a color, for example, but that makes it less visible.  */
+			if (mark_type == mark::move) {
+				mark_type = mark::circle;
+			} else if (mark_type == mark::falseeye) {
+				mark_type = mark::triangle;
+				mark_col = Qt::red;
+			} else if (mark_type == mark::seki) {
+				mark_type = mark::square;
+				mark_col = Qt::blue;
+			}
+			if (mark_type == mark::num) {
+				mark_str = QString::number (extra);
+				m_used_numbers.set_bit (extra);
+				mark_type = mark::text;
+			} else if (mark_type == mark::letter) {
+				mark_str = convert_letter_mark (extra);
+				m_used_letters.set_bit (extra);
+				mark_type = mark::text;
+			}
+			if (mark_type == mark::terr) {
+				mark_type = mark::cross;
+				mark_col = b.mark_extra_at (x, y) == 0 ? Qt::white : Qt::black;
+			}
+
+			if (mark_type != mark::text && text_mark != nullptr)
+				text_mark->set_shown (false);
+
+			if (mark_type == mark::none) {
+				if (m)
+					m->set_shown (false);
+			} else {
+				if (m && m->get_type () != mark_type) {
+					delete m;
+					m = nullptr;
+				}
+
+				mark_gfx *to_show = mark_type == mark::text ? text_mark : m;
+
+				if (to_show == nullptr) {
+					switch (mark_type) {
+					case mark::circle:
+						m = to_show = new mark_circle (canvas, square_size, mark_col);
+						break;
+					case mark::triangle:
+						m = to_show = new mark_triangle (canvas, square_size, mark_col);
+						break;
+					case mark::square:
+						m = to_show = new mark_square (canvas, square_size, mark_col);
+						break;
+					case mark::plus:
+						m = to_show = new mark_cross (canvas, square_size, mark_col, true);
+						break;
+					case mark::cross:
+						m = to_show = new mark_cross (canvas, square_size, mark_col, false);
+						break;
+					case mark::text:
+						text_mark = new mark_text (canvas, square_size, mark_col, setting->fontMarks,
+									   mark_str);
+						to_show = text_mark;
+						break;
+					default:
+						break;
+					}
+				} else {
+					if (mark_type == mark::text)
+						text_mark->set_text (mark_str);
+					to_show->set_size_and_color (square_size, mark_col);
+				}
+				if (text_mark && len_override > 0)
+					text_mark->set_max_len (len_override);
+
+				if (to_show != nullptr) {
+					gatter->hide (x + 1, y + 1);
+					to_show->set_center(offsetX + square_size * x, offsetY + square_size * y);
+					to_show->set_shown (true);
+				}
+			}
+			m_marks[bp] = m;
+			m_text_marks[bp] = text_mark;
+		}
+
+	updateCanvas();
+
+	m_main_widget->recalc_scores (b, m_game_mode);
+	if (!board_only)
+		m_board_win->setMoveData (*m_state, b, m_game_mode);
+	delete[] count_map;
+}
+
+void Board::observed_changed ()
+{
+	sync_appearance (false);
 }
 
 #ifndef NO_DEBUG
 void Board::debug()
 {
     qDebug("Board::debug()");
-
-#if 1
-    Mark *m = NULL;
-    for (m=marks->first(); m != NULL; m=marks->next())
-    {
-		qDebug("posX:%d posY:%d  rtti:%d", m->posX(), m->posY(), m->type());
-    }
-#endif
-
-
-#if 1
-    boardHandler->debug();
-#endif
 }
 #endif
 
+void Board::nextMove()
+{
+	game_state *next = m_state->next_move ();
+	if (next == nullptr)
+		return;
+	move_state (next);
+}
+
+void Board::previousMove()
+{
+	game_state *next = m_state->prev_move ();
+	if (next == nullptr)
+		return;
+	move_state (next);
+}
+
+void Board::previousComment()
+{
+	game_state *st = m_state;
+
+	while (st != nullptr) {
+		st = st->prev_move ();
+		if (st != nullptr && st->comment () != "") {
+			move_state (st);
+			break;
+		}
+	}
+}
+
+void Board::nextComment()
+{
+	game_state *st = m_state;
+
+	while (st != nullptr) {
+		st = st->next_move ();
+		if (st != nullptr && st->comment () != "") {
+			move_state (st);
+			break;
+		}
+	}
+}
+
+void Board::nextVariation()
+{
+	game_state *next = m_state->next_sibling (true);
+	if (next == nullptr)
+		return;
+	if (next != m_state)
+		move_state (next);
+}
+
+void Board::previousVariation()
+{
+	game_state *next = m_state->prev_sibling (true);
+	if (next == nullptr)
+		return;
+	if (next != m_state)
+		move_state (next);
+}
+
+void Board::gotoFirstMove()
+{
+	game_state *st = m_state;
+
+	for (;;) {
+		game_state *next = st->prev_move ();
+		if (next == nullptr) {
+			if (st != m_state)
+				move_state (st);
+			break;
+		}
+		st = next;
+	}
+}
+
+void Board::gotoLastMove()
+{
+	game_state *st = m_state;
+
+	for (;;) {
+		game_state *next = st->next_move ();
+		if (next == nullptr) {
+			if (st != m_state)
+				move_state (st);
+			break;
+		}
+		st = next;
+	}
+}
+
+// this slot is used for edit window to navigate to last made move
+void Board::gotoLastMoveByTime()
+{
+#if 0
+	if (m_game_mode == modeScore)
+		return;
+
+	CHECK_PTR(tree);
+
+	tree->setToFirstMove();
+	Move *m = tree->getCurrent();
+	CHECK_PTR(m);
+
+	// Descent tree to last son of latest variation
+	while (m->son != NULL)
+	{
+		m = tree->nextMove();
+		for (int i = 0; i < tree->getNumBrothers(); i++)
+			m = tree->nextVariation();
+/*		Move *n = m;
+		while (n != NULL && (n = n->brother) != NULL)
+		{
+			m = n;
+			if (n->getTimeLeft() <= m->getTimeLeft() ||
+				n->getTimeLeft() != 0 && m->getTimeLeft() == 0)
+				m = n;
+		}*/
+	}
+
+	if (m != NULL)
+		updateMove(m);
+#endif
+}
+
+void Board::gotoNthMove(int n)
+{
+	game_state *st = m_game->get_root ();
+	while (st->move_number () < n && st->n_children () > 0) {
+		st = st->next_move (true);
+	}
+	move_state (st);
+}
+
+void Board::gotoNthMoveInVar(int n)
+{
+	game_state *st = m_state;
+
+	while (st->move_number () != n) {
+		game_state *next = st->move_number () < n ? st->next_move () : st->prev_move ();
+		/* Some added safety... this should not happen.  */
+		if (next == nullptr)
+			break;
+		st = next;
+	}
+	move_state (st);
+}
+
+void Board::gotoMainBranch()
+{
+	game_state *st = m_state;
+	game_state *go_to = st;
+	while (st != nullptr) {
+		while (st->has_prev_sibling ())
+			st = go_to = st->prev_sibling (false);
+		st = st->prev_move ();
+	}
+	if (go_to != st)
+		move_state (go_to);
+}
+
+void Board::gotoVarStart()
+{
+	game_state *st = m_state->prev_move ();
+	if (st == nullptr)
+		return;
+	/* Walk back, ending either at the root or at a node which has
+	   more than one sibling.  */
+	for (;;) {
+		if (st->n_siblings () > 0)
+			break;
+		game_state *prev = st->prev_move ();
+		if (prev == nullptr)
+			break;
+		st = prev;
+	}
+	move_state (st);
+}
+
+void Board::gotoNextBranch()
+{
+	game_state *st = m_state;
+	for (;;) {
+		if (st->n_siblings () > 0)
+			break;
+		game_state *next = st->next_move ();
+		if (next == nullptr)
+			break;
+		st = next;
+	}
+	if (st != m_state)
+		move_state (st);
+}
+
+void Board::deleteNode()
+{
+	game_state *st = m_state;
+	if (st->root_node_p ())
+		return;
+	game_state *parent = st->prev_move ();
+	st->transfer_observers (parent);
+	if (m_state != parent)
+		throw std::logic_error ("should have updated to parent");
+	delete st;
+	const go_board &b = m_state->get_board ();
+	m_board_win->setMoveData (*m_state, b, m_game_mode);
+	setModified ();
+}
+
 void Board::leaveEvent(QEvent*)
 {
-    curStone->hide();
-    canvas->update();
+	curX = curY = -1;
+	sync_appearance (true);
 }
 
 int Board::convertCoordsToPoint(int c, int o)
 {
-    int p = c - o + square_size/2;
-    if (p >= 0)
+	int p = c - o + square_size/2;
+	if (p >= 0)
 		return p / square_size + 1;
-    else
+	else
 		return -1;
+}
+
+void Board::updateCovers ()
+{
+	QRectF sceneRect = canvas->sceneRect ();
+	int top_edge = 0;
+	if (m_rect_y1 > 1)
+		top_edge = offsetY + square_size * (m_rect_y1 - 1.5);
+	int bot_edge = sceneRect.bottom();
+	if (m_rect_y2 < board_size)
+		bot_edge = offsetY + square_size * (m_rect_y2 - 0.5);
+	int left_edge = 0;
+	if (m_rect_x1 > 1)
+		left_edge = offsetX + square_size * (m_rect_x1 - 1.5);
+	int right_edge = sceneRect.right();
+	if (m_rect_x2 < board_size)
+		right_edge = offsetX + square_size * (m_rect_x2 - 0.5);
+
+	coverLeft->setVisible (m_rect_x1 > 1);
+	coverRight->setVisible (m_rect_x2 < board_size);
+	coverTop->setVisible (m_rect_y1 > 1);
+	coverBot->setVisible (m_rect_y2 < board_size);
+
+	coverTop->setRect (0, 0, sceneRect.right(), top_edge);
+	coverBot->setRect (0, bot_edge, sceneRect.right(), sceneRect.bottom () - bot_edge);
+	coverLeft->setRect (0, top_edge, left_edge, bot_edge - top_edge);
+	coverRight->setRect (right_edge, top_edge, sceneRect.right() - right_edge, bot_edge - top_edge);
+}
+
+void Board::updateRectSel (int x, int y)
+{
+	if (x < 1)
+		x = 1;
+	if (y < 1)
+		y = 1;
+	if (x > board_size)
+		x = board_size;
+	if (y > board_size)
+		y = board_size;
+	int minx = m_down_x;
+	int miny = m_down_y;
+	if (x < minx)
+		std::swap (minx, x);
+	if (y < miny)
+		std::swap (miny, y);
+	m_rect_x1 = minx;
+	m_rect_y1 = miny;
+	m_rect_x2 = x;
+	m_rect_y2 = y;
+	updateCovers ();
 }
 
 void Board::mouseMoveEvent(QMouseEvent *e)
 {
-    int x = convertCoordsToPoint(e->x(), offsetX),
-		y = convertCoordsToPoint(e->y(), offsetY);
+	int x = convertCoordsToPoint (e->x (), offsetX);
+	int y = convertCoordsToPoint (e->y (), offsetY);
 
-    // Outside the valid board?
-    if (x < 1 || x > board_size || y < 1 || y > board_size)
-    {
-		curStone->hide();
-		canvas->update();
-		curX = curY = -1;
+	if (m_mark_rect)
+		updateRectSel (x, y);
+
+	// Outside the valid board?
+	if (x < 1 || x > board_size || y < 1 || y > board_size)
+	{
+		x = -1;
+		y = -1;
+	} else {
+		x--;
+		y--;
+	}
+
+
+	if (curX == x && curY == y)
 		return;
-    }
+#if 0 /* Would be nice to make this work, but things are fast enough as-is.  */
+	int prev_x = curX;
+	int prev_y = curY;
+#endif
+	curX = x;
+	curY = y;
 
-    // Nothing changed
-    if (curX == (short)x && curY == (short)y)
-		return;
-
-    // Update the statusbar coords tip
-    emit coordsChanged(x, y, board_size,showSGFCoords);
-
-    // Remember if the cursor was hidden meanwhile.
-    // If yes, we need to repaint it at the old position.
-    bool flag = curX == -1;
-
-    curX = (short)x;
-    curY = (short)y;
-
-    if (!showCursor || //setting->readBoolEntry("CURSOR") ||
-		(boardHandler->getGameMode() == modeEdit &&
-		boardHandler->getMarkType() != markNone) ||
-		boardHandler->getGameMode() == modeScore ||
-		(curStone->posX() == x &&
-		curStone->posY() == y && !flag))
-		return;
-
-    curStone->setPos(offsetX + square_size * (x-1.5), offsetY + square_size * (y-1.5));
-
-    bool notMyTurn = 	(curStone->getColor() == stoneBlack && !myColorIsBlack ||
-			 curStone->getColor() == stoneWhite && myColorIsBlack);
-
-    if (navIntersectionStatus ||
-        boardHandler->getGameMode() == modeObserve ||
-	( boardHandler->getGameMode() == modeMatch && notMyTurn) ||
-	( boardHandler->getGameMode() == modeComputer && notMyTurn))
-
-		curStone->hide();
-    else
-		curStone->show();
-
-    canvas->update();
+	// Update the statusbar coords tip
+	emit coordsChanged (x, y, board_size, showSGFCoords);
+#if 0
+	sync_appearance (prev_x, prev_y);
+	sync_appearance (x, y);
+#else
+	sync_appearance (true);
+#endif
 }
 
-void Board::mouseWheelEvent(QWheelEvent *e)
+void Board::wheelEvent(QWheelEvent *e)
 {
-    // leave if observing or playing
-    if (//boardHandler->getGameMode() == modeObserve ||
-		boardHandler->getGameMode() == modeMatch ||
-		boardHandler->getGameMode() == modeTeach)
+	// leave if observing or playing
+	if (m_game_mode != modeObserve && m_game_mode != modeNormal)
 		return;
 
-    // Check delay
-    if (QTime::currentTime() < wheelTime)
+#if 0 /* Let's try without this, and with cumulative angles instead.  */
+	// Check delay
+	if (QTime::currentTime() < wheelTime)
 		return;
-
-    // Needs an extra check on variable mouseState as state() does not work on Windows.
-    if (e->delta() != 120) // QQQ weel down to next
-    {
-		if (e->state() == Qt::RightButton || mouseState == Qt::RightButton)
+#endif
+	// Needs an extra check on variable mouseState as state() does not work on Windows.
+	QPoint numDegrees = e->angleDelta();
+	m_cumulative_delta += numDegrees.y ();
+	if (m_cumulative_delta < -60) // wheel down to next
+	{
+		if (e->buttons () == Qt::RightButton || mouseState == Qt::RightButton)
 			nextVariation();
 		else
 			nextMove();
-    }
-    else
-    {
-		if (e->state() == Qt::RightButton || mouseState == Qt::RightButton)
+		m_cumulative_delta = 0;
+	} else if (m_cumulative_delta > 60) {
+		if (e->buttons () == Qt::RightButton || mouseState == Qt::RightButton)
 			previousVariation();
 		else
 			previousMove();
-    }
+		m_cumulative_delta = 0;
+	}
 
-    // Delay of 100 msecs to avoid too fast scrolling
-    wheelTime = QTime::currentTime();
-    wheelTime = wheelTime.addMSecs(50);
+	// Delay of 100 msecs to avoid too fast scrolling
+	wheelTime = QTime::currentTime();
+	wheelTime = wheelTime.addMSecs(50);
 
-    e->accept();
+	e->accept();
+}
+
+void Board::play_one_move (int x, int y)
+{
+	if (!player_to_move_p ())
+		return;
+
+	game_state *st = m_state;
+	stone_color col = st->to_move ();
+
+	game_state *st_new = st->add_child_move (x, y);
+	if (st_new == nullptr)
+		/* Invalid move.  */
+		return;
+	setModified();
+	st->transfer_observers (st_new);
+	m_board_win->player_move (col, x, y);
+}
+
+void Board::play_external_move (int x, int y)
+{
+	game_state *st = m_state;
+	stone_color col = st->to_move ();
+
+	setModified();
+
+	game_state *st_new = st->add_child_move (x, y);
+	st->transfer_observers (st_new);
 }
 
 void Board::mouseReleaseEvent(QMouseEvent* e)
 {
 	mouseState = Qt::NoButton;
 
-	int 	x = convertCoordsToPoint(e->x(), offsetX),
-		y = convertCoordsToPoint(e->y(), offsetY);
+	if (m_mark_rect) {
+		m_mark_rect = false;
+		m_board_win->done_rect_select (m_rect_x1, m_rect_y1, m_rect_x2, m_rect_y2);
+		return;
+	}
+	int x = convertCoordsToPoint(e->x(), offsetX);
+	int y = convertCoordsToPoint(e->y(), offsetY);
+
+	if (m_down_x == -1 || x != m_down_x || y != m_down_y)
+		return;
 
 	//qDebug("Mouse should be released after %d,%03d", wheelTime.second(),wheelTime.msec());
 	//qDebug("Mouse released at time         %d,%03d", QTime::currentTime().second(),QTime::currentTime().msec());
 
-	if ( 	(boardHandler->getGameMode()==modeMatch) &&
-    		(QTime::currentTime() > wheelTime))
-	{
+	if (m_game_mode != modeMatch || QTime::currentTime() <= wheelTime)
+		return;
 
-		if (boardHandler->getBlackTurn())
-		{
-			if (myColorIsBlack)
-			{
-				boardHandler->addStone(stoneBlack, x, y);
-				emit signal_addStone(stoneBlack, x, y);
-			}
-		}
-		else
-		{
-			if (!myColorIsBlack)
-			{
-				boardHandler->addStone(stoneWhite, x, y);
-				emit signal_addStone(stoneWhite, x, y);
-			}
+	play_one_move (x - 1, y - 1);
+}
+
+void Board::mark_dead_external (int x, int y)
+{
+	m_edit_board->toggle_alive (x, y, false);
+	/* There's evidence to suggest that the IGS algorithm at least has
+	   no fancy tricks to find false eyes and such, and we should at
+	   least try to match the final result that the server will
+	   caclulate.
+	   See also the modeScoreRemote case in the mouse event handler.  */
+	m_edit_board->calc_scoring_markers_simple ();
+	observed_changed ();
+}
+
+stone_color Board::swap_edit_to_move ()
+{
+	if (m_edit_board != nullptr)
+		return m_edit_to_move = m_edit_to_move == black ? white : black;
+	stone_color newcol = m_state->to_move () == black ? white : black;
+	m_state->set_to_move (newcol);
+	m_board_win->setMoveData (*m_state, m_state->get_board (), m_game_mode);
+	return newcol;
+}
+
+void Board::click_add_mark (QMouseEvent *e, int x, int y)
+{
+	if (e->button () != Qt::RightButton && e->button () != Qt::LeftButton)
+		return;
+
+	mark mark_to_set = m_edit_mark;
+	mextra mark_extra = 0;
+
+	if (e->button () == Qt::RightButton)
+		mark_to_set = mark::none;
+
+	if (mark_to_set == mark::letter && e->modifiers () == Qt::ShiftModifier) {
+		TextEditDialog dlg (m_board_win);
+		dlg.textLineEdit->setFocus();
+		const go_board &b = m_edit_board ? *m_edit_board : m_state->get_board ();
+
+		if (b.mark_at (x, y) == mark::text)
+			dlg.textLineEdit->setText (QString::fromStdString (b.mark_text_at (x, y)));
+
+		if (dlg.exec() == QDialog::Accepted) {
+			/* This is all a bit clunky; it's the price to pay for having game_state's get_board
+			   return a const go_board.  */
+			if (m_edit_board)
+				m_edit_board->set_text_mark (x, y, dlg.textLineEdit->text().toStdString ());
+			else
+				m_state->set_text_mark (x, y, dlg.textLineEdit->text().toStdString ());
+			setModified ();
+			sync_appearance (true);
 		}
 
+		return;
+	}
+	if (mark_to_set  == mark::num) {
+		int i;
+		for (i = 0; i < 256; i++)
+			if (!m_used_numbers.test_bit (i))
+				break;
+		if (i == 256)
+			return;
+		mark_extra = i;
+	} else if (m_edit_mark == mark::letter) {
+		int i;
+		for (i = 0; i < 52; i++)
+			if (!m_used_letters.test_bit (i))
+				break;
+		if (i == 52)
+			return;
+		mark_extra = i;
 	}
 
-
-
+	bool changed;
+	if (m_edit_board)
+		changed = m_edit_board->set_mark (x, y, mark_to_set, mark_extra);
+	else
+		changed = m_state->set_mark (x, y, mark_to_set, mark_extra);
+	if (changed) {
+		setModified ();
+		sync_appearance (true);
+	}
 }
 
 void Board::mousePressEvent(QMouseEvent *e)
 {
-    mouseState = e->button();
+	mouseState = e->button();
 
-    int x = convertCoordsToPoint(e->x(), offsetX),
-		y = convertCoordsToPoint(e->y(), offsetY);
+	int x = convertCoordsToPoint (e->x(), offsetX);
+	int y = convertCoordsToPoint (e->y(), offsetY);
 
-    // Button gesture outside the board?
-    if (x < 1 || x > board_size || y < 1 || y > board_size)
-    {
-		if (e->button() == Qt::LeftButton &&
-			e->state() == Qt::RightButton)
-			previousMove();
-		else if (e->button() == Qt::RightButton &&
-			e->state() == Qt::LeftButton)
-			nextMove();
-		else if (e->button() == Qt::LeftButton &&
-			e->state() == Qt::MidButton)
-			gotoVarStart();
-		else if (e->button() == Qt::RightButton &&
-			e->state() == Qt::MidButton)
-			gotoNextBranch();
-
+	if (m_request_mark_rect && e->button () == Qt::LeftButton) {
+		m_mark_rect = true;
+		m_request_mark_rect = false;
+		if (x < 1)
+			x = 1;
+		if (y < 1)
+			y = 1;
+		if (x > board_size)
+			x = board_size;
+		if (y > board_size)
+			y = board_size;
+		m_down_x = x;
+		m_down_y = y;
+		updateRectSel (x, y);
 		return;
-    }
+	}
 
-    // Lock accidental gesture over board
-    if ((e->button() == Qt::LeftButton && e->state() == Qt::RightButton) ||
-		(e->button() == Qt::RightButton && e->state() == Qt::LeftButton) ||
-		(e->button() == Qt::LeftButton && e->state() == Qt::MidButton) ||
-		(e->button() == Qt::RightButton && e->state() == Qt::MidButton))
+	m_down_x = m_down_y = -1;
+
+	if (x < 1 || x > board_size || y < 1 || y > board_size)
 		return;
 
+	m_down_x = x;
+	m_down_y = y;
 
-    // Ok, we are inside the board, and it was no gesture.
+	stone_color existing_stone;
 
-    // We just handle the case of getting where the mouse was clicked
-    if (navIntersectionStatus) // added eb 11
-    {
-        navIntersectionStatus = false;
+	if (e->modifiers () == Qt::ControlModifier
+	    && (m_game_mode == modeNormal || m_game_mode == modeObserve))
+	{
+		// Find move in main branch
+#if 0
+		if (e->button () == Qt::LeftButton) {
+			navIntersectionStatus = false;
+			boardHandler->findMoveByPos(x, y);
+		} else if (e->button () == Qt::RightButton) {
+			boardHandler->findMoveByPosInVar(x, y);
+		}
+#endif
+		return;
+	}
+	mark mark_to_set = m_edit_mark;
 
-//   *** Several unsuccessfull tries with clean method ***
-//      unsetCursor();
-//      setCursor(ArrowCursor);
-//      this->topLevelWidget()->setCursor(ArrowCursor);
-//   *** Therefore we apply thick method :
+	// resume normal proceeding
+	switch (m_game_mode)
+	{
+	case modeNormal:
+		if (mark_to_set != mark::none)
+		{
+			click_add_mark (e, x - 1, y - 1);
+			break;
+		}
 
-        QApplication::restoreOverrideCursor();
-        boardHandler->findMoveByPos(x, y);                                 //SL added eb 11
-	return;
-	}                         // end add eb 11
-
-
-    // resume normal proceeding
-    switch (boardHandler->getGameMode())
-    {
-    case modeNormal:
+		/* fall through */
+	case modeTeach: /* @@@ teaching mode is untested; best guess.  */
+	case modeComputer:
 		switch (e->button())
 		{
 		case Qt::LeftButton:
-			if (e->state() == Qt::ShiftModifier)   // Shift: Find move in main branch
-			{
-				navIntersectionStatus = false;
-				boardHandler->findMoveByPos(x, y);                                 //SL added eb 11
-				return;
-			}
-			else if (e->state() == Qt::ControlModifier)  // Control: Find move in all following variations
-			{
-				if (boardHandler->findMoveInVar(x, y))  // Results found?
-				{
-					// Init dialog if not yet done
-					if (nodeResultsDlg == NULL)
-					{
-						nodeResultsDlg = new NodeResults(this, "noderesult", Qt::WType_TopLevel);
-						connect(nodeResultsDlg, SIGNAL(doFump(Move*)), this, SLOT(gotoMove(Move*)));
-					}
-					nodeResultsDlg->setNodes(boardHandler->nodeResults);
-					nodeResultsDlg->show();
-					nodeResultsDlg->raise();
-				}
-				return;
-			}
-			if (boardHandler->getBlackTurn())
-				boardHandler->addStone(stoneBlack, x, y);
-			else
-				boardHandler->addStone(stoneWhite, x, y);
-
-			break;
-
-		case Qt::RightButton:
-			if (e->state() == Qt::ShiftModifier)  // Shift: Find move in this branch
-			{
-				boardHandler->findMoveByPosInVar(x, y);
-				return;
-			}
+			play_one_move (x - 1, y - 1);
 			break;
 
 		default:
@@ -777,62 +1344,60 @@ void Board::mousePressEvent(QMouseEvent *e)
 		break;
 
 	case modeEdit:
+		if (mark_to_set != mark::none)
+		{
+			click_add_mark (e, x - 1, y - 1);
+			break;
+		}
+
+		existing_stone = m_edit_board->stone_at (x - 1, y - 1);
 		switch (e->button())
 		{
 		case Qt::LeftButton:
-			if (boardHandler->getMarkType() == markNone)
-				boardHandler->addStone(stoneBlack, x, y);
+			if (existing_stone == black)
+				m_edit_board->set_stone (x - 1, y - 1, none);
 			else
-			{
-				// Shift-click setting a text mark
-				if (boardHandler->getMarkType() == markText &&
-					e->state() == Qt::ShiftModifier)
-				{
-					// Dont open dialog if a text mark already exists
-					Mark *m;
-					QString oldTxt = NULL;
-					// If its a text mark, get the old text and put it in the dialog
-					if ((m = hasMark(x, y)) != NULL &&
-						m->getType() == markText)
-						oldTxt = boardHandler->getTree()->getCurrent()->getMatrix()->getMarkText(x, y);
-					// Get the label string from the dialog. Moved to inferface handler
-					// to keep the dialog stuff out of this class.
-					QString txt = getInterfaceHandler()->getTextLabelInput(this, oldTxt);
-					if (txt.isNull() || txt.isEmpty())  // Aborted dialog
-						break;
-					setMark(x, y, markText, true, txt);
-				}
-				else
-					setMark(x, y, boardHandler->getMarkType());
-				canvas->update();
-			}
+				m_edit_board->set_stone (x - 1, y - 1, black);
+			setModified();
+			sync_appearance (true);
 			break;
 		case Qt::RightButton:
-			if (boardHandler->getMarkType() == markNone)
-				boardHandler->addStone(stoneWhite, x, y);
+			if (existing_stone == white)
+				m_edit_board->set_stone (x - 1, y - 1, none);
 			else
-			{
-				removeMark(x, y);
-				canvas->update();
-			}
+				m_edit_board->set_stone (x - 1, y - 1, white);
+			setModified ();
+			sync_appearance (true);
 			break;
+
 		default:
 			break;
 		}
 		break;
 
+	case modeScoreRemote:
+		if (e->button () == Qt::LeftButton) {
+			m_board_win->player_toggle_dead (x - 1, y - 1);
+#if 0 /* We get our own toggle back from the server, at least in tests with NNGS.  */
+			m_edit_board->toggle_alive (x - 1, y - 1);
+			/* See comment in mark_dead_external.  */
+			m_edit_board->calc_scoring_markers_simple ();
+			observed_changed ();
+#endif
+		}
+		break;
 	case modeScore:
 		switch (e->button())
 		{
 		case Qt::LeftButton:
-			if (get_isLocalGame())
-				boardHandler->markDeadStone(x, y);  // Mark or unmark as dead
-			emit signal_addStone(stoneBlack, x, y); // the client accepts a coordinate in scoring mode
+			m_edit_board->toggle_alive (x - 1, y - 1);
+			m_edit_board->calc_scoring_markers_complex ();
+			observed_changed ();
 			break;
 		case Qt::RightButton:
-			if (get_isLocalGame())
-				boardHandler->markSeki(x, y);  // Mark group as alive in seki
-			emit signal_addStone(stoneBlack, x, y); // the client accepts a coordinate in scoring mode
+			m_edit_board->toggle_seki (x - 1, y - 1);
+			m_edit_board->calc_scoring_markers_complex ();
+			observed_changed ();
 			break;
 		default:
 			break;
@@ -849,37 +1414,6 @@ void Board::mousePressEvent(QMouseEvent *e)
     		//qDebug("Mouse pressed at time %d,%03d", wheelTime.second(),wheelTime.msec());
 		if (antiClicko)
 			wheelTime = wheelTime.addMSecs(250);
-
-
-		/*if (boardHandler->getBlackTurn())
-		{
-			if (myColorIsBlack)
-			{
-				boardHandler->addStone(stoneBlack, x, y);
-				emit signal_addStone(stoneBlack, x, y);
-			}
-		}
-		else
-		{
-			if (!myColorIsBlack)
-			{
-				boardHandler->addStone(stoneWhite, x, y);
-				emit signal_addStone(stoneWhite, x, y);
-			}
-		}*/
-		break;
-
-	case modeTeach:
-		if (boardHandler->getBlackTurn())
-		{
-			boardHandler->addStone(stoneBlack, x, y);
-			emit signal_addStone(stoneBlack, x, y);
-		}
-		else
-		{
-			boardHandler->addStone(stoneWhite, x, y);
-			emit signal_addStone(stoneWhite, x, y);
-		}
 		break;
 
 	default:
@@ -895,444 +1429,94 @@ void Board::changeSize()
     resizeBoard(width(), height());
 }
 
-void Board::hideAllStones()
+void Board::clear_stones ()
 {
-	QList<QGraphicsItem *> list = canvas->items();
-	QGraphicsItem *item;
-
-	QListIterator<QGraphicsItem *> it( list );
-
-
-	for (; it.hasNext();)
-	{
-		item = it.next();
-		if (item->type() == RTTI_STONE)
-			item->hide();
+	size_t sz = m_stones.size ();
+	for (size_t i = 0; i < sz; i++) {
+		stone_gfx *s = m_stones[i];
+		delete s;
+		m_stones[i] = nullptr;
+		mark_gfx *m = m_marks[i];
+		delete m;
+		m_marks[i] = nullptr;
+		mark_text *mt = m_text_marks[i];
+		delete mt;
+		m_text_marks[i] = nullptr;
 	}
 }
 
-void Board::showAllStones()
+void Board::clear_selection ()
 {
-#if 0 // Later.
-    Q3IntDict<Stone>* stones = boardHandler->getStoneHandler()->getAllStones();
-    if (stones.isEmpty())
-        return;
-
-    Q3IntDictIterator<Stone> it(*stones);
-    Stone *s;
-    while (s = it.current()) {
-        if (isHidingStones)
-		s->hide();
-        else
-		s->show();
-        ++it;
-    }
-#endif
+	m_request_mark_rect = false;
+	m_rect_x1 = m_rect_y1 = 1;
+	m_rect_x2 = m_rect_y2 = m_game->boardsize ();
+	updateCovers ();
 }
 
-void Board::hideAllMarks()
+void Board::reset_game (std::shared_ptr<game_record> gr)
 {
-    MarkText::maxLength = 1;
-    marks->clear();
+	stop_observing ();
 
-    gatter->showAll();
+	game_state *root = gr->get_root ();
 
-    for (int i=0; i<400; i++)
-    {
-		if (i < 52)
-			letterPool[i] = false;
-		numberPool[i] = false;
-    }
-}
+	const go_board &b = root->get_board ();
+	int sz = b.size ();
+	board_size = sz;
 
-bool Board::openSGF(const QString &fileName)
-{
+	clear_stones ();
+	m_stones.resize (sz * sz);
+	m_marks.resize (sz * sz);
+	m_text_marks.resize (sz * sz);
+	for (int i = 0; i < sz * sz; i++)
+		m_stones[i] = nullptr, m_marks[i] = nullptr, m_text_marks[i] = nullptr;
 
-    // Load the sgf
-    if (!boardHandler->loadSGF(fileName))
-		return false;
+	m_game = gr;
 
-    canvas->update();
-    setModified(false);
-    return true;
+	clear_selection ();
+
+	delete gatter;
+	gatter = new Gatter(canvas, board_size);
+	clearCoords ();
+	setupCoords ();
+
+	calculateSize ();
+
+	// Rescale the pixmaps in the ImageHandler
+	imageHandler->rescale(square_size);
+
+	// Redraw the board
+	drawBackground();
+	drawGatter();
+	drawCoordinates();
+
+	start_observing (root);
+
+	canvas->update();
+	setModified(false);
 }
 
 void Board::clearData()
 {
-    hideAllStones();
-    hideAllMarks();
-    ghosts->clear();
-    removeLastMoveMark();
-    boardHandler->clearData();
-    if (curStone != NULL)
-		curStone->setColor(stoneBlack);
-    canvas->update();
-    isModified = false;
-    if (nodeResultsDlg != NULL)
-    {
-		nodeResultsDlg->hide();
-		delete nodeResultsDlg;
-		nodeResultsDlg = NULL;
-    }
+	clear_stones ();
+	canvas->update();
+	isModified = false;
 	clearCoords();
 }
 
-void Board::updateComment()
+void Board::update_comment(const QString &qs, bool append)
 {
-    boardHandler->updateComment();
-}
-
-void Board::updateComment2()
-{
-	// emit signal to opponent in online game
-	sendcomment(getInterfaceHandler()->getComment2());
-}
-
-void Board::modifiedComment()
-{
-    setModified();
-}
-
-void Board::setMark(int x, int y, MarkType t, bool update, QString txt, bool overlay)
-{
-    if (x == -1 || y == -1)
-		return;
-
-    Mark *m;
-
-    // We already have a mark on this spot? If it is of the same type,
-    // do nothing, else overwrite with the new mark.
-    if ((m = hasMark(x, y)) != NULL)
-    {
-		if (m->getType() == t && m->getType() != markText)  // Text labels are overwritten
-			return;
-
-		removeMark(x, y, update);
-    }
-
-    if (lastMoveMark != NULL &&
-		lastMoveMark->posX() == x &&
-		lastMoveMark->posY() == y)
-		removeLastMoveMark();
-
-    QColor col = Qt::black;
-
-    // Black stone or black ghost underlying? Then we need a white mark.
-    if ((boardHandler->hasStone(x, y) == 1 &&
-		boardHandler->getStoneHandler()->getStoneAt(x, y)->getColor() == stoneBlack) ||
-		(setting->readIntEntry("VAR_GHOSTS") && hasVarGhost(stoneBlack, x, y)))
-		col = Qt::white;
-
-    short n = -1;
-
-    switch(t)
-    {
-    case markSquare:
-		m = new MarkSquare(x, y, square_size, canvas, col);
-		break;
-
-    case markCircle:
-		m = new MarkCircle(x, y, square_size, canvas, col, true);//setting->readBoolEntry("SMALL_STONES"));
-        break;
-
-    case markTriangle:
-		m = new MarkTriangle(x, y, square_size, canvas, col);
-		break;
-
-    case markCross:
-		m = new MarkCross(x, y, square_size, canvas, col);
-		break;
-
-    case markText:
-		if (txt.isNull())
-		{
-			n = 0;
-			while (letterPool[n] && n < 51)
-				n++;
-			letterPool[n] = true;
-
-			txt = QString(QChar(static_cast<const char>('A' + (n>=26 ? n+6 : n))));
-
-			// Update matrix with this letter
-			boardHandler->getTree()->getCurrent()->getMatrix()->setMarkText(x, y, txt);
-		}
-		else if (txt.length() == 1)
-		{
-			// Text was given as argument, check if it can converted to a single letter
-			n = -1;
-			if (txt[0] >= 'A' && txt[0] <= 'Z')
-				n = txt[0].latin1() - 'A';
-			else if (txt[0] >= 'a' && txt[0] <= 'a')
-				n = txt[0].latin1() - 'a' + 26;
-
-			if (n > -1)
-				letterPool[n] = true;
-		}
-		m = new MarkText(x, y, square_size, txt, canvas, col, n, false, overlay);
-		gatter->hide(x,y);//setMarkText(x, y, txt);
-		break;
-
-    case markNumber:
-		if (txt.isNull())
-		{
-			n = 0;
-			while (numberPool[n] && n < 399)
-				n++;
-
-			txt = QString::number(n+1);
-
-			// Update matrix with this letter
-			boardHandler->getTree()->getCurrent()->getMatrix()->setMarkText(x, y, txt);
-		}
-		else
-			n = txt.toInt() - 1;
-		numberPool[n] = true;
-		m = new MarkNumber(x, y, square_size, n, canvas, col, false);
-		setMarkText(x, y, txt);
-		gatter->hide(x,y);
-		break;
-
-    case markTerrBlack:
-		m = new MarkTerr(x, y, square_size, stoneBlack, canvas);
-		if (boardHandler->hasStone(x, y) == 1)
-		{
-			Stone *s = boardHandler->getStoneHandler()->getStoneAt(x, y);
-			s->setDead(true);
-			s->togglePixmap(boardHandler->board->getImageHandler()->getGhostPixmaps(),
-					false);
-			boardHandler->markedDead = true;
-		}
-		boardHandler->getTree()->getCurrent()->setScored(true);
-		break;
-
-    case markTerrWhite:
-		m = new MarkTerr(x, y, square_size, stoneWhite, canvas);
-		if (boardHandler->hasStone(x, y) == 1)
-		{
-			Stone *s = boardHandler->getStoneHandler()->getStoneAt(x, y);
-			s->setDead(true);
-			s->togglePixmap(boardHandler->board->getImageHandler()->getGhostPixmaps(),
-					false);
-			boardHandler->markedDead = true;
-		}
-		boardHandler->getTree()->getCurrent()->setScored(true);
-		break;
-
-    default:
-		qWarning("   *** Board::setMark() - Bad mark type! ***");
-		return;
-    }
-
-    CHECK_PTR(m);
-    m->setPos(offsetX + square_size * (x-1) - m->getSizeX()/2, offsetY + square_size * (y-1) - m->getSizeY()/2);
-    m->show();
-
-    marks->append(m);
-
-    if (update)
-		boardHandler->editMark(x, y, t, txt);
-}
-
-void Board::removeMark(int x, int y, bool update)
-{
-    Mark *m = NULL;
-
-    if (lastMoveMark != NULL &&
-		lastMoveMark->posX() == x &&
-		lastMoveMark->posY() == y)
-		removeLastMoveMark();
-
-    for (m=marks->first(); m != NULL; m=marks->next())
-    {
-		if (m->posX() == x && m->posY() == y)
-		{
-			if (m->getCounter() != -1)
-			{
-				if (m->getType() == markText)
-					letterPool[m->getCounter()] = false;
-				else if (m->getType() == markNumber)
-					numberPool[m->getCounter()] = false;
-			}
-
-			marks->remove(m);
-			gatter->show(x,y);
-			if (update)
-				boardHandler->editMark(x, y, markNone);
-			return;
-		}
-    }
-}
-
-void Board::setMarkText(int x, int y, const QString &txt)
-{
-    Mark *m;
-
-    // Oops, no mark here, or no text mark
-    if (txt.isNull() || txt.isEmpty() ||
-		(m = hasMark(x, y)) == NULL || m->getType() != markText)
-		return;
-
-    m->setText(txt);
-    // Adjust the position on the board, if the text size has changed.
-    m->setSize((double)square_size, (double)square_size);
-    m->setPos(offsetX + square_size * (x-1) - m->getSizeX()/2, offsetY + square_size * (y-1) - m->getSizeY()/2);
-
-}
-
-Mark* Board::hasMark(int x, int y)
-{
-    Mark *m = NULL;
-
-    for (m=marks->first(); m != NULL; m=marks->next())
-		if (m->posX() == x && m->posY() == y)
-			return m;
-
-		return NULL;
-}
-
-void Board::updateLastMove(StoneColor c, int x, int y)
-{
-	delete lastMoveMark;
-	lastMoveMark = NULL;
-
-	if (x == 20 && y == 20)  // Passing
-		removeLastMoveMark();
-	else if (c != stoneNone && x != -1 && y != -1 && x <= board_size && y <= board_size)
-	{
-		if (isHidingStones)
-			lastMoveMark = new MarkRedCircle(x, y, square_size, canvas); // QQQ
-		else
-			lastMoveMark = new MarkCross(x, y, square_size, canvas,
-				c == stoneBlack ? Qt::white : Qt::black, true);
-
-
-		ASSERT(lastMoveMark);
-
-		lastMoveMark->setPos(offsetX + square_size * (x-1) - lastMoveMark->getSizeX()/2,
-				     offsetY + square_size * (y-1) - lastMoveMark->getSizeY()/2);
-		lastMoveMark->show();
-	}
-
-	setCurStoneColor();
-}
-
-void Board::setCurStoneColor()
-{
-	// Switch the color of the ghost stone cursor
-	if (curStone != NULL)
-		curStone->setColor(boardHandler->getBlackTurn() ? stoneBlack : stoneWhite);
-}
-
-void Board::removeLastMoveMark()
-{
-    if (lastMoveMark != NULL)
-    {
-		lastMoveMark->hide();
-		delete lastMoveMark;
-		lastMoveMark = NULL;
-    }
-}
-
-void Board::checkLastMoveMark(int x, int y)
-{
-    Mark *m = NULL;
-
-    for (m=marks->first(); m != NULL; m=marks->next())
-    {
-		if (m->posX() == x && m->posY() == y &&
-			m->type() != RTTI_MARK_TERR &&
-			m->getColor() == Qt::white)
-		{
-			m->setColor(Qt::black);
-			break;
-		}
-    }
-
-    if (lastMoveMark == NULL ||
-		lastMoveMark->posX() != x ||
-		lastMoveMark->posY() != y)
-		return;
-
-    removeLastMoveMark();
-}
-
-void Board::updateMarkColor(StoneColor c, int x, int y)
-{
-    Mark *m = NULL;
-
-    for (m=marks->first(); m != NULL; m=marks->next())
-    {
-		if (m->posX() == x && m->posY() == y && m->type() != RTTI_MARK_TERR)
-		{
-			m->setColor(c == stoneBlack ? Qt::white : Qt::black);
-			break;
-		}
-    }
-}
-
-void Board::setVarGhost(StoneColor c, int x, int y)
-{
-	Stone *s = NULL;
-
-	if (setting->readIntEntry("VAR_GHOSTS") == vardisplayGhost)
-		s = new Stone(imageHandler->getGhostPixmaps(), canvas, c, x, y);
-	else if (setting->readIntEntry("VAR_GHOSTS") == vardisplaySmallStone)
-		s = new Stone(imageHandler->getAlternateGhostPixmaps(), canvas, c, x, y, 1);
-	else
-		return;
-
-	ghosts->append(s);
-
-	if (x == 20 && y == 20)  // Pass
-	{
-		s->setPos(offsetX + square_size * (board_size+1),
-			  offsetY + square_size * board_size);
-		setMark(board_size+2, board_size+1, markText, false, tr("Pass"), false);
-	}
-	else
-	{
-		s->setPos(offsetX + square_size * (x-1) - s->boundingRect().width()/2,
-			  offsetY + square_size * (y-1) - s->boundingRect().height()/2);
-	}
-}
-
-bool Board::hasVarGhost(StoneColor c, int x, int y)
-{
-	Stone *s;
-	for (s=ghosts->first(); s != NULL; s=ghosts->next())
-		if (s->posX() == x && s->posY() == y &&
-			s->getColor() == c)
-			return true;
-		return false;
-}
-
-void Board::setVariationDisplay(VariationDisplay d)
-{
-	if (d == vardisplayNone)
-	{
-		ghosts->clear();
-		canvas->update();
-	}
-}
-
-void Board::setShowCursor(bool b)
-{
-    if (!b && curStone != NULL)
-		curStone->hide();
-}
-
-void Board::removeGhosts()
-{
-	// Remove all variation ghosts
-	if (!ghosts->isEmpty())
-		ghosts->clear();
+	std::string s = qs.toStdString ();
+	if (append)
+		s = m_state->comment () + s;
+	m_state->set_comment (s);
+	setModified (true);
 }
 
 void Board::setShowCoords(bool b)
 {
-    bool old = showCoords;
-    showCoords = b;
-    if (old != showCoords)
+	bool old = showCoords;
+	showCoords = b;
+	if (old != showCoords)
 		changeSize();  // Redraw the board if the value changed.
 }
 
@@ -1344,188 +1528,58 @@ void Board::setShowSGFCoords(bool b)
 		changeSize();  // Redraw the board if the value changed.
 }
 
-void Board::initGame(GameData *d, bool sgf)
-{
-	CHECK_PTR(d);
-
-	int oldsize = board_size;
-	board_size = d->size;
-
-	// Clear up everything
-	clearData();
-
-	// and setup back
-	delete gatter;
-	gatter = new Gatter(canvas, board_size);
-	setupCoords();
-	changeSize();
-
-	boardHandler->initGame(d, sgf);
-	updateCaption();
-}
-
 void Board::setModified(bool m)
 {
-    if (m == isModified || boardHandler->getGameMode() == modeObserve)
+	if (m == isModified || m_game_mode == modeObserve)
 		return;
 
-    isModified = m;
-    updateCaption();
+	isModified = m;
+	m_board_win->updateCaption (isModified);
 }
 
-void Board::updateCaption()
+QPixmap Board::grabPicture()
 {
-    // Print caption
-    // example: qGo 0.0.5 - Zotan 8k vs. tgmouse 10k
-    // or if game name is given: qGo 0.0.5 - Kogo's Joseki Dictionary
-    topLevelWidget()->setCaption(QString(isModified ? "* " : "") +
-		(boardHandler->getGameData()->gameNumber != 0 ?
-		"(" + QString::number(boardHandler->getGameData()->gameNumber) + ") " : QString()) +
-		(boardHandler->getGameData()->gameName.isEmpty() ?
-		boardHandler->getGameData()->playerWhite +
-		(!boardHandler->getGameData()->rankWhite.isEmpty() ?
-		" " + boardHandler->getGameData()->rankWhite : QString())
-		+ " " + tr("vs.") + " "+
-		boardHandler->getGameData()->playerBlack +
-		(!boardHandler->getGameData()->rankBlack.isEmpty() ?
-		" " + boardHandler->getGameData()->rankBlack : QString()) :
-		boardHandler->getGameData()->gameName) +
-		"   " + QString(PACKAGE " " VERSION));
-
-	if (getInterfaceHandler())
-	{
-		bool simple = boardHandler->getGameData()->rankWhite.length() == 0 && boardHandler->getGameData()->rankBlack.length() == 0;
-		Q3GroupBox *gb = getInterfaceHandler()->normalTools->whiteFrame;
-		QString player = boardHandler->getGameData()->playerWhite;
-		if (simple && player == tr("White"))
-			gb->setTitle(tr("White"));
-		else
-		{
-			// truncate to 12 characters max
-			player.truncate(12);
-
-			if (boardHandler->getGameData()->rankWhite.length() != 0)
-				player = tr("W") + ": " + player + " " + boardHandler->getGameData()->rankWhite;
-			else
-				player = tr("W") + ": " + player;
-
-			gb->setTitle(player);
-		}
-
-		gb = getInterfaceHandler()->normalTools->blackFrame;
-		player = boardHandler->getGameData()->playerBlack;
-		if (simple && player == tr("Black"))
-			gb->setTitle(tr("Black"));
-		else
-		{
-			// truncate to 12 characters max
-			player.truncate(12);
-
-			if (boardHandler->getGameData()->rankBlack.length() != 0)
-				player = tr("B") + ": " + player + " " + boardHandler->getGameData()->rankBlack;
-			else
-				player = tr("B") + ": " + player;
-
-			gb->setTitle(player);
-		}
-	}
-}
-
-QPixmap Board::grabPicture ()
-{
+	int sz = m_game->boardsize ();
 	int minx = offsetX - offset + 2;
 	int miny = offsetY - offset + 2;
 	int maxx = minx + board_pixel_size + offset*2 - 4;
 	int maxy = miny + board_pixel_size + offset*2 - 4;
-	return QPixmap::grabWidget (this, QRect (minx, miny, maxx - minx, maxy - miny));
-}
-
-void Board::doCountDone()
-{
-    float komi = getGameData()->komi;
-    int capW = getInterfaceHandler()->scoreTools->capturesWhite->text().toInt(),
-		capB = getInterfaceHandler()->scoreTools->capturesBlack->text().toInt(),
-		terrW = getInterfaceHandler()->scoreTools->terrWhite->text().toInt(),
-		terrB = getInterfaceHandler()->scoreTools->terrBlack->text().toInt();
-
-    float totalWhite = capW + terrW + komi;
-    int totalBlack = capB + terrB;
-    float result = 0;
-    QString rs;
-
-    QString s;
-    s.sprintf(tr("White") + "\n%d + %d + %.1f = %.1f\n\n" + tr("Black") + "\n%d + %d = %d\n\n",
-		terrW, capW, komi, totalWhite,
-		terrB, capB, totalBlack);
-
-    if (totalBlack > totalWhite)
-    {
-		result = totalBlack - totalWhite;
-		s.append(tr("Black wins with %1").arg(result));
-		rs = "B+" + QString::number(result);
-    }
-    else if (totalWhite > totalBlack)
-    {
-		result = totalWhite - totalBlack;
-		s.append(tr("White wins with %1").arg(result));
-		rs = "W+" + QString::number(result);
-    }
-    else
-    {
-		rs = tr("Jigo");
-		s.append(rs);
-    }
-
-    //if (QMessageBox::information(this, PACKAGE " - " + tr("Game Over"), s, tr("Ok"), tr("Update gameinfo")) == 1)
-		boardHandler->getGameData()->result = rs;
-
-    boardHandler->getTree()->getCurrent()->setTerritoryMarked(false);
-    boardHandler->getTree()->getCurrent()->setScore(totalBlack, totalWhite);
-
-    emit signal_done();
-}
-
-int Board::getCurrentMoveNumber() const
-{
-    return boardHandler->getTree()->getCurrent()->getMoveNumber();
-}
-
-InterfaceHandler* Board::getInterfaceHandler()
-{
-    return ((MainWindow*)topLevelWidget())->getInterfaceHandler();
+	if (m_rect_x1 > 1)
+		minx = coverLeft->rect ().right ();
+	if (m_rect_x2 < sz)
+		maxx = coverRight->rect ().left ();
+	if (m_rect_y1 > 1)
+		miny = coverTop->rect ().bottom ();
+	if (m_rect_y2 < sz)
+		maxy = coverBot->rect ().top ();
+	return grab (QRect (minx, miny, maxx - minx, maxy - miny));
 }
 
 // button "Pass" clicked
 void Board::doPass()
 {
-	// wait for server message if online
-	if (isLocalGame)
-		// pass move is ok
-		boardHandler->doPass();
-
-  // emit in every case
-	emit signal_pass();
-
+	if (!player_to_move_p ())
+		return;
+	if (m_game_mode == modeNormal || m_game_mode == modeComputer) {
+		game_state *st = m_state->add_child_pass ();
+		m_state->transfer_observers (st);
+	}
 }
 
-void Board::doResign()
+void Board::play_external_pass ()
 {
-	emit signal_resign();
+	game_state *st = m_state->add_child_pass ();
+	m_state->transfer_observers (st);
 }
 
 void Board::set_isLocalGame(bool isLocal)
 {
 	isLocalGame = isLocal;
-	getInterfaceHandler()->commentEdit2->setDisabled(isLocalGame);
-	if (isLocalGame)
-		((MainWindow*)topLevelWidget())->getListView_observers()->hide();
-	else
-		((MainWindow*)topLevelWidget())->getListView_observers()->show();
 }
 
 void Board::navIntersection()
 {
-
+#if 0
  /***** several unsuccessful tries with clean method
  //   unsetCursor();
  //   this->topLevelWidget()->unsetCursor();
@@ -1553,28 +1607,5 @@ void Board::navIntersection()
     QApplication::setOverrideCursor( QCursor(Qt::pointingHandCursor) );
 
     navIntersectionStatus = true;
-
+#endif
 }
-
- /**
-  * Generate a candidate for the filename for this game
-  **/
-QString Board::getCandidateFileName()
-{
-	GameData data = getGameData();
-	QString base = QDate::currentDate().toString("yyyy-MM-dd") + "-" + data.playerWhite + "-" + data.playerBlack    ;
-	QString result = base ;
-	QString dir= "" ;
-
-	if (setting->readBoolEntry("REM_DIR"))
-			dir = setting->readEntry("LAST_DIR");
-	int i = 1;
-	while (QFile(dir + result+".sgf").exists())
-	{
-		//number = Q.number(i++);
-		result = base + "-"+ QString::number(i++);
-		//fileName = fileName + ".sgf";
-	}
-	return dir + result + ".sgf";
-}
-

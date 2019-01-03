@@ -1,16 +1,23 @@
 <RCC>
   <qresource prefix="/MainWidgetGui">
-    <file>images/mainwidget/image0.png</file>
-    <file>images/mainwidget/image1.png</file>
-    <file>images/mainwidget/image2.png</file>
-    <file>images/mainwidget/image3.png</file>
-    <file>images/mainwidget/image4.png</file>
-    <file>images/mainwidget/image5.png</file>
-    <file>images/mainwidget/image6.png</file>
     <file>images/mainwidget/1leftarrow.png</file>
     <file>images/mainwidget/1rightarrow.png</file>
     <file>images/mainwidget/2leftarrow.png</file>
     <file>images/mainwidget/2rightarrow.png</file>
+    <file>images/mainwidget/warning.png</file>
+  </qresource>
+  <qresource prefix="/BoardWindow">
+    <file>images/boardwindow/editsquare.png</file>
+    <file>images/boardwindow/edittriangle.png</file>
+    <file>images/boardwindow/editcross.png</file>
+    <file>images/boardwindow/editcircle.png</file>
+    <file>images/boardwindow/editletter.png</file>
+    <file>images/boardwindow/editnumber.png</file>
+    <file>images/boardwindow/editdelete.png</file>
+    <file>images/boardwindow/editstone.png</file>
+    <file>images/boardwindow/rect_select.png</file>
+    <file>images/boardwindow/clear_select.png</file>
+    <file>images/boardwindow/123.png</file>
   </qresource>
   <qresource prefix="/">
     <file>images/node_black.xpm</file>
@@ -48,15 +55,12 @@
     <file>images/clientwindow/seeking1.png</file>
     <file>images/clientwindow/seeking2.png</file>
     <file>images/clientwindow/seeking3.png</file>
-    <file>images/clientwindow/computerplay.png</file>
     <file>images/clientwindow/filenew.png</file>
     <file>images/clientwindow/fileopen.png</file>
     <file>images/clientwindow/image0.png</file>
     <file>images/clientwindow/image1.xpm</file>
     <file>images/clientwindow/image2.png</file>
-    <file>images/clientwindow/not_seeking.png</file>
     <file>images/clientwindow/refresh_games.png</file>
     <file>images/clientwindow/refresh_players.png</file>
-    <file>images/clientwindow/image2.png</file>
   </qresource>
 </RCC>

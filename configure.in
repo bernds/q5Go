@@ -53,8 +53,8 @@ dnl WITH_NLS is for the po files
 AM_KDE_WITH_NLS
 
 dnl Look for Qt4 libs
-PKG_CHECK_MODULES([QT4], ["QtCore QtGui QtXml Qt3Support"], [], [
-	AC_MSG_ERROR([Qt4 libs not found])])
+PKG_CHECK_MODULES([QT5], ["Qt5Core Qt5Widgets Qt5Gui Qt5Xml Qt5Multimedia"], [], [
+	AC_MSG_ERROR([Qt5 libs not found])])
 dnl Look for moc, either on $PATH or in $QTDIR/bin
 AC_PATH_PROG(MOC, moc, , $PATH:$QTDIR/bin)
 if test -z "$MOC" ; then
@@ -73,14 +73,14 @@ AC_PATH_PROG(qtchooser, qtchooser, , $PATH:$QTDIR/bin)
 if test -z "QTCHOOSER" ; then
     AC_MSG_ERROR([Cannot find 'qtchooser'])
 else
-    MOC='qtchooser -run-tool=moc -qt=qt4'
-    UIC='qtchooser -run-tool=uic -qt=qt4'
-    RCC='qtchooser -run-tool=rcc -qt=qt4'
+    MOC='qtchooser -run-tool=moc -qt=qt5'
+    UIC='qtchooser -run-tool=uic -qt=qt5'
+    RCC='qtchooser -run-tool=rcc -qt=qt5'
 fi
 
-CXXFLAGS="$CXXFLAGS $QT4_CFLAGS"
+CXXFLAGS="$CXXFLAGS $QT5_CFLAGS -fPIC"
 
-AC_SUBST(QT4_LIBS)
+AC_SUBST(QT5_LIBS)
 
 dnl KDE_NEED_FLEX dnl __kdevelop__
 dnl AC_PROG_YACC dnl __kdevelop__

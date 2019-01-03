@@ -5,6 +5,11 @@
 #include <QMainWindow>
 #include <QFileDialog>
 #include <QWhatsThis>
+#include <QMessageBox>
+#include <QTimerEvent>
+#include <QKeyEvent>
+#include <QMenu>
+#include <QAction>
 
 #include "mainwin.h"
 #include "defines.h"
@@ -12,9 +17,6 @@
 #include "gamestable.h"
 #include "gamedialog.h"
 #include "qgo_interface.h"
-//Added by qt3to4:
-#include <QTimerEvent>
-#include <QKeyEvent>
 #include "komispinbox.h"
 #include "icons.h"
 #include "igsconnection.h"
@@ -30,16 +32,11 @@
 #include <qevent.h>
 #include <qstatusbar.h>
 #include <qtooltip.h>
-#include <q3popupmenu.h>
-#include <q3textstream.h>
 #include <qpalette.h>
 #include <qtoolbutton.h>
 #include <qicon.h>
 #include <qpixmap.h>
-#include <q3buttongroup.h> 
 #include <qobject.h> 
-#include <q3listbox.h> 
-#include <qmovie.h> 
 #include <qradiobutton.h>
 
 ClientWindow *client_window;
@@ -70,8 +67,6 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 
 	cmd_count = 0;
 
-	sendBuffer.setAutoDelete(true);
-
 	resetCounter();
 	cmd_valid = false;
 	tn_ready = false;
@@ -89,7 +84,6 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	bytesIn = 0;
 	bytesOut = 0;
 	seekButtonTimer = 0;
-//	toolConnect = 0;
 
 	// set focus, clear entry field
 	cb_cmdLine->setFocus();
@@ -97,7 +91,7 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	cb_cmdLine->addItem("");
 
 	// create instance of telnetConnection
-	telnetConnection = new TelnetConnection(this);
+	telnetConnection = new TelnetConnection(this, ListView_players, ListView_games);
 
 	// create parser and connect signals
 	parser = new Parser();
@@ -135,7 +129,7 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	connect(ListView_games, SIGNAL(customContextMenuRequested(const QPoint&)),
 		this, SLOT(slot_menu_games(const QPoint&)));
 
-	connect(whoOpenCheck, SIGNAL(toggled(bool)), this, SLOT(slot_whoopen(bool)));
+	connect(whoOpenCheck, &QCheckBox::toggled, this, &ClientWindow::slot_whoopen);
 
 	// restore last setting
 	if (!setting)
@@ -338,12 +332,11 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	connect(parser, SIGNAL(signal_timeAdded(int, bool)), qgoif, SLOT(slot_timeAdded(int, bool)));
 	//connect(parser, SIGNAL(signal_undoRequest(const QString&)), qgoif, SLOT(slot_undoRequest(const QString&)));
 
+#if 0
 	//gamestable
 //	connect(ListView_players, SIGNAL(contentsMoving(int, int)), this, SLOT(slot_playerContentsMoving(int, int)));
 	connect(ListView_games, SIGNAL(contentsMoving(int, int)), this, SLOT(slot_gamesContentsMoving(int, int)));
-
-	// add menu bar and status bar
-//	MainAppWidgetLayout->addWidget(menuBar, 0, 0);
+#endif
 
 	slot_updateFont();
 
@@ -372,56 +365,56 @@ void ClientWindow::initStatusBar(QWidget* /*parent*/)
 
 	// Standard Text instead of "message" cause WhatsThisButten overlaps
 	statusMessage = new QLabel(statusBar());
-	statusMessage->setAlignment(Qt::AlignCenter | Qt::SingleLine);
+	statusMessage->setAlignment(Qt::AlignCenter);
 	statusMessage->setText("");
-	statusBar()->addWidget(statusMessage, 0, true);  // Permanent indicator
+	statusBar()->addPermanentWidget(statusMessage, 0);
 /*
 	// What's this
 	statusWhatsThis = new QLabel(statusBar);
-	statusWhatsThis->setAlignment(Qt::AlignCenter | Qt::SingleLine);
+	statusWhatsThis->setAlignment(Qt::AlignCenter);
 	statusWhatsThis->setText("WHATSTHIS");
-	statusBar->addWidget(statusWhatsThis, 0, true);  // Permanent indicator
+	statusBar->addPermanentWidget(statusWhatsThis, 0);
 	QWhatsThis::whatsThisButton(statusWhatsThis);
 */
 	// The users widget
 	statusUsers = new QLabel(statusBar());
-	statusUsers->setAlignment(Qt::AlignCenter | Qt::SingleLine);
+	statusUsers->setAlignment(Qt::AlignCenter);
 	statusUsers->setText(" P: 0 / 0 ");
-	statusBar()->addWidget(statusUsers, 0, true);  // Permanent indicator
-	QToolTip::add(statusUsers, tr("Current online players / watched players"));
-	QWhatsThis::add(statusUsers, tr("Displays the number of current online players\nand the number of online players you are watching.\nA player you are watching has an entry in the 'watch player:' field."));
+	statusBar()->addPermanentWidget(statusUsers, 0);
+	statusUsers->setToolTip (tr("Current online players / watched players"));
+	statusUsers->setWhatsThis (tr("Displays the number of current online players\nand the number of online players you are watching.\nA player you are watching has an entry in the 'watch player:' field."));
 
 	// The games widget
 	statusGames = new QLabel(statusBar());
-	statusGames->setAlignment(Qt::AlignCenter | Qt::SingleLine);
+	statusGames->setAlignment(Qt::AlignCenter);
 	statusGames->setText(" G: 0 / 0 ");
-	statusBar()->addWidget(statusGames, 0, true);  // Permanent indicator
-	QToolTip::add(statusGames, tr("Current online games / observed games + matches"));
-	QWhatsThis::add(statusGames, tr("Displays the number of games currently played on this server and the number of games you are observing or playing"));
+	statusBar()->addPermanentWidget(statusGames, 0);
+	statusGames->setToolTip (tr("Current online games / observed games + matches"));
+	statusGames->setWhatsThis (tr("Displays the number of games currently played on this server and the number of games you are observing or playing"));
 
 	// The server widget
 	statusServer = new QLabel(statusBar());
-	statusServer->setAlignment(Qt::AlignCenter | Qt::SingleLine);
+	statusServer->setAlignment(Qt::AlignCenter);
 	statusServer->setText(" OFFLINE ");
-	statusBar()->addWidget(statusServer, 0, true);  // Permanent indicator
-	QToolTip::add(statusServer, tr("Current server"));
-	QWhatsThis::add(statusServer, tr("Displays the current server's name or OFFLINE if you are not connected to the internet."));
+	statusBar()->addPermanentWidget(statusServer, 0);
+	statusServer->setToolTip (tr("Current server"));
+	statusServer->setWhatsThis (tr("Displays the current server's name or OFFLINE if you are not connected to the internet."));
 
 	// The channel widget
 	statusChannel = new QLabel(statusBar());
-	statusChannel->setAlignment(Qt::AlignCenter | Qt::SingleLine);
+	statusChannel->setAlignment(Qt::AlignCenter);
 	statusChannel->setText("");
-	statusBar()->addWidget(statusChannel, 0, true);  // Permanent indicator
-	QToolTip::add(statusChannel, tr("Current channels and users"));
-	QWhatsThis::add(statusChannel, tr("Displays the current channels you are in and the number of users inthere.\nThe tooltip text contains the channels' title and users' names"));
+	statusBar()->addPermanentWidget(statusChannel, 0);
+	statusChannel->setToolTip (tr("Current channels and users"));
+	statusChannel->setWhatsThis (tr("Displays the current channels you are in and the number of users inthere.\nThe tooltip text contains the channels' title and users' names"));
 
 	// Online Time
 	statusOnlineTime = new QLabel(statusBar());
-	statusOnlineTime->setAlignment(Qt::AlignCenter | Qt::SingleLine);
+	statusOnlineTime->setAlignment(Qt::AlignCenter);
 	statusOnlineTime->setText(" 00:00 ");
-	statusBar()->addWidget(statusOnlineTime, 0, true);  // Permanent indicator
-	QToolTip::add(statusOnlineTime, tr("Online Time"));
-	QWhatsThis::add(statusOnlineTime, tr("Displays the current online time.\n(A) -> auto answer\n(Hold) -> hold the line"));
+	statusBar()->addPermanentWidget(statusOnlineTime, 0);
+	statusOnlineTime->setToolTip (tr("Online Time"));
+	statusOnlineTime->setWhatsThis (tr("Displays the current online time.\n(A) -> auto answer\n(Hold) -> hold the line"));
 }
 
 void ClientWindow::timerEvent(QTimerEvent* e)
@@ -538,8 +531,7 @@ void ClientWindow::timerEvent(QTimerEvent* e)
 	statusOnlineTime->setText(pre + min_ + ":" + sec_ + " ");
 
 	// some statistics
-	QToolTip::remove(statusServer);
-	QToolTip::add(statusServer, tr("Current server") + "\n" +
+	statusServer->setToolTip (tr("Current server") + "\n" +
 		tr("Bytes in:") + " " + QString::number(bytesIn) + "\n" +
 		tr("Bytes out:") + " " + QString::number(bytesOut));
 //	LineEdit_bytesIn->setText(QString::number(bytesIn));
@@ -631,8 +623,7 @@ void ClientWindow::slot_connclosed()
 	Connect->setEnabled(true);
 	Disconnect->setEnabled(false);
 	toolConnect->setChecked(false);
-	QToolTip::remove(toolConnect);
-	QToolTip::add(toolConnect, tr("Connect with") + " " + cb_connect->currentText());
+	toolConnect->setToolTip (tr("Connect with") + " " + cb_connect->currentText());
 }
 
 // close application
@@ -715,7 +706,14 @@ void ClientWindow::saveSettings()
 }
 
 // close application
-void ClientWindow::quit()
+void ClientWindow::quit(bool)
+{
+	saveSettings();
+	qApp->quit();
+}
+
+// Signal from QApplication
+void ClientWindow::slot_last_window_closed ()
 {
 	saveSettings();
 	qApp->quit();
@@ -847,8 +845,7 @@ void ClientWindow::sendTextToApp(const QString &txt)
 			Connect->setEnabled(false);
 			Disconnect->setEnabled(true);
 			toolConnect->setChecked(true);
-			QToolTip::remove(toolConnect);
-			QToolTip::add(toolConnect, tr("Disconnect from") + " " + cb_connect->currentText());
+			toolConnect->setToolTip (tr("Disconnect from") + " " + cb_connect->currentText());
 
 			// quiet mode? if yes do clear table before refresh
 			gamesListSteadyUpdate = ! setQuietMode->isChecked();
@@ -998,10 +995,10 @@ int ClientWindow::sendTextFromApp(const QString &txt, bool localecho)
 	// check if telnet ready
 	if (tn_ready)
 	{
-		sendBuf *s = sendBuffer.getFirst();
-
-		if (s)
+		if (!sendBuffer.isEmpty ())
 		{
+			sendBuf *s = sendBuffer.takeFirst();
+
 			// send buffer cmd first; then put current cmd to buffer
 			telnetConnection->sendTextFromApp(s->get_txt());
 //qDebug("SENDBUFFER send: " + s->get_txt());
@@ -1013,15 +1010,13 @@ int ClientWindow::sendTextFromApp(const QString &txt, bool localecho)
 				sendTextToApp(CONSOLECMDPREFIX + QString(" ") + s->get_txt());
 			tn_ready = false;
 
-			// delete sent command from buffer 
-      sendBuffer.removeFirst();
-
 			if (valid)
 			{
 				// append current command to send as soon as possible
 				sendBuffer.append(new sendBuf(txt, localecho));
 //qDebug("SENDBUFFER added: " + txt);
 			}
+			delete s;
 		}
 		else if (valid)
 		{
@@ -1252,8 +1247,7 @@ void ClientWindow::slot_cbconnect(const QString &txt)
 	telnetConnection->setHost(h->host(), lg, pw, h->port(), h->codec());
 	if (toolConnect)
 	{
-		QToolTip::remove(toolConnect);
-		QToolTip::add(toolConnect, tr("Connect with") + " " + cb_connect->currentText());
+		toolConnect->setToolTip (tr("Connect with") + " " + cb_connect->currentText());
 	}
 }
 
@@ -1394,7 +1388,6 @@ void ClientWindow::slot_updateFont()
 
 	extUserInfo = setting->readBoolEntry("EXTUSERINFO");
 	setColumnsForExtUserInfo();
-//	slot_userDefinedKeysTextChanged();
 }
 
 // refresh button clicked
@@ -1563,10 +1556,10 @@ void ClientWindow::slot_mouse_games(int button, QTreeWidgetItem *lv)
 	// create popup window
 	if (!puw)
 	{
-		puw = new Q3PopupMenu(0, 0);
-		puw->insertItem(tr("observe"), this, SLOT(slot_gamesPopup(int)), 0, 1);
-		puw->insertItem(tr("stats W"), this, SLOT(slot_gamesPopup(int)), 0, 2);
-		puw->insertItem(tr("stats B"), this, SLOT(slot_gamesPopup(int)), 0, 3);
+		puw = new QMenu(0, 0);
+		puw->addAction(tr("observe"), this, [=] () { slot_gamesPopup(1); });
+		puw->addAction(tr("stats W"), this, [=] () { slot_gamesPopup(2); });
+		puw->addAction(tr("stats B"), this, [=] () { slot_gamesPopup(3); });
 	}
 	//puw->hide();
 
@@ -1608,8 +1601,6 @@ void ClientWindow::slot_mouse_games(int button, QTreeWidgetItem *lv)
 
 void ClientWindow::slot_removeMatchDialog(const QString &opponent)
 {
-	GameDialog *dlg = NULL;
-
 	for (auto it: matchlist)
 		if (it->playerOpponentEdit->text() == opponent) {
 			matchlist.removeOne (it);
@@ -2055,29 +2046,30 @@ void ClientWindow::slot_menu_players(const QPoint& pt)
 // mouse click on ListView_players
 void ClientWindow::slot_mouse_players(int button, QTreeWidgetItem *lv)
 {
-	static Q3PopupMenu *puw = 0;
+	static QMenu *puw = 0;
+	static QAction *puw11 = 0;
 	lv_popupPlayer = static_cast<PlayerTableItem*>(lv);
 	// create popup window
 	if (!puw)
 	{
-		puw = new Q3PopupMenu(0, 0);
-		puw->insertItem(tr("match"), this, SLOT(slot_playerPopup(int)), 0, 1);
-		puw->insertItem(tr("match within his prefs"), this, SLOT(slot_playerPopup(int)), 0, 11);
-		puw->insertItem(tr("talk"), this, SLOT(slot_playerPopup(int)), 0, 2);
-		puw->insertSeparator();
-		puw->insertItem(tr("stats"), this, SLOT(slot_playerPopup(int)), 0, 3);
-		puw->insertItem(tr("stored games"), this, SLOT(slot_playerPopup(int)), 0, 4);
-		puw->insertItem(tr("results"), this, SLOT(slot_playerPopup(int)), 0, 5);
-		puw->insertItem(tr("rating"), this, SLOT(slot_playerPopup(int)), 0, 8);
-		puw->insertItem(tr("observe game"), this, SLOT(slot_playerPopup(int)), 0, 9);
-		puw->insertItem(tr("trail"), this, SLOT(slot_playerPopup(int)), 0, 12);
-		puw->insertSeparator();
-		puw->insertItem(tr("toggle watch list"), this, SLOT(slot_playerPopup(int)), 0, 6);
-		puw->insertItem(tr("toggle exclude list"), this, SLOT(slot_playerPopup(int)), 0, 7);
+		puw = new QMenu(0, 0);
+		puw->addAction(tr("match"), this, [=] () { slot_playerPopup(1); });
+		puw11 = puw->addAction(tr("match within his prefs"), this, [=] () { slot_playerPopup(11); });
+		puw->addAction(tr("talk"), this, [=] () { slot_playerPopup(2); });
+		// puw->insertSeparator();
+		puw->addAction(tr("stats"), this, [=] () { slot_playerPopup(3); });
+		puw->addAction(tr("stored games"), this, [=] () { slot_playerPopup(4); });
+		puw->addAction(tr("results"), this, [=] () { slot_playerPopup(5); });
+		puw->addAction(tr("rating"), this, [=] () { slot_playerPopup(8); });
+		puw->addAction(tr("observe game"), this, [=] () { slot_playerPopup(9); });
+		puw->addAction(tr("trail"), this, [=] () { slot_playerPopup(12); });
+		// puw->insertSeparator();
+		puw->addAction(tr("toggle watch list"), this, [=] () { slot_playerPopup(6); });
+		puw->addAction(tr("toggle exclude list"), this, [=] () { slot_playerPopup(7); });
 
 	}
 
-	puw->setItemEnabled(11,lv_popupPlayer->get_player ().nmatch);
+	puw11->setEnabled(lv_popupPlayer->get_player ().nmatch);
 //puw->hide();
 
 	// do actions if button clicked on item
@@ -2303,17 +2295,17 @@ void ClientWindow::slot_excludeplayer(const QString &txt)
 // open a local board       ??? Do we need this ?
 void ClientWindow::slot_localBoard()
 {
-	openLocalBoard();
+	open_local_board (this, true);
 }
 
 // open a local board, size 19x19, skip questions
 void ClientWindow::slot_local19()
 {
-	openLocalBoard("/19/");
+	open_local_board (this, false);
 }
 
 // open a local board
-void ClientWindow::slot_preferences()
+void ClientWindow::slot_preferences(bool)
 {
 	dlgSetPreferences ();
 }
@@ -2532,24 +2524,24 @@ void ClientWindow::initActions()
 	/*
 	* Menu File
 	*/
-	connect(fileNewBoard, SIGNAL(activated()), this, SLOT(slotFileNewBoard()));
-	connect(fileNew, SIGNAL(activated()), this, SLOT(slotFileNewGame()));
-	connect(fileOpen, SIGNAL(activated()), this, SLOT(slotFileOpen()));
-	connect(computerPlay, SIGNAL(activated()), this, SLOT(slotComputerPlay()));
-	connect(fileQuit, SIGNAL(activated()), this, SLOT(quit()));
+	connect(fileNewBoard, &QAction::triggered, this, &ClientWindow::slotFileNewBoard);
+	connect(fileNew, &QAction::triggered, this, &ClientWindow::slotFileNewGame);
+	connect(fileOpen, &QAction::triggered, this, &ClientWindow::slotFileOpen);
+	connect(computerPlay, &QAction::triggered, this, &ClientWindow::slotComputerPlay);
+	connect(fileQuit, &QAction::triggered, this, &ClientWindow::quit);
 
 	/*
 	* Menu Connexion
 	*/
-	connect(Connect, SIGNAL(activated()), this, SLOT(slotMenuConnect()));
-	connect(Disconnect, SIGNAL(activated()), this, SLOT(slotMenuDisconnect()));
+	connect(Connect, &QAction::triggered, this, &ClientWindow::slotMenuConnect);
+	connect(Disconnect, &QAction::triggered, this, &ClientWindow::slotMenuDisconnect);
 	Disconnect->setEnabled(false);
-	connect(editServers, SIGNAL(activated()), this, SLOT(slotMenuEditServers()));
-  
+	connect(editServers, &QAction::triggered, this, &ClientWindow::slotMenuEditServers);
+
 	/*
 	* Menu Settings
 	*/
-	connect(setPreferences, SIGNAL(activated()), this, SLOT(slot_preferences()));
+	connect(setPreferences, &QAction::triggered, this, &ClientWindow::slot_preferences);
 
 	/*
 	* Menu View
@@ -2558,15 +2550,15 @@ void ClientWindow::initActions()
 	connect(viewMenuBar, SIGNAL(toggled(bool)), this, SLOT(slotViewMenuBar(bool)));
 	viewStatusBar->setWhatsThis(tr("Statusbar\n\nEnables/disables the statusbar."));
 	connect(viewStatusBar, SIGNAL(toggled(bool)), this, SLOT(slotViewStatusBar(bool)));
-    	
+
 	/*
 	* Menu Help
 	*/
-	connect(helpManual, SIGNAL(activated()), this, SLOT(slotHelpManual()));
-	connect(helpSoundInfo, SIGNAL(activated()), this, SLOT(slotHelpSoundInfo()));
-	connect(helpAboutApp, SIGNAL(activated()), this, SLOT(slotHelpAbout()));
-	connect(helpAboutQt, SIGNAL(activated()), this, SLOT(slotHelpAboutQt()));
-	connect(helpNewVersion, SIGNAL(activated()), this, SLOT(slotNewVersion()));
+	connect(helpManual, &QAction::triggered, this, &ClientWindow::slotHelpManual);
+	connect(helpSoundInfo, &QAction::triggered, this, &ClientWindow::slotHelpSoundInfo);
+	connect(helpAboutApp, &QAction::triggered, this, &ClientWindow::slotHelpAbout);
+	connect(helpAboutQt, &QAction::triggered, this, &ClientWindow::slotHelpAboutQt);
+	connect(helpNewVersion, &QAction::triggered, this, &ClientWindow::slotNewVersion);
 }
   
 void ClientWindow::initToolBar()
@@ -2576,104 +2568,117 @@ void ClientWindow::initToolBar()
 	//  toolConnect->setText(tr("Connect with") + " " + cb_connect->currentText()); 
 	//connect( toolConnect, SIGNAL( toggled(bool) ), this, SLOT( slot_connect(bool) ) );  //end add eb 5
 
-	seekMenu = new Q3PopupMenu();
-	toolSeek->setPopup(seekMenu);
-	toolSeek->setPopupDelay(1);
+	seekMenu = new QMenu();
+	toolSeek->setMenu (seekMenu);
+	toolSeek->setPopupMode (QToolButton::InstantPopup);
 
 	whatsThis = QWhatsThis::createAction (this);
-	whatsThis->addTo (Toolbar);
+	Toolbar->addAction (whatsThis);
+	//tb->setProperty( "geometry", QRect(0, 0, 20, 20));
 }
 // SLOTS
 
 
-void ClientWindow::slotHelpManual()
+void ClientWindow::slotHelpManual(bool)
 {
 	setting->qgo->openManual();
 }
 
-void ClientWindow::slotHelpSoundInfo()
+void ClientWindow::slotHelpSoundInfo(bool)
 {
 	// show info
 	setting->qgo->testSound(true);
 }
 
-void ClientWindow::slotHelpAbout()
+void ClientWindow::slotHelpAbout(bool)
 {
 	setting->qgo->slotHelpAbout();
 }
 
-void ClientWindow::slotHelpAboutQt()
+void ClientWindow::slotHelpAboutQt(bool)
 {
 	QMessageBox::aboutQt(this);
 }
 
-void ClientWindow::slotNewVersion()
+void ClientWindow::slotNewVersion(bool)
 {
 	QMessageBox::warning(this ,PACKAGE,NEWVERSIONWARNING);
 }
 
 
-void ClientWindow::slotFileNewBoard()
+void ClientWindow::slotFileNewBoard(bool)
 {
-	setting->qgo->addBoardWindow();
+	open_local_board (this, false);
 }
 
-void ClientWindow::slotFileNewGame()
-{   
-	MainWindow *w = setting->qgo->addBoardWindow() ;
-	w->slotFileNewGame();
+void ClientWindow::slotFileNewGame(bool)
+{
+	open_local_board (this, true);
 }
 
-void ClientWindow::slotFileOpen()
+void ClientWindow::slotFileOpen(bool)
 {
 	//if (!checkModified())
 	//	return;
-	QString fileName(QFileDialog::getOpenFileName(setting->readEntry("LAST_DIR"),
-		tr("SGF Files (*.sgf *.SGF);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)"), this));
+	QString fileName(QFileDialog::getOpenFileName(this, setting->readEntry("LAST_DIR"),
+		tr("SGF Files (*.sgf *.SGF);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)")));
 	if (fileName.isEmpty())
 		return;
-
-	MainWindow *w = setting->qgo->addBoardWindow() ; 
-	w->doOpen(fileName, w->getFileExtension(fileName));
+	open_window_from_file (fileName.toStdString ());
 }
 
-void ClientWindow::slotComputerPlay()
+void ClientWindow::slotComputerPlay(bool)
 {
-#ifndef Q_OS_MACX
-	QString s =  setting->readEntry("COMPUTER_PATH");
+	QString computer_path = setting->readEntry("COMPUTER_PATH");
 
-	if (setting->readEntry("COMPUTER_PATH").isNull() ||
-	setting->readEntry("COMPUTER_PATH").isEmpty())
+#ifndef Q_OS_MACX
+
+	if (computer_path.isEmpty())
 	{
 		QMessageBox::warning(this, PACKAGE, tr("You did not set the Computer program path !"));
-		dlgSetPreferences(3);
+		dlgSetPreferences (3);
 		return;
 	}
 #endif
-#if 0
-	QNewGameDlg * dlg = new QNewGameDlg(this);
-	if(!(dlg->exec()== QDialog::Accepted))
+	QNewGameDlg dlg (this);
+	if (dlg.exec() != QDialog::Accepted)
 		return;
-#endif
+
+	int hc = dlg.getHandicap ();
+	go_board starting_pos = new_handicap_board (dlg.getSize(), hc);
+
+	game_info info ("", dlg.getPlayerWhiteName ().toStdString (),
+			dlg.getPlayerBlackName ().toStdString (),
+			"", "",
+			"", dlg.getKomi(), hc, ranked::free, "", "", "", "", "", "");
+	std::shared_ptr<game_record> gr = std::make_shared<game_record> (starting_pos, hc > 1 ? white : black, info);
+
+	int b_type = dlg.getPlayerBlackType();
+	int w_type = dlg.getPlayerWhiteType();
+
+	if (gr == nullptr)
+		return;
+
+	new MainWindow_GTP (0, gr, computer_path, b_type == COMPUTER, w_type == COMPUTER);
 }
 
 
-void ClientWindow::slotMenuConnect()
+void ClientWindow::slotMenuConnect(bool)
 {
 	// push button
-	toolConnect->toggle();             //SL added eb 5
-}    
-
-void ClientWindow::slotMenuDisconnect()
-{
-	// push button
-	toolConnect->toggle();              //SL added eb 5
+	toolConnect->toggle();
 }
 
-void ClientWindow::slotMenuEditServers()
+void ClientWindow::slotMenuDisconnect(bool)
 {
-	dlgSetPreferences(4);
-} 
+	// push button
+	toolConnect->toggle();
+}
+
+void ClientWindow::slotMenuEditServers(bool)
+{
+	dlgSetPreferences (4);
+}
 
 void ClientWindow::slotViewStatusBar(bool toggle)
 {
@@ -2779,7 +2784,8 @@ void ClientWindow::slot_addSeekCondition(const QString& a, const QString& b, con
 	
 	time_condition = QString::number(int(b.toInt() / 60)) + " min + " + QString::number(int(c.toInt() / 60)) + " min / " + d + " stones";
 
-	seekMenu->insertItem(time_condition, this, SLOT(slot_seek(int)), 0, a.toInt());
+	int a_int = a.toInt ();
+	seekMenu->addAction(time_condition, this, [=] () { slot_seek(a_int); });
 }
 
 
@@ -2933,8 +2939,6 @@ void ClientWindow::dlgSetPreferences(int tab)
 	dlg.sgfCoordsCheckBox->setChecked(setting->readBoolEntry("SGF_BOARD_COORDS"));
 	dlg.toolTipCoordsCheckBox->setChecked(setting->readBoolEntry("BOARD_COORDS_TIP"));
 	dlg.cursorCheckBox->setChecked(setting->readBoolEntry("CURSOR"));
-	dlg.smallerMarksCheckBox->setChecked(setting->readBoolEntry("SMALL_MARKS"));
-	dlg.boldMarksCheckBox->setChecked(setting->readBoolEntry("BOLD_MARKS"));
 	dlg.adjustFontSizeCheckBox->setChecked(setting->readBoolEntry("ADJ_FONT"));
 	//dlg.smallerStonesCheckBox->setChecked(setting->readBoolEntry("SMALL_STONES"));
 	dlg.tooltipsCheckBox->setChecked(!(setting->readBoolEntry("TOOLTIPS")));
@@ -2947,10 +2951,6 @@ void ClientWindow::dlgSetPreferences(int tab)
 //	dlg.rememberFontCheckBox->setChecked(setting->readBoolEntry("REM_FONT"));
 	dlg.variableFontCheckBox->setChecked(setting->readBoolEntry("VAR_FONT"));
 	dlg.antiClickoCheckBox->setChecked(setting->readBoolEntry("ANTICLICKO"));
-
-	// SGF Loading tab
-	dlg.rememberDirCheckBox->setChecked(setting->readBoolEntry("REM_DIR"));
-	dlg.codecListBox->setCurrentItem(setting->readIntEntry("CODEC"));
 
 	// Client Window tab
 	dlg.LineEdit_watch->setText(setting->readEntry("WATCH"));
@@ -3009,8 +3009,8 @@ bool ClientWindow::preferencesSave(PreferencesDialog *dlg)
 {
 	ASSERT (dlg);
 
-	setting->writeEntry("SKIN", dlg->LineEdit_goban->text());
-	setting->writeEntry("SKIN_TABLE", dlg->LineEdit_Table->text());
+	setting->writeEntry("SKIN", dlg->LineEdit_goban->text()); 
+	setting->writeEntry("SKIN_TABLE", dlg->LineEdit_Table->text()); 
 	setting->writeEntry("LANG", setting->convertNumberToLanguage(dlg->languageComboBox->currentIndex()));
 //	setting->writeBoolEntry("STONES_SHADOW", dlg->stonesShadowCheckBox->isChecked());
 //	setting->writeBoolEntry("STONES_SHELLS", dlg->stonesShellsCheckBox->isChecked());
@@ -3041,18 +3041,14 @@ bool ClientWindow::preferencesSave(PreferencesDialog *dlg)
 	setting->writeBoolEntry("SIDEBAR_LEFT", dlg->sidebarLeftCheckBox->isChecked());
 	setting->writeBoolEntry("BOARD_COORDS_TIP", dlg->toolTipCoordsCheckBox->isChecked());
 	setting->writeBoolEntry("CURSOR", dlg->cursorCheckBox->isChecked());
-	setting->writeBoolEntry("SMALL_MARKS", dlg->smallerMarksCheckBox->isChecked());
-	setting->writeBoolEntry("BOLD_MARKS", dlg->boldMarksCheckBox->isChecked());
 	setting->writeBoolEntry("ADJ_FONT", dlg->adjustFontSizeCheckBox->isChecked());
 	//setting->writeBoolEntry("SMALL_STONES", dlg->smallerStonesCheckBox->isChecked());
 	setting->writeBoolEntry("TOOLTIPS", !(dlg->tooltipsCheckBox->isChecked()));
 	setting->writeIntEntry("BY_TIMER", dlg->BYTimeSpin->text().toInt());
 	setting->writeIntEntry("TIMER_INTERVAL", dlg->timerComboBox->currentIndex());
 	setting->writeBoolEntry("SGF_TIME_TAGS", dlg->sgfTimeTagsCheckBox->isChecked());
-	setting->writeBoolEntry("REM_DIR", dlg->rememberDirCheckBox->isChecked());
 	setting->writeBoolEntry("ANTICLICKO", dlg->antiClickoCheckBox->isChecked());
 	setting->writeBoolEntry("VAR_FONT", dlg->variableFontCheckBox->isChecked());
-	setting->writeIntEntry("CODEC", dlg->codecListBox->currentItem());
 
 	// Client Window Tab
 	setting->writeEntry("WATCH", dlg->LineEdit_watch->text());

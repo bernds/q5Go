@@ -31,7 +31,7 @@ class TelnetConnection : public QObject
 	Q_OBJECT
 
 public:
-	TelnetConnection(QWidget* parent);
+	TelnetConnection(QWidget* parent, QWidget *, QWidget *);
 	~TelnetConnection();
 
 	void sendTextFromApp(const QString&);

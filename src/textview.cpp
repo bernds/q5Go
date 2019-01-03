@@ -33,6 +33,8 @@ TextView::TextView(QWidget* parent, type t)
 		setWindowTitle (tr ("GTP program startup"));
 	} else {
 		gtpBox->setVisible (false);
+		cb_coords->setChecked (true);
+		cb_numbering->setChecked (true);
 		setWindowTitle (tr ("Export to ASCII"));
 	}
 }
@@ -79,11 +81,6 @@ void TextView::saveMe()
 void TextView::append (const QString &s)
 {
 	textEdit->append (s);
-}
-
-void TextView::set (const QString &s)
-{
-	textEdit->setText (s);
 }
 
 void TextView::toClipboard()

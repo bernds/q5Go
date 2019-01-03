@@ -17,7 +17,6 @@
 #include <qobject.h>
 #include <qstring.h>
 #include <qtimer.h>
-#include <q3ptrlist.h>
 
 // from qGo:
 #include "qgo.h"
@@ -57,18 +56,37 @@ public:
 
 //-----------
 
-class qGoBoard : public QObject
+class MainWindow_IGS;
+
+class qGoBoard : public QObject, public game_state::observer
 {
 	Q_OBJECT
 
+	std::shared_ptr<game_record> m_game = nullptr;
+	stone_color m_own_color = none;
+	qGoIF *m_qgoif;
+	QString *m_title = nullptr;
+	QString m_comments;
+	bool m_scoring = false;
+	bool m_connected = true;
+
+	/* State used while receiving a game result.  */
+	go_board *m_scoring_board = nullptr;
+	int m_terr_w, m_terr_b;
+	int m_caps_w, m_caps_b;
+
+	void observed_changed () { }
+
 public:
-	qGoBoard();
+	qGoBoard(qGoIF *);
 	~qGoBoard();
+
+	void game_startup ();
+	void disconnected (bool remove_from_list);
 	int get_id() const { return id; }
 	void set_id(int i) { id = i; gd.gameNumber = i; }
 	GameData get_gameData() { return gd; }
 	void set_title(const QString&);
-	bool get_haveTitle() { return haveTitle; }
 	void set_komi(const QString&);
 	void set_freegame(bool);
 	bool get_havegd() { return have_gameData; }
@@ -78,17 +96,20 @@ public:
 	QString get_bplayer() { return gd.playerBlack; }
 	QString get_wplayer() { return gd.playerWhite; }
 	void set_adj(bool a) { adjourned = a; }
-	void set_game(Game *g);
+	void set_game(Game *g, GameMode mode, stone_color own_color);
 
-	void set_Mode(int);
 	void set_Mode_real (GameMode);
 	GameMode get_Mode() { return gameMode; }
-	void set_move(StoneColor, QString, QString);
-	void send_kibitz(const QString);
-	MainWindow *get_win() { return win; }
-	void initGame() { win->getBoard()->initGame(&gd); }
-	void setGameData() {win->getBoard()->setGameData(&gd); }
-	void setMode() { win->getBoard()->setMode(gameMode); }
+	void set_move(stone_color, QString, QString);
+	void game_result (const QString &, const QString &);
+	void remote_undo (const QString &);
+	void mark_dead_stone (int x, int y);
+	void enter_scoring_mode (bool may_be_reentry);
+	void leave_scoring_mode (void);
+	void player_toggle_dead (int x, int y);
+
+	void send_kibitz(const QString&);
+	MainWindow_IGS *get_win() { return win; }
 	void setTimerInfo(const QString&, const QString&, const QString&, const QString&);
 	void timerEvent(QTimerEvent*);
 	QString secToTime(int);
@@ -98,7 +119,7 @@ public:
 	int get_boardsize() { return gd.size; }
 	int get_mvcount() { return mv_counter; }
 	void set_myColorIsBlack(bool b);
-	bool get_myColorIsBlack() { return myColorIsBlack; }
+	bool get_myColorIsBlack() { return m_own_color == black; }
 	void set_requests(const QString &handicap, const QString &komi, assessType);
 	void check_requests();
 	QString get_reqKomi() { return req_komi; }
@@ -110,7 +131,11 @@ public:
 	void addtime_b(int m);
 	void addtime_w(int m);
 	void set_myName(const QString &n) { myName = n; }
-	void clearObserverList() { win->getListView_observers()->clear(); }
+	void clearObserverList();
+
+	void receive_score_begin ();
+	void receive_score_line (int, const QString &);
+	void receive_score_end ();
 
 	// teaching features
 	bool        ExtendedTeachingGame;
@@ -127,8 +152,7 @@ signals:
 	// to qGoIF
 //	void signal_closeevent(int);
 	void signal_sendcommand(const QString&, bool);
-	void signal_2passes(const QString&, const QString&);
-  
+
 public slots:
 	// MainWindow
 	void slot_closeevent();
@@ -136,6 +160,7 @@ public slots:
 
 	// Board
 	void slot_addStone(enum StoneColor, int, int);
+	void move_played (int, int);
 	void slot_doPass();
 	void slot_doResign();
 	void slot_doUndo();
@@ -154,19 +179,18 @@ public slots:
 
 private:
 	int timer_id;
-	bool		game_paused;
-	bool        have_gameData;
-	bool        sent_movescmd;
-	bool        adjourned;
-	bool        myColorIsBlack;
-	bool        haveTitle;
-	GameMode    gameMode;
-	//GameData    gd;
-	int         id;
-	MainWindow  *win;
-	int         mv_counter;
-	int	        stated_mv_count ;
-	bool		    sound;
+	bool game_paused;
+	bool have_gameData;
+	bool sent_movescmd;
+	bool adjourned;
+	bool myColorIsBlack;
+	GameMode gameMode;
+	int id;
+	MainWindow_IGS *win;
+
+	int mv_counter;
+	int stated_mv_count;
+
 	int         bt_i, wt_i;
 	QString     bt, wt;
 	QString     b_stones, w_stones;
@@ -176,7 +200,7 @@ private:
 	bool		    requests_set;
 	GSName      gsName;
 	QString     myName;
-  int         BY_timer;
+	int         BY_timer;
 
 #ifdef SHOW_INTERNAL_TIME
 	int chk_b, chk_w;
@@ -201,6 +225,8 @@ public:
 	QWidget *get_parent() { return parent; }
 	void wrapupMatchGame(qGoBoard *, bool);
 
+	void window_closing (qGoBoard *);
+	void remove_board (qGoBoard *);
 signals:
 	void signal_sendcommand(const QString&, bool);
 	void signal_addToObservationList(int);
@@ -224,7 +250,6 @@ public slots:
 
 	// qGoBoard
 //	void slot_closeevent(int) {};
-	void slot_closeevent();
 	void slot_sendcommand(const QString&, bool);
 	void set_observe(const QString&);
 
@@ -236,7 +261,7 @@ private:
 	// actual pointer, for speedup reason
 	qGoBoard *qgobrd;
 	QString  myName;
-	Q3PtrList<qGoBoard> *boardlist;
+	QList<qGoBoard *> boardlist;
 	GSName   gsName;
 	int      localBoardCounter;
 //	int      lockObserveCmd;

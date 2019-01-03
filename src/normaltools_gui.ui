@@ -27,7 +27,7 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="Q3GroupBox" name="whiteFrame">
+    <widget class="QGroupBox" name="whiteFrame">
      <property name="sizePolicy">
       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
        <horstretch>0</horstretch>
@@ -92,7 +92,7 @@ Click on
     </widget>
    </item>
    <item>
-    <widget class="Q3GroupBox" name="blackFrame">
+    <widget class="QGroupBox" name="blackFrame">
      <property name="sizePolicy">
       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
        <horstretch>0</horstretch>
@@ -351,14 +351,6 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
- <customwidgets>
-  <customwidget>
-   <class>Q3GroupBox</class>
-   <extends>QGroupBox</extends>
-   <header>Qt3Support/Q3GroupBox</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

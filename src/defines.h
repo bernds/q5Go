@@ -76,7 +76,7 @@
 * Enum definitions
 */
 enum StoneColor { stoneNone, stoneWhite, stoneBlack, stoneErase };
-enum GameMode { modeNormal, modeEdit, modeScore, modeObserve, modeMatch, modeTeach, modeComputer };
+enum GameMode { modeNormal, modeEdit, modeScore, modeScoreRemote, modeObserve, modeMatch, modeTeach, modeComputer };
 enum MarkType { markNone, markSquare, markCircle, markTriangle, markCross, markText, markNumber, markTerrBlack, markTerrWhite };
 enum skinType { skinLight, skinDark, skin3, skin4, skin5 };
 enum VariationDisplay { vardisplayNone, vardisplayGhost, vardisplaySmallStone };

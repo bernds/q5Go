@@ -12,9 +12,9 @@
 */
 
 StatusTip::StatusTip(QWidget *parent)
-: QLabel(parent)
+	: QLabel(parent)
 {
-	setAlignment(Qt::AlignCenter | Qt::TextSingleLine);
+	setAlignment(Qt::AlignCenter);
 }
 
 StatusTip::~StatusTip()

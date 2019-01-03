@@ -8,8 +8,6 @@
 #include <QGraphicsView>
 #include "defines.h"
 #include "setting.h"
-#include "boardhandler.h"
-#include "stone.h"
 
 class ImageHandler;
 class Mark;

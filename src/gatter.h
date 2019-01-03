@@ -23,8 +23,6 @@
 #ifndef GATTER_H
 #define GATTER_H
 
-#include "imagehandler.h"
-
 #include <vector>
 
 #include <QtGui>
@@ -43,7 +41,7 @@ public:
 private:
 	int board_size;
 	QGraphicsScene *canvas;
-	std::vector< std::vector<QGraphicsLineItem *> > VGatter, HGatter ;
+	std::vector< std::vector<QGraphicsLineItem *> > VGatter, HGatter;
 	QMap<int,QGraphicsEllipseItem*> hoshisList ;
 };
 

@@ -3,12 +3,10 @@
 
 #include "misctools.h"
 #include "ui_mainwidget_gui.h"
-#include "interfacehandler.h"
 #include "setting.h"
 #include "defines.h"
 
-//class InterfaceHandler;
-
+class go_board;
 class MainWindow;
 
 class MainWidget : public QWidget, public Ui::MainWidgetGui
@@ -18,34 +16,41 @@ class MainWidget : public QWidget, public Ui::MainWidgetGui
 public:
 	MainWidget(MainWindow *, QWidget* parent = 0);
 	~MainWidget();
-	
+
 	void toggleSlider(bool);
 	bool getSlider() { return showSlider; }
 	void toggleSliderSignal(bool b) { sliderSignalToggle = b; }
 	virtual void setFont(const QFont &font);
 	void setToolsTabWidget(enum tabType=tabNormalScore, enum tabState=tabSet);
-	GameMode toggleMode();
 	void setGameMode (GameMode);
 
-	InterfaceHandler *interfaceHandler;
+	void toggleSidebar (bool);
+	void setSliderMax(int n);
+	void setCaptures(float black, float white, bool scored=false);
+	void setTimes(const QString &btime, const QString &bstones,
+		      const QString &wtime, const QString &wstones,
+		      bool warn_b, bool warn_w);
+	void setTimes(bool, float, int);
+
+	void update_game_record (std::shared_ptr<game_record>);
+	void init_game_record (std::shared_ptr<game_record>);
+	void setMoveData(const game_state &, const go_board &, GameMode);
+	void recalc_scores (const go_board &, GameMode);
 
 public slots:
 	void on_colorButton_clicked(bool);
-	void slot_toolsTabChanged(QWidget*);
-	virtual void setMarkType(int);
-	virtual void doPass();
-	virtual void doCountDone();
-	virtual void doUndo();// { interfaceHandler->board->doUndo(); }
-	virtual void doAdjourn();// { interfaceHandler->board->doAdjourn(); }
-	virtual void doResign();// { interfaceHandler->board->doResign(); }
-	virtual void doRefresh();// { interfaceHandler->board->doRefresh(); }
+	void slot_toolsTabChanged(int);
 	virtual void doRealScore(bool);
 	virtual void doEdit();
+	virtual void doEditPos(bool);
 	virtual void sliderChanged(int);
 
 private:
+	std::shared_ptr<game_record> m_game;
 	bool showSlider, sliderSignalToggle;
 	MainWindow *m_mainwin;
+	GameMode m_remember_mode;
+	int m_remember_tab;
 };
 
 #endif

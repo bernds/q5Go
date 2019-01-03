@@ -24,7 +24,7 @@ QFile * SearchPath::findFile(QFile &file)
   QDir *dir = findDirContainingFile(file);
 
   if (dir) {
-    QFile * filep = new QFile(dir->absFilePath(file.name()));
+    QFile * filep = new QFile(dir->absoluteFilePath(file.fileName()));
     return filep;
   } else {
     return NULL;
@@ -36,7 +36,7 @@ QDir * SearchPath::findDirContainingFile(QFile &file)
   for (auto dir: directoryList) {
     if (! dir->exists() )
       continue;
-    if (dir->exists(file.name()))
+    if (dir->exists(file.fileName()))
       return dir;
   }
   return NULL;

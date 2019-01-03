@@ -45,10 +45,6 @@ QGtp::QGtp(QWidget *parent, Gtp_Controller *c, const QString &prog, int size, fl
 	m_process = new QProcess();
 	m_dlg.show ();
 	m_dlg.activateWindow ();
-
-	 /* @@@ Qt5 syntax.  Since nothing uses this code at the moment, keep it commented out
-	    until we've progressed to the point where we're building with Qt5.  */
-#if 0
 	connect (m_dlg.buttonAbort, &QPushButton::clicked, this, &QGtp::slot_abort_request);
 
 	connect (m_process, &QProcess::started, this, &QGtp::slot_started);
@@ -58,7 +54,6 @@ QGtp::QGtp(QWidget *parent, Gtp_Controller *c, const QString &prog, int size, fl
 	connect (m_process, fini, this, &QGtp::slot_finished);
 	connect (m_process, &QProcess::readyReadStandardError,
 		 this, &QGtp::slot_startup_messages);
-#endif
 
 	QStringList arguments = prog.split (QRegExp ("\\s+"));
 	QString filename = arguments.takeFirst();

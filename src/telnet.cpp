@@ -10,13 +10,12 @@
 #include <qmessagebox.h>
 #include <qlineedit.h>
 #include <qmenubar.h>
-#include <q3accel.h>
 
 
 TelnetInterface *telnetIF;
 
 
-TelnetConnection::TelnetConnection(QWidget* parent)
+TelnetConnection::TelnetConnection(QWidget* parent, QWidget *lv_p, QWidget *lv_g)
 {
 	host = DEFAULT_HOST;
 	port = DEFAULT_PORT;
@@ -24,7 +23,7 @@ TelnetConnection::TelnetConnection(QWidget* parent)
 	password = "";
 
 	// Create IGSConnection instance
-	igsInterface = new IGSConnection();
+	igsInterface = new IGSConnection(lv_p, lv_g);
 	CHECK_PTR(igsInterface);
 	void (*fp)(QString);
 	fp = TelnetInterface::callback;

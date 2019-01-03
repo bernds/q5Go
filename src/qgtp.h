@@ -21,6 +21,7 @@
 #include <qapplication.h>
 #include <QProcess>
 
+#include "goboard.h"
 #include "textview.h"
 //#include "global.h"
 
@@ -49,9 +50,6 @@ class invalid_response : public gtp_exception
 #define FAIL -1
 
 class QGtp;
-
-/* @@@ This is here just temporarily, until the new go board code lands.  */
-enum stone_color { white, black, none };
 
 class Gtp_Controller
 {

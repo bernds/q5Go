@@ -7,15 +7,15 @@
 #include <QTimerEvent>
 #include "mainwindow.h"
 #include "qgo_interface.h"
-#include "gamestable.h"
+#include "tables.h"
 #include "defines.h"
 #include "globals.h"
 #include "gs_globals.h"
 #include "misc.h"
 #include "config.h"
-#include "interfacehandler.h"
-#include "move.h"
 #include "qnewgamedlg.h"
+#include "mainwin.h"
+
 #include <qlabel.h>
 //#include <qmultilineedit.h>
 #include <qobject.h>
@@ -26,14 +26,58 @@
 #include <qtooltip.h>
 #include <qcombobox.h>
 #include <qslider.h>
-#include <q3toolbar.h>
-#include <q3ptrlist.h>
 #include <qregexp.h>
 
 #ifdef Q_OS_MACX
 #include <CoreFoundation/CFString.h>
 #include <CoreFoundation/CFBundle.h>
 #endif //Q_OS_MACX
+
+class MainWindow_IGS : public MainWindow
+{
+	qGoBoard *m_connector;
+public:
+	MainWindow_IGS (QWidget *parent, std::shared_ptr<game_record> gr, qGoBoard *connector, bool playing_w, bool playing_b, GameMode mode);
+	~MainWindow_IGS ();
+
+	virtual void player_move (stone_color, int x, int y)
+	{
+		m_connector->move_played (x, y);
+	}
+	virtual void player_toggle_dead (int x, int y)
+	{
+		m_connector->player_toggle_dead (x, y);
+	}
+	virtual void doPass()
+	{
+		if (gfx_board->player_to_move_p ())
+			m_connector->slot_doPass ();
+	}
+	virtual void doResign()
+	{
+		m_connector->slot_doResign ();
+	}
+	void playPassSound ()
+	{
+		if (local_stone_sound)
+			qgo->playPassSound ();
+	}
+	void playClick ()
+	{
+		if (local_stone_sound)
+			qgo->playClick ();
+	}
+};
+
+MainWindow_IGS::MainWindow_IGS (QWidget *parent, std::shared_ptr<game_record> gr, qGoBoard *brd, bool playing_w, bool playing_b, GameMode mode)
+	: MainWindow (parent, gr, mode), m_connector (brd)
+{
+	gfx_board->set_player_colors (playing_w, playing_b);
+}
+
+MainWindow_IGS::~MainWindow_IGS ()
+{
+}
 
 /*
  *	Playing or Observing
@@ -49,17 +93,13 @@ qGoIF::qGoIF(QWidget *p) : QObject()
 	parent = p;
 	qgobrd = 0;
 	gsName = GS_UNKNOWN;
-	boardlist = new Q3PtrList<qGoBoard>;
-	boardlist->setAutoDelete(false);
 	localBoardCounter = 10000;
 }
 
 qGoIF::~qGoIF()
 {
-	delete boardlist;
 	delete qgo;
 }
-
 
 // handle move info and distribute to different boards
 bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
@@ -69,9 +109,11 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 #endif
 
 	int         game_id = 0;
- 	StoneColor  sc = stoneNone;
+	stone_color sc = none;
 	QString     pt;
 	QString     mv_nr;
+	GameMode    mode = modeObserve;
+	bool is_own = false;
 
 	switch (src)
 	{
@@ -79,11 +121,11 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 		case 0:
  			game_id = gi->nr.toInt();
 			if (gi->mv_col == QString("B"))
-				sc = stoneBlack;
+				sc = black;
 			else if (gi->mv_col == QString("W"))
-				sc = stoneWhite;
+				sc = white;
 			else
-				sc = stoneNone;
+				sc = none;
 			mv_nr = gi->mv_nr;
 			pt = gi->mv_pt;
 			break;
@@ -93,15 +135,14 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 			// check if g->nr is a number
 			if (g->nr == QString("@"))
 			{
-				qGoBoard *qb = boardlist->first();
-				while (qb != NULL && qb->get_bplayer() != myName && qb->get_wplayer() != myName)
-				{
-					qb = boardlist->next();
-				}
-
-				if (qb)
-					game_id = qb->get_id();
-				else
+				bool found = false;
+				for (auto qb: boardlist)
+					if (qb->get_bplayer() == myName || qb->get_wplayer() == myName) {
+						game_id = qb->get_id ();
+						found = true;
+						break;
+					}
+				if (!found)
 				{
 					qWarning("*** You are not playing a game to be adjourned!");
 					return false;
@@ -113,9 +154,7 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 			if (g->Sz == QString("@") || g->Sz == QString("@@"))
 			{
 				// look for adjourned games
-				qGoBoard *qb = boardlist->first();
-				while (qb != NULL)
-				{
+				for (auto qb: boardlist) {
 					if (qb->get_adj() && qb->get_id() == 10000 &&
 					    qb->get_bplayer() == g->bname &&
 					    qb->get_wplayer() == g->wname)
@@ -129,8 +168,11 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 							emit signal_sendcommand("games " + g->nr, false);
 						qb->set_sentmovescmd(true);
 						qb->set_id(g->nr.toInt());
+#if 0
 						qb->setGameData();
 						qb->setMode();
+#endif
+
 						qb->set_adj(false);
 //						qb->get_win()->toggleMode();
 						qb->set_runTimer();
@@ -140,75 +182,65 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 
 						qb->send_kibitz(tr("Game continued as Game number %1").arg(g->nr));
 						// show new game number;
-						qb->get_win()->getBoard()->updateCaption();
+						qb->get_win()->updateCaption(true);
 
 						// renew refresh button
-						qb->get_win()->getInterfaceHandler()->refreshButton->setText(QObject::tr("Refresh", "button label"));
+						qb->get_win()->getMainWidget()->refreshButton->setText(QObject::tr("Refresh", "button label"));
 
 						// increase number of observed games
 						emit signal_addToObservationList(-2);
 
 						return true;
 					}
-
-					qb = boardlist->next();
 				}
 			}
 
 			// special case: your own game
 			if (g->Sz == QString("@@"))// || g->bname == myName || g->wname == myName)
 			{
+				is_own = true;
 				// set up new game
 				if (g->bname == g->wname)
 					// teaching game
-					src = 14;
+					src = 4, mode = modeTeach;
 				else
 					// match
-					src = 13;
+					src = 3, mode = modeMatch;
 			}
 			break;
 
 		// game to observe
 		case 2:
 			game_id = txt.toInt();
+			mode = modeObserve;
 			break;
 
 		// match
 		case 3:
 			game_id = txt.toInt();
+			mode = modeMatch;
 			break;
 
 		// teaching game
 		case 4: game_id = txt.toInt();
+			mode = modeTeach;
 			break;
 
 		// remove all boards! -> if connection is closed
 		// but: set options for local actions
 		case -1:
-			qgobrd = boardlist->first();
-			while (qgobrd)
-			{
-				// modeNormal;
-				qgobrd->set_stopTimer();
-				// enable Menus
-//				qgobrd->get_win()->setOnlineMenu(false);
-
-				// set board editable...
-				qgobrd->set_Mode_real (modeNormal);
-
-				boardlist->remove();
-				qgobrd = boardlist->current();
+			for (auto b: boardlist) {
+				b->disconnected (false);
 			}
+			boardlist.clear ();
 
 			// set number of observed games to 0
 			emit signal_addToObservationList(0);
 			return false;
-			break;
 
 		default:
 			qWarning("*** qGoIF::parse_move(): unknown case !!! ***");
 			return false;
-			break;
 	}
 
 #ifdef SHOW_MOVES_DLG
@@ -227,10 +259,13 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 	if (!qgobrd || qgobrd->get_id() != game_id)
 	{
 		// seek dialog
-		qgobrd = boardlist->first();
-		while (qgobrd != NULL && qgobrd->get_id() != game_id)
-			qgobrd = boardlist->next();
-		
+		qgobrd = nullptr;
+		for (auto b: boardlist) {
+			if (b->get_id () == game_id) {
+				qgobrd = b;
+				break;
+			}
+		}
 		// not found -> create new dialog
 		if (!qgobrd)
 		{
@@ -241,93 +276,14 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 				return false;
 			}
 
-			qgobrd = new qGoBoard();
-			boardlist->append(qgobrd);
+			qgobrd = new qGoBoard (this);
+			boardlist.append(qgobrd);
 
 //			qgobrd->get_win()->setOnlineMenu(true);
 
 			CHECK_PTR(qgobrd);
 
-			// connect with board (MainWindow::CloseEvent())
-			connect(qgobrd->get_win(),
-				SIGNAL(signal_closeevent()),
-				qgobrd,
-				SLOT(slot_closeevent()));
-			// connect with board (qGoBoard)
-			//  board -> to kibitz or say
-			connect(qgobrd->get_win()->getBoard(),
-				SIGNAL(signal_sendcomment(const QString&)),
-				qgobrd,
-				SLOT(slot_sendcomment(const QString&)));
-			// board -> stones
-			connect(qgobrd->get_win()->getBoard(),
-				SIGNAL(signal_addStone(enum StoneColor, int, int)),
-				qgobrd,
-				SLOT(slot_addStone(enum StoneColor, int, int)));
-
-			connect(qgobrd,
-				SIGNAL(signal_2passes(const QString&,const QString& )),
-				this,
-				SLOT(slot_removestones(const QString&, const QString&)));
-
-			connect(qgobrd,
-				SIGNAL(signal_sendcommand(const QString&, bool)),
-				this,
-				SLOT(slot_sendcommand(const QString&, bool)));
-			// board -> commands
-			connect(qgobrd->get_win()->getBoard(),
-				SIGNAL(signal_pass()),
-				qgobrd,
-				SLOT(slot_doPass()));
-#if 0
-			connect(qgobrd->get_win()->get_fileClose(),
-				SIGNAL(activated()),
-				qgobrd,
-				SLOT(slot_doAdjourn()));
-			connect(qgobrd->get_win()->get_fileQuit(),
-				SIGNAL(activated()),
-				qgobrd,
-				SLOT(slot_doAdjourn()));
-#endif
-			connect(qgobrd->get_win()->getBoard(),
-				SIGNAL(signal_adjourn()),
-				qgobrd,
-				SLOT(slot_doAdjourn()));
-			connect(qgobrd->get_win()->getBoard(),
-				SIGNAL(signal_undo()),
-				qgobrd,
-				SLOT(slot_doUndo()));
-			connect(qgobrd->get_win()->getBoard(),
-				SIGNAL(signal_resign()),
-				qgobrd,
-				SLOT(slot_doResign()));
-			connect(qgobrd->get_win()->getBoard(),
-				SIGNAL(signal_done()),
-				qgobrd,
-				SLOT(slot_doDone()));
-			connect(qgobrd->get_win()->getBoard(),
-				SIGNAL(signal_refresh()),
-				qgobrd,
-				SLOT(slot_doRefresh()));
-			connect(qgobrd->get_win()->getBoard(),
-				SIGNAL(signal_editBoardInNewWindow()),
-				qgobrd->get_win(),
-				SLOT(slot_editBoardInNewWindow()));
-			// teach tools
-			connect(qgobrd->get_win()->getMainWidget()->cb_opponent,
-				SIGNAL(activated(const QString&)),
-				qgobrd,
-				SLOT(slot_ttOpponentSelected(const QString&)));
-			connect(qgobrd->get_win()->getMainWidget()->pb_controls,
-				SIGNAL(toggled(bool)),
-				qgobrd,
-				SLOT(slot_ttControls(bool)));
-			connect(qgobrd->get_win()->getMainWidget()->pb_mark,
-				SIGNAL(toggled(bool)),
-				qgobrd,
-				SLOT(slot_ttMark(bool)));
-
-			if (src == 2)
+			if (mode == modeObserve) // (src == 2)
 			{
 				qgobrd->set_sentmovescmd(true);
 				emit signal_sendcommand("games " + txt, false);
@@ -336,39 +292,21 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 			}
 
 			// for own games send "games" cmd to get full info
-			if (src == 3 || src == 4 || src == 13 || src == 14 )//|| src == 0)
+			if (mode == modeMatch || mode == modeTeach) // (src == 3 || src == 4 || src == 13 || src == 14 )//|| src == 0)
 			{
-				connect(qgobrd->get_win()->getInterfaceHandler()->normalTools->pb_timeBlack,
-					SIGNAL(clicked()),
-					qgobrd,
-					SLOT(slot_addtimePauseB()));
-				connect(qgobrd->get_win()->getInterfaceHandler()->normalTools->pb_timeWhite,
-					SIGNAL(clicked()),
-					qgobrd,
-					SLOT(slot_addtimePauseW()));
-
-				if (src == 13 || src == 14 )//|| src== 0)
+				if (is_own)//|| src== 0)
 				{
 					// src changed from 1 to 3/4
 					qgobrd->set_sentmovescmd(true);
 					emit signal_sendcommand("games " + g->nr, false);
 					emit signal_sendcommand("moves " + g->nr, false);
 					emit signal_sendcommand("all " + g->nr, false);
-
-					if (src == 13)
-						src = 3;
-					else
-						src = 4;
 				}
 				else
 					emit signal_sendcommand("games " + txt, false);
 
-				if (src == 4)
+				if (mode == modeTeach)
 				{
-					// make teaching features visible
-					qgobrd->get_win()->getMainWidget()->cb_opponent->setEnabled(true);
-					qgobrd->get_win()->getMainWidget()->pb_controls->setDisabled(true);
-					qgobrd->get_win()->getMainWidget()->pb_mark->setEnabled(true);
 					qgobrd->ExtendedTeachingGame = true;
 					qgobrd->IamTeacher = true;
 					qgobrd->havePupil = false;
@@ -377,16 +315,13 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 			}
 
 			// set correct mode in qGo
-			qgobrd->set_id(game_id);
-			qgobrd->set_gsName(gsName);
-			qgobrd->set_myName(myName);
-			if ((game_id == 0) && (src != 6)) //SL added eb 12
-				// set local board
-				qgobrd->set_Mode_real (modeNormal); // ??? was mode 5, identical to mode 1 ??
-			else if (src==0)
+			qgobrd->set_id (game_id);
+			qgobrd->set_gsName (gsName);
+			qgobrd->set_myName (myName);
+			if (src==0)
 				qgobrd->set_Mode_real (modeObserve); // special case when not triggered by the 'observe' command (trail, for instance)
 			else
-				qgobrd->set_Mode(src);
+				qgobrd->set_Mode_real (mode);
 
 			// increase number of observed games
 			emit signal_addToObservationList(-2);
@@ -438,7 +373,7 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 			}
 
 			break;
-				
+
 		// adjourn/end/resume of a game (parser)
 		case 1:
 #ifdef SHOW_MOVES_DLG
@@ -458,20 +393,7 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 					return false;
 				}
 
-#if 0
-				if (g->Sz.contains("adjourned"))
-					qgobrd->send_kibitz(tr("Game has adjourned"));
-				else if (g->Sz.contains("White forfeits"))
-					qgobrd->send_kibitz(tr("White forfeits on time"));
-				else if (g->Sz.contains("Black forfeits"))
-					qgobrd->send_kibitz(tr("Black forfeits on time"));
-				else if (g->Sz.contains("White resigns"))
-					qgobrd->send_kibitz(tr("White resigns"));
-				else if (g->Sz.contains("Black resigns"))
-					qgobrd->send_kibitz(tr("Black resigns"));
-				else
-#endif
-					qgobrd->send_kibitz(g->Sz);
+				qgobrd->send_kibitz(g->Sz);
 
 				// set correct result entry
 				QString rs = QString::null;
@@ -486,7 +408,8 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 						( !g->Sz.contains(myName) && !qgobrd->get_myColorIsBlack() )) ?
 						"W+T" : "B+T");
 
-				else if (g->Sz.contains("W ", true) && g->Sz.contains("B ", true))
+				else if (g->Sz.contains("W ",  Qt::CaseSensitive)
+					 && g->Sz.contains("B ",  Qt::CaseSensitive))
 				{
 					// NNGS: White resigns. W 59.5 B 66.0
 					// IGS: W 62.5 B 93.0
@@ -540,11 +463,10 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 					 rs = ((( g->Sz.contains(myName) && qgobrd->get_myColorIsBlack() ) ||
 						( !g->Sz.contains(myName) && !qgobrd->get_myColorIsBlack() )) ?
 						"W+R" : "B+R");
+
 				if (!rs.isNull())
 				{
-					qgobrd->get_win()->getBoard()->getGameData()->result = rs;
-					qgobrd->send_kibitz(rs);
-					qDebug() << "Result: " << rs;
+					qgobrd->game_result (rs, extended_rs);
 				}
 
 				QString wplayer = qgobrd->get_wplayer();
@@ -553,52 +475,10 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 				{
 					if (bplayer == myName || wplayer == myName)
 						// can only reload own games
-						qgobrd->get_win()->getInterfaceHandler()->refreshButton->setText(tr("LOAD"));
+						qgobrd->get_win()->getMainWidget()->refreshButton->setText(tr("LOAD"));
 					qDebug() << "game adjourned... #" << QString::number(qgobrd->get_id());
 					qgobrd->set_adj(true);
-					qgobrd->set_id(10000);
-					qgobrd->clearObserverList();
-					qgo->playGameEndSound();
-				}
-				else
-				{
-					// case: error -> game has not correctly been removed from list
-					GameMode owngame = qgobrd->get_Mode();
-					// game ended - if new game started with same number -> prohibit access
-					qgobrd->set_id(-qgobrd->get_id());
-
-					// enable Menus
-//					qgobrd->get_win()->setOnlineMenu(false);
-
-					// set board editable...
-					qgobrd->set_Mode_real (modeNormal);
-
-#if 0
-					//autosave ?
-					if ((setting->readBoolEntry("AUTOSAVE")) && (owngame == modeObserve)) 
-					{
-						qgobrd->get_win()->doSave(qgobrd->get_win()->getBoard()->getCandidateFileName(),true);
-						qDebug("Game saved");
-					}
-#endif
-					// but allow to use "say" cmd if it was an own game
-					//if (owngame == modeMatch)
-					bool doSave = ((setting->readBoolEntry("AUTOSAVE")) && (owngame == modeObserve)) ||
-							((setting->readBoolEntry("AUTOSAVE_PLAYED")) && (owngame == modeMatch)); 
-					wrapupMatchGame(qgobrd, doSave);
-					if (owngame != modeObserve)
-						QMessageBox::information(qgobrd->get_win(),
-									 tr("Game n° ") + QString::number(-qgobrd->get_id()), extended_rs);
-					//else
-					//	qgo->playGameEndSound();
-
-#if 0
-					{
-							// allow 'say' command
-						qgobrd->get_win()->getInterfaceHandler()->commentEdit2->setReadOnly(false);
-						qgobrd->get_win()->getInterfaceHandler()->commentEdit2->setDisabled(false);
-					}
-#endif
+					qgobrd->disconnected (true);
 				}
 
 				// decrease number of observed games
@@ -606,54 +486,28 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 			}
 			else if (!qgobrd->get_havegd())
 			{
+				stone_color own_color = none;
+				GameMode mode = modeObserve;
 				// check if it's my own game
 				if (g->bname == myName || g->wname == myName)
 				{
+					own_color = g->bname == myName ? black : white;
 					// case: trying to observe own game: this is the way to get back to match if
 					// board has been closed by mistake
 					if (g->bname == g->wname)
-						// teach
-						qgobrd->set_Mode_real (modeTeach);
+						mode = modeTeach;
 					else
-						// match
-						qgobrd->set_Mode (modeMatch);
+						mode = modeMatch;
 				}
 				else if (g->bname == g->wname && !g->bname.contains('*'))
 				{
 					// case: observing a teaching game
-					// make teaching features visible while observing
-					qgobrd->get_win()->getMainWidget()->cb_opponent->setDisabled(true);
-					qgobrd->get_win()->getMainWidget()->pb_controls->setDisabled(true);
-					qgobrd->get_win()->getMainWidget()->pb_mark->setDisabled(true);
 					qgobrd->ExtendedTeachingGame = true;
 					qgobrd->IamTeacher = false;
 					qgobrd->IamPupil = false;
 					qgobrd->havePupil = false;
 				}
-				qgobrd->set_game(g);
-
-				if (qgobrd->get_Mode() == modeMatch)
-				{
-					if (g->bname == myName)
-					{
-						qgobrd->get_win()->getBoard()->set_myColorIsBlack(true);
-						qgobrd->set_myColorIsBlack(true);
-
-						// I'm black, so check before the first move if komi, handi, free is correct
-						if (qgobrd->get_requests_set())
-						{
-							qDebug() << "qGoIF::parse_move() : check_requests";
-							qgobrd->check_requests();
-						}
-					}
-					else if (g->wname == myName)
-					{
-						qgobrd->get_win()->getBoard()->set_myColorIsBlack(false);
-						qgobrd->set_myColorIsBlack(false);
-					}
-					else
-						qWarning("*** Wanted to set up game without knowing my color ***");
-				}
+				qgobrd->set_game (g, mode, own_color);
 			}
 			break;
 
@@ -673,7 +527,6 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 			dlg->write("Teach: " + txt + "\n");
 			break;
 
-      
 #endif
 		default:
 			//qDebug("qGoInterface::parse_move() - illegal parameter");
@@ -722,18 +575,14 @@ void qGoIF::slot_matchcreate(const QString &gameno, const QString &opponent)
 void qGoIF::slot_matchsettings(const QString &id, const QString &handicap, const QString &komi, assessType kt)
 {
 	// seek board
-	qGoBoard *qb = boardlist->first();
-	while (qb && qb->get_id() != id.toInt())
-		qb = boardlist->next();
+	for (auto b: boardlist)
+		if (b->get_id() == id.toInt()) {
+			b->set_requests(handicap, komi, kt);
+			qDebug() << QString("qGoIF::slot_matchsettings: h=%1, k=%2, kt=%3").arg(handicap).arg(komi).arg(kt);
+			return;
+		}
 
-	if (!qb)
-	{
-		qWarning("BOARD CORRESPONDING TO GAME SETTINGS NOT FOUND !!!");
-		return;
-	}
-
-	qb->set_requests(handicap, komi, kt);
-	qDebug() << QString("qGoIF::slot_matchsettings: h=%1, k=%2, kt=%3").arg(handicap).arg(komi).arg(kt);
+	qWarning("BOARD CORRESPONDING TO GAME SETTINGS NOT FOUND !!!");
 }
 
 void qGoIF::slot_title(const GameInfo *gi, const QString &title)
@@ -741,10 +590,7 @@ void qGoIF::slot_title(const GameInfo *gi, const QString &title)
 	// This used to check that only teaching games can have a title.
 	// However, it seems that we can reliably identify boards by game
 	// ID - see parser.cpp.
-
-	qGoBoard *qb = boardlist->first();
-	while (qb)
-	{
+	for (auto qb: boardlist) {
 		if (qb->get_id() == gi->nr.toInt()
 		    && (qb->get_Mode() == modeMatch || qb->get_Mode() == modeTeach
 			|| qb->get_Mode() == modeObserve))
@@ -752,8 +598,7 @@ void qGoIF::slot_title(const GameInfo *gi, const QString &title)
 			qb->set_title(title);
 			return;
 		}
-		qb = boardlist->next();
-	}	
+	}
 }
 
 // komi set or requested
@@ -774,9 +619,12 @@ void qGoIF::slot_komi(const QString &nr, const QString &komi, bool isrequest)
 			return;
 
 		// 'nr' is opponent (IGS/NNGS)
-		qb = boardlist->first();
-		while (qb != NULL && qb->get_wplayer() != nr && qb->get_bplayer() != nr)
-			qb = boardlist->next();
+		qb = nullptr;
+		for (auto b: boardlist)
+			if (b->get_wplayer () == nr || b->get_bplayer () == nr) {
+				qb = b;
+				break;
+			}
 
 		if (qb)
 		{
@@ -817,57 +665,48 @@ void qGoIF::slot_komi(const QString &nr, const QString &komi, bool isrequest)
 			return;
 		}
 
-		qb = boardlist->first();
-		while (qb != NULL && qb->get_wplayer() != myName && qb->get_bplayer() != myName)
-			qb = boardlist->next();
+		for (auto b: boardlist)
+			if (b->get_wplayer () == myName || b->get_bplayer () == myName) {
+				b->set_komi (komi);
+				break;
+			}
 	}
 	else
 	{
 		// title message follows to move message
-		qb = boardlist->first();
-		while (qb != NULL && qb->get_id() != nr.toInt())
-			qb = boardlist->next();
+		for (auto b: boardlist)
+			if (b->get_id () == nr.toInt ()) {
+				b->set_komi (komi);
+				break;
+			}
 	}
 
-	if (qb)
-		qb->set_komi(komi);
 }
 
 // game free/unfree message received
 void qGoIF::slot_freegame(bool freegame)
 {
-	qGoBoard *qb;
-
-	qb = boardlist->first();
 	// what if 2 games (IGS) and mv_counter < 3 in each game? -> problem
-	while (qb != NULL && qb->get_wplayer() != myName && qb->get_bplayer() != myName && qb->get_mvcount() < 3)
-		qb = boardlist->next();
+	for (auto qb: boardlist)
+		if ((qb->get_wplayer() == myName || qb->get_bplayer() == myName) && qb->get_mvcount() < 3) {
+			qb->set_freegame(freegame);
+			return;
+		}
+}
 
-	if (qb)
-		qb->set_freegame(freegame);
+void qGoIF::remove_board (qGoBoard *qb)
+{
+	boardlist.removeOne (qb);
 }
 
 // board window closed...
-void qGoIF::slot_closeevent()
+void qGoIF::window_closing (qGoBoard *qb)
 {
-	int id = 0;
-	qGoBoard *qb;
+	int id = qb->get_id();
 
 	// erase actual pointer to prevent error
 	qgobrd = 0;
-
-	// seek board
-	qb = boardlist->first();
-	while (qb && (id = qb->get_id()) > 0)
-		qb = boardlist->next();
-
-	if (!qb)
-	{
-		qWarning("CLOSED BOARD NOT FOUND IN LIST !!!");
-		return;
-	}
-
-	qDebug() << QString("qGoIF::slot_closeevent() -> game %1").arg(qb->get_id());
+	qDebug() << "qGoIF::slot_closeevent() -> game " << id << "\n";
 
 	// destroy timers
 	qb->set_stopTimer();
@@ -885,7 +724,6 @@ void qGoIF::slot_closeevent()
 				break;
 
 			case modeMatch:
-
 				// decrease number of observed games
 				emit signal_addToObservationList(-1);
 				break;
@@ -902,10 +740,6 @@ void qGoIF::slot_closeevent()
 		}
 	}
 
-//	MainWindow *win = qb->get_win();
-//	qgo->removeBoardWindow(win);
-	boardlist->remove();
-
 	delete qb;
 //	delete win;
 }
@@ -913,7 +747,7 @@ void qGoIF::slot_closeevent()
 // kibitz strings
 void qGoIF::slot_kibitz(int num, const QString& who, const QString& msg)
 {
-	qGoBoard *qb;
+	qGoBoard *qb = nullptr;
 	QString name;
 
 	// own game if num == NULL
@@ -926,14 +760,16 @@ void qGoIF::slot_kibitz(int num, const QString& who, const QString& msg)
 			return;
 		}
 
-		qb = boardlist->first();
-		while (qb != NULL && qb->get_wplayer() != myName && qb->get_bplayer() != myName)
-			qb = boardlist->next();
-
-		if (qb && qb->get_wplayer() == myName)
-			name = qb->get_bplayer();
-		else if (qb)
-			name = qb->get_wplayer();
+		for (auto b: boardlist)
+			if (b->get_wplayer() == myName) {
+				qb = b;
+				name = b->get_bplayer ();
+				break;
+			} else if (qb->get_bplayer() == myName) {
+				qb = b;
+				name = b->get_wplayer ();
+				break;
+			}
 
 		if (qb)
 			// sound for "say" command
@@ -942,9 +778,11 @@ void qGoIF::slot_kibitz(int num, const QString& who, const QString& msg)
 	else
 	{
 		// seek board to send kibitz
-		qb = boardlist->first();
-		while (qb && qb->get_id() != num)
-			qb = boardlist->next();
+		for (auto b: boardlist)
+			if (b->get_id() == num) {
+				qb = b;
+				break;
+			}
 
 		name = who;
 	}
@@ -955,8 +793,11 @@ void qGoIF::slot_kibitz(int num, const QString& who, const QString& msg)
 	{
 		// special case: opponent has resigned - interesting in quiet mode
 		qb->send_kibitz(msg);
+		qDebug () << "strange opponent resignation\n";
+#if 0
 		//qgo->playGameEndSound();
 		wrapupMatchGame(qb, true);
+#endif
 	}
 	else
 		qb->send_kibitz(name + ": " + msg);
@@ -1019,16 +860,18 @@ void qGoIF::slot_sendcommand(const QString &text, bool show)
 
 void qGoIF::slot_removestones(const QString &pt, const QString &game_id)
 {
-	qGoBoard *qb = boardlist->first();
+	qGoBoard *qb = nullptr;
 
 	if (pt.isEmpty() && game_id.isEmpty())
 	{
-qDebug("slot_removestones(): !pt !game_id");
+		qDebug("slot_removestones(): !pt !game_id");
 		// search game
-		qb = boardlist->first();
-		while (qb && qb->get_Mode() != modeMatch)
-			qb = boardlist->next();
-		
+		for (auto b: boardlist)
+			if (b->get_Mode() == modeMatch) {
+				qb = b;
+				break;
+			}
+
 		if (!qb)
 		{
 			qWarning("*** No Match found !!! ***");
@@ -1038,45 +881,15 @@ qDebug("slot_removestones(): !pt !game_id");
 		switch (gsName)
 		{
 			case IGS:
-				// no parameter -> restore counting
-				if (qb->get_win()->getInterfaceHandler()->passButton->text() == QString(tr("Done")))
-				{
-qDebug("slot_removestones(): IGS restore counting");
-					// undo has done -> reset counting
-					qb->get_win()->doRealScore(false);
-					qb->get_win()->getBoard()->setMode(modeMatch);
-					qb->get_win()->getBoard()->previousMove();
-					qb->dec_mv_counter();
-					qb->get_win()->doRealScore(true);
-					qb->send_kibitz(tr("SCORE MODE: RESET - click on a stone to mark as dead..."));
-				}
-				else if (qb->get_Mode() == modeMatch)
-				{
-qDebug("slot_removestones(): IGS score mode");
-					// set to count mode
-					qb->get_win()->doRealScore(true);
-					qb->send_kibitz(tr("SCORE MODE: click on a stone to mark as dead..."));
-				}
+				/* Can be a re-enter if already scoring.  */
+				qb->enter_scoring_mode (true);
 				break;
 
 			default:
 				if (qb->get_Mode() == modeMatch)
-				{
-qDebug("slot_removestones(): NON IGS counting");
-					// set to count mode
-					qb->get_win()->doRealScore(true);
-					qb->send_kibitz(tr("SCORE MODE: click on a stone to mark as dead..."));
-				}
+					qb->enter_scoring_mode (false);
 				else
-				{
-qWarning("slot_removestones(): NON IGS no match");
-					// back to matchMode
-					qb->get_win()->doRealScore(false);
-					qb->get_win()->getBoard()->setMode(modeMatch);
-					qb->get_win()->getBoard()->previousMove();
-					qb->dec_mv_counter();
-					qb->send_kibitz(tr("GAME MODE: place stones..."));
-				}
+					qb->leave_scoring_mode ();
 				break;
 		}
 
@@ -1088,247 +901,164 @@ qWarning("slot_removestones(): NON IGS no match");
 		qDebug("slot_removestones(): pt !game_id");
 		// stone coords but no game number:
 		// single match mode, e.g. NNGS
-		while (qb && qb->get_Mode() != modeMatch && qb->get_Mode() != modeTeach)
-			qb = boardlist->next();
+		for (auto b: boardlist)
+			if (b->get_Mode () == modeMatch || b->get_Mode () == modeTeach) {
+				qb = b;
+				break;
+			}
 	}
 	else
 	{
 qDebug("slot_removestones(): game_id");
 		// multi match mode, e.g. IGS
-		while (qb && qb->get_id() != game_id.toInt())
-			qb = boardlist->next();
-
-		if (qb && qb->get_win()->getInterfaceHandler()->passButton->text() != QString(tr("Done")))
-		{
-			// set to count mode
-			qb->get_win()->doRealScore(true);
-			qb->send_kibitz(tr("SCORE MODE: click on a stone to mark as dead..."));
-		}
+		for (auto b: boardlist)
+			if (b->get_id () == game_id.toInt ()) {
+				qb = b;
+				qb->enter_scoring_mode (false);
+				break;
+			}
 	}
-		
+
 	if (!qb)
 	{
 		qWarning("*** No Match found !!! ***");
 		return;
 	}
 
-	int i = pt[0].toAscii() - 'A' + 1;
+	int i = pt[0].toLatin1() - 'A' + 1;
 	// skip j
 	if (i > 8)
 		i--;
-	
+
 	int j;
-	if (pt[2].toAscii() >= '0' && pt[2].toAscii() <= '9')
+	if (pt.length () > 2 && pt[2].toLatin1() >= '0' && pt[2].toLatin1() <= '9')
 		j = qb->get_boardsize() + 1 - pt.mid(1,2).toInt();
 	else
 		j = qb->get_boardsize() + 1 - pt[1].digitValue();
 
 	// mark dead stone
-	qb->get_win()->getBoard()->getBoardHandler()->markDeadStone(i, j);
+	qb->mark_dead_stone (i - 1, j - 1);
 	qb->send_kibitz("removing @ " + pt);
 }
 
 // game status received
-void qGoIF::slot_result(const QString &txt, const QString &line, bool isplayer, 
-const QString &komi)
+void qGoIF::slot_result(const QString &txt, const QString &line, bool isplayer,  const QString &komi)
 {
 	static qGoBoard *qb;
-	static float wcount, bcount;
 	static int column;
 
 	if (isplayer)
 	{
-		qb = boardlist->first();
-		// find right board - slow, but just once a game
-		while (qb != NULL
-		       && ((qb->get_wplayer() != txt && qb->get_bplayer() != txt
-			    && qb->get_Mode() != modeEdit)))
-			qb = boardlist->next();
+		qb = nullptr;
+		column = 0;
 
-		if (qb && qb->get_wplayer() == txt)
-		{
-			// prisoners white + komi
-			wcount = line.toFloat() + komi.toFloat();
-		}
-		else if (qb && qb->get_bplayer() == txt)
-		{
-			// prisoners black
-			bcount = line.toFloat();
-			// ok, start counting column
-			column = 0;
-		}
+		for (auto b: boardlist)
+			if ((b->get_wplayer() == txt || b->get_bplayer() == txt)
+			    && b->get_id () >= 0)
+			{
+				qb = b;
+				break;
+			}
+
+		if (qb)
+			qb->receive_score_begin ();
 	}
 	else if (qb)
 	{
-		// ok, now mark territory points only
-		// 0 .. black
-		// 1 .. white
-		// 2 .. free
-		// 3 .. neutral
-		// 4 .. white territory
-		// 5 .. black territory
-
-		// one line at a time
+		qb->receive_score_line (column, line);
 		column++;
-		int i;
-		for (i = 0; i < (int) line.length(); i++)
-		{
-			switch(line[i].digitValue())
-			{
-				case 4:
-					// add white territory
-					wcount++;
-					qb->get_win()->getBoard()->setMark(column, i+1, markTerrWhite, true);
-					break;
-
-				case 5:
-					// add black territory
-					bcount++;
-					qb->get_win()->getBoard()->setMark(column, i+1, markTerrBlack, true);
-					break;
-
-				default:
-					break;
-			}
-		}
-		// send kibitz string after counting
 		if (txt.toInt() == (int) line.length() - 1)
-			/*send_kibitz*/ qDebug() << tr("Game Status: W:") << QString::number(wcount) << " " << tr("B:") << QString::number(bcount);
-
-		// show territory
-		qb->get_win()->getBoard()->updateCanvas();
+			qb->receive_score_end ();
 	}
 }
 
 // undo a move
 void qGoIF::slot_undo(const QString &player, const QString &move)
 {
-	qDebug("qGoIF::slot_undo()");
-	qGoBoard *qb = boardlist->first();
+	qDebug() << "qGoIF::slot_undo()" << player << move;
 
 	// check if game number given
 	bool ok;
 	int nr = player.toInt(&ok);
-	if (ok)
-		while (qb != NULL && qb->get_id() != nr)
-			qb = boardlist->next();
-	else
-		while (qb != NULL && qb->get_wplayer() != player && qb->get_bplayer() != player)
-			qb = boardlist->next();
-
-	if (!qb)
-	{
-		qWarning("*** board for undo not found!");
-		return;
+	for (auto qb: boardlist) {
+		if ((ok && qb->get_id () == nr)
+		    || (!ok && qb->get_id () >= 0 && (qb->get_wplayer() == player || qb->get_bplayer() == player)))
+		{
+			qb->remote_undo (move);
+			return;
+		}
 	}
+	qWarning("*** board for undo not found!");
+}
 
-	if (move != "Pass")
+void qGoBoard::remote_undo (const QString &move)
+{
+	if (!m_scoring)
 	{
-		// only the last '0' is necessary
-		qb->set_move(stoneNone, 0, 0);
+		dec_mv_counter();
+		win->getBoard ()->deleteNode ();
 		return;
 	}
 
 	// back to matchMode
-	qb->get_win()->doRealScore(false);
-	qb->get_win()->getBoard()->setMode(modeMatch);
-	qb->get_win()->getBoard()->previousMove();
-	qb->dec_mv_counter();
-	qb->send_kibitz(tr("GAME MODE: place stones..."));
+	leave_scoring_mode ();
+	win->getBoard()->setMode(modeMatch);
+	win->getBoard()->previousMove();
+	dec_mv_counter();
+	send_kibitz(tr("GAME MODE: place stones..."));
 }
 
-
-
-// set independent local board
-void qGoIF::set_localboard(QString file)
+void qGoBoard::enter_scoring_mode (bool may_reenter)
 {
-	qGoBoard *qb = new qGoBoard();
-	qb->set_id(0);
-	// normal mode
-	qb->set_Mode_real (modeNormal);
-	if (file == "/19/")
-	{
-		qb->set_komi("5.5");
-		// special case - set up 19x19 board without any questions
+	if (m_scoring) {
+		if (may_reenter) {
+			leave_scoring_mode ();
+		}
 	}
-	else if (file.isNull ())
-		qb->get_win()->slotFileNewGame();
-	else
-		qb->get_win()->doOpen(file, 0, false);
-//	qb->get_win()->setOnlineMenu(false);
-	qb->get_win()->setGameMode (modeNormal);
-
-	boardlist->append(qb);
-	qb->set_id(++localBoardCounter);
-
-	// connect with board (MainWindow::CloseEvent())
-	connect(qb->get_win(),
-		SIGNAL(signal_closeevent()),
-		qb,
-		SLOT(slot_closeevent()));
+	if (m_scoring)
+		return;
+	send_kibitz (tr ("SCORE MODE: click on a stone to mark as dead..."));
+	m_scoring = true;
+	win->setGameMode (modeScoreRemote);
 }
 
-// set independent local board + open game
-void qGoIF::set_localgame()
+void qGoBoard::leave_scoring_mode ()
 {
-	qGoBoard *qb = new qGoBoard();
-	qb->set_id(0);
-	// normal mode
-	qb->set_Mode_real (modeNormal);
-	qb->get_win()->slotFileOpen();
-//	qb->get_win()->setOnlineMenu(false);
+	win->setGameMode (gameMode);
+	m_scoring = false;
+	send_kibitz (tr ("GAME MODE: click to play stones..."));
+}
 
-	boardlist->append(qb);
-	qb->set_id(++localBoardCounter);
+void qGoBoard::player_toggle_dead (int x, int y)
+{
+	/* @@@ Is that really it?  */
+	move_played (x, y);
+}
 
-	// connect with board (MainWindow::CloseEvent())
-	connect(qb->get_win(),
-		SIGNAL(signal_closeevent()),
-		qb,
-		SLOT(slot_closeevent()));
+void qGoBoard::mark_dead_stone (int x, int y)
+{
+	win->mark_dead_external (x, y);
 }
 
 // time has been added
 void qGoIF::slot_timeAdded(int time, bool toMe)
 {
-	qGoBoard *qb = boardlist->first();
-	while (qb != NULL && qb->get_Mode() != modeMatch)
-		qb = boardlist->next();
+	for (auto qb: boardlist) {
+		/* @@@ Not a great test.  */
+		if (qb->get_Mode () == modeMatch) {
 
-	if (!qb)
-	{
-		qWarning("*** board for undo not found!");
-		return;
+			// use time == -1 to pause the game
+			if (time == -1)
+				qb->set_gamePaused(toMe);
+			else if (toMe && qb->get_myColorIsBlack() || !toMe && !qb->get_myColorIsBlack())
+				qb->addtime_b(time);
+			else
+				qb->addtime_w(time);
+			return;
+		}
 	}
 
-	// use time == -1 to pause the game
-	if (time == -1)
-	{
-		qb->set_gamePaused(toMe);
-		return;
-	}
-
-	if (toMe && qb->get_myColorIsBlack() || !toMe && !qb->get_myColorIsBlack())
-		qb->addtime_b(time);
-	else
-		qb->addtime_w(time);
-}
-
-
-void qGoIF::wrapupMatchGame(qGoBoard * qgobrd, bool doSave)
-{
-	qgo->playGameEndSound();				
-	qgobrd->get_win()->getInterfaceHandler()->commentEdit2->setReadOnly(false);
-	qgobrd->get_win()->getInterfaceHandler()->commentEdit2->setDisabled(false);
-	
-	//autosave ?
-	if (doSave) 
-	{
-		qgobrd->get_win()->doSave(qgobrd->get_win()->getBoard()->getCandidateFileName(),true);
-		qDebug("Game saved");
-	}
-
-
+	qWarning("*** board for undo not found!");
 }
 
 
@@ -1339,7 +1069,7 @@ void qGoIF::wrapupMatchGame(qGoBoard * qgobrd, bool doSave)
 
 
 // add new board window
-qGoBoard::qGoBoard() : QObject()
+qGoBoard::qGoBoard(qGoIF *qif) : QObject(), m_qgoif (qif)
 {
 	qDebug("::qGoBoard()");
 	have_gameData = false;
@@ -1348,8 +1078,8 @@ qGoBoard::qGoBoard() : QObject()
 	gd = GameData();
 	mv_counter = -1;
 	requests_set = false;
-	haveTitle = false;
-	win = new MainWindow(0, PACKAGE);
+	m_game = nullptr;
+	win = nullptr;
 
 	ExtendedTeachingGame = false;
 	IamTeacher = false;
@@ -1372,42 +1102,133 @@ qGoBoard::qGoBoard() : QObject()
 	chk_b = -2;
 	chk_w = -2;
 #endif
-	qgo->addBoardWindow(win);
-
-	// disable some Menu items
-//	win->setOnlineMenu(true);
 }
 
 qGoBoard::~qGoBoard()
 {
-qDebug("~qGoBoard()");
-	qgo->removeBoardWindow(win);
-	// do NOT delete *win, cause MainWindow does it first!
+	qDebug("~qGoBoard()");
+	if (m_connected)
+		m_qgoif->remove_board (this);
 	delete win;
+	delete m_title;
+	delete m_scoring_board;
+}
+
+void qGoBoard::receive_score_begin ()
+{
+	m_scoring_board = new go_board (m_state->get_board ());
+	m_terr_w = m_terr_b = 0;
+	m_caps_w = m_caps_b = 0;
+}
+
+void qGoBoard::receive_score_end ()
+{
+	game_state *st = m_state;
+	game_state *st_new = st->add_child_edit (*m_scoring_board, m_state->to_move (), true);
+	st->transfer_observers (st_new);
+	delete m_scoring_board;
+	m_scoring_board = nullptr;
+}
+
+void qGoBoard::receive_score_line (int n, const QString &line)
+{
+	// ok, now mark territory points only
+	// 0 .. black
+	// 1 .. white
+	// 2 .. free
+	// 3 .. neutral
+	// 4 .. white territory
+	// 5 .. black territory
+
+	for (int y = 0; y < line.length (); y++)
+		switch (line[y].digitValue ()) {
+		case 4:
+			m_terr_w++;
+			if (m_scoring_board->stone_at (n, y) == black)
+				m_caps_w++;
+
+			m_scoring_board->set_mark (n, y, mark::terr, 0);
+			break;
+		case 5:
+			m_terr_b++;
+			if (m_scoring_board->stone_at (n, y) == white)
+				m_caps_b++;
+			m_scoring_board->set_mark (n, y, mark::terr, 1);
+			break;
+		default:
+			break;
+		}
+}
+
+/* Called when we have game info and all the moves up to this point.  */
+void qGoBoard::game_startup ()
+{
+	bool am_black = m_own_color == black;
+	bool am_white = m_own_color == white;
+	win = new MainWindow_IGS (0, m_game, this, am_white, am_black, gameMode);
+	win->show ();
+
+	game_state *root = m_game->get_root ();
+	if (root != m_state)
+		root->transfer_observers (m_state);
+
+	// disable some Menu items
+//	win->setOnlineMenu(true);
+
+	// connect with board (MainWindow::CloseEvent())
+	connect(win, SIGNAL(signal_closeevent()), this, SLOT(slot_closeevent()));
+	// connect with board (qGoBoard)
+	//  board -> to kibitz or say
+	connect(win, SIGNAL(signal_sendcomment(const QString&)), this, SLOT(slot_sendcomment(const QString&)));
+
+	connect(this, SIGNAL(signal_sendcommand(const QString&, bool)), m_qgoif, SLOT(slot_sendcommand(const QString&, bool)));
+	// board -> commands
+	connect(win, SIGNAL(signal_adjourn()), this, SLOT(slot_doAdjourn()));
+	connect(win, SIGNAL(signal_undo()), this, SLOT(slot_doUndo()));
+	connect(win, SIGNAL(signal_done()), this, SLOT(slot_doDone()));
+	connect(win, SIGNAL(signal_refresh()), this, SLOT(slot_doRefresh()));
+
+	// teach tools
+	connect(win->getMainWidget()->cb_opponent, SIGNAL(activated(const QString&)), this, SLOT(slot_ttOpponentSelected(const QString&)));
+	connect(win->getMainWidget()->pb_controls, SIGNAL(toggled(bool)), this, SLOT(slot_ttControls(bool)));
+	connect(win->getMainWidget()->pb_mark, SIGNAL(toggled(bool)), this, SLOT(slot_ttMark(bool)));
+
+	if (ExtendedTeachingGame) {
+		// make teaching features visible while observing
+		win->getMainWidget()->cb_opponent->setDisabled(IamTeacher);
+		win->getMainWidget()->pb_controls->setDisabled(IamTeacher);
+		win->getMainWidget()->pb_mark->setDisabled(IamTeacher);
+	}
+
+	if (gameMode == modeMatch || gameMode == modeTeach) {
+		connect (win->getMainWidget()->normalTools->pb_timeBlack,
+			 &QPushButton::clicked, this, &qGoBoard::slot_addtimePauseB);
+		connect (win->getMainWidget()->normalTools->pb_timeWhite,
+			 &QPushButton::clicked, this, &qGoBoard::slot_addtimePauseW);
+	}
+
+	if (m_comments.length () > 0)
+		win->append_comment (m_comments);
+
 }
 
 // set game info to one board
-void qGoBoard::set_game(Game *g)
+void qGoBoard::set_game(Game *g, GameMode mode, stone_color own_color)
 {
-	gd.playerBlack = g->bname;
-	gd.playerWhite = g->wname;
-	gd.rankBlack = g->brank;
-	gd.rankWhite = g->wrank;
-//	QString status = g->Sz.simplified();
-	gd.size = g->Sz.toInt();
-	gd.handicap = g->H.toInt();
-	gd.komi = g->K.toFloat();
-	gd.gameNumber = id;
+	go_board startpos (g->Sz.toInt ());
+	int handi = g->H.toInt ();
+	if (handi >= 2)
+		startpos = new_handicap_board (g->Sz.toInt(), handi);
+	enum ranked rt = ranked::ranked;
 	if (g->FR.contains("F"))
-		gd.freegame = FREE;
+		rt = ranked::free;
 	else if (g->FR.contains("T"))
-		gd.freegame = TEACHING;
-	else
-		gd.freegame = RATED;
-	if (gd.freegame != TEACHING)
+		rt = ranked::teaching;
+
+	if (rt != ranked::teaching)
 	{
 		gd.timeSystem = canadian;
-		gd.byoTime = g->By.toInt()*60;
+		gd.byoTime = g->By.toInt() * 60;
 		gd.byoStones = 25;
 		if (wt_i > 0)
 			gd.timelimit = (((wt_i > bt_i ? wt_i : bt_i) / 60) + 1) * 60;
@@ -1420,7 +1241,6 @@ void qGoBoard::set_game(Game *g)
 		else
 			gd.overtime = "25/" + QString::number(gd.byoTime) + " Canadian";
 	}
-	
 	else
 	{
 		gd.timeSystem = time_none;
@@ -1428,9 +1248,34 @@ void qGoBoard::set_game(Game *g)
 		gd.byoStones = 0;
 		gd.timelimit = 0;
 	}
+
+	game_info info (m_title ? m_title->toStdString () : "",
+			g->wname.toStdString (), g->bname.toStdString (),
+			g->wrank.toStdString (), g->brank.toStdString (),
+			"", g->K.toFloat(), handi, rt, "", "", "", "",
+			std::to_string (gd.timelimit), gd.overtime.toStdString ());
+
+	m_game = std::make_shared<game_record> (startpos, handi >= 2 ? white : black, info);
+	m_game->set_date (QDate::currentDate().toString("dd MM yyyy").toStdString ());
+	start_observing (m_game->get_root ());
+	gd.size = g->Sz.toInt();
+	gd.playerBlack = g->bname;
+	gd.playerWhite = g->wname;
+	gd.rankBlack = g->brank;
+	gd.rankWhite = g->wrank;
+//	QString status = g->Sz.simplified();
+	gd.handicap = g->H.toInt();
+	gd.komi = g->K.toFloat();
+	gd.gameNumber = id;
+	if (g->FR.contains("F"))
+		gd.freegame = FREE;
+	else if (g->FR.contains("T"))
+		gd.freegame = TEACHING;
+	else
+		gd.freegame = RATED;
+
 	gd.style = 1;
 	gd.oneColorGo = g->oneColorGo ;
-  	
 	switch (gsName)
 	{
 		case IGS :
@@ -1450,26 +1295,30 @@ void qGoBoard::set_game(Game *g)
 	}
 
 	gd.date = QDate::currentDate().toString("dd MM yyyy") ;
-	
-	setMode();
-	initGame();
-	setMode();
-//	win->toggleMode();
+
 	have_gameData = true;
 
 	// needed for correct sound
 	stated_mv_count = g->mv.toInt();
-	sound = false;
+	set_Mode_real (mode);
+	m_own_color = own_color;
+
+	if (stated_mv_count == 0)
+		game_startup ();
 }
 
 void qGoBoard::set_title(const QString &t)
 {
-	gd = win->getBoard()->getGameData();
-	gd.gameName = t;
-	win->getBoard()->setGameData(&gd);
-	win->getBoard()->updateCaption();
+	if (m_title)
+		delete m_title;
+	m_title = new QString (t);
 
-	haveTitle = true;
+	if (m_game == nullptr)
+		return;
+
+	m_game->set_title (t.toStdString ());
+	if (win)
+		win->update_game_record (m_game);
 }
 
 void qGoBoard::set_komi(const QString &k)
@@ -1483,24 +1332,17 @@ void qGoBoard::set_komi(const QString &k)
 
 	qDebug() << "set komi to " << k_;
 
+#if 0
 	gd.komi = k_.toFloat();
 	win->getBoard()->setGameData(&gd);
-	win->getInterfaceHandler()->normalTools->komi->setText(k_);
+	win->getMainWidget()->normalTools->komi->setText(k_);
+#endif
 }
 
 void qGoBoard::set_freegame(bool f)
 {
-	if (f)
-	{
-		win->getBoard()->getInterfaceHandler()->normalTools->TextLabel_free->setText(tr("free"));
-		gd.freegame = FREE;
-	}
-	else
-	{
-		win->getBoard()->getInterfaceHandler()->normalTools->TextLabel_free->setText(tr("rated"));
-		gd.freegame = RATED;
-	}
-	win->getBoard()->setGameData(&gd);
+	m_game->set_ranked_type (f ? ranked::free : ranked::ranked);
+	win->update_game_record (m_game);
 }
 
 // convert seconds to time string
@@ -1543,7 +1385,7 @@ QString qGoBoard::secToTime(int seconds)
 void qGoBoard::timerEvent(QTimerEvent*)
 {
 	// wait until first move
-	if (mv_counter < 0 || id < 0 || game_paused)
+	if (win == nullptr || mv_counter < 0 || id < 0 || game_paused)
 		return;
 
 	if (mv_counter % 2)
@@ -1555,9 +1397,11 @@ void qGoBoard::timerEvent(QTimerEvent*)
 		chk_b--;
 		if (chk_b < bt_i + 20)
 			chk_b = bt_i;
-		win->getInterfaceHandler()->setTimes("(" + secToTime(chk_b) + ") " + secToTime(bt_i), b_stones, "(" + secToTime(chk_w) + ") " + wt, w_stones);
+		win->getMainWidget ()->setTimes("(" + secToTime(chk_b) + ") " + secToTime(bt_i), b_stones,
+					  "(" + secToTime(chk_w) + ") " + wt, w_stones,
+					  false, false);
 #else
-		win->getInterfaceHandler()->setTimes(secToTime(bt_i), b_stones, wt, w_stones);
+		win->getMainWidget ()->setTimes(secToTime(bt_i), b_stones, wt, w_stones, false, false);
 #endif
 	}
 	else
@@ -1569,44 +1413,12 @@ void qGoBoard::timerEvent(QTimerEvent*)
 		chk_w--;
 		if (chk_w < bt_i + 20)
 			chk_w = wt_i;
-		win->getInterfaceHandler()->setTimes("(" + secToTime(chk_b) + ") " + bt, b_stones, "(" + secToTime(chk_w) + ") " + secToTime(wt_i), w_stones);
+		win->getMainWidget ()->setTimes("(" + secToTime(chk_b) + ") " + bt, b_stones,
+					  "(" + secToTime(chk_w) + ") " + secToTime(wt_i), w_stones,
+					  false, false);
 #else
-		win->getInterfaceHandler()->setTimes(bt, b_stones, secToTime(wt_i), w_stones);
+		win->getMainWidget ()->setTimes(bt, b_stones, secToTime(wt_i), w_stones, false, false);
 #endif
-	}
-
-	// warn if I am within the last 10 seconds
-	if (gameMode == modeMatch)
-	{
-		if (myColorIsBlack && bt_i <= BY_timer && bt_i > -1 && mv_counter % 2) // ||
-		{
-			// each second we alternate button background color
-			if (bt_i %2)
-				win->getInterfaceHandler()->normalTools->pb_timeBlack->setPaletteBackgroundColor(Qt::red);
-			else 
-				win->getInterfaceHandler()->normalTools->pb_timeBlack->setPaletteBackgroundColor(win->getInterfaceHandler()->normalTools->palette().color(QPalette::Active,QColorGroup::Button)) ;//setPaletteBackgroundColor(Qt::PaletteBase);
-			qgo->playTimeSound();
-		}		
-	
-		else if ( !myColorIsBlack && wt_i <= BY_timer && wt_i > -1 && (mv_counter % 2) == 0)
-		{
-			if (wt_i %2)
-				win->getInterfaceHandler()->normalTools->pb_timeWhite->setPaletteBackgroundColor(Qt::red);
-			else 
-				win->getInterfaceHandler()->normalTools->pb_timeWhite->setPaletteBackgroundColor(win->getInterfaceHandler()->normalTools->palette().color(QPalette::Active,QColorGroup::Button)) ;//setPaletteBackgroundColor(Qt::PaletteBase);
-			qgo->playTimeSound();
-		}
-		
-		//we have to reset the color when not anymore in warning period)
-		else if (win->getInterfaceHandler()->normalTools->pb_timeBlack->paletteBackgroundColor() == Qt::red)
-			win->getInterfaceHandler()->normalTools->pb_timeBlack->setPaletteBackgroundColor(win->getInterfaceHandler()->normalTools->palette().color(QPalette::Active,QColorGroup::Button)) ;
-
-		
-		else if (win->getInterfaceHandler()->normalTools->pb_timeWhite->paletteBackgroundColor() == Qt::red)
-			win->getInterfaceHandler()->normalTools->pb_timeWhite->setPaletteBackgroundColor(win->getInterfaceHandler()->normalTools->palette().color(QPalette::Active,QColorGroup::Button)) ;
-
-		
-
 	}
 }
 
@@ -1646,13 +1458,13 @@ void qGoBoard::setTimerInfo(const QString &btime, const QString &bstones, const 
 	bt = secToTime(bt_i);
 	wt = secToTime(wt_i);
 
+#if 0
 	// set initial timer until game is initialized
 	if (!have_gameData)
-		win->getInterfaceHandler()->setTimes(bt, bstones, wt, wstones);
-
-	// if time info available, sound can be played
-	// cause no moves cmd in execution
-	sound = true;
+		win->getMainWidget ()->setTimes(bt, bstones, wt, wstones,
+					  bt_i <= BY_timer && bt_i > -1 && mv_counter % 2 && bt_i %2,
+					  wt_i <= BY_timer && wt_i > -1 && (mv_counter % 2 && bt_i %2) == 0);
+#endif
 }
 
 // addtime function
@@ -1660,68 +1472,27 @@ void qGoBoard::addtime_b(int m)
 {
 	bt_i += m*60;
 	bt = secToTime(bt_i);
-	win->getInterfaceHandler()->setTimes(secToTime(bt_i), b_stones, wt, w_stones);
+	win->getMainWidget ()->setTimes(secToTime(bt_i), b_stones, wt, w_stones, false, false);
 }
 
 void qGoBoard::addtime_w(int m)
 {
 	wt_i += m*60;
 	wt = secToTime(wt_i);
-	win->getInterfaceHandler()->setTimes(bt, b_stones, secToTime(wt_i), w_stones);
+	win->getMainWidget ()->setTimes(bt, b_stones, secToTime(wt_i), w_stones, false, false);
+}
+
+void qGoBoard::clearObserverList ()
+{
+	win->clearObserver ();
 }
 
 void qGoBoard::set_Mode_real(GameMode mode)
 {
-	switch (mode)
-	{
-	case modeNormal:
-		win->getBoard()->set_isLocalGame(true);
-		break;
-	case modeObserve:
-		win->getBoard()->set_isLocalGame(false);
-		break;
-	case modeMatch:
-		win->getBoard()->set_isLocalGame(false);
-		break;
-	case modeTeach:
-		win->getBoard()->set_isLocalGame(false);
-		break;
-	}
-
-	win->setGameMode(mode);
+	gameMode = mode;
 }
 
-void qGoBoard::set_Mode(int src)
-{
-  fprintf (stderr, "Set mode: %d\n", src);
-	switch (src)
-	{
-	case 1:
-		set_Mode_real (modeNormal);
-		break;
-	case 2:
-		set_Mode_real (modeObserve);
-		break;
-	case 3:
-		set_Mode_real (modeMatch);
-		break;
-
-	case 4:
-		set_Mode_real (modeTeach);
-		win->getBoard()->set_isLocalGame(false);
-		break;
-
-	case 5:
-		// for game 0; local game
-		set_Mode_real (modeNormal);
-		return;
-
-	default:
-		break;
-	}
-}
-
-void qGoBoard::set_move(StoneColor sc, QString pt, QString mv_nr)
+void qGoBoard::set_move(stone_color sc, QString pt, QString mv_nr)
 {
 	int mv_nr_int;
 
@@ -1752,16 +1523,15 @@ void qGoBoard::set_move(StoneColor sc, QString pt, QString mv_nr)
 		// scoring mode? (NNGS)
 		if (gameMode == modeScore)
 		{
-			// back to matchMode
-			win->doRealScore(false);
-			win->getBoard()->setMode(modeMatch);
+			leave_scoring_mode ();
 		}
 
 		// special case: undo handicap
 		if (mv_counter <= 0 && gd.handicap)
 		{
 			gd.handicap = 0;
-			win->getBoard()->getBoardHandler()->setHandicap(0);
+			go_board new_root = new_handicap_board (m_game->boardsize (), 0);
+			m_game->replace_root (new_root, black);
 			qDebug("set Handicap to 0");
 		}
 
@@ -1770,29 +1540,9 @@ void qGoBoard::set_move(StoneColor sc, QString pt, QString mv_nr)
 			// case: undo
 			qDebug() << "set_move(): UNDO in game " << QString::number(id);
 			qDebug() << "...mv_nr = " << mv_nr;
-
-			                                                                       //added eb 9
-			Move *m=win->getBoard()->getBoardHandler()->getTree()->getCurrent();
-			Move *last=win->getBoard()->getBoardHandler()->lastValidMove ; //win->getBoard()->getBoardHandler()->getTree()->findLastMoveInMainBranch();
-
-			if (m!=last)                          // equivalent to display_incoming_move = false
-				win->getBoard()->getBoardHandler()->getTree()->setCurrent(last) ;
-			else
-				m = m->parent ;                   //we are going to delete the node. We will bactrack to m
-
-			win->getBoard()->deleteNode();
-			win->getBoard()->getBoardHandler()->lastValidMove = win->getBoard()->getBoardHandler()->getTree()->getCurrent();
-			win->getBoard()->getBoardHandler()->getTree()->getCurrent()->marker = NULL ; //(just in case)
-			win->getBoard()->getBoardHandler()->getStoneHandler()->checkAllPositions();
-                             
-			win->getBoard()->getBoardHandler()->getTree()->setCurrent(m) ;   //we return where we were observing the game
-			// this is not very nice, but it ensures things stay clean
-			win->getBoard()->getBoardHandler()->updateMove(m);                      // end add eb 9
+			remote_undo ("");
 
 			mv_counter--;
-
-			// ok for sound - no moves cmd in execution
-			sound = true;
 		}
 
 		return;
@@ -1808,22 +1558,26 @@ void qGoBoard::set_move(StoneColor sc, QString pt, QString mv_nr)
 
 		// check if handicap is set with initGame() - game data from server do not
 		// contain correct handicap in early stage, because handicap is first move!
-		if (gd.handicap != h)
+		if (m_game->handicap () != h)
 		{
-			gd.handicap = h;
-			win->getBoard()->getBoardHandler()->setHandicap(h);
+			m_game->set_handicap (h);
+			go_board new_root = new_handicap_board (m_game->boardsize (), h);
+			m_game->replace_root (new_root, h > 1 ? white : black);
 			qDebug("corrected Handicap");
 		}
 	}
-	else if (pt.contains("Pass",false))
+	else if (pt.contains("Pass", Qt::CaseInsensitive))
 	{
-		win->getBoard()->doSinglePass();
-		if (win->getBoard()->getBoardHandler()->local_stone_sound)
-			qgo->playPassSound();
+		qDebug () << "pass found\n";
+		game_state *st = m_state;
+		game_state *new_st = m_state->add_child_pass ();
+		st->transfer_observers (new_st);
+		if (win != nullptr)
+			win->playPassSound();
 	}
 	else
 	{
-		if ((gameMode == modeMatch) && (mv_counter < 2) && !(myColorIsBlack))
+		if ((gameMode == modeMatch) && (mv_counter < 2) && m_own_color == white)
 		{
 			// if black has not already done - maybe too late here???
 			if (requests_set)
@@ -1833,24 +1587,29 @@ void qGoBoard::set_move(StoneColor sc, QString pt, QString mv_nr)
 			}
 		}
 
-		int i = pt[0].toAscii() - 'A' + 1;
+		int i = pt[0].toLatin1() - 'A' + 1;
 		// skip j
 		if (i > 8)
 			i--;
 
 		int j;
 
-		if (pt[2].toAscii() >= '0' && pt[2].toAscii() <= '9')
+		if (pt.length () > 2 && pt[2].toLatin1() >= '0' && pt[2].toLatin1() <= '9')
 			j = gd.size + 1 - pt.mid(1,2).toInt();
 		else
 			j = gd.size + 1 - pt[1].digitValue();
 
-		// avoid sound problem during execution of "moves" cmd
-		if (stated_mv_count > mv_counter)
-			sound = false;
+		game_state *st = m_state;
+		game_state *st_new = st->add_child_move (i - 1, j - 1, sc);
+		if (st_new != nullptr) {
+			st->transfer_observers (st_new);
+			if (win != nullptr)
+				win->playClick ();
+		} else {
+			/* @@@ do something sensible.  */
+		}
 
-		win->getBoard()->addStone(sc, i, j, sound);
-		Move *m = win->getBoard()->getBoardHandler()->getTree()->getCurrent();
+#if 0
 		if (stated_mv_count > mv_counter ||
 			//gameMode == modeTeach ||
 			//ExtendedTeachingGame ||
@@ -1879,27 +1638,51 @@ void qGoBoard::set_move(StoneColor sc, QString pt, QString mv_nr)
 				m->parent->parent->setTimeinfo(false);
 			}
 		}
+#endif
 	}
+	qDebug () << "found move " << mv_counter << " of " << stated_mv_count << "\n";
+	if (mv_counter + 1 == stated_mv_count && win == nullptr)
+		game_startup ();
 }
 
 // board window closed
 void qGoBoard::slot_closeevent()
 {
+	/* Don't delete it later.  */
+	win = 0;
 	if (id > 0)
 	{
 		id = -id;
+		m_qgoif->window_closing (this);
 //		emit signal_closeevent(id);
 	}
 	else
 		qWarning("id < 0 ******************");
 }
 
+void qGoBoard::disconnected (bool remove_from_list)
+{
+	if (remove_from_list && m_connected)
+		m_qgoif->remove_board (this);
+	m_connected = false;
+	set_stopTimer();
+
+	qgo->playGameEndSound ();
+	clearObserverList ();
+
+	// set board editable...
+	set_Mode_real (modeNormal);
+	if (win)
+		win->setGameMode (modeNormal);
+}
+
 // write kibitz strings to comment window
-void qGoBoard::send_kibitz(const QString msg)
+void qGoBoard::send_kibitz(const QString &msg)
 {
 	// observer info
 	if (msg[0] == '0')
 	{
+#if 0
 		if (msg[1] == '0')
 		{
 			// finish
@@ -1927,7 +1710,7 @@ void qGoBoard::send_kibitz(const QString msg)
 
 			win->addObserver(msg.right(msg.length() - 3));
 		}
-
+#endif
 		return;
 	}
 
@@ -1945,6 +1728,7 @@ void qGoBoard::send_kibitz(const QString msg)
 				slot_ttOpponentSelected(tr("-- none --"));
 			else
 				slot_ttOpponentSelected(opp);
+			return;
 		}
 		else if (IamPupil)
 		{
@@ -1954,6 +1738,7 @@ void qGoBoard::send_kibitz(const QString msg)
 				haveControls = true;
 				win->getMainWidget()->pb_controls->setEnabled(true);
 				win->getMainWidget()->pb_controls->setChecked(true);
+				return;
 			}
 			else if (msg.indexOf("#TC:OFF") != -1)
 			{
@@ -1961,6 +1746,7 @@ void qGoBoard::send_kibitz(const QString msg)
 				haveControls = false;
 				win->getMainWidget()->pb_controls->setDisabled(true);
 				win->getMainWidget()->pb_controls->setChecked(false);
+				return;
 			}
 		}
 	}
@@ -1972,10 +1758,14 @@ void qGoBoard::send_kibitz(const QString msg)
 			// pupil gives controls back
 			haveControls = true;
 			win->getMainWidget()->pb_controls->setChecked(false);
+			return;
 		}
-		else if (havePupil && msg.section(' ', 0, 0) == ttOpponent.section(' ', 0, 0) &&
-		        (myColorIsBlack && (mv_counter % 2) || !myColorIsBlack && ((mv_counter % 2 + 1) || mv_counter == -1) ||
-			   !haveControls))
+		else if (havePupil
+			 && msg.section(' ', 0, 0) == ttOpponent.section(' ', 0, 0)
+			 && ((myColorIsBlack && (mv_counter % 2))
+			     || (!myColorIsBlack && ((mv_counter % 2 + 1)
+						     || mv_counter == -1))
+			     || !haveControls))
 		{
 			// move from opponent - it's his turn (his color or he has controls)!
 			// xxx [rk]: B1 (7)
@@ -1994,29 +1784,24 @@ void qGoBoard::send_kibitz(const QString msg)
 					emit signal_sendcommand(s + " " + QString::number(id), false);
 				else
 					emit signal_sendcommand(s, false);
+				return;
 			}
 		}
 	}
 
 	// skip my own messages
-qDebug() << "msg.indexOf(myName) = " << QString::number(msg.indexOf(myName));
+//	qDebug() << "msg.indexOf(myName) = " << QString::number(msg.indexOf(myName));
 //	if (msg.indexOf(myName) == 0)
 //		return;
 
 	// normal stuff...
-	if (msg.contains(QString::number(mv_counter + 1)))
-	{
-qDebug("qGoBoard::send_kibitz()");
-//		win->getInterfaceHandler()->displayComment(msg);
-		// update comment in SGF list
-		win->getInterfaceHandler()->board->getBoardHandler()->updateComment(msg);
-	}
-	else
-	{
-//		win->getInterfaceHandler()->displayComment("(" + QString::number(mv_counter + 1) + ") " + msg);
-		// update comment in SGF list
-		win->getInterfaceHandler()->board->getBoardHandler()->updateComment("(" + QString::number(mv_counter + 1) + ") " + msg);
-	}
+	QString to_add = msg;
+	if (!to_add.contains(QString::number(mv_counter + 1)))
+		to_add = "(" + QString::number(mv_counter + 1) + ") " + to_add;
+	to_add += "\n";
+	m_comments += to_add;
+	if (win)
+		win->append_comment (to_add);
 }
 
 void qGoBoard::slot_sendcomment(const QString &comment)
@@ -2050,10 +1835,10 @@ void qGoBoard::slot_addStone(StoneColor /*c*/, int x, int y)
 	if (id < 0)
 		return;
 
-	if (x > 8)
+	if (x > 7)
 		x++;
-	QChar c1 = x - 1 + 'A';
-	int c2 = gd.size + 1 - y;
+	QChar c1 = x + 'A';
+	int c2 = gd.size - y;
 
 	if (ExtendedTeachingGame && IamPupil)
 		emit signal_sendcommand("kibitz " + QString::number(id) + " " + QString(c1) + QString::number(c2), false);
@@ -2063,7 +1848,44 @@ void qGoBoard::slot_addStone(StoneColor /*c*/, int x, int y)
 		emit signal_sendcommand(QString(c1) + QString::number(c2), false);
 }
 
+void qGoBoard::move_played (int x, int y)
+{
+	if (id < 0)
+		return;
 
+	if (x > 7)
+		x++;
+	QChar c1 = x + 'A';
+	int c2 = gd.size - y;
+
+	if (ExtendedTeachingGame && IamPupil)
+		emit signal_sendcommand("kibitz " + QString::number(id) + " " + QString(c1) + QString::number(c2), false);
+	else
+		emit signal_sendcommand(QString(c1) + QString::number(c2) + " " + QString::number(id), false);
+}
+
+void qGoBoard::game_result (const QString &rs, const QString &extended_rs)
+{
+	m_game->set_result (rs.toStdString ());
+	send_kibitz(rs);
+	bool autosave = setting->readBoolEntry (gameMode == modeObserve ? "AUTOSAVE" : "AUTOSAVE_PLAYED");
+
+	//autosave ?
+	if (autosave)
+	{
+		win->doSave("", true);
+		qDebug("Game saved");
+	}
+
+	if (gameMode != modeObserve)
+		QMessageBox::information(win, tr("Game n° ") + QString::number(id), extended_rs);
+
+	id = -id;
+
+	disconnected (true);
+
+	qDebug() << "Result: " << rs;
+}
 
 void qGoBoard::slot_doPass()
 {
@@ -2080,7 +1902,7 @@ void qGoBoard::slot_doResign()
 void qGoBoard::slot_doUndo()
 {
 	if (id > 0) {
-		if (gsName == IGS)
+		if (gsName ==IGS)
 			emit signal_sendcommand("undoplease", false);
 		else
 			emit signal_sendcommand("undo", false);
@@ -2096,7 +1918,7 @@ void qGoBoard::slot_doAdjourn()
 
 void qGoBoard::slot_doDone()
 {
-	 if (id > 0)
+	if (id > 0)
 		emit signal_sendcommand("done", false);
 }
 
@@ -2188,9 +2010,8 @@ qDebug("Rated game settings ok...");
 // click on time field
 void qGoBoard::slot_addtimePauseB()
 {
-	if (myColorIsBlack)
+	if (m_own_color == black)
 	{
-
 		switch (gsName)
 		{
 			case IGS:
@@ -2211,7 +2032,7 @@ void qGoBoard::slot_addtimePauseB()
 // click on time field
 void qGoBoard::slot_addtimePauseW()
 {
-	if (!myColorIsBlack)
+	if (m_own_color == white)
 	{
 		switch (gsName)
 		{
@@ -2234,41 +2055,6 @@ void qGoBoard::slot_addtimePauseW()
 void qGoBoard::set_myColorIsBlack(bool b)
 {
 	myColorIsBlack = b;
-
-	// set correct tooltips
-	QToolTip::remove(win->getInterfaceHandler()->normalTools->pb_timeBlack);
-	QToolTip::remove(win->getInterfaceHandler()->normalTools->pb_timeWhite);
-
-	if (b)
-	{
-		switch (gsName)
-		{
-			case IGS:
-				QToolTip::add(win->getInterfaceHandler()->normalTools->pb_timeBlack, tr("remaining time / stones"));
-				break;
-
-			default:
-				QToolTip::add(win->getInterfaceHandler()->normalTools->pb_timeBlack, tr("click to pause/unpause the game"));
-				break;
-		}
-
-		QToolTip::add(win->getInterfaceHandler()->normalTools->pb_timeWhite, tr("click to add 1 minute to your opponent's clock"));
-	}
-	else
-	{
-		switch (gsName)
-		{
-			case IGS:
-				QToolTip::add(win->getInterfaceHandler()->normalTools->pb_timeBlack, tr("remaining time / stones"));
-				break;
-
-			default:
-				QToolTip::add(win->getInterfaceHandler()->normalTools->pb_timeWhite, tr("click to pause/unpause the game"));
-				break;
-		}
-
-		QToolTip::add(win->getInterfaceHandler()->normalTools->pb_timeBlack, tr("click to add 1 minute to your opponent's clock"));
-	}
 }
 
 // teachtools - teacher has selected an opponent
@@ -2324,7 +2110,7 @@ void qGoBoard::slot_ttOpponentSelected(const QString &opponent)
 		{
 			IamPupil = true;
 			set_Mode_real(modeMatch);
-			win->getBoard()->set_myColorIsBlack(mv_counter % 2);
+			win->getBoard()->set_player_colors (mv_counter % 2, !(mv_counter % 2));
 			set_myColorIsBlack(mv_counter % 2);
 		}
 		else

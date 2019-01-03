@@ -15,7 +15,8 @@ GamesTable::GamesTable (QWidget *parent)
 
 	headers <<  tr ("Id") << tr ("White") << tr ("WR") << tr ("Black") << tr ("BR") << tr ("Mv") << tr ("Sz") << tr ("H") << tr ("K") << tr ("By") << tr ("FR") << tr ("Ob");
 	setHeaderLabels (headers);
-	header()->setResizeMode(QHeaderView::ResizeToContents);
+	for (int i = 0; i < 12; i++)
+		header()->setSectionResizeMode(i, QHeaderView::ResizeToContents);
 
 	setFocusPolicy (Qt::NoFocus);
 	setContextMenuPolicy (Qt::CustomContextMenu);

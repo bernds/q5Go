@@ -3,7 +3,9 @@
 */
 
 #include <QFileDialog>
+#include <QFontDialog>
 #include <QWhatsThis>
+#include <QColorDialog>
 
 #include "preferences.h"
 #include "mainwindow.h"
@@ -275,15 +277,13 @@ void PreferencesDialog::slot_add_server()
 
 void PreferencesDialog::slot_delete_server()
 {
-	bool found = false;
 	Host *h;
 	for (auto h: parent_cw->hostlist) {
 		if (h->title() == LineEdit_title->text())
 		{
-			found = true;
 			// if found, delete current entry
 			parent_cw->hostlist.removeOne(h);
-			emit signal_delHost(LineEdit_title->text());
+			delete h;
 			break;
 		}
 	}
@@ -461,8 +461,8 @@ void PreferencesDialog::on_soundButtonGroup_buttonClicked(QAbstractButton *cb)
 
 void PreferencesDialog::slot_getComputerPath()
 {
-	QString fileName(QFileDialog::getOpenFileName(setting->readEntry("LAST_DIR"),
-		tr("All Files (*)"), this));
+	QString fileName(QFileDialog::getOpenFileName(this, setting->readEntry("LAST_DIR"),
+						      tr("All Files (*)")));
 	if (fileName.isEmpty())
 		return;
 
@@ -482,8 +482,7 @@ void PreferencesDialog::slot_getGobanPicturePath()
 #else
 	QString path = setting->readEntry("LAST_DIR");
 #endif
-	QString fileName(QFileDialog::getOpenFileName(path,
-		tr("Images (*.png *.xpm *.jpg)"), this));
+	QString fileName(QFileDialog::getOpenFileName(this, path, tr("Images (*.png *.xpm *.jpg)")));
 	if (fileName.isEmpty())
 		return;
 
@@ -503,8 +502,7 @@ void PreferencesDialog::slot_getTablePicturePath()
 #else
 	QString path = setting->readEntry("LAST_DIR");
 #endif
-	QString fileName(QFileDialog::getOpenFileName(path,
-		tr("Images (*.png *.xpm *.jpg)"), this));
+	QString fileName(QFileDialog::getOpenFileName(this, path, tr("Images (*.png *.xpm *.jpg)")));
 	if (fileName.isEmpty())
 		return;
 

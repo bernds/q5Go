@@ -53,9 +53,7 @@ void ClientWindow::prepare_tables(InfoType cmd)
 				lv++;
 				delete lvi;
 			}*/
-			// delete tooltips too
-			QToolTip::remove(statusChannel);
-			QToolTip::add(statusChannel, tr("Current channels and users"));
+			statusChannel->setToolTip (tr("Current channels and users"));
 			break;
 		}
 
@@ -840,13 +838,7 @@ Talk::Talk(const QString &playername, QWidget *parent, bool isplayer)
 	name = playername;
 
 	// create a new tab
-	QString s = "MultiLineEdit1_" + QString::number(++counter);
-	MultiLineEdit1->setName(s.ascii()) ;
-  
-	MultiLineEdit1->setCurrentFont(setting->fontComments); 
-
-	s = "LineEdit1_" + QString::number(++counter);
-	LineEdit1->setName(s.ascii());
+	MultiLineEdit1->setCurrentFont(setting->fontComments);
 	LineEdit1->setFont(setting->fontComments);
 
 	// do not add a button for shouts* or channels tab

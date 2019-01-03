@@ -2,14 +2,12 @@
 * mainwidget.cpp
 */
 
-#include "qgo.h"
-//Added by qt3to4:
 #include <QPixmap>
+
+#include "qgo.h"
 #include "mainwidget.h"
-#include "interfacehandler.h"
 #include "defines.h"
 #include "icons.h"
-#include <q3buttongroup.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qslider.h>
@@ -30,41 +28,20 @@ MainWidget::MainWidget(MainWindow *win, QWidget* parent)
 	: QWidget (parent), m_mainwin (win)
 {
 	setupUi(this);
-	connect(toolsTabWidget,
-		SIGNAL(currentChanged(QWidget*)),
-		SLOT(slot_toolsTabChanged(QWidget*)));
+	gfx_board->init2 (win, this);
+
+	void (QTabWidget::*changed) (int) = &QTabWidget::currentChanged;
+	connect(toolsTabWidget, changed, this, &MainWidget::slot_toolsTabChanged);
+
+	connect(passButton, SIGNAL(clicked()), win, SLOT(doPass()));
+        connect(undoButton, SIGNAL(clicked()), win, SLOT(doUndo()));
+        connect(adjournButton, SIGNAL(clicked()), win, SLOT(doAdjourn()));
+        connect(resignButton, SIGNAL(clicked()), win, SLOT(doResign()));
+        connect(doneButton, SIGNAL(clicked()), win, SLOT(doCountDone()));
 
 	normalTools->show();
-
-//	scoreTools = new ScoreTools(tab_ns, "scoreTools");
-//	scoreTools->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred));
-//	scoreTools->sizePolicy().hasHeightForWidth()));
-//	scoreTools->setMinimumSize(QSize(80, 230));
 	scoreTools->hide();
-	
-	interfaceHandler = new InterfaceHandler();
-	
-	interfaceHandler->moveNumLabel = moveNumLabel;
-	interfaceHandler->turnLabel = turnLabel;
-//	interfaceHandler->editTools = editTools;
-//	interfaceHandler->modeButton = modeButton;
-	interfaceHandler->passButton = passButton;
-	interfaceHandler->scoreButton = scoreButton;
-	interfaceHandler->undoButton = undoButton;
-	interfaceHandler->adjournButton = adjournButton;
-	interfaceHandler->resignButton = resignButton;
-	interfaceHandler->refreshButton = refreshButton;
-	interfaceHandler->capturesBlack = normalTools->capturesBlack;
-	interfaceHandler->capturesWhite = normalTools->capturesWhite;
-	interfaceHandler->normalTools = normalTools;
-//	interfaceHandler->teachTools = teachTools;
-	interfaceHandler->scoreTools = scoreTools;
-	interfaceHandler->toolsFrame = toolsFrame;
 
-	interfaceHandler->board = board;
-	
-//	connect(editTools->editButtonGroup, SIGNAL(clicked(int)), this, SLOT(setMarkType(int)));
-	
 	showSlider = true;
 	toggleSlider(setting->readBoolEntry("SLIDER"));
 	slider->setMaximum(SLIDER_INIT);
@@ -76,41 +53,73 @@ MainWidget::MainWidget(MainWindow *win, QWidget* parent)
 	normalTools->pb_timeBlack->setFont(setting->fontClocks);
 }
 
-/*  
+void MainWidget::update_game_record (std::shared_ptr<game_record> gr)
+{
+	m_game = gr;
+	if (gr->ranked_type () == ranked::free)
+		normalTools->TextLabel_free->setText(QApplication::tr("free"));
+	else if (gr->ranked_type () == ranked::ranked)
+		normalTools->TextLabel_free->setText(QApplication::tr("rated"));
+	else
+		normalTools->TextLabel_free->setText(QApplication::tr("teach"));
+	normalTools->komi->setText(QString::number(gr->komi ()));
+	scoreTools->komi->setText(QString::number(gr->komi ()));
+	normalTools->handicap->setText(QString::number(gr->handicap ()));
+
+	// set correct tooltips
+	QWidget *timeSelf = gfx_board->player_is (black) ? normalTools->pb_timeBlack : normalTools->pb_timeWhite;
+	QWidget *timeOther = gfx_board->player_is (white) ? normalTools->pb_timeWhite : normalTools->pb_timeBlack;
+#if 0
+	switch (gsName)
+	{
+			case IGS:
+				timeSelf->setToolTip(tr("remaining time / stones"));
+				break;
+
+			default:
+				timeSelf->setToolTip(tr("click to pause/unpause the game"));
+				break;
+		}
+#else
+	timeSelf->setToolTip (tr("click to pause/unpause the game"));
+#endif
+	timeOther->setToolTip (tr("click to add 1 minute to your opponent's clock"));
+}
+
+void MainWidget::init_game_record (std::shared_ptr<game_record> gr)
+{
+	gfx_board->reset_game (gr);
+	update_game_record (gr);
+}
+
+/*
 *  Destroys the object and frees any allocated resources
 */
 MainWidget::~MainWidget()
 {
 	// no need to delete child widgets, Qt does it all for us
-	delete interfaceHandler;
 	delete scoreTools;
 	delete normalTools;
 }
 
 // a tab has been clicked
-void MainWidget::slot_toolsTabChanged(QWidget * /*w*/)
+void MainWidget::slot_toolsTabChanged(int idx)
 {
-	switch (toolsTabWidget->currentPageIndex())
+	Board *b = gfx_board;
+	switch (idx)
 	{
 		// normal/score tools
 	case tabNormalScore:
-		interfaceHandler->board->setMode (modeNormal);
+		b->setMode (modeNormal);
 		m_mainwin->setGameMode (modeNormal);
 		break;
 
 		// edit tools
 	case tabEdit:
 		// set color of next move
-		if (interfaceHandler->board->getBoardHandler()->getBlackTurn())
-		{
-			colorButton->setChecked (false);
-		}
-		else
-		{
-			colorButton->setChecked (true);
-		}
+		colorButton->setChecked (b->m_state->to_move () == white);
 
-		interfaceHandler->board->setMode (modeEdit);
+		b->setMode (modeEdit);
 		m_mainwin->setGameMode (modeEdit);
 		break;
 
@@ -134,10 +143,6 @@ void MainWidget::setToolsTabWidget(enum tabType p, enum tabState s)
 			w = tab_ns;
 			break;
 
-		case tabEdit:
-			w = tab_e;
-			break;
-
 		case tabTeachGameTree:
 			w = tab_tg;
 			break;
@@ -151,158 +156,86 @@ void MainWidget::setToolsTabWidget(enum tabType p, enum tabState s)
 	{
 		// check whether the page to switch to is enabled
 		if (!toolsTabWidget->isEnabled())
-			toolsTabWidget->setTabEnabled(w, true);
+			toolsTabWidget->setTabEnabled(toolsTabWidget->indexOf (w), true);
 
-		toolsTabWidget->setCurrentPage(p);
+		toolsTabWidget->setCurrentIndex(p);
 	}
 	else
 	{
 		// check whether the current page is to disable; then set to 'normal'
-		if (s == tabDisable && toolsTabWidget->currentPageIndex() == p)
-			toolsTabWidget->setCurrentPage(tabNormalScore);
+		if (s == tabDisable && toolsTabWidget->currentIndex() == p)
+			toolsTabWidget->setCurrentIndex(tabNormalScore);
 
-		toolsTabWidget->setTabEnabled(w, s == tabEnable);
+		toolsTabWidget->setTabEnabled(toolsTabWidget->indexOf (w), s == tabEnable);
 	}
 }
 
-/*
-void MainWidget::toggleGameMode()
+void MainWidget::on_colorButton_clicked (bool)
 {
-	if (toggleMode() != modeEdit)
-	{
-//		editTools->hide();
-		normalTools->show();
-//		if (modeButton->isChecked())
-//			modeButton->setOn(false);
-	}
-	else
-	{
-		normalTools->hide();
-//		editTools->show();
-	}
+	stone_color col = gfx_board->swap_edit_to_move ();
+	colorButton->setChecked (col == white);
 }
-*/
-void MainWidget::setMarkType(int m)
+
+void MainWidget::doRealScore (bool toggle)
 {
-	interfaceHandler->setMarkType(m);
-}
-
-void MainWidget::on_colorButton_clicked(bool checked)
-{
-	interfaceHandler->setMarkType(7);
-}
-
-void MainWidget::doPass()
-{
-	interfaceHandler->board->doPass();
-}
-
-void MainWidget::doCountDone()
-{
-	interfaceHandler->board->doCountDone();
-}
-
-void MainWidget::doResign()
-{ 
-	interfaceHandler->board->doResign(); 
-}
-
-void MainWidget::doRefresh()
-{ 
-	interfaceHandler->board->doRefresh(); 
-}
-
-void MainWidget::doUndo() 
-{ 	
-	interfaceHandler->board->doUndo(); 
-}
-
-void MainWidget::doAdjourn() 
-{ 
-	interfaceHandler->board->doAdjourn(); 
-}
-
-void MainWidget::doRealScore(bool toggle)
-{
-	static GameMode rememberMode;
-	static int      rememberTab;
-
 	qDebug("MainWidget::doRealScore()");
+	/* Can be called when the user toggles the button, but also when a GTP board
+	   enters scoring after two passes.  */
+	scoreButton->setChecked (toggle);
 	if (toggle)
 	{
-		rememberMode = interfaceHandler->board->getGameMode();
-		rememberTab = toolsTabWidget->currentPageIndex();
-//		modeButton->setEnabled(false);
+		m_remember_mode = gfx_board->getGameMode();
+		m_remember_tab = toolsTabWidget->currentIndex();
+
 		setToolsTabWidget(tabEdit, tabDisable);
 		setToolsTabWidget(tabTeachGameTree, tabDisable);
-		if (scoreButton->text() == QString(tr("Edit")))
-		{
-			passButton->hide ();
-			doneButton->show ();
-			scoreButton->setEnabled(false);
 
-      			if (rememberMode==modeComputer)
-      			{
-        			adjournButton->setEnabled(false);
-        			resignButton->setEnabled(false);
-        			undoButton->setEnabled(false);
-      			}
-		} else
-			passButton->setEnabled (false);
-
-		interfaceHandler->disableToolbarButtons();
-//		editTools->hide();
 		normalTools->hide();
 		scoreTools->show();
-//		interfaceHandler->board->setMode(modeScore);
-		interfaceHandler->board->getBoardHandler()->countScore();
+		m_mainwin->setGameMode (modeScore);
 	}
 	else
 	{
-//		modeButton->setEnabled(true);
 		setToolsTabWidget(tabEdit, tabEnable);
 		setToolsTabWidget(tabTeachGameTree, tabEnable);
-		if (scoreButton->text() == QString(tr("Edit")))
-		{
-			passButton->show ();
-			doneButton->hide ();
-			scoreButton->setEnabled(true);
-		}
-		else
-			passButton->setEnabled(true);
 
-		interfaceHandler->restoreToolbarButtons();
 		scoreTools->hide();
 		normalTools->show();
-//		if (modeButton->isChecked())
-//			editTools->show();
-//		else
-//			normalTools->show();
-		interfaceHandler->board->setMode(rememberMode);
-		setToolsTabWidget(static_cast<tabType>(rememberTab));
+		m_mainwin->setGameMode (m_remember_mode);
+		setToolsTabWidget(static_cast<tabType>(m_remember_tab));
 	}
 }
-	
+
+/* The "Edit Position" button: Switch to edit mode.  */
+void MainWidget::doEditPos (bool toggle)
+{
+	qDebug("MainWidget::doEditPos()");
+	if (toggle)
+		m_mainwin->setGameMode (modeEdit);
+	else
+		m_mainwin->setGameMode (modeNormal);
+}
+
+/* The "Edit Game" button: Open a new window to edit observed game.  */
 void MainWidget::doEdit()
 {
 	qDebug("MainWidget::doEdit()");
-	// online mode -> don't score, open new Window instead
-	interfaceHandler->board->doEditBoardInNewWindow();
+	m_mainwin->slot_editBoardInNewWindow(false);
 }
 
 void MainWidget::sliderChanged(int n)
 {
 	if (sliderSignalToggle)
-		interfaceHandler->board->gotoNthMoveInVar(n);
+		gfx_board->gotoNthMoveInVar(n);
 }
 
 void MainWidget::toggleSlider(bool b)
 {
 	if (showSlider == b)
 		return;
-	
+
 	showSlider = b;
-	
+
 	if (b)
 	{
 		slider->show();
@@ -324,117 +257,240 @@ void MainWidget::setFont(const QFont &font)
 	f.setBold(true);
 	scoreTools->totalBlack->setFont(f);
 	scoreTools->totalWhite->setFont(f);
-	
+
 	QWidget::setFont(font);
 }
 
 void MainWidget::setGameMode(GameMode mode)
 {
-	switch (mode) {
-	case modeEdit:
-//		modeButton->setEnabled(true);
-		setToolsTabWidget(tabEdit, tabEnable);
-		setToolsTabWidget(tabTeachGameTree, tabDisable);
-		scoreButton->setEnabled(true);
-		scoreButton->show ();
-		editButton->hide ();
-		doneButton->hide ();
-		passButton->setEnabled(true);
-		undoButton->setDisabled(true); // for later: undo button -> one step back
-		resignButton->setDisabled(true);
-		adjournButton->setDisabled(true);
-		refreshButton->setDisabled(true);
-		break;
+	setToolsTabWidget (tabEdit, mode == modeNormal || mode == modeEdit ? tabEnable : tabDisable);
+	setToolsTabWidget(tabTeachGameTree, mode == modeTeach ? tabEnable : tabDisable);
 
-	case modeNormal:
-//		modeButton->setEnabled(true);
-		setToolsTabWidget(tabEdit, tabEnable);
-		setToolsTabWidget(tabTeachGameTree, tabDisable);
-		scoreButton->setEnabled(true);
-		scoreButton->show ();
-		editButton->hide ();
-		doneButton->hide ();
-		passButton->setEnabled(true);
-		undoButton->setDisabled(true);
-		resignButton->setDisabled(true);
-		adjournButton->setDisabled(true);
-		refreshButton->setDisabled(true);
-		break;
+	passButton->setVisible (mode != modeObserve);
+	doneButton->setVisible (mode == modeScore || mode == modeScoreRemote);
+	scoreButton->setVisible (mode == modeNormal || mode == modeEdit || mode == modeScore);
+	undoButton->setVisible (mode == modeScoreRemote || mode == modeMatch || mode == modeComputer || mode == modeTeach);
+	adjournButton->setVisible (mode == modeMatch || mode == modeTeach || mode == modeScoreRemote);
+	resignButton->setVisible (mode == modeMatch || mode == modeComputer || mode == modeTeach || mode == modeScoreRemote);
+	resignButton->setEnabled (mode != modeScoreRemote);
+	refreshButton->setVisible (false);
+	editButton->setVisible (mode == modeObserve);
+	editPosButton->setVisible (mode == modeNormal || mode == modeEdit || mode == modeScore);
+	editPosButton->setEnabled (mode == modeNormal || mode == modeEdit);
+	colorButton->setEnabled (mode == modeEdit || mode == modeNormal);
 
-	case modeObserve:
-//		modeButton->setDisabled(true);
-		setToolsTabWidget(tabEdit, tabDisable);
-		setToolsTabWidget(tabTeachGameTree, tabDisable);
-		scoreButton->setEnabled(false);
-		scoreButton->hide ();
-		editButton->show ();
-		doneButton->hide ();
-		passButton->setDisabled(true);
-		undoButton->setDisabled(true);
-		resignButton->setDisabled(true);
-		adjournButton->setDisabled(true);
-		refreshButton->setEnabled(true);
-		break;
+	slider->setEnabled (mode == modeNormal);
 
-	case modeMatch:
-//		modeButton->setDisabled(true);
-		setToolsTabWidget(tabEdit, tabDisable);
-		setToolsTabWidget(tabTeachGameTree, tabDisable);
-		scoreButton->setEnabled(false);
-		scoreButton->hide ();
-		editButton->show ();
-		doneButton->hide ();
-		passButton->setEnabled(true);
-		undoButton->setEnabled(true);
-		resignButton->setEnabled(true);
-		adjournButton->setEnabled(true);
-		refreshButton->setEnabled(true);
-		break;
+	passButton->setEnabled (mode != modeScore && mode != modeScoreRemote);
+	editButton->setEnabled (mode != modeScore);
+	scoreButton->setEnabled (mode != modeEdit);
 
-	case modeComputer:           // added eb 12
-//		modeButton->setDisabled(true);
-		setToolsTabWidget(tabEdit, tabDisable);
-		setToolsTabWidget(tabTeachGameTree, tabDisable);
-		scoreButton->setEnabled(false);
-		scoreButton->hide ();
-		editButton->show ();
-		doneButton->hide ();
-		passButton->setEnabled(true);
-		undoButton->setEnabled(true);
-		resignButton->setEnabled(true);
-		adjournButton->setEnabled(false);
-		refreshButton->setEnabled(false);
-		break;
+	gfx_board->setMode (mode);
+}
 
-	case modeTeach:
-//		modeButton->setDisabled(true);
-		setToolsTabWidget(tabEdit, tabDisable);
-		setToolsTabWidget(tabTeachGameTree, tabEnable);
-		scoreButton->setEnabled(false);
-		scoreButton->hide ();
-		editButton->show ();
-		doneButton->hide ();
-		passButton->setEnabled(true);
-		undoButton->setEnabled(true);
-		resignButton->setEnabled(true);
-		adjournButton->setEnabled(true);
-		refreshButton->setEnabled(true);
-		break;
+void MainWidget::setMoveData(const game_state &gs, const go_board &b, GameMode mode)
+{
+	int brothers = gs.n_siblings ();
+	int sons = gs.n_children ();
+	stone_color to_move = gs.to_move ();
+	int move_nr = gs.move_number ();
+	int var_nr = gs.var_number ();
 
-	case modeScore:
-//		modeButton->setDisabled(true);
-		setToolsTabWidget(tabEdit, tabDisable);
-//		setToolsTabWidget(tabNormalScore);
-		scoreButton->setEnabled(true);
-		scoreButton->hide ();
-		editButton->hide ();
-		doneButton->show ();
-		passButton->setDisabled(true);
-		undoButton->setEnabled(true);
-		resignButton->setDisabled(true);
-		adjournButton->setEnabled(true);
-		refreshButton->setEnabled(true);
-		break;
+	QString w_str = QObject::tr("W");
+	QString b_str = QObject::tr("B");
+
+	QString s (QObject::tr ("Move") + " ");
+	s.append (QString::number (move_nr));
+	if (move_nr == 0) {
+		/* Nothing to add for the root.  */
+	} else if (gs.was_pass_p ()) {
+		s.append(" (" + (to_move == black ? w_str : b_str) + " ");
+		s.append(" " + QObject::tr("Pass") + ")");
+	} else if (!gs.was_edit_p ()) {
+		int x = gs.get_move_x ();
+		int y = gs.get_move_y ();
+		s.append(" (");
+		s.append((to_move == black ? w_str : b_str) + " ");
+		s.append(QString(QChar(static_cast<const char>('A' + (x < 9 ? x : x + 1)))));
+		s.append(QString::number (b.size () - y) + ")");
+	}
+	s.append (QObject::tr ("\nVariation ") + QString::number (var_nr)
+		  + QObject::tr (" of ") + QString::number (1 + brothers) + "\n");
+	s.append (QString::number (sons) + " ");
+	if (sons == 1)
+		s.append (QObject::tr("child position"));
+	else
+		s.append (QObject::tr("child positions"));
+	moveNumLabel->setText(s);
+
+	bool warn = false;
+	if (gs.was_move_p () && gs.get_move_color () == to_move)
+		warn = true;
+	if (gs.root_node_p ()) {
+		bool empty = b.position_empty_p ();
+		bool b_to_move = to_move == black;
+		warn |= empty != b_to_move;
+	}
+	turnWarning->setVisible (warn);
+	colorButton->setChecked (to_move == white);
+#if 0
+	statusTurn->setText(" " + s.right (s.length() - 5) + " ");  // Without 'Move '
+	statusNav->setText(" " + QString::number(brothers) + "/" + QString::number(sons));
+#endif
+
+	if (to_move == black)
+		turnLabel->setText(QObject::tr ("Black to play"));
+	else
+		turnLabel->setText(QObject::tr ("White to play"));
+
+	bool is_root_node = gs.root_node_p ();
+
+	if (mode == modeNormal || mode == modeObserve) {
+		goPrevButton->setEnabled(!is_root_node);
+		goNextButton->setEnabled(sons > 0);
+		goFirstButton->setEnabled(!is_root_node);
+		goLastButton->setEnabled(sons > 0);
+	} else {
+		goPrevButton->setEnabled(false);
+		goNextButton->setEnabled(false);
+		goFirstButton->setEnabled(false);
+		goLastButton->setEnabled(false);
+	}
+
+	// Update slider
+	toggleSliderSignal (false);
+
+	int mv = gs.active_var_max ();
+	setSliderMax (mv);
+	slider->setValue (move_nr);
+	toggleSliderSignal (true);
+}
+
+
+void MainWidget::recalc_scores(const go_board &b, GameMode m)
+{
+	int caps_b, caps_w, score_b, score_w;
+	b.get_scores (caps_b, caps_w, score_b, score_w);
+
+	scoreTools->capturesWhite->setText(QString::number(caps_w));
+	scoreTools->capturesBlack->setText(QString::number(caps_b));
+	normalTools->capturesWhite->setText(QString::number(caps_w));
+	normalTools->capturesBlack->setText(QString::number(caps_b));
+
+	if (m == modeScore)
+	{
+		scoreTools->terrWhite->setText(QString::number(score_w));
+		scoreTools->totalWhite->setText(QString::number(score_w + caps_w + m_game->komi ()));
+		scoreTools->terrBlack->setText(QString::number(score_b));
+		scoreTools->totalBlack->setText(QString::number(score_b + caps_b));
+
+		double res = score_w + caps_w + m_game->komi () - score_b - caps_b;
+		if (res < 0)
+			scoreTools->result->setText ("B+" + QString::number (-res));
+		else if (res == 0)
+			scoreTools->result->setText ("Jigo");
+		else
+			scoreTools->result->setText ("W+" + QString::number (res));
 	}
 }
 
+void MainWidget::setSliderMax(int n)
+{
+	if (n < 0)
+		n = 0;
+
+	slider->setMaximum(n);
+	sliderRightLabel->setText(QString::number(n));
+}
+
+void MainWidget::toggleSidebar(bool toggle)
+{
+	if (!toggle)
+		toolsFrame->hide();
+	else
+		toolsFrame->show();
+}
+
+void MainWidget::setTimes(const QString &btime, const QString &bstones, const QString &wtime, const QString &wstones,
+			  bool warn_black, bool warn_white)
+{
+	if (!btime.isEmpty())
+	{
+		if (bstones != QString("-1"))
+			normalTools->pb_timeBlack->setText(btime + " / " + bstones);
+		else
+			normalTools->pb_timeBlack->setText(btime);
+	}
+
+	if (!wtime.isEmpty())
+	{
+		if (wstones != QString("-1"))
+			normalTools->pb_timeWhite->setText(wtime + " / " + wstones);
+		else
+			normalTools->pb_timeWhite->setText(wtime);
+	}
+
+	// warn if I am within the last 10 seconds
+	if (gfx_board->getGameMode() == modeMatch)
+	{
+		if (gfx_board->player_is (black) && warn_black)
+		{
+			// normalTools->pb_timeBlack->setPaletteBackgroundColor(Qt::red);
+			qgo->playTimeSound();
+		}
+		else if (gfx_board->player_is (white) && warn_white)
+		{
+			// normalTools->pb_timeWhite->setPaletteBackgroundColor(Qt::red);
+			qgo->playTimeSound();
+		}
+
+		//we have to reset the color when not anymore in warning period)
+		else {
+			// normalTools->pb_timeBlack->setPaletteBackgroundColor(normalTools->palette().color(QPalette::Active,QColorGroup::Button));
+			// normalTools->pb_timeWhite->setPaletteBackgroundColor(normalTools->palette().color(QPalette::Active,QColorGroup::Button));
+		}
+	}
+
+}
+
+void MainWidget::setTimes(bool isBlacksTurn, float time, int stones)
+{
+	QString strTime;
+	int seconds = (int)time;
+	bool neg = seconds < 0;
+	if (neg)
+		seconds = -seconds;
+
+	int h = seconds / 3600;
+	seconds -= h*3600;
+	int m = seconds / 60;
+	int s = seconds - m*60;
+
+	QString sec;
+
+	// prevailling 0 for seconds
+	if ((h || m) && s < 10)
+		sec = "0" + QString::number(s);
+	else
+		sec = QString::number(s);
+
+	if (h)
+	{
+		QString min;
+
+		// prevailling 0 for minutes
+		if (h && m < 10)
+			min = "0" + QString::number(m);
+		else
+			min = QString::number(m);
+
+		strTime = (neg ? "-" : "") + QString::number(h) + ":" + min + ":" + sec;
+	}
+	else
+		strTime = (neg ? "-" : "") + QString::number(m) + ":" + sec;
+
+	if (isBlacksTurn)
+		setTimes(strTime, QString::number(stones), 0, 0, false, false);
+	else
+		setTimes(0, 0, strTime, QString::number(stones), false, false);
+}

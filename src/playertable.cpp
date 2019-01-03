@@ -17,7 +17,8 @@ PlayerTable::PlayerTable(QWidget *parent)
 	QStringList headers;
 	headers <<  tr ("Stat") << tr ("Name") << tr ("Rk") << tr ("pl") << tr ("ob") << tr ("Idle") << tr ("X") << tr ("Info") << tr ("Won") << tr ("Lost") << tr ("Country") << tr ("Match prefs");
 	setHeaderLabels (headers);
-	header()->setResizeMode(QHeaderView::ResizeToContents);
+	for (int i = 0; i < 12; i++)
+		header()->setSectionResizeMode(i, QHeaderView::ResizeToContents);
 
 	setFocusPolicy (Qt::NoFocus);
 	setContextMenuPolicy (Qt::CustomContextMenu);

@@ -34,11 +34,7 @@
 #define ICON_START_VAR "./pics/top.xpm"
 #define ICON_NEXT_BRANCH "./pics/bottom.xpm"
 #define ICON_AUTOPLAY "./pics/player_pause.xpm"
-#define ICON_CUT "./pics/editcut.xpm"
-#define ICON_PASTE "./pics/editpaste.xpm"
 #define ICON_DELETE "./pics/editdelete.xpm"
-#define ICON_INCREASE_SIZE "./pics/viewmag+.xpm"
-#define ICON_DECREASE_SIZE "./pics/viewmag-.xpm"
 #define ICON_FULLSCREEN "./pics/window_fullscreen.xpm"
 #define ICON_WHATSTHIS "./pics/contexthelp.xpm"
 #define ICON_MANUAL "./pics/help.xpm"
@@ -64,3 +60,4 @@
 #define ICON_SOUND_ON "./pics/sound_on.xpm"
 #define ICON_SOUND_OFF "./pics/sound_off.xpm"
 #endif
+

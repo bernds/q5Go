@@ -15,7 +15,7 @@
 #include <QApplication>
 #include <QTextEdit>
 
-void myMessageHandler(QtMsgType, const char*);
+void myMessageHandler(QtMsgType, const QMessageLogContext&, const QString&);
 
 #ifdef OWN_DEBUG_MODE
 extern QTextEdit *view;

@@ -11,9 +11,6 @@
 #include <QGraphicsView>
 #include <QDateTime>
 #include <QPainter>
-#include <Q3PtrList>
-#include <Q3IntDict>
-//Added by qt3to4:
 #include <QWheelEvent>
 #include <QResizeEvent>
 #include <QMouseEvent>
@@ -21,137 +18,136 @@
 
 #include "defines.h"
 #include "setting.h"
-#include "boardhandler.h"
 #include "stone.h"
-#include "move.h"
 #include "gatter.h"
+#include "goboard.h"
 
 class ImageHandler;
 class Mark;
 class Tip;
 class InterfaceHandler;
 class GameData;
-class NodeResults;
 class QNewGameDlg;
+class MainWindow;
+class MainWidget;
 
-
-class Board : public QGraphicsView
+class Board : public QGraphicsView, public game_state::observer
 {
 	Q_OBJECT
+	MainWindow *m_board_win;
+	MainWidget *m_main_widget;
+
+	GameMode m_game_mode = modeNormal;
+
+	std::shared_ptr<game_record> m_game;
+
+	/* A local copy of the board for when editing and scoring.  Null otherwise.  */
+	go_board *m_edit_board = nullptr;
+	stone_color m_edit_to_move;
+	bool m_edit_changed;
+	mark m_edit_mark = mark::none;
+
+	bit_array m_used_numbers = bit_array (256, false);
+	bit_array m_used_letters = bit_array (52, false);
+
+	/* Anti-clicko, remember position on mouse button down.  */
+	int m_down_x, m_down_y;
+	int m_cumulative_delta = 0;
+
+	int m_rect_x1, m_rect_x2;
+	int m_rect_y1, m_rect_y2;
+	bool m_mark_rect = false;
+	bool m_request_mark_rect = false;
+
+	std::vector<stone_gfx *> m_stones;
+	std::vector<mark_gfx *> m_marks;
+	std::vector<mark_text *> m_text_marks;
+	bool m_player_is_b = true;
+	bool m_player_is_w = true;
+
+	void observed_changed ();
+	void sync_appearance (bool board_only = true);
+	void play_one_move (int x, int y);
 
 public:
 	Board(QWidget *parent=0, QGraphicsScene *c = 0);
 	~Board();
+	/* Should be part of the constructor, but Qt doesn't seem to allow such a construction with the .ui files.  */
+	void init2 (MainWindow *w, MainWidget *mw) { m_board_win = w; m_main_widget = mw; }
 	void clearData();
-	void initGame(GameData *d, bool sgf=false);
 	void setModified(bool m=true);
-	void updateCaption();
 	ImageHandler* getImageHandler() { return imageHandler; }
-	BoardHandler* getBoardHandler() { return boardHandler; }
-	InterfaceHandler* getInterfaceHandler();
-	Stone* addStoneSprite(StoneColor c, int x, int y, bool &shown);
 	void updateCanvas() { canvas->update(); }
-	QString getCandidateFileName();
-	void hideAllStones();
-	void showAllStones();
-	void hideAllMarks();
-	bool openSGF(const QString &fileName);
-	bool saveBoard(const QString &fileName) { return boardHandler->saveBoard(fileName); }
+	void clear_stones ();
+	void reset_game (std::shared_ptr<game_record>);
+	const std::shared_ptr<game_record> get_record () { return m_game; }
+	const game_state *get_state () { return m_state; }
+	void external_move (game_state *st) { move_state (st); }
+	void mark_dead_external (int x, int y);
 	void setShowCoords(bool b);
 	void setShowSGFCoords(bool b);
-	void setShowCursor(bool b);
-	void setVariationDisplay(VariationDisplay d);
-	void setMode(GameMode mode) { boardHandler->setMode(mode); }
-	void addStone(StoneColor sc, int x, int y, bool sound = 0) { boardHandler->addStone(sc, x, y, sound); }
-	void setHandicap(int h) { boardHandler->setHandicap(h); }
-	GameMode getGameMode() { return boardHandler->getGameMode(); }
-	void setMarkType(MarkType t) { boardHandler->setMarkType(t); }
-	MarkType getMarkType() const { return boardHandler->getMarkType(); }
-	void setMark(int x, int y, MarkType t, bool update=true, QString txt = QString::null, bool overlay=true);
-	void removeMark(int x, int y, bool update=true);
-	void setMarkText(int x, int y, const QString &txt);
-	Mark* hasMark(int x, int y);
-	void updateLastMove(StoneColor c, int x, int y);
-	void setCurStoneColor();
-	void removeLastMoveMark();
-	void checkLastMoveMark(int x, int y);
-	bool nextMove(bool autoplay=false) { return boardHandler->nextMove(autoplay); }
-	void previousMove() { boardHandler->previousMove(); }
-	void nextVariation() { boardHandler->nextVariation(); }
-	void previousVariation() { boardHandler->previousVariation(); }
-	void nextComment() { boardHandler->nextComment(); }
-	void previousComment() { boardHandler->previousComment(); }
-	void gotoFirstMove() { boardHandler->gotoFirstMove(); }
-	void gotoLastMove() { boardHandler->gotoLastMove(); }
-	void gotoLastMoveByTime() { boardHandler->gotoLastMoveByTime(); }
-	void gotoMainBranch() { boardHandler->gotoMainBranch(); }
-	void gotoVarStart() { boardHandler->gotoVarStart(); }
-	void gotoNextBranch() { boardHandler->gotoNextBranch(); }
-	void gotoNthMove(int n) { boardHandler->gotoNthMove(n); }
-	void gotoNthMoveInVar(int n) { boardHandler->gotoNthMoveInVar(n); }
+	bool show_cursor_p ();
+	void setMode(GameMode mode);
+	GameMode getGameMode () { return m_game_mode; }
+	void setMarkType(mark t) { m_edit_mark = t; }
+
+	void nextMove();
+	void previousMove();
+	void nextVariation();
+	void previousVariation();
+	void nextComment();
+	void previousComment();
+	void gotoFirstMove();
+	void gotoLastMove();
+	void gotoLastMoveByTime();
+	void gotoMainBranch();
+	void gotoVarStart();
+	void gotoNextBranch();
+	void gotoNthMove(int n);
+	void gotoNthMoveInVar(int n);
 	void navIntersection();
-	void deleteNode() { boardHandler->deleteNode(); }
-	void clearNode() { boardHandler->clearNode(); }
-	void duplicateNode() { boardHandler->duplicateNode(); }
-	bool swapVariations() { return boardHandler->swapVariations(); }
+	void set_start_count (bool on) { m_state->set_start_count (on); }
+	void set_rect_select (int on) { m_request_mark_rect = on; }
+	void clear_selection ();
+
+	bool player_to_move_p ()
+	{
+		return !m_state->was_score_p () && (m_state->to_move () == black ? m_player_is_b : m_player_is_w);
+	}
+	void play_external_move (int x, int y);
+	void play_external_pass ();
+
+	go_board *dup_current_board () { return new go_board (m_state->get_board ()); }
+	stone_color to_move () { return m_state->to_move (); }
+	stone_color swap_edit_to_move ();
+	void deleteNode();
 	void doPass();
-	void doSinglePass() { boardHandler->doPass(); }
-	void doAdjourn() { emit signal_adjourn(); }
-	void doUndo() { emit signal_undo(); }
-	void doResign();// { emit signal_resign(); }
-	void doRefresh() { emit signal_refresh(); }
-	void doEditBoardInNewWindow() { emit signal_editBoardInNewWindow(); }
-	void setVarGhost(StoneColor c, int x, int y);
-	bool hasVarGhost(StoneColor c, int x, int y);
-	void removeGhosts();
 	short getCurrentX() const { return curX; }
 	short getCurrentY() const { return curY; }
-	int getCurrentMoveNumber() const;
-	GameData* getGameData() { return boardHandler->getGameData(); }
-	void setGameData(GameData *gd) { boardHandler->setGameData(gd); }
-	QPixmap grabPicture ();
-	void exportASCII() { boardHandler->exportASCII(); }
-	bool importSGFClipboard() { return boardHandler->importSGFClipboard(); }
-	bool exportSGFtoClipB() { return boardHandler->exportSGFtoClipB(); }
-	void doCountDone();
-	void numberMoves() { boardHandler->numberMoves(); }
-	void markVariations(bool sons) { boardHandler->markVariations(sons); }
-	void setBoardSize(int s) { board_size = s; }
-	int getBoardSize() const { return board_size; }
+	QPixmap grabPicture();
+	QString render_ascii (bool, bool);
+	bool doCountDone();
 #ifndef NO_DEBUG
 	void debug();
 #endif
 
 	bool fastLoad, isModified, lockResize;
-	void sendcomment(const QString &text) { emit signal_sendcomment(text); }
 
 	// in case of match
-	void set_myColorIsBlack(bool b) { myColorIsBlack = b; }
-	bool get_myColorIsBlack() { return myColorIsBlack; }
+	void set_player_colors (bool w, bool b) { m_player_is_w = w; m_player_is_b = b; }
+	bool player_is (stone_color c) { return c == black ? m_player_is_b : m_player_is_w; }
+
 	void set_isLocalGame(bool isLocal);
 	bool get_isLocalGame() { return isLocalGame; }
-	void refreshDisplay() { Move *m = boardHandler->getTree()->getCurrent(); updateLastMove(m->getColor(), m->getX(), m->getY()); }
 	void set_antiClicko(bool b) { antiClicko = b; }
 
 
 public slots:
-	void updateComment();
-	void updateComment2();
-	void modifiedComment();
+	void update_comment(const QString &, bool append);
 	void changeSize();
-	void gotoMove(Move *m) { boardHandler->gotoMove(m); }
 
 signals:
 	void coordsChanged(int, int, int,bool);
-	void signal_sendcomment(const QString&);
-	void signal_addStone(enum StoneColor, int, int);
-	void signal_undo();
-	void signal_adjourn();
-	void signal_resign();
-	void signal_pass();
-	void signal_done();
-	void signal_refresh();
-	void signal_editBoardInNewWindow();
 
 protected:
 	void calculateSize();
@@ -161,51 +157,43 @@ protected:
 	void drawStarPoint(int x, int y);
 	void resizeBoard(int w, int h);
 	int convertCoordsToPoint(int c, int o);
-	void mousePressEvent(QMouseEvent *e);
-	void mouseReleaseEvent(QMouseEvent*);
-	void mouseMoveEvent(QMouseEvent *e);
-	void mouseWheelEvent(QWheelEvent *e);
-	void leaveEvent(QEvent*);
-	void resizeEvent(QResizeEvent*);
-	void updateMarkColor(StoneColor c, int x, int y);
+	void updateRectSel(int, int);
+	virtual void mousePressEvent(QMouseEvent *e) override;
+	virtual void mouseReleaseEvent(QMouseEvent*) override;
+	virtual void mouseMoveEvent(QMouseEvent *e) override;
+	virtual void wheelEvent(QWheelEvent *e) override;
+	virtual void leaveEvent(QEvent*) override;
+	virtual void resizeEvent(QResizeEvent*) override;
 
 private:
+	void click_add_mark (QMouseEvent *, int, int);
 	void setupCoords();
 	void clearCoords();
+	void updateCovers ();
+
+	QGraphicsRectItem *coverTop, *coverLeft, *coverRight, *coverBot;
 
 	QGraphicsScene *canvas;
 	QList<QGraphicsSimpleTextItem*> hCoords1, hCoords2 ,vCoords1, vCoords2;
 	Gatter *gatter;
 	ImageHandler *imageHandler;
-	BoardHandler *boardHandler;
 	static const int margin, coord_margin;
 	int board_size, offset, offsetX, offsetY, board_pixel_size, table_size;
 	int coord_offset;
 	double square_size;
 	bool showCoords;
 	bool showSGFCoords;
-	bool showCursor;
 	bool antiClicko;
-	Q3PtrList<Mark> *marks;
-	Q3PtrList<Stone> *ghosts;
-	Mark *lastMoveMark;
-	bool numberPool[400];
-	bool letterPool[52];
-	Stone *curStone;
 	short curX, curY;
 
 	QTime wheelTime;
-	Qt::ButtonState mouseState;
-	NodeResults *nodeResultsDlg;
+	Qt::MouseButtons mouseState;
 
 	bool isHidingStones; // QQQ
 
 #ifdef Q_WS_WIN
 	bool resizeDelayFlag;
 #endif
-
-	// in case of match
-	bool myColorIsBlack;
 	bool isLocalGame;
 	bool navIntersectionStatus;
 };

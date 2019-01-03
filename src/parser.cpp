@@ -6,6 +6,7 @@
 #include "qgo_interface.h"
 #include "gamestable.h"
 #include "playertable.h"
+
 #include <qregexp.h>
 #include <iostream>
 using namespace std;
@@ -659,7 +660,7 @@ InfoType Parser::cmd9(QString &line)
 		//      9 Game will count towards ratings.
 		emit signal_freegame(false);
 	}
-	else if (line.contains("game will not count", false))
+	else if (line.contains("game will not count", Qt::CaseInsensitive))
 	{
 		// IGS: 9 Game will not count towards ratings.
 		//      9 Game will count towards ratings.
@@ -691,7 +692,7 @@ InfoType Parser::cmd9(QString &line)
 			return IT_OTHER;
 
 		QString newline = line;
-		newline.simplifyWhiteSpace();
+		newline.simplified();
 
 		QString p1 = memory_str.section(' ', 3, 3);
 		// @@@ should be 7?
@@ -951,7 +952,7 @@ InfoType Parser::cmd9(QString &line)
 	// 9 Observing game  2 (chmeng vs. myao) :
 	// 9        shanghai  9k*           henry 15k  
 	// 9 Found 2 observers.
-	else if (line.contains("Observing game ", true))
+	else if (line.contains("Observing game ", Qt::CaseSensitive))
 	{
 		// right now: only need for observers of teaching game
 		// game number
@@ -1131,14 +1132,13 @@ InfoType Parser::cmd9(QString &line)
 		return IT_OTHER ;
 	}
 
-        
 	else if ((line.contains("Info:"))&& !(line.contains("Rank Info:")))
 	{
 		if (! statsPlayer->info.isEmpty())
 			statsPlayer->info.append("\n");
 		statsPlayer->info.append(line);
 		emit signal_statsPlayer(statsPlayer);
-		return IT_OTHER ;          
+		return IT_OTHER ;
 	}
 
 	else if (line.contains("Playing in game:"))       //IGS and LGS
@@ -1153,7 +1153,7 @@ InfoType Parser::cmd9(QString &line)
 		emit signal_statsPlayer(statsPlayer);
 		return IT_OTHER ;
 	}
-                
+
 	else if (line.contains("Rated Games:"))
 	{
 		statsPlayer->rated = line.section(':', 1).trimmed();
@@ -1339,7 +1339,7 @@ InfoType Parser::cmd15(const QString &line)
 		aGameInfo->mv_col = "T";
 	}
 	else if (line.contains("TIME"))
-	{	
+	{
 		QRegExp timere ("TIME:\\s*(\\d+)\\s*:([^:]+)\\([BW]\\):\\s*"
 				"(\\d+)\\s+(\\d+)/(\\d+)\\s+(\\d+)/(\\d+)\\s+(\\d+)/(\\d+)\\s+.*");
 
@@ -1358,7 +1358,7 @@ InfoType Parser::cmd15(const QString &line)
 			aGameInfo->wtime = (time1.toInt()==0 ? time2 : time1);
 			aGameInfo->wstones = (time1.toInt()==0 ?stones: "-1") ;
 		}
-		else if (line.contains("(B)"))					
+		else if (line.contains("(B)"))
 		{
 			aGameInfo->bname = timere.cap (2);
 			aGameInfo->btime = (time1.toInt()==0 ? time2 : time1);
@@ -1368,7 +1368,7 @@ InfoType Parser::cmd15(const QString &line)
 			return IT_OTHER;
 	}
 	else if (line.contains("GAMERPROPS"))
-	{	
+	{
 		return IT_OTHER;
 	}
 	else
@@ -1427,6 +1427,7 @@ InfoType Parser::cmd21(const QString &line)
 		// {guest1381 [NR ] has connected.}
 		QRegExp re("\\{\\s*([^\\s]+)\\s+\\[\\s*([^\\]\\s]+)\\s*\\]");
 		if (re.indexIn(line) == -1) {
+			qDebug () << "parse failure: " << line;
 			return IT_OTHER;
 		}
 		aPlayer->name = re.cap(1);
@@ -1480,8 +1481,8 @@ InfoType Parser::cmd21(const QString &line)
 		// 21 {Game 184: Redmond* vs NaiWei* : White lost by 1.0}
 		if (line.contains("resigns.")		||
 		    line.contains("adjourned.")	||
-		    line.contains(" : W ", true)	||
-		    line.contains(" : B ", true)	||
+		    line.contains(" : W ")	||
+		    line.contains(" : B ")	||
 		    line.contains("forfeits on")	||
 		    line.contains("lost by"))
 		{
@@ -1512,6 +1513,7 @@ InfoType Parser::cmd21(const QString &line)
 			   "([\\w\\d]+)\\s*\\[\\s*([^\\s\\]]+)\\s*\\]\\s+\\}.*");
 
 		if (re.indexIn(line) == -1) {
+			qDebug () << "parse failure: " << line;
 			return IT_OTHER;
 		}
 
@@ -1712,7 +1714,7 @@ InfoType Parser::cmd27(const QString &txt)
 
 	// indicate player to be online
 	aPlayer->online = true;
-			
+
 	if (gsName == WING)
 	{
 		// shifts take care of too long integers
@@ -1743,7 +1745,7 @@ InfoType Parser::cmd27(const QString &txt)
 				else
 					aPlayer->rank = txt.mid(33+shift2,4);
 			}
-					
+
 			// check if line ok, true -> cmd "players" preceded
 			emit signal_player(aPlayer, true);
 		}
@@ -2014,7 +2016,7 @@ InfoType Parser::cmd42(const QString &txt)
 			     "([A-Za-z0-9]+) +([^ ]{,2}) +default  ([TF])(.*)?");
 	if(re.indexIn(txt) < 0)
 	{
-		qDebug() << txt.utf8().data();
+		qDebug() << txt.toUtf8().data();
 		qDebug() << "No match";
 		return IT_OTHER;
 	}
@@ -2038,7 +2040,7 @@ InfoType Parser::cmd42(const QString &txt)
 	QString nmatchString = "";
 	// we want to format the nmatch settings to a readable string
 	if (aPlayer->nmatch)
-	{	
+	{
 		// BWN 0-9 19-19 60-60 600-600 25-25 0-0 0-0 0-0
 		nmatchString = re.cap(12).trimmed();
 		if (! nmatchString.isEmpty())
@@ -2188,34 +2190,34 @@ InfoType Parser::cmd63(const QString &line)
 	}
 
 	else if (line.contains("CONFIG_LIST_START"))
-	{
+	{	
 		emit signal_clearSeekCondition();
 		return IT_OTHER;
 	}
 
 	else if ((line.contains("OPPONENT_FOUND")) ||(line.contains("ENTRY_CANCEL")))
-	{
+	{	
 		emit signal_cancelSeek();
 		return IT_OTHER;
 	}
 
 	else if ((line.contains("ERROR")) )
-	{
+	{	
 		emit signal_cancelSeek();
 		emit signal_message(line);
 		return IT_OTHER;
 	}
 
 	else if ((line.contains("ENTRY_LIST_START")) )
-	{
+	{	
 		//emit signal_clearSeekList();
 		return IT_OTHER;
 	}
 
 	else if ((line.contains("ENTRY_LIST ")) )
-	{
+	{	
 		QString player = line.section(' ', 1, 1);
-		QString condition =
+		QString condition = 
 			line.section(' ', 7, 7)+"x"+line.section(' ', 7, 7)+" - " +
 			QString::number(int(line.section(' ', 2, 2).toInt()/60))+
 			" +" +

@@ -9,14 +9,15 @@
  */
 
 
-#include <qtextcodec.h>
-#include <qtimer.h>
+#include <QTextCodec>
+#include <QTimer>
+#include <QWidget>
 #include <QHostAddress>
 #include "defines.h"
 #include "igsconnection.h"
 
-IGSConnection::IGSConnection() : IGSInterface()
-{ 
+IGSConnection::IGSConnection(QWidget *lvp, QWidget *lvg) : m_lv_p (lvp), m_lv_g (lvg)
+{
 	authState = LOGIN;
 
 	qsocket = new QTcpSocket(this);
@@ -29,12 +30,14 @@ IGSConnection::IGSConnection() : IGSInterface()
 
 	username = "";
 	password = "";
-	
-	connect(qsocket, SIGNAL(hostFound()), SLOT(OnHostFound()));
-	connect(qsocket, SIGNAL(connected()), SLOT(OnConnected()));
-	connect(qsocket, SIGNAL(readyRead()), SLOT(OnReadyRead()));
-	connect(qsocket, SIGNAL(connectionClosed()), SLOT(OnConnectionClosed()));
+
+	connect(qsocket, &QTcpSocket::hostFound, this, &IGSConnection::OnHostFound);
+	connect(qsocket, &QTcpSocket::connected, this, &IGSConnection::OnConnected);
+	connect(qsocket, &QTcpSocket::readyRead, this, &IGSConnection::OnReadyRead);
+	connect(qsocket, &QTcpSocket::disconnected, this, &IGSConnection::OnConnectionClosed);
+#if 0
 	connect(qsocket, SIGNAL(delayedCloseFinished()), SLOT(OnDelayedCloseFinish()));
+#endif
 	connect(qsocket, SIGNAL(error(QAbstractSocket::SocketError)), SLOT(OnError(QAbstractSocket::SocketError)));
 }
 
@@ -122,10 +125,27 @@ void IGSConnection::OnConnected()
 	sendTextToApp("Connected to " + qsocket->peerAddress().toString() + " " +
 		  QString::number(qsocket->peerPort()));
 }
+
+class Update_Locker
+{
+	QWidget *m_w;
+public:
+	Update_Locker (QWidget *w) : m_w (w)
+	{
+		m_w->setUpdatesEnabled (false);
+	}
+	~Update_Locker ()
+	{
+		m_w->setUpdatesEnabled (true);
+	}
+};
+
 // We got data to read
 void IGSConnection::OnReadyRead()
 {
 	qDebug("OnReadyRead....");
+	Update_Locker l1 (m_lv_p);
+	Update_Locker l2 (m_lv_g);
 	for (;;)
 	{
 		int available = qsocket->bytesAvailable();
@@ -147,7 +167,7 @@ void IGSConnection::OnReadyRead()
 			if (authState == LOGIN && len_saved_data == 7)
 			{
 				qDebug("looking for 'Login:'");
-				QString y = QString::fromAscii(saved_data, len_saved_data);
+				QString y = QString::fromLatin1(saved_data, len_saved_data);
 
 				qDebug() << "Collected: " << y;
 				if (checkPrompt(y)) {
@@ -170,6 +190,7 @@ void IGSConnection::OnReadyRead()
 			if (saved_data)
 				delete[] saved_data;
 			saved_data = 0;
+
 			if (x.isEmpty())
 			{
 				qDebug("READ:NULL");
@@ -219,12 +240,12 @@ void IGSConnection::OnError(QAbstractSocket::SocketError i)
 {
 	switch (i)
 	{
-		case QAbstractSocket::ErrConnectionRefused: qDebug("ERROR: connection refused...");
+		case QAbstractSocket::ConnectionRefusedError: qDebug("ERROR: connection refused...");
 			break;
-		case QAbstractSocket::ErrHostNotFound: qDebug("ERROR: host not found...");
+		case QAbstractSocket::HostNotFoundError: qDebug("ERROR: host not found...");
 			break;
-		case QAbstractSocket::ErrSocketRead: qDebug("ERROR: socket read...");
-			break;
+//		case QAbstractSocket::SocketReadError: qDebug("ERROR: socket read...");
+//			break;
 		default: qDebug("ERROR: unknown Error...");
 			break;
 	}
@@ -239,7 +260,7 @@ void IGSConnection::OnError(QAbstractSocket::SocketError i)
 bool IGSConnection::isConnected()
 {
 //	qDebug("IGSConnection::isConnected()");
-	return qsocket->state() == QTcpSocket::Connection;
+	return qsocket->state() == QAbstractSocket::ConnectedState;
 }
 
 void IGSConnection::sendTextToHost(QString txt, bool ignoreCodec)
@@ -256,20 +277,19 @@ void IGSConnection::sendTextToHost(QString txt, bool ignoreCodec)
 	{
 
         	int len;
-		const char * txt2 = txt.latin1();
+		const char * txt2 = txt.toLatin1();
 
-        	if ((len = qsocket->writeBlock(txt2, strlen(txt2) * sizeof(char))) != -1)
-			qsocket->writeBlock("\r\n", 2);
+		if ((len = qsocket->write(txt2, strlen(txt2) * sizeof(char))) != -1)
+			qsocket->write("\r\n", 2);
 		else
 			qWarning() << QString("*** failed sending to host: %1").arg(txt2);
 	}
-
-	else 
+	else
 	{
 		QByteArray raw = textCodec->fromUnicode(txt);
 
-		if (qsocket->writeBlock(raw.data(), raw.size()) != -1)
-			qsocket->writeBlock("\r\n", 2);
+		if (qsocket->write(raw.data(), raw.size()) != -1)
+			qsocket->write("\r\n", 2);
 		else
 			qWarning() << QString("*** failed sending to host: %1").arg(txt);
 	}
@@ -278,7 +298,7 @@ void IGSConnection::sendTextToHost(QString txt, bool ignoreCodec)
 
 void IGSConnection::setTextCodec(QString codec)
 {
-	textCodec = QTextCodec::codecForName(codec);
+	textCodec = QTextCodec::codecForName(codec.toLatin1 ());
 	if(!textCodec)
 		textCodec = QTextCodec::codecForLocale();
 	CHECK_PTR(textCodec);
@@ -288,7 +308,7 @@ void IGSConnection::setTextCodec(QString codec)
 
 bool IGSConnection::openConnection(const QString &host, unsigned int port, const QString &user, const QString &pass)
 {
-	if (qsocket->state() != QTcpSocket::Idle ) {
+	if (qsocket->state() != QAbstractSocket::UnconnectedState) {
 		qDebug("Called IGSConnection::openConnection while in state %d", qsocket->state());
 		return false;
 	}
@@ -305,18 +325,14 @@ bool IGSConnection::openConnection(const QString &host, unsigned int port, const
 		 << (password.isNull () ? NULL : "***") << "]...\n";
 	sendTextToApp(tr("Trying to connect to %1 %2").arg(host).arg(port));
 
-	ASSERT(host != 0);
-	ASSERT(port != 0);
-	int len = qstrlen(host);
-	if ((len > 0) && (len < 200)) // otherwise host points to junk
-		qsocket->connectToHost(host, (Q_UINT16) port);
-	return qsocket->state() != QTcpSocket::Idle;
+	qsocket->connectToHost(host, port);
+	return qsocket->state() != QAbstractSocket::UnconnectedState;
 }
 
 bool IGSConnection::closeConnection()
 {
 	// We have no connection?
-	if (qsocket->state() == QTcpSocket::Idle)
+	if (qsocket->state() == QAbstractSocket::UnconnectedState)
 		return false;
 
 	qDebug("Disconnecting...");
@@ -325,7 +341,7 @@ bool IGSConnection::closeConnection()
 	qsocket->close();
 
 	// Closing succeeded, return message
-	if (qsocket->state() == QTcpSocket::Idle)
+	if (qsocket->state() == QAbstractSocket::UnconnectedState)
 	{
 		authState = LOGIN;
 		sendTextToApp("Connection closed.\n");

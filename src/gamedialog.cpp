@@ -510,71 +510,87 @@ void GameDialog::slot_dispute(const QString &opponent, const QString &line)
 		if (handicapSpin->value() != val.toInt())
 		{
 			handicapSpin->setValue(val.toInt());
-			handicapSpin->setPaletteBackgroundColor(QColor("cyan"));
+			// handicapSpin->setPaletteBackgroundColor(QColor("cyan"));
 		}
+#if 0
 		else
 			handicapSpin->unsetPalette();
+#endif
 
 		val = line.section(' ', 2, 2);
 		if (boardSizeSpin->value() != val.toInt())
 		{
 			boardSizeSpin->setValue(val.toInt());
-			boardSizeSpin->setPaletteBackgroundColor(QColor("cyan"));
+			// boardSizeSpin->setPaletteBackgroundColor(QColor("cyan"));
 		}
+#if 0
 		else
 			boardSizeSpin->unsetPalette();
+#endif
 
 		val = line.section(' ', 3, 3);
 		if (timeSpin->value() != val.toInt()/60)
 		{
 			timeSpin->setValue(val.toInt()/60);
-			timeSpin->setPaletteBackgroundColor(QColor("cyan"));
+			// timeSpin->setPaletteBackgroundColor(QColor("cyan"));
 		}
+#if 0
 		else
 			timeSpin->unsetPalette();
+#endif
 
 		val = line.section(' ', 4, 4);
 		if (byoTimeSpin->value() != val.toInt()/60)
 		{
 			byoTimeSpin->setValue(val.toInt()/60);
-			byoTimeSpin->setPaletteBackgroundColor(QColor("cyan"));
+			// byoTimeSpin->setPaletteBackgroundColor(QColor("cyan"));
 		}
+#if 0
 		else
-			byoTimeSpin->unsetPalette();	
+			byoTimeSpin->unsetPalette();
+#endif
 
 		//val = line.section(' ', 5, 5);
 		//BY_label->setText(tr(" Byoyomi Time : (")+ val + tr(" stones)"));
 
 		val = line.section(' ', 0, 0);
-		if ( !(play_nigiri_button->isChecked()) && (val == "N"))
+		if (!play_nigiri_button->isChecked() && val == "N")
 		{
+#if 0
 			play_nigiri_button->setPaletteBackgroundColor(QColor("cyan"));
 			play_white_button->setPaletteBackgroundColor(QColor("cyan"));
 			play_black_button->setPaletteBackgroundColor(QColor("cyan"));
+#endif
 			play_nigiri_button->setChecked(true);
 
 		}
-		else if ( (play_black_button->isChecked()) && (val == "B"))
+		else if (play_black_button->isChecked() && val == "B")
 		{
+#if 0
 			play_nigiri_button->setPaletteBackgroundColor(QColor("cyan"));
 			play_white_button->setPaletteBackgroundColor(QColor("cyan"));
 			play_black_button->setPaletteBackgroundColor(QColor("cyan"));
+#endif
 			play_white_button->setChecked(true);
 
 		}
-		else if ( (play_white_button->isChecked()) && (val == "W"))
+		else if (play_white_button->isChecked() && val == "W")
 		{
+#if 0
 			play_nigiri_button->setPaletteBackgroundColor(QColor("cyan"));
 			play_white_button->setPaletteBackgroundColor(QColor("cyan"));
 			play_black_button->setPaletteBackgroundColor(QColor("cyan"));
+#endif
 			play_black_button->setChecked(true);
 
 		}
 		else
 		{
+#if 0
 			play_nigiri_button->unsetPalette();
 			play_white_button->unsetPalette();
 			play_black_button->unsetPalette();
+#endif
 		}
 
 		buttonOffer->setText(tr("Accept"));

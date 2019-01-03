@@ -307,35 +307,35 @@ const QStringList Setting::getAvailableLanguages()
 
 QString Setting::convertNumberToLanguage(int n)
 {
-    const char* language_codes[] = LANGUAGE_CODES;
+	const char* language_codes[] = LANGUAGE_CODES;
 
-    if (n == 0)
+	if (n == 0)
 		return "Default";
-    
-    return language_codes[n-1];
+
+	return language_codes[n-1];
 }
 
 int Setting::convertLanguageCodeToNumber()
 {
-    const char *language_codes[] = LANGUAGE_CODES;
-    const int number_of_available_languages = NUMBER_OF_AVAILABLE_LANGUAGES;
-    int i;
+	const char *language_codes[] = LANGUAGE_CODES;
+	const int number_of_available_languages = NUMBER_OF_AVAILABLE_LANGUAGES;
+	int i;
 
-    for (i=0; i<number_of_available_languages; i++)
-    {
+	for (i=0; i<number_of_available_languages; i++)
+	{
 		if (readEntry("LANG") == QString(language_codes[i]))
 			return i+1;
-    }
+	}
 
-    return 0;
+	return 0;
 }
 
 QString Setting::getTranslationsDirectory()
 {
-    qDebug("Checking for translations directory...");
+	qDebug("Checking for translations directory...");
 
-    QStringList list;
-	
+	QStringList list;
+
 	ASSERT(program_dir);
 
 #ifdef Q_WS_WIN

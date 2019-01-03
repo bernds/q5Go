@@ -1,20 +1,20 @@
 TEMPLATE	      = app
 CONFIG		     += qt warn_on release thread
 FORMS	      = gui_dialog.ui \
- clientwindow_gui.ui \
-			gameinfo_gui.ui \
-			newgame_gui.ui \
-			newlocalgame_gui.ui \
-			scoretools_gui.ui \
-			normaltools_gui.ui \
-			mainwidget_gui.ui \
-			preferences_gui.ui \
-			qnewgamedlg_gui.ui \
-			talk_gui.ui \
-			textedit_gui.ui \
-			textview_gui.ui \
-			nthmove_gui.ui \
-			noderesults_gui.ui
+		clientwindow_gui.ui \
+		gameinfo_gui.ui \
+		newgame_gui.ui \
+		newlocalgame_gui.ui \
+		scoretools_gui.ui \
+		normaltools_gui.ui \
+		mainwidget_gui.ui \
+		preferences_gui.ui \
+		qnewgamedlg_gui.ui \
+		talk_gui.ui \
+		textedit_gui.ui \
+		textview_gui.ui \
+		nthmove_gui.ui
+
 HEADERS		      = config.h \
 			gamedialog.h \
 			gamestable.h \
@@ -32,41 +32,35 @@ HEADERS		      = config.h \
 			tables.h \
 			telnet.h \
 			board.h \
-			boardhandler.h \
 			defines.h \
 			globals.h \
-			group.h \
+			goboard.h \
 			helpviewer.h \
 			icons.h \
 			imagehandler.h \
-			interfacehandler.h \
 			komispinbox.h \
 			mainwidget.h \
 			mainwindow.h \
-			mark.h \
-			matrix.h \
-			move.h \
-			noderesults.h \
 			parserdefs.h \
 			preferences.h \
 			qgo.h \
 			qgtp.h \
 			qnewgamedlg.h \
-			sgfparser.h \
 			searchpath.h \
+			sgf.h \
 			stone.h \
-			stonehandler.h \
 			textview.h \
 			tip.h \
-			tree.h \
-    gatter.h \
-    misctools.h \
-    miscdialogs.h \
-    audio.h \
-    alsa.h
+                        gatter.h \
+                        misctools.h \
+                        miscdialogs.h \
+                        audio.h \
+                        alsa.h
+
 SOURCES		      = gamedialog.cpp \
 			gamestable.cpp \
 			gametree.cpp \
+			goboard.cc \
 			igsconnection.cpp \
 			main.cpp \
 			mainwin.cpp \
@@ -79,35 +73,26 @@ SOURCES		      = gamedialog.cpp \
 			tables.cpp \
 			telnet.cpp \
 			board.cpp \
-			boardhandler.cpp \
-			group.cpp \
 			helpviewer.cpp \
 			imagehandler.cpp \
-			interfacehandler.cpp \
 			mainwidget.cpp \
 			mainwindow.cpp \
-			mark.cpp \
-			matrix.cpp \
-			move.cpp \
-			noderesults.cpp \
 			preferences.cpp \
 			qgo.cpp \
 			qgtp.cpp \
 			qnewgamedlg.cpp \
-			sgfparser.cpp \
+			sgf2board.cc \
+			sgfload.cc \
 			searchpath.cpp \
 			stone.cpp \
-			stonehandler.cpp \
 			textview.cpp \
 			tip.cpp \
-			tree.cpp \
-    gatter.cpp \
-    audio.cpp
+                        gatter.cpp \
+                        audio.cpp
 
-
-TARGET                = q4go
-DATADIR               = $$PREFIX/share/q4go
-DOCDIR                = $$PREFIX/share/doc/q4go
+TARGET                = q5go
+DATADIR               = $$PREFIX/share/q5go
+DOCDIR                = $$PREFIX/share/doc/
 
 unix:INCLUDEPATH      += .
 win32:INCLUDEPATH     += .
@@ -153,11 +138,11 @@ sounds.path           = $$DATADIR/sounds
 sounds.files          = sounds/*
 INSTALLS += sounds
 
-documentation.path    = $$DOCDIR
+documentation.path    = $$DOCDIR/q5go
 documentation.files   = ../AUTHORS ../COPYING ../NEWS ../README ../TODO ../ChangeLog
 INSTALLS += documentation
 
-html.path             = $$DOCDIR/html
+html.path             = $$DOCDIR/html/q5go
 html.files            = ../html/*
 INSTALLS += html
 
@@ -165,7 +150,7 @@ target.path           = $$PREFIX/bin
 INSTALLS += target
 }
 
-QT += xml network  qt3support multimedia
+QT += widgets gui xml network multimedia
 
 RESOURCES += \
     q4go.qrc

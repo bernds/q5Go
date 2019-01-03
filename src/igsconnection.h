@@ -21,8 +21,9 @@ class IGSConnection : public QObject, public IGSInterface
 {
 	Q_OBJECT
 
+	QWidget *m_lv_p, *m_lv_g;
 public:
-	IGSConnection();
+	IGSConnection(QWidget *, QWidget *);
 	virtual ~IGSConnection();
 
 	// Implementation of IGSInterface virtual functions
