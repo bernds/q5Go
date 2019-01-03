@@ -68,17 +68,17 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am__objects_1 = audio.$(OBJEXT) alsa.$(OBJEXT) board.$(OBJEXT) \
-	goboard.$(OBJEXT) gamedialog.$(OBJEXT) gamestable.$(OBJEXT) \
-	gametree.$(OBJEXT) gatter.$(OBJEXT) helpviewer.$(OBJEXT) \
-	igsconnection.$(OBJEXT) imagehandler.$(OBJEXT) main.$(OBJEXT) \
-	mainwidget.$(OBJEXT) mainwin.$(OBJEXT) mainwindow.$(OBJEXT) \
-	misc.$(OBJEXT) msg_handler.$(OBJEXT) parser.$(OBJEXT) \
-	playertable.$(OBJEXT) preferences.$(OBJEXT) qgo.$(OBJEXT) \
-	qgo_interface.$(OBJEXT) qgtp.$(OBJEXT) qnewgamedlg.$(OBJEXT) \
-	setting.$(OBJEXT) sgfload.$(OBJEXT) sgf2board.$(OBJEXT) \
-	stone.$(OBJEXT) tables.$(OBJEXT) telnet.$(OBJEXT) \
-	textview.$(OBJEXT) tip.$(OBJEXT) searchpath.$(OBJEXT)
+am__objects_1 = audio.$(OBJEXT) board.$(OBJEXT) goboard.$(OBJEXT) \
+	gamedialog.$(OBJEXT) gamestable.$(OBJEXT) gametree.$(OBJEXT) \
+	gatter.$(OBJEXT) helpviewer.$(OBJEXT) igsconnection.$(OBJEXT) \
+	imagehandler.$(OBJEXT) main.$(OBJEXT) mainwidget.$(OBJEXT) \
+	mainwin.$(OBJEXT) mainwindow.$(OBJEXT) misc.$(OBJEXT) \
+	msg_handler.$(OBJEXT) parser.$(OBJEXT) playertable.$(OBJEXT) \
+	preferences.$(OBJEXT) qgo.$(OBJEXT) qgo_interface.$(OBJEXT) \
+	qgtp.$(OBJEXT) qnewgamedlg.$(OBJEXT) setting.$(OBJEXT) \
+	sgfload.$(OBJEXT) sgf2board.$(OBJEXT) stone.$(OBJEXT) \
+	tables.$(OBJEXT) telnet.$(OBJEXT) textview.$(OBJEXT) \
+	tip.$(OBJEXT) searchpath.$(OBJEXT)
 am__objects_2 =
 am_q5go_OBJECTS = $(am__objects_1) $(am__objects_2)
 am__objects_3 = audio.moc.$(OBJEXT) bitarray.moc.$(OBJEXT) \
@@ -320,7 +320,7 @@ DISTHEADERS_NOMOC = goboard.h config.h defines.h gatter.h globals.h gs_globals.h
 	matrix.h misc.h move.h msg_handler.h parserdefs.h setting.h sgf.h sgfparser.h stone.h \
 	tree.h
 
-DISTSOURCES = audio.cpp alsa.cpp board.cpp goboard.cc gamedialog.cpp \
+DISTSOURCES = audio.cpp board.cpp goboard.cc gamedialog.cpp \
 		gamestable.cpp gametree.cpp gatter.cpp helpviewer.cpp \
 		igsconnection.cpp imagehandler.cpp main.cpp \
 		mainwidget.cpp  mainwin.cpp mainwindow.cpp \
@@ -438,7 +438,6 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/alsa.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/audio.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/audio.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/bitarray.moc.Po@am__quote@

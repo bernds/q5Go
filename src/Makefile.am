@@ -16,7 +16,7 @@ DISTHEADERS_NOMOC = goboard.h config.h defines.h gatter.h globals.h gs_globals.h
 	matrix.h misc.h move.h msg_handler.h parserdefs.h setting.h sgf.h sgfparser.h stone.h \
 	tree.h
 
-DISTSOURCES = audio.cpp alsa.cpp board.cpp goboard.cc gamedialog.cpp \
+DISTSOURCES = audio.cpp board.cpp goboard.cc gamedialog.cpp \
 		gamestable.cpp gametree.cpp gatter.cpp helpviewer.cpp \
 		igsconnection.cpp imagehandler.cpp main.cpp \
 		mainwidget.cpp  mainwin.cpp mainwindow.cpp \

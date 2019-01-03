@@ -54,8 +54,7 @@ HEADERS		      = config.h \
                         gatter.h \
                         misctools.h \
                         miscdialogs.h \
-                        audio.h \
-                        alsa.h
+                        audio.h 
 
 SOURCES		      = gamedialog.cpp \
 			gamestable.cpp \
@@ -98,7 +97,6 @@ unix:INCLUDEPATH      += .
 win32:INCLUDEPATH     += .
 #win32:QMAKE_CFLAGS   += -GX -Gf
 #win32:QMAKE_CXXFLAGS += -GX -Gf
-!win32:SOURCES        += alsa.cpp
 
 DISTFILES            += *.dsw \
 			pics/* \
