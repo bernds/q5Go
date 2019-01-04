@@ -75,10 +75,8 @@
 #include ICON_AUTOPLAY
 #include ICON_DELETE
 #include ICON_FULLSCREEN
-#include ICON_WHATSTHIS
 #include ICON_MANUAL
 #include ICON_NAV_INTERSECTION
-#include ICON_COMPUTER_PLAY
 #include ICON_COORDS
 #include ICON_SOUND_ON
 #include ICON_SOUND_OFF

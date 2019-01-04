@@ -18,7 +18,6 @@
 #include "gamedialog.h"
 #include "qgo_interface.h"
 #include "komispinbox.h"
-#include "icons.h"
 #include "igsconnection.h"
 #include "mainwindow.h"
 #include "qnewgamedlg.h"

@@ -7,18 +7,12 @@
 #include "qgo.h"
 #include "mainwidget.h"
 #include "defines.h"
-#include "icons.h"
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qslider.h>
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qtabwidget.h>
-
-//#ifdef USE_XPM
-#include ICON_NODE_BLACK
-#include ICON_NODE_WHITE
-//#endif
 
 /*
  *  Constructs a MainWidget which is a child of 'parent', with the
