@@ -111,7 +111,7 @@ DISTFILES            += *.dsw \
 !win32:DEFINES       += "DATADIR=\\\"$$DATADIR\\\""
 !win32:DEFINES       += "DOCDIR=\\\"$$DOCDIR\\\""
 release:DEFINES      += NO_CHECK
-win32:DEFINES        += QT_DLL QT_THREAD_SUPPORT HAVE_CONFIG_H
+win32:DEFINES        += QT_DLL QT_THREAD_SUPPORT HAVE_CONFIG_H _USE_MATH_DEFINES
 win32:RC_FILE	      = qgo.rc
 OBJECTS_DIR	      = temp_
 MOC_DIR		      = temp_
