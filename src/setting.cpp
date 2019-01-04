@@ -3,6 +3,9 @@
  */
 
 #include <QTextStream>
+#include <QStandardPaths>
+#include <QMessageBox>
+#include <QPixmap>
 
 #include "setting.h"
 #include "config.h"
@@ -14,8 +17,6 @@
 #include <qfont.h>
 #include <qstringlist.h>
 #include <qstring.h>
-//Added by qt3to4:
-#include <QPixmap>
 
 //#ifdef USE_XPM
 #include ICON_APPICON
@@ -81,7 +82,10 @@ Setting::Setting()
 	writeIntEntry("DEFAULT_BY", 10);
 	writeIntEntry("BY_TIMER", 10);
 	writeIntEntry("COMPUTER_SIZE", 19);
-	writeEntry("LAST_DIR", QDir::homePath());
+        QStringList docdirs = QStandardPaths::standardLocations (QStandardPaths::DocumentsLocation);
+        qDebug () << "Docdirs: " << docdirs;
+        if (!docdirs.isEmpty ())
+                writeEntry("LAST_DIR", docdirs.first ());
 //#ifdef Q_OS_MACX
 	writeBoolEntry("REM_DIR", true);
 	writeIntEntry("STONES_LOOK", 3);
@@ -116,8 +120,8 @@ Setting::~Setting()
 
 void Setting::loadSettings()
 {
-	settingHomeDir = QDir::homePath();
-	QFile file (settingHomeDir + "/." + PACKAGE + "rc");
+        QString configfile = QStandardPaths::locate (QStandardPaths::AppConfigLocation, PACKAGE "rc", QStandardPaths::LocateFile);
+        QFile file (configfile);
 
 	if (!file.exists() || !file.open(QIODevice::ReadOnly))
 		qDebug() << "Failed loading settings: " << file.fileName();
@@ -222,7 +226,15 @@ void Setting::saveSettings()
 
 	writeIntEntry("VERSION", SETTING_VERSION);
 
-	QFile file(settingHomeDir + "/." + PACKAGE + "rc");
+        QString configfile = QStandardPaths::locate (QStandardPaths::AppConfigLocation, PACKAGE "rc");
+        if (configfile.isEmpty ()) {
+                QString path (QStandardPaths::writableLocation (QStandardPaths::AppConfigLocation));
+                QDir dir (path);
+                dir.mkpath (".");
+                configfile = path + "/" + PACKAGE "rc";
+        }
+
+        QFile file (configfile);
 
 	if (file.open(QIODevice::WriteOnly))
 	{
@@ -237,7 +249,9 @@ void Setting::saveSettings()
 		}
 
 		file.close();
-	}
+        } else {
+                QMessageBox::warning (nullptr, PACKAGE, QObject::tr ("Unable to save settings to ") + file.fileName ());
+        }
 }
 
 // make list entry
