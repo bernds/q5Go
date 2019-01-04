@@ -78,7 +78,7 @@ am__objects_1 = audio.$(OBJEXT) board.$(OBJEXT) goboard.$(OBJEXT) \
 	qgtp.$(OBJEXT) qnewgamedlg.$(OBJEXT) setting.$(OBJEXT) \
 	sgfload.$(OBJEXT) sgf2board.$(OBJEXT) stone.$(OBJEXT) \
 	tables.$(OBJEXT) telnet.$(OBJEXT) textview.$(OBJEXT) \
-	tip.$(OBJEXT) searchpath.$(OBJEXT)
+	tip.$(OBJEXT)
 am__objects_2 =
 am_q5go_OBJECTS = $(am__objects_1) $(am__objects_2)
 am__objects_3 = audio.moc.$(OBJEXT) bitarray.moc.$(OBJEXT) \
@@ -91,9 +91,8 @@ am__objects_3 = audio.moc.$(OBJEXT) bitarray.moc.$(OBJEXT) \
 	parser.moc.$(OBJEXT) playertable.moc.$(OBJEXT) \
 	preferences.moc.$(OBJEXT) qgo.moc.$(OBJEXT) \
 	qgo_interface.moc.$(OBJEXT) qgtp.moc.$(OBJEXT) \
-	qnewgamedlg.moc.$(OBJEXT) searchpath.moc.$(OBJEXT) \
-	tables.moc.$(OBJEXT) telnet.moc.$(OBJEXT) \
-	textview.moc.$(OBJEXT) tip.moc.$(OBJEXT)
+	qnewgamedlg.moc.$(OBJEXT) tables.moc.$(OBJEXT) \
+	telnet.moc.$(OBJEXT) textview.moc.$(OBJEXT) tip.moc.$(OBJEXT)
 am__objects_4 = $(am__objects_2) $(am__objects_3)
 am__objects_5 = q4go.rcc.$(OBJEXT)
 am__objects_6 = $(am__objects_5)
@@ -287,7 +286,7 @@ KDE_OPTIONS = qtonly
 DISTHEADERS_MOC = audio.h bitarray.h board.h gamedialog.h gamestable.h gametree.h helpviewer.h icons.h \
 	igsconnection.h mainwidget.h mainwindow.h mainwin.h miscdialogs.h \
 	misctools.h parser.h playertable.h preferences.h qgo.h \
-	qgo_interface.h qgtp.h qnewgamedlg.h searchpath.h tables.h telnet.h textview.h tip.h
+	qgo_interface.h qgtp.h qnewgamedlg.h tables.h telnet.h textview.h tip.h
 
 DISTHEADERS_NOMOC = goboard.h config.h defines.h gatter.h globals.h gs_globals.h \
 	igsinterface.h imagehandler.h komispinbox.h mark.h \
@@ -301,7 +300,7 @@ DISTSOURCES = audio.cpp board.cpp goboard.cc gamedialog.cpp \
 		misc.cpp msg_handler.cpp parser.cpp \
 		playertable.cpp preferences.cpp qgo.cpp qgo_interface.cpp qgtp.cpp \
 		qnewgamedlg.cpp setting.cpp  sgfload.cc sgf2board.cc \
-		stone.cpp tables.cpp telnet.cpp textview.cpp tip.cpp searchpath.cpp
+		stone.cpp tables.cpp telnet.cpp textview.cpp tip.cpp
 
 FORMS = clientwindow_gui.ui gameinfo_gui.ui gui_dialog.ui mainwidget_gui.ui newgame_gui.ui \
 	newlocalgame_gui.ui normaltools_gui.ui nthmove_gui.ui preferences_gui.ui \
@@ -451,8 +450,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/qgtp.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/qnewgamedlg.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/qnewgamedlg.moc.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/searchpath.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/searchpath.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/setting.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sgf2board.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sgfload.Po@am__quote@

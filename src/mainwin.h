@@ -172,7 +172,6 @@ public slots:
 	void slotComputerPlay(bool);
 
 	void slotHelpManual(bool);
-	void slotHelpSoundInfo(bool);
 	void slotHelpAbout(bool);
 	void slotHelpAboutQt(bool);
 	void slotNewVersion(bool);

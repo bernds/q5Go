@@ -11,7 +11,6 @@
 #include "mainwindow.h"
 #include "setting.h"
 #include "defines.h"
-#include "searchpath.h"
 #include "audio.h"
 #include "goboard.h"
 
@@ -23,7 +22,6 @@ extern "C" {extern  void play(const char *Pathname); }    //SL added eb 7
 class qGo : public QObject
 {
 	Q_OBJECT
-
 public:
 
 	qGo();
@@ -40,6 +38,7 @@ public:
 	void playTimeSound();
 	void playSaySound();
 	void playEnterSound();
+	void playStoneSound();
 	void playLeaveSound();
 	void playDisConnectSound();
 	void playConnectSound();
@@ -49,29 +48,12 @@ signals:
 	void signal_leave_qgo();
 	void signal_updateFont();
 
-public slots:
-	void quit();
-	void slotHelpAbout();
-
-public:
-	bool testSound(bool);
+	public slots:
+		void quit();
+		void slotHelpAbout();
 
 private:
-	HelpViewer *helpViewer;
-	Sound *clickSound;
-//	Sound *autoplaySound;
-	Sound *talkSound;
-	Sound *matchSound;
-	Sound *passSound;
-	Sound *gameEndSound;
-	Sound *timeSound;
-	Sound *saySound;
-	Sound *enterSound;
-	Sound *leaveSound;
-	Sound *connectSound;
-	Sound *retrieveSound(const char *, SearchPath&);
-	bool   soundsFound();
-	void loadSound() { testSound(false); }
+		HelpViewer *helpViewer;
 };
 
 extern qGo *qgo;

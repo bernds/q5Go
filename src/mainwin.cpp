@@ -2555,7 +2555,6 @@ void ClientWindow::initActions()
 	* Menu Help
 	*/
 	connect(helpManual, &QAction::triggered, this, &ClientWindow::slotHelpManual);
-	connect(helpSoundInfo, &QAction::triggered, this, &ClientWindow::slotHelpSoundInfo);
 	connect(helpAboutApp, &QAction::triggered, this, &ClientWindow::slotHelpAbout);
 	connect(helpAboutQt, &QAction::triggered, this, &ClientWindow::slotHelpAboutQt);
 	connect(helpNewVersion, &QAction::triggered, this, &ClientWindow::slotNewVersion);
@@ -2582,12 +2581,6 @@ void ClientWindow::initToolBar()
 void ClientWindow::slotHelpManual(bool)
 {
 	setting->qgo->openManual();
-}
-
-void ClientWindow::slotHelpSoundInfo(bool)
-{
-	// show info
-	setting->qgo->testSound(true);
 }
 
 void ClientWindow::slotHelpAbout(bool)

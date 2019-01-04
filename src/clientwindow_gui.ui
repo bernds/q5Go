@@ -883,8 +883,6 @@
 	</property>
 	<addaction name="helpManual"/>
 	<addaction name="separator"/>
-	<addaction name="helpSoundInfo"/>
-	<addaction name="separator"/>
 	<addaction name="helpAboutApp"/>
 	<addaction name="helpAboutQt"/>
 	<addaction name="helpNewVersion"/>
@@ -1323,25 +1321,6 @@
       </property>
       <property name="name" stdset="0">
 	<cstring>viewStatusBar</cstring>
-      </property>
-    </action>
-    <action name="helpSoundInfo">
-      <property name="text">
-	<string>&amp;Sound</string>
-      </property>
-      <property name="iconText">
-	<string>Sound</string>
-      </property>
-      <property name="toolTip">
-	<string>Short info on sound availability</string>
-      </property>
-      <property name="whatsThis">
-	<string>Sound Info
-
-	Views a message box with a short comment about sound.</string>
-      </property>
-      <property name="name" stdset="0">
-	<cstring>helpSoundInfo</cstring>
       </property>
     </action>
     <action name="helpAboutQt">

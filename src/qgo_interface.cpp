@@ -65,7 +65,7 @@ public:
 	void playClick ()
 	{
 		if (local_stone_sound)
-			qgo->playClick ();
+			qgo->playStoneSound ();
 	}
 };
 

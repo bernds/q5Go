@@ -308,7 +308,6 @@ MainWindow::~MainWindow()
 	delete viewSaveSize;
 	delete viewFullscreen;
 	delete helpManual;
-	delete helpSoundInfo;
 	delete helpAboutApp;
 	delete helpAboutQt;
 	delete whatsThis;
@@ -792,12 +791,6 @@ void MainWindow::initActions()
 	helpManual->setWhatsThis(tr("Help\n\nOpens the manual of the application."));
 	connect(helpManual, &QAction::triggered, this, &MainWindow::slotHelpManual);
 
-	// Sound Info
-	helpSoundInfo = new QAction(tr("&Sound"), this);
-	helpSoundInfo->setStatusTip(tr("Short info on sound availability"));
-	helpSoundInfo->setWhatsThis(tr("Sound Info\n\nViews a message box with a short comment about sound."));
-	connect(helpSoundInfo, &QAction::triggered, this, &MainWindow::slotHelpSoundInfo);
-
 	// Help About
 	helpAboutApp = new QAction(tr("&About..."), this);
 	helpAboutApp->setStatusTip(tr("About the application"));
@@ -929,10 +922,8 @@ void MainWindow::initMenuBar()
 	helpMenu = new QMenu(tr("&Help"));
 	helpMenu->addAction (helpManual);
 	helpMenu->addAction (whatsThis);
-	helpMenu->addAction (helpSoundInfo);
 	helpMenu->addAction (helpAboutApp);
 	helpMenu->addAction (helpAboutQt);
-	helpMenu->insertSeparator(helpSoundInfo);
 	helpMenu->insertSeparator(helpAboutApp);
 
 	// menubar configuration
@@ -1667,12 +1658,6 @@ void MainWindow::slotHelpManual(bool)
 	setting->qgo->openManual();
 }
 
-void MainWindow::slotHelpSoundInfo(bool)
-{
-	// show info
-	setting->qgo->testSound(true);
-}
-
 void MainWindow::slotHelpAbout(bool)
 {
 	setting->qgo->slotHelpAbout();
@@ -2369,7 +2354,7 @@ void MainWindow_GTP::gtp_startup_success ()
 void MainWindow_GTP::gtp_played_move (int x, int y)
 {
 	if (local_stone_sound)
-		qgo->playClick();
+		qgo->playStoneSound();
 	gfx_board->play_external_move (x, y);
 }
 
@@ -2432,7 +2417,7 @@ void MainWindow_GTP::player_move (stone_color col, int x, int y)
 	/* @@@ Could make sounds configurable in normal mode, but probably it's just
 	   obnoxious and unwanted.  */
 	if (gfx_board->getGameMode () != modeNormal && local_stone_sound)
-		qgo->playClick();
+		qgo->playStoneSound();
 
 	if (gfx_board->getGameMode () != modeComputer)
 		return;

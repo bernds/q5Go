@@ -46,7 +46,6 @@ HEADERS		      = config.h \
 			qgo.h \
 			qgtp.h \
 			qnewgamedlg.h \
-			searchpath.h \
 			sgf.h \
 			stone.h \
 			textview.h \
@@ -82,7 +81,6 @@ SOURCES		      = gamedialog.cpp \
 			qnewgamedlg.cpp \
 			sgf2board.cc \
 			sgfload.cc \
-			searchpath.cpp \
 			stone.cpp \
 			textview.cpp \
 			tip.cpp \

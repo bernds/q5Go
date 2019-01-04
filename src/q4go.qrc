@@ -22,6 +22,17 @@
   <qresource prefix="/">
     <file>images/node_black.xpm</file>
     <file>images/node_white.xpm</file>
+    <file>sounds/click.wav</file>
+    <file>sounds/connect.wav</file>
+    <file>sounds/enter.wav</file>
+    <file>sounds/gameend.wav</file>
+    <file>sounds/leave.wav</file>
+    <file>sounds/match.wav</file>
+    <file>sounds/pass.wav</file>
+    <file>sounds/say.wav</file>
+    <file>sounds/stone.wav</file>
+    <file>sounds/talk.wav</file>
+    <file>sounds/tictoc.wav</file>
   </qresource>
   <qresource prefix="/QNewGameDlgGui">
     <file>images/qnewgamedlg/image0.png</file>

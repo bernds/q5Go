@@ -145,7 +145,6 @@ public slots:
 	void slotViewVertComment(bool toggle);
 	void slotViewFullscreen(bool toggle);
 	void slotHelpManual(bool);
-	void slotHelpSoundInfo(bool);
 	void slotHelpAbout(bool);
 	void slotHelpAboutQt(bool);
 	void slotTimerForward();
@@ -201,7 +200,7 @@ protected:
 	QAction *setPreferences, *setGameInfo, *soundToggle;
 	QAction *viewFileBar, *viewToolBar, *viewEditBar, *viewMenuBar, *viewStatusBar, *viewCoords,
 		*viewSlider, *viewSidebar, *viewComment, *viewVertComment, *viewSaveSize, *viewFullscreen;
-	QAction *helpManual, *helpSoundInfo, *helpAboutApp, *helpAboutQt, *whatsThis;
+	QAction *helpManual, *helpAboutApp, *helpAboutQt, *whatsThis;
 	QActionGroup *editGroup;
 	QTimer *timer;
 
