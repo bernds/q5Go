@@ -31,7 +31,7 @@ HelpViewer::HelpViewer(QWidget* parent)
 
     QStringList strList;
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     strList << program_dir + "/html"
 	    << "C:/Program Files/qGo/html"
 	    << "D:/Program Files/qGo/html"

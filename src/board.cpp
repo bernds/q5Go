@@ -63,7 +63,7 @@ Board::Board(QWidget *parent, QGraphicsScene *c)
 	mouseState = Qt::NoButton;
 
 	//coordsTip = new Tip(this);
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 	resizeDelayFlag = false;
 #endif
 	curX = curY = -1;
@@ -1423,7 +1423,7 @@ void Board::mousePressEvent(QMouseEvent *e)
 
 void Board::changeSize()
 {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     resizeDelayFlag = false;
 #endif
     resizeBoard(width(), height());

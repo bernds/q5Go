@@ -297,7 +297,7 @@ QString Setting::getTranslationsDirectory()
 
 	QStringList list;
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 	list << program_dir + "/translations"
 		<< "C:/Program Files/q4Go/translations"
 		<< "D:/Program Files/q4Go/translations"

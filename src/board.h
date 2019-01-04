@@ -191,7 +191,7 @@ private:
 
 	bool isHidingStones; // QQQ
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 	bool resizeDelayFlag;
 #endif
 	bool isLocalGame;
