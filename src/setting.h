@@ -80,11 +80,6 @@ public:
 	// application icon
 	QPixmap image0;
 
-#ifdef Q_WS_WIN
-	QString getApplicationPath();
-#endif
-
-
 protected:
 	QMap<QString, QString> params;
 

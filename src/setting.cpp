@@ -26,40 +26,6 @@
 #include <CoreFoundation/CFBundle.h>
 #endif //Q_OS_MACX
 
-#ifdef Q_WS_WIN
-#include <windows.h>
-
-
-QString applicationPath;
-/*
- * If we are on Windows, read application path from registry, key was set
- * during installation at HKEY_LOCAL_MACHINE\Software\qGo\Location
- */
-QString Setting::getApplicationPath()
-{
-	LONG res;
-	HKEY hkey;
-	QString s = NULL;
-
-	if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, TEXT("Software\\qGo"), NULL,
-	    KEY_READ, &hkey) == ERROR_SUCCESS)
-	{
-		DWORD type = REG_SZ,
-		size;
-		char buffer[100];
-		size = sizeof(buffer);
-		res = RegQueryValueEx(hkey, TEXT("Location"), NULL, &type, (PBYTE)&buffer, &size);
-
-		RegCloseKey(hkey);
-
-		s = qt_winQString(buffer);
-		qDebug("getApplicationPath(): %s", s.latin1());
-	}
-
-	return s;
-}
-#endif
-
 /*
  *   Settings
  */
@@ -134,13 +100,8 @@ Setting::Setting()
 	// init
 	qgo = 0;
 	cw = 0;
-	program_dir = QString();
 
 	nmatch_settings_modified=false;
-
-#ifdef Q_WS_WIN
-	applicationPath = getApplicationPath();
-#endif
 
 //#ifdef USE_XPM
 	image0 = QPixmap((const char **)Bowl_xpm);
@@ -336,14 +297,8 @@ QString Setting::getTranslationsDirectory()
 
 	QStringList list;
 
-	ASSERT(program_dir);
-
 #ifdef Q_WS_WIN
-
-	ASSERT(applicationPath);
-
-	list << applicationPath + "/translations"
-		<< program_dir + "/translations"
+	list << program_dir + "/translations"
 		<< "C:/Program Files/q4Go/translations"
 		<< "D:/Program Files/q4Go/translations"
 		<< "E:/Program Files/q4Go/translations"

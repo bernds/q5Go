@@ -4,7 +4,7 @@
 
 #include "helpviewer.h"
 #include "icons.h"
-#include "setting.h"
+#include "qgo.h"
 #include "config.h"
 //Added by qt3to4:
 #include <QPixmap>
@@ -32,7 +32,7 @@ HelpViewer::HelpViewer(QWidget* parent)
     QStringList strList;
 
 #ifdef Q_WS_WIN
-    strList << applicationPath + "/html"
+    strList << program_dir + "/html"
 	    << "C:/Program Files/qGo/html"
 	    << "D:/Program Files/qGo/html"
 	    << "E:/Program Files/qGo/html"

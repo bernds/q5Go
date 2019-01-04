@@ -57,6 +57,7 @@ private:
 };
 
 extern qGo *qgo;
+extern QString program_dir;
 
 extern std::shared_ptr<game_record> new_game_dialog (QWidget *);
 extern std::shared_ptr<game_record> record_from_stream (std::istream &isgf);
