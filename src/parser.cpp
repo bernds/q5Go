@@ -158,7 +158,7 @@ InfoType Parser::put_line(const QString &txt)
 
 		if ((line.indexOf("guest account",0) != -1) || line.contains("logged in as a guest"))
 		{
-			emit signal_status(GUEST);
+			emit signal_status(Status::guest);
 			return STATUS;
 		}
 

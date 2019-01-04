@@ -721,7 +721,7 @@ void Account::set_caption()
 	}
   else
 	{
-		if (status == GUEST)
+		if (status == Status::guest)
 			parent->setWindowTitle(svname + " - " + acc_name + " (guest)");
 		else
 			parent->setWindowTitle(svname + " - " + acc_name);
@@ -766,8 +766,8 @@ void Account::set_gsname(GSName gs)
 		qWarning() << "set_gsname() - acc_name not found!";
 	}
 	
-	if (status == OFFLINE)
-		status = (enum Status) REGISTERED;
+	if (status == Status::offline)
+		status = Status::registered;
 }
 
 // set account name
@@ -788,7 +788,7 @@ void Account::set_offline()
 	gsName = GS_UNKNOWN;
 	svname = QString::null;
 	acc_name = QString::null;
-	status = OFFLINE;
+	status = Status::offline;
 
 	set_caption();
 

@@ -804,7 +804,7 @@ void ClientWindow::sendTextToApp(const QString &txt)
 						set_sessionparameter("client", true);
 
 					// set quiet true; refresh players, games
-					//if (myAccount->get_status() == GUEST)
+					//if (myAccount->get_status() == Status::guest)
 					set_sessionparameter("quiet", true);
 					//else
 					// set id - only available if registerd; who knows why...
@@ -832,7 +832,7 @@ void ClientWindow::sendTextToApp(const QString &txt)
 				default:
 					set_sessionparameter("client", true);
 					// set quiet false; refresh players, games
-					//if (myAccount->get_status() == GUEST)
+					//if (myAccount->get_status() == Status::guest)
 					set_sessionparameter("quiet", false);
 					slot_refresh(11);
 					if (myAccount->get_gsname() != CWS)
@@ -982,7 +982,7 @@ int ClientWindow::sendTextFromApp(const QString &txt, bool localecho)
 	if (valid)
 		setBytesOut(valid+2);
 
-	if (myAccount->get_status() == OFFLINE)
+	if (myAccount->get_status() == Status::offline)
 	{
 		// skip all commands while not telnet connection
 		sendTextToApp("Command skipped - no telnet connection: " + txt);
@@ -2869,8 +2869,8 @@ void ClientWindow::slot_SeekList(const QString& player, const QString& condition
 void ClientWindow::send_nmatch_range_parameters()
 {
 	
-	if ((myAccount->get_gsname() != IGS) || (myAccount->get_status() == OFFLINE))
-		return ;
+	if (myAccount->get_gsname() != IGS || myAccount->get_status() == Status::offline)
+		return;
 
 	QString c = "nmatchrange ";
 	c.append(setting->readBoolEntry("NMATCH_BLACK") ? "B" : "");

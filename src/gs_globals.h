@@ -9,7 +9,7 @@
 #define DEFAULT_PORT  6969
 
 //enum RankType {kyu, dan, pro, NR};
-enum Status {GUEST, REGISTERED, OFFLINE};
+enum class Status { guest, registered, offline };
 enum InfoType {PLAYER, GAME, MESSAGE, YOUHAVEMSG, SERVERNAME, 
 		ACCOUNT, STATUS, IT_OTHER, CMD, READY,
 		NOCLIENTMODE, TELL, KIBITZ, MOVE, BEEP,
