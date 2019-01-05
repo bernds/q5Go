@@ -2926,6 +2926,12 @@ void ClientWindow::dlgSetPreferences(int tab)
 	dlg.leaveSoundCheckBox->setChecked(setting->readBoolEntry("SOUND_LEAVE"));
 	dlg.disConnectSoundCheckBox->setChecked(setting->readBoolEntry("SOUND_DISCONNECT"));
 	dlg.connectSoundCheckBox->setChecked(setting->readBoolEntry("SOUND_CONNECT"));
+
+	dlg.soundMatchCheckBox->setChecked(setting->readBoolEntry("SOUND_MATCH_BOARD"));
+	dlg.soundObserveCheckBox->setChecked(setting->readBoolEntry("SOUND_OBSERVE"));
+	dlg.soundNormalCheckBox->setChecked(setting->readBoolEntry("SOUND_NORMAL"));
+	dlg.soundComputerCheckBox->setChecked(setting->readBoolEntry("SOUND_COMPUTER"));
+
 	dlg.variationComboBox->setCurrentIndex(setting->readIntEntry("VAR_GHOSTS"));
 	dlg.coordsCheckBox->setChecked(setting->readBoolEntry("BOARD_COORDS"));
 	dlg.sgfCoordsCheckBox->setChecked(setting->readBoolEntry("SGF_BOARD_COORDS"));
@@ -3025,6 +3031,12 @@ bool ClientWindow::preferencesSave(PreferencesDialog *dlg)
 	setting->writeBoolEntry("SOUND_LEAVE", dlg->leaveSoundCheckBox->isChecked());
 	setting->writeBoolEntry("SOUND_DISCONNECT", dlg->disConnectSoundCheckBox->isChecked());
 	setting->writeBoolEntry("SOUND_CONNECT", dlg->connectSoundCheckBox->isChecked());
+
+	setting->writeBoolEntry("SOUND_MATCH_BOARD", dlg->soundMatchCheckBox->isChecked());
+	setting->writeBoolEntry("SOUND_OBSERVE", dlg->soundObserveCheckBox->isChecked());
+	setting->writeBoolEntry("SOUND_NORMAL", dlg->soundNormalCheckBox->isChecked());
+	setting->writeBoolEntry("SOUND_COMPUTER", dlg->soundComputerCheckBox->isChecked());
+
 	setting->writeIntEntry("VAR_GHOSTS", dlg->variationComboBox->currentIndex());
 	setting->writeBoolEntry("BOARD_COORDS", dlg->coordsCheckBox->isChecked());
 	setting->writeBoolEntry("SGF_BOARD_COORDS", dlg->sgfCoordsCheckBox->isChecked());

@@ -63,6 +63,7 @@ Setting::Setting()
 	//writeBoolEntry("STONES_SHADOW", true);
 	//writeBoolEntry("STONES_SHELLS", true);
 	writeBoolEntry("VAR_FONT", true);
+
 	writeBoolEntry("SOUND_STONE", true);
 	writeBoolEntry("SOUND_AUTOPLAY", true);
 	writeBoolEntry("SOUND_TALK", true);
@@ -75,6 +76,12 @@ Setting::Setting()
 	writeBoolEntry("SOUND_LEAVE", true);
 	writeBoolEntry("SOUND_DISCONNECT", true);
 	writeBoolEntry("SOUND_CONNECT", true);
+
+	writeBoolEntry("SOUND_OBSERVE", false);
+	writeBoolEntry("SOUND_NORMAL", false);
+	writeBoolEntry("SOUND_MATCH_BOARD", true);
+	writeBoolEntry("SOUND_COMPUTER", true);
+
 	writeIntEntry("TIMER_INTERVAL", 1);
 	writeBoolEntry("SGF_TIME_TAGS", true);
 	writeIntEntry("DEFAULT_SIZE", 19);

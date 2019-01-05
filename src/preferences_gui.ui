@@ -121,12 +121,6 @@
      </item>
      <item>
       <widget class="QPushButton" name="buttonOk">
-       <property name="maximumSize">
-        <size>
-         <width>32767</width>
-         <height>32767</height>
-        </size>
-       </property>
        <property name="toolTip">
         <string>remember that point for fast return</string>
        </property>
@@ -153,12 +147,6 @@ After placing and/or undo release button for returning to starting point automat
      </item>
      <item>
       <widget class="QPushButton" name="buttonCancel">
-       <property name="maximumSize">
-        <size>
-         <width>32767</width>
-         <height>32767</height>
-        </size>
-       </property>
        <property name="toolTip">
         <string>cancel changes</string>
        </property>
@@ -874,7 +862,7 @@ You can set the warning time besides</string>
          </property>
         </spacer>
        </item>
-       <item row="2" column="0" colspan="2">
+       <item row="2" column="1">
         <widget class="QGroupBox" name="GroupBox8">
          <property name="toolTip">
           <string>Set application language</string>
@@ -918,6 +906,43 @@ If your language is not supported, you might consider translating qGo. Please ch
               <string>System default</string>
              </property>
             </item>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QGroupBox" name="groupBox_5">
+         <property name="title">
+          <string>Sound defaults by game type</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_5">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="soundNormalCheckBox">
+            <property name="text">
+             <string>Local editing</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="soundObserveCheckBox">
+            <property name="text">
+             <string>Observed games</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QCheckBox" name="soundComputerCheckBox">
+            <property name="text">
+             <string>Computer games</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QCheckBox" name="soundMatchCheckBox">
+            <property name="text">
+             <string>On-line matches</string>
+            </property>
            </widget>
           </item>
          </layout>
@@ -3762,36 +3787,96 @@ up to :</string>
    <signal>clicked ()</signal>
    <receiver>PreferencesDialogGui</receiver>
    <slot>selectStandardFont ()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
   </connection>
   <connection>
    <sender>fontMarksButton</sender>
    <signal>clicked ()</signal>
    <receiver>PreferencesDialogGui</receiver>
    <slot>selectMarksFont ()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
   </connection>
   <connection>
    <sender>fontCommentsButton</sender>
    <signal>clicked ()</signal>
    <receiver>PreferencesDialogGui</receiver>
    <slot>selectCommentsFont ()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
   </connection>
   <connection>
    <sender>fontListsButton</sender>
    <signal>clicked ()</signal>
    <receiver>PreferencesDialogGui</receiver>
    <slot>selectListsFont ()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
   </connection>
   <connection>
    <sender>fontClocksButton</sender>
    <signal>clicked ()</signal>
    <receiver>PreferencesDialogGui</receiver>
    <slot>selectClocksFont ()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
   </connection>
   <connection>
    <sender>fontConsoleButton</sender>
    <signal>clicked ()</signal>
    <receiver>PreferencesDialogGui</receiver>
    <slot>selectConsoleFont ()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
   </connection>
   <connection>
    <sender>buttonHelp</sender>

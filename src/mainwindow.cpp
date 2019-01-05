@@ -104,6 +104,12 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 
 	setWindowIcon (setting->image0);
 
+	local_stone_sound = setting->readBoolEntry(mode == modeMatch ? "SOUND_MATCH_BOARD"
+						   : mode == modeObserve ? "SOUND_OBSERVE"
+						   : mode == modeComputer ? "SOUND_COMPUTER"
+						   : "SOUND_NORMAL");
+
+
 	initActions();
 	initMenuBar();
 	initToolBar();
@@ -125,8 +131,6 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 	if (!setting->readBoolEntry("MENUBAR"))
 		viewMenuBar->setChecked(false); //menuBar()->hide();
 #endif
-
-	local_stone_sound = setting->readBoolEntry("SOUND_STONE");
 
 	if (viewVertComment->isChecked ()) {
 		// show vertical comment
@@ -659,7 +663,7 @@ void MainWindow::initActions()
 	OIC.addPixmap ( sound_onIcon, QIcon::Normal, QIcon::Off );
 	soundToggle = new QAction(OIC, tr("&Mute stones sound"), this);
 	soundToggle->setCheckable (true);
-	soundToggle->setChecked(!setting->readBoolEntry("SOUND_STONE"));
+	soundToggle->setChecked(!local_stone_sound);
 	soundToggle->setStatusTip(tr("Toggle stones sound on/off"));
 	soundToggle->setWhatsThis(tr("Stones sound\n\nToggle stones sound on/off\nthis toggles only the stones sounds"));
 	connect(soundToggle, &QAction::toggled, this, &MainWindow::slotSoundToggle);
@@ -2412,10 +2416,8 @@ void MainWindow_GTP::gtp_exited ()
 
 void MainWindow_GTP::player_move (stone_color col, int x, int y)
 {
-	/* @@@ Could make sounds configurable in normal mode, but probably it's just
-	   obnoxious and unwanted.  */
-	if (gfx_board->getGameMode () != modeNormal && local_stone_sound)
-		qgo->playStoneSound();
+	if (local_stone_sound)
+		qgo->playStoneSound ();
 
 	if (gfx_board->getGameMode () != modeComputer)
 		return;
