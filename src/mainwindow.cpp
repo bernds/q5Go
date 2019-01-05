@@ -142,8 +142,6 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 	initToolBar();
 	initStatusBar();
 
-	bool bb=setting->readBoolEntry("FILEBAR");
-	bb=false;
 	if (!setting->readBoolEntry("FILEBAR"))
 		viewFileBar->setChecked(false);
 	if (!setting->readBoolEntry("TOOLBAR"))
