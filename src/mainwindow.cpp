@@ -1112,8 +1112,9 @@ void MainWindow::slotFileOpen (bool)
 {
 	if (!checkModified())
 		return;
-	QString fileName(QFileDialog::getOpenFileName(this, setting->readEntry("LAST_DIR"),
-		tr("SGF Files (*.sgf *.SGF);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)")));
+	QString fileName(QFileDialog::getOpenFileName(this, tr ("Open SGF file"),
+						      setting->readEntry("LAST_DIR"),
+						      tr("SGF Files (*.sgf *.SGF);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)")));
 	if (fileName.isEmpty())
 		return;
 
@@ -1195,7 +1196,7 @@ bool MainWindow::doSave(QString fileName, bool force)
 			fileName = QString::fromStdString (get_candidate_filename (dir, *m_game));
 		}
 		if (!force)
-			fileName = QFileDialog::getSaveFileName(this, "Save SGF",
+			fileName = QFileDialog::getSaveFileName(this, tr ("Save SGF file"),
 								fileName, tr("SGF Files (*.sgf);;All Files (*)"));
 	}
 
@@ -1272,7 +1273,7 @@ void MainWindow::slotFileExportASCII(bool)
 void MainWindow::slotFileExportPic(bool)
 {
 	QString filter;
-	QString fileName = QFileDialog::getSaveFileName(this, tr("Export image as"), "",
+	QString fileName = QFileDialog::getSaveFileName(this, tr("Export image as"), setting->readEntry("LAST_DIR"),
 							"PNG (*.png);;BMP (*.bmp);;XPM (*.xpm);;XBM (*.xbm);;PNM (*.pnm);;GIF (*.gif);;JPG (*.jpg);;MNG (*.mng)",
 							&filter);
 

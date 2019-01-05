@@ -52,30 +52,24 @@ TextView::~TextView()
  */
 void TextView::saveMe()
 {
-	QString fileName(QFileDialog::getSaveFileName(this, QString::null,
-		tr("Text Files (*.txt);;All Files (*)")));
+	QString fileName(QFileDialog::getSaveFileName(this, tr ("Save ASCII export"), QString::null,
+						      tr("Text Files (*.txt);;All Files (*)")));
+
 	if (fileName.isEmpty())
 		return;
 
 	QFile file(fileName);
 
-	// Confirm overwriting file.
-	if (QFile(fileName).exists())
-		if (QMessageBox::information(this, PACKAGE,
-			tr("This file already exists. Do you want to overwrite it?"),
-			tr("Yes"), tr("No"), 0, 0, 1) == 1)
-			return;
+	if (!file.open(QIODevice::WriteOnly))
+	{
+		QString s = tr("Failed to write to file ") + fileName;
+		QMessageBox::warning(this, PACKAGE, s);
+		return;
+	}
 
-		if (!file.open(QIODevice::WriteOnly))
-		{
-			QString s = tr("Failed to write to file ") + fileName;
-			QMessageBox::warning(this, PACKAGE, s);
-			return;
-		}
-
-		QTextStream stream(&file);
-		stream << textEdit->toPlainText();
-		file.close();
+	QTextStream stream(&file);
+	stream << textEdit->toPlainText();
+	file.close();
 }
 
 void TextView::append (const QString &s)

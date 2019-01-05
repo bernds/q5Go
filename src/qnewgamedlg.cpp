@@ -240,8 +240,9 @@ void QNewGameDlg::init()
 
 void QNewGameDlg::slotGetFileName()
 {
-	QString getFileName(QFileDialog::getOpenFileName(this, "", //setting->readEntry("LAST_DIR"),
-		tr("SGF Files (*.sgf);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)")));
+	QString getFileName(QFileDialog::getOpenFileName(this, tr ("Choose an SGF file to load"),
+							 setting->readEntry("LAST_DIR"),
+							 tr("SGF Files (*.sgf);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)")));
 	if (getFileName.isEmpty())
 		return;
 

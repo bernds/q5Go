@@ -461,7 +461,7 @@ void PreferencesDialog::on_soundButtonGroup_buttonClicked(QAbstractButton *cb)
 
 void PreferencesDialog::slot_getComputerPath()
 {
-	QString fileName(QFileDialog::getOpenFileName(this, setting->readEntry("LAST_DIR"),
+	QString fileName(QFileDialog::getOpenFileName(this, tr ("Choose GTP engine path"), setting->readEntry("LAST_DIR"),
 						      tr("All Files (*)")));
 	if (fileName.isEmpty())
 		return;

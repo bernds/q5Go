@@ -2557,8 +2557,8 @@ void ClientWindow::slotFileOpen(bool)
 {
 	//if (!checkModified())
 	//	return;
-	QString fileName(QFileDialog::getOpenFileName(this, setting->readEntry("LAST_DIR"),
-		tr("SGF Files (*.sgf *.SGF);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)")));
+	QString fileName(QFileDialog::getOpenFileName(this, tr ("Open SGF file"), setting->readEntry("LAST_DIR"),
+						      tr("SGF Files (*.sgf *.SGF);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)")));
 	if (fileName.isEmpty())
 		return;
 	open_window_from_file (fileName.toStdString ());
