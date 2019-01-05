@@ -9,7 +9,6 @@
 
 #include "defines.h"
 #include "imagehandler.h"
-#include "icons.h"
 #include "qglobal.h"
 #include "setting.h"
 #include <math.h>
@@ -17,28 +16,9 @@
 
 //#include <iostream>
 
-//#ifdef USE_XPM
-#include WOOD_PIC
-
-#include TABLE_PIC
-#include ALT_GHOST_BLACK
-#include ALT_GHOST_WHITE
-//#endif
-
 #ifdef Q_OS_WIN
  double drand48() { return rand()*1.0/RAND_MAX; }
 #endif
-
-
-/*
-* Static class variables
-*/
-QPixmap* ImageHandler::woodPixmap1 = NULL;
-
-QPixmap* ImageHandler::tablePixmap = NULL;
-QList<QPixmap> *ImageHandler::altGhostPixmaps = NULL;
-int ImageHandler::classCounter = 0;
-
 
 /**
 * Stone rendering code
@@ -47,8 +27,8 @@ int ImageHandler::classCounter = 0;
 * /http://www.rene-grothmann.de/jago/
 **/
 
-void ImageHandler::icopy(int *im, QImage &qim, int w, int h) {
-	
+void ImageHandler::icopy(int *im, QImage &qim, int w, int h)
+{
 	for (int y = 0; y < h; y++) {
 		uint *p = (uint *)qim.scanLine(y);
 		for(int x = 0; x < w; x++) {
@@ -382,66 +362,8 @@ void ImageHandler::paintWhiteStone (QImage &wi, int d, int stone_render)//bool s
 
 ImageHandler::ImageHandler()
 {
-	tablePixmap = new QPixmap(const_cast<const char**>(table_xpm));
-	woodPixmap1 = new QPixmap(const_cast<const char**>(wood_xpm));
-	if (tablePixmap == NULL || tablePixmap->isNull())
-		qFatal("Could not load pixmaps.");
-    
-	// Init the alternate ghost pixmaps
-	if (altGhostPixmaps == NULL)
-	{
-		altGhostPixmaps = new QList<QPixmap>;
-
-		QPixmap alt1(const_cast<const char**>(alt_ghost_black_xpm));
-		QPixmap alt2(const_cast<const char**>(alt_ghost_white_xpm));
-
-		if (alt1.isNull() || alt2.isNull())
-			qFatal("Could not load alt_ghost pixmaps.");
-		altGhostPixmaps->append(alt1);
-		altGhostPixmaps->append(alt2);
-	}
-	
-	classCounter ++;
 }
 
-ImageHandler::~ImageHandler()
-{
-	classCounter --;
-	if (classCounter == 0)
-	{
-		delete woodPixmap1;
-		woodPixmap1 = NULL;
-
-		delete tablePixmap;
-		tablePixmap = NULL;
-		delete altGhostPixmaps;
-		altGhostPixmaps = NULL;
-	}
-}
-
-QPixmap* ImageHandler::getBoardPixmap(QString filename) //skinType s)
-{
-	
-	QPixmap *p = new QPixmap(filename) ;
-
-	if (p->isNull())
-		return woodPixmap1;
-	else 
-		return p;
-
-}
-
-QPixmap* ImageHandler::getTablePixmap(QString filename) //skinType s)
-{
-	
-	QPixmap *p = new QPixmap(filename) ;
-
-	if (p->isNull())
-		return tablePixmap;
-	else 
-		return p;
-
-}
 void ImageHandler::init(int size)
 {
 	// Scale the images

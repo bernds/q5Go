@@ -7,6 +7,12 @@
     <file>images/mainwidget/warning.png</file>
   </qresource>
   <qresource prefix="/BoardWindow">
+    <file>images/board/wood2.png</file>
+    <file>images/board/wood1.png</file>
+    <file>images/board/wood3.png</file>
+    <file>images/board/wood4.png</file>
+    <file>images/board/wood5.png</file>
+    <file>images/board/table.png</file>
     <file>images/boardwindow/editsquare.png</file>
     <file>images/boardwindow/edittriangle.png</file>
     <file>images/boardwindow/editcross.png</file>

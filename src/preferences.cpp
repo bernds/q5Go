@@ -482,7 +482,15 @@ void PreferencesDialog::slot_getGobanPicturePath()
 #else
 	QString path = setting->readEntry("LAST_DIR");
 #endif
-	QString fileName(QFileDialog::getOpenFileName(this, path, tr("Images (*.png *.xpm *.jpg)")));
+	QString old_name = LineEdit_goban->text ();
+	if (!old_name.isEmpty ()) {
+		QFileInfo info (old_name);
+		if (info.exists ()) {
+			QDir dir = info.dir ();
+			path = dir.absolutePath ();
+		}
+	}
+	QString fileName(QFileDialog::getOpenFileName(this, tr ("Select a goban wood image"), path, tr("Images (*.png *.xpm *.jpg)")));
 	if (fileName.isEmpty())
 		return;
 
@@ -502,7 +510,15 @@ void PreferencesDialog::slot_getTablePicturePath()
 #else
 	QString path = setting->readEntry("LAST_DIR");
 #endif
-	QString fileName(QFileDialog::getOpenFileName(this, path, tr("Images (*.png *.xpm *.jpg)")));
+	QString old_name = LineEdit_Table->text ();
+	if (!old_name.isEmpty ()) {
+		QFileInfo info (old_name);
+		if (info.exists ()) {
+			QDir dir = info.dir ();
+			path = dir.absolutePath ();
+		}
+	}
+	QString fileName(QFileDialog::getOpenFileName(this, tr ("Select a table background image"), path, tr("Images (*.png *.xpm *.jpg)")));
 	if (fileName.isEmpty())
 		return;
 

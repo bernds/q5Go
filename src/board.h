@@ -175,6 +175,11 @@ private:
 	void clearCoords();
 	void updateCovers ();
 
+	/* Local copies of the pixmaps held by the settings.  I'm not entirely
+	   clear on ownership issues of QPainter; this is to avoid any potential
+	   use-after free if the picture changes and settings deletes the old
+	   pixmaps.  */
+	QPixmap m_wood, m_table;
 	QGraphicsRectItem *coverTop, *coverLeft, *coverRight, *coverBot;
 
 	QGraphicsScene *canvas;

@@ -9,8 +9,6 @@
 //#undef USE_XPM
 #define SEEK_ANIMATION "./pics/seeking.gif"
 
-#define WOOD_PIC "./pics/wood.xpm"
-#define TABLE_PIC "./pics/table.xpm"
 #define ICON_PREFS "./pics/package_settings.xpm"
 #define ICON_GAMEINFO "./pics/idea.xpm"
 #define ICON_TELNET "./pics/openterm.xpm"
@@ -41,8 +39,6 @@
 #define ICON_APPICON "./pics/Bowl.xpm"
 #define ICON_NODE_BLACK "./pics/node_black.xpm"
 #define ICON_NODE_WHITE "./pics/node_white.xpm"
-#define ALT_GHOST_BLACK "./pics/alt_ghost_black.xpm"
-#define ALT_GHOST_WHITE "./pics/alt_ghost_white.xpm"
 #define ICON_NAV_INTERSECTION "./pics/navIntersection.xpm"
 #define ICON_COORDS "./pics/coords.xpm"
 #define ICON_SOUND_ON "./pics/sound_on.xpm"

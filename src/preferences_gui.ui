@@ -955,6 +955,147 @@ If your language is not supported, you might consider translating qGo. Please ch
        <string>Board Window</string>
       </attribute>
       <layout class="QGridLayout">
+       <item row="3" column="0" colspan="2">
+        <widget class="QGroupBox" name="GoEnginegroup_box_2">
+         <property name="title">
+          <string>Goban</string>
+         </property>
+         <layout class="QGridLayout">
+          <property name="leftMargin">
+           <number>11</number>
+          </property>
+          <property name="topMargin">
+           <number>11</number>
+          </property>
+          <property name="rightMargin">
+           <number>11</number>
+          </property>
+          <property name="bottomMargin">
+           <number>11</number>
+          </property>
+          <property name="spacing">
+           <number>6</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>Wood image:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLineEdit" name="LineEdit_Table">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="toolTip">
+             <string>Path to the table picture</string>
+            </property>
+            <property name="whatsThis">
+             <string>Path to the table picture.
+If the picture is not set, or unvalid, a default picture is used by qgo</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="textLabel1_2">
+            <property name="text">
+             <string>Table picture</string>
+            </property>
+            <property name="wordWrap">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="woodComboBox">
+            <item>
+             <property name="text">
+              <string>Custom file</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Default 1</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Default 2</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Default 3</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Default 4</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Default 5</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="3" column="2">
+           <widget class="QPushButton" name="TablePicturePathButton">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="q4go.qrc">
+              <normaloff>:/PreferencesDialogGui/images/preferences/image1.png</normaloff>:/PreferencesDialogGui/images/preferences/image1.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QPushButton" name="GobanPicturePathButton">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="q4go.qrc">
+              <normaloff>:/PreferencesDialogGui/images/preferences/image1.png</normaloff>:/PreferencesDialogGui/images/preferences/image1.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="LineEdit_goban">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="toolTip">
+             <string>Path to the goban picture</string>
+            </property>
+            <property name="whatsThis">
+             <string>Path to the goban picture.
+If the picture is not set, or unvalid, a default goban is used by qgo</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="textLabel1">
+            <property name="text">
+             <string>Wood filename:</string>
+            </property>
+            <property name="wordWrap">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
        <item row="0" column="1" rowspan="3">
         <widget class="QGroupBox" name="boardButtonGroup">
          <property name="title">
@@ -1116,114 +1257,6 @@ When editing only single digit marks, it might be convenient to switch this off.
              </size>
             </property>
            </spacer>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="3" column="0" colspan="2">
-        <widget class="QGroupBox" name="GoEnginegroup_box_2">
-         <property name="title">
-          <string>Goban</string>
-         </property>
-         <layout class="QGridLayout">
-          <property name="leftMargin">
-           <number>11</number>
-          </property>
-          <property name="topMargin">
-           <number>11</number>
-          </property>
-          <property name="rightMargin">
-           <number>11</number>
-          </property>
-          <property name="bottomMargin">
-           <number>11</number>
-          </property>
-          <property name="spacing">
-           <number>6</number>
-          </property>
-          <item row="0" column="0">
-           <layout class="QHBoxLayout">
-            <item>
-             <widget class="QLabel" name="textLabel1">
-              <property name="text">
-               <string>Board picture</string>
-              </property>
-              <property name="wordWrap">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="LineEdit_goban">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="toolTip">
-               <string>Path to the goban picture</string>
-              </property>
-              <property name="whatsThis">
-               <string>Path to the goban picture.
-If the picture is not set, or unvalid, a default goban is used by qgo</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="GobanPicturePathButton">
-              <property name="text">
-               <string/>
-              </property>
-              <property name="icon">
-               <iconset resource="q4go.qrc">
-                <normaloff>:/PreferencesDialogGui/images/preferences/image1.png</normaloff>:/PreferencesDialogGui/images/preferences/image1.png</iconset>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="1" column="0">
-           <layout class="QHBoxLayout">
-            <item>
-             <widget class="QLabel" name="textLabel1_2">
-              <property name="text">
-               <string>Table picture</string>
-              </property>
-              <property name="wordWrap">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="LineEdit_Table">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="toolTip">
-               <string>Path to the table picture</string>
-              </property>
-              <property name="whatsThis">
-               <string>Path to the table picture.
-If the picture is not set, or unvalid, a default picture is used by qgo</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="TablePicturePathButton">
-              <property name="text">
-               <string/>
-              </property>
-              <property name="icon">
-               <iconset resource="q4go.qrc">
-                <normaloff>:/PreferencesDialogGui/images/preferences/image1.png</normaloff>:/PreferencesDialogGui/images/preferences/image1.png</iconset>
-              </property>
-             </widget>
-            </item>
-           </layout>
           </item>
          </layout>
         </widget>
@@ -1443,7 +1476,7 @@ Select how to display all brothers of the current move. Either not at all, or as
              <widget class="QLabel" name="label_5">
               <property name="text">
                <string>Allow SGF files to override
-child/sibling setting</string>
+child/sibling setting:</string>
               </property>
              </widget>
             </item>
@@ -1521,22 +1554,6 @@ child/sibling setting</string>
          </item>
         </layout>
        </item>
-       <item row="5" column="1">
-        <spacer name="Spacer8_2">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Expanding</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>130</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
        <item row="4" column="0" colspan="2">
         <widget class="QGroupBox" name="buttonGroup6">
          <property name="title">
@@ -1590,6 +1607,22 @@ This will display realistic 3D stones with stripes and shadow</string>
           </item>
          </layout>
         </widget>
+       </item>
+       <item row="5" column="1">
+        <spacer name="Spacer8_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Expanding</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>130</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>

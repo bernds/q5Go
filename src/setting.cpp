@@ -62,7 +62,7 @@ Setting::Setting()
 	writeBoolEntry("VAR_CHILDREN", false);
 	writeIntEntry("VAR_SGF_STYLE", 2);
 
-	writeEntry("SKIN", "");
+	writeEntry("SKIN", "1");
 	writeEntry("SKIN_TABLE", "");
 	writeBoolEntry("TOOLTIPS", true);
 	//writeBoolEntry("STONES_SHADOW", true);
@@ -128,6 +128,35 @@ Setting::Setting()
 
 Setting::~Setting()
 {
+	delete m_wood_image;
+	delete m_table_image;
+}
+
+void Setting::obtain_skin_images ()
+{
+	int idx = readIntEntry ("SKIN_INDEX");
+	QString filename = readEntry ("SKIN");
+	if (idx > 0) {
+		filename = QString (":/BoardWindow/images/board/wood%1.png").arg (idx);
+	}
+	QPixmap *p = new QPixmap (filename);
+	if (p->isNull ()) {
+		QMessageBox::warning (nullptr, PACKAGE, QObject::tr ("Could not load custom board image,\nreverting to default."));
+
+		delete p;
+		p = new QPixmap (":/BoardWindow/images/board/wood1.png");
+		writeIntEntry ("SKIN_INDEX", 1);
+	}
+	delete m_wood_image;
+	m_wood_image = p;
+
+	p = new QPixmap (readEntry ("SKIN_TABLE"));
+	if (p->isNull ()) {
+		delete p;
+		p = new QPixmap (":/BoardWindow/images/board/table.png");
+	}
+	delete m_table_image;
+	m_table_image = p;
 }
 
 void Setting::loadSettings()
@@ -168,6 +197,8 @@ void Setting::loadSettings()
 	updateFont(fontLists, "FONT_LIST");
 	updateFont(fontClocks, "FONT_CLOCK");
 	updateFont(fontConsole, "FONT_CONSOLE");
+
+	obtain_skin_images ();
 }
 
 QString Setting::fontToString(QFont f)

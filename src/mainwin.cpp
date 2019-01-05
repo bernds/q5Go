@@ -2849,6 +2849,7 @@ void ClientWindow::dlgSetPreferences(int tab)
 	}
 
 	// Interface tab
+	dlg.woodComboBox->setCurrentIndex (setting->readIntEntry("SKIN_INDEX"));
 	dlg.LineEdit_goban->setText(setting->readEntry("SKIN"));
 	dlg.LineEdit_Table->setText(setting->readEntry("SKIN_TABLE"));
 	dlg.languageComboBox->insertItems(1, setting->getAvailableLanguages());
@@ -2958,8 +2959,11 @@ bool ClientWindow::preferencesSave(PreferencesDialog *dlg)
 {
 	ASSERT (dlg);
 
-	setting->writeEntry("SKIN", dlg->LineEdit_goban->text()); 
-	setting->writeEntry("SKIN_TABLE", dlg->LineEdit_Table->text()); 
+	setting->writeIntEntry("SKIN_INDEX", dlg->woodComboBox->currentIndex ());
+	setting->writeEntry("SKIN", dlg->LineEdit_goban->text());
+	setting->writeEntry("SKIN_TABLE", dlg->LineEdit_Table->text());
+	setting->obtain_skin_images ();
+
 	setting->writeEntry("LANG", setting->convertNumberToLanguage(dlg->languageComboBox->currentIndex()));
 //	setting->writeBoolEntry("STONES_SHADOW", dlg->stonesShadowCheckBox->isChecked());
 //	setting->writeBoolEntry("STONES_SHELLS", dlg->stonesShellsCheckBox->isChecked());

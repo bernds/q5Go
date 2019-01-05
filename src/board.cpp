@@ -229,10 +229,11 @@ void Board::resizeEvent(QResizeEvent*)
 
 void Board::drawBackground()
 {
-	QSettings settings;
-
 	int w = (int)canvas->width();
 	int h = (int)canvas->height();
+
+	m_wood = *setting->wood_image ();
+	m_table = *setting->table_image ();
 
 	// Create pixmap of appropriate size
 	//QPixmap all(w, h);
@@ -244,11 +245,8 @@ void Board::drawBackground()
 	painter.begin(&image);
 	painter.setPen(Qt::NoPen);
 
-
-	painter.drawTiledPixmap (0, 0, w, h,*(ImageHandler::getTablePixmap(  settings.value("SKIN_TABLE").toString())));
-
-	painter.drawTiledPixmap (offsetX - offset, offsetY - offset, table_size, table_size,
-				 * (ImageHandler::getBoardPixmap(settings.value("SKIN").toString())));
+	painter.drawTiledPixmap (0, 0, w, h, m_table);
+	painter.drawTiledPixmap (offsetX - offset, offsetY - offset, table_size, table_size, m_wood);
 
 	painter.end();
 

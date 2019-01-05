@@ -71,7 +71,10 @@ public:
 	QString getTranslationsDirectory();
 	bool getNewVersionWarning();
 
-	bool nmatch_settings_modified;	
+	void obtain_skin_images ();
+	const QPixmap *wood_image () { return m_wood_image; }
+	const QPixmap *table_image () { return m_table_image; }
+	bool nmatch_settings_modified;
 
 	// help to destroy static elements of qGo()
 	qGo *qgo;
@@ -84,6 +87,8 @@ protected:
 	QMap<QString, QString> params;
 
 private:
+	const QPixmap *m_wood_image {};
+	const QPixmap *m_table_image {};
 	QString settingHomeDir;
 };
 

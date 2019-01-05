@@ -26,20 +26,16 @@ class ImageHandler
 {
 public:
 	ImageHandler();
-	~ImageHandler();
 
 	void init(int size);
 	void rescale(int size);
-	static QPixmap* getBoardPixmap(QString );
-	static QPixmap* getTablePixmap(QString );
 	const QList<QPixmap> *getStonePixmaps() const { return &stonePixmaps; }
 	const QList<QPixmap> *getGhostPixmaps() const { return &ghostPixmaps; }
-	static QList<QPixmap> *getAlternateGhostPixmaps() { return altGhostPixmaps; }
 
 
 protected:
 	void scaleBoardPixmap(QPixmap *pix, int size);
-	
+
 private:
 	void icopy(int *im, QImage &qim, int w, int h);
 	void decideAppearance(WhiteDesc *desc, int size);
@@ -51,10 +47,6 @@ private:
 	void ghostImage(QImage *img);
 
 	QList<QPixmap> stonePixmaps, ghostPixmaps;
-	static QList<QPixmap> *altGhostPixmaps;
-	static QPixmap *tablePixmap;
-	static QPixmap *woodPixmap1;//, *woodPixmap2, *woodPixmap3, *woodPixmap4, *woodPixmap5;
-	static int classCounter;
 //	static int antialiasingColor, ac1, ac2, ac3, ac4, ac5;
 };
 
