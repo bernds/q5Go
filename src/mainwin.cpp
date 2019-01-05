@@ -147,61 +147,6 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 
 	int i;
 	QString s;
-// ----
-// BEGIN find outdated keys:
-// ----
-
-	if (setting->readIntEntry("VERSION") < SETTING_VERSION)
-	{
-		// version settings are not actual
-		int s_v = setting->readIntEntry("VERSION");
-
-		switch (s_v)
-		{
-			case 0:
-				for (i = 1; i < 5; i++)
-				{
-					s = setting->readEntry("USER" + QString::number(i));
-					if (s.length() > 0)
-					{
-						QString i_ = QString::number(i);
-						setting->writeEntry("USER" + i_ + "_1", s.section(DELIMITER, 0, 0));
-						setting->writeEntry("USER" + i_ + "_2", s.section(DELIMITER, 1, 1));
-						setting->writeEntry("USER" + i_ + "_3", s.section(DELIMITER, 2, 2));
-						// delete old label
-						setting->writeEntry("USER" + i_, 0);
-					}
-				}
-				setting->writeEntry("HOSTWINDOW", 0);
-
-				i = 0;
-				for (;;)
-				{
-					QString s = setting->readEntry("HOST" + QString::number(++i));
-					if (s.isNull())
-						break;
-
-					// check if 4 delimiters in s
-					if (s.contains(DELIMITER) == 4)
-					{
-						setting->writeEntry("HOST" + QString::number(i) + "a", s.section(DELIMITER, 0, 0));
-						setting->writeEntry("HOST" + QString::number(i) + "b", s.section(DELIMITER, 1, 1));
-						setting->writeIntEntry("HOST" + QString::number(i) + "c", s.section(DELIMITER, 2, 2).toInt());
-						setting->writeEntry("HOST" + QString::number(i) + "d", s.section(DELIMITER, 3, 3));
-						setting->writeEntry("HOST" + QString::number(i) + "e", s.section(DELIMITER, 4, 4));
-					}
-					// delete old hosts
-					setting->writeEntry("HOST" + QString::number(i), QString());
-				}
-				break;
-
-			default:
-				break;
-		}
-	}
-// ----
-// END find
-// ----
 
 	// restore: hostlist
 	i = 0;
