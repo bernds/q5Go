@@ -654,30 +654,52 @@ void Board::sync_appearance (bool board_only)
 			   appropriately sized for the longest number.  */
 			int len_override = 0;
 
-			/* Now look at marks.  First, an artificial (not recorded) one for the last move,
-			   or for numbering moves.  */
-			if (m_edit_board == nullptr && m_state->was_move_p ()) {
-				if (startpos) {
-					int bp = b.bitpos (x, y);
-					int v = count_map[bp];
-					if (v != 0) {
-						v = n_back - v + 1;
-						mark_type = mark::text;
-						mark_str = QString::number (v);
-						len_override = n_back > 99 ? 3 : n_back > 9 ? 2 : 1;
-					}
-				} else {
-					int last_x = m_state->get_move_x ();
-					int last_y = m_state->get_move_y ();
-					if (last_x == x && last_y == y)
-						mark_type = mark::move;
+			/* Now look at marks.  */
+
+			/* See if we should number moves.  This is done relatively early because if the
+			   user enables move numbering, we do want to override marks on the board.  */
+			if (mark_type == mark::none && startpos) {
+				int bp = b.bitpos (x, y);
+				int v = count_map[bp];
+				if (v != 0) {
+					v = n_back - v + 1;
+					mark_type = mark::text;
+					mark_str = QString::number (v);
+					len_override = n_back > 99 ? 3 : n_back > 9 ? 2 : 1;
 				}
-			}
-			if (mark_type == mark::none) {
+			} else {
 				mark_type = mark_at_pos;
+				/* Make sure this isn't entered if we made a move number mark,
+				   which also becomes mark::text.  */
+				if (mark_type == mark::text)
+					mark_str = QString::fromStdString (b.mark_text_at (x, y));
 			}
-			if (mark_type == mark::text) {
-				mark_str = QString::fromStdString (b.mark_text_at (x, y));
+
+
+			/* Now, letter-style variation display.  The SGF spec says that this
+			   should not overwrite any other marks, so we do it here.  */
+			mark var_mark = vars.mark_at (x, y);
+#if 0 /* Occasionally useful for debugging.  */
+			if (var_mark != mark::none && mark_type != mark::none)
+				mark_col = Qt::green;
+#endif
+			if (mark_type == mark::none && m_vars_type == 2 && var_mark != mark::none) {
+				mark_type = var_mark;
+				extra = vars.mark_extra_at (x, y);
+				if (mark_type == mark::letter) {
+					mark_str = convert_letter_mark (extra);
+					mark_type = mark::text;
+				}
+				mark_col = Qt::blue;
+			}
+
+			/* We make an artificial mark for the last move.  Done late so as to not
+			   override other marks.  */
+			if (mark_type == mark::none && m_edit_board == nullptr && m_state->was_move_p ()) {
+				int last_x = m_state->get_move_x ();
+				int last_y = m_state->get_move_y ();
+				if (last_x == x && last_y == y)
+					mark_type = mark::move;
 			}
 
 			/* Convert the large number of conceptual marks into a smaller set of
@@ -711,22 +733,6 @@ void Board::sync_appearance (bool board_only)
 			if (mark_type != mark::text && text_mark != nullptr)
 				text_mark->set_shown (false);
 
-			/* Now, letter-style variation display.  The SGF spec says that this
-			   should not overwrite any other marks, so we do it here.  */
-			mark var_mark = vars.mark_at (x, y);
-#if 0 /* Occasionally useful for debugging.  */
-			if (var_mark != mark::none && mark_type != mark::none)
-				mark_col = Qt::green;
-#endif
-			if (mark_type == mark::none && m_vars_type == 2 && var_mark != mark::none) {
-				mark_type = var_mark;
-				extra = vars.mark_extra_at (x, y);
-				if (mark_type == mark::letter) {
-					mark_str = convert_letter_mark (extra);
-					mark_type = mark::text;
-				}
-				mark_col = Qt::blue;
-			}
 			if (mark_type == mark::none) {
 				if (m)
 					m->set_shown (false);
