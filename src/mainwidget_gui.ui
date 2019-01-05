@@ -2229,7 +2229,7 @@ After placing and/or undo release button for returning to starting point automat
   <customwidget>
    <class>NormalTools</class>
    <extends>QWidget</extends>
-   <header>ui_normaltools_gui.h</header>
+   <header>normaltools.h</header>
   </customwidget>
   <customwidget>
    <class>GameTree</class>
@@ -2239,7 +2239,7 @@ After placing and/or undo release button for returning to starting point automat
   <customwidget>
    <class>ScoreTools</class>
    <extends>QWidget</extends>
-   <header>ui_scoretools_gui.h</header>
+   <header>scoretools.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -40,13 +40,15 @@ HEADERS		      = config.h \
 			imagehandler.h \
 			komispinbox.h \
 			mainwidget.h \
-			mainwindow.h \
+                        mainwindow.h \
+                        normaltools.h \
 			parserdefs.h \
 			preferences.h \
 			qgo.h \
 			qgtp.h \
 			qnewgamedlg.h \
-			sgf.h \
+                        sgf.h \
+                        scoretools.h \
 			stone.h \
 			textview.h \
 			tip.h \
