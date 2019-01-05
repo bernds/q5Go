@@ -484,6 +484,12 @@ void MainWindow::initActions()
 	editDelete->setWhatsThis(tr("Delete\n\nDelete this and all following positions."));
 	connect(editDelete, &QAction::triggered, this, &MainWindow::slotEditDelete);
 
+	setGameInfo = new QAction(infoIcon, tr("&Game Info"), this);
+	setGameInfo->setShortcut (QKeySequence (Qt::CTRL + Qt::Key_I));
+	setGameInfo->setStatusTip(tr("Display game information"));
+	setGameInfo->setWhatsThis(tr("Game Info\n\nDisplay game information."));
+	connect(setGameInfo, &QAction::triggered, this, &MainWindow::slotSetGameInfo);
+
 	editStone = new QAction(QIcon (":/BoardWindow/images/boardwindow/editstone.png"), tr("Play stone"), this);
 	editStone->setCheckable (true);
 	editStone->setStatusTip(tr("Normal mode, click to place a stone."));
@@ -662,13 +668,6 @@ void MainWindow::initActions()
 	setPreferences->setStatusTip(tr("Edit the preferences"));
 	setPreferences->setWhatsThis(tr("Preferences\n\nEdit the applications preferences."));
 	connect(setPreferences, &QAction::triggered, client_window, &ClientWindow::slot_preferences);
-
-	// Setings GameInfo
-	setGameInfo = new QAction(infoIcon, tr("&Game Info"), this);
-	setGameInfo->setShortcut (QKeySequence (Qt::CTRL + Qt::Key_I));
-	setGameInfo->setStatusTip(tr("Display game information"));
-	setGameInfo->setWhatsThis(tr("Game Info\n\nDisplay game information."));
-	connect(setGameInfo, &QAction::triggered, this, &MainWindow::slotSetGameInfo);
 
 	//Toggling sound
 	QIcon  OIC;
@@ -864,6 +863,10 @@ void MainWindow::initMenuBar()
 
 	// menuBar entry editMenu
 	editMenu = new QMenu(tr("&Edit"));
+	editMenu->addAction (setGameInfo);
+
+	editMenu->addSeparator ();
+
 	editMenu->addAction (editDelete);
 
 	editMenu->addSeparator ();
@@ -903,7 +906,6 @@ void MainWindow::initMenuBar()
 	// menuBar entry settingsMenu
 	settingsMenu = new QMenu(tr("&Settings"));
 	settingsMenu->addAction (setPreferences);
-	settingsMenu->addAction (setGameInfo);
 	settingsMenu->addAction (soundToggle);
 
 	settingsMenu->insertSeparator(soundToggle);
@@ -978,12 +980,12 @@ void MainWindow::initToolBar()
 	toolBar->addAction (whatsThis);
 	toolBar->addSeparator();
 
-//toolBar->addAction (setPreferences);
-toolBar->addAction (setGameInfo);
-
 	// Edit toolbar
 	editBar = addToolBar ("editbar");
 
+	editBar->addAction (setGameInfo);
+
+	editBar->addSeparator ();
 	editBar->addAction (editDelete);
 	editBar->addAction (editStone);
 	editBar->addAction (editTriangle);
@@ -992,7 +994,9 @@ toolBar->addAction (setGameInfo);
 	editBar->addAction (editCross);
 	editBar->addAction (editNumber);
 	editBar->addAction (editLetter);
+	editBar->addSeparator ();
 	editBar->addAction (edit123);
+	editBar->addSeparator ();
 	editBar->addAction (editRectSelect);
 	editBar->addAction (editClearSelect);
 }
