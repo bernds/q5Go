@@ -38,7 +38,7 @@ class MainWindow : public QMainWindow
 	Q_OBJECT
 
 	bool m_allow_text_update_signal;
-
+	bool m_sgf_var_style;
 public:
 	MainWindow(QWidget* parent, std::shared_ptr<game_record>, GameMode mode = modeNormal);
 	virtual ~MainWindow();
@@ -111,8 +111,6 @@ public slots:
 	void slotFileExportPicClipB(bool);
 
 	void slotEditDelete(bool);
-	void slotEditMarkBrothers(bool);
-	void slotEditMarkSons(bool);
 	void slotEdit123(bool);
 	void slotNavBackward(bool = false);
 	void slotNavForward(bool = false);
@@ -193,7 +191,6 @@ protected:
 		*fileQuit;
 	QAction *editDelete, *editStone, *editTriangle, *editSquare, *editCircle, *editCross, *editNumber, *editLetter;
 	QAction *editRectSelect, *editClearSelect, *edit123;
-	QAction *editMarkBrothers, *editMarkSons;
 	QAction *navBackward, *navForward, *navFirst, *navLast, *navNextVar, *navPrevVar,
 		*navMainBranch, *navStartVar, *navNextBranch, *navNthMove, *navAutoplay, *navEmptyBranch,
 		*navCloneNode, *navSwapVariations, *navNextComment, *navPrevComment, *navIntersection ;       //SL added eb 11                               // added eb the 2 last

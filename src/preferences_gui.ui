@@ -187,7 +187,7 @@ After placing and/or undo release button for returning to starting point automat
       <string/>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="InterfaceTabWidget">
       <attribute name="title">
@@ -976,36 +976,6 @@ If your language is not supported, you might consider translating qGo. Please ch
           <property name="spacing">
            <number>0</number>
           </property>
-          <item row="0" column="0">
-           <widget class="QCheckBox" name="coordsCheckBox">
-            <property name="toolTip">
-             <string>Show board coordinates</string>
-            </property>
-            <property name="whatsThis">
-             <string>Show board coordinates
-
-Toggles if the board coordinates are shown.</string>
-            </property>
-            <property name="text">
-             <string>Coordinates</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QCheckBox" name="sgfCoordsCheckBox">
-            <property name="toolTip">
-             <string>Show SGF board coordinates</string>
-            </property>
-            <property name="whatsThis">
-             <string>Show SGF board coordinates
-										
-Toggles if SGF style board coordinates are shown.</string>
-            </property>
-            <property name="text">
-             <string>SGF Style</string>
-            </property>
-           </widget>
-          </item>
           <item row="2" column="0">
            <widget class="QCheckBox" name="sliderCheckBox">
             <property name="toolTip">
@@ -1032,26 +1002,11 @@ Toggles the slider on the bottom of the board on or off.</string>
 Have a ghost stone showing the current position of the mouse pointer on the board?</string>
             </property>
             <property name="text">
-             <string>Cursor</string>
+             <string>Cursor stone</string>
             </property>
            </widget>
           </item>
-          <item row="4" column="0">
-           <widget class="QCheckBox" name="toolTipCoordsCheckBox">
-            <property name="toolTip">
-             <string>Show coordinates as ToolTip</string>
-            </property>
-            <property name="whatsThis">
-             <string>Show coordinates as ToolTip
-
-When the mouse hovers over a point on the board, show a tooltip with the current coordinate.</string>
-            </property>
-            <property name="text">
-             <string>ToolTip coords</string>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="0">
+          <item row="6" column="0">
            <widget class="QCheckBox" name="variableFontCheckBox">
             <property name="toolTip">
              <string>Variable font size for marks</string>
@@ -1066,7 +1021,7 @@ Ignore the size of the chosen font for marks and set size to about stone dimensi
             </property>
            </widget>
           </item>
-          <item row="5" column="0">
+          <item row="4" column="0">
            <widget class="QCheckBox" name="tooltipsCheckBox">
             <property name="toolTip">
              <string>Disable Tool Tips</string>
@@ -1081,7 +1036,7 @@ Globally disables all tool tips that would show up if the mouse hovers over a GU
             </property>
            </widget>
           </item>
-          <item row="6" column="0">
+          <item row="5" column="0">
            <widget class="QCheckBox" name="adjustFontSizeCheckBox">
             <property name="toolTip">
              <string>Adjust font size for text and number labels</string>
@@ -1097,54 +1052,70 @@ When editing only single digit marks, it might be convenient to switch this off.
             </property>
            </widget>
           </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="coordsComboBox">
+            <item>
+             <property name="text">
+              <string>None</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Standard</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>SGF style</string>
+             </property>
+            </item>
+           </widget>
+          </item>
           <item row="1" column="0">
-           <layout class="QHBoxLayout">
-            <property name="spacing">
-             <number>6</number>
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>Side bar:</string>
             </property>
-            <property name="leftMargin">
-             <number>0</number>
-            </property>
-            <property name="topMargin">
-             <number>0</number>
-            </property>
-            <property name="rightMargin">
-             <number>0</number>
-            </property>
-            <property name="bottomMargin">
-             <number>0</number>
-            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QComboBox" name="sidebarComboBox">
             <item>
-             <widget class="QCheckBox" name="sidebarCheckBox">
-              <property name="toolTip">
-               <string>Show sidebar</string>
-              </property>
-              <property name="whatsThis">
-               <string>Show sidebar
-
-Enables or disables the navigation and tool sidebar.</string>
-              </property>
-              <property name="text">
-               <string>Sidebar</string>
-              </property>
-             </widget>
+             <property name="text">
+              <string>Hidden</string>
+             </property>
             </item>
             <item>
-             <widget class="QCheckBox" name="sidebarLeftCheckBox">
-              <property name="toolTip">
-               <string>Show sidebar on the left</string>
-              </property>
-              <property name="whatsThis">
-               <string>Show sidebar on the left
-
-Swaps sidebar and board, thus board is on the left and sidbar is on the right.</string>
-              </property>
-              <property name="text">
-               <string>left</string>
-              </property>
-             </widget>
+             <property name="text">
+              <string>Left</string>
+             </property>
             </item>
-           </layout>
+            <item>
+             <property name="text">
+              <string>Right</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>Coordinates:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="0">
+           <spacer name="verticalSpacer_13">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </widget>
@@ -1468,7 +1439,15 @@ Select how to display all brothers of the current move. Either not at all, or as
             <property name="spacing">
              <number>6</number>
             </property>
-            <item row="0" column="0">
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_5">
+              <property name="text">
+               <string>Allow SGF files to override
+child/sibling setting</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
              <widget class="QComboBox" name="variationComboBox">
               <property name="focusPolicy">
                <enum>Qt::TabFocus</enum>
@@ -1485,7 +1464,54 @@ Select how to display all brothers of the current move. Either not at all, or as
               </item>
               <item>
                <property name="text">
-                <string>Small stones</string>
+                <string>Letters</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label">
+              <property name="text">
+               <string>Show as:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QComboBox" name="varSGFStyleComboBox">
+              <item>
+               <property name="text">
+                <string>No</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Yes</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Ask</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_2">
+              <property name="text">
+               <string>Show which:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QComboBox" name="varChildrenComboBox">
+              <item>
+               <property name="text">
+                <string>Siblings</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Children</string>
                </property>
               </item>
              </widget>

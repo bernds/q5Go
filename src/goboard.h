@@ -654,24 +654,14 @@ public:
 	{
 		return m_parent == nullptr;
 	}
+	/* Collect a set of child moves to a board, for use in variation display.  */
+	const go_board child_moves (const game_state *excluding) const;
 	const go_board sibling_moves () const
 	{
-		go_board b (m_board.size ());
 		game_state *p = m_parent;
 		if (p == nullptr)
-			return b;
-		for (auto &it: p->m_children) {
-			if (it == this)
-				continue;
-			if (it->m_move_x < 0)
-				continue;
-			stone_color col = it->m_board.stone_at (it->m_move_x, it->m_move_y);
-			if (col == none)
-				/* @@@ theoretically possible for rulesets that allow suicide.  */
-				continue;
-			b.set_stone (it->m_move_x, it->m_move_y, col);
-		}
-		return b;
+			return go_board (m_board.size ());
+		return p->child_moves (this);
 	}
 	/* Set a mark on the current board, and return true if that made a change.  */
 	bool set_mark (int x, int y, mark m, mextra extra)
@@ -742,6 +732,8 @@ protected:
 
 	std::string m_copyright = "";
 
+	/* SGF variation display style, or -1 if unset by SGF file.  */
+	int m_style = -1;
 public:
 	ranked ranked_type () const { return m_ranked; }
 	double komi () const { return m_komi; }
@@ -750,6 +742,9 @@ public:
 	void set_ranked_type (ranked r) { m_ranked = r; }
 	void set_komi (double k) { m_komi = k; }
 	void set_handicap (int h) { m_handicap = h; }
+
+	int style () const { return m_style; }
+	void set_style (int st) { m_style = st; }
 
 	const std::string &name_white () const { return m_name_w; }
 	const std::string &name_black () const { return m_name_b; }
@@ -790,11 +785,11 @@ public:
 		   const std::string &rw, const std::string &rb,
 		   const std::string &ru, double komi, int hc, ranked rt, const std::string &re,
 		   const std::string &dt, const std::string &pc, const std::string &cp,
-		   const std::string &tm, const std::string &ot)
+		   const std::string &tm, const std::string &ot, int style)
 		: m_title (title), m_name_w (w), m_name_b (b), m_rank_w (rw), m_rank_b (rb),
 		m_rules (ru), m_komi (komi), m_handicap (hc), m_result (re), m_date (dt), m_place (pc),
 		m_ranked (rt), m_time (tm), m_overtime (ot),
-		m_copyright (cp)
+	  m_copyright (cp), m_style (style)
 	{
 	}
 };

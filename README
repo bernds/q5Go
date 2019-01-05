@@ -37,6 +37,9 @@ There are some changes in the feature list in this version:
    for every encountered screen dimension.
    The functionality to save up to 10 different board sizes with
    keyboard shortcuts was removed.
+ * Variation display was improved and the user can chooser between letters
+   and ghost stones, as well as choosing whether to use the setting found
+   in SGF files or ignore it.
 
 This update was done by Bernd Schmidt <bernds_cb1@t-online.de>.
 

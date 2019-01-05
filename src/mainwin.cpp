@@ -2587,7 +2587,7 @@ void ClientWindow::slotComputerPlay(bool)
 	game_info info ("", dlg.getPlayerWhiteName ().toStdString (),
 			dlg.getPlayerBlackName ().toStdString (),
 			"", "",
-			"", dlg.getKomi(), hc, ranked::free, "", "", "", "", "", "");
+			"", dlg.getKomi(), hc, ranked::free, "", "", "", "", "", "", -1);
 	std::shared_ptr<game_record> gr = std::make_shared<game_record> (starting_pos, hc > 1 ? white : black, info);
 
 	int b_type = dlg.getPlayerBlackType();
@@ -2878,9 +2878,13 @@ void ClientWindow::dlgSetPreferences(int tab)
 	dlg.soundComputerCheckBox->setChecked(setting->readBoolEntry("SOUND_COMPUTER"));
 
 	dlg.variationComboBox->setCurrentIndex(setting->readIntEntry("VAR_GHOSTS"));
-	dlg.coordsCheckBox->setChecked(setting->readBoolEntry("BOARD_COORDS"));
-	dlg.sgfCoordsCheckBox->setChecked(setting->readBoolEntry("SGF_BOARD_COORDS"));
-	dlg.toolTipCoordsCheckBox->setChecked(setting->readBoolEntry("BOARD_COORDS_TIP"));
+	dlg.varChildrenComboBox->setCurrentIndex(setting->readBoolEntry("VAR_CHILDREN") != 0);
+	dlg.varSGFStyleComboBox->setCurrentIndex(setting->readIntEntry("VAR_SGF_STYLE"));
+
+	int coords = (setting->readBoolEntry("BOARD_COORDS")
+		      ? (setting->readBoolEntry("SGF_BOARD_COORDS") ? 2 : 1)
+		      : 0);
+	dlg.coordsComboBox->setCurrentIndex(coords);
 	dlg.cursorCheckBox->setChecked(setting->readBoolEntry("CURSOR"));
 	dlg.adjustFontSizeCheckBox->setChecked(setting->readBoolEntry("ADJ_FONT"));
 	//dlg.smallerStonesCheckBox->setChecked(setting->readBoolEntry("SMALL_STONES"));
@@ -2889,8 +2893,10 @@ void ClientWindow::dlgSetPreferences(int tab)
 	dlg.BYTimeSpin->setValue(setting->readIntEntry("BY_TIMER"));
 	dlg.sgfTimeTagsCheckBox->setChecked(setting->readBoolEntry("SGF_TIME_TAGS"));
 	dlg.sliderCheckBox->setChecked(setting->readBoolEntry("SLIDER"));
-	dlg.sidebarCheckBox->setChecked(setting->readBoolEntry("SIDEBAR"));
-	dlg.sidebarLeftCheckBox->setChecked(setting->readBoolEntry("SIDEBAR_LEFT"));
+	int sidebar = (setting->readBoolEntry("SIDEBAR")
+		       ? (setting->readBoolEntry("SIDEBAR_LEFT") ? 1 : 2)
+		       : 0);
+	dlg.sidebarComboBox->setCurrentIndex(sidebar);
 //	dlg.rememberFontCheckBox->setChecked(setting->readBoolEntry("REM_FONT"));
 	dlg.variableFontCheckBox->setChecked(setting->readBoolEntry("VAR_FONT"));
 	dlg.antiClickoCheckBox->setChecked(setting->readBoolEntry("ANTICLICKO"));
@@ -2983,12 +2989,16 @@ bool ClientWindow::preferencesSave(PreferencesDialog *dlg)
 	setting->writeBoolEntry("SOUND_COMPUTER", dlg->soundComputerCheckBox->isChecked());
 
 	setting->writeIntEntry("VAR_GHOSTS", dlg->variationComboBox->currentIndex());
-	setting->writeBoolEntry("BOARD_COORDS", dlg->coordsCheckBox->isChecked());
-	setting->writeBoolEntry("SGF_BOARD_COORDS", dlg->sgfCoordsCheckBox->isChecked());
+	setting->writeBoolEntry("VAR_CHILDREN", dlg->varChildrenComboBox->currentIndex() == 1);
+	setting->writeIntEntry("VAR_SGF_STYLE", dlg->varSGFStyleComboBox->currentIndex());
+
+	int coords = dlg->coordsComboBox->currentIndex();
+	int sidebar = dlg->sidebarComboBox->currentIndex();
+	setting->writeBoolEntry("BOARD_COORDS", coords > 0);
+	setting->writeBoolEntry("SGF_BOARD_COORDS", coords == 2);
 	setting->writeBoolEntry("SLIDER", dlg->sliderCheckBox->isChecked());
-	setting->writeBoolEntry("SIDEBAR", dlg->sidebarCheckBox->isChecked());
-	setting->writeBoolEntry("SIDEBAR_LEFT", dlg->sidebarLeftCheckBox->isChecked());
-	setting->writeBoolEntry("BOARD_COORDS_TIP", dlg->toolTipCoordsCheckBox->isChecked());
+	setting->writeBoolEntry("SIDEBAR", sidebar > 0);
+	setting->writeBoolEntry("SIDEBAR_LEFT", sidebar == 1);
 	setting->writeBoolEntry("CURSOR", dlg->cursorCheckBox->isChecked());
 	setting->writeBoolEntry("ADJ_FONT", dlg->adjustFontSizeCheckBox->isChecked());
 	//setting->writeBoolEntry("SMALL_STONES", dlg->smallerStonesCheckBox->isChecked());

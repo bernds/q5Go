@@ -57,6 +57,11 @@ Setting::Setting()
 	writeBoolEntry("EDITBAR", true);
 	writeBoolEntry("STATUSBAR", true);
 	writeBoolEntry("MENUBAR", true);
+
+	writeIntEntry("VAR_GHOSTS", 1);
+	writeBoolEntry("VAR_CHILDREN", false);
+	writeIntEntry("VAR_SGF_STYLE", 2);
+
 	writeEntry("SKIN", "");
 	writeEntry("SKIN_TABLE", "");
 	writeBoolEntry("TOOLTIPS", true);

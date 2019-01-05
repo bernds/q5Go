@@ -65,6 +65,9 @@ class Board : public QGraphicsView, public game_state::observer
 	bool m_player_is_b = true;
 	bool m_player_is_w = true;
 
+	int m_vars_type = 1;
+	bool m_vars_children = false;
+
 	void observed_changed ();
 	void sync_appearance (bool board_only = true);
 	void play_one_move (int x, int y);
@@ -84,8 +87,6 @@ public:
 	const game_state *get_state () { return m_state; }
 	void external_move (game_state *st) { move_state (st); }
 	void mark_dead_external (int x, int y);
-	void setShowCoords(bool b);
-	void setShowSGFCoords(bool b);
 	bool show_cursor_p ();
 	void setMode(GameMode mode);
 	GameMode getGameMode () { return m_game_mode; }
@@ -139,8 +140,11 @@ public:
 
 	void set_isLocalGame(bool isLocal);
 	bool get_isLocalGame() { return isLocalGame; }
-	void set_antiClicko(bool b) { antiClicko = b; }
 
+	void setShowCoords(bool b);
+	void setShowSGFCoords(bool b);
+	void set_antiClicko(bool b) { antiClicko = b; }
+	void set_vardisplay (bool children, int type);
 
 public slots:
 	void update_comment(const QString &, bool append);

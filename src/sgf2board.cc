@@ -258,8 +258,22 @@ std::shared_ptr<game_record> sgf2record (const sgf &s)
 
 	const std::string *cp = s.nodes->find_property_val ("CP");
 
+	const std::string *st = s.nodes->find_property_val ("ST");
+
+	if (km && km->length () > 0) {
+		size_t pos = 0;
+		if ((*km)[0] == '-')
+			pos++;
+		if (km->find_first_not_of ("0123456789.", pos) != std::string::npos)
+			throw broken_sgf ();
+	}
 	double komi = km ? stod (*km) : 0;
+	if (ha && (ha->find_first_not_of ("0123456789") != std::string::npos))
+		throw broken_sgf ();
 	int hc = ha ? stoi (*ha) : 0;
+	if (st && (st->find_first_not_of ("0123456789") != std::string::npos))
+		throw broken_sgf ();
+	int style = st ? stoi (*st) : -1;
 	game_info info (translated_prop_str (gn, codec),
 			translated_prop_str (pw, codec), translated_prop_str (pb, codec),
 			translated_prop_str (wr, codec), translated_prop_str (br, codec),
@@ -267,7 +281,8 @@ std::shared_ptr<game_record> sgf2record (const sgf &s)
 			translated_prop_str (re, codec),
 			translated_prop_str (dt, codec), translated_prop_str (pc, codec),
 			translated_prop_str (cp, codec),
-			translated_prop_str (tm, codec), translated_prop_str (ot, codec));
+			translated_prop_str (tm, codec), translated_prop_str (ot, codec),
+			style);
 	go_board initpos (size);
 	for (auto n: s.nodes->props)
 		if (n->ident == "AB")
@@ -476,6 +491,10 @@ std::string game_record::to_sgf () const
 	encode_string (s, "RE", m_result);
 	if (m_root.to_move () == white)
 		s += "PL[W]";
+
+	/* @@@ Could think about writing a ST property, but I dislike the idea of
+	   a file telling me how I have to view it.  */
+
 	m_root.append_to_sgf (s);
 	s += ")\n";
 	return s;

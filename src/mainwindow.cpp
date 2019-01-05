@@ -109,6 +109,33 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 						   : mode == modeComputer ? "SOUND_COMPUTER"
 						   : "SOUND_NORMAL");
 
+	int game_style = m_game->style ();
+	m_sgf_var_style = false;
+	if (game_style != -1) {
+		int allow = setting->readIntEntry ("VAR_SGF_STYLE");
+		int our_style = 0;
+		if (setting->readIntEntry ("VAR_GHOSTS") == 0)
+			our_style |= 2;
+		if (!setting->readBoolEntry ("VAR_CHILDREN"))
+			our_style |= 1;
+		if (our_style == game_style && allow != 1) {
+			/* Hard to say what the best behaviour would be.  For now, if
+			   the style matched exactly but we're not unconditionally
+			   allowing the SGF to override our settings, we choose to not
+			   do anything here, leaving m_sgf_var_style false so that
+			   settings changes take effect on this board.  */
+		} if (allow == 2 && our_style != game_style) {
+			QMessageBox mb(QMessageBox::Question, tr("Choose variation display"),
+				       QString(tr("The SGF file that is being opened uses a different style\n"
+						  "of variation display.  Use the style found in the file?\n\n"
+						  "You can customize this behaviour (and disable this dialog)\n"
+						  "in the preferences.")),
+				       QMessageBox::Yes | QMessageBox::No);
+			if (mb.exec() == QMessageBox::Yes)
+				m_sgf_var_style = true;
+		} else if (allow)
+			m_sgf_var_style = true;
+	}
 
 	initActions();
 	initMenuBar();
@@ -526,20 +553,6 @@ void MainWindow::initActions()
 	editClearSelect->setWhatsThis(tr("Click to clear the selected rectangle and select the whole board again."));
 	connect(editClearSelect, &QAction::triggered, this, &MainWindow::slotEditClearSelect);
 
-	// Edit mark brothers
-	editMarkBrothers = new QAction(tr("Mark &brothers"), this);
-	editMarkBrothers->setShortcut (Qt::SHIFT + Qt::Key_F3);
-	editMarkBrothers->setStatusTip(tr("Mark all brothers of the current move"));
-	editMarkBrothers->setWhatsThis(tr("Mark brothers\n\nMark all brothers of the current move."));
-	connect(editMarkBrothers, &QAction::triggered, this, &MainWindow::slotEditMarkBrothers);
-
-	// Edit mark sons
-	editMarkSons = new QAction(tr("Mark &sons"), this);
-	editMarkSons->setShortcut (Qt::SHIFT + Qt::Key_F4);
-	editMarkSons->setStatusTip(tr("Mark all sons of the current move"));
-	editMarkSons->setWhatsThis(tr("Mark sons\n\nMark all sons of the current move."));
-	connect(editMarkSons, &QAction::triggered, this, &MainWindow::slotEditMarkSons);
-
 	/*
 	* Menu Navigation
 	*/
@@ -867,11 +880,6 @@ void MainWindow::initMenuBar()
 
 	editMenu->addAction (editRectSelect);
 	editMenu->addAction (editClearSelect);
-
-	editMenu->addSeparator ();
-
-	editMenu->addAction (editMarkBrothers);
-	editMenu->addAction (editMarkSons);
 
 	// menuBar entry navMenu
 	navMenu = new QMenu(tr("&Navigation"));
@@ -1283,16 +1291,6 @@ void MainWindow::slotEditDelete(bool)
 	gfx_board->deleteNode();
 }
 
-void MainWindow::slotEditMarkBrothers(bool)
-{
-	/* @@@ useless? */
-}
-
-void MainWindow::slotEditMarkSons(bool)
-{
-	/* @@@ useless? */
-}
-
 void MainWindow::slotEditRectSelect(bool on)
 {
 	qDebug () << "rectSelect " << on << "\n";
@@ -1450,11 +1448,29 @@ void MainWindow::slotNavSwapVariations(bool)
 
 void MainWindow::updateBoard()
 {
-	viewSlider->setChecked(setting->readBoolEntry("SLIDER"));
-	viewSidebar->setChecked(setting->readBoolEntry("SIDEBAR"));
-	viewCoords->setChecked(setting->readBoolEntry("BOARD_COORDS"));
-	gfx_board->setShowSGFCoords(setting->readBoolEntry("SGF_BOARD_COORDS"));
-	gfx_board->set_antiClicko(setting->readBoolEntry("ANTICLICKO"));
+	viewSlider->setChecked (setting->readBoolEntry ("SLIDER"));
+	viewSidebar->setChecked (setting->readBoolEntry ("SIDEBAR"));
+	viewCoords->setChecked (setting->readBoolEntry ("BOARD_COORDS"));
+	gfx_board->setShowSGFCoords (setting->readBoolEntry ("SGF_BOARD_COORDS"));
+	gfx_board->set_antiClicko (setting->readBoolEntry ("ANTICLICKO"));
+
+	int ghosts = setting->readIntEntry ("VAR_GHOSTS");
+	bool children = setting->readBoolEntry ("VAR_CHILDREN");
+	int style = m_game->style ();
+
+	/* Should never have the first condition and not the second, but it doesn't
+	   hurt to be careful.  */
+	if (m_sgf_var_style && style != -1) {
+		children = (style & 1) == 0;
+		if (style & 2)
+			ghosts = 0;
+		/* The SGF file says nothing about how to render the markup.  Letters
+		   are somewhat implied, but maybe it's better to leave that final
+		   choice to the user.  */
+		else if (ghosts == 0)
+			ghosts = 2;
+	}
+	gfx_board->set_vardisplay (children, ghosts);
 
 	QString scrkey = screen_key ();
 	int inv_view_comment = setting->readIntEntry("INV_VIEW_COMMENT_" + scrkey);
@@ -1474,10 +1490,6 @@ void MainWindow::updateBoard()
 #endif
 
 	slotViewLeftSidebar();
-#if 0
-	gfx_board->setVariationDisplay(static_cast<VariationDisplay>(setting->readIntEntry("VAR_GHOSTS")));
-#endif
-	gfx_board->changeSize();  // For smaller stones
 }
 
 void MainWindow::slotSetGameInfo(bool)

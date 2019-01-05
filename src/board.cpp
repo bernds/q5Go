@@ -569,7 +569,7 @@ void Board::sync_appearance (bool board_only)
 	const go_board &b = m_edit_board == nullptr ? m_state->get_board () : *m_edit_board;
 	stone_color to_move = m_edit_board == nullptr ? m_state->to_move () : m_edit_to_move;
 
-	const go_board &vars = m_state->sibling_moves ();
+	const go_board vars = m_vars_children ? m_state->child_moves (nullptr) : m_state->sibling_moves ();
 	const bit_array st_w = b.get_stones_w ();
 	const bit_array st_b = b.get_stones_b ();
 	int sz = b.size ();
@@ -625,7 +625,7 @@ void Board::sync_appearance (bool board_only)
 			} else if (mark_at_pos == mark::terr || mark_at_pos == mark::falseeye)
 				type = stone_type::var;
 
-			if (sc == none) {
+			if (sc == none && m_vars_type == 1) {
 				sc = vars.stone_at (x, y);
 				if (sc != none)
 					type = stone_type::var;
@@ -713,6 +713,22 @@ void Board::sync_appearance (bool board_only)
 			if (mark_type != mark::text && text_mark != nullptr)
 				text_mark->set_shown (false);
 
+			/* Now, letter-style variation display.  The SGF spec says that this
+			   should not overwrite any other marks, so we do it here.  */
+			mark var_mark = vars.mark_at (x, y);
+#if 0 /* Occasionally useful for debugging.  */
+			if (var_mark != mark::none && mark_type != mark::none)
+				mark_col = Qt::green;
+#endif
+			if (mark_type == mark::none && m_vars_type == 2 && var_mark != mark::none) {
+				mark_type = var_mark;
+				extra = vars.mark_extra_at (x, y);
+				if (mark_type == mark::letter) {
+					mark_str = convert_letter_mark (extra);
+					mark_type = mark::text;
+				}
+				mark_col = Qt::blue;
+			}
 			if (mark_type == mark::none) {
 				if (m)
 					m->set_shown (false);
@@ -1524,8 +1540,19 @@ void Board::setShowSGFCoords(bool b)
 {
 	bool old = showSGFCoords;
 	showSGFCoords = b;
-	if(old != showSGFCoords)
-		changeSize();  // Redraw the board if the value changed.
+	if (old == showSGFCoords)
+		return;
+	clearCoords ();
+	setupCoords ();
+	drawCoordinates ();
+}
+
+void Board::set_vardisplay (bool children, int type)
+{
+	m_vars_children = children;
+	m_vars_type = type;
+
+	sync_appearance (true);
 }
 
 void Board::setModified(bool m)
