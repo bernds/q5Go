@@ -108,6 +108,7 @@ public:
 	void gotoNextBranch();
 	void gotoNthMove(int n);
 	void gotoNthMoveInVar(int n);
+	void findMove(int x, int y);
 	void navIntersection();
 	void set_start_count (bool on) { m_state->set_start_count (on); }
 	void set_rect_select (int on) { m_request_mark_rect = on; }

@@ -923,6 +923,22 @@ void Board::gotoLastMove()
 	}
 }
 
+void Board::findMove(int x, int y)
+{
+	game_state *st = m_state;
+	if (!st->was_move_p () || st->get_move_x () != x || st->get_move_y () != y)
+		st = m_game->get_root ();
+
+	for (;;) {
+		st = st->next_move ();
+		if (st == nullptr)
+			return;
+		if (st->was_move_p () && st->get_move_x () == x && st->get_move_y () == y)
+			break;
+	}
+	move_state (st);
+}
+
 // this slot is used for edit window to navigate to last made move
 void Board::gotoLastMoveByTime()
 {
@@ -1347,23 +1363,21 @@ void Board::mousePressEvent(QMouseEvent *e)
 	m_down_x = x;
 	m_down_y = y;
 
-	stone_color existing_stone;
-
+	if (navIntersectionStatus) {
+		navIntersectionStatus = false;
+		unsetCursor ();
+		findMove (x - 1, y - 1);
+		return;
+	}
 	if (e->modifiers () == Qt::ControlModifier
 	    && (m_game_mode == modeNormal || m_game_mode == modeObserve))
 	{
-		// Find move in main branch
-#if 0
-		if (e->button () == Qt::LeftButton) {
-			navIntersectionStatus = false;
-			boardHandler->findMoveByPos(x, y);
-		} else if (e->button () == Qt::RightButton) {
-			boardHandler->findMoveByPosInVar(x, y);
-		}
-#endif
+		/* @@@ Previous code made a distinction between left and right button.  */
+		findMove (x - 1, y - 1);
 		return;
 	}
 	mark mark_to_set = m_edit_mark;
+	stone_color existing_stone;
 
 	// resume normal proceeding
 	switch (m_game_mode)
@@ -1636,33 +1650,6 @@ void Board::set_isLocalGame(bool isLocal)
 
 void Board::navIntersection()
 {
-#if 0
- /***** several unsuccessful tries with clean method
- //   unsetCursor();
- //   this->topLevelWidget()->unsetCursor();
-
- // this is debug code to check if we can catch the corrrect cursor
-    if (this->topLevelWidget()->ownCursor())
-      qDebug("cursor = top");
-
-    bool b;
-    int i= 0;
-    QWidget *w = this;
-    do {
-
-      if (w->ownCursor())
-          qDebug("cursor = %d",i);
-       i++  ;
-      }
-    while (w=w->parentWidget(true)) ;
-
-    qDebug("stack %d ",i-1);
-
-    setCursor(pointingHandCursor);
-
-  *** Therefore we apply thick method  :           */
-    QApplication::setOverrideCursor( QCursor(Qt::pointingHandCursor) );
-
-    navIntersectionStatus = true;
-#endif
+	setCursor(Qt::PointingHandCursor);
+	navIntersectionStatus = true;
 }
