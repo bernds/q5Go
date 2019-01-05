@@ -338,18 +338,15 @@ void MainWidget::setMoveData(const game_state &gs, const go_board &b, GameMode m
 		turnLabel->setText(QObject::tr ("White to play"));
 
 	bool is_root_node = gs.root_node_p ();
-
-	if (mode == modeNormal || mode == modeObserve) {
-		goPrevButton->setEnabled(!is_root_node);
-		goNextButton->setEnabled(sons > 0);
-		goFirstButton->setEnabled(!is_root_node);
-		goLastButton->setEnabled(sons > 0);
-	} else {
-		goPrevButton->setEnabled(false);
-		goNextButton->setEnabled(false);
-		goFirstButton->setEnabled(false);
-		goLastButton->setEnabled(false);
-	}
+	bool good_mode = mode == modeNormal || mode == modeObserve;
+	goPrevButton->setEnabled(good_mode && !is_root_node);
+	goNextButton->setEnabled(good_mode && sons > 0);
+	goFirstButton->setEnabled(good_mode && !is_root_node);
+	goLastButton->setEnabled(good_mode && sons > 0);
+	prevCommentButton->setEnabled(good_mode && !is_root_node);
+	nextCommentButton->setEnabled(good_mode && sons > 0);
+	prevNumberButton->setEnabled(good_mode && !is_root_node);
+	nextNumberButton->setEnabled(good_mode && sons > 0);
 
 	// Update slider
 	toggleSliderSignal (false);

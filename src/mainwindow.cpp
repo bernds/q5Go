@@ -215,6 +215,10 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 	connect(mainWidget->goFirstButton, SIGNAL(clicked()), this, SLOT(slotNavFirst()));
 	connect(mainWidget->goNextButton, SIGNAL(clicked()), this, SLOT(slotNavForward()));
 	connect(mainWidget->goPrevButton, SIGNAL(clicked()), this, SLOT(slotNavBackward()));
+	connect(mainWidget->prevNumberButton, &QToolButton::clicked, [=] () { gfx_board->previousCount (); });
+	connect(mainWidget->nextNumberButton, &QToolButton::clicked, [=] () { gfx_board->nextCount (); });
+	connect(mainWidget->prevCommentButton, &QToolButton::clicked, [=] () { gfx_board->previousComment (); });
+	connect(mainWidget->nextCommentButton, &QToolButton::clicked, [=] () { gfx_board->nextComment (); });
 
 	connect(m_ascii_dlg.cb_coords, &QCheckBox::toggled, this, &MainWindow::slotFileExportASCII);
 	connect(m_ascii_dlg.cb_numbering, &QCheckBox::toggled, this, &MainWindow::slotFileExportASCII);

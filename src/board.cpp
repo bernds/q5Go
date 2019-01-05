@@ -849,6 +849,32 @@ void Board::nextComment()
 	}
 }
 
+void Board::previousCount()
+{
+	game_state *st = m_state;
+
+	while (st != nullptr) {
+		st = st->prev_move ();
+		if (st != nullptr && st->get_start_count ()) {
+			move_state (st);
+			break;
+		}
+	}
+}
+
+void Board::nextCount()
+{
+	game_state *st = m_state;
+
+	while (st != nullptr) {
+		st = st->next_move ();
+		if (st != nullptr && st->get_start_count ()) {
+			move_state (st);
+			break;
+		}
+	}
+}
+
 void Board::nextVariation()
 {
 	game_state *next = m_state->next_sibling (true);

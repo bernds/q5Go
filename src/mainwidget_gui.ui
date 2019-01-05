@@ -775,6 +775,12 @@ Variation 1 of 20
         </property>
         <item>
          <widget class="QToolButton" name="goFirstButton">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="toolTip">
+           <string>Go to first move.</string>
+          </property>
           <property name="text">
            <string>...</string>
           </property>
@@ -786,6 +792,12 @@ Variation 1 of 20
         </item>
         <item>
          <widget class="QToolButton" name="goPrevButton">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="toolTip">
+           <string>Go to previous move.</string>
+          </property>
           <property name="text">
            <string>...</string>
           </property>
@@ -797,6 +809,12 @@ Variation 1 of 20
         </item>
         <item>
          <widget class="QToolButton" name="goNextButton">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="toolTip">
+           <string>Go to next move.</string>
+          </property>
           <property name="text">
            <string>...</string>
           </property>
@@ -808,12 +826,96 @@ Variation 1 of 20
         </item>
         <item>
          <widget class="QToolButton" name="goLastButton">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="toolTip">
+           <string>Go to last move.</string>
+          </property>
           <property name="text">
            <string>...</string>
           </property>
           <property name="icon">
            <iconset resource="q4go.qrc">
             <normaloff>:/MainWidgetGui/images/mainwidget/2rightarrow.png</normaloff>:/MainWidgetGui/images/mainwidget/2rightarrow.png</iconset>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QToolButton" name="prevCommentButton">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="toolTip">
+           <string>Go to previous commented move.</string>
+          </property>
+          <property name="text">
+           <string>...</string>
+          </property>
+          <property name="icon">
+           <iconset resource="q4go.qrc">
+            <normaloff>:/MainWidgetGui/images/mainwidget/1leftcomment.png</normaloff>:/MainWidgetGui/images/mainwidget/1leftcomment.png</iconset>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="nextCommentButton">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="toolTip">
+           <string>Go to next commented move.</string>
+          </property>
+          <property name="text">
+           <string>...</string>
+          </property>
+          <property name="icon">
+           <iconset resource="q4go.qrc">
+            <normaloff>:/MainWidgetGui/images/mainwidget/1rightcomment.png</normaloff>:/MainWidgetGui/images/mainwidget/1rightcomment.png</iconset>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="prevNumberButton">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="toolTip">
+           <string>Go to previous move which starts numbering.</string>
+          </property>
+          <property name="text">
+           <string>...</string>
+          </property>
+          <property name="icon">
+           <iconset resource="q4go.qrc">
+            <normaloff>:/MainWidgetGui/images/mainwidget/1left123.png</normaloff>:/MainWidgetGui/images/mainwidget/1left123.png</iconset>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="nextNumberButton">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="toolTip">
+           <string>Go to next move which starts numbering.</string>
+          </property>
+          <property name="text">
+           <string>next</string>
+          </property>
+          <property name="icon">
+           <iconset resource="q4go.qrc">
+            <normaloff>:/MainWidgetGui/images/mainwidget/1right123.png</normaloff>:/MainWidgetGui/images/mainwidget/1right123.png</iconset>
           </property>
          </widget>
         </item>
@@ -1310,6 +1412,9 @@ Indicates whether it is black's or white's turn.</string>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="toolTip">
+           <string>Indicates that it's not the expected player's move.</string>
+          </property>
           <property name="text">
            <string/>
           </property>
@@ -1320,6 +1425,9 @@ Indicates whether it is black's or white's turn.</string>
         </item>
         <item>
          <widget class="QToolButton" name="colorButton">
+          <property name="toolTip">
+           <string>Toggle player to move.</string>
+          </property>
           <property name="text">
            <string>...</string>
           </property>
@@ -1488,7 +1596,7 @@ Send adjournment request to your opponent. If he accept it, the game will be adj
            <enum>Qt::NoFocus</enum>
           </property>
           <property name="toolTip">
-           <string>Edit the game in a new window.</string>
+           <string>Enter and leave edit mode where stones can be placed freely.</string>
           </property>
           <property name="whatsThis">
            <string>Freely edit the board position. Edited positions are added below the current one.</string>

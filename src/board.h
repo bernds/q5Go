@@ -94,6 +94,8 @@ public:
 
 	void nextMove();
 	void previousMove();
+	void nextCount();
+	void previousCount();
 	void nextVariation();
 	void previousVariation();
 	void nextComment();
