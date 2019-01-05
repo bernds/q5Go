@@ -700,7 +700,7 @@ void ClientWindow::sendTextToApp(const QString &txt)
 				QTimer::singleShot(200, this, SLOT(set_tn_ready()));
 				tn_wait_for_tn_ready = true;
 			}
-			sendTextFromApp(NULL);
+			sendTextFromApp (nullptr);
 		case WS:
 			// ready or white space -> return
 			return;
@@ -728,7 +728,7 @@ void ClientWindow::sendTextToApp(const QString &txt)
 			{
 				// enable sending
 				set_tn_ready();
-			} while (sendTextFromApp(NULL) != 0);
+			} while (sendTextFromApp (nullptr) != 0);
 
 			// check if tables are sorted
 #if 0 && (QT_VERSION > 0x030006)
@@ -914,7 +914,7 @@ void ClientWindow::set_tn_ready()
 {
 	tn_ready = true;
 	tn_wait_for_tn_ready = false;
-	sendTextFromApp(0);
+	sendTextFromApp (nullptr);
 }
 
 // send text via telnet session; skipping empty string!
@@ -1144,7 +1144,7 @@ void ClientWindow::set_sessionparameter(QString par, bool val)
 void ClientWindow::slot_cbconnect(const QString &txt)
 {
 	QString text = txt;
-	Host *h = NULL;
+	Host *h = nullptr;
 	int i=1;
 
 	if (text.isNull())
@@ -2755,7 +2755,7 @@ void ClientWindow::slot_cancelSeek()
 void ClientWindow::slot_seek(int i)
 {
 	toolSeek->setChecked (true);
-	toolSeek->setMenu (NULL);
+	toolSeek->setMenu (nullptr);
 
 	//seek entry 1 19 5 3 0
 	QString send_seek = 	"seek entry " + 

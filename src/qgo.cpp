@@ -53,7 +53,7 @@ void qGo::quit()
 
 void qGo::openManual()
 {
-	if (helpViewer == NULL)
+	if (helpViewer == nullptr)
 		helpViewer = new HelpViewer(0);
 	helpViewer->show();
 	helpViewer->raise();

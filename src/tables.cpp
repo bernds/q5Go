@@ -117,7 +117,7 @@ void ClientWindow::slot_game(Game* g)
 	if (g->running)
 	{
 		bool found = false;
-		GamesTableItem *lvi_mem = NULL;
+		GamesTableItem *lvi_mem = nullptr;
 
 		// check if game already exists
 		if (!playerListEmpty)

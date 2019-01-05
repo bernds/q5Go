@@ -8,8 +8,8 @@
 #ifdef OWN_DEBUG_MODE
 void myMessageHandler(QtMsgType type, const QMessageLogContext &, const QString &msg)
 {
-	if (view == NULL || myapp.startingUp() || myapp.closingDown())
-		return ;
+	if (view == nullptr || myapp.startingUp () || myapp.closingDown ())
+		return;
 
 	//QString msg2 = QString::QString(msg);
 

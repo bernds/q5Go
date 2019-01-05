@@ -50,7 +50,7 @@ IGSConnection::~IGSConnection()
 // any data can be transferred after signalling with normal functions
 void IGSConnection::sendTextToApp(QString txt)
 {
-	if (callbackFP != NULL)
+	if (callbackFP != nullptr)
 		(*callbackFP)(txt);
 }
 

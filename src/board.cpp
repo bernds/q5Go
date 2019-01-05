@@ -907,7 +907,7 @@ void Board::gotoLastMoveByTime()
 	CHECK_PTR(m);
 
 	// Descent tree to last son of latest variation
-	while (m->son != NULL)
+	while (m->son != nullptr)
 	{
 		m = tree->nextMove();
 		for (int i = 0; i < tree->getNumBrothers(); i++)
@@ -922,7 +922,7 @@ void Board::gotoLastMoveByTime()
 		}*/
 	}
 
-	if (m != NULL)
+	if (m != nullptr)
 		updateMove(m);
 #endif
 }

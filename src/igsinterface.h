@@ -16,12 +16,12 @@ template <class T>  class callBackImpl
 public:
 	callBackImpl()
 	{
-		callbackFP = NULL;
+		callbackFP = nullptr;
 	}
 
 	void registerCallback(T fp)
 	{
-		if (fp != NULL) callbackFP = fp;
+		if (fp != nullptr) callbackFP = fp;
 	};
 
 protected:

@@ -2424,7 +2424,7 @@ void MainWindow_GTP::gtp_exited ()
 		setGameMode (modeNormal);
 		gfx_board->set_player_colors (true, true);
 		show ();
-		QMessageBox::warning (0, PACKAGE, QObject::tr ("GTP process exited unexpectedly."));
+		QMessageBox::warning (this, PACKAGE, QObject::tr ("GTP process exited unexpectedly."));
 	}
 }
 

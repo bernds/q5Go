@@ -46,7 +46,7 @@ TelnetConnection::~TelnetConnection()
 	// qDebug("after deleting igsinterface");
 	
 	delete telnetIF;
-	telnetIF = NULL;
+	telnetIF = nullptr;
 	
 	qDebug("TelnetConnection::~TelnetConnection() DONE");
 }
@@ -117,6 +117,6 @@ TelnetInterface::~TelnetInterface()
 
 void TelnetInterface::callback(QString s)
 {
-	if (telnetIF != NULL)
+	if (telnetIF != nullptr)
 		emit telnetIF->textRecieved(s);
 }

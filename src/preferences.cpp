@@ -47,7 +47,7 @@ PreferencesDialog::PreferencesDialog(QWidget* parent)
 		new QListWidgetItem (h->title(), ListView_hosts);
 
 	// init random-number generator
-	srand( (unsigned)time( NULL ) );
+	srand ((unsigned)time (nullptr));
 
 	insertStandardHosts();
 
