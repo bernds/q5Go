@@ -15,13 +15,24 @@ void myMessageHandler(QtMsgType type, const QMessageLogContext &, const QString 
 
 	switch (type)
 	{
+	case QtInfoMsg:
+		view->setTextColor (Qt::darkGreen);
+		view->append("Info: "  + msg);
+		break;
 	case QtDebugMsg:
+		view->setTextColor (Qt::black);
 		view->append("Debug: "  + msg);
 		break;
 	case QtWarningMsg:
+		view->setTextColor (Qt::darkYellow);
 		view->append((QString) "Warning: " + msg);
 		break;
+	case QtCriticalMsg:
+		view->setTextColor (Qt::darkRed);
+		view->append((QString) "Critical: " + msg);
+		break;
 	case QtFatalMsg:
+		view->setTextColor (Qt::red);
 		view->append((QString) "Fatal: " + msg);
 		break;
 	}
