@@ -130,6 +130,7 @@ public:
 	short getCurrentY() const { return curY; }
 	QPixmap grabPicture();
 	QString render_ascii (bool, bool);
+	QString render_svg (bool, bool);
 	bool doCountDone();
 #ifndef NO_DEBUG
 	void debug();

@@ -5194,19 +5194,19 @@ $as_echo "no" >&6; }
 fi
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for \"Qt5Core Qt5Widgets Qt5Gui Qt5Xml Qt5Multimedia\"" >&5
-$as_echo_n "checking for \"Qt5Core Qt5Widgets Qt5Gui Qt5Xml Qt5Multimedia\"... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for \"Qt5Core Qt5Widgets Qt5Gui Qt5Xml Qt5Multimedia Qt5Svg\"" >&5
+$as_echo_n "checking for \"Qt5Core Qt5Widgets Qt5Gui Qt5Xml Qt5Multimedia Qt5Svg\"... " >&6; }
 
 if test -n "$QT5_CFLAGS"; then
     pkg_cv_QT5_CFLAGS="$QT5_CFLAGS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\"Qt5Core Qt5Widgets Qt5Gui Qt5Xml Qt5Multimedia\"\""; } >&5
-  ($PKG_CONFIG --exists --print-errors ""Qt5Core Qt5Widgets Qt5Gui Qt5Xml Qt5Multimedia"") 2>&5
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\"Qt5Core Qt5Widgets Qt5Gui Qt5Xml Qt5Multimedia Qt5Svg\"\""; } >&5
+  ($PKG_CONFIG --exists --print-errors ""Qt5Core Qt5Widgets Qt5Gui Qt5Xml Qt5Multimedia Qt5Svg"") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_QT5_CFLAGS=`$PKG_CONFIG --cflags ""Qt5Core Qt5Widgets Qt5Gui Qt5Xml Qt5Multimedia"" 2>/dev/null`
+  pkg_cv_QT5_CFLAGS=`$PKG_CONFIG --cflags ""Qt5Core Qt5Widgets Qt5Gui Qt5Xml Qt5Multimedia Qt5Svg"" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
@@ -5218,12 +5218,12 @@ if test -n "$QT5_LIBS"; then
     pkg_cv_QT5_LIBS="$QT5_LIBS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\"Qt5Core Qt5Widgets Qt5Gui Qt5Xml Qt5Multimedia\"\""; } >&5
-  ($PKG_CONFIG --exists --print-errors ""Qt5Core Qt5Widgets Qt5Gui Qt5Xml Qt5Multimedia"") 2>&5
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\"Qt5Core Qt5Widgets Qt5Gui Qt5Xml Qt5Multimedia Qt5Svg\"\""; } >&5
+  ($PKG_CONFIG --exists --print-errors ""Qt5Core Qt5Widgets Qt5Gui Qt5Xml Qt5Multimedia Qt5Svg"") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_QT5_LIBS=`$PKG_CONFIG --libs ""Qt5Core Qt5Widgets Qt5Gui Qt5Xml Qt5Multimedia"" 2>/dev/null`
+  pkg_cv_QT5_LIBS=`$PKG_CONFIG --libs ""Qt5Core Qt5Widgets Qt5Gui Qt5Xml Qt5Multimedia Qt5Svg"" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
@@ -5244,9 +5244,9 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        QT5_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs ""Qt5Core Qt5Widgets Qt5Gui Qt5Xml Qt5Multimedia"" 2>&1`
+	        QT5_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs ""Qt5Core Qt5Widgets Qt5Gui Qt5Xml Qt5Multimedia Qt5Svg"" 2>&1`
         else
-	        QT5_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs ""Qt5Core Qt5Widgets Qt5Gui Qt5Xml Qt5Multimedia"" 2>&1`
+	        QT5_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs ""Qt5Core Qt5Widgets Qt5Gui Qt5Xml Qt5Multimedia Qt5Svg"" 2>&1`
         fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$QT5_PKG_ERRORS" >&5

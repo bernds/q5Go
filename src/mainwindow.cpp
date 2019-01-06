@@ -93,7 +93,7 @@ QString screen_key ()
 }
 
 MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMode mode)
-	: QMainWindow(parent), m_game (gr), m_ascii_dlg (this)
+	: QMainWindow(parent), m_game (gr), m_ascii_dlg (this), m_svg_dlg (this)
 {
 	setProperty("icon", setting->image0);
 	setAttribute (Qt::WA_DeleteOnClose);
@@ -222,6 +222,13 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 
 	connect(m_ascii_dlg.cb_coords, &QCheckBox::toggled, this, &MainWindow::slotFileExportASCII);
 	connect(m_ascii_dlg.cb_numbering, &QCheckBox::toggled, this, &MainWindow::slotFileExportASCII);
+	connect(m_svg_dlg.cb_coords, &QCheckBox::toggled, this, &MainWindow::slotFileExportSVG);
+	connect(m_svg_dlg.cb_numbering, &QCheckBox::toggled, this, &MainWindow::slotFileExportSVG);
+	/* These don't do anything that toggling the checkboxes wouldn't also do, but it's slightly more
+	   intuitive to have a button for it.  */
+	connect(m_ascii_dlg.buttonRefresh, &QPushButton::clicked, this, &MainWindow::slotFileExportASCII);
+	connect(m_svg_dlg.buttonRefresh, &QPushButton::clicked, this, &MainWindow::slotFileExportSVG);
+
 	setCentralWidget(splitter);
 
 	// Create a timer instance
@@ -296,6 +303,7 @@ MainWindow::~MainWindow()
 	delete fileSaveAs;
 	delete fileClose;
 	delete fileExportASCII;
+	delete fileExportSVG;
 	delete fileImportSgfClipB;
 	delete fileExportSgfClipB;
 	delete fileExportPic;
@@ -441,6 +449,12 @@ void MainWindow::initActions()
 	fileExportASCII->setStatusTip(tr("Export current board to ASCII"));
 	fileExportASCII->setWhatsThis(tr("Export ASCII\n\nExport current board to ASCII."));
 	connect(fileExportASCII, &QAction::triggered, this, &MainWindow::slotFileExportASCII);
+
+	// File ExportSVG
+	fileExportSVG = new QAction(charIcon, tr("&Export SVG"), this);
+	fileExportSVG->setStatusTip(tr("Export current board to SVG"));
+	fileExportSVG->setWhatsThis(tr("Export SVG\n\nExport current board to SVG."));
+	connect(fileExportSVG, &QAction::triggered, this, &MainWindow::slotFileExportSVG);
 
 	// File ImportSgfClipB
 	fileImportSgfClipB = new QAction(fileOpenIcon, tr("Import SGF &from clipboard"), this);
@@ -842,6 +856,7 @@ void MainWindow::initMenuBar()
 	// submenu Import/Export
 	importExportMenu = new QMenu(tr("&Import/Export"));
 	importExportMenu->addAction (fileExportASCII);
+	importExportMenu->addAction (fileExportSVG);
 	importExportMenu->addAction (fileImportSgfClipB);
 	importExportMenu->addAction (fileExportSgfClipB);
 	importExportMenu->addAction (fileExportPic);
@@ -1262,11 +1277,19 @@ void MainWindow::slotFileExportSgfClipB(bool)
 
 void MainWindow::slotFileExportASCII(bool)
 {
-	const game_state *st = gfx_board->get_state ();
 	m_ascii_dlg.show ();
 	QString s = gfx_board->render_ascii (m_ascii_dlg.cb_numbering->isChecked (),
 					     m_ascii_dlg.cb_coords->isChecked ());
 	m_ascii_dlg.textEdit->setText (s);
+	statusBar()->showMessage(tr("Ready."));
+}
+
+void MainWindow::slotFileExportSVG(bool)
+{
+	m_svg_dlg.show ();
+	QString s = gfx_board->render_svg (m_svg_dlg.cb_numbering->isChecked (),
+					   m_svg_dlg.cb_coords->isChecked ());
+	m_svg_dlg.set (s);
 	statusBar()->showMessage(tr("Ready."));
 }
 

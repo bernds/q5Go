@@ -3,6 +3,7 @@
 */
 #include <vector>
 #include <fstream>
+#include <cmath>
 
 #include <qmessagebox.h>
 #include <qapplication.h>
@@ -432,6 +433,287 @@ bool Board::show_cursor_p ()
 	return true;
 }
 
+static QString convert_letter_mark (mextra extra)
+{
+	if (extra < 27)
+		return QString ('A' + extra);
+	else
+		return QString ('a' + extra - 26);
+}
+
+QString svg_for_text_at (double cx, double cy, double sidelen, int len, QString txt, QString fill)
+{
+	int real_len = txt.length ();
+	if (real_len > len)
+		len = real_len;
+	int font_h = sidelen * 0.8 / (1 + 0.4 * (len - 1));
+	/* A very crude attempt at centering vertically.  */
+	int font_yoff = -font_h * 0.15;
+
+	QFontInfo fi (setting->fontMarks);
+	QString family = fi.family() + ",sans-serif";
+
+	QString svg = "<text x=\"" + QString::number (cx);
+	svg += "\" y=\"" + QString::number (cy + font_h / 2 + font_yoff);
+	svg += "\" style=\"stroke:none; font-family:" + family + "; text-anchor: middle; fill: " + fill;
+	if (fi.bold ())
+		svg += "; font-weight:bold";
+	svg += "; font-size: " + QString::number (font_h) + "px;\">";
+	svg += txt + "</text>\n";
+	return svg;
+}
+
+QString svg_for_circle_at (double cx, double cy, double r, QString fill, QString stroke)
+{
+	QString svg = "<circle cx=\"" + QString::number (cx);
+	svg += "\" cy=\"" + QString::number (cy);
+	svg += "\" r=\"" + QString::number (r);
+	svg += "\"";
+	if (stroke != "none")
+		svg += " stroke-width=\"2\"";
+	svg += " stroke=\"" + stroke + "\" fill=\"" + fill + "\" />\n";
+	return svg;
+}
+
+QString svg_for_square_at (double cx, double cy, double sidelen, QString fill, QString stroke)
+{
+	QString svg = "<rect x=\"" + QString::number (cx - sidelen * 0.5);
+	svg += "\" y=\"" + QString::number (cy - sidelen * 0.5);
+	svg += "\" width=\"" + QString::number (sidelen);
+	svg += "\" height=\"" + QString::number (sidelen);
+	svg += "\"";
+	if (stroke != "none")
+		svg += " stroke-width=\"2\"";
+	svg += " stroke=\"" + stroke + "\" fill=\"" + fill + "\" />\n";
+	return svg;
+}
+
+QString svg_for_rect (double x, double y, double w, double h, QString fill, QString stroke)
+{
+	QString svg = "<rect x=\"" + QString::number (x);
+	svg += "\" y=\"" + QString::number (y);
+	svg += "\" width=\"" + QString::number (x + w);
+	svg += "\" height=\"" + QString::number (y + h);
+	svg += "\"";
+	if (stroke != "none")
+		svg += " stroke-width=\"2\"";
+	svg += " stroke=\"" + stroke + "\" fill=\"" + fill + "\" />\n";
+	return svg;
+}
+
+QString svg_for_line (double x1, double y1, double x2, double y2, QString stroke, QString width)
+{
+	QString svg = "<line x1=\"" + QString::number (x1);
+	svg += "\" y1=\"" + QString::number (y1);
+	svg += "\" x2=\"" + QString::number (x2);
+	svg += "\" y2=\"" + QString::number (y2);
+	svg += "\" stroke-width=\"" + width + "\" stroke=\"" + stroke + "\" />\n";
+	return svg;
+}
+
+QString svg_for_triangle_at (double cx, double cy, double sidelen, QString fill, QString stroke)
+{
+	sidelen /= 2;
+	double s = sin (M_PI * 2 / 3);
+	double c = cos (M_PI * 2 / 3);
+
+	QString svg = (QString ("<polygon points=\"%1,%2 %3,%4 %5,%6\"")
+		       .arg (cx).arg (cy - sidelen)
+		       .arg (cx - s * sidelen).arg (cy - c * sidelen)
+		       .arg (cx + s * sidelen).arg (cy - c * sidelen));
+	if (stroke != "none")
+		svg += " stroke-width=\"2\"";
+	svg += " stroke=\"" + stroke + "\" fill=\"" + fill + "\" />\n";
+	return svg;
+}
+QString svg_for_cross_at (double cx, double cy, double sidelen, QString stroke)
+{
+	sidelen /= M_SQRT2 * 2;
+	QString svg = svg_for_line (cx - sidelen, cy - sidelen, cx + sidelen, cy + sidelen,
+				    stroke, "2");
+	svg += svg_for_line (cx + sidelen, cy - sidelen, cx - sidelen, cy + sidelen,
+				    stroke, "2");
+	return svg;
+}
+
+QString Board::render_svg (bool do_number, bool coords)
+{
+	const go_board &b = m_edit_board == nullptr ? m_state->get_board () : *m_edit_board;
+	/* Look back through previous moves to see if we should do numbering.  */
+	int n_back = 0;
+	int *count_map = new int[board_size * board_size]();
+	game_state *startpos = nullptr;
+	if (do_number && m_edit_board == nullptr && !m_state->get_start_count () && m_state->was_move_p ()) {
+		startpos = m_state;
+		while (startpos
+		       && (startpos->was_move_p () || startpos->root_node_p ())
+		       && !startpos->get_start_count ())
+		{
+			if (startpos->root_node_p ()) {
+				startpos = nullptr;
+				break;
+			}
+			int x = startpos->get_move_x ();
+			int y = startpos->get_move_y ();
+			int bp = b.bitpos (x, y);
+			count_map[bp] = ++n_back;
+			startpos = startpos->prev_move ();
+		}
+		if (startpos && !startpos->was_move_p () && !startpos->root_node_p ())
+			startpos = nullptr;
+	}
+
+	double factor = 30;
+	double margin = 10;
+	double offset_x = margin + factor / 2;
+	double offset_y = margin + factor / 2;
+	int cols = (m_rect_x2 - m_rect_x1 + 1);
+	int rows = (m_rect_y2 - m_rect_y1 + 1);
+	int w = factor * cols + 2 * margin;
+	int h = factor * rows + 2 * margin;
+	if (coords) {
+		if (m_rect_x1 == 1)
+			offset_x += factor, w += factor;
+		if (m_rect_y1 == 1)
+			offset_y += factor, h += factor;
+		if (m_rect_x2 == board_size)
+			w += factor;
+		if (m_rect_y2 == board_size)
+			h += factor;
+	}
+
+	QString svg = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";
+	svg += QString ("<svg height=\"%1\" width=\"%2\" preserveAspectRatio=\"xMidYMid meet\" ").arg (h).arg (w);
+	svg += "xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">\n";
+
+	/* A white background, since use white squares to clear the grid when showing marks.
+	   Against a clear background that wouldn't look very good.  */
+	svg += svg_for_rect (0, 0, w, h, "white", "none");
+
+	if (coords) {
+		double dist = margin + factor / 2;
+		for (int y = 0; y < rows; y++) {
+			int ry = y + m_rect_y1;
+			double center_y = offset_y + y * factor;
+			if (m_rect_x1 == 1)
+				svg += svg_for_text_at (dist, center_y, factor,
+							board_size < 10 ? 1 : 2, QString::number (ry),
+							"black");
+			if (m_rect_x2 == board_size)
+				svg += svg_for_text_at (w - dist , center_y, factor,
+							board_size < 10 ? 1 : 2, QString::number (ry),
+							"black");
+		}
+		for (int x = 0; x < cols; x++) {
+			int rx = x + m_rect_x1;
+			double center_x = offset_x + x * factor;
+			QString label;
+			if (rx < 9)
+				label = QChar ('A' + rx - 1);
+			else
+				label = QChar ('A' + rx);
+			if (m_rect_y1 == 1)
+				svg += svg_for_text_at (center_x, dist, factor,
+							board_size < 10 ? 1 : 2, label,	"black");
+			if (m_rect_y2 == board_size)
+				svg += svg_for_text_at (center_x, h - dist, factor,
+							board_size < 10 ? 1 : 2, label,	"black");
+		}
+	}
+
+	/* The grid.  */
+	int top = m_rect_y1 > 1 ? -factor / 2 : 0;
+	int bot = m_rect_y2 < board_size ? factor / 2 : 0;
+	int lef = m_rect_x1 > 1 ? -factor / 2 : 0;
+	int rig = m_rect_x2 < board_size ? factor / 2 : 0;
+	for (int x = 0; x < cols; x++) {
+		QString width = "1";
+		if ((x == 0 && m_rect_x1 == 1) || (x + 1 == cols && m_rect_x2 == board_size))
+			width = "2";
+		svg += svg_for_line (offset_x + x * factor, offset_y + top,
+				     offset_x + x * factor, offset_y + (rows - 1) * factor + bot,
+				     "black", width);
+	}
+	for (int y = 0; y < rows; y++) {
+		QString width = "1";
+		if ((y == 0 && m_rect_y1 == 1) || (y + 1 == rows && m_rect_y2 == board_size))
+			width = "2";
+		svg += svg_for_line (offset_x + lef, offset_y + y * factor,
+				     offset_x + (cols - 1) * factor + rig, offset_y + y * factor,
+				     "black", width);
+	}
+	for (int y = 0; y < rows; y++) {
+		for (int x = 0; x < cols; x++) {
+			int rx = x + m_rect_x1 - 1;
+			int ry = y + m_rect_y1 - 1;
+			stone_color c = b.stone_at (rx, ry);
+			mark m = b.mark_at (rx, ry);
+			mextra extra = b.mark_extra_at (rx, ry);
+			int bp = b.bitpos (rx, ry);
+			int v = startpos == nullptr ? 0 : count_map[bp];
+
+			double center_x = offset_x + x * factor;
+			double center_y = offset_y + y * factor;
+			if (c != none) {
+				svg += svg_for_circle_at (center_x, center_y, factor * 0.45,
+							  c == black ? "black" : "white",
+							  c == black ? "none" : "black");
+			} else if (v != 0 || m != mark::none) {
+				svg += svg_for_square_at (center_x, center_y, factor * 0.9,
+							  "white", "none");
+			}
+			if (v != 0) {
+				v = n_back - v + 1;
+				int len = n_back > 99 ? 3 : n_back > 9 ? 2 : 1;
+				svg += svg_for_text_at (center_x, center_y, factor,
+							len, QString::number (v),
+							c == black ? "white" : "black");
+			} else if (m != mark::none) {
+				switch (m) {
+				case mark::circle:
+					svg += svg_for_circle_at (center_x, center_y, factor * 0.3,
+								  "none", c == black ? "white" : "black");
+					break;
+				case mark::square:
+					svg += svg_for_square_at (center_x, center_y, factor * 0.8 / M_SQRT2,
+								  "none", c == black ? "white" : "black");
+					break;
+				case mark::triangle:
+					svg += svg_for_triangle_at (center_x, center_y, factor * 0.8,
+								    "none", c == black ? "white" : "black");
+					break;
+				case mark::cross:
+					svg += svg_for_cross_at (center_x, center_y, factor * 0.8,
+								 c == black ? "white" : "black");
+					break;
+				case mark::num:
+					svg += svg_for_text_at (center_x, center_y, factor, 0,
+								QString::number (extra),
+								c == black ? "white" : "black");
+					break;
+				case mark::letter:
+					svg += svg_for_text_at (center_x, center_y, factor, 0,
+								convert_letter_mark (extra),
+								c == black ? "white" : "black");
+					break;
+				case mark::text:
+					svg += svg_for_text_at (center_x, center_y, factor, 0,
+								QString::fromStdString (b.mark_text_at (rx, ry)),
+								c == black ? "white" : "black");
+					break;
+
+				default:
+					break;
+				}
+			}
+		}
+	}
+
+	svg += "</svg>";
+	delete[] count_map;
+	return svg;
+}
+
 /* Construct ASCII diagrams suitable for use on lifein19x19.com.
    Moves can be numbered 1-10.  When we do numbering, we split the moves up
    into a suitable number of diagrams, inserting breaks when 10 moves are
@@ -551,14 +833,6 @@ QString Board::render_ascii (bool do_number, bool coords)
 		moves += n_mv;
 	} while (startpos != m_state);
 	return result;
-}
-
-static QString convert_letter_mark (mextra extra)
-{
-	if (extra < 27)
-		return QString ('A' + extra);
-	else
-		return QString ('a' + extra - 26);
 }
 
 /* The central function for synchronizing visual appearance with the abstract board data.  */

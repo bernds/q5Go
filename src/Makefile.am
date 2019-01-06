@@ -27,7 +27,7 @@ DISTSOURCES = audio.cpp board.cpp goboard.cc gamedialog.cpp \
 
 FORMS = clientwindow_gui.ui gameinfo_gui.ui gui_dialog.ui mainwidget_gui.ui newgame_gui.ui \
 	newlocalgame_gui.ui normaltools_gui.ui nthmove_gui.ui preferences_gui.ui \
-	qnewgamedlg_gui.ui scoretools_gui.ui talk_gui.ui textedit_gui.ui textview_gui.ui 
+	qnewgamedlg_gui.ui scoretools_gui.ui svgview_gui.ui talk_gui.ui textedit_gui.ui textview_gui.ui
 
 RESOURCES = q4go.qrc
 

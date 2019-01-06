@@ -13,6 +13,7 @@ FORMS	      = gui_dialog.ui \
 		talk_gui.ui \
 		textedit_gui.ui \
 		textview_gui.ui \
+		svgview_gui.ui \
 		nthmove_gui.ui
 
 HEADERS		      = config.h \
@@ -153,7 +154,7 @@ target.path           = $$PREFIX/bin
 INSTALLS += target
 }
 
-QT += widgets gui xml network multimedia
+QT += widgets gui xml network multimedia svg
 
 RESOURCES += \
     q4go.qrc

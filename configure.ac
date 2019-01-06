@@ -47,7 +47,7 @@ dnl WITH_NLS is for the po files
 AM_KDE_WITH_NLS
 
 dnl Look for Qt4 libs
-PKG_CHECK_MODULES([QT5], ["Qt5Core Qt5Widgets Qt5Gui Qt5Xml Qt5Multimedia"], [], [
+PKG_CHECK_MODULES([QT5], ["Qt5Core Qt5Widgets Qt5Gui Qt5Xml Qt5Multimedia Qt5Svg"], [], [
 	AC_MSG_ERROR([Qt5 libs not found])])
 dnl Look for moc, either on $PATH or in $QTDIR/bin
 AC_PATH_PROG(MOC, moc, , $PATH:$QTDIR/bin)

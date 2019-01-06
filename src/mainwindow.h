@@ -105,6 +105,7 @@ public slots:
 	void slotFileClose(bool);
 	bool slotFileSaveAs(bool);
 	void slotFileExportASCII(bool);
+	void slotFileExportSVG(bool);
 	void slotFileImportSgfClipB(bool);
 	void slotFileExportSgfClipB(bool);
 	void slotFileExportPic(bool);
@@ -167,6 +168,7 @@ protected:
 	Board *gfx_board;
 	MainWidget *mainWidget;
 	TextView m_ascii_dlg;
+	SvgView m_svg_dlg;
 	bool local_stone_sound;
 
 	//	HelpViewer *helpViewer;
@@ -186,7 +188,7 @@ protected:
 
 	QAction *escapeFocus;
 	QAction *fileNewBoard, *fileNew, *fileOpen, *fileSave, *fileSaveAs, *fileClose,
-		*fileExportASCII, *fileImportSgfClipB, *fileExportSgfClipB,
+		*fileExportASCII, *fileExportSVG, *fileImportSgfClipB, *fileExportSgfClipB,
 		*fileExportPic, *fileExportPicClipB,
 		*fileQuit;
 	QAction *editDelete, *editStone, *editTriangle, *editSquare, *editCircle, *editCross, *editNumber, *editLetter;

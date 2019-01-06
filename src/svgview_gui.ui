@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>TextViewGUI</class>
- <widget class="QDialog" name="TextViewGUI">
+ <class>SvgViewGUI</class>
+ <widget class="QDialog" name="SvgViewGUI">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Text View</string>
+   <string>SVG export</string>
   </property>
   <layout class="QVBoxLayout">
    <property name="spacing">
@@ -30,6 +30,16 @@
     <number>11</number>
    </property>
    <item>
+    <widget class="QWidget" name="gfxWidget" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item>
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <property name="topMargin">
       <number>0</number>
@@ -37,16 +47,6 @@
      <property name="bottomMargin">
       <number>0</number>
      </property>
-     <item>
-      <widget class="QTextEdit" name="textEdit">
-       <property name="minimumSize">
-        <size>
-         <width>350</width>
-         <height>350</height>
-        </size>
-       </property>
-      </widget>
-     </item>
      <item>
       <widget class="QWidget" name="exportBox" native="true">
        <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -129,7 +129,7 @@
              <string>Copy position to clipboard</string>
             </property>
             <property name="text">
-             <string>&amp;To clipboard</string>
+             <string>&amp;To clipboard (as text)</string>
             </property>
            </widget>
           </item>
@@ -171,53 +171,6 @@
        </layout>
       </widget>
      </item>
-     <item>
-      <widget class="QWidget" name="gtpBox" native="true">
-       <layout class="QHBoxLayout" name="gtpLayout">
-        <property name="spacing">
-         <number>6</number>
-        </property>
-        <property name="leftMargin">
-         <number>1</number>
-        </property>
-        <property name="topMargin">
-         <number>1</number>
-        </property>
-        <property name="rightMargin">
-         <number>1</number>
-        </property>
-        <property name="bottomMargin">
-         <number>1</number>
-        </property>
-        <item>
-         <spacer name="Horizontal Spacing2">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Expanding</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QPushButton" name="buttonAbort">
-          <property name="toolTip">
-           <string>Abort program startup</string>
-          </property>
-          <property name="text">
-           <string>&amp;Abort</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
     </layout>
    </item>
   </layout>
@@ -228,7 +181,7 @@
   <connection>
    <sender>buttonClose</sender>
    <signal>clicked()</signal>
-   <receiver>TextViewGUI</receiver>
+   <receiver>SvgViewGUI</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -244,7 +197,7 @@
   <connection>
    <sender>buttonSave</sender>
    <signal>clicked()</signal>
-   <receiver>TextViewGUI</receiver>
+   <receiver>SvgViewGUI</receiver>
    <slot>saveMe()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -260,7 +213,7 @@
   <connection>
    <sender>buttonToClip</sender>
    <signal>clicked()</signal>
-   <receiver>TextViewGUI</receiver>
+   <receiver>SvgViewGUI</receiver>
    <slot>toClipboard()</slot>
    <hints>
     <hint type="sourcelabel">
