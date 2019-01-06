@@ -36,6 +36,8 @@ There are some changes in the feature list in this version:
    consequence, the character set used for ASCII display is no longer
    configurable.  ASCII import was removed on the grounds of not
    being very useful.
+ * There is a new SVG export to create a vector graphics representation of
+   the board.  This also supports exporting subparts of the board.
  * The functionality for saving window sizes was simplified to just always
    save comment orientation.  Size and layout are now remembered separately
    for every encountered screen dimension.
