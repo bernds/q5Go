@@ -393,7 +393,7 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 					return false;
 				}
 
-				qgobrd->send_kibitz(g->Sz);
+				qgobrd->send_kibitz(g->Sz + "\n");
 
 				// set correct result entry
 				QString rs = QString::null;
@@ -1798,7 +1798,6 @@ void qGoBoard::send_kibitz(const QString &msg)
 	QString to_add = msg;
 	if (!to_add.contains(QString::number(mv_counter + 1)))
 		to_add = "(" + QString::number(mv_counter + 1) + ") " + to_add;
-	to_add += "\n";
 	m_comments += to_add;
 	if (win)
 		win->append_comment (to_add);
