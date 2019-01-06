@@ -111,13 +111,6 @@ When in score mode, left click to mark a group as dead, right click to mark it a
          </widget>
         </item>
         <item>
-         <widget class="QScrollBar" name="horizontalScrollBar">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-        <item>
          <layout class="QHBoxLayout">
           <property name="spacing">
            <number>6</number>
