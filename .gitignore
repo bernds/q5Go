@@ -1,4 +1,6 @@
 Makefile
+*.sgf
+autom4te.cache
 /config.*
 /libtool
 /src/.deps/*
