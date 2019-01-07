@@ -15,8 +15,6 @@
 
 @SET_MAKE@
 
-####### kdevelop will overwrite this part!!! (begin)##########
-
 VPATH = @srcdir@
 am__make_dryrun = \
   { \
@@ -55,21 +53,18 @@ build_triplet = @build@
 host_triplet = @host@
 target_triplet = @target@
 subdir = .
-DIST_COMMON = $(am__configure_deps) $(srcdir)/Makefile.am \
+DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(srcdir)/config.h.in \
-	$(top_srcdir)/configure AUTHORS COPYING ChangeLog NEWS TODO \
-	admin/ChangeLog admin/config.guess admin/config.sub \
-	admin/depcomp admin/install-sh admin/ltcf-c.sh \
-	admin/ltcf-cxx.sh admin/ltcf-gcj.sh admin/ltconfig \
-	admin/ltmain.sh admin/missing admin/mkinstalldirs admin/ylwrap
+	$(top_srcdir)/configure AUTHORS COPYING ChangeLog INSTALL NEWS \
+	TODO admin/config.guess admin/config.sub admin/depcomp \
+	admin/install-sh admin/missing
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
-	$(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno config.status.lineno
-mkinstalldirs = $(SHELL) $(top_srcdir)/admin/mkinstalldirs
+mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
@@ -142,10 +137,6 @@ AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
-CC = @CC@
-CCDEPMODE = @CCDEPMODE@
-CFLAGS = @CFLAGS@
-CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
 CXXDEPMODE = @CXXDEPMODE@
@@ -156,10 +147,7 @@ DEPDIR = @DEPDIR@
 ECHO_C = @ECHO_C@
 ECHO_N = @ECHO_N@
 ECHO_T = @ECHO_T@
-EGREP = @EGREP@
 EXEEXT = @EXEEXT@
-GMSGFMT = @GMSGFMT@
-GREP = @GREP@
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
@@ -172,7 +160,6 @@ LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
 MKDIR_P = @MKDIR_P@
 MOC = @MOC@
-MSGFMT = @MSGFMT@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
 PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
@@ -191,15 +178,12 @@ RCC = @RCC@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
-TOPSUBDIRS = @TOPSUBDIRS@
 UIC = @UIC@
 VERSION = @VERSION@
-XGETTEXT = @XGETTEXT@
 abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
 abs_top_builddir = @abs_top_builddir@
 abs_top_srcdir = @abs_top_srcdir@
-ac_ct_CC = @ac_ct_CC@
 ac_ct_CXX = @ac_ct_CXX@
 all_includes = @all_includes@
 all_libraries = @all_libraries@
@@ -253,16 +237,23 @@ target_vendor = @target_vendor@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-EXTRA_DIST = qgo.kdevprj admin qgo.spec 
 
-####### kdevelop will overwrite this part!!! (end)############
-# not a GNU package. You can remove this line, if 
-# have all needed files, that a GNU package needs
-AUTOMAKE_OPTIONS = foreign 
+# Necessary since we have README.md rather than README
+AUTOMAKE_OPTIONS = foreign
+EXTRA_DIST = admin
+
+#$(top_srcdir)/acinclude.m4: $(top_srcdir)/admin/acinclude.m4.in $(top_srcdir)/admin/libtool.m4.in
+#	@cd $(top_srcdir) && cat admin/acinclude.m4.in admin/libtool.m4.in > acinclude.m4
 MAINTAINERCLEANFILES = subdirs configure.in acinclude.m4 configure.files 
-noinst_DATA = acinclude.m4 aclocal.m4 Makefile.in config.h.in qgo.kdevelop \
-	qgo.spec
 
+#package-messages:
+#	$(MAKE) -f admin/Makefile.common package-messages
+#	$(MAKE) -C po merge
+
+#dist-hook:
+#	cd $(top_distdir) && perl admin/am_edit -padmin
+#	cd $(top_distdir) && $(MAKE) -f admin/Makefile.common subdirs
+noinst_DATA = aclocal.m4 Makefile.in config.h.in
 SUBDIRS = src templates
 INCLUDES = $(all_includes)
 all: config.h
@@ -511,9 +502,6 @@ distdir: $(DISTFILES)
 	      || exit 1; \
 	  fi; \
 	done
-	$(MAKE) $(AM_MAKEFLAGS) \
-	  top_distdir="$(top_distdir)" distdir="$(distdir)" \
-	  dist-hook
 	-test -n "$(am__skip_mode_fix)" \
 	|| find "$(distdir)" -type d ! -perm -755 \
 		-exec chmod u+rwx,go+rx {} \; -o \
@@ -755,8 +743,8 @@ uninstall-am:
 .PHONY: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) CTAGS GTAGS \
 	all all-am am--refresh check check-am clean clean-generic \
 	ctags ctags-recursive dist dist-all dist-bzip2 dist-gzip \
-	dist-hook dist-lzip dist-lzma dist-shar dist-tarZ dist-xz \
-	dist-zip distcheck distclean distclean-generic distclean-hdr \
+	dist-lzip dist-lzma dist-shar dist-tarZ dist-xz dist-zip \
+	distcheck distclean distclean-generic distclean-hdr \
 	distclean-tags distcleancheck distdir distuninstallcheck dvi \
 	dvi-am html html-am info info-am install install-am \
 	install-data install-data-am install-dvi install-dvi-am \
@@ -774,17 +762,6 @@ uninstall-am:
 
 $(top_srcdir)/subdirs:
 	cd $(top_srcdir) && $(MAKE) -f admin/Makefile.common subdirs
-
-$(top_srcdir)/acinclude.m4: $(top_srcdir)/admin/acinclude.m4.in $(top_srcdir)/admin/libtool.m4.in
-	@cd $(top_srcdir) && cat admin/acinclude.m4.in admin/libtool.m4.in > acinclude.m4
-
-package-messages:
-	$(MAKE) -f admin/Makefile.common package-messages
-	$(MAKE) -C po merge
-
-dist-hook:
-	cd $(top_distdir) && perl admin/am_edit -padmin
-	cd $(top_distdir) && $(MAKE) -f admin/Makefile.common subdirs
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

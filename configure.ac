@@ -4,7 +4,9 @@
 
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(acinclude.m4) dnl a source file from your sub dir
+AC_INIT(src/goboard.h)
+
+dnl AC_INIT(acinclude.m4) dnl a source file from your sub dir
 
 dnl This is so we can use kde-common
 AC_CONFIG_AUX_DIR(admin)
@@ -14,12 +16,9 @@ AC_OBJEXT
 AC_EXEEXT
 
 AC_CANONICAL_SYSTEM 
-AC_C_BIGENDIAN
 
 dnl Automake doc recommends to do this only here. (Janos)
 AM_INIT_AUTOMAKE(q5go,0.1)
-
-dnl KDE_SET_PREFIX
 
 AC_PREFIX_DEFAULT(/usr/local)
 if test "x$prefix" = "xNONE"; then
@@ -75,17 +74,6 @@ fi
 CXXFLAGS="$CXXFLAGS $QT5_CFLAGS -fPIC"
 
 AC_SUBST(QT5_LIBS)
-
-dnl KDE_NEED_FLEX dnl __kdevelop__
-dnl AC_PROG_YACC dnl __kdevelop__
-
-dnl Perform program name transformation
-dnl AC_ARG_PROGRAM
-
-
-dnl PACKAGE set before
-
-KDE_CREATE_SUBDIRSLIST
 
 dnl add here all your Makefiles. This are created by configure
 AC_CONFIG_FILES([ Makefile ])
