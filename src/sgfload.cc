@@ -32,8 +32,14 @@ sgf::node *parse_gametree (std::istream &in)
 	nextch = skip_whitespace (in);
 	for (;;) {
 	    std::string idstr = "";
-	    while (isalpha (nextch) && isupper (nextch)) {
-		idstr += nextch;
+	    while (isalpha (nextch) && isalpha (nextch)) {
+		/* When downloading from their web interface, IGS writes
+		   properties with two uppercase and several ignored lowercase
+		   letters.  Ideally we'd add warning flags to the SGF to
+		   inform the user they have a broken file.  But for now,
+		   silently ignore them.  */
+		if (isupper (nextch))
+		    idstr += nextch;
 		if (! in.get (nextch))
 		    throw premature_eof ();
 	    }
