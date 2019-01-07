@@ -54,9 +54,13 @@ See VERSION_HISTORY for a history of changes.
 ## Compiling
 
 Make a build subdirectory, enter it, and either run
+```sh
   ../configure
+```
 or
+```sh
   qmake ../src/q5go.pro
+```
 
-followed by make.  The latter is probably recommended as the automake system is somewhat
-cobbled-together.
+followed by make.  The latter is probably recommended as the automake system
+is somewhat cobbled-together.
