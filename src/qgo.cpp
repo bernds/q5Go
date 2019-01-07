@@ -185,12 +185,13 @@ void qGo::playDisConnectSound()
 void qGo::slotHelpAbout()
 {
 	QString txt = PACKAGE " " VERSION
-		u8"\n\nCopyright (c) 2001-2006\nPeter Strempel <pstrempel@t-online.de>\nJohannes Mesa <frosla@gmx.at>\nEmmanuel B\u00E9ranger <yfh2@hotmail.com>\n\n" +
+		"\n\nCopyright 2011-2019\nBernd Schmidt <bernds_cb1@t-online.de>"
+		u8"\nCopyright (c) 2001-2006\nPeter Strempel <pstrempel@t-online.de>\nJohannes Mesa <frosla@gmx.at>\nEmmanuel B\u00E9ranger <yfh2@hotmail.com>\n\n" +
 		tr("GTP code from Goliath, thanks to:") + "\nPALM Thomas\nDINTILHAC Florian\nHIVERT Anthony\nPIOC Sebastien";
-	
+
 	QString translation = tr(u8"English translation by:\nPeter Strempel\nJohannes Mesa\nEmmanuel B\u00E9ranger", "Please set your own language and your name! Use your own language!");
 	//if (translation != "English translation by:\nPeter Strempel\nJohannes Mesa\nEmmanuel B\u00E9ranger")
 	txt += "\n\n" + translation;
-	
+
 	QMessageBox::about(0, tr("About..."), txt);
 }
