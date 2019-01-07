@@ -41,10 +41,6 @@ all_includes="$all_includes $USER_INCLUDES"
 AC_SUBST(all_includes)
 AC_SUBST(all_libraries)
 
-dnl for NLS support. Call them in this order!
-dnl WITH_NLS is for the po files
-AM_KDE_WITH_NLS
-
 dnl Look for Qt4 libs
 PKG_CHECK_MODULES([QT5], ["Qt5Core Qt5Widgets Qt5Gui Qt5Xml Qt5Multimedia Qt5Svg"], [], [
 	AC_MSG_ERROR([Qt5 libs not found])])

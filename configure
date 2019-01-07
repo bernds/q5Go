@@ -3408,8 +3408,6 @@ all_includes="$all_includes $USER_INCLUDES"
 
 
 
-AM_KDE_WITH_NLS
-
 
 
 
