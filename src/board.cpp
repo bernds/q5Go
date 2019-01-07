@@ -1576,9 +1576,9 @@ void Board::click_add_mark (QMouseEvent *e, int x, int y)
 
 		return;
 	}
-	if (mark_to_set  == mark::num) {
+	if (mark_to_set == mark::num) {
 		int i;
-		for (i = 0; i < 256; i++)
+		for (i = 1; i < 256; i++)
 			if (!m_used_numbers.test_bit (i))
 				break;
 		if (i == 256)
