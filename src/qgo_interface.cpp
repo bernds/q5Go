@@ -1674,6 +1674,8 @@ void qGoBoard::disconnected (bool remove_from_list)
 	set_Mode_real (modeNormal);
 	if (win)
 		win->setGameMode (modeNormal);
+	/* @@@ Sometimes we get a game result without moves, if we started observing just
+	   as the game ended.  We should arrange for some way to delete this qGoBoard.  */
 }
 
 // write kibitz strings to comment window
@@ -1869,8 +1871,9 @@ void qGoBoard::game_result (const QString &rs, const QString &extended_rs)
 	send_kibitz(rs);
 	bool autosave = setting->readBoolEntry (gameMode == modeObserve ? "AUTOSAVE" : "AUTOSAVE_PLAYED");
 
-	//autosave ?
-	if (autosave)
+	/* Note that win can be null - observing a game just as it ends may cause the
+	   server to send a result without moves (or maybe before, but that is still unclear).  */
+	if (autosave && win)
 	{
 		win->doSave("", true);
 		qDebug("Game saved");
