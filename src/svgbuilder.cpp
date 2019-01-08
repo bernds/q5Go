@@ -8,9 +8,9 @@ void svg_builder::text_at (double cx, double cy, double sidelen, int len,
 	int real_len = txt.length ();
 	if (real_len > len)
 		len = real_len;
-	int font_h = sidelen * 0.8 / (1 + 0.4 * (len - 1));
+	int font_h = sidelen * 0.8 / (1 + 0.35 * (len - 1));
 	/* A very crude attempt at centering vertically.  */
-	int font_yoff = -font_h * 0.15;
+	int font_yoff = -font_h * 0.17;
 
 	const QString &family = fi.family() + ",sans-serif";
 

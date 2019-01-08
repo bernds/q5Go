@@ -77,6 +77,9 @@ Board::Board(QWidget *parent, QGraphicsScene *c)
 
 	isHidingStones = false; // QQQ
 
+	canvas->addItem (m_mark_layer = new QGraphicsPixmapItem ());
+	m_mark_layer->setZValue (20);
+
 	canvas->addItem (coverTop = new QGraphicsRectItem ());
 	canvas->addItem (coverBot = new QGraphicsRectItem ());
 	canvas->addItem (coverLeft = new QGraphicsRectItem ());
@@ -442,6 +445,106 @@ static QString convert_letter_mark (mextra extra)
 		return QString ('a' + extra - 26);
 }
 
+/* Render a mark in SVG at center position CX/CY in a square with a side length of FACTOR.
+   M and ME represent the mark as present in the board.  SC is the color of the stone that
+   has been rendered before, or NONE.  COUNT_VAL, if nonzero, together with N_BACK represents
+   the move number to be displayed.  VAR_M and VAR_ME represent a variation mark, typically
+   some letter.
+   WHITE_BACKGROUND is true if we are doing this for svg export, it changes the display a
+   little bit.  */
+static bool add_mark_svg (svg_builder &svg, double cx, double cy, double factor,
+			  mark m, mextra me, const std::string &mstr, mark var_m, mextra var_me,
+			  stone_color sc, int count_val, int n_back, bool was_last_move,
+			  bool white_background, const QFontInfo &fi)
+{
+	QString mark_col = sc == black ? "white" : "black";
+	if (sc == none && white_background && (count_val != 0 || m != mark::none || var_m != mark::none)) {
+		svg.square_at (cx, cy, factor * 0.9,
+			       "white", "none");
+	}
+	if (count_val != 0) {
+		count_val = n_back - count_val + 1;
+		int len = n_back > 99 ? 3 : n_back > 9 ? 2 : 1;
+		svg.text_at (cx, cy, factor,
+			     len, QString::number (count_val),
+			     mark_col, fi);
+		return true;
+	}
+
+	if (m == mark::none && var_m != mark::none) {
+		m = var_m;
+		me = var_me;
+		mark_col = "blue";
+	}
+
+	/* We make an artificial mark for the last move.  Done late so as to not
+	   override other marks.  */
+	if (m == mark::none && was_last_move)
+		m = mark::move;
+
+	/* Convert the large number of conceptual marks into a smaller set of
+	   visual ones.  */
+
+	/* @@@ Could think about making these two look different.  Using red
+	   as a color, for example, but that makes it less visible.  */
+	if (m == mark::move) {
+		m = mark::circle;
+	} else if (m == mark::falseeye) {
+		m = mark::triangle;
+		mark_col = "red";
+	} else if (m == mark::seki) {
+		m = mark::square;
+		mark_col = "blue";
+	}
+
+	if (m == mark::none)
+		return false;
+
+	switch (m) {
+	case mark::circle:
+		svg.circle_at (cx, cy, factor * 0.25,
+			       "none", mark_col);
+		break;
+	case mark::square:
+		svg.square_at (cx, cy, factor * 0.8 / M_SQRT2,
+			       "none", mark_col);
+		break;
+	case mark::triangle:
+		svg.triangle_at (cx, cy, factor * 0.8,
+				 "none", mark_col);
+		break;
+	case mark::terr:
+		if (sc == none && white_background)
+			mark_col = "black";
+		else
+			mark_col = me == 0 ? "white" : "black";
+		/* fall through */
+	case mark::cross:
+		svg.cross_at (cx, cy, factor * 0.8,
+			      mark_col);
+		break;
+	case mark::num:
+		svg.text_at (cx, cy, factor, 0,
+			     QString::number (me),
+			     mark_col, fi);
+		break;
+	case mark::letter:
+		svg.text_at (cx, cy, factor, 0,
+			     convert_letter_mark (me),
+			     mark_col, fi);
+		break;
+	case mark::text:
+		svg.text_at (cx, cy, factor, 0,
+			     QString::fromStdString (mstr),
+			     mark_col, fi);
+		break;
+
+	default:
+		break;
+	}
+	return true;
+}
+
 QByteArray Board::render_svg (bool do_number, bool coords)
 {
 	const go_board &b = m_edit_board == nullptr ? m_state->get_board () : *m_edit_board;
@@ -563,54 +666,10 @@ QByteArray Board::render_svg (bool do_number, bool coords)
 				svg.circle_at (center_x, center_y, factor * 0.45,
 					       c == black ? "black" : "white",
 					       c == black ? "none" : "black");
-			} else if (v != 0 || m != mark::none) {
-				svg.square_at (center_x, center_y, factor * 0.9,
-					       "white", "none");
 			}
-			if (v != 0) {
-				v = n_back - v + 1;
-				int len = n_back > 99 ? 3 : n_back > 9 ? 2 : 1;
-				svg.text_at (center_x, center_y, factor,
-					     len, QString::number (v),
-					     c == black ? "white" : "black", fi);
-			} else if (m != mark::none) {
-				switch (m) {
-				case mark::circle:
-					svg.circle_at (center_x, center_y, factor * 0.3,
-						       "none", c == black ? "white" : "black");
-					break;
-				case mark::square:
-					svg.square_at (center_x, center_y, factor * 0.8 / M_SQRT2,
-						       "none", c == black ? "white" : "black");
-					break;
-				case mark::triangle:
-					svg.triangle_at (center_x, center_y, factor * 0.8,
-							 "none", c == black ? "white" : "black");
-					break;
-				case mark::cross:
-					svg.cross_at (center_x, center_y, factor * 0.8,
-						      c == black ? "white" : "black");
-					break;
-				case mark::num:
-					svg.text_at (center_x, center_y, factor, 0,
-						     QString::number (extra),
-						     c == black ? "white" : "black", fi);
-					break;
-				case mark::letter:
-					svg.text_at (center_x, center_y, factor, 0,
-						     convert_letter_mark (extra),
-						     c == black ? "white" : "black", fi);
-					break;
-				case mark::text:
-					svg.text_at (center_x, center_y, factor, 0,
-						     QString::fromStdString (b.mark_text_at (rx, ry)),
-						     c == black ? "white" : "black", fi);
-					break;
-
-				default:
-					break;
-				}
-			}
+			add_mark_svg (svg, center_x, center_y, factor,
+				      m, extra, m == mark::text ? b.mark_text_at (rx, ry) : "",
+				      mark::none, 0, c, v, n_back, false, true, fi);
 		}
 	}
 
@@ -750,6 +809,13 @@ void Board::sync_appearance (bool board_only)
 	const bit_array st_b = b.get_stones_b ();
 	int sz = b.size ();
 
+	/* Builds a mark layer, which gets rendered into a pixmap and added to the canvas.
+	   The factor is the size of a square in svg, it gets scaled later.  It should have
+	   an optically pleasant relation with the stroke width (2 for marks).  */
+	double svg_factor = 30;
+	QFontInfo fi (setting->fontMarks);
+	svg_builder svg (svg_factor * sz, svg_factor * sz);
+
 	/* Look back through previous moves to see if we should do numbering.  */
 	int n_back = 0;
 	int *count_map = new int[sz * sz]();
@@ -786,6 +852,13 @@ void Board::sync_appearance (bool board_only)
 			stone_type type = stone_type::live;
 			mark mark_at_pos = b.mark_at (x, y);
 			mextra extra = b.mark_extra_at (x, y);
+			bool was_last_move = false;
+			if (m_edit_board == nullptr && m_state->was_move_p ()) {
+				int last_x = m_state->get_move_x ();
+				int last_y = m_state->get_move_y ();
+				if (last_x == x && last_y == y)
+					was_last_move = true;
+			}
 
 			/* If we don't have a real stone, check for various possibilities of
 			   ghost stones.  First, the mouse cursor, then territory marks,
@@ -823,146 +896,23 @@ void Board::sync_appearance (bool board_only)
 				s->set_center(offsetX + square_size * x, offsetY + square_size * y);
 				m_stones[bp] = s;
 			}
+
 			mark mark_type = mark::none;
-			QColor mark_col = sc == black ? Qt::white : Qt::black;
-			mark_gfx *m = m_marks[bp];
-			mark_text *text_mark = m_text_marks[bp];
-			QString mark_str;
-			/* Used to ensure that all move numbers indicators have the same font size,
-			   appropriately sized for the longest number.  */
-			int len_override = 0;
-
+			mark var_mark = m_vars_type == 2 ? vars.mark_at (x, y) : mark::none;
+			mextra var_me = vars.mark_extra_at (x, y);
 			/* Now look at marks.  */
+			int v = startpos ? count_map[bp] : 0;
 
-			/* See if we should number moves.  This is done relatively early because if the
-			   user enables move numbering, we do want to override marks on the board.  */
-			if (mark_type == mark::none && startpos) {
-				int bp = b.bitpos (x, y);
-				int v = count_map[bp];
-				if (v != 0) {
-					v = n_back - v + 1;
-					mark_type = mark::text;
-					mark_str = QString::number (v);
-					len_override = n_back > 99 ? 3 : n_back > 9 ? 2 : 1;
-				}
-			} else {
-				mark_type = mark_at_pos;
-				/* Make sure this isn't entered if we made a move number mark,
-				   which also becomes mark::text.  */
-				if (mark_type == mark::text)
-					mark_str = QString::fromStdString (b.mark_text_at (x, y));
-			}
-
-
-			/* Now, letter-style variation display.  The SGF spec says that this
-			   should not overwrite any other marks, so we do it here.  */
-			mark var_mark = vars.mark_at (x, y);
-#if 0 /* Occasionally useful for debugging.  */
-			if (var_mark != mark::none && mark_type != mark::none)
-				mark_col = Qt::green;
-#endif
-			if (mark_type == mark::none && m_vars_type == 2 && var_mark != mark::none) {
-				mark_type = var_mark;
-				extra = vars.mark_extra_at (x, y);
-				if (mark_type == mark::letter) {
-					mark_str = convert_letter_mark (extra);
-					mark_type = mark::text;
-				}
-				mark_col = Qt::blue;
-			}
-
-			/* We make an artificial mark for the last move.  Done late so as to not
-			   override other marks.  */
-			if (mark_type == mark::none && m_edit_board == nullptr && m_state->was_move_p ()) {
-				int last_x = m_state->get_move_x ();
-				int last_y = m_state->get_move_y ();
-				if (last_x == x && last_y == y)
-					mark_type = mark::move;
-			}
-
-			/* Convert the large number of conceptual marks into a smaller set of
-			   visual ones.  */
-
-			/* @@@ Could think about making these two look different.  Using red
-			   as a color, for example, but that makes it less visible.  */
-			if (mark_type == mark::move) {
-				mark_type = mark::circle;
-			} else if (mark_type == mark::falseeye) {
-				mark_type = mark::triangle;
-				mark_col = Qt::red;
-			} else if (mark_type == mark::seki) {
-				mark_type = mark::square;
-				mark_col = Qt::blue;
-			}
-			if (mark_type == mark::num) {
-				mark_str = QString::number (extra);
+			if (mark_type == mark::num)
 				m_used_numbers.set_bit (extra);
-				mark_type = mark::text;
-			} else if (mark_type == mark::letter) {
-				mark_str = convert_letter_mark (extra);
+			else if (mark_type == mark::letter)
 				m_used_letters.set_bit (extra);
-				mark_type = mark::text;
-			}
-			if (mark_type == mark::terr) {
-				mark_type = mark::cross;
-				mark_col = b.mark_extra_at (x, y) == 0 ? Qt::white : Qt::black;
-			}
 
-			if (mark_type != mark::text && text_mark != nullptr)
-				text_mark->set_shown (false);
-
-			if (mark_type == mark::none) {
-				if (m)
-					m->set_shown (false);
-			} else {
-				if (m && m->get_type () != mark_type) {
-					delete m;
-					m = nullptr;
-				}
-
-				mark_gfx *to_show = mark_type == mark::text ? text_mark : m;
-
-				if (to_show == nullptr) {
-					switch (mark_type) {
-					case mark::circle:
-						m = to_show = new mark_circle (canvas, square_size, mark_col);
-						break;
-					case mark::triangle:
-						m = to_show = new mark_triangle (canvas, square_size, mark_col);
-						break;
-					case mark::square:
-						m = to_show = new mark_square (canvas, square_size, mark_col);
-						break;
-					case mark::plus:
-						m = to_show = new mark_cross (canvas, square_size, mark_col, true);
-						break;
-					case mark::cross:
-						m = to_show = new mark_cross (canvas, square_size, mark_col, false);
-						break;
-					case mark::text:
-						text_mark = new mark_text (canvas, square_size, mark_col, setting->fontMarks,
-									   mark_str);
-						to_show = text_mark;
-						break;
-					default:
-						break;
-					}
-				} else {
-					if (mark_type == mark::text)
-						text_mark->set_text (mark_str);
-					to_show->set_size_and_color (square_size, mark_col);
-				}
-				if (text_mark && len_override > 0)
-					text_mark->set_max_len (len_override);
-
-				if (to_show != nullptr) {
-					gatter->hide (x + 1, y + 1);
-					to_show->set_center(offsetX + square_size * x, offsetY + square_size * y);
-					to_show->set_shown (true);
-				}
-			}
-			m_marks[bp] = m;
-			m_text_marks[bp] = text_mark;
+			bool added = add_mark_svg (svg, svg_factor / 2 + svg_factor * x, svg_factor / 2 + svg_factor * y, svg_factor,
+						   mark_at_pos, extra, mark_type == mark::text ? b.mark_text_at (x, y) : "",
+						   var_mark, var_me, sc, v, n_back, was_last_move, false, fi);
+			if (added)
+				gatter->hide (x + 1, y + 1);
 		}
 
 	updateCanvas();
@@ -971,6 +921,16 @@ void Board::sync_appearance (bool board_only)
 	if (!board_only)
 		m_board_win->setMoveData (*m_state, b, m_game_mode);
 	delete[] count_map;
+
+	QPixmap img (square_size * board_size, square_size * board_size);
+	QSvgRenderer renderer (svg);
+	img.fill (QColor(0, 0, 0, 0));
+	QPainter painter;
+	painter.begin (&img);
+	renderer.render (&painter);
+	painter.end ();
+	m_mark_layer->setPixmap (img);
+	m_mark_layer->setPos (offsetX - square_size / 2, offsetY - square_size / 2);
 }
 
 void Board::observed_changed ()
@@ -1674,12 +1634,6 @@ void Board::clear_stones ()
 		stone_gfx *s = m_stones[i];
 		delete s;
 		m_stones[i] = nullptr;
-		mark_gfx *m = m_marks[i];
-		delete m;
-		m_marks[i] = nullptr;
-		mark_text *mt = m_text_marks[i];
-		delete mt;
-		m_text_marks[i] = nullptr;
 	}
 }
 
@@ -1703,10 +1657,8 @@ void Board::reset_game (std::shared_ptr<game_record> gr)
 
 	clear_stones ();
 	m_stones.resize (sz * sz);
-	m_marks.resize (sz * sz);
-	m_text_marks.resize (sz * sz);
 	for (int i = 0; i < sz * sz; i++)
-		m_stones[i] = nullptr, m_marks[i] = nullptr, m_text_marks[i] = nullptr;
+		m_stones[i] = nullptr;
 
 	m_game = gr;
 

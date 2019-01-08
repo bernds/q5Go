@@ -60,13 +60,13 @@ class Board : public QGraphicsView, public game_state::observer
 	bool m_request_mark_rect = false;
 
 	std::vector<stone_gfx *> m_stones;
-	std::vector<mark_gfx *> m_marks;
-	std::vector<mark_text *> m_text_marks;
 	bool m_player_is_b = true;
 	bool m_player_is_w = true;
 
 	int m_vars_type = 1;
 	bool m_vars_children = false;
+
+	QGraphicsPixmapItem *m_mark_layer {};
 
 	void observed_changed ();
 	void sync_appearance (bool board_only = true);
