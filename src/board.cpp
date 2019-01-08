@@ -435,7 +435,7 @@ bool Board::show_cursor_p ()
 
 static QString convert_letter_mark (mextra extra)
 {
-	if (extra < 27)
+	if (extra < 26)
 		return QString ('A' + extra);
 	else
 		return QString ('a' + extra - 26);
