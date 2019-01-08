@@ -53,10 +53,10 @@ build_triplet = @build@
 host_triplet = @host@
 target_triplet = @target@
 subdir = .
-DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
+DIST_COMMON = $(am__configure_deps) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(srcdir)/config.h.in \
-	$(top_srcdir)/configure AUTHORS COPYING ChangeLog INSTALL NEWS \
-	TODO admin/config.guess admin/config.sub admin/depcomp \
+	$(top_srcdir)/configure AUTHORS COPYING ChangeLog NEWS TODO \
+	admin/config.guess admin/config.sub admin/depcomp \
 	admin/install-sh admin/missing
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
