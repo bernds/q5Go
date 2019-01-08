@@ -50,13 +50,14 @@ HEADERS		      = config.h \
 			qnewgamedlg.h \
                         sgf.h \
                         scoretools.h \
-			stone.h \
+                        stone.h \
+                        svgbuilder.h \
 			textview.h \
 			tip.h \
                         gatter.h \
                         misctools.h \
                         miscdialogs.h \
-                        audio.h 
+                        audio.h
 
 SOURCES		      = gamedialog.cpp \
 			gamestable.cpp \
@@ -84,7 +85,8 @@ SOURCES		      = gamedialog.cpp \
 			qnewgamedlg.cpp \
 			sgf2board.cc \
 			sgfload.cc \
-			stone.cpp \
+                        stone.cpp \
+                        svgbuilder.cpp \
 			textview.cpp \
 			tip.cpp \
                         gatter.cpp \

@@ -50,7 +50,7 @@ class SvgView : public QDialog, public Ui::SvgViewGUI
 public:
 	SvgView(QWidget* parent = 0);
 	~SvgView();
-	void set (const QString &);
+	void set (const QByteArray &);
 
 public slots:
 	void toClipboard();

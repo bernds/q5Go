@@ -119,10 +119,9 @@ SvgView::~SvgView()
 	delete m_view;
 }
 
-void SvgView::set (const QString &s)
+void SvgView::set (const QByteArray &qba)
 {
-	m_svg = s;
-	QByteArray qba = s.toUtf8 ();
+	m_svg = QString::fromUtf8 (qba);
 	m_view->load (qba);
 	m_view->fix_aspect ();
 	updateGeometry ();

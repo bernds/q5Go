@@ -6,13 +6,16 @@
 *
 */
 
+#include <QPainter>
+#include <QPixmap>
+#include <QSvgRenderer>
 
 #include "defines.h"
 #include "imagehandler.h"
 #include "qglobal.h"
 #include "setting.h"
 #include <math.h>
-#include <qpixmap.h>
+#include <svgbuilder.h>
 
 //#include <iostream>
 
@@ -40,7 +43,7 @@ void ImageHandler::icopy(int *im, QImage &qim, int w, int h)
 
 void ImageHandler::decideAppearance(WhiteDesc *desc, int size)  {
 	double  minStripeW, maxStripeW, theta;
-	
+
 	minStripeW = (double)size / 20.0;
 	if (minStripeW < 1.5)
 		minStripeW = 1.5;
@@ -53,10 +56,10 @@ void ImageHandler::decideAppearance(WhiteDesc *desc, int size)  {
 	desc->sinTheta = sin(theta);
 	desc->stripeWidth = 1.5*minStripeW +
 		(drand48() * (maxStripeW - minStripeW));
-	
+
 	desc->xAdd = 3*desc->stripeWidth +
 		(double)size * 3.0;
-	
+
 	desc->stripeMul = 3.0;
 	desc->zMul = drand48() * 650.0 + 70.0;
 }
@@ -64,9 +67,9 @@ void ImageHandler::decideAppearance(WhiteDesc *desc, int size)  {
 
 double ImageHandler::getStripe(WhiteDesc &white, double bright, double z, int x, int y) {
 	double wBright;
-	
+
 	bright = bright/256.0;
-	
+
 	double wStripeLoc = x*white.cosTheta - y*white.sinTheta +	white.xAdd;
 	double wStripeColor = fmod(wStripeLoc + (z * z * z * white.zMul) *
 		white.stripeWidth,
@@ -77,46 +80,46 @@ double ImageHandler::getStripe(WhiteDesc &white, double bright, double z, int x,
 	if (wStripeColor > 1.0)
 		wStripeColor = 1.0;
 	wStripeColor = wStripeColor * 0.15 + 0.85;
-	
+
 	if (bright < 0.95)
 		wBright = bright*wStripeColor;
-	else 
+	else
 		wBright = bright*sqrt(sqrt(wStripeColor));
-	
+
 	if (wBright > 255)
 		wBright = 255;
 	if (wBright < 0)
 		wBright = 0;
-	
+
 	return wBright*255;
 }
 extern bool isHidingStones;
-void ImageHandler::paintBlackStone (QImage &bi, int d, int stone_render) 
+void ImageHandler::paintBlackStone (QImage &bi, int d, int stone_render)
 {
-	
+
 	const double pixel=0.8;//,shadow=0.99;
 	// board color
 	//int col = antialiasingColor; //0xecb164;
 	//int blue=col&0x0000FF,green=(col&0x00FF00)>>8,red=(col&0xFF0000)>>16;
-	
+
 	bool Alias=true;
-	
+
 	// these are the images
 	int *pb=new int[d*d];
 	int i, j, g,g1,g2, k;
 	double di, dj, d2=(double)d/2.0-5e-1, r=d2-2e-1, f=sqrt(3.0);
 	double x, y, z, xr,xr1, xr2, xg1,xg2,hh;
-		
+
 	k=0;
-	
+
 	bool smallerstones = false;
 	if (smallerstones) r-=1;
-	
+
 	for (i=0; i<d; i++)
 		for (j=0; j<d; j++) {
 			di=i-d2; dj=j-d2;
 			hh=r-sqrt(di*di+dj*dj);
-			if (hh>=0) 
+			if (hh>=0)
 			{
 				if (stone_render>1)
 				{
@@ -128,24 +131,24 @@ void ImageHandler::paintBlackStone (QImage &bi, int d, int stone_render)
 					xr1=(2*z-x+y)/xr;
 					//xr2=(1.6*z+x+1.75*y)/xr;
 					xr2=(2*z+x-y)/xr;
-				
+
 					if (xr1>0.9) xg1=(xr1-0.9)*10;
 					else xg1=0;
 					//if (xr2>1) xg2=(xr2-1)*10;
 					if (xr2>0.96) xg2=(xr2-0.96)*10;
 					else xg2=0;
-				
+
 					//random = drand48();
-				
+
 					g1=(int)(5+10*drand48() + 10*xr1 + xg1*140);
 					g2=(int)(10+10* xr2+xg2*160);
 					g=(g1 > g2 ? g1 : g2);
 					//g=(int)1/ (1/g1 + 1/g2);
-				
+
 					if (hh>pixel || !Alias) {
 						pb[k]=(255<<24)|(g<<16)|(g<<8)|g;
 					}
-					else {			
+					else {
 						pb[k]=((int)(hh/pixel*255)<<24)|(g<<16)|(g<<8)|g;
 					}
 
@@ -153,24 +156,24 @@ void ImageHandler::paintBlackStone (QImage &bi, int d, int stone_render)
 				else //code for flat stones
 				{
 					g=0;
-					pb[k]=((int)(255)<<24)|(g<<16)|(g<<8)|g;	
+					pb[k]=((int)(255)<<24)|(g<<16)|(g<<8)|g;
 				}
 			}
 			else pb[k]=0;
 			k++;
-			
+
 		}
-		
+
 	// now copy the result in QImages
 	icopy(pb, bi, d, d);
-		
+
 	// free memory
 	delete[] pb;
 }
 
 // shadow under stones
 void ImageHandler::paintShadowStone (QImage &si, int d) {
-	
+
 	//const double pixel=0.8,shadow=0.99;
 
 	// these are the images
@@ -178,12 +181,12 @@ void ImageHandler::paintShadowStone (QImage &si, int d) {
 	int i, j,  k;
 	double di, dj, d2=(double)d/2.0-5e-1, r=d2-2e-1;
 	double hh;
-	
+
 	k=0;
-	
+
 	bool smallerstones = false;
 	if (smallerstones) r-=1;
-	
+
 	for (i=0; i<d; i++)
 		for (j=0; j<d; j++) {
 			di=i-d2; dj=j-d2;
@@ -191,17 +194,17 @@ void ImageHandler::paintShadowStone (QImage &si, int d) {
 			if (hh>=0) {
 				hh=2*hh/r ;
 				if (hh> 1)  hh=1;
-				
+
 				pw[k]=((int)(255*hh)<<24)|(1<<16)|(1<<8)|(1);
 			}
 			else pw[k]=0;
 			k++;
-			
+
 		}
-		
+
 	// now copy the result in QImages
 	icopy(pw, si, d, d);
-		
+
 	// free memory
 	delete[] pw;
 }
@@ -226,15 +229,15 @@ void ImageHandler::paintWhiteStone (QImage &wi, int d, int stone_render)//bool s
 	//int blue=col&0x0000FF,green=(col&0x00FF00)>>8,red=(col&0xFF0000)>>16;
 
 	bool Alias=true;
-	
+
 	// these are the images
 	int *pw=new int[d*d];
 	int i, j, g, g1,g2,k;
 	double di, dj, d2=(double)d/2.0-5e-1, r=d2-2e-1, f=sqrt(3.0);
 	double x, y, z, xr, xr1, xr2, xg1,xg2, hh;
-	
+
 	k=0;
-	
+
 	bool smallerstones = false;
 	if (smallerstones) r-=1;
 
@@ -242,7 +245,7 @@ void ImageHandler::paintWhiteStone (QImage &wi, int d, int stone_render)//bool s
 		for (j=0; j<d; j++) {
 			di=i-d2; dj=j-d2;
 			hh=r-sqrt(di*di+dj*dj);
-			if (hh>=0) 
+			if (hh>=0)
 			{
 				if (stone_render > 1)
 				{
@@ -253,34 +256,34 @@ void ImageHandler::paintWhiteStone (QImage &wi, int d, int stone_render)//bool s
 					xr=sqrt(6*(x*x+y*y+z*z));
 					xr1=(2*z-x+y)/xr;
 					xr2=(2*z+x-y)/xr;
-				
-				
+
+
 					if (xr1>0.9) xg1=(xr1-0.9)*10;
 					else xg1=0;
 
 					if (xr2>0.92) xg2=(xr2-0.92)*10;
 					else xg2=0;
-				
+
 					g2=(int)(200+10* xr2+xg2*45);
 				//g=(g1 > g2 ? g1 : g2);
-				
+
 					theta = atan2(double(j-d/2), double(i-d/2)) + M_PI - M_PI/4 + M_PI/2;
 					bool stripeband = theta > ALPHA && theta < 2*M_PI-ALPHA;
 
-					if (theta > M_PI) 
+					if (theta > M_PI)
 					theta = (2*M_PI-theta);
 
 					double stripe = STRIPE*sin((M_PI/2)*(theta-ALPHA)/(M_PI-ALPHA));
 					if (stripe < 1) stripe = 1;
-				
+
 					double g1min=(int)(0+10*xr1+xg1*45), g2min=(int)(0+10*xr2+xg2*45);
 					double g1max=(int)(200+10*xr1+xg1*45), g2max=(int)(200+10* xr2+xg2*45);;
 					g1min = g1max - (g1max-g1min)*(1-exp(-1*(theta-ALPHA)/(M_PI-ALPHA)));
 					g2min = g2max - (g2max-g2min)*(1-exp(-1*(theta-ALPHA)/(M_PI-ALPHA)));
-				
+
 					if (hh < STRIPE && hh > pixel && stripeband) {
-					
-						if (hh > stripe ) 
+
+						if (hh > stripe )
 						{
 							g1 = (int)g1max;
 							g2 = (int)g2max;
@@ -295,33 +298,33 @@ void ImageHandler::paintWhiteStone (QImage &wi, int d, int stone_render)//bool s
 							g1=125;
 							g2=125;
 						}
-*/					
+*/
 						g=(g1 > g2 ? g1 : g2);
-				
+
 						if (stone_render == 3) //stripes)
 							g = (int)getStripe(desc, g, xr1/7.0, i, j);
 						pw[k]=(255<<24)|(g<<16)|((g)<<8)|(g);
 					}
 					else if (hh>pixel || !Alias) {
 					//g1=(int)(190+10*drand48()+10*xr1+xg1*45);
-					
+
 						g=(int)(g1max > g2max ? g1max : g2max);
-					
+
 						if (stone_render == 3)//stripes)
 							g = (int)getStripe(desc, g, xr1/7.0, i, j);
 						pw[k]=(255<<24)|(g<<16)|((g)<<8)|(g);
 					}
 					else {
-					
+
 						g1=(int)(stripeband ? g1min : g1max);
 						g2=(int)(stripeband ? g2min : g2max);
-					
+
 						g=(g1 > g2 ? g1 : g2);
-					
+
 						if (stone_render == 3)//stripes)
 							g = (int)getStripe(desc, g, xr1/7.0, i, j);
-				
-						pw[k]=((int)(hh/pixel*255)<<24)|(g<<16)|(g<<8)|g;				
+
+						pw[k]=((int)(hh/pixel*255)<<24)|(g<<16)|(g<<8)|g;
 					}
 				}
 				else // Code for flat stones
@@ -331,14 +334,14 @@ void ImageHandler::paintWhiteStone (QImage &wi, int d, int stone_render)//bool s
 					{
 						g=0;
 						pw[k]=((int)(255)<<24)|(g<<16)|(g<<8)|g;
-					}	
+					}
 					else if (hh>0)
 					{
 						g=255;
 						pw[k]=((int)(255)<<24)|(g<<16)|(g<<8)|g;
 					}
-				}	
-				
+				}
+
 			}
 			else pw[k]=0;
 			k++;
@@ -364,11 +367,40 @@ ImageHandler::ImageHandler()
 {
 }
 
+static void paint_white_stone_svg (QImage &img)
+{
+	/* Gets scaled to the pixmap size during render.  */
+	int size = 30;
+	svg_builder svg (size, size);
+	double border = 1;
+	svg.circle_at (size/2, size/2, size * 0.48 - border * 0.5, "white", "black", QString::number (border));
+	QSvgRenderer renderer (svg);
+	img.fill (QColor(0, 0, 0, 0));
+	QPainter painter;
+	painter.begin (&img);
+	renderer.render (&painter);
+	painter.end ();
+}
+
+static void paint_black_stone_svg (QImage &img)
+{
+	/* Gets scaled to the pixmap size during render.  */
+	int size = 30;
+	svg_builder svg (size, size);
+	svg.circle_at (size/2, size/2, size * 0.48, "black", "none");
+	QSvgRenderer renderer (svg);
+	img.fill (QColor(0, 0, 0, 0));
+	QPainter painter;
+	painter.begin (&img);
+	renderer.render (&painter);
+	painter.end ();
+}
+
 void ImageHandler::init(int size)
 {
 	// Scale the images
 	size = size * 9 / 10;
-	
+
 	//*******
 	//bool shadow = setting->readBoolEntry("STONES_SHADOW");
 	//bool stripes = setting->readBoolEntry("STONES_SHELLS");
@@ -377,32 +409,40 @@ void ImageHandler::init(int size)
 	//black stone
 	QImage ib = QImage(size, size, QImage::Format_ARGB32);
 
-	paintBlackStone(ib, size, stone_look);
+	if (stone_look == 1) {
+		paint_black_stone_svg (ib);
+	} else {
+		paintBlackStone(ib, size, stone_look);
+	}
 
 	stonePixmaps.append(QPixmap::fromImage(ib,
-						Qt::PreferDither | 
-						Qt::DiffuseAlphaDither | 
+						Qt::PreferDither |
+						Qt::DiffuseAlphaDither |
 						Qt::DiffuseDither));
 
 	QImage gb(ib);
 	ghostImage(&gb);
 	ghostPixmaps.append(QPixmap::fromImage(gb));
 
-	// white stones	
+	// white stones
 	for (int i = 1; i <= WHITE_STONES_NB; i++)
 	{
 		QImage iw1(size, size, QImage::Format_ARGB32);
-		paintWhiteStone(iw1, size, stone_look);
+		if (stone_look == 1) {
+			paint_white_stone_svg (iw1);
+		} else {
+			paintWhiteStone(iw1, size, stone_look);
+		}
 		stonePixmaps.append(QPixmap::fromImage (iw1,
-							 Qt::PreferDither | 
-							 Qt::DiffuseAlphaDither | 
+							 Qt::PreferDither |
+							 Qt::DiffuseAlphaDither |
 							 Qt::DiffuseDither));
 
 		QImage gw1(iw1);
 		ghostImage(&gw1);
 		ghostPixmaps.append(QPixmap::fromImage(gw1));
 	}
-	
+
 	//shadow under the stones
 	QImage is = QImage(size, size, QImage::Format_ARGB32);
 	if (stone_look == 3)
@@ -410,8 +450,8 @@ void ImageHandler::init(int size)
 	else
 		is.fill(0);
 	stonePixmaps.append(QPixmap::fromImage(is,
-					       Qt::PreferDither | 
-					       Qt::DiffuseAlphaDither | 
+					       Qt::PreferDither |
+					       Qt::DiffuseAlphaDither |
 					       Qt::DiffuseDither));
 }
 
@@ -425,39 +465,47 @@ void ImageHandler::rescale(int size)
 
 	//repaint black stones
 	QImage ib = QImage(size, size, QImage::Format_ARGB32);
-	paintBlackStone(ib, size, stone_look);
-	stonePixmaps[0].convertFromImage(ib, Qt::PreferDither | 
-					 Qt::DiffuseAlphaDither | 
+	if (stone_look == 1) {
+		paint_black_stone_svg (ib);
+	} else {
+		paintBlackStone(ib, size, stone_look);
+	}
+	stonePixmaps[0].convertFromImage(ib, Qt::PreferDither |
+					 Qt::DiffuseAlphaDither |
 					 Qt::DiffuseDither);
 	QImage gb(ib);
 	ghostImage(&gb);
-	ghostPixmaps[0].convertFromImage(gb, Qt::PreferDither | 
-					 Qt::DiffuseAlphaDither | 
+	ghostPixmaps[0].convertFromImage(gb, Qt::PreferDither |
+					 Qt::DiffuseAlphaDither |
 					 Qt::DiffuseDither);
 
-	// white stones	
+	// white stones
 	for (int i = 1; i <= WHITE_STONES_NB; i++)
 	{
 		QImage iw1 = QImage(size, size, QImage::Format_ARGB32);
-		paintWhiteStone(iw1, size, stone_look);
-		stonePixmaps[i].convertFromImage(iw1, Qt::PreferDither | 
-						 Qt::DiffuseAlphaDither | 
+		if (stone_look == 1) {
+			paint_white_stone_svg (iw1);
+		} else {
+			paintWhiteStone(iw1, size, stone_look);
+		}
+		stonePixmaps[i].convertFromImage(iw1, Qt::PreferDither |
+						 Qt::DiffuseAlphaDither |
 						 Qt::DiffuseDither);
 		QImage gw1(iw1);
 		ghostImage(&gw1);
-		ghostPixmaps[i].convertFromImage(gw1, Qt::PreferDither | 
-						 Qt::DiffuseAlphaDither | 
+		ghostPixmaps[i].convertFromImage(gw1, Qt::PreferDither |
+						 Qt::DiffuseAlphaDither |
 						 Qt::DiffuseDither);
 	}
-	
+
 	// shadow
 	QImage is = QImage(size, size, QImage::Format_ARGB32);
-	if (stone_look == 3)//shadow) 
+	if (stone_look == 3)//shadow)
 		paintShadowStone(is, size);
 	else
 		is.fill(0);
-	stonePixmaps[WHITE_STONES_NB+1].convertFromImage(is, Qt::PreferDither | 
-							 Qt::DiffuseAlphaDither | 
+	stonePixmaps[WHITE_STONES_NB+1].convertFromImage(is, Qt::PreferDither |
+							 Qt::DiffuseAlphaDither |
 							 Qt::DiffuseDither);
 #if 0
 	// QQQ add transparency image

@@ -1287,8 +1287,8 @@ void MainWindow::slotFileExportASCII(bool)
 void MainWindow::slotFileExportSVG(bool)
 {
 	m_svg_dlg.show ();
-	QString s = gfx_board->render_svg (m_svg_dlg.cb_numbering->isChecked (),
-					   m_svg_dlg.cb_coords->isChecked ());
+	QByteArray s = gfx_board->render_svg (m_svg_dlg.cb_numbering->isChecked (),
+					      m_svg_dlg.cb_coords->isChecked ());
 	m_svg_dlg.set (s);
 	statusBar()->showMessage(tr("Ready."));
 }
