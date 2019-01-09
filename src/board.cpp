@@ -897,19 +897,18 @@ void Board::sync_appearance (bool board_only)
 				m_stones[bp] = s;
 			}
 
-			mark mark_type = mark::none;
 			mark var_mark = m_vars_type == 2 ? vars.mark_at (x, y) : mark::none;
 			mextra var_me = vars.mark_extra_at (x, y);
 			/* Now look at marks.  */
 			int v = startpos ? count_map[bp] : 0;
 
-			if (mark_type == mark::num)
+			if (mark_at_pos == mark::num)
 				m_used_numbers.set_bit (extra);
-			else if (mark_type == mark::letter)
+			else if (mark_at_pos == mark::letter)
 				m_used_letters.set_bit (extra);
 
 			bool added = add_mark_svg (svg, svg_factor / 2 + svg_factor * x, svg_factor / 2 + svg_factor * y, svg_factor,
-						   mark_at_pos, extra, mark_type == mark::text ? b.mark_text_at (x, y) : "",
+						   mark_at_pos, extra, mark_at_pos == mark::text ? b.mark_text_at (x, y) : "",
 						   var_mark, var_me, sc, v, n_back, was_last_move, false, fi);
 			if (added)
 				gatter->hide (x + 1, y + 1);
