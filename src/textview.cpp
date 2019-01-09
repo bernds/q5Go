@@ -100,6 +100,7 @@ SvgView::SvgView(QWidget* parent)
 	setupUi(this);
 
 	QLayout *layout = new QHBoxLayout (gfxWidget);
+	layout->setContentsMargins (0, 0, 0, 0);
 	m_view = new SvgWidget (gfxWidget);
 #if 1
 	QSizePolicy p (QSizePolicy::Expanding, QSizePolicy::Expanding);
