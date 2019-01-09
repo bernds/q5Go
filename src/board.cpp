@@ -605,11 +605,11 @@ QByteArray Board::render_svg (bool do_number, bool coords)
 			double center_y = offset_y + y * factor;
 			if (m_rect_x1 == 1)
 				svg.text_at (dist, center_y, factor,
-					     board_size < 10 ? 1 : 2, QString::number (ry),
+					     board_size < 10 ? 1 : 2, QString::number (board_size - ry + 1),
 					     "black", fi);
 			if (m_rect_x2 == board_size)
 				svg.text_at (w - dist , center_y, factor,
-					     board_size < 10 ? 1 : 2, QString::number (ry),
+					     board_size < 10 ? 1 : 2, QString::number (board_size - ry + 1),
 					     "black", fi);
 		}
 		for (int x = 0; x < cols; x++) {
