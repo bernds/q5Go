@@ -69,7 +69,6 @@ Setting::Setting()
 	writeBoolEntry("TOOLTIPS", true);
 	//writeBoolEntry("STONES_SHADOW", true);
 	//writeBoolEntry("STONES_SHELLS", true);
-	writeBoolEntry("VAR_FONT", true);
 
 	writeBoolEntry("SOUND_STONE", true);
 	writeBoolEntry("SOUND_AUTOPLAY", true);

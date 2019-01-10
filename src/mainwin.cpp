@@ -2887,8 +2887,6 @@ void ClientWindow::dlgSetPreferences(int tab)
 		      : 0);
 	dlg.coordsComboBox->setCurrentIndex(coords);
 	dlg.cursorCheckBox->setChecked(setting->readBoolEntry("CURSOR"));
-	dlg.adjustFontSizeCheckBox->setChecked(setting->readBoolEntry("ADJ_FONT"));
-	//dlg.smallerStonesCheckBox->setChecked(setting->readBoolEntry("SMALL_STONES"));
 	dlg.tooltipsCheckBox->setChecked(!(setting->readBoolEntry("TOOLTIPS")));
 	dlg.timerComboBox->setCurrentIndex(setting->readIntEntry("TIMER_INTERVAL"));
 	dlg.BYTimeSpin->setValue(setting->readIntEntry("BY_TIMER"));
@@ -2899,7 +2897,6 @@ void ClientWindow::dlgSetPreferences(int tab)
 		       : 0);
 	dlg.sidebarComboBox->setCurrentIndex(sidebar);
 //	dlg.rememberFontCheckBox->setChecked(setting->readBoolEntry("REM_FONT"));
-	dlg.variableFontCheckBox->setChecked(setting->readBoolEntry("VAR_FONT"));
 	dlg.antiClickoCheckBox->setChecked(setting->readBoolEntry("ANTICLICKO"));
 
 	// Client Window tab
@@ -3004,14 +3001,12 @@ bool ClientWindow::preferencesSave(PreferencesDialog *dlg)
 	setting->writeBoolEntry("SIDEBAR", sidebar > 0);
 	setting->writeBoolEntry("SIDEBAR_LEFT", sidebar == 1);
 	setting->writeBoolEntry("CURSOR", dlg->cursorCheckBox->isChecked());
-	setting->writeBoolEntry("ADJ_FONT", dlg->adjustFontSizeCheckBox->isChecked());
 	//setting->writeBoolEntry("SMALL_STONES", dlg->smallerStonesCheckBox->isChecked());
 	setting->writeBoolEntry("TOOLTIPS", !(dlg->tooltipsCheckBox->isChecked()));
 	setting->writeIntEntry("BY_TIMER", dlg->BYTimeSpin->text().toInt());
 	setting->writeIntEntry("TIMER_INTERVAL", dlg->timerComboBox->currentIndex());
 	setting->writeBoolEntry("SGF_TIME_TAGS", dlg->sgfTimeTagsCheckBox->isChecked());
 	setting->writeBoolEntry("ANTICLICKO", dlg->antiClickoCheckBox->isChecked());
-	setting->writeBoolEntry("VAR_FONT", dlg->variableFontCheckBox->isChecked());
 
 	// Client Window Tab
 	setting->writeEntry("WATCH", dlg->LineEdit_watch->text());
