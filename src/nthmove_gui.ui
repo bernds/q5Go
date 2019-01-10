@@ -93,7 +93,6 @@
       </property>
     </widget>
   </widget>
-  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
   <tabstops>
     <tabstop>moveSpinBox</tabstop>
     <tabstop>buttonOk</tabstop>
