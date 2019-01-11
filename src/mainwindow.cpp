@@ -2428,6 +2428,11 @@ void MainWindow_GTP::gtp_played_resign ()
 		m_game->set_result ("W+R");
 	}
 
+	QMessageBox mb(QMessageBox::Information, tr("Game end"),
+		       QString(tr("The computer has resigned the game.")),
+		       QMessageBox::Ok | QMessageBox::Default);
+	mb.exec ();
+
 	setGameMode (modeNormal);
 	m_gtp->quit();
 	gfx_board->set_player_colors (true, true);
