@@ -9,7 +9,7 @@
 
 QGtp *Gtp_Controller::create_gtp (const QString &prog, const QString &args, int size, double komi, int hc, int level)
 {
-	QGtp *g = new QGtp (m_parent, this, prog, size, komi, hc, level);
+	QGtp *g = new QGtp (m_parent, this, prog, args, size, komi, hc, level);
 	return g;
 }
 
@@ -18,7 +18,8 @@ QGtp *Gtp_Controller::create_gtp (const QString &prog, const QString &args, int 
 * Fails:     never
 * Returns:   nothing
 */
-QGtp::QGtp(QWidget *parent, Gtp_Controller *c, const QString &prog, int size, float komi, int hc, int level)
+QGtp::QGtp(QWidget *parent, Gtp_Controller *c, const QString &prog, const QString &args,
+	   int size, float komi, int hc, int level)
 	: m_dlg (parent, TextView::type::gtp), m_controller (c), m_size (size), m_komi (komi), m_hc (hc), m_level (level)
 {
 	req_cnt = 1;
@@ -38,10 +39,10 @@ QGtp::QGtp(QWidget *parent, Gtp_Controller *c, const QString &prog, int size, fl
 	connect (m_process, &QProcess::readyReadStandardOutput,
 		 this, &QGtp::slot_receive_stdout);
 
-	QStringList arguments = prog.split (QRegExp ("\\s+"));
-	QString filename = arguments.takeFirst();
-	m_process->start (filename, arguments);
-
+	QStringList arguments;
+	if (!args.isEmpty ())
+		arguments = args.split (QRegExp ("\\s+"));
+	m_process->start (prog, arguments);
 }
 
 QGtp::~QGtp()

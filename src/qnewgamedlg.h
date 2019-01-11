@@ -1,12 +1,4 @@
 /***************************************************************************
-                          qnewgamedlg.h  -  description
-                             -------------------
-    begin                : Thu Dec 20 2001
-    copyright            : (C) 2001 by PALM Thomas , DINTILHAC Florian, HIVERT Anthony, PIOC Sebastien
-    email                : 
- ***************************************************************************/
-
-/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,96 +12,29 @@
 
 #include <qdialog.h>
 #include "ui_qnewgamedlg_gui.h"
-//#include "global.h"
-//#include "gothic.h"
 
+#include "goboard.h"
+
+class Engine;
 
 class QNewGameDlg : public QDialog, public Ui::QNewGameDlgGui
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-	QNewGameDlg( QWidget* parent = 0, const char* name = 0);
-	~QNewGameDlg();
+	QNewGameDlg (QWidget* parent, const QList<Engine *> engines);
 
-	int getSize();
-	int getHandicap();
-	float getKomi();
-	int getLevelBlack();
-	int getLevelWhite();
-	QString getPlayerBlackName();
-	QString getPlayerWhiteName();
-	int getPlayerBlackType();
-	int getPlayerWhiteType();
-	int getTime();
-	bool getOneColorGo();
-	QString fileName;
+	game_info create_game_info ();
+	int board_size ();
+	int handicap ();
+	int engine_index ();
+	QString fileName ();
+	bool computer_white_p ();
 
 public slots:
-	void slotCancel();
-	void slotOk();
-  
-
-protected:
-/*
-    QFrame* _NewGameWhite;
-    QLabel* _WhiteLevelLabel;
-    QLabel* _WhiteTypeLabel;
-    QLabel* _WhiteNewGameLabel;
-    QLabel* _WhitePlayerLabel;
-    QLineEdit* _WhitePlayerLineEdit;
-    QSpinBox* _WhiteLevelSpinBox;
-    QComboBox* _WhiteTypeComboBox;
-    QFrame* _Black;
-    QLineEdit* _BlackPlayerLineEdit;
-    QLabel* _BlackPlayerLabel;
-    QLabel* _BlackLevelLabel;
-    QSpinBox* _BlackLevelSpinBox;
-    QLabel* _BlackTypeLabel;
-    QLabel* _BlackNewGameLabel;
-    QComboBox* _BlackTypeComboBox;
-    QPushButton* _CancelPushButton;
-    QPushButton* _OkPushButton;
-    QGroupBox* _ParametersGroupBox;
-//    QSpinBox* _KomiSpinBox;
-    QLineEdit* _KomiLineEdit;
-    QLabel* _TimeLabel;
-    QLabel* _SizeLabel;
-    QLabel* _HandicapLabel;
-    QSpinBox* _HandicapSpinBox;
-    QLabel* _KomiLabel;
-    QSpinBox* _SizeSpinBox;
-    QSpinBox* _TimeSpinBox;
-
-	void initDialog();
-*/
-  	void init();
-
-	bool _oneColorGo;
-	int _size, _handicap, _levelBlack, _levelWhite,_time;
-	int _playerWhiteType, _playerBlackType;
-	float _komi;
-	QString _playerWhiteName, _playerBlackName;
-
-protected slots:
-	void slotGobanSizeChanged();
-    void slotHandicapChanged();
-    void slotKomiChanged();
-    void slotLevelBlackChanged();
-    void slotLevelWhiteChanged();
-    void slotPlayerBlackNameChanged();
-    void slotPlayerBlackTypeChanged();
-    void slotPlayerWhiteNameChanged();
-    void slotPlayerWhiteTypeChanged();
-    void slotTimeChanged();
-    void slotGetFileName();
-    void slotOneColorGoClicked();
+	void slotGetFileName ();
+	void slotCancel ();
+	void slotOk ();
 };
-
-/** Define player types   /
-typedef enum {
-	HUMAN,
- COMPUTER
-} player_type;            */
 
 #endif

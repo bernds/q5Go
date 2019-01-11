@@ -111,9 +111,9 @@ public:
 	QString codec() const { return cdc; };
 	// operators <, ==
 	int operator== (Host h)
-		{ return (this->title() == h.title()); };
+		{ return (this->t == h.t); };
 	bool operator< (Host h)
-		{ return (this->title() < h.title()); };
+		{ return (this->t < h.t); };
 
 private:
 	QString t;
@@ -125,8 +125,6 @@ private:
 };
 
 typedef QList<Host *> HostList;
-
-//-----------
 
 //-----------
 

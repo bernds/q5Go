@@ -39,12 +39,10 @@ PreferencesDialog::PreferencesDialog(QWidget* parent)
 		move(parent_cw->getPrefPos());
 	}
 
-	// set hostlist
-	//parent_cw->hostlist;
-
-	// set connection titles to listview
 	for (auto h: parent_cw->hostlist)
 		new QListWidgetItem (h->title(), ListView_hosts);
+	for (auto h: parent_cw->m_engines)
+		new QListWidgetItem (h->title(), ListView_engines);
 
 	// init random-number generator
 	srand ((unsigned)time (nullptr));
@@ -172,14 +170,44 @@ void PreferencesDialog::selectFont(int selector)
 			fontConsoleButton->setFont(f);
 		}
 		break;
-    
+
 	default:
 		break;
 	}
 }
 
+bool PreferencesDialog::avoid_losing_data ()
+{
+	if (m_changing_engine) {
+		if (!enginePath->text ().isEmpty () || !engineArgs->text ().isEmpty ()) {
+			QMessageBox mb(QMessageBox::Question, tr("Unsaved data"),
+				       QString(tr("The engine input fields contain\n"
+						  "potentially unsaved data.\n"
+						  "Really close the preferences?")),
+				       QMessageBox::Yes | QMessageBox::No);
+			return mb.exec() == QMessageBox::No;
+		}
+	}
+	if (m_changing_host) {
+		if (!LineEdit_host->text ().isEmpty ()
+		    || !LineEdit_port->text ().isEmpty ()
+		    || !LineEdit_login->text ().isEmpty ())
+		{
+			QMessageBox mb(QMessageBox::Question, tr("Unsaved data"),
+				       QString(tr("The host input fields contain\n"
+						  "potentially unsaved data.\n"
+						  "Really close the preferences?")),
+				       QMessageBox::Yes | QMessageBox::No);
+			return mb.exec() == QMessageBox::No;
+		}
+	}
+	return false;
+}
+
 void PreferencesDialog::slot_accept()
 {
+	if (avoid_losing_data ())
+		return;
 	saveSizes();
 
 	// save settings
@@ -190,6 +218,9 @@ void PreferencesDialog::slot_accept()
 
 void PreferencesDialog::slot_reject()
 {
+	if (avoid_losing_data ())
+		return;
+
 	saveSizes();
 	reject();
 }
@@ -201,6 +232,119 @@ void PreferencesDialog::saveSizes()
 
 	// update hosts
 	parent_cw->slot_cbconnect(QString());
+}
+
+void PreferencesDialog::slot_add_engine()
+{
+	const QString name = engineName->text();
+	// check if at least title and path are set
+	if (!name.isEmpty() && !enginePath->text().isEmpty())
+	{
+		// check if title already exists
+		bool found = false;
+
+		for (auto h: parent_cw->m_engines)
+			if (h->title() == name)
+			{
+				found = true;
+				// if found, insert at current pos, and remove old item
+				parent_cw->m_engines.removeOne (h);
+				break;
+			}
+
+		parent_cw->m_engines.append(new Engine(engineName->text(),
+						       enginePath->text(), engineArgs->text ()));
+		std::sort (parent_cw->m_engines.begin (), parent_cw->m_engines.end (),
+			   [] (Engine *a, Engine *b) { return *a < *b; });
+
+		// create entry in listview
+		if (!found)
+			new QListWidgetItem(name, ListView_engines);
+		else
+		{
+			ListView_engines->currentItem()->setText(name);
+		}
+		ListView_engines->repaint();
+	}
+
+	clear_engine ();
+}
+
+void PreferencesDialog::clear_engine ()
+{
+	engineName->clear ();
+	enginePath->clear ();
+	engineArgs->clear ();
+	m_changing_engine = false;
+}
+
+void PreferencesDialog::slot_delete_engine()
+{
+	for (auto h: parent_cw->m_engines) {
+		if (h->title() == LineEdit_title->text())
+		{
+			// if found, delete current entry
+			parent_cw->m_engines.removeOne(h);
+			delete h;
+			break;
+		}
+	}
+
+	clear_engine ();
+
+	// set connection titles to listview
+	ListView_engines->clear ();
+
+	for (auto h: parent_cw->m_engines)
+		new QListWidgetItem(h->title(), ListView_engines);
+}
+
+void PreferencesDialog::slot_new_engine()
+{
+	clear_engine ();
+}
+
+void PreferencesDialog::slot_clickedEngines (QListWidgetItem *lvi)
+{
+	if (!lvi)
+		return;
+
+	// fill host info of selected title
+	for (auto h: parent_cw->m_engines) {
+		if (h->title() == lvi->text ()) {
+			engineName->setText(h->title ());
+			enginePath->setText(h->path ());
+			engineArgs->setText(h->args ());
+			break;
+		}
+	}
+}
+
+void PreferencesDialog::slot_engineChanged(const QString &title)
+{
+	for (auto h: parent_cw->m_engines)
+	{
+		if (h->title() == title) {
+			m_changing_engine = true;
+			pb_engine_add->setText(tr("Change"));
+			return;
+		}
+	}
+
+	m_changing_engine = false;
+	pb_engine_add->setText(tr("Add"));
+}
+
+
+void PreferencesDialog::clear_host ()
+{
+	LineEdit_title->clear();
+	LineEdit_host->clear();
+	LineEdit_port->clear();
+	LineEdit_login->clear();
+	ComboBox_codec->setCurrentText("");
+
+	m_changing_host = false;
 }
 
 void PreferencesDialog::insertStandardHosts()
@@ -259,16 +403,6 @@ void PreferencesDialog::slot_add_server()
 		}
 		ListView_hosts->repaint();
 //			cb_title->insertItem(LineEdit_title->text(), 0);
-
-#if 0
-		// add to ClientWindow hostlist       !!! does not seem to be used !
-		emit signal_addHost(LineEdit_title->text(),
-		                    LineEdit_host->text(),
-		                    tmp,
-		                    LineEdit_login->text(),
-		                    LineEdit_pass->text());
-#endif
-
 	}
 
 	// init insertion fields
@@ -277,7 +411,6 @@ void PreferencesDialog::slot_add_server()
 
 void PreferencesDialog::slot_delete_server()
 {
-	Host *h;
 	for (auto h: parent_cw->hostlist) {
 		if (h->title() == LineEdit_title->text())
 		{
@@ -290,19 +423,15 @@ void PreferencesDialog::slot_delete_server()
 
 	// set connection titles to listview
 	ListView_hosts->clear ();
-
-	// clear entries
-	slot_cbtitle(QString());
-
 	for (auto h: parent_cw->hostlist)
 		new QListWidgetItem(h->title(), ListView_hosts);
-
 	insertStandardHosts();
+	clear_host ();
 }
 
 void PreferencesDialog::slot_new_server()
 {
-	slot_cbtitle(QString());
+	clear_host ();
 }
 
 void PreferencesDialog::slot_clickedHostList(QListWidgetItem *lvi)
@@ -318,13 +447,7 @@ void PreferencesDialog::slot_cbtitle(const QString &txt)
 {
 	LineEdit_pass->clear();
 	if (txt.isEmpty() || txt.isNull())
-	{
-		LineEdit_title->clear();
-		LineEdit_host->clear();
-		LineEdit_port->clear();
-		LineEdit_login->clear();
-		ComboBox_codec->setCurrentText("");
-	}
+		clear_host ();
 	// fix coding: standard servers
 	else if (txt == QString("-- Aurora --"))
 	{
@@ -397,7 +520,7 @@ void PreferencesDialog::slot_cbtitle(const QString &txt)
 		// A guess
 		ComboBox_codec->setCurrentText("iso-8859-15");
 	}
-	else if (!txt.isEmpty())
+	else
 	{
 		// fill host info of selected title
 		for (auto h: parent_cw->hostlist) {
@@ -415,17 +538,19 @@ void PreferencesDialog::slot_cbtitle(const QString &txt)
 	}
 }
 
-void PreferencesDialog::slot_textChanged(const QString &title)
+void PreferencesDialog::slot_serverChanged(const QString &title)
 {
 	for (auto h: parent_cw->hostlist)
 	{
 		if (h->title() == title) {
-			pb_add->setText(tr("Change"));
+			m_changing_host = true;
+			pb_server_add->setText(tr("Change"));
 			return;
 		}
 	}
 
-	pb_add->setText(tr("Add"));
+	m_changing_host = true;
+	pb_server_add->setText(tr("Add"));
 }
 
 // play the sound if check box has been clicked
@@ -466,7 +591,7 @@ void PreferencesDialog::slot_getComputerPath()
 	if (fileName.isEmpty())
 		return;
 
-  	LineEdit_computer->setText(fileName);
+  	enginePath->setText(fileName);
 }
 
 void PreferencesDialog::slot_getGobanPicturePath()

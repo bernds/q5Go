@@ -12,9 +12,15 @@ class MainWindow;
 class ClientWindow;
 
 class PreferencesDialog : public QDialog, public Ui::PreferencesDialogGui
-{ 
+{
 	Q_OBJECT
 
+	bool m_changing_engine = false;
+	bool m_changing_host = false;
+
+	bool avoid_losing_data ();
+	void clear_engine ();
+	void clear_host ();
 public:
 	PreferencesDialog(QWidget* parent = 0);
 	~PreferencesDialog();
@@ -31,6 +37,9 @@ public slots:
 	virtual void slot_new_server();
 	virtual void slot_add_server();
 	virtual void slot_delete_server();
+	virtual void slot_new_engine();
+	virtual void slot_add_engine();
+	virtual void slot_delete_engine();
 	virtual void slot_apply();
 	virtual void startHelpMode();
 	virtual void selectFont(int);
@@ -42,13 +51,15 @@ public slots:
 	virtual void selectConsoleFont() { selectFont (5); }
 	virtual void slot_accept();
 	virtual void slot_reject();
-	virtual void slot_textChanged (const QString &);
+	virtual void slot_serverChanged (const QString &);
+	virtual void slot_engineChanged (const QString &);
 	virtual void slot_getComputerPath();
 	virtual void slot_getGobanPicturePath();
 	virtual void slot_getTablePicturePath();
 	virtual void slot_main_time_changed(int);
 	virtual void slot_BY_time_changed(int);
 	virtual void slot_clickedHostList(QListWidgetItem *);
+	virtual void slot_clickedEngines(QListWidgetItem *);
 
 private:
 	void          saveSizes();

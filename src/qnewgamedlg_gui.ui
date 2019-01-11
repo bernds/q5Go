@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>375</height>
+    <height>463</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -35,7 +35,7 @@
    <bool>false</bool>
   </property>
   <layout class="QGridLayout">
-   <item row="2" column="0" colspan="2">
+   <item row="7" column="0" colspan="2">
     <widget class="QGroupBox" name="IGSgroup_box_2">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -48,7 +48,7 @@
      </property>
      <layout class="QHBoxLayout">
       <item>
-       <widget class="QLineEdit" name="_LineEdit_GameToLoad">
+       <widget class="QLineEdit" name="gameToLoad">
         <property name="enabled">
          <bool>true</bool>
         </property>
@@ -68,314 +68,7 @@
      </layout>
     </widget>
    </item>
-   <item row="0" column="1">
-    <widget class="QGroupBox" name="groupBox1_2">
-     <property name="title">
-      <string>Black Player</string>
-     </property>
-     <layout class="QGridLayout">
-      <item row="2" column="0" colspan="2">
-       <widget class="QLabel" name="textLabel1_2">
-        <property name="text">
-         <string>Computer Level</string>
-        </property>
-        <property name="wordWrap">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="2">
-       <widget class="QSpinBox" name="_BlackLevelSpinBox">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="maximum">
-         <number>10</number>
-        </property>
-        <property name="value">
-         <number>10</number>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="textLabel1">
-        <property name="text">
-         <string>Name</string>
-        </property>
-        <property name="wordWrap">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="pixmapLabel2">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="pixmap">
-         <pixmap resource="q4go.qrc">:/QNewGameDlgGui/images/qnewgamedlg/image1.png</pixmap>
-        </property>
-        <property name="scaledContents">
-         <bool>true</bool>
-        </property>
-        <property name="wordWrap">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1" colspan="2">
-       <widget class="QLineEdit" name="_BlackPlayerLineEdit">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1" colspan="2">
-       <widget class="QComboBox" name="_BlackTypeComboBox">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="1" column="0" colspan="2">
-    <widget class="QGroupBox" name="groupBox4">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="title">
-      <string>New Game</string>
-     </property>
-     <layout class="QGridLayout">
-      <item row="0" column="0">
-       <layout class="QHBoxLayout">
-        <property name="spacing">
-         <number>6</number>
-        </property>
-        <property name="margin">
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QLabel" name="TextLabel3">
-          <property name="text">
-           <string>Board size:</string>
-          </property>
-          <property name="wordWrap">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="_SizeSpinBox">
-          <property name="maximumSize">
-           <size>
-            <width>60</width>
-            <height>32767</height>
-           </size>
-          </property>
-          <property name="minimum">
-           <number>4</number>
-          </property>
-          <property name="maximum">
-           <number>36</number>
-          </property>
-          <property name="value">
-           <number>19</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="2" column="0">
-       <layout class="QHBoxLayout">
-        <property name="spacing">
-         <number>6</number>
-        </property>
-        <property name="margin">
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QLabel" name="TextLabel5">
-          <property name="text">
-           <string>Handicap:</string>
-          </property>
-          <property name="wordWrap">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="_HandicapSpinBox">
-          <property name="maximumSize">
-           <size>
-            <width>60</width>
-            <height>32767</height>
-           </size>
-          </property>
-          <property name="maximum">
-           <number>13</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="1" column="0">
-       <layout class="QHBoxLayout">
-        <property name="spacing">
-         <number>6</number>
-        </property>
-        <property name="margin">
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QLabel" name="TextLabel4">
-          <property name="text">
-           <string>Komi:</string>
-          </property>
-          <property name="wordWrap">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="KomiSpinBox" name="komiSpin" native="true">
-          <property name="minimumSize">
-           <size>
-            <width>20</width>
-            <height>20</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>60</width>
-            <height>32767</height>
-           </size>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::StrongFocus</enum>
-          </property>
-          <property name="acceptDrops">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="0" column="1">
-       <widget class="QCheckBox" name="_oneColorGoCheckbox">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="text">
-         <string>One Color Go</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="0" column="0">
-    <widget class="QGroupBox" name="groupBox1_2_2">
-     <property name="title">
-      <string>White Player</string>
-     </property>
-     <layout class="QGridLayout">
-      <item row="2" column="2">
-       <widget class="QSpinBox" name="_WhiteLevelSpinBox">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="maximum">
-         <number>10</number>
-        </property>
-        <property name="value">
-         <number>10</number>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0" colspan="2">
-       <widget class="QLabel" name="textLabel1_2_2">
-        <property name="text">
-         <string>Computer Level</string>
-        </property>
-        <property name="wordWrap">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="textLabel1_3">
-        <property name="text">
-         <string>Name</string>
-        </property>
-        <property name="wordWrap">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1" colspan="2">
-       <widget class="QLineEdit" name="_WhitePlayerLineEdit">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1" colspan="2">
-       <widget class="QComboBox" name="_WhiteTypeComboBox">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="pixmapLabel2_2">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="pixmap">
-         <pixmap resource="q4go.qrc">:/QNewGameDlgGui/images/qnewgamedlg/image2.png</pixmap>
-        </property>
-        <property name="scaledContents">
-         <bool>true</bool>
-        </property>
-        <property name="wordWrap">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="3" column="0" colspan="2">
+   <item row="8" column="0" colspan="2">
     <spacer name="spacer3">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -391,12 +84,21 @@
      </property>
     </spacer>
    </item>
-   <item row="4" column="0" colspan="2">
+   <item row="9" column="0" colspan="2">
     <layout class="QHBoxLayout">
      <property name="spacing">
       <number>6</number>
      </property>
-     <property name="margin">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
       <number>0</number>
      </property>
      <item>
@@ -446,6 +148,215 @@
      </item>
     </layout>
    </item>
+   <item row="0" column="0" colspan="2">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Players</string>
+     </property>
+     <layout class="QFormLayout" name="formLayout">
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Engine:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="engineComboBox">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="textLabel1_2_2">
+        <property name="text">
+         <string>Engine Level:</string>
+        </property>
+        <property name="wordWrap">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Computer plays:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QToolButton" name="engineColorButton">
+        <property name="text">
+         <string>...</string>
+        </property>
+        <property name="icon">
+         <iconset resource="q4go.qrc">
+          <normaloff>:/QNewGameDlgGui/images/qnewgamedlg/image1.png</normaloff>
+          <normalon>:/QNewGameDlgGui/images/qnewgamedlg/image2.png</normalon>:/QNewGameDlgGui/images/qnewgamedlg/image1.png</iconset>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QSpinBox" name="engineLevelSpinBox">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximum">
+         <number>10</number>
+        </property>
+        <property name="value">
+         <number>10</number>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="textLabel1_3">
+        <property name="text">
+         <string>Human:</string>
+        </property>
+        <property name="wordWrap">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="humanPlayerLineEdit">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="6" column="0" colspan="2">
+    <widget class="QGroupBox" name="groupBox4">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="title">
+      <string>Game parameters</string>
+     </property>
+     <layout class="QGridLayout">
+      <item row="1" column="1">
+       <widget class="KomiSpinBox" name="komiSpin" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>60</width>
+          <height>32767</height>
+         </size>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::StrongFocus</enum>
+        </property>
+        <property name="acceptDrops">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="TextLabel4">
+        <property name="text">
+         <string>Komi:</string>
+        </property>
+        <property name="wordWrap">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QSpinBox" name="handicapSpinBox">
+        <property name="maximumSize">
+         <size>
+          <width>60</width>
+          <height>32767</height>
+         </size>
+        </property>
+        <property name="maximum">
+         <number>13</number>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="TextLabel3">
+        <property name="text">
+         <string>Board size:</string>
+        </property>
+        <property name="wordWrap">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="TextLabel5">
+        <property name="text">
+         <string>Handicap:</string>
+        </property>
+        <property name="wordWrap">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QSpinBox" name="boardsizeSpinBox">
+        <property name="maximumSize">
+         <size>
+          <width>60</width>
+          <height>32767</height>
+         </size>
+        </property>
+        <property name="minimum">
+         <number>4</number>
+        </property>
+        <property name="maximum">
+         <number>36</number>
+        </property>
+        <property name="value">
+         <number>19</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
@@ -457,17 +368,7 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>_WhiteTypeComboBox</tabstop>
-  <tabstop>_WhitePlayerLineEdit</tabstop>
-  <tabstop>_WhiteLevelSpinBox</tabstop>
-  <tabstop>_BlackTypeComboBox</tabstop>
-  <tabstop>_BlackPlayerLineEdit</tabstop>
-  <tabstop>_BlackLevelSpinBox</tabstop>
-  <tabstop>_SizeSpinBox</tabstop>
-  <tabstop>komiSpin</tabstop>
-  <tabstop>_HandicapSpinBox</tabstop>
-  <tabstop>_oneColorGoCheckbox</tabstop>
-  <tabstop>_LineEdit_GameToLoad</tabstop>
+  <tabstop>gameToLoad</tabstop>
   <tabstop>_OkPushButton</tabstop>
   <tabstop>_CancelPushButton</tabstop>
  </tabstops>

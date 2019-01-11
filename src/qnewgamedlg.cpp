@@ -1,91 +1,54 @@
-/***************************************************************************
-                          qnewgamedlg.cpp  -  description
-                             -------------------
-    begin                : Thu Dec 20 2001
-    copyright            : (C) 2001 by PALM Thomas , DINTILHAC Florian, HIVERT Anthony, PIOC Sebastien
-    email                : 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
-
 #include <QFileDialog>
-#include "qnewgamedlg.h"
+
+#include "qgo.h"
 #include "defines.h"
+#include "qnewgamedlg.h"
 #include "setting.h"
 #include "komispinbox.h"
 #include <qmessagebox.h>
-#include <stdio.h>
 
-
-/* 
- *  Constructs a QNewGameDlg which is a child of 'parent', with the
- *  name 'name' and widget flags set to 'f' 
- *
- *  The dialog will by default be modeless, unless you set 'modal' to
- *  TRUE to construct a mod#include "komispinbox.h"al dialog.
- */
-
-
-
-
-QNewGameDlg::QNewGameDlg( QWidget* parent,  const char* name)
+QNewGameDlg::QNewGameDlg( QWidget* parent, const QList<Engine *> engines)
 	: QDialog (parent)
 {
 	setupUi(this);
-	init();
 	setModal (true);
-//	initDialog();
 
-    // signals and slots connections
-    connect( _BlackTypeComboBox, SIGNAL( activated(int) ), this, SLOT( slotPlayerBlackTypeChanged() ) );
-    connect( _WhiteTypeComboBox, SIGNAL( activated(int) ), this, SLOT( slotPlayerWhiteTypeChanged() ) );
-    connect( _WhitePlayerLineEdit, SIGNAL( textChanged(const QString&) ), this, SLOT( slotPlayerWhiteNameChanged() ) );
-    connect( _BlackPlayerLineEdit, SIGNAL( textChanged(const QString&) ), this, SLOT( slotPlayerBlackNameChanged() ) );
-    connect( _SizeSpinBox, SIGNAL( valueChanged(int) ), this, SLOT( slotGobanSizeChanged() ) );
-//    connect( komiSpin, SIGNAL( valueChanged() ), this, SLOT( slotKomiChanged() ) );
-    connect( _HandicapSpinBox, SIGNAL( valueChanged(int) ), this, SLOT( slotHandicapChanged() ) );
-//    connect( _TimeSpinBox, SIGNAL( valueChanged(int) ), this, SLOT( slotTimeChanged() ) );
-    connect( _WhiteLevelSpinBox, SIGNAL( valueChanged(int) ), this, SLOT( slotLevelWhiteChanged() ) );
-    connect( _BlackLevelSpinBox, SIGNAL( valueChanged(int) ), this, SLOT( slotLevelBlackChanged() ) );
-    connect( _OkPushButton, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
-    connect( _CancelPushButton, SIGNAL( clicked() ), this, SLOT( slotCancel() ) );
-    connect( _oneColorGoCheckbox, SIGNAL( clicked() ), this, SLOT( slotOneColorGoClicked() ) );
-}
+	for (auto e: engines)
+		engineComboBox->addItem (e->title ());
 
-/*  
- *  Destroys the object and frees any allocated resources
- */
-QNewGameDlg::~QNewGameDlg()
-{
-    // no need to delete child widgets, Qt does it all for us
+	int sz = setting->readIntEntry("COMPUTER_SIZE");
+	if (sz > 3 && sz < 26)
+		boardsizeSpinBox->setValue (sz);
+
+	int hc = setting->readIntEntry("COMPUTER_HANDICAP");
+	handicapSpinBox->setValue (hc);
+	engineColorButton->setChecked (setting->readBoolEntry ("COMPUTER_WHITE"));
 }
 
 void QNewGameDlg::slotCancel()
 {
-    QDialog::reject();
+	QDialog::reject();
 
+}
+
+int QNewGameDlg::engine_index ()
+{
+	return engineComboBox->currentIndex ();
+}
+
+bool QNewGameDlg::computer_white_p ()
+{
+	return engineColorButton->isChecked ();
 }
 
 void QNewGameDlg::slotOk()
 {
-
-	if (getPlayerBlackName().simplified().isEmpty())
-		_playerBlackName = getPlayerBlackType() == HUMAN ? tr("Human") : tr("Computer");
-	if (getPlayerWhiteName().simplified().isEmpty())
-		_playerWhiteName = getPlayerWhiteType() == HUMAN ? tr("Human") : tr("Computer");
-
-
-	if (_handicap == 1)
+	if (handicap () == 1)
 	{
-		QMessageBox msg(tr("Error"),tr("You entered an invalid Handicap (1 is not legal)"), QMessageBox::Warning,
-			QMessageBox::Ok | QMessageBox::Default, Qt::NoButton, Qt::NoButton);
+		QMessageBox msg(tr("Error"),
+				tr("You entered an invalid Handicap (1 is not legal)"),
+				QMessageBox::Warning,
+				QMessageBox::Ok | QMessageBox::Default, Qt::NoButton, Qt::NoButton);
 		msg.exec();
 		QDialog::reject();
 	}
@@ -93,149 +56,30 @@ void QNewGameDlg::slotOk()
 		QDialog::accept();
 }
 
-void QNewGameDlg::slotGobanSizeChanged()
+
+int QNewGameDlg::board_size()
 {
-	_size=_SizeSpinBox->text().toInt();
+	return boardsizeSpinBox->value ();
 }
 
-void QNewGameDlg::slotHandicapChanged()
+int QNewGameDlg::handicap()
 {
-	_handicap=_HandicapSpinBox->text().toInt();
+	return handicapSpinBox->value ();
 }
 
-void QNewGameDlg::slotKomiChanged()
+game_info QNewGameDlg::create_game_info ()
 {
-	_komi=(float)komiSpin->value();
-}
-
-void QNewGameDlg::slotLevelBlackChanged()
-{
-	_levelBlack=_BlackLevelSpinBox->text().toInt();
-}
-
-void QNewGameDlg::slotLevelWhiteChanged()
-{
-	_levelWhite=_WhiteLevelSpinBox->text().toInt();
-}
-
-void QNewGameDlg::slotPlayerBlackNameChanged()
-{
-	_playerBlackName=_BlackPlayerLineEdit->text();
-}
-
-void QNewGameDlg::slotPlayerBlackTypeChanged()
-{
-	_playerBlackType=_BlackTypeComboBox->currentIndex();
-	if (_BlackTypeComboBox->currentIndex()==HUMAN)
-		_BlackLevelSpinBox->setDisabled(true);
-	else
-		_BlackLevelSpinBox->setEnabled(true);
-}
-
-void QNewGameDlg::slotPlayerWhiteNameChanged()
-{
-    _playerWhiteName=_WhitePlayerLineEdit->text();
-}
-
-void QNewGameDlg::slotPlayerWhiteTypeChanged()
-{
-    _playerWhiteType=_WhiteTypeComboBox->currentIndex();
-	if (_WhiteTypeComboBox->currentIndex()==HUMAN)
-		_WhiteLevelSpinBox->setDisabled(true);
-	else
-		_WhiteLevelSpinBox->setEnabled(true);
-}
-
-void QNewGameDlg::slotTimeChanged()
-{
-//    _time=_TimeSpinBox->text().toInt();
-}
-
-void QNewGameDlg::slotOneColorGoClicked()
-{
-	_oneColorGo = _oneColorGoCheckbox->isChecked();
-}
-
-int QNewGameDlg::getSize()
-{
-	return _size;
-}
-
-int QNewGameDlg::getHandicap()
-{
-	return _handicap;
-}
-
-bool QNewGameDlg::getOneColorGo()
-{
-	return _oneColorGo;
-}
-
-float QNewGameDlg::getKomi()
-{
-	return komiSpin->value();//_komi;
-}
-
-int QNewGameDlg::getLevelBlack()
-{
-	return _levelBlack;
-}
-
-int QNewGameDlg::getLevelWhite()
-{
-	return _levelWhite;
-}
-
-QString QNewGameDlg::getPlayerBlackName()
-{
-	return _playerBlackName;
-}
-
-QString QNewGameDlg::getPlayerWhiteName()
-{
-	return _playerWhiteName;
-}
-
-int QNewGameDlg::getPlayerBlackType()
-{
-	return _playerBlackType;
-}
-
-int QNewGameDlg::getPlayerWhiteType()
-{
-	return _playerWhiteType;
-}
-
-int QNewGameDlg::getTime()
-{
-	return _time;
-}
-
-void QNewGameDlg::init()
-{
-	_size = setting->readIntEntry("COMPUTER_SIZE") ;//Gothic::size;
-	_komi = 5.5 ;//Gothic::komi;
-	_handicap = setting->readIntEntry("COMPUTER_HANDICAP") ;//Gothic::handicap;
-	_playerBlackType = (setting->readBoolEntry("COMPUTER_BLACK") ? COMPUTER : HUMAN); //Gothic::blackType;
-	_playerWhiteType = (setting->readBoolEntry("COMPUTER_WHITE") ? COMPUTER : HUMAN); //Gothic::whiteType;
-	_levelBlack = 10; //Gothic::levelBlack;
-	_levelWhite = 10; //Gothic::levelWhite;
-	_playerBlackName = "";//Gothic::playerBlackName;
-	_playerWhiteName = "";//Gothic::playerWhiteName;
-	_time = 0;//Gothic::time;
-	_oneColorGo = false;
-
-	_WhiteTypeComboBox->addItem(tr("Human"));
-	_WhiteTypeComboBox->addItem(tr("Computer"));
-	_WhiteTypeComboBox->setCurrentIndex(_playerWhiteType);
-	_BlackTypeComboBox->addItem(tr("Human"));
-	_BlackTypeComboBox->addItem(tr("Computer"));
-	_BlackTypeComboBox->setCurrentIndex(_playerBlackType);
-	_SizeSpinBox->setValue(_size);
-	_HandicapSpinBox->setValue(_handicap);
-
-	slotPlayerWhiteTypeChanged();
-	slotPlayerBlackTypeChanged();
+	QString human = humanPlayerLineEdit->text ();
+	QString computer = engineComboBox->currentText ();
+	bool human_is_black = engineColorButton->isChecked ();
+	const QString &w = human_is_black ? computer : human;
+	const QString &b = human_is_black ? human : computer;
+	double komi = komiSpin->value ();
+	int hc = handicap ();
+	game_info info ("", w.toStdString (), b.toStdString (),
+			"", "",
+			"", komi, hc, ranked::free, "", "", "", "", "", "", -1);
+	return info;
 }
 
 void QNewGameDlg::slotGetFileName()
@@ -246,6 +90,5 @@ void QNewGameDlg::slotGetFileName()
 	if (getFileName.isEmpty())
 		return;
 
-	_LineEdit_GameToLoad->setText(getFileName);
-	fileName = getFileName;
+	gameToLoad->setText(getFileName);
 }

@@ -73,6 +73,7 @@ public:
 //	QSortedList<Host>  hostlist;
 //	QPtrList<Host>  hostlist;
 	HostList hostlist;
+	QList<Engine *> m_engines;
 
 signals:
 	void signal_cmdsent(const QString&);

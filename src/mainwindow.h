@@ -14,6 +14,7 @@
 #include <QTreeWidget>
 #include <QMainWindow>
 
+#include "qgo.h"
 #include "preferences.h"
 #include "board.h"
 #include "mainwidget.h"
@@ -28,8 +29,7 @@ class StatusTip;
 class qGoIF;
 class QNewGameDlg;
 class QToolBar;
-
-struct ASCII_Import;
+class Engine;
 
 extern QString screen_key ();
 
@@ -219,7 +219,7 @@ class MainWindow_GTP : public MainWindow, public Gtp_Controller
 {
 	QGtp *m_gtp;
 public:
-	MainWindow_GTP (QWidget *parent, std::shared_ptr<game_record>, const QString &program,
+	MainWindow_GTP (QWidget *parent, std::shared_ptr<game_record>, const Engine &program,
 			bool b_comp, bool w_comp);
 	~MainWindow_GTP ();
 

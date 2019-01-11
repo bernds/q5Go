@@ -187,7 +187,7 @@ After placing and/or undo release button for returning to starting point automat
       <string/>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="InterfaceTabWidget">
       <attribute name="title">
@@ -1600,27 +1600,31 @@ This will display realistic 3D stones with stripes and shadow</string>
        <string>Computer Go</string>
       </attribute>
       <layout class="QGridLayout">
-       <item row="0" column="0">
-        <widget class="QGroupBox" name="GoEnginegroup_box">
+       <item row="2" column="0">
+        <layout class="QHBoxLayout"/>
+       </item>
+       <item row="4" column="0">
+        <spacer name="Spacer8">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Expanding</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>260</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="3" column="0">
+        <widget class="QGroupBox" name="groupBox25_3">
          <property name="title">
-          <string>Go Engine</string>
+          <string>Default games settings</string>
          </property>
          <layout class="QGridLayout">
-          <property name="leftMargin">
-           <number>11</number>
-          </property>
-          <property name="topMargin">
-           <number>11</number>
-          </property>
-          <property name="rightMargin">
-           <number>11</number>
-          </property>
-          <property name="bottomMargin">
-           <number>11</number>
-          </property>
-          <property name="spacing">
-           <number>6</number>
-          </property>
           <item row="0" column="0">
            <layout class="QHBoxLayout">
             <property name="spacing">
@@ -1639,124 +1643,43 @@ This will display realistic 3D stones with stripes and shadow</string>
              <number>0</number>
             </property>
             <item>
-             <widget class="QLineEdit" name="LineEdit_computer">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
+             <widget class="QLabel" name="TextLabel3_3_3">
               <property name="toolTip">
-               <string>Path to the Go program</string>
+               <string>board size</string>
               </property>
-              <property name="whatsThis">
-               <string>Path to the Go playing program, e.g. GnuGo</string>
+              <property name="text">
+               <string>Board size:</string>
+              </property>
+              <property name="wordWrap">
+               <bool>false</bool>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="ComputerPathButton">
-              <property name="text">
-               <string/>
+             <widget class="QSpinBox" name="computerSizeSpin">
+              <property name="maximumSize">
+               <size>
+                <width>60</width>
+                <height>32767</height>
+               </size>
               </property>
-              <property name="icon">
-               <iconset resource="q4go.qrc">
-                <normaloff>:/PreferencesDialogGui/images/preferences/image1.png</normaloff>:/PreferencesDialogGui/images/preferences/image1.png</iconset>
+              <property name="toolTip">
+               <string>board size</string>
+              </property>
+              <property name="minimum">
+               <number>4</number>
+              </property>
+              <property name="maximum">
+               <number>36</number>
+              </property>
+              <property name="value">
+               <number>19</number>
               </property>
              </widget>
             </item>
            </layout>
           </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <layout class="QHBoxLayout">
-         <item>
-          <widget class="QGroupBox" name="buttonGroup4">
-           <property name="title">
-            <string>Default for White</string>
-           </property>
-           <layout class="QGridLayout">
-            <item row="0" column="0">
-             <layout class="QHBoxLayout">
-              <item>
-               <widget class="QRadioButton" name="computerButtonWhite">
-                <property name="text">
-                 <string>Computer</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QRadioButton" name="humanButtonWhite">
-                <property name="text">
-                 <string>Human</string>
-                </property>
-                <property name="checked">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="buttonGroup5">
-           <property name="title">
-            <string>Default for Black</string>
-           </property>
-           <layout class="QGridLayout">
-            <item row="0" column="0">
-             <layout class="QHBoxLayout">
-              <item>
-               <widget class="QRadioButton" name="computerButtonBlack">
-                <property name="text">
-                 <string>Computer</string>
-                </property>
-                <property name="checked">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QRadioButton" name="humanButtonBlack">
-                <property name="text">
-                 <string>Human</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item row="3" column="0">
-        <spacer name="Spacer8">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Expanding</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>260</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="2" column="0">
-        <widget class="QGroupBox" name="groupBox25_3">
-         <property name="title">
-          <string>Default games settings</string>
-         </property>
-         <layout class="QGridLayout">
-          <item row="0" column="1">
+          <item row="1" column="0">
            <layout class="QHBoxLayout">
             <property name="spacing">
              <number>6</number>
@@ -1813,59 +1736,293 @@ This will display realistic 3D stones with stripes and shadow</string>
             </item>
            </layout>
           </item>
-          <item row="0" column="0">
-           <layout class="QHBoxLayout">
-            <property name="spacing">
-             <number>6</number>
-            </property>
-            <property name="leftMargin">
-             <number>0</number>
-            </property>
+          <item row="2" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
             <property name="topMargin">
              <number>0</number>
             </property>
-            <property name="rightMargin">
-             <number>0</number>
-            </property>
-            <property name="bottomMargin">
-             <number>0</number>
-            </property>
             <item>
-             <widget class="QLabel" name="TextLabel3_3_3">
-              <property name="toolTip">
-               <string>board size</string>
-              </property>
+             <widget class="QLabel" name="label_7">
               <property name="text">
-               <string>Board size:</string>
-              </property>
-              <property name="wordWrap">
-               <bool>false</bool>
+               <string>Computer color:</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="computerSizeSpin">
-              <property name="maximumSize">
+             <spacer name="horizontalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
                <size>
-                <width>60</width>
-                <height>32767</height>
+                <width>40</width>
+                <height>20</height>
                </size>
               </property>
-              <property name="toolTip">
-               <string>board size</string>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QToolButton" name="computerWhiteButton">
+              <property name="text">
+               <string>...</string>
               </property>
-              <property name="minimum">
-               <number>4</number>
+              <property name="icon">
+               <iconset resource="q4go.qrc">
+                <normaloff>:/QNewGameDlgGui/images/qnewgamedlg/image1.png</normaloff>
+                <normalon>:/QNewGameDlgGui/images/qnewgamedlg/image2.png</normalon>:/QNewGameDlgGui/images/qnewgamedlg/image1.png</iconset>
               </property>
-              <property name="maximum">
-               <number>36</number>
-              </property>
-              <property name="value">
-               <number>19</number>
+              <property name="checkable">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
            </layout>
+          </item>
+          <item row="1" column="1">
+           <spacer name="horizontalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QGroupBox" name="GoEnginegroup_box">
+         <property name="title">
+          <string>Go Engines</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_7">
+          <item row="4" column="0">
+           <widget class="QWidget" name="widget_6" native="true">
+            <layout class="QGridLayout" name="gridLayout_6">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <property name="verticalSpacing">
+              <number>6</number>
+             </property>
+             <item row="0" column="0">
+              <spacer name="horizontalSpacer">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="0" column="1">
+              <layout class="QVBoxLayout" name="_21">
+               <property name="spacing">
+                <number>6</number>
+               </property>
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QPushButton" name="pb_engine_new">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="toolTip">
+                  <string>Clear the engine form.</string>
+                 </property>
+                 <property name="whatsThis">
+                  <string>New
+
+clear form; doesn't make any changes to the entries</string>
+                 </property>
+                 <property name="text">
+                  <string>New</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="_22">
+                 <property name="spacing">
+                  <number>6</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QPushButton" name="pb_engine_add">
+                   <property name="toolTip">
+                    <string>Add or change the current entry.</string>
+                   </property>
+                   <property name="whatsThis">
+                    <string>Add or Change
+
+Label 'Change ' appears when title is not unique, i.e. the saved entries with that title will be superseded by the current entries.
+
+Label 'Add' is default. The given entries will be saved under the given title.</string>
+                   </property>
+                   <property name="text">
+                    <string>Add</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="pb_engine_delete">
+                   <property name="toolTip">
+                    <string>Delete the current entry.</string>
+                   </property>
+                   <property name="whatsThis">
+                    <string>Delete
+
+Deletes the saved entries with same Title.
+
+Note: 'Delete' concerns saved records.</string>
+                   </property>
+                   <property name="text">
+                    <string>Delete</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="0" column="1" rowspan="5">
+           <widget class="QListWidget" name="ListView_engines">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_10">
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_11">
+              <property name="text">
+               <string>Arguments:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="engineArgs">
+              <property name="toolTip">
+               <string>Any command line arguments that should be passed at startup.</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="1" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_9">
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="enginelabel_2">
+              <property name="text">
+               <string>Executable:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="enginePath">
+              <property name="toolTip">
+               <string>The path to the GTP engine's executable.</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="enginePathButton">
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="q4go.qrc">
+                <normaloff>:/PreferencesDialogGui/images/preferences/image1.png</normaloff>:/PreferencesDialogGui/images/preferences/image1.png</iconset>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="0" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_8">
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="enginelabel_1">
+              <property name="text">
+               <string>Name:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="engineName">
+              <property name="toolTip">
+               <string>The name of the engine by which it is selected in the new computer game dialog</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="3" column="0">
+           <spacer name="verticalSpacer_14">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </widget>
@@ -2248,7 +2405,7 @@ New users: leave blank!</string>
              <number>0</number>
             </property>
             <item>
-             <widget class="QPushButton" name="pb_new">
+             <widget class="QPushButton" name="pb_server_new">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -2256,7 +2413,7 @@ New users: leave blank!</string>
                </sizepolicy>
               </property>
               <property name="toolTip">
-               <string>clear form</string>
+               <string>Clear the server form.</string>
               </property>
               <property name="whatsThis">
                <string>New
@@ -2286,9 +2443,9 @@ clear form; doesn't make any changes to the entries</string>
                <number>0</number>
               </property>
               <item>
-               <widget class="QPushButton" name="pb_add">
+               <widget class="QPushButton" name="pb_server_add">
                 <property name="toolTip">
-                 <string>add/change current entry</string>
+                 <string>Add or change the current entry.</string>
                 </property>
                 <property name="whatsThis">
                  <string>Add or Change
@@ -2303,9 +2460,9 @@ Label 'Add' is default. The given entries will be saved under the given title.</
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pb_delete">
+               <widget class="QPushButton" name="pb_server_delete">
                 <property name="toolTip">
-                 <string>delete current entry</string>
+                 <string>Delete the current entry.</string>
                 </property>
                 <property name="whatsThis">
                  <string>Delete
@@ -3929,40 +4086,8 @@ up to :</string>
    <slot>slot_accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>518</x>
-     <y>654</y>
-    </hint>
-    <hint type="destinationlabel">
      <x>20</x>
      <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>ComputerPathButton</sender>
-   <signal>clicked()</signal>
-   <receiver>PreferencesDialogGui</receiver>
-   <slot>slot_getComputerPath()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>555</x>
-     <y>83</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pb_delete</sender>
-   <signal>clicked()</signal>
-   <receiver>PreferencesDialogGui</receiver>
-   <slot>slot_delete_server()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>254</x>
-     <y>589</y>
     </hint>
     <hint type="destinationlabel">
      <x>20</x>
@@ -3977,72 +4102,8 @@ up to :</string>
    <slot>slot_getGobanPicturePath()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>555</x>
-     <y>325</y>
-    </hint>
-    <hint type="destinationlabel">
      <x>20</x>
      <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pb_add</sender>
-   <signal>clicked()</signal>
-   <receiver>PreferencesDialogGui</receiver>
-   <slot>slot_add_server()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>198</x>
-     <y>589</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>ListView_hosts</sender>
-   <signal>itemClicked(QListWidgetItem*)</signal>
-   <receiver>PreferencesDialogGui</receiver>
-   <slot>slot_clickedHostList(QListWidgetItem *)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>326</x>
-     <y>46</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>LineEdit_title</sender>
-   <signal>textChanged(QString)</signal>
-   <receiver>PreferencesDialogGui</receiver>
-   <slot>slot_textChanged(QString)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>103</x>
-     <y>47</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pb_new</sender>
-   <signal>clicked()</signal>
-   <receiver>PreferencesDialogGui</receiver>
-   <slot>slot_new_server()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>197</x>
-     <y>559</y>
     </hint>
     <hint type="destinationlabel">
      <x>20</x>
@@ -4057,8 +4118,184 @@ up to :</string>
    <slot>slot_getTablePicturePath()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>555</x>
-     <y>356</y>
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>enginePathButton</sender>
+   <signal>clicked()</signal>
+   <receiver>PreferencesDialogGui</receiver>
+   <slot>slot_getComputerPath()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb_engine_delete</sender>
+   <signal>clicked()</signal>
+   <receiver>PreferencesDialogGui</receiver>
+   <slot>slot_delete_engine()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb_engine_add</sender>
+   <signal>clicked()</signal>
+   <receiver>PreferencesDialogGui</receiver>
+   <slot>slot_add_engine()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ListView_engines</sender>
+   <signal>itemClicked(QListWidgetItem*)</signal>
+   <receiver>PreferencesDialogGui</receiver>
+   <slot>slot_clickedEngines(QListWidgetItem *)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>engineName</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>PreferencesDialogGui</receiver>
+   <slot>slot_engineChanged(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb_engine_new</sender>
+   <signal>clicked()</signal>
+   <receiver>PreferencesDialogGui</receiver>
+   <slot>slot_new_engine()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb_server_delete</sender>
+   <signal>clicked()</signal>
+   <receiver>PreferencesDialogGui</receiver>
+   <slot>slot_delete_server()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb_server_add</sender>
+   <signal>clicked()</signal>
+   <receiver>PreferencesDialogGui</receiver>
+   <slot>slot_add_server()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ListView_hosts</sender>
+   <signal>itemClicked(QListWidgetItem*)</signal>
+   <receiver>PreferencesDialogGui</receiver>
+   <slot>slot_clickedHostList(QListWidgetItem *)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>LineEdit_title</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>PreferencesDialogGui</receiver>
+   <slot>slot_serverChanged(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb_server_new</sender>
+   <signal>clicked()</signal>
+   <receiver>PreferencesDialogGui</receiver>
+   <slot>slot_new_server()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
     </hint>
     <hint type="destinationlabel">
      <x>20</x>

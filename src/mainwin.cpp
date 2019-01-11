@@ -164,6 +164,17 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	}
 	std::sort (hostlist.begin (), hostlist.end (), [] (Host *a, Host *b) { return *a < *b; });
 
+	i = 0;
+	for (;;)
+	{
+		QString s = setting->readEntry("ENGINE" + QString::number(++i) + "a");
+		if (s.isNull ())
+			break;
+		m_engines.append (new Engine(s, setting->readEntry("ENGINE" + QString::number(i) + "b"),
+					     setting->readEntry("ENGINE" + QString::number(i) + "c")));
+	}
+	std::sort (hostlist.begin (), hostlist.end (), [] (Host *a, Host *b) { return *a < *b; });
+
 	// run slot command to initialize combobox and set host
 	QString w = setting->readEntry("ACTIVEHOST");
 	// int cb_connect
@@ -597,6 +608,15 @@ void ClientWindow::saveSettings()
 		setting->writeEntry("HOST" + QString::number(i) + "d", QString());
 		setting->writeEntry("HOST" + QString::number(i) + "e", QString());
 		setting->writeEntry("HOST" + QString::number(i) + "f", QString());
+	}
+
+	i = 0;
+	for (auto h: m_engines)
+	{
+		i++;
+		setting->writeEntry("ENGINE" + QString::number(i) + "a", h->title());
+		setting->writeEntry("ENGINE" + QString::number(i) + "b", h->path());
+		setting->writeEntry("ENGINE" + QString::number(i) + "c", h->args());
 	}
 
 	// save current connection if at least one host exists
@@ -2566,37 +2586,29 @@ void ClientWindow::slotFileOpen(bool)
 
 void ClientWindow::slotComputerPlay(bool)
 {
-	QString computer_path = setting->readEntry("COMPUTER_PATH");
-
-#ifndef Q_OS_MACX
-
-	if (computer_path.isEmpty())
+	if (m_engines.isEmpty ())
 	{
-		QMessageBox::warning(this, PACKAGE, tr("You did not set the Computer program path !"));
+		QMessageBox::warning(this, PACKAGE, tr("You did not configure any engines!"));
 		dlgSetPreferences (3);
 		return;
 	}
-#endif
-	QNewGameDlg dlg (this);
+
+	QNewGameDlg dlg (this, m_engines);
 	if (dlg.exec() != QDialog::Accepted)
 		return;
 
-	int hc = dlg.getHandicap ();
-	go_board starting_pos = new_handicap_board (dlg.getSize(), hc);
+	int eidx = dlg.engine_index ();
+	const Engine *engine = m_engines[eidx];
+	int hc = dlg.handicap ();
+	game_info info = dlg.create_game_info ();
+	go_board starting_pos = new_handicap_board (dlg.board_size (), dlg.handicap ());
 
-	game_info info ("", dlg.getPlayerWhiteName ().toStdString (),
-			dlg.getPlayerBlackName ().toStdString (),
-			"", "",
-			"", dlg.getKomi(), hc, ranked::free, "", "", "", "", "", "", -1);
 	std::shared_ptr<game_record> gr = std::make_shared<game_record> (starting_pos, hc > 1 ? white : black, info);
-
-	int b_type = dlg.getPlayerBlackType();
-	int w_type = dlg.getPlayerWhiteType();
 
 	if (gr == nullptr)
 		return;
-
-	new MainWindow_GTP (0, gr, computer_path, b_type == COMPUTER, w_type == COMPUTER);
+	bool computer_white = dlg.computer_white_p ();
+	new MainWindow_GTP (0, gr, *engine, !computer_white, computer_white);
 }
 
 
@@ -2911,11 +2923,7 @@ void ClientWindow::dlgSetPreferences(int tab)
 	dlg.timeSpin_Nmatch->setValue(setting->readIntEntry("NMATCH_MAIN_TIME"));
 	dlg.BYSpin_Nmatch->setValue(setting->readIntEntry("NMATCH_BYO_TIME"));
 
-	dlg.LineEdit_computer->setText(setting->readEntry("COMPUTER_PATH")); //SL added eb 12
-	dlg.computerButtonWhite->setChecked(setting->readBoolEntry("COMPUTER_WHITE"));
-	dlg.computerButtonBlack->setChecked(setting->readBoolEntry("COMPUTER_BLACK"));
-	dlg.humanButtonWhite->setChecked(!setting->readBoolEntry("COMPUTER_WHITE"));
-	dlg.humanButtonBlack->setChecked(!setting->readBoolEntry("COMPUTER_BLACK"));
+	dlg.computerWhiteButton->setChecked(setting->readBoolEntry("COMPUTER_WHITE"));
 	dlg.computerSizeSpin->setValue(setting->readIntEntry("COMPUTER_SIZE"));
 	dlg.computerHandicapSpin->setValue(setting->readIntEntry("COMPUTER_HANDICAP"));
 
@@ -3043,9 +3051,7 @@ bool ClientWindow::preferencesSave(PreferencesDialog *dlg)
 	setting->writeBoolEntry("AUTOSAVE_PLAYED", dlg->CheckBox_autoSave_Played->isChecked());
 
 	// Computer Tab
-	setting->writeEntry("COMPUTER_PATH", dlg->LineEdit_computer->text());
-	setting->writeBoolEntry("COMPUTER_WHITE", dlg->computerButtonWhite->isChecked());
-	setting->writeBoolEntry("COMPUTER_BLACK", dlg->computerButtonBlack->isChecked());
+	setting->writeBoolEntry("COMPUTER_WHITE", dlg->computerWhiteButton->isChecked());
 	setting->writeIntEntry("COMPUTER_SIZE", dlg->computerSizeSpin->text().toInt());
 	setting->writeIntEntry("COMPUTER_HANDICAP", dlg->computerHandicapSpin->text().toInt());
 

@@ -56,6 +56,27 @@ private:
 		HelpViewer *helpViewer;
 };
 
+//-----------
+
+class Engine
+{
+	QString m_title;
+	QString m_path;
+	QString m_args;
+public:
+	Engine(const QString &title, const QString &path, const QString &args)
+		: m_title (title), m_path (path), m_args (args)
+	{
+	}
+	QString title() const { return m_title; };
+	QString path() const { return m_path; };
+	QString args() const { return m_args; };
+	int operator== (Engine h)
+		{ return (this->m_title == h.m_title); };
+	bool operator< (Engine h)
+		{ return (this->m_title < h.m_title); };
+};
+
 extern qGo *qgo;
 extern QString program_dir;
 

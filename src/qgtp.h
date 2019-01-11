@@ -46,7 +46,8 @@ class Gtp_Controller
 
 public:
 	Gtp_Controller (QWidget *p) : m_parent (p) { }
-	QGtp *create_gtp (const QString &program, int size, double komi, int hc, int level);
+	QGtp *create_gtp (const QString &program, const QString &args,
+			  int size, double komi, int hc, int level);
 	virtual void gtp_played_move (int x, int y) = 0;
 	virtual void gtp_played_pass () = 0;
 	virtual void gtp_played_resign () = 0;
@@ -95,7 +96,8 @@ public slots:
 // void slot_stateChanged(QProcess::ProcessState);
 
 public:
-	QGtp(QWidget *parent, Gtp_Controller *c, const QString &prog, int size, float komi, int hc, int level);
+	QGtp(QWidget *parent, Gtp_Controller *c, const QString &prog, const QString &args,
+	     int size, float komi, int hc, int level);
 	~QGtp();
 
 	void request_move (stone_color col);
