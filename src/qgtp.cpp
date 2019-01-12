@@ -7,9 +7,9 @@
 #include "defines.h"
 #include "qgtp.h"
 
-QGtp *Gtp_Controller::create_gtp (const QString &prog, const QString &args, int size, double komi, int hc, int level)
+GTP_Process *Gtp_Controller::create_gtp (const QString &prog, const QString &args, int size, double komi, int hc, int level)
 {
-	QGtp *g = new QGtp (m_parent, this, prog, args, size, komi, hc, level);
+	GTP_Process *g = new GTP_Process (m_parent, this, prog, args, size, komi, hc, level);
 	return g;
 }
 
@@ -18,52 +18,43 @@ QGtp *Gtp_Controller::create_gtp (const QString &prog, const QString &args, int 
 * Fails:     never
 * Returns:   nothing
 */
-QGtp::QGtp(QWidget *parent, Gtp_Controller *c, const QString &prog, const QString &args,
-	   int size, float komi, int hc, int level)
+GTP_Process::GTP_Process(QWidget *parent, Gtp_Controller *c, const QString &prog, const QString &args,
+			 int size, float komi, int hc, int level)
 	: m_dlg (parent, TextView::type::gtp), m_controller (c), m_size (size), m_komi (komi), m_hc (hc), m_level (level)
 {
 	req_cnt = 1;
 
-	m_process = new QProcess();
 	m_dlg.show ();
 	m_dlg.activateWindow ();
-	connect (m_dlg.buttonAbort, &QPushButton::clicked, this, &QGtp::slot_abort_request);
+	connect (m_dlg.buttonAbort, &QPushButton::clicked, this, &GTP_Process::slot_abort_request);
 
-	connect (m_process, &QProcess::started, this, &QGtp::slot_started);
-	connect (m_process, &QProcess::errorOccurred, this, &QGtp::slot_error);
+	connect (this, &QProcess::started, this, &GTP_Process::slot_started);
+	connect (this, &QProcess::errorOccurred, this, &GTP_Process::slot_error);
 	// ??? Unresolved overload errors without this.
 	void (QProcess::*fini)(int, QProcess::ExitStatus) = &QProcess::finished;
-	connect (m_process, fini, this, &QGtp::slot_finished);
-	connect (m_process, &QProcess::readyReadStandardError,
-		 this, &QGtp::slot_startup_messages);
-	connect (m_process, &QProcess::readyReadStandardOutput,
-		 this, &QGtp::slot_receive_stdout);
+	connect (this, fini, this, &GTP_Process::slot_finished);
+	connect (this, &QProcess::readyReadStandardError, this, &GTP_Process::slot_startup_messages);
+	connect (this, &QProcess::readyReadStandardOutput, this, &GTP_Process::slot_receive_stdout);
 
 	QStringList arguments;
 	if (!args.isEmpty ())
 		arguments = args.split (QRegExp ("\\s+"));
-	m_process->start (prog, arguments);
+	start (prog, arguments);
 }
 
-QGtp::~QGtp()
+void GTP_Process::slot_started ()
 {
-	if (m_process)
-		delete m_process;
+	send_request ("protocol_version", &GTP_Process::startup_part2);
 }
 
-void QGtp::slot_started ()
-{
-	send_request ("protocol_version", &QGtp::startup_part2);
-}
-
-void QGtp::slot_error (QProcess::ProcessError)
+void GTP_Process::slot_error (QProcess::ProcessError)
 {
 	m_receivers.clear ();
 	m_dlg.hide ();
 	m_controller->gtp_exited ();
 }
 
-void QGtp::slot_abort_request (bool)
+void GTP_Process::slot_abort_request (bool)
 {
 	m_receivers.clear ();
 	quit ();
@@ -71,48 +62,48 @@ void QGtp::slot_abort_request (bool)
 	m_controller->gtp_exited ();
 }
 
-void QGtp::slot_startup_messages ()
+void GTP_Process::slot_startup_messages ()
 {
-	QString output = m_process->readAllStandardError ();
+	QString output = readAllStandardError ();
 	m_dlg.append (output);
 }
 
-void QGtp::startup_part2 (const QString &response)
+void GTP_Process::startup_part2 (const QString &response)
 {
 	if (response != "2") {
-		m_controller->gtp_failure (wrong_protocol ());
+		m_controller->gtp_failure (tr ("GTP engine reported unsupported protocol version"));
 		quit ();
 		return;
 	}
-	send_request (QString ("boardsize ") + QString::number (m_size), &QGtp::startup_part3);
+	send_request (QString ("boardsize ") + QString::number (m_size), &GTP_Process::startup_part3);
 }
 
-void QGtp::startup_part3 (const QString &)
+void GTP_Process::startup_part3 (const QString &)
 {
-	send_request ("clear_board", &QGtp::startup_part4);
+	send_request ("clear_board", &GTP_Process::startup_part4);
 }
 
-void QGtp::startup_part4 (const QString &)
+void GTP_Process::startup_part4 (const QString &)
 {
 	char komi[20];
 	sprintf (komi, "komi %.2f", m_komi);
-	t_receiver rcv = &QGtp::startup_part6;
+	t_receiver rcv = &GTP_Process::startup_part6;
 	if (m_hc > 2)
-		rcv = &QGtp::startup_part5;
+		rcv = &GTP_Process::startup_part5;
 	send_request (komi, rcv);
 }
 
-void QGtp::startup_part5 (const QString &)
+void GTP_Process::startup_part5 (const QString &)
 {
-	send_request (QString ("fixed_handicap ") + QString::number (m_hc), &QGtp::startup_part6);
+	send_request (QString ("fixed_handicap ") + QString::number (m_hc), &GTP_Process::startup_part6);
 }
 
-void QGtp::startup_part6 (const QString &)
+void GTP_Process::startup_part6 (const QString &)
 {
 	m_controller->gtp_startup_success ();
 }
 
-void QGtp::receive_move (const QString &move)
+void GTP_Process::receive_move (const QString &move)
 {
 	if (move.toLower () == "resign") {
 		m_controller->gtp_played_resign ();
@@ -129,48 +120,38 @@ void QGtp::receive_move (const QString &move)
 	}
 }
 
-void QGtp::played_move (stone_color col, int x, int y)
+void GTP_Process::played_move (stone_color col, int x, int y)
 {
 	if (x >= 8)
 		x++;
-	try {
-		char req[20];
-		sprintf (req, "%c%d", 'A' + x, m_size - y);
-		if (col == black)
-			send_request ("play black " + QString (req));
-		else
-			send_request ("play white " + QString (req));
-	} catch (gtp_exception &e) {
-		m_controller->gtp_failure (e);
-		quit ();
-	}
+	char req[20];
+	sprintf (req, "%c%d", 'A' + x, m_size - y);
+	if (col == black)
+		send_request ("play black " + QString (req));
+	else
+		send_request ("play white " + QString (req));
 }
 
-void QGtp::played_move_pass (stone_color col)
-{
-	try {
-		if (col == black)
-			send_request ("play black pass");
-		else
-			send_request ("play white pass");
-	} catch (gtp_exception &e) {
-		m_controller->gtp_failure (e);
-		quit ();
-	}
-}
-
-void QGtp::request_move (stone_color col)
+void GTP_Process::played_move_pass (stone_color col)
 {
 	if (col == black)
-		send_request ("genmove black", &QGtp::receive_move);
+		send_request ("play black pass");
 	else
-		send_request ("genmove white", &QGtp::receive_move);
+		send_request ("play white pass");
+}
+
+void GTP_Process::request_move (stone_color col)
+{
+	if (col == black)
+		send_request ("genmove black", &GTP_Process::receive_move);
+	else
+		send_request ("genmove white", &GTP_Process::receive_move);
 }
 
 /* Code */
 
 // exit
-void QGtp::slot_finished (int exitcode, QProcess::ExitStatus status)
+void GTP_Process::slot_finished (int exitcode, QProcess::ExitStatus status)
 {
 	qDebug() << req_cnt << " quit";
 	m_controller->gtp_exited ();
@@ -181,9 +162,9 @@ void QGtp::slot_finished (int exitcode, QProcess::ExitStatus status)
    slots directly to receive GTP responses.  Instead, we have this intermediate function
    to collect ouput and pass along full output lines to receivers.  This way we can even
    queue up multiple commands at once.  */
-void QGtp::slot_receive_stdout ()
+void GTP_Process::slot_receive_stdout ()
 {
-	m_buffer += m_process->readAllStandardOutput ();
+	m_buffer += readAllStandardOutput ();
 
 	for (;;) {
 		/* Clear empty lines at the front of the buffer.  */
@@ -211,7 +192,7 @@ void QGtp::slot_receive_stdout ()
 		m_dlg.textEdit->setTextColor (Qt::black);
 
 		if (output[0] != '=') {
-			m_controller->gtp_failure (invalid_response ());
+			m_controller->gtp_failure (tr ("Invalid response from GTP engine"));
 			quit ();
 			return;
 		}
@@ -225,7 +206,7 @@ void QGtp::slot_receive_stdout ()
 		int cmd_nr = output.left (n_digits).toInt ();
 		QMap<int, t_receiver>::const_iterator map_iter = m_receivers.constFind (cmd_nr);
 		if (map_iter == m_receivers.constEnd ()) {
-			m_controller->gtp_failure (invalid_response ());
+			m_controller->gtp_failure (tr ("Invalid response from GTP engine"));
 			quit ();
 			return;
 		}
@@ -237,7 +218,7 @@ void QGtp::slot_receive_stdout ()
 	}
 }
 
-void QGtp::send_request(const QString &s, t_receiver rcv)
+void GTP_Process::send_request(const QString &s, t_receiver rcv)
 {
 	qDebug() << "send_request -> " << req_cnt << " " << s << "\n";
 	m_receivers[req_cnt] = rcv;
@@ -247,14 +228,23 @@ void QGtp::send_request(const QString &s, t_receiver rcv)
 	m_dlg.textEdit->setTextColor (Qt::black);
 #endif
 	QString req = QString::number (req_cnt) + " " + s + "\n";
-	m_process->write (req.toLatin1 ());
-	m_process->waitForBytesWritten();
+	write (req.toLatin1 ());
+	waitForBytesWritten();
 	req_cnt++;
 }
 
-void QGtp::quit ()
+void GTP_Process::quit ()
 {
-	disconnect (m_process, &QProcess::readyReadStandardOutput, nullptr, nullptr);
-	disconnect (m_process, &QProcess::readyReadStandardError, nullptr, nullptr);
+	disconnect (this, &QProcess::readyReadStandardOutput, nullptr, nullptr);
+	disconnect (this, &QProcess::readyReadStandardError, nullptr, nullptr);
 	send_request ("quit");
+}
+
+GTP_Process::~GTP_Process ()
+{
+	disconnect (this, &QProcess::readyReadStandardOutput, nullptr, nullptr);
+	disconnect (this, &QProcess::readyReadStandardError, nullptr, nullptr);
+	disconnect (this, &QProcess::errorOccurred, nullptr, nullptr);
+	void (QProcess::*fini)(int, QProcess::ExitStatus) = &QProcess::finished;
+	disconnect (this, fini, nullptr, nullptr);
 }

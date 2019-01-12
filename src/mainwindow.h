@@ -20,6 +20,7 @@
 #include "mainwidget.h"
 #include "setting.h"
 #include "miscdialogs.h"
+#include "textview.h"
 #include "qgtp.h"
 
 class Board;
@@ -217,7 +218,7 @@ public:
 
 class MainWindow_GTP : public MainWindow, public Gtp_Controller
 {
-	QGtp *m_gtp;
+	GTP_Process *m_gtp;
 public:
 	MainWindow_GTP (QWidget *parent, std::shared_ptr<game_record>, const Engine &program,
 			bool b_comp, bool w_comp);
@@ -235,7 +236,7 @@ public:
 	virtual void gtp_played_pass ();
 	virtual void gtp_startup_success ();
 	virtual void gtp_exited ();
-	virtual void gtp_failure (const gtp_exception &);
+	virtual void gtp_failure (const QString &);
 };
 
 extern std::list<MainWindow *> main_window_list;

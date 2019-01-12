@@ -2440,15 +2440,14 @@ void MainWindow_GTP::gtp_played_resign ()
 	gfx_board->set_player_colors (true, true);
 }
 
-void MainWindow_GTP::gtp_failure (const gtp_exception &e)
+void MainWindow_GTP::gtp_failure (const QString &err)
 {
 	if (gfx_board->getGameMode () != modeComputer)
 		return;
 	show ();
 	setGameMode (modeNormal);
 	gfx_board->set_player_colors (true, true);
-	QMessageBox msg(QString (QObject::tr("Error")),
-			e.errmsg (),
+	QMessageBox msg(QString (QObject::tr("Error")), err,
 			QMessageBox::Warning, QMessageBox::Ok | QMessageBox::Default,
 			Qt::NoButton, Qt::NoButton);
 	msg.activateWindow();
