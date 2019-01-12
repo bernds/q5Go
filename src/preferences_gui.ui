@@ -1765,8 +1765,8 @@ This will display realistic 3D stones with stripes and shadow</string>
               </property>
               <property name="icon">
                <iconset resource="q4go.qrc">
-                <normaloff>:/QNewGameDlgGui/images/qnewgamedlg/image1.png</normaloff>
-                <normalon>:/QNewGameDlgGui/images/qnewgamedlg/image2.png</normalon>:/QNewGameDlgGui/images/qnewgamedlg/image1.png</iconset>
+                <normaloff>:/NewAIGameDlgGui/images/newaigamedlg/image1.png</normaloff>
+                <normalon>:/NewAIGameDlgGui/images/newaigamedlg/image2.png</normalon>:/NewAIGameDlgGui/images/newaigamedlg/image1.png</iconset>
               </property>
               <property name="checkable">
                <bool>true</bool>
