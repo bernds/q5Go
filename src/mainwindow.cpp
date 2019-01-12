@@ -815,19 +815,19 @@ void MainWindow::initActions()
 	helpManual->setShortcut (Qt::Key_F1);
 	helpManual->setStatusTip(tr("Opens the manual"));
 	helpManual->setWhatsThis(tr("Help\n\nOpens the manual of the application."));
-	connect(helpManual, &QAction::triggered, this, &MainWindow::slotHelpManual);
+	connect(helpManual, &QAction::triggered, this, [=] (bool) { qgo->openManual (); });
 
 	// Help About
 	helpAboutApp = new QAction(tr("&About..."), this);
 	helpAboutApp->setStatusTip(tr("About the application"));
 	helpAboutApp->setWhatsThis(tr("About\n\nAbout the application."));
-	connect(helpAboutApp, &QAction::triggered, this, &MainWindow::slotHelpAbout);
+	connect(helpAboutApp, &QAction::triggered, [=] (bool) { help_about (); });
 
 	// Help AboutQt
 	helpAboutQt = new QAction(tr("About &Qt..."), this);
 	helpAboutQt->setStatusTip(tr("About Qt"));
 	helpAboutQt->setWhatsThis(tr("About Qt\n\nAbout Qt."));
-	connect(helpAboutQt, &QAction::triggered, this, &MainWindow::slotHelpAboutQt);
+	connect(helpAboutQt, &QAction::triggered, [=] (bool) { QMessageBox::aboutQt (this); });
 
 	// Disable some toolbuttons at startup
 	navForward->setEnabled(false);
@@ -1693,21 +1693,6 @@ void MainWindow::slotViewFullscreen(bool toggle)
 		showFullScreen();
 
 	isFullScreen = toggle;
-}
-
-void MainWindow::slotHelpManual(bool)
-{
-	setting->qgo->openManual();
-}
-
-void MainWindow::slotHelpAbout(bool)
-{
-	setting->qgo->slotHelpAbout();
-}
-
-void MainWindow::slotHelpAboutQt(bool)
-{
-	QMessageBox::aboutQt(this);
 }
 
 void MainWindow::slotTimerForward()

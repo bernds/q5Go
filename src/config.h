@@ -6,12 +6,11 @@
 #define PACKAGE1 "q5goClient"
 
 /* Version number of package */
-#define VERSION "0.1"
+#define VERSION "0.2"
 
-#define NEWVERSIONWARNING "This is a port of qGo to Qt5.\n" \
-  "A lot of code has been rewritten or replaced.  It should be reasonably " \
-  "stable, but some issues are to be expected.\n\n" \
-  "It is NOT recommended that you use the IGS client for playing games at this time, only for observing.\n\n" \
-  "This message will not be shown anymore."
+#define NEWVERSIONWARNING "<p>Welcome to version 0.2 of q5go.</p>\n" \
+  "<p>This version is a maintenance release which fixes a few issues in 0.1.</p>" \
+  "<p>The IGS client has been tested somewhat, but it is still recommended you use it for observing rather than playing.</p>\n\n" \
+  "<p>This message will not be shown anymore on startup.</p>"
 
 

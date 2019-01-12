@@ -48,12 +48,11 @@ signals:
 	void signal_leave_qgo();
 	void signal_updateFont();
 
-	public slots:
-		void quit();
-		void slotHelpAbout();
+public slots:
+	void quit();
 
 private:
-		HelpViewer *helpViewer;
+	HelpViewer *helpViewer;
 };
 
 //-----------
@@ -86,5 +85,8 @@ extern bool open_window_from_file (const std::string &filename);
 extern void open_local_board (QWidget *, bool);
 extern go_board new_handicap_board (int, int);
 extern std::string get_candidate_filename (const std::string &dir, const game_info &);
+
+extern void help_about ();
+extern void help_new_version ();
 
 #endif

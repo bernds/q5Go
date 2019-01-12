@@ -172,11 +172,6 @@ public slots:
 	void slotFileOpen(bool);
 	void slotComputerPlay(bool);
 
-	void slotHelpManual(bool);
-	void slotHelpAbout(bool);
-	void slotHelpAboutQt(bool);
-	void slotNewVersion(bool);
-
 	void slotMenuConnect(bool);
 	void slotMenuDisconnect(bool);
 	void slotMenuEditServers(bool);

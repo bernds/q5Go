@@ -182,16 +182,29 @@ void qGo::playDisConnectSound()
 	}
 }
 
-void qGo::slotHelpAbout()
+void help_about ()
 {
-	QString txt = PACKAGE " " VERSION
-		"\n\nCopyright 2011-2019\nBernd Schmidt <bernds_cb1@t-online.de>"
-		u8"\nCopyright (c) 2001-2006\nPeter Strempel <pstrempel@t-online.de>\nJohannes Mesa <frosla@gmx.at>\nEmmanuel B\u00E9ranger <yfh2@hotmail.com>\n\n" +
-		tr("GTP code from Goliath, thanks to:") + "\nPALM Thomas\nDINTILHAC Florian\nHIVERT Anthony\nPIOC Sebastien";
+	QString txt;
+	txt = u8"<p>Copyright \u00a9 2011-2019\nBernd Schmidt &lt;bernds_cb1@t-online.de&gt;</p>";
+	txt += u8"<p>Copyright \u00a9 2001-2006\nPeter Strempel &lt;pstrempel@t-online.de&gt;, Johannes Mesa &lt;frosla@gmx.at&gt;, Emmanuel B\u00E9ranger &lt;yfh2@hotmail.com&gt;</p>";
+	txt += "<p>" + QObject::tr("GTP code originally from Goliath, thanks to: ") + "PALM Thomas, DINTILHAC Florian, HIVERT Anthony, PIOC Sebastien</p>";
 
-	QString translation = tr(u8"English translation by:\nPeter Strempel\nJohannes Mesa\nEmmanuel B\u00E9ranger", "Please set your own language and your name! Use your own language!");
-	//if (translation != "English translation by:\nPeter Strempel\nJohannes Mesa\nEmmanuel B\u00E9ranger")
-	txt += "\n\n" + translation;
+	txt += "<hr/><p>Visit <a href=\"https://github.com/bernds/q5go\">the Github repository</a> for new versions.</p>";
+	QString translation = "<hr/><p>" + QObject::tr(u8"English translation by: Peter Strempel, Johannes Mesa, Emmanuel B\u00E9ranger", "Please set your own language and your name! Use your own language!") + "</p>";
+	txt += translation;
 
-	QMessageBox::about(0, tr("About..."), txt);
+	QMessageBox mb;
+	mb.setWindowTitle (PACKAGE " " VERSION);
+	mb.setTextFormat (Qt::RichText);
+	mb.setText (txt);
+	mb.exec ();
+}
+
+void help_new_version ()
+{
+	QMessageBox mb;
+	mb.setWindowTitle (PACKAGE);
+	mb.setTextFormat (Qt::RichText);
+	mb.setText (NEWVERSIONWARNING);
+	mb.exec ();
 }

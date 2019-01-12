@@ -142,9 +142,6 @@ public slots:
 	void slotViewComment(bool toggle);
 	void slotViewVertComment(bool toggle);
 	void slotViewFullscreen(bool toggle);
-	void slotHelpManual(bool);
-	void slotHelpAbout(bool);
-	void slotHelpAboutQt(bool);
 	void slotTimerForward();
 	void slot_editBoardInNewWindow(bool);
 	void slot_animateClick(bool);

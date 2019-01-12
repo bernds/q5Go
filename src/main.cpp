@@ -358,7 +358,7 @@ int main(int argc, char **argv)
 	}
 
 	if (setting->getNewVersionWarning())
-		QMessageBox::warning(client_window ,PACKAGE,NEWVERSIONWARNING);//PACKAGE, NEWVERSIONWARNING);
+		help_new_version ();
 
 	return myapp.exec();
 }

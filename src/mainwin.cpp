@@ -2513,10 +2513,10 @@ void ClientWindow::initActions()
 	/*
 	* Menu Help
 	*/
-	connect(helpManual, &QAction::triggered, this, &ClientWindow::slotHelpManual);
-	connect(helpAboutApp, &QAction::triggered, this, &ClientWindow::slotHelpAbout);
-	connect(helpAboutQt, &QAction::triggered, this, &ClientWindow::slotHelpAboutQt);
-	connect(helpNewVersion, &QAction::triggered, this, &ClientWindow::slotNewVersion);
+	connect(helpManual, &QAction::triggered, [=] (bool) { qgo->openManual (); });
+	connect(helpAboutApp, &QAction::triggered, [=] (bool) { help_about (); });
+	connect(helpAboutQt, &QAction::triggered, [=] (bool) { QMessageBox::aboutQt (this); });
+	connect(helpNewVersion, &QAction::triggered, [=] (bool) { help_new_version (); });
 }
   
 void ClientWindow::initToolBar()
@@ -2534,29 +2534,8 @@ void ClientWindow::initToolBar()
 	Toolbar->addAction (whatsThis);
 	//tb->setProperty( "geometry", QRect(0, 0, 20, 20));
 }
+
 // SLOTS
-
-
-void ClientWindow::slotHelpManual(bool)
-{
-	setting->qgo->openManual();
-}
-
-void ClientWindow::slotHelpAbout(bool)
-{
-	setting->qgo->slotHelpAbout();
-}
-
-void ClientWindow::slotHelpAboutQt(bool)
-{
-	QMessageBox::aboutQt(this);
-}
-
-void ClientWindow::slotNewVersion(bool)
-{
-	QMessageBox::warning(this ,PACKAGE,NEWVERSIONWARNING);
-}
-
 
 void ClientWindow::slotFileNewBoard(bool)
 {
