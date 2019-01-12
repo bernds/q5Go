@@ -3,7 +3,7 @@
 "docbook/docbookx.dtd">
 <book>
   <bookinfo>
-	<title>qGo</title>
+	<title>q5go</title>
 
 	<copyright>
 	  <year>2001-2003</year>
@@ -16,7 +16,7 @@
   <preface>
 	<title>Introduction</title>
 
-	<para>qGo is a Go client and
+	<para>q5go is a Go client and
 	<link linkend="sgf">SGF</link>
 
 	editor written with the Qt library, available for Linux,
@@ -25,14 +25,14 @@
 	<para>Go is an ancient boardgame, very common in Japan, China
 	and Korea.</para>
 
-	<para>qGo can support translations. Check in the preferences
+	<para>q5go can support translations. Check in the preferences
 	dialog if your language is available. If not, you might
-	consider translating qGo to your language. Read more about
+	consider translating q5go to your language. Read more about
 	<link linkend="language">translations</link>
 
 	in the preferences chapter.</para>
 
-	<para>This manual describes the basic usage of qGo.</para>
+	<para>This manual describes the basic usage of q5go.</para>
 
 	<note>
 	  <para>It is currently in progress and anything from
@@ -51,8 +51,8 @@
 	  <section>
 		<title>Linux</title>
 
-		<para>The easiest way to install qGo on Linux is to get
-		the binary packages from the qGo webpage. Depending on
+		<para>The easiest way to install q5go on Linux is to get
+		the binary packages from the q5go webpage. Depending on
 		your distribution, that are the rpm or deb
 		packages.</para>
 
@@ -89,28 +89,28 @@
 	  <section>
 		<title>Windows</title>
 
-		<para>Installing qGo on Windows is easy.</para>
+		<para>Installing q5go on Windows is easy.</para>
 
 		<para>Download the windows installation package from the
-		qGo webpage:
+		q5go webpage:
 		<filename>qgo-(version)-win.exe</filename>
 
 		.</para>
 
 		<para>Simple double-click on this executable file and the
 		normal windows installation process will start, dialogs
-		will guide you through the installation. qGo will by
+		will guide you through the installation. q5go will by
 		default be installed in the directory
 		<filename class="directory">C:\Program
-		Files\qGo\</filename>
+		Files\q5go\</filename>
 
 		.</para>
 
-		<para>To run qGo, select the link from the start
+		<para>To run q5go, select the link from the start
 		menu.</para>
 
 		<tip>
-		  <para>If you already have qGo installed on your
+		  <para>If you already have q5go installed on your
 		  computer, you can download the smaller update package:
 		  <filename>qgo-(version)-winupdate.exe</filename>
 
@@ -118,7 +118,7 @@
 
 		  <para>This file is much smaller, as it does not contain
 		  the qt library. You can simply install this package
-		  over an existing qGo installation, just make sure you
+		  over an existing q5go installation, just make sure you
 		  choose the same installation directory. The qt library
 		  file will stay.</para>
 
@@ -131,10 +131,10 @@
 	  <section>
 		<title>Mac OS X</title>
 
-		<para>Compiling qGo on Mac OS X is a task that requires experience in
+		<para>Compiling q5go on Mac OS X is a task that requires experience in
 		a Unix software development environment.</para>
 
-		<para>The system requirements for compiling qGo on Mac OS X follow.
+		<para>The system requirements for compiling q5go on Mac OS X follow.
 		Older versions of the listed components might work, but are untested
 		on this platform.  Newer but compatible versions are likely to
 		work.</para>
@@ -159,7 +159,7 @@
 				<filename>libqt-mt.a</filename> after compilation and
 				installation of Qt.</tip>
 
-				<tip>Qt and qGo must be compiled with the same version of
+				<tip>Qt and q5go must be compiled with the same version of
 				GCC.</tip>
 			
 			</listitem>
@@ -170,16 +170,16 @@
 			<listitem><ulink url="http://www.gnu.org/software/gnugo/">GNU
 			Go</ulink></listitem>
 
-			<listitem>The qGo source distribution</listitem>
+			<listitem>The q5go source distribution</listitem>
 		</itemizedlist>
 
-		<para>After expanding the qGo source distribution, and entering the
+		<para>After expanding the q5go source distribution, and entering the
 		created folder in a shell, follow these steps and run these commands
-		to compile qGo:</para>
+		to compile q5go:</para>
 
 		<itemizedlist>
 		
-			<listitem>Run <userinput>cd &lt;path to your unpacked qGo
+			<listitem>Run <userinput>cd &lt;path to your unpacked q5go
 			sources&gt;/src</userinput></listitem>
 
 			<listitem>Edit <filename>mac/Rakefile</filename>, correcting the
@@ -190,7 +190,7 @@
 			<listitem>Run <userinput>rake -f mac/Rakefile</userinput></listitem>
 		</itemizedlist>
 
-		<para>At the conclusion of the Rake processing, qGo.app should be
+		<para>At the conclusion of the Rake processing, q5go.app should be
 		created and ready to run.</para>
 
 	  </section>
@@ -199,7 +199,7 @@
 	<section>
 	  <title>Source codes</title>
 
-	  <para>If you want to compile qGo on Windows (as well as
+	  <para>If you want to compile q5go on Windows (as well as
 	  Linux or Mac) yourself, get the tmake package from the
 	  download page. For further information please refer to the
 	  Qt and tmake documentation. You need to have either the
@@ -323,19 +323,19 @@
 	  <section>
 		<title>Windows</title>
 
-		<para>To uninstall qGo:
+		<para>To uninstall q5go:
 		<itemizedlist>
 		  <listitem>
-			<para>Locate qGo's program folder from your Start
-			folder and select 'Uninstall qGo'.</para>
+			<para>Locate q5go's program folder from your Start
+			folder and select 'Uninstall q5go'.</para>
 
 			<para>or</para>
 		  </listitem>
 
 		  <listitem>
-			<para>Locate the qGo directory - by default
+			<para>Locate the q5go directory - by default
 			<filename class="directory">C:\Program
-			Files\qGo\</filename>
+			Files\q5go\</filename>
 
 			and run unins000.exe manually.</para>
 
@@ -351,7 +351,7 @@
 
 		<note>
 		  <para>There is a residing file
-		  <userinput>.qGorc</userinput>
+		  <userinput>.q5gorc</userinput>
 
 		  containing configuration information and Go server
 		  account information. The path to this file is either
@@ -395,8 +395,8 @@
 
 	  <para>Because an SGF can contain much information -
 	  including but not limited to board setup, markings,
-	  variations, and extensive comments - programs such as qGo
-	  have been created. qGo provides a powerful, easy-to-use
+	  variations, and extensive comments - programs such as q5go
+	  have been created. q5go provides a powerful, easy-to-use
 	  interface for creating, editing and viewing SGF
 	  files.</para>
 
@@ -412,7 +412,7 @@
 
 	  <anchor id="mgt" />
 
-	  <para>qGo is able to load files in the MGT format. This
+	  <para>q5go is able to load files in the MGT format. This
 	  format is used by the common editor WinMGT.</para>
 
 	  <para>The newer WinMGT versions save files with the
@@ -421,7 +421,7 @@
 	  files.</para>
 
 	  <para>But there are some very old games out on the web in
-	  an older format. qGo is able to convert this format to SGF
+	  an older format. q5go is able to convert this format to SGF
 	  automatically when loading those files.</para>
 	</section>
 
@@ -439,16 +439,16 @@
 	  does not exist for XML yet. The author of Jago created an
 	  own XML specification.</para>
 
-	  <para>qGo is using Jagos XML definitions and currently able
-	  to load XML games saved with Jago. qGo is not yet able to
+	  <para>q5go is using Jagos XML definitions and currently able
+	  to load XML games saved with Jago. q5go is not yet able to
 	  save games in XML format, this but this feature will be
 	  implemented somewhen in the future.</para>
 	</section>
   </chapter>
 
-<!-- Chapter: qGo, the Program -->
+<!-- Chapter: q5go, the Program -->
   <chapter>
-	<title>qGo, the Program</title>
+	<title>q5go, the Program</title>
 
 <!-- Section Launching -->
 	<section>
@@ -459,7 +459,7 @@
 	  is</para>
 
 	  <para>
-	  <userinput>qGo</userinput>
+	  <userinput>q5go</userinput>
 
 	  [options] [
 	  <filename>file</filename>
@@ -539,7 +539,7 @@
 	<section>
 	  <title>Structure</title>
 
-	  <para>qGo has two main windows, one is the client window
+	  <para>q5go has two main windows, one is the client window
 	  the other is the board window. Further, there is the debug window, too, but you may not need
 	  it.</para>
 
@@ -551,7 +551,7 @@
 		<para>While handling the connection to internet,
 		negotiating your match requests or looking for games to
 		observe this is your main window. This window appears on
-		starting the qGo program without any of the options
+		starting the q5go program without any of the options
 		<userinput>-sgf</userinput>
 
 		,
@@ -646,18 +646,18 @@
 		shown with the
 		<userinput>-debug</userinput>
 
-		startup option. However, this will set qGo in a debug
+		startup option. However, this will set q5go in a debug
 		mode, too, which means the program will run
 		slower.</para>
 
 		<para>The debug window is always present but it's maybe
-		hidden. Thus, the debug window a log viewer for qGo.
-		Setting qGo to debug mode means logging more events,
+		hidden. Thus, the debug window a log viewer for q5go.
+		Setting q5go to debug mode means logging more events,
 		especially logging all host responses but some internal
 		messages, too.</para>
 
 		<para>Therefore, only opening the debug window doesn't
-		slow down the qGo program.</para>
+		slow down the q5go program.</para>
 
 		<para>In order to show the debug window there are other
 		options:</para>
@@ -684,7 +684,7 @@
 				  <userinput>-debug</userinput>
 				</entry>
 
-				<entry>when launching qGo</entry>
+				<entry>when launching q5go</entry>
 
 				<entry>DEBUG</entry>
 
@@ -743,13 +743,13 @@
 	<title>Client Window - Usage</title>
 
 	<note>
-	  <para>There are a lot of settings saved when qGo is getting
-	  closed. Thus, by running several instances of qGo the last
-	  closed instance of qGo supersedes the settings.</para>
+	  <para>There are a lot of settings saved when q5go is getting
+	  closed. Thus, by running several instances of q5go the last
+	  closed instance of q5go supersedes the settings.</para>
 
 	  <para>This is different to closing a board window since all
 	  board settings are updated simultaneosly and they are saved
-	  when qGo quits.</para>
+	  when q5go quits.</para>
 	</note>
 
 <!-- Section Window focus -->
@@ -870,7 +870,7 @@
 		  <title>Open</title>
 
 		  <para>This will open a stored SGF file into the current
-		  window. qGo will remember which directory you store
+		  window. q5go will remember which directory you store
 		  your SGFs in and return there next time you perform the
 		  Open, Save, or Save As functions during the same
 		  session. The file does not have to have an .sgf
@@ -902,14 +902,14 @@
 		  <title>Import ASCII</title>
 
 		  <para>Sometimes (especially in text-based forums) you
-		  will see a Go board diagram in ASCII text. qGo can
+		  will see a Go board diagram in ASCII text. q5go can
 		  import this ASCII diagram into SGF format, making it
 		  much easier to view/edit/store. Save or cut and paste
 		  the ASCII diagram you want to import into a file. Then
 		  select File - Import ASCII - and you will be prompted
 		  for the filename. To [re]define various ASCII marks for
 		  the import function, see Settings - Preferences -
-		  Import. qGo defaults to the standard format. The
+		  Import. q5go defaults to the standard format. The
 		  position will be added as brother or son of the current
 		  node - this can be set in the preferences
 		  dialog.</para>
@@ -918,7 +918,7 @@
 		<section>
 		  <title>Export ASCII</title>
 
-		  <para>qGo can also export an SGF position into ASCII
+		  <para>q5go can also export an SGF position into ASCII
 		  format. Simply load the position you want to export and
 		  then select File - Export ASCII. This opens a window to
 		  show you what the exported ASCII file will look like.
@@ -938,7 +938,7 @@
 		  and select File - Export Image. You will be prompted
 		  for a filename to save the image under. Note that this
 		  does not produce a screenshot; it produces an image of
-		  the board position only. qGo supports common image
+		  the board position only. q5go supports common image
 		  formats like png, gif, jpeg, bmp. You can the exported
 		  file to alter in common graphic suits like Gimp or
 		  CorelDraw.</para>
@@ -1029,7 +1029,7 @@
 	<section>
 	  <title>Preferences</title>
 
-	  <para>In the preferences dialog the main features of qGo
+	  <para>In the preferences dialog the main features of q5go
 	  can be controlled. There are three sections for the
 	  Interface, ASCII importing/exporting and SGF
 	  loading.</para>
@@ -1039,7 +1039,7 @@
 		<title>Interface</title>
 
 		<para>Here the visual settings can be changed. All
-		settings are saved and reloaded when qGo starts up the
+		settings are saved and reloaded when q5go starts up the
 		next time.</para>
 
 		<para>More detailed information has to be written. Please
@@ -1071,7 +1071,7 @@
 		  on Windows, just chose the language manually.</para>
 
 		  <note>
-			<para>You have to restart qGo to let the language
+			<para>You have to restart q5go to let the language
 			change take effect.</para>
 		  </note>
 		</section>
@@ -1106,11 +1106,11 @@
 		<para>If
 		<emphasis>Remember last directory</emphasis>
 
-		is checked, qGo will remember the directory a user loads
+		is checked, q5go will remember the directory a user loads
 		from or saves to and reuse this directory the next time a
 		file operation is performed. This can be useful,
 		especially on Windows, if one certain directory is used
-		for all game files. On Linux, qGo defaults to the users
+		for all game files. On Linux, q5go defaults to the users
 		home directory, so leaving this option unchecked might be
 		more comfortable.</para>
 
@@ -1167,7 +1167,7 @@
 		recommand switching this setting to 'None'.</para>
 
 		<para>The encoding settings are automatically saved and
-		reloaded the next time qGo starts.</para>
+		reloaded the next time q5go starts.</para>
 
 		<para>
 		<emphasis>Fast loading</emphasis>
@@ -1181,7 +1181,7 @@
 	<section>
 	  <title>Mouse control</title>
 
-	  <para>qGo offers advanced navigation features by using the
+	  <para>q5go offers advanced navigation features by using the
 	  mouse only, to provide a comfortable interface to the user.
 	  Mouse gestures are implemented as button and wheel
 	  gestures.</para>
@@ -1265,7 +1265,7 @@
 	<section>
 	  <title>Keyboard control</title>
 
-	  <para>qGo offers easy keyboard control to navigate through
+	  <para>q5go offers easy keyboard control to navigate through
 	  a game tree. Most menu items have a keyboard shortcut, as
 	  stated in the menu. The cursor keys offer the basic
 	  navigation through moves and navigation.</para>
