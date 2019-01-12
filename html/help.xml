@@ -6,8 +6,11 @@
 	<title>q5go</title>
 
 	<copyright>
+	  <year>2011-2019</year>
+	  <holder>Bernd Schmidt</holder>
+	</copyright>
+	<copyright>
 	  <year>2001-2003</year>
-
 	  <holder>Peter Strempel, Johannes Mesa, Emmanuel Beranger, Marin Ferecatu</holder>
 	</copyright>
   </bookinfo>
@@ -35,8 +38,8 @@
 	<para>This manual describes the basic usage of q5go.</para>
 
 	<note>
-	  <para>It is currently in progress and anything from
-	  finished. Please be patient.</para>
+	  <para>This manual was written against an older version of
+	  the program and is neither finished nor up-to-date.</para>
 	</note>
   </preface>
 
