@@ -5,7 +5,6 @@
 #include <QFileDialog>
 #include <QFontDialog>
 #include <QWhatsThis>
-#include <QColorDialog>
 
 #include "preferences.h"
 #include "mainwindow.h"

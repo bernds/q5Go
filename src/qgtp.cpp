@@ -1,10 +1,5 @@
-#include <iostream>
-
-#include <stdlib.h>
-
 #include <QProcess>
 
-#include "defines.h"
 #include "qgtp.h"
 
 GTP_Process *Gtp_Controller::create_gtp (const QString &prog, const QString &args, int size, double komi, int hc, int level)

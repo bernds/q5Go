@@ -22,7 +22,6 @@
 #include "mainwindow.h"
 #include "newaigamedlg.h"
 #include <qaction.h>
-#include <qdir.h>
 #include <qcombobox.h>
 #include <qcheckbox.h>
 #include <qtabwidget.h>
@@ -31,12 +30,8 @@
 #include <qevent.h>
 #include <qstatusbar.h>
 #include <qtooltip.h>
-#include <qpalette.h>
 #include <qtoolbutton.h>
 #include <qicon.h>
-#include <qpixmap.h>
-#include <qobject.h> 
-#include <qradiobutton.h>
 
 ClientWindow *client_window;
 
