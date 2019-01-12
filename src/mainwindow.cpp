@@ -2234,6 +2234,8 @@ void MainWindow::setGameMode(GameMode mode)
 //		modeButton->setDisabled(true);
 		commentEdit->setReadOnly(true);
 		commentEdit2->setDisabled(true);
+		/* fall through */
+	case modeScoreRemote:
 		statusMode->setText(" " + QObject::tr("S", "Board status line: score mode") + " ");
 		break;
 	}
