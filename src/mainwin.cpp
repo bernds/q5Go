@@ -20,7 +20,7 @@
 #include "komispinbox.h"
 #include "igsconnection.h"
 #include "mainwindow.h"
-#include "qnewgamedlg.h"
+#include "newaigamedlg.h"
 #include <qaction.h>
 #include <qdir.h>
 #include <qcombobox.h>
@@ -2593,7 +2593,7 @@ void ClientWindow::slotComputerPlay(bool)
 		return;
 	}
 
-	QNewGameDlg dlg (this, m_engines);
+	NewAIGameDlg dlg (this, m_engines);
 	if (dlg.exec() != QDialog::Accepted)
 		return;
 

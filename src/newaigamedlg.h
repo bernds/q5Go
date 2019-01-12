@@ -7,22 +7,22 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef QNEWGAMEDLG_H
-#define QNEWGAMEDLG_H
+#ifndef NEWAIGAMEDLG_H
+#define NEWAIGAMEDLG_H
 
 #include <qdialog.h>
-#include "ui_qnewgamedlg_gui.h"
+#include "ui_newaigamedlg_gui.h"
 
 #include "goboard.h"
 
 class Engine;
 
-class QNewGameDlg : public QDialog, public Ui::QNewGameDlgGui
+class NewAIGameDlg : public QDialog, public Ui::NewAIGameDlgGui
 {
 	Q_OBJECT
 
 public:
-	QNewGameDlg (QWidget* parent, const QList<Engine *> engines);
+	NewAIGameDlg (QWidget* parent, const QList<Engine *> engines);
 
 	game_info create_game_info ();
 	int board_size ();

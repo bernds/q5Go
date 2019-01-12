@@ -13,7 +13,6 @@
 #include "gs_globals.h"
 #include "misc.h"
 #include "config.h"
-#include "qnewgamedlg.h"
 #include "mainwin.h"
 
 #include <qlabel.h>

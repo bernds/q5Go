@@ -44,10 +44,10 @@
     <file>sounds/talk.wav</file>
     <file>sounds/tictoc.wav</file>
   </qresource>
-  <qresource prefix="/QNewGameDlgGui">
-    <file>images/qnewgamedlg/image0.png</file>
-    <file>images/qnewgamedlg/image1.png</file>
-    <file>images/qnewgamedlg/image2.png</file>
+  <qresource prefix="/NewAIGameDlgGui">
+    <file>images/newaigamedlg/image0.png</file>
+    <file>images/newaigamedlg/image1.png</file>
+    <file>images/newaigamedlg/image2.png</file>
   </qresource>
   <qresource prefix="/TalkGui">
     <file>images/talk/image0.png</file>

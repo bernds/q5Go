@@ -9,7 +9,7 @@ FORMS	      = gui_dialog.ui \
 		normaltools_gui.ui \
 		mainwidget_gui.ui \
 		preferences_gui.ui \
-		qnewgamedlg_gui.ui \
+		newaigamedlg_gui.ui \
 		talk_gui.ui \
 		textedit_gui.ui \
 		textview_gui.ui \
@@ -47,7 +47,7 @@ HEADERS		      = config.h \
 			preferences.h \
 			qgo.h \
 			qgtp.h \
-			qnewgamedlg.h \
+			newaigamedlg.h \
                         sgf.h \
                         scoretools.h \
                         stone.h \
@@ -82,7 +82,7 @@ SOURCES		      = gamedialog.cpp \
 			preferences.cpp \
 			qgo.cpp \
 			qgtp.cpp \
-			qnewgamedlg.cpp \
+			newaigamedlg.cpp \
 			sgf2board.cc \
 			sgfload.cc \
                         stone.cpp \

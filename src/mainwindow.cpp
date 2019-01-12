@@ -29,7 +29,6 @@
 #include "komispinbox.h"
 #include "parserdefs.h"
 #include "config.h"
-#include "qnewgamedlg.h"
 #include "qgo_interface.h"
 #include <QAction>
 #include <qmenubar.h>

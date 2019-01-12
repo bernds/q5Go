@@ -2,12 +2,12 @@
 
 #include "qgo.h"
 #include "defines.h"
-#include "qnewgamedlg.h"
+#include "newaigamedlg.h"
 #include "setting.h"
 #include "komispinbox.h"
 #include <qmessagebox.h>
 
-QNewGameDlg::QNewGameDlg( QWidget* parent, const QList<Engine *> engines)
+NewAIGameDlg::NewAIGameDlg( QWidget* parent, const QList<Engine *> engines)
 	: QDialog (parent)
 {
 	setupUi(this);
@@ -25,23 +25,23 @@ QNewGameDlg::QNewGameDlg( QWidget* parent, const QList<Engine *> engines)
 	engineColorButton->setChecked (setting->readBoolEntry ("COMPUTER_WHITE"));
 }
 
-void QNewGameDlg::slotCancel()
+void NewAIGameDlg::slotCancel()
 {
 	QDialog::reject();
 
 }
 
-int QNewGameDlg::engine_index ()
+int NewAIGameDlg::engine_index ()
 {
 	return engineComboBox->currentIndex ();
 }
 
-bool QNewGameDlg::computer_white_p ()
+bool NewAIGameDlg::computer_white_p ()
 {
 	return engineColorButton->isChecked ();
 }
 
-void QNewGameDlg::slotOk()
+void NewAIGameDlg::slotOk()
 {
 	if (handicap () == 1)
 	{
@@ -57,17 +57,17 @@ void QNewGameDlg::slotOk()
 }
 
 
-int QNewGameDlg::board_size()
+int NewAIGameDlg::board_size()
 {
 	return boardsizeSpinBox->value ();
 }
 
-int QNewGameDlg::handicap()
+int NewAIGameDlg::handicap()
 {
 	return handicapSpinBox->value ();
 }
 
-game_info QNewGameDlg::create_game_info ()
+game_info NewAIGameDlg::create_game_info ()
 {
 	QString human = humanPlayerLineEdit->text ();
 	QString computer = engineComboBox->currentText ();
@@ -82,7 +82,7 @@ game_info QNewGameDlg::create_game_info ()
 	return info;
 }
 
-void QNewGameDlg::slotGetFileName()
+void NewAIGameDlg::slotGetFileName()
 {
 	QString getFileName(QFileDialog::getOpenFileName(this, tr ("Choose an SGF file to load"),
 							 setting->readEntry("LAST_DIR"),

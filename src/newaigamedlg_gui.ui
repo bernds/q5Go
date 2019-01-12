@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>QNewGameDlgGui</class>
- <widget class="QDialog" name="QNewGameDlgGui">
+ <class>NewAIGameDlgGui</class>
+ <widget class="QDialog" name="NewAIGameDlgGui">
   <property name="enabled">
    <bool>true</bool>
   </property>
@@ -61,7 +61,7 @@
         </property>
         <property name="icon">
          <iconset resource="q4go.qrc">
-          <normaloff>:/QNewGameDlgGui/images/qnewgamedlg/image0.png</normaloff>:/QNewGameDlgGui/images/qnewgamedlg/image0.png</iconset>
+          <normaloff>:/NewAIGameDlgGui/images/newaigamedlg/image0.png</normaloff>:/NewAIGameDlgGui/images/newaigamedlg/image0.png</iconset>
         </property>
        </widget>
       </item>
@@ -195,8 +195,8 @@
         </property>
         <property name="icon">
          <iconset resource="q4go.qrc">
-          <normaloff>:/QNewGameDlgGui/images/qnewgamedlg/image1.png</normaloff>
-          <normalon>:/QNewGameDlgGui/images/qnewgamedlg/image2.png</normalon>:/QNewGameDlgGui/images/qnewgamedlg/image1.png</iconset>
+          <normaloff>:/NewAIGameDlgGui/images/newaigamedlg/image1.png</normaloff>
+          <normalon>:/NewAIGameDlgGui/images/newaigamedlg/image2.png</normalon>:/NewAIGameDlgGui/images/newaigamedlg/image1.png</iconset>
         </property>
         <property name="checkable">
          <bool>true</bool>
@@ -382,7 +382,7 @@
   <connection>
    <sender>_OkPushButton</sender>
    <signal>clicked()</signal>
-   <receiver>QNewGameDlgGui</receiver>
+   <receiver>NewAIGameDlgGui</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -398,7 +398,7 @@
   <connection>
    <sender>_CancelPushButton</sender>
    <signal>clicked()</signal>
-   <receiver>QNewGameDlgGui</receiver>
+   <receiver>NewAIGameDlgGui</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -414,7 +414,7 @@
   <connection>
    <sender>_FilePathButton</sender>
    <signal>clicked()</signal>
-   <receiver>QNewGameDlgGui</receiver>
+   <receiver>NewAIGameDlgGui</receiver>
    <slot>slotGetFileName()</slot>
    <hints>
     <hint type="sourcelabel">

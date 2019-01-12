@@ -9,7 +9,7 @@ KDE_OPTIONS = qtonly
 DISTHEADERS_MOC = audio.h bitarray.h board.h gamedialog.h gamestable.h gametree.h helpviewer.h icons.h \
 	igsconnection.h mainwidget.h mainwindow.h mainwin.h miscdialogs.h \
 	misctools.h normaltools.h scoretools.h parser.h playertable.h preferences.h qgo.h \
-	qgo_interface.h qgtp.h qnewgamedlg.h tables.h telnet.h textview.h tip.h
+	qgo_interface.h qgtp.h newaigamedlg.h tables.h telnet.h textview.h tip.h
 
 DISTHEADERS_NOMOC = goboard.h config.h defines.h gatter.h globals.h gs_globals.h \
 	igsinterface.h imagehandler.h komispinbox.h mark.h \
@@ -22,12 +22,12 @@ DISTSOURCES = audio.cpp board.cpp goboard.cc gamedialog.cpp \
 		mainwidget.cpp  mainwin.cpp mainwindow.cpp \
 		misc.cpp msg_handler.cpp parser.cpp \
 		playertable.cpp preferences.cpp qgo.cpp qgo_interface.cpp qgtp.cpp \
-		qnewgamedlg.cpp setting.cpp  sgfload.cc sgf2board.cc \
+		newaigamedlg.cpp setting.cpp  sgfload.cc sgf2board.cc \
 		stone.cpp svgbuilder.cpp tables.cpp telnet.cpp textview.cpp tip.cpp
 
 FORMS = clientwindow_gui.ui gameinfo_gui.ui gui_dialog.ui mainwidget_gui.ui newgame_gui.ui \
 	newlocalgame_gui.ui normaltools_gui.ui nthmove_gui.ui preferences_gui.ui \
-	qnewgamedlg_gui.ui scoretools_gui.ui svgview_gui.ui talk_gui.ui textedit_gui.ui textview_gui.ui
+	newaigamedlg_gui.ui scoretools_gui.ui svgview_gui.ui talk_gui.ui textedit_gui.ui textview_gui.ui
 
 RESOURCES = q4go.qrc
 
