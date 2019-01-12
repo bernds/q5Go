@@ -38,6 +38,12 @@ PreferencesDialog::PreferencesDialog(QWidget* parent)
 		resize(parent_cw->getPrefSize());
 		move(parent_cw->getPrefPos());
 	}
+	int engine_w = enginelabel_1->width ();
+	engine_w = std::max (engine_w, enginelabel_2->width ());
+	engine_w = std::max (engine_w, enginelabel_3->width ());
+	enginelabel_1->setMinimumWidth (engine_w);
+	enginelabel_2->setMinimumWidth (engine_w);
+	enginelabel_3->setMinimumWidth (engine_w);
 
 	for (auto h: parent_cw->hostlist)
 		new QListWidgetItem (h->title(), ListView_hosts);
