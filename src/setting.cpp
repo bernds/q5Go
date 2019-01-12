@@ -110,6 +110,7 @@ Setting::Setting()
 	fontComments = QFont();
 	fontLists = QFont();
 	fontClocks = QFont();
+	fontClocks.setPointSize (fontClocks.pointSize () * 1.5);
   	fontConsole = QFont("Fixed");
 
 	// init
