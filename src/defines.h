@@ -19,16 +19,6 @@
 //#define NL "\n"
 #define CONSOLECMDPREFIX "--->"
 
-#define RTTI_STONE 1001
-#define RTTI_MARK_SQUARE 1002
-#define RTTI_MARK_CIRCLE 1003
-#define RTTI_MARK_TRIANGLE 1004
-#define RTTI_MARK_CROSS 1005
-#define RTTI_MARK_TEXT 1006
-#define RTTI_MARK_NUMBER 1007
-#define RTTI_MARK_TERR 1008
-#define RTTI_MARK_OTHERLINE 1009
-
 #define SLIDER_INIT 0
 
 #define WHITE_STONES_NB 8
@@ -75,11 +65,7 @@
 /*
 * Enum definitions
 */
-enum StoneColor { stoneNone, stoneWhite, stoneBlack, stoneErase };
 enum GameMode { modeNormal, modeEdit, modeScore, modeScoreRemote, modeObserve, modeMatch, modeTeach, modeComputer };
-enum MarkType { markNone, markSquare, markCircle, markTriangle, markCross, markText, markNumber, markTerrBlack, markTerrWhite };
-enum skinType { skinLight, skinDark, skin3, skin4, skin5 };
-enum VariationDisplay { vardisplayNone, vardisplayGhost, vardisplaySmallStone };
 enum Codec { codecNone, codecBig5, codecEucJP, codecJIS, codecSJIS, codecEucKr, codecGBK, codecTscii };
 enum assessType { noREQ, FREE, RATED, TEACHING };
 enum tabType {tabNormalScore=0, tabEdit, tabTeachGameTree };

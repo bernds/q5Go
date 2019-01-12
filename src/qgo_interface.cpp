@@ -1830,24 +1830,6 @@ void qGoBoard::slot_sendcomment(const QString &comment)
 	}
 }
 
-void qGoBoard::slot_addStone(StoneColor /*c*/, int x, int y)
-{
-	if (id < 0)
-		return;
-
-	if (x > 7)
-		x++;
-	QChar c1 = x + 'A';
-	int c2 = gd.size - y;
-
-	if (ExtendedTeachingGame && IamPupil)
-		emit signal_sendcommand("kibitz " + QString::number(id) + " " + QString(c1) + QString::number(c2), false);
-	else if (gsName == IGS)
-		emit signal_sendcommand(QString(c1) + QString::number(c2) + " " + QString::number(id), false);
-	else
-		emit signal_sendcommand(QString(c1) + QString::number(c2), false);
-}
-
 void qGoBoard::move_played (int x, int y)
 {
 	if (id < 0)

@@ -1031,7 +1031,7 @@ void MainWindow::initStatusBar()
 	statusBar()->addPermanentWidget(statusTurn);
 	statusTurn->setToolTip (tr("Current move"));
 	statusTurn->setWhatsThis (tr("Move\nDisplays the number of the current turn and the last move played."));
-	
+
 	// The nav widget
 	statusNav = new QLabel(statusBar());
 	statusNav->setAlignment(Qt::AlignCenter);

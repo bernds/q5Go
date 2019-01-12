@@ -60,7 +60,6 @@ Board::Board(QWidget *parent, QGraphicsScene *c)
 	imageHandler->init(square_size);
 
 	// Initialize some class variables
-	fastLoad = false;
 	isModified = false;
 	mouseState = Qt::NoButton;
 
@@ -70,12 +69,8 @@ Board::Board(QWidget *parent, QGraphicsScene *c)
 #endif
 	curX = curY = -1;
 
-	isLocalGame = true;
-
 	lockResize = false;
 	navIntersectionStatus = false;
-
-	isHidingStones = false; // QQQ
 
 	canvas->addItem (m_mark_layer = new QGraphicsPixmapItem ());
 	m_mark_layer->setZValue (20);
@@ -1770,11 +1765,6 @@ void Board::play_external_pass ()
 {
 	game_state *st = m_state->add_child_pass ();
 	m_state->transfer_observers (st);
-}
-
-void Board::set_isLocalGame(bool isLocal)
-{
-	isLocalGame = isLocal;
 }
 
 void Board::navIntersection()

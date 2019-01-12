@@ -159,7 +159,6 @@ public slots:
 	void slot_sendcomment(const QString&);
 
 	// Board
-	void slot_addStone(enum StoneColor, int, int);
 	void move_played (int, int);
 	void slot_doPass();
 	void slot_doResign();

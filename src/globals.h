@@ -104,13 +104,6 @@ public:
   bool oneColorGo;
 };
 
-struct FastLoadMark
-{
-	int x, y;
-	MarkType t;
-	QString txt;
-};
-
 /*
 * Global variables declarations
 */

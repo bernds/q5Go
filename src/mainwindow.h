@@ -82,8 +82,6 @@ protected:
 	void closeEvent(QCloseEvent *e);
 //	bool doSave(QString fileName, bool force=false);
 	void rememberLastDir(const QString &file);
-//  bool eventFilter( QObject *obj, QEvent *ev ); //SL added eb 11
-	const QString getStatusMarkText(MarkType t);
 
 signals:
 	void signal_sendcomment(const QString&);
@@ -174,7 +172,7 @@ protected:
 
 	//	HelpViewer *helpViewer;
 	StatusTip *statusTip;
-	QLabel *statusMode, *statusTurn, *statusMark, *statusNav;
+	QLabel *statusMode, *statusTurn, *statusNav;
 
 	QSplitter *splitter, *splitter_comment;
 	QWidget *comments_widget;

@@ -136,14 +136,11 @@ public:
 	void debug();
 #endif
 
-	bool fastLoad, isModified, lockResize;
+	bool isModified, lockResize;
 
 	// in case of match
 	void set_player_colors (bool w, bool b) { m_player_is_w = w; m_player_is_b = b; }
 	bool player_is (stone_color c) { return c == black ? m_player_is_b : m_player_is_w; }
-
-	void set_isLocalGame(bool isLocal);
-	bool get_isLocalGame() { return isLocalGame; }
 
 	void setShowCoords(bool b);
 	void setShowSGFCoords(bool b);
@@ -202,12 +199,9 @@ private:
 	QTime wheelTime;
 	Qt::MouseButtons mouseState;
 
-	bool isHidingStones; // QQQ
-
 #ifdef Q_OS_WIN
 	bool resizeDelayFlag;
 #endif
-	bool isLocalGame;
 	bool navIntersectionStatus;
 };
 

@@ -104,8 +104,6 @@ Setting::Setting()
 	writeIntEntry("STONES_LOOK", 3);
 //#endif
 
-	addImportAsBrother = false;
-	fastLoad = false;
 	language = "Default";
 	fontStandard = QFont();
 	fontMarks = QFont();

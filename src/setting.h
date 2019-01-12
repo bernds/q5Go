@@ -57,8 +57,6 @@ public:
 	QString fontToString(QFont);
 	void updateFont(QFont&, QString);
 
-	bool addImportAsBrother;
-	bool fastLoad;
 	QFont fontStandard, fontMarks, fontComments, fontLists, fontClocks, fontConsole;
 	QString language;
 	QString program_dir;
