@@ -23,6 +23,7 @@ NewAIGameDlg::NewAIGameDlg( QWidget* parent, const QList<Engine *> engines)
 	int hc = setting->readIntEntry("COMPUTER_HANDICAP");
 	handicapSpinBox->setValue (hc);
 	engineColorButton->setChecked (setting->readBoolEntry ("COMPUTER_WHITE"));
+	humanPlayerLineEdit->setText (setting->readEntry ("HUMAN_NAME"));
 }
 
 void NewAIGameDlg::slotCancel()

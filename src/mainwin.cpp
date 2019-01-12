@@ -2926,6 +2926,7 @@ void ClientWindow::dlgSetPreferences(int tab)
 	dlg.computerWhiteButton->setChecked(setting->readBoolEntry("COMPUTER_WHITE"));
 	dlg.computerSizeSpin->setValue(setting->readIntEntry("COMPUTER_SIZE"));
 	dlg.computerHandicapSpin->setValue(setting->readIntEntry("COMPUTER_HANDICAP"));
+	dlg.humanName->setText(setting->readEntry("HUMAN_NAME"));
 
 	// Go Server tab
 	dlg.boardSizeSpin->setValue(setting->readIntEntry("DEFAULT_SIZE"));
@@ -3054,6 +3055,7 @@ bool ClientWindow::preferencesSave(PreferencesDialog *dlg)
 	setting->writeBoolEntry("COMPUTER_WHITE", dlg->computerWhiteButton->isChecked());
 	setting->writeIntEntry("COMPUTER_SIZE", dlg->computerSizeSpin->text().toInt());
 	setting->writeIntEntry("COMPUTER_HANDICAP", dlg->computerHandicapSpin->text().toInt());
+	setting->writeEntry("HUMAN_NAME", dlg->humanName->text());
 
 	return true;
 }
