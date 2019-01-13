@@ -149,7 +149,7 @@ documentation.files   = ../AUTHORS ../COPYING ../NEWS ../README ../TODO ../Chang
 INSTALLS += documentation
 
 html.path             = $$DOCDIR/html/
-html.files            = ../html/*
+html.files            = ../html/*.html ../html/images/*.png
 INSTALLS += html
 
 target.path           = $$PREFIX/bin
