@@ -126,8 +126,6 @@ public:
 	stone_color swap_edit_to_move ();
 	void deleteNode();
 	void doPass();
-	short getCurrentX() const { return curX; }
-	short getCurrentY() const { return curY; }
 	QPixmap grabPicture();
 	QString render_ascii (bool, bool);
 	QByteArray render_svg (bool, bool);
