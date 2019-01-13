@@ -408,45 +408,6 @@
 
 	  for asian languages.</para>
 	</section>
-
-<!-- Section: MGT -->
-	<section>
-	  <title>MGT</title>
-
-	  <anchor id="mgt" />
-
-	  <para>q5go is able to load files in the MGT format. This
-	  format is used by the common editor WinMGT.</para>
-
-	  <para>The newer WinMGT versions save files with the
-	  extension .mgt, but the file format follows the SGF
-	  specification, so reading those is just like reading SGF
-	  files.</para>
-
-	  <para>But there are some very old games out on the web in
-	  an older format. q5go is able to convert this format to SGF
-	  automatically when loading those files.</para>
-	</section>
-
-<!-- Section: XML -->
-	<section>
-	  <title>XML</title>
-
-	  <anchor id="xml" />
-
-	  <para>XML is a modern file format and not yet much used in
-	  the Go world.</para>
-
-	  <para>Jago is able to load and save Go games in XML format.
-	  Unlike SGF, which is a standardized format, such a standard
-	  does not exist for XML yet. The author of Jago created an
-	  own XML specification.</para>
-
-	  <para>q5go is using Jagos XML definitions and currently able
-	  to load XML games saved with Jago. q5go is not yet able to
-	  save games in XML format, this but this feature will be
-	  implemented somewhen in the future.</para>
-	</section>
   </chapter>
 
 <!-- Chapter: q5go, the Program -->
@@ -524,12 +485,6 @@
 
 			  <entry>open file (type
 			  <link linkend="sgf">SGF</link>
-
-			  ,
-			  <link linkend="mgt">MGT</link>
-
-			  or
-			  <link linkend="xml">XML</link>
 
 			  )</entry>
 			</row>
@@ -755,37 +710,6 @@
 	  when q5go quits.</para>
 	</note>
 
-<!-- Section Window focus -->
-	<section>
-	  <title>Window focus</title>
-
-	  <para>When the command line on the lower side has focus,
-	  i.e. after pressing
-	  <keycap>Escape</keycap>
-
-	  or clicking onto the command line, the window position and
-	  size can rapidly be changed by pressing
-	  <keycap>CTRL</keycap>
-
-	  +
-	  <keycap>0</keycap>
-
-	  ..
-	  <keycap>9</keycap>
-
-	  whereby the window position and size have to be saved once
-	  by pressing the same number
-	  <keycap>ALT</keycap>
-
-	  +
-	  <keycap>0</keycap>
-
-	  ..
-	  <keycap>9</keycap>
-
-	  before.</para>
-	</section>
-
 <!-- Section Menus -->
 	<section>
 	  <title>Menus</title>
@@ -899,23 +823,6 @@
 		  the SGF file will be saved under. Use this to save
 		  edited, or alternate copies of SGFs without overwriting
 		  the original.</para>
-		</section>
-
-		<section>
-		  <title>Import ASCII</title>
-
-		  <para>Sometimes (especially in text-based forums) you
-		  will see a Go board diagram in ASCII text. q5go can
-		  import this ASCII diagram into SGF format, making it
-		  much easier to view/edit/store. Save or cut and paste
-		  the ASCII diagram you want to import into a file. Then
-		  select File - Import ASCII - and you will be prompted
-		  for the filename. To [re]define various ASCII marks for
-		  the import function, see Settings - Preferences -
-		  Import. q5go defaults to the standard format. The
-		  position will be added as brother or son of the current
-		  node - this can be set in the preferences
-		  dialog.</para>
 		</section>
 
 		<section>
@@ -1271,25 +1178,14 @@
 	  <para>q5go offers easy keyboard control to navigate through
 	  a game tree. Most menu items have a keyboard shortcut, as
 	  stated in the menu. The cursor keys offer the basic
-	  navigation through moves and navigation.</para>
+	  navigation: left and right move backwards and forwards
+	  through the game, while up and down can be used to switch
+	  between variations if they are present.</para>
 
-	  <para>Those four keys not mentioned in the menus:</para>
+	  <para>Some additional functionality is available through keys
+	  not mentioned in the menus:</para>
 
 	  <itemizedlist>
-		<listitem>
-		  <para>
-		  <keycap>Ctrl-E</keycap>
-
-		  - Toggles between normal and edit mode.</para>
-		</listitem>
-
-		<listitem>
-		  <para>
-		  <keycap>Ctrl-T</keycap>
-
-		  - Switched through the mark types in edit mode.</para>
-		</listitem>
-
 		<listitem>
 		  <para>
 		  <keycap>Escape</keycap>
@@ -1332,13 +1228,7 @@
 			  </listitem>
 
 			  <listitem>
-				<para>In edit mode, when editing letter marks,
-				shift-click allows to customize the mark
-				text.</para>
-			  </listitem>
-
-			  <listitem>
-				<para>In edit mode, when editing letter marks,
+				<para>When the letter mark tool is selected,
 				shift-click allows to customize the mark
 				text.</para>
 			  </listitem>
