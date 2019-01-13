@@ -59,25 +59,6 @@ void MainWidget::update_game_record (std::shared_ptr<game_record> gr)
 	normalTools->komi->setText(QString::number(gr->komi ()));
 	scoreTools->komi->setText(QString::number(gr->komi ()));
 	normalTools->handicap->setText(QString::number(gr->handicap ()));
-
-	// set correct tooltips
-	QWidget *timeSelf = gfx_board->player_is (black) ? normalTools->pb_timeBlack : normalTools->pb_timeWhite;
-	QWidget *timeOther = gfx_board->player_is (white) ? normalTools->pb_timeWhite : normalTools->pb_timeBlack;
-#if 0
-	switch (gsName)
-	{
-			case IGS:
-				timeSelf->setToolTip(tr("remaining time / stones"));
-				break;
-
-			default:
-				timeSelf->setToolTip(tr("click to pause/unpause the game"));
-				break;
-		}
-#else
-	timeSelf->setToolTip (tr("click to pause/unpause the game"));
-#endif
-	timeOther->setToolTip (tr("click to add 1 minute to your opponent's clock"));
 }
 
 void MainWidget::init_game_record (std::shared_ptr<game_record> gr)
@@ -280,6 +261,31 @@ void MainWidget::setGameMode(GameMode mode)
 	scoreButton->setEnabled (mode != modeEdit);
 
 	gfx_board->setMode (mode);
+
+	if (mode == modeMatch || mode == modeTeach) {
+		qDebug () << gfx_board->player_is (white) << " : " << gfx_board->player_is (black);
+		QWidget *timeSelf = gfx_board->player_is (black) ? normalTools->pb_timeBlack : normalTools->pb_timeWhite;
+		QWidget *timeOther = gfx_board->player_is (black) ? normalTools->pb_timeWhite : normalTools->pb_timeBlack;
+#if 0
+		switch (gsName)
+		{
+		case IGS:
+			timeSelf->setToolTip(tr("remaining time / stones"));
+			break;
+
+		default:
+			timeSelf->setToolTip(tr("click to pause/unpause the game"));
+			break;
+		}
+#else
+		timeSelf->setToolTip (tr("click to pause/unpause the game"));
+#endif
+		timeOther->setToolTip (tr("click to add 1 minute to your opponent's clock"));
+	} else {
+		normalTools->pb_timeBlack->setToolTip (tr ("Time remaining for this move"));
+		normalTools->pb_timeWhite->setToolTip (tr ("Time remaining for this move"));
+	}
+
 }
 
 void MainWidget::setMoveData(const game_state &gs, const go_board &b, GameMode mode)
