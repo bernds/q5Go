@@ -43,40 +43,6 @@
 	</note>
   </preface>
 
-<!-- Chapter: File formats -->
-  <chapter>
-	<title>File formats</title>
-
-<!-- Section: SGF -->
-	<section>
-	  <title>SGF</title>
-
-	  <anchor id="sgf" />
-
-	  <para>SGF (Smart Game Format) files are a simple and
-	  effective way to store records of two-player board games.
-	  File information is saved as plain text, which makes the
-	  files very small and easy to handle or store. Game
-	  information is stored in a tree-based format - in other
-	  words, there is one main linear sequence of moves, with any
-	  alternatives that have been entered into the record
-	  branching away from that main sequence. These branches may
-	  have their own branches and so on.</para>
-
-	  <para>Because an SGF can contain much information -
-	  including but not limited to board setup, markings,
-	  variations, and extensive comments - programs such as q5go
-	  have been created. q5go provides a powerful, easy-to-use
-	  interface for creating, editing and viewing SGF
-	  files.</para>
-
-	  <para>Loading and saving SGF files supports
-	  <link linkend="encoding">text encoding</link>
-
-	  for asian languages.</para>
-	</section>
-  </chapter>
-
 <!-- Chapter: q5go, the Program -->
   <chapter>
 	<title>q5go, the Program</title>
@@ -925,6 +891,40 @@
 	  </itemizedlist>
 	</section>
   </chapter>
+<!-- Chapter: File formats -->
+  <chapter>
+	<title>File formats</title>
+
+<!-- Section: SGF -->
+	<section>
+	  <title>SGF</title>
+
+	  <anchor id="sgf" />
+
+	  <para>SGF (Smart Game Format) files are a simple and
+	  effective way to store records of two-player board games.
+	  File information is saved as plain text, which makes the
+	  files very small and easy to handle or store. Game
+	  information is stored in a tree-based format - in other
+	  words, there is one main linear sequence of moves, with any
+	  alternatives that have been entered into the record
+	  branching away from that main sequence. These branches may
+	  have their own branches and so on.</para>
+
+	  <para>Because an SGF can contain much information -
+	  including but not limited to board setup, markings,
+	  variations, and extensive comments - programs such as q5go
+	  have been created. q5go provides a powerful, easy-to-use
+	  interface for creating, editing and viewing SGF
+	  files.</para>
+
+	  <para>Loading and saving SGF files supports
+	  <link linkend="encoding">text encoding</link>
+
+	  for asian languages.</para>
+	</section>
+  </chapter>
+
 </book>
 
 
