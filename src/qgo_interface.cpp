@@ -227,18 +227,6 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 			mode = modeTeach;
 			break;
 
-		// remove all boards! -> if connection is closed
-		// but: set options for local actions
-		case -1:
-			for (auto b: boardlist) {
-				b->disconnected (false);
-			}
-			boardlist.clear ();
-
-			// set number of observed games to 0
-			emit signal_addToObservationList(0);
-			return false;
-
 		default:
 			qWarning("*** qGoIF::parse_move(): unknown case !!! ***");
 			return false;
@@ -560,7 +548,13 @@ void qGoIF::set_observe(const QString& gameno)
 // remove all boards
 void qGoIF::set_initIF()
 {
-	parse_move(-1);
+	for (auto b: boardlist) {
+		b->disconnected (false);
+	}
+	boardlist.clear ();
+
+	// set number of observed games to 0
+	emit signal_addToObservationList(0);
 }
 
 // a match is created
