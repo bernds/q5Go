@@ -24,7 +24,7 @@ protected:
 private:
 	QTextBrowser *browser;
 	QToolBar *toolBar;
-	QAction *buttonHome, *buttonClose;
+	QAction *buttonHome, *buttonClose, *buttonBack, *buttonForward;
 };
 
 #endif

@@ -9,9 +9,9 @@ noinst_DATA = 1leftarrow.png 1leftarrow.xpm 1leftcomment.png \
 		2leftarrow.xpm 2rightarrow.png 2rightarrow.xpm \
 		bottom.png bottom.xpm Bowl.xpm charset.png	charset.xpm \
 		down.png down.xpm editcut.png \
-		editcut.xpm editdelete.png	editdelete.xpm editpaste.png editpaste.xpm exit.png \
-		exit.xpm filenew.png	filenew.xpm fileopen.png fileopen.xpm filesaveas.png \
-		filesaveas.xpm	filesave.png filesave.xpm gohome.png gohome.xpm help.png help.xpm	idea.png idea.xpm \
+		editcut.xpm editdelete.png	editdelete.xpm editpaste.png editpaste.xpm \
+		filenew.png	filenew.xpm fileopen.png fileopen.xpm filesaveas.png \
+		filesaveas.xpm	filesave.png filesave.xpm help.png help.xpm	idea.png idea.xpm \
 		navIntersection.png	navIntersection.xpm newboard.png \
 		newboard.xpm new_bottom.xpm	new_down.xpm new_start.xpm new_top.xpm new_up.xpm \
 		node_black.png	node_black.xpm node_white.png node_white.xpm \

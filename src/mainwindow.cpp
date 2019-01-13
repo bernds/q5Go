@@ -49,7 +49,6 @@
 //#ifdef USE_XPM
 #include ICON_PREFS
 #include ICON_GAMEINFO
-#include ICON_EXIT
 #include ICON_FILENEWBOARD
 #include ICON_FILENEW
 #include ICON_FILEOPEN
@@ -351,7 +350,7 @@ MainWindow::~MainWindow()
 void MainWindow::initActions()
 {
 	// Load the pixmaps
-	QPixmap exitIcon, fileNewboardIcon, fileNewIcon, fileOpenIcon, fileSaveIcon, fileSaveAsIcon,
+	QPixmap fileNewboardIcon, fileNewIcon, fileOpenIcon, fileSaveIcon, fileSaveAsIcon,
 		transformIcon, charIcon, deleteIcon,
 		nextCommentIcon, previousCommentIcon, navIntersectionIcon,
 		rightArrowIcon, leftArrowIcon,two_rightArrowIcon, two_leftArrowIcon,
@@ -360,7 +359,6 @@ void MainWindow::initActions()
 
 	prefsIcon = QPixmap((package_settings_xpm));
 	infoIcon = QPixmap((idea_xpm));
-	exitIcon = QPixmap((exit_xpm));
 	fileNewboardIcon = QPixmap((newboard_xpm));
 	fileNewIcon = QPixmap((filenew_xpm));
 	fileOpenIcon = QPixmap((fileopen_xpm));
@@ -479,7 +477,7 @@ void MainWindow::initActions()
 	connect(fileExportPicClipB, &QAction::triggered, this, &MainWindow::slotFileExportPicClipB);
 
 	// File Quit
-	fileQuit = new QAction(exitIcon, tr("E&xit"), this);
+	fileQuit = new QAction(QIcon (":/images/exit.png"), tr("E&xit"), this);
 	fileQuit->setShortcut (QKeySequence (Qt::CTRL + Qt::Key_Q));
 	fileQuit->setStatusTip(tr("Quits the application"));
 	fileQuit->setWhatsThis(tr("Exit\n\nQuits the application."));
