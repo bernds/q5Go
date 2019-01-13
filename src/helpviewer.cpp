@@ -62,7 +62,7 @@ HelpViewer::~HelpViewer()
 
 void HelpViewer::initToolBar()
 {
-	toolBar = new QToolBar(this);
+	toolBar = addToolBar ("Navigation Bar");
 
 	QPixmap iconHome, iconExit;
 
