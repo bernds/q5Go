@@ -101,6 +101,7 @@ PreferencesDialog::PreferencesDialog(QWidget* parent)
 	connect (whiteHardSlider, &QSlider::valueChanged, [=] (int) { update_w_stones (); });
 	connect (whiteSpecSlider, &QSlider::valueChanged, [=] (int) { update_w_stones (); });
 	connect (whiteFlatSlider, &QSlider::valueChanged, [=] (int) { update_w_stones (); });
+	connect (ambientSlider, &QSlider::valueChanged, [=] (int) { update_w_stones (); update_b_stones (); });
 	connect (stripesCheckBox, &QCheckBox::toggled, [=] (int) { update_w_stones (); });
 }
 
@@ -130,6 +131,7 @@ void PreferencesDialog::init_from_settings ()
 	blackRoundSlider->setValue(setting->readIntEntry("STONES_BROUND"));
 	whiteFlatSlider->setValue(setting->readIntEntry("STONES_WFLAT"));
 	blackFlatSlider->setValue(setting->readIntEntry("STONES_BFLAT"));
+	ambientSlider->setValue (setting->readIntEntry("STONES_AMBIENT"));
 
 	stoneSoundCheckBox->setChecked(setting->readBoolEntry("SOUND_STONE"));
 	autoplaySoundCheckBox->setChecked(setting->readBoolEntry("SOUND_AUTOPLAY"));
@@ -240,6 +242,7 @@ void PreferencesDialog::update_stone_params ()
 	double wf = whiteFlatSlider->value ();
 	double bh = 1 + blackHardSlider->value () / 10.0;
 	double wh = 1 + whiteHardSlider->value () / 10.0;
+	double ambient = ambientSlider->value () / 100.0;
 	bool clamshell = stripesCheckBox->isChecked ();
 	int look = 3;
 	if (radioButtonStones_2D->isChecked ())
@@ -248,7 +251,7 @@ void PreferencesDialog::update_stone_params ()
 		look = 2;
 	blackGroupBox->setEnabled (look == 3);
 	whiteGroupBox->setEnabled (look == 3);
-	m_ih->set_stone_params (wh, bh, ws, bs, wr, br, wf, bf, look, clamshell);
+	m_ih->set_stone_params (wh, bh, ws, bs, wr, br, wf, bf, ambient, look, clamshell);
 }
 
 void PreferencesDialog::update_w_stones ()
@@ -312,6 +315,7 @@ void PreferencesDialog::slot_apply()
 	setting->writeIntEntry("STONES_BROUND", blackRoundSlider->value());
 	setting->writeIntEntry("STONES_WFLAT", whiteFlatSlider->value());
 	setting->writeIntEntry("STONES_BFLAT", blackFlatSlider->value());
+	setting->writeIntEntry("STONES_AMBIENT", ambientSlider->value());
 	setting->writeEntry("STONES_BCOL", black_color().name());
 	setting->writeEntry("STONES_WCOL", white_color().name());
 

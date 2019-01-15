@@ -21,7 +21,7 @@ class ImageHandler
 	int m_w_flat { 1 }, m_b_flat { 1 };
 	QColor m_w_col {255, 255, 255, 255};
 	QColor m_b_col {60, 60, 60, 255};
-
+	double m_ambient { 0.2 };
 	bool m_clamshell;
 	int m_look;
 
@@ -39,7 +39,7 @@ public:
 
 	void set_stone_params (double w_hard, double b_hard, double w_spec, double b_spec,
 			       double w_radius, double b_radius, int w_flat, int b_flat,
-			       int look, bool clamshell)
+			       double ambient, int look, bool clamshell)
 	{
 		m_w_hard = w_hard;
 		m_b_hard = b_hard;
@@ -49,6 +49,7 @@ public:
 		m_b_radius = b_radius;
 		m_w_flat = w_flat;
 		m_b_flat = b_flat;
+		m_ambient = ambient;
 		m_clamshell = clamshell;
 		m_look = look;
 	}
