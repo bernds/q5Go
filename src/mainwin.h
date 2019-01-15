@@ -66,7 +66,6 @@ public:
 	void saveSettings();
 
 	bool preferencesAccept();
-	bool preferencesSave(PreferencesDialog*);
 	void dlgSetPreferences(int tab=-1);
 
 	bool DODEBUG;

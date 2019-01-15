@@ -26,6 +26,8 @@ class PreferencesDialog : public QDialog, public Ui::PreferencesDialogGui
 	QGraphicsScene *m_stone_canvas;
 	int m_stone_size;
 
+	void init_from_settings ();
+
 	bool avoid_losing_data ();
 	void clear_engine ();
 	void clear_host ();

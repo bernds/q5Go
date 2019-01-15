@@ -39,15 +39,8 @@ PreferencesDialog::PreferencesDialog(QWidget* parent)
 	enginelabel_2->setMinimumWidth (engine_w);
 	enginelabel_3->setMinimumWidth (engine_w);
 
-	for (auto h: parent_cw->hostlist)
-		new QListWidgetItem (h->title(), ListView_hosts);
-	for (auto h: parent_cw->m_engines)
-		new QListWidgetItem (h->title(), ListView_engines);
-
 	// init random-number generator
 	srand ((unsigned)time (nullptr));
-
-	insertStandardHosts();
 
 	// set valid port range
 	val = new QIntValidator(0, 9999, this);
@@ -56,19 +49,9 @@ PreferencesDialog::PreferencesDialog(QWidget* parent)
 	// clear edit field
 	LineEdit_title->clear();
 
-	fontStandardButton->setText(setting->fontToString(setting->fontStandard));
-	fontMarksButton->setText(setting->fontToString(setting->fontMarks));
-	fontCommentsButton->setText(setting->fontToString(setting->fontComments));
-	fontListsButton->setText(setting->fontToString(setting->fontLists));
-	fontClocksButton->setText(setting->fontToString(setting->fontClocks));
-	fontConsoleButton->setText(setting->fontToString(setting->fontConsole));
+	init_from_settings ();
 
-	fontStandardButton->setFont(setting->fontStandard);
-	fontMarksButton->setFont(setting->fontMarks);
-	fontCommentsButton->setFont(setting->fontComments);
-	fontListsButton->setFont(setting->fontLists);
-	fontClocksButton->setFont(setting->fontClocks);
-	fontConsoleButton->setFont(setting->fontConsole);
+	insertStandardHosts();
 
 	// Default codec
 	ComboBox_codec->addItem("");
@@ -119,6 +102,112 @@ PreferencesDialog::PreferencesDialog(QWidget* parent)
 	connect (whiteSpecSlider, &QSlider::valueChanged, [=] (int) { update_w_stones (); });
 	connect (whiteFlatSlider, &QSlider::valueChanged, [=] (int) { update_w_stones (); });
 	connect (stripesCheckBox, &QCheckBox::toggled, [=] (int) { update_w_stones (); });
+}
+
+void PreferencesDialog::init_from_settings ()
+{
+	for (auto h: parent_cw->hostlist)
+		new QListWidgetItem (h->title(), ListView_hosts);
+	for (auto h: parent_cw->m_engines)
+		new QListWidgetItem (h->title(), ListView_engines);
+
+	// Interface tab
+	woodComboBox->setCurrentIndex (setting->readIntEntry("SKIN_INDEX"));
+	LineEdit_goban->setText(setting->readEntry("SKIN"));
+	LineEdit_Table->setText(setting->readEntry("SKIN_TABLE"));
+	languageComboBox->insertItems(1, setting->getAvailableLanguages());
+	languageComboBox->setCurrentIndex(setting->convertLanguageCodeToNumber());
+
+	radioButtonStones_2D->setChecked((setting->readIntEntry("STONES_LOOK")==1));
+	radioButtonStones_3D->setChecked((setting->readIntEntry("STONES_LOOK")==2));
+	radioButtonStone_real->setChecked((setting->readIntEntry("STONES_LOOK")==3));
+	stripesCheckBox->setChecked (setting->readBoolEntry("STONES_STRIPES"));
+	whiteSpecSlider->setValue (setting->readIntEntry("STONES_WSPEC"));
+	blackSpecSlider->setValue (setting->readIntEntry("STONES_BSPEC"));
+	whiteHardSlider->setValue(setting->readIntEntry("STONES_WHARD"));
+	blackHardSlider->setValue(setting->readIntEntry("STONES_BHARD"));
+	whiteRoundSlider->setValue(setting->readIntEntry("STONES_WROUND"));
+	blackRoundSlider->setValue(setting->readIntEntry("STONES_BROUND"));
+	whiteFlatSlider->setValue(setting->readIntEntry("STONES_WFLAT"));
+	blackFlatSlider->setValue(setting->readIntEntry("STONES_BFLAT"));
+
+	stoneSoundCheckBox->setChecked(setting->readBoolEntry("SOUND_STONE"));
+	autoplaySoundCheckBox->setChecked(setting->readBoolEntry("SOUND_AUTOPLAY"));
+	talkSoundCheckBox->setChecked(setting->readBoolEntry("SOUND_TALK"));
+	matchSoundCheckBox->setChecked(setting->readBoolEntry("SOUND_MATCH"));
+	passSoundCheckBox->setChecked(setting->readBoolEntry("SOUND_PASS"));
+	gameEndSoundCheckBox->setChecked(setting->readBoolEntry("SOUND_GAMEEND"));
+	timeSoundCheckBox->setChecked(setting->readBoolEntry("SOUND_TIME"));
+	saySoundCheckBox->setChecked(setting->readBoolEntry("SOUND_SAY"));
+	enterSoundCheckBox->setChecked(setting->readBoolEntry("SOUND_ENTER"));
+	leaveSoundCheckBox->setChecked(setting->readBoolEntry("SOUND_LEAVE"));
+	disConnectSoundCheckBox->setChecked(setting->readBoolEntry("SOUND_DISCONNECT"));
+	connectSoundCheckBox->setChecked(setting->readBoolEntry("SOUND_CONNECT"));
+
+	soundMatchCheckBox->setChecked(setting->readBoolEntry("SOUND_MATCH_BOARD"));
+	soundObserveCheckBox->setChecked(setting->readBoolEntry("SOUND_OBSERVE"));
+	soundNormalCheckBox->setChecked(setting->readBoolEntry("SOUND_NORMAL"));
+	soundComputerCheckBox->setChecked(setting->readBoolEntry("SOUND_COMPUTER"));
+
+	variationComboBox->setCurrentIndex(setting->readIntEntry("VAR_GHOSTS"));
+	varChildrenComboBox->setCurrentIndex(setting->readBoolEntry("VAR_CHILDREN") != 0);
+	varSGFStyleComboBox->setCurrentIndex(setting->readIntEntry("VAR_SGF_STYLE"));
+
+	int coords = (setting->readBoolEntry("BOARD_COORDS")
+		      ? (setting->readBoolEntry("SGF_BOARD_COORDS") ? 2 : 1)
+		      : 0);
+	coordsComboBox->setCurrentIndex(coords);
+	cursorCheckBox->setChecked(setting->readBoolEntry("CURSOR"));
+	tooltipsCheckBox->setChecked(!(setting->readBoolEntry("TOOLTIPS")));
+	timerComboBox->setCurrentIndex(setting->readIntEntry("TIMER_INTERVAL"));
+	BYTimeSpin->setValue(setting->readIntEntry("BY_TIMER"));
+	sgfTimeTagsCheckBox->setChecked(setting->readBoolEntry("SGF_TIME_TAGS"));
+	sliderCheckBox->setChecked(setting->readBoolEntry("SLIDER"));
+	int sidebar = (setting->readBoolEntry("SIDEBAR")
+		       ? (setting->readBoolEntry("SIDEBAR_LEFT") ? 1 : 2)
+		       : 0);
+	sidebarComboBox->setCurrentIndex(sidebar);
+	antiClickoCheckBox->setChecked(setting->readBoolEntry("ANTICLICKO"));
+
+	// Client Window tab
+	LineEdit_watch->setText(setting->readEntry("WATCH"));
+	LineEdit_exclude->setText(setting->readEntry("EXCLUDE"));
+	CheckBox_extUserInfo->setChecked(setting->readBoolEntry("EXTUSERINFO"));
+//	CheckBox_useNmatch->setChecked(setting->readBoolEntry("USE_NMATCH"));
+	checkBox_Nmatch_Black->setChecked(setting->readBoolEntry("NMATCH_BLACK"));
+	checkBox_Nmatch_White->setChecked(setting->readBoolEntry("NMATCH_WHITE"));
+	checkBox_Nmatch_Nigiri->setChecked(setting->readBoolEntry("NMATCH_NIGIRI"));
+	HandicapSpin_Nmatch->setValue(setting->readIntEntry("NMATCH_HANDICAP"));
+	timeSpin_Nmatch->setValue(setting->readIntEntry("NMATCH_MAIN_TIME"));
+	BYSpin_Nmatch->setValue(setting->readIntEntry("NMATCH_BYO_TIME"));
+
+	computerWhiteButton->setChecked(setting->readBoolEntry("COMPUTER_WHITE"));
+	computerSizeSpin->setValue(setting->readIntEntry("COMPUTER_SIZE"));
+	computerHandicapSpin->setValue(setting->readIntEntry("COMPUTER_HANDICAP"));
+	humanName->setText(setting->readEntry("HUMAN_NAME"));
+
+	// Go Server tab
+	boardSizeSpin->setValue(setting->readIntEntry("DEFAULT_SIZE"));
+	timeSpin->setValue(setting->readIntEntry("DEFAULT_TIME"));
+	BYSpin->setValue(setting->readIntEntry("DEFAULT_BY"));
+	komiSpinDefault->setValue(setting->readIntEntry("DEFAULT_KOMI"));
+	automaticNegotiationCheckBox->setChecked(setting->readBoolEntry("DEFAULT_AUTONEGO"));
+	CheckBox_autoSave->setChecked(setting->readBoolEntry("AUTOSAVE"));
+	CheckBox_autoSave_Played->setChecked(setting->readBoolEntry("AUTOSAVE_PLAYED"));
+
+	fontStandardButton->setText(setting->fontToString(setting->fontStandard));
+	fontMarksButton->setText(setting->fontToString(setting->fontMarks));
+	fontCommentsButton->setText(setting->fontToString(setting->fontComments));
+	fontListsButton->setText(setting->fontToString(setting->fontLists));
+	fontClocksButton->setText(setting->fontToString(setting->fontClocks));
+	fontConsoleButton->setText(setting->fontToString(setting->fontConsole));
+
+	fontStandardButton->setFont(setting->fontStandard);
+	fontMarksButton->setFont(setting->fontMarks);
+	fontCommentsButton->setFont(setting->fontComments);
+	fontListsButton->setFont(setting->fontLists);
+	fontClocksButton->setFont(setting->fontClocks);
+	fontConsoleButton->setFont(setting->fontConsole);
 }
 
 void PreferencesDialog::select_stone_look (bool)
@@ -199,7 +288,110 @@ PreferencesDialog::~PreferencesDialog()
 void PreferencesDialog::slot_apply()
 {
 	qDebug() << "onApply";
-	client_window->preferencesSave(this);
+
+	setting->writeIntEntry("SKIN_INDEX", woodComboBox->currentIndex ());
+	setting->writeEntry("SKIN", LineEdit_goban->text());
+	setting->writeEntry("SKIN_TABLE", LineEdit_Table->text());
+	setting->obtain_skin_images ();
+
+	setting->writeEntry("LANG", setting->convertNumberToLanguage(languageComboBox->currentIndex()));
+//	setting->writeBoolEntry("STONES_SHADOW", stonesShadowCheckBox->isChecked());
+//	setting->writeBoolEntry("STONES_SHELLS", stonesShellsCheckBox->isChecked());
+	int i = 3;
+	if ( radioButtonStones_2D->isChecked())
+		i=1;
+	else if ( radioButtonStones_3D->isChecked())
+		i=2;
+	setting->writeBoolEntry("STONES_STRIPES", stripesCheckBox->isChecked());
+	setting->writeIntEntry("STONES_LOOK", i);
+	setting->writeIntEntry("STONES_WSPEC", whiteSpecSlider->value());
+	setting->writeIntEntry("STONES_BSPEC", blackSpecSlider->value());
+	setting->writeIntEntry("STONES_WHARD", whiteHardSlider->value());
+	setting->writeIntEntry("STONES_BHARD", blackHardSlider->value());
+	setting->writeIntEntry("STONES_WROUND", whiteRoundSlider->value());
+	setting->writeIntEntry("STONES_BROUND", blackRoundSlider->value());
+	setting->writeIntEntry("STONES_WFLAT", whiteFlatSlider->value());
+	setting->writeIntEntry("STONES_BFLAT", blackFlatSlider->value());
+	setting->writeEntry("STONES_BCOL", black_color().name());
+	setting->writeEntry("STONES_WCOL", white_color().name());
+
+	setting->writeBoolEntry("SOUND_STONE", stoneSoundCheckBox->isChecked());
+	setting->writeBoolEntry("SOUND_AUTOPLAY", autoplaySoundCheckBox->isChecked());
+	setting->writeBoolEntry("SOUND_TALK", talkSoundCheckBox->isChecked());
+	setting->writeBoolEntry("SOUND_MATCH", matchSoundCheckBox->isChecked());
+	setting->writeBoolEntry("SOUND_GAMEEND", passSoundCheckBox->isChecked());
+	setting->writeBoolEntry("SOUND_PASS", gameEndSoundCheckBox->isChecked());
+	setting->writeBoolEntry("SOUND_TIME", timeSoundCheckBox->isChecked());
+	setting->writeBoolEntry("SOUND_SAY", saySoundCheckBox->isChecked());
+	setting->writeBoolEntry("SOUND_ENTER", enterSoundCheckBox->isChecked());
+	setting->writeBoolEntry("SOUND_LEAVE", leaveSoundCheckBox->isChecked());
+	setting->writeBoolEntry("SOUND_DISCONNECT", disConnectSoundCheckBox->isChecked());
+	setting->writeBoolEntry("SOUND_CONNECT", connectSoundCheckBox->isChecked());
+
+	setting->writeBoolEntry("SOUND_MATCH_BOARD", soundMatchCheckBox->isChecked());
+	setting->writeBoolEntry("SOUND_OBSERVE", soundObserveCheckBox->isChecked());
+	setting->writeBoolEntry("SOUND_NORMAL", soundNormalCheckBox->isChecked());
+	setting->writeBoolEntry("SOUND_COMPUTER", soundComputerCheckBox->isChecked());
+
+	setting->writeIntEntry("VAR_GHOSTS", variationComboBox->currentIndex());
+	setting->writeBoolEntry("VAR_CHILDREN", varChildrenComboBox->currentIndex() == 1);
+	setting->writeIntEntry("VAR_SGF_STYLE", varSGFStyleComboBox->currentIndex());
+
+	int coords = coordsComboBox->currentIndex();
+	int sidebar = sidebarComboBox->currentIndex();
+	setting->writeBoolEntry("BOARD_COORDS", coords > 0);
+	setting->writeBoolEntry("SGF_BOARD_COORDS", coords == 2);
+	setting->writeBoolEntry("SLIDER", sliderCheckBox->isChecked());
+	setting->writeBoolEntry("SIDEBAR", sidebar > 0);
+	setting->writeBoolEntry("SIDEBAR_LEFT", sidebar == 1);
+	setting->writeBoolEntry("CURSOR", cursorCheckBox->isChecked());
+	//setting->writeBoolEntry("SMALL_STONES", smallerStonesCheckBox->isChecked());
+	setting->writeBoolEntry("TOOLTIPS", !(tooltipsCheckBox->isChecked()));
+	setting->writeIntEntry("BY_TIMER", BYTimeSpin->text().toInt());
+	setting->writeIntEntry("TIMER_INTERVAL", timerComboBox->currentIndex());
+	setting->writeBoolEntry("SGF_TIME_TAGS", sgfTimeTagsCheckBox->isChecked());
+	setting->writeBoolEntry("ANTICLICKO", antiClickoCheckBox->isChecked());
+
+	// Client Window Tab
+	setting->writeEntry("WATCH", LineEdit_watch->text());
+	setting->writeEntry("EXCLUDE", LineEdit_exclude->text());
+	setting->writeBoolEntry("EXTUSERINFO", CheckBox_extUserInfo->isChecked());
+//	setting->writeBoolEntry("USE_NMATCH", CheckBox_useNmatch->isChecked());
+
+	//Checks wether the nmatch parameters have been modified, in order to send a new nmatchrange command
+	if( 	(setting->readBoolEntry("NMATCH_BLACK") != checkBox_Nmatch_Black->isChecked()) ||
+		(setting->readBoolEntry("NMATCH_WHITE") != checkBox_Nmatch_White->isChecked()) ||
+		(setting->readBoolEntry("NMATCH_NIGIRI") != checkBox_Nmatch_Nigiri->isChecked()) ||
+		(setting->readIntEntry("NMATCH_MAIN_TIME") != timeSpin_Nmatch->text().toInt()) ||
+		(setting->readIntEntry("NMATCH_BYO_TIME") != BYSpin_Nmatch->text().toInt()) ||
+		(setting->readIntEntry("NMATCH_HANDICAP") != HandicapSpin_Nmatch->text().toInt()) ||
+		(setting->readIntEntry("DEFAULT_SIZE") != boardSizeSpin->text().toInt()) ||
+		(setting->readIntEntry("DEFAULT_TIME") != timeSpin->text().toInt()) ||
+		(setting->readIntEntry("DEFAULT_BY") != BYSpin->text().toInt()) )
+			setting->nmatch_settings_modified = true;
+
+	setting->writeBoolEntry("NMATCH_BLACK", checkBox_Nmatch_Black->isChecked());
+	setting->writeBoolEntry("NMATCH_WHITE", checkBox_Nmatch_White->isChecked());
+	setting->writeBoolEntry("NMATCH_NIGIRI", checkBox_Nmatch_Nigiri->isChecked());
+	setting->writeIntEntry("NMATCH_MAIN_TIME", timeSpin_Nmatch->text().toInt());
+	setting->writeIntEntry("NMATCH_BYO_TIME", BYSpin_Nmatch->text().toInt());
+	setting->writeIntEntry("NMATCH_HANDICAP", HandicapSpin_Nmatch->text().toInt());
+
+
+	setting->writeIntEntry("DEFAULT_SIZE", boardSizeSpin->text().toInt());
+	setting->writeIntEntry("DEFAULT_TIME", timeSpin->text().toInt());
+	setting->writeIntEntry("DEFAULT_BY", BYSpin->text().toInt());
+	setting->writeIntEntry("DEFAULT_KOMI", komiSpinDefault->text().toFloat());
+	setting->writeBoolEntry("DEFAULT_AUTONEGO", automaticNegotiationCheckBox->isChecked());
+	setting->writeBoolEntry("AUTOSAVE", CheckBox_autoSave->isChecked());
+	setting->writeBoolEntry("AUTOSAVE_PLAYED", CheckBox_autoSave_Played->isChecked());
+
+	// Computer Tab
+	setting->writeBoolEntry("COMPUTER_WHITE", computerWhiteButton->isChecked());
+	setting->writeIntEntry("COMPUTER_SIZE", computerSizeSpin->text().toInt());
+	setting->writeIntEntry("COMPUTER_HANDICAP", computerHandicapSpin->text().toInt());
+	setting->writeEntry("HUMAN_NAME", humanName->text());
+
 	client_window->preferencesAccept();
 }
 
@@ -314,9 +506,7 @@ void PreferencesDialog::slot_accept()
 		return;
 	saveSizes();
 
-	// save settings
-	parent_cw->saveSettings();
-
+	slot_apply ();
 	accept();
 }
 
