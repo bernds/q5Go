@@ -145,6 +145,7 @@ public:
 	void set_antiClicko(bool b) { antiClicko = b; }
 	void set_vardisplay (bool children, int type);
 
+	void update_images () {	imageHandler->rescale (square_size); sync_appearance (); }
 public slots:
 	void update_comment(const QString &, bool append);
 	void changeSize();

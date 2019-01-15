@@ -2844,6 +2844,15 @@ void ClientWindow::dlgSetPreferences(int tab)
 	dlg.radioButtonStones_2D->setChecked((setting->readIntEntry("STONES_LOOK")==1));
 	dlg.radioButtonStones_3D->setChecked((setting->readIntEntry("STONES_LOOK")==2));
 	dlg.radioButtonStone_real->setChecked((setting->readIntEntry("STONES_LOOK")==3));
+	dlg.stripesCheckBox->setChecked (setting->readBoolEntry("STONES_STRIPES"));
+	dlg.whiteSpecSlider->setValue (setting->readIntEntry("STONES_WSPEC"));
+	dlg.blackSpecSlider->setValue (setting->readIntEntry("STONES_BSPEC"));
+	dlg.whiteHardSlider->setValue(setting->readIntEntry("STONES_WHARD"));
+	dlg.blackHardSlider->setValue(setting->readIntEntry("STONES_BHARD"));
+	dlg.whiteRoundSlider->setValue(setting->readIntEntry("STONES_WROUND"));
+	dlg.blackRoundSlider->setValue(setting->readIntEntry("STONES_BROUND"));
+	dlg.whiteFlatSlider->setValue(setting->readIntEntry("STONES_WFLAT"));
+	dlg.blackFlatSlider->setValue(setting->readIntEntry("STONES_BFLAT"));
 
 //	dlg.stonesShellsCheckBox->setChecked(setting->readBoolEntry("STONES_SHELLS"));
 	dlg.stoneSoundCheckBox->setChecked(setting->readBoolEntry("SOUND_STONE"));
@@ -2952,7 +2961,18 @@ bool ClientWindow::preferencesSave(PreferencesDialog *dlg)
 		i=1;
 	else if ( dlg->radioButtonStones_3D->isChecked())
 		i=2;
+	setting->writeBoolEntry("STONES_STRIPES", dlg->stripesCheckBox->isChecked());
 	setting->writeIntEntry("STONES_LOOK", i);
+	setting->writeIntEntry("STONES_WSPEC", dlg->whiteSpecSlider->value());
+	setting->writeIntEntry("STONES_BSPEC", dlg->blackSpecSlider->value());
+	setting->writeIntEntry("STONES_WHARD", dlg->whiteHardSlider->value());
+	setting->writeIntEntry("STONES_BHARD", dlg->blackHardSlider->value());
+	setting->writeIntEntry("STONES_WROUND", dlg->whiteRoundSlider->value());
+	setting->writeIntEntry("STONES_BROUND", dlg->blackRoundSlider->value());
+	setting->writeIntEntry("STONES_WFLAT", dlg->whiteFlatSlider->value());
+	setting->writeIntEntry("STONES_BFLAT", dlg->blackFlatSlider->value());
+	setting->writeEntry("STONES_BCOL", dlg->black_color().name());
+	setting->writeEntry("STONES_WCOL", dlg->white_color().name());
 
 	setting->writeBoolEntry("SOUND_STONE", dlg->stoneSoundCheckBox->isChecked());
 	setting->writeBoolEntry("SOUND_AUTOPLAY", dlg->autoplaySoundCheckBox->isChecked());

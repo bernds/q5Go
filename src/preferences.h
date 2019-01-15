@@ -10,6 +10,9 @@
 class QIntValidator;
 class MainWindow;
 class ClientWindow;
+class ImageHandler;
+class QGraphicsScene;
+class QGraphicsPixmapItem;
 
 class PreferencesDialog : public QDialog, public Ui::PreferencesDialogGui
 {
@@ -18,18 +21,29 @@ class PreferencesDialog : public QDialog, public Ui::PreferencesDialogGui
 	bool m_changing_engine = false;
 	bool m_changing_host = false;
 
+	ImageHandler *m_ih;
+	QGraphicsPixmapItem *m_w_stone, *m_b_stone;
+	QGraphicsScene *m_stone_canvas;
+	int m_stone_size;
+
 	bool avoid_losing_data ();
 	void clear_engine ();
 	void clear_host ();
+	void update_w_stones ();
+	void update_b_stones ();
+	void update_stone_params ();
 public:
 	PreferencesDialog(QWidget* parent = 0);
 	~PreferencesDialog();
 
 //	static QString fontToString(QFont f);
+	QColor white_color ();
+	QColor black_color ();
 
 signals:
 	void signal_addHost(const QString&, const QString&, unsigned int, const QString&, const QString&);
 	void signal_delHost(const QString&);
+
 
 public slots:
 	void on_soundButtonGroup_buttonClicked(QAbstractButton *);
@@ -60,7 +74,9 @@ public slots:
 	virtual void slot_BY_time_changed(int);
 	virtual void slot_clickedHostList(QListWidgetItem *);
 	virtual void slot_clickedEngines(QListWidgetItem *);
-
+	void select_white_color (bool);
+	void select_black_color (bool);
+	void select_stone_look (bool);
 private:
 	void          saveSizes();
 	ClientWindow  *parent_cw;

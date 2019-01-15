@@ -99,10 +99,22 @@ Setting::Setting()
         qDebug () << "Docdirs: " << docdirs;
         if (!docdirs.isEmpty ())
                 writeEntry("LAST_DIR", docdirs.first ());
-//#ifdef Q_OS_MACX
+
 	writeBoolEntry("REM_DIR", true);
+
+	writeIntEntry("STONES_BFLAT", 1);
+	writeIntEntry("STONES_BROUND", 80);
+	writeIntEntry("STONES_BHARD", 30);
+	writeIntEntry("STONES_BSPEC", 50);
+	writeIntEntry("STONES_WFLAT", 1);
+	writeIntEntry("STONES_WROUND", 60);
+	writeIntEntry("STONES_WHARD", 7);
+	writeIntEntry("STONES_WSPEC", 80);
+
+	writeEntry("STONES_BCOL", "#101010");
+	writeEntry("STONES_WCOL", "#FFFFFF");
 	writeIntEntry("STONES_LOOK", 3);
-//#endif
+	writeBoolEntry("STONES_STRIPES", 1);
 
 	language = "Default";
 	fontStandard = QFont();

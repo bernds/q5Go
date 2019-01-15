@@ -4,25 +4,20 @@
 
 #include <QFileDialog>
 #include <QFontDialog>
+#include <QColorDialog>
 #include <QWhatsThis>
 
 #include "preferences.h"
 #include "mainwindow.h"
 #include "qgo.h"
 #include "mainwin.h"
+#include "imagehandler.h"
 
 #ifdef Q_OS_MACX
 #include <CoreFoundation/CFString.h>
 #include <CoreFoundation/CFBundle.h>
 #endif //Q_OS_MACX
 
-/* 
-*  Constructs a PreferencesDialog which is a child of 'parent', with the 
-*  name 'name' and widget flags set to 'f' 
-*
-*  The dialog will by default be modeless, unless you set 'modal' to
-*  TRUE to construct a modal dialog.
-*/
 PreferencesDialog::PreferencesDialog(QWidget* parent)
 	: QDialog (parent)
 {
@@ -80,7 +75,111 @@ PreferencesDialog::PreferencesDialog(QWidget* parent)
 	auto codecs = QTextCodec::availableCodecs ();
 	for(auto it: codecs)
 		ComboBox_codec->addItem(it);
+
+	m_ih = new ImageHandler;
+
+	int w = stoneView->width ();
+	int h = stoneView->height ();
+	m_stone_size = std::min (w / 2, h);
+	m_ih->init (5);
+	m_ih->rescale (m_stone_size);
+	m_stone_canvas = new QGraphicsScene(0, 0, w, h, stoneView);
+	stoneView->setScene (m_stone_canvas);
+	const QList<QPixmap> *pixmaps = m_ih->getStonePixmaps();
+	m_b_stone = new QGraphicsPixmapItem ((*pixmaps)[0]);
+	m_w_stone = new QGraphicsPixmapItem ((*pixmaps)[1]);
+	m_stone_canvas->addItem (m_w_stone);
+	m_stone_canvas->addItem (m_b_stone);
+	m_w_stone->setPos (w / 2 - m_stone_size, 0);
+	m_b_stone->setPos (w / 2, 0);
+
+	QImage image(w, h, QImage::Format_RGB32);
+
+	// Paint table and board on the pixmap
+	QPainter painter;
+
+	painter.begin(&image);
+	painter.setPen(Qt::NoPen);
+
+	painter.drawTiledPixmap (0, 0, w, h, *setting->wood_image ());
+	painter.end();
+	m_stone_canvas->setBackgroundBrush(QBrush(image));
+
+	connect (radioButtonStones_2D, &QRadioButton::toggled, this, &PreferencesDialog::select_stone_look);
+	connect (radioButtonStones_3D, &QRadioButton::toggled, this, &PreferencesDialog::select_stone_look);
+
+	connect (whiteColorButton, &QToolButton::clicked, this, &PreferencesDialog::select_white_color);
+	connect (blackColorButton, &QToolButton::clicked, this, &PreferencesDialog::select_black_color);
+	connect (blackRoundSlider, &QSlider::valueChanged, [=] (int) { update_b_stones (); });
+	connect (blackHardSlider, &QSlider::valueChanged, [=] (int) { update_b_stones (); });
+	connect (blackSpecSlider, &QSlider::valueChanged, [=] (int) { update_b_stones (); });
+	connect (blackFlatSlider, &QSlider::valueChanged, [=] (int) { update_b_stones (); });
+	connect (whiteRoundSlider, &QSlider::valueChanged, [=] (int) { update_w_stones (); });
+	connect (whiteHardSlider, &QSlider::valueChanged, [=] (int) { update_w_stones (); });
+	connect (whiteSpecSlider, &QSlider::valueChanged, [=] (int) { update_w_stones (); });
+	connect (whiteFlatSlider, &QSlider::valueChanged, [=] (int) { update_w_stones (); });
+	connect (stripesCheckBox, &QCheckBox::toggled, [=] (int) { update_w_stones (); });
 }
+
+void PreferencesDialog::select_stone_look (bool)
+{
+	update_w_stones ();
+	update_b_stones ();
+}
+
+void PreferencesDialog::select_white_color (bool)
+{
+	QColor c = QColorDialog::getColor (m_ih->white_color (), this, tr ("Select white stone base color"));
+	m_ih->set_white_color (c);
+	update_w_stones ();
+}
+
+void PreferencesDialog::select_black_color (bool)
+{
+	QColor c = QColorDialog::getColor (m_ih->black_color (), this, tr ("Select black stone base color"));
+	m_ih->set_black_color (c);
+	update_b_stones ();
+}
+
+void PreferencesDialog::update_stone_params ()
+{
+	double br = 2.05 + (100 - blackRoundSlider->value ()) / 30.0;
+	double wr = 2.05 + (100 - whiteRoundSlider->value ()) / 30.0;
+	double bs = blackSpecSlider->value () / 100.0;
+	double ws = whiteSpecSlider->value () / 100.0;
+	double bf = blackFlatSlider->value ();
+	double wf = whiteFlatSlider->value ();
+	double bh = 1 + blackHardSlider->value () / 10.0;
+	double wh = 1 + whiteHardSlider->value () / 10.0;
+	bool clamshell = stripesCheckBox->isChecked ();
+	int look = 3;
+	if (radioButtonStones_2D->isChecked ())
+		look = 1;
+	else if (radioButtonStones_3D->isChecked ())
+		look = 2;
+	blackGroupBox->setEnabled (look == 3);
+	whiteGroupBox->setEnabled (look == 3);
+	m_ih->set_stone_params (wh, bh, ws, bs, wr, br, wf, bf, look, clamshell);
+}
+
+void PreferencesDialog::update_w_stones ()
+{
+	update_stone_params ();
+	QImage img (m_stone_size, m_stone_size, QImage::Format_ARGB32);
+	m_ih->paint_one_stone (img, true, m_stone_size);
+	QPixmap pm = QPixmap::fromImage (img);
+	m_w_stone->setPixmap (pm);
+}
+
+void PreferencesDialog::update_b_stones ()
+{
+	update_stone_params ();
+	QImage img (m_stone_size, m_stone_size, QImage::Format_ARGB32);
+	m_ih->paint_one_stone (img, false, m_stone_size);
+	QPixmap pm = QPixmap::fromImage (img);
+	m_b_stone->setPixmap (pm);
+}
+
 
 /*  
 *  Destroys the object and frees any allocated resources
@@ -664,4 +763,14 @@ void PreferencesDialog::slot_main_time_changed(int n)
 void PreferencesDialog::slot_BY_time_changed(int n)
 {
 	BYSpin_Nmatch->setMinimum(n);
+}
+
+QColor PreferencesDialog::white_color ()
+{
+	return m_ih->white_color ();
+}
+
+QColor PreferencesDialog::black_color ()
+{
+	return m_ih->black_color ();
 }
