@@ -62,22 +62,6 @@ public:
 	}
 };
 
-#include "ui_qnewgamedlg_gui.h"
-
-class QNewGameDlgGui : public QDialog, public Ui::QNewGameDlgGui
-{
-	Q_OBJECT
-
-public:
-	QNewGameDlgGui( QWidget* parent = 0)
-		: QDialog (parent)
-	{
-		setupUi (this);
-		setModal (true);
-	}
-
-};
-
 #include "ui_nthmove_gui.h"
 
 class NthMoveDialog : public QDialog, public Ui::NthMoveDialog
