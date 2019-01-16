@@ -1619,7 +1619,14 @@ If you press to enter a move on the board, the move will not be acknowledged if 
         </widget>
        </item>
        <item row="4" column="0" colspan="2">
-        <widget class="QGraphicsView" name="stoneView"/>
+        <widget class="QGraphicsView" name="stoneView">
+         <property name="verticalScrollBarPolicy">
+          <enum>Qt::ScrollBarAlwaysOff</enum>
+         </property>
+         <property name="horizontalScrollBarPolicy">
+          <enum>Qt::ScrollBarAlwaysOff</enum>
+         </property>
+        </widget>
        </item>
        <item row="0" column="0" colspan="2">
         <widget class="QGroupBox" name="buttonGroup6">
