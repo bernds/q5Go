@@ -50,6 +50,7 @@ HEADERS		      = config.h \
 			newaigamedlg.h \
                         sgf.h \
                         scoretools.h \
+                        sizegraphicsview.h \
                         stone.h \
                         svgbuilder.h \
 			textview.h \

@@ -31,6 +31,7 @@ class PreferencesDialog : public QDialog, public Ui::PreferencesDialogGui
 	bool avoid_losing_data ();
 	void clear_engine ();
 	void clear_host ();
+	void update_board_image ();
 	void update_w_stones ();
 	void update_b_stones ();
 	void update_stone_params ();

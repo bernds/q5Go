@@ -65,28 +65,12 @@ PreferencesDialog::PreferencesDialog(QWidget* parent)
 	int h = stoneView->height ();
 	m_stone_size = std::min (w / 2, h);
 	m_ih->init (5);
-	m_ih->rescale (m_stone_size);
 	m_stone_canvas = new QGraphicsScene(0, 0, w, h, stoneView);
 	stoneView->setScene (m_stone_canvas);
-	const QList<QPixmap> *pixmaps = m_ih->getStonePixmaps();
-	m_b_stone = new QGraphicsPixmapItem ((*pixmaps)[0]);
-	m_w_stone = new QGraphicsPixmapItem ((*pixmaps)[1]);
+	m_b_stone = new QGraphicsPixmapItem;
+	m_w_stone = new QGraphicsPixmapItem;
 	m_stone_canvas->addItem (m_w_stone);
 	m_stone_canvas->addItem (m_b_stone);
-	m_w_stone->setPos (w / 2 - m_stone_size, 0);
-	m_b_stone->setPos (w / 2, 0);
-
-	QImage image(w, h, QImage::Format_RGB32);
-
-	// Paint table and board on the pixmap
-	QPainter painter;
-
-	painter.begin(&image);
-	painter.setPen(Qt::NoPen);
-
-	painter.drawTiledPixmap (0, 0, w, h, *setting->wood_image ());
-	painter.end();
-	m_stone_canvas->setBackgroundBrush(QBrush(image));
 
 	connect (radioButtonStones_2D, &QRadioButton::toggled, this, &PreferencesDialog::select_stone_look);
 	connect (radioButtonStones_3D, &QRadioButton::toggled, this, &PreferencesDialog::select_stone_look);
@@ -103,6 +87,45 @@ PreferencesDialog::PreferencesDialog(QWidget* parent)
 	connect (whiteFlatSlider, &QSlider::valueChanged, [=] (int) { update_w_stones (); });
 	connect (ambientSlider, &QSlider::valueChanged, [=] (int) { update_w_stones (); update_b_stones (); });
 	connect (stripesCheckBox, &QCheckBox::toggled, [=] (int) { update_w_stones (); });
+
+	void (QComboBox::*cic) (int) = &QComboBox::currentIndexChanged;
+	connect (woodComboBox, cic, [=] (int i) { GobanPicturePathButton->setEnabled (i == 0); LineEdit_goban->setEnabled (i == 0); update_board_image (); });
+	connect (LineEdit_goban, &QLineEdit::editingFinished, [=] () { update_board_image (); });
+
+	update_board_image ();
+	update_w_stones ();
+	update_b_stones ();
+	connect (stoneView, &SizeGraphicsView::resized, [=] () { update_board_image (); update_w_stones (); update_b_stones (); });
+}
+
+void PreferencesDialog::update_board_image ()
+{
+	int w = stoneView->width ();
+	int h = stoneView->height ();
+	QImage image(w, h, QImage::Format_RGB32);
+	QPixmap pm;
+	QString filename = LineEdit_goban->text();
+	int idx = woodComboBox->currentIndex ();
+	if (idx > 0)
+		filename = QString (":/BoardWindow/images/board/wood%1.png").arg (idx);
+	QPixmap p (filename);
+	if (p.isNull ())
+		p = QPixmap (":/BoardWindow/images/board/wood1.png");
+
+	// Paint table and board on the pixmap
+	QPainter painter;
+
+	painter.begin(&image);
+	painter.setPen(Qt::NoPen);
+
+	painter.drawTiledPixmap (0, 0, w, h, p);
+	painter.end();
+	m_stone_canvas->setSceneRect (0, 0, w, h);
+	m_stone_canvas->setBackgroundBrush (QBrush (image));
+
+	m_stone_size = std::min (w / 2, h);
+	m_w_stone->setPos (w / 2 - m_stone_size, 0);
+	m_b_stone->setPos (w / 2, 0);
 }
 
 void PreferencesDialog::init_from_settings ()
@@ -112,8 +135,11 @@ void PreferencesDialog::init_from_settings ()
 	for (auto h: parent_cw->m_engines)
 		new QListWidgetItem (h->title(), ListView_engines);
 
-	// Interface tab
-	woodComboBox->setCurrentIndex (setting->readIntEntry("SKIN_INDEX"));
+	int idx = setting->readIntEntry("SKIN_INDEX");
+	GobanPicturePathButton->setEnabled (idx == 0);
+	LineEdit_goban->setEnabled (idx == 0);
+	woodComboBox->setCurrentIndex (idx);
+
 	LineEdit_goban->setText(setting->readEntry("SKIN"));
 	LineEdit_Table->setText(setting->readEntry("SKIN_TABLE"));
 	languageComboBox->insertItems(1, setting->getAvailableLanguages());

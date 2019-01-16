@@ -91,8 +91,9 @@ am__objects_3 = audio.moc.$(OBJEXT) bitarray.moc.$(OBJEXT) \
 	parser.moc.$(OBJEXT) playertable.moc.$(OBJEXT) \
 	preferences.moc.$(OBJEXT) qgo.moc.$(OBJEXT) \
 	qgo_interface.moc.$(OBJEXT) qgtp.moc.$(OBJEXT) \
-	newaigamedlg.moc.$(OBJEXT) tables.moc.$(OBJEXT) \
-	telnet.moc.$(OBJEXT) textview.moc.$(OBJEXT) tip.moc.$(OBJEXT)
+	newaigamedlg.moc.$(OBJEXT) sizegraphicsview.moc.$(OBJEXT) \
+	tables.moc.$(OBJEXT) telnet.moc.$(OBJEXT) \
+	textview.moc.$(OBJEXT) tip.moc.$(OBJEXT)
 am__objects_4 = $(am__objects_2) $(am__objects_3)
 am__objects_5 = q4go.rcc.$(OBJEXT)
 am__objects_6 = $(am__objects_5)
@@ -275,7 +276,7 @@ KDE_OPTIONS = qtonly
 DISTHEADERS_MOC = audio.h bitarray.h board.h gamedialog.h gamestable.h gametree.h helpviewer.h icons.h \
 	igsconnection.h mainwidget.h mainwindow.h mainwin.h miscdialogs.h \
 	misctools.h normaltools.h scoretools.h parser.h playertable.h preferences.h qgo.h \
-	qgo_interface.h qgtp.h newaigamedlg.h tables.h telnet.h textview.h tip.h
+	qgo_interface.h qgtp.h newaigamedlg.h sizegraphicsview.h tables.h telnet.h textview.h tip.h
 
 DISTHEADERS_NOMOC = goboard.h config.h defines.h gatter.h globals.h gs_globals.h \
 	igsinterface.h imagehandler.h komispinbox.h mark.h \
@@ -444,6 +445,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/setting.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sgf2board.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sgfload.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sizegraphicsview.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stone.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/svgbuilder.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tables.Po@am__quote@
