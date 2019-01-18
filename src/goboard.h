@@ -13,6 +13,7 @@
 #include <memory>
 
 #include "bitarray.h"
+#include "sgf.h"
 
 enum stone_color
 {
@@ -335,6 +336,8 @@ private:
 	stone_color m_move_color = none;
 	std::string m_comment;
 
+	sgf::node::proplist m_unrecognized_props;
+
 	/* A slight violation of abstractions; this is not really a property of the game, but
 	   something handled by the user interface.  But the alternative is keeping some kind of
 	   map of game states in the board window and making sure it gets updated whenever we delete
@@ -348,6 +351,11 @@ private:
 
 	game_state (const go_board &b, int move, game_state *parent, stone_color to_move, int x, int y, stone_color move_col)
 		: m_board (b), m_move_number (move), m_parent (parent), m_to_move (to_move), m_move_x (x), m_move_y (y), m_move_color (move_col)
+	{
+	}
+
+	game_state (const go_board &b, int move, game_state *parent, stone_color to_move, int x, int y, stone_color move_col, const sgf::node::proplist &unrecognized)
+		: m_board (b), m_move_number (move), m_parent (parent), m_to_move (to_move), m_move_x (x), m_move_y (y), m_move_color (move_col), m_unrecognized_props (unrecognized)
 	{
 	}
 
@@ -400,7 +408,7 @@ public:
 	/* Deep copy.  Don't copy observers.  */
 	game_state (const game_state &other, game_state *parent)
 		: game_state (other.m_board, other.m_move_number, parent, other.m_to_move,
-			      other.m_move_x, other.m_move_y, other.m_move_color)
+			      other.m_move_x, other.m_move_y, other.m_move_color, other.m_unrecognized_props)
 	{
 		for (auto c: other.m_children) {
 			game_state *new_c = new game_state (*c, this);
@@ -411,6 +419,9 @@ public:
 	}
 	~game_state ()
 	{
+		for (sgf::node::property *it: m_unrecognized_props)
+			delete it;
+
 		if (m_parent) {
 			game_state *last = m_parent->m_children.back ();
 			m_parent->m_children.pop_back ();
@@ -437,7 +448,10 @@ public:
 			it->move_state (m_parent);
 		}
 	}
-
+	void set_unrecognized (const sgf::node::proplist &list)
+	{
+		m_unrecognized_props = list;
+	}
 	stone_color to_move () const
 	{
 		return m_to_move;
@@ -713,8 +727,6 @@ class game_record;
 
 enum class ranked { unknown, free, ranked, teaching };
 
-extern std::shared_ptr<game_record> sgf2record (const sgf &s);
-
 class game_info
 {
 protected:
@@ -801,6 +813,11 @@ public:
 	}
 };
 
+class game_record;
+extern game_state *sgf2board (sgf &);
+extern std::shared_ptr<game_record> sgf2record (const sgf &);
+extern std::string record2sgf (const game_record &);
+
 class game_record : public game_info
 {
 	friend std::shared_ptr<game_record> sgf2record (const sgf &s);
@@ -830,7 +847,7 @@ public:
 		return true;
 	}
 
-	int boardsize ()
+	int boardsize () const
 	{
 		return m_root.get_board ().size ();
 	}

@@ -1,3 +1,6 @@
+#ifndef SGF_H
+#define SGF_H
+
 #include <string>
 #include <list>
 #include <exception>
@@ -28,7 +31,15 @@ public:
 		public:
 			std::string ident;
 			std::list<std::string> values;
+			/* True if we ever looked up this property, indicating that
+			   it is one the program understands.  */
+			bool handled = false;
+
 			property (std::string &i) : ident (i) { }
+			property (const property &other)
+				: ident (other.ident), values (other.values)
+			{
+			}
 		};
 		typedef std::list<property *>proplist;
 		proplist props;
@@ -55,12 +66,12 @@ public:
 		}
 		property *find_property (const char *id, bool require_value = true) const
 		{
-			proplist::const_iterator i;
-			for (i = props.begin (); i != props.end (); i++)
-				if ((*i)->ident == id) {
-					if (require_value && (*i)->values.empty ())
+			for (auto i: props)
+				if (i->ident == id) {
+					if (require_value && i->values.empty ())
 						throw broken_sgf ();
-					return *i;
+					i->handled = true;
+					return i;
 				}
 			return nullptr;
 		}
@@ -84,6 +95,5 @@ public:
 };
 
 extern sgf *load_sgf (std::istream &);
-extern game_state *sgf2board (sgf &);
-extern std::shared_ptr<game_record> sgf2record (const sgf &);
-extern std::string record2sgf (const game_record &);
+
+#endif

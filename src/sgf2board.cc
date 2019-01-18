@@ -56,6 +56,11 @@ static void put_stones (go_board &b, sgf::node::property *p, stone_color col)
 	}
 }
 
+static bool recognized_mark (const std::string &id)
+{
+	return id == "MA" || id == "TR" || id == "SQ" || id == "CR" || id == "LB" || id == "TW" || id == "TB";
+}
+
 /* Look for mark properties in node N and add them to the go board.
    Return true iff we found territory markers.  */
 static bool add_marks (go_board &b, sgf::node *n)
@@ -63,7 +68,8 @@ static bool add_marks (go_board &b, sgf::node *n)
 	bool terr = false;
 	for (auto &p : n->props) {
 		const std::string &id = p->ident;
-		if (id == "MA" || id == "TR" || id == "SQ" || id == "CR" || id == "LB" || id == "TW" || id == "TB") {
+		if (recognized_mark (id)) {
+			p->handled = true;
 			for (auto &v: p->values) {
 				if (v.length () < 2)
 					continue;
@@ -144,9 +150,11 @@ static void add_to_game_state (game_state *gs, sgf::node *n, bool force, QTextCo
 		stone_color to_move = gs->to_move ();
 		int move_x = -1, move_y = -1;
 		bool is_pass = false;
+		sgf::node::proplist unrecognized;
 		for (auto &p : n->props) {
 			const std::string &id = p->ident;
 			if (id == "AB" || id == "B" || id == "AW" || id == "W" || id == "AE") {
+				p->handled = true;
 				im thisprop_move = id.length () == 1 ? im::yes : im::no;
 				if (is_move == im::unknown)
 					is_move = thisprop_move;
@@ -190,6 +198,11 @@ static void add_to_game_state (game_state *gs, sgf::node *n, bool force, QTextCo
 		} else
 			gs = gs->add_child_move (new_board, to_move, move_x, move_y, false);
 		add_comment (gs, n, codec);
+		for (auto p: n->props) {
+			if (!p->handled)
+				unrecognized.push_back (new sgf::node::property (*p));
+		}
+		gs->set_unrecognized (unrecognized);
 		n = n->m_children;
 	}
 #ifdef TEST_SGF
@@ -214,15 +227,17 @@ std::string translated_prop_str (const std::string *val, QTextCodec *codec)
 	return std::string (tmp.toStdString ());
 }
 
-QString cdcnm;
 std::shared_ptr<game_record> sgf2record (const sgf &s)
 {
+	const std::string *ff = s.nodes->find_property_val ("FF");
+	const std::string *gm = s.nodes->find_property_val ("GM");
+	if (ff == nullptr || gm == nullptr || *ff != "4" || *gm != "1")
+		throw broken_sgf ();
+
 	const std::string *ca = s.nodes->find_property_val ("CA");
 	QTextCodec *codec = nullptr;
 	if (ca != nullptr) {
 		codec = QTextCodec::codecForName (ca->c_str ());
-		if (codec)
-			cdcnm = codec->name ();
 	}
 	const std::string *p = s.nodes->find_property_val ("SZ");
 	int size = 19;
@@ -298,6 +313,14 @@ std::shared_ptr<game_record> sgf2record (const sgf &s)
 	std::shared_ptr<game_record> game = std::make_shared<game_record> (initpos, to_play, info);
 
 	add_comment (&game->m_root, s.nodes, codec);
+
+	sgf::node::proplist unrecognized;
+	for (auto p: s.nodes->props) {
+		if (!p->handled)
+			unrecognized.push_back (new sgf::node::property (*p));
+	}
+	game->m_root.set_unrecognized (unrecognized);
+
 	add_to_game_state (&game->m_root, s.nodes->m_children, false, codec);
 
 	/* Fix up situations where we have a handicap game without a PL property.
@@ -392,8 +415,10 @@ static void maybe_add_property (std::string &s, const go_board &b, const char *n
 static void encode_string (std::string &s, const char *id, std::string src)
 {
 	if (src.length () > 0) {
-		s += "\n";
-		s += id;
+		if (id != nullptr) {
+			s += "\n";
+			s += id;
+		}
 		s += "[";
 		for (size_t i = 0; i < src.length (); i++) {
 			char c = src[i];
@@ -449,7 +474,13 @@ void game_state::append_to_sgf (std::string &s) const
 		encode_string (s, "C", comm);
 		if (comm.length () > 0)
 			linecount = 16;
-
+		for (auto p: gs->m_unrecognized_props) {
+			s += p->ident;
+			for (auto v: p->values) {
+				encode_string (s, nullptr, v);
+				linecount++;
+			}
+		}
 		int l = gs->m_children.size ();
 		if (l != 1) {
 			for (int i = 0; i < l; i++) {
@@ -476,6 +507,7 @@ std::string game_record::to_sgf () const
 	   when loading, and Qt uses Unicode internally and toStdString conversions
 	   guarantee UTF-8.  */
 	std::string s = "(;FF[4]GM[1]CA[UTF-8]";
+	encode_string (s, "SZ", std::to_string (boardsize ()));
 	encode_string (s, "GN", m_title);
 	encode_string (s, "PW", m_name_w);
 	encode_string (s, "PB", m_name_b);
@@ -485,6 +517,8 @@ std::string game_record::to_sgf () const
 	encode_string (s, "PC", m_place);
 	encode_string (s, "DT", m_date);
 	encode_string (s, "RU", m_rules);
+	encode_string (s, "TM", m_time);
+	encode_string (s, "OT", m_overtime);
 	encode_string (s, "CP", m_copyright);
 	if (m_handicap > 0)
 		encode_string (s, "HA", std::to_string (m_handicap));
