@@ -17,6 +17,7 @@ FORMS	      = gui_dialog.ui \
 		nthmove_gui.ui
 
 HEADERS		      = config.h \
+			clockview.h \
 			gamedialog.h \
 			gamestable.h \
 			gametree.h \

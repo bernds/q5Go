@@ -20,7 +20,7 @@ public:
 	void toggleSlider(bool);
 	bool getSlider() { return showSlider; }
 	void toggleSliderSignal(bool b) { sliderSignalToggle = b; }
-	virtual void setFont(const QFont &font);
+	void updateFont();
 	void setToolsTabWidget(enum tabType=tabNormalScore, enum tabState=tabSet);
 	void setGameMode (GameMode);
 
@@ -29,8 +29,10 @@ public:
 	void setCaptures(float black, float white, bool scored=false);
 	void setTimes(const QString &btime, const QString &bstones,
 		      const QString &wtime, const QString &wstones,
-		      bool warn_b, bool warn_w);
+		      bool warn_b, bool warn_w, int);
+#if 0
 	void setTimes(bool, float, int);
+#endif
 
 	void update_game_record (std::shared_ptr<game_record>);
 	void init_game_record (std::shared_ptr<game_record>);
@@ -57,6 +59,7 @@ private:
 	int m_remember_tab;
 	QGraphicsScene *m_eval_canvas;
 	QGraphicsRectItem *m_eval_bar;
+	QGraphicsTextItem *m_w_time, *m_b_time;
 	double m_eval;
 };
 

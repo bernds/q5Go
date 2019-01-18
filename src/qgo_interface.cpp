@@ -1196,10 +1196,10 @@ void qGoBoard::game_startup ()
 	}
 
 	if (gameMode == modeMatch || gameMode == modeTeach) {
-		connect (win->getMainWidget()->normalTools->pb_timeBlack,
-			 &QPushButton::clicked, this, &qGoBoard::slot_addtimePauseB);
-		connect (win->getMainWidget()->normalTools->pb_timeWhite,
-			 &QPushButton::clicked, this, &qGoBoard::slot_addtimePauseW);
+		connect (win->getMainWidget()->normalTools->btimeView,
+			 &ClockView::clicked, this, &qGoBoard::slot_addtimePauseB);
+		connect (win->getMainWidget()->normalTools->wtimeView,
+			 &ClockView::clicked, this, &qGoBoard::slot_addtimePauseW);
 	}
 
 	if (m_comments.length () > 0)
@@ -1388,15 +1388,17 @@ void qGoBoard::timerEvent(QTimerEvent*)
 		// B's turn
 		bt_i--;
 
+		bool warn = bt_i > - 1 && bt_i <= BY_timer;
+
 #ifdef SHOW_INTERNAL_TIME
 		chk_b--;
 		if (chk_b < bt_i + 20)
 			chk_b = bt_i;
 		win->getMainWidget ()->setTimes("(" + secToTime(chk_b) + ") " + secToTime(bt_i), b_stones,
-					  "(" + secToTime(chk_w) + ") " + wt, w_stones,
-					  false, false);
+						"(" + secToTime(chk_w) + ") " + wt, w_stones,
+						warn, false, bt_i);
 #else
-		win->getMainWidget ()->setTimes(secToTime(bt_i), b_stones, wt, w_stones, false, false);
+		win->getMainWidget ()->setTimes(secToTime(bt_i), b_stones, wt, w_stones, warn, false, bt_i);
 #endif
 	}
 	else
@@ -1404,15 +1406,17 @@ void qGoBoard::timerEvent(QTimerEvent*)
 		// W's turn
 		wt_i--;
 
+		bool warn = wt_i > - 1 && wt_i <= BY_timer;
+
 #ifdef SHOW_INTERNAL_TIME
 		chk_w--;
 		if (chk_w < bt_i + 20)
 			chk_w = wt_i;
 		win->getMainWidget ()->setTimes("(" + secToTime(chk_b) + ") " + bt, b_stones,
 					  "(" + secToTime(chk_w) + ") " + secToTime(wt_i), w_stones,
-					  false, false);
+						false, warn, wt_i);
 #else
-		win->getMainWidget ()->setTimes(bt, b_stones, secToTime(wt_i), w_stones, false, false);
+		win->getMainWidget ()->setTimes(bt, b_stones, secToTime(wt_i), w_stones, false, warn, wt_i);
 #endif
 	}
 }
@@ -1467,14 +1471,14 @@ void qGoBoard::addtime_b(int m)
 {
 	bt_i += m*60;
 	bt = secToTime(bt_i);
-	win->getMainWidget ()->setTimes(secToTime(bt_i), b_stones, wt, w_stones, false, false);
+	win->getMainWidget ()->setTimes(secToTime(bt_i), b_stones, wt, w_stones, false, false, 0);
 }
 
 void qGoBoard::addtime_w(int m)
 {
 	wt_i += m*60;
 	wt = secToTime(wt_i);
-	win->getMainWidget ()->setTimes(bt, b_stones, secToTime(wt_i), w_stones, false, false);
+	win->getMainWidget ()->setTimes(bt, b_stones, secToTime(wt_i), w_stones, false, false, 0);
 }
 
 void qGoBoard::clearObserverList ()
@@ -1667,8 +1671,10 @@ void qGoBoard::disconnected (bool remove_from_list)
 
 	// set board editable...
 	set_Mode_real (modeNormal);
-	if (win)
+	if (win) {
 		win->setGameMode (modeNormal);
+		win->getBoard()->set_player_colors (true, true);
+	}
 	/* @@@ Sometimes we get a game result without moves, if we started observing just
 	   as the game ended.  We should arrange for some way to delete this qGoBoard.  */
 }

@@ -3,6 +3,7 @@
 */
 
 #include <QPixmap>
+#include <QGraphicsTextItem>
 
 #include "qgo.h"
 #include "mainwidget.h"
@@ -13,6 +14,63 @@
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qtabwidget.h>
+
+ClockView::ClockView (QWidget *parent)
+	: QGraphicsView (parent)
+{
+	QFontMetrics m (setting->fontClocks);
+	int w = width ();
+	int h = m.height ();
+	setMinimumHeight (h);
+	setMaximumHeight (h);
+	m_scene = new QGraphicsScene (0, 0, w, h, this);
+	setScene (m_scene);
+	m_text = m_scene->addText ("00:00", setting->fontClocks);
+	m_text->setDefaultTextColor (Qt::white);
+	update_pos ();
+}
+
+void ClockView::resizeEvent (QResizeEvent *)
+{
+	update_pos ();
+}
+
+void ClockView::mousePressEvent (QMouseEvent *e)
+{
+	if (e->button () == Qt::LeftButton)
+		emit clicked ();
+}
+
+void ClockView::update_pos ()
+{
+	QRectF br = m_text->boundingRect ();
+	m_text->setPos ((width () - br.width ()) / 2, (height () - br.height ()) / 2);
+	m_scene->update ();
+}
+
+void ClockView::update_font (const QFont &f)
+{
+	m_text->setFont (f);
+	QFontMetrics m (f);
+	int h = m.height ();
+	setMinimumHeight (h);
+	setMaximumHeight (h);
+
+	update_pos ();
+}
+
+void ClockView::set_text (const QString &s)
+{
+	m_text->setPlainText (s);
+	update_pos ();
+}
+
+void ClockView::flash (bool on)
+{
+	setBackgroundBrush (QBrush (on ? Qt::red : Qt::black));
+	m_text->setDefaultTextColor (on ? Qt::black : Qt::white);
+}
+
 
 /*
  *  Constructs a MainWidget which is a child of 'parent', with the
@@ -42,9 +100,7 @@ MainWidget::MainWidget(MainWindow *win, QWidget* parent)
 	sliderRightLabel->setText(QString::number(SLIDER_INIT));
 	sliderSignalToggle = true;
 
-	setFont(setting->fontStandard);
-	normalTools->pb_timeWhite->setFont(setting->fontClocks);
-	normalTools->pb_timeBlack->setFont(setting->fontClocks);
+	updateFont ();
 
 	int w = evalView->width ();
 	int h = evalView->height ();
@@ -236,14 +292,16 @@ void MainWidget::toggleSlider(bool b)
 }
 
 // Overwritten from QWidget
-void MainWidget::setFont(const QFont &font)
+void MainWidget::updateFont ()
 {
-	QFont f(font);
-	f.setBold(true);
-	scoreTools->totalBlack->setFont(f);
-	scoreTools->totalWhite->setFont(f);
+	QFont f (setting->fontStandard);
+	f.setBold (true);
+	scoreTools->totalBlack->setFont (f);
+	scoreTools->totalWhite->setFont (f);
 
-	QWidget::setFont(font);
+	setFont (setting->fontStandard);
+	normalTools->wtimeView->update_font (setting->fontClocks);
+	normalTools->btimeView->update_font (setting->fontClocks);
 }
 
 void MainWidget::setGameMode(GameMode mode)
@@ -274,8 +332,8 @@ void MainWidget::setGameMode(GameMode mode)
 
 	if (mode == modeMatch || mode == modeTeach) {
 		qDebug () << gfx_board->player_is (white) << " : " << gfx_board->player_is (black);
-		QWidget *timeSelf = gfx_board->player_is (black) ? normalTools->pb_timeBlack : normalTools->pb_timeWhite;
-		QWidget *timeOther = gfx_board->player_is (black) ? normalTools->pb_timeWhite : normalTools->pb_timeBlack;
+		QWidget *timeSelf = gfx_board->player_is (black) ? normalTools->btimeView : normalTools->wtimeView;
+		QWidget *timeOther = gfx_board->player_is (black) ? normalTools->wtimeView : normalTools->btimeView;
 #if 0
 		switch (gsName)
 		{
@@ -292,8 +350,8 @@ void MainWidget::setGameMode(GameMode mode)
 #endif
 		timeOther->setToolTip (tr("click to add 1 minute to your opponent's clock"));
 	} else {
-		normalTools->pb_timeBlack->setToolTip (tr ("Time remaining for this move"));
-		normalTools->pb_timeWhite->setToolTip (tr ("Time remaining for this move"));
+		normalTools->btimeView->setToolTip (tr ("Time remaining for this move"));
+		normalTools->wtimeView->setToolTip (tr ("Time remaining for this move"));
 	}
 
 }
@@ -419,47 +477,48 @@ void MainWidget::toggleSidebar(bool toggle)
 }
 
 void MainWidget::setTimes(const QString &btime, const QString &bstones, const QString &wtime, const QString &wstones,
-			  bool warn_black, bool warn_white)
+			  bool warn_black, bool warn_white, int timer_cnt)
 {
 	if (!btime.isEmpty())
 	{
 		if (bstones != QString("-1"))
-			normalTools->pb_timeBlack->setText(btime + " / " + bstones);
+			normalTools->btimeView->set_text(btime + " / " + bstones);
 		else
-			normalTools->pb_timeBlack->setText(btime);
+			normalTools->btimeView->set_text(btime);
 	}
 
 	if (!wtime.isEmpty())
 	{
 		if (wstones != QString("-1"))
-			normalTools->pb_timeWhite->setText(wtime + " / " + wstones);
+			normalTools->wtimeView->set_text(wtime + " / " + wstones);
 		else
-			normalTools->pb_timeWhite->setText(wtime);
+			normalTools->wtimeView->set_text(wtime);
 	}
 
 	// warn if I am within the last 10 seconds
 	if (gfx_board->getGameMode() == modeMatch)
 	{
-		if (gfx_board->player_is (black) && warn_black)
+		if (gfx_board->player_is (black))
 		{
-			// normalTools->pb_timeBlack->setPaletteBackgroundColor(Qt::red);
-			qgo->playTimeSound();
+			normalTools->wtimeView->flash (false);
+			normalTools->btimeView->flash (timer_cnt % 2 != 0 && warn_black);
+			if (warn_black)
+				qgo->playTimeSound();
 		}
 		else if (gfx_board->player_is (white) && warn_white)
 		{
-			// normalTools->pb_timeWhite->setPaletteBackgroundColor(Qt::red);
-			qgo->playTimeSound();
+			normalTools->btimeView->flash (false);
+			normalTools->wtimeView->flash (timer_cnt % 2 != 0 && warn_white);
+			if (warn_white)
+				qgo->playTimeSound();
 		}
-
-		//we have to reset the color when not anymore in warning period)
-		else {
-			// normalTools->pb_timeBlack->setPaletteBackgroundColor(normalTools->palette().color(QPalette::Active,QColorGroup::Button));
-			// normalTools->pb_timeWhite->setPaletteBackgroundColor(normalTools->palette().color(QPalette::Active,QColorGroup::Button));
-		}
+	} else {
+		normalTools->btimeView->flash (false);
+		normalTools->wtimeView->flash (false);
 	}
-
 }
 
+#if 0
 void MainWidget::setTimes(bool isBlacksTurn, float time, int stones)
 {
 	QString strTime;
@@ -497,10 +556,11 @@ void MainWidget::setTimes(bool isBlacksTurn, float time, int stones)
 		strTime = (neg ? "-" : "") + QString::number(m) + ":" + sec;
 
 	if (isBlacksTurn)
-		setTimes(strTime, QString::number(stones), 0, 0, false, false);
+		setTimes(strTime, QString::number(stones), 0, 0, false, false, 0);
 	else
-		setTimes(0, 0, strTime, QString::number(stones), false, false);
+		setTimes(0, 0, strTime, QString::number(stones), false, false, 0);
 }
+#endif
 
 void MainWidget::set_eval (double eval)
 {

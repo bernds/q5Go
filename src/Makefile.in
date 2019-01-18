@@ -81,19 +81,19 @@ am__objects_1 = audio.$(OBJEXT) board.$(OBJEXT) goboard.$(OBJEXT) \
 am__objects_2 =
 am_q5go_OBJECTS = $(am__objects_1) $(am__objects_2)
 am__objects_3 = audio.moc.$(OBJEXT) bitarray.moc.$(OBJEXT) \
-	board.moc.$(OBJEXT) gamedialog.moc.$(OBJEXT) \
-	gamestable.moc.$(OBJEXT) gametree.moc.$(OBJEXT) \
-	helpviewer.moc.$(OBJEXT) icons.moc.$(OBJEXT) \
-	igsconnection.moc.$(OBJEXT) mainwidget.moc.$(OBJEXT) \
-	mainwindow.moc.$(OBJEXT) mainwin.moc.$(OBJEXT) \
-	miscdialogs.moc.$(OBJEXT) misctools.moc.$(OBJEXT) \
-	normaltools.moc.$(OBJEXT) scoretools.moc.$(OBJEXT) \
-	parser.moc.$(OBJEXT) playertable.moc.$(OBJEXT) \
-	preferences.moc.$(OBJEXT) qgo.moc.$(OBJEXT) \
-	qgo_interface.moc.$(OBJEXT) qgtp.moc.$(OBJEXT) \
-	newaigamedlg.moc.$(OBJEXT) sizegraphicsview.moc.$(OBJEXT) \
-	tables.moc.$(OBJEXT) telnet.moc.$(OBJEXT) \
-	textview.moc.$(OBJEXT) tip.moc.$(OBJEXT)
+	board.moc.$(OBJEXT) clockview.moc.$(OBJEXT) \
+	gamedialog.moc.$(OBJEXT) gamestable.moc.$(OBJEXT) \
+	gametree.moc.$(OBJEXT) helpviewer.moc.$(OBJEXT) \
+	icons.moc.$(OBJEXT) igsconnection.moc.$(OBJEXT) \
+	mainwidget.moc.$(OBJEXT) mainwindow.moc.$(OBJEXT) \
+	mainwin.moc.$(OBJEXT) miscdialogs.moc.$(OBJEXT) \
+	misctools.moc.$(OBJEXT) normaltools.moc.$(OBJEXT) \
+	scoretools.moc.$(OBJEXT) parser.moc.$(OBJEXT) \
+	playertable.moc.$(OBJEXT) preferences.moc.$(OBJEXT) \
+	qgo.moc.$(OBJEXT) qgo_interface.moc.$(OBJEXT) \
+	qgtp.moc.$(OBJEXT) newaigamedlg.moc.$(OBJEXT) \
+	sizegraphicsview.moc.$(OBJEXT) tables.moc.$(OBJEXT) \
+	telnet.moc.$(OBJEXT) textview.moc.$(OBJEXT) tip.moc.$(OBJEXT)
 am__objects_4 = $(am__objects_2) $(am__objects_3)
 am__objects_5 = q4go.rcc.$(OBJEXT)
 am__objects_6 = $(am__objects_5)
@@ -273,7 +273,7 @@ top_srcdir = @top_srcdir@
 INCLUDES = $(all_includes)
 q5go_METASOURCES = AUTO
 KDE_OPTIONS = qtonly
-DISTHEADERS_MOC = audio.h bitarray.h board.h gamedialog.h gamestable.h gametree.h helpviewer.h icons.h \
+DISTHEADERS_MOC = audio.h bitarray.h board.h clockview.h gamedialog.h gamestable.h gametree.h helpviewer.h icons.h \
 	igsconnection.h mainwidget.h mainwindow.h mainwin.h miscdialogs.h \
 	misctools.h normaltools.h scoretools.h parser.h playertable.h preferences.h qgo.h \
 	qgo_interface.h qgtp.h newaigamedlg.h sizegraphicsview.h tables.h telnet.h textview.h tip.h
@@ -400,6 +400,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/bitarray.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/board.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/board.moc.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/clockview.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gamedialog.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gamedialog.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gamestable.Po@am__quote@

@@ -1116,13 +1116,13 @@ void MainWindow::updateCaption (bool modified)
 	player_w = tr("W") + ": " + player_w;
 	if (rank_w.length () > 0)
 		player_w += " " + rank_w;
-	mainWidget->normalTools->whiteFrame->setTitle(player_w);
+	mainWidget->normalTools->whiteLabel->setText(player_w);
 
 	player_b.truncate(12);
 	player_b = tr("B") + ": " + player_b;
 	if (rank_b.length () > 0)
 		player_b += " " + rank_b;
-	mainWidget->normalTools->blackFrame->setTitle(player_b);
+	mainWidget->normalTools->blackLabel->setText(player_b);
 
 }
 
@@ -2094,9 +2094,7 @@ void MainWindow::updateFont()
 	ListView_observers->setFont(setting->fontLists);
 
 	// rest: standard font
-	mainWidget->setFont(setting->fontStandard);
-	mainWidget->normalTools->pb_timeWhite->setFont(setting->fontClocks);
-	mainWidget->normalTools->pb_timeBlack->setFont(setting->fontClocks);
+	mainWidget->updateFont ();
 }
 
 // used in slot_editBoardInNewWindow()
