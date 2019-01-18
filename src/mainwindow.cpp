@@ -215,6 +215,11 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 	connect(mainWidget->prevCommentButton, &QToolButton::clicked, [=] () { gfx_board->previousComment (); });
 	connect(mainWidget->nextCommentButton, &QToolButton::clicked, [=] () { gfx_board->nextComment (); });
 
+	connect(mainWidget->normalTools->anStartButton, &QToolButton::clicked,
+		[=] (bool on) { if (on) gfx_board->start_analysis (); else gfx_board->stop_analysis (); });
+	connect(mainWidget->normalTools->anPauseButton, &QToolButton::clicked,
+		[=] (bool on) { gfx_board->pause_analysis (on); });
+
 	connect(m_ascii_dlg.cb_coords, &QCheckBox::toggled, this, &MainWindow::slotFileExportASCII);
 	connect(m_ascii_dlg.cb_numbering, &QCheckBox::toggled, this, &MainWindow::slotFileExportASCII);
 	connect(m_svg_dlg.cb_coords, &QCheckBox::toggled, this, &MainWindow::slotFileExportSVG);
@@ -2160,6 +2165,10 @@ void MainWindow::setGameMode(GameMode mode)
 		editGroup->setEnabled (false);
 	}
 
+	mainWidget->normalTools->anGroup->setVisible (mode == modeNormal || mode == modeObserve);
+	mainWidget->normalTools->anStartButton->setVisible (mode == modeNormal || mode == modeObserve);
+	mainWidget->normalTools->anPauseButton->setVisible (mode == modeNormal || mode == modeObserve);
+
 	bool enable_nav = mode == modeNormal; /* @@@ teach perhaps? */
 
 	navPrevVar->setEnabled (enable_nav);
@@ -2509,13 +2518,25 @@ void MainWindow_GTP::doResign ()
 
 void MainWindow::update_analysis (analyzer state)
 {
-	mainWidget->evalView->setVisible (state == analyzer::running);
+	mainWidget->evalView->setVisible (state == analyzer::running || state == analyzer::paused);
 	anConnect->setEnabled (state == analyzer::disconnected);
+	anConnect->setChecked (state != analyzer::disconnected);
 	anDisconnect->setEnabled (state != analyzer::disconnected);
+	mainWidget->normalTools->anStartButton->setChecked (state != analyzer::disconnected);
+	if (state == analyzer::disconnected)
+		mainWidget->normalTools->anStartButton->setIcon (QIcon (":/images/exit.png"));
+	else if (state == analyzer::starting)
+		mainWidget->normalTools->anStartButton->setIcon (QIcon (":/images/power-standby.png"));
+	else
+		mainWidget->normalTools->anStartButton->setIcon (QIcon (":/images/power-on.png"));
+	mainWidget->normalTools->anPrimaryBox->setEnabled (state == analyzer::running);
+	mainWidget->normalTools->anShownBox->setEnabled (state == analyzer::running);
 	anPause->setEnabled (state != analyzer::disconnected);
+	mainWidget->normalTools->anPauseButton->setEnabled (state != analyzer::disconnected);
+	mainWidget->normalTools->anPauseButton->setChecked (state == analyzer::paused);
+	anPause->setChecked (state == analyzer::paused);
 
 	if (state == analyzer::disconnected) {
-		anPause->setChecked (false);
 		mainWidget->normalTools->primaryCoords->setText ("");
 		mainWidget->normalTools->primaryWR->setText ("");
 		mainWidget->normalTools->primaryVisits->setText ("");

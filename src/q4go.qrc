@@ -35,7 +35,10 @@
   <qresource prefix="/">
     <file>images/node_black.xpm</file>
     <file>images/node_white.xpm</file>
+    <file>images/power-standby.png</file>
+    <file>images/power-on.png</file>
     <file>images/exit.png</file>
+    <file>images/pause.png</file>
     <file>sounds/click.wav</file>
     <file>sounds/connect.wav</file>
     <file>sounds/enter.wav</file>

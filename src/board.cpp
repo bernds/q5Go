@@ -2027,12 +2027,14 @@ void Board::pause_analysis (bool on)
 	if (m_analyzer == nullptr || !m_analyzer->started () || m_analyzer->stopped ())
 		return;
 	m_pause_eval = on;
-	if (on)
+	if (on) {
 		m_analyzer->pause_analysis ();
-	else {
+		m_board_win->update_analysis (analyzer::paused);
+	} else {
 		stone_color to_move = m_state->to_move ();
 		m_winrate = new double[board_size * board_size] ();
 		m_visits = new int[board_size * board_size] ();
+		m_board_win->update_analysis (analyzer::running);
 		m_analyzer->analyze (to_move, 100);
 	}
 }
