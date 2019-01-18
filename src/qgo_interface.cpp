@@ -1862,12 +1862,13 @@ void qGoBoard::game_result (const QString &rs, const QString &extended_rs)
 		qDebug("Game saved");
 	}
 
-	if (gameMode != modeObserve)
-		QMessageBox::information(win, tr("Game n° ") + QString::number(id), extended_rs);
-
+	GameMode prev_mode = gameMode;
 	id = -id;
 
 	disconnected (true);
+
+	if (prev_mode != modeObserve)
+		QMessageBox::information(win, tr("Game n° ") + QString::number(id), extended_rs);
 
 	qDebug() << "Result: " << rs;
 }
