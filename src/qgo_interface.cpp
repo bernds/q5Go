@@ -39,8 +39,9 @@ public:
 	MainWindow_IGS (QWidget *parent, std::shared_ptr<game_record> gr, qGoBoard *connector, bool playing_w, bool playing_b, GameMode mode);
 	~MainWindow_IGS ();
 
-	virtual void player_move (stone_color, int x, int y)
+	virtual void player_move (stone_color col, int x, int y)
 	{
+		MainWindow::player_move (col, x, y);
 		m_connector->move_played (x, y);
 	}
 	virtual void player_toggle_dead (int x, int y)

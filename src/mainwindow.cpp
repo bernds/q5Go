@@ -2308,6 +2308,12 @@ void MainWindow::setMoveData (const game_state &gs, const go_board &b, GameMode 
 	mainWidget->setMoveData (gs, b, mode);
 }
 
+void MainWindow::player_move (stone_color, int, int)
+{
+	if (local_stone_sound)
+		qgo->playStoneSound ();
+}
+
 void MainWindow::doPass()
 {
 	gfx_board->doPass();
@@ -2469,8 +2475,7 @@ void MainWindow_GTP::gtp_exited ()
 
 void MainWindow_GTP::player_move (stone_color col, int x, int y)
 {
-	if (local_stone_sound)
-		qgo->playStoneSound ();
+	MainWindow::player_move (col, x, y);
 
 	if (gfx_board->getGameMode () != modeComputer)
 		return;

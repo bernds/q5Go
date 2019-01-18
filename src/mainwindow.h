@@ -208,9 +208,10 @@ protected:
 	QGridLayout *mainWidgetGuiLayout;
 
 public:
-	/* Called when the user performed a board action.  Used in derived
-	   classes, to send a GTP command or a message to the server.  */
-	virtual void player_move (stone_color, int, int) { }
+	/* Called when the user performed a board action.  Just plays an
+	   (optional) sound, but is used in derived classes to send a GTP
+	   command or a message to the server.  */
+	virtual void player_move (stone_color, int, int);
 	virtual void player_toggle_dead (int, int) { }
 };
 
