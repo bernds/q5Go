@@ -26,11 +26,12 @@
 #include "imagehandler.h"
 #include "tip.h"
 #include "mainwindow.h"
+#include "mainwin.h"
 #include "miscdialogs.h"
 #include "svgbuilder.h"
 
 Board::Board(QWidget *parent, QGraphicsScene *c)
-	: QGraphicsView(c, parent), m_game (nullptr)
+	: QGraphicsView(c, parent), Gtp_Controller (parent), m_game (nullptr)
 {
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -139,9 +140,11 @@ void Board::clearCoords()
 
 Board::~Board()
 {
+	clear_eval_data ();
 	clear_stones ();
 	delete canvas;
 	delete imageHandler;
+	delete m_analyzer;
 }
 
 // distance from table edge to wooden board edge
@@ -442,15 +445,16 @@ static QString convert_letter_mark (mextra extra)
 
 /* Render a mark in SVG at center position CX/CY in a square with a side length of FACTOR.
    M and ME represent the mark as present in the board.  SC is the color of the stone that
-   has been rendered before, or NONE.  COUNT_VAL, if nonzero, together with N_BACK represents
+   has been rendered before, or NONE.  COUNT_VAL, if nonzero, together with MAX_NUMBER represents
    the move number to be displayed.  VAR_M and VAR_ME represent a variation mark, typically
    some letter.
+
    WHITE_BACKGROUND is true if we are doing this for svg export, it changes the display a
    little bit.  */
 static bool add_mark_svg (svg_builder &svg, double cx, double cy, double factor,
 			  mark m, mextra me, const std::string &mstr, mark var_m, mextra var_me,
-			  stone_color sc, int count_val, int n_back, bool was_last_move,
-			  bool white_background, const QFontInfo &fi)
+			  stone_color sc, int count_val, int max_number,
+			  bool was_last_move, bool white_background, const QFontInfo &fi)
 {
 	QString mark_col = sc == black ? "white" : "black";
 	if (sc == none && white_background && (count_val != 0 || m != mark::none || var_m != mark::none)) {
@@ -458,8 +462,7 @@ static bool add_mark_svg (svg_builder &svg, double cx, double cy, double factor,
 			       "white", "none");
 	}
 	if (count_val != 0) {
-		count_val = n_back - count_val + 1;
-		int len = n_back > 99 ? 3 : n_back > 9 ? 2 : 1;
+		int len = max_number > 99 ? 3 : max_number > 9 ? 2 : 1;
 		svg.text_at (cx, cy, factor,
 			     len, QString::number (count_val),
 			     mark_col, fi);
@@ -547,7 +550,9 @@ QByteArray Board::render_svg (bool do_number, bool coords)
 	int n_back = 0;
 	int *count_map = new int[board_size * board_size]();
 	game_state *startpos = nullptr;
-	if (do_number && m_edit_board == nullptr && !m_state->get_start_count () && m_state->was_move_p ()) {
+	bool numbering = do_number && m_edit_board == nullptr;
+
+	if (numbering && !m_state->get_start_count () && m_state->was_move_p ()) {
 		startpos = m_state;
 		while (startpos
 		       && (startpos->was_move_p () || startpos->root_node_p ())
@@ -662,6 +667,8 @@ QByteArray Board::render_svg (bool do_number, bool coords)
 					       c == black ? "black" : "white",
 					       c == black ? "none" : "black");
 			}
+			if (v > 0)
+				v = n_back - v + 1;
 			add_mark_svg (svg, center_x, center_y, factor,
 				      m, extra, m == mark::text ? b.mark_text_at (rx, ry) : "",
 				      mark::none, 0, c, v, n_back, false, true, fi);
@@ -796,6 +803,10 @@ QString Board::render_ascii (bool do_number, bool coords)
 /* The central function for synchronizing visual appearance with the abstract board data.  */
 void Board::sync_appearance (bool board_only)
 {
+	int analysis_vartype = setting->readIntEntry ("ANALYSIS_VARTYPE");
+	int winrate_for = setting->readIntEntry ("ANALYSIS_WINRATE");
+	stone_color wr_swap_col = winrate_for == 0 ? white : winrate_for == 1 ? black : none;
+
 	const go_board &b = m_edit_board == nullptr ? m_state->get_board () : *m_edit_board;
 	stone_color to_move = m_edit_board == nullptr ? m_state->to_move () : m_edit_to_move;
 
@@ -812,10 +823,40 @@ void Board::sync_appearance (bool board_only)
 	svg_builder svg (svg_factor * sz, svg_factor * sz);
 
 	/* Look back through previous moves to see if we should do numbering.  */
-	int n_back = 0;
+	int n_back = 0, max_number = 0;
 	int *count_map = new int[sz * sz]();
+	bool have_analysis = m_eval_state != nullptr;
+	bool numbering = !have_analysis && m_edit_board == nullptr;
+
 	game_state *startpos = nullptr;
-	if (m_edit_board == nullptr && !m_state->get_start_count () && m_state->was_move_p ()) {
+	if (have_analysis) {
+		startpos = m_eval_state;
+		game_state *pv = m_eval_state->find_child_move (curX, curY);
+		if (pv == nullptr) {
+			m_main_widget->set_2nd_eval (nullptr, 0, none, 0);
+		} else {
+			int x = pv->get_move_x ();
+			int y = pv->get_move_y ();
+			int bp = b.bitpos (x, y);
+			if (x > 7)
+				x++;
+			QString move = QChar ('A' + x) + QString::number (board_size - y);
+			m_main_widget->set_2nd_eval (move, m_primary_eval + m_winrate[bp],
+						     m_state->to_move (), m_visits[bp]);
+		}
+
+		while (pv) {
+			int x = pv->get_move_x ();
+			int y = pv->get_move_y ();
+			int bp = b.bitpos (x, y);
+			count_map[bp] = ++n_back;
+			pv = pv->next_move ();
+		}
+		max_number = n_back;
+		n_back = 0;
+	}
+
+	if (numbering && !m_state->get_start_count () && m_state->was_move_p ()) {
 		startpos = m_state;
 		while (startpos
 		       && (startpos->was_move_p () || startpos->root_node_p ())
@@ -833,6 +874,7 @@ void Board::sync_appearance (bool board_only)
 		}
 		if (startpos && !startpos->was_move_p () && !startpos->root_node_p ())
 			startpos = nullptr;
+		max_number = n_back;
 	}
 	m_used_letters.clear ();
 	m_used_numbers.clear ();
@@ -848,6 +890,8 @@ void Board::sync_appearance (bool board_only)
 			mark mark_at_pos = b.mark_at (x, y);
 			mextra extra = b.mark_extra_at (x, y);
 			bool was_last_move = false;
+			int v = startpos ? count_map[bp] : 0;
+
 			if (m_edit_board == nullptr && m_state->was_move_p ()) {
 				int last_x = m_state->get_move_x ();
 				int last_y = m_state->get_move_y ();
@@ -856,8 +900,15 @@ void Board::sync_appearance (bool board_only)
 			}
 
 			/* If we don't have a real stone, check for various possibilities of
-			   ghost stones.  First, the mouse cursor, then territory marks,
-			   then variation display.  */
+			   ghost stones.  First, PV moves, then the mouse cursor, then territory
+			   marks, then variation display.  */
+			if (sc == none && n_back == 0 && v > 0) {
+				int v_tmp = v;
+				if (m_eval_state->to_move () == black)
+					v_tmp++;
+				sc = v_tmp % 2 ? white : black;
+			}
+
 			if (sc == none) {
 				if (x == curX && y == curY && show_cursor_p ()) {
 					sc = to_move;
@@ -895,16 +946,61 @@ void Board::sync_appearance (bool board_only)
 			mark var_mark = m_vars_type == 2 ? vars.mark_at (x, y) : mark::none;
 			mextra var_me = vars.mark_extra_at (x, y);
 			/* Now look at marks.  */
-			int v = startpos ? count_map[bp] : 0;
 
 			if (mark_at_pos == mark::num)
 				m_used_numbers.set_bit (extra);
 			else if (mark_at_pos == mark::letter)
 				m_used_letters.set_bit (extra);
 
-			bool added = add_mark_svg (svg, svg_factor / 2 + svg_factor * x, svg_factor / 2 + svg_factor * y, svg_factor,
-						   mark_at_pos, extra, mark_at_pos == mark::text ? b.mark_text_at (x, y) : "",
-						   var_mark, var_me, sc, v, n_back, was_last_move, false, fi);
+			mark eval_mark = m_eval_state != nullptr ? m_eval_state->get_board ().mark_at (x, y) : mark::none;
+			mextra eval_me = m_eval_state != nullptr ? m_eval_state->get_board ().mark_extra_at (x, y) : 0;
+
+			double cx = svg_factor / 2 + svg_factor * x;
+			double cy = svg_factor / 2 + svg_factor * y;
+
+			if (v > 0 && n_back != 0)
+				v = n_back - v + 1;
+			QString wr_col = "white";
+			bool added = false;
+			/* Put a percentage or letter mark on variations returned by the analysis engine,
+			   unless we are already showing a numbered variation and this intersection
+			   has a number.  */
+			if (eval_mark != mark::none && v == 0) {
+				/* m_winrate holds the difference to the primary move's winrate.
+				   Use green for a difference of 0, red for any loss bigger than 12%.
+				   The HSV angle between red and green is 120, so just multiply by 1000.  */
+				double wrdiff = m_winrate[bp];
+				int angle = std::min (120.0, std::max (0.0, 120 + 1000 * wrdiff));
+				QColor col = QColor::fromHsv (angle, 255, 200);
+				wr_col = col.name ();
+				svg.circle_at (cx, cy, svg_factor * 0.45, wr_col,
+					       eval_me == 0 ? "lawngreen" : "black", "1");
+
+				if (analysis_vartype == 0) {
+					QChar c = eval_me >= 26 ? 'a' + eval_me - 26 : 'A' + eval_me;
+					svg.text_at (cx, cy, svg_factor, 0, c,
+						     "black", fi);
+				} else {
+					if (analysis_vartype == 2) {
+						wrdiff += m_primary_eval;
+
+						if (m_eval_state->to_move () == wr_swap_col)
+							wrdiff = 1 - wrdiff;
+					} else if (m_eval_state->to_move () == wr_swap_col)
+						wrdiff = -wrdiff;
+
+					svg.text_at (cx, cy, svg_factor, 4,
+						     QString::number (wrdiff * 100, 'f', 1),
+						     "black", fi);
+				}
+				added = true;
+			} else
+				added = add_mark_svg (svg, cx, cy, svg_factor,
+						      mark_at_pos, extra,
+						      mark_at_pos == mark::text ? b.mark_text_at (x, y) : "",
+						      var_mark, var_me,
+						      sc, v, max_number, was_last_move, false, fi);
+
 			if (added)
 				gatter->hide (x + 1, y + 1);
 		}
@@ -929,6 +1025,7 @@ void Board::sync_appearance (bool board_only)
 
 void Board::observed_changed ()
 {
+	setup_analyzer_position ();
 	sync_appearance (false);
 }
 
@@ -1771,4 +1868,171 @@ void Board::navIntersection()
 {
 	setCursor(Qt::PointingHandCursor);
 	navIntersectionStatus = true;
+}
+
+analyzer Board::analyzer_state ()
+{
+	if (m_analyzer == nullptr)
+		return analyzer::disconnected;
+	if (m_analyzer->stopped ())
+		return analyzer::disconnected;
+	if (!m_analyzer->started ())
+		return analyzer::starting;
+	if (m_pause_eval)
+		return analyzer::paused;
+	return analyzer::running;
+}
+
+void Board::setup_analyzer_position ()
+{
+	analyzer st = analyzer_state ();
+	if (st != analyzer::running && st != analyzer::paused)
+		return;
+	const go_board &b = m_state->get_board ();
+	m_analyzer->clear_board ();
+	for (int i = 0; i < board_size; i++)
+		for (int j = 0; j < board_size; j++) {
+			stone_color c = b.stone_at (i, j);
+			if (c != none)
+				m_analyzer->played_move (c, i, j);
+		}
+	clear_eval_data ();
+	if (st == analyzer::running && !m_pause_eval) {
+		stone_color to_move = m_state->to_move ();
+		m_winrate = new double[board_size * board_size] ();
+		m_visits = new int[board_size * board_size] ();
+		m_analyzer->analyze (to_move, 100);
+	}
+}
+
+void Board::gtp_startup_success ()
+{
+	m_board_win->update_analysis (analyzer::running);
+	setup_analyzer_position ();
+}
+
+void Board::gtp_failure (const QString &err)
+{
+	clear_eval_data ();
+	m_board_win->update_analysis (analyzer::disconnected);
+	QMessageBox msg(QString (QObject::tr("Error")), err,
+			QMessageBox::Warning, QMessageBox::Ok | QMessageBox::Default,
+			Qt::NoButton, Qt::NoButton);
+	msg.exec();
+}
+
+void Board::gtp_exited ()
+{
+	clear_eval_data ();
+	m_board_win->update_analysis (analyzer::disconnected);
+	QMessageBox::warning (this, PACKAGE, QObject::tr ("GTP process exited unexpectedly."));
+}
+
+void Board::gtp_eval (const QString &s)
+{
+	/* Right click pauses eval updates.  */
+	if (mouseState == Qt::RightButton)
+		return;
+
+	bool prune = setting->readBoolEntry("ANALYSIS_PRUNE");
+
+	QStringList moves = s.split ("info move ", QString::SkipEmptyParts);
+	if (moves.isEmpty ())
+		return;
+
+	const go_board &b = m_state->get_board ();
+	stone_color to_move = m_state->to_move ();
+	delete m_eval_state;
+	m_eval_state = new game_state (b, to_move);
+
+	int count = 0;
+	m_primary_eval = 0.5;
+	for (auto &e: moves) {
+//		m_board_win->append_comment (e);
+		QRegExp re ("(\\S+)\\s+visits\\s+(\\d+)\\s+winrate\\s+(\\d+)\\s+prior\\s+(\\d+)\\s+order\\s+(\\d+)\\s+pv\\s+(.*)$");
+		if (re.indexIn (e) == -1)
+			continue;
+		QString move = re.cap (1);
+		int visits = re.cap (2).toInt ();
+		int winrate = re.cap (3).toInt ();
+		QString pv = re.cap (6);
+		double wr = winrate / 10000.;
+
+		if (count == 0) {
+			m_primary_eval = wr;
+			m_main_widget->set_eval (move, wr, m_state->to_move (), visits);
+		}
+		qDebug () << move << " PV: " << pv;
+
+		QStringList pvmoves = pv.split (" ", QString::SkipEmptyParts);
+		if (count < 52 && (!prune || pvmoves.length () > 1 || visits >= 2)) {
+			game_state *cur = m_eval_state;
+			bool pv_first = true;
+			for (auto &pm: pvmoves) {
+				QChar sx = pm[0];
+
+				int i = sx.toLatin1() - 'A';
+				if (i > 7)
+					i--;
+				int j = board_size - pm.mid (1).toInt();
+				if (i >= 0 && i < board_size && j >= 0 && j < board_size) {
+					if (pv_first) {
+						int bp = b.bitpos (i, j);
+						cur->set_mark (i, j, mark::letter, count);
+
+						m_winrate[bp] = wr - m_primary_eval;
+						m_visits[bp] = visits;
+					}
+					cur = cur->add_child_move (i, j);
+				} else
+					break;
+				if (cur == nullptr)
+					break;
+				pv_first = false;
+			}
+		}
+		count++;
+	}
+	sync_appearance ();
+}
+
+void Board::start_analysis ()
+{
+	Engine *e = client_window->analysis_engine ();
+	if (e == nullptr) {
+		QMessageBox::warning(this, PACKAGE, tr("You did not configure any analysis engine!"));
+		return;
+	}
+
+	if (m_analyzer != nullptr) {
+		m_analyzer->quit ();
+		delete m_analyzer;
+		m_analyzer = nullptr;
+	}
+	m_analyzer = create_gtp (e->path (), e->args (), board_size, 7.5, 0, 10);
+	m_board_win->update_analysis (analyzer::starting);
+}
+
+void Board::stop_analysis ()
+{
+	clear_eval_data ();
+	m_pause_eval = false;
+	if (m_analyzer != nullptr && !m_analyzer->stopped ())
+		m_analyzer->quit ();
+	m_board_win->update_analysis (analyzer::disconnected);
+}
+
+void Board::pause_analysis (bool on)
+{
+	if (m_analyzer == nullptr || !m_analyzer->started () || m_analyzer->stopped ())
+		return;
+	m_pause_eval = on;
+	if (on)
+		m_analyzer->pause_analysis ();
+	else {
+		stone_color to_move = m_state->to_move ();
+		m_winrate = new double[board_size * board_size] ();
+		m_visits = new int[board_size * board_size] ();
+		m_analyzer->analyze (to_move, 100);
+	}
 }

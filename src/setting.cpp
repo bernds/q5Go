@@ -117,6 +117,8 @@ Setting::Setting()
 	writeIntEntry("STONES_LOOK", 3);
 	writeBoolEntry("STONES_STRIPES", 1);
 
+	writeBoolEntry("ANALYSIS_PRUNE", 1);
+
 	language = "Default";
 	fontStandard = QFont();
 	fontMarks = QFont();

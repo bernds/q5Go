@@ -650,6 +650,13 @@ public:
 	{
 		return m_children.size ();
 	}
+	game_state *find_child_move (int x, int y)
+	{
+		for (auto &it: m_children)
+			if (it->was_move_p () && it->m_move_x == x && it->m_move_y == y)
+				return it;
+		return nullptr;
+	}
 	bool root_node_p () const
 	{
 		return m_parent == nullptr;

@@ -27,8 +27,8 @@
     <rect>
      <x>10</x>
      <y>60</y>
-     <width>432</width>
-     <height>380</height>
+     <width>274</width>
+     <height>282</height>
     </rect>
    </property>
    <property name="frameShape">
@@ -88,15 +88,92 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="Board" name="gfx_board" native="true">
-          <property name="minimumSize">
-           <size>
-            <width>250</width>
-            <height>250</height>
-           </size>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <property name="spacing">
+           <number>4</number>
           </property>
-          <property name="whatsThis">
-           <string>Click on the board to place a stone.
+          <property name="leftMargin">
+           <number>4</number>
+          </property>
+          <property name="rightMargin">
+           <number>4</number>
+          </property>
+          <item>
+           <widget class="SizeGraphicsView" name="evalView">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>15</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>15</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <property name="lineWidth">
+             <number>1</number>
+            </property>
+            <property name="verticalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOff</enum>
+            </property>
+            <property name="horizontalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOff</enum>
+            </property>
+            <property name="backgroundBrush">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>255</red>
+               <green>255</green>
+               <blue>255</blue>
+              </color>
+             </brush>
+            </property>
+            <property name="sceneRect">
+             <rectf>
+              <x>0.000000000000000</x>
+              <y>0.000000000000000</y>
+              <width>15.000000000000000</width>
+              <height>0.000000000000000</height>
+             </rectf>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+            </property>
+            <property name="transformationAnchor">
+             <enum>QGraphicsView::NoAnchor</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="Board" name="gfx_board" native="true">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>1</horstretch>
+              <verstretch>1</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>250</width>
+              <height>250</height>
+             </size>
+            </property>
+            <property name="whatsThis">
+             <string>Click on the board to place a stone.
 
 When in normal mode, left click plays moves in alternating colors.
 Shift + left click moves to the first move in the main branch.
@@ -104,11 +181,13 @@ Shift + right click moves to the next move in the current branch.
 When in edit mode and editing stones, left click places a black, right click a white stone, clicking on an existant stone removes it.
 When editing marks, left click sets, right click removes the mark. When editing letter marks, shift-click allows to customize the mark text.
 When in score mode, left click to mark a group as dead, right click to mark it alive in seki. Click again to unmark as dead or seki.</string>
-          </property>
-          <property name="caption" stdset="0">
-           <string/>
-          </property>
-         </widget>
+            </property>
+            <property name="caption" stdset="0">
+             <string/>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item>
          <layout class="QHBoxLayout">
@@ -2349,6 +2428,11 @@ After placing and/or undo release button for returning to starting point automat
    <extends>QWidget</extends>
    <header>scoretools.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>SizeGraphicsView</class>
+   <extends>QGraphicsView</extends>
+   <header>sizegraphicsview.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

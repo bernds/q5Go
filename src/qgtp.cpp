@@ -44,6 +44,7 @@ void GTP_Process::slot_started ()
 
 void GTP_Process::slot_error (QProcess::ProcessError)
 {
+	m_stopped = true;
 	m_receivers.clear ();
 	m_dlg.hide ();
 	m_controller->gtp_exited ();
@@ -95,6 +96,9 @@ void GTP_Process::startup_part5 (const QString &)
 
 void GTP_Process::startup_part6 (const QString &)
 {
+	/* Set this before calling startup success, as the callee may want to examine it.  */
+	m_started = true;
+	m_dlg.hide ();
 	m_controller->gtp_startup_success ();
 }
 
@@ -143,11 +147,28 @@ void GTP_Process::request_move (stone_color col)
 		send_request ("genmove white", &GTP_Process::receive_move);
 }
 
+void GTP_Process::analyze (stone_color col, int interval)
+{
+	if (col == black)
+		send_request ("lz-analyze black " + QString::number (interval));
+	else
+		send_request ("lz-analyze white " + QString::number (interval));
+}
+
+void GTP_Process::pause_analysis ()
+{
+	/* There doesn't seem to be a specific command for stopping the analysis
+	   in Leela Zero, but sending anything else does the trick.  So just
+	   pick something that is valid but doesn't affect the board position.  */
+	send_request ("known_command known_command");
+}
+
 /* Code */
 
 // exit
 void GTP_Process::slot_finished (int exitcode, QProcess::ExitStatus status)
 {
+	m_stopped = true;
 	qDebug() << req_cnt << " quit";
 	m_controller->gtp_exited ();
 }
@@ -172,19 +193,26 @@ void GTP_Process::slot_receive_stdout ()
 		}
 		if (last_lf >= 0)
 			m_buffer = m_buffer.mid (last_lf + 1);
-		if (m_receivers.isEmpty ())
-			return;
 
 		int idx = m_buffer.indexOf ("\n");
 		if (idx < 0)
 			return;
 
 		QString output = m_buffer.left (idx).trimmed ();
-		m_buffer = m_buffer.mid (idx + 1);
 
 		m_dlg.textEdit->setTextColor (Qt::red);
 		m_dlg.append (output);
 		m_dlg.textEdit->setTextColor (Qt::black);
+
+		if (output.length () >= 10 && output.left (10) == "info move ") {
+			m_buffer = m_buffer.mid (idx + 1);
+			m_controller->gtp_eval (output);
+			return;
+		}
+
+		if (m_receivers.isEmpty ())
+			return;
+		m_buffer = m_buffer.mid (idx + 1);
 
 		if (output[0] != '=') {
 			m_controller->gtp_failure (tr ("Invalid response from GTP engine"));
@@ -228,15 +256,24 @@ void GTP_Process::send_request(const QString &s, t_receiver rcv)
 	req_cnt++;
 }
 
-void GTP_Process::quit ()
+void GTP_Process::internal_quit ()
 {
+	m_stopped = true;
 	disconnect (this, &QProcess::readyReadStandardOutput, nullptr, nullptr);
 	disconnect (this, &QProcess::readyReadStandardError, nullptr, nullptr);
 	send_request ("quit");
 }
 
+void GTP_Process::quit ()
+{
+	void (QProcess::*fini)(int, QProcess::ExitStatus) = &QProcess::finished;
+	disconnect (this, fini, nullptr, nullptr);
+	internal_quit ();
+}
+
 GTP_Process::~GTP_Process ()
 {
+	m_stopped = true;
 	disconnect (this, &QProcess::readyReadStandardOutput, nullptr, nullptr);
 	disconnect (this, &QProcess::readyReadStandardError, nullptr, nullptr);
 	disconnect (this, &QProcess::errorOccurred, nullptr, nullptr);

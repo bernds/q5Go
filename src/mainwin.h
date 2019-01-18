@@ -68,6 +68,7 @@ public:
 	bool preferencesAccept();
 	void dlgSetPreferences(int tab=-1);
 
+	Engine *analysis_engine ();
 	bool DODEBUG;
 //	QSortedList<Host>  hostlist;
 //	QPtrList<Host>  hostlist;

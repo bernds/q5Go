@@ -62,14 +62,20 @@ class Engine
 	QString m_title;
 	QString m_path;
 	QString m_args;
+	QString m_komi;
+	bool m_analysis;
+
 public:
-	Engine(const QString &title, const QString &path, const QString &args)
-		: m_title (title), m_path (path), m_args (args)
+	Engine (const QString &title, const QString &path, const QString &args, const QString &komi, bool analysis)
+		: m_title (title), m_path (path), m_args (args), m_komi (komi), m_analysis (analysis)
 	{
 	}
 	QString title() const { return m_title; };
 	QString path() const { return m_path; };
 	QString args() const { return m_args; };
+	QString komi() const { return m_komi; }
+	bool analysis () const { return m_analysis; }
+
 	int operator== (Engine h)
 		{ return (this->m_title == h.m_title); };
 	bool operator< (Engine h)

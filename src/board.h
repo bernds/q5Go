@@ -21,6 +21,7 @@
 #include "stone.h"
 #include "gatter.h"
 #include "goboard.h"
+#include "qgtp.h"
 
 class ImageHandler;
 class Mark;
@@ -31,7 +32,9 @@ class QNewGameDlg;
 class MainWindow;
 class MainWidget;
 
-class Board : public QGraphicsView, public game_state::observer
+enum class analyzer { disconnected, starting, running, paused };
+
+class Board : public QGraphicsView, public game_state::observer, public Gtp_Controller
 {
 	Q_OBJECT
 	MainWindow *m_board_win;
@@ -41,12 +44,18 @@ class Board : public QGraphicsView, public game_state::observer
 
 	std::shared_ptr<game_record> m_game;
 
+	/* Controls whether moves are allowed for either color.  */
+	bool m_player_is_b = true;
+	bool m_player_is_w = true;
+
 	/* A local copy of the board for when editing and scoring.  Null otherwise.  */
 	go_board *m_edit_board = nullptr;
 	stone_color m_edit_to_move;
 	bool m_edit_changed;
 	mark m_edit_mark = mark::none;
 
+	/* Collected when syncing the abstract position to the screen, and used
+	   when placing marks.  */
 	bit_array m_used_numbers = bit_array (256, false);
 	bit_array m_used_letters = bit_array (52, false);
 
@@ -54,24 +63,39 @@ class Board : public QGraphicsView, public game_state::observer
 	int m_down_x, m_down_y;
 	int m_cumulative_delta = 0;
 
+	/* Variables related to rectangle selection.  */
 	int m_rect_x1, m_rect_x2;
 	int m_rect_y1, m_rect_y2;
 	bool m_mark_rect = false;
 	bool m_request_mark_rect = false;
 
 	std::vector<stone_gfx *> m_stones;
-	bool m_player_is_b = true;
-	bool m_player_is_w = true;
 
 	int m_vars_type = 1;
 	bool m_vars_children = false;
 
+	bool m_pause_eval = false;
+	double m_primary_eval;
+	game_state *m_eval_state {};
+	double *m_winrate {};
+	int *m_visits {};
 	QGraphicsPixmapItem *m_mark_layer {};
+
+	GTP_Process *m_analyzer {};
 
 	void observed_changed ();
 	void sync_appearance (bool board_only = true);
 	void play_one_move (int x, int y);
-
+	void setup_analyzer_position ();
+	void clear_eval_data ()
+	{
+		delete m_eval_state;
+		m_eval_state = nullptr;
+		delete m_winrate;
+		m_winrate = nullptr;
+		delete m_visits;
+		m_visits = nullptr;
+	}
 public:
 	Board(QWidget *parent=0, QGraphicsScene *c = 0);
 	~Board();
@@ -114,6 +138,11 @@ public:
 	void set_rect_select (int on) { m_request_mark_rect = on; }
 	void clear_selection ();
 
+	analyzer analyzer_state ();
+	void start_analysis ();
+	void stop_analysis ();
+	void pause_analysis (bool);
+
 	bool player_to_move_p ()
 	{
 		return !m_state->was_score_p () && (m_state->to_move () == black ? m_player_is_b : m_player_is_w);
@@ -146,62 +175,72 @@ public:
 	void set_vardisplay (bool children, int type);
 
 	void update_images () {	imageHandler->rescale (square_size); sync_appearance (); }
-public slots:
-	void update_comment(const QString &, bool append);
-	void changeSize();
+
+	/* Virtuals from Gtp_Controller.  */
+	virtual void gtp_played_move (int, int) { /* Should not happen.  */ }
+	virtual void gtp_played_resign () { /* Should not happen.  */ }
+	virtual void gtp_played_pass () { /* Should not happen.  */ }
+	virtual void gtp_startup_success () override;
+	virtual void gtp_exited () override;
+	virtual void gtp_failure (const QString &) override;
+	virtual void gtp_eval (const QString &) override;
+
+	public slots:
+		void update_comment(const QString &, bool append);
+		void changeSize();
 
 signals:
-	void coordsChanged(int, int, int,bool);
+		void coordsChanged(int, int, int,bool);
 
 protected:
-	void calculateSize();
-	void drawBackground();
-	void drawGatter();
-	void drawCoordinates();
-	void drawStarPoint(int x, int y);
-	void resizeBoard(int w, int h);
-	int convertCoordsToPoint(int c, int o);
-	void updateRectSel(int, int);
-	virtual void mousePressEvent(QMouseEvent *e) override;
-	virtual void mouseReleaseEvent(QMouseEvent*) override;
-	virtual void mouseMoveEvent(QMouseEvent *e) override;
-	virtual void wheelEvent(QWheelEvent *e) override;
-	virtual void leaveEvent(QEvent*) override;
-	virtual void resizeEvent(QResizeEvent*) override;
+		void calculateSize();
+		void drawBackground();
+		void drawGatter();
+		void drawCoordinates();
+		void drawStarPoint(int x, int y);
+		void resizeBoard(int w, int h);
+		int convertCoordsToPoint(int c, int o);
+		void updateRectSel(int, int);
+		virtual void mousePressEvent(QMouseEvent *e) override;
+		virtual void mouseReleaseEvent(QMouseEvent*) override;
+		virtual void mouseMoveEvent(QMouseEvent *e) override;
+		virtual void wheelEvent(QWheelEvent *e) override;
+		virtual void leaveEvent(QEvent*) override;
+		virtual void resizeEvent(QResizeEvent*) override;
 
 private:
-	void click_add_mark (QMouseEvent *, int, int);
-	void setupCoords();
-	void clearCoords();
-	void updateCovers ();
+		void click_add_mark (QMouseEvent *, int, int);
+		void setupCoords();
+		void clearCoords();
+		void updateCovers ();
 
-	/* Local copies of the pixmaps held by the settings.  I'm not entirely
-	   clear on ownership issues of QPainter; this is to avoid any potential
-	   use-after free if the picture changes and settings deletes the old
-	   pixmaps.  */
-	QPixmap m_wood, m_table;
-	QGraphicsRectItem *coverTop, *coverLeft, *coverRight, *coverBot;
+		/* Local copies of the pixmaps held by the settings.  I'm not entirely
+		   clear on ownership issues of QPainter; this is to avoid any potential
+		   use-after free if the picture changes and settings deletes the old
+		   pixmaps.  */
+		QPixmap m_wood, m_table;
+		QGraphicsRectItem *coverTop, *coverLeft, *coverRight, *coverBot;
 
-	QGraphicsScene *canvas;
-	QList<QGraphicsSimpleTextItem*> hCoords1, hCoords2 ,vCoords1, vCoords2;
-	Gatter *gatter;
-	ImageHandler *imageHandler;
-	static const int margin, coord_margin;
-	int board_size, offset, offsetX, offsetY, board_pixel_size, table_size;
-	int coord_offset;
-	double square_size;
-	bool showCoords;
-	bool showSGFCoords;
-	bool antiClicko;
-	short curX, curY;
+		QGraphicsScene *canvas;
+		QList<QGraphicsSimpleTextItem*> hCoords1, hCoords2 ,vCoords1, vCoords2;
+		Gatter *gatter;
+		ImageHandler *imageHandler;
+		static const int margin, coord_margin;
+		int board_size, offset, offsetX, offsetY, board_pixel_size, table_size;
+		int coord_offset;
+		double square_size;
+		bool showCoords;
+		bool showSGFCoords;
+		bool antiClicko;
+		short curX, curY;
 
-	QTime wheelTime;
-	Qt::MouseButtons mouseState;
+		QTime wheelTime;
+		Qt::MouseButtons mouseState;
 
 #ifdef Q_OS_WIN
-	bool resizeDelayFlag;
+		bool resizeDelayFlag;
 #endif
-	bool navIntersectionStatus;
+		bool navIntersectionStatus;
 };
 
 #endif

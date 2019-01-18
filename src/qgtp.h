@@ -27,6 +27,9 @@ public:
 	virtual void gtp_startup_success () = 0;
 	virtual void gtp_exited () = 0;
 	virtual void gtp_failure (const QString &) = 0;
+	virtual void gtp_eval (const QString &)
+	{
+	}
 };
 
 class GTP_Process : public QProcess
@@ -42,6 +45,8 @@ class GTP_Process : public QProcess
 	double m_komi;
 	int m_hc;
 	int m_level;
+	bool m_started = false;
+	bool m_stopped = false;
 
 	typedef void (GTP_Process::*t_receiver) (const QString &);
 	QMap <int, t_receiver> m_receivers;
@@ -56,6 +61,7 @@ class GTP_Process : public QProcess
 	void startup_part5 (const QString &);
 	void startup_part6 (const QString &);
 	void receive_move (const QString &);
+	void internal_quit ();
 
 public slots:
 	void slot_started ();
@@ -71,10 +77,16 @@ public:
 	GTP_Process (QWidget *parent, Gtp_Controller *c, const QString &prog, const QString &args,
 		     int size, float komi, int hc, int level);
 	~GTP_Process ();
+	bool started () { return m_started; }
+	bool stopped () { return m_stopped; }
+
+	void clear_board () { send_request ("clear_board"); }
 	void request_move (stone_color col);
 	void played_move (stone_color col, int x, int y);
 	void played_move_pass (stone_color col);
 	void played_move_resign (stone_color col);
+	void analyze (stone_color col, int interval);
+	void pause_analysis ();
 
 	void quit ();
 };

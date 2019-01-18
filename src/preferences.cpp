@@ -35,9 +35,11 @@ PreferencesDialog::PreferencesDialog(QWidget* parent)
 	int engine_w = enginelabel_1->width ();
 	engine_w = std::max (engine_w, enginelabel_2->width ());
 	engine_w = std::max (engine_w, enginelabel_3->width ());
+	engine_w = std::max (engine_w, enginelabel_4->width ());
 	enginelabel_1->setMinimumWidth (engine_w);
 	enginelabel_2->setMinimumWidth (engine_w);
 	enginelabel_3->setMinimumWidth (engine_w);
+	enginelabel_4->setMinimumWidth (engine_w);
 
 	// init random-number generator
 	srand ((unsigned)time (nullptr));
@@ -92,6 +94,9 @@ PreferencesDialog::PreferencesDialog(QWidget* parent)
 	connect (woodComboBox, cic, [=] (int i) { GobanPicturePathButton->setEnabled (i == 0); LineEdit_goban->setEnabled (i == 0); update_board_image (); });
 	connect (LineEdit_goban, &QLineEdit::editingFinished, [=] () { update_board_image (); });
 
+	/* @@@ Need to figure out the best way to display moves on the board during
+	   analysis.  */
+	anChildMovesCheckBox->setVisible (false);
 	update_board_image ();
 	update_w_stones ();
 	update_b_stones ();
@@ -213,6 +218,11 @@ void PreferencesDialog::init_from_settings ()
 	computerSizeSpin->setValue(setting->readIntEntry("COMPUTER_SIZE"));
 	computerHandicapSpin->setValue(setting->readIntEntry("COMPUTER_HANDICAP"));
 	humanName->setText(setting->readEntry("HUMAN_NAME"));
+
+	anChildMovesCheckBox->setChecked (setting->readBoolEntry ("ANALYSIS_CHILDREN"));
+	anPruneCheckBox->setChecked (setting->readBoolEntry ("ANALYSIS_PRUNE"));
+	anVarComboBox->setCurrentIndex (setting->readIntEntry ("ANALYSIS_VARTYPE"));
+	winrateComboBox->setCurrentIndex (setting->readIntEntry ("ANALYSIS_WINRATE"));
 
 	// Go Server tab
 	boardSizeSpin->setValue(setting->readIntEntry("DEFAULT_SIZE"));
@@ -422,6 +432,11 @@ void PreferencesDialog::slot_apply()
 	setting->writeIntEntry("COMPUTER_HANDICAP", computerHandicapSpin->text().toInt());
 	setting->writeEntry("HUMAN_NAME", humanName->text());
 
+	setting->writeBoolEntry ("ANALYSIS_CHILDREN", anChildMovesCheckBox->isChecked ());
+	setting->writeBoolEntry ("ANALYSIS_PRUNE", anPruneCheckBox->isChecked ());
+	setting->writeIntEntry ("ANALYSIS_VARTYPE", anVarComboBox->currentIndex ());
+	setting->writeIntEntry ("ANALYSIS_WINRATE", winrateComboBox->currentIndex ());
+
 	client_window->preferencesAccept();
 }
 
@@ -505,7 +520,9 @@ void PreferencesDialog::selectFont(int selector)
 bool PreferencesDialog::avoid_losing_data ()
 {
 	if (m_changing_engine) {
-		if (!enginePath->text ().isEmpty () || !engineArgs->text ().isEmpty ()) {
+		if (!enginePath->text ().isEmpty () || !engineArgs->text ().isEmpty ()
+		    || !engineKomi->text ().isEmpty ())
+		{
 			QMessageBox mb(QMessageBox::Question, tr("Unsaved data"),
 				       QString(tr("The engine input fields contain\n"
 						  "potentially unsaved data.\n"
@@ -560,6 +577,17 @@ void PreferencesDialog::saveSizes()
 
 void PreferencesDialog::slot_add_engine()
 {
+	QString komi = engineKomi->text ();
+	if (!komi.isEmpty ()) {
+		QDoubleValidator kv;
+		kv.setDecimals (2);
+		int pos = 0;
+		if (kv.validate (komi, pos) != QValidator::Acceptable) {
+			QMessageBox::warning (this, tr ("Invalid komi entered"),
+					      tr ("Please enter a valid komi before adding the engine."));
+			return;
+		}
+	}
 	const QString name = engineName->text();
 	// check if at least title and path are set
 	if (!name.isEmpty() && !enginePath->text().isEmpty())
@@ -577,7 +605,9 @@ void PreferencesDialog::slot_add_engine()
 			}
 
 		parent_cw->m_engines.append(new Engine(engineName->text(),
-						       enginePath->text(), engineArgs->text ()));
+						       enginePath->text(), engineArgs->text (),
+						       engineKomi->text(),
+						       engineAnalysis->isChecked ()));
 		std::sort (parent_cw->m_engines.begin (), parent_cw->m_engines.end (),
 			   [] (Engine *a, Engine *b) { return *a < *b; });
 
@@ -599,6 +629,8 @@ void PreferencesDialog::clear_engine ()
 	engineName->clear ();
 	enginePath->clear ();
 	engineArgs->clear ();
+	engineKomi->clear ();
+	engineAnalysis->setChecked (false);
 	m_changing_engine = false;
 }
 
@@ -639,6 +671,7 @@ void PreferencesDialog::slot_clickedEngines (QListWidgetItem *lvi)
 			engineName->setText(h->title ());
 			enginePath->setText(h->path ());
 			engineArgs->setText(h->args ());
+			engineAnalysis->setChecked (h->analysis ());
 			break;
 		}
 	}

@@ -37,6 +37,10 @@ public:
 	void setMoveData(const game_state &, const go_board &, GameMode);
 	void recalc_scores (const go_board &, GameMode);
 
+	void grey_eval_bar ();
+	void set_eval (double);
+	void set_eval (const QString &, double, stone_color, int);
+	void set_2nd_eval (const QString &, double, stone_color, int);
 public slots:
 	void on_colorButton_clicked(bool);
 	void slot_toolsTabChanged(int);
@@ -51,6 +55,9 @@ private:
 	MainWindow *m_mainwin;
 	GameMode m_remember_mode;
 	int m_remember_tab;
+	QGraphicsScene *m_eval_canvas;
+	QGraphicsRectItem *m_eval_bar;
+	double m_eval;
 };
 
 #endif

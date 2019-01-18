@@ -31,6 +31,7 @@ class qGoIF;
 class QNewGameDlg;
 class QToolBar;
 class Engine;
+class QGraphicsRectItem;
 
 extern QString screen_key ();
 
@@ -73,9 +74,10 @@ public:
 	/* Called from external source.  */
 	void append_comment (const QString &);
 
+	void update_analysis (analyzer);
 protected:
 	void initActions();
-	void initMenuBar();
+	void initMenuBar(GameMode);
 	void initToolBar();
 	void initStatusBar();
 	void keyPressEvent(QKeyEvent *e);
@@ -180,7 +182,7 @@ protected:
 
 	QToolBar *fileBar, *toolBar, *editBar;
 
-	QMenu *fileMenu, *importExportMenu, *editMenu, *navMenu, *settingsMenu, *viewMenu, *helpMenu;
+	QMenu *fileMenu, *importExportMenu, *editMenu, *navMenu, *settingsMenu, *viewMenu, *anMenu, *helpMenu;
 
 	QAction *escapeFocus;
 	QAction *fileNewBoard, *fileNew, *fileOpen, *fileSave, *fileSaveAs, *fileClose,
@@ -193,6 +195,7 @@ protected:
 		*navMainBranch, *navStartVar, *navNextBranch, *navNthMove, *navAutoplay, *navEmptyBranch,
 		*navCloneNode, *navSwapVariations, *navNextComment, *navPrevComment, *navIntersection ;       //SL added eb 11                               // added eb the 2 last
 	QAction *setPreferences, *setGameInfo, *soundToggle;
+	QAction *anConnect, *anDisconnect, *anPause;
 	QAction *viewFileBar, *viewToolBar, *viewEditBar, *viewMenuBar, *viewStatusBar, *viewCoords,
 		*viewSlider, *viewSidebar, *viewComment, *viewVertComment, *viewSaveSize, *viewFullscreen;
 	QAction *helpManual, *helpAboutApp, *helpAboutQt, *whatsThis;

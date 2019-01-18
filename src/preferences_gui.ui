@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>664</width>
-    <height>808</height>
+    <height>853</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -187,7 +187,7 @@ After placing and/or undo release button for returning to starting point automat
       <string/>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="InterfaceTabWidget">
       <attribute name="title">
@@ -1805,7 +1805,7 @@ If the picture is not set, or unvalid, a default goban is used by qgo</string>
        <string>Computer Go</string>
       </attribute>
       <layout class="QGridLayout">
-       <item row="3" column="0">
+       <item row="4" column="0">
         <spacer name="Spacer8">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -2038,6 +2038,13 @@ If the picture is not set, or unvalid, a default goban is used by qgo</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_7">
           <item row="4" column="0">
+           <widget class="QCheckBox" name="engineAnalysis">
+            <property name="text">
+             <string>Use for analysis (LZ or compatible)</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="0">
            <widget class="QWidget" name="widget_6" native="true">
             <layout class="QGridLayout" name="gridLayout_6">
              <property name="leftMargin">
@@ -2164,7 +2171,7 @@ Note: 'Delete' concerns saved records.</string>
             </layout>
            </widget>
           </item>
-          <item row="0" column="1" rowspan="5">
+          <item row="0" column="1" rowspan="7">
            <widget class="QListWidget" name="ListView_engines">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
@@ -2248,7 +2255,7 @@ Note: 'Delete' concerns saved records.</string>
             </item>
            </layout>
           </item>
-          <item row="3" column="0">
+          <item row="5" column="0">
            <spacer name="verticalSpacer_14">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -2260,6 +2267,98 @@ Note: 'Delete' concerns saved records.</string>
              </size>
             </property>
            </spacer>
+          </item>
+          <item row="3" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_7">
+            <property name="topMargin">
+             <number>5</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="enginelabel_4">
+              <property name="text">
+               <string>Fixed komi:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="engineKomi"/>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QGroupBox" name="groupBox_6">
+         <property name="title">
+          <string>Analysis</string>
+         </property>
+         <layout class="QFormLayout" name="formLayout">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_17">
+            <property name="text">
+             <string>Show variations as:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="anVarComboBox">
+            <item>
+             <property name="text">
+              <string>Letters</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Percentage difference</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Absolute percentage</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QCheckBox" name="anChildMovesCheckBox">
+            <property name="text">
+             <string>Always show child moves as circles</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_18">
+            <property name="text">
+             <string>Winning percentages shown for:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QComboBox" name="winrateComboBox">
+            <item>
+             <property name="text">
+              <string>Black</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>White</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Side to move</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QCheckBox" name="anPruneCheckBox">
+            <property name="text">
+             <string>Don't display moves with few visits</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>

@@ -15,7 +15,8 @@ public:
 		return (header + m_elts + "</svg>\n").toUtf8 ();
 	}
 	void text_at (double cx, double cy, double sidelen, int len,
-		      const QString &txt, const QString &fill, const QFontInfo &fi);
+		      const QString &txt, const QString &fill, const QFontInfo &fi,
+		      const QString &stroke = QString ());
 	void circle_at (double cx, double cy, double r,
 			const QString &fill, const QString &stroke, const QString &width = QString ());
 	void square_at (double cx, double cy, double sidelen,

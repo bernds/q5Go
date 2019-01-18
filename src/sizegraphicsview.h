@@ -1,3 +1,6 @@
+#ifndef SIZEGRAPHICSVIEW_H
+#define SIZEGRAPHICSVIEW_H
+
 #include <QGraphicsView>
 
 class SizeGraphicsView: public QGraphicsView
@@ -16,3 +19,5 @@ public:
 	{
 	}
 };
+
+#endif

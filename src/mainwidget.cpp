@@ -45,6 +45,16 @@ MainWidget::MainWidget(MainWindow *win, QWidget* parent)
 	setFont(setting->fontStandard);
 	normalTools->pb_timeWhite->setFont(setting->fontClocks);
 	normalTools->pb_timeBlack->setFont(setting->fontClocks);
+
+	int w = evalView->width ();
+	int h = evalView->height ();
+
+	m_eval_canvas = new QGraphicsScene (0, 0, w, h, evalView);
+	evalView->setScene (m_eval_canvas);
+	m_eval_bar = m_eval_canvas->addRect (QRectF (0, 0, w, h / 2), Qt::NoPen, QBrush (Qt::black));
+
+	m_eval = 0.5;
+	connect (evalView, &SizeGraphicsView::resized, this, [=] () { set_eval (m_eval); });
 }
 
 void MainWidget::update_game_record (std::shared_ptr<game_record> gr)
@@ -490,4 +500,61 @@ void MainWidget::setTimes(bool isBlacksTurn, float time, int stones)
 		setTimes(strTime, QString::number(stones), 0, 0, false, false);
 	else
 		setTimes(0, 0, strTime, QString::number(stones), false, false);
+}
+
+void MainWidget::set_eval (double eval)
+{
+	m_eval = eval;
+	int w = evalView->width ();
+	int h = evalView->height ();
+	m_eval_canvas->setSceneRect (0, 0, w, h);
+	m_eval_bar->setRect (0, 0, w, h * eval);
+	m_eval_bar->setPos (0, 0);
+	m_eval_canvas->update ();
+}
+
+void MainWidget::set_eval (const QString &move, double eval, stone_color to_move, int visits)
+{
+	evalView->setBackgroundBrush (QBrush (Qt::white));
+	m_eval_bar->setBrush (QBrush (Qt::black));
+	set_eval (to_move == black ? eval : 1 - eval);
+
+	int winrate_for = setting->readIntEntry ("ANALYSIS_WINRATE");
+	stone_color wr_swap_col = winrate_for == 0 ? white : winrate_for == 1 ? black : none;
+	if (to_move == wr_swap_col)
+		eval = 1 - eval;
+
+	normalTools->primaryCoords->setText (move);
+	normalTools->primaryWR->setText (QString::number (100 * eval, 'f', 1));
+	normalTools->primaryVisits->setText (QString::number (visits));
+	if (winrate_for == 0 || (winrate_for == 2 && to_move == black)) {
+		normalTools->pWRLabel->setText (tr ("B Win %"));
+		normalTools->sWRLabel->setText (tr ("B Win %"));
+	} else {
+		normalTools->pWRLabel->setText (tr ("W Win %"));
+		normalTools->sWRLabel->setText (tr ("W Win %"));
+	}
+}
+
+void MainWidget::set_2nd_eval (const QString &move, double eval, stone_color to_move, int visits)
+{
+	if (move.isEmpty ()) {
+		normalTools->shownCoords->setText ("");
+		normalTools->shownWR->setText ("");
+		normalTools->shownVisits->setText ("");
+	} else {
+		int winrate_for = setting->readIntEntry ("ANALYSIS_WINRATE");
+		stone_color wr_swap_col = winrate_for == 0 ? white : winrate_for == 1 ? black : none;
+		if (to_move == wr_swap_col)
+			eval = 1 - eval;
+		normalTools->shownCoords->setText (move);
+		normalTools->shownWR->setText (QString::number (100 * eval, 'f', 1));
+		normalTools->shownVisits->setText (QString::number (visits));
+	}
+}
+
+void MainWidget::grey_eval_bar ()
+{
+	evalView->setBackgroundBrush (QBrush (Qt::lightGray));
+	m_eval_bar->setBrush (QBrush (Qt::darkGray));
 }

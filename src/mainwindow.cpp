@@ -133,7 +133,7 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 	}
 
 	initActions();
-	initMenuBar();
+	initMenuBar(mode);
 	initToolBar();
 	initStatusBar();
 
@@ -252,6 +252,7 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 	connect(commentEdit2, SIGNAL(returnPressed()), this, SLOT(slotUpdateComment2()));
 	m_allow_text_update_signal = true;
 
+	update_analysis (analyzer::disconnected);
 	main_window_list.push_back (this);
 }
 
@@ -805,9 +806,28 @@ void MainWindow::initActions()
 	viewFullscreen->setWhatsThis(tr("Fullscreen\n\nEnable/disable fullscreen mode."));
 	connect(viewFullscreen, &QAction::toggled, this, &MainWindow::slotViewFullscreen);
 
+	/* Analyze menu.  */
+
+	anConnect = new QAction(tr("&Connect analysis engine"), this);
+	anConnect->setStatusTip(tr("Start up a configured analysis engine"));
+	anConnect->setWhatsThis(tr("Try to find an engine configured as an analysis tool in the engine list,\n"
+				      "and connect to it.\n"));
+	connect(anConnect, &QAction::triggered, this, [=] () { gfx_board->start_analysis (); });
+
+	anPause = new QAction(tr("&Pause analysis engine"), this);
+	anPause->setCheckable (true);
+	anPause->setStatusTip(tr("Stop the analysis temporarily"));
+	anPause->setWhatsThis(tr("Click to pause or unpause the analysis engine.\n"));
+	connect(anPause, &QAction::toggled, this, [=] (bool on) { if (on) { mainWidget->grey_eval_bar (); } gfx_board->pause_analysis (on); });
+
+	anDisconnect = new QAction(tr("&Disconnect analysis engine"), this);
+	anDisconnect->setStatusTip(tr("Detach the running analysis engine"));
+	anDisconnect->setWhatsThis(tr("Detach the currently running analysis engine.\n"));
+	connect(anDisconnect, &QAction::triggered, this, [=] () { gfx_board->stop_analysis (); });
+
 	/*
-	* Menu Help
-	*/
+	 * Menu Help
+	 */
 	// Help Manual
 	helpManual = new QAction(manualIcon, tr("&Manual"), this);
 	helpManual->setShortcut (Qt::Key_F1);
@@ -845,7 +865,7 @@ void MainWindow::initActions()
 	whatsThis = QWhatsThis::createAction (this);
 }
 
-void MainWindow::initMenuBar()
+void MainWindow::initMenuBar(GameMode mode)
 {
 	// submenu Import/Export
 	importExportMenu = new QMenu(tr("&Import/Export"));
@@ -941,6 +961,11 @@ void MainWindow::initMenuBar()
 	viewMenu->insertSeparator(viewSaveSize);
 	viewMenu->insertSeparator(viewFullscreen);
 
+	anMenu = new QMenu (tr ("&Analysis"));
+	anMenu->addAction (anConnect);
+	anMenu->addAction (anDisconnect);
+	anMenu->addAction (anPause);
+
 	// menuBar entry helpMenu
 	helpMenu = new QMenu(tr("&Help"));
 	helpMenu->addAction (helpManual);
@@ -955,6 +980,8 @@ void MainWindow::initMenuBar()
 	menuBar()->addMenu(navMenu);
 	menuBar()->addMenu(settingsMenu);
 	menuBar()->addMenu(viewMenu);
+	if (mode == modeNormal || mode == modeObserve)
+		menuBar()->addMenu(anMenu);
 	menuBar()->addMenu(helpMenu);
 }
 
@@ -2478,4 +2505,22 @@ void MainWindow_GTP::doResign ()
 		m_game->set_result ("W+R");
 	else
 		m_game->set_result ("B+R");
+}
+
+void MainWindow::update_analysis (analyzer state)
+{
+	mainWidget->evalView->setVisible (state == analyzer::running);
+	anConnect->setEnabled (state == analyzer::disconnected);
+	anDisconnect->setEnabled (state != analyzer::disconnected);
+	anPause->setEnabled (state != analyzer::disconnected);
+
+	if (state == analyzer::disconnected) {
+		anPause->setChecked (false);
+		mainWidget->normalTools->primaryCoords->setText ("");
+		mainWidget->normalTools->primaryWR->setText ("");
+		mainWidget->normalTools->primaryVisits->setText ("");
+		mainWidget->normalTools->shownCoords->setText ("");
+		mainWidget->normalTools->shownWR->setText ("");
+		mainWidget->normalTools->shownVisits->setText ("");
+	}
 }

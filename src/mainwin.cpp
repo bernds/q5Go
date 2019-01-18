@@ -166,7 +166,9 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 		if (s.isNull ())
 			break;
 		m_engines.append (new Engine(s, setting->readEntry("ENGINE" + QString::number(i) + "b"),
-					     setting->readEntry("ENGINE" + QString::number(i) + "c")));
+					     setting->readEntry("ENGINE" + QString::number(i) + "c"),
+					     setting->readEntry("ENGINE" + QString::number(i) + "d"),
+					     setting->readBoolEntry("ENGINE" + QString::number(i) + "e")));
 	}
 	std::sort (hostlist.begin (), hostlist.end (), [] (Host *a, Host *b) { return *a < *b; });
 
@@ -612,6 +614,8 @@ void ClientWindow::saveSettings()
 		setting->writeEntry("ENGINE" + QString::number(i) + "a", h->title());
 		setting->writeEntry("ENGINE" + QString::number(i) + "b", h->path());
 		setting->writeEntry("ENGINE" + QString::number(i) + "c", h->args());
+		setting->writeEntry("ENGINE" + QString::number(i) + "d", h->komi());
+		setting->writeBoolEntry("ENGINE" + QString::number(i) + "e", h->analysis());
 	}
 
 	// save current connection if at least one host exists
@@ -2556,6 +2560,15 @@ void ClientWindow::slotFileOpen(bool)
 	if (fileName.isEmpty())
 		return;
 	open_window_from_file (fileName.toStdString ());
+}
+
+Engine *ClientWindow::analysis_engine ()
+{
+	for (auto e: m_engines) {
+		if (e->analysis ())
+			return e;
+	}
+	return nullptr;
 }
 
 void ClientWindow::slotComputerPlay(bool)

@@ -3,7 +3,8 @@
 #include "svgbuilder.h"
 
 void svg_builder::text_at (double cx, double cy, double sidelen, int len,
-			   const QString &txt, const QString &fill, const QFontInfo &fi)
+			   const QString &txt, const QString &fill, const QFontInfo &fi,
+			   const QString &stroke)
 {
 	int real_len = txt.length ();
 	if (real_len > len)
@@ -12,11 +13,11 @@ void svg_builder::text_at (double cx, double cy, double sidelen, int len,
 	/* A very crude attempt at centering vertically.  */
 	int font_yoff = -font_h * 0.17;
 
-	const QString &family = fi.family() + ",sans-serif";
-
+	const QString family = fi.family() + ",sans-serif";
+	const QString str = stroke.isEmpty () ? "none" : stroke;
 	m_elts += "<text x=\"" + QString::number (cx);
 	m_elts += "\" y=\"" + QString::number (cy + font_h / 2 + font_yoff);
-	m_elts += "\" style=\"stroke:none; font-family:" + family + "; text-anchor: middle; fill: " + fill;
+	m_elts += "\" style=\"stroke:" + str + "; font-family:" + family + "; text-anchor: middle; fill: " + fill;
 	if (fi.bold ())
 		m_elts += "; font-weight:bold";
 	m_elts += "; font-size: " + QString::number (font_h) + "px;\">";
