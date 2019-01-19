@@ -1110,8 +1110,6 @@ void MainWindow::updateCaption (bool modified)
 	s += "   " + QString (PACKAGE " " VERSION);
 	setWindowTitle (s);
 
-	bool simple = rank_w.length () == 0 && rank_b.length () == 0;
-
 	player_w.truncate(12);
 	player_w = tr("W") + ": " + player_w;
 	if (rank_w.length () > 0)
@@ -1123,7 +1121,6 @@ void MainWindow::updateCaption (bool modified)
 	if (rank_b.length () > 0)
 		player_b += " " + rank_b;
 	mainWidget->normalTools->blackLabel->setText(player_b);
-
 }
 
 void MainWindow::slotFileNewBoard (bool)
@@ -2511,7 +2508,6 @@ void MainWindow_GTP::doPass ()
 
 void MainWindow_GTP::doResign ()
 {
-	stone_color col = gfx_board->to_move ();
 	MainWindow::doResign();
 	setGameMode (modeNormal);
 	gfx_board->set_player_colors (true, true);

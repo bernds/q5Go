@@ -1445,7 +1445,6 @@ void Board::play_one_move (int x, int y)
 void Board::play_external_move (int x, int y)
 {
 	game_state *st = m_state;
-	stone_color col = st->to_move ();
 
 	setModified();
 

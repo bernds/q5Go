@@ -42,7 +42,6 @@ Parser::~Parser()
 InfoType Parser::put_line(const QString &txt)
 {
 	QString line = txt.trimmed();
-	int pos;
 
 	if (line.length() == 0)
 	{
@@ -180,7 +179,7 @@ InfoType Parser::put_line(const QString &txt)
 		// special case: channel info
 		cmd_nr = 9;
 	}
-	else if (!ok || memory_str.contains("File") && !line.contains("File"))
+	else if (!ok || (memory_str.contains("File") && !line.contains("File")))
 	{
 		// memory_str == "File": This is a help message!
 		// skip action if entering client mode

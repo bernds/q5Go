@@ -1952,7 +1952,7 @@ void ClientWindow::slot_playerPopup(int i)
 
 			// emulate mouse click
 			QTreeWidgetItemIterator lv(ListView_games);
-			for (QTreeWidgetItem *lvi; lvi = *lv;)
+			for (QTreeWidgetItem *lvi; (lvi = *lv);)
 			{
 				// compare game ids
 				if (lv_popupPlayer->text(3) == lvi->text(0))

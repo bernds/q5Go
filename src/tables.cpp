@@ -215,7 +215,7 @@ void ClientWindow::slot_game(Game* g)
 			lvi_mem->update_game (*g);
 		} else {
 			// from GAMES command or game info{...}
-			GamesTableItem *gti = new GamesTableItem(ListView_games, *g);
+			new GamesTableItem(ListView_games, *g);
 
 			// increase number of games
 			myAccount->num_games++;
@@ -414,7 +414,7 @@ void ClientWindow::slot_player(Player *p, bool cmdplayers)
 		}
 		p->mark = mark;
 		p->sort_rk = rkToKey(p->rank) + p->name.toLower();
-		PlayerTableItem *lv1 = new PlayerTableItem(ListView_players, *p);
+		new PlayerTableItem(ListView_players, *p);
 #if 0
 		lv1->set_nmatchSettings(p);
 #endif
@@ -493,7 +493,6 @@ void ClientWindow::slot_channelinfo(int nr, const QString &txt)
 {
 	qDebug() << "slot_channelinfo(): " << txt;
 	QString tipstring("");
-	Channel *h;
 	Channel *ch = 0;
 
 	// check if entering a channel

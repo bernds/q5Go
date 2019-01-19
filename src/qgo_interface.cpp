@@ -987,7 +987,7 @@ void qGoIF::slot_undo(const QString &player, const QString &move)
 	qWarning("*** board for undo not found!");
 }
 
-void qGoBoard::remote_undo (const QString &move)
+void qGoBoard::remote_undo (const QString &)
 {
 	if (!m_scoring)
 	{
@@ -1046,7 +1046,7 @@ void qGoIF::slot_timeAdded(int time, bool toMe)
 			// use time == -1 to pause the game
 			if (time == -1)
 				qb->set_gamePaused(toMe);
-			else if (toMe && qb->get_myColorIsBlack() || !toMe && !qb->get_myColorIsBlack())
+			else if ((toMe && qb->get_myColorIsBlack()) || (!toMe && !qb->get_myColorIsBlack()))
 				qb->addtime_b(time);
 			else
 				qb->addtime_w(time);
@@ -2119,7 +2119,7 @@ void qGoBoard::slot_ttControls(bool on)
 	if (IamTeacher)
 	{
 		// check whether controls key has been clicked or has been toggled by command
-		if (haveControls && !on || !haveControls && on)
+		if ((haveControls && !on) || (!haveControls && on))
 		{
 			// toggled by command
 		}
@@ -2148,7 +2148,7 @@ void qGoBoard::slot_ttControls(bool on)
 		}
 
 		// check whether controls key has been clicked or has been toggled by command
-		if (!haveControls && !on || haveControls && on)
+		if ((!haveControls && !on) || (haveControls && on))
 			// toggled by command
 			return;
 

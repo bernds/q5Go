@@ -236,7 +236,6 @@ int main(int argc, char **argv)
 
 	bool found_debug = false;
 	bool found_sgf = false;
-	bool found_sgf_file = false;
 	const char *sgf_file;
 
 	// look for arguments
@@ -257,7 +256,6 @@ int main(int argc, char **argv)
 		{
 			// set up board 19x19 immediately
 			found_sgf = true;
-			found_sgf_file = true;
 			sgf_file = "/19/";
 		}
 		else if (argv[ac] == QString("-desktop"))
@@ -269,7 +267,6 @@ int main(int argc, char **argv)
 		{
 			// file name
 			found_sgf = true;
-			found_sgf_file = true;
 			sgf_file = argv[ac];
 		}
 	}
