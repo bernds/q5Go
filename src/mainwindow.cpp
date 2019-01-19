@@ -1580,6 +1580,9 @@ void MainWindow::slotSetGameInfo(bool)
 		m_game->set_place (dlg.placeEdit->text().toStdString ());
 		m_game->set_copyright (dlg.copyrightEdit->text().toStdString ());
 
+		/* The board may call it if it wasn't modified yet, but otherwise
+		   we must call it ourselves to update the information.  */
+		updateCaption (true);
 		mainWidget->update_game_record (m_game);
 		gfx_board->setModified (true);
 	}
