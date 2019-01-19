@@ -1336,6 +1336,8 @@ void ClientWindow::slot_updateFont()
 	MultiLineEdit2->selectAll();
 	MultiLineEdit2->setCurrentFont(setting->fontConsole);
 	MultiLineEdit2->setTextCursor (c);
+	MultiLineEdit2->setCurrentFont(setting->fontConsole);
+
 	MultiLineEdit3->setCurrentFont(setting->fontComments);
 	cb_cmdLine->setFont(setting->fontComments);
 

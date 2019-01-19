@@ -27,10 +27,15 @@ class ImageHandler;
 
 class Setting
 {
+	const QPixmap *m_wood_image {};
+	const QPixmap *m_table_image {};
+	QString settingHomeDir;
+
 public:
 	Setting();
 	~Setting();
 
+	void clearEntry(const QString &s) { writeEntry (s, QString ()); }
 	void writeEntry(const QString&, const QString&);
 	void writeBoolEntry(const QString &s, bool b) { writeEntry(s, (b ? "1" : "0")); }
 	void writeIntEntry(const QString &s, int i) { writeEntry(s, QString::number(i)); }
@@ -55,7 +60,6 @@ public:
 	void loadSettings();
 	void saveSettings();
 	QString fontToString(QFont);
-	void updateFont(QFont&, QString);
 
 	QFont fontStandard, fontMarks, fontComments, fontLists, fontClocks, fontConsole;
 	QString language;
@@ -85,9 +89,7 @@ protected:
 	QMap<QString, QString> params;
 
 private:
-	const QPixmap *m_wood_image {};
-	const QPixmap *m_table_image {};
-	QString settingHomeDir;
+	void updateFont(QFont&, QString);
 };
 
 #endif

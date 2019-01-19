@@ -205,7 +205,7 @@ void Setting::loadSettings()
 
 	file.close();
 
-	// init fonts
+	// Read obsolete font entries first, and then try to replace them with more current ones.
 	updateFont(fontStandard, "FONT_MAIN");
 	updateFont(fontMarks, "FONT_MARK");
 	updateFont(fontComments, "FONT_COMMENT");
@@ -213,23 +213,35 @@ void Setting::loadSettings()
 	updateFont(fontClocks, "FONT_CLOCK");
 	updateFont(fontConsole, "FONT_CONSOLE");
 
+	auto update2 = [=](QFont &f, const char *e) -> void
+		{
+			QString nm = readEntry (e);
+			if (!nm.isEmpty ())
+				f.fromString (nm);
+		};
+	update2 (fontStandard, "FONT_V2_MAIN");
+	update2 (fontMarks, "FONT_V2_MARK");
+	update2 (fontComments, "FONT_V2_COMMENT");
+	update2 (fontLists, "FONT_V2_LIST");
+	update2 (fontClocks, "FONT_V2_CLOCK");
+	update2 (fontConsole, "FONT_V2_CONSOLE");
 	obtain_skin_images ();
 }
 
+/* Used to be used for saving and loading with updateFont.
+   Now used only for display on the font selection buttons.  */
 QString Setting::fontToString(QFont f)
 {
-#ifdef Q_WS_X11_xxx
-	return f.rawName();
-#else
-	return f.family() + "-" +
-		QString::number(f.pointSize()) + "-" +
-		QString::number(f.weight()) + "-" +
-		QString::number(f.italic()) + "-" +
-		QString::number(f.underline()) + "-" +
-		QString::number(f.strikeOut());
-#endif
+	QString nm = f.family ();
+	nm += " " + QString::number (f.pointSize ());
+	if (f.italic ())
+		nm += " italic";
+	if (f.weight () != QFont::Normal)
+		nm += " Weight:" + QString::number (f.weight ());
+	return nm;
 }
 
+/* Function to load legacy settings.  */
 void Setting::updateFont(QFont &font, QString entry)
 {
 	// do font stuff
@@ -272,15 +284,21 @@ void Setting::updateFont(QFont &font, QString entry)
 
 void Setting::saveSettings()
 {
-//	if (readBoolEntry("REM_FONT"))
-//	{
-	// add fonts
-	writeEntry("FONT_MAIN", fontToString(fontStandard));
-	writeEntry("FONT_MARK", fontToString(fontMarks));
-	writeEntry("FONT_COMMENT", fontToString(fontComments));
-	writeEntry("FONT_LIST", fontToString(fontLists));
-	writeEntry("FONT_CLOCK", fontToString(fontClocks));
-	writeEntry("FONT_CONSOLE", fontToString(fontConsole));
+	writeEntry("FONT_V2_MAIN", fontStandard.toString ());
+	writeEntry("FONT_V2_MARK", fontMarks.toString ());
+	writeEntry("FONT_V2_COMMENT", fontComments.toString ());
+	writeEntry("FONT_V2_LIST", fontLists.toString ());
+	writeEntry("FONT_V2_CLOCK", fontClocks.toString ());
+	writeEntry("FONT_V2_CONSOLE", fontConsole.toString ());
+
+#if 0 /* Enable in a later version when users aren't likely to return to v0.2.  */
+	clearEntry ("FONT_MAIN");
+	clearEntry ("FONT_MARK");
+	clearEntry ("FONT_COMMENT");
+	clearEntry ("FONT_LIST");
+	clearEntry ("FONT_CLOCK");
+	clearEntry ("FONT_CONSOLE");
+#endif
 
 	writeIntEntry("VERSION", SETTING_VERSION);
 
