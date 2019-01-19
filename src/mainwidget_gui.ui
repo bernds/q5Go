@@ -2386,16 +2386,6 @@ After placing and/or undo release button for returning to starting point automat
              </item>
             </layout>
            </item>
-           <item row="1" column="0">
-            <widget class="GameTree" name="GameTree1" native="true">
-             <property name="minimumSize">
-              <size>
-               <width>80</width>
-               <height>180</height>
-              </size>
-             </property>
-            </widget>
-           </item>
           </layout>
          </widget>
         </item>
