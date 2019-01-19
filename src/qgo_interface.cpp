@@ -14,6 +14,7 @@
 #include "misc.h"
 #include "config.h"
 #include "mainwin.h"
+#include "ui_helpers.h"
 
 #include <qlabel.h>
 //#include <qmultilineedit.h>

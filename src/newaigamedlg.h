@@ -14,6 +14,7 @@
 #include "ui_newaigamedlg_gui.h"
 
 #include "goboard.h"
+#include "gogame.h"
 
 class Engine;
 

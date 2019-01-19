@@ -21,6 +21,8 @@
 #include "igsconnection.h"
 #include "mainwindow.h"
 #include "newaigamedlg.h"
+#include "ui_helpers.h"
+
 #include <qaction.h>
 #include <qcombobox.h>
 #include <qcheckbox.h>

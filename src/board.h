@@ -21,6 +21,7 @@
 #include "stone.h"
 #include "gatter.h"
 #include "goboard.h"
+#include "gogame.h"
 #include "qgtp.h"
 
 class ImageHandler;

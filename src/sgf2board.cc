@@ -5,8 +5,9 @@
    support for converting text encodings.  */
 #include <QTextCodec>
 
-#include "goboard.h"
 #include "sgf.h"
+#include "goboard.h"
+#include "gogame.h"
 
 static int coord_from_letter (char x)
 {

@@ -30,6 +30,8 @@
 #include "parserdefs.h"
 #include "config.h"
 #include "qgo_interface.h"
+#include "ui_helpers.h"
+
 #include <QAction>
 #include <qmenubar.h>
 #include <qtoolbar.h>

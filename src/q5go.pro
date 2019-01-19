@@ -37,6 +37,7 @@ HEADERS		      = config.h \
 			defines.h \
 			globals.h \
 			goboard.h \
+			gogame.h \
 			helpviewer.h \
 			icons.h \
 			imagehandler.h \
@@ -55,7 +56,8 @@ HEADERS		      = config.h \
                         stone.h \
                         svgbuilder.h \
 			textview.h \
-			tip.h \
+                        tip.h \
+                        ui_helpers.h \
                         gatter.h \
                         misctools.h \
                         miscdialogs.h \
@@ -64,7 +66,8 @@ HEADERS		      = config.h \
 SOURCES		      = gamedialog.cpp \
 			gamestable.cpp \
 			gametree.cpp \
-			goboard.cc \
+                        goboard.cc \
+                        gogame.cc \
 			igsconnection.cpp \
 			main.cpp \
 			mainwin.cpp \

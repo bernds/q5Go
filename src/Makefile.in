@@ -68,16 +68,16 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am__objects_1 = audio.$(OBJEXT) board.$(OBJEXT) goboard.$(OBJEXT) \
-	gamedialog.$(OBJEXT) gamestable.$(OBJEXT) gametree.$(OBJEXT) \
-	gatter.$(OBJEXT) helpviewer.$(OBJEXT) igsconnection.$(OBJEXT) \
-	imagehandler.$(OBJEXT) main.$(OBJEXT) mainwidget.$(OBJEXT) \
-	mainwin.$(OBJEXT) mainwindow.$(OBJEXT) misc.$(OBJEXT) \
-	msg_handler.$(OBJEXT) parser.$(OBJEXT) playertable.$(OBJEXT) \
-	preferences.$(OBJEXT) qgo.$(OBJEXT) qgo_interface.$(OBJEXT) \
-	qgtp.$(OBJEXT) newaigamedlg.$(OBJEXT) setting.$(OBJEXT) \
-	sgfload.$(OBJEXT) sgf2board.$(OBJEXT) stone.$(OBJEXT) \
-	svgbuilder.$(OBJEXT) tables.$(OBJEXT) telnet.$(OBJEXT) \
-	textview.$(OBJEXT) tip.$(OBJEXT)
+	gogame.$(OBJEXT) gamedialog.$(OBJEXT) gamestable.$(OBJEXT) \
+	gametree.$(OBJEXT) gatter.$(OBJEXT) helpviewer.$(OBJEXT) \
+	igsconnection.$(OBJEXT) imagehandler.$(OBJEXT) main.$(OBJEXT) \
+	mainwidget.$(OBJEXT) mainwin.$(OBJEXT) mainwindow.$(OBJEXT) \
+	misc.$(OBJEXT) msg_handler.$(OBJEXT) parser.$(OBJEXT) \
+	playertable.$(OBJEXT) preferences.$(OBJEXT) qgo.$(OBJEXT) \
+	qgo_interface.$(OBJEXT) qgtp.$(OBJEXT) newaigamedlg.$(OBJEXT) \
+	setting.$(OBJEXT) sgfload.$(OBJEXT) sgf2board.$(OBJEXT) \
+	stone.$(OBJEXT) svgbuilder.$(OBJEXT) tables.$(OBJEXT) \
+	telnet.$(OBJEXT) textview.$(OBJEXT) tip.$(OBJEXT)
 am__objects_2 =
 am_q5go_OBJECTS = $(am__objects_1) $(am__objects_2)
 am__objects_3 = audio.moc.$(OBJEXT) bitarray.moc.$(OBJEXT) \
@@ -278,12 +278,12 @@ DISTHEADERS_MOC = audio.h bitarray.h board.h clockview.h gamedialog.h gamestable
 	misctools.h normaltools.h scoretools.h parser.h playertable.h preferences.h qgo.h \
 	qgo_interface.h qgtp.h newaigamedlg.h sizegraphicsview.h tables.h telnet.h textview.h tip.h
 
-DISTHEADERS_NOMOC = goboard.h config.h defines.h gatter.h globals.h gs_globals.h \
+DISTHEADERS_NOMOC = goboard.h config.h defines.h gatter.h globals.h goboard.h gogame.h gs_globals.h \
 	igsinterface.h imagehandler.h komispinbox.h mark.h \
 	misc.h msg_handler.h parserdefs.h setting.h sgf.h sgfparser.h stone.h \
-	svgbuilder.h
+	svgbuilder.h ui_helpers.h
 
-DISTSOURCES = audio.cpp board.cpp goboard.cc gamedialog.cpp \
+DISTSOURCES = audio.cpp board.cpp goboard.cc gogame.cc gamedialog.cpp \
 		gamestable.cpp gametree.cpp gatter.cpp helpviewer.cpp \
 		igsconnection.cpp imagehandler.cpp main.cpp \
 		mainwidget.cpp  mainwin.cpp mainwindow.cpp \
@@ -409,6 +409,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gametree.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gatter.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/goboard.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gogame.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/helpviewer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/helpviewer.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/icons.moc.Po@am__quote@

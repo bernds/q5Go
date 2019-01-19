@@ -9,27 +9,20 @@
 #include <QFileDialog>
 
 #include "config.h"
+#include "sgf.h"
 #include "mainwin.h"
 #include "msg_handler.h"
 #include "setting.h"
 #include "miscdialogs.h"
-#include "sgf.h"
+#include "ui_helpers.h"
 
 #include <fstream>
 #include <qtranslator.h>
 #include <qtextcodec.h>
-#include <qwidget.h>
 #include <qapplication.h>
 #include <qdialog.h>
-#include <qpushbutton.h>
 #include <qmessagebox.h>
 #include <qdir.h>
-#include <qcheckbox.h>
-#include <qstring.h>
-#include <qobject.h>
-
-#include <qaction.h>
-#include <qstyle.h>
 
 qGo *qgo;
 
