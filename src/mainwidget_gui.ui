@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>635</width>
-    <height>672</height>
+    <height>654</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -1512,8 +1512,8 @@ Indicates whether it is black's or white's turn.</string>
           </property>
           <property name="icon">
            <iconset resource="q4go.qrc">
-            <normaloff>:/images/node_black.xpm</normaloff>
-            <normalon>:/images/node_white.xpm</normalon>:/images/node_black.xpm</iconset>
+            <normaloff>:/images/stone_b16.png</normaloff>
+            <normalon>:/images/stone_w16.png</normalon>:/images/stone_b16.png</iconset>
           </property>
           <property name="checkable">
            <bool>true</bool>

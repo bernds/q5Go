@@ -1859,8 +1859,8 @@ If the picture is not set, or unvalid, a default goban is used by qgo</string>
               </property>
               <property name="icon">
                <iconset resource="q4go.qrc">
-                <normaloff>:/NewAIGameDlgGui/images/newaigamedlg/image1.png</normaloff>
-                <normalon>:/NewAIGameDlgGui/images/newaigamedlg/image2.png</normalon>:/NewAIGameDlgGui/images/newaigamedlg/image1.png</iconset>
+                <normaloff>:/images/stone_b16.png</normaloff>
+                <normalon>:/images/stone_w16.png</normalon>:/images/stone_b16.png</iconset>
               </property>
               <property name="checkable">
                <bool>true</bool>

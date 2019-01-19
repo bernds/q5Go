@@ -37,8 +37,6 @@
 #define ICON_MANUAL "./pics/help.xpm"
 #define ICON_HOME "./pics/gohome.xpm"
 #define ICON_APPICON "./pics/Bowl.xpm"
-#define ICON_NODE_BLACK "./pics/node_black.xpm"
-#define ICON_NODE_WHITE "./pics/node_white.xpm"
 #define ICON_NAV_INTERSECTION "./pics/navIntersection.xpm"
 #define ICON_COORDS "./pics/coords.xpm"
 #define ICON_SOUND_ON "./pics/sound_on.xpm"

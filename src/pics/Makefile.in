@@ -221,7 +221,6 @@ noinst_DATA = 1leftarrow.png 1leftarrow.xpm 1leftcomment.png \
 		filesaveas.xpm	filesave.png filesave.xpm help.png help.xpm	idea.png idea.xpm \
 		navIntersection.png	navIntersection.xpm newboard.png \
 		newboard.xpm new_bottom.xpm	new_down.xpm new_start.xpm new_top.xpm new_up.xpm \
-		node_black.png	node_black.xpm node_white.png node_white.xpm \
 		openterm.png	openterm.xpm package_settings.png \
 		package_settings.xpm	player_pause.png player_pause.xpm qgo.ico qgo.png qgo.xpm \
 		start.png \

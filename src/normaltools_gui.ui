@@ -36,11 +36,38 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QLabel" name="whiteLabel">
-     <property name="text">
-      <string>White</string>
-     </property>
-    </widget>
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <item>
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap resource="q4go.qrc">:/images/stone_w16.png</pixmap>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="whiteLabel">
+       <property name="text">
+        <string>White</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
    </item>
    <item>
     <widget class="ClockView" name="wtimeView">
@@ -123,11 +150,38 @@
     </widget>
    </item>
    <item>
-    <widget class="QLabel" name="blackLabel">
-     <property name="text">
-      <string>Black</string>
-     </property>
-    </widget>
+    <layout class="QHBoxLayout" name="horizontalLayout_5">
+     <item>
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap resource="q4go.qrc">:/images/stone_b16.png</pixmap>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="blackLabel">
+       <property name="text">
+        <string>Black</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
    </item>
    <item>
     <widget class="ClockView" name="btimeView">
@@ -249,27 +303,6 @@ Number of stones placed by black as his first move.</string>
        </item>
       </layout>
      </item>
-     <item row="2" column="1">
-      <widget class="QLabel" name="TextLabel_free">
-       <property name="toolTip">
-        <string>free/rated game</string>
-       </property>
-       <property name="whatsThis">
-        <string>free game:
-
-use &quot;free&quot; command to make game rated or unrated (free)</string>
-       </property>
-       <property name="text">
-        <string>free</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-       </property>
-       <property name="wordWrap">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="1">
       <layout class="QHBoxLayout">
        <item>
@@ -376,6 +409,27 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
        </property>
       </spacer>
      </item>
+     <item row="1" column="2">
+      <widget class="QLabel" name="TextLabel_free">
+       <property name="toolTip">
+        <string>free/rated game</string>
+       </property>
+       <property name="whatsThis">
+        <string>free game:
+
+use &quot;free&quot; command to make game rated or unrated (free)</string>
+       </property>
+       <property name="text">
+        <string>free</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+       </property>
+       <property name="wordWrap">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>
@@ -386,10 +440,7 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="anGroup">
-     <property name="title">
-      <string>Analysis</string>
-     </property>
+    <widget class="QFrame" name="anGroup">
      <layout class="QVBoxLayout" name="verticalLayout">
       <property name="spacing">
        <number>0</number>
@@ -406,6 +457,13 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
       <property name="bottomMargin">
        <number>0</number>
       </property>
+      <item>
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>Analysis</string>
+        </property>
+       </widget>
+      </item>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <property name="topMargin">

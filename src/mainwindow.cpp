@@ -1113,13 +1113,11 @@ void MainWindow::updateCaption (bool modified)
 	setWindowTitle (s);
 
 	player_w.truncate(12);
-	player_w = tr("W") + ": " + player_w;
 	if (rank_w.length () > 0)
 		player_w += " " + rank_w;
 	mainWidget->normalTools->whiteLabel->setText(player_w);
 
 	player_b.truncate(12);
-	player_b = tr("B") + ": " + player_b;
 	if (rank_b.length () > 0)
 		player_b += " " + rank_b;
 	mainWidget->normalTools->blackLabel->setText(player_b);

@@ -33,8 +33,8 @@
     <file>images/help/gohome.png</file>
   </qresource>
   <qresource prefix="/">
-    <file>images/node_black.xpm</file>
-    <file>images/node_white.xpm</file>
+    <file>images/stone_b16.png</file>
+    <file>images/stone_w16.png</file>
     <file>images/power-standby.png</file>
     <file>images/power-on.png</file>
     <file>images/exit.png</file>
@@ -53,8 +53,6 @@
   </qresource>
   <qresource prefix="/NewAIGameDlgGui">
     <file>images/newaigamedlg/image0.png</file>
-    <file>images/newaigamedlg/image1.png</file>
-    <file>images/newaigamedlg/image2.png</file>
   </qresource>
   <qresource prefix="/TalkGui">
     <file>images/talk/image0.png</file>
