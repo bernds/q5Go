@@ -1112,15 +1112,21 @@ void MainWindow::updateCaption (bool modified)
 	s += "   " + QString (PACKAGE " " VERSION);
 	setWindowTitle (s);
 
-	player_w.truncate(12);
-	if (rank_w.length () > 0)
+	rank_w.truncate (5);
+	int rwlen = rank_w.length ();
+	player_w.truncate(15 - rwlen);
+	if (rwlen > 0)
 		player_w += " " + rank_w;
 	mainWidget->normalTools->whiteLabel->setText(player_w);
+	mainWidget->scoreTools->whiteLabel->setText(player_w);
 
-	player_b.truncate(12);
-	if (rank_b.length () > 0)
+	rank_b.truncate (5);
+	int rblen = rank_b.length ();
+	player_b.truncate(15 - rblen);
+	if (rblen > 0)
 		player_b += " " + rank_b;
 	mainWidget->normalTools->blackLabel->setText(player_b);
+	mainWidget->scoreTools->blackLabel->setText(player_b);
 }
 
 void MainWindow::slotFileNewBoard (bool)
