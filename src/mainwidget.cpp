@@ -129,8 +129,8 @@ void MainWidget::update_game_record (std::shared_ptr<game_record> gr)
 
 void MainWidget::init_game_record (std::shared_ptr<game_record> gr)
 {
-	gfx_board->reset_game (gr);
 	update_game_record (gr);
+	gfx_board->reset_game (gr);
 }
 
 /*
@@ -220,16 +220,12 @@ void MainWidget::doRealScore (bool toggle)
 
 		setToolsTabWidget(tabTeachGameTree, tabDisable);
 
-		normalTools->hide();
-		scoreTools->show();
 		m_mainwin->setGameMode (modeScore);
 	}
 	else
 	{
 		setToolsTabWidget(tabTeachGameTree, tabEnable);
 
-		scoreTools->hide();
-		normalTools->show();
 		m_mainwin->setGameMode (m_remember_mode);
 		setToolsTabWidget(static_cast<tabType>(m_remember_tab));
 	}
@@ -317,6 +313,9 @@ void MainWidget::setGameMode(GameMode mode)
 
 	gfx_board->setMode (mode);
 
+	scoreTools->setVisible (mode == modeScore || mode == modeScoreRemote);
+	normalTools->setVisible (mode != modeScore && mode != modeScoreRemote);
+
 	if (mode == modeMatch || mode == modeTeach) {
 		qDebug () << gfx_board->player_is (white) << " : " << gfx_board->player_is (black);
 		QWidget *timeSelf = gfx_board->player_is (black) ? normalTools->btimeView : normalTools->wtimeView;
@@ -400,14 +399,17 @@ void MainWidget::setMoveData(const game_state &gs, const go_board &b, GameMode m
 
 	bool is_root_node = gs.root_node_p ();
 	bool good_mode = mode == modeNormal || mode == modeObserve;
-	goPrevButton->setEnabled(good_mode && !is_root_node);
-	goNextButton->setEnabled(good_mode && sons > 0);
-	goFirstButton->setEnabled(good_mode && !is_root_node);
-	goLastButton->setEnabled(good_mode && sons > 0);
-	prevCommentButton->setEnabled(good_mode && !is_root_node);
-	nextCommentButton->setEnabled(good_mode && sons > 0);
-	prevNumberButton->setEnabled(good_mode && !is_root_node);
-	nextNumberButton->setEnabled(good_mode && sons > 0);
+	goPrevButton->setEnabled (good_mode && !is_root_node);
+	goNextButton->setEnabled (good_mode && sons > 0);
+	goFirstButton->setEnabled (good_mode && !is_root_node);
+	goLastButton->setEnabled (good_mode && sons > 0);
+	prevCommentButton->setEnabled (good_mode && !is_root_node);
+	nextCommentButton->setEnabled (good_mode && sons > 0);
+	prevNumberButton->setEnabled (good_mode && !is_root_node);
+	nextNumberButton->setEnabled (good_mode && sons > 0);
+
+	scoreTools->setVisible (mode == modeScore || mode == modeScoreRemote || gs.was_score_p ());
+	normalTools->setVisible (mode != modeScore && mode != modeScoreRemote && !gs.was_score_p ());
 
 	// Update slider
 	toggleSliderSignal (false);
@@ -419,7 +421,7 @@ void MainWidget::setMoveData(const game_state &gs, const go_board &b, GameMode m
 }
 
 
-void MainWidget::recalc_scores(const go_board &b, GameMode m)
+void MainWidget::recalc_scores(const go_board &b)
 {
 	int caps_b, caps_w, score_b, score_w;
 	b.get_scores (caps_b, caps_w, score_b, score_w);
@@ -429,21 +431,18 @@ void MainWidget::recalc_scores(const go_board &b, GameMode m)
 	normalTools->capturesWhite->setText(QString::number(caps_w));
 	normalTools->capturesBlack->setText(QString::number(caps_b));
 
-	if (m == modeScore)
-	{
-		scoreTools->terrWhite->setText(QString::number(score_w));
-		scoreTools->totalWhite->setText(QString::number(score_w + caps_w + m_game->komi ()));
-		scoreTools->terrBlack->setText(QString::number(score_b));
-		scoreTools->totalBlack->setText(QString::number(score_b + caps_b));
+	scoreTools->terrWhite->setText(QString::number(score_w));
+	scoreTools->totalWhite->setText(QString::number(score_w + caps_w + m_game->komi ()));
+	scoreTools->terrBlack->setText(QString::number(score_b));
+	scoreTools->totalBlack->setText(QString::number(score_b + caps_b));
 
-		double res = score_w + caps_w + m_game->komi () - score_b - caps_b;
-		if (res < 0)
-			scoreTools->result->setText ("B+" + QString::number (-res));
-		else if (res == 0)
-			scoreTools->result->setText ("Jigo");
-		else
-			scoreTools->result->setText ("W+" + QString::number (res));
-	}
+	double res = score_w + caps_w + m_game->komi () - score_b - caps_b;
+	if (res < 0)
+		scoreTools->result->setText ("B+" + QString::number (-res));
+	else if (res == 0)
+		scoreTools->result->setText ("Jigo");
+	else
+		scoreTools->result->setText ("W+" + QString::number (res));
 }
 
 void MainWidget::setSliderMax(int n)

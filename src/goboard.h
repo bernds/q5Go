@@ -266,6 +266,7 @@ public:
 		score_b = m_score_b;
 		score_w = m_score_w;
 	}
+	void territory_from_markers ();
 	void append_marks_sgf (std::string &) const;
 
 private:

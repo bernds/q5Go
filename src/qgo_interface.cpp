@@ -1120,6 +1120,7 @@ void qGoBoard::receive_score_begin ()
 void qGoBoard::receive_score_end ()
 {
 	game_state *st = m_state;
+	m_scoring_board->territory_from_markers ();
 	game_state *st_new = st->add_child_edit (*m_scoring_board, m_state->to_move (), true);
 	st->transfer_observers (st_new);
 	delete m_scoring_board;

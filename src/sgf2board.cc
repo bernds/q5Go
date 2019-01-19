@@ -192,6 +192,8 @@ static void add_to_game_state (game_state *gs, sgf::node *n, bool force, QTextCo
 		if (is_move == im::no || (is_move == im::unknown && terr)) {
 			/* @@@ fix up to_move.  */
 			new_board.identify_units ();
+			if (terr)
+				new_board.territory_from_markers ();
 			gs = gs->add_child_edit (new_board, to_move, terr, false);
 		} else if (is_pass) {
 			gs = gs->add_child_pass (new_board, false);

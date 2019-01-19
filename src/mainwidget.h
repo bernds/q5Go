@@ -37,7 +37,7 @@ public:
 	void update_game_record (std::shared_ptr<game_record>);
 	void init_game_record (std::shared_ptr<game_record>);
 	void setMoveData(const game_state &, const go_board &, GameMode);
-	void recalc_scores (const go_board &, GameMode);
+	void recalc_scores (const go_board &);
 
 	void grey_eval_bar ();
 	void set_eval (double);

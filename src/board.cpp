@@ -1007,7 +1007,7 @@ void Board::sync_appearance (bool board_only)
 
 	updateCanvas();
 
-	m_main_widget->recalc_scores (b, m_game_mode);
+	m_main_widget->recalc_scores (b);
 	if (!board_only)
 		m_board_win->setMoveData (*m_state, b, m_game_mode);
 	delete[] count_map;

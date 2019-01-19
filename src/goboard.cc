@@ -197,6 +197,24 @@ void go_board::toggle_seki (int x, int y)
 		}
 }
 
+/* Called when loading an SGF and encountering a position with territory markers.
+   Update our captures and territory so that the correct result can be shown.  */
+void go_board::territory_from_markers ()
+{
+	for (int i = 0; i < m_sz * m_sz; i++) {
+		if (m_marks[i] == mark::terr) {
+			if (m_stones_w->test_bit (i))
+				m_caps_b++;
+			else if (m_stones_b->test_bit (i))
+				m_caps_w++;
+			if (m_mark_extra[i] == 0)
+				m_score_w++;
+			else
+				m_score_b++;
+		}
+	}
+}
+
 /* Expand FILL until it reaches the borders made up by W_STONES and B_STONES.
    Store into the neighbours variables whether the border we touch contains
    white or black stones.  */
