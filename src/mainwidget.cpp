@@ -155,15 +155,6 @@ void MainWidget::slot_toolsTabChanged(int idx)
 		m_mainwin->setGameMode (modeNormal);
 		break;
 
-		// edit tools
-	case tabEdit:
-		// set color of next move
-		colorButton->setChecked (b->m_state->to_move () == white);
-
-		b->setMode (modeEdit);
-		m_mainwin->setGameMode (modeEdit);
-		break;
-
 		// teach tools + game tree
 	case tabTeachGameTree:
 		break;
@@ -190,7 +181,6 @@ void MainWidget::setToolsTabWidget(enum tabType p, enum tabState s)
 
 		default:
 			return;
-			break;
 	}
 
 	if (s == tabSet)
@@ -228,7 +218,6 @@ void MainWidget::doRealScore (bool toggle)
 		m_remember_mode = gfx_board->getGameMode();
 		m_remember_tab = toolsTabWidget->currentIndex();
 
-		setToolsTabWidget(tabEdit, tabDisable);
 		setToolsTabWidget(tabTeachGameTree, tabDisable);
 
 		normalTools->hide();
@@ -237,7 +226,6 @@ void MainWidget::doRealScore (bool toggle)
 	}
 	else
 	{
-		setToolsTabWidget(tabEdit, tabEnable);
 		setToolsTabWidget(tabTeachGameTree, tabEnable);
 
 		scoreTools->hide();
@@ -306,7 +294,6 @@ void MainWidget::updateFont ()
 
 void MainWidget::setGameMode(GameMode mode)
 {
-	setToolsTabWidget (tabEdit, mode == modeNormal || mode == modeEdit ? tabEnable : tabDisable);
 	setToolsTabWidget(tabTeachGameTree, mode == modeTeach ? tabEnable : tabDisable);
 
 	passButton->setVisible (mode != modeObserve);
