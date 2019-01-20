@@ -264,7 +264,8 @@ void ImageHandler::paint_stone_new (QImage &wi, int d, const QColor &col, double
 				double intensity = shade_point (norm_x, norm_y, v2, spec, hard, m_ambient);
 				max_int = std::max (intensity, max_int);
 				intense[k] = intensity;
-			}
+			} else
+				intense[k] = 0;
 			k++;
 		}
 
