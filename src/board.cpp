@@ -207,9 +207,9 @@ void Board::resizeBoard (int w, int h)
 	imageHandler->rescale (square_size);
 
 	// Redraw the board
-	drawBackground ();
-	drawGatter ();
-	drawCoordinates ();
+	draw_background ();
+	draw_grid ();
+	draw_coordinates ();
 	updateCovers ();
 
 	sync_appearance ();
@@ -230,7 +230,7 @@ void Board::resizeEvent(QResizeEvent*)
 #endif
 }
 
-void Board::drawBackground()
+void Board::draw_background()
 {
 	int w = (int)canvas->width();
 	int h = (int)canvas->height();
@@ -305,12 +305,12 @@ void Board::drawBackground()
 	canvas->setBackgroundBrush(QBrush(image));
 }
 
-void Board::drawGatter()
+void Board::draw_grid()
 {
 	gatter->resize(offsetX,offsetY,square_size);
 }
 
-void Board::drawCoordinates()
+void Board::draw_coordinates()
 {
 	QGraphicsSimpleTextItem *coord;
 	int i;
@@ -1760,9 +1760,9 @@ void Board::reset_game (std::shared_ptr<game_record> gr)
 	imageHandler->rescale(square_size);
 
 	// Redraw the board
-	drawBackground();
-	drawGatter();
-	drawCoordinates();
+	draw_background();
+	draw_grid();
+	draw_coordinates();
 
 	start_observing (root);
 
@@ -1803,7 +1803,7 @@ void Board::setShowSGFCoords(bool b)
 		return;
 	clearCoords ();
 	setupCoords ();
-	drawCoordinates ();
+	draw_coordinates ();
 }
 
 void Board::set_vardisplay (bool children, int type)

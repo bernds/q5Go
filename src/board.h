@@ -84,7 +84,7 @@ class Board : public QGraphicsView, public game_state::observer, public Gtp_Cont
 
 	GTP_Process *m_analyzer {};
 
-	void observed_changed ();
+	void observed_changed () override;
 	void sync_appearance (bool board_only = true);
 	void play_one_move (int x, int y);
 	void setup_analyzer_position ();
@@ -178,9 +178,9 @@ public:
 	void update_images () {	imageHandler->rescale (square_size); sync_appearance (); }
 
 	/* Virtuals from Gtp_Controller.  */
-	virtual void gtp_played_move (int, int) { /* Should not happen.  */ }
-	virtual void gtp_played_resign () { /* Should not happen.  */ }
-	virtual void gtp_played_pass () { /* Should not happen.  */ }
+	virtual void gtp_played_move (int, int) override { /* Should not happen.  */ }
+	virtual void gtp_played_resign () override { /* Should not happen.  */ }
+	virtual void gtp_played_pass () override { /* Should not happen.  */ }
 	virtual void gtp_startup_success () override;
 	virtual void gtp_exited () override;
 	virtual void gtp_failure (const QString &) override;
@@ -195,10 +195,10 @@ signals:
 
 protected:
 		void calculateSize();
-		void drawBackground();
-		void drawGatter();
-		void drawCoordinates();
-		void drawStarPoint(int x, int y);
+		void draw_background();
+		void draw_grid();
+		void draw_coordinates();
+
 		void resizeBoard(int w, int h);
 		int convertCoordsToPoint(int c, int o);
 		void updateRectSel(int, int);

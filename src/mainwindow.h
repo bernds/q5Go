@@ -225,17 +225,17 @@ public:
 
 	/* Virtuals from MainWindow.  */
 	virtual void player_move (stone_color, int x, int y) override;
-	virtual void doPass();
+	virtual void doPass() override;
 	// virtual void doUndo();
-	virtual void doResign();
+	virtual void doResign() override;
 
 	/* Virtuals from Gtp_Controller.  */
-	virtual void gtp_played_move (int x, int y);
-	virtual void gtp_played_resign ();
-	virtual void gtp_played_pass ();
-	virtual void gtp_startup_success ();
-	virtual void gtp_exited ();
-	virtual void gtp_failure (const QString &);
+	virtual void gtp_played_move (int x, int y) override;
+	virtual void gtp_played_resign () override;
+	virtual void gtp_played_pass () override;
+	virtual void gtp_startup_success () override;
+	virtual void gtp_exited () override;
+	virtual void gtp_failure (const QString &) override;
 };
 
 extern std::list<MainWindow *> main_window_list;
