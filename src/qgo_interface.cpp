@@ -1871,7 +1871,7 @@ void qGoBoard::game_result (const QString &rs, const QString &extended_rs)
 	disconnected (true);
 
 	if (prev_mode != modeObserve)
-		QMessageBox::information(win, tr("Game n° ") + QString::number(id), extended_rs);
+		QMessageBox::information(win, tr("Game #") + QString::number(id), extended_rs);
 
 	qDebug() << "Result: " << rs;
 }

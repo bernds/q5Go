@@ -26,7 +26,7 @@
 /*
 * Set available languages here. The Codes have to be in the same order as the language names
 */
-#define NUMBER_OF_AVAILABLE_LANGUAGES 14
+#define NUMBER_OF_AVAILABLE_LANGUAGES 15
 #define AVAILABLE_LANGUAGES { \
 	"Chinese", \
 	"Chinese (simplified)", \
@@ -35,15 +35,15 @@
 	"Deutsch", \
 	"English", \
 	"Espanol",\
-	"Français", \
+	u8"Fran\u00e7ais", \
 	"Italiano", \
 	"Latin (!)", \
 	"Nederlands", \
 	"Polish", \
 	"Portuges", \
 	"Russian", \
-	"Türkçe"}
-	
+	u8"T\u00fcrk\u00e7e"}
+
 #define LANGUAGE_CODES { \
 	"zh", \
 	"zh_cn", \
