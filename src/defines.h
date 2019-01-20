@@ -66,7 +66,6 @@
 * Enum definitions
 */
 enum GameMode { modeNormal, modeEdit, modeScore, modeScoreRemote, modeObserve, modeMatch, modeTeach, modeComputer };
-enum Codec { codecNone, codecBig5, codecEucJP, codecJIS, codecSJIS, codecEucKr, codecGBK, codecTscii };
 enum assessType { noREQ, FREE, RATED, TEACHING };
 enum tabType {tabNormalScore=0, tabTeachGameTree };
 enum tabState {tabSet, tabEnable, tabDisable };
