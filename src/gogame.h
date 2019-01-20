@@ -1,6 +1,39 @@
 #ifndef GOGAME_H
 #define GOGAME_H
 
+class visual_tree
+{
+	/* The dimensions of the box that holds this (sub)tree.  */
+	int m_w, m_h;
+	/* The offset from the parent's box.  */
+	int m_off_y = 0;
+	/* The graphical representation, as bits indicating nodes.  */
+	std::vector<bit_array> m_rep;
+public:
+	visual_tree (bool collapsed = false)
+		: m_w (collapsed ? 2 : 1), m_h (1)
+	{
+		m_rep.push_back (bit_array (m_w));
+		m_rep[0].set_bit (0);
+		if (m_w == 2)
+			m_rep[0].set_bit (1);
+	}
+	visual_tree (visual_tree &main_var, int max_child_width);
+	void add_variation (visual_tree &other);
+	int width () const
+	{
+		return m_w;
+	}
+	int height () const
+	{
+		return m_h;
+	}
+	int y_offset () const
+	{
+		return m_off_y;
+	}
+};
+
 class game_state
 {
 public:
@@ -25,6 +58,14 @@ private:
 
 	sgf::node::proplist m_unrecognized_props;
 
+	/* Default initialized to a one-node tree, which is up-to-date when initialized without children.  */
+	visual_tree m_visualized;
+	/* The visualization is up-to-date iff both this variable is true, and none of the children
+	   require updates.  */
+	bool m_visual_ok = true;
+	/* True if we should not be showing child nodes.  Always false if no children exist.  */
+	bool m_visual_collapse = false;
+
 	/* A slight violation of abstractions; this is not really a property of the game, but
 	   something handled by the user interface.  But the alternative is keeping some kind of
 	   map of game states in the board window and making sure it gets updated whenever we delete
@@ -41,8 +82,12 @@ private:
 	{
 	}
 
-	game_state (const go_board &b, int move, game_state *parent, stone_color to_move, int x, int y, stone_color move_col, const sgf::node::proplist &unrecognized)
-		: m_board (b), m_move_number (move), m_parent (parent), m_to_move (to_move), m_move_x (x), m_move_y (y), m_move_color (move_col), m_unrecognized_props (unrecognized)
+	game_state (const go_board &b, int move, game_state *parent,
+		    stone_color to_move, int x, int y, stone_color move_col,
+		    const sgf::node::proplist &unrecognized, const visual_tree &vt, bool vtok)
+		: m_board (b), m_move_number (move), m_parent (parent),
+		m_to_move (to_move), m_move_x (x), m_move_y (y), m_move_color (move_col),
+		m_unrecognized_props (unrecognized), m_visualized (vt), m_visual_ok (vtok)
 	{
 	}
 
@@ -95,7 +140,8 @@ public:
 	/* Deep copy.  Don't copy observers.  */
 	game_state (const game_state &other, game_state *parent)
 		: game_state (other.m_board, other.m_move_number, parent, other.m_to_move,
-			      other.m_move_x, other.m_move_y, other.m_move_color, other.m_unrecognized_props)
+			      other.m_move_x, other.m_move_y, other.m_move_color, other.m_unrecognized_props,
+			      other.m_visualized, other.m_visual_ok)
 	{
 		for (auto c: other.m_children) {
 			game_state *new_c = new game_state (*c, this);
@@ -122,6 +168,10 @@ public:
 			}
 			if (i == m_parent->m_active && i > 0)
 				m_parent->m_active--;
+
+			m_parent->m_visual_ok = false;
+			if (m_parent->m_children.size () == 0)
+				m_parent->m_visual_collapse = false;
 #if 0
 			if (i == n && last != this)
 				throw std::logic_error ("delete node not found among parent's children");
@@ -209,12 +259,30 @@ public:
 		}
 		m_observers.clear ();
 	}
+	void make_active ()
+	{
+		game_state *p = m_parent;
+		game_state *prev = this;
+		while (p != nullptr) {
+			size_t n = p->m_children.size ();
+			for (size_t i = 0; i < n; i++) {
+				game_state *v = p->m_children[i];
+				if (v == prev) {
+					p->m_active = i;
+					break;
+				}
+			}
+			prev = p;
+			p = p->m_parent;
+		}
+	}
 
 	game_state *add_child_edit (const go_board &new_board, stone_color to_move, bool scored = false, bool set_active = true)
 	{
 		for (auto &it: m_children)
 			if (it->m_board == new_board && it->m_to_move == to_move)
 				return it;
+		m_visual_ok = false;
 		int code = scored ? -3 : -2;
 		game_state *tmp = new game_state (new_board, m_move_number + 1, this, to_move, code, code, none);
 		m_children.push_back (tmp);
@@ -228,6 +296,7 @@ public:
 		for (auto &it: m_children)
 			if (it->m_board == new_board && it->m_to_move == next_to_move)
 				return it;
+		m_visual_ok = false;
 		game_state *tmp = new game_state (new_board, m_move_number + 1, this, next_to_move, x, y, to_move);
 		m_children.push_back (tmp);
 		if (set_active)
@@ -238,6 +307,8 @@ public:
 	{
 		if (!valid_move_p (x, y, to_move))
 			return nullptr;
+
+		m_visual_ok = false;
 
 		go_board new_board = m_board;
 		new_board.clear_marks ();
@@ -258,6 +329,7 @@ public:
 		for (auto &it: m_children)
 			if (it->m_board == new_board && it->was_pass_p ())
 				return it;
+		m_visual_ok = false;
 		game_state *tmp = new game_state (new_board, m_move_number + 1, this, m_to_move == black ? white : black);
 		tmp->m_move_color = m_to_move;
 		m_children.push_back (tmp);
@@ -407,6 +479,37 @@ public:
 	{
 		return m_start_count;
 	}
+
+	/* Return true if a change was made.  */
+	bool update_visualization ();
+	typedef std::function<void (game_state *, int cx, int cy, stone_color)> draw_circle;
+	typedef std::function<void (game_state *, int cx, int cy, bool)> draw_special;
+	typedef std::function<void (int, int, int, int, bool)> draw_line;
+	typedef std::function<void (int, int)> add_point;
+	void render_visualization (int, int, int,
+				   const draw_circle &, const draw_special &, const draw_line &);
+	void render_active_trace (int, int, int, const add_point &, const draw_line &);
+	bool locate_visual (int, int, const game_state *active, int &, int &);
+	const visual_tree &visualization ()
+	{
+		return m_visualized;
+	}
+	void toggle_vis_collapse ()
+	{
+		if (m_children.size () == 0)
+			return;
+
+		m_visual_collapse = !m_visual_collapse;
+		m_visual_ok = false;
+	}
+	bool vis_collapsed ()
+	{
+		return m_visual_collapse;
+	}
+	/* Expand this node, but keep its children collapsed.
+	   Does nothing if already expanded, and returns false iff that is
+	   the case.  */
+	bool vis_expand_one ();
 };
 
 class sgf;

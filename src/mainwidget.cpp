@@ -18,6 +18,7 @@
 ClockView::ClockView (QWidget *parent)
 	: QGraphicsView (parent)
 {
+	setFocusPolicy (Qt::NoFocus);
 	QFontMetrics m (setting->fontClocks);
 	int w = width ();
 	int h = m.height ();

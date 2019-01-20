@@ -3,6 +3,15 @@
 
 #include "goboard.h"
 
+void bit_array::debug () const
+{
+	for (unsigned bit = 0; bit < m_n_bits; bit++) {
+		uint64_t val = m_bits[bit / 64];
+		printf ("%d", (int)((val >> (bit % 64)) & 1));
+	}
+	putchar ('\n');
+}
+
 /* Keep some precomputed bit arrays, one for each board size, which
    have the left and right columns masked out.  These can be used in
    shift-and-and operations to find neighbours.  */
@@ -33,6 +42,48 @@ static const bit_array &get_boardmask_right (int n)
 	right_masks.insert (std::pair<int,bit_array> (n, a));
 	it = right_masks.find (n);
 	return it->second;
+}
+
+bool bit_array::intersect_p (const bit_array &other, int shift) const
+{
+	shift = -shift;
+
+	// int sgn = shift / std::abs (shift);
+
+	/* Examples:
+	   shift -3: right shift by 3.
+	   Dest word 0 receives [word1:0-3 :: word0:3-64]
+	   shift 3:  left shift by 3.
+	   Dest word 0 receives [word0:0-61 :: 000 ]
+	   Dest word 1 receives [word1:0-61 :: word0:62-64 ]
+	   shift 64: left shift by 64.
+	   Dest word 0 receives 64 bits from src word -1.  */
+
+	shift += other.m_n_elts * 64;
+	int wordshift = (shift + 63) / 64 - other.m_n_elts - 1;
+	int bitshift = shift % 64;
+
+	uint64_t last = 0;
+	if (wordshift >= 0 && wordshift < other.m_n_elts)
+		last = other.m_bits[wordshift];
+	for (int i = 0; i < m_n_elts; i++) {
+		wordshift++;
+		uint64_t curr = 0;
+		if (wordshift >= 0 && wordshift < other.m_n_elts)
+			curr = other.m_bits[wordshift];
+		uint64_t val = m_bits[i];
+		if (bitshift != 0) {
+			uint64_t andval = curr << (64 - bitshift);
+			andval |= last >> bitshift;
+			val &= andval;
+		} else {
+			val &= curr;
+		}
+		if (val != 0)
+			return true;
+		last = curr;
+	}
+	return false;
 }
 
 /* Extend a bit mask in all directions.  */

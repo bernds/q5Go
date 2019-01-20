@@ -4,15 +4,235 @@
 
 #include "config.h"
 #include "setting.h"
+#include "goboard.h"
+#include "gogame.h"
 #include "gametree.h"
 #include "globals.h"
-#include "imagehandler.h"
+#include "svgbuilder.h"
 
-GameTree::GameTree(QWidget *parent, const char *name, QGraphicsScene* c)
-  : QGraphicsView(c, parent)
+static QByteArray box_svg =
+	"<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"
+	"<svg width=\"160\" height=\"160\">"
+	"  <path"
+	"     style=\"fill:#a89e97;fill-rule:evenodd;stroke:none\""
+	"     d=\"M 80,50 160,25 80,0 0,25 Z\" />"
+	"  <path"
+	"     style=\"fill:#917c6f;fill-rule:evenodd;stroke:none\""
+	"     d=\"M 80,150 160,125 160,25 80,50 Z\" />"
+	"  <path"
+	"     style=\"fill:#483e37;fill-rule:evenodd;stroke:none\""
+	"     d=\"M 80,50 80,150 0,125 0,25 Z\" />"
+	"  <path"
+	"     style=\"fill:#FFFF00;fill-rule:evenodd;stroke:none\""
+	"     d=\"M 35.2,14 44.8,11 124.8,36 115.2,35 Z\" />"
+	"</svg>";
+
+class ClickablePixmap : public QGraphicsPixmapItem
 {
+	GameTree *m_view;
+	game_state *m_state;
+public:
+	ClickablePixmap (GameTree *view, QGraphicsScene *scene, game_state *st, const QPixmap &pm)
+		: QGraphicsPixmapItem (pm), m_view (view), m_state (st)
+	{
+		setZValue (10);
+		scene->addItem (this);
+		setAcceptHoverEvents (true);
+	}
+protected:
+	virtual void mousePressEvent (QGraphicsSceneMouseEvent *e) override;
+	virtual void hoverEnterEvent (QGraphicsSceneHoverEvent *e) override;
+	virtual void hoverLeaveEvent (QGraphicsSceneHoverEvent *e) override;
+	virtual void contextMenuEvent (QGraphicsSceneContextMenuEvent *e) override;
+};
+
+void ClickablePixmap::contextMenuEvent (QGraphicsSceneContextMenuEvent *e)
+{
+	QMenu menu;
+	menu.addAction (QObject::tr ("Navigate to this node"), [=] () { m_view->item_clicked (m_state); });
+	if (m_state->vis_collapsed ()) {
+		menu.addAction (QObject::tr ("Expand subtree"), [=] () { m_view->toggle_collapse (m_state, false); });
+		menu.addAction (QObject::tr ("Expand one level of child nodes"), [=] () { m_view->toggle_collapse (m_state, true); });
+	} else
+		menu.addAction (QObject::tr ("Collapse subtree"), [=] () { m_view->toggle_collapse (m_state, false); });
+	menu.exec (e->screenPos ());
 }
 
-GameTree::~GameTree()
+void ClickablePixmap::mousePressEvent (QGraphicsSceneMouseEvent *e)
 {
+	if (e->button () == Qt::LeftButton) {
+		if (e->modifiers () == Qt::ShiftModifier)
+			m_view->toggle_collapse (m_state, false);
+		else if (e->modifiers () == Qt::ControlModifier)
+			m_view->toggle_collapse (m_state, true);
+		else
+			m_view->item_clicked (m_state);
+	}
+}
+
+void ClickablePixmap::hoverEnterEvent (QGraphicsSceneHoverEvent *)
+{
+	m_view->setDragMode (QGraphicsView::NoDrag);
+}
+
+void ClickablePixmap::hoverLeaveEvent (QGraphicsSceneHoverEvent *)
+{
+	m_view->setDragMode (QGraphicsView::ScrollHandDrag);
+}
+
+GameTree::GameTree (QWidget *parent)
+	: QGraphicsView (parent)
+{
+	setFocusPolicy (Qt::NoFocus);
+	m_scene = new QGraphicsScene (0, 0, m_size, m_size, this);
+	setScene (m_scene);
+	setBackgroundBrush (QBrush (Qt::white));
+
+	int ssize = m_size - 2;
+	int soff = ssize / 2;
+	svg_builder wstone (ssize, ssize);
+	wstone.circle_at (soff, soff, soff * 0.9 - 1, "white", "black", "2");
+	svg_builder bstone (ssize, ssize);
+	bstone.circle_at (soff, soff, soff * 0.9, "black", "none");
+	svg_builder edit (ssize, ssize);
+	edit.circle_at (soff / 2, soff / 2, (ssize / 4) * 0.9, "black", "none");
+	edit.circle_at (ssize - soff / 2, ssize - soff / 2, (ssize / 4) * 0.9, "black", "none");
+	edit.circle_at (soff / 2, ssize - soff / 2, (ssize / 4) * 0.9 - 0.5, "white", "black", "1");
+	edit.circle_at (ssize - soff / 2, soff / 2, (ssize / 4) * 0.9 - 0.5, "white", "black", "1");
+	m_pm_w = new QPixmap (wstone.to_pixmap (ssize, ssize));
+	m_pm_b = new QPixmap (bstone.to_pixmap (ssize, ssize));
+	m_pm_e = new QPixmap (edit.to_pixmap (ssize, ssize));
+
+	QSvgRenderer renderer (box_svg);
+	m_pm_box = new QPixmap (ssize, ssize);
+	m_pm_box->fill (QColor (0, 0, 0, 0));
+	QPainter painter;
+	painter.begin (m_pm_box);
+	renderer.render (&painter);
+	painter.end ();
+
+	setAlignment (Qt::AlignTop | Qt::AlignLeft);
+
+	setDragMode (QGraphicsView::ScrollHandDrag);
+	setToolTip (tr ("The game tree.\nClick nodes to move to them, click empty areas to drag.\n"
+			"Shift-click nodes to collapse or expand their sub-variations.\n"
+			"Control-click a collapsed node to expand one level of its children."));
+}
+
+QSize GameTree::sizeHint () const
+{
+	return QSize (100, 100);
+}
+
+void GameTree::toggle_collapse (game_state *st, bool one_level)
+{
+	if (one_level) {
+		if (!st->vis_expand_one ())
+			return;
+	} else
+		st->toggle_vis_collapse ();
+	update (m_game, m_active);
+}
+
+void GameTree::item_clicked (game_state *st)
+{
+	if (st == m_active)
+		return;
+	if (m_game != nullptr) {
+		/* Have to call this first so we trace the correct path - transfer_observers
+		   eventually ends up calling into our update function.  */
+		st->make_active ();
+		m_active->transfer_observers (st);
+	}
+}
+
+void GameTree::update (std::shared_ptr<game_record> gr, game_state *active)
+{
+	game_state *r = gr->get_root ();
+	bool changed = r->update_visualization ();
+	bool active_changed = m_active != active;
+	if (gr != m_game)
+		changed = true;
+	if (!changed && !active_changed)
+		return;
+	m_game = gr;
+	m_active = active;
+	if (changed) {
+		const visual_tree &vroot = r->visualization ();
+		int w = vroot.width ();
+		int h = vroot.height ();
+
+		m_scene->setSceneRect (0, 0, m_size * w, m_size * h);
+		setSceneRect (0, 0, m_size * w, m_size * h);
+
+		m_scene->clear ();
+		m_sel = nullptr;
+		m_path = nullptr;
+		m_path_end = nullptr;
+
+		setDragMode (QGraphicsView::ScrollHandDrag);
+
+		auto circle = [&] (game_state *st, int x, int y, stone_color col) -> void
+			{
+				QGraphicsPixmapItem *pm = new ClickablePixmap (this, m_scene, st,
+									       col == white ? *m_pm_w : *m_pm_b);
+				pm->setPos (x - m_size / 2 + 1, y - m_size / 2 + 1);
+			};
+		auto special = [&] (game_state *st, int x, int y, bool box) -> void
+			{
+				QGraphicsPixmapItem *pm = new ClickablePixmap (this, m_scene, st,
+									       box ? *m_pm_box : *m_pm_e);
+				pm->setPos (x - m_size / 2 + 1, y - m_size / 2 + 1);
+			};
+		auto line = [&] (int x0, int y0, int x1, int y1, bool dotted) -> void
+			{
+				QPen pen;
+				pen.setWidth (2);
+				if (dotted)
+					pen.setStyle (Qt::DotLine);
+				QLineF line (x0, y0, x1, y1);
+				m_scene->addLine (line, pen);
+			};
+		r->render_visualization (m_size / 2, m_size / 2, m_size, circle, special, line);
+	}
+	int acx = 0, acy = 0;
+	r->locate_visual (0, 0, active, acx, acy);
+
+	QPen pen;
+	pen.setColor (Qt::red);
+	pen.setWidth (4);
+	QPainterPath path;
+	bool first = false;
+	auto point = [&] (int x, int y) -> void
+		{
+			if (first)
+				path.moveTo (x, y);
+			else
+				path.lineTo (x, y);
+		};
+	auto dotted_line = [&] (int x0, int y0, int x1, int y1, bool) -> void
+		{
+			QLineF line (x0, y0, x1, y1);
+			QPen new_pen = pen;
+			new_pen.setStyle (Qt::DotLine);
+			delete m_path_end;
+			m_path_end = m_scene->addLine (line, new_pen);
+		};
+
+	delete m_path_end;
+	m_path_end = nullptr;
+	r->render_active_trace (m_size / 2, m_size / 2, m_size, point, dotted_line);
+	delete m_path;
+	m_path = m_scene->addPath (path, pen);
+	m_path->setZValue (3);
+
+	/* Ideally we'd keep the m_sel object around and just move it.  The problem is that when scrolling,
+	   Qt leaves behind ghost copies at the old location as graphical garbage.  */
+	delete m_sel;
+	m_sel = m_scene->addRect (0, 0, m_size, m_size, Qt::NoPen, QBrush (Qt::red));
+	m_sel->setPos (acx * m_size, acy * m_size);
+	m_sel->setZValue (-1);
+	if (active_changed)
+		ensureVisible (m_sel);
+	m_scene->update ();
 }

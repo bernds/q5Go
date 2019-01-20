@@ -1021,6 +1021,7 @@ void Board::observed_changed ()
 {
 	setup_analyzer_position ();
 	sync_appearance (false);
+	m_board_win->update_game_tree (m_state);
 }
 
 #ifndef NO_DEBUG

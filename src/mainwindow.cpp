@@ -199,8 +199,16 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 	headers << tr("Observers") << tr("Rk");
 	ListView_observers->setHeaderLabels (headers);
 
+	gameTreeView = new GameTree (splitter_comment);
+
 	splitter->setStretchFactor (splitter->indexOf (mainWidget), 0);
 	splitter_comment->setStretchFactor(splitter_comment->indexOf (ListView_observers), 0);
+	splitter_comment->setStretchFactor(splitter_comment->indexOf (gameTreeView), 0);
+
+	if (mode == modeMatch || mode == modeObserve || mode == modeTeach)
+		gameTreeView->setParent (nullptr);
+	else
+		ListView_observers->setParent (nullptr);
 
 	gfx_board = mainWidget->gfx_board;
 
@@ -249,6 +257,7 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 	mainWidget->init_game_record (gr);
 	setGameMode (mode);
 
+	splitter_comment->resize (100, 100);
 	restoreWindowSize ();
 
 	updateCaption (false);
@@ -1128,6 +1137,11 @@ void MainWindow::updateCaption (bool modified)
 	mainWidget->scoreTools->blackLabel->setText(player_b);
 }
 
+void MainWindow::update_game_tree (game_state *active)
+{
+	gameTreeView->update (m_game, active);
+}
+
 void MainWindow::slotFileNewBoard (bool)
 {
 	open_local_board (client_window, false);
@@ -1690,7 +1704,10 @@ void MainWindow::slotViewVertComment(bool toggle)
 	splitter->setOrientation(toggle ? Qt::Horizontal : Qt::Vertical);
 	splitter->setStretchFactor(0, 0);
 	splitter_comment->setOrientation(!toggle ? Qt::Horizontal : Qt::Vertical);
-	splitter_comment->setStretchFactor(splitter_comment->indexOf (ListView_observers), 0);
+	if (ListView_observers->parent () != nullptr)
+		splitter_comment->setStretchFactor(splitter_comment->indexOf (ListView_observers), 0);
+	if (gameTreeView->parent () != nullptr)
+		splitter_comment->setStretchFactor(splitter_comment->indexOf (gameTreeView), 0);
 }
 
 // set sidbar left or right
@@ -1858,7 +1875,10 @@ void MainWindow::saveWindowSize()
 			    QString::number(size().height()));
 
 	if (viewComment->isChecked ()) {
-		setting->writeEntry("BOARDSPLITTER_" + strKey,
+		QString key = "BOARDSPLITTER_";
+		if (gameTreeView->parent () != nullptr)
+			key = "BOARDSPLITTER_GT_";
+		setting->writeEntry(key + strKey,
 				    QString::number(splitter->sizes().first()) + DELIMITER +
 				    QString::number(splitter->sizes().last()) + DELIMITER +
 				    QString::number(splitter_comment->sizes().first()) + DELIMITER +
@@ -1895,7 +1915,12 @@ bool MainWindow::restoreWindowSize ()
 
 	if (viewComment->isChecked ()) {
 		// restore splitter in board window
-		s = setting->readEntry("BOARDSPLITTER_" + strKey);
+		QString split1 = setting->readEntry("BOARDSPLITTER_" + strKey);
+		QString split2 = setting->readEntry("BOARDSPLITTER_GT_" + strKey);
+		if (gameTreeView->parent () == nullptr)
+			s = split1;
+		else
+			s = split2;
 		if (s.length() > 5) {
 			int i, j;
 
@@ -2193,6 +2218,17 @@ void MainWindow::setGameMode(GameMode mode)
 	commentEdit2->setEnabled (!editable_comments);
 	commentEdit2->setVisible (!editable_comments);
 
+	if (mode == modeMatch || mode == modeObserve || mode == modeTeach) {
+		if (gameTreeView->parent () != nullptr) {
+			splitter_comment->addWidget (ListView_observers);
+			gameTreeView->setParent (nullptr);
+		}
+	} else {
+		if (ListView_observers->parent () != nullptr) {
+			ListView_observers->setParent (nullptr);
+			splitter_comment->addWidget (gameTreeView);
+		}
+	}
 	switch (mode)
 	{
 	case modeEdit:

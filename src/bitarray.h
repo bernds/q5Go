@@ -12,15 +12,18 @@ class bit_array
 	uint64_t *m_bits;
 	uint64_t m_last_mask;
 
-public:
-	bit_array (unsigned sz, bool set = false)
-		: m_n_bits (sz), m_n_elts ((sz + 63) / 64), m_bits (new uint64_t[m_n_elts]())
+	void calc_mask (unsigned sz)
 	{
 		uint64_t mask = 0;
 		mask = ~mask;
 		mask >>= 63 - (sz + 63) % 64;
 		m_last_mask = mask;
-
+	}
+public:
+	bit_array (unsigned sz, bool set = false)
+		: m_n_bits (sz), m_n_elts ((sz + 63) / 64), m_bits (new uint64_t[m_n_elts]())
+	{
+		calc_mask (sz);
 		if (set && m_n_elts > 0) {
 			memset (m_bits, -1, m_n_elts * sizeof (uint64_t));
 			m_bits[m_n_elts - 1] &= m_last_mask;
@@ -60,14 +63,20 @@ public:
 	{
 		return !(*this == other);
 	}
-	void debug ()
+	void grow (unsigned sz)
 	{
-		for (unsigned bit = 0; bit < m_n_bits; bit++) {
-			uint64_t val = m_bits[bit / 64];
-			printf ("%d", (int)((val >> (bit % 64)) & 1));
-		}
-		putchar ('\n');
+		if (sz < m_n_bits)
+			throw std::logic_error ("grow called with smaller size");
+		int new_nelts = (sz + 63) / 64;
+		uint64_t *new_bits = new uint64_t[new_nelts]();
+		memcpy (new_bits, m_bits, m_n_elts * sizeof (uint64_t));
+		calc_mask (sz);
+		m_n_bits = sz;
+		m_n_elts = new_nelts;
+		std::swap (m_bits, new_bits);
+		delete[] new_bits;
 	}
+	void debug () const;
 	void clear ()
 	{
 		for (int i = 0; i < m_n_elts; i++)
@@ -214,6 +223,9 @@ public:
 		}
 		return false;
 	}
+	/* Check for intersections, but shift other left (or right, if negative).  */
+	bool intersect_p (const bit_array &other, int shift) const;
+
 	unsigned popcnt () const
 	{
 		unsigned cnt = 0;

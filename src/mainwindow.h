@@ -28,6 +28,7 @@ class QSplitter;
 class StatusTip;
 class QToolBar;
 class Engine;
+class GameTree;
 
 extern QString screen_key ();
 
@@ -72,6 +73,8 @@ public:
 	void append_comment (const QString &);
 
 	void update_analysis (analyzer);
+	void update_game_tree (game_state *);
+
 protected:
 	void initActions();
 	void initMenuBar(GameMode);
@@ -175,6 +178,7 @@ protected:
 	QTextEdit *commentEdit;
 	QLineEdit *commentEdit2;
 	QTreeWidget *ListView_observers;
+	GameTree *gameTreeView;
 
 	QToolBar *fileBar, *toolBar, *editBar;
 
