@@ -14,6 +14,8 @@ public:
 		header += "xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">\n";
 		return (header + m_elts + "</svg>\n").toUtf8 ();
 	}
+	QPixmap to_pixmap (int w, int h);
+	QPixmap to_pixmap ();
 	void text_at (double cx, double cy, double sidelen, int len,
 		      const QString &txt, const QString &fill, const QFontInfo &fi,
 		      const QString &stroke = QString ());

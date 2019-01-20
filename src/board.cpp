@@ -1012,13 +1012,7 @@ void Board::sync_appearance (bool board_only)
 		m_board_win->setMoveData (*m_state, b, m_game_mode);
 	delete[] count_map;
 
-	QPixmap img (square_size * board_size, square_size * board_size);
-	QSvgRenderer renderer (svg);
-	img.fill (QColor(0, 0, 0, 0));
-	QPainter painter;
-	painter.begin (&img);
-	renderer.render (&painter);
-	painter.end ();
+	QPixmap img = svg.to_pixmap (square_size * board_size, square_size * board_size);
 	m_mark_layer->setPixmap (img);
 	m_mark_layer->setPos (offsetX - square_size / 2, offsetY - square_size / 2);
 }

@@ -1,4 +1,7 @@
 #include <cmath>
+#include <QSvgRenderer>
+#include <QPixmap>
+#include <QPainter>
 
 #include "svgbuilder.h"
 
@@ -91,4 +94,21 @@ void svg_builder::cross_at (double cx, double cy, double sidelen, const QString 
 	      stroke, "2");
 	line (cx + sidelen, cy - sidelen, cx - sidelen, cy + sidelen,
 	      stroke, "2");
+}
+
+QPixmap svg_builder::to_pixmap (int w, int h)
+{
+	QSvgRenderer renderer (*this);
+	QPixmap img (w, h);
+	img.fill (QColor (0, 0, 0, 0));
+	QPainter painter;
+	painter.begin (&img);
+	renderer.render (&painter);
+	painter.end ();
+	return img;
+}
+
+QPixmap svg_builder::to_pixmap ()
+{
+	return to_pixmap (m_w, m_h);
 }
