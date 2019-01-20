@@ -2173,14 +2173,13 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
        <string>Tools tab
 
 N/S	normal/score tools
-E	edit tools
-TG	teach tools / game tree</string>
+TG	teaching tools</string>
       </property>
       <property name="tabPosition">
        <enum>QTabWidget::South</enum>
       </property>
-      <property name="currentIndex">
-       <number>0</number>
+      <property name="tabBarAutoHide">
+       <bool>true</bool>
       </property>
       <widget class="QWidget" name="tab_ns">
        <attribute name="title">
@@ -2407,11 +2406,6 @@ After placing and/or undo release button for returning to starting point automat
    <class>NormalTools</class>
    <extends>QWidget</extends>
    <header>normaltools.h</header>
-  </customwidget>
-  <customwidget>
-   <class>GameTree</class>
-   <extends>QWidget</extends>
-   <header location="global">gametree.h</header>
   </customwidget>
   <customwidget>
    <class>ScoreTools</class>

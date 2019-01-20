@@ -292,6 +292,8 @@ void MainWidget::updateFont ()
 void MainWidget::setGameMode(GameMode mode)
 {
 	setToolsTabWidget(tabTeachGameTree, mode == modeTeach ? tabEnable : tabDisable);
+	if (mode != modeTeach && mode != modeScoreRemote && mode != modeScore && tab_tg->parent () != nullptr)
+		tab_tg->setParent (nullptr);
 
 	passButton->setVisible (mode != modeObserve);
 	doneButton->setVisible (mode == modeScore || mode == modeScoreRemote);

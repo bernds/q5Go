@@ -21,6 +21,7 @@
 #include "mainwindow.h"
 #include "mainwidget.h"
 #include "board.h"
+#include "gametree.h"
 #include "sgf.h"
 #include "tip.h"
 #include "setting.h"
