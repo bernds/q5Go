@@ -24,14 +24,10 @@
 #include "qgtp.h"
 
 class Board;
-class InterfaceHandler;
 class QSplitter;
 class StatusTip;
-class qGoIF;
-class QNewGameDlg;
 class QToolBar;
 class Engine;
-class QGraphicsRectItem;
 
 extern QString screen_key ();
 
@@ -57,10 +53,11 @@ public:
 	void saveWindowSize ();
 	bool restoreWindowSize ();
 	void updateBoard();
+
 	void addObserver(const QString &name);
 	void clearObserver() { ListView_observers->clear(); }
 	void updateObserverCnt();
-	int blackPlayerType, whitePlayerType ;
+
 	bool doSave(QString fileName, bool force=false);
 	void setGameMode (GameMode);
 
@@ -161,7 +158,6 @@ public slots:
 	virtual void doResign();
 
 protected:
-	qGoIF *parent_;
 	std::shared_ptr<game_record> m_game;
 	Board *gfx_board;
 	MainWidget *mainWidget;

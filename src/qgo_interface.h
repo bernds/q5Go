@@ -57,6 +57,7 @@ public:
 //-----------
 
 class MainWindow_IGS;
+class qGoIF;
 
 class qGoBoard : public QObject, public game_state::observer
 {

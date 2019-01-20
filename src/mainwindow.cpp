@@ -94,7 +94,6 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 {
 	setProperty("icon", setting->image0);
 	setAttribute (Qt::WA_DeleteOnClose);
-	parent_ = 0;
 
 	isFullScreen = 0;
 	setFocusPolicy(Qt::StrongFocus);
@@ -2001,11 +2000,6 @@ void MainWindow::closeEvent(QCloseEvent *e)
 	if (getBoard()->getGameMode() == modeObserve || checkModified() == 1)
 	{
 		emit signal_closeevent();
-		//qGo::removeBoardWindow(this);
-		if (parent_)
-			QTimer::singleShot(1000, (QWidget*)parent_, SLOT(slot_closeevent()));
-		else
-			qWarning("*** BOARD CANNOT BE DELETED");
 		e->accept();
 	}
 	else
