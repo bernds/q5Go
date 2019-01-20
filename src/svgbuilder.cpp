@@ -52,8 +52,8 @@ void svg_builder::rect (double x, double y, double w, double h, const QString &f
 {
 	m_elts += "<rect x=\"" + QString::number (x);
 	m_elts += "\" y=\"" + QString::number (y);
-	m_elts += "\" width=\"" + QString::number (x + w);
-	m_elts += "\" height=\"" + QString::number (y + h);
+	m_elts += "\" width=\"" + QString::number (w);
+	m_elts += "\" height=\"" + QString::number (h);
 	m_elts += "\"";
 	if (stroke != "none")
 		m_elts += " stroke-width=\"2\"";
