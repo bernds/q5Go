@@ -66,7 +66,8 @@ void ClickablePixmap::mousePressEvent (QGraphicsSceneMouseEvent *e)
 			m_view->toggle_collapse (x, y, true);
 		else
 			m_view->item_clicked (x, y);
-	}
+	} else if (e->button () == Qt::MiddleButton)
+		m_view->toggle_collapse (x, y, false);
 }
 
 void ClickablePixmap::hoverEnterEvent (QGraphicsSceneHoverEvent *)
@@ -91,7 +92,7 @@ GameTree::GameTree (QWidget *parent)
 
 	setDragMode (QGraphicsView::ScrollHandDrag);
 	setToolTip (tr ("The game tree.\nClick nodes to move to them, click empty areas to drag.\n"
-			"Shift-click nodes to collapse or expand their sub-variations.\n"
+			"Shift-click or middle-click nodes to collapse or expand their sub-variations.\n"
 			"Control-click a collapsed node to expand one level of its children."));
 
 	m_header_view.setModel (&m_headers);
@@ -197,12 +198,12 @@ void GameTree::show_menu (int x, int y, const QPoint &pos)
 {
 	game_state *st = m_game->get_root ()->locate_by_vis_coords (x, y, 0, 0);
 	QMenu menu;
-	menu.addAction (QObject::tr ("Navigate to this node"), [=] () { item_clicked (x, y); });
 	if (st->vis_collapsed ()) {
 		menu.addAction (QObject::tr ("Expand subtree"), [=] () { toggle_collapse (x, y, false); });
 		menu.addAction (QObject::tr ("Expand one level of child nodes"), [=] () { toggle_collapse (x, y, true); });
 	} else
 		menu.addAction (QObject::tr ("Collapse subtree"), [=] () { toggle_collapse (x, y, false); });
+	menu.addAction (QObject::tr ("Navigate to this node"), [=] () { item_clicked (x, y); });
 	menu.exec (pos);
 }
 
