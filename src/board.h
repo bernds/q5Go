@@ -186,62 +186,62 @@ public:
 	virtual void gtp_failure (const QString &) override;
 	virtual void gtp_eval (const QString &) override;
 
-	public slots:
-		void update_comment(const QString &, bool append);
-		void changeSize();
+public slots:
+	void update_comment(const QString &, bool append);
+	void changeSize();
 
 signals:
-		void coordsChanged(int, int, int,bool);
+	void coordsChanged(int, int, int,bool);
 
 protected:
-		void calculateSize();
-		void draw_background();
-		void draw_grid();
-		void draw_coordinates();
+	void calculateSize();
+	void draw_background();
+	void draw_grid();
+	void draw_coordinates();
 
-		void resizeBoard(int w, int h);
-		int convertCoordsToPoint(int c, int o);
-		void updateRectSel(int, int);
-		virtual void mousePressEvent(QMouseEvent *e) override;
-		virtual void mouseReleaseEvent(QMouseEvent*) override;
-		virtual void mouseMoveEvent(QMouseEvent *e) override;
-		virtual void wheelEvent(QWheelEvent *e) override;
-		virtual void leaveEvent(QEvent*) override;
-		virtual void resizeEvent(QResizeEvent*) override;
+	void resizeBoard(int w, int h);
+	int convertCoordsToPoint(int c, int o);
+	void updateRectSel(int, int);
+	virtual void mousePressEvent(QMouseEvent *e) override;
+	virtual void mouseReleaseEvent(QMouseEvent*) override;
+	virtual void mouseMoveEvent(QMouseEvent *e) override;
+	virtual void wheelEvent(QWheelEvent *e) override;
+	virtual void leaveEvent(QEvent*) override;
+	virtual void resizeEvent(QResizeEvent*) override;
 
 private:
-		void click_add_mark (QMouseEvent *, int, int);
-		void setupCoords();
-		void clearCoords();
-		void updateCovers ();
+	void click_add_mark (QMouseEvent *, int, int);
+	void setupCoords();
+	void clearCoords();
+	void updateCovers ();
 
-		/* Local copies of the pixmaps held by the settings.  I'm not entirely
-		   clear on ownership issues of QPainter; this is to avoid any potential
-		   use-after free if the picture changes and settings deletes the old
-		   pixmaps.  */
-		QPixmap m_wood, m_table;
-		QGraphicsRectItem *coverTop, *coverLeft, *coverRight, *coverBot;
+	/* Local copies of the pixmaps held by the settings.  I'm not entirely
+	   clear on ownership issues of QPainter; this is to avoid any potential
+	   use-after free if the picture changes and settings deletes the old
+	   pixmaps.  */
+	QPixmap m_wood, m_table;
+	QGraphicsRectItem *coverTop, *coverLeft, *coverRight, *coverBot;
 
-		QGraphicsScene *canvas;
-		QList<QGraphicsSimpleTextItem*> hCoords1, hCoords2 ,vCoords1, vCoords2;
-		Gatter *gatter;
-		ImageHandler *imageHandler;
-		static const int margin, coord_margin;
-		int board_size, offset, offsetX, offsetY, board_pixel_size, table_size;
-		int coord_offset;
-		double square_size;
-		bool showCoords;
-		bool showSGFCoords;
-		bool antiClicko;
-		short curX, curY;
+	QGraphicsScene *canvas;
+	QList<QGraphicsSimpleTextItem*> hCoords1, hCoords2 ,vCoords1, vCoords2;
+	Gatter *gatter;
+	ImageHandler *imageHandler;
+	static const int margin, coord_margin;
+	int board_size, offset, offsetX, offsetY, board_pixel_size, table_size;
+	int coord_offset;
+	double square_size;
+	bool showCoords;
+	bool showSGFCoords;
+	bool antiClicko;
+	short curX, curY;
 
-		QTime wheelTime;
-		Qt::MouseButtons mouseState;
+	QTime wheelTime;
+	Qt::MouseButtons mouseState;
 
 #ifdef Q_OS_WIN
-		bool resizeDelayFlag;
+	bool resizeDelayFlag;
 #endif
-		bool navIntersectionStatus;
+	bool navIntersectionStatus;
 };
 
 #endif
