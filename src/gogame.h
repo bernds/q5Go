@@ -361,8 +361,7 @@ public:
 
 		m_visual_ok = false;
 
-		go_board new_board = m_board;
-		new_board.clear_marks ();
+		go_board new_board (m_board, mark::none);
 		new_board.add_stone (x, y, to_move);
 		/* Check for ko.  */
 		if (m_parent != nullptr) {

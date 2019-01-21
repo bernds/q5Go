@@ -148,8 +148,7 @@ static void add_to_game_state (game_state *gs, sgf::node *n, bool force, QTextCo
 		}
 		force = false;
 		enum class im { unknown, yes, no } is_move = im::unknown;
-		go_board new_board = gs->get_board ();
-		new_board.clear_marks ();
+		go_board new_board (gs->get_board (), mark::none);
 		stone_color to_move = gs->to_move ();
 		int move_x = -1, move_y = -1;
 		bool is_pass = false;

@@ -92,6 +92,16 @@ public:
 		m_marks (other.m_marks), m_mark_extra (other.m_mark_extra), m_mark_text (other.m_mark_text)
 	{
 	}
+	/* The unused mark argument should be passed as mark::none by the callers to indicate what this
+	   constructor is for: copying a board position without copying marks.  */
+	go_board (const go_board &other, mark)
+		: m_sz (other.m_sz), m_score_b (other.m_score_b), m_score_w (other.m_score_w),
+		m_caps_b (other.m_caps_b), m_caps_w (other.m_caps_w),
+		m_stones_b (new bit_array (*other.m_stones_b)), m_stones_w (new bit_array (*other.m_stones_w)),
+		m_units_b (other.m_units_b), m_units_w (other.m_units_w),
+		m_units_t (other.m_units_t), m_units_st (other.m_units_st)
+	{
+	}
 	go_board &operator= (go_board other)
 	{
 		m_sz = other.m_sz;
