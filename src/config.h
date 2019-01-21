@@ -6,11 +6,11 @@
 #define PACKAGE1 "q5goClient"
 
 /* Version number of package */
-#define VERSION "0.2"
+#define VERSION "0.3"
 
-#define NEWVERSIONWARNING "<p>Welcome to version 0.2 of q5go.</p>\n" \
-  "<p>This version is a maintenance release which fixes a few issues in 0.1.</p>" \
-  "<p>The IGS client has been tested somewhat, but it is still recommended you use it for observing rather than playing.</p>\n\n" \
+#define NEWVERSIONWARNING "<p>Welcome to version 0.3 of q5go.</p>\n" \
+  "<p>This version introduces two new major features, computer analysis using Leela Zero, and a game tree display.</p>" \
+  "<p>The IGS client has been tested somewhat. If you feel adventurous, it should be possible to play games with it. Please report any issues.</p>\n\n" \
   "<p>This message will not be shown anymore on startup.</p>"
 
 

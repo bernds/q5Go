@@ -18,7 +18,7 @@ AC_EXEEXT
 AC_CANONICAL_SYSTEM 
 
 dnl Automake doc recommends to do this only here. (Janos)
-AM_INIT_AUTOMAKE(q5go,0.1)
+AM_INIT_AUTOMAKE(q5go,0.3)
 
 AC_PREFIX_DEFAULT(/usr/local)
 if test "x$prefix" = "xNONE"; then

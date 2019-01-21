@@ -1,3 +1,15 @@
+q5Go 0.3
+
+Version 0.3 adds two major new features:
+ * Analysis with Leela Zero or compatible programs
+ * A game tree display
+
+Minor changes and fixes include:
+ * Some visual improvements for the user interface
+ * Time warnings for online play are working again
+ * When loading SGF files, unrecognized properties are now
+   remembered and saved as per the specification
+
 q5Go 0.2
 
 Version 0.2 is mostly a maintenance release which fixes some issues in 0.1.
