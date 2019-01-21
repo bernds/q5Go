@@ -805,6 +805,7 @@ void Board::sync_appearance (bool board_only)
 {
 	int analysis_vartype = setting->readIntEntry ("ANALYSIS_VARTYPE");
 	int winrate_for = setting->readIntEntry ("ANALYSIS_WINRATE");
+	int maxdepth = setting->readIntEntry ("ANALYSIS_DEPTH");
 	stone_color wr_swap_col = winrate_for == 0 ? white : winrate_for == 1 ? black : none;
 
 	const go_board &b = m_edit_board == nullptr ? m_state->get_board () : *m_edit_board;
@@ -844,8 +845,8 @@ void Board::sync_appearance (bool board_only)
 			m_main_widget->set_2nd_eval (move, m_primary_eval + m_winrate[bp],
 						     m_state->to_move (), m_visits[bp]);
 		}
-
-		while (pv) {
+		int depth = 0;
+		while (pv && (maxdepth == 0 || depth++ < maxdepth)) {
 			int x = pv->get_move_x ();
 			int y = pv->get_move_y ();
 			int bp = b.bitpos (x, y);
@@ -1937,6 +1938,7 @@ void Board::gtp_eval (const QString &s)
 	delete m_eval_state;
 	m_eval_state = new game_state (b, to_move);
 
+	int an_maxmoves = setting->readIntEntry ("ANALYSIS_MAXMOVES");
 	int count = 0;
 	m_primary_eval = 0.5;
 	for (auto &e: moves) {
@@ -1963,10 +1965,10 @@ void Board::gtp_eval (const QString &s)
 			for (auto &pm: pvmoves) {
 				QChar sx = pm[0];
 
-				int i = sx.toLatin1() - 'A';
+				int i = sx.toLatin1 () - 'A';
 				if (i > 7)
 					i--;
-				int j = board_size - pm.mid (1).toInt();
+				int j = board_size - pm.mid (1).toInt ();
 				if (i >= 0 && i < board_size && j >= 0 && j < board_size) {
 					if (pv_first) {
 						int bp = b.bitpos (i, j);
@@ -1984,6 +1986,8 @@ void Board::gtp_eval (const QString &s)
 			}
 		}
 		count++;
+		if (an_maxmoves > 0 && count == an_maxmoves)
+			break;
 	}
 	sync_appearance ();
 }

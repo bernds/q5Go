@@ -187,7 +187,7 @@ After placing and/or undo release button for returning to starting point automat
       <string/>
      </property>
      <property name="currentIndex">
-      <number>4</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="InterfaceTabWidget">
       <attribute name="title">
@@ -2273,13 +2273,6 @@ Note: 'Delete' concerns saved records.</string>
             </item>
            </widget>
           </item>
-          <item row="2" column="0">
-           <widget class="QCheckBox" name="anChildMovesCheckBox">
-            <property name="text">
-             <string>Always show child moves as circles</string>
-            </property>
-           </widget>
-          </item>
           <item row="1" column="0">
            <widget class="QLabel" name="label_18">
             <property name="text">
@@ -2310,6 +2303,55 @@ Note: 'Delete' concerns saved records.</string>
            <widget class="QCheckBox" name="anPruneCheckBox">
             <property name="text">
              <string>Don't display moves with few visits</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <layout class="QHBoxLayout" name="horizontalLayout_11">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_19">
+              <property name="text">
+               <string>Max. variation depth:
+(0 is unlimited)</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="anDepthEdit"/>
+            </item>
+           </layout>
+          </item>
+          <item row="2" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_12">
+            <property name="topMargin">
+             <number>8</number>
+            </property>
+            <property name="rightMargin">
+             <number>8</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_20">
+              <property name="text">
+               <string>Max. moves shown:
+(0 is unlimited)</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="anMaxMovesEdit"/>
+            </item>
+           </layout>
+          </item>
+          <item row="3" column="1">
+           <widget class="QCheckBox" name="anChildMovesCheckBox">
+            <property name="text">
+             <string>Always show child moves as circles</string>
             </property>
            </widget>
           </item>
@@ -4173,8 +4215,6 @@ Note: 'Delete' concerns saved records.</string>
   <tabstop>humanName</tabstop>
   <tabstop>anVarComboBox</tabstop>
   <tabstop>winrateComboBox</tabstop>
-  <tabstop>anChildMovesCheckBox</tabstop>
-  <tabstop>anPruneCheckBox</tabstop>
   <tabstop>BYSpin_Nmatch</tabstop>
   <tabstop>timeSpin</tabstop>
   <tabstop>buttonCancel</tabstop>

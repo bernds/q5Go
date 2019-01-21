@@ -44,9 +44,9 @@ PreferencesDialog::PreferencesDialog(QWidget* parent)
 	// init random-number generator
 	srand ((unsigned)time (nullptr));
 
-	// set valid port range
-	val = new QIntValidator(0, 9999, this);
-	LineEdit_port->setValidator(val);
+	LineEdit_port->setValidator (new QIntValidator (0, 9999, this));
+	anMaxMovesEdit->setValidator (new QIntValidator (0, 999, this));
+	anDepthEdit->setValidator (new QIntValidator (0, 999, this));
 
 	// clear edit field
 	LineEdit_title->clear();
@@ -223,6 +223,8 @@ void PreferencesDialog::init_from_settings ()
 	anPruneCheckBox->setChecked (setting->readBoolEntry ("ANALYSIS_PRUNE"));
 	anVarComboBox->setCurrentIndex (setting->readIntEntry ("ANALYSIS_VARTYPE"));
 	winrateComboBox->setCurrentIndex (setting->readIntEntry ("ANALYSIS_WINRATE"));
+	anDepthEdit->setText (QString::number (setting->readIntEntry ("ANALYSIS_DEPTH")));
+	anMaxMovesEdit->setText (QString::number (setting->readIntEntry ("ANALYSIS_MAXMOVES")));
 
 	// Go Server tab
 	boardSizeSpin->setValue(setting->readIntEntry("DEFAULT_SIZE"));
@@ -436,6 +438,9 @@ void PreferencesDialog::slot_apply()
 	setting->writeBoolEntry ("ANALYSIS_PRUNE", anPruneCheckBox->isChecked ());
 	setting->writeIntEntry ("ANALYSIS_VARTYPE", anVarComboBox->currentIndex ());
 	setting->writeIntEntry ("ANALYSIS_WINRATE", winrateComboBox->currentIndex ());
+
+	setting->writeIntEntry ("ANALYSIS_DEPTH", anDepthEdit->text().toInt());
+	setting->writeIntEntry ("ANALYSIS_MAXMOVES", anMaxMovesEdit->text().toInt());
 
 	client_window->preferencesAccept();
 }

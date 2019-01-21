@@ -83,7 +83,6 @@ public slots:
 private:
 	void          saveSizes();
 	ClientWindow  *parent_cw;
-	QIntValidator *val;
 	void          insertStandardHosts();
 };
 
