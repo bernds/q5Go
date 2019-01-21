@@ -30,8 +30,9 @@ class GameTree : public QGraphicsView
 public:
 	GameTree(QWidget *parent);
 	void update (std::shared_ptr<game_record> gr, game_state *);
-	void item_clicked (game_state *);
-	void toggle_collapse (game_state *, bool);
+	void show_menu (int x, int y, const QPoint &pos);
+	void item_clicked (int x, int y);
+	void toggle_collapse (int x, int y, bool);
 
 	virtual QSize sizeHint () const override;
 };

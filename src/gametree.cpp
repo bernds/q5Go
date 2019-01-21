@@ -30,10 +30,10 @@ static QByteArray box_svg =
 class ClickablePixmap : public QGraphicsPixmapItem
 {
 	GameTree *m_view;
-	game_state *m_state;
+	int m_x, m_y, m_size;
 public:
-	ClickablePixmap (GameTree *view, QGraphicsScene *scene, game_state *st, const QPixmap &pm)
-		: QGraphicsPixmapItem (pm), m_view (view), m_state (st)
+	ClickablePixmap (GameTree *view, QGraphicsScene *scene, int x, int y, int size, const QPixmap &pm)
+		: QGraphicsPixmapItem (pm), m_view (view), m_x (x), m_y (y), m_size (size)
 	{
 		setZValue (10);
 		scene->addItem (this);
@@ -48,25 +48,24 @@ protected:
 
 void ClickablePixmap::contextMenuEvent (QGraphicsSceneContextMenuEvent *e)
 {
-	QMenu menu;
-	menu.addAction (QObject::tr ("Navigate to this node"), [=] () { m_view->item_clicked (m_state); });
-	if (m_state->vis_collapsed ()) {
-		menu.addAction (QObject::tr ("Expand subtree"), [=] () { m_view->toggle_collapse (m_state, false); });
-		menu.addAction (QObject::tr ("Expand one level of child nodes"), [=] () { m_view->toggle_collapse (m_state, true); });
-	} else
-		menu.addAction (QObject::tr ("Collapse subtree"), [=] () { m_view->toggle_collapse (m_state, false); });
-	menu.exec (e->screenPos ());
+	QPointF pos = e->pos ();
+	int x = m_x + pos.x () / m_size;
+	int y = m_y;
+	m_view->show_menu (x, y, e->screenPos ());
 }
 
 void ClickablePixmap::mousePressEvent (QGraphicsSceneMouseEvent *e)
 {
+	QPointF pos = e->pos ();
+	int x = m_x + pos.x () / m_size;
+	int y = m_y;
 	if (e->button () == Qt::LeftButton) {
 		if (e->modifiers () == Qt::ShiftModifier)
-			m_view->toggle_collapse (m_state, false);
+			m_view->toggle_collapse (x, y, false);
 		else if (e->modifiers () == Qt::ControlModifier)
-			m_view->toggle_collapse (m_state, true);
+			m_view->toggle_collapse (x, y, true);
 		else
-			m_view->item_clicked (m_state);
+			m_view->item_clicked (x, y);
 	}
 }
 
@@ -124,8 +123,9 @@ QSize GameTree::sizeHint () const
 	return QSize (100, 100);
 }
 
-void GameTree::toggle_collapse (game_state *st, bool one_level)
+void GameTree::toggle_collapse (int x, int y, bool one_level)
 {
+	game_state *st = m_game->get_root ()->locate_by_vis_coords (x, y, 0, 0);
 	if (one_level) {
 		if (!st->vis_expand_one ())
 			return;
@@ -134,16 +134,31 @@ void GameTree::toggle_collapse (game_state *st, bool one_level)
 	update (m_game, m_active);
 }
 
-void GameTree::item_clicked (game_state *st)
+void GameTree::item_clicked (int x, int y)
 {
+	if (m_game == nullptr)
+		return;
+
+	game_state *st = m_game->get_root ()->locate_by_vis_coords (x, y, 0, 0);
 	if (st == m_active)
 		return;
-	if (m_game != nullptr) {
-		/* Have to call this first so we trace the correct path - transfer_observers
-		   eventually ends up calling into our update function.  */
-		st->make_active ();
-		m_active->transfer_observers (st);
-	}
+	/* Have to call this first so we trace the correct path - transfer_observers
+	   eventually ends up calling into our update function.  */
+	st->make_active ();
+	m_active->transfer_observers (st);
+}
+
+void GameTree::show_menu (int x, int y, const QPoint &pos)
+{
+	game_state *st = m_game->get_root ()->locate_by_vis_coords (x, y, 0, 0);
+	QMenu menu;
+	menu.addAction (QObject::tr ("Navigate to this node"), [=] () { item_clicked (x, y); });
+	if (st->vis_collapsed ()) {
+		menu.addAction (QObject::tr ("Expand subtree"), [=] () { toggle_collapse (x, y, false); });
+		menu.addAction (QObject::tr ("Expand one level of child nodes"), [=] () { toggle_collapse (x, y, true); });
+	} else
+		menu.addAction (QObject::tr ("Collapse subtree"), [=] () { toggle_collapse (x, y, false); });
+	menu.exec (pos);
 }
 
 void GameTree::update (std::shared_ptr<game_record> gr, game_state *active)
@@ -172,18 +187,44 @@ void GameTree::update (std::shared_ptr<game_record> gr, game_state *active)
 
 		setDragMode (QGraphicsView::ScrollHandDrag);
 
-		auto circle = [&] (game_state *st, int x, int y, stone_color col) -> void
-			{
-				QGraphicsPixmapItem *pm = new ClickablePixmap (this, m_scene, st,
-									       col == white ? *m_pm_w : *m_pm_b);
-				pm->setPos (x - m_size / 2 + 1, y - m_size / 2 + 1);
-			};
-		auto special = [&] (game_state *st, int x, int y, bool box) -> void
-			{
-				QGraphicsPixmapItem *pm = new ClickablePixmap (this, m_scene, st,
-									       box ? *m_pm_box : *m_pm_e);
-				pm->setPos (x - m_size / 2 + 1, y - m_size / 2 + 1);
-			};
+		visual_tree::bit_rect stones_w (w, h);
+		visual_tree::bit_rect stones_b (w, h);
+		visual_tree::bit_rect edits (w, h);
+		visual_tree::bit_rect collapsed (w, h);
+
+		r->extract_visualization (0, 0, stones_w, stones_b, edits, collapsed);
+		visual_tree::bit_rect all_items = stones_w;
+		all_items.ior (stones_b, 0, 0);
+		all_items.ior (edits, 0, 0);
+		all_items.ior (collapsed, 0, 0);
+
+		for (int y = 0; y < h; y++)
+			for (int x0 = 0; x0 < w; ) {
+				int len = 1;
+				if (all_items.test_bit (x0, y)) {
+					while (x0 + len < w && all_items.test_bit (x0 + len, y))
+						len++;
+					QPixmap combined (m_size * len, m_size);
+					combined.fill (QColor (0, 0, 0, 0));
+					QPainter painter;
+					painter.setPen (Qt::NoPen);
+					painter.begin (&combined);
+					for (int i = 0; i < len; i++) {
+						QPixmap *src = m_pm_box;
+						if (edits.test_bit (x0 + i, y))
+							src = m_pm_e;
+						else if (stones_w.test_bit (x0 + i, y))
+							src = m_pm_w;
+						else if (stones_b.test_bit (x0 + i, y))
+							src = m_pm_b;
+						painter.drawPixmap (i * m_size, 0, *src);
+					}
+					painter.end ();
+					QGraphicsPixmapItem *pm = new ClickablePixmap (this, m_scene, x0, y, m_size, combined);
+					pm->setPos (x0 * m_size, y * m_size);
+				}
+				x0 += len;
+			}
 		auto line = [&] (int x0, int y0, int x1, int y1, bool dotted) -> void
 			{
 				QPen pen;
@@ -193,7 +234,7 @@ void GameTree::update (std::shared_ptr<game_record> gr, game_state *active)
 				QLineF line (x0, y0, x1, y1);
 				m_scene->addLine (line, pen);
 			};
-		r->render_visualization (m_size / 2, m_size / 2, m_size, circle, special, line);
+		r->render_visualization (m_size / 2, m_size / 2, m_size, line, true);
 	}
 	int acx = 0, acy = 0;
 	r->locate_visual (0, 0, active, acx, acy);

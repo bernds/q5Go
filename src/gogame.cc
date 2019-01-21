@@ -30,40 +30,30 @@ const go_board game_state::child_moves (const game_state *excluding) const
 }
 
 visual_tree::visual_tree (visual_tree &main_var, int max_child_width)
-	: m_w (1 + max_child_width), m_h (main_var.m_h)
+	: m_rep (1 + max_child_width, main_var.height ())
 {
-	for (int i = 0; i < m_h; i++) {
-		m_rep.push_back (bit_array (m_w));
-		m_rep[i].ior (main_var.m_rep[i], 1);
-	}
+	m_rep.ior (main_var.m_rep, 1, 0);
 	main_var.m_off_y = 0;
-	m_rep[0].set_bit (0);
+	m_rep.set_bit (0, 0);
 }
 
 void visual_tree::add_variation (visual_tree &other)
 {
-	if (other.m_w + 1 > m_w) {
-		m_w = other.m_w + 1;
-		for (auto &vec: m_rep)
-			vec.grow (m_w);
-	}
+	m_rep.set_max_width (other.width () + 1);
 
-	int i;
-	/* Calculate the amount of overlap, as I lines.  */
-	for (i = 0; i < m_h - 1; i++) {
-		if (m_rep[m_h - i - 1].intersect_p (other.m_rep[0], 1))
+	/* Find the highest offset that does not cause overlap.  */
+	int i = height ();
+	while (i-- > 0)
+		if (m_rep.test_overlap (other.m_rep, 1, i))
 			break;
-	}
-	other.m_off_y = m_h - i;
-	m_h = std::max (m_h, other.m_off_y + other.m_h);
-	for (int j = 0; j < other.m_h; j++) {
-		if (j >= i)
-			m_rep.push_back (bit_array (m_w));
-		m_rep[other.m_off_y + j].ior (other.m_rep[j], 1);
-	}
+
+	other.m_off_y = i + 1;
+	m_rep.set_max_height (std::max (height (), other.m_off_y + other.height ()));
+	m_rep.ior (other.m_rep, 1, other.m_off_y);
+
 	/* Show conflicts for the connecting lines as well.  */
-	for (int y = 0; y < other.m_off_y; y++)
-		m_rep[y].set_bit (0);
+	for (int y = 1; y < other.m_off_y; y++)
+		m_rep.set_bit (0, y);
 }
 
 bool game_state::update_visualization ()
@@ -94,18 +84,25 @@ bool game_state::update_visualization ()
 
 /* CX and CY are the cumulative offsets from the root node, and should count in pixels.
    They give the center of the node; modulo that they are multiples of SIZE.  */
-void game_state::render_visualization (int cx, int cy, int size,
-				       const draw_circle &circle_fn, const draw_special &special_fn, const draw_line &line_fn)
+void game_state::render_visualization (int cx, int cy, int size, const draw_line &line_fn, bool first)
 {
 	size_t n_children = m_children.size ();
 
 	if (m_visual_collapse && n_children > 0) {
 		line_fn (cx, cy, cx + size, cy, true);
-		special_fn (this, cx, cy, true);
 		return;
 	}
 
 	if (n_children > 0 && !m_visual_collapse) {
+		if (first) {
+			game_state *p = this;
+			int count = 0;
+			while (p && !p->m_visual_collapse && p->m_children.size () > 0) {
+				count++;
+				p = p->m_children[0];
+			}
+			line_fn (cx, cy, cx + size * count, cy, false);
+		}
 		game_state *last = m_children.back ();
 		int yoff = last->m_visualized.y_offset () - 1;
 		if (n_children > 1 && yoff > 0) {
@@ -114,28 +111,57 @@ void game_state::render_visualization (int cx, int cy, int size,
 		for (auto it: m_children) {
 			int y0 = it->m_visualized.y_offset () * size;
 			int y1 = y0;
-			if (y0 > 0)
+			if (y0 > 0) {
 				y0 -= size;
-			line_fn (cx, cy + y0, cx + size, cy + y1, false);
+				line_fn (cx, cy + y0, cx + size, cy + y1, false);
+			}
 		}
 	}
-	if (m_move_color == none)
-		special_fn (this, cx, cy, false);
-	else
-		circle_fn (this, cx, cy, m_move_color);
 
 	for (auto &it: m_children) {
 		int yoff = it->m_visualized.y_offset ();
 		it->render_visualization (cx + size, cy + size * yoff, size,
-					  circle_fn, special_fn, line_fn);
+					  line_fn, it != m_children[0]);
+	}
+}
+
+void game_state::extract_visualization (int x, int y,
+					visual_tree::bit_rect &stones_w,
+					visual_tree::bit_rect &stones_b,
+					visual_tree::bit_rect &edits,
+					visual_tree::bit_rect &collapsed)
+{
+	size_t n_children = m_children.size ();
+
+	if (m_visual_collapse && n_children > 0) {
+		collapsed.set_bit (x, y);
+		return;
+	}
+	switch (m_move_color) {
+	case none:
+		edits.set_bit (x, y);
+		break;
+	case white:
+		stones_w.set_bit (x, y);
+		break;
+	case black:
+		stones_b.set_bit (x, y);
+		break;
+	}
+
+	for (auto &it: m_children) {
+		int yoff = it->m_visualized.y_offset ();
+		it->extract_visualization (x + 1, y + yoff, stones_w, stones_b, edits, collapsed);
 	}
 }
 
 void game_state::render_active_trace (int cx, int cy, int size, const add_point &point_fn,
 				      const draw_line &line_fn)
 {
-	point_fn (cx, cy);
-	if (m_children.size () == 0)
+	size_t n_children = m_children.size ();
+	if (n_children == 0 || m_active > 0 || m_parent == nullptr || m_parent->m_active != 0)
+		point_fn (cx, cy);
+	if (n_children == 0)
 		return;
 
 	game_state *c = m_children[m_active];
@@ -168,6 +194,22 @@ bool game_state::locate_visual (int x, int y, const game_state *active, int &ax,
 		}
 	}
 	return false;
+}
+
+game_state *game_state::locate_by_vis_coords (int x, int y, int off_x, int off_y)
+{
+	if (off_x == x && off_y == y)
+		return this;
+	if (x < off_x || y < off_y)
+		return nullptr;
+	if (x >= off_x + m_visualized.width () || y >= off_y + m_visualized.height ())
+		return nullptr;
+	for (auto &it: m_children) {
+		game_state *ret = it->locate_by_vis_coords (x, y, off_x + 1, off_y + it->m_visualized.y_offset ());
+		if (ret != nullptr)
+			return ret;
+	}
+	return nullptr;
 }
 
 bool game_state::vis_expand_one ()

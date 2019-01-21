@@ -3,34 +3,79 @@
 
 class visual_tree
 {
-	/* The dimensions of the box that holds this (sub)tree.  */
-	int m_w, m_h;
+public:
+	struct bit_rect
+	{
+		std::vector<bit_array> m_rep;
+		int m_w, m_h;
+		bit_rect (int w, int h) : m_w (w), m_h (h)
+		{
+			for (int i = 0; i < h; i++)
+				m_rep.push_back (bit_array (m_w));
+		}
+		void set_bit (int x, int y)
+		{
+			m_rep[y].set_bit (x);
+		}
+		bool test_bit (int x, int y)
+		{
+			return m_rep[y].test_bit (x);
+		}
+		void ior (const bit_rect &other, int xoff, int yoff)
+		{
+			for (int i = 0; i < other.m_h; i++)
+				m_rep[yoff + i].ior (other.m_rep[i], xoff);
+		}
+		bool test_overlap (const bit_rect &other, int xoff, int yoff)
+		{
+			return m_rep[yoff].intersect_p (other.m_rep[0], xoff);
+		}
+		void set_max_width (int x)
+		{
+			if (x <= m_w)
+				return;
+			m_w = x;
+			for (auto &vec: m_rep)
+				vec.grow (m_w);
+		}
+		void set_max_height (int h)
+		{
+			while (m_h < h) {
+				m_rep.push_back (bit_array (m_w));
+				m_h++;
+			}
+		}
+	};
+
+private:
+	bit_rect m_rep;
 	/* The offset from the parent's box.  */
 	int m_off_y = 0;
-	/* The graphical representation, as bits indicating nodes.  */
-	std::vector<bit_array> m_rep;
 public:
 	visual_tree (bool collapsed = false)
-		: m_w (collapsed ? 2 : 1), m_h (1)
+		: m_rep (collapsed ? 2 : 1, 1)
 	{
-		m_rep.push_back (bit_array (m_w));
-		m_rep[0].set_bit (0);
-		if (m_w == 2)
-			m_rep[0].set_bit (1);
+		m_rep.set_bit (0, 0);
+		if (m_rep.m_w == 2)
+			m_rep.set_bit (1, 0);
 	}
 	visual_tree (visual_tree &main_var, int max_child_width);
 	void add_variation (visual_tree &other);
 	int width () const
 	{
-		return m_w;
+		return m_rep.m_w;
 	}
 	int height () const
 	{
-		return m_h;
+		return m_rep.m_h;
 	}
 	int y_offset () const
 	{
 		return m_off_y;
+	}
+	const bit_rect &representation ()
+	{
+		return m_rep;
 	}
 };
 
@@ -482,14 +527,16 @@ public:
 
 	/* Return true if a change was made.  */
 	bool update_visualization ();
-	typedef std::function<void (game_state *, int cx, int cy, stone_color)> draw_circle;
-	typedef std::function<void (game_state *, int cx, int cy, bool)> draw_special;
 	typedef std::function<void (int, int, int, int, bool)> draw_line;
 	typedef std::function<void (int, int)> add_point;
-	void render_visualization (int, int, int,
-				   const draw_circle &, const draw_special &, const draw_line &);
+	void extract_visualization (int x, int y, visual_tree::bit_rect &stones_w,
+				    visual_tree::bit_rect &stones_b,
+				    visual_tree::bit_rect &edits,
+				    visual_tree::bit_rect &collapsed);
+	void render_visualization (int, int, int, const draw_line &, bool first);
 	void render_active_trace (int, int, int, const add_point &, const draw_line &);
 	bool locate_visual (int, int, const game_state *active, int &, int &);
+	game_state *locate_by_vis_coords (int x, int y, int off_x, int off_y);
 	const visual_tree &visualization ()
 	{
 		return m_visualized;
