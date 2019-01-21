@@ -148,44 +148,70 @@ void go_board::identify_units ()
 	const bit_array &masked_right = get_boardmask_right (m_sz);
 
 	bit_array handled (m_sz * m_sz);
-
-	for (int i = 0; i < m_sz * m_sz; i++) {
-		if (handled.test_bit (i))
-			continue;
-		bit_array *stones;
-		stone_color col = none;
-		if (m_stones_w->test_bit (i)) {
-			col = white;
-			stones = m_stones_w;
-		} else if (m_stones_b->test_bit (i)) {
-			col = black;
-			stones = m_stones_b;
-		} else
-			continue;
-		std::vector<stone_unit> &units = col == black ? m_units_b : m_units_w;
-		bit_array unit (m_sz * m_sz);
-		unit.set_bit (i);
-		bit_array next (unit);
-		for (;;) {
-			flood_step (next, unit, masked_left, masked_right);
-			next.and1 (*stones);
-			if (next == unit)
-				break;
-			unit = next;
-		}
 #ifdef DEBUG
-		if (handled.intersect_p (unit))
-			throw std::logic_error ("overlapping groups");
+	int found_w = 0;
+	int found_b = 0;
 #endif
-		handled.ior (unit);
+	for (int y = 0; y < m_sz; y++) {
+		for (int x = 0; x < m_sz; x++) {
+			int i = bitpos (x, y);
+			if (handled.test_bit (i))
+				continue;
+			bit_array *stones;
+			stone_color col = none;
+			if (m_stones_w->test_bit (i)) {
+				col = white;
+				stones = m_stones_w;
+			} else if (m_stones_b->test_bit (i)) {
+				col = black;
+				stones = m_stones_b;
+			} else
+				continue;
+			std::vector<stone_unit> &units = col == black ? m_units_b : m_units_w;
+			bit_array unit (m_sz * m_sz);
+			unit.set_bit (i);
+			/* Extend vertically and horizontally as far
+			   as possible, to try to reduce the number of
+			   flood fill operations needed.  */
+			for (int x0 = x + 1; x0 < m_sz; x0++)
+				if (stones->test_bit (bitpos (x0, y)))
+					unit.set_bit (bitpos (x0, y));
+				else
+					break;
+			for (int y0 = y + 1; y0 < m_sz; y0++)
+				if (stones->test_bit (bitpos (x, y0)))
+					unit.set_bit (bitpos (x, y0));
+				else
+					break;
 
-		unsigned n_liberties = count_liberties (unit);
-		stone_unit su (next, n_liberties);
+			bit_array next (unit);
+			for (;;) {
+				flood_step (next, unit, masked_left, masked_right);
+				next.and1 (*stones);
+				if (next == unit)
+					break;
+				unit = next;
+			}
+#ifdef DEBUG
+			if (handled.intersect_p (unit))
+				throw std::logic_error ("overlapping groups");
+			if (col == white)
+				found_w += unit.popcnt ();
+			else
+				found_b += unit.popcnt ();
+#endif
+			handled.ior (unit);
+			unsigned n_liberties = count_liberties (unit);
+			stone_unit su (next, n_liberties);
 
-		units.push_back (su);
+			units.push_back (su);
+		}
 	}
+#ifdef DEBUG
+	if (found_w != m_stones_w->popcnt () || found_b != m_stones_b->popcnt ())
+		throw std::logic_error ("unit search didn't find all stones.");
+#endif
 }
-
 void go_board::toggle_alive (int x, int y, bool flood)
 {
 	int bp = bitpos (x, y);
