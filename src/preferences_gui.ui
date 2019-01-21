@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>664</width>
-    <height>785</height>
+    <width>673</width>
+    <height>776</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -2351,7 +2351,8 @@ Note: 'Delete' concerns saved records.</string>
           <item row="3" column="1">
            <widget class="QCheckBox" name="anChildMovesCheckBox">
             <property name="text">
-             <string>Always show child moves as circles</string>
+             <string>Override variation display settings
+(show child moves as circles when analysing)</string>
             </property>
            </widget>
           </item>

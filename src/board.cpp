@@ -803,6 +803,10 @@ QString Board::render_ascii (bool do_number, bool coords)
 /* The central function for synchronizing visual appearance with the abstract board data.  */
 void Board::sync_appearance (bool board_only)
 {
+	bool have_analysis = m_eval_state != nullptr;
+	bool numbering = !have_analysis && m_edit_board == nullptr;
+
+	bool analysis_children = setting->readBoolEntry ("ANALYSIS_CHILDREN");
 	int analysis_vartype = setting->readIntEntry ("ANALYSIS_VARTYPE");
 	int winrate_for = setting->readIntEntry ("ANALYSIS_WINRATE");
 	int maxdepth = setting->readIntEntry ("ANALYSIS_DEPTH");
@@ -811,7 +815,11 @@ void Board::sync_appearance (bool board_only)
 	const go_board &b = m_edit_board == nullptr ? m_state->get_board () : *m_edit_board;
 	stone_color to_move = m_edit_board == nullptr ? m_state->to_move () : m_edit_to_move;
 
-	const go_board vars = m_vars_children ? m_state->child_moves (nullptr) : m_state->sibling_moves ();
+	int var_type = have_analysis && analysis_children ? 0 : m_vars_type;
+
+	const go_board child_vars = m_state->child_moves (nullptr);
+	const go_board sibling_vars = m_state->sibling_moves ();
+	const go_board &vars = m_vars_children ? child_vars : sibling_vars;
 	const bit_array st_w = b.get_stones_w ();
 	const bit_array st_b = b.get_stones_b ();
 	int sz = b.size ();
@@ -826,8 +834,6 @@ void Board::sync_appearance (bool board_only)
 	/* Look back through previous moves to see if we should do numbering.  */
 	int n_back = 0, max_number = 0;
 	int *count_map = new int[sz * sz]();
-	bool have_analysis = m_eval_state != nullptr;
-	bool numbering = !have_analysis && m_edit_board == nullptr;
 
 	game_state *startpos = nullptr;
 	if (have_analysis) {
@@ -921,7 +927,7 @@ void Board::sync_appearance (bool board_only)
 			} else if (mark_at_pos == mark::terr || mark_at_pos == mark::falseeye)
 				type = stone_type::var;
 
-			if (sc == none && m_vars_type == 1) {
+			if (sc == none && var_type == 1) {
 				sc = vars.stone_at (x, y);
 				if (sc != none)
 					type = stone_type::var;
@@ -944,7 +950,7 @@ void Board::sync_appearance (bool board_only)
 				m_stones[bp] = s;
 			}
 
-			mark var_mark = m_vars_type == 2 ? vars.mark_at (x, y) : mark::none;
+			mark var_mark = var_type == 2 ? vars.mark_at (x, y) : mark::none;
 			mextra var_me = vars.mark_extra_at (x, y);
 			/* Now look at marks.  */
 
@@ -962,6 +968,7 @@ void Board::sync_appearance (bool board_only)
 			if (v > 0 && n_back != 0)
 				v = n_back - v + 1;
 			bool added = false;
+			bool an_child_mark = have_analysis && analysis_children && child_vars.stone_at (x, y) == to_move;
 			/* Put a percentage or letter mark on variations returned by the analysis engine,
 			   unless we are already showing a numbered variation and this intersection
 			   has a number.  */
@@ -976,7 +983,7 @@ void Board::sync_appearance (bool board_only)
 					QColor col = QColor::fromHsv (angle, 255, 200);
 					wr_col = col.name ();
 				}
-				svg.circle_at (cx, cy, svg_factor * 0.45, wr_col, "black", "1");
+				svg.circle_at (cx, cy, svg_factor * 0.45, wr_col, an_child_mark ? "white" : "black", "1");
 
 				if (analysis_vartype == 0) {
 					QChar c = eval_me >= 26 ? 'a' + eval_me - 26 : 'A' + eval_me;
@@ -996,6 +1003,8 @@ void Board::sync_appearance (bool board_only)
 						     "black", fi);
 				}
 				added = true;
+			} else if (an_child_mark) {
+				svg.circle_at (cx, cy, svg_factor * 0.45, "none", "white", "1");
 			} else
 				added = add_mark_svg (svg, cx, cy, svg_factor,
 						      mark_at_pos, extra,

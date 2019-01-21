@@ -94,9 +94,6 @@ PreferencesDialog::PreferencesDialog(QWidget* parent)
 	connect (woodComboBox, cic, [=] (int i) { GobanPicturePathButton->setEnabled (i == 0); LineEdit_goban->setEnabled (i == 0); update_board_image (); });
 	connect (LineEdit_goban, &QLineEdit::editingFinished, [=] () { update_board_image (); });
 
-	/* @@@ Need to figure out the best way to display moves on the board during
-	   analysis.  */
-	anChildMovesCheckBox->setVisible (false);
 	update_board_image ();
 	update_w_stones ();
 	update_b_stones ();
