@@ -156,11 +156,13 @@ public:
 	public:
 		game_state *m_state;
 		virtual void observed_changed () = 0;
-		void move_state (game_state *s)
+		void move_state (game_state *s, bool deleting_state = false)
 		{
 			if (s == m_state)
 				return;
-			if (m_state != nullptr)
+			/* Avoid removing items from a list we're iterating over
+			   in the game_state destructor.  */
+			if (m_state != nullptr && !deleting_state)
 				m_state->remove_observer (this);
 			if (s != nullptr)
 				s->m_observers.push_back (this);
@@ -195,40 +197,49 @@ public:
 		m_comment = other.m_comment;
 		m_active = other.m_active;
 	}
-	~game_state ()
+	void disconnect ()
 	{
-		for (sgf::node::property *it: m_unrecognized_props)
-			delete it;
+		game_state *parent = m_parent;
 
-		if (m_parent) {
-			game_state *last = m_parent->m_children.back ();
-			m_parent->m_children.pop_back ();
-			size_t n = m_parent->m_children.size ();
+		if (parent) {
+			game_state *last = parent->m_children.back ();
+			parent->m_children.pop_back ();
+			size_t n = parent->m_children.size ();
 			size_t i;
 			for (i = 0; i < n; i++) {
-				if (m_parent->m_children[i] == this) {
-					m_parent->m_children[i] = last;
+				if (parent->m_children[i] == this) {
+					parent->m_children[i] = last;
 					break;
 				}
 			}
-			if (i == m_parent->m_active && i > 0)
-				m_parent->m_active--;
+			if (i == parent->m_active && i > 0)
+				parent->m_active--;
 
-			m_parent->m_visual_ok = false;
-			if (m_parent->m_children.size () == 0)
-				m_parent->m_visual_collapse = false;
+			parent->m_visual_ok = false;
+			if (parent->m_children.size () == 0)
+				parent->m_visual_collapse = false;
 #if 0
 			if (i == n && last != this)
 				throw std::logic_error ("delete node not found among parent's children");
 #endif
 		}
+		m_parent = nullptr;
+		for (auto &it: m_observers) {
+			it->move_state (parent, true);
+		}
+
+	}
+	~game_state ()
+	{
+		for (sgf::node::property *it: m_unrecognized_props)
+			delete it;
+
 		while (m_children.size () > 0) {
 			game_state *c = m_children.back ();
 			delete c;
 		}
-		for (auto &it: m_observers) {
-			it->move_state (m_parent);
-		}
+
+		disconnect ();
 	}
 	void set_unrecognized (const sgf::node::proplist &list)
 	{
@@ -710,7 +721,6 @@ public:
 	}
 	~game_record ()
 	{
-		// m_last_move.set_state (nullptr);
 	}
 };
 

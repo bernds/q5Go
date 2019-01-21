@@ -1283,10 +1283,9 @@ void Board::deleteNode()
 	if (st->root_node_p ())
 		return;
 	game_state *parent = st->prev_move ();
-	st->transfer_observers (parent);
+	delete st;
 	if (m_state != parent)
 		throw std::logic_error ("should have updated to parent");
-	delete st;
 	const go_board &b = m_state->get_board ();
 	m_board_win->setMoveData (*m_state, b, m_game_mode);
 	setModified ();
