@@ -34,6 +34,12 @@ GTP_Process::GTP_Process(QWidget *parent, Gtp_Controller *c, const QString &prog
 	QStringList arguments;
 	if (!args.isEmpty ())
 		arguments = args.split (QRegExp ("\\s+"));
+	QFileInfo fi (prog);
+	QString wd = fi.dir ().absolutePath ();
+	setWorkingDirectory (wd);
+	m_dlg.textEdit->setTextColor (Qt::red);
+	m_dlg.append ("Working directory: " + wd);
+	m_dlg.textEdit->setTextColor (Qt::black);
 	start (prog, arguments);
 }
 
