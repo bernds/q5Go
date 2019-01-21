@@ -961,21 +961,22 @@ void Board::sync_appearance (bool board_only)
 
 			if (v > 0 && n_back != 0)
 				v = n_back - v + 1;
-			QString wr_col = "white";
 			bool added = false;
 			/* Put a percentage or letter mark on variations returned by the analysis engine,
 			   unless we are already showing a numbered variation and this intersection
 			   has a number.  */
 			if (eval_mark != mark::none && v == 0) {
-				/* m_winrate holds the difference to the primary move's winrate.
-				   Use green for a difference of 0, red for any loss bigger than 12%.
-				   The HSV angle between red and green is 120, so just multiply by 1000.  */
+				QString wr_col = "lightblue";
 				double wrdiff = m_winrate[bp];
-				int angle = std::min (120.0, std::max (0.0, 120 + 1000 * wrdiff));
-				QColor col = QColor::fromHsv (angle, 255, 200);
-				wr_col = col.name ();
-				svg.circle_at (cx, cy, svg_factor * 0.45, wr_col,
-					       eval_me == 0 ? "lawngreen" : "black", "1");
+				if (eval_me > 0) {
+					/* m_winrate holds the difference to the primary move's winrate.
+					   Use green for a difference of 0, red for any loss bigger than 12%.
+					   The HSV angle between red and green is 120, so just multiply by 1000.  */
+					int angle = std::min (120.0, std::max (0.0, 120 + 1000 * wrdiff));
+					QColor col = QColor::fromHsv (angle, 255, 200);
+					wr_col = col.name ();
+				}
+				svg.circle_at (cx, cy, svg_factor * 0.45, wr_col, "black", "1");
 
 				if (analysis_vartype == 0) {
 					QChar c = eval_me >= 26 ? 'a' + eval_me - 26 : 'A' + eval_me;
