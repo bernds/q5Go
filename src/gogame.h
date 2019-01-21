@@ -335,18 +335,24 @@ public:
 			m_active = m_children.size() - 1;
 		return tmp;
 	}
-	game_state *add_child_move (const go_board &new_board, stone_color to_move, int x, int y, bool set_active = true)
+private:
+	game_state *add_child_move_common (const go_board &new_board, stone_color to_move, int x, int y, bool set_active)
 	{
 		stone_color next_to_move = to_move == black ? white : black;
-		for (auto &it: m_children)
-			if (it->m_board == new_board && it->m_to_move == next_to_move)
-				return it;
 		m_visual_ok = false;
 		game_state *tmp = new game_state (new_board, m_move_number + 1, this, next_to_move, x, y, to_move);
 		m_children.push_back (tmp);
 		if (set_active)
 			m_active = m_children.size() - 1;
 		return tmp;
+	}
+public:
+	game_state *add_child_move (const go_board &new_board, stone_color to_move, int x, int y, bool set_active = true)
+	{
+		for (auto &it: m_children)
+			if (it->was_move_p () && it->m_board == new_board)
+				return it;
+		return add_child_move_common (new_board, to_move, x, y, set_active);
 	}
 	game_state *add_child_move (int x, int y, stone_color to_move)
 	{
@@ -363,6 +369,10 @@ public:
 			if (m_parent->m_board.position_equal_p (new_board))
 				return nullptr;
 		}
+		for (auto &it: m_children)
+			if (it->was_move_p () && it->m_board.position_equal_p (new_board))
+				return it;
+
 		return add_child_move (new_board, m_to_move, x, y);
 	}
 	game_state *add_child_move (int x, int y)
