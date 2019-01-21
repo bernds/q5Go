@@ -430,7 +430,7 @@ InfoType Parser::cmd7(const QString &line)
 	aGame->oneColorGo = false ;
 
 	emit signal_game(aGame);
-	emit signal_move(aGame);
+	emit signal_gamemove(aGame);
 
 	return GAME7;
 }
@@ -846,7 +846,7 @@ InfoType Parser::cmd9(QString &line)
 		aGame->Sz = "has adjourned.";
 
 		emit signal_game(aGame);
-		emit signal_move(aGame);
+		emit signal_gamemove(aGame);
 	}
 	// 9 Removing game 30 from observation list.
 	else if (line.contains("from observation list"))
@@ -857,7 +857,7 @@ InfoType Parser::cmd9(QString &line)
 		aGame->Sz = "-";
 		aGame->running = false;
 
-		emit signal_move(aGame);
+		emit signal_gamemove(aGame);
 		return IT_OTHER;
 	}
 	// 9 Adding game to observation list.
@@ -1011,10 +1011,9 @@ InfoType Parser::cmd9(QString &line)
 	{
 		aGame->nr = "@";
 		aGame->running = false;
-			
-		aGame->Sz = line ;
-			
-		emit signal_move(aGame);
+		aGame->Sz = line;
+
+		emit signal_gamemove(aGame);
 		return IT_OTHER;
 #if 0 // make better check
 		if (element(line, 0, " ", "EOL") != QString("has resigned the game."))
@@ -1328,7 +1327,7 @@ InfoType Parser::cmd15(const QString &line)
 			aGame->Sz = "@@";
 			aGame->running = true;
 
-			emit signal_move(aGame);
+			emit signal_gamemove(aGame);
 
 			// reset memory
 			memory_str = QString::null;
@@ -1410,10 +1409,10 @@ InfoType Parser::cmd20(const QString &line)
 
 	if ( line.indexOf("W:") < line.indexOf("B:"))
 		aGame->Sz = "W " + line.section(' ', 2, 2) + " B " + line.section(' ', 6, 6);
-	else 
-		aGame->Sz = "B " + line.section(' ', 2, 2) + " W " + line.section(' ', 6, 6);				
-			
-	emit signal_move(aGame);
+	else
+		aGame->Sz = "B " + line.section(' ', 2, 2) + " W " + line.section(' ', 6, 6);
+
+	emit signal_gamemove(aGame);
 	return IT_OTHER;
 }
 
@@ -1467,7 +1466,7 @@ InfoType Parser::cmd21(const QString &line)
 			aGame->running = true;
 
 			emit signal_game(aGame);
-			emit signal_move(aGame);
+			emit signal_gamemove(aGame);
 			return GAME;
 		}
 
@@ -1497,7 +1496,7 @@ InfoType Parser::cmd21(const QString &line)
 				aGame->Sz.remove(0,2);
 
 			emit signal_game(aGame);
-			emit signal_move(aGame);
+			emit signal_gamemove(aGame);
 			return GAME;
 		}
 	}

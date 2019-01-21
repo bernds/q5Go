@@ -267,24 +267,24 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	qgoif = new qGoIF(this);
 	// qGo Interface
 
-	connect(parser, SIGNAL(signal_set_observe( const QString&)), qgoif, SLOT(set_observe(const QString&)));
-	connect(parser, SIGNAL(signal_move(GameInfo*)), qgoif, SLOT(slot_move(GameInfo*)));
-	connect(parser, SIGNAL(signal_move(Game*)), qgoif, SLOT(slot_move(Game*)));
-	connect(parser, SIGNAL(signal_kibitz(int, const QString&, const QString&)), qgoif, SLOT(slot_kibitz(int, const QString&, const QString&)));
-	connect(parser, SIGNAL(signal_title(const GameInfo *, const QString&)), qgoif, SLOT(slot_title(const GameInfo *, const QString&)));
-	connect(parser, SIGNAL(signal_komi(const QString&, const QString&, bool)), qgoif, SLOT(slot_komi(const QString&, const QString&, bool)));
-	connect(parser, SIGNAL(signal_freegame(bool)), qgoif, SLOT(slot_freegame(bool)));
-	connect(parser, SIGNAL(signal_matchcreate(const QString&, const QString&)), qgoif, SLOT(slot_matchcreate(const QString&, const QString&)));
-	connect(parser, SIGNAL(signal_removestones(const QString&, const QString&)), qgoif, SLOT(slot_removestones(const QString&, const QString&)));
-	connect(parser, SIGNAL(signal_undo(const QString&, const QString&)), qgoif, SLOT(slot_undo(const QString&, const QString&)));
-	connect(parser, SIGNAL(signal_result(const QString&, const QString&, bool, const QString&)), qgoif, SLOT(slot_result(const QString&, const QString&, bool, const QString&)));
-	connect(parser, SIGNAL(signal_requestDialog(const QString&, const QString&, const QString&, const QString&)), qgoif, SLOT(slot_requestDialog(const QString&, const QString&, const QString&, const QString&)));
-	connect(this, SIGNAL(signal_move(Game*)), qgoif, SLOT(slot_move(Game*)));
-	connect(qgoif, SIGNAL(signal_sendcommand(const QString&, bool)), this, SLOT(slot_sendcommand(const QString&, bool)));
-	connect(qgoif, SIGNAL(signal_addToObservationList(int)), this, SLOT(slot_addToObservationList(int)));
-	connect(qgo, SIGNAL(signal_updateFont()), this, SLOT(slot_updateFont()));
-	connect(parser, SIGNAL(signal_timeAdded(int, bool)), qgoif, SLOT(slot_timeAdded(int, bool)));
-	//connect(parser, SIGNAL(signal_undoRequest(const QString&)), qgoif, SLOT(slot_undoRequest(const QString&)));
+	connect(parser, &Parser::signal_set_observe, qgoif, &qGoIF::set_observe);
+	connect(parser, &Parser::signal_move, qgoif, &qGoIF::slot_move);
+	connect(parser, &Parser::signal_gamemove, qgoif, &qGoIF::slot_gamemove);
+	connect(parser, &Parser::signal_kibitz, qgoif, &qGoIF::slot_kibitz);
+	connect(parser, &Parser::signal_title, qgoif, &qGoIF::slot_title);
+	connect(parser, &Parser::signal_komi, qgoif, &qGoIF::slot_komi);
+	connect(parser, &Parser::signal_freegame, qgoif, &qGoIF::slot_freegame);
+	connect(parser, &Parser::signal_matchcreate, qgoif, &qGoIF::slot_matchcreate);
+	connect(parser, &Parser::signal_removestones, qgoif, &qGoIF::slot_removestones);
+	connect(parser, &Parser::signal_undo, qgoif, &qGoIF::slot_undo);
+	connect(parser, &Parser::signal_result, qgoif, &qGoIF::slot_result);
+	connect(parser, &Parser::signal_requestDialog, qgoif, &qGoIF::slot_requestDialog);
+	connect(this, &ClientWindow::signal_move, qgoif, &qGoIF::slot_gamemove);
+	connect(qgoif, &qGoIF::signal_sendcommand, this, &ClientWindow::slot_sendcommand);
+	connect(qgoif, &qGoIF::signal_addToObservationList, this, &ClientWindow::slot_addToObservationList);
+	connect(qgo, &qGo::signal_updateFont, this, &ClientWindow::slot_updateFont);
+	connect(parser, &Parser::signal_timeAdded, qgoif, &qGoIF::slot_timeAdded);
+	//connect(parser, &Parser::signal_undoRequest, qgoif, &qGoIF::slot_undoRequest);
 
 #if 0
 	//gamestable

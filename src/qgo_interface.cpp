@@ -536,7 +536,7 @@ void qGoIF::slot_move(GameInfo *gi)
 }
 
 // start/adjourn/end/resume of a game (parser)
-void qGoIF::slot_move(Game *g)
+void qGoIF::slot_gamemove(Game *g)
 {
 	parse_move(1, 0, g);
 }
