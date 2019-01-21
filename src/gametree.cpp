@@ -83,32 +83,9 @@ GameTree::GameTree (QWidget *parent)
 	: QGraphicsView (parent), m_header_view (Qt::Horizontal, this)
 {
 	setFocusPolicy (Qt::NoFocus);
-	m_scene = new QGraphicsScene (0, 0, m_size, m_size, this);
+	m_scene = new QGraphicsScene (0, 0, 30, 30, this);
 	setScene (m_scene);
 	setBackgroundBrush (QBrush (Qt::white));
-
-	int ssize = m_size - 2;
-	int soff = ssize / 2;
-	svg_builder wstone (ssize, ssize);
-	wstone.circle_at (soff, soff, soff * 0.9 - 1, "white", "black", "2");
-	svg_builder bstone (ssize, ssize);
-	bstone.circle_at (soff, soff, soff * 0.9, "black", "none");
-	svg_builder edit (ssize, ssize);
-	edit.circle_at (soff / 2, soff / 2, (ssize / 4) * 0.9, "black", "none");
-	edit.circle_at (ssize - soff / 2, ssize - soff / 2, (ssize / 4) * 0.9, "black", "none");
-	edit.circle_at (soff / 2, ssize - soff / 2, (ssize / 4) * 0.9 - 0.5, "white", "black", "1");
-	edit.circle_at (ssize - soff / 2, soff / 2, (ssize / 4) * 0.9 - 0.5, "white", "black", "1");
-	m_pm_w = new QPixmap (wstone.to_pixmap (ssize, ssize));
-	m_pm_b = new QPixmap (bstone.to_pixmap (ssize, ssize));
-	m_pm_e = new QPixmap (edit.to_pixmap (ssize, ssize));
-
-	QSvgRenderer renderer (box_svg);
-	m_pm_box = new QPixmap (ssize, ssize);
-	m_pm_box->fill (QColor (0, 0, 0, 0));
-	QPainter painter;
-	painter.begin (m_pm_box);
-	renderer.render (&painter);
-	painter.end ();
 
 	setAlignment (Qt::AlignTop | Qt::AlignLeft);
 
@@ -126,6 +103,58 @@ GameTree::GameTree (QWidget *parent)
 	setViewportMargins (0, m_header_view.height (), 0, 0);
 	QScrollBar *hscr = horizontalScrollBar ();
 	connect (hscr, &QScrollBar::valueChanged, [=] (int v) { m_header_view.setOffset (v); });
+	update_item_size ();
+}
+
+void GameTree::update_item_size ()
+{
+	m_size = setting->readIntEntry ("GAMETREE_SIZE");
+	m_size = std::max (30, std::min (120, m_size));
+
+	QFont f = setting->fontStandard;
+	QFontMetrics fm (f);
+
+	int width = 0;
+	for (int i = 0; i < 9; i++) {
+		char c = '0' + i;
+		char str[] = { c, c, c, '\0' };
+		QRect br = fm.boundingRect (str);
+		width = std::max (width, br.width ());
+	}
+	if (width > m_size) {
+		double ratio = m_size * 1.0 / width;
+		/* Don't scale too heavily.  */
+		ratio = std::max (0.5, ratio);
+		f.setPointSize (f.pointSize () * ratio);
+		m_header_view.setFont (f);
+	} else
+		m_header_view.setFont (f);
+
+	int ssize = m_size - 2;
+	int soff = ssize / 2;
+	svg_builder wstone (ssize, ssize);
+	wstone.circle_at (soff, soff, soff * 0.9 - 1, "white", "black", "2");
+	svg_builder bstone (ssize, ssize);
+	bstone.circle_at (soff, soff, soff * 0.9, "black", "none");
+	svg_builder edit (ssize, ssize);
+	edit.circle_at (soff / 2, soff / 2, (ssize / 4) * 0.9, "black", "none");
+	edit.circle_at (ssize - soff / 2, ssize - soff / 2, (ssize / 4) * 0.9, "black", "none");
+	edit.circle_at (soff / 2, ssize - soff / 2, (ssize / 4) * 0.9 - 0.5, "white", "black", "1");
+	edit.circle_at (ssize - soff / 2, soff / 2, (ssize / 4) * 0.9 - 0.5, "white", "black", "1");
+	m_pm_w = QPixmap (wstone.to_pixmap (ssize, ssize));
+	m_pm_b = QPixmap (bstone.to_pixmap (ssize, ssize));
+	m_pm_e = QPixmap (edit.to_pixmap (ssize, ssize));
+
+	QSvgRenderer renderer (box_svg);
+	m_pm_box = QPixmap (ssize, ssize);
+	m_pm_box.fill (QColor (0, 0, 0, 0));
+	QPainter painter;
+	painter.begin (&m_pm_box);
+	renderer.render (&painter);
+	painter.end ();
+
+	if (m_game != nullptr)
+		update (m_game, m_active, true);
 }
 
 void GameTree::resizeEvent(QResizeEvent*)
@@ -177,10 +206,10 @@ void GameTree::show_menu (int x, int y, const QPoint &pos)
 	menu.exec (pos);
 }
 
-void GameTree::update (std::shared_ptr<game_record> gr, game_state *active)
+void GameTree::update (std::shared_ptr<game_record> gr, game_state *active, bool force)
 {
 	game_state *r = gr->get_root ();
-	bool changed = r->update_visualization ();
+	bool changed = r->update_visualization () || force;
 	bool active_changed = m_active != active;
 	if (gr != m_game)
 		changed = true;
@@ -226,13 +255,13 @@ void GameTree::update (std::shared_ptr<game_record> gr, game_state *active)
 					painter.setPen (Qt::NoPen);
 					painter.begin (&combined);
 					for (int i = 0; i < len; i++) {
-						QPixmap *src = m_pm_box;
+						QPixmap *src = &m_pm_box;
 						if (edits.test_bit (x0 + i, y))
-							src = m_pm_e;
+							src = &m_pm_e;
 						else if (stones_w.test_bit (x0 + i, y))
-							src = m_pm_w;
+							src = &m_pm_w;
 						else if (stones_b.test_bit (x0 + i, y))
-							src = m_pm_b;
+							src = &m_pm_b;
 						painter.drawPixmap (i * m_size, 0, *src);
 					}
 					painter.end ();
@@ -260,6 +289,7 @@ void GameTree::update (std::shared_ptr<game_record> gr, game_state *active)
 		m_header_view.setModel (nullptr);
 		for (int i = 0; i < w; i++)
 			m_headers.setHorizontalHeaderItem (i, new QStandardItem (QString::number (i)));
+		m_headers.setColumnCount (w);
 		m_header_view.setModel (&m_headers);
 	}
 	int acx = 0, acy = 0;

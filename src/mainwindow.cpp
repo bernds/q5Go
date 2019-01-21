@@ -2120,6 +2120,7 @@ void MainWindow::updateFont()
 
 	// rest: standard font
 	mainWidget->updateFont ();
+	gameTreeView->update_item_size ();
 }
 
 // used in slot_editBoardInNewWindow()

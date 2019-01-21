@@ -199,6 +199,8 @@ void PreferencesDialog::init_from_settings ()
 	sidebarComboBox->setCurrentIndex(sidebar);
 	antiClickoCheckBox->setChecked(setting->readBoolEntry("ANTICLICKO"));
 
+	gameTreeSizeSlider->setValue(setting->readIntEntry("GAMETREE_SIZE"));
+
 	// Client Window tab
 	LineEdit_watch->setText(setting->readEntry("WATCH"));
 	LineEdit_exclude->setText(setting->readEntry("EXCLUDE"));
@@ -438,6 +440,8 @@ void PreferencesDialog::slot_apply()
 
 	setting->writeIntEntry ("ANALYSIS_DEPTH", anDepthEdit->text().toInt());
 	setting->writeIntEntry ("ANALYSIS_MAXMOVES", anMaxMovesEdit->text().toInt());
+
+	setting->writeIntEntry("GAMETREE_SIZE", gameTreeSizeSlider->value());
 
 	client_window->preferencesAccept();
 }

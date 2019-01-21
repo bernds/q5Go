@@ -119,6 +119,8 @@ Setting::Setting()
 
 	writeBoolEntry("ANALYSIS_PRUNE", 1);
 
+	writeIntEntry("GAMETREE_SIZE", 30);
+
 	language = "Default";
 	fontStandard = QFont();
 	fontMarks = QFont();

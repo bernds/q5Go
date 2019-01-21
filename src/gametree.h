@@ -25,7 +25,7 @@ class GameTree : public QGraphicsView
 	QGraphicsRectItem *m_sel {};
 	QGraphicsPathItem *m_path {};
 	QGraphicsLineItem *m_path_end {};
-	QPixmap *m_pm_w, *m_pm_b, *m_pm_e, *m_pm_box;
+	QPixmap m_pm_w, m_pm_b, m_pm_e, m_pm_box;
 	QStandardItemModel m_headers;
 	QHeaderView m_header_view;
 protected:
@@ -33,10 +33,12 @@ protected:
 
 public:
 	GameTree(QWidget *parent);
-	void update (std::shared_ptr<game_record> gr, game_state *);
+	void update (std::shared_ptr<game_record> gr, game_state *, bool force = false);
 	void show_menu (int x, int y, const QPoint &pos);
 	void item_clicked (int x, int y);
 	void toggle_collapse (int x, int y, bool);
+
+	void update_item_size ();
 
 	virtual QSize sizeHint () const override;
 };
