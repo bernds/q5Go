@@ -1778,11 +1778,9 @@ void Board::clearData()
 	clearCoords();
 }
 
-void Board::update_comment(const QString &qs, bool append)
+void Board::update_comment(const QString &qs)
 {
 	std::string s = qs.toStdString ();
-	if (append)
-		s = m_state->comment () + s;
 	m_state->set_comment (s);
 	setModified (true);
 }

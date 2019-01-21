@@ -2083,7 +2083,7 @@ void MainWindow::slotUpdateComment()
 {
 	if (!m_allow_text_update_signal)
 		return;
-	gfx_board->update_comment (commentEdit->toPlainText(), false);
+	gfx_board->update_comment (commentEdit->toPlainText());
 }
 
 /* Called from an external source to append to the comments window.  */
@@ -2092,7 +2092,6 @@ void MainWindow::append_comment(const QString &t)
 	bool old = m_allow_text_update_signal;
 	m_allow_text_update_signal = false;
 	commentEdit->append (t);
-	gfx_board->update_comment (t, true);
 	m_allow_text_update_signal = old;
 }
 

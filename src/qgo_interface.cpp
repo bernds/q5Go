@@ -1804,9 +1804,12 @@ void qGoBoard::send_kibitz(const QString &msg)
 	QString to_add = msg;
 	if (!to_add.contains(QString::number(mv_counter + 1)))
 		to_add = "(" + QString::number(mv_counter + 1) + ") " + to_add;
-	m_comments += to_add;
+	const std::string old_comment = m_state->comment ();
+	m_state->set_comment (old_comment + to_add.toStdString ());
 	if (win)
 		win->append_comment (to_add);
+	else
+		m_comments += to_add;
 }
 
 void qGoBoard::slot_sendcomment(const QString &comment)

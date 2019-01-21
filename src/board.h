@@ -187,7 +187,7 @@ public:
 	virtual void gtp_eval (const QString &) override;
 
 public slots:
-	void update_comment(const QString &, bool append);
+	void update_comment(const QString &);
 	void changeSize();
 
 signals:
