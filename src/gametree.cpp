@@ -80,7 +80,7 @@ void ClickablePixmap::hoverLeaveEvent (QGraphicsSceneHoverEvent *)
 }
 
 GameTree::GameTree (QWidget *parent)
-	: QGraphicsView (parent)
+	: QGraphicsView (parent), m_header_view (Qt::Horizontal, this)
 {
 	setFocusPolicy (Qt::NoFocus);
 	m_scene = new QGraphicsScene (0, 0, m_size, m_size, this);
@@ -116,6 +116,22 @@ GameTree::GameTree (QWidget *parent)
 	setToolTip (tr ("The game tree.\nClick nodes to move to them, click empty areas to drag.\n"
 			"Shift-click nodes to collapse or expand their sub-variations.\n"
 			"Control-click a collapsed node to expand one level of its children."));
+
+	m_header_view.setModel (&m_headers);
+	m_header_view.setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Expanding);
+	int frame_width = frameWidth ();
+	m_header_view.resize (width () - 2 * frame_width, m_header_view.height ());
+	m_header_view.move (frame_width, frame_width);
+
+	setViewportMargins (0, m_header_view.height (), 0, 0);
+	QScrollBar *hscr = horizontalScrollBar ();
+	connect (hscr, &QScrollBar::valueChanged, [=] (int v) { m_header_view.setOffset (v); });
+}
+
+void GameTree::resizeEvent(QResizeEvent*)
+{
+	int frame_width = frameWidth ();
+	m_header_view.resize (width () - 2 * frame_width, m_header_view.height ());
 }
 
 QSize GameTree::sizeHint () const
@@ -235,6 +251,16 @@ void GameTree::update (std::shared_ptr<game_record> gr, game_state *active)
 				m_scene->addLine (line, pen);
 			};
 		r->render_visualization (m_size / 2, m_size / 2, m_size, line, true);
+
+		m_header_view.setDefaultSectionSize (m_size);
+		m_header_view.setSectionResizeMode (QHeaderView::Fixed);
+
+		/* ??? Uncertain whether this is helpful for performance.
+		   The idea is to avoid many dataChanged calls.  */
+		m_header_view.setModel (nullptr);
+		for (int i = 0; i < w; i++)
+			m_headers.setHorizontalHeaderItem (i, new QStandardItem (QString::number (i)));
+		m_header_view.setModel (&m_headers);
 	}
 	int acx = 0, acy = 0;
 	r->locate_visual (0, 0, active, acx, acy);

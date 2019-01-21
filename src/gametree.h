@@ -26,6 +26,10 @@ class GameTree : public QGraphicsView
 	QGraphicsPathItem *m_path {};
 	QGraphicsLineItem *m_path_end {};
 	QPixmap *m_pm_w, *m_pm_b, *m_pm_e, *m_pm_box;
+	QStandardItemModel m_headers;
+	QHeaderView m_header_view;
+protected:
+	virtual void resizeEvent(QResizeEvent*) override;
 
 public:
 	GameTree(QWidget *parent);
