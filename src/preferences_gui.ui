@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>664</width>
-    <height>853</height>
+    <height>785</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -187,7 +187,7 @@ After placing and/or undo release button for returning to starting point automat
       <string/>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>4</number>
      </property>
      <widget class="QWidget" name="InterfaceTabWidget">
       <attribute name="title">
@@ -841,23 +841,7 @@ You can set the warning time besides</string>
          <property name="sizeHint" stdset="0">
           <size>
            <width>21</width>
-           <height>82</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="3" column="1">
-        <spacer name="spacer11">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Expanding</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>82</height>
+           <height>0</height>
           </size>
          </property>
         </spacer>
@@ -955,135 +939,7 @@ If your language is not supported, you might consider translating qGo. Please ch
        <string>Board Window</string>
       </attribute>
       <layout class="QGridLayout">
-       <item row="0" column="0">
-        <layout class="QHBoxLayout">
-         <property name="spacing">
-          <number>6</number>
-         </property>
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
-         <item>
-          <widget class="QGroupBox" name="GroupBox7">
-           <property name="toolTip">
-            <string>Display variations</string>
-           </property>
-           <property name="whatsThis">
-            <string>Display variations
-
-Select how to display all brothers of the current move. Either not at all, or as ghost stones, or as smaller stones.</string>
-           </property>
-           <property name="title">
-            <string>Variation display</string>
-           </property>
-           <layout class="QGridLayout">
-            <property name="leftMargin">
-             <number>10</number>
-            </property>
-            <property name="topMargin">
-             <number>6</number>
-            </property>
-            <property name="rightMargin">
-             <number>11</number>
-            </property>
-            <property name="bottomMargin">
-             <number>6</number>
-            </property>
-            <property name="spacing">
-             <number>6</number>
-            </property>
-            <item row="2" column="0">
-             <widget class="QLabel" name="label_5">
-              <property name="text">
-               <string>Allow SGF files to override
-child/sibling setting:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QComboBox" name="variationComboBox">
-              <property name="focusPolicy">
-               <enum>Qt::TabFocus</enum>
-              </property>
-              <item>
-               <property name="text">
-                <string>None</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Ghosts</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Letters</string>
-               </property>
-              </item>
-             </widget>
-            </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="label">
-              <property name="text">
-               <string>Show as:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QComboBox" name="varSGFStyleComboBox">
-              <item>
-               <property name="text">
-                <string>No</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Yes</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Ask</string>
-               </property>
-              </item>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="label_2">
-              <property name="text">
-               <string>Show which:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QComboBox" name="varChildrenComboBox">
-              <item>
-               <property name="text">
-                <string>Siblings</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Children</string>
-               </property>
-              </item>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item row="0" column="1">
+       <item row="0" column="2">
         <widget class="QGroupBox" name="boardButtonGroup">
          <property name="title">
           <string>Board</string>
@@ -1204,7 +1060,7 @@ Globally disables all tool tips that would show up if the mouse hovers over a GU
          </layout>
         </widget>
        </item>
-       <item row="1" column="1">
+       <item row="1" column="2">
         <widget class="QGroupBox" name="autoplayGroup">
          <property name="title">
           <string>Autoplay</string>
@@ -1390,10 +1246,119 @@ If you press to enter a move on the board, the move will not be acknowledged if 
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>40</height>
+           <height>0</height>
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="0" column="0">
+        <widget class="QGroupBox" name="GroupBox7">
+         <property name="toolTip">
+          <string>Display variations</string>
+         </property>
+         <property name="whatsThis">
+          <string>Display variations
+
+Select how to display all brothers of the current move. Either not at all, or as ghost stones, or as smaller stones.</string>
+         </property>
+         <property name="title">
+          <string>Variation display</string>
+         </property>
+         <layout class="QGridLayout">
+          <property name="leftMargin">
+           <number>10</number>
+          </property>
+          <property name="topMargin">
+           <number>6</number>
+          </property>
+          <property name="rightMargin">
+           <number>11</number>
+          </property>
+          <property name="bottomMargin">
+           <number>6</number>
+          </property>
+          <property name="spacing">
+           <number>6</number>
+          </property>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>Allow SGF files to override
+child/sibling setting:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="variationComboBox">
+            <property name="focusPolicy">
+             <enum>Qt::TabFocus</enum>
+            </property>
+            <item>
+             <property name="text">
+              <string>None</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Ghosts</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Letters</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Show as:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QComboBox" name="varSGFStyleComboBox">
+            <item>
+             <property name="text">
+              <string>No</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Yes</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Ask</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>Show which:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QComboBox" name="varChildrenComboBox">
+            <item>
+             <property name="text">
+              <string>Siblings</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Children</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -1783,7 +1748,7 @@ If the picture is not set, or unvalid, a default goban is used by qgo</string>
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>40</height>
+           <height>0</height>
           </size>
          </property>
         </spacer>
@@ -1816,7 +1781,7 @@ If the picture is not set, or unvalid, a default goban is used by qgo</string>
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>260</height>
+           <height>0</height>
           </size>
          </property>
         </spacer>
@@ -2069,7 +2034,7 @@ If the picture is not set, or unvalid, a default goban is used by qgo</string>
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
-                 <width>40</width>
+                 <width>0</width>
                  <height>20</height>
                 </size>
                </property>
@@ -2183,9 +2148,6 @@ Note: 'Delete' concerns saved records.</string>
           </item>
           <item row="2" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_10">
-            <property name="rightMargin">
-             <number>0</number>
-            </property>
             <item>
              <widget class="QLabel" name="enginelabel_3">
               <property name="text">
@@ -2204,9 +2166,6 @@ Note: 'Delete' concerns saved records.</string>
           </item>
           <item row="1" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_9">
-            <property name="rightMargin">
-             <number>0</number>
-            </property>
             <item>
              <widget class="QLabel" name="enginelabel_2">
               <property name="text">
@@ -2236,9 +2195,6 @@ Note: 'Delete' concerns saved records.</string>
           </item>
           <item row="0" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_8">
-            <property name="rightMargin">
-             <number>0</number>
-            </property>
             <item>
              <widget class="QLabel" name="enginelabel_1">
               <property name="text">
@@ -2263,16 +2219,13 @@ Note: 'Delete' concerns saved records.</string>
             <property name="sizeHint" stdset="0">
              <size>
               <width>20</width>
-              <height>40</height>
+              <height>0</height>
              </size>
             </property>
            </spacer>
           </item>
           <item row="3" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_7">
-            <property name="topMargin">
-             <number>5</number>
-            </property>
             <item>
              <widget class="QLabel" name="enginelabel_4">
               <property name="text">
@@ -2375,18 +2328,6 @@ Note: 'Delete' concerns saved records.</string>
          <property name="spacing">
           <number>6</number>
          </property>
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
          <item>
           <widget class="QLabel" name="TextLabel1_title">
            <property name="minimumSize">
@@ -2444,18 +2385,6 @@ Select one of the predefined hosts -- xxx -- and add a title to use it.</string>
          <property name="spacing">
           <number>6</number>
          </property>
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
          <item>
           <widget class="QLabel" name="TextLabel1_5">
            <property name="minimumSize">
@@ -2500,18 +2429,6 @@ Use a valid hostname or ip address. Instead of typing it one of the predefined h
          <property name="spacing">
           <number>6</number>
          </property>
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
          <item>
           <widget class="QLabel" name="TextLabel2_4">
            <property name="minimumSize">
@@ -2550,18 +2467,6 @@ Port address is defined for each go server. It's a fixed number. See Host for pr
          <property name="spacing">
           <number>6</number>
          </property>
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
          <item>
           <widget class="QLabel" name="TextLabel3_2">
            <property name="minimumSize">
@@ -2598,21 +2503,9 @@ others:		guest</string>
         </layout>
        </item>
        <item row="4" column="0">
-        <layout class="QHBoxLayout">
+        <layout class="QHBoxLayout" name="_26">
          <property name="spacing">
           <number>6</number>
-         </property>
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
          </property>
          <item>
           <widget class="QLabel" name="TextLabel4_2">
@@ -2651,7 +2544,7 @@ New users: leave blank!</string>
         </layout>
        </item>
        <item row="5" column="0">
-        <layout class="QHBoxLayout">
+        <layout class="QHBoxLayout" name="_27">
          <item>
           <widget class="QLabel" name="textLabel1_3">
            <property name="sizePolicy">
@@ -2691,133 +2584,6 @@ New users: leave blank!</string>
           </widget>
          </item>
         </layout>
-       </item>
-       <item row="6" column="0">
-        <widget class="QGroupBox" name="groupBox">
-         <property name="title">
-          <string/>
-         </property>
-         <property name="flat">
-          <bool>true</bool>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_2">
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
-          </property>
-          <item row="0" column="0">
-           <spacer name="Spacer3">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Expanding</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>274</width>
-              <height>53</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="0" column="1">
-           <layout class="QVBoxLayout" name="_2">
-            <property name="spacing">
-             <number>6</number>
-            </property>
-            <property name="leftMargin">
-             <number>0</number>
-            </property>
-            <property name="topMargin">
-             <number>0</number>
-            </property>
-            <property name="rightMargin">
-             <number>0</number>
-            </property>
-            <property name="bottomMargin">
-             <number>0</number>
-            </property>
-            <item>
-             <widget class="QPushButton" name="pb_server_new">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="toolTip">
-               <string>Clear the server form.</string>
-              </property>
-              <property name="whatsThis">
-               <string>New
-
-clear form; doesn't make any changes to the entries</string>
-              </property>
-              <property name="text">
-               <string>New</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="_3">
-              <property name="spacing">
-               <number>6</number>
-              </property>
-              <property name="leftMargin">
-               <number>0</number>
-              </property>
-              <property name="topMargin">
-               <number>0</number>
-              </property>
-              <property name="rightMargin">
-               <number>0</number>
-              </property>
-              <property name="bottomMargin">
-               <number>0</number>
-              </property>
-              <item>
-               <widget class="QPushButton" name="pb_server_add">
-                <property name="toolTip">
-                 <string>Add or change the current entry.</string>
-                </property>
-                <property name="whatsThis">
-                 <string>Add or Change
-
-Label 'Change ' appears when title is not unique, i.e. the saved entries with that title will be superseded by the current entries.
-
-Label 'Add' is default. The given entries will be saved under the given title.</string>
-                </property>
-                <property name="text">
-                 <string>Add</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="pb_server_delete">
-                <property name="toolTip">
-                 <string>Delete the current entry.</string>
-                </property>
-                <property name="whatsThis">
-                 <string>Delete
-
-Deletes the saved entries with same Title.
-
-Note: 'Delete' concerns saved records.</string>
-                </property>
-                <property name="text">
-                 <string>Delete</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
        </item>
        <item row="11" column="0">
         <widget class="QGroupBox" name="IGSgroup_box">
@@ -2926,7 +2692,7 @@ If checked then when an observed game completes, it is automatically saved in th
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>21</width>
+              <width>0</width>
               <height>20</height>
              </size>
             </property>
@@ -3764,9 +3530,6 @@ up to :</string>
        </item>
        <item row="10" column="0" colspan="2">
         <layout class="QHBoxLayout" name="horizontalLayout_5">
-         <property name="topMargin">
-          <number>0</number>
-         </property>
          <item>
           <widget class="Line" name="Line4">
            <property name="sizePolicy">
@@ -4253,6 +4016,133 @@ Click to get a new, editable offline window.</string>
          </item>
         </layout>
        </item>
+       <item row="6" column="0">
+        <widget class="QWidget" name="widget" native="true">
+         <layout class="QGridLayout" name="gridLayout_2">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item row="0" column="0">
+           <spacer name="Spacer3">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Expanding</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>0</width>
+              <height>53</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="1">
+           <layout class="QVBoxLayout" name="_2">
+            <property name="spacing">
+             <number>6</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QPushButton" name="pb_server_new">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="toolTip">
+               <string>Clear the server form.</string>
+              </property>
+              <property name="whatsThis">
+               <string>New
+
+clear form; doesn't make any changes to the entries</string>
+              </property>
+              <property name="text">
+               <string>New</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="_3">
+              <property name="spacing">
+               <number>6</number>
+              </property>
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="QPushButton" name="pb_server_add">
+                <property name="toolTip">
+                 <string>Add or change the current entry.</string>
+                </property>
+                <property name="whatsThis">
+                 <string>Add or Change
+
+Label 'Change ' appears when title is not unique, i.e. the saved entries with that title will be superseded by the current entries.
+
+Label 'Add' is default. The given entries will be saved under the given title.</string>
+                </property>
+                <property name="text">
+                 <string>Add</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pb_server_delete">
+                <property name="toolTip">
+                 <string>Delete the current entry.</string>
+                </property>
+                <property name="whatsThis">
+                 <string>Delete
+
+Deletes the saved entries with same Title.
+
+Note: 'Delete' concerns saved records.</string>
+                </property>
+                <property name="text">
+                 <string>Delete</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
       </layout>
      </widget>
     </widget>
@@ -4268,18 +4158,108 @@ Click to get a new, editable offline window.</string>
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>tabWidget</tabstop>
-  <tabstop>languageComboBox</tabstop>
-  <tabstop>fontMarksButton</tabstop>
-  <tabstop>buttonHelp</tabstop>
-  <tabstop>buttonApply</tabstop>
-  <tabstop>buttonOk</tabstop>
+  <tabstop>LineEdit_pass</tabstop>
+  <tabstop>ComboBox_codec</tabstop>
+  <tabstop>pb_server_new</tabstop>
+  <tabstop>pb_server_add</tabstop>
+  <tabstop>pb_server_delete</tabstop>
+  <tabstop>ListView_hosts</tabstop>
+  <tabstop>pb_engine_new</tabstop>
+  <tabstop>pb_engine_add</tabstop>
+  <tabstop>pb_engine_delete</tabstop>
+  <tabstop>computerSizeSpin</tabstop>
+  <tabstop>computerHandicapSpin</tabstop>
+  <tabstop>computerWhiteButton</tabstop>
+  <tabstop>humanName</tabstop>
+  <tabstop>anVarComboBox</tabstop>
+  <tabstop>winrateComboBox</tabstop>
+  <tabstop>anChildMovesCheckBox</tabstop>
+  <tabstop>anPruneCheckBox</tabstop>
+  <tabstop>BYSpin_Nmatch</tabstop>
+  <tabstop>timeSpin</tabstop>
   <tabstop>buttonCancel</tabstop>
+  <tabstop>boardSizeSpin</tabstop>
+  <tabstop>komiSpinDefault</tabstop>
+  <tabstop>buttonOk</tabstop>
+  <tabstop>stoneView</tabstop>
+  <tabstop>enginePath</tabstop>
+  <tabstop>buttonApply</tabstop>
+  <tabstop>buttonHelp</tabstop>
+  <tabstop>ListView_engines</tabstop>
+  <tabstop>checkBox_Nmatch_Black</tabstop>
+  <tabstop>BYSpin</tabstop>
+  <tabstop>timeSpin_Nmatch</tabstop>
+  <tabstop>automaticNegotiationCheckBox</tabstop>
+  <tabstop>stoneSoundCheckBox</tabstop>
+  <tabstop>autoplaySoundCheckBox</tabstop>
+  <tabstop>saySoundCheckBox</tabstop>
+  <tabstop>enterSoundCheckBox</tabstop>
+  <tabstop>disConnectSoundCheckBox</tabstop>
+  <tabstop>matchSoundCheckBox</tabstop>
+  <tabstop>timeSoundCheckBox</tabstop>
+  <tabstop>BYTimeSpin</tabstop>
+  <tabstop>passSoundCheckBox</tabstop>
+  <tabstop>gameEndSoundCheckBox</tabstop>
+  <tabstop>talkSoundCheckBox</tabstop>
+  <tabstop>leaveSoundCheckBox</tabstop>
+  <tabstop>connectSoundCheckBox</tabstop>
+  <tabstop>soundNormalCheckBox</tabstop>
+  <tabstop>soundObserveCheckBox</tabstop>
+  <tabstop>soundMatchCheckBox</tabstop>
+  <tabstop>soundComputerCheckBox</tabstop>
   <tabstop>fontStandardButton</tabstop>
+  <tabstop>fontMarksButton</tabstop>
   <tabstop>fontCommentsButton</tabstop>
   <tabstop>fontListsButton</tabstop>
   <tabstop>fontClocksButton</tabstop>
   <tabstop>fontConsoleButton</tabstop>
+  <tabstop>languageComboBox</tabstop>
+  <tabstop>variationComboBox</tabstop>
+  <tabstop>varChildrenComboBox</tabstop>
+  <tabstop>varSGFStyleComboBox</tabstop>
+  <tabstop>coordsComboBox</tabstop>
+  <tabstop>sidebarComboBox</tabstop>
+  <tabstop>sliderCheckBox</tabstop>
+  <tabstop>cursorCheckBox</tabstop>
+  <tabstop>tooltipsCheckBox</tabstop>
+  <tabstop>antiClickoCheckBox</tabstop>
+  <tabstop>timerComboBox</tabstop>
+  <tabstop>sgfTimeTagsCheckBox</tabstop>
+  <tabstop>checkBox_Nmatch_White</tabstop>
+  <tabstop>engineAnalysis</tabstop>
+  <tabstop>checkBox_Nmatch_Nigiri</tabstop>
+  <tabstop>HandicapSpin_Nmatch</tabstop>
+  <tabstop>enginePathButton</tabstop>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>engineName</tabstop>
+  <tabstop>engineArgs</tabstop>
+  <tabstop>engineKomi</tabstop>
+  <tabstop>LineEdit_watch</tabstop>
+  <tabstop>LineEdit_exclude</tabstop>
+  <tabstop>radioButtonStones_2D</tabstop>
+  <tabstop>radioButtonStones_3D</tabstop>
+  <tabstop>radioButtonStone_real</tabstop>
+  <tabstop>whiteSpecSlider</tabstop>
+  <tabstop>whiteHardSlider</tabstop>
+  <tabstop>whiteRoundSlider</tabstop>
+  <tabstop>whiteFlatSlider</tabstop>
+  <tabstop>whiteColorButton</tabstop>
+  <tabstop>blackSpecSlider</tabstop>
+  <tabstop>blackHardSlider</tabstop>
+  <tabstop>blackRoundSlider</tabstop>
+  <tabstop>blackFlatSlider</tabstop>
+  <tabstop>blackColorButton</tabstop>
+  <tabstop>stripesCheckBox</tabstop>
+  <tabstop>ambientSlider</tabstop>
+  <tabstop>woodComboBox</tabstop>
+  <tabstop>LineEdit_goban</tabstop>
+  <tabstop>GobanPicturePathButton</tabstop>
+  <tabstop>LineEdit_Table</tabstop>
+  <tabstop>TablePicturePathButton</tabstop>
+  <tabstop>LineEdit_title</tabstop>
+  <tabstop>LineEdit_host</tabstop>
+  <tabstop>LineEdit_port</tabstop>
+  <tabstop>LineEdit_login</tabstop>
  </tabstops>
  <resources>
   <include location="q4go.qrc"/>
