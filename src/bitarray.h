@@ -37,7 +37,9 @@ public:
 	bit_array (bit_array &&other)
 		: m_n_bits (other.m_n_bits), m_n_elts (other.m_n_elts), m_bits (other.m_bits), m_last_mask (other.m_last_mask)
 	{
-		other.m_bits = 0;
+		if (&other == this)
+			return;
+		other.m_n_bits = 0;
 		other.m_n_elts = 0;
 		other.m_bits = 0;
 	}

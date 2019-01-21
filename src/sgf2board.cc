@@ -114,7 +114,8 @@ static bool add_marks (go_board &b, sgf::node *n)
 	return terr;
 }
 
-static void add_comment (game_state *gs, sgf::node *n, QTextCodec *codec)
+/* Return true if OK, false if there was a charset conversion error.  */
+static bool add_comment (game_state *gs, sgf::node *n, QTextCodec *codec)
 {
 	sgf::node::property *comment = n->find_property ("C");
 	if (comment) {
@@ -127,20 +128,21 @@ static void add_comment (game_state *gs, sgf::node *n, QTextCodec *codec)
 			QTextCodec::ConverterState state;
 			QString tmp = codec->toUnicode (bytes, strlen (bytes), &state);
 			if (state.invalidChars > 0)
-				throw broken_sgf ();
+				return false;
 			cs = tmp.toStdString ();
 		}
 		gs->set_comment (cs);
 	}
+	return true;
 }
 
-static void add_to_game_state (game_state *gs, sgf::node *n, bool force, QTextCodec *codec)
+static void add_to_game_state (game_state *gs, sgf::node *n, bool force, QTextCodec *codec, sgf_errors &errs)
 {
 	while (n) {
 		if (!force) {
 			while (n->m_siblings != nullptr)
 			{
-				add_to_game_state (gs, n, true, codec);
+				add_to_game_state (gs, n, true, codec, errs);
 				n = n->m_siblings;
 			}
 		}
@@ -155,6 +157,14 @@ static void add_to_game_state (game_state *gs, sgf::node *n, bool force, QTextCo
 		for (auto &p : n->props) {
 			const std::string &id = p->ident;
 			if (id == "AB" || id == "B" || id == "AW" || id == "W" || id == "AE") {
+#if 0
+				for (int i = 0; i < gs->move_number (); i++)
+					std::cerr << " ";
+				std::cerr << id;
+				for (auto &v: p->values)
+					std::cerr << " : " << v;
+				std::cerr << std::endl;
+#endif
 				p->handled = true;
 				im thisprop_move = id.length () == 1 ? im::yes : im::no;
 				if (is_move == im::unknown)
@@ -181,6 +191,12 @@ static void add_to_game_state (game_state *gs, sgf::node *n, bool force, QTextCo
 
 					move_x = coord_from_letter (v[0]);
 					move_y = coord_from_letter (v[1]);
+					if (new_board.stone_at (move_x, move_y) != none) {
+						/* We'd like to throw, but Kogo's Joseki Dictionary has
+						   such errors.  */
+						errs.played_on_stone = true;
+						return;
+					}
 					new_board.add_stone (move_x, move_y, sc);
 					to_move = sc;
 				} else {
@@ -200,7 +216,8 @@ static void add_to_game_state (game_state *gs, sgf::node *n, bool force, QTextCo
 			gs = gs->add_child_pass (new_board, false);
 		} else
 			gs = gs->add_child_move (new_board, to_move, move_x, move_y, false);
-		add_comment (gs, n, codec);
+
+		errs.charset_error |= !add_comment (gs, n, codec);
 		for (auto p: n->props) {
 			if (!p->handled)
 				unrecognized.push_back (new sgf::node::property (*p));
@@ -315,7 +332,9 @@ std::shared_ptr<game_record> sgf2record (const sgf &s)
 	stone_color to_play = pl && *pl == "W" ? white : black;
 	std::shared_ptr<game_record> game = std::make_shared<game_record> (initpos, to_play, info);
 
-	add_comment (&game->m_root, s.nodes, codec);
+	sgf_errors errs;
+
+	errs.charset_error |= !add_comment (&game->m_root, s.nodes, codec);
 
 	sgf::node::proplist unrecognized;
 	for (auto p: s.nodes->props) {
@@ -324,7 +343,8 @@ std::shared_ptr<game_record> sgf2record (const sgf &s)
 	}
 	game->m_root.set_unrecognized (unrecognized);
 
-	add_to_game_state (&game->m_root, s.nodes->m_children, false, codec);
+	add_to_game_state (&game->m_root, s.nodes->m_children, false, codec, errs);
+	game->set_errors (errs);
 
 	/* Fix up situations where we have a handicap game without a PL property.
 	   If it really looks like white to move, fix up the root node.  */

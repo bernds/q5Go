@@ -660,6 +660,8 @@ class game_record : public game_info
 	friend std::shared_ptr<game_record> sgf2record (const sgf &s);
 	game_state m_root;
 
+	sgf_errors m_errors;
+
 public:
 	game_record (int size, const game_info &info)
 		: game_info (info), m_root (size)
@@ -689,6 +691,14 @@ public:
 		return m_root.get_board ().size ();
 	}
 	std::string to_sgf () const;
+	void set_errors (const sgf_errors &errs)
+	{
+		m_errors = errs;
+	}
+	const sgf_errors &errors ()
+	{
+		return m_errors;
+	}
 	~game_record ()
 	{
 		// m_last_move.set_state (nullptr);

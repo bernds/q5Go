@@ -18,6 +18,12 @@ class invalid_boardsize : public std::exception
 {
 };
 
+struct sgf_errors
+{
+	bool played_on_stone = false;
+	bool charset_error = false;
+};
+
 class sgf
 {
 public:

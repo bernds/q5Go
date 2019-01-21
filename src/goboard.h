@@ -306,13 +306,7 @@ private:
 		return tmp;
 	}
 	void append_mark_plane_sgf (std::string &, const std::string &, const bit_array &) const;
-	void verify_invariants ()
-	{
-#ifdef CHECKING
-		if (m_stones_b->intersect_p (*m_stones_w))
-			throw std::logic_error ("white stones and black stones overlap");
-#endif
-	}
+	void verify_invariants ();
 };
 
 #endif

@@ -64,7 +64,15 @@ std::shared_ptr<game_record> record_from_stream (std::istream &isgf)
 {
 	try {
 		sgf *sgf = load_sgf (isgf);
-		return sgf2record (*sgf);
+		std::shared_ptr<game_record> gr = sgf2record (*sgf);
+		const sgf_errors &errs = gr->errors ();
+		if (errs.played_on_stone) {
+			QMessageBox::warning (0, PACKAGE, QObject::tr ("The SGF file contained an invalid move that was played on top of another stone. Variations have been truncated at that point."));
+		}
+		if (errs.charset_error) {
+			QMessageBox::warning (0, PACKAGE, QObject::tr ("One or more comments have been dropped since they contained invalid characters."));
+		}
+		return gr;
 	} catch (invalid_boardsize &) {
 		QMessageBox::warning (0, PACKAGE, QObject::tr ("Unsupported board size in SGF file."));
 	} catch (broken_sgf &) {
