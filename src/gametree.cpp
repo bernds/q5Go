@@ -252,8 +252,8 @@ void GameTree::update (std::shared_ptr<game_record> gr, game_state *active, bool
 					QPixmap combined (m_size * len, m_size);
 					combined.fill (QColor (0, 0, 0, 0));
 					QPainter painter;
-					painter.setPen (Qt::NoPen);
 					painter.begin (&combined);
+					painter.setPen (Qt::NoPen);
 					for (int i = 0; i < len; i++) {
 						QPixmap *src = &m_pm_box;
 						if (edits.test_bit (x0 + i, y))
