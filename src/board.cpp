@@ -1889,7 +1889,13 @@ void Board::setup_analyzer_position ()
 	analyzer st = analyzer_state ();
 	if (st != analyzer::running && st != analyzer::paused)
 		return;
-	const go_board &b = m_state->get_board ();
+	std::vector<game_state *> moves;
+	game_state *gst = m_state;
+	while (gst->was_move_p () && !gst->root_node_p ()) {
+		moves.push_back (gst);
+		gst = gst->prev_move ();
+	}
+	const go_board &b = gst->get_board ();
 	m_analyzer->clear_board ();
 	for (int i = 0; i < board_size; i++)
 		for (int j = 0; j < board_size; j++) {
@@ -1897,6 +1903,13 @@ void Board::setup_analyzer_position ()
 			if (c != none)
 				m_analyzer->played_move (c, i, j);
 		}
+	while (!moves.empty ()) {
+		gst = moves.back ();
+		moves.pop_back ();
+		m_analyzer->played_move (gst->get_move_color (),
+					 gst->get_move_x (),
+					 gst->get_move_y ());
+	}
 	clear_eval_data ();
 	if (st == analyzer::running && !m_pause_eval) {
 		stone_color to_move = m_state->to_move ();
