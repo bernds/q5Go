@@ -456,7 +456,7 @@ void MainWindow::initActions()
 	connect(fileExportASCII, &QAction::triggered, this, &MainWindow::slotFileExportASCII);
 
 	// File ExportSVG
-	fileExportSVG = new QAction(charIcon, tr("&Export SVG"), this);
+	fileExportSVG = new QAction(charIcon, tr("Export S&VG"), this);
 	fileExportSVG->setStatusTip(tr("Export current board to SVG"));
 	fileExportSVG->setWhatsThis(tr("Export SVG\n\nExport current board to SVG."));
 	connect(fileExportSVG, &QAction::triggered, this, &MainWindow::slotFileExportSVG);
