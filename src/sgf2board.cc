@@ -210,11 +210,11 @@ static void add_to_game_state (game_state *gs, sgf::node *n, bool force, QTextCo
 			new_board.identify_units ();
 			if (terr)
 				new_board.territory_from_markers ();
-			gs = gs->add_child_edit (new_board, to_move, terr, false);
+			gs = gs->add_child_edit_nochecks (new_board, to_move, terr, false);
 		} else if (is_pass) {
-			gs = gs->add_child_pass (new_board, false);
+			gs = gs->add_child_pass_nochecks (new_board, false);
 		} else
-			gs = gs->add_child_move (new_board, to_move, move_x, move_y, false);
+			gs = gs->add_child_move_nochecks (new_board, to_move, move_x, move_y, false);
 
 		errs.charset_error |= !add_comment (gs, n, codec);
 		for (auto p: n->props) {

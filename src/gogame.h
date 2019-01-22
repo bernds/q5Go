@@ -333,11 +333,8 @@ public:
 		}
 	}
 
-	game_state *add_child_edit (const go_board &new_board, stone_color to_move, bool scored = false, bool set_active = true)
+	game_state *add_child_edit_nochecks (const go_board &new_board, stone_color to_move, bool scored, bool set_active)
 	{
-		for (auto &it: m_children)
-			if (it->m_board == new_board && it->m_to_move == to_move)
-				return it;
 		m_visual_ok = false;
 		int code = scored ? -3 : -2;
 		game_state *tmp = new game_state (new_board, m_move_number + 1, this, to_move, code, code, none);
@@ -345,6 +342,13 @@ public:
 		if (set_active)
 			m_active = m_children.size() - 1;
 		return tmp;
+	}
+	game_state *add_child_edit (const go_board &new_board, stone_color to_move, bool scored = false, bool set_active = true)
+	{
+		for (auto &it: m_children)
+			if (it->m_board == new_board && it->m_to_move == to_move)
+				return it;
+		return add_child_edit_nochecks (new_board, to_move, scored, set_active);
 	}
 
 	game_state *add_child_move_nochecks (const go_board &new_board, stone_color to_move, int x, int y, bool set_active)
@@ -387,11 +391,8 @@ public:
 	{
 		return add_child_move (x, y, m_to_move);
 	}
-	game_state *add_child_pass (const go_board &new_board, bool set_active = true)
+	game_state *add_child_pass_nochecks (const go_board &new_board, bool set_active)
 	{
-		for (auto &it: m_children)
-			if (it->m_board == new_board && it->was_pass_p ())
-				return it;
 		m_visual_ok = false;
 		game_state *tmp = new game_state (new_board, m_move_number + 1, this, m_to_move == black ? white : black);
 		tmp->m_move_color = m_to_move;
@@ -399,6 +400,13 @@ public:
 		if (set_active)
 			m_active = m_children.size() - 1;
 		return tmp;
+	}
+	game_state *add_child_pass (const go_board &new_board, bool set_active = true)
+	{
+		for (auto &it: m_children)
+			if (it->m_board == new_board && it->was_pass_p ())
+				return it;
+		return add_child_pass_nochecks (new_board, set_active);
 	}
 	game_state *add_child_pass (bool set_active = true)
 	{
