@@ -188,6 +188,9 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 	commentEdit2 = new QLineEdit;
 	comments_layout->addWidget (commentEdit2);
 
+	commentEdit->addAction (escapeFocus);
+	commentEdit2->addAction (escapeFocus);
+
 	ListView_observers = new QTreeWidget(splitter_comment);
 	ListView_observers->setFocusPolicy (Qt::NoFocus);
 	QStringList headers;
