@@ -1601,6 +1601,40 @@ void Board::mousePressEvent(QMouseEvent *e)
 		findMove (x - 1, y - 1);
 		return;
 	}
+	if (m_eval_state != nullptr
+	    && ((e->modifiers () == Qt::ShiftModifier && e->button () == Qt::LeftButton)
+		|| e->button () == Qt::MiddleButton))
+	{
+		game_state *eval = m_eval_state->find_child_move (x - 1, y - 1);
+		game_state *st = m_state;
+		bool first = true;
+		while (eval) {
+			go_board b = st->get_board ();
+			int tx = eval->get_move_x ();
+			int ty = eval->get_move_y ();
+			stone_color col = eval->get_move_color ();
+			b.add_stone (tx, ty, col);
+			st = st->add_child_move_nochecks (b, col, tx, ty, false);
+			if (first) {
+				QString comment = "Evaluation: W %1%2 B %3%4\n";
+				int bp = b.bitpos (tx, ty);
+				double wr = m_primary_eval + m_winrate[bp];
+				double other_wr = 1 - wr;
+				if (m_state->to_move () == black)
+					std::swap (wr, other_wr);
+				comment = (comment.arg (QString::number (100 * wr, 'f', 1)).arg ('%')
+					   .arg (QString::number (100 * other_wr, 'f', 1)).arg ('%'));
+				st->set_comment (comment.toStdString ());
+			}
+			eval = eval->next_move ();
+			first = false;
+		}
+		if (!first) {
+			sync_appearance ();
+			m_board_win->update_game_tree (m_state);
+			return;
+		}
+	}
 	if (e->modifiers () == Qt::ControlModifier
 	    && (m_game_mode == modeNormal || m_game_mode == modeObserve))
 	{
