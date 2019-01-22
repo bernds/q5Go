@@ -4,7 +4,7 @@
 
 #include "telnet.h"
 #include "gs_globals.h"
-#include "mainwin.h"
+#include "clientwin.h"
 #include "igsconnection.h"
 #include <qapplication.h>
 #include <qmessagebox.h>

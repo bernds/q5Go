@@ -7,7 +7,7 @@ q5go_METASOURCES = AUTO
 KDE_OPTIONS = qtonly
 
 DISTHEADERS_MOC = audio.h bitarray.h board.h clockview.h gamedialog.h gamestable.h gametree.h helpviewer.h icons.h \
-	igsconnection.h mainwidget.h mainwindow.h mainwin.h miscdialogs.h \
+	igsconnection.h mainwidget.h mainwindow.h clientwin.h miscdialogs.h \
 	misctools.h normaltools.h scoretools.h parser.h playertable.h preferences.h qgo.h \
 	qgo_interface.h qgtp.h newaigamedlg.h sizegraphicsview.h tables.h telnet.h textview.h tip.h
 
@@ -19,7 +19,7 @@ DISTHEADERS_NOMOC = goboard.h config.h defines.h gatter.h goboard.h gogame.h gs_
 DISTSOURCES = audio.cpp board.cpp goboard.cc gogame.cc gamedialog.cpp \
 		gamestable.cpp gametree.cpp gatter.cpp helpviewer.cpp \
 		igsconnection.cpp imagehandler.cpp main.cpp \
-		mainwidget.cpp  mainwin.cpp mainwindow.cpp \
+		mainwidget.cpp  clientwin.cpp mainwindow.cpp \
 		misc.cpp msg_handler.cpp parser.cpp \
 		playertable.cpp preferences.cpp qgo.cpp qgo_interface.cpp qgtp.cpp \
 		newaigamedlg.cpp setting.cpp  sgfload.cc sgf2board.cc \

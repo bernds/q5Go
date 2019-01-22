@@ -11,7 +11,7 @@
 #include <QMenu>
 #include <QAction>
 
-#include "mainwin.h"
+#include "clientwin.h"
 #include "defines.h"
 #include "playertable.h"
 #include "gamestable.h"

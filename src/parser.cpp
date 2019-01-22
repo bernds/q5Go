@@ -4,7 +4,7 @@
 
 #include "parser.h"
 #include "qgo_interface.h"
-#include "mainwin.h"
+#include "clientwin.h"
 
 #include <qregexp.h>
 #include <iostream>
@@ -732,7 +732,7 @@ InfoType Parser::cmd9(QString &line)
 		if (re.indexIn(line) == -1) {
 			return IT_OTHER;
 		}
-		// false -> not my request: used in mainwin.cpp
+		// false -> not my request: used in clientwin.cpp
 		emit signal_matchrequest(re.cap(1), false);
 	}
 	// 9 Match [5] with guest17 in 1 accepted.

@@ -10,7 +10,7 @@
 
 #include "config.h"
 #include "sgf.h"
-#include "mainwin.h"
+#include "clientwin.h"
 #include "msg_handler.h"
 #include "setting.h"
 #include "miscdialogs.h"

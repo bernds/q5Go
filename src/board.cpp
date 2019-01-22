@@ -25,7 +25,7 @@
 #include "imagehandler.h"
 #include "tip.h"
 #include "mainwindow.h"
-#include "mainwin.h"
+#include "clientwin.h"
 #include "miscdialogs.h"
 #include "svgbuilder.h"
 

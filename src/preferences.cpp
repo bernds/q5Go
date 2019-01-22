@@ -10,7 +10,7 @@
 #include "preferences.h"
 #include "mainwindow.h"
 #include "qgo.h"
-#include "mainwin.h"
+#include "clientwin.h"
 #include "imagehandler.h"
 
 #ifdef Q_OS_MACX

@@ -28,7 +28,7 @@
 #include <QLineEdit>
 #include <QTimer>
 
-#include "mainwin.h"
+#include "clientwin.h"
 #include "mainwindow.h"
 #include "mainwidget.h"
 #include "board.h"

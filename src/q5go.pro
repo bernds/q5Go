@@ -24,7 +24,7 @@ HEADERS		      = config.h \
 			gs_globals.h \
 			igsconnection.h \
 			igsinterface.h \
-			mainwin.h \
+			clientwin.h \
 			misc.h \
 			msg_handler.h \
 			parser.h \
@@ -61,14 +61,14 @@ HEADERS		      = config.h \
                         miscdialogs.h \
                         audio.h
 
-SOURCES		      = gamedialog.cpp \
+SOURCES		      = clientwin.cpp \
+                        gamedialog.cpp \
 			gamestable.cpp \
 			gametree.cpp \
                         goboard.cc \
                         gogame.cc \
 			igsconnection.cpp \
 			main.cpp \
-			mainwin.cpp \
 			misc.cpp \
 			msg_handler.cpp \
 			parser.cpp \

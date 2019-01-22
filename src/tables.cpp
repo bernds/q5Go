@@ -2,7 +2,7 @@
  *   tables.cpp = part of mainwindow
  */
 #include "tables.h"
-#include "mainwin.h"
+#include "clientwin.h"
 #include "playertable.h"
 #include "gamestable.h"
 #include "gs_globals.h"

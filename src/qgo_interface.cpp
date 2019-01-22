@@ -12,7 +12,7 @@
 #include "gs_globals.h"
 #include "misc.h"
 #include "config.h"
-#include "mainwin.h"
+#include "clientwin.h"
 #include "ui_helpers.h"
 
 #include <qstring.h>
