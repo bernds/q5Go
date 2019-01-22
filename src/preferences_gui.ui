@@ -122,11 +122,7 @@
      <item>
       <widget class="QPushButton" name="buttonOk">
        <property name="toolTip">
-        <string>remember that point for fast return</string>
-       </property>
-       <property name="whatsThis">
-        <string>push button at starting point to enable remembering.
-After placing and/or undo release button for returning to starting point automatically.</string>
+        <string>Accept changes and close dialog</string>
        </property>
        <property name="text">
         <string>&amp;OK</string>
