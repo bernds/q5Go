@@ -8,7 +8,6 @@
 #include <QtSvg>
 
 #include "ui_textview_gui.h"
-#include "globals.h"
 
 class TextView : public QDialog, public Ui::TextViewGUI
 {

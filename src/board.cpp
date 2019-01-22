@@ -22,7 +22,6 @@
 #include "setting.h"
 #include "qgo.h"
 #include "board.h"
-#include "globals.h"
 #include "imagehandler.h"
 #include "tip.h"
 #include "mainwindow.h"

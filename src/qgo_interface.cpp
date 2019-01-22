@@ -9,23 +9,16 @@
 #include "qgo_interface.h"
 #include "tables.h"
 #include "defines.h"
-#include "globals.h"
 #include "gs_globals.h"
 #include "misc.h"
 #include "config.h"
 #include "mainwin.h"
 #include "ui_helpers.h"
 
-#include <qlabel.h>
-//#include <qmultilineedit.h>
-#include <qobject.h>
 #include <qstring.h>
 #include <qtimer.h>
-#include <qpushbutton.h>
 #include <qmessagebox.h>
-#include <qtooltip.h>
 #include <qcombobox.h>
-#include <qslider.h>
 #include <qregexp.h>
 
 #ifdef Q_OS_MACX
@@ -1068,10 +1061,8 @@ void qGoIF::slot_timeAdded(int time, bool toMe)
 qGoBoard::qGoBoard(qGoIF *qif, int gameid) : m_qgoif (qif), id (gameid)
 {
 	qDebug("::qGoBoard()");
-	have_gameData = false;
 	sent_movescmd = false;
 	adjourned = false;
-	gd = GameData();
 	mv_counter = -1;
 	requests_set = false;
 	m_game = nullptr;
@@ -1221,77 +1212,56 @@ void qGoBoard::set_game(Game *g, GameMode mode, stone_color own_color)
 	else if (g->FR.contains("T"))
 		rt = ranked::teaching;
 
+	int timelimit = 0;
+	std::string overtime = "";
 	if (rt != ranked::teaching)
 	{
-		gd.timeSystem = canadian;
-		gd.byoTime = g->By.toInt() * 60;
-		gd.byoStones = 25;
+		int byoTime = g->By.toInt() * 60;
 		if (wt_i > 0)
-			gd.timelimit = (((wt_i > bt_i ? wt_i : bt_i) / 60) + 1) * 60;
+			timelimit = (((wt_i > bt_i ? wt_i : bt_i) / 60) + 1) * 60;
 		else
-			gd.timelimit = 60;
+			timelimit = 60;
 
-		if (gd.byoTime == 0)
-			// change to absolute
-			gd.timeSystem = absolute;
-		else
-			gd.overtime = "25/" + QString::number(gd.byoTime) + " Canadian";
+		if (byoTime != 0)
+			overtime = "25/" + std::to_string (byoTime) + " Canadian";
 	}
-	else
+
+	std::string place = "";
+	switch (gsName)
 	{
-		gd.timeSystem = time_none;
-		gd.byoTime = 0;
-		gd.byoStones = 0;
-		gd.timelimit = 0;
+	case IGS:
+		place = "IGS";
+		break;
+	case LGS:
+		place = "LGS";
+		break;
+	case WING:
+		place = "WING";
+		break;
+	case CWS:
+		place = "CWS";
+		break;
+	default:
+		break;
 	}
 
 	game_info info (m_title ? m_title->toStdString () : "",
 			g->wname.toStdString (), g->bname.toStdString (),
 			g->wrank.toStdString (), g->brank.toStdString (),
-			"", g->K.toFloat(), handi, rt, "", "", "", "",
-			std::to_string (gd.timelimit), gd.overtime.toStdString (), -1);
+			"", g->K.toFloat(), handi, rt, "",
+			QDate::currentDate().toString("dd MM yyyy").toStdString (),
+			place, "",
+			std::to_string (timelimit), overtime, -1);
 
 	m_game = std::make_shared<game_record> (startpos, handi >= 2 ? white : black, info);
 	m_game->set_date (QDate::currentDate().toString("dd MM yyyy").toStdString ());
 	start_observing (m_game->get_root ());
-	gd.size = g->Sz.toInt();
-	gd.playerBlack = g->bname;
-	gd.playerWhite = g->wname;
-	gd.rankBlack = g->brank;
-	gd.rankWhite = g->wrank;
-//	QString status = g->Sz.simplified();
-	gd.handicap = g->H.toInt();
-	gd.komi = g->K.toFloat();
 	if (g->FR.contains("F"))
-		gd.freegame = FREE;
+		m_freegame = FREE;
 	else if (g->FR.contains("T"))
-		gd.freegame = TEACHING;
+		m_freegame = TEACHING;
 	else
-		gd.freegame = RATED;
-
-	gd.style = 1;
-	gd.oneColorGo = g->oneColorGo ;
-	switch (gsName)
-	{
-		case IGS :
-			gd.place = "IGS";
-			break ;
-		case LGS :
-			gd.place = "LGS";
-			break ;
-		case WING :
-			gd.place = "WING";
-			break ;
-		case CWS :
-			gd.place = "CWS";
-			break;
-		default :
-			;
-	}
-
-	gd.date = QDate::currentDate().toString("dd MM yyyy") ;
-
-	have_gameData = true;
+		m_freegame = RATED;
 
 	// needed for correct sound
 	stated_mv_count = g->mv.toInt();
@@ -1526,11 +1496,11 @@ void qGoBoard::set_move(stone_color sc, QString pt, QString mv_nr)
 		}
 
 		// special case: undo handicap
-		if (mv_counter <= 0 && gd.handicap)
+		if (mv_counter <= 0 && m_game->handicap () > 0)
 		{
-			gd.handicap = 0;
 			go_board new_root = new_handicap_board (m_game->boardsize (), 0);
 			m_game->replace_root (new_root, black);
+			m_game->set_handicap (0);
 			qDebug("set Handicap to 0");
 		}
 
@@ -1594,9 +1564,9 @@ void qGoBoard::set_move(stone_color sc, QString pt, QString mv_nr)
 		int j;
 
 		if (pt.length () > 2 && pt[2].toLatin1() >= '0' && pt[2].toLatin1() <= '9')
-			j = gd.size + 1 - pt.mid(1,2).toInt();
+			j = m_game->boardsize () + 1 - pt.mid(1,2).toInt();
 		else
-			j = gd.size + 1 - pt[1].digitValue();
+			j = m_game->boardsize () + 1 - pt[1].digitValue();
 
 		game_state *st = m_state;
 		game_state *st_new = st->add_child_move (i - 1, j - 1, sc);
@@ -1843,7 +1813,7 @@ void qGoBoard::move_played (int x, int y)
 	if (x > 7)
 		x++;
 	QChar c1 = x + 'A';
-	int c2 = gd.size - y;
+	int c2 = m_game->boardsize () - y;
 
 	if (ExtendedTeachingGame && IamPupil)
 		emit signal_sendcommand("kibitz " + QString::number(id) + " " + QString(c1) + QString::number(c2), false);
@@ -1929,7 +1899,7 @@ void qGoBoard::check_requests()
 	if (req_handicap.isNull() || gameMode == modeTeach || setting->readBoolEntry("DEFAULT_AUTONEGO"))
 		return;
 
-	if (gd.handicap != req_handicap.toInt())
+	if (m_game->handicap () != req_handicap.toInt())
 	{
 		emit signal_sendcommand("handicap " + req_handicap, false);
 		qDebug() << "Requested handicap: " << req_handicap;
@@ -1937,25 +1907,25 @@ void qGoBoard::check_requests()
 	else
 		qDebug("Handicap settings ok...");
 
-	if (gd.komi != req_komi.toFloat())
+	if (m_game->komi () != req_komi.toFloat())
 	{
 		qDebug("qGoBoard::check_requests() : emit komi");
 		emit signal_sendcommand("komi " + req_komi, false);
 	}
 
 	// if size != 19 don't care, it's a free game
-	if (req_free != noREQ && gd.size == 19 && mv_counter < 1)
+	if (req_free != noREQ && m_game->boardsize () == 19 && mv_counter < 1)
 	{
 		// check if requests are equal to settings or if teaching game
-		if ((gd.freegame == FREE && req_free == FREE) ||
-		    (gd.freegame != FREE && req_free == RATED) ||
+		if ((m_freegame == FREE && req_free == FREE) ||
+		    (m_freegame != FREE && req_free == RATED) ||
 		    req_free == TEACHING)
 		    return;
 
 		switch (gsName)
 		{
 			case NNGS:
-				if (gd.freegame == FREE)
+				if (m_freegame == FREE)
 					emit signal_sendcommand("unfree", false);
 				else
 					emit signal_sendcommand("free", false);

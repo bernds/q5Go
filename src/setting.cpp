@@ -10,7 +10,6 @@
 #include "setting.h"
 #include "config.h"
 #include "defines.h"
-#include "globals.h"
 #include "icons.h"
 #include <qfile.h>
 #include <qdir.h>

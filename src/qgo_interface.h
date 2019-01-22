@@ -11,7 +11,6 @@
 
 #include "tables.h"
 #include "defines.h"
-#include "globals.h"
 #include "gs_globals.h"
 #include "setting.h"
 #include <qobject.h>
@@ -86,16 +85,15 @@ public:
 	void disconnected (bool remove_from_list);
 	int get_id() const { return id; }
 	void set_id(int i) { id = i; }
-	GameData get_gameData() { return gd; }
 	void set_title(const QString&);
 	void set_komi(const QString&);
 	void set_freegame(bool);
-	bool get_havegd() { return have_gameData; }
+	bool get_havegd() { return m_game != nullptr; }
 	bool get_sentmovescmd() { return sent_movescmd; }
 	void set_sentmovescmd(bool m) { sent_movescmd = m; }
 	bool get_adj() { return adjourned; }
-	QString get_bplayer() { return gd.playerBlack; }
-	QString get_wplayer() { return gd.playerWhite; }
+	QString get_bplayer() { return QString::fromStdString (m_game->name_black ()); }
+	QString get_wplayer() { return QString::fromStdString (m_game->name_white ()); }
 	void set_adj(bool a) { adjourned = a; }
 	void set_game(Game *g, GameMode mode, stone_color own_color);
 
@@ -117,14 +115,14 @@ public:
 	void set_stopTimer();
 	void set_runTimer();
 	void set_gamePaused(bool p) { game_paused = p; }
-	int get_boardsize() { return gd.size; }
+	int get_boardsize() { return m_game->boardsize (); }
 	int get_mvcount() { return mv_counter; }
 	void set_myColorIsBlack(bool b);
 	bool get_myColorIsBlack() { return m_own_color == black; }
 	void set_requests(const QString &handicap, const QString &komi, assessType);
 	void check_requests();
 	QString get_reqKomi() { return req_komi; }
-	QString get_currentKomi() { return QString::number(gd.komi); }
+	QString get_currentKomi() { return QString::number (m_game->komi ()); }
 	void dec_mv_counter() { mv_counter--; }
 	int get_mv_counter() { return mv_counter; }
 	bool get_requests_set() { return requests_set; }
@@ -147,7 +145,7 @@ public:
 	QString     ttOpponent;
 	bool        mark_set;
 	int         mark_counter;
-	GameData    gd;
+	assessType  m_freegame;
 
 signals:
 	// to qGoIF
@@ -179,7 +177,6 @@ public slots:
 private:
 	int timer_id;
 	bool game_paused;
-	bool have_gameData;
 	bool sent_movescmd;
 	bool adjourned;
 	bool myColorIsBlack;

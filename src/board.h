@@ -28,7 +28,6 @@ class ImageHandler;
 class Mark;
 class Tip;
 class InterfaceHandler;
-class GameData;
 class QNewGameDlg;
 class MainWindow;
 class MainWidget;

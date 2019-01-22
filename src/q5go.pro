@@ -35,7 +35,6 @@ HEADERS		      = config.h \
 			telnet.h \
 			board.h \
 			defines.h \
-			globals.h \
 			goboard.h \
 			gogame.h \
 			helpviewer.h \
@@ -45,7 +44,6 @@ HEADERS		      = config.h \
 			mainwidget.h \
                         mainwindow.h \
                         normaltools.h \
-			parserdefs.h \
 			preferences.h \
 			qgo.h \
 			qgtp.h \

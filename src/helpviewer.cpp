@@ -10,7 +10,6 @@
 #include <config.h>
 #endif
 #include <qstringlist.h>
-#include "globals.h"
 
 HelpViewer::HelpViewer(QWidget* parent)
 	: QMainWindow(parent)

@@ -11,9 +11,9 @@ DISTHEADERS_MOC = audio.h bitarray.h board.h clockview.h gamedialog.h gamestable
 	misctools.h normaltools.h scoretools.h parser.h playertable.h preferences.h qgo.h \
 	qgo_interface.h qgtp.h newaigamedlg.h sizegraphicsview.h tables.h telnet.h textview.h tip.h
 
-DISTHEADERS_NOMOC = goboard.h config.h defines.h gatter.h globals.h goboard.h gogame.h gs_globals.h \
+DISTHEADERS_NOMOC = goboard.h config.h defines.h gatter.h goboard.h gogame.h gs_globals.h \
 	igsinterface.h imagehandler.h komispinbox.h mark.h \
-	misc.h msg_handler.h parserdefs.h setting.h sgf.h sgfparser.h stone.h \
+	misc.h msg_handler.h setting.h sgf.h sgfparser.h stone.h \
 	svgbuilder.h ui_helpers.h
 
 DISTSOURCES = audio.cpp board.cpp goboard.cc gogame.cc gamedialog.cpp \

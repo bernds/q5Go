@@ -16,6 +16,17 @@
 #include <QMenu>
 #include <QFileDialog>
 #include <QWhatsThis>
+#include <QAction>
+#include <QToolBar>
+#include <QStatusBar>
+#include <QMessageBox>
+#include <QApplication>
+#include <QCheckBox>
+#include <QSplitter>
+#include <QPushButton>
+#include <QSlider>
+#include <QLineEdit>
+#include <QTimer>
 
 #include "mainwin.h"
 #include "mainwindow.h"
@@ -28,26 +39,9 @@
 #include "icons.h"
 #include "ui_newgame_gui.h"
 #include "komispinbox.h"
-#include "parserdefs.h"
 #include "config.h"
 #include "qgo_interface.h"
 #include "ui_helpers.h"
-
-#include <QAction>
-#include <qmenubar.h>
-#include <qtoolbar.h>
-#include <qstatusbar.h>
-#include <qmessagebox.h>
-#include <qapplication.h>
-#include <qcheckbox.h>
-#include <qsplitter.h>
-//#include <qmultilineedit.h>
-#include <qpushbutton.h>
-#include <qslider.h>
-#include <qlineedit.h>
-#include <qtimer.h>
-#include <qtabwidget.h>
-#include <qlayout.h>
 
 //#ifdef USE_XPM
 #include ICON_PREFS

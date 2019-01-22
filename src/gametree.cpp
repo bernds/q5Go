@@ -7,7 +7,6 @@
 #include "goboard.h"
 #include "gogame.h"
 #include "gametree.h"
-#include "globals.h"
 #include "svgbuilder.h"
 
 static QByteArray box_svg =

@@ -7,7 +7,6 @@
 
 #include <QObject>
 
-#include "globals.h"
 #include "mainwindow.h"
 #include "setting.h"
 #include "defines.h"
