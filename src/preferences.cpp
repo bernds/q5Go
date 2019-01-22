@@ -677,6 +677,7 @@ void PreferencesDialog::slot_clickedEngines (QListWidgetItem *lvi)
 			engineName->setText(h->title ());
 			enginePath->setText(h->path ());
 			engineArgs->setText(h->args ());
+			engineKomi->setText(h->komi ());
 			engineAnalysis->setChecked (h->analysis ());
 			break;
 		}
