@@ -246,14 +246,14 @@ void go_board::toggle_alive (int x, int y, bool flood)
 			it.m_seki = false;
 			it.m_alive = !it.m_alive;
 			int mult = it.m_alive ? -1 : 1;
-			m_caps_b += mult * it.m_stones.popcnt ();
+			m_dead_w += mult * it.m_stones.popcnt ();
 		}
 	for (auto &it: m_units_b)
 		if (it.m_stones.intersect_p (fill)) {
 			it.m_seki = false;
 			it.m_alive = !it.m_alive;
 			int mult = it.m_alive ? -1 : 1;
-			m_caps_w += mult * it.m_stones.popcnt ();
+			m_dead_b += mult * it.m_stones.popcnt ();
 		}
 }
 
@@ -282,9 +282,9 @@ void go_board::territory_from_markers ()
 	for (int i = 0; i < m_sz * m_sz; i++) {
 		if (m_marks[i] == mark::terr) {
 			if (m_stones_w->test_bit (i))
-				m_caps_b++;
+				m_dead_w++;
 			else if (m_stones_b->test_bit (i))
-				m_caps_w++;
+				m_dead_b++;
 			if (m_mark_extra[i] == 0)
 				m_score_w++;
 			else

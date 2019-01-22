@@ -62,10 +62,17 @@ class go_board
 	};
 
 	int m_sz;
+	/* The total score that has been calculated.  */
 	int m_score_b = 0;
 	int m_score_w = 0;
+	/* Number of captures that have occurred on the board.  Note: these indicate
+	   the captures made _by_ a side, so m_caps_b is the number of white stones captured.  */
 	int m_caps_b = 0;
 	int m_caps_w = 0;
+	/* Number of stones marked as captured during the scoring phase.  Here, m_dead_b is the
+	   number of dead black stones.  */
+	int m_dead_b = 0;
+	int m_dead_w = 0;
 	bit_array *m_stones_b, *m_stones_w;
 
 	std::vector<stone_unit> m_units_b;
@@ -86,6 +93,7 @@ public:
 	go_board (const go_board &other)
 		: m_sz (other.m_sz), m_score_b (other.m_score_b), m_score_w (other.m_score_w),
 		m_caps_b (other.m_caps_b), m_caps_w (other.m_caps_w),
+		m_dead_b (other.m_dead_b), m_dead_w (other.m_dead_w),
 		m_stones_b (new bit_array (*other.m_stones_b)), m_stones_w (new bit_array (*other.m_stones_w)),
 		m_units_b (other.m_units_b), m_units_w (other.m_units_w),
 		m_units_t (other.m_units_t), m_units_st (other.m_units_st),
@@ -93,10 +101,13 @@ public:
 	{
 	}
 	/* The unused mark argument should be passed as mark::none by the callers to indicate what this
-	   constructor is for: copying a board position without copying marks.  */
+	   constructor is for: copying a board position without copying marks.
+	   Note that this implies territory markers are not copied, and we do not copy m_dead_b and m_dead_w
+	   which just summarize that information.  */
 	go_board (const go_board &other, mark)
 		: m_sz (other.m_sz), m_score_b (other.m_score_b), m_score_w (other.m_score_w),
 		m_caps_b (other.m_caps_b), m_caps_w (other.m_caps_w),
+		m_dead_b (0), m_dead_w (0),
 		m_stones_b (new bit_array (*other.m_stones_b)), m_stones_w (new bit_array (*other.m_stones_w)),
 		m_units_b (other.m_units_b), m_units_w (other.m_units_w),
 		m_units_t (other.m_units_t), m_units_st (other.m_units_st)
@@ -109,6 +120,8 @@ public:
 		m_score_w = other.m_score_w;
 		m_caps_b = other.m_caps_b;
 		m_caps_w = other.m_caps_w;
+		m_dead_b = other.m_dead_b;
+		m_dead_w = other.m_dead_w;
 		std::swap (m_stones_w, other.m_stones_w);
 		std::swap (m_stones_b, other.m_stones_b);
 		std::swap (m_units_w, other.m_units_w);
@@ -272,8 +285,8 @@ public:
 	}
 	void get_scores (int &caps_b, int &caps_w, int &score_b, int &score_w) const
 	{
-		caps_b = m_caps_b;
-		caps_w = m_caps_w;
+		caps_b = m_caps_b + m_dead_w;
+		caps_w = m_caps_w + m_dead_b;
 		score_b = m_score_b;
 		score_w = m_score_w;
 	}
