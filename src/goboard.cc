@@ -707,7 +707,7 @@ void go_board::add_stone (int x, int y, stone_color col, bool process_captures)
 	} else if (n_caps == 0) {
 		first_neighbour->m_n_liberties = count_liberties (first_neighbour->m_stones);
 	}
-	if (first_neighbour->m_n_liberties == 0) {
+	if (first_neighbour->m_n_liberties == 0 && process_captures) {
 #ifdef DEBUG
 		std::cerr << "suicide move found\n";
 #endif
