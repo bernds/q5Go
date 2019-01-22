@@ -94,7 +94,6 @@ signals:
 	void signal_resign();
 	void signal_pass();
 	void signal_done();
-	void signal_refresh();
 	void signal_editBoardInNewWindow();
 
 public slots:

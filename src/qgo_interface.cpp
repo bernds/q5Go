@@ -1183,7 +1183,6 @@ void qGoBoard::game_startup ()
 	connect(win, SIGNAL(signal_adjourn()), this, SLOT(slot_doAdjourn()));
 	connect(win, SIGNAL(signal_undo()), this, SLOT(slot_doUndo()));
 	connect(win, SIGNAL(signal_done()), this, SLOT(slot_doDone()));
-	connect(win, SIGNAL(signal_refresh()), this, SLOT(slot_doRefresh()));
 
 	// teach tools
 	connect(win->getMainWidget()->cb_opponent, SIGNAL(activated(const QString&)), this, SLOT(slot_ttOpponentSelected(const QString&)));
@@ -1910,31 +1909,6 @@ void qGoBoard::slot_doDone()
 {
 	if (id > 0)
 		emit signal_sendcommand("done", false);
-}
-
-void qGoBoard::slot_doRefresh()
-{
-	// no refresh for ended or adjourned games
-	if (id > 0 && id != 10000)
-	{
-		if (!have_gameData)
-			emit signal_sendcommand("games " + QString::number(id), false);
-		else
-		{
-			set_sentmovescmd(true);
-			emit signal_sendcommand("moves " + QString::number(id), false);
-//			emit signal_sendcommand("all " + QString::number(id), false);
-		}
-
-//		if (ExtendedTeachingGame)
-			// get observers
-		emit signal_sendcommand("all " + QString::number(id), false);
-	}
-	else if (id == 10000 && (gd.playerBlack == myName || gd.playerWhite == myName))
-	{
-		// load stored game
-		emit signal_sendcommand("load " + gd.playerWhite + "-" + gd.playerBlack, false);
-	}
 }
 
 void qGoBoard::set_requests(const QString &handicap, const QString &komi, assessType kt)

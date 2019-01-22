@@ -166,7 +166,6 @@ public slots:
 	void slot_doUndo();
 	void slot_doAdjourn();
 	void slot_doDone();
-	void slot_doRefresh();
 
 	// normaltools
 	void slot_addtimePauseW();

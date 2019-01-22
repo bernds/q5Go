@@ -2443,22 +2443,6 @@ After placing and/or undo release button for returning to starting point automat
    </hints>
   </connection>
   <connection>
-   <sender>refreshButton</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWidgetGui</receiver>
-   <slot>doRefresh()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>468</x>
-     <y>153</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>scoreButton</sender>
    <signal>clicked(bool)</signal>
    <receiver>MainWidgetGui</receiver>
