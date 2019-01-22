@@ -4,15 +4,14 @@
 
 #include "parser.h"
 #include "qgo_interface.h"
-#include "gamestable.h"
-#include "playertable.h"
+#include "mainwin.h"
 
 #include <qregexp.h>
 #include <iostream>
 using namespace std;
 
 // Parsing of Go Server messages
-Parser::Parser() : QObject()
+Parser::Parser(ClientWindow *cw, qGoIF *qgoif) : m_client_win (cw), m_qgoif (qgoif)
 {
 	// generate buffers
 	aPlayer = new Player;

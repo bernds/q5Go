@@ -128,7 +128,6 @@ public slots:
 	void slot_player(Player*, bool);
 	void slot_game(Game*);
   	void slot_message(QString);
-	void slot_message(QString, QColor);
 	void slot_svname(GSName&);
 	void slot_accname(QString&);
 	void slot_status(Status);
@@ -232,6 +231,8 @@ private:
 	void initActions();
 
 	int toggle_player_state (const char *list, const QString &symbol);
+
+	void colored_message(QString, QColor);
 
 	void keyPressEvent(QKeyEvent*);
 //	void keyReleaseEvent(QKeyEvent*);

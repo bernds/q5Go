@@ -89,31 +89,6 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	// create instance of telnetConnection
 	telnetConnection = new TelnetConnection(this, ListView_players, ListView_games);
 
-	// create parser and connect signals
-	parser = new Parser();
-	connect(parser, SIGNAL(signal_player(Player*, bool)), SLOT(slot_player(Player*, bool)));
-  	connect(parser, SIGNAL(signal_statsPlayer(Player*)), SLOT(slot_statsPlayer(Player*)));
-	connect(parser, SIGNAL(signal_game(Game*)), SLOT(slot_game(Game*)));
-	connect(parser, SIGNAL(signal_message(QString)), SLOT(slot_message(QString)));
-	connect(parser, SIGNAL(signal_svname(GSName&)), SLOT(slot_svname(GSName&)));
-	connect(parser, SIGNAL(signal_accname(QString&)), SLOT(slot_accname(QString&)));
-	connect(parser, SIGNAL(signal_status(Status)), SLOT(slot_status(Status)));
-	connect(parser, SIGNAL(signal_connclosed()), SLOT(slot_connclosed()));
-	connect(parser, SIGNAL(signal_talk(const QString&, const QString&, bool)), SLOT(slot_talk(const QString&, const QString&, bool)));
-	connect(parser, SIGNAL(signal_checkbox(int, bool)), SLOT(slot_checkbox(int, bool)));
-	connect(parser, SIGNAL(signal_addToObservationList(int)), SLOT(slot_addToObservationList(int)));
-	connect(parser, SIGNAL(signal_channelinfo(int, const QString&)), SLOT(slot_channelinfo(int, const QString&)));
-	connect(parser, SIGNAL(signal_matchrequest(const QString&, bool)), this, SLOT(slot_matchrequest(const QString&, bool)));
-  	connect(parser, SIGNAL(signal_matchCanceled(const QString&)), this, SLOT(slot_removeMatchDialog(const QString&)));
-	connect(parser, SIGNAL(signal_shout(const QString&, const QString&)), SLOT(slot_shout(const QString&, const QString&)));
-	connect(parser, SIGNAL(signal_room(const QString&, bool)),SLOT(slot_room(const QString&, bool)));
-	connect(parser, SIGNAL(signal_addSeekCondition(const QString&,const QString&, const QString&, const QString&, const QString&)),this,
-			SLOT(slot_addSeekCondition(const QString&, const QString&, const QString&, const QString&, const QString&)));
-	connect(parser, SIGNAL(signal_clearSeekCondition()),this,SLOT(slot_clearSeekCondition()));
-	connect(parser, SIGNAL(signal_cancelSeek()),this,SLOT(slot_cancelSeek()));
-	connect(parser, SIGNAL(signal_SeekList(const QString&, const QString&)),this,SLOT(slot_SeekList(const QString&, const QString&)));
-	connect(parser, SIGNAL(signal_refresh(int)),this, SLOT(slot_refresh(int)));
-
 	// doubleclick
 	connect(ListView_games, SIGNAL(signal_doubleClicked(QTreeWidgetItem*)), this,
 		SLOT(slot_click_games(QTreeWidgetItem*)));
@@ -266,6 +241,30 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	// create qGo Interface for board handling
 	qgoif = new qGoIF(this);
 	// qGo Interface
+
+	// create parser and connect signals
+	parser = new Parser(this, qgoif);
+	connect(parser, &Parser::signal_player, this, &ClientWindow::slot_player);
+	connect(parser, &Parser::signal_statsPlayer, this, &ClientWindow::slot_statsPlayer);
+	connect(parser, &Parser::signal_game, this, &ClientWindow::slot_game);
+	connect(parser, &Parser::signal_message, this, &ClientWindow::slot_message);
+	connect(parser, &Parser::signal_svname, this, &ClientWindow::slot_svname);
+	connect(parser, &Parser::signal_accname, this, &ClientWindow::slot_accname);
+	connect(parser, &Parser::signal_status, this, &ClientWindow::slot_status);
+	connect(parser, &Parser::signal_connclosed, this, &ClientWindow::slot_connclosed);
+	connect(parser, &Parser::signal_talk, this, &ClientWindow::slot_talk);
+	connect(parser, &Parser::signal_checkbox, this, &ClientWindow::slot_checkbox);
+	connect(parser, &Parser::signal_addToObservationList, this, &ClientWindow::slot_addToObservationList);
+	connect(parser, &Parser::signal_channelinfo, this, &ClientWindow::slot_channelinfo);
+	connect(parser, &Parser::signal_matchrequest, this, &ClientWindow::slot_matchrequest);
+	connect(parser, &Parser::signal_matchCanceled, this, &ClientWindow::slot_removeMatchDialog);
+	connect(parser, &Parser::signal_shout, this, &ClientWindow::slot_shout);
+	connect(parser, &Parser::signal_room, this, &ClientWindow::slot_room);
+	connect(parser, &Parser::signal_addSeekCondition, this, &ClientWindow::slot_addSeekCondition);
+	connect(parser, &Parser::signal_clearSeekCondition, this, &ClientWindow::slot_clearSeekCondition);
+	connect(parser, &Parser::signal_cancelSeek, this, &ClientWindow::slot_cancelSeek);
+	connect(parser, &Parser::signal_SeekList, this, &ClientWindow::slot_SeekList);
+	connect(parser, &Parser::signal_refresh, this, &ClientWindow::slot_refresh);
 
 	connect(parser, &Parser::signal_set_observe, qgoif, &qGoIF::set_observe);
 	connect(parser, &Parser::signal_move, qgoif, &qGoIF::slot_move);
@@ -1058,7 +1057,7 @@ void ClientWindow::sendcommand(const QString &cmd, bool localecho)
 		// add to Messages, anyway
 		// Scroll at bottom of text, set cursor to end of line
 		qDebug() << "CMD: " << cmd;
-		slot_message(cmd,Qt::blue);
+		colored_message (cmd, Qt::blue);
 	}
 
 	// send to Host

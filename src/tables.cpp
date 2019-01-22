@@ -606,7 +606,7 @@ void ClientWindow::slot_pbuser4()
 }
 
 // tell, say, kibitz...
-void ClientWindow::slot_message(QString txt, QColor c)
+void ClientWindow::colored_message(QString txt, QColor c)
 {
 	MultiLineEdit2->setTextColor(c);
 	slot_message( txt);

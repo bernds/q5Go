@@ -14,10 +14,15 @@
 class Player;
 class Game;
 class GameInfo;
+class qGoIF;
+class ClientWindow;
 
 class Parser : public QObject
 {
 	Q_OBJECT
+
+	ClientWindow *m_client_win;
+	qGoIF *m_qgoif;
 
 signals:
 	// emit if info is found
@@ -63,7 +68,7 @@ signals:
 	//void signal_undoRequest(const QString&);
 
 public:
-	Parser();
+	Parser(ClientWindow *, qGoIF *);
 	~Parser();
 	InfoType  put_line(const QString&);
 //	Player    get_player();
