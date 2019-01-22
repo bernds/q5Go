@@ -35,6 +35,10 @@
   <qresource prefix="/">
     <file>images/stone_b16.png</file>
     <file>images/stone_w16.png</file>
+    <file>images/stone_b22.png</file>
+    <file>images/stone_w22.png</file>
+    <file>images/stone_b32.png</file>
+    <file>images/stone_w32.png</file>
     <file>images/power-standby.png</file>
     <file>images/power-on.png</file>
     <file>images/exit.png</file>

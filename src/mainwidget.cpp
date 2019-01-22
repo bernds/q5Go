@@ -287,6 +287,35 @@ void MainWidget::updateFont ()
 	setFont (setting->fontStandard);
 	normalTools->wtimeView->update_font (setting->fontClocks);
 	normalTools->btimeView->update_font (setting->fontClocks);
+
+	QFontMetrics fm (setting->fontStandard);
+	QRect r = fm.boundingRect ("Variation 12 of 15");
+	QRect r2 = fm.boundingRect ("Move 359 (W M19)");
+	int strings_width = std::max (r.width (), r2.width ());
+	int min_width = std::max (125, strings_width) + 25;
+	toolsFrame->setMaximumWidth (min_width);
+	toolsFrame->setMinimumWidth (min_width);
+	toolsFrame->resize (min_width, toolsFrame->height ());
+
+	int h = fm.height ();
+	QString wimg = ":/images/stone_w16.png";
+	QString bimg = ":/images/stone_b16.png";
+	if (h >= 32) {
+		 wimg = ":/images/stone_w32.png";
+		 bimg = ":/images/stone_b32.png";
+	} else if (h >= 22) {
+		wimg = ":/images/stone_w22.png";
+		bimg = ":/images/stone_b22.png";
+	}
+	QIcon icon (bimg);
+	icon.addPixmap (wimg, QIcon::Normal, QIcon::On);
+
+	colorButton->setIcon (icon);
+	colorButton->setIconSize (QSize (h, h));
+	normalTools->whiteStoneLabel->setPixmap (QPixmap (wimg));
+	normalTools->blackStoneLabel->setPixmap (QPixmap (bimg));
+	scoreTools->whiteStoneLabel->setPixmap (wimg);
+	scoreTools->blackStoneLabel->setPixmap (bimg);
 }
 
 void MainWidget::setGameMode(GameMode mode)

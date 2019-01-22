@@ -38,7 +38,7 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_4">
      <item>
-      <widget class="QLabel" name="label_2">
+      <widget class="QLabel" name="whiteStoneLabel">
        <property name="text">
         <string/>
        </property>
@@ -152,7 +152,7 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_5">
      <item>
-      <widget class="QLabel" name="label_4">
+      <widget class="QLabel" name="blackStoneLabel">
        <property name="text">
         <string/>
        </property>
