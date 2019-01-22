@@ -79,13 +79,13 @@ class qGoBoard : public QObject, public game_state::observer
 	void observed_changed () { }
 
 public:
-	qGoBoard(qGoIF *);
+	qGoBoard(qGoIF *, int game_id);
 	~qGoBoard();
 
 	void game_startup ();
 	void disconnected (bool remove_from_list);
 	int get_id() const { return id; }
-	void set_id(int i) { id = i; gd.gameNumber = i; }
+	void set_id(int i) { id = i; }
 	GameData get_gameData() { return gd; }
 	void set_title(const QString&);
 	void set_komi(const QString&);
@@ -257,6 +257,8 @@ protected:
 	bool parse_move(int src, GameInfo* gi=0, Game* g=0, QString txt=QString::null);
 
 private:
+	qGoBoard *find_game_id (int);
+
 	QWidget *parent;
 	// actual pointer, for speedup reason
 	qGoBoard *qgobrd;

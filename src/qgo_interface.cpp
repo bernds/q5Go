@@ -104,6 +104,15 @@ qGoIF::~qGoIF()
 	delete qgo;
 }
 
+qGoBoard *qGoIF::find_game_id (int id)
+{
+	for (auto qb: boardlist)
+		if (qb->get_id() == id) {
+			return qb;
+		}
+	return nullptr;
+}
+
 // handle move info and distribute to different boards
 bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 {
@@ -267,7 +276,7 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 				return false;
 			}
 
-			qgobrd = new qGoBoard (this);
+			qgobrd = new qGoBoard (this, game_id);
 			boardlist.append(qgobrd);
 
 //			qgobrd->get_win()->setOnlineMenu(true);
@@ -306,7 +315,6 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 			}
 
 			// set correct mode in qGo
-			qgobrd->set_id (game_id);
 			qgobrd->set_gsName (gsName);
 			qgobrd->set_myName (myName);
 			if (src==0)
@@ -584,18 +592,9 @@ void qGoIF::slot_matchsettings(const QString &id, const QString &handicap, const
 
 void qGoIF::slot_title(const GameInfo *gi, const QString &title)
 {
-	// This used to check that only teaching games can have a title.
-	// However, it seems that we can reliably identify boards by game
-	// ID - see parser.cpp.
-	for (auto qb: boardlist) {
-		if (qb->get_id() == gi->nr.toInt()
-		    && (qb->get_Mode() == modeMatch || qb->get_Mode() == modeTeach
-			|| qb->get_Mode() == modeObserve))
-		{
-			qb->set_title(title);
-			return;
-		}
-	}
+	qGoBoard *qb = find_game_id (gi->nr.toInt ());
+	if (qb)
+		qb->set_title (title);
 }
 
 // komi set or requested
@@ -1066,7 +1065,7 @@ void qGoIF::slot_timeAdded(int time, bool toMe)
 
 
 // add new board window
-qGoBoard::qGoBoard(qGoIF *qif) : QObject(), m_qgoif (qif)
+qGoBoard::qGoBoard(qGoIF *qif, int gameid) : m_qgoif (qif), id (gameid)
 {
 	qDebug("::qGoBoard()");
 	have_gameData = false;
@@ -1264,7 +1263,6 @@ void qGoBoard::set_game(Game *g, GameMode mode, stone_color own_color)
 //	QString status = g->Sz.simplified();
 	gd.handicap = g->H.toInt();
 	gd.komi = g->K.toFloat();
-	gd.gameNumber = id;
 	if (g->FR.contains("F"))
 		gd.freegame = FREE;
 	else if (g->FR.contains("T"))

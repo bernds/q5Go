@@ -27,7 +27,6 @@ public:
 		int _byoStones=25,
 		int _timelimit=0,
 		int _byoPeriods=0,
-		int _gameNumber=0,
 		int _style = 1,
 		QString _result="",
 		QString _date="",
@@ -53,7 +52,6 @@ public:
 		overtime = _overtime;
 		size = _size;
 		handicap = _handicap;
-		gameNumber = _gameNumber;
 		byoTime = _byoTime;
 		byoPeriods = _byoPeriods;
 		byoStones = _byoStones;
@@ -81,7 +79,6 @@ public:
 			overtime = d->overtime;
 			size = d->size;
 			handicap = d->handicap;
-			gameNumber = d->gameNumber;
 			byoTime = d->byoTime;
 			byoPeriods = d->byoPeriods;
 			byoStones = d->byoStones;
@@ -97,7 +94,7 @@ public:
 
 	QString    playerBlack, playerWhite, rankBlack, rankWhite, result,
 	           date, place, copyright, gameName, fileName, overtime;
-	int        size, handicap, gameNumber, byoTime, byoPeriods, byoStones, style, timelimit;
+	int        size, handicap, byoTime, byoPeriods, byoStones, style, timelimit;
 	float      komi;
 	assessType freegame;
 	TimeSystem timeSystem;
