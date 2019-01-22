@@ -28,7 +28,10 @@ public:
 		}
 		bool test_overlap (const bit_rect &other, int xoff, int yoff)
 		{
-			return m_rep[yoff].intersect_p (other.m_rep[0], xoff);
+			for (int y = yoff; y < m_h && y - yoff < other.m_h; y++)
+				if (m_rep[y].intersect_p (other.m_rep[y - yoff], xoff))
+					return true;
+			return false;
 		}
 		void set_max_width (int x)
 		{
