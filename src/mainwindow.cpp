@@ -2427,8 +2427,7 @@ MainWindow_GTP::MainWindow_GTP (QWidget *parent, std::shared_ptr<game_record> gr
 	: MainWindow (parent, gr, modeComputer), Gtp_Controller (this)
 {
 	gfx_board->set_player_colors (!w_is_comp, !b_is_comp);
-	m_gtp = create_gtp (program.path (), program.args (),
-			    m_game->boardsize (), m_game->komi (), m_game->handicap (), 10);
+	m_gtp = create_gtp (program, m_game->boardsize (), m_game->komi (), m_game->handicap ());
 }
 
 MainWindow_GTP::~MainWindow_GTP ()

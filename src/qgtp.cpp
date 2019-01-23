@@ -2,9 +2,9 @@
 
 #include "qgtp.h"
 
-GTP_Process *Gtp_Controller::create_gtp (const QString &prog, const QString &args, int size, double komi, int hc, int level)
+GTP_Process *Gtp_Controller::create_gtp (const Engine &engine, int size, double komi, int hc)
 {
-	GTP_Process *g = new GTP_Process (m_parent, this, prog, args, size, komi, hc, level);
+	GTP_Process *g = new GTP_Process (m_parent, this, engine, size, komi, hc);
 	return g;
 }
 
@@ -13,10 +13,12 @@ GTP_Process *Gtp_Controller::create_gtp (const QString &prog, const QString &arg
 * Fails:     never
 * Returns:   nothing
 */
-GTP_Process::GTP_Process(QWidget *parent, Gtp_Controller *c, const QString &prog, const QString &args,
-			 int size, float komi, int hc, int level)
-	: m_dlg (parent, TextView::type::gtp), m_controller (c), m_size (size), m_komi (komi), m_hc (hc), m_level (level)
+GTP_Process::GTP_Process(QWidget *parent, Gtp_Controller *c, const Engine &engine,
+			 int size, float komi, int hc)
+	: m_dlg (parent, TextView::type::gtp), m_controller (c), m_size (size), m_komi (komi), m_hc (hc)
 {
+	const QString &prog = engine.path ();
+	const QString &args = engine.args ();
 	req_cnt = 1;
 
 	m_dlg.show ();

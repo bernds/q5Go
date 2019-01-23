@@ -2055,7 +2055,7 @@ void Board::start_analysis ()
 		delete m_analyzer;
 		m_analyzer = nullptr;
 	}
-	m_analyzer = create_gtp (e->path (), e->args (), board_size, 7.5, 0, 10);
+	m_analyzer = create_gtp (*e, board_size, 7.5, 0);
 	m_board_win->update_analysis (analyzer::starting);
 }
 

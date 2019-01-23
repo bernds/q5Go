@@ -6,9 +6,31 @@
 #include "goboard.h"
 #include "textview.h"
 
-#define IGTP_BUFSIZE 2048    /* Size of the response buffer */
-#define OK 0
-#define FAIL -1
+class Engine
+{
+	QString m_title;
+	QString m_path;
+	QString m_args;
+	QString m_komi;
+	bool m_analysis;
+
+public:
+	Engine (const QString &title, const QString &path, const QString &args, const QString &komi, bool analysis)
+		: m_title (title), m_path (path), m_args (args), m_komi (komi), m_analysis (analysis)
+	{
+	}
+	QString title() const { return m_title; };
+	QString path() const { return m_path; };
+	QString args() const { return m_args; };
+	QString komi() const { return m_komi; }
+	bool analysis () const { return m_analysis; }
+
+	int operator== (Engine h)
+		{ return (this->m_title == h.m_title); };
+	bool operator< (Engine h)
+		{ return (this->m_title < h.m_title); };
+};
+
 
 class GTP_Process;
 
@@ -19,8 +41,7 @@ class Gtp_Controller
 
 public:
 	Gtp_Controller (QWidget *p) : m_parent (p) { }
-	GTP_Process *create_gtp (const QString &program, const QString &args,
-			  int size, double komi, int hc, int level);
+	GTP_Process *create_gtp (const Engine &engine, int size, double komi, int hc);
 	virtual void gtp_played_move (int x, int y) = 0;
 	virtual void gtp_played_pass () = 0;
 	virtual void gtp_played_resign () = 0;
@@ -44,7 +65,6 @@ class GTP_Process : public QProcess
 	int m_size;
 	double m_komi;
 	int m_hc;
-	int m_level;
 	bool m_started = false;
 	bool m_stopped = false;
 
@@ -71,11 +91,9 @@ public slots:
 	void slot_startup_messages ();
 	void slot_abort_request (bool);
 
-// void slot_stateChanged(QProcess::ProcessState);
-
 public:
-	GTP_Process (QWidget *parent, Gtp_Controller *c, const QString &prog, const QString &args,
-		     int size, float komi, int hc, int level);
+	GTP_Process (QWidget *parent, Gtp_Controller *c, const Engine &engine,
+		     int size, float komi, int hc);
 	~GTP_Process ();
 	bool started () { return m_started; }
 	bool stopped () { return m_stopped; }
