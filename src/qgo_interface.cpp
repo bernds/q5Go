@@ -789,7 +789,7 @@ void qGoIF::slot_kibitz(int num, const QString& who, const QString& msg)
 #endif
 	}
 	else
-		qb->send_kibitz(name + ": " + msg);
+		qb->send_kibitz(name + ": " + msg + "\n");
 }
 
 void qGoIF::slot_requestDialog(const QString &yes, const QString &no, const QString & /*id*/, const QString &opponent)
