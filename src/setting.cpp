@@ -116,6 +116,8 @@ Setting::Setting()
 	writeIntEntry("STONES_LOOK", 3);
 	writeBoolEntry("STONES_STRIPES", 1);
 
+	writeIntEntry("ANALYSIS_VARTYPE", 2);
+	writeIntEntry("ANALYSIS_WINRATE", 2);
 	writeBoolEntry("ANALYSIS_PRUNE", 1);
 	writeBoolEntry("ANALYSIS_CHILDREN", 1);
 	writeBoolEntry("ANALYSIS_HIDEOTHER", 1);
