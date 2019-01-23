@@ -1642,20 +1642,20 @@ void Board::mousePressEvent(QMouseEvent *e)
 		findMove (x - 1, y - 1);
 		return;
 	}
-	mark mark_to_set = m_edit_mark;
+	/* All modes where marks are not allowed, including scoring, force the editStone
+	   button instead of the marks.  So this is a simple test.  */
+	if (m_edit_mark != mark::none)
+	{
+		click_add_mark (e, x - 1, y - 1);
+		return;
+	}
+
 	stone_color existing_stone;
 
 	// resume normal proceeding
 	switch (m_game_mode)
 	{
 	case modeNormal:
-		if (mark_to_set != mark::none)
-		{
-			click_add_mark (e, x - 1, y - 1);
-			break;
-		}
-
-		/* fall through */
 	case modeTeach: /* @@@ teaching mode is untested; best guess.  */
 	case modeComputer:
 		switch (e->button())
@@ -1670,12 +1670,6 @@ void Board::mousePressEvent(QMouseEvent *e)
 		break;
 
 	case modeEdit:
-		if (mark_to_set != mark::none)
-		{
-			click_add_mark (e, x - 1, y - 1);
-			break;
-		}
-
 		existing_stone = m_edit_board->stone_at (x - 1, y - 1);
 		switch (e->button())
 		{

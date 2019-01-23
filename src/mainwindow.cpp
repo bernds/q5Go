@@ -2179,10 +2179,11 @@ void MainWindow::slotSoundToggle(bool toggle)
 
 void MainWindow::setGameMode(GameMode mode)
 {
-	if (mode == modeEdit || mode == modeNormal) {
+	if (mode == modeEdit || mode == modeNormal || mode == modeObserve) {
 		editGroup->setEnabled (true);
 	} else {
 		editStone->setChecked (true);
+		gfx_board->setMarkType (mark::none);
 		editGroup->setEnabled (false);
 	}
 

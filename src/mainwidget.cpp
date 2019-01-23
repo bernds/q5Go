@@ -337,7 +337,7 @@ void MainWidget::setGameMode(GameMode mode)
 	editPosButton->setEnabled (mode == modeNormal || mode == modeEdit);
 	colorButton->setEnabled (mode == modeEdit || mode == modeNormal);
 
-	slider->setEnabled (mode == modeNormal);
+	slider->setEnabled (mode == modeNormal || mode == modeObserve);
 
 	passButton->setEnabled (mode != modeScore && mode != modeScoreRemote);
 	editButton->setEnabled (mode != modeScore);
