@@ -252,7 +252,7 @@ void MainWidget::doEdit()
 void MainWidget::sliderChanged(int n)
 {
 	if (sliderSignalToggle)
-		gfx_board->gotoNthMoveInVar(n);
+		gfx_board->goto_nth_move_in_var (n);
 }
 
 void MainWidget::toggleSlider(bool b)

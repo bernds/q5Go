@@ -34,15 +34,13 @@ class MainWidget;
 
 enum class analyzer { disconnected, starting, running, paused };
 
-class Board : public QGraphicsView, public game_state::observer, public Gtp_Controller
+class Board : public QGraphicsView, public navigable_observer, public Gtp_Controller
 {
 	Q_OBJECT
 	MainWindow *m_board_win;
 	MainWidget *m_main_widget;
 
 	GameMode m_game_mode = modeNormal;
-
-	std::shared_ptr<game_record> m_game;
 
 	/* Controls whether moves are allowed for either color.  */
 	bool m_player_is_b = true;
@@ -116,23 +114,6 @@ public:
 	GameMode getGameMode () { return m_game_mode; }
 	void setMarkType(mark t) { m_edit_mark = t; }
 
-	void nextMove();
-	void previousMove();
-	void nextCount();
-	void previousCount();
-	void nextVariation();
-	void previousVariation();
-	void nextComment();
-	void previousComment();
-	void gotoFirstMove();
-	void gotoLastMove();
-	void gotoLastMoveByTime();
-	void gotoMainBranch();
-	void gotoVarStart();
-	void gotoNextBranch();
-	void gotoNthMove(int n);
-	void gotoNthMoveInVar(int n);
-	void findMove(int x, int y);
 	void navIntersection();
 	void set_start_count (bool on) { m_state->set_start_count (on); }
 	void set_rect_select (int on) { m_request_mark_rect = on; }

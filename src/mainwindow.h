@@ -113,21 +113,10 @@ public slots:
 
 	void slotEditDelete(bool);
 	void slotEdit123(bool);
-	void slotNavBackward(bool = false);
-	void slotNavForward(bool = false);
-	void slotNavFirst(bool = false);
-	void slotNavLast(bool = false);
-	void slotNavLastByTime(bool = false);
-	void slotNavNextVar(bool = false);
-	void slotNavPrevVar(bool = false);
-	void slotNavNextComment(bool);
-	void slotNavPrevComment(bool);
+
 	void slotNavIntersection(bool);
-	void slotNavMainBranch(bool);
-	void slotNavStartVar(bool = false);
-	void slotNavNextBranch(bool = false);
-	void slotNavNthMove(bool);
 	void slotNavAutoplay(bool toggle);
+	void slotNavNthMove(bool);
 	void slotNavSwapVariations(bool);
 
 	void slotSetGameInfo(bool);

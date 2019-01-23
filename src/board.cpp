@@ -30,7 +30,7 @@
 #include "svgbuilder.h"
 
 Board::Board(QWidget *parent, QGraphicsScene *c)
-	: QGraphicsView(c, parent), Gtp_Controller (parent), m_game (nullptr)
+	: QGraphicsView(c, parent), Gtp_Controller (parent)
 {
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -1042,241 +1042,6 @@ void Board::debug()
 }
 #endif
 
-void Board::nextMove()
-{
-	game_state *next = m_state->next_move ();
-	if (next == nullptr)
-		return;
-	move_state (next);
-}
-
-void Board::previousMove()
-{
-	game_state *next = m_state->prev_move ();
-	if (next == nullptr)
-		return;
-	move_state (next);
-}
-
-void Board::previousComment()
-{
-	game_state *st = m_state;
-
-	while (st != nullptr) {
-		st = st->prev_move ();
-		if (st != nullptr && st->comment () != "") {
-			move_state (st);
-			break;
-		}
-	}
-}
-
-void Board::nextComment()
-{
-	game_state *st = m_state;
-
-	while (st != nullptr) {
-		st = st->next_move ();
-		if (st != nullptr && st->comment () != "") {
-			move_state (st);
-			break;
-		}
-	}
-}
-
-void Board::previousCount()
-{
-	game_state *st = m_state;
-
-	while (st != nullptr) {
-		st = st->prev_move ();
-		if (st != nullptr && st->get_start_count ()) {
-			move_state (st);
-			break;
-		}
-	}
-}
-
-void Board::nextCount()
-{
-	game_state *st = m_state;
-
-	while (st != nullptr) {
-		st = st->next_move ();
-		if (st != nullptr && st->get_start_count ()) {
-			move_state (st);
-			break;
-		}
-	}
-}
-
-void Board::nextVariation()
-{
-	game_state *next = m_state->next_sibling (true);
-	if (next == nullptr)
-		return;
-	if (next != m_state)
-		move_state (next);
-}
-
-void Board::previousVariation()
-{
-	game_state *next = m_state->prev_sibling (true);
-	if (next == nullptr)
-		return;
-	if (next != m_state)
-		move_state (next);
-}
-
-void Board::gotoFirstMove()
-{
-	game_state *st = m_state;
-
-	for (;;) {
-		game_state *next = st->prev_move ();
-		if (next == nullptr) {
-			if (st != m_state)
-				move_state (st);
-			break;
-		}
-		st = next;
-	}
-}
-
-void Board::gotoLastMove()
-{
-	game_state *st = m_state;
-
-	for (;;) {
-		game_state *next = st->next_move ();
-		if (next == nullptr) {
-			if (st != m_state)
-				move_state (st);
-			break;
-		}
-		st = next;
-	}
-}
-
-void Board::findMove(int x, int y)
-{
-	game_state *st = m_state;
-	if (!st->was_move_p () || st->get_move_x () != x || st->get_move_y () != y)
-		st = m_game->get_root ();
-
-	for (;;) {
-		st = st->next_move ();
-		if (st == nullptr)
-			return;
-		if (st->was_move_p () && st->get_move_x () == x && st->get_move_y () == y)
-			break;
-	}
-	move_state (st);
-}
-
-// this slot is used for edit window to navigate to last made move
-void Board::gotoLastMoveByTime()
-{
-#if 0
-	if (m_game_mode == modeScore)
-		return;
-
-	CHECK_PTR(tree);
-
-	tree->setToFirstMove();
-	Move *m = tree->getCurrent();
-	CHECK_PTR(m);
-
-	// Descent tree to last son of latest variation
-	while (m->son != nullptr)
-	{
-		m = tree->nextMove();
-		for (int i = 0; i < tree->getNumBrothers(); i++)
-			m = tree->nextVariation();
-/*		Move *n = m;
-		while (n != NULL && (n = n->brother) != NULL)
-		{
-			m = n;
-			if (n->getTimeLeft() <= m->getTimeLeft() ||
-				n->getTimeLeft() != 0 && m->getTimeLeft() == 0)
-				m = n;
-		}*/
-	}
-
-	if (m != nullptr)
-		updateMove(m);
-#endif
-}
-
-void Board::gotoNthMove(int n)
-{
-	game_state *st = m_game->get_root ();
-	while (st->move_number () < n && st->n_children () > 0) {
-		st = st->next_move (true);
-	}
-	move_state (st);
-}
-
-void Board::gotoNthMoveInVar(int n)
-{
-	game_state *st = m_state;
-
-	while (st->move_number () != n) {
-		game_state *next = st->move_number () < n ? st->next_move () : st->prev_move ();
-		/* Some added safety... this should not happen.  */
-		if (next == nullptr)
-			break;
-		st = next;
-	}
-	move_state (st);
-}
-
-void Board::gotoMainBranch()
-{
-	game_state *st = m_state;
-	game_state *go_to = st;
-	while (st != nullptr) {
-		while (st->has_prev_sibling ())
-			st = go_to = st->prev_sibling (false);
-		st = st->prev_move ();
-	}
-	if (go_to != st)
-		move_state (go_to);
-}
-
-void Board::gotoVarStart()
-{
-	game_state *st = m_state->prev_move ();
-	if (st == nullptr)
-		return;
-	/* Walk back, ending either at the root or at a node which has
-	   more than one sibling.  */
-	for (;;) {
-		if (st->n_siblings () > 0)
-			break;
-		game_state *prev = st->prev_move ();
-		if (prev == nullptr)
-			break;
-		st = prev;
-	}
-	move_state (st);
-}
-
-void Board::gotoNextBranch()
-{
-	game_state *st = m_state;
-	for (;;) {
-		if (st->n_siblings () > 0)
-			break;
-		game_state *next = st->next_move ();
-		if (next == nullptr)
-			break;
-		st = next;
-	}
-	if (st != m_state)
-		move_state (st);
-}
-
 void Board::deleteNode()
 {
 	game_state *st = m_state;
@@ -1411,15 +1176,15 @@ void Board::wheelEvent(QWheelEvent *e)
 	if (m_cumulative_delta < -60) // wheel down to next
 	{
 		if (e->buttons () == Qt::RightButton || mouseState == Qt::RightButton)
-			nextVariation();
+			next_variation ();
 		else
-			nextMove();
+			next_move ();
 		m_cumulative_delta = 0;
 	} else if (m_cumulative_delta > 60) {
 		if (e->buttons () == Qt::RightButton || mouseState == Qt::RightButton)
-			previousVariation();
+			previous_variation ();
 		else
-			previousMove();
+			previous_move ();
 		m_cumulative_delta = 0;
 	}
 
@@ -1599,7 +1364,7 @@ void Board::mousePressEvent(QMouseEvent *e)
 	if (navIntersectionStatus) {
 		navIntersectionStatus = false;
 		unsetCursor ();
-		findMove (x - 1, y - 1);
+		find_move (x - 1, y - 1);
 		return;
 	}
 	if (m_eval_state != nullptr
@@ -1640,7 +1405,7 @@ void Board::mousePressEvent(QMouseEvent *e)
 	    && (m_game_mode == modeNormal || m_game_mode == modeObserve))
 	{
 		/* @@@ Previous code made a distinction between left and right button.  */
-		findMove (x - 1, y - 1);
+		find_move (x - 1, y - 1);
 		return;
 	}
 	/* All modes where marks are not allowed, including scoring, force the editStone

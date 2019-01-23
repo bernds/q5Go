@@ -213,14 +213,14 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 	CHECK_PTR(board);
 	// Connect the mouseMove event of the board with the status bar coords widget
 	connect(gfx_board, SIGNAL(coordsChanged(int, int, int,bool)), statusTip, SLOT(slotStatusTipCoords(int, int, int,bool)));
-	connect(mainWidget->goLastButton, SIGNAL(clicked()), this, SLOT(slotNavLast()));
-	connect(mainWidget->goFirstButton, SIGNAL(clicked()), this, SLOT(slotNavFirst()));
-	connect(mainWidget->goNextButton, SIGNAL(clicked()), this, SLOT(slotNavForward()));
-	connect(mainWidget->goPrevButton, SIGNAL(clicked()), this, SLOT(slotNavBackward()));
-	connect(mainWidget->prevNumberButton, &QToolButton::clicked, [=] () { gfx_board->previousCount (); });
-	connect(mainWidget->nextNumberButton, &QToolButton::clicked, [=] () { gfx_board->nextCount (); });
-	connect(mainWidget->prevCommentButton, &QToolButton::clicked, [=] () { gfx_board->previousComment (); });
-	connect(mainWidget->nextCommentButton, &QToolButton::clicked, [=] () { gfx_board->nextComment (); });
+	connect(mainWidget->goLastButton, &QToolButton::clicked, [=] () { gfx_board->goto_last_move (); });
+	connect(mainWidget->goFirstButton, &QToolButton::clicked, [=] () { gfx_board->goto_first_move (); });
+	connect(mainWidget->goNextButton, &QToolButton::clicked, [=] () { gfx_board->next_move (); });
+	connect(mainWidget->goPrevButton, &QToolButton::clicked, [=] () { gfx_board->previous_move (); });
+	connect(mainWidget->prevNumberButton, &QToolButton::clicked, [=] () { gfx_board->previous_count (); });
+	connect(mainWidget->nextNumberButton, &QToolButton::clicked, [=] () { gfx_board->next_count (); });
+	connect(mainWidget->prevCommentButton, &QToolButton::clicked, [=] () { gfx_board->previous_comment (); });
+	connect(mainWidget->nextCommentButton, &QToolButton::clicked, [=] () { gfx_board->next_comment (); });
 
 	connect(mainWidget->normalTools->anStartButton, &QToolButton::clicked,
 		[=] (bool on) { if (on) gfx_board->start_analysis (); else gfx_board->stop_analysis (); });
@@ -586,71 +586,60 @@ void MainWindow::initActions()
 	/*
 	* Menu Navigation
 	*/
-	// Navigation Backward
 	navBackward = new QAction(leftArrowIcon, tr("&Previous move") + "\t" + tr("Left"), this);
 	navBackward->setStatusTip(tr("To previous move"));
 	navBackward->setWhatsThis(tr("Previous move\n\nMove one move backward."));
-	connect(navBackward, &QAction::triggered, this, &MainWindow::slotNavBackward);
+	connect (navBackward, &QAction::triggered, [=] () { gfx_board->previous_move (); });
 
-	// Navigation Forward
 	navForward = new QAction(rightArrowIcon, tr("&Next move") + "\t" + tr("Right"), this);
 	navForward->setStatusTip(tr("To next move"));
 	navForward->setWhatsThis(tr("Next move\n\nMove one move forward."));
-	connect(navForward, &QAction::triggered, this, &MainWindow::slotNavForward);
+	connect (navForward, &QAction::triggered, [=] () { gfx_board->next_move (); });
 
-	// Navigation First
 	navFirst = new QAction(two_leftArrowIcon, tr("&First move") + "\t" + tr("Home"), this);
 	navFirst->setStatusTip(tr("To first move"));
 	navFirst->setWhatsThis(tr("First move\n\nMove to first move."));
-	connect(navFirst, &QAction::triggered, this, &MainWindow::slotNavFirst);
+	connect (navFirst, &QAction::triggered, [=] () { gfx_board->goto_first_move (); });
 
-	// Navigation Last
 	navLast = new QAction(two_rightArrowIcon, tr("&Last move") + "\t" + tr("End"), this);
 	navLast->setStatusTip(tr("To last move"));
 	navLast->setWhatsThis(tr("Last move\n\nMove to last move."));
-	connect(navLast, &QAction::triggered, this, &MainWindow::slotNavLast);
+	connect (navLast, &QAction::triggered, [=] () { gfx_board->goto_last_move (); });
 
-	// Navigation previous variation
 	navPrevVar = new QAction(prevVarIcon, tr("P&revious variation") + "\t" + tr("Up"), this);
 	navPrevVar->setStatusTip(tr("To previous variation"));
 	navPrevVar->setWhatsThis(tr("Previous variation\n\nMove to the previous variation of this move."));
-	connect(navPrevVar, &QAction::triggered, this, &MainWindow::slotNavPrevVar);
+	connect (navPrevVar, &QAction::triggered, [=] () { gfx_board->previous_variation (); });
 
-	// Navigation next variation
 	navNextVar = new QAction(nextVarIcon, tr("N&ext variation") + "\t" + tr("Down"), this);
 	navNextVar->setStatusTip(tr("To next variation"));
 	navNextVar->setWhatsThis(tr("Next variation\n\nMove to the next variation of this move."));
-	connect(navNextVar, &QAction::triggered, this, &MainWindow::slotNavNextVar);
+	connect (navNextVar, &QAction::triggered, [=] () { gfx_board->next_variation (); });
 
-	// Navigation main branch
 	navMainBranch = new QAction(mainBranchIcon, tr("&Main branch"), this);
 	navMainBranch->setShortcut (Qt::Key_Insert);
 	navMainBranch->setStatusTip(tr("To main branch"));
 	navMainBranch->setWhatsThis(tr("Main Branch\n\nMove to the main branch where variation started."));
-	connect(navMainBranch, &QAction::triggered, this, &MainWindow::slotNavMainBranch);
+	connect (navMainBranch, &QAction::triggered, [=] () { gfx_board->goto_main_branch (); });
 
-	// Navigation variation start
 	navStartVar = new QAction(startVarIcon, tr("Variation &start"), this);
 	navStartVar->setShortcut (Qt::Key_PageUp);
 	navStartVar->setStatusTip(tr("To top of variation"));
 	navStartVar->setWhatsThis(tr("Variation start\n\nMove to the top variation of this branch."));
-	connect(navStartVar, &QAction::triggered, this, &MainWindow::slotNavStartVar);
+	connect (navStartVar, &QAction::triggered, [=] () { gfx_board->goto_var_start (); });
 
-	// Navigation next branch
 	navNextBranch = new QAction(nextBranchIcon, tr("Next &branch"), this);
 	navNextBranch->setShortcut (Qt::Key_PageDown);
 	navNextBranch->setStatusTip(tr("To next branch starting a variation"));
 	navNextBranch->setWhatsThis(tr("Next branch\n\nMove to the next branch starting a variation."));
-	connect(navNextBranch, &QAction::triggered, this, &MainWindow::slotNavNextBranch);
+	connect (navNextBranch, &QAction::triggered, [=] () { gfx_board->goto_next_branch (); });
 
-	// Navigation goto Nth move
 	navNthMove = new QAction(tr("&Goto Move"), this);
 	navNthMove->setShortcut (QKeySequence (Qt::CTRL + Qt::Key_G));
 	navNthMove->setStatusTip(tr("Goto a move of main branch by number"));
 	navNthMove->setWhatsThis(tr("Goto move\n\nGoto a move of main branch by number."));
 	connect(navNthMove, &QAction::triggered, this, &MainWindow::slotNavNthMove);
 
-	// Navigation Autoplay
 	navAutoplay = new QAction(autoplayIcon, tr("&Autoplay"), this);
 	navAutoplay->setCheckable (true);
 	navAutoplay->setShortcut (QKeySequence (Qt::CTRL + Qt::Key_A));
@@ -659,29 +648,25 @@ void MainWindow::initActions()
 	navAutoplay->setWhatsThis(tr("Autoplay\n\nStart/Stop autoplaying current game."));
 	connect(navAutoplay, &QAction::toggled, this, &MainWindow::slotNavAutoplay);
 
-	// Navigation swap variations
 	navSwapVariations = new QAction(tr("S&wap variations"), this);
 	navSwapVariations->setStatusTip(tr("Swap current move with previous variation"));
 	navSwapVariations->setWhatsThis(tr("Swap variations\n\nSwap current move with previous variation."));
 	connect(navSwapVariations, &QAction::triggered, this, &MainWindow::slotNavSwapVariations);
 
-	// Navigation previous comment
 	navPrevComment = new QAction(previousCommentIcon, tr("Previous &commented move"), this);
 	navPrevComment->setStatusTip(tr("To previous comment"));
 	navPrevComment->setWhatsThis(tr("Previous comment\n\nMove to the previous move that has a comment"));
-	connect(navPrevComment, &QAction::triggered, this, &MainWindow::slotNavPrevComment);
+	connect (navPrevComment, &QAction::triggered, [=] () { gfx_board->previous_comment (); });
 
-	// Navigation next comment
 	navNextComment = new QAction(nextCommentIcon, tr("Next c&ommented move"), this);
 	navNextComment->setStatusTip(tr("To next comment"));
 	navNextComment->setWhatsThis(tr("Next comment\n\nMove to the next move that has a comment"));
-	connect(navNextComment, &QAction::triggered, this, &MainWindow::slotNavNextComment);
+	connect (navNextComment, &QAction::triggered, [=] () { gfx_board->next_comment (); });
 
-	// Navigation to clicked intersection
 	navIntersection = new QAction(navIntersectionIcon, tr("Goto clic&ked move"), this);
 	navIntersection->setStatusTip(tr("To clicked move"));
 	navIntersection->setWhatsThis(tr("Click on a board intersection\n\nMove to the stone played at this intersection (if any)"));
-	connect(navIntersection, &QAction::triggered, this, &MainWindow::slotNavIntersection);
+	connect (navIntersection, &QAction::triggered, this, &MainWindow::slotNavIntersection);
 
 	/*
 	* Menu Settings
@@ -1401,72 +1386,10 @@ void MainWindow::slotEdit123 (bool on)
 	gfx_board->set_start_count (on);
 }
 
-void MainWindow::slotNavBackward(bool)
-{
-	gfx_board->previousMove();
-}
-
-void MainWindow::slotNavForward(bool)
-{
-	gfx_board->nextMove();
-}
-
-void MainWindow::slotNavFirst(bool)
-{
-	gfx_board->gotoFirstMove();
-}
-
-void MainWindow::slotNavLast(bool)
-{
-	gfx_board->gotoLastMove();
-}
-
-// this slot is used for edit window to navigate to last made move
-void MainWindow::slotNavLastByTime(bool)
-{
-	gfx_board->gotoLastMoveByTime();
-}
-
-void MainWindow::slotNavNextVar(bool)
-{
-	gfx_board->nextVariation();
-}
-
-void MainWindow::slotNavPrevVar(bool)
-{
-	gfx_board->previousVariation();
-}
-
-void MainWindow::slotNavNextComment(bool)    //added eb
-{
-	gfx_board->nextComment();
-}
-
-void MainWindow::slotNavPrevComment(bool)
-{
-	gfx_board->previousComment();
-}                                        //end add eb
-
-void MainWindow::slotNavStartVar(bool)
-{
-	gfx_board->gotoVarStart();
-}
-
-void MainWindow::slotNavMainBranch(bool)
-{
-	gfx_board->gotoMainBranch();
-}
-
-void MainWindow::slotNavNextBranch(bool)
-{
-	gfx_board->gotoNextBranch();
-}
-
 void MainWindow::slotNavIntersection(bool)
 {
 	gfx_board->navIntersection();
 }
-
 
 void MainWindow::slotNavNthMove(bool)
 {
@@ -1982,32 +1905,32 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
 */
 	case Qt::Key_Left:
 		if (navBackward->isEnabled ())
-			slotNavBackward();
+			navBackward->trigger ();
 		break;
 
 	case Qt::Key_Right:
 		if (navForward->isEnabled ())
-			slotNavForward();
+			navForward->trigger ();
 		break;
 
 	case Qt::Key_Up:
 		if (navPrevVar->isEnabled ())
-			slotNavPrevVar();
+			navPrevVar->trigger ();
 		break;
 
 	case Qt::Key_Down:
 		if (navNextVar->isEnabled ())
-			slotNavNextVar();
+			navNextVar->trigger ();
 		break;
 
 	case Qt::Key_Home:
 		if (navFirst->isEnabled ())
-			slotNavFirst();
+			navFirst->trigger ();
 		break;
 
 	case Qt::Key_End:
 		if (navLast->isEnabled ())
-			slotNavLast();
+			navLast->trigger ();
 		break;
 
 	default:
@@ -2148,7 +2071,7 @@ void MainWindow::slot_editBoardInNewWindow(bool)
 	QTimer::singleShot(100, w, SLOT(slot_animateClick()));
 #endif
 
-	w->slotNavLast ();
+	w->navLast->trigger ();
 	w->show ();
 }
 
