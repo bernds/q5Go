@@ -19,7 +19,7 @@
 #include "defines.h"
 #include "setting.h"
 #include "stone.h"
-#include "gatter.h"
+#include "grid.h"
 #include "goboard.h"
 #include "gogame.h"
 #include "qgtp.h"
@@ -204,7 +204,7 @@ private:
 
 	QGraphicsScene *canvas;
 	QList<QGraphicsSimpleTextItem*> hCoords1, hCoords2 ,vCoords1, vCoords2;
-	Gatter *gatter;
+	Grid *grid;
 	ImageHandler *imageHandler;
 	static const int margin, coord_margin;
 	int board_size, offset, offsetX, offsetY, board_pixel_size, table_size;

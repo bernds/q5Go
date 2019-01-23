@@ -56,7 +56,7 @@ HEADERS		      = config.h \
 			textview.h \
                         tip.h \
                         ui_helpers.h \
-                        gatter.h \
+                        grid.h \
                         misctools.h \
                         miscdialogs.h \
                         audio.h
@@ -92,7 +92,7 @@ SOURCES		      = clientwin.cpp \
                         svgbuilder.cpp \
 			textview.cpp \
 			tip.cpp \
-                        gatter.cpp \
+                        grid.cpp \
                         audio.cpp
 
 isEmpty(PREFIX) {

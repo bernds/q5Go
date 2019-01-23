@@ -26,37 +26,37 @@
 #include <QGraphicsLineItem>
 
 #include "defines.h"
-#include "gatter.h"
+#include "grid.h"
 
 
  /**
-  * Initialises the gatter intersections and hoshis points
+  * Initialises the grid intersections and hoshis points
   **/
-Gatter::Gatter(QGraphicsScene *canvas, int size)
+Grid::Grid(QGraphicsScene *canvas, int size)
 {
 	int i,j;
 
 	board_size = size;
 
-	VGatter.reserve(board_size);
-	HGatter.reserve(board_size);
+	VGrid.reserve(board_size);
+	HGrid.reserve(board_size);
 	for (i=0; i<board_size; i++)
 	{
 		std::vector<QGraphicsLineItem *> row,col;
 		row.reserve(board_size);
 		col.reserve(board_size);
-		VGatter.push_back(row);
-		HGatter.push_back(col);
+		VGrid.push_back(row);
+		HGrid.push_back(col);
 
 		for (j=0; j<board_size; j++)
 		{
 			QGraphicsLineItem *t1, *t2;
-			VGatter[i].push_back(t1 = new QGraphicsLineItem());
-			HGatter[i].push_back(t2 = new QGraphicsLineItem());
+			VGrid[i].push_back(t1 = new QGraphicsLineItem());
+			HGrid[i].push_back(t2 = new QGraphicsLineItem());
 			canvas->addItem (t1);
 			canvas->addItem (t2);
-			Q_CHECK_PTR(VGatter[i][j]);
-			Q_CHECK_PTR(HGatter[i][j]);
+			Q_CHECK_PTR(VGrid[i][j]);
+			Q_CHECK_PTR(HGrid[i][j]);
 		}
 	}
 	int edge_dist = (board_size > 12 ? 4 : 3);
@@ -91,9 +91,9 @@ Gatter::Gatter(QGraphicsScene *canvas, int size)
 }
 
  /**
-  * Destroys the gatter
+  * Destroys the grid
   **/
-Gatter::~Gatter()
+Grid::~Grid()
 {
 	int i,j;
 
@@ -102,15 +102,15 @@ Gatter::~Gatter()
  	{
 		for (j=0; j<board_size; j++)
  		{
- 			delete VGatter[i][j];
-			delete HGatter[i][j];
+ 			delete VGrid[i][j];
+			delete HGrid[i][j];
 		}
-	VGatter[i].clear();
-	HGatter[i].clear();
+	VGrid[i].clear();
+	HGrid[i].clear();
 	}
 
-	VGatter.clear();
-	HGatter.clear();
+	VGrid.clear();
+	HGrid.clear();
 
 	for (QMap<int,QGraphicsEllipseItem*>::const_iterator i = hoshisList.begin();
 		 i != hoshisList.end(); ++i)
@@ -121,9 +121,9 @@ Gatter::~Gatter()
 
 
  /**
-  * Calculates the gatter intersections and hoshis position
+  * Calculates the grid intersections and hoshis position
   **/
-void Gatter::resize(int offsetX, int offsetY, double square_size)
+void Grid::resize(int offsetX, int offsetY, double square_size)
 {
 	int i,j;
 	QGraphicsEllipseItem *e;
@@ -144,12 +144,12 @@ void Gatter::resize(int offsetX, int offsetY, double square_size)
 		for (j=0; j<board_size; j++)
 		{
 
-			HGatter[i][j]->setLine(int(offsetX + square_size * ( i - 0.5*(i!=0))),
+			HGrid[i][j]->setLine(int(offsetX + square_size * ( i - 0.5*(i!=0))),
 						offsetY + square_size * j,
 						int(offsetX + square_size * ( i + 0.5 * (i+1 != board_size))),
 						offsetY + square_size * j );
 
-			VGatter[i][j]->setLine(offsetX + square_size *  i,
+			VGrid[i][j]->setLine(offsetX + square_size *  i,
 						int(offsetY + square_size * ( j - 0.5*(j!=0))),
 						offsetX + square_size *  i,
 						int(offsetY + square_size * ( j + 0.5 * (j+1 != board_size))));
@@ -169,15 +169,15 @@ void Gatter::resize(int offsetX, int offsetY, double square_size)
  /**
   * Resets all interctions and hoshis to be shown
   **/
-void Gatter::showAll()
+void Grid::showAll()
 {
 	int i,j;
 
 	for (i=0; i<board_size; i++)
 		for (j=0; j<board_size; j++)
 		{
-			VGatter[i][j]->show();
-			HGatter[i][j]->show();
+			VGrid[i][j]->show();
+			HGrid[i][j]->show();
 		}
 
 	QMapIterator<int,QGraphicsEllipseItem*> it( hoshisList );
@@ -192,15 +192,15 @@ void Gatter::showAll()
  /**
   * Hides an intersection (when placing a letter mark)
   **/
-void Gatter::hide(int i, int j)
+void Grid::hide(int i, int j)
 {
 	QGraphicsEllipseItem *e;
 
 	if (( i<1) || (i > board_size) || ( j<1) || (j > board_size))
 		return;
 
-	VGatter[i-1][j-1]->hide();
-	HGatter[i-1][j-1]->hide();
+	VGrid[i-1][j-1]->hide();
+	HGrid[i-1][j-1]->hide();
 
 	if (hoshisList.contains(board_size*i + j))
 	{
@@ -213,15 +213,15 @@ void Gatter::hide(int i, int j)
  /**
   * shows an intersection (when removing a letter mark)
   **/
-void Gatter::show(int i, int j)
+void Grid::show(int i, int j)
 {
 	QGraphicsEllipseItem *e;
 
 	if (( i<1) || (i > board_size) || ( j<1) || (j > board_size))
 		return;
 
-	VGatter[i-1][j-1]->show();
-	HGatter[i-1][j-1]->show();
+	VGrid[i-1][j-1]->show();
+	HGrid[i-1][j-1]->show();
 
 	if (hoshisList.contains(board_size*i + j))
 	{

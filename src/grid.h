@@ -20,27 +20,27 @@
  ***************************************************************************/
 
 
-#ifndef GATTER_H
-#define GATTER_H
+#ifndef GRID_H
+#define GRID_H
 
 #include <vector>
 
 #include <QtGui>
 #include <QMap>
 
-class Gatter
+class Grid
 {
 public:
-	Gatter(QGraphicsScene *Canvas, int board_size);
-	~Gatter();
+	Grid (QGraphicsScene *Canvas, int board_size);
+	~Grid ();
 	void hide (int x, int y);
 	void show (int x, int y);
-	void resize(int offsetX, int offsetY, double square_size);
-	void showAll();
+	void resize (int offsetX, int offsetY, double square_size);
+	void showAll ();
 
 private:
 	int board_size;
-	std::vector< std::vector<QGraphicsLineItem *> > VGatter, HGatter;
+	std::vector< std::vector<QGraphicsLineItem *> > VGrid, HGrid;
 	QMap<int,QGraphicsEllipseItem*> hoshisList ;
 };
 

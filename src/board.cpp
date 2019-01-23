@@ -52,9 +52,9 @@ Board::Board(QWidget *parent, QGraphicsScene *c)
 	// Init the canvas
 	canvas = new QGraphicsScene(0,0, BOARD_X, BOARD_Y,this);
 	setScene(canvas);
-	gatter = new Gatter(canvas, board_size);
+	grid = new Grid(canvas, board_size);
 
-	// Init the gatter size and the imagehandler pixmaps
+	// Init the grid size and the imagehandler pixmaps
 	calculateSize();
 
 	imageHandler->init(square_size);
@@ -306,7 +306,7 @@ void Board::draw_background()
 
 void Board::draw_grid()
 {
-	gatter->resize(offsetX,offsetY,square_size);
+	grid->resize(offsetX,offsetY,square_size);
 }
 
 void Board::draw_coordinates()
@@ -886,7 +886,7 @@ void Board::sync_appearance (bool board_only)
 	m_used_letters.clear ();
 	m_used_numbers.clear ();
 
-	gatter->showAll ();
+	grid->showAll ();
 
 	for (int x = 0; x < sz; x++)
 		for (int y = 0; y < sz; y++) {
@@ -1013,7 +1013,7 @@ void Board::sync_appearance (bool board_only)
 						      sc, v, max_number, was_last_move, false, fi);
 
 			if (added)
-				gatter->hide (x + 1, y + 1);
+				grid->hide (x + 1, y + 1);
 		}
 
 	updateCanvas();
@@ -1552,8 +1552,8 @@ void Board::reset_game (std::shared_ptr<game_record> gr)
 
 	clear_selection ();
 
-	delete gatter;
-	gatter = new Gatter(canvas, board_size);
+	delete grid;
+	grid = new Grid (canvas, board_size);
 	clearCoords ();
 	setupCoords ();
 

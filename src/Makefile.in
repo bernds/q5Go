@@ -69,7 +69,7 @@ am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am__objects_1 = audio.$(OBJEXT) board.$(OBJEXT) goboard.$(OBJEXT) \
 	gogame.$(OBJEXT) gamedialog.$(OBJEXT) gamestable.$(OBJEXT) \
-	gametree.$(OBJEXT) gatter.$(OBJEXT) helpviewer.$(OBJEXT) \
+	gametree.$(OBJEXT) grid.$(OBJEXT) helpviewer.$(OBJEXT) \
 	igsconnection.$(OBJEXT) imagehandler.$(OBJEXT) main.$(OBJEXT) \
 	mainwidget.$(OBJEXT) clientwin.$(OBJEXT) mainwindow.$(OBJEXT) \
 	misc.$(OBJEXT) msg_handler.$(OBJEXT) parser.$(OBJEXT) \
@@ -278,13 +278,13 @@ DISTHEADERS_MOC = audio.h bitarray.h board.h clockview.h gamedialog.h gamestable
 	misctools.h normaltools.h scoretools.h parser.h playertable.h preferences.h qgo.h \
 	qgo_interface.h qgtp.h newaigamedlg.h sizegraphicsview.h tables.h telnet.h textview.h tip.h
 
-DISTHEADERS_NOMOC = goboard.h config.h defines.h gatter.h goboard.h gogame.h gs_globals.h \
+DISTHEADERS_NOMOC = goboard.h config.h defines.h grid.h goboard.h gogame.h gs_globals.h \
 	igsinterface.h imagehandler.h komispinbox.h mark.h \
 	misc.h msg_handler.h setting.h sgf.h sgfparser.h stone.h \
 	svgbuilder.h ui_helpers.h
 
 DISTSOURCES = audio.cpp board.cpp goboard.cc gogame.cc gamedialog.cpp \
-		gamestable.cpp gametree.cpp gatter.cpp helpviewer.cpp \
+		gamestable.cpp gametree.cpp grid.cpp helpviewer.cpp \
 		igsconnection.cpp imagehandler.cpp main.cpp \
 		mainwidget.cpp  clientwin.cpp mainwindow.cpp \
 		misc.cpp msg_handler.cpp parser.cpp \
@@ -409,9 +409,9 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gamestable.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gametree.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gametree.moc.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gatter.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/goboard.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gogame.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/grid.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/helpviewer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/helpviewer.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/icons.moc.Po@am__quote@
