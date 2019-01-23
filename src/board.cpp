@@ -39,7 +39,7 @@ Board::Board(QWidget *parent, QGraphicsScene *c)
 	viewport()->setMouseTracking(true);
 	setUpdatesEnabled(true);
 
-	board_size = DEFAULT_BOARD_SIZE;
+	board_size_x = board_size_y = DEFAULT_BOARD_SIZE;
 	showCoords = setting->readBoolEntry("BOARD_COORDS");
 	showSGFCoords = setting->readBoolEntry("SGF_BOARD_COORDS");
 	antiClicko = setting->readBoolEntry("ANTICLICKO");
@@ -116,9 +116,10 @@ void Board::calculateSize()
 	int w = canvas->width ();
 	int h = canvas->height ();
 
-	int table_size = (w < h ? w : h) - margin * 2;
+	int table_size_x = w - 2 * margin;
+	int table_size_y = h - 2 * margin;
 
-	QGraphicsSimpleTextItem coordV (QString::number(board_size));
+	QGraphicsSimpleTextItem coordV (QString::number(board_size_y));
 	QGraphicsSimpleTextItem coordH ("A");
 	canvas->addItem (&coordV);
 	canvas->addItem (&coordH);
@@ -128,24 +129,31 @@ void Board::calculateSize()
 	// space for coodinates if shown
 	coord_offset = coord_width < coord_height ? coord_height : coord_width;
 
-	square_size = table_size;
-	// we need 1 more virtual 'square' for the stones on 1st and last line getting off the grid
-	if (showCoords)
-		square_size -= 2 * (coord_offset + coord_margin * 2);
+	//we need 1 more virtual 'square' for the stones on 1st and last line getting off the grid
+	int cmargin = showCoords ? 2 * (coord_offset + coord_margin * 2) : 0;
+	int square_size_w = table_size_x - cmargin;
+	int square_size_h = table_size_y - cmargin;
+	square_size = std::min ((double)square_size_w / board_size_x, (double)square_size_h / board_size_y);
 
-	square_size /= (float)board_size;
 	// Should not happen, but safe is safe.
 	if (square_size == 0)
 		  square_size = 1;
 
-	// grid size
-	int board_pixel_size = square_size * (board_size - 1);
+	int board_pixel_size_x = square_size * (board_size_x - 1);
+	int board_pixel_size_y = square_size * (board_size_y - 1);
 
+	int real_tx = std::min (table_size_x, board_pixel_size_x + (int)floor (square_size) + cmargin);
+	int real_ty = std::min (table_size_y, board_pixel_size_y + (int)floor (square_size) + cmargin);
+#if 1
+	if (table_size_x - real_tx < table_size_y - real_ty)
+		real_tx = table_size_x;
+	else
+		real_ty = table_size_y;
+#endif
 	// Center the board in canvas
-
-	m_wood_rect = QRect ((w - table_size) / 2, (h - table_size) / 2, table_size, table_size);
-	m_board_rect = QRect ((w - board_pixel_size) / 2, (h - board_pixel_size) / 2,
-			      board_pixel_size, board_pixel_size);
+	m_wood_rect = QRect ((w - real_tx) / 2, (h - real_ty) / 2, real_tx, real_ty);
+	m_board_rect = QRect ((w - board_pixel_size_x) / 2, (h - board_pixel_size_y) / 2,
+			      board_pixel_size_x, board_pixel_size_y);
 }
 
 void Board::resizeBoard (int w, int h)
@@ -436,7 +444,7 @@ QByteArray Board::render_svg (bool do_number, bool coords)
 	const go_board &b = m_edit_board == nullptr ? m_state->get_board () : *m_edit_board;
 	/* Look back through previous moves to see if we should do numbering.  */
 	int n_back = 0;
-	int *count_map = new int[board_size * board_size]();
+	int *count_map = new int[board_size_x * board_size_y]();
 	game_state *startpos = nullptr;
 	bool numbering = do_number && m_edit_board == nullptr;
 
@@ -473,9 +481,9 @@ QByteArray Board::render_svg (bool do_number, bool coords)
 			offset_x += factor, w += factor;
 		if (m_rect_y1 == 1)
 			offset_y += factor, h += factor;
-		if (m_rect_x2 == board_size)
+		if (m_rect_x2 == b.size_x ())
 			w += factor;
-		if (m_rect_y2 == board_size)
+		if (m_rect_y2 == b.size_y ())
 			h += factor;
 	}
 
@@ -493,11 +501,11 @@ QByteArray Board::render_svg (bool do_number, bool coords)
 			double center_y = offset_y + y * factor;
 			if (m_rect_x1 == 1)
 				svg.text_at (dist, center_y, factor,
-					     board_size < 10 ? 1 : 2, QString::number (board_size - ry + 1),
+					     board_size_y < 10 ? 1 : 2, QString::number (board_size_y - ry + 1),
 					     "black", fi);
-			if (m_rect_x2 == board_size)
+			if (m_rect_x2 == board_size_x)
 				svg.text_at (w - dist , center_y, factor,
-					     board_size < 10 ? 1 : 2, QString::number (board_size - ry + 1),
+					     board_size_y < 10 ? 1 : 2, QString::number (board_size_y - ry + 1),
 					     "black", fi);
 		}
 		for (int x = 0; x < cols; x++) {
@@ -510,21 +518,21 @@ QByteArray Board::render_svg (bool do_number, bool coords)
 				label = QChar ('A' + rx);
 			if (m_rect_y1 == 1)
 				svg.text_at (center_x, dist, factor,
-					     board_size < 10 ? 1 : 2, label, "black", fi);
-			if (m_rect_y2 == board_size)
+					     board_size_x < 10 ? 1 : 2, label, "black", fi);
+			if (m_rect_y2 == board_size_y)
 				svg.text_at (center_x, h - dist, factor,
-					     board_size < 10 ? 1 : 2, label, "black", fi);
+					     board_size_x < 10 ? 1 : 2, label, "black", fi);
 		}
 	}
 
 	/* The grid.  */
 	int top = m_rect_y1 > 1 ? -factor / 2 : 0;
-	int bot = m_rect_y2 < board_size ? factor / 2 : 0;
+	int bot = m_rect_y2 < b.size_y () ? factor / 2 : 0;
 	int lef = m_rect_x1 > 1 ? -factor / 2 : 0;
-	int rig = m_rect_x2 < board_size ? factor / 2 : 0;
+	int rig = m_rect_x2 < b.size_x () ? factor / 2 : 0;
 	for (int x = 0; x < cols; x++) {
 		QString width = "1";
-		if ((x == 0 && m_rect_x1 == 1) || (x + 1 == cols && m_rect_x2 == board_size))
+		if ((x == 0 && m_rect_x1 == 1) || (x + 1 == cols && m_rect_x2 == b.size_x ()))
 			width = "2";
 		svg.line (offset_x + x * factor, offset_y + top,
 			  offset_x + x * factor, offset_y + (rows - 1) * factor + bot,
@@ -532,7 +540,7 @@ QByteArray Board::render_svg (bool do_number, bool coords)
 	}
 	for (int y = 0; y < rows; y++) {
 		QString width = "1";
-		if ((y == 0 && m_rect_y1 == 1) || (y + 1 == rows && m_rect_y2 == board_size))
+		if ((y == 0 && m_rect_y1 == 1) || (y + 1 == rows && m_rect_y2 == b.size_y ()))
 			width = "2";
 		svg.line (offset_x + lef, offset_y + y * factor,
 			  offset_x + (cols - 1) * factor + rig, offset_y + y * factor,
@@ -578,10 +586,14 @@ QByteArray Board::render_svg (bool do_number, bool coords)
 
 QString Board::render_ascii (bool do_number, bool coords)
 {
-	int sz = m_game->boardsize ();
+	game_state *root = m_game->get_root ();
+	const go_board &broot = root->get_board ();
+	int bitsz = broot.bitsize ();
+	int szx = broot.size_x ();
+	int szy = broot.size_y ();
 	QString result;
 
-	int *count_map = new int[sz * sz]();
+	int *count_map = new int[bitsz]();
 	game_state *startpos = m_state;
 	if (do_number && m_edit_board == nullptr && !m_state->get_start_count ()) {
 		startpos = m_state;
@@ -600,7 +612,7 @@ QString Board::render_ascii (bool do_number, bool coords)
 
 		int n_mv = 0;
 		game_state *next = startpos;
-		memset (count_map, 0, sz * sz * sizeof *count_map);
+		memset (count_map, 0, bitsz * sizeof *count_map);
 		while (next != m_state && n_mv < 10) {
 			game_state *nx2 = next->next_move ();
 			int x = nx2->get_move_x ();
@@ -615,7 +627,7 @@ QString Board::render_ascii (bool do_number, bool coords)
 		result += "[go]$$";
 		result += startpos->to_move () == black ? "B" : "W";
 		if (coords) {
-			result += "c" + QString::number (sz);
+			result += "c" + QString::number (std::max (szx, szy));
 		}
 		if (moves > 1) {
 			result += "m" + QString::number (moves);
@@ -627,7 +639,7 @@ QString Board::render_ascii (bool do_number, bool coords)
 				result += " +";
 			for (int i = 0; i < m_rect_x2 - m_rect_x1 + 1; i++)
 				result += "--";
-			if (m_rect_x2 == sz)
+			if (m_rect_x2 == szx)
 				result += "-+";
 			result += "\n";
 		}
@@ -667,17 +679,17 @@ QString Board::render_ascii (bool do_number, bool coords)
 					result += rslt;
 				}
 			}
-			if (m_rect_x2 == sz)
+			if (m_rect_x2 == szx)
 				result += " |";
 			result += "\n";
 		}
-		if (m_rect_y2 == sz) {
+		if (m_rect_y2 == szy) {
 			result += "$$";
 			if (m_rect_x1 == 1)
 				result += " +";
 			for (int i = 0; i < m_rect_x2 - m_rect_x1 + 1; i++)
 				result += "--";
-			if (m_rect_x2 == sz)
+			if (m_rect_x2 == szx)
 				result += "-+";
 			result += "\n";
 		}
@@ -711,18 +723,20 @@ void Board::sync_appearance (bool board_only)
 	const go_board &vars = m_vars_children ? child_vars : sibling_vars;
 	const bit_array st_w = b.get_stones_w ();
 	const bit_array st_b = b.get_stones_b ();
-	int sz = b.size ();
+	int szx = b.size_x ();
+	int szy = b.size_y ();
+	int bitsize = b.bitsize ();
 
 	/* Builds a mark layer, which gets rendered into a pixmap and added to the canvas.
 	   The factor is the size of a square in svg, it gets scaled later.  It should have
 	   an optically pleasant relation with the stroke width (2 for marks).  */
 	double svg_factor = 30;
 	QFontInfo fi (setting->fontMarks);
-	svg_builder svg (svg_factor * sz, svg_factor * sz);
+	svg_builder svg (svg_factor * szx, svg_factor * szy);
 
 	/* Look back through previous moves to see if we should do numbering.  */
 	int n_back = 0, max_number = 0;
-	int *count_map = new int[sz * sz]();
+	int *count_map = new int[bitsize]();
 
 	game_state *startpos = nullptr;
 	if (have_analysis) {
@@ -736,7 +750,7 @@ void Board::sync_appearance (bool board_only)
 			int bp = b.bitpos (x, y);
 			if (x > 7)
 				x++;
-			QString move = QChar ('A' + x) + QString::number (board_size - y);
+			QString move = QChar ('A' + x) + QString::number (b.size_y () - y);
 			m_main_widget->set_2nd_eval (move, m_primary_eval + m_winrate[bp],
 						     m_state->to_move (), m_visits[bp]);
 		}
@@ -777,8 +791,8 @@ void Board::sync_appearance (bool board_only)
 
 	m_grid->showAll ();
 
-	for (int x = 0; x < sz; x++)
-		for (int y = 0; y < sz; y++) {
+	for (int x = 0; x < szx; x++)
+		for (int y = 0; y < szy; y++) {
 			int bp = b.bitpos (x, y);
 			stone_gfx *s = m_stones[bp];
 			stone_color sc = b.stone_at (x, y);
@@ -912,7 +926,7 @@ void Board::sync_appearance (bool board_only)
 		m_board_win->setMoveData (*m_state, b, m_game_mode);
 	delete[] count_map;
 
-	QPixmap img = svg.to_pixmap (square_size * board_size, square_size * board_size);
+	QPixmap img = svg.to_pixmap (square_size * b.size_x (), square_size * b.size_y ());
 	m_mark_layer->setPixmap (img);
 	m_mark_layer->setPos (m_board_rect.x () - square_size / 2, m_board_rect.y () - square_size / 2);
 }
@@ -967,19 +981,19 @@ void Board::updateCovers ()
 	if (m_rect_y1 > 1)
 		top_edge = m_board_rect.y () + square_size * (m_rect_y1 - 1.5);
 	int bot_edge = sceneRect.bottom();
-	if (m_rect_y2 < board_size)
+	if (m_rect_y2 < board_size_y)
 		bot_edge = m_board_rect.y () + square_size * (m_rect_y2 - 0.5);
 	int left_edge = 0;
 	if (m_rect_x1 > 1)
 		left_edge = m_board_rect.x () + square_size * (m_rect_x1 - 1.5);
 	int right_edge = sceneRect.right();
-	if (m_rect_x2 < board_size)
+	if (m_rect_x2 < board_size_x)
 		right_edge = m_board_rect.x () + square_size * (m_rect_x2 - 0.5);
 
 	coverLeft->setVisible (m_rect_x1 > 1);
-	coverRight->setVisible (m_rect_x2 < board_size);
+	coverRight->setVisible (m_rect_x2 < board_size_x);
 	coverTop->setVisible (m_rect_y1 > 1);
-	coverBot->setVisible (m_rect_y2 < board_size);
+	coverBot->setVisible (m_rect_y2 < board_size_y);
 
 	coverTop->setRect (0, 0, sceneRect.right(), top_edge);
 	coverBot->setRect (0, bot_edge, sceneRect.right(), sceneRect.bottom () - bot_edge);
@@ -993,10 +1007,10 @@ void Board::updateRectSel (int x, int y)
 		x = 1;
 	if (y < 1)
 		y = 1;
-	if (x > board_size)
-		x = board_size;
-	if (y > board_size)
-		y = board_size;
+	if (x > board_size_x)
+		x = board_size_x;
+	if (y > board_size_y)
+		y = board_size_y;
 	int minx = m_down_x;
 	int miny = m_down_y;
 	if (x < minx)
@@ -1019,7 +1033,7 @@ void Board::mouseMoveEvent(QMouseEvent *e)
 		updateRectSel (x, y);
 
 	// Outside the valid board?
-	if (x < 1 || x > board_size || y < 1 || y > board_size)
+	if (x < 1 || x > board_size_x || y < 1 || y > board_size_y)
 	{
 		x = -1;
 		y = -1;
@@ -1235,10 +1249,10 @@ void Board::mousePressEvent(QMouseEvent *e)
 			x = 1;
 		if (y < 1)
 			y = 1;
-		if (x > board_size)
-			x = board_size;
-		if (y > board_size)
-			y = board_size;
+		if (x > board_size_x)
+			x = board_size_x;
+		if (y > board_size_y)
+			y = board_size_y;
 		m_down_x = x;
 		m_down_y = y;
 		updateRectSel (x, y);
@@ -1247,7 +1261,7 @@ void Board::mousePressEvent(QMouseEvent *e)
 
 	m_down_x = m_down_y = -1;
 
-	if (x < 1 || x > board_size || y < 1 || y > board_size)
+	if (x < 1 || x > board_size_x || y < 1 || y > board_size_y)
 		return;
 
 	m_down_x = x;
@@ -1435,12 +1449,12 @@ void Board::reset_game (std::shared_ptr<game_record> gr)
 	game_state *root = gr->get_root ();
 
 	const go_board &b = root->get_board ();
-	int sz = b.size ();
-	board_size = sz;
+	board_size_x = b.size_x ();
+	board_size_y = b.size_y ();
 
 	clear_stones ();
-	m_stones.resize (sz * sz);
-	for (int i = 0; i < sz * sz; i++)
+	m_stones.resize (b.bitsize ());
+	for (int i = 0; i < b.bitsize (); i++)
 		m_stones[i] = nullptr;
 
 	m_game = gr;
@@ -1575,8 +1589,8 @@ void Board::setup_analyzer_position ()
 	}
 	const go_board &b = gst->get_board ();
 	m_analyzer->clear_board ();
-	for (int i = 0; i < board_size; i++)
-		for (int j = 0; j < board_size; j++) {
+	for (int i = 0; i < b.size_x (); i++)
+		for (int j = 0; j < b.size_y (); j++) {
 			stone_color c = b.stone_at (i, j);
 			if (c != none)
 				m_analyzer->played_move (c, i, j);
@@ -1591,8 +1605,8 @@ void Board::setup_analyzer_position ()
 	clear_eval_data ();
 	if (st == analyzer::running && !m_pause_eval) {
 		stone_color to_move = m_state->to_move ();
-		m_winrate = new double[board_size * board_size] ();
-		m_visits = new int[board_size * board_size] ();
+		m_winrate = new double[b.bitsize ()] ();
+		m_visits = new int[b.bitsize ()] ();
 		m_analyzer->analyze (to_move, 100);
 	}
 }
@@ -1667,8 +1681,10 @@ void Board::gtp_eval (const QString &s)
 				int i = sx.toLatin1 () - 'A';
 				if (i > 7)
 					i--;
-				int j = board_size - pm.mid (1).toInt ();
-				if (i >= 0 && i < board_size && j >= 0 && j < board_size) {
+				int szx = m_state->get_board ().size_x ();
+				int szy = m_state->get_board ().size_y ();
+				int j = szy - pm.mid (1).toInt ();
+				if (i >= 0 && i < szx && j >= 0 && j < szy) {
 					if (pv_first) {
 						int bp = b.bitpos (i, j);
 						cur->set_mark (i, j, mark::letter, count);
@@ -1693,6 +1709,10 @@ void Board::gtp_eval (const QString &s)
 
 void Board::start_analysis ()
 {
+	if (board_size_x != board_size_y) {
+		QMessageBox::warning(this, PACKAGE, tr("Analysis is supported only for square boards!"));
+		return;
+	}
 	Engine *e = client_window->analysis_engine ();
 	if (e == nullptr) {
 		QMessageBox::warning(this, PACKAGE, tr("You did not configure any analysis engine!"));
@@ -1704,7 +1724,7 @@ void Board::start_analysis ()
 		delete m_analyzer;
 		m_analyzer = nullptr;
 	}
-	m_analyzer = create_gtp (*e, board_size, 7.5, 0);
+	m_analyzer = create_gtp (*e, board_size_x, 7.5, 0);
 	m_board_win->update_analysis (analyzer::starting);
 }
 
@@ -1727,8 +1747,8 @@ void Board::pause_analysis (bool on)
 		m_board_win->update_analysis (analyzer::paused);
 	} else {
 		stone_color to_move = m_state->to_move ();
-		m_winrate = new double[board_size * board_size] ();
-		m_visits = new int[board_size * board_size] ();
+		m_winrate = new double[board_size_x * board_size_y] ();
+		m_visits = new int[board_size_x * board_size_y] ();
 		m_board_win->update_analysis (analyzer::running);
 		m_analyzer->analyze (to_move, 100);
 	}

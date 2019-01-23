@@ -9,7 +9,7 @@ bool game_state::valid_move_p (int x, int y, stone_color col)
 
 const go_board game_state::child_moves (const game_state *excluding) const
 {
-	go_board b (m_board.size ());
+	go_board b (m_board.size_x (), m_board.size_y ());
 	size_t n = 0;
 	for (auto &it: m_children) {
 		if (it == excluding)

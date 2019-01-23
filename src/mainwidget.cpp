@@ -398,7 +398,7 @@ void MainWidget::setMoveData(const game_state &gs, const go_board &b, GameMode m
 		s.append(" (");
 		s.append((to_move == black ? w_str : b_str) + " ");
 		s.append(QString(QChar(static_cast<const char>('A' + (x < 9 ? x : x + 1)))));
-		s.append(QString::number (b.size () - y) + ")");
+		s.append(QString::number (b.size_y () - y) + ")");
 	}
 	s.append (QObject::tr ("\nVariation ") + QString::number (var_nr)
 		  + QObject::tr (" of ") + QString::number (1 + brothers) + "\n");

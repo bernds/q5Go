@@ -13,36 +13,99 @@ void bit_array::debug () const
 	putchar ('\n');
 }
 
+
 /* Keep some precomputed bit arrays, one for each board size, which
    have the left and right columns masked out.  These can be used in
    shift-and-and operations to find neighbours.  */
-static std::map<int, bit_array> left_masks;
-static std::map<int, bit_array> right_masks;
 
-static const bit_array &get_boardmask_left (int n)
+static std::map<std::pair<int, int>, bit_array *> left_masks;
+static std::map<std::pair<int, int>, bit_array *> right_masks;
+static std::map<std::pair<int, int>, bit_array *> left_columns;
+static std::map<std::pair<int, int>, bit_array *> right_columns;
+static std::map<std::pair<int, int>, bit_array *> top_rows;
+static std::map<std::pair<int, int>, bit_array *> bottom_rows;
+
+static const bit_array *create_boardmask_left (int w, int h)
 {
-	auto it = left_masks.find (n);
+	auto it = left_masks.find ({w, h});
 	if (it != left_masks.end ())
 		return it->second;
-	bit_array a (n * n, true);
-	for (int i = 0; i < n; i++)
-		a.clear_bit (i * n);
-	left_masks.insert (std::pair<int,bit_array> (n, a));
-	it = left_masks.find (n);
-	return it->second;
+	bit_array *m = new bit_array (w * h, true);
+	for (int i = 0; i < h; i++)
+		m->clear_bit (i * w);
+	left_masks.insert ({ {w, h}, m});
+	return m;
 }
 
-static const bit_array &get_boardmask_right (int n)
+static const bit_array *create_boardmask_right (int w, int h)
 {
-	auto it = right_masks.find (n);
+	auto it = right_masks.find ({w, h});
 	if (it != right_masks.end ())
 		return it->second;
-	bit_array a (n * n, true);
-	for (int i = 0; i < n; i++)
-		a.clear_bit (i * n + n - 1);
-	right_masks.insert (std::pair<int,bit_array> (n, a));
-	it = right_masks.find (n);
-	return it->second;
+	bit_array *m = new bit_array (w * h, true);
+	for (int i = 0; i < h; i++)
+		m->clear_bit (i * w + w - 1);
+	right_masks.insert ({ {w, h}, m});
+	return m;
+}
+
+static const bit_array *create_column_left (int w, int h)
+{
+	auto it = left_columns.find ({w, h});
+	if (it != left_columns.end ())
+		return it->second;
+	bit_array *m = new bit_array (w * h);
+	for (int i = 0; i < h; i++)
+		m->set_bit (i * w);
+	left_columns.insert ({ {w, h}, m});
+	return m;
+}
+
+static const bit_array *create_column_right (int w, int h)
+{
+	auto it = right_columns.find ({w, h});
+	if (it != right_columns.end ())
+		return it->second;
+	bit_array *m = new bit_array (w * h);
+	for (int i = 0; i < h; i++)
+		m->set_bit (i * w + w - 1);
+	right_columns.insert ({ {w, h}, m});
+	return m;
+}
+
+static const bit_array *create_row_top (int w, int h)
+{
+	auto it = top_rows.find ({w, h});
+	if (it != top_rows.end ())
+		return it->second;
+	bit_array *m = new bit_array (w * h, true);
+	for (int i = 0; i < h; i++)
+		m->clear_bit (i * w);
+	top_rows.insert ({ {w, h}, m});
+	return m;
+}
+
+static const bit_array *create_row_bottom (int w, int h)
+{
+	auto it = bottom_rows.find ({w, h});
+	if (it != bottom_rows.end ())
+		return it->second;
+	bit_array *m = new bit_array (w * h, true);
+	for (int i = 0; i < h; i++)
+		m->clear_bit (i * w + w - 1);
+	bottom_rows.insert ({ {w, h}, m});
+	return m;
+}
+
+go_board::go_board (int w, int h, bool torus_h, bool torus_v)
+	: m_sz_x (w), m_sz_y (h), m_torus_h (torus_h), m_torus_v (torus_v),
+	  m_masked_left (create_boardmask_left (w, h)), m_masked_right (create_boardmask_right (w, h)),
+	  m_column_left (torus_h ? create_column_left (w, h) : nullptr),
+	  m_column_right (torus_h ? create_column_right (w, h) : nullptr),
+	  m_row_top (torus_v ? create_row_top (w, h) : nullptr),
+	  m_row_bottom (torus_v ? create_row_bottom (w, h) : nullptr),
+	  m_stones_b (new bit_array (w * h)), m_stones_w (new bit_array (w * h))
+{
 }
 
 bool bit_array::intersect_p (const bit_array &other, int shift) const
@@ -88,22 +151,26 @@ bool bit_array::intersect_p (const bit_array &other, int shift) const
 }
 
 /* Extend a bit mask in all directions.  */
-void go_board::flood_step (bit_array &next, const bit_array &fill,
-			   const bit_array &masked_left, const bit_array &masked_right)
+void go_board::flood_step (bit_array &next, const bit_array &fill)
 {
-	next.ior (fill, -1, masked_left);
-	next.ior (fill, 1, masked_right);
-	next.ior (fill, m_sz);
-	next.ior (fill, -m_sz);
+	next.ior (fill, -1, *m_masked_left);
+	next.ior (fill, 1, *m_masked_right);
+	next.ior (fill, m_sz_x);
+	next.ior (fill, -m_sz_x);
+	if (m_torus_h) {
+		next.ior (fill, m_sz_x - 1, *m_column_left);
+		next.ior (fill, -m_sz_x + 1, *m_column_right);
+	}
+	if (m_torus_v) {
+		next.ior (fill, m_sz_x * (m_sz_y - 1));
+		next.ior (fill, -m_sz_x * (m_sz_y - 1));
+	}
 }
 
 int go_board::count_liberties (const bit_array &stones)
 {
-	const bit_array &masked_left = get_boardmask_left (m_sz);
-	const bit_array &masked_right = get_boardmask_right (m_sz);
-
 	bit_array liberties (bitsize ());
-	flood_step (liberties, stones, masked_left, masked_right);
+	flood_step (liberties, stones);
 	liberties.andnot (*m_stones_w);
 	liberties.andnot (*m_stones_b);
 	return liberties.popcnt ();
@@ -112,8 +179,8 @@ int go_board::count_liberties (const bit_array &stones)
 /* For debugging purposes.  */
 void go_board::dump_ascii () const
 {
-	for (int y = 0; y < m_sz; y++) {
-		for (int x = 0; x < m_sz; x++) {
+	for (int y = 0; y < m_sz_y; y++) {
+		for (int x = 0; x < m_sz_x; x++) {
 			int bp = bitpos (x, y);
 			if (m_stones_w->test_bit (bp))
 				putchar ('O');
@@ -128,8 +195,8 @@ void go_board::dump_ascii () const
 
 void go_board::dump_bitmap (const bit_array &ba) const
 {
-	for (int y = 0; y < m_sz; y++) {
-		for (int x = 0; x < m_sz; x++) {
+	for (int y = 0; y < m_sz_y; y++) {
+		for (int x = 0; x < m_sz_x; x++) {
 			int bp = bitpos (x, y);
 			if (ba.test_bit (bp))
 				putchar ('X');
@@ -145,16 +212,13 @@ void go_board::identify_units ()
 	m_units_w.clear ();
 	m_units_b.clear ();
 
-	const bit_array &masked_left = get_boardmask_left (m_sz);
-	const bit_array &masked_right = get_boardmask_right (m_sz);
-
 	bit_array handled (bitsize ());
 #ifdef DEBUG
 	unsigned found_w = 0;
 	unsigned found_b = 0;
 #endif
-	for (int y = 0; y < m_sz; y++) {
-		for (int x = 0; x < m_sz; x++) {
+	for (int y = 0; y < m_sz_y; y++) {
+		for (int x = 0; x < m_sz_x; x++) {
 			int i = bitpos (x, y);
 			if (handled.test_bit (i))
 				continue;
@@ -174,12 +238,12 @@ void go_board::identify_units ()
 			/* Extend vertically and horizontally as far
 			   as possible, to try to reduce the number of
 			   flood fill operations needed.  */
-			for (int x0 = x + 1; x0 < m_sz; x0++)
+			for (int x0 = x + 1; x0 < m_sz_x; x0++)
 				if (stones->test_bit (bitpos (x0, y)))
 					unit.set_bit (bitpos (x0, y));
 				else
 					break;
-			for (int y0 = y + 1; y0 < m_sz; y0++)
+			for (int y0 = y + 1; y0 < m_sz_y; y0++)
 				if (stones->test_bit (bitpos (x, y0)))
 					unit.set_bit (bitpos (x, y0));
 				else
@@ -187,7 +251,7 @@ void go_board::identify_units ()
 
 			bit_array next (unit);
 			for (;;) {
-				flood_step (next, unit, masked_left, masked_right);
+				flood_step (next, unit);
 				next.and1 (*stones);
 				if (next == unit)
 					break;
@@ -224,16 +288,13 @@ void go_board::toggle_alive (int x, int y, bool flood)
 	else
 		return;
 
-	const bit_array &masked_left = get_boardmask_left (m_sz);
-	const bit_array &masked_right = get_boardmask_right (m_sz);
-
 	const bit_array &other_stones = col == black ? *m_stones_w : *m_stones_b;
 	bit_array fill (bitsize ());
 	fill.set_bit (bp);
 	if (flood) {
 		bit_array next (fill);
 		for (;;) {
-			flood_step (next, fill, masked_left, masked_right);
+			flood_step (next, fill);
 			next.andnot (other_stones);
 			if (next == fill)
 				break;
@@ -296,13 +357,13 @@ void go_board::territory_from_markers ()
 /* Expand FILL until it reaches the borders made up by W_STONES and B_STONES.
    Store into the neighbours variables whether the border we touch contains
    white or black stones.  */
-void go_board::scoring_flood_fill (bit_array &fill, const bit_array &masked_left, const bit_array &masked_right,
+void go_board::scoring_flood_fill (bit_array &fill,
 				   const bit_array &w_stones, const bit_array &b_stones,
 				   bool &neighbours_w, bool &neighbours_b)
 {
 	bit_array next (fill);
 	for (;;) {
-		flood_step (next, fill, masked_left, masked_right);
+		flood_step (next, fill);
 		if (next.intersect_p (w_stones))
 			neighbours_w = true;
 		if (next.intersect_p (b_stones))
@@ -318,8 +379,7 @@ void go_board::scoring_flood_fill (bit_array &fill, const bit_array &masked_left
 /* Fill m_units_t with blocks of territory, where W_STONES and B_STONES are the boundaries.
    Also sets mark::dead for every stone not inside these two sets, since it's convenient
    to do it here.  */
-void go_board::find_territory_units (const bit_array &w_stones, const bit_array &b_stones,
-				     const bit_array &masked_left, const bit_array &masked_right)
+void go_board::find_territory_units (const bit_array &w_stones, const bit_array &b_stones)
 {
 	m_units_t.clear ();
 	m_units_st.clear ();
@@ -338,8 +398,7 @@ void go_board::find_territory_units (const bit_array &w_stones, const bit_array 
 		bit_array fill (bitsize ());
 		fill.set_bit (i);
 		bool neighbours_b = false, neighbours_w = false;
-		scoring_flood_fill (fill, masked_left, masked_right, w_stones, b_stones,
-				    neighbours_w, neighbours_b);
+		scoring_flood_fill (fill, w_stones, b_stones, neighbours_w, neighbours_b);
 		if (neighbours_w != neighbours_b)
 			m_units_t.push_back (terr_unit (fill, neighbours_w, neighbours_b,
 							fill.intersect_p (dead_stones)));
@@ -390,9 +449,6 @@ void go_board::calc_scoring_markers_simple ()
 	m_score_b = 0;
 	m_score_w = 0;
 
-	const bit_array &masked_left = get_boardmask_left (m_sz);
-	const bit_array &masked_right = get_boardmask_right (m_sz);
-
 	bit_array w_stones (bitsize ());
 	bit_array b_stones (bitsize ());
 	for (auto &it: m_units_w) {
@@ -405,7 +461,7 @@ void go_board::calc_scoring_markers_simple ()
 		if (it.m_alive)
 			b_stones.ior (it.m_stones);
 	}
-	find_territory_units (w_stones, b_stones, masked_left, masked_right);
+	find_territory_units (w_stones, b_stones);
 	finish_scoring_markers (nullptr);
 	m_units_t.clear ();
 	m_units_st.clear ();
@@ -421,8 +477,6 @@ void go_board::calc_scoring_markers_complex ()
 	m_score_w = 0;
 
 	std::vector<stone_unit *> live_units;
-	const bit_array &masked_left = get_boardmask_left (m_sz);
-	const bit_array &masked_right = get_boardmask_right (m_sz);
 
 	bit_array w_stones (bitsize ());
 	bit_array b_stones (bitsize ());
@@ -443,7 +497,7 @@ void go_board::calc_scoring_markers_complex ()
 		} else
 			dead_stones.ior (it.m_stones);
 	}
-	find_territory_units (w_stones, b_stones, masked_left, masked_right);
+	find_territory_units (w_stones, b_stones);
 
 	bit_array cand_territory (bitsize ());
 	for (auto &t: m_units_t)
@@ -460,12 +514,12 @@ void go_board::calc_scoring_markers_complex ()
 		bool changed = false;
 		for (auto it: live_units) {
 			bit_array borders (bitsize ());
-			flood_step (borders, it->m_stones, masked_left, masked_right);
+			flood_step (borders, it->m_stones);
 			borders.and1 (cand_territory);
 			if (borders.popcnt () != 1)
 				continue;
 			bit_array b_libs (bitsize ());
-			flood_step (b_libs, borders, masked_left, masked_right);
+			flood_step (b_libs, borders);
 			b_libs.andnot (it->m_stones);
 			if (b_libs.popcnt () > 0) {
 				/* We found a false eye.  Two cases: a single point,
@@ -513,7 +567,7 @@ void go_board::calc_scoring_markers_complex ()
 			continue;
 
 		bit_array borders (bitsize ());
-		flood_step (borders, t.m_terr, masked_left, masked_right);
+		flood_step (borders, t.m_terr);
 
 		if (t.m_contains_dead)
 			real_territory.ior (t.m_terr);
@@ -552,7 +606,7 @@ void go_board::calc_scoring_markers_complex ()
 			if (it->m_real_terr)
 				continue;
 			bit_array borders (bitsize ());
-			flood_step (borders, it->m_stones, masked_left, masked_right);
+			flood_step (borders, it->m_stones);
 			if (borders.intersect_p (real_territory)) {
 				nonseki_stones.ior (it->m_stones);
 				it->m_real_terr = true;
@@ -566,7 +620,7 @@ void go_board::calc_scoring_markers_complex ()
 			if (t.m_contains_dead)
 				continue;
 			bit_array borders (bitsize ());
-			flood_step (borders, t.m_terr, masked_left, masked_right);
+			flood_step (borders, t.m_terr);
 			if (borders.intersect_p (nonseki_stones)) {
 				real_territory.ior (t.m_terr);
 				t.m_contains_dead = true;
@@ -589,7 +643,7 @@ void go_board::calc_scoring_markers_complex ()
 		if (it.m_any_terr || !it.m_alive)
 			continue;
 		bit_array nb (bitsize ());
-		flood_step (nb, it.m_stones, masked_left, masked_right);
+		flood_step (nb, it.m_stones);
 		for (auto &nit: m_units_b) {
 			if (nit.m_alive && !nit.m_real_terr && nb.intersect_p (nit.m_stones))
 				nit.m_seki_neighbour = true;
@@ -599,7 +653,7 @@ void go_board::calc_scoring_markers_complex ()
 		if (it.m_any_terr || !it.m_alive)
 			continue;
 		bit_array nb (bitsize ());
-		flood_step (nb, it.m_stones, masked_left, masked_right);
+		flood_step (nb, it.m_stones);
 		for (auto &nit: m_units_w) {
 			if (nit.m_alive && !nit.m_real_terr && nb.intersect_p (nit.m_stones))
 				nit.m_seki_neighbour = true;
@@ -609,12 +663,12 @@ void go_board::calc_scoring_markers_complex ()
 	   neighbour.  These points should not be counted for territory.  */
 	for (auto it: live_units) {
 		if (it->m_seki_neighbour)
-			flood_step (seki_neighbours, it->m_stones, masked_left, masked_right);
+			flood_step (seki_neighbours, it->m_stones);
 	}
 #else
 	for (auto it: live_units)
 		if (it->m_seki)
-			flood_step (seki_neighbours, it->m_stones, masked_left, masked_right);
+			flood_step (seki_neighbours, it->m_stones);
 #endif
 	finish_scoring_markers (&seki_neighbours);
  	m_units_t.clear ();
@@ -635,9 +689,6 @@ void go_board::add_stone (int x, int y, stone_color col, bool process_captures)
 	if (stone_at (x, y) != none)
 		throw std::logic_error ("placing stone on top of another");
 #endif
-	const bit_array &masked_left = get_boardmask_left (m_sz);
-	const bit_array &masked_right = get_boardmask_right (m_sz);
-
 	std::vector<stone_unit> &opponent_units = col == black ? m_units_w : m_units_b;
 	std::vector<stone_unit> &player_units = col == black ? m_units_b : m_units_w;
 	bit_array *opponent_stones = col == black ? m_stones_w : m_stones_b;
@@ -647,10 +698,7 @@ void go_board::add_stone (int x, int y, stone_color col, bool process_captures)
 	bit_array pos (bitsize ());
 	bit_array pos_neighbours (bitsize ());
 	pos.set_bit (bitpos (x, y));
-	pos_neighbours.ior (pos, -1, masked_left);
-	pos_neighbours.ior (pos, 1, masked_right);
-	pos_neighbours.ior (pos, m_sz);
-	pos_neighbours.ior (pos, -m_sz);
+	flood_step (pos_neighbours, pos);
 
 	int n_caps = 0;
 	int n_removed = 0;
@@ -743,14 +791,8 @@ bool go_board::valid_move_p (int x, int y, stone_color col)
 		return true;
 
 	/* Look at surrounding units.  */
-	const bit_array &masked_left = get_boardmask_left (m_sz);
-	const bit_array &masked_right = get_boardmask_right (m_sz);
-
 	bit_array pos_neighbours (bitsize ());
-	pos_neighbours.ior (pos, -1, masked_left);
-	pos_neighbours.ior (pos, 1, masked_right);
-	pos_neighbours.ior (pos, m_sz);
-	pos_neighbours.ior (pos, -m_sz);
+	flood_step (pos_neighbours, pos);
 
 	/* Extending a group of the same color?  */
 	std::vector<stone_unit> &player_units = col == black ? m_units_b : m_units_w;

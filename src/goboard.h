@@ -61,7 +61,9 @@ class go_board
 		}
 	};
 
-	int m_sz;
+	int m_sz_x, m_sz_y;
+	bool m_torus_h = false, m_torus_v = false;
+	const bit_array *m_masked_left, *m_masked_right, *m_column_left, *m_column_right, *m_row_top, *m_row_bottom;
 	/* The total score that has been calculated.  */
 	int m_score_b = 0;
 	int m_score_w = 0;
@@ -87,11 +89,17 @@ class go_board
 	std::vector<std::string> m_mark_text;
 
 public:
-	go_board (int sz) : m_sz (sz), m_stones_b (new bit_array (sz * sz)), m_stones_w (new bit_array (sz * sz))
+	go_board (int w, int h, bool torus_h = false, bool torus_v = false);
+	go_board (int sz) : go_board (sz, sz)
 	{
 	}
 	go_board (const go_board &other)
-		: m_sz (other.m_sz), m_score_b (other.m_score_b), m_score_w (other.m_score_w),
+		: m_sz_x (other.m_sz_x), m_sz_y (other.m_sz_y),
+		m_torus_h (other.m_torus_h), m_torus_v (other.m_torus_v),
+		m_masked_left (other.m_masked_left), m_masked_right (other.m_masked_right),
+		m_column_left (other.m_column_left), m_column_right (other.m_column_right),
+		m_row_top (other.m_row_top), m_row_bottom (other.m_row_bottom),
+		m_score_b (other.m_score_b), m_score_w (other.m_score_w),
 		m_caps_b (other.m_caps_b), m_caps_w (other.m_caps_w),
 		m_dead_b (other.m_dead_b), m_dead_w (other.m_dead_w),
 		m_stones_b (new bit_array (*other.m_stones_b)), m_stones_w (new bit_array (*other.m_stones_w)),
@@ -105,7 +113,12 @@ public:
 	   Note that this implies territory markers are not copied, and we do not copy m_dead_b and m_dead_w
 	   which just summarize that information.  */
 	go_board (const go_board &other, mark)
-		: m_sz (other.m_sz), m_score_b (other.m_score_b), m_score_w (other.m_score_w),
+		: m_sz_x (other.m_sz_x), m_sz_y (other.m_sz_y),
+		m_torus_h (other.m_torus_h), m_torus_v (other.m_torus_v),
+		m_masked_left (other.m_masked_left), m_masked_right (other.m_masked_right),
+		m_column_left (other.m_column_left), m_column_right (other.m_column_right),
+		m_row_top (other.m_row_top), m_row_bottom (other.m_row_bottom),
+		m_score_b (other.m_score_b), m_score_w (other.m_score_w),
 		m_caps_b (other.m_caps_b), m_caps_w (other.m_caps_w),
 		m_dead_b (0), m_dead_w (0),
 		m_stones_b (new bit_array (*other.m_stones_b)), m_stones_w (new bit_array (*other.m_stones_w)),
@@ -113,15 +126,38 @@ public:
 		m_units_t (other.m_units_t), m_units_st (other.m_units_st)
 	{
 	}
+	/* A similar constructor to create an empty board with identical properties to another.
+	   Callers should pass none to the unused stone_color argument for clarity.  */
+	go_board (const go_board &other, stone_color)
+		: m_sz_x (other.m_sz_x), m_sz_y (other.m_sz_y),
+		m_torus_h (other.m_torus_h), m_torus_v (other.m_torus_v),
+		m_masked_left (other.m_masked_left), m_masked_right (other.m_masked_right),
+		m_column_left (other.m_column_left), m_column_right (other.m_column_right),
+		m_row_top (other.m_row_top), m_row_bottom (other.m_row_bottom),
+		m_stones_b (new bit_array (other.bitsize ())), m_stones_w (new bit_array (other.bitsize ()))
+	{
+	}
 	go_board &operator= (go_board other)
 	{
-		m_sz = other.m_sz;
+		m_sz_x = other.m_sz_x;
+		m_sz_y = other.m_sz_y;
+
+		m_torus_h = other.m_torus_h;
+		m_torus_v = other.m_torus_v;
+		m_masked_left = other.m_masked_left;
+		m_masked_right = other.m_masked_right;
+		m_column_left = other.m_column_left;
+		m_column_right = other.m_column_right;
+		m_row_top = other.m_row_top;
+		m_row_bottom = other.m_row_bottom;
+
 		m_score_b = other.m_score_b;
 		m_score_w = other.m_score_w;
 		m_caps_b = other.m_caps_b;
 		m_caps_w = other.m_caps_w;
 		m_dead_b = other.m_dead_b;
 		m_dead_w = other.m_dead_w;
+
 		std::swap (m_stones_w, other.m_stones_w);
 		std::swap (m_stones_b, other.m_stones_b);
 		std::swap (m_units_w, other.m_units_w);
@@ -136,17 +172,21 @@ public:
 		delete m_stones_b;
 		delete m_stones_w;
 	}
-	int size () const
+	int size_x () const
 	{
-		return m_sz;
+		return m_sz_x;
+	}
+	int size_y () const
+	{
+		return m_sz_y;
 	}
 	int bitsize () const
 	{
-		return m_sz * m_sz;
+		return m_sz_x * m_sz_y;
 	}
 	int bitpos (int x, int y) const
 	{
-		return x + y * m_sz;
+		return x + y * m_sz_x;
 	}
 	void identify_units ();
 	int count_liberties (const bit_array &);
@@ -240,7 +280,7 @@ public:
 
 	bool position_equal_p (const go_board &other) const
 	{
-		if (m_sz != other.m_sz)
+		if (m_sz_x != other.m_sz_x || m_sz_y != other.m_sz_y)
 			return false;
 		if (*m_stones_b != *other.m_stones_b)
 			return false;
@@ -254,7 +294,7 @@ public:
 	}
 	bool operator== (const go_board &other) const
 	{
-		if (m_sz != other.m_sz)
+		if (m_sz_x != other.m_sz_x || m_sz_y != other.m_sz_y)
 			return false;
 		if (*m_stones_b != *other.m_stones_b)
 			return false;
@@ -299,13 +339,10 @@ public:
 
 private:
 	void recalc_liberties ();
-	void find_territory_units (const bit_array &w_stones, const bit_array &b_stones,
-				   const bit_array &masked_left, const bit_array &masked_right);
-	void flood_step (bit_array &next, const bit_array &fill,
-			 const bit_array &masked_left, const bit_array &masked_right);
+	void find_territory_units (const bit_array &w_stones, const bit_array &b_stones);
+	void flood_step (bit_array &next, const bit_array &fill);
 	void finish_scoring_markers (const bit_array *do_not_count);
-	void scoring_flood_fill (bit_array &fill, const bit_array &masked_left, const bit_array &masked_right,
-				 const bit_array &w_stones, const bit_array &b_stones,
+	void scoring_flood_fill (bit_array &fill, const bit_array &w_stones, const bit_array &b_stones,
 				 bool &neighbours_w, bool &neighbours_b);
 	void init_marks (bool clear)
 	{
@@ -328,7 +365,7 @@ private:
 	bit_array collect_marks (mark t, mextra me) const
 	{
 		bit_array tmp (bitsize ());
-		for (int i = 0; i < m_sz * m_sz; i++)
+		for (int i = 0; i < bitsize (); i++)
 			if (m_marks[i] == t && m_mark_extra[i] == me)
 				tmp.set_bit (i);
 		return tmp;

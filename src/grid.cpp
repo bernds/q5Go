@@ -49,8 +49,8 @@ Grid::Grid (QGraphicsScene *canvas, const go_board &ref, const bit_array &hoshis
 	}
 
 	int n = 0;
-	for (int x = 0; x < ref.size (); x++)
-		for (int y = 0; y < ref.size (); y++) {
+	for (int x = 0; x < ref.size_x (); x++)
+		for (int y = 0; y < ref.size_y (); y++) {
 			int p = ref.bitpos (x, y);
 			if (hoshis.test_bit (p))
 				m_hoshi_pos[n++] = std::pair<int, int> (x, y);
@@ -67,13 +67,13 @@ void Grid::resize (const QRect &rect, double square_size)
 	int i,j;
 	int size = square_size / 5;
 
-	for (i = 0; i < m_ref_board.size (); i++)
-		for (j = 0; j < m_ref_board.size (); j++) {
+	for (i = 0; i < m_ref_board.size_x (); i++)
+		for (j = 0; j < m_ref_board.size_y (); j++) {
 			int bp = m_ref_board.bitpos (i, j);
 			bool first_col = i == 0;
-			bool last_col = i + 1 == m_ref_board.size ();
+			bool last_col = i + 1 == m_ref_board.size_x ();
 			bool first_row = j == 0;
-			bool last_row = j + 1 == m_ref_board.size ();
+			bool last_row = j + 1 == m_ref_board.size_y ();
 			m_hgrid[bp].setLine(int(rect.x () + square_size * (i - 0.5 * !first_col)),
 					    rect.y () + square_size * j,
 					    int(rect.x () + square_size * (i + 0.5 * !last_col)),
@@ -136,7 +136,7 @@ void Grid::hide (int x, int y)
 
 CoordDisplay::CoordDisplay (QGraphicsScene *canvas, const go_board &ref, int offs, int margin, bool sgf)
 	: m_ref_board (ref),
-	  m_coords_v1 (ref.size ()), m_coords_v2 (ref.size ()), m_coords_h1 (ref.size ()), m_coords_h2 (ref.size ()),
+	  m_coords_v1 (ref.size_y ()), m_coords_v2 (ref.size_y ()), m_coords_h1 (ref.size_x ()), m_coords_h2 (ref.size_x ()),
 	  m_coord_offset (offs), m_coord_margin (margin)
 {
 	for (auto &i: m_coords_h1)
@@ -152,7 +152,7 @@ CoordDisplay::CoordDisplay (QGraphicsScene *canvas, const go_board &ref, int off
 
 void CoordDisplay::set_texts (bool sgf)
 {
-	for (int i=0; i < m_ref_board.size (); i++) {
+	for (int i = 0; i < m_ref_board.size_x (); i++) {
 		QString hTxt;
 		if (sgf)
 			hTxt = QChar ('a' + i);
@@ -164,7 +164,7 @@ void CoordDisplay::set_texts (bool sgf)
 		m_coords_h1[i].setText (hTxt);
 		m_coords_h2[i].setText (hTxt);
 	}
-	for (int i = 0; i < m_ref_board.size (); i++) {
+	for (int i = 0; i < m_ref_board.size_y (); i++) {
 		QString vTxt;
 		if (sgf)
 			vTxt = QChar ('a' + i);
@@ -179,7 +179,7 @@ void CoordDisplay::set_texts (bool sgf)
 void CoordDisplay::retrieve_text (QString &xt, QString &yt, int x, int y)
 {
 	xt = m_coords_h1[x].text ();
-	yt = m_coords_v1[m_ref_board.size () - y - 1].text ();
+	yt = m_coords_v1[m_ref_board.size_y () - y - 1].text ();
 }
 
 void CoordDisplay::resize (const QRect &wrect, const QRect &brect, double square_size, bool show)
@@ -187,10 +187,11 @@ void CoordDisplay::resize (const QRect &wrect, const QRect &brect, double square
 	// centres the coordinates text within the remaining space at table edge
 	const int center = m_coord_offset / 2 + m_coord_margin;
 
-	int sz = m_ref_board.size ();
-	for (int i = 0; i < sz; i++) {
+	int sz_x = m_ref_board.size_x ();
+	int sz_y = m_ref_board.size_y ();
+	for (int i = 0; i < sz_y; i++) {
 		QGraphicsSimpleTextItem *coord = &m_coords_v1[i];
-		int ypos = brect.y () + square_size * (sz - i - 1) - coord->boundingRect().height() / 2;
+		int ypos = brect.y () + square_size * (sz_y - i - 1) - coord->boundingRect().height() / 2;
 		// Left side
 		coord->setPos (wrect.x () + center - coord->boundingRect().width() / 2, ypos);
 
@@ -208,7 +209,7 @@ void CoordDisplay::resize (const QRect &wrect, const QRect &brect, double square
 		else
 			coord->hide();
 	}
-	for (int i = 0; i < sz; i++) {
+	for (int i = 0; i < sz_x; i++) {
 		QGraphicsSimpleTextItem *coord = &m_coords_h1[i];
 		int xpos = brect.x () + square_size * i - coord->boundingRect().width() / 2;
 		// Top

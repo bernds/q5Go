@@ -44,7 +44,7 @@ class Board : public QGraphicsView, public navigable_observer, public Gtp_Contro
 	GameMode m_game_mode = modeNormal;
 
 	/* Size of the (abstract) board.  */
-	int board_size;
+	int board_size_x, board_size_y;
 
 	/* Controls whether moves are allowed for either color.  */
 	bool m_player_is_b = true;

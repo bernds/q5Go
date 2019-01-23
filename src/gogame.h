@@ -515,7 +515,9 @@ public:
 	{
 		game_state *p = m_parent;
 		if (p == nullptr)
-			return go_board (m_board.size ());
+			/* No need to copy special properties if we're just going to use this
+			   as a bit mask.  */
+			return go_board (m_board.size_x (), m_board.size_y ());
 		return p->child_moves (this);
 	}
 	/* Set a mark on the current board, and return true if that made a change.  */
@@ -718,7 +720,8 @@ public:
 
 	int boardsize () const
 	{
-		return m_root.get_board ().size ();
+		const go_board &b = m_root.get_board ();
+		return std::max (b.size_x (), b.size_y ());
 	}
 	std::string to_sgf () const;
 	void set_errors (const sgf_errors &errs)

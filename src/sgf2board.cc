@@ -48,7 +48,7 @@ static void put_stones (go_board &b, sgf::node::property *p, stone_color col)
 		} else {
 			x2 = x1, y2 = y1;
 		}
-		if (x2 >= b.size () || y2 >= b.size ())
+		if (x2 >= b.size_x () || y2 >= b.size_y ())
 			throw broken_sgf ();
 
 		for (int x = x1; x <= x2; x++)
@@ -260,18 +260,27 @@ std::shared_ptr<game_record> sgf2record (const sgf &s)
 		codec = QTextCodec::codecForName (ca->c_str ());
 	}
 	const std::string *p = s.nodes->find_property_val ("SZ");
-	int size = 19;
+	int size_x = -1;
+	int size_y = 19;
 	/* GoGui writes files without SZ. Assume 19, I guess.  */
 	if (p != nullptr) {
 		const std::string &v = *p;
-		size = 0;
+		size_y = 0;
 		for (size_t i = 0; i < v.length (); i++) {
-			if (! isdigit (v[i]))
+			if (v[i] == ':') {
+				if (size_x != -1)
+					throw broken_sgf ();
+				size_x = size_y;
+				size_y = 0;
+			} else if (! isdigit (v[i]))
 				throw broken_sgf ();
-			size = size * 10 + v[i] - '0';
+			else
+				size_y = size_y * 10 + v[i] - '0';
 		}
 	}
-	if (size < 3 || size > 26)
+	if (size_x == -1)
+		size_x = size_y;
+	if (size_x < 3 || size_x > 26 || size_y < 3 || size_y > 26)
 		throw invalid_boardsize ();
 
 	const std::string *gn = s.nodes->find_property_val ("GN");
@@ -318,7 +327,7 @@ std::shared_ptr<game_record> sgf2record (const sgf &s)
 			translated_prop_str (cp, codec),
 			translated_prop_str (tm, codec), translated_prop_str (ot, codec),
 			style);
-	go_board initpos (size);
+	go_board initpos (size_x, size_y);
 	for (auto n: s.nodes->props)
 		if (n->ident == "AB")
 			put_stones (initpos, n, black);
@@ -363,8 +372,8 @@ void go_board::append_mark_plane_sgf (std::string &s, const std::string &p, cons
 		return;
 
 	s += p;
-	for (int x = 0; x < m_sz; x++)
-		for (int y = 0; y < m_sz; y++) {
+	for (int x = 0; x < m_sz_x; x++)
+		for (int y = 0; y < m_sz_y; y++) {
 			if (!t.test_bit (bitpos (x, y)))
 				continue;
 			s += '[';
@@ -393,8 +402,8 @@ void go_board::append_marks_sgf (std::string &s) const
 	append_mark_plane_sgf (s, "TB", tb);
 
 	bool have_lb  = false;
-	for (int x = 0; x < m_sz; x++)
-		for (int y = 0; y < m_sz; y++) {
+	for (int x = 0; x < m_sz_x; x++)
+		for (int y = 0; y < m_sz_y; y++) {
 			mark m = mark_at (x, y);
 			mextra me = mark_extra_at (x, y);
 			if (m != mark::letter && m != mark::num && m != mark::text)
@@ -422,9 +431,10 @@ static void maybe_add_property (std::string &s, const go_board &b, const char *n
 	if (arr.popcnt () == 0)
 		return;
 	s += name;
-	int sz = b.size ();
-	for (int x = 0; x < sz; x++)
-		for (int y = 0; y < sz; y++) {
+	int szx = b.size_x ();
+	int szy = b.size_y ();
+	for (int x = 0; x < szx; x++)
+		for (int y = 0; y < szy; y++) {
 			if (arr.test_bit (b.bitpos (x, y))) {
 				s += '[';
 				s += 'a' + x;
@@ -456,12 +466,11 @@ static void encode_string (std::string &s, const char *id, std::string src)
 void game_state::append_to_sgf (std::string &s) const
 {
 	int linecount = 0;
-	int sz = m_board.size ();
 	const game_state *gs = this;
 	while (gs) {
 		const go_board &this_board = gs->m_board;
 		if (gs->m_parent == nullptr || gs->was_edit_p ()) {
-			go_board prev_board (sz);
+			go_board prev_board (this_board, none);
 			if (gs->m_parent)
 				prev_board = gs->m_parent->m_board;
 			bit_array stones_w = this_board.get_stones_w ();
@@ -530,7 +539,10 @@ std::string game_record::to_sgf () const
 	   when loading, and Qt uses Unicode internally and toStdString conversions
 	   guarantee UTF-8.  */
 	std::string s = "(;FF[4]GM[1]CA[UTF-8]";
-	encode_string (s, "SZ", std::to_string (boardsize ()));
+	const go_board &rootb = m_root.get_board ();
+	std::string szx = std::to_string (rootb.size_x ());
+	std::string szy = std::to_string (rootb.size_y ());
+	encode_string (s, "SZ", szx == szy ? szx : szx + ":" + szy);
 	encode_string (s, "GN", m_title);
 	encode_string (s, "PW", m_name_w);
 	encode_string (s, "PB", m_name_b);

@@ -115,25 +115,33 @@ void open_local_board (QWidget *parent, bool with_dialog)
 /* Create a bit array of hoshi points for a board shaped like REF.  */
 bit_array calculate_hoshis (const go_board &ref)
 {
-	int size = ref.size ();
+	int size_x = ref.size_x ();
+	int size_y = ref.size_y ();
 	bit_array map (ref.bitsize ());
 
-	int edge_dist = size > 12 ? 4 : 3;
-	int low = edge_dist - 1;
-	int middle = size / 2;
-	int high = size - edge_dist;
-	if (size % 2 && size > 9)
-	{
-		map.set_bit (ref.bitpos (middle, low));
-		map.set_bit (ref.bitpos (middle, middle));
-		map.set_bit (ref.bitpos (middle, high));
-		map.set_bit (ref.bitpos (low, middle));
-		map.set_bit (ref.bitpos (high, middle));
+	int edge_dist_x = size_x > 12 ? 4 : 3;
+	int edge_dist_y = size_y > 12 ? 4 : 3;
+	int low_x = edge_dist_x - 1;
+	int low_y = edge_dist_y - 1;
+	int middle_x = size_x / 2;
+	int middle_y = size_y / 2;
+	int high_x = size_x - edge_dist_x;
+	int high_y = size_y - edge_dist_y;
+	if (size_x % 2 && size_x > 9) {
+		map.set_bit (ref.bitpos (middle_x, low_y));
+		map.set_bit (ref.bitpos (middle_x, high_y));
+		if (size_y % 2 && size_y > 9)
+			map.set_bit (ref.bitpos (middle_x, middle_y));
 	}
-	map.set_bit (ref.bitpos (low, low));
-	map.set_bit (ref.bitpos (high, low));
-	map.set_bit (ref.bitpos (high, high));
-	map.set_bit (ref.bitpos (low, high));
+	if (size_y % 2 && size_y > 9) {
+		map.set_bit (ref.bitpos (low_x, middle_y));
+		map.set_bit (ref.bitpos (high_x, middle_y));
+	}
+
+	map.set_bit (ref.bitpos (low_x, low_y));
+	map.set_bit (ref.bitpos (high_x, low_y));
+	map.set_bit (ref.bitpos (high_x, high_y));
+	map.set_bit (ref.bitpos (low_x, high_y));
 	return map;
 }
 
