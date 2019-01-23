@@ -250,9 +250,10 @@ std::shared_ptr<game_record> sgf2record (const sgf &s)
 {
 	const std::string *ff = s.nodes->find_property_val ("FF");
 	const std::string *gm = s.nodes->find_property_val ("GM");
-	if (ff == nullptr || gm == nullptr || *ff != "4" || *gm != "1")
+	if (ff != nullptr && *ff != "4" && *ff != "3")
 		throw broken_sgf ();
-
+	if (gm != nullptr && *gm != "1")
+		throw broken_sgf ();
 	const std::string *ca = s.nodes->find_property_val ("CA");
 	QTextCodec *codec = nullptr;
 	if (ca != nullptr) {
