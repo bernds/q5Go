@@ -26,207 +26,110 @@
 #include <QGraphicsLineItem>
 
 #include "defines.h"
+#include "goboard.h"
 #include "grid.h"
 
 
  /**
   * Initialises the grid intersections and hoshis points
   **/
-Grid::Grid(QGraphicsScene *canvas, int size)
+Grid::Grid (QGraphicsScene *canvas, const go_board &ref, const bit_array &hoshis)
+	: m_ref_board (ref),
+	  m_hoshi_map (hoshis), VGrid (ref.bitsize ()), HGrid (ref.bitsize ()),
+	  m_hoshis (hoshis.popcnt ()), m_hoshi_pos (hoshis.popcnt ())
 {
-	int i,j;
+	for (auto &i: VGrid)
+		canvas->addItem (&i);
+	for (auto &i: HGrid)
+		canvas->addItem (&i);
+	for (auto &i: m_hoshis) {
+		i.setBrush (Qt::SolidPattern);
+		i.setPen (Qt::NoPen);
+		canvas->addItem (&i);
+	}
 
-	board_size = size;
-
-	VGrid.reserve(board_size);
-	HGrid.reserve(board_size);
-	for (i=0; i<board_size; i++)
-	{
-		std::vector<QGraphicsLineItem *> row,col;
-		row.reserve(board_size);
-		col.reserve(board_size);
-		VGrid.push_back(row);
-		HGrid.push_back(col);
-
-		for (j=0; j<board_size; j++)
-		{
-			QGraphicsLineItem *t1, *t2;
-			VGrid[i].push_back(t1 = new QGraphicsLineItem());
-			HGrid[i].push_back(t2 = new QGraphicsLineItem());
-			canvas->addItem (t1);
-			canvas->addItem (t2);
-			Q_CHECK_PTR(VGrid[i][j]);
-			Q_CHECK_PTR(HGrid[i][j]);
+	int n = 0;
+	for (int x = 0; x < ref.size (); x++)
+		for (int y = 0; y < ref.size (); y++) {
+			int p = ref.bitpos (x, y);
+			if (hoshis.test_bit (p))
+				m_hoshi_pos[n++] = std::pair<int, int> (x, y);
 		}
-	}
-	int edge_dist = (board_size > 12 ? 4 : 3);
-	int low = edge_dist;
-	int middle = (board_size + 1) / 2;
-	int high = board_size + 1 - edge_dist;
-	if (board_size % 2 && board_size > 9)
-	{
-		hoshisList.insert(middle*board_size + low, new QGraphicsEllipseItem());
-		hoshisList.insert(middle*board_size + middle, new QGraphicsEllipseItem());
-		hoshisList.insert(middle*board_size + high, new QGraphicsEllipseItem());
-		hoshisList.insert(low*board_size + middle, new QGraphicsEllipseItem());
-		hoshisList.insert(high*board_size + middle, new QGraphicsEllipseItem());
-	}
-	hoshisList.insert(low*board_size + low ,new QGraphicsEllipseItem());
-	hoshisList.insert(high*board_size + low, new QGraphicsEllipseItem());
-	hoshisList.insert(high*board_size + high, new QGraphicsEllipseItem());
-	hoshisList.insert(low*board_size + high, new QGraphicsEllipseItem());
 
-
-	QMapIterator<int,QGraphicsEllipseItem*> it( hoshisList );
-
-	for ( ; it.hasNext() ; )
-	{
-		it.next();
-		it.value()->setBrush(Qt::SolidPattern);
-		it.value()->setPen(Qt::NoPen);
-		canvas->addItem (it.value());
-	}
-
-	showAll();
+	showAll ();
 }
-
- /**
-  * Destroys the grid
-  **/
-Grid::~Grid()
-{
-	int i,j;
-
-
-	for (i=0; i<board_size; i++)
- 	{
-		for (j=0; j<board_size; j++)
- 		{
- 			delete VGrid[i][j];
-			delete HGrid[i][j];
-		}
-	VGrid[i].clear();
-	HGrid[i].clear();
-	}
-
-	VGrid.clear();
-	HGrid.clear();
-
-	for (QMap<int,QGraphicsEllipseItem*>::const_iterator i = hoshisList.begin();
-		 i != hoshisList.end(); ++i)
-		delete *i;
-	hoshisList.clear();
-}
-
-
 
  /**
   * Calculates the grid intersections and hoshis position
   **/
-void Grid::resize(int offsetX, int offsetY, double square_size)
+void Grid::resize (int offsetX, int offsetY, double square_size)
 {
 	int i,j;
-	QGraphicsEllipseItem *e;
-	QMapIterator<int,QGraphicsEllipseItem*> it( hoshisList );
-
 	int size = square_size / 5;
+
+	for (i = 0; i < m_ref_board.size (); i++)
+		for (j = 0; j < m_ref_board.size (); j++) {
+			int bp = m_ref_board.bitpos (i, j);
+			bool first_col = i == 0;
+			bool last_col = i + 1 == m_ref_board.size ();
+			bool first_row = j == 0;
+			bool last_row = j + 1 == m_ref_board.size ();
+			HGrid[bp].setLine(int(offsetX + square_size * (i - 0.5 * !first_col)),
+					   offsetY + square_size * j,
+					   int(offsetX + square_size * (i + 0.5 * !last_col)),
+					   offsetY + square_size * j);
+
+			VGrid[bp].setLine(offsetX + square_size * i,
+					   int(offsetY + square_size * (j - 0.5 * !first_row)),
+					   offsetX + square_size *  i,
+					   int(offsetY + square_size * (j + 0.5 * !last_row)));
+		}
 
 	// Round size top be odd (hoshis)
 	if (size % 2 == 0)
 		size--;
-	if ((size < 7) && (size>2))
+	if (size < 7 && size > 2)
 		size = 7;
 	else if (size <= 2)
 		size = 3;
 
+	for (size_t i = 0; i < m_hoshis.size (); i++) {
+		int x = m_hoshi_pos[i].first;
+		int y = m_hoshi_pos[i].second;
 
-	for (i=0; i<board_size; i++)
-		for (j=0; j<board_size; j++)
-		{
+		QGraphicsEllipseItem *e = &m_hoshis[i];
 
-			HGrid[i][j]->setLine(int(offsetX + square_size * ( i - 0.5*(i!=0))),
-						offsetY + square_size * j,
-						int(offsetX + square_size * ( i + 0.5 * (i+1 != board_size))),
-						offsetY + square_size * j );
-
-			VGrid[i][j]->setLine(offsetX + square_size *  i,
-						int(offsetY + square_size * ( j - 0.5*(j!=0))),
-						offsetX + square_size *  i,
-						int(offsetY + square_size * ( j + 0.5 * (j+1 != board_size))));
-
-
-			if (hoshisList.contains(board_size*(i+1)+j+1))
-			{
-				e = hoshisList.value(board_size*(i+1)+j+1);
-				e->setRect(offsetX + square_size * i - size/2,
-					offsetY + square_size * j- size/2,
-					size ,
-					size );
-			}
-		}
+		e->setRect(offsetX + square_size * x - size/2, offsetY + square_size * y - size/2,
+			   size , size);
+	}
 }
 
  /**
   * Resets all interctions and hoshis to be shown
   **/
-void Grid::showAll()
+void Grid::showAll ()
 {
-	int i,j;
-
-	for (i=0; i<board_size; i++)
-		for (j=0; j<board_size; j++)
-		{
-			VGrid[i][j]->show();
-			HGrid[i][j]->show();
-		}
-
-	QMapIterator<int,QGraphicsEllipseItem*> it( hoshisList );
-
-	for ( ; it.hasNext() ; )
-	{
-		it.next();
-		it.value()->show();
-	}
+	for (auto &i: VGrid)
+		i.show ();
+	for (auto &i: HGrid)
+		i.show ();
+	for (auto &i: m_hoshis)
+		i.show ();
 }
 
  /**
   * Hides an intersection (when placing a letter mark)
   **/
-void Grid::hide(int i, int j)
+void Grid::hide (int x, int y)
 {
-	QGraphicsEllipseItem *e;
+	int bp = m_ref_board.bitpos (x, y);
 
-	if (( i<1) || (i > board_size) || ( j<1) || (j > board_size))
-		return;
+	VGrid[bp].hide();
+	HGrid[bp].hide();
 
-	VGrid[i-1][j-1]->hide();
-	HGrid[i-1][j-1]->hide();
-
-	if (hoshisList.contains(board_size*i + j))
-	{
-		e = hoshisList.value(board_size*i+j);
-		e->hide();
-	}
-
+	for (size_t i = 0; i < m_hoshis.size (); i++)
+		if (m_hoshi_pos[i] == std::pair<int, int> (x, y)) {
+			m_hoshis[i].hide ();
+			break;
+		}
 }
-
- /**
-  * shows an intersection (when removing a letter mark)
-  **/
-void Grid::show(int i, int j)
-{
-	QGraphicsEllipseItem *e;
-
-	if (( i<1) || (i > board_size) || ( j<1) || (j > board_size))
-		return;
-
-	VGrid[i-1][j-1]->show();
-	HGrid[i-1][j-1]->show();
-
-	if (hoshisList.contains(board_size*i + j))
-	{
-		e = hoshisList.value(board_size*i+j);
-		e->show();
-	}
-}
-

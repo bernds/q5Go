@@ -112,6 +112,31 @@ void open_local_board (QWidget *parent, bool with_dialog)
 	win->show ();
 }
 
+/* Create a bit array of hoshi points for a board shaped like REF.  */
+bit_array calculate_hoshis (const go_board &ref)
+{
+	int size = ref.size ();
+	bit_array map (ref.bitsize ());
+
+	int edge_dist = size > 12 ? 4 : 3;
+	int low = edge_dist - 1;
+	int middle = size / 2;
+	int high = size - edge_dist;
+	if (size % 2 && size > 9)
+	{
+		map.set_bit (ref.bitpos (middle, low));
+		map.set_bit (ref.bitpos (middle, middle));
+		map.set_bit (ref.bitpos (middle, high));
+		map.set_bit (ref.bitpos (low, middle));
+		map.set_bit (ref.bitpos (high, middle));
+	}
+	map.set_bit (ref.bitpos (low, low));
+	map.set_bit (ref.bitpos (high, low));
+	map.set_bit (ref.bitpos (high, high));
+	map.set_bit (ref.bitpos (low, high));
+	return map;
+}
+
 go_board new_handicap_board (int size, int handicap)
 {
 	go_board b (size);
@@ -122,7 +147,7 @@ go_board new_handicap_board (int size, int handicap)
 		return b;
 	}
 
-	int edge_dist = (size > 12 ? 4 : 3);
+	int edge_dist = size > 12 ? 4 : 3;
 	int low = edge_dist - 1;
 	int middle = size / 2;
 	int high = size - edge_dist;

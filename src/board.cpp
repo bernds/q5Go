@@ -28,6 +28,7 @@
 #include "clientwin.h"
 #include "miscdialogs.h"
 #include "svgbuilder.h"
+#include "ui_helpers.h"
 
 Board::Board(QWidget *parent, QGraphicsScene *c)
 	: QGraphicsView(c, parent), Gtp_Controller (parent)
@@ -50,9 +51,8 @@ Board::Board(QWidget *parent, QGraphicsScene *c)
 	CHECK_PTR(imageHandler);
 
 	// Init the canvas
-	canvas = new QGraphicsScene(0,0, BOARD_X, BOARD_Y,this);
-	setScene(canvas);
-	grid = new Grid(canvas, board_size);
+	canvas = new QGraphicsScene (0, 0, BOARD_X, BOARD_Y, this);
+	setScene (canvas);
 
 	// Init the grid size and the imagehandler pixmaps
 	calculateSize();
@@ -139,6 +139,7 @@ void Board::clearCoords()
 
 Board::~Board()
 {
+	delete m_grid;
 	clear_eval_data ();
 	clear_stones ();
 	delete canvas;
@@ -304,9 +305,9 @@ void Board::draw_background()
 	canvas->setBackgroundBrush(QBrush(image));
 }
 
-void Board::draw_grid()
+void Board::draw_grid ()
 {
-	grid->resize(offsetX,offsetY,square_size);
+	m_grid->resize (offsetX, offsetY, square_size);
 }
 
 void Board::draw_coordinates()
@@ -886,7 +887,7 @@ void Board::sync_appearance (bool board_only)
 	m_used_letters.clear ();
 	m_used_numbers.clear ();
 
-	grid->showAll ();
+	m_grid->showAll ();
 
 	for (int x = 0; x < sz; x++)
 		for (int y = 0; y < sz; y++) {
@@ -1013,7 +1014,7 @@ void Board::sync_appearance (bool board_only)
 						      sc, v, max_number, was_last_move, false, fi);
 
 			if (added)
-				grid->hide (x + 1, y + 1);
+				m_grid->hide (x, y);
 		}
 
 	updateCanvas();
@@ -1536,6 +1537,7 @@ void Board::clear_selection ()
 void Board::reset_game (std::shared_ptr<game_record> gr)
 {
 	stop_observing ();
+	delete m_grid;
 
 	game_state *root = gr->get_root ();
 
@@ -1549,11 +1551,9 @@ void Board::reset_game (std::shared_ptr<game_record> gr)
 		m_stones[i] = nullptr;
 
 	m_game = gr;
-
 	clear_selection ();
 
-	delete grid;
-	grid = new Grid (canvas, board_size);
+	m_grid = new Grid (canvas, b, calculate_hoshis (b));
 	clearCoords ();
 	setupCoords ();
 

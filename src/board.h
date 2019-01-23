@@ -67,7 +67,11 @@ class Board : public QGraphicsView, public navigable_observer, public Gtp_Contro
 	bool m_mark_rect = false;
 	bool m_request_mark_rect = false;
 
+	/* Graphical elements on the board canvas.  */
 	std::vector<stone_gfx *> m_stones;
+	QGraphicsScene *canvas;
+	QList<QGraphicsSimpleTextItem*> hCoords1, hCoords2, vCoords1, vCoords2;
+	Grid *m_grid {};
 
 	int m_vars_type = 1;
 	bool m_vars_children = false;
@@ -202,9 +206,6 @@ private:
 	QPixmap m_wood, m_table;
 	QGraphicsRectItem *coverTop, *coverLeft, *coverRight, *coverBot;
 
-	QGraphicsScene *canvas;
-	QList<QGraphicsSimpleTextItem*> hCoords1, hCoords2 ,vCoords1, vCoords2;
-	Grid *grid;
 	ImageHandler *imageHandler;
 	static const int margin, coord_margin;
 	int board_size, offset, offsetX, offsetY, board_pixel_size, table_size;

@@ -30,18 +30,20 @@
 
 class Grid
 {
+	const go_board m_ref_board;
+	const bit_array m_hoshi_map;
+	std::vector<QGraphicsLineItem> VGrid, HGrid;
+	std::vector<QGraphicsEllipseItem> m_hoshis;
+	std::vector<std::pair <int, int> > m_hoshi_pos;
+
 public:
-	Grid (QGraphicsScene *Canvas, int board_size);
-	~Grid ();
+	Grid (QGraphicsScene *Canvas, const go_board &ref, const bit_array &hoshis);
+
 	void hide (int x, int y);
-	void show (int x, int y);
 	void resize (int offsetX, int offsetY, double square_size);
 	void showAll ();
 
 private:
-	int board_size;
-	std::vector< std::vector<QGraphicsLineItem *> > VGrid, HGrid;
-	QMap<int,QGraphicsEllipseItem*> hoshisList ;
 };
 
 #endif
