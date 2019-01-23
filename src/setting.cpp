@@ -117,6 +117,8 @@ Setting::Setting()
 	writeBoolEntry("STONES_STRIPES", 1);
 
 	writeBoolEntry("ANALYSIS_PRUNE", 1);
+	writeBoolEntry("ANALYSIS_CHILDREN", 1);
+	writeBoolEntry("ANALYSIS_HIDEOTHER", 1);
 
 	writeIntEntry("GAMETREE_SIZE", 30);
 

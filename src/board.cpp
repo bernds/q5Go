@@ -805,6 +805,7 @@ void Board::sync_appearance (bool board_only)
 	bool have_analysis = m_eval_state != nullptr;
 	bool numbering = !have_analysis && m_edit_board == nullptr;
 
+	bool analysis_hide = setting->readBoolEntry ("ANALYSIS_HIDEOTHER");
 	bool analysis_children = setting->readBoolEntry ("ANALYSIS_CHILDREN");
 	int analysis_vartype = setting->readIntEntry ("ANALYSIS_VARTYPE");
 	int winrate_for = setting->readIntEntry ("ANALYSIS_WINRATE");
@@ -967,11 +968,11 @@ void Board::sync_appearance (bool board_only)
 			if (v > 0 && n_back != 0)
 				v = n_back - v + 1;
 			bool added = false;
-			bool an_child_mark = have_analysis && analysis_children && child_vars.stone_at (x, y) == to_move;
+			bool an_child_mark = have_analysis && analysis_children && v == 0 && child_vars.stone_at (x, y) == to_move;
 			/* Put a percentage or letter mark on variations returned by the analysis engine,
 			   unless we are already showing a numbered variation and this intersection
 			   has a number.  */
-			if (eval_mark != mark::none && v == 0) {
+			if (eval_mark != mark::none && v == 0 && (max_number == 0 || !analysis_hide)) {
 				QString wr_col = "lightblue";
 				double wrdiff = m_winrate[bp];
 				if (eval_me > 0) {

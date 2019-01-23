@@ -220,6 +220,7 @@ void PreferencesDialog::init_from_settings ()
 
 	anChildMovesCheckBox->setChecked (setting->readBoolEntry ("ANALYSIS_CHILDREN"));
 	anPruneCheckBox->setChecked (setting->readBoolEntry ("ANALYSIS_PRUNE"));
+	anHideCheckBox->setChecked (setting->readBoolEntry ("ANALYSIS_HIDEOTHER"));
 	anVarComboBox->setCurrentIndex (setting->readIntEntry ("ANALYSIS_VARTYPE"));
 	winrateComboBox->setCurrentIndex (setting->readIntEntry ("ANALYSIS_WINRATE"));
 	anDepthEdit->setText (QString::number (setting->readIntEntry ("ANALYSIS_DEPTH")));
@@ -435,6 +436,7 @@ void PreferencesDialog::slot_apply()
 
 	setting->writeBoolEntry ("ANALYSIS_CHILDREN", anChildMovesCheckBox->isChecked ());
 	setting->writeBoolEntry ("ANALYSIS_PRUNE", anPruneCheckBox->isChecked ());
+	setting->writeBoolEntry ("ANALYSIS_HIDEOTHER", anHideCheckBox->isChecked ());
 	setting->writeIntEntry ("ANALYSIS_VARTYPE", anVarComboBox->currentIndex ());
 	setting->writeIntEntry ("ANALYSIS_WINRATE", winrateComboBox->currentIndex ());
 
