@@ -102,7 +102,7 @@ int go_board::count_liberties (const bit_array &stones)
 	const bit_array &masked_left = get_boardmask_left (m_sz);
 	const bit_array &masked_right = get_boardmask_right (m_sz);
 
-	bit_array liberties (m_sz * m_sz);
+	bit_array liberties (bitsize ());
 	flood_step (liberties, stones, masked_left, masked_right);
 	liberties.andnot (*m_stones_w);
 	liberties.andnot (*m_stones_b);
@@ -148,7 +148,7 @@ void go_board::identify_units ()
 	const bit_array &masked_left = get_boardmask_left (m_sz);
 	const bit_array &masked_right = get_boardmask_right (m_sz);
 
-	bit_array handled (m_sz * m_sz);
+	bit_array handled (bitsize ());
 #ifdef DEBUG
 	unsigned found_w = 0;
 	unsigned found_b = 0;
@@ -169,7 +169,7 @@ void go_board::identify_units ()
 			} else
 				continue;
 			std::vector<stone_unit> &units = col == black ? m_units_b : m_units_w;
-			bit_array unit (m_sz * m_sz);
+			bit_array unit (bitsize ());
 			unit.set_bit (i);
 			/* Extend vertically and horizontally as far
 			   as possible, to try to reduce the number of
@@ -228,7 +228,7 @@ void go_board::toggle_alive (int x, int y, bool flood)
 	const bit_array &masked_right = get_boardmask_right (m_sz);
 
 	const bit_array &other_stones = col == black ? *m_stones_w : *m_stones_b;
-	bit_array fill (m_sz * m_sz);
+	bit_array fill (bitsize ());
 	fill.set_bit (bp);
 	if (flood) {
 		bit_array next (fill);
@@ -279,7 +279,7 @@ void go_board::toggle_seki (int x, int y)
    Update our captures and territory so that the correct result can be shown.  */
 void go_board::territory_from_markers ()
 {
-	for (int i = 0; i < m_sz * m_sz; i++) {
+	for (int i = 0; i < bitsize (); i++) {
 		if (m_marks[i] == mark::terr) {
 			if (m_stones_w->test_bit (i))
 				m_dead_w++;
@@ -323,19 +323,19 @@ void go_board::find_territory_units (const bit_array &w_stones, const bit_array 
 {
 	m_units_t.clear ();
 	m_units_st.clear ();
-	bit_array handled (m_sz * m_sz);
+	bit_array handled (bitsize ());
 	bit_array dead_stones = *m_stones_w;
 	dead_stones.ior (*m_stones_b);
 	dead_stones.andnot (w_stones);
 	dead_stones.andnot (b_stones);
-	for (int i = 0; i < m_sz * m_sz; i++) {
+	for (int i = 0; i < bitsize (); i++) {
 		if (handled.test_bit (i))
 			continue;
 
 		if (w_stones.test_bit (i) || b_stones.test_bit (i))
 			continue;
 
-		bit_array fill (m_sz * m_sz);
+		bit_array fill (bitsize ());
 		fill.set_bit (i);
 		bool neighbours_b = false, neighbours_w = false;
 		scoring_flood_fill (fill, masked_left, masked_right, w_stones, b_stones,
@@ -353,8 +353,8 @@ void go_board::find_territory_units (const bit_array &w_stones, const bit_array 
 /* The final step for calculating scores, shared by the simple and complex variants.  */
 void go_board::finish_scoring_markers (const bit_array *do_not_count)
 {
-	bit_array terr_w (m_sz * m_sz);
-	bit_array terr_b (m_sz * m_sz);
+	bit_array terr_w (bitsize ());
+	bit_array terr_b (bitsize ());
 	for (auto &t: m_units_t) {
 		bool counted = true;
 		if (do_not_count && t.m_terr.intersect_p (*do_not_count))
@@ -369,7 +369,7 @@ void go_board::finish_scoring_markers (const bit_array *do_not_count)
 	}
 	m_score_w += terr_w.popcnt ();
 	m_score_b += terr_b.popcnt ();
-	for (int i = 0; i < m_sz * m_sz; i++) {
+	for (int i = 0; i < bitsize (); i++) {
 		if (terr_w.test_bit (i)) {
 			m_marks[i] = mark::terr;
 			m_mark_extra[i] = 0;
@@ -393,8 +393,8 @@ void go_board::calc_scoring_markers_simple ()
 	const bit_array &masked_left = get_boardmask_left (m_sz);
 	const bit_array &masked_right = get_boardmask_right (m_sz);
 
-	bit_array w_stones (m_sz * m_sz);
-	bit_array b_stones (m_sz * m_sz);
+	bit_array w_stones (bitsize ());
+	bit_array b_stones (bitsize ());
 	for (auto &it: m_units_w) {
 		it.m_any_terr = it.m_real_terr = it.m_seki_neighbour = false;
 		if (it.m_alive)
@@ -424,9 +424,9 @@ void go_board::calc_scoring_markers_complex ()
 	const bit_array &masked_left = get_boardmask_left (m_sz);
 	const bit_array &masked_right = get_boardmask_right (m_sz);
 
-	bit_array w_stones (m_sz * m_sz);
-	bit_array b_stones (m_sz * m_sz);
-	bit_array dead_stones (m_sz * m_sz);
+	bit_array w_stones (bitsize ());
+	bit_array b_stones (bitsize ());
+	bit_array dead_stones (bitsize ());
 	for (auto &it: m_units_w) {
 		it.m_any_terr = it.m_real_terr = it.m_seki_neighbour = false;
 		if (it.m_alive) {
@@ -445,10 +445,10 @@ void go_board::calc_scoring_markers_complex ()
 	}
 	find_territory_units (w_stones, b_stones, masked_left, masked_right);
 
-	bit_array cand_territory (m_sz * m_sz);
+	bit_array cand_territory (bitsize ());
 	for (auto &t: m_units_t)
 		cand_territory.ior (t.m_terr);
-	bit_array false_eyes (m_sz * m_sz);
+	bit_array false_eyes (bitsize ());
 
 	/* Discover false eyes.  The condition is that we must have a unit of
 	   stones which borders only one point of candidate territory, and that
@@ -459,12 +459,12 @@ void go_board::calc_scoring_markers_complex ()
 	for (;;) {
 		bool changed = false;
 		for (auto it: live_units) {
-			bit_array borders (m_sz * m_sz);
+			bit_array borders (bitsize ());
 			flood_step (borders, it->m_stones, masked_left, masked_right);
 			borders.and1 (cand_territory);
 			if (borders.popcnt () != 1)
 				continue;
-			bit_array b_libs (m_sz * m_sz);
+			bit_array b_libs (bitsize ());
 			flood_step (b_libs, borders, masked_left, masked_right);
 			b_libs.andnot (it->m_stones);
 			if (b_libs.popcnt () > 0) {
@@ -496,12 +496,12 @@ void go_board::calc_scoring_markers_complex ()
 		cand_territory.and_not (false_eyes);
 	}
 #endif
-	for (int i = 0; i < m_sz * m_sz; i++)
+	for (int i = 0; i < bitsize (); i++)
 		if (false_eyes.test_bit (i))
 			m_marks[i] = mark::falseeye;
 
-	bit_array real_territory (m_sz * m_sz);
-	bit_array nonseki_stones (m_sz * m_sz);
+	bit_array real_territory (bitsize ());
+	bit_array nonseki_stones (bitsize ());
 
 	/* Now discover territories that contain dead stones, and units which border
 	   them.
@@ -512,7 +512,7 @@ void go_board::calc_scoring_markers_complex ()
 		if (t.m_terr.popcnt () == 0)
 			continue;
 
-		bit_array borders (m_sz * m_sz);
+		bit_array borders (bitsize ());
 		flood_step (borders, t.m_terr, masked_left, masked_right);
 
 		if (t.m_contains_dead)
@@ -533,11 +533,11 @@ void go_board::calc_scoring_markers_complex ()
 		}
 	}
 
-	bit_array seki_stones (m_sz * m_sz);
+	bit_array seki_stones (bitsize ());
 	for (auto it: live_units)
 		if (it->m_seki)
 			seki_stones.ior (it->m_stones);
-	for (int i = 0; i < m_sz * m_sz; i++)
+	for (int i = 0; i < bitsize (); i++)
 		if (seki_stones.test_bit (i))
 			m_marks[i] = mark::seki;
 
@@ -551,7 +551,7 @@ void go_board::calc_scoring_markers_complex ()
 		for (auto it: live_units) {
 			if (it->m_real_terr)
 				continue;
-			bit_array borders (m_sz * m_sz);
+			bit_array borders (bitsize ());
 			flood_step (borders, it->m_stones, masked_left, masked_right);
 			if (borders.intersect_p (real_territory)) {
 				nonseki_stones.ior (it->m_stones);
@@ -565,7 +565,7 @@ void go_board::calc_scoring_markers_complex ()
 		for (auto &t: m_units_t) {
 			if (t.m_contains_dead)
 				continue;
-			bit_array borders (m_sz * m_sz);
+			bit_array borders (bitsize ());
 			flood_step (borders, t.m_terr, masked_left, masked_right);
 			if (borders.intersect_p (nonseki_stones)) {
 				real_territory.ior (t.m_terr);
@@ -577,7 +577,7 @@ void go_board::calc_scoring_markers_complex ()
 			break;
 	}
 
-	bit_array seki_neighbours (m_sz * m_sz);
+	bit_array seki_neighbours (bitsize ());
 #if 0
 	/* Now look for units that are not marked dead, but did not
 	   border any territory.  Mark their neighbours as involved in
@@ -588,7 +588,7 @@ void go_board::calc_scoring_markers_complex ()
 	for (auto &it: m_units_w) {
 		if (it.m_any_terr || !it.m_alive)
 			continue;
-		bit_array nb (m_sz * m_sz);
+		bit_array nb (bitsize ());
 		flood_step (nb, it.m_stones, masked_left, masked_right);
 		for (auto &nit: m_units_b) {
 			if (nit.m_alive && !nit.m_real_terr && nb.intersect_p (nit.m_stones))
@@ -598,7 +598,7 @@ void go_board::calc_scoring_markers_complex ()
 	for (auto &it: m_units_b) {
 		if (it.m_any_terr || !it.m_alive)
 			continue;
-		bit_array nb (m_sz * m_sz);
+		bit_array nb (bitsize ());
 		flood_step (nb, it.m_stones, masked_left, masked_right);
 		for (auto &nit: m_units_w) {
 			if (nit.m_alive && !nit.m_real_terr && nb.intersect_p (nit.m_stones))
@@ -644,8 +644,8 @@ void go_board::add_stone (int x, int y, stone_color col, bool process_captures)
 	bit_array *player_stones = col == black ? m_stones_b : m_stones_w;
 	player_stones->set_bit (bitpos (x, y));
 
-	bit_array pos (m_sz * m_sz);
-	bit_array pos_neighbours (m_sz * m_sz);
+	bit_array pos (bitsize ());
+	bit_array pos_neighbours (bitsize ());
 	pos.set_bit (bitpos (x, y));
 	pos_neighbours.ior (pos, -1, masked_left);
 	pos_neighbours.ior (pos, 1, masked_right);
@@ -736,7 +736,7 @@ bool go_board::valid_move_p (int x, int y, stone_color col)
 		return false;
 
 	/* Simplest case: test for plainly enough liberties.  */
-	bit_array pos (m_sz * m_sz);
+	bit_array pos (bitsize ());
 	pos.set_bit (bitpos (x, y));
 
 	if (count_liberties (pos) > 0)
@@ -746,7 +746,7 @@ bool go_board::valid_move_p (int x, int y, stone_color col)
 	const bit_array &masked_left = get_boardmask_left (m_sz);
 	const bit_array &masked_right = get_boardmask_right (m_sz);
 
-	bit_array pos_neighbours (m_sz * m_sz);
+	bit_array pos_neighbours (bitsize ());
 	pos_neighbours.ior (pos, -1, masked_left);
 	pos_neighbours.ior (pos, 1, masked_right);
 	pos_neighbours.ior (pos, m_sz);
