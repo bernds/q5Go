@@ -46,4 +46,17 @@ public:
 private:
 };
 
+class CoordDisplay
+{
+	const go_board m_ref_board;
+	std::vector<QGraphicsSimpleTextItem> m_coords_v1, m_coords_v2;
+	std::vector<QGraphicsSimpleTextItem> m_coords_h1, m_coords_h2;
+	int m_coord_offset, m_coord_margin;
+
+public:
+	CoordDisplay (QGraphicsScene *Canvas, const go_board &ref, int offs, int margin, bool sgf);
+	void resize (int offsetX, int offsetY, int offset, double square_size, int, bool);
+	void set_texts (bool);
+};
+
 #endif

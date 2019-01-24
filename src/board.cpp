@@ -22,6 +22,7 @@
 #include "setting.h"
 #include "qgo.h"
 #include "board.h"
+#include "grid.h"
 #include "imagehandler.h"
 #include "tip.h"
 #include "mainwindow.h"
@@ -89,57 +90,13 @@ Board::Board(QWidget *parent, QGraphicsScene *c)
 	coverLeft->setPen (QColor (0, 0, 0, 0));
 	coverRight->setPen (QColor (0, 0, 0, 0));
 
-	setupCoords();
 	setFocusPolicy(Qt::NoFocus);
-}
-
-
-void Board::setupCoords()
-{
-	QString hTxt,vTxt;
-
-	// Init the coordinates
-	for (int i=0; i<board_size; i++)
-	{
-		if (showSGFCoords)
-		{
-			vTxt = QString(QChar(static_cast<const char>('a' + i)));
-			hTxt = QString(QChar(static_cast<const char>('a' + i)));
-		} else {
-			int real_i = i < 8 ? i : i + 1;
-			vTxt = QString::number(i + 1);
-			hTxt = QString(QChar(static_cast<const char>('A' + real_i)));
-		}
-
-		QGraphicsSimpleTextItem *t;
-		vCoords1.append(t = new QGraphicsSimpleTextItem(vTxt));
-		canvas->addItem (t);
-		hCoords1.append(t = new QGraphicsSimpleTextItem(hTxt));
-		canvas->addItem (t);
-		vCoords2.append(t = new QGraphicsSimpleTextItem(vTxt));
-		canvas->addItem (t);
-		hCoords2.append(t = new QGraphicsSimpleTextItem(hTxt));
-		canvas->addItem (t);
-	}
-}
-
-void Board::clearCoords()
-{
-	QList<QGraphicsSimpleTextItem*>::const_iterator i;
-#define FREE_ARRAY_OF_POINTERS(a)							\
-	for (i = a.begin(); i != a.end(); ++i)					\
-		delete *i;											\
-	a.clear();												\
-
-	FREE_ARRAY_OF_POINTERS(vCoords1);
-	FREE_ARRAY_OF_POINTERS(hCoords1);
-	FREE_ARRAY_OF_POINTERS(vCoords2);
-	FREE_ARRAY_OF_POINTERS(hCoords2);
 }
 
 Board::~Board()
 {
 	delete m_grid;
+	delete m_coords;
 	clear_eval_data ();
 	clear_stones ();
 	delete canvas;
@@ -208,8 +165,7 @@ void Board::resizeBoard (int w, int h)
 
 	// Redraw the board
 	draw_background ();
-	draw_grid ();
-	draw_coordinates ();
+	draw_grid_and_coords ();
 	updateCovers ();
 
 	sync_appearance ();
@@ -305,62 +261,10 @@ void Board::draw_background()
 	canvas->setBackgroundBrush(QBrush(image));
 }
 
-void Board::draw_grid ()
+void Board::draw_grid_and_coords ()
 {
 	m_grid->resize (offsetX, offsetY, square_size);
-}
-
-void Board::draw_coordinates()
-{
-	QGraphicsSimpleTextItem *coord;
-	int i;
-
-	// centres the coordinates text within the remaining space at table edge
-	const int coord_centre = coord_offset/2 + coord_margin;
-	QString txt;
-
-	for (i=0; i<board_size; i++)
-	{
-		// Left side
-		coord = vCoords1.at(i);
-		coord->setPos(offsetX - offset + coord_centre - coord->boundingRect().width()/2,
-			      offsetY + square_size * (board_size - i - 1) - coord->boundingRect().height()/2);
-
-		if (showCoords)
-			coord->show();
-		else
-			coord->hide();
-
-		// Right side
-		coord = vCoords2.at(i);
-    		coord->setPos(offsetX + board_pixel_size + offset - coord_centre - coord->boundingRect().width()/2,
-			      offsetY + square_size * (board_size - i - 1) - coord->boundingRect().height()/2);
-
-		if (showCoords)
-			coord->show();
-		else
-			coord->hide();
-
-		// Top
-		coord = hCoords1.at(i);
-		coord->setPos(offsetX + square_size * i - coord->boundingRect().width()/2,
-			      offsetY - offset + coord_centre - coord->boundingRect().height()/2 );
-
-		if (showCoords)
-			coord->show();
-		else
-			coord->hide();
-
-		// Bottom
-		coord = hCoords2.at(i);
-		coord->setPos(offsetX + square_size * i - coord->boundingRect().width()/2,
-			      offsetY + offset + board_pixel_size - coord_centre - coord->boundingRect().height()/2);
-
-		if (showCoords)
-			coord->show();
-		else
-			coord->hide();
-	}
+	m_coords->resize (offsetX, offsetY, offset, square_size, board_pixel_size, showCoords);
 }
 
 /* Handle a click on the Done button.  Return true if we should return to normal mode.  */
@@ -1537,7 +1441,9 @@ void Board::clear_selection ()
 void Board::reset_game (std::shared_ptr<game_record> gr)
 {
 	stop_observing ();
+
 	delete m_grid;
+	delete m_coords;
 
 	game_state *root = gr->get_root ();
 
@@ -1554,8 +1460,7 @@ void Board::reset_game (std::shared_ptr<game_record> gr)
 	clear_selection ();
 
 	m_grid = new Grid (canvas, b, calculate_hoshis (b));
-	clearCoords ();
-	setupCoords ();
+	m_coords = new CoordDisplay (canvas, b, coord_offset, coord_margin, showSGFCoords);
 
 	calculateSize ();
 
@@ -1563,22 +1468,13 @@ void Board::reset_game (std::shared_ptr<game_record> gr)
 	imageHandler->rescale(square_size);
 
 	// Redraw the board
-	draw_background();
-	draw_grid();
-	draw_coordinates();
+	draw_background ();
+	draw_grid_and_coords ();
 
 	start_observing (root);
 
 	canvas->update();
 	setModified(false);
-}
-
-void Board::clearData()
-{
-	clear_stones ();
-	canvas->update();
-	isModified = false;
-	clearCoords();
 }
 
 void Board::update_comment(const QString &qs)
@@ -1592,8 +1488,10 @@ void Board::setShowCoords(bool b)
 {
 	bool old = showCoords;
 	showCoords = b;
-	if (old != showCoords)
-		changeSize();  // Redraw the board if the value changed.
+	if (old == showCoords)
+		return;
+
+	changeSize();
 }
 
 void Board::setShowSGFCoords(bool b)
@@ -1602,9 +1500,8 @@ void Board::setShowSGFCoords(bool b)
 	showSGFCoords = b;
 	if (old == showSGFCoords)
 		return;
-	clearCoords ();
-	setupCoords ();
-	draw_coordinates ();
+
+	m_coords->set_texts (showSGFCoords);
 }
 
 void Board::set_vardisplay (bool children, int type)

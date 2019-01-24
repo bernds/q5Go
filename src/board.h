@@ -19,7 +19,6 @@
 #include "defines.h"
 #include "setting.h"
 #include "stone.h"
-#include "grid.h"
 #include "goboard.h"
 #include "gogame.h"
 #include "qgtp.h"
@@ -31,6 +30,8 @@ class InterfaceHandler;
 class QNewGameDlg;
 class MainWindow;
 class MainWidget;
+class Grid;
+class CoordDisplay;
 
 enum class analyzer { disconnected, starting, running, paused };
 
@@ -70,8 +71,8 @@ class Board : public QGraphicsView, public navigable_observer, public Gtp_Contro
 	/* Graphical elements on the board canvas.  */
 	std::vector<stone_gfx *> m_stones;
 	QGraphicsScene *canvas;
-	QList<QGraphicsSimpleTextItem*> hCoords1, hCoords2, vCoords1, vCoords2;
 	Grid *m_grid {};
+	CoordDisplay *m_coords {};
 
 	int m_vars_type = 1;
 	bool m_vars_children = false;
@@ -86,6 +87,7 @@ class Board : public QGraphicsView, public navigable_observer, public Gtp_Contro
 	GTP_Process *m_analyzer {};
 
 	void observed_changed () override;
+	bool show_cursor_p ();
 	void sync_appearance (bool board_only = true);
 	void play_one_move (int x, int y);
 	void setup_analyzer_position ();
@@ -103,7 +105,6 @@ public:
 	~Board();
 	/* Should be part of the constructor, but Qt doesn't seem to allow such a construction with the .ui files.  */
 	void init2 (MainWindow *w, MainWidget *mw) { m_board_win = w; m_main_widget = mw; }
-	void clearData();
 	void setModified(bool m=true);
 	ImageHandler* getImageHandler() { return imageHandler; }
 	void updateCanvas() { canvas->update(); }
@@ -113,7 +114,6 @@ public:
 	const game_state *get_state () { return m_state; }
 	void external_move (game_state *st) { move_state (st); }
 	void mark_dead_external (int x, int y);
-	bool show_cursor_p ();
 	void setMode(GameMode mode);
 	GameMode getGameMode () { return m_game_mode; }
 	void setMarkType(mark t) { m_edit_mark = t; }
@@ -178,10 +178,9 @@ signals:
 	void coordsChanged(int, int, int,bool);
 
 protected:
-	void calculateSize();
-	void draw_background();
-	void draw_grid();
-	void draw_coordinates();
+	void calculateSize ();
+	void draw_background ();
+	void draw_grid_and_coords ();
 
 	void resizeBoard(int w, int h);
 	int convertCoordsToPoint(int c, int o);
@@ -195,8 +194,6 @@ protected:
 
 private:
 	void click_add_mark (QMouseEvent *, int, int);
-	void setupCoords();
-	void clearCoords();
 	void updateCovers ();
 
 	/* Local copies of the pixmaps held by the settings.  I'm not entirely

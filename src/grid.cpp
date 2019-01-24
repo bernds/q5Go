@@ -133,3 +133,93 @@ void Grid::hide (int x, int y)
 			break;
 		}
 }
+
+CoordDisplay::CoordDisplay (QGraphicsScene *canvas, const go_board &ref, int offs, int margin, bool sgf)
+	: m_ref_board (ref),
+	  m_coords_v1 (ref.size ()), m_coords_v2 (ref.size ()), m_coords_h1 (ref.size ()), m_coords_h2 (ref.size ()),
+	  m_coord_offset (offs), m_coord_margin (margin)
+{
+	for (auto &i: m_coords_h1)
+		canvas->addItem (&i);
+	for (auto &i: m_coords_h2)
+		canvas->addItem (&i);
+	for (auto &i: m_coords_v1)
+		canvas->addItem (&i);
+	for (auto &i: m_coords_v2)
+		canvas->addItem (&i);
+	set_texts (sgf);
+}
+
+void CoordDisplay::set_texts (bool sgf)
+{
+	for (int i=0; i < m_ref_board.size (); i++) {
+		QString hTxt;
+		if (sgf)
+			hTxt = QChar ('a' + i);
+		else {
+			int real_i = i < 8 ? i : i + 1;
+			hTxt = QChar ('A' + real_i);
+		}
+
+		m_coords_h1[i].setText (hTxt);
+		m_coords_h2[i].setText (hTxt);
+	}
+	for (int i = 0; i < m_ref_board.size (); i++) {
+		QString vTxt;
+		if (sgf)
+			vTxt = QChar ('a' + i);
+		else
+			vTxt = QString::number (i + 1);
+
+		m_coords_v1[i].setText (vTxt);
+		m_coords_v2[i].setText (vTxt);
+	}
+}
+
+void CoordDisplay::resize (int offsetX, int offsetY, int offset, double square_size, int board_pixel_size, bool show)
+{
+	// centres the coordinates text within the remaining space at table edge
+	const int center = m_coord_offset / 2 + m_coord_margin;
+
+	int sz = m_ref_board.size ();
+	for (int i = 0; i < sz; i++) {
+		QGraphicsSimpleTextItem *coord = &m_coords_v1[i];
+		int ypos = offsetY + square_size * (sz - i - 1) - coord->boundingRect().height() / 2;
+		// Left side
+		coord->setPos (offsetX - offset + center - coord->boundingRect().width() / 2, ypos);
+
+		if (show)
+			coord->show();
+		else
+			coord->hide();
+
+		// Right side
+		coord = &m_coords_v2[i];
+		coord->setPos (offsetX + board_pixel_size + offset - center - coord->boundingRect().width() / 2, ypos);
+
+		if (show)
+			coord->show();
+		else
+			coord->hide();
+	}
+	for (int i = 0; i < sz; i++) {
+		QGraphicsSimpleTextItem *coord = &m_coords_h1[i];
+		int xpos = offsetX + square_size * i - coord->boundingRect().width() / 2;
+		// Top
+		coord->setPos (xpos, offsetY - offset + center - coord->boundingRect().height() / 2);
+
+		if (show)
+			coord->show();
+		else
+			coord->hide();
+
+		// Bottom
+		coord = &m_coords_h2[i];
+		coord->setPos (xpos, offsetY + offset + board_pixel_size - center - coord->boundingRect().height() / 2);
+
+		if (show)
+			coord->show();
+		else
+			coord->hide();
+	}
+}
