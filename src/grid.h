@@ -32,7 +32,7 @@ class Grid
 {
 	const go_board m_ref_board;
 	const bit_array m_hoshi_map;
-	std::vector<QGraphicsLineItem> VGrid, HGrid;
+	std::vector<QGraphicsLineItem> m_hgrid, m_vgrid;
 	std::vector<QGraphicsEllipseItem> m_hoshis;
 	std::vector<std::pair <int, int> > m_hoshi_pos;
 

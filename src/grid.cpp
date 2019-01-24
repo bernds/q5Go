@@ -35,12 +35,12 @@
   **/
 Grid::Grid (QGraphicsScene *canvas, const go_board &ref, const bit_array &hoshis)
 	: m_ref_board (ref),
-	  m_hoshi_map (hoshis), VGrid (ref.bitsize ()), HGrid (ref.bitsize ()),
+	  m_hoshi_map (hoshis), m_hgrid (ref.bitsize ()), m_vgrid (ref.bitsize ()),
 	  m_hoshis (hoshis.popcnt ()), m_hoshi_pos (hoshis.popcnt ())
 {
-	for (auto &i: VGrid)
+	for (auto &i: m_vgrid)
 		canvas->addItem (&i);
-	for (auto &i: HGrid)
+	for (auto &i: m_hgrid)
 		canvas->addItem (&i);
 	for (auto &i: m_hoshis) {
 		i.setBrush (Qt::SolidPattern);
@@ -74,15 +74,15 @@ void Grid::resize (const QRect &rect, double square_size)
 			bool last_col = i + 1 == m_ref_board.size ();
 			bool first_row = j == 0;
 			bool last_row = j + 1 == m_ref_board.size ();
-			HGrid[bp].setLine(int(rect.x () + square_size * (i - 0.5 * !first_col)),
-					   rect.y () + square_size * j,
-					   int(rect.x () + square_size * (i + 0.5 * !last_col)),
-					   rect.y () + square_size * j);
+			m_hgrid[bp].setLine(int(rect.x () + square_size * (i - 0.5 * !first_col)),
+					    rect.y () + square_size * j,
+					    int(rect.x () + square_size * (i + 0.5 * !last_col)),
+					    rect.y () + square_size * j);
 
-			VGrid[bp].setLine(rect.x () + square_size * i,
-					   int(rect.y () + square_size * (j - 0.5 * !first_row)),
-					   rect.x () + square_size *  i,
-					   int(rect.y () + square_size * (j + 0.5 * !last_row)));
+			m_vgrid[bp].setLine(rect.x () + square_size * i,
+					    int(rect.y () + square_size * (j - 0.5 * !first_row)),
+					    rect.x () + square_size *  i,
+					    int(rect.y () + square_size * (j + 0.5 * !last_row)));
 		}
 
 	// Round size top be odd (hoshis)
@@ -109,9 +109,9 @@ void Grid::resize (const QRect &rect, double square_size)
   **/
 void Grid::showAll ()
 {
-	for (auto &i: VGrid)
+	for (auto &i: m_vgrid)
 		i.show ();
-	for (auto &i: HGrid)
+	for (auto &i: m_hgrid)
 		i.show ();
 	for (auto &i: m_hoshis)
 		i.show ();
@@ -124,8 +124,8 @@ void Grid::hide (int x, int y)
 {
 	int bp = m_ref_board.bitpos (x, y);
 
-	VGrid[bp].hide();
-	HGrid[bp].hide();
+	m_vgrid[bp].hide();
+	m_hgrid[bp].hide();
 
 	for (size_t i = 0; i < m_hoshis.size (); i++)
 		if (m_hoshi_pos[i] == std::pair<int, int> (x, y)) {
