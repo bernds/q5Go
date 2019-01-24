@@ -5,6 +5,7 @@ FORMS	      = gui_dialog.ui \
 		gameinfo_gui.ui \
 		newgame_gui.ui \
 		newlocalgame_gui.ui \
+		newvariantgame_gui.ui \
 		scoretools_gui.ui \
 		normaltools_gui.ui \
 		mainwidget_gui.ui \

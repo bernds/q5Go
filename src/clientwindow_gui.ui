@@ -1360,6 +1360,26 @@
 	<cstring>fileNew</cstring>
       </property>
     </action>
+    <action name="fileNewVariant">
+      <property name="text">
+	<string>New &amp;Variant Board</string>
+      </property>
+      <property name="iconText">
+	<string>New Board</string>
+      </property>
+      <property name="toolTip">
+	<string>New Variant Board</string>
+      </property>
+      <property name="whatsThis">
+	<string>Creates a new board</string>
+      </property>
+      <property name="shortcut">
+	<string>Ctrl+V</string>
+      </property>
+      <property name="name" stdset="0">
+	<cstring>fileNew</cstring>
+      </property>
+    </action>
     <action name="Seek">
       <property name="checkable">
 	<bool>true</bool>

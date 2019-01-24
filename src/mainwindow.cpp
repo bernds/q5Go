@@ -304,6 +304,7 @@ MainWindow::~MainWindow()
 	delete escapeFocus;
 	delete fileNewBoard;
 	delete fileNew;
+	delete fileNewVariant;
 	delete fileOpen;
 	delete fileSave;
 	delete fileSaveAs;
@@ -421,6 +422,13 @@ void MainWindow::initActions()
 	fileNew->setStatusTip(tr("Creates a new game on this board"));
 	fileNew->setWhatsThis(tr("New\n\nCreates a new game on this board."));
 	connect(fileNew, &QAction::triggered, this, &MainWindow::slotFileNewGame);
+
+	// File New Variant Game
+	fileNewVariant = new QAction(tr("New &variant game"), this);
+	fileNewVariant->setShortcut (QKeySequence (Qt::CTRL + Qt::Key_V));
+	fileNewVariant->setStatusTip(tr("Creates a new game on this board"));
+	fileNewVariant->setWhatsThis(tr("New\n\nCreates a new variant game on this board."));
+	connect(fileNewVariant, &QAction::triggered, this, &MainWindow::slotFileNewVariantGame);
 
 	// File Open
 	fileOpen = new QAction(fileOpenIcon, tr("&Open"), this);
@@ -878,6 +886,7 @@ void MainWindow::initMenuBar(GameMode mode)
 	fileMenu = new QMenu(tr("&File"));
 	fileMenu->addAction (fileNewBoard);
 	fileMenu->addAction (fileNew);
+	fileMenu->addAction (fileNewVariant);
 	fileMenu->addAction (fileOpen);
 	fileMenu->addAction (fileSave);
 	fileMenu->addAction (fileSaveAs);
@@ -986,6 +995,7 @@ void MainWindow::initToolBar()
 	fileBar = addToolBar ("filebar");
 
 	fileBar->addAction (fileNew);
+	// fileBar->addAction (fileNewVariant);
 	fileBar->addAction (fileOpen);
 	fileBar->addAction (fileSave);
 	fileBar->addAction (fileSaveAs);
@@ -1133,6 +1143,23 @@ void MainWindow::slotFileNewGame (bool)
 
 	/* @@@ choose between new game dialogs */
 	std::shared_ptr<game_record> gr = new_game_dialog (this);
+	if (gr == nullptr)
+		return;
+
+	m_game = gr;
+	setGameMode (modeNormal);
+	mainWidget->init_game_record (gr);
+	updateCaption (false);
+
+	statusBar()->showMessage(tr("New board prepared."));
+}
+
+void MainWindow::slotFileNewVariantGame (bool)
+{
+	if (!checkModified())
+		return;
+
+	std::shared_ptr<game_record> gr = new_variant_game_dialog (this);
 	if (gr == nullptr)
 		return;
 

@@ -62,6 +62,21 @@ public:
 	}
 };
 
+#include "ui_newvariantgame_gui.h"
+
+class NewVariantGameDialog : public QDialog, public Ui::NewVariantGameDialog
+{
+	Q_OBJECT
+
+public:
+	NewVariantGameDialog( QWidget* parent = 0)
+		: QDialog (parent)
+	{
+		setupUi (this);
+		setModal (true);
+	}
+};
+
 #include "ui_nthmove_gui.h"
 
 class NthMoveDialog : public QDialog, public Ui::NthMoveDialog

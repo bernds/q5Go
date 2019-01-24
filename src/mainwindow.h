@@ -100,6 +100,7 @@ public slots:
 	void slotFocus (bool) { setFocus (); }
 	void slotFileNewBoard(bool);
 	void slotFileNewGame(bool);
+	void slotFileNewVariantGame(bool);
 	void slotFileOpen(bool);
 	bool slotFileSave(bool = false);
 	void slotFileClose(bool);
@@ -171,7 +172,7 @@ protected:
 	QMenu *fileMenu, *importExportMenu, *editMenu, *navMenu, *settingsMenu, *viewMenu, *anMenu, *helpMenu;
 
 	QAction *escapeFocus;
-	QAction *fileNewBoard, *fileNew, *fileOpen, *fileSave, *fileSaveAs, *fileClose,
+	QAction *fileNewBoard, *fileNew, *fileNewVariant, *fileOpen, *fileSave, *fileSaveAs, *fileClose,
 		*fileExportASCII, *fileExportSVG, *fileImportSgfClipB, *fileExportSgfClipB,
 		*fileExportPic, *fileExportPicClipB,
 		*fileQuit;
