@@ -187,9 +187,6 @@ public slots:
 	void update_comment(const QString &);
 	void changeSize();
 
-signals:
-	void coordsChanged(int, int, int,bool);
-
 protected:
 	void calculateSize ();
 	void draw_background ();

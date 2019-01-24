@@ -57,6 +57,7 @@ public:
 	CoordDisplay (QGraphicsScene *Canvas, const go_board &ref, int offs, int margin, bool sgf);
 	void resize (const QRect &w, const QRect &b, double square_size, bool);
 	void set_texts (bool);
+	void retrieve_text (QString &xt, QString &yt, int x, int y);
 };
 
 #endif

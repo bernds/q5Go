@@ -54,7 +54,6 @@ HEADERS		      = config.h \
                         stone.h \
                         svgbuilder.h \
 			textview.h \
-                        tip.h \
                         ui_helpers.h \
                         grid.h \
                         misctools.h \
@@ -91,7 +90,6 @@ SOURCES		      = clientwin.cpp \
                         stone.cpp \
                         svgbuilder.cpp \
 			textview.cpp \
-			tip.cpp \
                         grid.cpp \
                         audio.cpp
 

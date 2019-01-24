@@ -176,6 +176,12 @@ void CoordDisplay::set_texts (bool sgf)
 	}
 }
 
+void CoordDisplay::retrieve_text (QString &xt, QString &yt, int x, int y)
+{
+	xt = m_coords_h1[x].text ();
+	yt = m_coords_v1[m_ref_board.size () - y - 1].text ();
+}
+
 void CoordDisplay::resize (const QRect &wrect, const QRect &brect, double square_size, bool show)
 {
 	// centres the coordinates text within the remaining space at table edge

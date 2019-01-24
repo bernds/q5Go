@@ -24,7 +24,6 @@
 #include "board.h"
 #include "grid.h"
 #include "imagehandler.h"
-#include "tip.h"
 #include "mainwindow.h"
 #include "clientwin.h"
 #include "miscdialogs.h"
@@ -1040,7 +1039,10 @@ void Board::mouseMoveEvent(QMouseEvent *e)
 	curY = y;
 
 	// Update the statusbar coords tip
-	emit coordsChanged (x, y, board_size, showSGFCoords);
+	QString xt, yt;
+	if (x != -1)
+		m_coords->retrieve_text (xt, yt, x, y);
+	m_board_win->coords_changed (xt, yt);
 #if 0
 	sync_appearance (prev_x, prev_y);
 	sync_appearance (x, y);

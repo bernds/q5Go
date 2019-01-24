@@ -25,7 +25,6 @@
 
 class Board;
 class QSplitter;
-class StatusTip;
 class QToolBar;
 class Engine;
 class GameTree;
@@ -75,6 +74,7 @@ public:
 	void update_analysis (analyzer);
 	void update_game_tree (game_state *);
 
+	void coords_changed (const QString &, const QString &);
 protected:
 	void initActions();
 	void initMenuBar(GameMode);
@@ -156,9 +156,7 @@ protected:
 	SvgView m_svg_dlg;
 	bool local_stone_sound;
 
-	//	HelpViewer *helpViewer;
-	StatusTip *statusTip;
-	QLabel *statusMode, *statusTurn, *statusNav;
+	QLabel *statusCoords, *statusMode, *statusTurn, *statusNav;
 
 	QSplitter *splitter, *splitter_comment;
 	QWidget *comments_widget;

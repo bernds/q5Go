@@ -34,7 +34,6 @@
 #include "board.h"
 #include "gametree.h"
 #include "sgf.h"
-#include "tip.h"
 #include "setting.h"
 #include "icons.h"
 #include "ui_newgame_gui.h"
@@ -211,8 +210,7 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 	gfx_board = mainWidget->gfx_board;
 
 	CHECK_PTR(board);
-	// Connect the mouseMove event of the board with the status bar coords widget
-	connect(gfx_board, SIGNAL(coordsChanged(int, int, int,bool)), statusTip, SLOT(slotStatusTipCoords(int, int, int,bool)));
+
 	connect(mainWidget->goLastButton, &QToolButton::clicked, [=] () { gfx_board->goto_last_move (); });
 	connect(mainWidget->goFirstButton, &QToolButton::clicked, [=] () { gfx_board->goto_first_move (); });
 	connect(mainWidget->goNextButton, &QToolButton::clicked, [=] () { gfx_board->next_move (); });
@@ -287,7 +285,7 @@ MainWindow::~MainWindow()
 	delete statusMode;
 	delete statusNav;
 	delete statusTurn;
-	delete statusTip;
+	delete statusCoords;
 
 	// tool bar;
 	delete editBar;
@@ -1040,12 +1038,11 @@ void MainWindow::initToolBar()
 void MainWindow::initStatusBar()
 {
 	// The coords widget
-	statusTip = new StatusTip(statusBar());
-	statusBar()->addWidget(statusTip);
+	statusCoords = new QLabel (statusBar());
+	statusBar()->addWidget(statusCoords);
 	//statusBar()->show();
 	statusBar()->setSizeGripEnabled(true);
 	statusBar()->showMessage(tr("Ready."));  // Normal indicator
-	connect(statusTip, &StatusTip::clearStatusBar, statusBar(), &QStatusBar::clearMessage);
 
 	// The turn widget
 	statusTurn = new QLabel(statusBar());
@@ -1564,7 +1561,6 @@ void MainWindow::slotViewEditBar(bool toggle)
 void MainWindow::slotViewMenuBar(bool toggle)
 {
 	menuBar()->setVisible (toggle);
-
 	setting->writeBoolEntry("MENUBAR", toggle);
 
 	statusBar()->showMessage(tr("Ready."));
@@ -1572,19 +1568,7 @@ void MainWindow::slotViewMenuBar(bool toggle)
 
 void MainWindow::slotViewStatusBar(bool toggle)
 {
-	if (!toggle)
-	{
-		statusBar()->hide();
-		// Disconnect this signal, if the statusbar is hidden, we dont need it
-		//disconnect(gfx_board, SIGNAL(coordsChanged(int, int, int)), statusTip, SLOT(slotStatusTipCoords(int, int, int)));
-	}
-	else
-	{
-		statusBar()->show();
-		// Connect the mouseMove event of the board with the status bar coords widget
-		connect(gfx_board, SIGNAL(coordsChanged(int, int, int,bool)), statusTip, SLOT(slotStatusTipCoords(int, int, int,bool)));
-	}
-
+	statusBar()->setVisible (toggle);
 	setting->writeBoolEntry("STATUSBAR", toggle);
 
 	statusBar()->showMessage(tr("Ready."));
@@ -1780,6 +1764,12 @@ void MainWindow::slotTimerForward()
 			setting->qgo->playAutoPlayClick();
 	}
 #endif
+}
+
+void MainWindow::coords_changed (const QString &t1, const QString &t2)
+{
+	statusBar ()->clearMessage ();
+	statusCoords->setText (" " + t1 + " " + t2 + " ");
 }
 
 void MainWindow::saveWindowSize()
