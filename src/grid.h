@@ -40,7 +40,7 @@ public:
 	Grid (QGraphicsScene *Canvas, const go_board &ref, const bit_array &hoshis);
 
 	void hide (int x, int y);
-	void resize (int offsetX, int offsetY, double square_size);
+	void resize (const QRect &r, double square_size);
 	void showAll ();
 
 private:
@@ -55,7 +55,7 @@ class CoordDisplay
 
 public:
 	CoordDisplay (QGraphicsScene *Canvas, const go_board &ref, int offs, int margin, bool sgf);
-	void resize (int offsetX, int offsetY, int offset, double square_size, int, bool);
+	void resize (const QRect &w, const QRect &b, double square_size, bool);
 	void set_texts (bool);
 };
 

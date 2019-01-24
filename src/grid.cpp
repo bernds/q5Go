@@ -62,7 +62,7 @@ Grid::Grid (QGraphicsScene *canvas, const go_board &ref, const bit_array &hoshis
  /**
   * Calculates the grid intersections and hoshis position
   **/
-void Grid::resize (int offsetX, int offsetY, double square_size)
+void Grid::resize (const QRect &rect, double square_size)
 {
 	int i,j;
 	int size = square_size / 5;
@@ -74,15 +74,15 @@ void Grid::resize (int offsetX, int offsetY, double square_size)
 			bool last_col = i + 1 == m_ref_board.size ();
 			bool first_row = j == 0;
 			bool last_row = j + 1 == m_ref_board.size ();
-			HGrid[bp].setLine(int(offsetX + square_size * (i - 0.5 * !first_col)),
-					   offsetY + square_size * j,
-					   int(offsetX + square_size * (i + 0.5 * !last_col)),
-					   offsetY + square_size * j);
+			HGrid[bp].setLine(int(rect.x () + square_size * (i - 0.5 * !first_col)),
+					   rect.y () + square_size * j,
+					   int(rect.x () + square_size * (i + 0.5 * !last_col)),
+					   rect.y () + square_size * j);
 
-			VGrid[bp].setLine(offsetX + square_size * i,
-					   int(offsetY + square_size * (j - 0.5 * !first_row)),
-					   offsetX + square_size *  i,
-					   int(offsetY + square_size * (j + 0.5 * !last_row)));
+			VGrid[bp].setLine(rect.x () + square_size * i,
+					   int(rect.y () + square_size * (j - 0.5 * !first_row)),
+					   rect.x () + square_size *  i,
+					   int(rect.y () + square_size * (j + 0.5 * !last_row)));
 		}
 
 	// Round size top be odd (hoshis)
@@ -99,7 +99,7 @@ void Grid::resize (int offsetX, int offsetY, double square_size)
 
 		QGraphicsEllipseItem *e = &m_hoshis[i];
 
-		e->setRect(offsetX + square_size * x - size/2, offsetY + square_size * y - size/2,
+		e->setRect(rect.x () + square_size * x - size/2, rect.y () + square_size * y - size/2,
 			   size , size);
 	}
 }
@@ -176,7 +176,7 @@ void CoordDisplay::set_texts (bool sgf)
 	}
 }
 
-void CoordDisplay::resize (int offsetX, int offsetY, int offset, double square_size, int board_pixel_size, bool show)
+void CoordDisplay::resize (const QRect &wrect, const QRect &brect, double square_size, bool show)
 {
 	// centres the coordinates text within the remaining space at table edge
 	const int center = m_coord_offset / 2 + m_coord_margin;
@@ -184,9 +184,9 @@ void CoordDisplay::resize (int offsetX, int offsetY, int offset, double square_s
 	int sz = m_ref_board.size ();
 	for (int i = 0; i < sz; i++) {
 		QGraphicsSimpleTextItem *coord = &m_coords_v1[i];
-		int ypos = offsetY + square_size * (sz - i - 1) - coord->boundingRect().height() / 2;
+		int ypos = brect.y () + square_size * (sz - i - 1) - coord->boundingRect().height() / 2;
 		// Left side
-		coord->setPos (offsetX - offset + center - coord->boundingRect().width() / 2, ypos);
+		coord->setPos (wrect.x () + center - coord->boundingRect().width() / 2, ypos);
 
 		if (show)
 			coord->show();
@@ -195,7 +195,7 @@ void CoordDisplay::resize (int offsetX, int offsetY, int offset, double square_s
 
 		// Right side
 		coord = &m_coords_v2[i];
-		coord->setPos (offsetX + board_pixel_size + offset - center - coord->boundingRect().width() / 2, ypos);
+		coord->setPos (wrect.x () + wrect.width () - center - coord->boundingRect().width() / 2, ypos);
 
 		if (show)
 			coord->show();
@@ -204,9 +204,9 @@ void CoordDisplay::resize (int offsetX, int offsetY, int offset, double square_s
 	}
 	for (int i = 0; i < sz; i++) {
 		QGraphicsSimpleTextItem *coord = &m_coords_h1[i];
-		int xpos = offsetX + square_size * i - coord->boundingRect().width() / 2;
+		int xpos = brect.x () + square_size * i - coord->boundingRect().width() / 2;
 		// Top
-		coord->setPos (xpos, offsetY - offset + center - coord->boundingRect().height() / 2);
+		coord->setPos (xpos, wrect.y () + center - coord->boundingRect().height() / 2);
 
 		if (show)
 			coord->show();
@@ -215,7 +215,7 @@ void CoordDisplay::resize (int offsetX, int offsetY, int offset, double square_s
 
 		// Bottom
 		coord = &m_coords_h2[i];
-		coord->setPos (xpos, offsetY + offset + board_pixel_size - center - coord->boundingRect().height() / 2);
+		coord->setPos (xpos, wrect.y () + wrect.height () - center - coord->boundingRect().height() / 2);
 
 		if (show)
 			coord->show();

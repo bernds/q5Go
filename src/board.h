@@ -43,6 +43,9 @@ class Board : public QGraphicsView, public navigable_observer, public Gtp_Contro
 
 	GameMode m_game_mode = modeNormal;
 
+	/* Size of the (abstract) board.  */
+	int board_size;
+
 	/* Controls whether moves are allowed for either color.  */
 	bool m_player_is_b = true;
 	bool m_player_is_w = true;
@@ -67,6 +70,16 @@ class Board : public QGraphicsView, public navigable_observer, public Gtp_Contro
 	int m_rect_y1, m_rect_y2;
 	bool m_mark_rect = false;
 	bool m_request_mark_rect = false;
+
+	/* Positioning of the board image inside the view.  The board rect gives the
+	   exact size of the grid; stones and marks extend outside of it.  We also
+	   need space for coordinates, so there is an additional wood rect to hold
+	   the entire area drawn with a wooden background texture.  */
+	QRect m_wood_rect;
+	QRect m_board_rect;
+	static const int margin, coord_margin;
+	int coord_offset;
+	double square_size;
 
 	/* Graphical elements on the board canvas.  */
 	std::vector<stone_gfx *> m_stones;
@@ -204,10 +217,6 @@ private:
 	QGraphicsRectItem *coverTop, *coverLeft, *coverRight, *coverBot;
 
 	ImageHandler *imageHandler;
-	static const int margin, coord_margin;
-	int board_size, offset, offsetX, offsetY, board_pixel_size, table_size;
-	int coord_offset;
-	double square_size;
 	bool showCoords;
 	bool showSGFCoords;
 	bool antiClicko;

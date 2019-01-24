@@ -114,10 +114,10 @@ void Board::calculateSize()
 {
 	// Calculate the size values
 
-	int w = (int)canvas->width() - margin * 2;
-	int h = (int)canvas->height() - margin * 2;
+	int w = canvas->width ();
+	int h = canvas->height ();
 
-	table_size = w < h ? w : h;
+	int table_size = (w < h ? w : h) - margin * 2;
 
 	QGraphicsSimpleTextItem coordV (QString::number(board_size));
 	QGraphicsSimpleTextItem coordH ("A");
@@ -129,24 +129,24 @@ void Board::calculateSize()
 	// space for coodinates if shown
 	coord_offset = coord_width < coord_height ? coord_height : coord_width;
 
-	//we need 1 more virtual 'square' for the stones on 1st and last line getting off the grid
+	square_size = table_size;
+	// we need 1 more virtual 'square' for the stones on 1st and last line getting off the grid
 	if (showCoords)
-		square_size = (table_size - 2 * (coord_offset + coord_margin * 2));
-	else
-		square_size = table_size;
+		square_size -= 2 * (coord_offset + coord_margin * 2);
+
 	square_size /= (float)board_size;
 	// Should not happen, but safe is safe.
 	if (square_size == 0)
 		  square_size = 1;
 
 	// grid size
-	board_pixel_size = square_size * (board_size - 1);
-	offset = (table_size - board_pixel_size)/2;
+	int board_pixel_size = square_size * (board_size - 1);
 
 	// Center the board in canvas
 
-	offsetX = margin + (w - board_pixel_size) / 2;
-	offsetY = margin + (h - board_pixel_size) / 2;
+	m_wood_rect = QRect ((w - table_size) / 2, (h - table_size) / 2, table_size, table_size);
+	m_board_rect = QRect ((w - board_pixel_size) / 2, (h - board_pixel_size) / 2,
+			      board_pixel_size, board_pixel_size);
 }
 
 void Board::resizeBoard (int w, int h)
@@ -188,83 +188,68 @@ void Board::resizeEvent(QResizeEvent*)
 
 void Board::draw_background()
 {
-	int w = (int)canvas->width();
-	int h = (int)canvas->height();
+	int w = canvas->width ();
+	int h = canvas->height ();
 
 	m_wood = *setting->wood_image ();
 	m_table = *setting->table_image ();
 
 	// Create pixmap of appropriate size
 	//QPixmap all(w, h);
-	QImage image(w, h, QImage::Format_RGB32);
+	QImage image (w, h, QImage::Format_RGB32);
 
 	// Paint table and board on the pixmap
 	QPainter painter;
 
-	painter.begin(&image);
-	painter.setPen(Qt::NoPen);
+	painter.begin (&image);
+	painter.setPen (Qt::NoPen);
 
+	int board_x0 = m_wood_rect.x ();
+	int board_y0 = m_wood_rect.y ();
+	int board_x1 = board_x0 + m_wood_rect.width () - 1;
+	int board_y1 = board_y0 + m_wood_rect.height () - 1;
 	painter.drawTiledPixmap (0, 0, w, h, m_table);
-	painter.drawTiledPixmap (offsetX - offset, offsetY - offset, table_size, table_size, m_wood);
-
-	painter.end();
+	painter.drawTiledPixmap (m_wood_rect, m_wood);
 
 	// Modify the edges of the board so they appear slightly three-dimensional.
-	//QImage image = all.toImage();
-	int lighter=20;
-	int darker=60;
 	int width = 3;
 
-	for(int x = 0; x < width; x++)
-		for (int yi = x; yi < table_size - x; yi++)
-		{
-			int y = yi + offsetY - offset;
-			int x1 = offsetX - offset + x;
-			image.setPixel(x1, y,
-				       QColor(image.pixel(x1,y)).dark(int(100 + darker*(width-x)*(width-x)/width/width)).rgb());
-
-			int x2 = offsetX - offset + table_size - x - 1;
-			image.setPixel(x2, y,
-				       QColor(image.pixel(x2,y)).light(100+ int(lighter*(width-x)*(width-x)/width/width)).rgb());
-		}
-	for(int y = 0; y < width; y++)
-		for (int xi = y; xi < table_size - y; xi++)
-		{
-			int x = xi + offsetX - offset;
-			int y1 = offsetY - offset + y;
-			image.setPixel(x, y1,
-				       QColor(image.pixel(x, y1)).light(int(100 + lighter*(width-y)*(width-y)/width/width)).rgb());
-			int y2 = offsetY - offset + table_size - y - 1;
-			image.setPixel(x, y2,
-				       QColor(image.pixel(x, y2)).dark(100+ int(darker*(width-y)*(width-y)/width/width)).rgb());
-		}
+	for (int i = 0; i < width; i++) {
+		double darken_factor = (double) (width - i) / width;
+		double lighten_factor = (double) (width - i) / width;
+		darken_factor *= darken_factor;
+		lighten_factor *= lighten_factor;
+		darken_factor = darken_factor * 0.6;
+		lighten_factor = lighten_factor * 0.4;
+		QColor darken (0, 0, 0, darken_factor * 255);
+		QColor lighten (255, 255, 255, lighten_factor * 255);
+		painter.setPen (lighten);
+		painter.drawLine (board_x0 + i, board_y0 + i, board_x1 - i, board_y0 + i);
+		painter.drawLine (board_x1 - i, board_y0 + i + 1, board_x1 - i, board_y1 - i);
+		painter.setPen (darken);
+		painter.drawLine (board_x0 + i, board_y0 + i + 1, board_x0 + i, board_y1 - i);
+		painter.drawLine (board_x0 + i + 1, board_y1 - i, board_x1 - i - 1, board_y1 - i);
+	}
 
 	// Draw a shadow below the board
 	width = 10;
-	darker=50;
+	for (int i = 0; i < width; i++) {
+		double darken_factor = (double) (width - i) / width;
+		darken_factor = darken_factor * 0.5;
+		QColor darken (0, 0, 0, darken_factor * 255);
+		painter.setPen (darken);
+		painter.drawLine (board_x0 - i, board_y0 + i, board_x0 - i, board_y1 + i);
+		painter.drawLine (board_x0 - i + 1, board_y1 + i, board_x1 - i, board_y1 + i);
+	}
+	painter.end ();
 
-	for (int x = 0; x <= width && offsetX - offset - x > 0; x++)
-		for (int yi = x; yi < table_size - x; yi++)
-		{
-			int y = yi + offsetY - offset;
-			image.setPixel(offsetX - offset - 1 - x, y,
-				       QColor(image.pixel(offsetX - offset - 1 - x,y)).dark(int(100 + darker*(width-x)/width)).rgb());
-		}
-
-	for (int y = 0; y <= width && offsetY + board_pixel_size + offset + y + 1 < h;y++)
-		for (int x = (offsetX - offset - y > 0 ? offsetX - offset - y : 0); x < offsetX + board_pixel_size + offset-y ;x++)
-		{
-			image.setPixel(x, offsetY + board_pixel_size + offset + y +1,
-				QColor(image.pixel(x,offsetY + board_pixel_size + offset+y+1)).dark(100+ int(darker*(width-y)/width)).rgb());
-		}
-
-	canvas->setBackgroundBrush(QBrush(image));
+	canvas->setBackgroundBrush (QBrush (image));
 }
 
 void Board::draw_grid_and_coords ()
 {
-	m_grid->resize (offsetX, offsetY, square_size);
-	m_coords->resize (offsetX, offsetY, offset, square_size, board_pixel_size, showCoords);
+	m_grid->resize (m_board_rect, square_size);
+	m_coords->resize (m_wood_rect, m_board_rect, square_size, showCoords);
 }
 
 /* Handle a click on the Done button.  Return true if we should return to normal mode.  */
@@ -851,7 +836,7 @@ void Board::sync_appearance (bool board_only)
 				s->show ();
 			}
 			if (s) {
-				s->set_center(offsetX + square_size * x, offsetY + square_size * y);
+				s->set_center(m_board_rect.x () + square_size * x, m_board_rect.y () + square_size * y);
 				m_stones[bp] = s;
 			}
 
@@ -930,7 +915,7 @@ void Board::sync_appearance (bool board_only)
 
 	QPixmap img = svg.to_pixmap (square_size * board_size, square_size * board_size);
 	m_mark_layer->setPixmap (img);
-	m_mark_layer->setPos (offsetX - square_size / 2, offsetY - square_size / 2);
+	m_mark_layer->setPos (m_board_rect.x () - square_size / 2, m_board_rect.y () - square_size / 2);
 }
 
 void Board::observed_changed ()
@@ -981,16 +966,16 @@ void Board::updateCovers ()
 	QRectF sceneRect = canvas->sceneRect ();
 	int top_edge = 0;
 	if (m_rect_y1 > 1)
-		top_edge = offsetY + square_size * (m_rect_y1 - 1.5);
+		top_edge = m_board_rect.y () + square_size * (m_rect_y1 - 1.5);
 	int bot_edge = sceneRect.bottom();
 	if (m_rect_y2 < board_size)
-		bot_edge = offsetY + square_size * (m_rect_y2 - 0.5);
+		bot_edge = m_board_rect.y () + square_size * (m_rect_y2 - 0.5);
 	int left_edge = 0;
 	if (m_rect_x1 > 1)
-		left_edge = offsetX + square_size * (m_rect_x1 - 1.5);
+		left_edge = m_board_rect.x () + square_size * (m_rect_x1 - 1.5);
 	int right_edge = sceneRect.right();
 	if (m_rect_x2 < board_size)
-		right_edge = offsetX + square_size * (m_rect_x2 - 0.5);
+		right_edge = m_board_rect.x () + square_size * (m_rect_x2 - 0.5);
 
 	coverLeft->setVisible (m_rect_x1 > 1);
 	coverRight->setVisible (m_rect_x2 < board_size);
@@ -1028,8 +1013,8 @@ void Board::updateRectSel (int x, int y)
 
 void Board::mouseMoveEvent(QMouseEvent *e)
 {
-	int x = convertCoordsToPoint (e->x (), offsetX);
-	int y = convertCoordsToPoint (e->y (), offsetY);
+	int x = convertCoordsToPoint (e->x (), m_board_rect.x ());
+	int y = convertCoordsToPoint (e->y (), m_board_rect.y ());
 
 	if (m_mark_rect)
 		updateRectSel (x, y);
@@ -1136,8 +1121,8 @@ void Board::mouseReleaseEvent(QMouseEvent* e)
 		m_board_win->done_rect_select (m_rect_x1, m_rect_y1, m_rect_x2, m_rect_y2);
 		return;
 	}
-	int x = convertCoordsToPoint(e->x(), offsetX);
-	int y = convertCoordsToPoint(e->y(), offsetY);
+	int x = convertCoordsToPoint (e->x (), m_board_rect.x ());
+	int y = convertCoordsToPoint (e->y (), m_board_rect.y ());
 
 	if (m_down_x == -1 || x != m_down_x || y != m_down_y)
 		return;
@@ -1238,8 +1223,8 @@ void Board::mousePressEvent(QMouseEvent *e)
 {
 	mouseState = e->button();
 
-	int x = convertCoordsToPoint (e->x(), offsetX);
-	int y = convertCoordsToPoint (e->y(), offsetY);
+	int x = convertCoordsToPoint (e->x (), m_board_rect.x ());
+	int y = convertCoordsToPoint (e->y (), m_board_rect.y ());
 
 	if (m_request_mark_rect && e->button () == Qt::LeftButton) {
 		m_mark_rect = true;
@@ -1524,10 +1509,10 @@ void Board::setModified(bool m)
 QPixmap Board::grabPicture()
 {
 	int sz = m_game->boardsize ();
-	int minx = offsetX - offset + 2;
-	int miny = offsetY - offset + 2;
-	int maxx = minx + board_pixel_size + offset*2 - 4;
-	int maxy = miny + board_pixel_size + offset*2 - 4;
+	int minx = m_wood_rect.x () + 2;
+	int miny = m_wood_rect.y () + 2;
+	int maxx = minx + m_wood_rect.width () - 4;
+	int maxy = miny + m_wood_rect.height () - 4;
 	if (m_rect_x1 > 1)
 		minx = coverLeft->rect ().right ();
 	if (m_rect_x2 < sz)
