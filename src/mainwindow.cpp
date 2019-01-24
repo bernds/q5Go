@@ -36,7 +36,6 @@
 #include "sgf.h"
 #include "setting.h"
 #include "icons.h"
-#include "ui_newgame_gui.h"
 #include "komispinbox.h"
 #include "config.h"
 #include "qgo_interface.h"

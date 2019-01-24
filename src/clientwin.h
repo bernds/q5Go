@@ -14,12 +14,12 @@
 #include "igsinterface.h"
 #include "parser.h"
 #include "gs_globals.h"
-#include "gamedialog.h"
 #include "gamestable.h"
 #include "playertable.h"
 #include "mainwindow.h"
 
 class GamesTable;
+class GameDialog;
 
 class sendBuf
 {
