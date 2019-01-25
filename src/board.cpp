@@ -40,9 +40,10 @@ Board::Board(QWidget *parent, QGraphicsScene *c)
 	setUpdatesEnabled(true);
 
 	board_size_x = board_size_y = DEFAULT_BOARD_SIZE;
-	showCoords = setting->readBoolEntry("BOARD_COORDS");
-	showSGFCoords = setting->readBoolEntry("SGF_BOARD_COORDS");
-	antiClicko = setting->readBoolEntry("ANTICLICKO");
+	showCoords = setting->readBoolEntry ("BOARD_COORDS");
+	showSGFCoords = setting->readBoolEntry ("SGF_BOARD_COORDS");
+	antiClicko = setting->readBoolEntry ("ANTICLICKO");
+	m_pref_dups = setting->readIntEntry ("TOROID_DUPS");
 
 	setStyleSheet( "QGraphicsView { border-style: none; }" );
 
@@ -53,9 +54,6 @@ Board::Board(QWidget *parent, QGraphicsScene *c)
 	// Init the canvas
 	canvas = new QGraphicsScene (0, 0, BOARD_X, BOARD_Y, this);
 	setScene (canvas);
-
-	// Init the grid size and the imagehandler pixmaps
-	calculateSize();
 
 	imageHandler->init(square_size);
 
@@ -94,10 +92,8 @@ Board::Board(QWidget *parent, QGraphicsScene *c)
 
 Board::~Board()
 {
-	delete m_grid;
-	delete m_coords;
+	clear_graphics_elts ();
 	clear_eval_data ();
-	clear_stones ();
 	delete canvas;
 	delete imageHandler;
 	delete m_analyzer;
@@ -133,14 +129,18 @@ void Board::calculateSize()
 	int cmargin = showCoords ? 2 * (coord_offset + coord_margin * 2) : 0;
 	int square_size_w = table_size_x - cmargin;
 	int square_size_h = table_size_y - cmargin;
-	square_size = std::min ((double)square_size_w / board_size_x, (double)square_size_h / board_size_y);
+	int shown_size_x = board_size_x + 2 * n_dups_h ();
+	int shown_size_y = board_size_y + 2 * n_dups_v ();
+	square_size = std::min ((double)square_size_w / shown_size_x, (double)square_size_h / shown_size_y);
 
 	// Should not happen, but safe is safe.
 	if (square_size == 0)
 		  square_size = 1;
 
-	int board_pixel_size_x = square_size * (board_size_x - 1);
-	int board_pixel_size_y = square_size * (board_size_y - 1);
+	imageHandler->rescale (square_size);
+
+	int board_pixel_size_x = square_size * (shown_size_x - 1);
+	int board_pixel_size_y = square_size * (shown_size_y - 1);
 
 	int real_tx = std::min (table_size_x, board_pixel_size_x + (int)floor (square_size) + cmargin);
 	int real_ty = std::min (table_size_y, board_pixel_size_y + (int)floor (square_size) + cmargin);
@@ -166,9 +166,6 @@ void Board::resizeBoard (int w, int h)
 
 	// Recalculate the size values
 	calculateSize ();
-
-	// Rescale the pixmaps in the ImageHandler
-	imageHandler->rescale (square_size);
 
 	// Redraw the board
 	draw_background ();
@@ -255,8 +252,8 @@ void Board::draw_background()
 
 void Board::draw_grid_and_coords ()
 {
-	m_grid->resize (m_board_rect, square_size);
-	m_coords->resize (m_wood_rect, m_board_rect, square_size, showCoords);
+	m_grid->resize (m_board_rect, m_shift_x, m_shift_y, square_size);
+	m_coords->resize (m_wood_rect, m_board_rect, m_shift_x, m_shift_y, square_size, showCoords);
 }
 
 /* Handle a click on the Done button.  Return true if we should return to normal mode.  */
@@ -315,7 +312,7 @@ bool Board::show_cursor_p ()
 	if (!setting->readBoolEntry("CURSOR") || navIntersectionStatus)
 		return false;
 
-	if (m_mark_rect || m_request_mark_rect)
+	if (m_mark_rect || m_request_mark_rect || m_dragging)
 		return false;
 
 	GameMode mode = m_game_mode;
@@ -725,6 +722,8 @@ void Board::sync_appearance (bool board_only)
 	const bit_array st_b = b.get_stones_b ();
 	int szx = b.size_x ();
 	int szy = b.size_y ();
+	int dups_x = n_dups_h ();
+	int dups_y = n_dups_v ();
 	int bitsize = b.bitsize ();
 
 	/* Builds a mark layer, which gets rendered into a pixmap and added to the canvas.
@@ -732,7 +731,7 @@ void Board::sync_appearance (bool board_only)
 	   an optically pleasant relation with the stroke width (2 for marks).  */
 	double svg_factor = 30;
 	QFontInfo fi (setting->fontMarks);
-	svg_builder svg (svg_factor * szx, svg_factor * szy);
+	svg_builder svg (svg_factor * (szx + 2 * dups_x), svg_factor * (szy + 2 * dups_y));
 
 	/* Look back through previous moves to see if we should do numbering.  */
 	int n_back = 0, max_number = 0;
@@ -791,10 +790,13 @@ void Board::sync_appearance (bool board_only)
 
 	m_grid->showAll ();
 
-	for (int x = 0; x < szx; x++)
-		for (int y = 0; y < szy; y++) {
+	for (int tx = 0; tx < szx + 2 * dups_x; tx++)
+		for (int ty = 0; ty < szy + 2 * dups_y; ty++) {
+			int x = (tx + m_shift_x + (szx - dups_x)) % szx;
+			int y = (ty + m_shift_y + (szy - dups_y)) % szy;
 			int bp = b.bitpos (x, y);
-			stone_gfx *s = m_stones[bp];
+			int st_bp = tx + ty * (szx + 2 * dups_x);
+			stone_gfx *s = m_stones[st_bp];
 			stone_color sc = b.stone_at (x, y);
 			stone_type type = stone_type::live;
 			mark mark_at_pos = b.mark_at (x, y);
@@ -849,8 +851,8 @@ void Board::sync_appearance (bool board_only)
 				s->show ();
 			}
 			if (s) {
-				s->set_center(m_board_rect.x () + square_size * x, m_board_rect.y () + square_size * y);
-				m_stones[bp] = s;
+				s->set_center(m_board_rect.x () + square_size * tx, m_board_rect.y () + square_size * ty);
+				m_stones[st_bp] = s;
 			}
 
 			mark var_mark = var_type == 2 ? vars.mark_at (x, y) : mark::none;
@@ -865,8 +867,8 @@ void Board::sync_appearance (bool board_only)
 			mark eval_mark = m_eval_state != nullptr ? m_eval_state->get_board ().mark_at (x, y) : mark::none;
 			mextra eval_me = m_eval_state != nullptr ? m_eval_state->get_board ().mark_extra_at (x, y) : 0;
 
-			double cx = svg_factor / 2 + svg_factor * x;
-			double cy = svg_factor / 2 + svg_factor * y;
+			double cx = svg_factor / 2 + svg_factor * tx;
+			double cy = svg_factor / 2 + svg_factor * ty;
 
 			if (v > 0 && n_back != 0)
 				v = n_back - v + 1;
@@ -916,7 +918,7 @@ void Board::sync_appearance (bool board_only)
 						      sc, v, max_number, was_last_move, false, fi);
 
 			if (added)
-				m_grid->hide (x, y);
+				m_grid->hide (tx, ty);
 		}
 
 	updateCanvas();
@@ -926,7 +928,8 @@ void Board::sync_appearance (bool board_only)
 		m_board_win->setMoveData (*m_state, b, m_game_mode);
 	delete[] count_map;
 
-	QPixmap img = svg.to_pixmap (square_size * b.size_x (), square_size * b.size_y ());
+	QPixmap img = svg.to_pixmap (square_size * (b.size_x () + 2 * dups_x),
+				     square_size * (b.size_y () + 2 * dups_y));
 	m_mark_layer->setPixmap (img);
 	m_mark_layer->setPos (m_board_rect.x () - square_size / 2, m_board_rect.y () - square_size / 2);
 }
@@ -965,13 +968,36 @@ void Board::leaveEvent(QEvent*)
 	sync_appearance (true);
 }
 
-int Board::convertCoordsToPoint(int c, int o)
+int Board::coord_vis_to_board_x (int p)
 {
-	int p = c - o + square_size/2;
-	if (p >= 0)
-		return p / square_size + 1;
-	else
+	p -= m_board_rect.x () - square_size / 2;
+	if (p < 0)
 		return -1;
+	p /= square_size;
+	p -= n_dups_h ();
+	if (p < 0)
+		return -1;
+	if (p >= board_size_x)
+		return board_size_x;
+	p += m_shift_x;
+	p %= board_size_x;
+	return p;
+}
+
+int Board::coord_vis_to_board_y (int p)
+{
+	p -= m_board_rect.y () - square_size / 2;
+	if (p < 0)
+		return -1;
+	p /= square_size;
+	p -= n_dups_v ();
+	if (p < 0)
+		return -1;
+	if (p >= board_size_y)
+		return board_size_y;
+	p += m_shift_y;
+	p %= board_size_y;
+	return p;
 }
 
 void Board::updateCovers ()
@@ -979,16 +1005,16 @@ void Board::updateCovers ()
 	QRectF sceneRect = canvas->sceneRect ();
 	int top_edge = 0;
 	if (m_rect_y1 > 1)
-		top_edge = m_board_rect.y () + square_size * (m_rect_y1 - 1.5);
+		top_edge = m_board_rect.y () + square_size * (m_rect_y1 + n_dups_v () - 1.5);
 	int bot_edge = sceneRect.bottom();
 	if (m_rect_y2 < board_size_y)
-		bot_edge = m_board_rect.y () + square_size * (m_rect_y2 - 0.5);
+		bot_edge = m_board_rect.y () + square_size * (m_rect_y2 + n_dups_v () - 0.5);
 	int left_edge = 0;
 	if (m_rect_x1 > 1)
-		left_edge = m_board_rect.x () + square_size * (m_rect_x1 - 1.5);
+		left_edge = m_board_rect.x () + square_size * (m_rect_x1 + n_dups_h () - 1.5);
 	int right_edge = sceneRect.right();
 	if (m_rect_x2 < board_size_x)
-		right_edge = m_board_rect.x () + square_size * (m_rect_x2 - 0.5);
+		right_edge = m_board_rect.x () + square_size * (m_rect_x2 + n_dups_h () - 0.5);
 
 	coverLeft->setVisible (m_rect_x1 > 1);
 	coverRight->setVisible (m_rect_x2 < board_size_x);
@@ -1003,45 +1029,71 @@ void Board::updateCovers ()
 
 void Board::updateRectSel (int x, int y)
 {
-	if (x < 1)
-		x = 1;
-	if (y < 1)
-		y = 1;
-	if (x > board_size_x)
-		x = board_size_x;
-	if (y > board_size_y)
-		y = board_size_y;
+	if (x < 0)
+		x = 0;
+	if (y < 0)
+		y = 0;
+	if (x >= board_size_x)
+		x = board_size_x - 1;
+	if (y >= board_size_y)
+		y = board_size_y - 1;
 	int minx = m_down_x;
 	int miny = m_down_y;
 	if (x < minx)
 		std::swap (minx, x);
 	if (y < miny)
 		std::swap (miny, y);
-	m_rect_x1 = minx;
-	m_rect_y1 = miny;
-	m_rect_x2 = x;
-	m_rect_y2 = y;
+	m_rect_x1 = minx + 1;
+	m_rect_y1 = miny + 1;
+	m_rect_x2 = x + 1;
+	m_rect_y2 = y + 1;
 	updateCovers ();
+}
+
+void Board::update_shift (int x, int y)
+{
+	const go_board &b = m_game->get_root ()->get_board ();
+	if (!b.torus_h ())
+		x = 0;
+	if (!b.torus_v ())
+		y = 0;
+	if (m_shift_x == x && m_shift_y == y)
+		return;
+	m_shift_x = x;
+	m_shift_y = y;
+	draw_grid_and_coords ();
+	sync_appearance ();
 }
 
 void Board::mouseMoveEvent(QMouseEvent *e)
 {
-	int x = convertCoordsToPoint (e->x (), m_board_rect.x ());
-	int y = convertCoordsToPoint (e->y (), m_board_rect.y ());
+	if (m_dragging) {
+		int dist_x = (m_down_x - e->x ()) / square_size;
+		int dist_y = (m_down_y - e->y ()) / square_size;
+		dist_x += m_drag_begin_x;
+		dist_y += m_drag_begin_y;
+		while (dist_x < 0)
+			dist_x += board_size_x;
+		while (dist_y < 0)
+			dist_y += board_size_y;
+		dist_x %= board_size_x;
+		dist_y %= board_size_y;
+		update_shift (dist_x, dist_y);
+		return;
+	}
+
+	int x = coord_vis_to_board_x (e->x ());
+	int y = coord_vis_to_board_y (e->y ());
 
 	if (m_mark_rect)
 		updateRectSel (x, y);
 
 	// Outside the valid board?
-	if (x < 1 || x > board_size_x || y < 1 || y > board_size_y)
+	if (x < 0 || x >= board_size_x || y < 0 || y >= board_size_y)
 	{
 		x = -1;
 		y = -1;
-	} else {
-		x--;
-		y--;
 	}
-
 
 	if (curX == x && curY == y)
 		return;
@@ -1132,13 +1184,18 @@ void Board::mouseReleaseEvent(QMouseEvent* e)
 {
 	mouseState = Qt::NoButton;
 
+	if (m_dragging) {
+		m_dragging = false;
+		m_down_x = -1;
+	}
+
 	if (m_mark_rect) {
 		m_mark_rect = false;
+		m_down_x = -1;
 		m_board_win->done_rect_select (m_rect_x1, m_rect_y1, m_rect_x2, m_rect_y2);
-		return;
 	}
-	int x = convertCoordsToPoint (e->x (), m_board_rect.x ());
-	int y = convertCoordsToPoint (e->y (), m_board_rect.y ());
+	int x = coord_vis_to_board_x (e->x ());
+	int y = coord_vis_to_board_y (e->y ());
 
 	if (m_down_x == -1 || x != m_down_x || y != m_down_y)
 		return;
@@ -1149,7 +1206,7 @@ void Board::mouseReleaseEvent(QMouseEvent* e)
 	if (m_game_mode != modeMatch || QTime::currentTime() <= wheelTime)
 		return;
 
-	play_one_move (x - 1, y - 1);
+	play_one_move (x, y);
 }
 
 void Board::mark_dead_external (int x, int y)
@@ -1239,29 +1296,36 @@ void Board::mousePressEvent(QMouseEvent *e)
 {
 	mouseState = e->button();
 
-	int x = convertCoordsToPoint (e->x (), m_board_rect.x ());
-	int y = convertCoordsToPoint (e->y (), m_board_rect.y ());
+	int x = coord_vis_to_board_x (e->x ());
+	int y = coord_vis_to_board_y (e->y ());
 
 	if (m_request_mark_rect && e->button () == Qt::LeftButton) {
 		m_mark_rect = true;
 		m_request_mark_rect = false;
-		if (x < 1)
-			x = 1;
-		if (y < 1)
-			y = 1;
-		if (x > board_size_x)
-			x = board_size_x;
-		if (y > board_size_y)
-			y = board_size_y;
+		if (x < 0)
+			x = 0;
+		if (y < 0)
+			y = 0;
+		if (x >= board_size_x)
+			x = board_size_x - 1;
+		if (y >= board_size_y)
+			y = board_size_y - 1;
 		m_down_x = x;
 		m_down_y = y;
 		updateRectSel (x, y);
 		return;
 	}
-
+	if (e->button () == Qt::MiddleButton) {
+		m_down_x = e->x ();
+		m_down_y = e->y ();
+		m_dragging = true;
+		m_drag_begin_x = m_shift_x;
+		m_drag_begin_y = m_shift_y;
+		return;
+	}
 	m_down_x = m_down_y = -1;
 
-	if (x < 1 || x > board_size_x || y < 1 || y > board_size_y)
+	if (x < 0 || x >= board_size_x || y < 0 || y >= board_size_y)
 		return;
 
 	m_down_x = x;
@@ -1270,14 +1334,14 @@ void Board::mousePressEvent(QMouseEvent *e)
 	if (navIntersectionStatus) {
 		navIntersectionStatus = false;
 		unsetCursor ();
-		find_move (x - 1, y - 1);
+		find_move (x, y);
 		return;
 	}
 	if (m_eval_state != nullptr
 	    && ((e->modifiers () == Qt::ShiftModifier && e->button () == Qt::LeftButton)
 		|| e->button () == Qt::MiddleButton))
 	{
-		game_state *eval = m_eval_state->find_child_move (x - 1, y - 1);
+		game_state *eval = m_eval_state->find_child_move (x, y);
 		game_state *st = m_state;
 		bool first = true;
 		while (eval) {
@@ -1311,14 +1375,14 @@ void Board::mousePressEvent(QMouseEvent *e)
 	    && (m_game_mode == modeNormal || m_game_mode == modeObserve))
 	{
 		/* @@@ Previous code made a distinction between left and right button.  */
-		find_move (x - 1, y - 1);
+		find_move (x, y);
 		return;
 	}
 	/* All modes where marks are not allowed, including scoring, force the editStone
 	   button instead of the marks.  So this is a simple test.  */
 	if (m_edit_mark != mark::none)
 	{
-		click_add_mark (e, x - 1, y - 1);
+		click_add_mark (e, x, y);
 		return;
 	}
 
@@ -1333,7 +1397,7 @@ void Board::mousePressEvent(QMouseEvent *e)
 		switch (e->button())
 		{
 		case Qt::LeftButton:
-			play_one_move (x - 1, y - 1);
+			play_one_move (x, y);
 			break;
 
 		default:
@@ -1342,22 +1406,22 @@ void Board::mousePressEvent(QMouseEvent *e)
 		break;
 
 	case modeEdit:
-		existing_stone = m_edit_board->stone_at (x - 1, y - 1);
+		existing_stone = m_edit_board->stone_at (x, y);
 		switch (e->button())
 		{
 		case Qt::LeftButton:
 			if (existing_stone == black)
-				m_edit_board->set_stone (x - 1, y - 1, none);
+				m_edit_board->set_stone (x, y, none);
 			else
-				m_edit_board->set_stone (x - 1, y - 1, black);
+				m_edit_board->set_stone (x, y, black);
 			setModified();
 			sync_appearance (true);
 			break;
 		case Qt::RightButton:
 			if (existing_stone == white)
-				m_edit_board->set_stone (x - 1, y - 1, none);
+				m_edit_board->set_stone (x, y, none);
 			else
-				m_edit_board->set_stone (x - 1, y - 1, white);
+				m_edit_board->set_stone (x, y, white);
 			setModified ();
 			sync_appearance (true);
 			break;
@@ -1369,9 +1433,9 @@ void Board::mousePressEvent(QMouseEvent *e)
 
 	case modeScoreRemote:
 		if (e->button () == Qt::LeftButton) {
-			m_board_win->player_toggle_dead (x - 1, y - 1);
+			m_board_win->player_toggle_dead (x, y);
 #if 0 /* We get our own toggle back from the server, at least in tests with NNGS.  */
-			m_edit_board->toggle_alive (x - 1, y - 1);
+			m_edit_board->toggle_alive (x, y);
 			/* See comment in mark_dead_external.  */
 			m_edit_board->calc_scoring_markers_simple ();
 			observed_changed ();
@@ -1382,12 +1446,12 @@ void Board::mousePressEvent(QMouseEvent *e)
 		switch (e->button())
 		{
 		case Qt::LeftButton:
-			m_edit_board->toggle_alive (x - 1, y - 1);
+			m_edit_board->toggle_alive (x, y);
 			m_edit_board->calc_scoring_markers_complex ();
 			observed_changed ();
 			break;
 		case Qt::RightButton:
-			m_edit_board->toggle_seki (x - 1, y - 1);
+			m_edit_board->toggle_seki (x, y);
 			m_edit_board->calc_scoring_markers_complex ();
 			observed_changed ();
 			break;
@@ -1416,9 +1480,9 @@ void Board::mousePressEvent(QMouseEvent *e)
 void Board::changeSize()
 {
 #ifdef Q_OS_WIN
-    resizeDelayFlag = false;
+	resizeDelayFlag = false;
 #endif
-    resizeBoard(width(), height());
+	resizeBoard (width (), height ());
 }
 
 void Board::clear_stones ()
@@ -1439,43 +1503,87 @@ void Board::clear_selection ()
 	updateCovers ();
 }
 
+int Board::n_dups_h ()
+{
+	game_state *root = m_game->get_root ();
+
+	const go_board &b = root->get_board ();
+	if (b.torus_h ())
+		return std::min (b.size_x (), m_pref_dups);
+	return 0;
+}
+
+int Board::n_dups_v ()
+{
+	game_state *root = m_game->get_root ();
+
+	const go_board &b = root->get_board ();
+	if (b.torus_v ())
+		return std::min (b.size_y (), m_pref_dups);
+	return 0;
+}
+
+void Board::clear_graphics_elts ()
+{
+	delete m_grid;
+	delete m_coords;
+	clear_stones ();
+
+	m_dragging = false;
+	m_shift_x = m_shift_y = 0;
+}
+
+void Board::alloc_graphics_elts ()
+{
+	game_state *root = m_game->get_root ();
+	const go_board &b = root->get_board ();
+
+	board_size_x = b.size_x ();
+	board_size_y = b.size_y ();
+
+	calculateSize ();
+
+	m_shown_points = (board_size_x + 2 * n_dups_h ()) * (board_size_y + 2 * n_dups_v ());
+	m_stones.resize (m_shown_points);
+	for (int i = 0; i < m_shown_points; i++)
+		m_stones[i] = nullptr;
+
+	m_grid = new Grid (canvas, b, n_dups_h (), n_dups_v (), calculate_hoshis (b));
+	m_coords = new CoordDisplay (canvas, b, n_dups_h (), n_dups_v (), coord_offset, coord_margin, showSGFCoords);
+}
+
 void Board::reset_game (std::shared_ptr<game_record> gr)
 {
 	stop_observing ();
 
-	delete m_grid;
-	delete m_coords;
-
-	game_state *root = gr->get_root ();
-
-	const go_board &b = root->get_board ();
-	board_size_x = b.size_x ();
-	board_size_y = b.size_y ();
-
-	clear_stones ();
-	m_stones.resize (b.bitsize ());
-	for (int i = 0; i < b.bitsize (); i++)
-		m_stones[i] = nullptr;
+	clear_graphics_elts ();
 
 	m_game = gr;
-	clear_selection ();
 
-	m_grid = new Grid (canvas, b, calculate_hoshis (b));
-	m_coords = new CoordDisplay (canvas, b, coord_offset, coord_margin, showSGFCoords);
+	alloc_graphics_elts ();
 
-	calculateSize ();
-
-	// Rescale the pixmaps in the ImageHandler
-	imageHandler->rescale(square_size);
-
-	// Redraw the board
 	draw_background ();
 	draw_grid_and_coords ();
 
-	start_observing (root);
+	start_observing (gr->get_root ());
+
+	clear_selection ();
 
 	canvas->update();
 	setModified(false);
+}
+
+void Board::update_prefs ()
+{
+	m_pref_dups = setting->readIntEntry ("TOROID_DUPS");
+
+	clear_graphics_elts ();
+	alloc_graphics_elts ();
+
+	draw_background ();
+	draw_grid_and_coords ();
+
+	sync_appearance ();
 }
 
 void Board::update_comment(const QString &qs)

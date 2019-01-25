@@ -33,10 +33,11 @@
  /**
   * Initialises the grid intersections and hoshis points
   **/
-Grid::Grid (QGraphicsScene *canvas, const go_board &ref, const bit_array &hoshis)
-	: m_ref_board (ref),
-	  m_hoshi_map (hoshis), m_hgrid (ref.bitsize ()), m_vgrid (ref.bitsize ()),
-	  m_hoshis (hoshis.popcnt ()), m_hoshi_pos (hoshis.popcnt ())
+Grid::Grid (QGraphicsScene *canvas, const go_board &ref, int hdups, int vdups, const bit_array &hoshis)
+	: m_ref_board (ref), m_h_dups (hdups), m_v_dups (vdups), m_hoshi_map (hoshis),
+	  m_hgrid ((ref.size_x () + 2 * hdups) * (ref.size_y () + 2 * vdups)),
+	  m_vgrid ((ref.size_x () + 2 * hdups) * (ref.size_y () + 2 * vdups)),
+	  m_hoshis (hoshis.popcnt ()), m_hoshi_pos (hoshis.popcnt ()), m_hoshi_screen_pos (hoshis.popcnt ())
 {
 	for (auto &i: m_vgrid)
 		canvas->addItem (&i);
@@ -52,8 +53,10 @@ Grid::Grid (QGraphicsScene *canvas, const go_board &ref, const bit_array &hoshis
 	for (int x = 0; x < ref.size_x (); x++)
 		for (int y = 0; y < ref.size_y (); y++) {
 			int p = ref.bitpos (x, y);
-			if (hoshis.test_bit (p))
-				m_hoshi_pos[n++] = std::pair<int, int> (x, y);
+			if (hoshis.test_bit (p)) {
+				m_hoshi_screen_pos[n] = { x, y };
+				m_hoshi_pos[n++] = { x, y };
+			}
 		}
 
 	showAll ();
@@ -62,18 +65,28 @@ Grid::Grid (QGraphicsScene *canvas, const go_board &ref, const bit_array &hoshis
  /**
   * Calculates the grid intersections and hoshis position
   **/
-void Grid::resize (const QRect &rect, double square_size)
+void Grid::resize (const QRect &rect, int shift_x, int shift_y, double square_size)
 {
 	int i,j;
 	int size = square_size / 5;
 
-	for (i = 0; i < m_ref_board.size_x (); i++)
-		for (j = 0; j < m_ref_board.size_y (); j++) {
-			int bp = m_ref_board.bitpos (i, j);
-			bool first_col = i == 0;
-			bool last_col = i + 1 == m_ref_board.size_x ();
-			bool first_row = j == 0;
-			bool last_row = j + 1 == m_ref_board.size_y ();
+	int szx = m_ref_board.size_x ();
+	int szy = m_ref_board.size_y ();
+	for (i = 0; i < szx + 2 * m_h_dups; i++)
+		for (j = 0; j < szy + 2 * m_v_dups; j++) {
+			int x = (i + shift_x + (szx - m_h_dups)) % szx;
+			int y = (j + shift_y + (szy - m_v_dups)) % szy;
+
+			int bp = i + j * (szx + 2 * m_h_dups);
+			bool first_col = x == 0;
+			bool last_col = x + 1 == szx;
+			bool first_row = y == 0;
+			bool last_row = y + 1 == szy;
+
+			if (m_h_dups != 0)
+				first_col = last_col = false;
+			if (m_v_dups != 0)
+				first_row = last_row = false;
 			m_hgrid[bp].setLine(int(rect.x () + square_size * (i - 0.5 * !first_col)),
 					    rect.y () + square_size * j,
 					    int(rect.x () + square_size * (i + 0.5 * !last_col)),
@@ -99,8 +112,12 @@ void Grid::resize (const QRect &rect, double square_size)
 
 		QGraphicsEllipseItem *e = &m_hoshis[i];
 
-		e->setRect(rect.x () + square_size * x - size/2, rect.y () + square_size * y - size/2,
-			   size , size);
+		int rx = m_h_dups + (x + szx - shift_x) % szx;
+		int ry = m_v_dups + (y + szy - shift_y) % szy;
+		m_hoshi_screen_pos[i] = { rx, ry };
+		e->setRect (rect.x () + square_size * rx - size/2,
+			    rect.y () + square_size * ry - size/2,
+			    size, size);
 	}
 }
 
@@ -122,20 +139,20 @@ void Grid::showAll ()
   **/
 void Grid::hide (int x, int y)
 {
-	int bp = m_ref_board.bitpos (x, y);
+	int bp = x + y * (m_ref_board.size_x () + 2 * m_h_dups);
 
 	m_vgrid[bp].hide();
 	m_hgrid[bp].hide();
 
 	for (size_t i = 0; i < m_hoshis.size (); i++)
-		if (m_hoshi_pos[i] == std::pair<int, int> (x, y)) {
+		if (m_hoshi_screen_pos[i] == std::pair<int, int> (x, y)) {
 			m_hoshis[i].hide ();
 			break;
 		}
 }
 
-CoordDisplay::CoordDisplay (QGraphicsScene *canvas, const go_board &ref, int offs, int margin, bool sgf)
-	: m_ref_board (ref),
+CoordDisplay::CoordDisplay (QGraphicsScene *canvas, const go_board &ref, int hdups, int vdups, int offs, int margin, bool sgf)
+	: m_ref_board (ref), m_h_dups (hdups), m_v_dups (vdups),
 	  m_coords_v1 (ref.size_y ()), m_coords_v2 (ref.size_y ()), m_coords_h1 (ref.size_x ()), m_coords_h2 (ref.size_x ()),
 	  m_coord_offset (offs), m_coord_margin (margin)
 {
@@ -182,7 +199,8 @@ void CoordDisplay::retrieve_text (QString &xt, QString &yt, int x, int y)
 	yt = m_coords_v1[m_ref_board.size_y () - y - 1].text ();
 }
 
-void CoordDisplay::resize (const QRect &wrect, const QRect &brect, double square_size, bool show)
+void CoordDisplay::resize (const QRect &wrect, const QRect &brect, int shift_x, int shift_y,
+			   double square_size, bool show)
 {
 	// centres the coordinates text within the remaining space at table edge
 	const int center = m_coord_offset / 2 + m_coord_margin;
@@ -190,8 +208,9 @@ void CoordDisplay::resize (const QRect &wrect, const QRect &brect, double square
 	int sz_x = m_ref_board.size_x ();
 	int sz_y = m_ref_board.size_y ();
 	for (int i = 0; i < sz_y; i++) {
-		QGraphicsSimpleTextItem *coord = &m_coords_v1[i];
-		int ypos = brect.y () + square_size * (sz_y - i - 1) - coord->boundingRect().height() / 2;
+		int y = (i + sz_y - shift_y) % sz_y;
+		QGraphicsSimpleTextItem *coord = &m_coords_v1[y];
+		int ypos = brect.y () + square_size * (m_v_dups + sz_y - i - 1) - coord->boundingRect().height() / 2;
 		// Left side
 		coord->setPos (wrect.x () + center - coord->boundingRect().width() / 2, ypos);
 
@@ -201,7 +220,7 @@ void CoordDisplay::resize (const QRect &wrect, const QRect &brect, double square
 			coord->hide();
 
 		// Right side
-		coord = &m_coords_v2[i];
+		coord = &m_coords_v2[y];
 		coord->setPos (wrect.x () + wrect.width () - center - coord->boundingRect().width() / 2, ypos);
 
 		if (show)
@@ -210,8 +229,9 @@ void CoordDisplay::resize (const QRect &wrect, const QRect &brect, double square
 			coord->hide();
 	}
 	for (int i = 0; i < sz_x; i++) {
-		QGraphicsSimpleTextItem *coord = &m_coords_h1[i];
-		int xpos = brect.x () + square_size * i - coord->boundingRect().width() / 2;
+		int x = (i + shift_x) % sz_x;
+		QGraphicsSimpleTextItem *coord = &m_coords_h1[x];
+		int xpos = brect.x () + square_size * (m_h_dups + i) - coord->boundingRect().width() / 2;
 		// Top
 		coord->setPos (xpos, wrect.y () + center - coord->boundingRect().height() / 2);
 
@@ -221,7 +241,7 @@ void CoordDisplay::resize (const QRect &wrect, const QRect &brect, double square
 			coord->hide();
 
 		// Bottom
-		coord = &m_coords_h2[i];
+		coord = &m_coords_h2[x];
 		coord->setPos (xpos, wrect.y () + wrect.height () - center - coord->boundingRect().height() / 2);
 
 		if (show)

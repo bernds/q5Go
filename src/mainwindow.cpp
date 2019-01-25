@@ -1506,8 +1506,7 @@ void MainWindow::updateBoard()
 	}
 #endif
 
-	/* Catches board skin changes.  */
-	gfx_board->changeSize ();
+	gfx_board->update_prefs ();
 	slotViewLeftSidebar();
 }
 

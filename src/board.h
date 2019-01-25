@@ -45,6 +45,7 @@ class Board : public QGraphicsView, public navigable_observer, public Gtp_Contro
 
 	/* Size of the (abstract) board.  */
 	int board_size_x, board_size_y;
+	int m_shown_points;
 
 	/* Controls whether moves are allowed for either color.  */
 	bool m_player_is_b = true;
@@ -64,6 +65,12 @@ class Board : public QGraphicsView, public navigable_observer, public Gtp_Contro
 	/* Anti-clicko, remember position on mouse button down.  */
 	int m_down_x, m_down_y;
 	int m_cumulative_delta = 0;
+
+	/* Toroid support.  */
+	bool m_dragging = false;
+	int m_drag_begin_x, m_drag_begin_y;
+	int m_shift_x = 0, m_shift_y = 0;
+	int m_pref_dups = 0;
 
 	/* Variables related to rectangle selection.  */
 	int m_rect_x1, m_rect_x2;
@@ -102,6 +109,10 @@ class Board : public QGraphicsView, public navigable_observer, public Gtp_Contro
 	void observed_changed () override;
 	bool show_cursor_p ();
 	void sync_appearance (bool board_only = true);
+	void update_shift (int x, int y);
+	int coord_vis_to_board_x (int);
+	int coord_vis_to_board_y (int);
+
 	void play_one_move (int x, int y);
 	void setup_analyzer_position ();
 	void clear_eval_data ()
@@ -113,6 +124,11 @@ class Board : public QGraphicsView, public navigable_observer, public Gtp_Contro
 		delete m_visits;
 		m_visits = nullptr;
 	}
+
+	int n_dups_h ();
+	int n_dups_v ();
+	void alloc_graphics_elts ();
+	void clear_graphics_elts ();
 public:
 	Board(QWidget *parent=0, QGraphicsScene *c = 0);
 	~Board();
@@ -172,7 +188,7 @@ public:
 	void set_antiClicko(bool b) { antiClicko = b; }
 	void set_vardisplay (bool children, int type);
 
-	void update_images () {	imageHandler->rescale (square_size); sync_appearance (); }
+	void update_prefs ();
 
 	/* Virtuals from Gtp_Controller.  */
 	virtual void gtp_played_move (int, int) override { /* Should not happen.  */ }
@@ -193,7 +209,6 @@ protected:
 	void draw_grid_and_coords ();
 
 	void resizeBoard(int w, int h);
-	int convertCoordsToPoint(int c, int o);
 	void updateRectSel(int, int);
 	virtual void mousePressEvent(QMouseEvent *e) override;
 	virtual void mouseReleaseEvent(QMouseEvent*) override;

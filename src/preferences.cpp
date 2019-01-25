@@ -235,6 +235,8 @@ void PreferencesDialog::init_from_settings ()
 	CheckBox_autoSave->setChecked(setting->readBoolEntry("AUTOSAVE"));
 	CheckBox_autoSave_Played->setChecked(setting->readBoolEntry("AUTOSAVE_PLAYED"));
 
+	toroidDupsSpin->setValue (setting->readIntEntry("TOROID_DUPS"));
+
 	fontStandardButton->setText(setting->fontToString(setting->fontStandard));
 	fontMarksButton->setText(setting->fontToString(setting->fontMarks));
 	fontCommentsButton->setText(setting->fontToString(setting->fontComments));
@@ -419,7 +421,6 @@ void PreferencesDialog::slot_apply()
 	setting->writeIntEntry("NMATCH_BYO_TIME", BYSpin_Nmatch->text().toInt());
 	setting->writeIntEntry("NMATCH_HANDICAP", HandicapSpin_Nmatch->text().toInt());
 
-
 	setting->writeIntEntry("DEFAULT_SIZE", boardSizeSpin->text().toInt());
 	setting->writeIntEntry("DEFAULT_TIME", timeSpin->text().toInt());
 	setting->writeIntEntry("DEFAULT_BY", BYSpin->text().toInt());
@@ -444,6 +445,8 @@ void PreferencesDialog::slot_apply()
 	setting->writeIntEntry ("ANALYSIS_MAXMOVES", anMaxMovesEdit->text().toInt());
 
 	setting->writeIntEntry("GAMETREE_SIZE", gameTreeSizeSlider->value());
+
+	setting->writeIntEntry("TOROID_DUPS", toroidDupsSpin->text().toInt());
 
 	client_window->preferencesAccept();
 }

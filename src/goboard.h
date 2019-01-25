@@ -180,6 +180,14 @@ public:
 	{
 		return m_sz_y;
 	}
+	bool torus_h () const
+	{
+		return m_torus_h;
+	}
+	bool torus_v () const
+	{
+		return m_torus_v;
+	}
 	int bitsize () const
 	{
 		return m_sz_x * m_sz_y;
