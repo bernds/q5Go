@@ -2258,18 +2258,6 @@ void ClientWindow::slot_excludeplayer(const QString &txt)
 		exclude = QString();
 }
 
-// open a local board       ??? Do we need this ?
-void ClientWindow::slot_localBoard()
-{
-	open_local_board (this, true);
-}
-
-// open a local board, size 19x19, skip questions
-void ClientWindow::slot_local19()
-{
-	open_local_board (this, false);
-}
-
 // open a local board
 void ClientWindow::slot_preferences(bool)
 {
@@ -2490,8 +2478,9 @@ void ClientWindow::initActions()
 	/*
 	* Menu File
 	*/
-	connect(fileNewBoard, &QAction::triggered, this, &ClientWindow::slotFileNewBoard);
-	connect(fileNew, &QAction::triggered, this, &ClientWindow::slotFileNewGame);
+	connect(fileNewBoard, &QAction::triggered, [=] (bool) { open_local_board (this, game_dialog_type::none); });
+	connect(fileNewVariant, &QAction::triggered, [=] (bool) { open_local_board (this, game_dialog_type::variant); });
+	connect(fileNew, &QAction::triggered, [=] (bool) { open_local_board (this, game_dialog_type::normal); });
 	connect(fileOpen, &QAction::triggered, this, &ClientWindow::slotFileOpen);
 	connect(computerPlay, &QAction::triggered, this, &ClientWindow::slotComputerPlay);
 	connect(fileQuit, &QAction::triggered, this, &ClientWindow::quit);
@@ -2543,16 +2532,6 @@ void ClientWindow::initToolBar()
 }
 
 // SLOTS
-
-void ClientWindow::slotFileNewBoard(bool)
-{
-	open_local_board (this, false);
-}
-
-void ClientWindow::slotFileNewGame(bool)
-{
-	open_local_board (this, true);
-}
 
 void ClientWindow::slotFileOpen(bool)
 {

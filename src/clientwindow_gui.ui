@@ -845,7 +845,9 @@
 	</property>
 	<addaction name="fileNewBoard"/>
 	<addaction name="fileNew"/>
+	<addaction name="fileNewVariant"/>
 	<addaction name="fileOpen"/>
+	<addaction name="separator"/>
 	<addaction name="computerPlay"/>
 	<addaction name="separator"/>
 	<addaction name="fileQuit"/>
@@ -1361,6 +1363,10 @@
       </property>
     </action>
     <action name="fileNewVariant">
+      <property name="icon">
+	<iconset resource="q4go.qrc">
+	<normaloff>:/ClientWindowGui/images/clientwindow/torus.png</normaloff>:/ClientWindowGui/images/clientwindow/torus.png</iconset>
+      </property>
       <property name="text">
 	<string>New &amp;Variant Board</string>
       </property>

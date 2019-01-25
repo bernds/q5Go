@@ -113,8 +113,6 @@ public slots:
 	virtual void slot_cmdactivated_int(int);
 	virtual void slot_watchplayer(const QString&);
 	virtual void slot_excludeplayer(const QString&);
-	virtual void slot_localBoard();
-	virtual void slot_local19();
 	virtual void slot_preferences(bool = false);
 //	virtual void slot_userDefinedKeysTextChanged();
 	virtual void slot_pbuser1();
@@ -166,8 +164,6 @@ public slots:
 	// gamedialog, qgoif
 	void slot_sendcommand(const QString&, bool);
 	//menus
-	void slotFileNewBoard(bool);
-	void slotFileNewGame(bool);
 	void slotFileOpen(bool);
 	void slotComputerPlay(bool);
 

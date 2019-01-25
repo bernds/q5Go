@@ -121,17 +121,28 @@ bool open_window_from_file (const std::string &filename)
 	return true;
 }
 
-void open_local_board (QWidget *parent, bool with_dialog)
+void open_local_board (QWidget *parent, game_dialog_type type)
 {
 	std::shared_ptr<game_record> gr;
-	if (with_dialog) {
+	switch (type) {
+	case game_dialog_type::normal:
 		gr = new_game_dialog (parent);
 		if (gr == nullptr)
 			return;
-	} else {
+		break;
+	case game_dialog_type::variant:
+		gr = new_variant_game_dialog (parent);
+		if (gr == nullptr)
+			return;
+		break;
+
+	case game_dialog_type::none:
+	{
 		go_board b (19);
 		gr = std::make_shared<game_record> (b, black, game_info (QObject::tr ("White").toStdString (),
 									 QObject::tr ("Black").toStdString ()));
+		break;
+	}
 	}
 	MainWindow *win = new MainWindow (0, gr);
 	win->show ();

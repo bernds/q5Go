@@ -424,7 +424,8 @@ void MainWindow::initActions()
 	connect(fileNew, &QAction::triggered, this, &MainWindow::slotFileNewGame);
 
 	// File New Variant Game
-	fileNewVariant = new QAction(tr("New &variant game"), this);
+	fileNewVariant = new QAction(QIcon (":/ClientWindowGui/images/clientwindow/torus.png"),
+				     tr("New &variant game"), this);
 	fileNewVariant->setShortcut (QKeySequence (Qt::CTRL + Qt::Key_V));
 	fileNewVariant->setStatusTip(tr("Creates a new game on this board"));
 	fileNewVariant->setWhatsThis(tr("New\n\nCreates a new variant game on this board."));
@@ -1134,7 +1135,7 @@ void MainWindow::update_game_tree (game_state *active)
 
 void MainWindow::slotFileNewBoard (bool)
 {
-	open_local_board (client_window, false);
+	open_local_board (client_window, game_dialog_type::none);
 }
 
 void MainWindow::slotFileNewGame (bool)
