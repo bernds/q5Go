@@ -183,7 +183,7 @@
       <string/>
      </property>
      <property name="currentIndex">
-      <number>5</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="InterfaceTabWidget">
       <attribute name="title">
@@ -1284,35 +1284,6 @@ child/sibling setting:</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
-           <widget class="QComboBox" name="variationComboBox">
-            <property name="focusPolicy">
-             <enum>Qt::TabFocus</enum>
-            </property>
-            <item>
-             <property name="text">
-              <string>None</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Ghosts</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Letters</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string>Show as:</string>
-            </property>
-           </widget>
-          </item>
           <item row="2" column="1">
            <widget class="QComboBox" name="varSGFStyleComboBox">
             <item>
@@ -1339,6 +1310,13 @@ child/sibling setting:</string>
             </property>
            </widget>
           </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Show as:</string>
+            </property>
+           </widget>
+          </item>
           <item row="1" column="1">
            <widget class="QComboBox" name="varChildrenComboBox">
             <item>
@@ -1349,6 +1327,28 @@ child/sibling setting:</string>
             <item>
              <property name="text">
               <string>Children</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="variationComboBox">
+            <property name="focusPolicy">
+             <enum>Qt::TabFocus</enum>
+            </property>
+            <item>
+             <property name="text">
+              <string>None</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Ghosts</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Letters</string>
              </property>
             </item>
            </widget>
@@ -1658,10 +1658,35 @@ This will display realistic 3D stones with stripes and shadow</string>
           <property name="spacing">
            <number>6</number>
           </property>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_6">
+          <item row="1" column="0">
+           <widget class="QLabel" name="textLabel1">
             <property name="text">
-             <string>Wood image:</string>
+             <string>Wood filename:</string>
+            </property>
+            <property name="wordWrap">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QPushButton" name="GobanPicturePathButton">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="q4go.qrc">
+              <normaloff>:/PreferencesDialogGui/images/preferences/image1.png</normaloff>:/PreferencesDialogGui/images/preferences/image1.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="2">
+           <widget class="QPushButton" name="TablePicturePathButton">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="q4go.qrc">
+              <normaloff>:/PreferencesDialogGui/images/preferences/image1.png</normaloff>:/PreferencesDialogGui/images/preferences/image1.png</iconset>
             </property>
            </widget>
           </item>
@@ -1726,28 +1751,6 @@ If the picture is not set, or unvalid, a default picture is used by qgo</string>
             </item>
            </widget>
           </item>
-          <item row="3" column="2">
-           <widget class="QPushButton" name="TablePicturePathButton">
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset resource="q4go.qrc">
-              <normaloff>:/PreferencesDialogGui/images/preferences/image1.png</normaloff>:/PreferencesDialogGui/images/preferences/image1.png</iconset>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="QPushButton" name="GobanPicturePathButton">
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset resource="q4go.qrc">
-              <normaloff>:/PreferencesDialogGui/images/preferences/image1.png</normaloff>:/PreferencesDialogGui/images/preferences/image1.png</iconset>
-            </property>
-           </widget>
-          </item>
           <item row="1" column="1">
            <widget class="QLineEdit" name="LineEdit_goban">
             <property name="sizePolicy">
@@ -1765,15 +1768,49 @@ If the picture is not set, or unvalid, a default goban is used by qgo</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="textLabel1">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_6">
             <property name="text">
-             <string>Wood filename:</string>
-            </property>
-            <property name="wordWrap">
-             <bool>false</bool>
+             <string>Wood image:</string>
             </property>
            </widget>
+          </item>
+          <item row="4" column="0" colspan="2">
+           <layout class="QHBoxLayout" name="horizontalLayout_14">
+            <property name="topMargin">
+             <number>8</number>
+            </property>
+            <property name="rightMargin">
+             <number>8</number>
+            </property>
+            <item>
+             <widget class="QCheckBox" name="lineScaleCheckBox">
+              <property name="text">
+               <string>Scale line widths</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="lineWidenCheckBox">
+              <property name="text">
+               <string>Widen outside lines</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_6">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>0</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
           </item>
          </layout>
         </widget>
@@ -4369,6 +4406,8 @@ Note: 'Delete' concerns saved records.</string>
   <tabstop>GobanPicturePathButton</tabstop>
   <tabstop>LineEdit_Table</tabstop>
   <tabstop>TablePicturePathButton</tabstop>
+  <tabstop>lineScaleCheckBox</tabstop>
+  <tabstop>lineWidenCheckBox</tabstop>
   <tabstop>LineEdit_title</tabstop>
   <tabstop>LineEdit_host</tabstop>
   <tabstop>LineEdit_port</tabstop>

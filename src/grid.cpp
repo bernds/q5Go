@@ -28,7 +28,7 @@
 #include "defines.h"
 #include "goboard.h"
 #include "grid.h"
-
+#include "setting.h"
 
  /**
   * Initialises the grid intersections and hoshis points
@@ -70,6 +70,13 @@ void Grid::resize (const QRect &rect, int shift_x, int shift_y, double square_si
 	int i,j;
 	int size = square_size / 5;
 
+	QPen pen;
+	bool widen = setting->readBoolEntry ("BOARD_LINEWIDEN");
+	int scaled_w = setting->readBoolEntry ("BOARD_LINESCALE") ? (int)square_size / 40 + 1 : 1;
+	int widened_w = scaled_w;
+	if (setting->readBoolEntry ("BOARD_LINEWIDEN"))
+		widened_w *= 2;
+
 	int szx = m_ref_board.size_x ();
 	int szy = m_ref_board.size_y ();
 	for (i = 0; i < szx + 2 * m_h_dups; i++)
@@ -82,6 +89,13 @@ void Grid::resize (const QRect &rect, int shift_x, int shift_y, double square_si
 			bool last_col = x + 1 == szx;
 			bool first_row = y == 0;
 			bool last_row = y + 1 == szy;
+			bool in_real_board = (i >= m_h_dups && i < szx + m_h_dups
+					      && j >= m_v_dups && j < szy + m_v_dups);
+
+			pen.setWidth (in_real_board && widen && (first_col || last_col) ? widened_w : scaled_w);
+			m_vgrid[bp].setPen (pen);
+			pen.setWidth (in_real_board && widen && (first_row || last_row) ? widened_w : scaled_w);
+			m_hgrid[bp].setPen (pen);
 
 			if (m_h_dups != 0)
 				first_col = last_col = false;

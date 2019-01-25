@@ -161,6 +161,9 @@ void PreferencesDialog::init_from_settings ()
 	blackFlatSlider->setValue(setting->readIntEntry("STONES_BFLAT"));
 	ambientSlider->setValue (setting->readIntEntry("STONES_AMBIENT"));
 
+	lineScaleCheckBox->setChecked (setting->readBoolEntry("BOARD_LINESCALE"));
+	lineWidenCheckBox->setChecked (setting->readBoolEntry("BOARD_LINEWIDEN"));
+
 	stoneSoundCheckBox->setChecked(setting->readBoolEntry("SOUND_STONE"));
 	autoplaySoundCheckBox->setChecked(setting->readBoolEntry("SOUND_AUTOPLAY"));
 	talkSoundCheckBox->setChecked(setting->readBoolEntry("SOUND_TALK"));
@@ -358,6 +361,9 @@ void PreferencesDialog::slot_apply()
 	setting->writeIntEntry("STONES_AMBIENT", ambientSlider->value());
 	setting->writeEntry("STONES_BCOL", black_color().name());
 	setting->writeEntry("STONES_WCOL", white_color().name());
+
+	setting->writeBoolEntry("BOARD_LINESCALE", lineScaleCheckBox->isChecked ());
+	setting->writeBoolEntry("BOARD_LINEWIDEN", lineWidenCheckBox->isChecked ());
 
 	setting->writeBoolEntry("SOUND_STONE", stoneSoundCheckBox->isChecked());
 	setting->writeBoolEntry("SOUND_AUTOPLAY", autoplaySoundCheckBox->isChecked());
