@@ -581,6 +581,7 @@ void MainWindow::initActions()
 	editRectSelect->setCheckable (true);
 	editRectSelect->setStatusTip(tr("Choose a rectangle to export."));
 	editRectSelect->setWhatsThis(tr("In play or edit mode, click to begin choosing a rectangle to be used when exporting."));
+	editRectSelect->setShortcut(Qt::Key_R);
 	connect(editRectSelect, &QAction::toggled, this, &MainWindow::slotEditRectSelect);
 
 	editClearSelect = new QAction(QIcon (":/BoardWindow/images/boardwindow/clear_select.png"), tr("Clear selection"), this);
