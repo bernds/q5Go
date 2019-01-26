@@ -34,7 +34,7 @@ public:
 	{
 		memcpy (m_bits, other.m_bits, m_n_elts * sizeof (uint64_t));
 	}
-	bit_array (bit_array &&other)
+	bit_array (bit_array &&other) noexcept
 		: m_n_bits (other.m_n_bits), m_n_elts (other.m_n_elts), m_bits (other.m_bits), m_last_mask (other.m_last_mask)
 	{
 		if (&other == this)
