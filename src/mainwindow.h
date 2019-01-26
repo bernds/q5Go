@@ -54,10 +54,7 @@ public:
 	bool restoreWindowSize ();
 	void updateBoard();
 
-	void addObserver(const QString &name);
-	void clearObserver() { ListView_observers->clear(); }
-	void updateObserverCnt();
-
+	void set_observer_model (QStandardItemModel *m);
 	bool doSave(QString fileName, bool force=false);
 	void setGameMode (GameMode);
 
@@ -164,7 +161,7 @@ protected:
 	QLayout *comments_layout;
 	QTextEdit *commentEdit;
 	QLineEdit *commentEdit2;
-	QTreeWidget *ListView_observers;
+	QTreeView *ListView_observers;
 	GameTree *gameTreeView;
 
 	QToolBar *fileBar, *toolBar, *editBar;

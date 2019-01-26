@@ -189,11 +189,9 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 	commentEdit->addAction (escapeFocus);
 	commentEdit2->addAction (escapeFocus);
 
-	ListView_observers = new QTreeWidget(splitter_comment);
+	ListView_observers = new QTreeView (splitter_comment);
 	ListView_observers->setFocusPolicy (Qt::NoFocus);
-	QStringList headers;
-	headers << tr("Observers") << tr("Rk");
-	ListView_observers->setHeaderLabels (headers);
+	ListView_observers->setSortingEnabled (true);
 
 	gameTreeView = new GameTree (splitter_comment);
 
@@ -2092,26 +2090,6 @@ void MainWindow::slot_editBoardInNewWindow(bool)
 	w->show ();
 }
 
-void MainWindow::updateObserverCnt()
-{
-	QStringList headers;
-	headers << tr("Observers") + " (" + QString::number(ListView_observers->topLevelItemCount()) + ")" << tr("Rk");
-	ListView_observers->setHeaderLabels (headers);
-	ListView_observers->sortItems (2, Qt::AscendingOrder);
-}
-
-void MainWindow::addObserver(const QString &name)
-{
-	QString name_without_rank = name.section(' ', 0, 0);
-	QString rank = name.section(' ', 1, 1);
-	QString rankkey = rkToKey(rank) + name_without_rank;
-
-	QStringList strs;
-	strs << name_without_rank << rank << rankkey;
-
-        new QTreeWidgetItem(ListView_observers, strs);
-}
-
 void MainWindow::slotSoundToggle(bool toggle)
 {
 	local_stone_sound = !toggle;
@@ -2361,6 +2339,12 @@ void MainWindow::doAdjourn()
 	emit signal_adjourn();
 }
 
+void MainWindow::set_observer_model (QStandardItemModel *m)
+{
+	ListView_observers->setModel (m);
+	ListView_observers->header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+	ListView_observers->header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+}
 
 MainWindow_GTP::MainWindow_GTP (QWidget *parent, std::shared_ptr<game_record> gr, const Engine &program,
 				bool b_is_comp, bool w_is_comp)

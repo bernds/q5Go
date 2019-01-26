@@ -75,7 +75,9 @@ class qGoBoard : public QObject, public game_state::observer
 	int m_terr_w, m_terr_b;
 	int m_caps_w, m_caps_b;
 
-	void observed_changed () { }
+	QStandardItemModel m_observers;
+
+	virtual void observed_changed () override { }
 
 public:
 	qGoBoard(qGoIF *, int game_id);
@@ -130,7 +132,10 @@ public:
 	void addtime_b(int m);
 	void addtime_w(int m);
 	void set_myName(const QString &n) { myName = n; }
-	void clearObserverList();
+
+	void observer_list_start ();
+	void observer_list_entry (const QString &, const QString &);
+	void observer_list_end ();
 
 	void receive_score_begin ();
 	void receive_score_line (int, const QString &);
@@ -223,6 +228,11 @@ public:
 
 	void window_closing (qGoBoard *);
 	void remove_board (qGoBoard *);
+
+	/* Called by parser.cpp.  */
+	void observer_list_start (int);
+	void observer_list_entry (int, const QString &, const QString &);
+	void observer_list_end (int);
 signals:
 	void signal_sendcommand(const QString&, bool);
 	void signal_addToObservationList(int);

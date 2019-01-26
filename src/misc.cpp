@@ -71,6 +71,9 @@ QString rkToKey(QString txt, bool integer)
 		if (rk == "NR")
 			return "nr";
 
+		bool has_plus = rk.indexOf ("+") != -1;
+		bool has_qm = rk.indexOf ("?") != -1;
+
 		// check for k,d,p
 		if (rk.indexOf("k") != -1)
 			keyStr = "c";
@@ -84,19 +87,18 @@ QString rkToKey(QString txt, bool integer)
 		// get number
 		QString buffer = rk;
 		buffer.replace(QRegExp("[pdk+?\\*\\s]"), "");
-		if (buffer.length() < 2)
-		{
-			keyStr += "0";
 
-			// reverse sort order for dan/pro players
-			if ((keyStr == "a0") || (keyStr == "b0"))
-			{
-				int i = buffer.toInt();
-				i = 10 - i;
-				buffer = QString::number(i);
-			}
+		// reverse sort order for dan/pro players
+		if (keyStr == "a" || keyStr == "b") {
+			int i = buffer.toInt();
+			i = 100 - i;
+			buffer = QString::number (i);
 		}
 
-		return keyStr + buffer;
+		if (buffer.length() < 2)
+			buffer = "0" + buffer;
+
+		QString end = has_plus ? "a" : has_qm ? "c" : "b";
+		return keyStr + buffer + end;
 	}
 }

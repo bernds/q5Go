@@ -959,16 +959,14 @@ InfoType Parser::cmd9(QString &line)
 		if (ok)
 		{
 			memory_str = "observe";
-			// send as kibitz from "0" -> init
-			emit signal_kibitz(memory, "0", "0"); 
+			m_qgoif->observer_list_start (memory);
 
 			return KIBITZ;
 		}
 	}
 	else if (memory_str == "observe" && line.contains("."))
 	{
-//				QString cnt = line.section(' ', 1, 1);
-		emit signal_kibitz(memory, "00", "");
+		m_qgoif->observer_list_end (memory);
 
 		memory = 0;
 		memory_str = QString::null;
@@ -983,8 +981,7 @@ InfoType Parser::cmd9(QString &line)
 		{
 			++i;
 			rank = line.section(' ', i, i);
-			// send as kibitz from "0"
-			emit signal_kibitz(memory, "0", name + " " + rank);
+			m_qgoif->observer_list_entry (memory, name, rank);
 		}
 
 		return KIBITZ;

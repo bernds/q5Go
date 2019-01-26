@@ -1050,6 +1050,26 @@ void qGoIF::slot_timeAdded(int time, bool toMe)
 	qWarning("*** board for undo not found!");
 }
 
+void qGoIF::observer_list_start (int id)
+{
+	qGoBoard *b = find_game_id (id);
+	if (b)
+		b->observer_list_start ();
+}
+
+void qGoIF::observer_list_entry (int id, const QString &n, const QString &r)
+{
+	qGoBoard *b = find_game_id (id);
+	if (b)
+		b->observer_list_entry (n, r);
+}
+
+void qGoIF::observer_list_end (int id)
+{
+	qGoBoard *b = find_game_id (id);
+	if (b)
+		b->observer_list_end ();
+}
 
 /*
  *	qGo Board
@@ -1089,6 +1109,11 @@ qGoBoard::qGoBoard(qGoIF *qif, int gameid) : m_qgoif (qif), id (gameid)
 	chk_b = -2;
 	chk_w = -2;
 #endif
+
+	m_observers.setColumnCount (2);
+	m_observers.setHorizontalHeaderItem (0, new QStandardItem ("Name"));
+	m_observers.setHorizontalHeaderItem (1, new QStandardItem ("Rk"));
+	m_observers.setSortRole (Qt::UserRole + 1);
 }
 
 qGoBoard::~qGoBoard()
@@ -1099,6 +1124,43 @@ qGoBoard::~qGoBoard()
 	delete win;
 	delete m_title;
 	delete m_scoring_board;
+}
+
+void qGoBoard::observer_list_start ()
+{
+	if (win) {
+		win->getMainWidget()->cb_opponent->clear();
+		win->getMainWidget()->TextLabel_opponent->setText(tr("opponent:"));
+		win->getMainWidget()->cb_opponent->addItem(tr("-- none --"));
+		if (havePupil && ttOpponent != tr("-- none --"))
+		{
+			win->getMainWidget()->cb_opponent->addItem(ttOpponent, 1);
+			win->getMainWidget()->cb_opponent->setCurrentIndex(1);
+		}
+	}
+
+	m_observers.setRowCount (0);
+}
+
+void qGoBoard::observer_list_entry (const QString &n, const QString &r)
+{
+	QList<QStandardItem *> list;
+	QStandardItem *nm_item = new QStandardItem (n);
+	nm_item->setData (n, Qt::UserRole + 1);
+	list.append (nm_item);
+	QStandardItem *rk_item = new QStandardItem (r);
+	rk_item->setData (rkToKey (r, false), Qt::UserRole + 1);
+	list.append (rk_item);
+	m_observers.appendRow (list);
+	if (win) {
+		win->getMainWidget()->cb_opponent->addItem (n);
+		int cnt = win->getMainWidget()->cb_opponent->count();
+		win->getMainWidget()->TextLabel_opponent->setText(tr("opponent:") + " (" + QString::number(cnt-1) + ")");
+	}
+}
+
+void qGoBoard::observer_list_end ()
+{
 }
 
 void qGoBoard::receive_score_begin ()
@@ -1155,6 +1217,7 @@ void qGoBoard::game_startup ()
 	bool am_white = m_own_color == white;
 	win = new MainWindow_IGS (0, m_game, this, am_white, am_black, gameMode);
 	win->show ();
+	win->set_observer_model (&m_observers);
 
 	game_state *root = m_game->get_root ();
 	if (root != m_state)
@@ -1451,11 +1514,6 @@ void qGoBoard::addtime_w(int m)
 	win->getMainWidget ()->setTimes(bt, b_stones, secToTime(wt_i), w_stones, false, false, 0);
 }
 
-void qGoBoard::clearObserverList ()
-{
-	win->clearObserver ();
-}
-
 void qGoBoard::set_Mode_real(GameMode mode)
 {
 	gameMode = mode;
@@ -1637,7 +1695,7 @@ void qGoBoard::disconnected (bool remove_from_list)
 	set_stopTimer();
 
 	qgo->playGameEndSound ();
-	clearObserverList ();
+	m_observers.clear ();
 
 	// set board editable...
 	set_Mode_real (modeNormal);
@@ -1652,41 +1710,6 @@ void qGoBoard::disconnected (bool remove_from_list)
 // write kibitz strings to comment window
 void qGoBoard::send_kibitz(const QString &msg)
 {
-	// observer info
-	if (msg[0] == '0')
-	{
-#if 0
-		if (msg[1] == '0')
-		{
-			// finish
-			win->updateObserverCnt();
-		}
-		else if (msg.length() < 5)
-		{
-			//init
-			win->getMainWidget()->cb_opponent->clear();
-			win->getMainWidget()->TextLabel_opponent->setText(tr("opponent:"));
-			win->getMainWidget()->cb_opponent->addItem(tr("-- none --"));
-			if (havePupil && ttOpponent != tr("-- none --"))
-			{
-				win->getMainWidget()->cb_opponent->addItem(ttOpponent, 1);
-				win->getMainWidget()->cb_opponent->setCurrentIndex(1);
-			}
-
-			win->clearObserver();
-		}
-		else
-		{
-			win->getMainWidget()->cb_opponent->addItem(msg.right(msg.length() - 3));
-//			int cnt = win->getMainWidget()->cb_opponent->count();
-//			win->getMainWidget()->TextLabel_opponent->setText(tr("opponent:") + " (" + QString::number(cnt-1) + ")");
-
-			win->addObserver(msg.right(msg.length() - 3));
-		}
-#endif
-		return;
-	}
-
 	// if observing a teaching game
 	if (ExtendedTeachingGame && !IamTeacher)
 	{
