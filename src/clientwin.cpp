@@ -1461,23 +1461,6 @@ void ClientWindow::slot_gamesPopup(int i)
 				// if game is set up new -> get moves
 				//   set game to observe
 				sendcommand("observe " + gameID);
-
-				// check if enough data here
-				if (lv_popupGames->text(7).length() == 0)
-				{
-					// LGS sends the needed information, anyway
-					if (myAccount->get_gsname() != LGS)
-						sendcommand("games " + gameID);
-				}
-				else
-				{
-					//   complete game info
-					Game g = lv_popupGames->get_game ();
-					g.running = true;
-					g.oneColorGo = false;
-
-					emit signal_move(&g);
-				}
 			}
 		}
 		break;

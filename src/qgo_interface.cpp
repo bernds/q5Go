@@ -706,7 +706,10 @@ void qGoIF::window_closing (qGoBoard *qb)
 		{
 			case modeObserve:
 				// unobserve
-				emit signal_sendcommand("observe " + QString::number(-id), false);
+				if (gsName == IGS)
+					emit signal_sendcommand("unobserve " + QString::number(-id), false);
+				else
+					emit signal_sendcommand("observe " + QString::number(-id), false);
 
 				// decrease number of observed games
 				emit signal_addToObservationList(-1);
