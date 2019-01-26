@@ -267,9 +267,7 @@ void go_board::identify_units ()
 #endif
 			handled.ior (unit);
 			unsigned n_liberties = count_liberties (unit);
-			stone_unit su (next, n_liberties);
-
-			units.push_back (su);
+			units.emplace_back (next, n_liberties);
 		}
 	}
 #ifdef DEBUG
@@ -400,11 +398,10 @@ void go_board::find_territory_units (const bit_array &w_stones, const bit_array 
 		bool neighbours_b = false, neighbours_w = false;
 		scoring_flood_fill (fill, w_stones, b_stones, neighbours_w, neighbours_b);
 		if (neighbours_w != neighbours_b)
-			m_units_t.push_back (terr_unit (fill, neighbours_w, neighbours_b,
-							fill.intersect_p (dead_stones)));
+			m_units_t.emplace_back (fill, neighbours_w, neighbours_b,
+						fill.intersect_p (dead_stones));
 		else
-			m_units_st.push_back (terr_unit (fill, neighbours_w, neighbours_b,
-							 false));
+			m_units_st.emplace_back (fill, neighbours_w, neighbours_b, false);
 		handled.ior (fill);
 	}
 }
@@ -749,8 +746,7 @@ void go_board::add_stone (int x, int y, stone_color col, bool process_captures)
 		it.m_n_liberties = -1;
 	}
 	if (first_neighbour == nullptr) {
-		stone_unit newunit (pos, count_liberties (pos));
-		player_units.push_back (newunit);
+		player_units.emplace_back (pos, count_liberties (pos));
 		first_neighbour = &player_units.back ();
 	} else if (n_caps == 0) {
 		first_neighbour->m_n_liberties = count_liberties (first_neighbour->m_stones);

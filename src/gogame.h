@@ -12,7 +12,7 @@ public:
 		bit_rect (int w, int h) : m_w (w), m_h (h)
 		{
 			for (int i = 0; i < h; i++)
-				m_rep.push_back (bit_array (m_w));
+				m_rep.emplace_back (m_w);
 		}
 		void set_bit (int x, int y)
 		{
@@ -45,7 +45,7 @@ public:
 		void set_max_height (int h)
 		{
 			while (m_h < h) {
-				m_rep.push_back (bit_array (m_w));
+				m_rep.emplace_back (m_w);
 				m_h++;
 			}
 		}
