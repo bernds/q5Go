@@ -112,7 +112,6 @@ public:
 	void send_kibitz(const QString&);
 	MainWindow_IGS *get_win() { return win; }
 	void setTimerInfo(const QString&, const QString&, const QString&, const QString&);
-	void timerEvent(QTimerEvent*);
 	QString secToTime(int);
 	void set_stopTimer();
 	void set_runTimer();
@@ -178,6 +177,9 @@ public slots:
 	void slot_ttOpponentSelected(const QString&);
 	void slot_ttControls(bool);
 	void slot_ttMark(bool);
+
+protected:
+	virtual void timerEvent(QTimerEvent*) override;
 
 private:
 	int timer_id;
