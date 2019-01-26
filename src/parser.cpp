@@ -689,8 +689,7 @@ InfoType Parser::cmd9(QString &line)
 			// something went wrong...
 			return IT_OTHER;
 
-		QString newline = line;
-		newline.simplified();
+		QString newline = line.simplified();
 
 		QString p1 = memory_str.section(' ', 3, 3);
 		// @@@ should be 7?
