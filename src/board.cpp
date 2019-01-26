@@ -441,7 +441,7 @@ QByteArray Board::render_svg (bool do_number, bool coords)
 	const go_board &b = m_edit_board == nullptr ? m_state->get_board () : *m_edit_board;
 	/* Look back through previous moves to see if we should do numbering.  */
 	int n_back = 0;
-	int *count_map = new int[board_size_x * board_size_y]();
+	std::vector<int> count_map (board_size_x * board_size_y);
 	game_state *startpos = nullptr;
 	bool numbering = do_number && m_edit_board == nullptr;
 
@@ -568,7 +568,6 @@ QByteArray Board::render_svg (bool do_number, bool coords)
 		}
 	}
 
-	delete[] count_map;
 	return svg;
 }
 
@@ -590,7 +589,7 @@ QString Board::render_ascii (bool do_number, bool coords)
 	int szy = broot.size_y ();
 	QString result;
 
-	int *count_map = new int[bitsz]();
+	std::vector<int> count_map (bitsz);
 	game_state *startpos = m_state;
 	if (do_number && m_edit_board == nullptr && !m_state->get_start_count ()) {
 		startpos = m_state;
@@ -609,7 +608,7 @@ QString Board::render_ascii (bool do_number, bool coords)
 
 		int n_mv = 0;
 		game_state *next = startpos;
-		memset (count_map, 0, bitsz * sizeof *count_map);
+		std::fill (std::begin (count_map), std::end (count_map), 0);
 		while (next != m_state && n_mv < 10) {
 			game_state *nx2 = next->next_move ();
 			int x = nx2->get_move_x ();
@@ -735,7 +734,7 @@ void Board::sync_appearance (bool board_only)
 
 	/* Look back through previous moves to see if we should do numbering.  */
 	int n_back = 0, max_number = 0;
-	int *count_map = new int[bitsize]();
+	std::vector<int> count_map (bitsize);
 
 	game_state *startpos = nullptr;
 	if (have_analysis) {
@@ -926,7 +925,6 @@ void Board::sync_appearance (bool board_only)
 	m_main_widget->recalc_scores (b);
 	if (!board_only)
 		m_board_win->setMoveData (*m_state, b, m_game_mode);
-	delete[] count_map;
 
 	QPixmap img = svg.to_pixmap (square_size * (b.size_x () + 2 * dups_x),
 				     square_size * (b.size_y () + 2 * dups_y));
