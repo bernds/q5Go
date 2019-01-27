@@ -1969,7 +1969,7 @@ void MainWindow::closeEvent(QCloseEvent *e)
 
 int MainWindow::checkModified(bool interactive)
 {
-	if (!gfx_board->isModified)
+	if (!gfx_board->modified ())
 		return 1;
 
 	if (!interactive)
@@ -1981,7 +1981,7 @@ int MainWindow::checkModified(bool interactive)
 		0, 2))
 	{
 	case 0:
-		return slotFileSave() && !gfx_board->isModified;
+		return slotFileSave() && !gfx_board->modified ();
 
 	case 1:
 		return 1;

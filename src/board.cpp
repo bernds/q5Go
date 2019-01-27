@@ -30,19 +30,17 @@
 #include "svgbuilder.h"
 #include "ui_helpers.h"
 
-Board::Board(QWidget *parent, QGraphicsScene *c)
-	: QGraphicsView(c, parent), Gtp_Controller (parent)
+BoardView::BoardView(QWidget *parent, QGraphicsScene *c)
+	: QGraphicsView(c, parent)
 {
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-	viewport()->setMouseTracking(true);
 	setUpdatesEnabled(true);
 
 	board_size_x = board_size_y = DEFAULT_BOARD_SIZE;
 	showCoords = setting->readBoolEntry ("BOARD_COORDS");
 	showSGFCoords = setting->readBoolEntry ("SGF_BOARD_COORDS");
-	antiClicko = setting->readBoolEntry ("ANTICLICKO");
 	m_pref_dups = setting->readIntEntry ("TOROID_DUPS");
 
 	setStyleSheet( "QGraphicsView { border-style: none; }" );
@@ -57,18 +55,11 @@ Board::Board(QWidget *parent, QGraphicsScene *c)
 
 	imageHandler->init(10);
 
-	// Initialize some class variables
-	isModified = false;
-	mouseState = Qt::NoButton;
-
 	//coordsTip = new Tip(this);
 #ifdef Q_OS_WIN
 	resizeDelayFlag = false;
 #endif
-	curX = curY = -1;
-
 	lockResize = false;
-	navIntersectionStatus = false;
 
 	canvas->addItem (m_mark_layer = new QGraphicsPixmapItem ());
 	m_mark_layer->setZValue (20);
@@ -90,22 +81,39 @@ Board::Board(QWidget *parent, QGraphicsScene *c)
 	setFocusPolicy(Qt::NoFocus);
 }
 
-Board::~Board()
+BoardView::~BoardView()
 {
+	stop_observing ();
 	clear_graphics_elts ();
 	clear_eval_data ();
 	delete canvas;
 	delete imageHandler;
+}
+
+
+Board::Board (QWidget *parent, QGraphicsScene *c)
+	: BoardView (parent, c), Gtp_Controller (parent)
+{
+	viewport()->setMouseTracking(true);
+	curX = curY = -1;
+
+	antiClicko = setting->readBoolEntry ("ANTICLICKO");
+
+	navIntersectionStatus = false;
+}
+
+Board::~Board ()
+{
 	delete m_analyzer;
 }
 
 // distance from table edge to wooden board edge
-const int Board::margin = 2;
+const int BoardView::margin = 2;
 
 // distance from coords to surrounding elements
-const int Board::coord_margin = 4;
+const int BoardView::coord_margin = 4;
 
-void Board::calculateSize()
+void BoardView::calculateSize()
 {
 	// Calculate the size values
 
@@ -156,7 +164,7 @@ void Board::calculateSize()
 			      board_pixel_size_x, board_pixel_size_y);
 }
 
-void Board::resizeBoard (int w, int h)
+void BoardView::resizeBoard (int w, int h)
 {
 	if (w < 30 || h < 30)
 		return;
@@ -175,7 +183,7 @@ void Board::resizeBoard (int w, int h)
 	sync_appearance ();
 }
 
-void Board::resizeEvent(QResizeEvent*)
+void BoardView::resizeEvent(QResizeEvent*)
 {
 #ifdef _WS_WIN_x
 	if (!resizeDelayFlag)
@@ -190,7 +198,7 @@ void Board::resizeEvent(QResizeEvent*)
 #endif
 }
 
-void Board::draw_background()
+void BoardView::draw_background()
 {
 	int w = canvas->width ();
 	int h = canvas->height ();
@@ -250,7 +258,7 @@ void Board::draw_background()
 	canvas->setBackgroundBrush (QBrush (image));
 }
 
-void Board::draw_grid_and_coords ()
+void BoardView::draw_grid_and_coords ()
 {
 	m_grid->resize (m_board_rect, m_shift_x, m_shift_y, square_size);
 	m_coords->resize (m_wood_rect, m_board_rect, m_shift_x, m_shift_y, square_size, showCoords);
@@ -326,6 +334,17 @@ bool Board::show_cursor_p ()
 		return false;
 
 	return true;
+}
+
+stone_color Board::cursor_color (int x, int y, stone_color to_move)
+{
+	if (x == curX && y == curY && show_cursor_p ()) {
+		if (m_game_mode == modeEdit)
+			/* @@@ */
+			return black;
+		return to_move;
+	}
+	return none;
 }
 
 static QString convert_letter_mark (mextra extra)
@@ -436,7 +455,7 @@ static bool add_mark_svg (svg_builder &svg, double cx, double cy, double factor,
 	return true;
 }
 
-QByteArray Board::render_svg (bool do_number, bool coords)
+QByteArray BoardView::render_svg (bool do_number, bool coords)
 {
 	const go_board &b = m_edit_board == nullptr ? m_state->get_board () : *m_edit_board;
 	/* Look back through previous moves to see if we should do numbering.  */
@@ -580,7 +599,7 @@ QByteArray Board::render_svg (bool do_number, bool coords)
    This should really be part of game_state, but there is the added complication
    of the m_edit_board.  */
 
-QString Board::render_ascii (bool do_number, bool coords)
+QString BoardView::render_ascii (bool do_number, bool coords)
 {
 	game_state *root = m_game->get_root ();
 	const go_board &broot = root->get_board ();
@@ -696,8 +715,41 @@ QString Board::render_ascii (bool do_number, bool coords)
 	return result;
 }
 
+game_state *Board::extract_analysis (const go_board &b, std::vector<int> &count_map, int &max_number)
+{
+	int maxdepth = setting->readIntEntry ("ANALYSIS_DEPTH");
+	if (m_eval_state == nullptr)
+		return nullptr;
+
+	game_state *startpos = m_eval_state;
+	game_state *pv = m_eval_state->find_child_move (curX, curY);
+	if (pv == nullptr) {
+		m_main_widget->set_2nd_eval (nullptr, 0, none, 0);
+	} else {
+		int x = pv->get_move_x ();
+		int y = pv->get_move_y ();
+		int bp = b.bitpos (x, y);
+		if (x > 7)
+			x++;
+		QString move = QChar ('A' + x) + QString::number (b.size_y () - y);
+		m_main_widget->set_2nd_eval (move, m_primary_eval + m_winrate[bp],
+					     m_state->to_move (), m_visits[bp]);
+	}
+	int depth = 0;
+	int count = 0;
+	while (pv && (maxdepth == 0 || depth++ < maxdepth)) {
+		int x = pv->get_move_x ();
+		int y = pv->get_move_y ();
+		int bp = b.bitpos (x, y);
+		count_map[bp] = ++count;
+		pv = pv->next_move ();
+	}
+	max_number = count;
+	return startpos;
+}
+
 /* The central function for synchronizing visual appearance with the abstract board data.  */
-void Board::sync_appearance (bool board_only)
+void BoardView::sync_appearance (bool)
 {
 	bool have_analysis = m_eval_state != nullptr;
 	bool numbering = !have_analysis && m_edit_board == nullptr;
@@ -706,7 +758,6 @@ void Board::sync_appearance (bool board_only)
 	bool analysis_children = setting->readBoolEntry ("ANALYSIS_CHILDREN");
 	int analysis_vartype = setting->readIntEntry ("ANALYSIS_VARTYPE");
 	int winrate_for = setting->readIntEntry ("ANALYSIS_WINRATE");
-	int maxdepth = setting->readIntEntry ("ANALYSIS_DEPTH");
 	stone_color wr_swap_col = winrate_for == 0 ? white : winrate_for == 1 ? black : none;
 
 	const go_board &b = m_edit_board == nullptr ? m_state->get_board () : *m_edit_board;
@@ -736,32 +787,10 @@ void Board::sync_appearance (bool board_only)
 	int n_back = 0, max_number = 0;
 	std::vector<int> count_map (bitsize);
 
-	game_state *startpos = nullptr;
-	if (have_analysis) {
-		startpos = m_eval_state;
-		game_state *pv = m_eval_state->find_child_move (curX, curY);
-		if (pv == nullptr) {
-			m_main_widget->set_2nd_eval (nullptr, 0, none, 0);
-		} else {
-			int x = pv->get_move_x ();
-			int y = pv->get_move_y ();
-			int bp = b.bitpos (x, y);
-			if (x > 7)
-				x++;
-			QString move = QChar ('A' + x) + QString::number (b.size_y () - y);
-			m_main_widget->set_2nd_eval (move, m_primary_eval + m_winrate[bp],
-						     m_state->to_move (), m_visits[bp]);
-		}
-		int depth = 0;
-		while (pv && (maxdepth == 0 || depth++ < maxdepth)) {
-			int x = pv->get_move_x ();
-			int y = pv->get_move_y ();
-			int bp = b.bitpos (x, y);
-			count_map[bp] = ++n_back;
-			pv = pv->next_move ();
-		}
-		max_number = n_back;
-		n_back = 0;
+	game_state *startpos = extract_analysis (b, count_map, max_number);
+	if (startpos) {
+		have_analysis = true;
+		numbering = false;
 	}
 
 	if (numbering && !m_state->get_start_count () && m_state->was_move_p ()) {
@@ -821,13 +850,9 @@ void Board::sync_appearance (bool board_only)
 			}
 
 			if (sc == none) {
-				if (x == curX && y == curY && show_cursor_p ()) {
-					sc = to_move;
-					/* @@@ */
-					if (m_game_mode == modeEdit)
-						sc = black;
+				sc = cursor_color (x, y, to_move);
+				if (sc != none)
 					type = stone_type::var;
-				}
 			} else if (mark_at_pos == mark::terr || mark_at_pos == mark::falseeye)
 				type = stone_type::var;
 
@@ -920,31 +945,31 @@ void Board::sync_appearance (bool board_only)
 				m_grid->hide (tx, ty);
 		}
 
-	updateCanvas();
-
-	m_main_widget->recalc_scores (b);
-	if (!board_only)
-		m_board_win->setMoveData (*m_state, b, m_game_mode);
-
+	canvas->update ();
 	QPixmap img = svg.to_pixmap (square_size * (b.size_x () + 2 * dups_x),
 				     square_size * (b.size_y () + 2 * dups_y));
 	m_mark_layer->setPixmap (img);
 	m_mark_layer->setPos (m_board_rect.x () - square_size / 2, m_board_rect.y () - square_size / 2);
 }
 
-void Board::observed_changed ()
+void Board::sync_appearance (bool board_only)
 {
-	setup_analyzer_position ();
-	sync_appearance (false);
-	m_board_win->update_game_tree (m_state);
+	if (!board_only) {
+		setup_analyzer_position ();
+	}
+	BoardView::sync_appearance (board_only);
+	const go_board &b = m_edit_board == nullptr ? m_state->get_board () : *m_edit_board;
+	m_main_widget->recalc_scores (b);
+	if (!board_only) {
+		m_board_win->setMoveData (*m_state, b, m_game_mode);
+		m_board_win->update_game_tree (m_state);
+	}
 }
 
-#ifndef NO_DEBUG
-void Board::debug()
+void BoardView::observed_changed ()
 {
-    qDebug("Board::debug()");
+	sync_appearance (false);
 }
-#endif
 
 void Board::deleteNode()
 {
@@ -998,7 +1023,7 @@ int Board::coord_vis_to_board_y (int p)
 	return p;
 }
 
-void Board::updateCovers ()
+void BoardView::updateCovers ()
 {
 	QRectF sceneRect = canvas->sceneRect ();
 	int top_edge = 0;
@@ -1475,7 +1500,7 @@ void Board::mousePressEvent(QMouseEvent *e)
     }
 }
 
-void Board::changeSize()
+void BoardView::changeSize()
 {
 #ifdef Q_OS_WIN
 	resizeDelayFlag = false;
@@ -1483,7 +1508,7 @@ void Board::changeSize()
 	resizeBoard (width (), height ());
 }
 
-void Board::clear_stones ()
+void BoardView::clear_stones ()
 {
 	size_t sz = m_stones.size ();
 	for (size_t i = 0; i < sz; i++) {
@@ -1493,15 +1518,14 @@ void Board::clear_stones ()
 	}
 }
 
-void Board::clear_selection ()
+void BoardView::clear_selection ()
 {
-	m_request_mark_rect = false;
 	m_rect_x1 = m_rect_y1 = 1;
 	m_rect_x2 = m_rect_y2 = m_game->boardsize ();
 	updateCovers ();
 }
 
-int Board::n_dups_h ()
+int BoardView::n_dups_h ()
 {
 	game_state *root = m_game->get_root ();
 
@@ -1511,7 +1535,7 @@ int Board::n_dups_h ()
 	return 0;
 }
 
-int Board::n_dups_v ()
+int BoardView::n_dups_v ()
 {
 	game_state *root = m_game->get_root ();
 
@@ -1521,17 +1545,16 @@ int Board::n_dups_v ()
 	return 0;
 }
 
-void Board::clear_graphics_elts ()
+void BoardView::clear_graphics_elts ()
 {
 	delete m_grid;
 	delete m_coords;
 	clear_stones ();
 
-	m_dragging = false;
 	m_shift_x = m_shift_y = 0;
 }
 
-void Board::alloc_graphics_elts ()
+void BoardView::alloc_graphics_elts ()
 {
 	game_state *root = m_game->get_root ();
 	const go_board &b = root->get_board ();
@@ -1550,7 +1573,7 @@ void Board::alloc_graphics_elts ()
 	m_coords = new CoordDisplay (canvas, b, n_dups_h (), n_dups_v (), coord_offset, coord_margin, showSGFCoords);
 }
 
-void Board::reset_game (std::shared_ptr<game_record> gr)
+void BoardView::reset_game (std::shared_ptr<game_record> gr)
 {
 	stop_observing ();
 
@@ -1568,10 +1591,17 @@ void Board::reset_game (std::shared_ptr<game_record> gr)
 	clear_selection ();
 
 	canvas->update();
-	setModified(false);
 }
 
-void Board::update_prefs ()
+void Board::reset_game (std::shared_ptr<game_record> gr)
+{
+	BoardView::reset_game (gr);
+	setModified(false);
+	m_dragging = false;
+	m_request_mark_rect = false;
+}
+
+void BoardView::update_prefs ()
 {
 	m_pref_dups = setting->readIntEntry ("TOROID_DUPS");
 
@@ -1584,14 +1614,7 @@ void Board::update_prefs ()
 	sync_appearance ();
 }
 
-void Board::update_comment(const QString &qs)
-{
-	std::string s = qs.toStdString ();
-	m_state->set_comment (s);
-	setModified (true);
-}
-
-void Board::setShowCoords(bool b)
+void BoardView::setShowCoords(bool b)
 {
 	bool old = showCoords;
 	showCoords = b;
@@ -1601,7 +1624,7 @@ void Board::setShowCoords(bool b)
 	changeSize();
 }
 
-void Board::setShowSGFCoords(bool b)
+void BoardView::setShowSGFCoords(bool b)
 {
 	bool old = showSGFCoords;
 	showSGFCoords = b;
@@ -1611,7 +1634,7 @@ void Board::setShowSGFCoords(bool b)
 	m_coords->set_texts (showSGFCoords);
 }
 
-void Board::set_vardisplay (bool children, int type)
+void BoardView::set_vardisplay (bool children, int type)
 {
 	m_vars_children = children;
 	m_vars_type = type;
@@ -1619,6 +1642,12 @@ void Board::set_vardisplay (bool children, int type)
 	sync_appearance (true);
 }
 
+void Board::update_comment(const QString &qs)
+{
+	std::string s = qs.toStdString ();
+	m_state->set_comment (s);
+	setModified (true);
+}
 void Board::setModified(bool m)
 {
 	if (m == isModified || m_game_mode == modeObserve)
@@ -1628,7 +1657,7 @@ void Board::setModified(bool m)
 	m_board_win->updateCaption (isModified);
 }
 
-QPixmap Board::grabPicture()
+QPixmap BoardView::grabPicture()
 {
 	int sz = m_game->boardsize ();
 	int minx = m_wood_rect.x () + 2;
