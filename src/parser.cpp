@@ -1571,6 +1571,10 @@ InfoType Parser::cmd21(const QString &line)
 // 22 18: 5555000111411300144
 InfoType Parser::cmd22(const QString &line)
 {
+	/* NNGS reports game results several times with different command numbers.  */
+	if (line.contains ("{Game")) {
+		return IT_OTHER;
+	}
 	if (!line.contains(":"))
 	{
 		QString player = line.section(' ', 0, 0, QString::SectionSkipEmpty);
