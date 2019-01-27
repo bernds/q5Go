@@ -216,6 +216,8 @@ class qGoIF : public QObject
 {
 	Q_OBJECT
 
+	void game_end (qGoBoard *, const QString &txt);
+
 public:
 	qGoIF(QWidget*);
 	~qGoIF();
@@ -235,6 +237,10 @@ public:
 	void observer_list_start (int);
 	void observer_list_entry (int, const QString &, const QString &);
 	void observer_list_end (int);
+
+	void game_end (const QString &id, const QString &txt);
+	void game_end (const QString &player1, const QString &player2, const QString &txt);
+
 signals:
 	void signal_sendcommand(const QString&, bool);
 	void signal_addToObservationList(int);
@@ -266,6 +272,7 @@ protected:
 
 private:
 	qGoBoard *find_game_id (int);
+	qGoBoard *find_game_players (const QString &, const QString &);
 
 	QWidget *parent;
 	// actual pointer, for speedup reason

@@ -416,7 +416,7 @@ InfoType Parser::cmd7(const QString &line)
 	aGame->K = gamesre.cap (9);
 	aGame->By = gamesre.cap (10);
 	aGame->FR = gamesre.cap (11);
-			
+
 	aGame->nr = gamesre.cap (1);
 	aGame->wname = gamesre.cap (2);
 	aGame->wrank = gamesre.cap (3);
@@ -844,7 +844,7 @@ InfoType Parser::cmd9(QString &line)
 		aGame->Sz = "has adjourned.";
 
 		emit signal_game(aGame);
-		emit signal_gamemove(aGame);
+		m_qgoif->game_end (aGame->nr, "has adjourned.");
 	}
 	// 9 Removing game 30 from observation list.
 	else if (line.contains("from observation list"))
@@ -855,7 +855,7 @@ InfoType Parser::cmd9(QString &line)
 		aGame->Sz = "-";
 		aGame->running = false;
 
-		emit signal_gamemove(aGame);
+		m_qgoif->game_end (aGame->nr, "-");
 		return IT_OTHER;
 	}
 	// 9 Adding game to observation list.
@@ -1004,20 +1004,8 @@ InfoType Parser::cmd9(QString &line)
 	else if ((line.contains("has resigned the game"))||
 		 (line.contains("has run out of time")))
 	{
-		aGame->nr = "@";
-		aGame->running = false;
-		aGame->Sz = line;
-
-		emit signal_gamemove(aGame);
+		m_qgoif->game_end (line.section(' ', 0, 0), QString (), line);
 		return IT_OTHER;
-#if 0 // make better check
-		if (element(line, 0, " ", "EOL") != QString("has resigned the game."))
-		{
-			qDebug("'has resigned the game.' ... but pattern wrong");
-		}
-		else
-			emit signal_kibitz(0, element(line, 0, " "), line);
-#endif
 	}
 #if 0
 	//eb5 has run out of time.
@@ -1402,12 +1390,14 @@ InfoType Parser::cmd20(const QString &line)
 	aGame->nr = "@";
 	aGame->running = false;
 
+	QString player1 = line.section(' ', 2, 2);
+	QString player2 = line.section(' ', 6, 6);
 	if ( line.indexOf("W:") < line.indexOf("B:"))
-		aGame->Sz = "W " + line.section(' ', 2, 2) + " B " + line.section(' ', 6, 6);
+		aGame->Sz = "W " + player1 + " B " + player2;
 	else
-		aGame->Sz = "B " + line.section(' ', 2, 2) + " W " + line.section(' ', 6, 6);
+		aGame->Sz = "B " + player1 + " W " + player2;
 
-	emit signal_gamemove(aGame);
+	m_qgoif->game_end (player1, player2, aGame->Sz);
 	return IT_OTHER;
 }
 
@@ -1491,7 +1481,7 @@ InfoType Parser::cmd21(const QString &line)
 				aGame->Sz.remove(0,2);
 
 			emit signal_game(aGame);
-			emit signal_gamemove(aGame);
+			m_qgoif->game_end (aGame->nr, aGame->Sz);
 			return GAME;
 		}
 	}

@@ -106,6 +106,136 @@ qGoBoard *qGoIF::find_game_id (int id)
 	return nullptr;
 }
 
+qGoBoard *qGoIF::find_game_players (const QString &pl1, const QString &pl2)
+{
+	for (auto qb: boardlist) {
+		if (!qb->get_havegd ())
+			continue;
+		const QString qb1 = qb->get_wplayer ();
+		const QString qb2 = qb->get_bplayer ();
+		if (qb1 == pl1 && (pl2.isEmpty () || qb2 == pl2))
+			return qb;
+		if (qb2 == pl1 && (pl2.isEmpty () || qb1 == pl2))
+			return qb;
+	}
+	return nullptr;
+}
+
+void qGoIF::game_end (qGoBoard *qb, const QString &txt)
+{
+	if (qb == nullptr)
+		return;
+
+	// stopped game do not need a timer
+	qb->set_stopTimer();
+
+	if (txt == "-")
+		return;
+
+	qb->send_kibitz(txt + "\n");
+
+	// set correct result entry
+	QString rs = QString::null;
+	QString extended_rs = txt;
+
+	if (txt.contains("White forfeits"))
+		rs = "B+T";
+	else if (txt.contains("Black forfeits"))
+		rs = "W+T";
+	else if (txt.contains("has run out of time"))
+		rs = ((( txt.contains(myName) && qb->get_myColorIsBlack() ) ||
+		       ( !txt.contains(myName) && !qb->get_myColorIsBlack() )) ?
+		      "W+T" : "B+T");
+
+	else if (txt.contains("W ",  Qt::CaseSensitive)
+		 && txt.contains("B ",  Qt::CaseSensitive))
+	{
+		// NNGS: White resigns. W 59.5 B 66.0
+		// IGS: W 62.5 B 93.0
+		// calculate result first
+		int posw, posb;
+		float re1, re2;
+		posw = txt.indexOf("W ");
+		posb = txt.indexOf("B ");
+		bool wfirst = posw < posb;
+
+		if (!wfirst)
+		{
+			int h = posw;
+			posw = posb;
+			posb = h;
+		}
+
+		QString t1 = txt.mid(posw+1, posb-posw-2);
+		QString t2 = txt.right(txt.length()-posb-1);
+		re1 = t1.toFloat();
+		re2 = t2.toFloat();
+
+		re1 = re2-re1;
+		if (re1 < 0)
+		{
+			re1 = -re1;
+			wfirst = !wfirst;
+		}
+
+		if (re1 < 0.2)
+		{
+			rs = "Jigo";
+			extended_rs = "        Jigo         ";
+		}
+		else if (wfirst)
+		{
+			rs = "B+" + QString::number(re1);
+			extended_rs = "Black won by " + QString::number(re1) + " points";
+		}
+		else
+		{
+			rs = "W+" + QString::number(re1);
+			extended_rs = "White won by " + QString::number(re1) + " points";
+		}
+	}
+	else if (txt.contains("White resigns"))
+		rs = "B+R";
+	else if (txt.contains("Black resigns"))
+		rs = "W+R";
+	else if (txt.contains("has resigned the game"))
+		rs = ((( txt.contains(myName) && qb->get_myColorIsBlack() ) ||
+		       ( !txt.contains(myName) && !qb->get_myColorIsBlack() )) ?
+		      "W+R" : "B+R");
+
+	if (!rs.isNull())
+	{
+		qb->game_result (rs, extended_rs);
+	}
+
+	if (txt.contains("adjourned"))
+	{
+		if (qb->get_havegd ()) {
+			QString wplayer = qb->get_wplayer();
+			QString bplayer = qb->get_bplayer();
+			if (bplayer == myName || wplayer == myName)
+				// can only reload own games
+				qb->get_win()->getMainWidget()->refreshButton->setText(tr("LOAD"));
+			qDebug() << "game adjourned... #" << QString::number(qb->get_id());
+			qb->set_adj(true);
+		}
+		qb->disconnected (true);
+	}
+
+	// decrease number of observed games
+	emit signal_addToObservationList(-1);
+}
+
+void qGoIF::game_end (const QString &id, const QString &txt)
+{
+	game_end (find_game_id (id.toInt ()), txt);
+}
+
+void qGoIF::game_end (const QString &pl1, const QString &pl2, const QString &txt)
+{
+	game_end (find_game_players (pl1, pl2), txt);
+}
+
 // handle move info and distribute to different boards
 bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 {
@@ -140,18 +270,13 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 			// check if g->nr is a number
 			if (g->nr == QString("@"))
 			{
-				bool found = false;
-				for (auto qb: boardlist)
-					if (qb->get_bplayer() == myName || qb->get_wplayer() == myName) {
-						game_id = qb->get_id ();
-						found = true;
-						break;
-					}
-				if (!found)
+				qGoBoard *qb = find_game_players (myName, QString ());
+				if (qb == nullptr)
 				{
 					qWarning("*** You are not playing a game to be adjourned!");
 					return false;
 				}
+				game_id = qb->get_id ();
 			}
 			else
 				game_id = g->nr.toInt();
@@ -372,111 +497,7 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 			dlg->write("Spiel " + g->nr + (g->running ? " running\n" : " STOPPED\n"));
 			dlg->write(g->Sz + "\n");
 #endif
-
-			if (!g->running)
-			{
-				// stopped game do not need a timer
-				qgobrd->set_stopTimer();
-
-				ASSERT(g->Sz);
-
-				if (g->Sz == "-")
-				{
-					return false;
-				}
-
-				qgobrd->send_kibitz(g->Sz + "\n");
-
-				// set correct result entry
-				QString rs = QString::null;
-				QString extended_rs = g->Sz;
-
-				if (g->Sz.contains("White forfeits"))
-					rs = "B+T";
-				else if (g->Sz.contains("Black forfeits"))
-					rs = "W+T";
-				else if (g->Sz.contains("has run out of time"))
-					 rs = ((( g->Sz.contains(myName) && qgobrd->get_myColorIsBlack() ) ||
-						( !g->Sz.contains(myName) && !qgobrd->get_myColorIsBlack() )) ?
-						"W+T" : "B+T");
-
-				else if (g->Sz.contains("W ",  Qt::CaseSensitive)
-					 && g->Sz.contains("B ",  Qt::CaseSensitive))
-				{
-					// NNGS: White resigns. W 59.5 B 66.0
-					// IGS: W 62.5 B 93.0
-					// calculate result first
-					int posw, posb;
-					float re1, re2;
-					posw = g->Sz.indexOf("W ");
-					posb = g->Sz.indexOf("B ");
-					bool wfirst = posw < posb;
-
-					if (!wfirst)
-					{
-						int h = posw;
-						posw = posb;
-						posb = h;
-					}
-
-					QString t1 = g->Sz.mid(posw+1, posb-posw-2);
-					QString t2 = g->Sz.right(g->Sz.length()-posb-1);
-					re1 = t1.toFloat();
-					re2 = t2.toFloat();
-
-					re1 = re2-re1;
-					if (re1 < 0)
-					{
-						re1 = -re1;
-						wfirst = !wfirst;
-					}
-
-					if (re1 < 0.2)
-					{
-						rs = "Jigo";
-						extended_rs = "        Jigo         ";
-					}
-					else if (wfirst)
-					{
-						rs = "B+" + QString::number(re1);
-						extended_rs = "Black won by " + QString::number(re1) + " points";
-					}
-					else
-					{
-						rs = "W+" + QString::number(re1);
-						extended_rs = "White won by " + QString::number(re1) + " points";
-					}
-				}
-				else if (g->Sz.contains("White resigns"))
-					rs = "B+R";
-				else if (g->Sz.contains("Black resigns"))
-					rs = "W+R";
-				else if (g->Sz.contains("has resigned the game"))
-					 rs = ((( g->Sz.contains(myName) && qgobrd->get_myColorIsBlack() ) ||
-						( !g->Sz.contains(myName) && !qgobrd->get_myColorIsBlack() )) ?
-						"W+R" : "B+R");
-
-				if (!rs.isNull())
-				{
-					qgobrd->game_result (rs, extended_rs);
-				}
-
-				QString wplayer = qgobrd->get_wplayer();
-				QString bplayer = qgobrd->get_bplayer();
-				if (g->Sz.contains("adjourned") && !bplayer.isEmpty() && !wplayer.isEmpty())
-				{
-					if (bplayer == myName || wplayer == myName)
-						// can only reload own games
-						qgobrd->get_win()->getMainWidget()->refreshButton->setText(tr("LOAD"));
-					qDebug() << "game adjourned... #" << QString::number(qgobrd->get_id());
-					qgobrd->set_adj(true);
-					qgobrd->disconnected (true);
-				}
-
-				// decrease number of observed games
-				emit signal_addToObservationList(-1);
-			}
-			else if (!qgobrd->get_havegd())
+			if (!qgobrd->get_havegd())
 			{
 				stone_color own_color = none;
 				GameMode mode = modeObserve;
@@ -608,12 +629,7 @@ void qGoIF::slot_komi(const QString &nr, const QString &komi, bool isrequest)
 			return;
 
 		// 'nr' is opponent (IGS/NNGS)
-		qb = nullptr;
-		for (auto b: boardlist)
-			if (b->get_wplayer () == nr || b->get_bplayer () == nr) {
-				qb = b;
-				break;
-			}
+		qb = find_game_players (nr, QString ());
 
 		if (qb)
 		{
@@ -655,7 +671,7 @@ void qGoIF::slot_komi(const QString &nr, const QString &komi, bool isrequest)
 		}
 
 		for (auto b: boardlist)
-			if (b->get_wplayer () == myName || b->get_bplayer () == myName) {
+			if (b->get_havegd () && (b->get_wplayer () == myName || b->get_bplayer () == myName)) {
 				b->set_komi (komi);
 				break;
 			}
@@ -677,7 +693,10 @@ void qGoIF::slot_freegame(bool freegame)
 {
 	// what if 2 games (IGS) and mv_counter < 3 in each game? -> problem
 	for (auto qb: boardlist)
-		if ((qb->get_wplayer() == myName || qb->get_bplayer() == myName) && qb->get_mvcount() < 3) {
+		if (qb->get_havegd ()
+		    && (qb->get_wplayer() == myName || qb->get_bplayer() == myName)
+		    && qb->get_mvcount() < 3)
+		{
 			qb->set_freegame(freegame);
 			return;
 		}
@@ -743,40 +762,26 @@ void qGoIF::slot_kibitz(int num, const QString& who, const QString& msg)
 	QString name;
 
 	// own game if num == NULL
-	if (!num)
-	{
+	if (num) {
+		qb = find_game_id (num);
+		name = who;
+	} else {
 		if (myName.isEmpty())
 		{
 			// own name not set -> should never happen!
 			qWarning("*** qGoIF::slot_kibitz(): Don't know my online name ***");
 			return;
 		}
+		qb = find_game_players (myName, QString ());
+		if (qb != nullptr) {
+			if (qb->get_wplayer() == myName)
+				name = qb->get_bplayer ();
+			else if (qb->get_bplayer() == myName)
+				name = qb->get_wplayer ();
 
-		for (auto b: boardlist)
-			if (b->get_wplayer() == myName) {
-				qb = b;
-				name = b->get_bplayer ();
-				break;
-			} else if (qb->get_bplayer() == myName) {
-				qb = b;
-				name = b->get_wplayer ();
-				break;
-			}
-
-		if (qb)
 			// sound for "say" command
 			qgo->playSaySound();
-	}
-	else
-	{
-		// seek board to send kibitz
-		for (auto b: boardlist)
-			if (b->get_id() == num) {
-				qb = b;
-				break;
-			}
-
-		name = who;
+		}
 	}
 
 	if (!qb)
@@ -786,10 +791,6 @@ void qGoIF::slot_kibitz(int num, const QString& who, const QString& msg)
 		// special case: opponent has resigned - interesting in quiet mode
 		qb->send_kibitz(msg);
 		qDebug () << "strange opponent resignation\n";
-#if 0
-		//qgo->playGameEndSound();
-		wrapupMatchGame(qb, true);
-#endif
 	}
 	else
 		qb->send_kibitz(name + ": " + msg + "\n");
@@ -934,24 +935,15 @@ qDebug("slot_removestones(): game_id");
 }
 
 // game status received
-void qGoIF::slot_result(const QString &txt, const QString &line, bool isplayer,  const QString &komi)
+void qGoIF::slot_result(const QString &txt, const QString &line, bool isplayer, const QString &komi)
 {
 	static qGoBoard *qb;
 	static int column;
 
 	if (isplayer)
 	{
-		qb = nullptr;
 		column = 0;
-
-		for (auto b: boardlist)
-			if ((b->get_wplayer() == txt || b->get_bplayer() == txt)
-			    && b->get_id () >= 0)
-			{
-				qb = b;
-				break;
-			}
-
+		qb = find_game_players (txt, QString ());
 		if (qb)
 			qb->receive_score_begin ();
 	}
@@ -972,13 +964,10 @@ void qGoIF::slot_undo(const QString &player, const QString &move)
 	// check if game number given
 	bool ok;
 	int nr = player.toInt(&ok);
-	for (auto qb: boardlist) {
-		if ((ok && qb->get_id () == nr)
-		    || (!ok && qb->get_id () >= 0 && (qb->get_wplayer() == player || qb->get_bplayer() == player)))
-		{
-			qb->remote_undo (move);
-			return;
-		}
+	qGoBoard *qb = ok ? find_game_id (nr) : find_game_players (player, QString ());
+	if (qb != nullptr) {
+		qb->remote_undo (move);
+		return;
 	}
 	qWarning("*** board for undo not found!");
 }
