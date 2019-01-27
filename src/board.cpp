@@ -55,7 +55,7 @@ Board::Board(QWidget *parent, QGraphicsScene *c)
 	canvas = new QGraphicsScene (0, 0, BOARD_X, BOARD_Y, this);
 	setScene (canvas);
 
-	imageHandler->init(square_size);
+	imageHandler->init(10);
 
 	// Initialize some class variables
 	isModified = false;
