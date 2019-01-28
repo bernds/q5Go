@@ -19,6 +19,7 @@ FORMS	      = gui_dialog.ui \
 		talk_gui.ui \
 		textedit_gui.ui \
 		textview_gui.ui \
+		slideview_gui.ui \
 		svgview_gui.ui \
                 nthmove_gui.ui
 
@@ -61,6 +62,7 @@ HEADERS		      = analyzedlg.h \
                         sgfpreview.h \
                         scoretools.h \
                         sizegraphicsview.h \
+                        slideview.h \
                         svgbuilder.h \
 			textview.h \
                         ui_helpers.h \
@@ -101,7 +103,8 @@ SOURCES		      = analyzedlg.cpp \
 			newaigamedlg.cpp \
 			sgf2board.cc \
 			sgfload.cc \
-			sgfpreview.cpp \
+                        sgfpreview.cpp \
+                        slideview.cpp \
 			svgbuilder.cpp \
 			textview.cpp \
                         grid.cpp \

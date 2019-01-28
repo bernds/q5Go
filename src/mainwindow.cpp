@@ -6,6 +6,7 @@
 
 #include <fstream>
 #include <sstream>
+#include <cmath>
 
 #include <QLabel>
 #include <QPixmap>
@@ -24,6 +25,7 @@
 #include <QSlider>
 #include <QLineEdit>
 #include <QTimer>
+#include <QFontMetrics>
 
 #include "clientwin.h"
 #include "mainwindow.h"
@@ -36,7 +38,7 @@
 #include "qgo_interface.h"
 #include "autodiagsdlg.h"
 #include "ui_helpers.h"
-
+#include "slideview.h"
 std::list<MainWindow *> main_window_list;
 
 /* Return a string to identify the screen.  We use its dimensions.  */
@@ -219,8 +221,6 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, const Q
 	commentEdit->addAction (escapeFocus);
 	commentEdit2->addAction (escapeFocus);
 
-	// gameTreeView = new GameTree (this, treeDockContents);
-
 	normalTools->show();
 	scoreTools->hide();
 
@@ -355,6 +355,8 @@ void MainWindow::init_game_record (std::shared_ptr<game_record> gr)
 	   to update figures, which means we need to have diagView set up.  */
 	diagView->reset_game (gr);
 	gfx_board->reset_game (gr);
+	if (slideView != nullptr)
+		slideView->set_game (gr);
 	m_an_id_model.populate_list (gr);
 	if (m_an_id_model.rowCount () > 0)
 		anIdListView->setCurrentIndex (m_an_id_model.index (0, 0));
@@ -389,6 +391,8 @@ void MainWindow::update_game_record ()
 MainWindow::~MainWindow()
 {
 	main_window_list.remove (this);
+
+	delete slideView;
 
 	for (auto it: engine_actions)
 		delete it;
@@ -436,6 +440,15 @@ void MainWindow::initActions ()
 	connect(fileExportSgfClipB, &QAction::triggered, this, &MainWindow::slotFileExportSgfClipB);
 	connect(fileExportPic, &QAction::triggered, this, &MainWindow::slotFileExportPic);
 	connect(fileExportPicClipB, &QAction::triggered, this, &MainWindow::slotFileExportPicClipB);
+	connect(fileExportSlide, &QAction::triggered, [this] (bool)
+		{
+			if (slideView == nullptr) {
+				slideView = new SlideView (this);
+				slideView->set_game (m_game);
+				slideView->set_active (gfx_board->displayed ());
+			}
+			slideView->show ();
+		});
 
 	/* Edit menu.  */
 	connect(editDelete, &QAction::triggered, this, &MainWindow::slotEditDelete);
@@ -704,6 +717,8 @@ void MainWindow::update_game_tree ()
 {
 	game_state *st = gfx_board->displayed ();
 	gameTreeView->update (m_game, st);
+	if (slideView != nullptr)
+		slideView->set_active (st);
 	QModelIndex idx = anIdListView->currentIndex ();
 	if (idx.isValid ()) {
 		gfx_board->set_analyzer_id (m_an_id_model.entries ()[idx.row ()]);
@@ -1230,6 +1245,9 @@ void MainWindow::update_settings ()
 	editRectSelect->setEnabled (!disable_rect);
 
 	gameTreeView->update_prefs ();
+
+	if (slideView != nullptr)
+		slideView->update_prefs ();
 
 	if (setting->engines_changed)
 		populate_engines_menu ();
@@ -2136,6 +2154,7 @@ void MainWindow::setMoveData (game_state &gs, const go_board &b, GameMode mode)
 			commentEdit->clear();
 		else
 			commentEdit->setText(QString::fromStdString (c));
+
 		m_allow_text_update_signal = old;
 	}
 

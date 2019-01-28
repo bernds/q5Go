@@ -128,6 +128,11 @@ Setting::Setting()
 	writeIntEntry ("BOARD_DIAGCLEAR", 1);
 	writeIntEntry ("TOROID_DUPS", 2);
 
+	writeIntEntry ("SLIDE_LINES", 15);
+	writeIntEntry ("SLIDE_X", 1920);
+	writeIntEntry ("SLIDE_Y", 1080);
+	writeIntEntry ("SLIDE_MARGIN", 2);
+
 	language = "Default";
 	fontStandard = QFont();
 	fontMarks = QFont();

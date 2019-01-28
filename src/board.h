@@ -145,6 +145,8 @@ public:
 
 	void set_margin (int);
 	QPixmap grabPicture ();
+	QImage background_image ();
+	QRect wood_rect () { return m_wood_rect; }
 	QPixmap draw_position (int);
 	QString render_ascii (bool, bool, bool);
 	QByteArray render_svg (bool, bool);

@@ -26,6 +26,7 @@ class QSplitter;
 class QToolBar;
 struct Engine;
 class GameTree;
+class SlideView;
 
 /* This keeps track of analyzer_ids, which are combinations of engine name and
    komi.  The evaluation graph shows one line per id.  */
@@ -236,6 +237,8 @@ protected:
 	TextView m_ascii_dlg;
 	SvgView m_svg_dlg;
 	bool local_stone_sound;
+
+	SlideView *slideView {};
 
 	QLabel *statusCoords, *statusMode, *statusTurn, *statusNav;
 

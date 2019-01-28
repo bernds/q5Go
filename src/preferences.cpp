@@ -175,6 +175,8 @@ PreferencesDialog::PreferencesDialog(QWidget* parent)
 	LineEdit_port->setValidator (new QIntValidator (0, 9999, this));
 	anMaxMovesEdit->setValidator (new QIntValidator (0, 999, this));
 	anDepthEdit->setValidator (new QIntValidator (0, 999, this));
+	slideXEdit->setValidator (new QIntValidator (100, 9999, this));
+	slideYEdit->setValidator (new QIntValidator (100, 9999, this));
 
 	// clear edit field
 	LineEdit_title->clear();
@@ -495,6 +497,15 @@ void PreferencesDialog::init_from_settings ()
 
 	toroidDupsSpin->setValue (setting->readIntEntry("TOROID_DUPS"));
 
+	slideLinesSpinBox->setValue (setting->readIntEntry ("SLIDE_LINES"));
+	slideMarginSpinBox->setValue (setting->readIntEntry ("SLIDE_MARGIN"));
+	slideXEdit->setText (QString::number (setting->readIntEntry ("SLIDE_X")));
+	slideYEdit->setText (QString::number (setting->readIntEntry ("SLIDE_Y")));
+	slideItalicCheckBox->setChecked (setting->readBoolEntry ("SLIDE_ITALIC"));
+	slideBoldCheckBox->setChecked (setting->readBoolEntry ("SLIDE_BOLD"));
+	slideWBCheckBox->setChecked (setting->readBoolEntry ("SLIDE_WB"));
+	slideCoordsCheckBox->setChecked (setting->readBoolEntry ("SLIDE_COORDS"));
+
 	fontStandardButton->setText(setting->fontToString(setting->fontStandard));
 	fontMarksButton->setText(setting->fontToString(setting->fontMarks));
 	fontCommentsButton->setText(setting->fontToString(setting->fontComments));
@@ -617,6 +628,33 @@ PreferencesDialog::~PreferencesDialog()
 void PreferencesDialog::slot_apply()
 {
 	qDebug() << "onApply";
+
+	bool ok;
+	int slide_x = slideXEdit->text ().toInt(&ok);
+	if (!ok || slide_x < 100 || slide_x > 10000) {
+		QMessageBox::warning (this, tr ("Invalid slide width"),
+				      tr ("Please enter valid dimensions for slide export (100x100 or larger)."));
+		return;
+	}
+	int slide_y = slideYEdit->text ().toInt (&ok);
+	if (!ok || slide_y < 100 || slide_y > 10000) {
+		QMessageBox::warning (this, tr ("Invalid slide height"),
+				      tr ("Please enter valid dimensions for slide export (100x100 or larger)."));
+		return;
+	}
+	if (slide_y > slide_x) {
+		QMessageBox::warning (this, tr ("Invalid slide dimensions"),
+				      tr ("Slide export dimensions must be wider than they are tall."));
+		return;
+	}
+	setting->writeIntEntry ("SLIDE_X", slide_x);
+	setting->writeIntEntry ("SLIDE_Y", slide_y);
+	setting->writeIntEntry ("SLIDE_LINES", slideLinesSpinBox->value ());
+	setting->writeIntEntry ("SLIDE_MARGIN", slideMarginSpinBox->value ());
+	setting->writeBoolEntry ("SLIDE_ITALIC", slideItalicCheckBox->isChecked ());
+	setting->writeBoolEntry ("SLIDE_BOLD", slideBoldCheckBox->isChecked ());
+	setting->writeBoolEntry ("SLIDE_WB", slideWBCheckBox->isChecked ());
+	setting->writeBoolEntry ("SLIDE_COORDS", slideCoordsCheckBox->isChecked ());
 
 	setting->writeIntEntry("SKIN_INDEX", woodComboBox->currentIndex ());
 	setting->writeEntry("SKIN", LineEdit_goban->text());

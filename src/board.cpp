@@ -176,7 +176,7 @@ void BoardView::resizeEvent(QResizeEvent*)
 #endif
 }
 
-void BoardView::draw_background()
+QImage BoardView::background_image ()
 {
 	int w = canvas->width ();
 	int h = canvas->height ();
@@ -307,8 +307,12 @@ void BoardView::draw_background()
 	}
 
 	painter.end ();
+	return image;
+}
 
-	canvas->setBackgroundBrush (QBrush (image));
+void BoardView::draw_background (void)
+{
+	canvas->setBackgroundBrush (QBrush (background_image ()));
 }
 
 /* Handle a click on the Done button.  Return true if we should return to normal mode.  */
