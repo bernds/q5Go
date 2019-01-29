@@ -1582,7 +1582,8 @@ void BoardView::changeSize()
 void BoardView::clear_selection ()
 {
 	m_rect_x1 = m_rect_y1 = 1;
-	m_rect_x2 = m_rect_y2 = m_game->boardsize ();
+	m_rect_x2 = board_size_x;
+	m_rect_y2 = board_size_y;
 	updateCovers ();
 }
 
