@@ -35,6 +35,8 @@ public:
 		: QGraphicsPixmapItem (pm), m_view (view), m_x (x), m_y (y), m_size (size)
 	{
 		setZValue (10);
+		/* Supposedly faster, and makes it easier to click on edit nodes.  */
+		setShapeMode (QGraphicsPixmapItem::BoundingRectShape);
 		scene->addItem (this);
 		setAcceptHoverEvents (true);
 	}
