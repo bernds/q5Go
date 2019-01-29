@@ -52,7 +52,6 @@ HEADERS		      = config.h \
                         sgf.h \
                         scoretools.h \
                         sizegraphicsview.h \
-                        stone.h \
                         svgbuilder.h \
 			textview.h \
                         ui_helpers.h \
@@ -88,7 +87,6 @@ SOURCES		      = clientwin.cpp \
 			newaigamedlg.cpp \
 			sgf2board.cc \
 			sgfload.cc \
-                        stone.cpp \
                         svgbuilder.cpp \
 			textview.cpp \
                         grid.cpp \

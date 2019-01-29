@@ -61,8 +61,8 @@ BoardView::BoardView(QWidget *parent, QGraphicsScene *c)
 #endif
 	lockResize = false;
 
-	canvas->addItem (m_mark_layer = new QGraphicsPixmapItem ());
-	m_mark_layer->setZValue (20);
+	canvas->addItem (&m_stone_layer);
+	m_stone_layer.setZValue (10);
 
 	canvas->addItem (coverTop = new QGraphicsRectItem ());
 	canvas->addItem (coverBot = new QGraphicsRectItem ());
@@ -83,6 +83,7 @@ BoardView::BoardView(QWidget *parent, QGraphicsScene *c)
 
 BoardView::~BoardView()
 {
+	canvas->removeItem (&m_stone_layer);
 	stop_observing ();
 	clear_graphics_elts ();
 	clear_eval_data ();
@@ -715,6 +716,8 @@ QString BoardView::render_ascii (bool do_number, bool coords)
 	return result;
 }
 
+/* Examine the current cursor position, and extract a PV line into count_map and max_number if
+   we have one.  Always return the eval state if we have one.  */
 game_state *Board::extract_analysis (const go_board &b, std::vector<int> &count_map, int &max_number)
 {
 	int maxdepth = setting->readIntEntry ("ANALYSIS_DEPTH");
@@ -746,6 +749,62 @@ game_state *Board::extract_analysis (const go_board &b, std::vector<int> &count_
 	}
 	max_number = count;
 	return startpos;
+}
+
+const QPixmap &BoardView::choose_stone_pixmap (stone_color c, stone_type type, int bp)
+{
+	if (type == stone_type::live) {
+		const QList<QPixmap> *l = imageHandler->getStonePixmaps ();
+		int cnt = l->count ();
+		if (c == black)
+			return (*l)[0];
+		else if (cnt <= 2)
+			return (*l)[1];
+		else
+			return (*l)[1 + bp % (cnt - 2)];
+	} else {
+		const QList<QPixmap> *l = imageHandler->getGhostPixmaps ();
+		if (c == black)
+			return (*l)[0];
+		else
+			return (*l)[1];
+	}
+}
+
+std::pair<stone_color, stone_type> BoardView::stone_to_display (const go_board &b, stone_color to_move,
+								int x, int y, game_state *startpos,
+								const std::vector<int> &count_map, int n_back,
+								const go_board &vars, int var_type)
+{
+	int bp = b.bitpos (x, y);
+	stone_color sc = b.stone_at (x, y);
+	stone_type type = stone_type::live;
+	mark mark_at_pos = b.mark_at (x, y);
+	int v = startpos ? count_map[bp] : 0;
+
+	/* If we don't have a real stone, check for various possibilities of
+	   ghost stones.  First, PV moves, then the mouse cursor, then territory
+	   marks, then variation display.  */
+	if (sc == none && n_back == 0 && v > 0) {
+		int v_tmp = v;
+		if (m_eval_state->to_move () == black)
+			v_tmp++;
+		sc = v_tmp % 2 ? white : black;
+	}
+
+	if (sc == none) {
+		sc = cursor_color (x, y, to_move);
+		if (sc != none)
+			type = stone_type::var;
+	} else if (mark_at_pos == mark::terr || mark_at_pos == mark::falseeye)
+		type = stone_type::var;
+
+	if (sc == none && var_type == 1) {
+		sc = vars.stone_at (x, y);
+		if (sc != none)
+			type = stone_type::var;
+	}
+	return std::make_pair (sc, type);
 }
 
 /* The central function for synchronizing visual appearance with the abstract board data.  */
@@ -787,6 +846,8 @@ void BoardView::sync_appearance (bool)
 	int n_back = 0, max_number = 0;
 	std::vector<int> count_map (bitsize);
 
+	/* Two ways we can get move numbering: either when showing a PV line from analysis, or
+	   when displaying a figure.  The first has priority.  */
 	game_state *startpos = extract_analysis (b, count_map, max_number);
 	if (startpos) {
 		have_analysis = true;
@@ -813,20 +874,22 @@ void BoardView::sync_appearance (bool)
 			startpos = nullptr;
 		max_number = n_back;
 	}
+
+	/* Handle marks first.  They go into an svgbuilder which we'll render at the end,
+	   but we also use this to decide which parts of the grid to hide for better
+	   readability.  */
 	m_used_letters.clear ();
 	m_used_numbers.clear ();
 
 	m_grid->showAll ();
-
 	for (int tx = 0; tx < szx + 2 * dups_x; tx++)
 		for (int ty = 0; ty < szy + 2 * dups_y; ty++) {
 			int x = (tx + m_shift_x + (szx - dups_x)) % szx;
 			int y = (ty + m_shift_y + (szy - dups_y)) % szy;
+			auto stone_display = stone_to_display (b, to_move, x, y,
+							       startpos, count_map, n_back, vars, var_type);
+			stone_color sc = stone_display.first;
 			int bp = b.bitpos (x, y);
-			int st_bp = tx + ty * (szx + 2 * dups_x);
-			stone_gfx *s = m_stones[st_bp];
-			stone_color sc = b.stone_at (x, y);
-			stone_type type = stone_type::live;
 			mark mark_at_pos = b.mark_at (x, y);
 			mextra extra = b.mark_extra_at (x, y);
 			bool was_last_move = false;
@@ -839,49 +902,8 @@ void BoardView::sync_appearance (bool)
 					was_last_move = true;
 			}
 
-			/* If we don't have a real stone, check for various possibilities of
-			   ghost stones.  First, PV moves, then the mouse cursor, then territory
-			   marks, then variation display.  */
-			if (sc == none && n_back == 0 && v > 0) {
-				int v_tmp = v;
-				if (m_eval_state->to_move () == black)
-					v_tmp++;
-				sc = v_tmp % 2 ? white : black;
-			}
-
-			if (sc == none) {
-				sc = cursor_color (x, y, to_move);
-				if (sc != none)
-					type = stone_type::var;
-			} else if (mark_at_pos == mark::terr || mark_at_pos == mark::falseeye)
-				type = stone_type::var;
-
-			if (sc == none && var_type == 1) {
-				sc = vars.stone_at (x, y);
-				if (sc != none)
-					type = stone_type::var;
-			}
-			if (sc == none) {
-				if (s) {
-					s->hide ();
-					s = nullptr;
-				}
-			}
-			if (sc != none) {
-				if (s == nullptr)
-					s = new stone_gfx (canvas, imageHandler, sc, type, bp);
-				else
-					s->set_appearance (sc, type);
-				s->show ();
-			}
-			if (s) {
-				s->set_center(m_board_rect.x () + square_size * tx, m_board_rect.y () + square_size * ty);
-				m_stones[st_bp] = s;
-			}
-
 			mark var_mark = var_type == 2 ? vars.mark_at (x, y) : mark::none;
 			mextra var_me = vars.mark_extra_at (x, y);
-			/* Now look at marks.  */
 
 			if (mark_at_pos == mark::num)
 				m_used_numbers.set_bit (extra);
@@ -945,11 +967,60 @@ void BoardView::sync_appearance (bool)
 				m_grid->hide (tx, ty);
 		}
 
-	canvas->update ();
-	QPixmap img = svg.to_pixmap (square_size * (b.size_x () + 2 * dups_x),
-				     square_size * (b.size_y () + 2 * dups_y));
-	m_mark_layer->setPixmap (img);
-	m_mark_layer->setPos (m_board_rect.x () - square_size / 2, m_board_rect.y () - square_size / 2);
+	/* Now, draw stones.  Do this in two passes, with shadows first.  */
+	QPixmap stones (m_wood_rect.size ());
+	stones.fill (QColor (0, 0, 0, 0));
+	QPainter painter;
+	painter.begin (&stones);
+	painter.setPen (Qt::NoPen);
+	int shadow_offx = m_board_rect.left () - m_wood_rect.left () - square_size / 2 - square_size / 8;
+	int shadow_offy = m_board_rect.top () - m_wood_rect.top () - square_size / 2 + square_size / 8;
+	for (int tx = 0; tx < szx + 2 * dups_x; tx++)
+		for (int ty = 0; ty < szy + 2 * dups_y; ty++) {
+			int x = (tx + m_shift_x + (szx - dups_x)) % szx;
+			int y = (ty + m_shift_y + (szy - dups_y)) % szy;
+			auto stone_display = stone_to_display (b, to_move, x, y,
+							       startpos, count_map, n_back, vars, var_type);
+			stone_color sc = stone_display.first;
+			stone_type type = stone_display.second;
+			if (sc != none && type == stone_type::live) {
+				painter.drawPixmap (shadow_offx + tx * square_size,
+						    shadow_offy + ty * square_size,
+						    imageHandler->getStonePixmaps ()->last ());
+			}
+		}
+
+	int stone_offx = m_board_rect.left () - m_wood_rect.left () - square_size / 2;
+	int stone_offy = m_board_rect.top () - m_wood_rect.top () - square_size / 2;
+	for (int tx = 0; tx < szx + 2 * dups_x; tx++)
+		for (int ty = 0; ty < szy + 2 * dups_y; ty++) {
+			int x = (tx + m_shift_x + (szx - dups_x)) % szx;
+			int y = (ty + m_shift_y + (szy - dups_y)) % szy;
+			auto stone_display = stone_to_display (b, to_move, x, y,
+							       startpos, count_map, n_back, vars, var_type);
+			stone_color sc = stone_display.first;
+			stone_type type = stone_display.second;
+			if (sc != none) {
+				int bp = b.bitpos (x, y);
+				painter.drawPixmap (stone_offx + tx * square_size,
+						    stone_offy + ty * square_size,
+						    choose_stone_pixmap (sc, type, bp));
+			}
+		}
+
+	/* Now render the marks on top of all that.  */
+	QTransform transform;
+	transform.translate (m_board_rect.x () - m_wood_rect.x () - square_size / 2,
+			     m_board_rect.y () - m_wood_rect.y () - square_size / 2);
+	transform.scale (((double)m_board_rect.width () + square_size) / m_wood_rect.width (),
+			 ((double)m_board_rect.height () + square_size) / m_wood_rect.height ());
+	painter.setWorldTransform (transform);
+	QSvgRenderer renderer (svg);
+	renderer.render (&painter);
+
+	painter.end ();
+	m_stone_layer.setPixmap (stones);
+	m_stone_layer.setPos (m_wood_rect.x (), m_wood_rect.y ());
 }
 
 void Board::sync_appearance (bool board_only)
@@ -1508,16 +1579,6 @@ void BoardView::changeSize()
 	resizeBoard (width (), height ());
 }
 
-void BoardView::clear_stones ()
-{
-	size_t sz = m_stones.size ();
-	for (size_t i = 0; i < sz; i++) {
-		stone_gfx *s = m_stones[i];
-		delete s;
-		m_stones[i] = nullptr;
-	}
-}
-
 void BoardView::clear_selection ()
 {
 	m_rect_x1 = m_rect_y1 = 1;
@@ -1549,7 +1610,6 @@ void BoardView::clear_graphics_elts ()
 {
 	delete m_grid;
 	delete m_coords;
-	clear_stones ();
 
 	m_shift_x = m_shift_y = 0;
 }
@@ -1563,11 +1623,6 @@ void BoardView::alloc_graphics_elts ()
 	board_size_y = b.size_y ();
 
 	calculateSize ();
-
-	m_shown_points = (board_size_x + 2 * n_dups_h ()) * (board_size_y + 2 * n_dups_v ());
-	m_stones.resize (m_shown_points);
-	for (int i = 0; i < m_shown_points; i++)
-		m_stones[i] = nullptr;
 
 	m_grid = new Grid (canvas, b, n_dups_h (), n_dups_v (), calculate_hoshis (b));
 	m_coords = new CoordDisplay (canvas, b, n_dups_h (), n_dups_v (), coord_offset, coord_margin, showSGFCoords);

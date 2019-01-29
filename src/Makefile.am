@@ -13,7 +13,7 @@ DISTHEADERS_MOC = audio.h bitarray.h board.h clockview.h gamedialog.h gamestable
 
 DISTHEADERS_NOMOC = goboard.h config.h defines.h grid.h goboard.h gogame.h gs_globals.h \
 	igsinterface.h imagehandler.h komispinbox.h mark.h \
-	misc.h msg_handler.h setting.h sgf.h sgfparser.h stone.h \
+	misc.h msg_handler.h setting.h sgf.h sgfparser.h \
 	svgbuilder.h ui_helpers.h
 
 DISTSOURCES = audio.cpp board.cpp goboard.cc gogame.cc gamedialog.cpp \
@@ -23,7 +23,7 @@ DISTSOURCES = audio.cpp board.cpp goboard.cc gogame.cc gamedialog.cpp \
 		misc.cpp msg_handler.cpp parser.cpp \
 		playertable.cpp preferences.cpp qgo.cpp qgo_interface.cpp qgtp.cpp \
 		newaigamedlg.cpp setting.cpp  sgfload.cc sgf2board.cc \
-		stone.cpp svgbuilder.cpp tables.cpp telnet.cpp textview.cpp
+		svgbuilder.cpp tables.cpp telnet.cpp textview.cpp
 
 FORMS = clientwindow_gui.ui gameinfo_gui.ui gui_dialog.ui mainwidget_gui.ui newgame_gui.ui \
 	newlocalgame_gui.ui newvariantgame_gui.ui normaltools_gui.ui nthmove_gui.ui preferences_gui.ui \

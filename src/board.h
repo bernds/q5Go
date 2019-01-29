@@ -18,7 +18,6 @@
 
 #include "defines.h"
 #include "setting.h"
-#include "stone.h"
 #include "goboard.h"
 #include "gogame.h"
 #include "qgtp.h"
@@ -48,7 +47,6 @@ class BoardView : public QGraphicsView, public navigable_observer
 protected:
 	/* Size of the (abstract) board.  */
 	int board_size_x, board_size_y;
-	int m_shown_points;
 
 	/* A local copy of the board for when editing and scoring.  Null otherwise.  */
 	go_board *m_edit_board = nullptr;
@@ -78,7 +76,6 @@ protected:
 	double square_size;
 
 	/* Graphical elements on the board canvas.  */
-	std::vector<stone_gfx *> m_stones;
 	QGraphicsScene *canvas;
 	Grid *m_grid {};
 	CoordDisplay *m_coords {};
@@ -90,10 +87,11 @@ protected:
 	game_state *m_eval_state {};
 	double *m_winrate {};
 	int *m_visits {};
-	QGraphicsPixmapItem *m_mark_layer {};
+	QGraphicsPixmapItem m_stone_layer;
 
 	void observed_changed () override;
 	virtual void sync_appearance (bool board_only = true);
+	const QPixmap &choose_stone_pixmap (stone_color, stone_type, int);
 	void update_shift (int x, int y);
 
 	int n_dups_h ();
@@ -112,8 +110,12 @@ protected:
 		m_visits = nullptr;
 	}
 
+	/* Overridden by Board.  */
 	virtual stone_color cursor_color (int, int, stone_color) { return none; }
 	virtual game_state *extract_analysis (const go_board &, std::vector<int> &, int &) { return nullptr; }
+	std::pair<stone_color, stone_type> stone_to_display (const go_board &, stone_color to_move, int x, int y,
+							     game_state *startpos, const std::vector<int> &count_map, int n_back,
+							     const go_board &vars, int var_type);
 
 public:
 	BoardView (QWidget *parent=0, QGraphicsScene *c = 0);
