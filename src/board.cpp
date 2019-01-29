@@ -69,10 +69,6 @@ BoardView::BoardView(QWidget *parent, QGraphicsScene *c)
 	canvas->addItem (coverLeft = new QGraphicsRectItem ());
 	canvas->addItem (coverRight = new QGraphicsRectItem ());
 
-	coverTop->setBrush (QColor (0, 0, 0, 128));
-	coverBot->setBrush (QColor (0, 0, 0, 128));
-	coverLeft->setBrush (QColor (0, 0, 0, 128));
-	coverRight->setBrush (QColor (0, 0, 0, 128));
 	coverTop->setPen (QColor (0, 0, 0, 0));
 	coverBot->setPen (QColor (0, 0, 0, 0));
 	coverLeft->setPen (QColor (0, 0, 0, 0));
@@ -1096,29 +1092,30 @@ int Board::coord_vis_to_board_y (int p)
 
 void BoardView::updateCovers ()
 {
+	coverLeft->setVisible (m_rect_x1 > 1 || n_dups_h () > 0);
+	coverRight->setVisible (m_rect_x2 < board_size_x || n_dups_h () > 0);
+	coverTop->setVisible (m_rect_y1 > 1 || n_dups_v () > 0);
+	coverBot->setVisible (m_rect_y2 < board_size_y || n_dups_v () > 0);
+
 	QRectF sceneRect = canvas->sceneRect ();
-	int top_edge = 0;
-	if (m_rect_y1 > 1)
-		top_edge = m_board_rect.y () + square_size * (m_rect_y1 + n_dups_v () - 1.5);
-	int bot_edge = sceneRect.bottom();
-	if (m_rect_y2 < board_size_y)
-		bot_edge = m_board_rect.y () + square_size * (m_rect_y2 + n_dups_v () - 0.5);
-	int left_edge = 0;
-	if (m_rect_x1 > 1)
-		left_edge = m_board_rect.x () + square_size * (m_rect_x1 + n_dups_h () - 1.5);
-	int right_edge = sceneRect.right();
-	if (m_rect_x2 < board_size_x)
-		right_edge = m_board_rect.x () + square_size * (m_rect_x2 + n_dups_h () - 0.5);
+	int top_edge = m_board_rect.y () + square_size * (m_rect_y1 + n_dups_v () - 1.5);
+	int bot_edge = m_board_rect.y () + square_size * (m_rect_y2 + n_dups_v () - 0.5);
+	int left_edge = m_board_rect.x () + square_size * (m_rect_x1 + n_dups_h () - 1.5);
+	int right_edge = m_board_rect.x () + square_size * (m_rect_x2 + n_dups_h () - 0.5);
 
-	coverLeft->setVisible (m_rect_x1 > 1);
-	coverRight->setVisible (m_rect_x2 < board_size_x);
-	coverTop->setVisible (m_rect_y1 > 1);
-	coverBot->setVisible (m_rect_y2 < board_size_y);
-
+	int sides_top_edge = coverTop->isVisible () ? top_edge : 0;
+	int sides_bot_edge = coverBot->isVisible () ? bot_edge : sceneRect.bottom();
 	coverTop->setRect (0, 0, sceneRect.right(), top_edge);
 	coverBot->setRect (0, bot_edge, sceneRect.right(), sceneRect.bottom () - bot_edge);
-	coverLeft->setRect (0, top_edge, left_edge, bot_edge - top_edge);
-	coverRight->setRect (right_edge, top_edge, sceneRect.right() - right_edge, bot_edge - top_edge);
+	coverLeft->setRect (0, sides_top_edge, left_edge, sides_bot_edge - sides_top_edge);
+	coverRight->setRect (right_edge, sides_top_edge,
+			     sceneRect.right() - right_edge, sides_bot_edge - sides_top_edge);
+
+	int alpha = n_dups_h () + n_dups_v () > 0 ? 32 : 128;
+	coverTop->setBrush (QColor (0, 0, 0, alpha));
+	coverBot->setBrush (QColor (0, 0, 0, alpha));
+	coverLeft->setBrush (QColor (0, 0, 0, alpha));
+	coverRight->setBrush (QColor (0, 0, 0, alpha));
 }
 
 void Board::updateRectSel (int x, int y)
@@ -1666,6 +1663,7 @@ void BoardView::update_prefs ()
 
 	draw_background ();
 	draw_grid_and_coords ();
+	updateCovers ();
 
 	sync_appearance ();
 }

@@ -60,7 +60,10 @@ public:
 
 	void setMoveData(const game_state &, const go_board &, GameMode);
 	void mark_dead_external (int x, int y) { gfx_board->mark_dead_external (x, y); }
-	void update_game_record (std::shared_ptr<game_record>) { /* @@@ */ }
+	void init_game_record (std::shared_ptr<game_record>);
+	/* Called when the record was changed by some external source (say, a Go server
+	   providing a title string).  */
+	void update_game_record ();
 	void updateCaption (bool modified);
 
 	void done_rect_select (int minx, int miny, int maxx, int maxy);

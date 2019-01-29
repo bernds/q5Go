@@ -1338,7 +1338,7 @@ void qGoBoard::set_title(const QString &t)
 
 	m_game->set_title (t.toStdString ());
 	if (win)
-		win->update_game_record (m_game);
+		win->update_game_record ();
 }
 
 void qGoBoard::set_komi(const QString &k)
@@ -1362,7 +1362,7 @@ void qGoBoard::set_komi(const QString &k)
 void qGoBoard::set_freegame(bool f)
 {
 	m_game->set_ranked_type (f ? ranked::free : ranked::ranked);
-	win->update_game_record (m_game);
+	win->update_game_record ();
 }
 
 // convert seconds to time string

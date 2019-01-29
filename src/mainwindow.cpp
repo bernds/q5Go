@@ -247,13 +247,12 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 	toolBar->setFocus();
 	updateFont();
 
-	mainWidget->init_game_record (gr);
+	init_game_record (gr);
 	setGameMode (mode);
 
 	splitter_comment->resize (100, 100);
 	restoreWindowSize ();
 
-	updateCaption (false);
 	updateBoard();
 
 	connect(commentEdit, SIGNAL(textChanged()), this, SLOT(slotUpdateComment()));
@@ -262,6 +261,21 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 
 	update_analysis (analyzer::disconnected);
 	main_window_list.push_back (this);
+}
+
+void MainWindow::init_game_record (std::shared_ptr<game_record> gr)
+{
+	m_game = gr;
+	mainWidget->init_game_record (gr);
+	updateCaption (false);
+	const go_board &b = gr->get_root ()->get_board ();
+	bool disable_rect = (b.torus_h () || b.torus_v ()) && setting->readIntEntry ("TOROID_DUPS") > 0;
+	editRectSelect->setEnabled (!disable_rect);
+}
+
+void MainWindow::update_game_record ()
+{
+	updateCaption (gfx_board->modified ());
 }
 
 MainWindow::~MainWindow()
@@ -1141,15 +1155,12 @@ void MainWindow::slotFileNewGame (bool)
 	if (!checkModified())
 		return;
 
-	/* @@@ choose between new game dialogs */
 	std::shared_ptr<game_record> gr = new_game_dialog (this);
 	if (gr == nullptr)
 		return;
 
-	m_game = gr;
+	init_game_record (gr);
 	setGameMode (modeNormal);
-	mainWidget->init_game_record (gr);
-	updateCaption (false);
 
 	statusBar()->showMessage(tr("New board prepared."));
 }
@@ -1163,10 +1174,8 @@ void MainWindow::slotFileNewVariantGame (bool)
 	if (gr == nullptr)
 		return;
 
-	m_game = gr;
+	init_game_record (gr);
 	setGameMode (modeNormal);
-	mainWidget->init_game_record (gr);
-	updateCaption (false);
 
 	statusBar()->showMessage(tr("New board prepared."));
 }
@@ -1215,10 +1224,9 @@ bool MainWindow::doOpen(const char *fileName)
 	if (gr == nullptr)
 		/* Assume alerts were shown in record_from_stream.  */
 		return false;
-	m_game = gr;
+
+	init_game_record (gr);
 	setGameMode (modeNormal);
-	mainWidget->init_game_record (gr);
-	updateCaption (false);
 
 	return true;
 }
@@ -1309,10 +1317,9 @@ void MainWindow::slotFileImportSgfClipB(bool)
 		/* Assume alerts were shown in record_from_stream.  */
 		return;
 
-	m_game = gr;
+	init_game_record (gr);
 	setGameMode (modeNormal);
-	mainWidget->init_game_record (gr);
-	updateCaption (false);
+
 	statusBar()->showMessage(tr("SGF imported."));
 }
 
@@ -1507,6 +1514,10 @@ void MainWindow::updateBoard()
 
 	gfx_board->update_prefs ();
 	slotViewLeftSidebar();
+
+	const go_board &b = m_game->get_root ()->get_board ();
+	bool disable_rect = (b.torus_h () || b.torus_v ()) && setting->readIntEntry ("TOROID_DUPS") > 0;
+	editRectSelect->setEnabled (!disable_rect);
 }
 
 void MainWindow::slotSetGameInfo(bool)
