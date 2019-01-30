@@ -15,6 +15,7 @@
 #include "setting.h"
 #include "miscdialogs.h"
 #include "ui_helpers.h"
+#include "variantgamedlg.h"
 
 #include <fstream>
 #include <qtranslator.h>

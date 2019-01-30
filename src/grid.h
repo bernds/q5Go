@@ -27,6 +27,8 @@
 
 #include <QtGui>
 #include <QMap>
+#include <QGraphicsLineItem>
+#include <QGraphicsEllipseItem>
 
 class Grid
 {

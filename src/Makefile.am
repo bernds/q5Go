@@ -9,7 +9,8 @@ KDE_OPTIONS = qtonly
 DISTHEADERS_MOC = audio.h bitarray.h board.h clockview.h gamedialog.h gamestable.h gametree.h helpviewer.h icons.h \
 	igsconnection.h mainwidget.h mainwindow.h clientwin.h miscdialogs.h \
 	misctools.h normaltools.h scoretools.h parser.h playertable.h preferences.h qgo.h \
-	qgo_interface.h qgtp.h newaigamedlg.h sizegraphicsview.h tables.h telnet.h textview.h
+	qgo_interface.h qgtp.h newaigamedlg.h sizegraphicsview.h tables.h telnet.h textview.h \
+	variantgamedlg.h
 
 DISTHEADERS_NOMOC = goboard.h config.h defines.h grid.h goboard.h gogame.h gs_globals.h \
 	igsinterface.h imagehandler.h komispinbox.h mark.h \
@@ -23,7 +24,7 @@ DISTSOURCES = audio.cpp board.cpp goboard.cc gogame.cc gamedialog.cpp \
 		misc.cpp msg_handler.cpp parser.cpp \
 		playertable.cpp preferences.cpp qgo.cpp qgo_interface.cpp qgtp.cpp \
 		newaigamedlg.cpp setting.cpp  sgfload.cc sgf2board.cc \
-		svgbuilder.cpp tables.cpp telnet.cpp textview.cpp
+		svgbuilder.cpp tables.cpp telnet.cpp textview.cpp variantgamedlg.cpp
 
 FORMS = clientwindow_gui.ui gameinfo_gui.ui gui_dialog.ui mainwidget_gui.ui newgame_gui.ui \
 	newlocalgame_gui.ui newvariantgame_gui.ui normaltools_gui.ui nthmove_gui.ui preferences_gui.ui \

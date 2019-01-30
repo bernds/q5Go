@@ -15,7 +15,7 @@ FORMS	      = gui_dialog.ui \
 		textedit_gui.ui \
 		textview_gui.ui \
 		svgview_gui.ui \
-		nthmove_gui.ui
+                nthmove_gui.ui
 
 HEADERS		      = config.h \
 			clockview.h \
@@ -58,6 +58,7 @@ HEADERS		      = config.h \
                         grid.h \
                         misctools.h \
                         miscdialogs.h \
+                        variantgamedlg.h \
                         audio.h
 
 SOURCES		      = clientwin.cpp \
@@ -90,6 +91,7 @@ SOURCES		      = clientwin.cpp \
                         svgbuilder.cpp \
 			textview.cpp \
                         grid.cpp \
+                        variantgamedlg.cpp \
                         audio.cpp
 
 isEmpty(PREFIX) {

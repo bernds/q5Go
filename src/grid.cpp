@@ -71,11 +71,8 @@ void Grid::resize (const QRect &rect, int shift_x, int shift_y, double square_si
 	int size = square_size / 5;
 
 	QPen pen;
-	bool widen = setting->readBoolEntry ("BOARD_LINEWIDEN");
-	int scaled_w = setting->readBoolEntry ("BOARD_LINESCALE") ? (int)square_size / 40 + 1 : 1;
-	int widened_w = scaled_w;
-	if (setting->readBoolEntry ("BOARD_LINEWIDEN"))
-		widened_w *= 2;
+	int scaled_w = 1;
+	int widened_w = 2;
 
 	int szx = m_ref_board.size_x ();
 	int szy = m_ref_board.size_y ();
@@ -92,14 +89,14 @@ void Grid::resize (const QRect &rect, int shift_x, int shift_y, double square_si
 			bool in_real_board = (i >= m_h_dups && i < szx + m_h_dups
 					      && j >= m_v_dups && j < szy + m_v_dups);
 
-			pen.setWidth (in_real_board && widen && (first_col || last_col) ? widened_w : scaled_w);
+			pen.setWidth (in_real_board && (first_col || last_col) ? widened_w : scaled_w);
 			m_vgrid[bp].setPen (pen);
-			pen.setWidth (in_real_board && widen && (first_row || last_row) ? widened_w : scaled_w);
+			pen.setWidth (in_real_board && (first_row || last_row) ? widened_w : scaled_w);
 			m_hgrid[bp].setPen (pen);
 
-			if (m_h_dups != 0)
+			if (m_ref_board.torus_h ())
 				first_col = last_col = false;
-			if (m_v_dups != 0)
+			if (m_ref_board.torus_v ())
 				first_row = last_row = false;
 			m_hgrid[bp].setLine(int(rect.x () + square_size * (i - 0.5 * !first_col)),
 					    rect.y () + square_size * j,
