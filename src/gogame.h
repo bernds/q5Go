@@ -1,6 +1,7 @@
 #ifndef GOGAME_H
 #define GOGAME_H
 
+#include "goboard.h"
 #include <functional>
 class visual_tree
 {

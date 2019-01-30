@@ -3,6 +3,7 @@
  */
 
 #include <QHeaderView>
+#include <QMouseEvent>
 
 #include "playertable.h"
 #include "misc.h"

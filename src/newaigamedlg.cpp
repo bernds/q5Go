@@ -1,11 +1,12 @@
 #include <QFileDialog>
+#include <QMessageBox>
 
 #include "qgo.h"
 #include "defines.h"
 #include "newaigamedlg.h"
 #include "setting.h"
 #include "komispinbox.h"
-#include <qmessagebox.h>
+#include "qgtp.h"
 
 NewAIGameDlg::NewAIGameDlg( QWidget* parent, const QList<Engine *> engines)
 	: QDialog (parent)

@@ -3,8 +3,6 @@
 
 #include "misctools.h"
 #include "ui_mainwidget_gui.h"
-#include "setting.h"
-#include "defines.h"
 
 class go_board;
 class MainWindow;

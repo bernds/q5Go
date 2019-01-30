@@ -6,12 +6,9 @@
 #define MAINWINDOW_H
 
 #include <qlayout.h>
-#include <QCloseEvent>
 #include <QGridLayout>
 #include <QLabel>
-#include <QKeyEvent>
 #include <QAction>
-#include <QTreeWidget>
 #include <QMainWindow>
 
 #include "qgo.h"
@@ -19,7 +16,6 @@
 #include "board.h"
 #include "mainwidget.h"
 #include "setting.h"
-#include "miscdialogs.h"
 #include "textview.h"
 #include "qgtp.h"
 

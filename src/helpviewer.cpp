@@ -2,14 +2,16 @@
  * helpviewer.cpp
  */
 
+#include <QPixmap>
+#include <QStringList>
+
 #include "helpviewer.h"
 #include "qgo.h"
+#include "setting.h"
 #include "config.h"
-#include <QPixmap>
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <qstringlist.h>
 
 HelpViewer::HelpViewer(QWidget* parent)
 	: QMainWindow(parent)

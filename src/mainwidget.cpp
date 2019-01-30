@@ -3,17 +3,12 @@
 */
 
 #include <QPixmap>
-#include <QGraphicsTextItem>
+#include <QTabWidget>
 
 #include "qgo.h"
-#include "mainwidget.h"
 #include "defines.h"
-#include <qpushbutton.h>
-#include <qlayout.h>
-#include <qslider.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qtabwidget.h>
+#include "mainwidget.h"
+#include "mainwindow.h"
 
 ClockView::ClockView (QWidget *parent)
 	: QGraphicsView (parent)

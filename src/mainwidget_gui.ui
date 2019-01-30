@@ -2400,7 +2400,7 @@ After placing and/or undo release button for returning to starting point automat
   <customwidget>
    <class>Board</class>
    <extends>QWidget</extends>
-   <header location="global">board.h</header>
+   <header>board.h</header>
   </customwidget>
   <customwidget>
    <class>NormalTools</class>

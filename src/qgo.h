@@ -7,16 +7,7 @@
 
 #include <QObject>
 
-#include "mainwindow.h"
-#include "setting.h"
-#include "defines.h"
-#include "audio.h"
-#include "goboard.h"
-
 class HelpViewer;
-
-extern "C" {extern  void play(const char *Pathname); }    //SL added eb 7
-
 
 class qGo : public QObject
 {

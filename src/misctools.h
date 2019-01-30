@@ -6,8 +6,6 @@
 #define MISCTOOLS_H
 #include "ui_scoretools_gui.h"
 
-class Move;
-
 class ScoreTools : public QWidget, public Ui::ScoreTools
 {
 	Q_OBJECT

@@ -9,21 +9,18 @@
 #undef SHOW_INTERNAL_TIME
 #undef SHOW_MOVES_DLG
 
+#include <QObject>
+#include <QString>
+#include <QTimerEvent>
+#include <QStandardItemModel>
+
 #include "tables.h"
 #include "defines.h"
 #include "gs_globals.h"
 #include "setting.h"
-#include <qobject.h>
-#include <qstring.h>
-#include <qtimer.h>
 
-// from qGo:
 #include "qgo.h"
-//Added by qt3to4:
-#include <QTimerEvent>
-#include "mainwindow.h"
-//#include "qgoclient_interface.h"
-
+#include "gogame.h"
 
 //-----------
 
