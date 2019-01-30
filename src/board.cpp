@@ -55,7 +55,6 @@ BoardView::BoardView(QWidget *parent, QGraphicsScene *c)
 
 	imageHandler->init(10);
 
-	//coordsTip = new Tip(this);
 #ifdef Q_OS_WIN
 	resizeDelayFlag = false;
 #endif
@@ -174,7 +173,7 @@ void BoardView::resizeBoard (int w, int h)
 
 	// Redraw the board
 	draw_background ();
-	draw_grid_and_coords ();
+	draw_coords ();
 	updateCovers ();
 
 	sync_appearance ();
@@ -255,9 +254,8 @@ void BoardView::draw_background()
 	canvas->setBackgroundBrush (QBrush (image));
 }
 
-void BoardView::draw_grid_and_coords ()
+void BoardView::draw_coords ()
 {
-	m_grid->resize (m_board_rect, m_shift_x, m_shift_y, square_size);
 	m_coords->resize (m_wood_rect, m_board_rect, m_shift_x, m_shift_y, square_size, showCoords);
 }
 
@@ -747,6 +745,130 @@ game_state *Board::extract_analysis (const go_board &b, std::vector<int> &count_
 	return startpos;
 }
 
+void BoardView::draw_grid (QPainter &painter, bit_array &grid_hidden)
+{
+	int szx = board_size_x;
+	int szy = board_size_y;
+	int dups_x = n_dups_h ();
+	int dups_y = n_dups_v ();
+
+	int scaled_w = setting->readBoolEntry ("BOARD_LINESCALE") ? (int)square_size / 40 + 1 : 1;
+	QPen pen;
+	pen.setWidth (scaled_w);
+	painter.setPen (pen);
+
+	int line_offx = m_board_rect.left () - m_wood_rect.left ();
+	int line_offy = m_board_rect.top () - m_wood_rect.top ();
+	for (int tx = 0; tx < szx + 2 * dups_x; tx++) {
+		int first = -2;
+		for (int ty = 0; ty < szy + 2 * dups_y + 1; ty++) {
+			int bp = tx + ty * (szx + 2 * dups_x);
+			if (ty == szy + 2 * dups_y || grid_hidden.test_bit (bp)) {
+				if (first != -2) {
+					int last = ty * 2 - 1;
+					if (ty == szy + 2 * dups_y && dups_y == 0)
+						last--;
+					painter.drawLine (line_offx + tx * square_size, line_offy + first * square_size / 2,
+							  line_offx + tx * square_size, line_offy + last * square_size / 2);
+				}
+				first = -2;
+			} else if (first == -2)
+				first = ty == 0 && dups_y == 0 ? 0 : ty * 2 - 1;
+		}
+	}
+	for (int ty = 0; ty < szy + 2 * dups_y; ty++) {
+		int first = -2;
+		for (int tx = 0; tx < szx + 2 * dups_x  + 1; tx++) {
+			int bp = tx + ty * (szx + 2 * dups_x);
+			if (tx == szx + 2 * dups_x || grid_hidden.test_bit (bp)) {
+				if (first != -2) {
+					int last = tx * 2 - 1;
+					if (tx == szx + 2 * dups_x && dups_x == 0)
+						last--;
+					painter.drawLine (line_offx + first * square_size / 2, line_offy + ty * square_size,
+							  line_offx + last * square_size / 2, line_offy + ty * square_size);
+				}
+				first = -2;
+			} else if (first == -2)
+				first = tx == 0 && dups_x == 0 ? 0 : tx * 2 - 1;
+		}
+	}
+	if (setting->readBoolEntry ("BOARD_LINEWIDEN"))
+		pen.setWidth (scaled_w * 2);
+	painter.setPen (pen);
+
+	int ty1 = dups_y + (szy - m_shift_y) % szy;
+	int ty2 = dups_y + (szy - m_shift_y - 1) % szy;
+	int yfirst1 = -2;
+	int yfirst2 = -2;
+	for (int tx = 0; tx < szx + 1; tx++) {
+		int x = (tx + m_shift_x) % szx;
+		int bp1 = tx + dups_x + ty1 * (szx + 2 * dups_x);
+		int bp2 = tx + dups_x + ty2 * (szx + 2 * dups_x);
+		if (tx == szx || x == 0 || grid_hidden.test_bit (bp1)) {
+			if (yfirst1 != -2) {
+				int last = tx * 2 - 1 + 2 * dups_x;
+				if (x == 0)
+					last--;
+				painter.drawLine (line_offx + yfirst1 * square_size / 2, line_offy + ty1 * square_size,
+						  line_offx + last * square_size / 2, line_offy + ty1 * square_size);
+			}
+			yfirst1 = -2;
+		}
+		if (tx == szx || x == 0 || grid_hidden.test_bit (bp2)) {
+			if (yfirst2 != -2) {
+				int last = tx * 2 - 1 + 2 * dups_x;
+				if (x == 0)
+					last--;
+				painter.drawLine (line_offx + yfirst2 * square_size / 2, line_offy + ty2 * square_size,
+						  line_offx + last * square_size / 2, line_offy + ty2 * square_size);
+			}
+			yfirst2 = -2;
+		}
+		if (tx == szx)
+			break;
+		if (!grid_hidden.test_bit (bp1) && (x == 0 || yfirst1 == -2))
+			yfirst1 = (x == 0 ? tx * 2 : tx * 2 - 1) + 2 * dups_x;
+		if (!grid_hidden.test_bit (bp2) && (x == 0 || yfirst2 == -2))
+			yfirst2 = (x == 0 ? tx * 2 : tx * 2 - 1) + 2 * dups_x;
+	}
+	int tx1 = dups_x + (szx - m_shift_x) % szx;
+	int tx2 = dups_x + (szx - m_shift_x - 1) % szx;
+	int xfirst1 = -2;
+	int xfirst2 = -2;
+	for (int ty = 0; ty < szy + 1; ty++) {
+		int y = (ty + m_shift_y) % szy;
+		int bp1 = tx1 + (ty + dups_y) * (szx + 2 * dups_x);
+		int bp2 = tx2 + (ty + dups_y) * (szx + 2 * dups_x);
+		if (ty == szy || y == 0 || grid_hidden.test_bit (bp1)) {
+			if (xfirst1 != -2) {
+				int last = ty * 2 - 1 + 2 * dups_y;
+				if (y == 0)
+					last--;
+				painter.drawLine (line_offx + tx1 * square_size, line_offy + xfirst1 * square_size / 2,
+						  line_offx + tx1 * square_size, line_offy + last * square_size / 2);
+			}
+			xfirst1 = -2;
+		}
+		if (ty == szy || y == 0 || grid_hidden.test_bit (bp2)) {
+			if (xfirst2 != -2) {
+				int last = ty * 2 - 1 + 2 * dups_y;
+				if (y == 0)
+					last--;
+				painter.drawLine (line_offx + tx2 * square_size, line_offy + xfirst2 * square_size / 2,
+						  line_offx + tx2 * square_size, line_offy + last * square_size / 2);
+			}
+			xfirst2 = -2;
+		}
+		if (ty == szy)
+			break;
+		if (!grid_hidden.test_bit (bp1) && (y == 0 || xfirst1 == -2))
+			xfirst1 = (y == 0 ? ty * 2 : ty * 2 - 1) + 2 * dups_y;
+		if (!grid_hidden.test_bit (bp2) && (y == 0 || xfirst2 == -2))
+			xfirst2 = (y == 0 ? ty * 2 : ty * 2 - 1) + 2 * dups_y;
+	}
+}
+
 const QPixmap &BoardView::choose_stone_pixmap (stone_color c, stone_type type, int bp)
 {
 	if (type == stone_type::live) {
@@ -877,7 +999,7 @@ void BoardView::sync_appearance (bool)
 	m_used_letters.clear ();
 	m_used_numbers.clear ();
 
-	m_grid->showAll ();
+	bit_array grid_hidden ((szx + 2 * dups_x) * (szy + 2 * dups_y));
 	for (int tx = 0; tx < szx + 2 * dups_x; tx++)
 		for (int ty = 0; ty < szy + 2 * dups_y; ty++) {
 			int x = (tx + m_shift_x + (szx - dups_x)) % szx;
@@ -960,14 +1082,18 @@ void BoardView::sync_appearance (bool)
 						      sc, v, max_number, was_last_move, false, fi);
 
 			if (added)
-				m_grid->hide (tx, ty);
+				grid_hidden.set_bit (tx + ty * (szx + 2 * dups_x));
 		}
 
-	/* Now, draw stones.  Do this in two passes, with shadows first.  */
+	/* Now we're ready to draw the grid.  */
 	QPixmap stones (m_wood_rect.size ());
 	stones.fill (QColor (0, 0, 0, 0));
 	QPainter painter;
 	painter.begin (&stones);
+
+	draw_grid (painter, grid_hidden);
+
+	/* Now, draw stones.  Do this in two passes, with shadows first.  */
 	painter.setPen (Qt::NoPen);
 	int shadow_offx = m_board_rect.left () - m_wood_rect.left () - square_size / 2 - square_size / 8;
 	int shadow_offy = m_board_rect.top () - m_wood_rect.top () - square_size / 2 + square_size / 8;
@@ -1152,7 +1278,7 @@ void Board::update_shift (int x, int y)
 		return;
 	m_shift_x = x;
 	m_shift_y = y;
-	draw_grid_and_coords ();
+	draw_coords ();
 	sync_appearance ();
 }
 
@@ -1606,7 +1732,6 @@ int BoardView::n_dups_v ()
 
 void BoardView::clear_graphics_elts ()
 {
-	delete m_grid;
 	delete m_coords;
 
 	m_shift_x = m_shift_y = 0;
@@ -1622,7 +1747,6 @@ void BoardView::alloc_graphics_elts ()
 
 	calculateSize ();
 
-	m_grid = new Grid (canvas, b, n_dups_h (), n_dups_v (), calculate_hoshis (b));
 	m_coords = new CoordDisplay (canvas, b, n_dups_h (), n_dups_v (), coord_offset, coord_margin, showSGFCoords);
 }
 
@@ -1637,7 +1761,7 @@ void BoardView::reset_game (std::shared_ptr<game_record> gr)
 	alloc_graphics_elts ();
 
 	draw_background ();
-	draw_grid_and_coords ();
+	draw_coords ();
 
 	start_observing (gr->get_root ());
 
@@ -1662,7 +1786,7 @@ void BoardView::update_prefs ()
 	alloc_graphics_elts ();
 
 	draw_background ();
-	draw_grid_and_coords ();
+	draw_coords ();
 	updateCovers ();
 
 	sync_appearance ();

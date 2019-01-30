@@ -77,7 +77,6 @@ protected:
 
 	/* Graphical elements on the board canvas.  */
 	QGraphicsScene *canvas;
-	Grid *m_grid {};
 	CoordDisplay *m_coords {};
 
 	int m_vars_type = 1;
@@ -147,7 +146,8 @@ protected:
 
 	void calculateSize ();
 	void draw_background ();
-	void draw_grid_and_coords ();
+	void draw_grid (QPainter &, bit_array &);
+	void draw_coords ();
 
 	void resizeBoard(int w, int h);
 
