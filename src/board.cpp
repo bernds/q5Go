@@ -789,6 +789,8 @@ void BoardView::draw_grid (QPainter &painter, bit_array &grid_hidden)
 	int szy = board_size_y;
 	int dups_x = n_dups_h ();
 	int dups_y = n_dups_v ();
+	bool torus_h = m_game->get_root()->get_board().torus_h ();
+	bool torus_v = m_game->get_root()->get_board().torus_v ();
 
 	int scaled_w = setting->readBoolEntry ("BOARD_LINESCALE") ? (int)square_size / 40 + 1 : 1;
 	QPen pen;
@@ -804,14 +806,14 @@ void BoardView::draw_grid (QPainter &painter, bit_array &grid_hidden)
 			if (ty == szy + 2 * dups_y || grid_hidden.test_bit (bp)) {
 				if (first != -2) {
 					int last = ty * 2 - 1;
-					if (ty == szy + 2 * dups_y && dups_y == 0)
+					if (ty == szy + 2 * dups_y && !torus_v)
 						last--;
 					painter.drawLine (line_offx + tx * square_size, line_offy + first * square_size / 2,
 							  line_offx + tx * square_size, line_offy + last * square_size / 2);
 				}
 				first = -2;
 			} else if (first == -2)
-				first = ty == 0 && dups_y == 0 ? 0 : ty * 2 - 1;
+				first = ty == 0 && !torus_v ? 0 : ty * 2 - 1;
 		}
 	}
 	for (int ty = 0; ty < szy + 2 * dups_y; ty++) {
@@ -821,14 +823,14 @@ void BoardView::draw_grid (QPainter &painter, bit_array &grid_hidden)
 			if (tx == szx + 2 * dups_x || grid_hidden.test_bit (bp)) {
 				if (first != -2) {
 					int last = tx * 2 - 1;
-					if (tx == szx + 2 * dups_x && dups_x == 0)
+					if (tx == szx + 2 * dups_x && !torus_h)
 						last--;
 					painter.drawLine (line_offx + first * square_size / 2, line_offy + ty * square_size,
 							  line_offx + last * square_size / 2, line_offy + ty * square_size);
 				}
 				first = -2;
 			} else if (first == -2)
-				first = tx == 0 && dups_x == 0 ? 0 : tx * 2 - 1;
+				first = tx == 0 && !torus_h ? 0 : tx * 2 - 1;
 		}
 	}
 	if (setting->readBoolEntry ("BOARD_LINEWIDEN"))
