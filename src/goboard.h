@@ -199,6 +199,14 @@ public:
 	void identify_units ();
 	int count_liberties (const bit_array &);
 
+	std::pair<std::string, std::string> coords_name (int x, int y, bool sgf) const
+	{
+		if (sgf)
+			return std::make_pair (std::string (1, 'a' + x), std::string (1, 'a' + y));
+		if (x > 7)
+			x++;
+		return std::make_pair (std::string (1, 'A' + x), std::to_string (m_sz_y - y));
+	}
 	bool valid_move_p (int x, int y, stone_color);
 	void add_stone (int x, int y, stone_color col, bool process_captures = true);
 	/* Must be followed by an identify_units call after setting all new stones.  */

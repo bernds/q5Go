@@ -17,12 +17,12 @@
 #include <QMouseEvent>
 #include <QEvent>
 #include <QWheelEvent>
+#include <QFontMetrics>
 
 #include "config.h"
 #include "setting.h"
 #include "qgo.h"
 #include "board.h"
-#include "grid.h"
 #include "imagehandler.h"
 #include "mainwindow.h"
 #include "clientwin.h"
@@ -173,7 +173,6 @@ void BoardView::resizeBoard (int w, int h)
 
 	// Redraw the board
 	draw_background ();
-	draw_coords ();
 	updateCovers ();
 
 	sync_appearance ();
@@ -249,6 +248,46 @@ void BoardView::draw_background()
 		painter.drawLine (board_x0 - i, board_y0 + i, board_x0 - i, board_y1 + i);
 		painter.drawLine (board_x0 - i + 1, board_y1 + i, board_x1 - i, board_y1 + i);
 	}
+
+	/* Draw the coordinates.  */
+	if (showCoords && m_game != nullptr) {
+		game_state *root = m_game->get_root ();
+		const go_board &b = root->get_board ();
+
+		// centres the coordinates text within the remaining space at table edge
+		const int center = coord_offset / 2 + coord_margin;
+
+		QFontMetrics fm (painter.font ());
+		int hdups = n_dups_h ();
+		int vdups = n_dups_v ();
+		painter.setPen (Qt::black);
+
+		for (int tx = 0; tx < board_size_x; tx++) {
+			int x = (tx + m_shift_x) % board_size_x;
+			auto name = b.coords_name (x, 0, showSGFCoords);
+			QString nm = QString::fromStdString (name.first);
+			QRect brect = fm.boundingRect (nm);
+			brect.moveCenter (QPoint (m_board_rect.x () + square_size * (hdups + tx),
+						  m_wood_rect.y () + center));
+			painter.drawText (brect, Qt::AlignCenter, nm);
+			brect.moveCenter (QPoint (m_board_rect.x () + square_size * (hdups + tx),
+						  m_wood_rect.y () + m_wood_rect.height () - center));
+			painter.drawText (brect, Qt::AlignCenter, nm);
+		}
+		for (int ty = 0; ty < board_size_y; ty++) {
+			int y = (ty + m_shift_x) % board_size_y;
+			auto name = b.coords_name (0, y, showSGFCoords);
+			QString nm = QString::fromStdString (name.second);
+			QRect brect = fm.boundingRect (nm);
+			brect.moveCenter (QPoint (m_wood_rect.x () + center,
+						  m_board_rect.y () + square_size * (vdups + ty)));
+			painter.drawText (brect, Qt::AlignCenter, nm);
+			brect.moveCenter (QPoint (m_wood_rect.x () + m_wood_rect.width () - center,
+						  m_board_rect.y () + square_size * (vdups + ty)));
+			painter.drawText (brect, Qt::AlignCenter, nm);
+		}
+	}
+
 	painter.end ();
 
 	canvas->setBackgroundBrush (QBrush (image));
@@ -256,7 +295,6 @@ void BoardView::draw_background()
 
 void BoardView::draw_coords ()
 {
-	m_coords->resize (m_wood_rect, m_board_rect, m_shift_x, m_shift_y, square_size, showCoords);
 }
 
 /* Handle a click on the Done button.  Return true if we should return to normal mode.  */
@@ -1278,7 +1316,7 @@ void Board::update_shift (int x, int y)
 		return;
 	m_shift_x = x;
 	m_shift_y = y;
-	draw_coords ();
+	draw_background ();
 	sync_appearance ();
 }
 
@@ -1314,24 +1352,17 @@ void Board::mouseMoveEvent(QMouseEvent *e)
 
 	if (curX == x && curY == y)
 		return;
-#if 0 /* Would be nice to make this work, but things are fast enough as-is.  */
-	int prev_x = curX;
-	int prev_y = curY;
-#endif
 	curX = x;
 	curY = y;
 
 	// Update the statusbar coords tip
-	QString xt, yt;
-	if (x != -1)
-		m_coords->retrieve_text (xt, yt, x, y);
-	m_board_win->coords_changed (xt, yt);
-#if 0
-	sync_appearance (prev_x, prev_y);
-	sync_appearance (x, y);
-#else
+	if (x != -1) {
+		const go_board &b = m_game->get_root ()->get_board ();
+		auto name = b.coords_name (curX, curY, showSGFCoords);
+		m_board_win->coords_changed (QString::fromStdString (name.first), QString::fromStdString (name.second));
+	} else
+		m_board_win->coords_changed ("", "");
 	sync_appearance (true);
-#endif
 }
 
 void Board::wheelEvent(QWheelEvent *e)
@@ -1732,8 +1763,6 @@ int BoardView::n_dups_v ()
 
 void BoardView::clear_graphics_elts ()
 {
-	delete m_coords;
-
 	m_shift_x = m_shift_y = 0;
 }
 
@@ -1746,8 +1775,6 @@ void BoardView::alloc_graphics_elts ()
 	board_size_y = b.size_y ();
 
 	calculateSize ();
-
-	m_coords = new CoordDisplay (canvas, b, n_dups_h (), n_dups_v (), coord_offset, coord_margin, showSGFCoords);
 }
 
 void BoardView::reset_game (std::shared_ptr<game_record> gr)
@@ -1761,7 +1788,6 @@ void BoardView::reset_game (std::shared_ptr<game_record> gr)
 	alloc_graphics_elts ();
 
 	draw_background ();
-	draw_coords ();
 
 	start_observing (gr->get_root ());
 
@@ -1809,7 +1835,7 @@ void BoardView::setShowSGFCoords(bool b)
 	if (old == showSGFCoords)
 		return;
 
-	m_coords->set_texts (showSGFCoords);
+	draw_background ();
 }
 
 void BoardView::set_vardisplay (bool children, int type)

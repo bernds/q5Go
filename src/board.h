@@ -29,8 +29,6 @@ class InterfaceHandler;
 class QNewGameDlg;
 class MainWindow;
 class MainWidget;
-class Grid;
-class CoordDisplay;
 
 /* We split the Board view into two classes: a BoardView, dealing only with display, and
    Board, which also interacts with the board window.
@@ -77,7 +75,6 @@ protected:
 
 	/* Graphical elements on the board canvas.  */
 	QGraphicsScene *canvas;
-	CoordDisplay *m_coords {};
 
 	int m_vars_type = 1;
 	bool m_vars_children = false;
