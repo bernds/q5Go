@@ -250,10 +250,16 @@ std::shared_ptr<game_record> sgf2record (const sgf &s)
 {
 	const std::string *ff = s.nodes->find_property_val ("FF");
 	const std::string *gm = s.nodes->find_property_val ("GM");
+	bool our_extensions = false;
 	if (ff != nullptr && *ff != "4" && *ff != "3")
 		throw broken_sgf ();
-	if (gm != nullptr && *gm != "1")
-		throw broken_sgf ();
+	if (gm != nullptr) {
+		if (*gm == "q5go-1")
+			our_extensions = true;
+		else if (*gm != "1") {
+			throw broken_sgf ();
+		}
+	}
 	const std::string *ca = s.nodes->find_property_val ("CA");
 	QTextCodec *codec = nullptr;
 	if (ca != nullptr) {
@@ -283,6 +289,18 @@ std::shared_ptr<game_record> sgf2record (const sgf &s)
 	if (size_x < 3 || size_x > 26 || size_y < 3 || size_y > 26)
 		throw invalid_boardsize ();
 
+	bool torus_h = false, torus_v = false;
+	const std::string *to = our_extensions ? s.nodes->find_property_val ("TO") : nullptr;
+	if (to != nullptr) {
+		if (to->length () != 1 || !isdigit ((*to)[0]))
+			throw broken_sgf ();
+		int torus = (*to)[0] - '0';
+		if (torus & 1)
+			torus_h = true;
+		if (torus & 2)
+			torus_v = true;
+
+	}
 	const std::string *gn = s.nodes->find_property_val ("GN");
 
 	const std::string *pw = s.nodes->find_property_val ("PW");
@@ -327,7 +345,7 @@ std::shared_ptr<game_record> sgf2record (const sgf &s)
 			translated_prop_str (cp, codec),
 			translated_prop_str (tm, codec), translated_prop_str (ot, codec),
 			style);
-	go_board initpos (size_x, size_y);
+	go_board initpos (size_x, size_y, torus_h, torus_v);
 	for (auto n: s.nodes->props)
 		if (n->ident == "AB")
 			put_stones (initpos, n, black);
@@ -535,14 +553,24 @@ void game_state::append_to_sgf (std::string &s) const
 
 std::string game_record::to_sgf () const
 {
+	const go_board &rootb = m_root.get_board ();
+	std::string gm = "1";
+	int torus = (rootb.torus_h () ? 1 : 0) | (rootb.torus_v () ? 2 : 0);
+
+	/* There does not appear to be a standard for how to save variant Go in SGF.
+	   So we intentionally pick something that other software won't accept and
+	   misinterpret.  */
+	if (torus != 0)
+		gm = "q5go-1";
 	/* UTF-8 encoding should be guaranteed, since we convert other charsets
 	   when loading, and Qt uses Unicode internally and toStdString conversions
 	   guarantee UTF-8.  */
-	std::string s = "(;FF[4]GM[1]CA[UTF-8]";
-	const go_board &rootb = m_root.get_board ();
+	std::string s = "(;FF[4]GM[" + gm + "]CA[UTF-8]";
 	std::string szx = std::to_string (rootb.size_x ());
 	std::string szy = std::to_string (rootb.size_y ());
 	encode_string (s, "SZ", szx == szy ? szx : szx + ":" + szy);
+	if (torus)
+		encode_string (s, "TO", std::to_string (torus));
 	encode_string (s, "GN", m_title);
 	encode_string (s, "PW", m_name_w);
 	encode_string (s, "PB", m_name_b);
