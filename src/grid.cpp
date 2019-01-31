@@ -22,8 +22,6 @@
 
 #include <vector>
 #include <QGraphicsScene>
-#include <QGraphicsEllipseItem>
-#include <QGraphicsLineItem>
 
 #include "defines.h"
 #include "goboard.h"
@@ -33,16 +31,22 @@
  /**
   * Initialises the grid intersections and hoshis points
   **/
-Grid::Grid (QGraphicsScene *canvas, const go_board &ref, int hdups, int vdups, const bit_array &hoshis)
-	: m_ref_board (ref), m_h_dups (hdups), m_v_dups (vdups), m_hoshi_map (hoshis),
-	  m_hgrid ((ref.size_x () + 2 * hdups) * (ref.size_y () + 2 * vdups)),
-	  m_vgrid ((ref.size_x () + 2 * hdups) * (ref.size_y () + 2 * vdups)),
+Grid::Grid (QGraphicsScene *canvas, const go_board &ref, const bit_array &hoshis)
+	: m_ref_board (ref), m_hoshi_map (hoshis),
+	  m_hgrid (ref.bitsize ()), m_vgrid (ref.bitsize ()), m_covers (ref.bitsize ()),
 	  m_hoshis (hoshis.popcnt ()), m_hoshi_pos (hoshis.popcnt ()), m_hoshi_screen_pos (hoshis.popcnt ())
 {
 	for (auto &i: m_vgrid)
 		canvas->addItem (&i);
 	for (auto &i: m_hgrid)
 		canvas->addItem (&i);
+	for (auto &i: m_covers) {
+		canvas->addItem (&i);
+		i.setBrush (QColor (128, 128, 255, 128));
+		i.setPen (Qt::NoPen);
+		i.setAcceptedMouseButtons (Qt::NoButton);
+		i.setVisible (false);
+	}
 	for (auto &i: m_hoshis) {
 		i.setBrush (Qt::SolidPattern);
 		i.setPen (Qt::NoPen);
@@ -76,22 +80,20 @@ void Grid::resize (const QRect &rect, int shift_x, int shift_y, double square_si
 
 	int szx = m_ref_board.size_x ();
 	int szy = m_ref_board.size_y ();
-	for (i = 0; i < szx + 2 * m_h_dups; i++)
-		for (j = 0; j < szy + 2 * m_v_dups; j++) {
-			int x = (i + shift_x + (szx - m_h_dups)) % szx;
-			int y = (j + shift_y + (szy - m_v_dups)) % szy;
+	for (i = 0; i < szx; i++)
+		for (j = 0; j < szy; j++) {
+			int x = (i + shift_x + szx) % szx;
+			int y = (j + shift_y + szy) % szy;
 
-			int bp = i + j * (szx + 2 * m_h_dups);
+			int bp = i + j * szx;
 			bool first_col = x == 0;
 			bool last_col = x + 1 == szx;
 			bool first_row = y == 0;
 			bool last_row = y + 1 == szy;
-			bool in_real_board = (i >= m_h_dups && i < szx + m_h_dups
-					      && j >= m_v_dups && j < szy + m_v_dups);
 
-			pen.setWidth (in_real_board && (first_col || last_col) ? widened_w : scaled_w);
+			pen.setWidth ((first_col || last_col) ? widened_w : scaled_w);
 			m_vgrid[bp].setPen (pen);
-			pen.setWidth (in_real_board && (first_row || last_row) ? widened_w : scaled_w);
+			pen.setWidth ((first_row || last_row) ? widened_w : scaled_w);
 			m_hgrid[bp].setPen (pen);
 
 			if (m_ref_board.torus_h ())
@@ -107,6 +109,11 @@ void Grid::resize (const QRect &rect, int shift_x, int shift_y, double square_si
 					    int(rect.y () + square_size * (j - 0.5 * !first_row)),
 					    rect.x () + square_size *  i,
 					    int(rect.y () + square_size * (j + 0.5 * !last_row)));
+			int left = rect.x () + square_size * (i - 0.5);
+			int top = rect.y () + square_size * (j - 0.5);
+			int right = rect.x () + square_size * (i + 0.5);
+			int bot = rect.y () + square_size * (j + 0.5);
+			m_covers[bp].setRect (left, top, right - left, bot - top);
 		}
 
 	// Round size top be odd (hoshis)
@@ -123,12 +130,52 @@ void Grid::resize (const QRect &rect, int shift_x, int shift_y, double square_si
 
 		QGraphicsEllipseItem *e = &m_hoshis[i];
 
-		int rx = m_h_dups + (x + szx - shift_x) % szx;
-		int ry = m_v_dups + (y + szy - shift_y) % szy;
+		int rx = (x + szx - shift_x) % szx;
+		int ry = (y + szy - shift_y) % szy;
 		m_hoshi_screen_pos[i] = { rx, ry };
 		e->setRect (rect.x () + square_size * rx - size/2,
 			    rect.y () + square_size * ry - size/2,
 			    size, size);
+	}
+}
+
+/* Rectangle R1 is a selection rectangle given to us by the rubber band.  Apply it
+   by affecting item visibility rather than selection state.  We could make the
+   items selectable and use that, but it looks messy and ugly, hence this method.  */
+bool Grid::apply_selection (const QRect &r1)
+{
+	bool result = false;
+	QRectF r = r1;
+	for (auto &c: m_covers) {
+		bool shown = r.contains (c.rect ().center ());
+		result |= shown;
+		c.setVisible (shown);
+		c.update ();
+	}
+	return result;
+}
+
+bit_array Grid::selected_items ()
+{
+	bit_array result (m_ref_board.bitsize ());
+	for (int i = 0; i < m_ref_board.bitsize (); i++)
+		if (m_covers[i].isVisible ())
+			result.set_bit (i);
+
+	return result;
+}
+
+void Grid::set_removed_points (const bit_array &mask)
+{
+	for (int i = 0; i < m_ref_board.bitsize (); i++) {
+		QPen p = m_vgrid[i].pen ();
+		p.setColor (mask.test_bit (i) ? Qt::white : Qt::black);
+		m_vgrid[i].setPen (p);
+		m_vgrid[i].update ();
+		p = m_hgrid[i].pen ();
+		p.setColor (mask.test_bit (i) ? Qt::white : Qt::black);
+		m_hgrid[i].setPen (p);
+		m_hgrid[i].update ();
 	}
 }
 
@@ -150,7 +197,7 @@ void Grid::showAll ()
   **/
 void Grid::hide (int x, int y)
 {
-	int bp = x + y * (m_ref_board.size_x () + 2 * m_h_dups);
+	int bp = m_ref_board.bitpos (x, y);
 
 	m_vgrid[bp].hide();
 	m_hgrid[bp].hide();
