@@ -269,10 +269,10 @@ void BoardView::draw_background()
 			QRect brect = fm.boundingRect (nm);
 			brect.moveCenter (QPoint (m_board_rect.x () + square_size * (hdups + tx),
 						  m_wood_rect.y () + center));
-			painter.drawText (brect, Qt::AlignCenter, nm);
+			painter.drawText (brect, Qt::AlignLeft | Qt::AlignTop, nm);
 			brect.moveCenter (QPoint (m_board_rect.x () + square_size * (hdups + tx),
 						  m_wood_rect.y () + m_wood_rect.height () - center));
-			painter.drawText (brect, Qt::AlignCenter, nm);
+			painter.drawText (brect, Qt::AlignLeft | Qt::AlignTop, nm);
 		}
 		for (int ty = 0; ty < board_size_y; ty++) {
 			int y = (ty + m_shift_x) % board_size_y;
@@ -281,10 +281,10 @@ void BoardView::draw_background()
 			QRect brect = fm.boundingRect (nm);
 			brect.moveCenter (QPoint (m_wood_rect.x () + center,
 						  m_board_rect.y () + square_size * (vdups + ty)));
-			painter.drawText (brect, Qt::AlignCenter, nm);
+			painter.drawText (brect, Qt::AlignLeft | Qt::AlignTop, nm);
 			brect.moveCenter (QPoint (m_wood_rect.x () + m_wood_rect.width () - center,
 						  m_board_rect.y () + square_size * (vdups + ty)));
-			painter.drawText (brect, Qt::AlignCenter, nm);
+			painter.drawText (brect, Qt::AlignLeft | Qt::AlignTop, nm);
 		}
 	}
 
