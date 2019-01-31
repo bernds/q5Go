@@ -424,6 +424,8 @@ void MainWidget::setMoveData(game_state &gs, const go_board &b, GameMode mode)
 	} else if (gs.was_pass_p ()) {
 		s.append(" (" + (to_move == black ? w_str : b_str) + " ");
 		s.append(" " + QObject::tr("Pass") + ")");
+	} else if (gs.was_score_p ()) {
+		s.append(tr (" (Scoring)"));
 	} else if (!gs.was_edit_p ()) {
 		int x = gs.get_move_x ();
 		int y = gs.get_move_y ();
