@@ -6,9 +6,9 @@
 #define PACKAGE1 "q5goClient"
 
 /* Version number of package */
-#define VERSION "0.4"
+#define VERSION "0.4.1"
 
-#define NEWVERSIONWARNING "<p>Welcome to version 0.4 of q5go.</p>\n" \
+#define NEWVERSIONWARNING "<p>Welcome to version 0.4.1 of q5go.</p>\n" \
   "<p>This version adds support for some non-standard Go variants: rectangular and toroidal boards.</p>" \
   "<p>This message will not be shown anymore on startup.</p>"
 

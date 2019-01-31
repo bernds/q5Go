@@ -1,4 +1,4 @@
-## q5Go 0.4
+## q5Go 0.4.1
 
 This is a Go player's tool, an SGF editor/GTP interface/IGS client.  It is
 based on the old Qt3 version of qGo, but ported to Qt5 and modernized.
@@ -19,6 +19,8 @@ Version 0.4 adds the following features:
  * On-line observer lists, which were dropped in the initial versions
    of q5go, are functioning again
  * Likewise for move time annotations
+
+Version 0.4.1 is a minor bugfix to add back the display of star points.
 
 See VERSION_HISTORY for a history of changes.
 
