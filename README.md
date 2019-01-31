@@ -1,4 +1,4 @@
-## q5Go 0.3
+## q5Go 0.4
 
 This is a Go player's tool, an SGF editor/GTP interface/IGS client.  It is
 based on the old Qt3 version of qGo, but ported to Qt5 and modernized.
@@ -7,20 +7,18 @@ The basic goal for this program is to provide an everyday SGF editor
 that is fast, easy and convenient to use and does everything you could
 want out of such a tool.  Some of the more unusual features include a
 Go diagram exporting function for sites like lifein19x19.com or
-Sensei's library, as well as SVG vector graphics export.
+Sensei's library, as well as SVG vector graphics export.  q5go also supports
+some non-standard Go variants.
 
 ![screenshot](screens/screenshot.png)
 
-Version 0.3 adds two major new features:
- * An analysis mode using Leela Zero or compatible programs
- * A game tree display
-
-Minor changes and fixes include:
- * Some visual improvements for the user interface
- * Time warnings for online play are working again
- * When loading SGF files, unrecognized properties are now
-   remembered and saved as per the specification
- * Faster loading of SGF files
+Version 0.4 adds the following features:
+ * Support for rectangular boards
+ * Support for toroidal boards (with an extended view option and
+   scrolling)
+ * On-line observer lists, which were dropped in the initial versions
+   of q5go, are functioning again
+ * Likewise for move time annotations
 
 See VERSION_HISTORY for a history of changes.
 
@@ -58,6 +56,20 @@ There are several presets for the wood image, and the user can also
 supply a custom file.
 
 ![screenshot](screens/gostones2.jpg)
+
+### Go variants
+
+q5go supports rectangular and toroidal boards.  Note that the latter
+can only be saved in a non-standard SGF format since the specification
+does not allow for it.  When playing on a torus, q5go can be configured
+to extend the board past its regular dimensions, duplicating parts of
+the position for a better overview.  Also, the board can be dragged
+with the middle mouse button.
+
+![screenshot](screens/variants.jpg)
+
+The screenshot shows the variant game dialog and a (different) position
+with both axes set to be toroidal.
 
 ## Compiling
 

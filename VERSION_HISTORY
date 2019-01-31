@@ -1,3 +1,13 @@
+q5Go 0.4
+
+Version 0.4 adds the following features:
+ * Support for rectangular boards
+ * Support for toroidal boards (with an extended view option and
+   scrolling)
+ * On-line observer lists, which were dropped in the initial versions
+   of q5go, are functioning again
+ * Likewise for move time annotations
+
 q5Go 0.3
 
 Version 0.3 adds two major new features:
