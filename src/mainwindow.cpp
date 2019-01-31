@@ -2157,6 +2157,12 @@ void MainWindow::setGameMode(GameMode mode)
 			splitter_comment->addWidget (gameTreeView);
 		}
 	}
+
+	fileNew->setEnabled (mode == modeNormal || mode == modeEdit);
+	fileNewVariant->setEnabled (mode == modeNormal || mode == modeEdit);
+	fileNewBoard->setEnabled (mode == modeNormal || mode == modeEdit);
+	fileOpen->setEnabled (mode == modeNormal || mode == modeEdit);
+
 	switch (mode)
 	{
 	case modeEdit:
@@ -2168,36 +2174,22 @@ void MainWindow::setGameMode(GameMode mode)
 		break;
 
 	case modeObserve:
-    		editDelete->setEnabled(false);
-		fileNew->setEnabled(false);
-		fileNewBoard->setEnabled(false);
-		fileOpen->setEnabled(false);
 		statusMode->setText(" " + QObject::tr("O", "Board status line: observe mode") + " ");
 		break;
 
 	case modeMatch:
-		fileNew->setEnabled(false);
-		fileNewBoard->setEnabled(false);
-		fileOpen->setEnabled(false);
 		statusMode->setText(" " + QObject::tr("P", "Board status line: play mode") + " ");
 		break;
 
 	case modeComputer:
-		fileNew->setEnabled(false);
-		fileNewBoard->setEnabled(false);
-		fileOpen->setEnabled(false);
 		statusMode->setText(" " + QObject::tr("P", "Board status line: play mode") + " ");
 		break;
 
 	case modeTeach:
-		fileNew->setEnabled(false);
-		fileNewBoard->setEnabled(false);
-		fileOpen->setEnabled(false);
 		statusMode->setText(" " + QObject::tr("T", "Board status line: teach mode") + " ");
 		break;
 
 	case modeScore:
-//		modeButton->setDisabled(true);
 		commentEdit->setReadOnly(true);
 		commentEdit2->setDisabled(true);
 		/* fall through */
