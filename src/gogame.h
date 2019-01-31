@@ -106,6 +106,9 @@ private:
 	stone_color m_move_color = none;
 	std::string m_comment;
 
+	std::string m_timeleft_w = "", m_timeleft_b = "";
+	std::string m_stonesleft_w = "", m_stonesleft_b = "";
+
 	sgf::node::proplist m_unrecognized_props;
 
 	/* Default initialized to a one-node tree, which is up-to-date when initialized without children.  */
@@ -301,6 +304,30 @@ public:
 	{
 		return m_move_color;
 	}
+
+	std::string time_left (stone_color col) const
+	{
+		return col == white ? m_timeleft_w : m_timeleft_b;
+	}
+	std::string stones_left (stone_color col) const
+	{
+		return col == white ? m_stonesleft_w : m_stonesleft_b;
+	}
+	void set_time_left (stone_color col, std::string tm)
+	{
+		if (col == white)
+			m_timeleft_w = tm;
+		else
+			m_timeleft_b = tm;
+	}
+	void set_stones_left (stone_color col, std::string tm)
+	{
+		if (col == white)
+			m_stonesleft_w = tm;
+		else
+			m_stonesleft_b = tm;
+	}
+
 	void remove_observer (const observer *o) const
 	{
 		for (auto it = m_observers.begin (); it != m_observers.end (); ++it) {

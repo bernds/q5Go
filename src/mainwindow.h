@@ -54,7 +54,7 @@ public:
 	bool doSave(QString fileName, bool force=false);
 	void setGameMode (GameMode);
 
-	void setMoveData(const game_state &, const go_board &, GameMode);
+	void setMoveData(game_state &, const go_board &, GameMode);
 	void mark_dead_external (int x, int y) { gfx_board->mark_dead_external (x, y); }
 	void init_game_record (std::shared_ptr<game_record>);
 	/* Called when the record was changed by some external source (say, a Go server

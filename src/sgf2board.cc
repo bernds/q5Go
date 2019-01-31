@@ -216,6 +216,18 @@ static void add_to_game_state (game_state *gs, sgf::node *n, bool force, QTextCo
 		} else
 			gs = gs->add_child_move_nochecks (new_board, to_move, move_x, move_y, false);
 
+		const std::string *wl = n->find_property_val ("WL");
+		const std::string *bl = n->find_property_val ("BL");
+		const std::string *ow = n->find_property_val ("OW");
+		const std::string *ob = n->find_property_val ("OB");
+		if (wl)
+			gs->set_time_left (white, *wl);
+		if (bl)
+			gs->set_time_left (black, *bl);
+		if (ow)
+			gs->set_stones_left (white, *ow);
+		if (ob)
+			gs->set_stones_left (black, *ob);
 		errs.charset_error |= !add_comment (gs, n, codec);
 		for (auto p: n->props) {
 			if (!p->handled)
@@ -524,6 +536,27 @@ void game_state::append_to_sgf (std::string &s) const
 		encode_string (s, "C", comm);
 		if (comm.length () > 0)
 			linecount = 16;
+		std::string wl = gs->time_left (white);
+		if (wl.length () > 0) {
+			s += "WL[" + wl + "]";
+			linecount++;
+		}
+		std::string bl = gs->time_left (black);
+		if (bl.length () > 0) {
+			s += "BL[" + bl + "]";
+			linecount++;
+		}
+		std::string ow = gs->stones_left (white);
+		if (ow.length () > 0) {
+			s += "OW[" + ow + "]";
+			linecount++;
+		}
+		std::string ob = gs->stones_left (black);
+		if (ob.length () > 0) {
+			s += "OB[" + ob + "]";
+			linecount++;
+		}
+
 		for (auto p: gs->m_unrecognized_props) {
 			s += p->ident;
 			for (auto v: p->values) {

@@ -369,7 +369,44 @@ void MainWidget::setGameMode(GameMode mode)
 
 }
 
-void MainWidget::setMoveData(const game_state &gs, const go_board &b, GameMode mode)
+static QString time_string (const std::string &timeleft, const std::string &stonesleft)
+{
+	QString timestr;
+	if (timeleft.length () == 0)
+		return QString ();
+	try {
+		double t = stod (timeleft);
+		int seconds = (int)t;
+		bool neg = seconds < 0;
+		if (neg)
+			seconds = -seconds;
+
+		int h = seconds / 3600;
+		seconds -= h*3600;
+		int m = seconds / 60;
+		int s = seconds - m*60;
+
+		QString sec = QString::number (s);
+		QString min = QString::number (m);
+		if ((h || m) && s < 10)
+			sec = "0" + sec;
+		if (h)
+		{
+			if (m < 10)
+				min = "0" + min;
+			timestr = (neg ? "-" : "") + QString::number(h) + ":" + min + ":" + sec;
+		} else
+			timestr = (neg ? "-" : "") + min + ":" + sec;
+
+	} catch (...) {
+		return QString ();
+	}
+	if (stonesleft.length () > 0)
+		timestr += " / " + QString::fromStdString (stonesleft);
+	return timestr;
+}
+
+void MainWidget::setMoveData(game_state &gs, const go_board &b, GameMode mode)
 {
 	int brothers = gs.n_siblings ();
 	int sons = gs.n_children ();
@@ -438,6 +475,22 @@ void MainWidget::setMoveData(const game_state &gs, const go_board &b, GameMode m
 	scoreTools->setVisible (mode == modeScore || mode == modeScoreRemote || gs.was_score_p ());
 	normalTools->setVisible (mode != modeScore && mode != modeScoreRemote && !gs.was_score_p ());
 
+	if (mode == modeNormal) {
+		QString wt = time_string (gs.time_left (white), gs.stones_left (white));
+		QString bt = time_string (gs.time_left (black), gs.stones_left (black));
+		if (!wt.isNull () || !bt.isNull ()) {
+			if (wt.isNull () && !is_root_node) {
+				wt = time_string (gs.prev_move ()->time_left (white),
+						  gs.prev_move ()->stones_left (white));
+			}
+			if (bt.isNull () && !is_root_node) {
+				bt = time_string (gs.prev_move ()->time_left (black),
+						  gs.prev_move ()->stones_left (black));
+			}
+		}
+		normalTools->wtimeView->set_text (wt.isNull () ? "--:--" : wt);
+		normalTools->btimeView->set_text (bt.isNull () ? "--:--" : bt);
+	}
 	// Update slider
 	toggleSliderSignal (false);
 
@@ -530,50 +583,6 @@ void MainWidget::setTimes(const QString &btime, const QString &bstones, const QS
 		normalTools->wtimeView->flash (false);
 	}
 }
-
-#if 0
-void MainWidget::setTimes(bool isBlacksTurn, float time, int stones)
-{
-	QString strTime;
-	int seconds = (int)time;
-	bool neg = seconds < 0;
-	if (neg)
-		seconds = -seconds;
-
-	int h = seconds / 3600;
-	seconds -= h*3600;
-	int m = seconds / 60;
-	int s = seconds - m*60;
-
-	QString sec;
-
-	// prevailling 0 for seconds
-	if ((h || m) && s < 10)
-		sec = "0" + QString::number(s);
-	else
-		sec = QString::number(s);
-
-	if (h)
-	{
-		QString min;
-
-		// prevailling 0 for minutes
-		if (h && m < 10)
-			min = "0" + QString::number(m);
-		else
-			min = QString::number(m);
-
-		strTime = (neg ? "-" : "") + QString::number(h) + ":" + min + ":" + sec;
-	}
-	else
-		strTime = (neg ? "-" : "") + QString::number(m) + ":" + sec;
-
-	if (isBlacksTurn)
-		setTimes(strTime, QString::number(stones), 0, 0, false, false, 0);
-	else
-		setTimes(0, 0, strTime, QString::number(stones), false, false, 0);
-}
-#endif
 
 void MainWidget::set_eval (double eval)
 {

@@ -2200,7 +2200,7 @@ void MainWindow::setGameMode(GameMode mode)
 	mainWidget->setGameMode (mode);
 }
 
-void MainWindow::setMoveData (const game_state &gs, const go_board &b, GameMode mode)
+void MainWindow::setMoveData (game_state &gs, const go_board &b, GameMode mode)
 {
 	int sons = gs.n_children ();
 

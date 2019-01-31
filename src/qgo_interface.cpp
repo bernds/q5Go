@@ -1628,36 +1628,12 @@ void qGoBoard::set_move(stone_color sc, QString pt, QString mv_nr)
 			/* @@@ do something sensible.  */
 		}
 
-#if 0
-		if (stated_mv_count > mv_counter ||
-			//gameMode == modeTeach ||
-			//ExtendedTeachingGame ||
-			wt_i < 0 || bt_i < 0)
-		{
-			m->setTimeinfo(false);
+		if (st_new != nullptr && stated_mv_count <= mv_counter && wt_i >= 0 && bt_i >= 0) {
+			st_new->set_time_left (sc, std::to_string (sc == white ? wt_i : bt_i));
+			QString &whichstones = sc == white ? w_stones : b_stones;
+			if (whichstones != "-1")
+				st_new->set_stones_left (sc, whichstones.toStdString ());
 		}
-		else
-		{
-			m->setTimeLeft(sc == stoneBlack ? bt_i : wt_i);
-			int stones = -1;
-			if (sc == stoneBlack)
-				stones = b_stones.toInt();
-			else
-				stones = w_stones.toInt();
-			m->setOpenMoves(stones);
-			m->setTimeinfo(true);
-
-			// check for a common error -> times and open moves identical
-			if (m->parent &&
-				m->parent->parent &&
-				m->parent->parent->getTimeinfo() &&
-				m->parent->parent->getTimeLeft() == m->getTimeLeft() &&
-				m->parent->parent->getOpenMoves() == m->getOpenMoves())
-			{
-				m->parent->parent->setTimeinfo(false);
-			}
-		}
-#endif
 	}
 	qDebug () << "found move " << mv_counter << " of " << stated_mv_count << "\n";
 	if (mv_counter + 1 == stated_mv_count && win == nullptr)
