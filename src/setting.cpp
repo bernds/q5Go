@@ -124,6 +124,8 @@ Setting::Setting()
 
 	writeIntEntry("GAMETREE_SIZE", 30);
 
+	writeIntEntry ("TOROID_DUPS", 2);
+
 	language = "Default";
 	fontStandard = QFont();
 	fontMarks = QFont();
