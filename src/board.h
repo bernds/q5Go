@@ -45,6 +45,7 @@ class BoardView : public QGraphicsView, public navigable_observer
 protected:
 	/* Size of the (abstract) board.  */
 	int board_size_x, board_size_y;
+	bit_array m_hoshis;
 
 	/* A local copy of the board for when editing and scoring.  Null otherwise.  */
 	go_board *m_edit_board = nullptr;

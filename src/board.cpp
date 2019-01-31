@@ -31,7 +31,7 @@
 #include "ui_helpers.h"
 
 BoardView::BoardView(QWidget *parent, QGraphicsScene *c)
-	: QGraphicsView(c, parent)
+	: QGraphicsView(c, parent), m_hoshis (361)
 {
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -789,13 +789,20 @@ void BoardView::draw_grid (QPainter &painter, bit_array &grid_hidden)
 	int szy = board_size_y;
 	int dups_x = n_dups_h ();
 	int dups_y = n_dups_v ();
-	bool torus_h = m_game->get_root()->get_board().torus_h ();
-	bool torus_v = m_game->get_root()->get_board().torus_v ();
+	const go_board &rootb = m_game->get_root()->get_board();
+	bool torus_h = rootb.torus_h ();
+	bool torus_v = rootb.torus_v ();
 
 	int scaled_w = setting->readBoolEntry ("BOARD_LINESCALE") ? (int)square_size / 40 + 1 : 1;
 	QPen pen;
 	pen.setWidth (scaled_w);
 	painter.setPen (pen);
+
+	int hoshi_size = square_size / 8;
+	if (hoshi_size % 2 == 0)
+		hoshi_size--;
+	if (hoshi_size <= 2)
+		hoshi_size = 3;
 
 	int line_offx = m_board_rect.left () - m_wood_rect.left ();
 	int line_offy = m_board_rect.top () - m_wood_rect.top ();
@@ -812,8 +819,24 @@ void BoardView::draw_grid (QPainter &painter, bit_array &grid_hidden)
 							  line_offx + tx * square_size, line_offy + last * square_size / 2);
 				}
 				first = -2;
-			} else if (first == -2)
-				first = ty == 0 && !torus_v ? 0 : ty * 2 - 1;
+			} else {
+				if (first == -2)
+					first = ty == 0 && !torus_v ? 0 : ty * 2 - 1;
+				/* Use the first pass to also draw hoshi.  */
+				if (ty > dups_y && ty < szy + dups_y && tx > dups_x && tx < szx + dups_x) {
+					int x = ((tx - dups_x) + m_shift_x) % szx;
+					int y = ((ty - dups_y) + m_shift_y) % szy;
+					if (m_hoshis.test_bit (rootb.bitpos (x, y))) {
+						painter.setPen (Qt::NoPen);
+						painter.setBrush (QBrush (Qt::black));
+						painter.drawEllipse (QPoint (line_offx + tx * square_size,
+									     line_offy + ty * square_size),
+								     hoshi_size, hoshi_size);
+						painter.setPen (pen);
+						painter.setBrush (Qt::NoBrush);
+					}
+				}
+			}
 		}
 	}
 	for (int ty = 0; ty < szy + 2 * dups_y; ty++) {
@@ -1787,11 +1810,14 @@ void BoardView::reset_game (std::shared_ptr<game_record> gr)
 
 	m_game = gr;
 
+	game_state *root = m_game->get_root ();
+	m_hoshis = calculate_hoshis (root->get_board ());
+
 	alloc_graphics_elts ();
 
 	draw_background ();
 
-	start_observing (gr->get_root ());
+	start_observing (root);
 
 	clear_selection ();
 
