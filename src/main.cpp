@@ -343,6 +343,7 @@ int main(int argc, char **argv)
 	}
 
 	QApplication myapp(argc, argv);
+	myapp.setAttribute (Qt::AA_EnableHighDpiScaling);
 
 #ifdef OWN_DEBUG_MODE
 	qInstallMessageHandler(myMessageHandler);
