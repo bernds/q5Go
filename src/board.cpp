@@ -794,7 +794,7 @@ void BoardView::draw_grid (QPainter &painter, bit_array &grid_hidden)
 	bool torus_v = rootb.torus_v ();
 
 	int scaled_w = setting->readBoolEntry ("BOARD_LINESCALE") ? (int)square_size / 40 + 1 : 1;
-	QPen pen;
+	QPen pen (Qt::black);
 	pen.setWidth (scaled_w);
 	painter.setPen (pen);
 
@@ -819,24 +819,8 @@ void BoardView::draw_grid (QPainter &painter, bit_array &grid_hidden)
 							  line_offx + tx * square_size, line_offy + last * square_size / 2);
 				}
 				first = -2;
-			} else {
-				if (first == -2)
-					first = ty == 0 && !torus_v ? 0 : ty * 2 - 1;
-				/* Use the first pass to also draw hoshi.  */
-				if (ty > dups_y && ty < szy + dups_y && tx > dups_x && tx < szx + dups_x) {
-					int x = ((tx - dups_x) + m_shift_x) % szx;
-					int y = ((ty - dups_y) + m_shift_y) % szy;
-					if (m_hoshis.test_bit (rootb.bitpos (x, y))) {
-						painter.setPen (Qt::NoPen);
-						painter.setBrush (QBrush (Qt::black));
-						painter.drawEllipse (QPoint (line_offx + tx * square_size,
-									     line_offy + ty * square_size),
-								     hoshi_size, hoshi_size);
-						painter.setPen (pen);
-						painter.setBrush (Qt::NoBrush);
-					}
-				}
-			}
+			} else if (first == -2)
+				first = ty == 0 && !torus_v ? 0 : ty * 2 - 1;
 		}
 	}
 	for (int ty = 0; ty < szy + 2 * dups_y; ty++) {
@@ -930,6 +914,22 @@ void BoardView::draw_grid (QPainter &painter, bit_array &grid_hidden)
 		if (!grid_hidden.test_bit (bp2) && (y == 0 || xfirst2 == -2))
 			xfirst2 = (y == 0 ? ty * 2 : ty * 2 - 1) + 2 * dups_y;
 	}
+
+	/* Now draw the hoshi points.  */
+	painter.setRenderHints (QPainter::Antialiasing);
+	painter.setPen (Qt::NoPen);
+	painter.setBrush (QBrush (Qt::black));
+	for (int tx = 0; tx < szx; tx++)
+		for (int ty = 0; ty < szy; ty++) {
+			int gbp = tx + dups_x + (ty + dups_y) * (szx + 2 * dups_x);
+			int x = (tx  + m_shift_x) % szx;
+			int y = (ty  + m_shift_y) % szy;
+			if (m_hoshis.test_bit (rootb.bitpos (x, y)) && !grid_hidden.test_bit (gbp)) {
+				painter.drawEllipse (QPoint (line_offx + (tx + dups_x) * square_size,
+							     line_offy + (ty + dups_y) * square_size),
+						     hoshi_size, hoshi_size);
+			}
+		}
 }
 
 const QPixmap &BoardView::choose_stone_pixmap (stone_color c, stone_type type, int bp)
