@@ -260,6 +260,9 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 
 void MainWindow::init_game_record (std::shared_ptr<game_record> gr)
 {
+	m_svg_dlg.hide ();
+	m_ascii_dlg.hide ();
+
 	m_game = gr;
 	mainWidget->init_game_record (gr);
 	updateCaption (false);
