@@ -38,7 +38,7 @@ class MainWidget;
 
 enum class analyzer { disconnected, starting, running, paused };
 
-class BoardView : public QGraphicsView, public navigable_observer
+class BoardView : public QGraphicsView
 {
 	Q_OBJECT
 
@@ -46,6 +46,8 @@ protected:
 	/* Size of the (abstract) board.  */
 	int board_size_x, board_size_y;
 	bit_array m_hoshis;
+
+	game_state *m_displayed {};
 
 	/* A local copy of the board for when editing and scoring.  Null otherwise.  */
 	go_board *m_edit_board = nullptr;
@@ -86,7 +88,6 @@ protected:
 	int *m_visits {};
 	QGraphicsPixmapItem m_stone_layer;
 
-	void observed_changed () override;
 	virtual void sync_appearance (bool board_only = true);
 	const QPixmap &choose_stone_pixmap (stone_color, stone_type, int);
 	void update_shift (int x, int y);
@@ -118,10 +119,10 @@ public:
 	BoardView (QWidget *parent=0, QGraphicsScene *c = 0);
 	~BoardView ();
 	virtual void reset_game (std::shared_ptr<game_record>);
-	const std::shared_ptr<game_record> get_record () { return m_game; }
-	const game_state *get_state () { return m_state; }
+	virtual void set_displayed (game_state *);
+	const game_state *get_state () { return m_displayed; }
 
-	stone_color to_move () { return m_state->to_move (); }
+	stone_color to_move () { return m_displayed->to_move (); }
 	QPixmap grabPicture();
 	QString render_ascii (bool, bool);
 	QByteArray render_svg (bool, bool);
@@ -167,7 +168,7 @@ protected:
 #endif
 };
 
-class Board : public BoardView, public Gtp_Controller
+class Board : public BoardView, public navigable_observer, public Gtp_Controller
 {
 	Q_OBJECT
 	MainWindow *m_board_win {};
@@ -214,6 +215,9 @@ public:
 	/* Should be part of the constructor, but Qt doesn't seem to allow such a construction with the .ui files.  */
 	void init2 (MainWindow *w, MainWidget *mw) { m_board_win = w; m_main_widget = mw; }
 	virtual void reset_game (std::shared_ptr<game_record>) override;
+	const std::shared_ptr<game_record> get_record () { return m_game; }
+	virtual void set_displayed (game_state *) override;
+
 	void setModified(bool m=true);
 	bool modified () { return isModified; }
 	void external_move (game_state *st) { move_state (st); }
@@ -225,7 +229,7 @@ public:
 	void setMarkType(mark t) { m_edit_mark = t; }
 
 	void navIntersection();
-	void set_start_count (bool on) { m_state->set_start_count (on); }
+	void set_start_count (bool on) { m_displayed->set_start_count (on); }
 	void set_rect_select (int on) { m_request_mark_rect = on; }
 
 	analyzer analyzer_state ();
@@ -235,7 +239,7 @@ public:
 
 	bool player_to_move_p ()
 	{
-		return !m_state->was_score_p () && (m_state->to_move () == black ? m_player_is_b : m_player_is_w);
+		return !m_displayed->was_score_p () && (m_displayed->to_move () == black ? m_player_is_b : m_player_is_w);
 	}
 	void play_external_move (int x, int y);
 	void play_external_pass ();
@@ -249,6 +253,8 @@ public:
 	bool player_is (stone_color c) { return c == black ? m_player_is_b : m_player_is_w; }
 
 	void set_antiClicko(bool b) { antiClicko = b; }
+
+	virtual void observed_changed () override;
 
 	/* Virtuals from Gtp_Controller.  */
 	virtual void gtp_played_move (int, int) override { /* Should not happen.  */ }

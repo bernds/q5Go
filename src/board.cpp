@@ -79,7 +79,6 @@ BoardView::BoardView(QWidget *parent, QGraphicsScene *c)
 BoardView::~BoardView()
 {
 	canvas->removeItem (&m_stone_layer);
-	stop_observing ();
 	clear_graphics_elts ();
 	clear_eval_data ();
 	delete canvas;
@@ -100,6 +99,7 @@ Board::Board (QWidget *parent, QGraphicsScene *c)
 
 Board::~Board ()
 {
+	stop_observing ();
 	delete m_analyzer;
 }
 
@@ -250,9 +250,8 @@ void BoardView::draw_background()
 	}
 
 	/* Draw the coordinates.  */
-	if (showCoords && m_game != nullptr) {
-		game_state *root = m_game->get_root ();
-		const go_board &b = root->get_board ();
+	if (showCoords && m_displayed != nullptr) {
+		const go_board &b = m_displayed->get_board ();
 
 		// centres the coordinates text within the remaining space at table edge
 		const int center = coord_offset / 2 + coord_margin;
@@ -300,23 +299,23 @@ void BoardView::draw_coords ()
 /* Handle a click on the Done button.  Return true if we should return to normal mode.  */
 bool Board::doCountDone()
 {
-	game_state *new_st = m_state->add_child_edit (*m_edit_board, m_edit_to_move, true);
-	m_state->transfer_observers (new_st);
+	game_state *new_st = m_displayed->add_child_edit (*m_edit_board, m_edit_to_move, true);
+	m_displayed->transfer_observers (new_st);
 
 	return true;
 }
 
 void Board::setMode (GameMode mode)
 {
-	game_state *new_st = m_state;
+	game_state *new_st = m_displayed;
 
 	GameMode old_mode = m_game_mode;
 	m_game_mode = mode;
 
 	if (mode == modeScore || mode == modeScoreRemote || mode == modeEdit) {
-		m_edit_board = new go_board (m_state->get_board ());
+		m_edit_board = new go_board (m_displayed->get_board ());
 		m_edit_changed = false;
-		m_edit_to_move = m_state->to_move ();
+		m_edit_to_move = m_displayed->to_move ();
 		if (mode == modeScore || mode == modeScoreRemote) {
 			m_edit_board->calc_scoring_markers_complex ();
 		}
@@ -332,17 +331,17 @@ void Board::setMode (GameMode mode)
 		   was the root node, or an edit node, and has no children yet, just update it in-place.
 		   It can be debated whether this behaviour would be surprising to users, but it seems like
 		   the most useful way to handle the situation.  */
-		if (m_state->n_children () == 0
-		    && (m_state->root_node_p () || m_state->was_edit_p ()))
+		if (m_displayed->n_children () == 0
+		    && (m_displayed->root_node_p () || m_displayed->was_edit_p ()))
 		{
-			m_state->replace (*m_edit_board, m_edit_to_move);
-		} else if (m_state->to_move () != m_edit_to_move || m_state->get_board () != *m_edit_board)
-			new_st = m_state->add_child_edit (*m_edit_board, m_edit_to_move);
+			m_displayed->replace (*m_edit_board, m_edit_to_move);
+		} else if (m_displayed->to_move () != m_edit_to_move || m_displayed->get_board () != *m_edit_board)
+			new_st = m_displayed->add_child_edit (*m_edit_board, m_edit_to_move);
 		delete m_edit_board;
 		m_edit_board = nullptr;
 	}
-	if (new_st != m_state)
-		m_state->transfer_observers (new_st);
+	if (new_st != m_displayed)
+		m_displayed->transfer_observers (new_st);
 
 	/* Always needed when changing modes to update toolbar buttons etc.  */
 	sync_appearance (false);
@@ -490,15 +489,15 @@ static bool add_mark_svg (svg_builder &svg, double cx, double cy, double factor,
 
 QByteArray BoardView::render_svg (bool do_number, bool coords)
 {
-	const go_board &b = m_edit_board == nullptr ? m_state->get_board () : *m_edit_board;
+	const go_board &b = m_edit_board == nullptr ? m_displayed->get_board () : *m_edit_board;
 	/* Look back through previous moves to see if we should do numbering.  */
 	int n_back = 0;
 	std::vector<int> count_map (board_size_x * board_size_y);
 	game_state *startpos = nullptr;
 	bool numbering = do_number && m_edit_board == nullptr;
 
-	if (numbering && !m_state->get_start_count () && m_state->was_move_p ()) {
-		startpos = m_state;
+	if (numbering && !m_displayed->get_start_count () && m_displayed->was_move_p ()) {
+		startpos = m_displayed;
 		while (startpos
 		       && (startpos->was_move_p () || startpos->root_node_p ())
 		       && !startpos->get_start_count ())
@@ -634,17 +633,16 @@ QByteArray BoardView::render_svg (bool do_number, bool coords)
 
 QString BoardView::render_ascii (bool do_number, bool coords)
 {
-	game_state *root = m_game->get_root ();
-	const go_board &broot = root->get_board ();
-	int bitsz = broot.bitsize ();
-	int szx = broot.size_x ();
-	int szy = broot.size_y ();
+	const go_board &db = m_displayed->get_board ();
+	int bitsz = db.bitsize ();
+	int szx = db.size_x ();
+	int szy = db.size_y ();
 	QString result;
 
 	std::vector<int> count_map (bitsz);
-	game_state *startpos = m_state;
-	if (do_number && m_edit_board == nullptr && !m_state->get_start_count ()) {
-		startpos = m_state;
+	game_state *startpos = m_displayed;
+	if (do_number && m_edit_board == nullptr && !m_displayed->get_start_count ()) {
+		startpos = m_displayed;
 		while (startpos
 		       && (startpos->was_move_p () || startpos->root_node_p ())
 		       && !startpos->get_start_count ())
@@ -652,7 +650,7 @@ QString BoardView::render_ascii (bool do_number, bool coords)
 			startpos = startpos->prev_move ();
 		}
 		if (startpos == nullptr || (!startpos->was_move_p () && !startpos->root_node_p ()))
-			startpos = m_state;
+			startpos = m_displayed;
 	}
 	int moves = 1;
 	do {
@@ -661,7 +659,7 @@ QString BoardView::render_ascii (bool do_number, bool coords)
 		int n_mv = 0;
 		game_state *next = startpos;
 		std::fill (std::begin (count_map), std::end (count_map), 0);
-		while (next != m_state && n_mv < 10) {
+		while (next != m_displayed && n_mv < 10) {
 			game_state *nx2 = next->next_move ();
 			int x = nx2->get_move_x ();
 			int y = nx2->get_move_y ();
@@ -744,7 +742,7 @@ QString BoardView::render_ascii (bool do_number, bool coords)
 		result += "[/go]\n";
 		startpos = next;
 		moves += n_mv;
-	} while (startpos != m_state);
+	} while (startpos != m_displayed);
 	return result;
 }
 
@@ -768,7 +766,7 @@ game_state *Board::extract_analysis (const go_board &b, std::vector<int> &count_
 			x++;
 		QString move = QChar ('A' + x) + QString::number (b.size_y () - y);
 		m_main_widget->set_2nd_eval (move, m_primary_eval + m_winrate[bp],
-					     m_state->to_move (), m_visits[bp]);
+					     m_displayed->to_move (), m_visits[bp]);
 	}
 	int depth = 0;
 	int count = 0;
@@ -789,9 +787,9 @@ void BoardView::draw_grid (QPainter &painter, bit_array &grid_hidden)
 	int szy = board_size_y;
 	int dups_x = n_dups_h ();
 	int dups_y = n_dups_v ();
-	const go_board &rootb = m_game->get_root()->get_board();
-	bool torus_h = rootb.torus_h ();
-	bool torus_v = rootb.torus_v ();
+	const go_board &b = m_displayed->get_board();
+	bool torus_h = b.torus_h ();
+	bool torus_v = b.torus_v ();
 
 	int scaled_w = setting->readBoolEntry ("BOARD_LINESCALE") ? (int)square_size / 40 + 1 : 1;
 	QPen pen (Qt::black);
@@ -924,7 +922,7 @@ void BoardView::draw_grid (QPainter &painter, bit_array &grid_hidden)
 			int gbp = tx + dups_x + (ty + dups_y) * (szx + 2 * dups_x);
 			int x = (tx  + m_shift_x) % szx;
 			int y = (ty  + m_shift_y) % szy;
-			if (m_hoshis.test_bit (rootb.bitpos (x, y)) && !grid_hidden.test_bit (gbp)) {
+			if (m_hoshis.test_bit (b.bitpos (x, y)) && !grid_hidden.test_bit (gbp)) {
 				painter.drawEllipse (QPoint (line_offx + (tx + dups_x) * square_size,
 							     line_offy + (ty + dups_y) * square_size),
 						     hoshi_size, hoshi_size);
@@ -1000,13 +998,13 @@ void BoardView::sync_appearance (bool)
 	int winrate_for = setting->readIntEntry ("ANALYSIS_WINRATE");
 	stone_color wr_swap_col = winrate_for == 0 ? white : winrate_for == 1 ? black : none;
 
-	const go_board &b = m_edit_board == nullptr ? m_state->get_board () : *m_edit_board;
-	stone_color to_move = m_edit_board == nullptr ? m_state->to_move () : m_edit_to_move;
+	const go_board &b = m_edit_board == nullptr ? m_displayed->get_board () : *m_edit_board;
+	stone_color to_move = m_edit_board == nullptr ? m_displayed->to_move () : m_edit_to_move;
 
 	int var_type = have_analysis && analysis_children ? 0 : m_vars_type;
 
-	const go_board child_vars = m_state->child_moves (nullptr);
-	const go_board sibling_vars = m_state->sibling_moves ();
+	const go_board child_vars = m_displayed->child_moves (nullptr);
+	const go_board sibling_vars = m_displayed->sibling_moves ();
 	const go_board &vars = m_vars_children ? child_vars : sibling_vars;
 	const bit_array st_w = b.get_stones_w ();
 	const bit_array st_b = b.get_stones_b ();
@@ -1035,8 +1033,8 @@ void BoardView::sync_appearance (bool)
 		numbering = false;
 	}
 
-	if (numbering && !m_state->get_start_count () && m_state->was_move_p ()) {
-		startpos = m_state;
+	if (numbering && !m_displayed->get_start_count () && m_displayed->was_move_p ()) {
+		startpos = m_displayed;
 		while (startpos
 		       && (startpos->was_move_p () || startpos->root_node_p ())
 		       && !startpos->get_start_count ())
@@ -1076,9 +1074,9 @@ void BoardView::sync_appearance (bool)
 			bool was_last_move = false;
 			int v = startpos ? count_map[bp] : 0;
 
-			if (m_edit_board == nullptr && m_state->was_move_p ()) {
-				int last_x = m_state->get_move_x ();
-				int last_y = m_state->get_move_y ();
+			if (m_edit_board == nullptr && m_displayed->was_move_p ()) {
+				int last_x = m_displayed->get_move_x ();
+				int last_y = m_displayed->get_move_y ();
 				if (last_x == x && last_y == y)
 					was_last_move = true;
 			}
@@ -1214,30 +1212,35 @@ void Board::sync_appearance (bool board_only)
 		setup_analyzer_position ();
 	}
 	BoardView::sync_appearance (board_only);
-	const go_board &b = m_edit_board == nullptr ? m_state->get_board () : *m_edit_board;
+	const go_board &b = m_edit_board == nullptr ? m_displayed->get_board () : *m_edit_board;
 	m_main_widget->recalc_scores (b);
 	if (!board_only) {
-		m_board_win->setMoveData (*m_state, b, m_game_mode);
-		m_board_win->update_game_tree (m_state);
+		m_board_win->setMoveData (*m_displayed, b, m_game_mode);
+		m_board_win->update_game_tree (m_displayed);
 	}
 }
 
-void BoardView::observed_changed ()
+void Board::set_displayed (game_state *st)
 {
-	sync_appearance (false);
+	move_state (st);
+}
+
+void Board::observed_changed ()
+{
+	BoardView::set_displayed (m_state);
 }
 
 void Board::deleteNode()
 {
-	game_state *st = m_state;
+	game_state *st = m_displayed;
 	if (st->root_node_p ())
 		return;
 	game_state *parent = st->prev_move ();
 	delete st;
-	if (m_state != parent)
+	if (m_displayed != parent)
 		throw std::logic_error ("should have updated to parent");
-	const go_board &b = m_state->get_board ();
-	m_board_win->setMoveData (*m_state, b, m_game_mode);
+	const go_board &b = m_displayed->get_board ();
+	m_board_win->setMoveData (*m_displayed, b, m_game_mode);
 	setModified ();
 }
 
@@ -1431,7 +1434,7 @@ void Board::play_one_move (int x, int y)
 	if (!player_to_move_p ())
 		return;
 
-	game_state *st = m_state;
+	game_state *st = m_displayed;
 	stone_color col = st->to_move ();
 
 	game_state *st_new = st->add_child_move (x, y);
@@ -1445,7 +1448,7 @@ void Board::play_one_move (int x, int y)
 
 void Board::play_external_move (int x, int y)
 {
-	game_state *st = m_state;
+	game_state *st = m_displayed;
 
 	setModified();
 
@@ -1498,9 +1501,9 @@ stone_color Board::swap_edit_to_move ()
 {
 	if (m_edit_board != nullptr)
 		return m_edit_to_move = m_edit_to_move == black ? white : black;
-	stone_color newcol = m_state->to_move () == black ? white : black;
-	m_state->set_to_move (newcol);
-	m_board_win->setMoveData (*m_state, m_state->get_board (), m_game_mode);
+	stone_color newcol = m_displayed->to_move () == black ? white : black;
+	m_displayed->set_to_move (newcol);
+	m_board_win->setMoveData (*m_displayed, m_displayed->get_board (), m_game_mode);
 	return newcol;
 }
 
@@ -1518,7 +1521,7 @@ void Board::click_add_mark (QMouseEvent *e, int x, int y)
 	if (mark_to_set == mark::letter && e->modifiers () == Qt::ShiftModifier) {
 		TextEditDialog dlg (m_board_win);
 		dlg.textLineEdit->setFocus();
-		const go_board &b = m_edit_board ? *m_edit_board : m_state->get_board ();
+		const go_board &b = m_edit_board ? *m_edit_board : m_displayed->get_board ();
 
 		if (b.mark_at (x, y) == mark::text)
 			dlg.textLineEdit->setText (QString::fromStdString (b.mark_text_at (x, y)));
@@ -1529,7 +1532,7 @@ void Board::click_add_mark (QMouseEvent *e, int x, int y)
 			if (m_edit_board)
 				m_edit_board->set_text_mark (x, y, dlg.textLineEdit->text().toStdString ());
 			else
-				m_state->set_text_mark (x, y, dlg.textLineEdit->text().toStdString ());
+				m_displayed->set_text_mark (x, y, dlg.textLineEdit->text().toStdString ());
 			setModified ();
 			sync_appearance (true);
 		}
@@ -1558,7 +1561,7 @@ void Board::click_add_mark (QMouseEvent *e, int x, int y)
 	if (m_edit_board)
 		changed = m_edit_board->set_mark (x, y, mark_to_set, mark_extra);
 	else
-		changed = m_state->set_mark (x, y, mark_to_set, mark_extra);
+		changed = m_displayed->set_mark (x, y, mark_to_set, mark_extra);
 	if (changed) {
 		setModified ();
 		sync_appearance (true);
@@ -1615,7 +1618,7 @@ void Board::mousePressEvent(QMouseEvent *e)
 		|| e->button () == Qt::MiddleButton))
 	{
 		game_state *eval = m_eval_state->find_child_move (x, y);
-		game_state *st = m_state;
+		game_state *st = m_displayed;
 		bool first = true;
 		while (eval) {
 			go_board b = st->get_board ();
@@ -1629,7 +1632,7 @@ void Board::mousePressEvent(QMouseEvent *e)
 				int bp = b.bitpos (tx, ty);
 				double wr = m_primary_eval + m_winrate[bp];
 				double other_wr = 1 - wr;
-				if (m_state->to_move () == black)
+				if (m_displayed->to_move () == black)
 					std::swap (wr, other_wr);
 				comment = (comment.arg (QString::number (100 * wr, 'f', 1)).arg ('%')
 					   .arg (QString::number (100 * other_wr, 'f', 1)).arg ('%'));
@@ -1640,7 +1643,7 @@ void Board::mousePressEvent(QMouseEvent *e)
 		}
 		if (!first) {
 			sync_appearance ();
-			m_board_win->update_game_tree (m_state);
+			m_board_win->update_game_tree (m_displayed);
 			return;
 		}
 	}
@@ -1768,9 +1771,7 @@ void BoardView::clear_selection ()
 
 int BoardView::n_dups_h ()
 {
-	game_state *root = m_game->get_root ();
-
-	const go_board &b = root->get_board ();
+	const go_board &b = m_displayed->get_board ();
 	if (b.torus_h ())
 		return std::min (b.size_x (), m_pref_dups);
 	return 0;
@@ -1778,9 +1779,7 @@ int BoardView::n_dups_h ()
 
 int BoardView::n_dups_v ()
 {
-	game_state *root = m_game->get_root ();
-
-	const go_board &b = root->get_board ();
+	const go_board &b = m_displayed->get_board ();
 	if (b.torus_v ())
 		return std::min (b.size_y (), m_pref_dups);
 	return 0;
@@ -1793,8 +1792,7 @@ void BoardView::clear_graphics_elts ()
 
 void BoardView::alloc_graphics_elts ()
 {
-	game_state *root = m_game->get_root ();
-	const go_board &b = root->get_board ();
+	const go_board &b = m_displayed->get_board ();
 
 	board_size_x = b.size_x ();
 	board_size_y = b.size_y ();
@@ -1804,30 +1802,38 @@ void BoardView::alloc_graphics_elts ()
 
 void BoardView::reset_game (std::shared_ptr<game_record> gr)
 {
-	stop_observing ();
-
 	clear_graphics_elts ();
 
-	m_game = gr;
-
-	game_state *root = m_game->get_root ();
+	game_state *root = gr->get_root ();
+	m_displayed = root;
 	m_hoshis = calculate_hoshis (root->get_board ());
 
 	alloc_graphics_elts ();
 
 	draw_background ();
 
-	start_observing (root);
-
 	clear_selection ();
 
 	canvas->update();
 }
 
+void BoardView::set_displayed (game_state *st)
+{
+	m_displayed = st;
+	sync_appearance (false);
+}
+
 void Board::reset_game (std::shared_ptr<game_record> gr)
 {
+	stop_observing ();
+
+	m_game = gr;
+
 	BoardView::reset_game (gr);
-	setModified(false);
+
+	start_observing (gr->get_root ());
+
+	setModified (false);
 	m_dragging = false;
 	m_request_mark_rect = false;
 }
@@ -1877,7 +1883,7 @@ void BoardView::set_vardisplay (bool children, int type)
 void Board::update_comment(const QString &qs)
 {
 	std::string s = qs.toStdString ();
-	m_state->set_comment (s);
+	m_displayed->set_comment (s);
 	setModified (true);
 }
 void Board::setModified(bool m)
@@ -1891,18 +1897,17 @@ void Board::setModified(bool m)
 
 QPixmap BoardView::grabPicture()
 {
-	int sz = m_game->boardsize ();
 	int minx = m_wood_rect.x () + 2;
 	int miny = m_wood_rect.y () + 2;
 	int maxx = minx + m_wood_rect.width () - 4;
 	int maxy = miny + m_wood_rect.height () - 4;
 	if (m_rect_x1 > 1)
 		minx = coverLeft->rect ().right ();
-	if (m_rect_x2 < sz)
+	if (m_rect_x2 < board_size_x)
 		maxx = coverRight->rect ().left ();
 	if (m_rect_y1 > 1)
 		miny = coverTop->rect ().bottom ();
-	if (m_rect_y2 < sz)
+	if (m_rect_y2 < board_size_y)
 		maxy = coverBot->rect ().top ();
 	return grab (QRect (minx, miny, maxx - minx, maxy - miny));
 }
@@ -1913,15 +1918,15 @@ void Board::doPass()
 	if (!player_to_move_p ())
 		return;
 	if (m_game_mode == modeNormal || m_game_mode == modeComputer) {
-		game_state *st = m_state->add_child_pass ();
-		m_state->transfer_observers (st);
+		game_state *st = m_displayed->add_child_pass ();
+		m_displayed->transfer_observers (st);
 	}
 }
 
 void Board::play_external_pass ()
 {
-	game_state *st = m_state->add_child_pass ();
-	m_state->transfer_observers (st);
+	game_state *st = m_displayed->add_child_pass ();
+	m_displayed->transfer_observers (st);
 }
 
 void Board::navIntersection()
@@ -1949,7 +1954,7 @@ void Board::setup_analyzer_position ()
 	if (st != analyzer::running && st != analyzer::paused)
 		return;
 	std::vector<game_state *> moves;
-	game_state *gst = m_state;
+	game_state *gst = m_displayed;
 	while (gst->was_move_p () && !gst->root_node_p ()) {
 		moves.push_back (gst);
 		gst = gst->prev_move ();
@@ -1971,7 +1976,7 @@ void Board::setup_analyzer_position ()
 	}
 	clear_eval_data ();
 	if (st == analyzer::running && !m_pause_eval) {
-		stone_color to_move = m_state->to_move ();
+		stone_color to_move = m_displayed->to_move ();
 		m_winrate = new double[b.bitsize ()] ();
 		m_visits = new int[b.bitsize ()] ();
 		m_analyzer->analyze (to_move, 100);
@@ -2013,8 +2018,8 @@ void Board::gtp_eval (const QString &s)
 	if (moves.isEmpty ())
 		return;
 
-	const go_board &b = m_state->get_board ();
-	stone_color to_move = m_state->to_move ();
+	const go_board &b = m_displayed->get_board ();
+	stone_color to_move = m_displayed->to_move ();
 	delete m_eval_state;
 	m_eval_state = new game_state (b, to_move);
 
@@ -2034,7 +2039,7 @@ void Board::gtp_eval (const QString &s)
 
 		if (count == 0) {
 			m_primary_eval = wr;
-			m_main_widget->set_eval (move, wr, m_state->to_move (), visits);
+			m_main_widget->set_eval (move, wr, m_displayed->to_move (), visits);
 		}
 		qDebug () << move << " PV: " << pv;
 
@@ -2048,8 +2053,8 @@ void Board::gtp_eval (const QString &s)
 				int i = sx.toLatin1 () - 'A';
 				if (i > 7)
 					i--;
-				int szx = m_state->get_board ().size_x ();
-				int szy = m_state->get_board ().size_y ();
+				int szx = m_displayed->get_board ().size_x ();
+				int szy = m_displayed->get_board ().size_y ();
 				int j = szy - pm.mid (1).toInt ();
 				if (i >= 0 && i < szx && j >= 0 && j < szy) {
 					if (pv_first) {
@@ -2113,7 +2118,7 @@ void Board::pause_analysis (bool on)
 		m_analyzer->pause_analysis ();
 		m_board_win->update_analysis (analyzer::paused);
 	} else {
-		stone_color to_move = m_state->to_move ();
+		stone_color to_move = m_displayed->to_move ();
 		m_winrate = new double[board_size_x * board_size_y] ();
 		m_visits = new int[board_size_x * board_size_y] ();
 		m_board_win->update_analysis (analyzer::running);
