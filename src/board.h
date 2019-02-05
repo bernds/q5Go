@@ -90,7 +90,6 @@ protected:
 
 	virtual void sync_appearance (bool board_only = true);
 	const QPixmap &choose_stone_pixmap (stone_color, stone_type, int);
-	void update_shift (int x, int y);
 
 	int n_dups_h ();
 	int n_dups_v ();
@@ -146,7 +145,6 @@ protected:
 	void calculateSize ();
 	void draw_background ();
 	void draw_grid (QPainter &, bit_array &);
-	void draw_coords ();
 
 	void resizeBoard(int w, int h);
 

@@ -274,7 +274,7 @@ void BoardView::draw_background()
 			painter.drawText (brect, Qt::AlignLeft | Qt::AlignTop, nm);
 		}
 		for (int ty = 0; ty < board_size_y; ty++) {
-			int y = (ty + m_shift_x) % board_size_y;
+			int y = (ty + m_shift_y) % board_size_y;
 			auto name = b.coords_name (0, y, showSGFCoords);
 			QString nm = QString::fromStdString (name.second);
 			QRect brect = fm.boundingRect (nm);
@@ -290,10 +290,6 @@ void BoardView::draw_background()
 	painter.end ();
 
 	canvas->setBackgroundBrush (QBrush (image));
-}
-
-void BoardView::draw_coords ()
-{
 }
 
 /* Handle a click on the Done button.  Return true if we should return to normal mode.  */
@@ -1846,7 +1842,6 @@ void BoardView::update_prefs ()
 	alloc_graphics_elts ();
 
 	draw_background ();
-	draw_coords ();
 	updateCovers ();
 
 	sync_appearance ();
