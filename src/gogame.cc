@@ -385,7 +385,7 @@ void navigable_observer::goto_main_branch ()
 	game_state *go_to = st;
 	while (st != nullptr) {
 		while (st->has_prev_sibling ())
-			st = go_to = st->prev_sibling (false);
+			st = go_to = st->prev_sibling (true);
 		st = st->prev_move ();
 	}
 	if (go_to != st)
