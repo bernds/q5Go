@@ -1474,7 +1474,7 @@ void MainWindow::updateBoard()
 	viewSlider->setChecked (setting->readBoolEntry ("SLIDER"));
 	viewSidebar->setChecked (setting->readBoolEntry ("SIDEBAR"));
 	viewCoords->setChecked (setting->readBoolEntry ("BOARD_COORDS"));
-	gfx_board->setShowSGFCoords (setting->readBoolEntry ("SGF_BOARD_COORDS"));
+	gfx_board->set_sgf_coords (setting->readBoolEntry ("SGF_BOARD_COORDS"));
 	gfx_board->set_antiClicko (setting->readBoolEntry ("ANTICLICKO"));
 
 	int ghosts = setting->readIntEntry ("VAR_GHOSTS");
@@ -1613,9 +1613,9 @@ void MainWindow::slotViewStatusBar(bool toggle)
 void MainWindow::slotViewCoords(bool toggle)
 {
 	if (!toggle)
-		gfx_board->setShowCoords(false);
+		gfx_board->set_show_coords(false);
 	else
-		gfx_board->setShowCoords(true);
+		gfx_board->set_show_coords(true);
 
 	statusBar()->showMessage(tr("Ready."));
 }

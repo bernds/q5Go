@@ -66,6 +66,9 @@ protected:
 	int m_rect_x1, m_rect_x2;
 	int m_rect_y1, m_rect_y2;
 
+	/* A few board display options.  */
+	bool m_show_coords, m_sgf_coords;
+
 	/* Positioning of the board image inside the view.  The board rect gives the
 	   exact size of the grid; stones and marks extend outside of it.  We also
 	   need space for coordinates, so there is an additional wood rect to hold
@@ -130,8 +133,8 @@ public:
 
 	bool lockResize;
 
-	void setShowCoords(bool b);
-	void setShowSGFCoords(bool b);
+	void set_show_coords (bool b);
+	void set_sgf_coords (bool b);
 	void set_vardisplay (bool children, int type);
 
 	void update_prefs ();
@@ -158,8 +161,6 @@ protected:
 	QGraphicsRectItem *coverTop, *coverLeft, *coverRight, *coverBot;
 
 	ImageHandler *imageHandler;
-	bool showCoords;
-	bool showSGFCoords;
 
 #ifdef Q_OS_WIN
 	bool resizeDelayFlag;

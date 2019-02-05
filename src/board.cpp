@@ -39,8 +39,8 @@ BoardView::BoardView(QWidget *parent, QGraphicsScene *c)
 	setUpdatesEnabled(true);
 
 	board_size_x = board_size_y = DEFAULT_BOARD_SIZE;
-	showCoords = setting->readBoolEntry ("BOARD_COORDS");
-	showSGFCoords = setting->readBoolEntry ("SGF_BOARD_COORDS");
+	m_show_coords = setting->readBoolEntry ("BOARD_COORDS");
+	m_sgf_coords = setting->readBoolEntry ("SGF_BOARD_COORDS");
 	m_pref_dups = setting->readIntEntry ("TOROID_DUPS");
 
 	setStyleSheet( "QGraphicsView { border-style: none; }" );
@@ -130,7 +130,7 @@ void BoardView::calculateSize()
 	coord_offset = coord_width < coord_height ? coord_height : coord_width;
 
 	//we need 1 more virtual 'square' for the stones on 1st and last line getting off the grid
-	int cmargin = showCoords ? 2 * (coord_offset + coord_margin * 2) : 0;
+	int cmargin = m_show_coords ? 2 * (coord_offset + coord_margin * 2) : 0;
 	int square_size_w = table_size_x - cmargin;
 	int square_size_h = table_size_y - cmargin;
 	int shown_size_x = board_size_x + 2 * n_dups_h ();
@@ -250,7 +250,7 @@ void BoardView::draw_background()
 	}
 
 	/* Draw the coordinates.  */
-	if (showCoords && m_displayed != nullptr) {
+	if (m_show_coords && m_displayed != nullptr) {
 		const go_board &b = m_displayed->get_board ();
 
 		// centres the coordinates text within the remaining space at table edge
@@ -263,7 +263,7 @@ void BoardView::draw_background()
 
 		for (int tx = 0; tx < board_size_x; tx++) {
 			int x = (tx + m_shift_x) % board_size_x;
-			auto name = b.coords_name (x, 0, showSGFCoords);
+			auto name = b.coords_name (x, 0, m_sgf_coords);
 			QString nm = QString::fromStdString (name.first);
 			QRect brect = fm.boundingRect (nm);
 			brect.moveCenter (QPoint (m_board_rect.x () + square_size * (hdups + tx),
@@ -275,7 +275,7 @@ void BoardView::draw_background()
 		}
 		for (int ty = 0; ty < board_size_y; ty++) {
 			int y = (ty + m_shift_y) % board_size_y;
-			auto name = b.coords_name (0, y, showSGFCoords);
+			auto name = b.coords_name (0, y, m_sgf_coords);
 			QString nm = QString::fromStdString (name.second);
 			QRect brect = fm.boundingRect (nm);
 			brect.moveCenter (QPoint (m_wood_rect.x () + center,
@@ -1382,7 +1382,7 @@ void Board::mouseMoveEvent(QMouseEvent *e)
 	// Update the statusbar coords tip
 	if (x != -1) {
 		const go_board &b = m_game->get_root ()->get_board ();
-		auto name = b.coords_name (curX, curY, showSGFCoords);
+		auto name = b.coords_name (curX, curY, m_sgf_coords);
 		m_board_win->coords_changed (QString::fromStdString (name.first), QString::fromStdString (name.second));
 	} else
 		m_board_win->coords_changed ("", "");
@@ -1847,21 +1847,21 @@ void BoardView::update_prefs ()
 	sync_appearance ();
 }
 
-void BoardView::setShowCoords(bool b)
+void BoardView::set_show_coords (bool b)
 {
-	bool old = showCoords;
-	showCoords = b;
-	if (old == showCoords)
+	bool old = m_show_coords;
+	m_show_coords = b;
+	if (old == m_show_coords)
 		return;
 
 	changeSize();
 }
 
-void BoardView::setShowSGFCoords(bool b)
+void BoardView::set_sgf_coords (bool b)
 {
-	bool old = showSGFCoords;
-	showSGFCoords = b;
-	if (old == showSGFCoords)
+	bool old = m_sgf_coords;
+	m_sgf_coords = b;
+	if (old == m_sgf_coords)
 		return;
 
 	draw_background ();
