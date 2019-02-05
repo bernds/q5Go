@@ -67,7 +67,9 @@ protected:
 	int m_rect_y1, m_rect_y2;
 
 	/* A few board display options.  */
-	bool m_show_coords, m_sgf_coords;
+	bool m_figure_moves = false;
+	bool m_move_numbers = false;
+	bool m_show_coords, m_sgf_coords, m_show_hoshis, m_show_figure_caps;
 
 	/* Positioning of the board image inside the view.  The board rect gives the
 	   exact size of the grid; stones and marks extend outside of it.  We also
@@ -89,6 +91,7 @@ protected:
 	game_state *m_eval_state {};
 	double *m_winrate {};
 	int *m_visits {};
+
 	QGraphicsPixmapItem m_stone_layer;
 
 	virtual void sync_appearance (bool board_only = true);
@@ -112,9 +115,8 @@ protected:
 
 	/* Overridden by Board.  */
 	virtual stone_color cursor_color (int, int, stone_color) { return none; }
-	virtual game_state *extract_analysis (const go_board &, std::vector<int> &, int &) { return nullptr; }
+	virtual int extract_analysis (go_board &) { return 0; }
 	std::pair<stone_color, stone_type> stone_to_display (const go_board &, stone_color to_move, int x, int y,
-							     game_state *startpos, const std::vector<int> &count_map, int n_back,
 							     const go_board &vars, int var_type);
 
 public:
@@ -122,9 +124,10 @@ public:
 	~BoardView ();
 	virtual void reset_game (std::shared_ptr<game_record>);
 	virtual void set_displayed (game_state *);
-	const game_state *get_state () { return m_displayed; }
+	game_state *displayed () { return m_displayed; }
 
 	stone_color to_move () { return m_displayed->to_move (); }
+
 	QPixmap grabPicture();
 	QString render_ascii (bool, bool);
 	QByteArray render_svg (bool, bool);
@@ -133,8 +136,12 @@ public:
 
 	bool lockResize;
 
-	void set_show_coords (bool b);
-	void set_sgf_coords (bool b);
+	void set_figure_view_enabled (bool on) { m_figure_moves = on; }
+	void set_show_move_numbers (bool);
+	void set_show_hoshis (bool);
+	void set_show_figure_caps (bool);
+	void set_show_coords (bool);
+	void set_sgf_coords (bool);
 	void set_vardisplay (bool children, int type);
 
 	void update_prefs ();
@@ -228,7 +235,6 @@ public:
 	void setMarkType(mark t) { m_edit_mark = t; }
 
 	void navIntersection();
-	void set_start_count (bool on) { m_displayed->set_start_count (on); }
 	void set_rect_select (int on) { m_request_mark_rect = on; }
 
 	analyzer analyzer_state ();
@@ -272,7 +278,7 @@ protected:
 	virtual void leaveEvent(QEvent*) override;
 
 	virtual stone_color cursor_color (int x, int y, stone_color to_move) override;
-	virtual game_state *extract_analysis (const go_board &, std::vector<int> &, int &) override;
+	virtual int extract_analysis (go_board &) override;
 	virtual void sync_appearance (bool board_only = true) override;
 
 private:

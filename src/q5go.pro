@@ -2,7 +2,8 @@ TEMPLATE	      = app
 CONFIG		     += qt warn_on release thread
 FORMS	      = gui_dialog.ui \
 		clientwindow_gui.ui \
-		gameinfo_gui.ui \
+                figuredlg_gui.ui \
+                gameinfo_gui.ui \
 		newgame_gui.ui \
 		newlocalgame_gui.ui \
 		newvariantgame_gui.ui \
@@ -19,7 +20,8 @@ FORMS	      = gui_dialog.ui \
 
 HEADERS		      = config.h \
 			clockview.h \
-			gamedialog.h \
+                        figuredlg.h \
+                        gamedialog.h \
 			gamestable.h \
 			gametree.h \
 			gs_globals.h \
@@ -62,7 +64,8 @@ HEADERS		      = config.h \
                         audio.h
 
 SOURCES		      = clientwin.cpp \
-                        gamedialog.cpp \
+			figuredlg.cpp \
+			gamedialog.cpp \
 			gamestable.cpp \
 			gametree.cpp \
                         goboard.cc \

@@ -17,6 +17,7 @@
 #include "mainwidget.h"
 #include "setting.h"
 #include "textview.h"
+#include "figuredlg.h"
 #include "qgtp.h"
 
 class Board;
@@ -33,6 +34,8 @@ class MainWindow : public QMainWindow
 
 	bool m_allow_text_update_signal;
 	bool m_sgf_var_style;
+
+	QList<game_state *> m_figures;
 public:
 	MainWindow(QWidget* parent, std::shared_ptr<game_record>, GameMode mode = modeNormal);
 	virtual ~MainWindow();
@@ -61,7 +64,7 @@ public:
 	   providing a title string).  */
 	void update_game_record ();
 	void updateCaption (bool modified);
-
+	void update_figure_display ();
 	void done_rect_select (int minx, int miny, int maxx, int maxy);
 
 	/* Called from external source.  */
@@ -69,8 +72,10 @@ public:
 
 	void update_analysis (analyzer);
 	void update_game_tree (game_state *);
+	void update_figures (game_state *);
 
 	void coords_changed (const QString &, const QString &);
+
 protected:
 	void initActions();
 	void initMenuBar(GameMode);
@@ -109,7 +114,7 @@ public slots:
 	void slotFileExportPicClipB(bool);
 
 	void slotEditDelete(bool);
-	void slotEdit123(bool);
+	void slotEditFigure(bool);
 
 	void slotNavIntersection(bool);
 	void slotNavAutoplay(bool toggle);
@@ -129,6 +134,8 @@ public slots:
 	void slotViewComment(bool toggle);
 	void slotViewVertComment(bool toggle);
 	void slotViewFullscreen(bool toggle);
+	void slotViewMoveNumbers(bool toggle);
+	void slotViewFigures(bool toggle);
 	void slotTimerForward();
 	void slot_editBoardInNewWindow(bool);
 	void slot_animateClick(bool);
@@ -138,6 +145,11 @@ public slots:
 	void slotEditGroup(bool);
 	void slotEditRectSelect(bool);
 	void slotEditClearSelect(bool);
+
+	void slotDiagEdit (bool);
+	void slotDiagASCII (bool);
+	void slotDiagSVG (bool);
+	void slotDiagChosen (int);
 
 	virtual void doPass();
 	virtual void doCountDone();
@@ -173,14 +185,15 @@ protected:
 		*fileExportPic, *fileExportPicClipB,
 		*fileQuit;
 	QAction *editDelete, *editStone, *editTriangle, *editSquare, *editCircle, *editCross, *editNumber, *editLetter;
-	QAction *editRectSelect, *editClearSelect, *edit123;
+	QAction *editRectSelect, *editClearSelect, *editFigure;
 	QAction *navBackward, *navForward, *navFirst, *navLast, *navNextVar, *navPrevVar,
 		*navMainBranch, *navStartVar, *navNextBranch, *navNthMove, *navAutoplay, *navEmptyBranch,
 		*navCloneNode, *navSwapVariations, *navNextComment, *navPrevComment, *navIntersection ;       //SL added eb 11                               // added eb the 2 last
 	QAction *setPreferences, *setGameInfo, *soundToggle;
 	QAction *anConnect, *anDisconnect, *anPause;
 	QAction *viewFileBar, *viewToolBar, *viewEditBar, *viewMenuBar, *viewStatusBar, *viewCoords,
-		*viewSlider, *viewSidebar, *viewComment, *viewVertComment, *viewSaveSize, *viewFullscreen;
+		*viewSlider, *viewSidebar, *viewComment, *viewVertComment, *viewSaveSize, *viewFullscreen,
+		*viewNumbers, *viewFigures;
 	QAction *helpManual, *helpAboutApp, *helpAboutQt, *whatsThis;
 	QActionGroup *editGroup;
 	QTimer *timer;

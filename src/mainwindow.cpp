@@ -153,23 +153,10 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 	}
 	splitter->setOpaqueResize(false);
 	splitter_comment->setVisible (viewComment->isChecked ());
+	mainWidget->figuresWidget->setVisible (viewFigures->isChecked ());
 
-	mainWidgetGuiLayout = new QGridLayout(mainWidget);
-#if 0
-	mainWidget->removeWidget (mainWidget->toolsFrame);
-	mainWidget->removeWidget (mainWidget->boardFrame);
-#endif
 	if (setting->readBoolEntry("SIDEBAR_LEFT"))
-	{
-		mainWidgetGuiLayout->addWidget(mainWidget->toolsFrame, 0, 0);
-		mainWidgetGuiLayout->addWidget(mainWidget->boardFrame, 0, 1);
-
-	}
-	else
-	{
-		mainWidgetGuiLayout->addWidget(mainWidget->toolsFrame, 0, 1);
-		mainWidgetGuiLayout->addWidget(mainWidget->boardFrame, 0, 0);
-	}
+		slotViewLeftSidebar ();
 
 	//commentEdit = new QTextEdit(splitter_comment, "comments");
 	comments_widget = new QWidget (splitter_comment);
@@ -188,7 +175,7 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 	ListView_observers->setFocusPolicy (Qt::NoFocus);
 	ListView_observers->setSortingEnabled (true);
 
-	gameTreeView = new GameTree (splitter_comment);
+	gameTreeView = new GameTree (this, splitter_comment);
 
 	splitter->setStretchFactor (splitter->indexOf (mainWidget), 0);
 	splitter_comment->setStretchFactor(splitter_comment->indexOf (ListView_observers), 0);
@@ -207,10 +194,16 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 	connect(mainWidget->goFirstButton, &QToolButton::clicked, [=] () { gfx_board->goto_first_move (); });
 	connect(mainWidget->goNextButton, &QToolButton::clicked, [=] () { gfx_board->next_move (); });
 	connect(mainWidget->goPrevButton, &QToolButton::clicked, [=] () { gfx_board->previous_move (); });
-	connect(mainWidget->prevNumberButton, &QToolButton::clicked, [=] () { gfx_board->previous_count (); });
-	connect(mainWidget->nextNumberButton, &QToolButton::clicked, [=] () { gfx_board->next_count (); });
+	connect(mainWidget->prevNumberButton, &QToolButton::clicked, [=] () { gfx_board->previous_figure (); });
+	connect(mainWidget->nextNumberButton, &QToolButton::clicked, [=] () { gfx_board->next_figure (); });
 	connect(mainWidget->prevCommentButton, &QToolButton::clicked, [=] () { gfx_board->previous_comment (); });
 	connect(mainWidget->nextCommentButton, &QToolButton::clicked, [=] () { gfx_board->next_comment (); });
+
+	connect(mainWidget->diagEditButton, &QToolButton::clicked, this, &MainWindow::slotDiagEdit);
+	connect(mainWidget->diagASCIIButton, &QToolButton::clicked, this, &MainWindow::slotDiagASCII);
+	connect(mainWidget->diagSVGButton, &QToolButton::clicked, this, &MainWindow::slotDiagSVG);
+	void (QComboBox::*cact) (int) = &QComboBox::activated;
+	connect(mainWidget->diagComboBox, cact, this, &MainWindow::slotDiagChosen);
 
 	connect(mainWidget->normalTools->anStartButton, &QToolButton::clicked,
 		[=] (bool on) { if (on) gfx_board->start_analysis (); else gfx_board->stop_analysis (); });
@@ -335,6 +328,7 @@ MainWindow::~MainWindow()
 	delete editNumber;
 	delete editLetter;
 	delete editGroup;
+	delete editFigure;
 	delete navBackward;
 	delete navForward;
 	delete navFirst;
@@ -363,6 +357,8 @@ MainWindow::~MainWindow()
 	delete viewVertComment;
 	delete viewSaveSize;
 	delete viewFullscreen;
+	delete viewFigures;
+	delete viewNumbers;
 	delete helpManual;
 	delete helpAboutApp;
 	delete helpAboutQt;
@@ -576,11 +572,12 @@ void MainWindow::initActions()
 	editGroup->addAction (editLetter);
 	editStone->setChecked (true);
 
-	edit123 = new QAction(QIcon (":/BoardWindow/images/boardwindow/123.png"), tr("Number moves from here"), this);
-	edit123->setCheckable (true);
-	edit123->setStatusTip(tr("Select to start numbering moves from this position."));
-	edit123->setWhatsThis(tr("Causes the board to display move numbers starting at this position."));
-	connect(edit123, &QAction::triggered, this, &MainWindow::slotEdit123);
+	editFigure = new QAction(QIcon (":/BoardWindow/images/boardwindow/figure.png"), tr("Set this move as the start of a diagram"), this);
+	editFigure->setCheckable (true);
+	editFigure->setStatusTip(tr("Select to make this move the start of a diagram."));
+	editFigure->setWhatsThis(tr("If selected, the current node starts a diagram.\n"
+				    "Enable diagram display in the View menu to see and edit diagrams."));
+	connect(editFigure, &QAction::triggered, this, &MainWindow::slotEditFigure);
 
 	editRectSelect = new QAction(QIcon (":/BoardWindow/images/boardwindow/rect_select.png"), tr("Select rectangle"), this);
 	editRectSelect->setCheckable (true);
@@ -811,14 +808,27 @@ void MainWindow::initActions()
 				      "Saves the current window size and restores it on the next program start.\n"));
 	connect(viewSaveSize, &QAction::triggered, this, [=] () { saveWindowSize (); });
 
-	// View Fullscreen
 	viewFullscreen = new QAction(fullscreenIcon, tr("&Fullscreen"), this);
 	viewFullscreen->setCheckable (true);
 	viewFullscreen->setShortcut (Qt::Key_F11);
-	viewFullscreen->setChecked(false);
+	viewFullscreen->setChecked (false);
 	viewFullscreen->setStatusTip(tr("Enable/disable fullscreen mode"));
 	viewFullscreen->setWhatsThis(tr("Fullscreen\n\nEnable/disable fullscreen mode."));
 	connect(viewFullscreen, &QAction::toggled, this, &MainWindow::slotViewFullscreen);
+
+	viewFigures = new QAction(tr("Fi&gures and eval graph"), this);
+	viewFigures->setCheckable (true);
+	viewFigures->setChecked (false);
+	viewFigures->setStatusTip(tr("Enable/disable the figure and score graph view"));
+	viewFigures->setWhatsThis(tr("Figures\n\nEnable/disable the figure and score graph view."));
+	connect(viewFigures, &QAction::toggled, this, &MainWindow::slotViewFigures);
+
+	viewNumbers = new QAction(QIcon (":/BoardWindow/images/boardwindow/123.png"), tr("Move &numbers"), this);
+	viewNumbers->setCheckable (true);
+	viewNumbers->setChecked (false);
+	viewNumbers->setStatusTip(tr("Enable/disable move numbering"));
+	viewNumbers->setWhatsThis(tr("Figures\n\nEnable/disable move numbering on the main board."));
+	connect(viewNumbers, &QAction::toggled, this, &MainWindow::slotViewMoveNumbers);
 
 	/* Analyze menu.  */
 
@@ -970,11 +980,13 @@ void MainWindow::initMenuBar(GameMode mode)
 	viewMenu->addAction (viewSidebar);
 	viewMenu->addAction (viewComment);
 	viewMenu->addAction (viewVertComment);
+	viewMenu->addSeparator ();
 	viewMenu->addAction (viewSaveSize);
+	viewMenu->addSeparator ();
 	viewMenu->addAction (viewFullscreen);
-
-	viewMenu->insertSeparator(viewSaveSize);
-	viewMenu->insertSeparator(viewFullscreen);
+	viewMenu->addSeparator ();
+	viewMenu->addAction (viewFigures);
+	viewMenu->addAction (viewNumbers);
 
 	anMenu = new QMenu (tr ("&Analysis"));
 	anMenu->addAction (anConnect);
@@ -1049,7 +1061,7 @@ void MainWindow::initToolBar()
 	editBar->addAction (editNumber);
 	editBar->addAction (editLetter);
 	editBar->addSeparator ();
-	editBar->addAction (edit123);
+	editBar->addAction (editFigure);
 	editBar->addSeparator ();
 	editBar->addAction (editRectSelect);
 	editBar->addAction (editClearSelect);
@@ -1408,9 +1420,47 @@ void MainWindow::slotEditGroup (bool)
 	gfx_board->setMarkType (m);
 }
 
-void MainWindow::slotEdit123 (bool on)
+void MainWindow::slotEditFigure (bool on)
 {
-	gfx_board->set_start_count (on);
+	game_state *st = gfx_board->displayed ();
+	if (on)
+		st->set_figure (256, "");
+	else
+		st->clear_figure ();
+	update_figures (st);
+	update_game_tree (st);
+}
+
+void MainWindow::slotDiagChosen (int idx)
+{
+	game_state *st = m_figures.at (idx);
+	mainWidget->diagView->set_displayed (st);
+}
+
+void MainWindow::slotDiagEdit (bool)
+{
+	game_state *st = mainWidget->diagView->displayed ();
+	FigureDialog dlg (st, this);
+	dlg.exec ();
+	update_figures (st);
+}
+
+void MainWindow::slotDiagASCII (bool)
+{
+	m_ascii_dlg.show ();
+	QString s = gfx_board->render_ascii (m_ascii_dlg.cb_numbering->isChecked (),
+					     m_ascii_dlg.cb_coords->isChecked ());
+	m_ascii_dlg.textEdit->setText (s);
+	statusBar()->showMessage(tr("Ready."));
+}
+
+void MainWindow::slotDiagSVG (bool)
+{
+	m_svg_dlg.show ();
+	QByteArray s = gfx_board->render_svg (m_svg_dlg.cb_numbering->isChecked (),
+					      m_svg_dlg.cb_coords->isChecked ());
+	m_svg_dlg.set (s);
+	statusBar()->showMessage(tr("Ready."));
 }
 
 void MainWindow::slotNavIntersection(bool)
@@ -1609,11 +1659,13 @@ void MainWindow::slotViewStatusBar(bool toggle)
 
 void MainWindow::slotViewCoords(bool toggle)
 {
-	if (!toggle)
-		gfx_board->set_show_coords(false);
-	else
-		gfx_board->set_show_coords(true);
+	gfx_board->set_show_coords(toggle);
+	statusBar()->showMessage(tr("Ready."));
+}
 
+void MainWindow::slotViewMoveNumbers(bool toggle)
+{
+	gfx_board->set_show_move_numbers (toggle);
 	statusBar()->showMessage(tr("Ready."));
 }
 
@@ -1636,34 +1688,41 @@ void MainWindow::slotViewComment(bool toggle)
 	statusBar()->showMessage(tr("Ready."));
 }
 
+void MainWindow::slotViewFigures(bool toggle)
+{
+	mainWidget->figuresWidget->setVisible (toggle);
+	setFocus();
+
+	statusBar()->showMessage(tr("Ready."));
+}
+
 void MainWindow::slotViewVertComment(bool toggle)
 {
 	setting->writeIntEntry("BOARDVERTCOMMENT_" + screen_key (), toggle ? 1 : 0);
 	splitter->setOrientation(toggle ? Qt::Horizontal : Qt::Vertical);
 	splitter->setStretchFactor(0, 0);
 	splitter_comment->setOrientation(!toggle ? Qt::Horizontal : Qt::Vertical);
-	if (ListView_observers->parent () != nullptr)
+	if (ListView_observers->parent () == splitter_comment)
 		splitter_comment->setStretchFactor(splitter_comment->indexOf (ListView_observers), 0);
-	if (gameTreeView->parent () != nullptr)
+	if (gameTreeView->parent () == splitter_comment)
 		splitter_comment->setStretchFactor(splitter_comment->indexOf (gameTreeView), 0);
 }
 
 // set sidbar left or right
 void MainWindow::slotViewLeftSidebar()
 {
-	mainWidgetGuiLayout->removeWidget(mainWidget->boardFrame);
-	mainWidgetGuiLayout->removeWidget(mainWidget->toolsFrame);
+	mainWidget->mainGridLayout->removeWidget(mainWidget->boardFrame);
+	mainWidget->mainGridLayout->removeWidget(mainWidget->toolsFrame);
 
 	if (setting->readBoolEntry("SIDEBAR_LEFT"))
 	{
-		mainWidgetGuiLayout->addWidget(mainWidget->toolsFrame, 0, 0);
-		mainWidgetGuiLayout->addWidget(mainWidget->boardFrame, 0, 1);
-
+		mainWidget->mainGridLayout->addWidget(mainWidget->toolsFrame, 0, 0, 2, 1);
+		mainWidget->mainGridLayout->addWidget(mainWidget->boardFrame, 0, 1, 2, 1);
 	}
 	else
 	{
-		mainWidgetGuiLayout->addWidget(mainWidget->toolsFrame, 0, 1);
-		mainWidgetGuiLayout->addWidget(mainWidget->boardFrame, 0, 0);
+		mainWidget->mainGridLayout->addWidget(mainWidget->toolsFrame, 0, 1, 2, 1);
+		mainWidget->mainGridLayout->addWidget(mainWidget->boardFrame, 0, 0, 2, 1);
 	}
 }
 
@@ -2197,6 +2256,74 @@ void MainWindow::setGameMode(GameMode mode)
 	mainWidget->setGameMode (mode);
 }
 
+void MainWindow::update_figure_display ()
+{
+	game_state *fig = mainWidget->diagView->displayed ();
+	if (fig != nullptr) {
+		int flags = fig->figure_flags ();
+		mainWidget->diagView->set_show_coords (!(flags & 1));
+		mainWidget->diagView->set_show_figure_caps (!(flags & 256));
+		mainWidget->diagView->set_show_hoshis (!(flags & 512));
+		mainWidget->diagView->changeSize ();
+	}
+}
+
+void MainWindow::update_figures (game_state *gs)
+{
+	game_state *old_fig = mainWidget->diagView->displayed ();
+	bool keep_old_fig = false;
+	m_figures.clear ();
+	mainWidget->diagComboBox->clear ();
+	bool main_fig = gs->has_figure ();
+	editFigure->setChecked (main_fig);
+	if (main_fig) {
+		const std::string &title = gs->figure_title ();
+		m_figures.push_back (gs);
+		if (title == "")
+			mainWidget->diagComboBox->addItem ("Current position (untitled)");
+		else
+			mainWidget->diagComboBox->addItem (QString::fromStdString (title));
+		if (gs == old_fig)
+			keep_old_fig = true;
+	}
+	int count = 1;
+	auto children = gs->children ();
+	for (auto it: children) {
+		/* Skip the first child - it's the main variation, and should only appear
+		   in the list as "Current position", once it is reached.  */
+		if (it == children[0])
+			continue;
+		if (it->has_figure ()) {
+			if (count == 1 && m_figures.size () != 0) {
+				m_figures.push_back (nullptr);
+				mainWidget->diagComboBox->insertSeparator (1);
+			}
+			const std::string &title = it->figure_title ();
+			if (title == "")
+				mainWidget->diagComboBox->addItem ("Subposition " + QString::number (count) + " (untitled)");
+			else
+				mainWidget->diagComboBox->addItem (QString::fromStdString (title));
+			m_figures.push_back (it);
+			count++;
+			if (it == old_fig)
+				keep_old_fig = true;
+		}
+	}
+	bool have_any = m_figures.size () != 0;
+	mainWidget->diagComboBox->setEnabled (have_any);
+	mainWidget->diagEditButton->setEnabled (have_any);
+	mainWidget->diagASCIIButton->setEnabled (have_any);
+	mainWidget->diagSVGButton->setEnabled (have_any);
+	if (!have_any) {
+		mainWidget->diagComboBox->addItem ("No diagrams available");
+	} else if (main_fig)
+		mainWidget->diagView->set_displayed (gs);
+	else if (!keep_old_fig) {
+		mainWidget->diagView->set_displayed (m_figures[0]);
+	}
+	update_figure_display ();
+}
+
 void MainWindow::setMoveData (game_state &gs, const go_board &b, GameMode mode)
 {
 	int sons = gs.n_children ();
@@ -2257,7 +2384,7 @@ void MainWindow::setMoveData (game_state &gs, const go_board &b, GameMode mode)
 		m_allow_text_update_signal = old;
 	}
 
-	edit123->setChecked (gs.get_start_count ());
+	update_figures (&gs);
 	mainWidget->setMoveData (gs, b, mode);
 }
 
@@ -2377,7 +2504,7 @@ void MainWindow_GTP::gtp_played_pass ()
 {
 	if (local_stone_sound)
 		qgo->playPassSound();
-	const game_state *st = gfx_board->get_state ();
+	const game_state *st = gfx_board->displayed ();
 	gfx_board->play_external_pass ();
 	if (st->was_pass_p ()) {
 		m_gtp->quit ();
@@ -2450,7 +2577,7 @@ void MainWindow_GTP::doPass ()
 	}
 	if (!gfx_board->player_to_move_p ())
 		return;
-	const game_state *st = gfx_board->get_state ();
+	const game_state *st = gfx_board->displayed ();
 	stone_color col = gfx_board->to_move ();
 	MainWindow::doPass ();
 	m_gtp->played_move_pass (col);

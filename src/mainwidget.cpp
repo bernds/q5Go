@@ -78,6 +78,9 @@ MainWidget::MainWidget(MainWindow *win, QWidget* parent)
 	setupUi(this);
 	gfx_board->init2 (win, this);
 
+	figSplitter->setStretchFactor (0, 1);
+	figSplitter->setStretchFactor (1, 0);
+
 	void (QTabWidget::*changed) (int) = &QTabWidget::currentChanged;
 	connect(toolsTabWidget, changed, this, &MainWidget::slot_toolsTabChanged);
 
@@ -107,6 +110,8 @@ MainWidget::MainWidget(MainWindow *win, QWidget* parent)
 
 	m_eval = 0.5;
 	connect (evalView, &SizeGraphicsView::resized, this, [=] () { set_eval (m_eval); });
+
+	diagView->set_figure_view_enabled (true);
 }
 
 void MainWidget::update_game_record (std::shared_ptr<game_record> gr)
@@ -127,6 +132,7 @@ void MainWidget::init_game_record (std::shared_ptr<game_record> gr)
 {
 	update_game_record (gr);
 	gfx_board->reset_game (gr);
+	diagView->reset_game (gr);
 }
 
 /*

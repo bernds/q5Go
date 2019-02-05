@@ -35,6 +35,7 @@
     <file>images/boardwindow/editstone.png</file>
     <file>images/boardwindow/rect_select.png</file>
     <file>images/boardwindow/clear_select.png</file>
+    <file>images/boardwindow/figure.png</file>
     <file>images/boardwindow/123.png</file>
   </qresource>
   <qresource prefix="/Help">

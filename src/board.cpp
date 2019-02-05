@@ -39,6 +39,8 @@ BoardView::BoardView(QWidget *parent, QGraphicsScene *c)
 	setUpdatesEnabled(true);
 
 	board_size_x = board_size_y = DEFAULT_BOARD_SIZE;
+	m_show_hoshis = true;
+	m_show_figure_caps = false;
 	m_show_coords = setting->readBoolEntry ("BOARD_COORDS");
 	m_sgf_coords = setting->readBoolEntry ("SGF_BOARD_COORDS");
 	m_pref_dups = setting->readIntEntry ("TOROID_DUPS");
@@ -375,6 +377,35 @@ stone_color Board::cursor_color (int x, int y, stone_color to_move)
 	return none;
 }
 
+static int collect_moves (go_board &b, game_state *startpos, game_state *stop_pos, bool primary)
+{
+	int mvnr = startpos->sgf_move_number ();
+	int count = 0;
+	game_state *st = startpos;
+	int maxnr = 0;
+	for (;;) {
+		if (!st->was_move_p ())
+			throw std::logic_error ("found non-move ");
+		int x = st->get_move_x ();
+		int y = st->get_move_y ();
+		stone_color to_move = st->get_move_color ();
+		stone_color present = b.stone_at (x, y);
+		if (present == none)
+			b.set_stone (x, y, present = to_move);
+		if (present == to_move)
+			b.set_mark (x, y, mark::num, maxnr = mvnr + count);
+
+		if (st == stop_pos)
+			break;
+		++count;
+		if (primary)
+			st = st->next_primary_move ();
+		else
+			st = st->next_move ();
+	}
+	return maxnr;
+}
+
 static QString convert_letter_mark (mextra extra)
 {
 	if (extra < 26)
@@ -487,29 +518,36 @@ QByteArray BoardView::render_svg (bool do_number, bool coords)
 {
 	const go_board &b = m_edit_board == nullptr ? m_displayed->get_board () : *m_edit_board;
 	/* Look back through previous moves to see if we should do numbering.  */
-	int n_back = 0;
 	std::vector<int> count_map (board_size_x * board_size_y);
 	game_state *startpos = nullptr;
 	bool numbering = do_number && m_edit_board == nullptr;
+	bool have_figure = numbering && m_displayed->has_figure ();
 
-	if (numbering && !m_displayed->get_start_count () && m_displayed->was_move_p ()) {
-		startpos = m_displayed;
-		while (startpos
-		       && (startpos->was_move_p () || startpos->root_node_p ())
-		       && !startpos->get_start_count ())
-		{
-			if (startpos->root_node_p ()) {
-				startpos = nullptr;
-				break;
-			}
-			int x = startpos->get_move_x ();
-			int y = startpos->get_move_y ();
-			int bp = b.bitpos (x, y);
-			count_map[bp] = ++n_back;
-			startpos = startpos->prev_move ();
+	int max_number = 0;
+	go_board mn_board (b, mark::none);
+
+	if (have_figure && numbering) {
+		game_state *startpos = m_displayed;
+		if (!startpos->was_move_p () && startpos->n_children () > 0)
+			startpos = startpos->next_primary_move ();
+		game_state *last = startpos;
+		game_state *st = startpos->next_primary_move ();
+		while (st && st->was_move_p () && !st->has_figure ()) {
+			last = st;
+			st = st->next_primary_move ();
 		}
-		if (startpos && !startpos->was_move_p () && !startpos->root_node_p ())
-			startpos = nullptr;
+		if (last != startpos || startpos->was_move_p ()) {
+			int fig_flags = m_displayed->figure_flags ();
+			game_state *real_start = startpos->was_move_p () ? startpos->prev_move () : startpos;
+			mn_board = (fig_flags & 256) == 0 ? last->get_board () : real_start->get_board ();
+			max_number = collect_moves (mn_board, startpos, last, true);
+		}
+	} else if (numbering && !m_displayed->has_figure () && m_displayed->was_move_p ()) {
+		game_state *startpos = m_displayed;
+		game_state *first = startpos;
+		while (startpos && startpos->was_move_p () && !startpos->has_figure ())
+			first = startpos, startpos = startpos->prev_move ();
+		max_number = collect_moves (mn_board, first, m_displayed, false);
 	}
 
 	double factor = 30;
@@ -594,11 +632,10 @@ QByteArray BoardView::render_svg (bool do_number, bool coords)
 		for (int x = 0; x < cols; x++) {
 			int rx = x + m_rect_x1 - 1;
 			int ry = y + m_rect_y1 - 1;
-			stone_color c = b.stone_at (rx, ry);
+			stone_color c = mn_board.stone_at (rx, ry);
 			mark m = b.mark_at (rx, ry);
 			mextra extra = b.mark_extra_at (rx, ry);
-			int bp = b.bitpos (rx, ry);
-			int v = startpos == nullptr ? 0 : count_map[bp];
+			int v = mn_board.mark_at (rx, ry) == mark::num ? mn_board.mark_extra_at (rx, ry) : 0;
 
 			double center_x = offset_x + x * factor;
 			double center_y = offset_y + y * factor;
@@ -607,11 +644,9 @@ QByteArray BoardView::render_svg (bool do_number, bool coords)
 					       c == black ? "black" : "white",
 					       c == black ? "none" : "black");
 			}
-			if (v > 0)
-				v = n_back - v + 1;
 			add_mark_svg (svg, center_x, center_y, factor,
 				      m, extra, m == mark::text ? b.mark_text_at (rx, ry) : "",
-				      mark::none, 0, c, v, n_back, false, true, fi);
+				      mark::none, 0, c, v, max_number, false, true, fi);
 		}
 	}
 
@@ -630,44 +665,67 @@ QByteArray BoardView::render_svg (bool do_number, bool coords)
 QString BoardView::render_ascii (bool do_number, bool coords)
 {
 	const go_board &db = m_displayed->get_board ();
+	bool have_figure = m_figure_moves && m_edit_board == nullptr && m_displayed->has_figure ();
 	int bitsz = db.bitsize ();
 	int szx = db.size_x ();
 	int szy = db.size_y ();
 	QString result;
 
-	std::vector<int> count_map (bitsz);
-	game_state *startpos = m_displayed;
-	if (do_number && m_edit_board == nullptr && !m_displayed->get_start_count ()) {
-		startpos = m_displayed;
-		while (startpos
-		       && (startpos->was_move_p () || startpos->root_node_p ())
-		       && !startpos->get_start_count ())
-		{
-			startpos = startpos->prev_move ();
-		}
-		if (startpos == nullptr || (!startpos->was_move_p () && !startpos->root_node_p ()))
-			startpos = m_displayed;
-	}
+	/* Holds the position to be shown.  There is a difference between
+	   numbering and plain mode: if numbering, this should be the position
+	   _before_ the first move.  */
+	go_board initial_board (db);
+
 	int moves = 1;
+	game_state *startpos = m_displayed;
+	game_state *finalpos = m_displayed;
+
+	if (do_number && have_figure) {
+		if (!startpos->was_move_p () && startpos->n_children () > 0)
+			startpos = startpos->next_primary_move ();
+		game_state *st = startpos->next_primary_move ();
+		while (st && st->was_move_p () && !st->has_figure ())
+			st = st->next_primary_move ();
+		finalpos = st;
+		moves = startpos->sgf_move_number ();
+		game_state *real_start = startpos->was_move_p () ? startpos->prev_move () : startpos;
+		initial_board = go_board (real_start->get_board (), mark::none);
+	} else if (do_number && m_edit_board == nullptr && !m_displayed->has_figure ()) {
+		game_state *prev = startpos;
+		while (prev && prev->was_move_p () && !startpos->has_figure ())
+			startpos = prev, prev = prev->prev_move ();
+		game_state *real_start = startpos->was_move_p () ? startpos->prev_move () : startpos;
+		initial_board = go_board (real_start->get_board (), mark::none);
+		finalpos = finalpos->next_move ();
+	}
+
+	std::vector<int> count_map (bitsz);
 	do {
-		const go_board &b = m_edit_board == nullptr ? startpos->get_board () : *m_edit_board;
+		std::fill (std::begin (count_map), std::end (count_map), 0);
 
 		int n_mv = 0;
 		game_state *next = startpos;
-		std::fill (std::begin (count_map), std::end (count_map), 0);
-		while (next != m_displayed && n_mv < 10) {
-			game_state *nx2 = next->next_move ();
-			int x = nx2->get_move_x ();
-			int y = nx2->get_move_y ();
-			int bp = b.bitpos (x, y);
-			if (count_map[bp] != 0 || b.stone_at (x, y) != none)
+		stone_color first_col = none;
+		stone_color prev_col = none;
+		while (next != finalpos && n_mv < 10) {
+			int x = next->get_move_x ();
+			int y = next->get_move_y ();
+			stone_color col = next->get_move_color ();
+			if (first_col == none)
+				first_col = col;
+			else if (col == prev_col)
 				break;
-			next = nx2;
+			prev_col = col;
+			int bp = initial_board.bitpos (x, y);
+			if (count_map[bp] != 0 || initial_board.stone_at (x, y) != none)
+				break;
 			count_map[bp] = ++n_mv;
+			next = have_figure ? next->next_primary_move () : next->next_move ();
 		}
-
+		if (first_col == none)
+			first_col = startpos->to_move ();
 		result += "[go]$$";
-		result += startpos->to_move () == black ? "B" : "W";
+		result += first_col == black ? "B" : "W";
 		if (coords) {
 			result += "c" + QString::number (std::max (szx, szy));
 		}
@@ -690,14 +748,14 @@ QString BoardView::render_ascii (bool do_number, bool coords)
 			if (m_rect_x1 == 1)
 				result += " |";
 			for (int x = m_rect_x1; x <= m_rect_x2; x++) {
-				int bp = b.bitpos (x - 1, y - 1);
+				int bp = initial_board.bitpos (x - 1, y - 1);
 				int v = count_map[bp];
 				if (v != 0) {
 					result += " " + QString::number (v % 10);
 				} else {
-					stone_color c = b.stone_at (x - 1, y - 1);
-					mark m = b.mark_at (x - 1, y - 1);
-					mextra me = b.mark_extra_at (x - 1, y - 1);
+					stone_color c = initial_board.stone_at (x - 1, y - 1);
+					mark m = initial_board.mark_at (x - 1, y - 1);
+					mextra me = initial_board.mark_extra_at (x - 1, y - 1);
 					char rslt[] = " .";
 					if (c == none) {
 						if (m == mark::letter && me < 26)
@@ -736,24 +794,29 @@ QString BoardView::render_ascii (bool do_number, bool coords)
 			result += "\n";
 		}
 		result += "[/go]\n";
-		startpos = next;
+
+		for (int i = 0; i < n_mv; i++) {
+			int x = startpos->get_move_x ();
+			int y = startpos->get_move_y ();
+			initial_board.add_stone (x, y, startpos->get_move_color ());
+			startpos = have_figure ? startpos->next_primary_move () : startpos->next_move ();
+		}
 		moves += n_mv;
-	} while (startpos != m_displayed);
+	} while (startpos != finalpos);
 	return result;
 }
 
-/* Examine the current cursor position, and extract a PV line into count_map and max_number if
-   we have one.  Always return the eval state if we have one.  */
-game_state *Board::extract_analysis (const go_board &b, std::vector<int> &count_map, int &max_number)
+
+/* Examine the current cursor position, and extract a PV line into board B if
+   we have one.  Return the number of moves added.  */
+int Board::extract_analysis (go_board &b)
 {
 	int maxdepth = setting->readIntEntry ("ANALYSIS_DEPTH");
-	if (m_eval_state == nullptr)
-		return nullptr;
 
-	game_state *startpos = m_eval_state;
 	game_state *pv = m_eval_state->find_child_move (curX, curY);
 	if (pv == nullptr) {
 		m_main_widget->set_2nd_eval (nullptr, 0, none, 0);
+		return 0;
 	} else {
 		int x = pv->get_move_x ();
 		int y = pv->get_move_y ();
@@ -765,16 +828,13 @@ game_state *Board::extract_analysis (const go_board &b, std::vector<int> &count_
 					     m_displayed->to_move (), m_visits[bp]);
 	}
 	int depth = 0;
-	int count = 0;
+	game_state *first = pv;
+	game_state *last = pv;
 	while (pv && (maxdepth == 0 || depth++ < maxdepth)) {
-		int x = pv->get_move_x ();
-		int y = pv->get_move_y ();
-		int bp = b.bitpos (x, y);
-		count_map[bp] = ++count;
-		pv = pv->next_move ();
+		last = pv;
+		pv = pv->next_primary_move ();
 	}
-	max_number = count;
-	return startpos;
+	return collect_moves (b, first, last, true);
 }
 
 void BoardView::draw_grid (QPainter &painter, bit_array &grid_hidden)
@@ -909,6 +969,8 @@ void BoardView::draw_grid (QPainter &painter, bit_array &grid_hidden)
 			xfirst2 = (y == 0 ? ty * 2 : ty * 2 - 1) + 2 * dups_y;
 	}
 
+	if (!m_show_hoshis)
+		return;
 	/* Now draw the hoshi points.  */
 	painter.setRenderHints (QPainter::Antialiasing);
 	painter.setPen (Qt::NoPen);
@@ -946,26 +1008,15 @@ const QPixmap &BoardView::choose_stone_pixmap (stone_color c, stone_type type, i
 	}
 }
 
-std::pair<stone_color, stone_type> BoardView::stone_to_display (const go_board &b, stone_color to_move,
-								int x, int y, game_state *startpos,
-								const std::vector<int> &count_map, int n_back,
+std::pair<stone_color, stone_type> BoardView::stone_to_display (const go_board &b, stone_color to_move, int x, int y,
 								const go_board &vars, int var_type)
 {
-	int bp = b.bitpos (x, y);
 	stone_color sc = b.stone_at (x, y);
 	stone_type type = stone_type::live;
 	mark mark_at_pos = b.mark_at (x, y);
-	int v = startpos ? count_map[bp] : 0;
 
 	/* If we don't have a real stone, check for various possibilities of
-	   ghost stones.  First, PV moves, then the mouse cursor, then territory
-	   marks, then variation display.  */
-	if (sc == none && n_back == 0 && v > 0) {
-		int v_tmp = v;
-		if (m_eval_state->to_move () == black)
-			v_tmp++;
-		sc = v_tmp % 2 ? white : black;
-	}
+	   ghost stones: the mouse cursor, then territory marks, then variation display.  */
 
 	if (sc == none) {
 		sc = cursor_color (x, y, to_move);
@@ -986,7 +1037,9 @@ std::pair<stone_color, stone_type> BoardView::stone_to_display (const go_board &
 void BoardView::sync_appearance (bool)
 {
 	bool have_analysis = m_eval_state != nullptr;
-	bool numbering = !have_analysis && m_edit_board == nullptr;
+	bool numbering = !have_analysis && m_edit_board == nullptr && m_move_numbers;
+	bool have_figure = m_figure_moves && !have_analysis && m_edit_board == nullptr && m_displayed->has_figure ();
+	int print_num = m_displayed->print_numbering_inherited ();
 
 	bool analysis_hide = setting->readBoolEntry ("ANALYSIS_HIDEOTHER");
 	bool analysis_children = setting->readBoolEntry ("ANALYSIS_CHILDREN");
@@ -994,60 +1047,48 @@ void BoardView::sync_appearance (bool)
 	int winrate_for = setting->readIntEntry ("ANALYSIS_WINRATE");
 	stone_color wr_swap_col = winrate_for == 0 ? white : winrate_for == 1 ? black : none;
 
-	const go_board &b = m_edit_board == nullptr ? m_displayed->get_board () : *m_edit_board;
-	stone_color to_move = m_edit_board == nullptr ? m_displayed->to_move () : m_edit_to_move;
-
-	int var_type = have_analysis && analysis_children ? 0 : m_vars_type;
+	int var_type = (have_analysis && analysis_children) || have_figure ? 0 : m_vars_type;
 
 	const go_board child_vars = m_displayed->child_moves (nullptr);
 	const go_board sibling_vars = m_displayed->sibling_moves ();
 	const go_board &vars = m_vars_children ? child_vars : sibling_vars;
-	const bit_array st_w = b.get_stones_w ();
-	const bit_array st_b = b.get_stones_b ();
-	int szx = b.size_x ();
-	int szy = b.size_y ();
-	int dups_x = n_dups_h ();
-	int dups_y = n_dups_v ();
-	int bitsize = b.bitsize ();
 
-	/* Builds a mark layer, which gets rendered into a pixmap and added to the canvas.
-	   The factor is the size of a square in svg, it gets scaled later.  It should have
-	   an optically pleasant relation with the stroke width (2 for marks).  */
-	double svg_factor = 30;
-	QFontInfo fi (setting->fontMarks);
-	svg_builder svg (svg_factor * (szx + 2 * dups_x), svg_factor * (szy + 2 * dups_y));
+	const go_board &b = m_edit_board == nullptr ? m_displayed->get_board () : *m_edit_board;
+	stone_color to_move = m_edit_board == nullptr ? m_displayed->to_move () : m_edit_to_move;
 
-	/* Look back through previous moves to see if we should do numbering.  */
-	int n_back = 0, max_number = 0;
-	std::vector<int> count_map (bitsize);
+	/* There are several ways we can get move numbering: showing a PV line from analysis, or
+	   when displaying a figure, or displaying numbers on a normal board.  The first and
+	   second are mutually exclusive, and have priority.  */
+	int max_number = 0;
+	go_board mn_board (b, mark::none);
 
-	/* Two ways we can get move numbering: either when showing a PV line from analysis, or
-	   when displaying a figure.  The first has priority.  */
-	game_state *startpos = extract_analysis (b, count_map, max_number);
-	if (startpos) {
+	if (have_analysis)
+		max_number = extract_analysis (mn_board);
+	if (max_number > 0) {
 		have_analysis = true;
-		numbering = false;
 	}
-
-	if (numbering && !m_displayed->get_start_count () && m_displayed->was_move_p ()) {
-		startpos = m_displayed;
-		while (startpos
-		       && (startpos->was_move_p () || startpos->root_node_p ())
-		       && !startpos->get_start_count ())
-		{
-			if (startpos->root_node_p ()) {
-				startpos = nullptr;
-				break;
-			}
-			int x = startpos->get_move_x ();
-			int y = startpos->get_move_y ();
-			int bp = b.bitpos (x, y);
-			count_map[bp] = ++n_back;
-			startpos = startpos->prev_move ();
+	if (have_figure && print_num != 0) {
+		game_state *startpos = m_displayed;
+		if (!startpos->was_move_p () && startpos->n_children () > 0)
+			startpos = startpos->next_primary_move ();
+		game_state *last = startpos;
+		game_state *st = startpos->next_primary_move ();
+		while (st && st->was_move_p () && !st->has_figure ()) {
+			last = st;
+			st = st->next_primary_move ();
 		}
-		if (startpos && !startpos->was_move_p () && !startpos->root_node_p ())
-			startpos = nullptr;
-		max_number = n_back;
+		if (last != startpos || startpos->was_move_p ()) {
+			int fig_flags = m_displayed->figure_flags ();
+			game_state *real_start = startpos->was_move_p () ? startpos->prev_move () : startpos;
+			mn_board = (fig_flags & 256) == 0 ? last->get_board () : real_start->get_board ();
+			max_number = collect_moves (mn_board, startpos, last, true);
+		}
+	} else if (numbering && !m_displayed->has_figure () && m_displayed->was_move_p ()) {
+		game_state *startpos = m_displayed;
+		game_state *first = startpos;
+		while (startpos && startpos->was_move_p () && !first->has_figure ())
+			first = startpos, startpos = startpos->prev_move ();
+		max_number = collect_moves (mn_board, first, m_displayed, false);
 	}
 
 	/* Handle marks first.  They go into an svgbuilder which we'll render at the end,
@@ -1056,21 +1097,30 @@ void BoardView::sync_appearance (bool)
 	m_used_letters.clear ();
 	m_used_numbers.clear ();
 
+	int szx = b.size_x ();
+	int szy = b.size_y ();
+	int dups_x = n_dups_h ();
+	int dups_y = n_dups_v ();
+
+	/* The factor is the size of a square in svg, it gets scaled later.  It should have
+	   an optically pleasant relation with the stroke width (2 for marks).  */
+	double svg_factor = 30;
+	QFontInfo fi (setting->fontMarks);
+	svg_builder svg (svg_factor * (szx + 2 * dups_x), svg_factor * (szy + 2 * dups_y));
+
 	bit_array grid_hidden ((szx + 2 * dups_x) * (szy + 2 * dups_y));
 	for (int tx = 0; tx < szx + 2 * dups_x; tx++)
 		for (int ty = 0; ty < szy + 2 * dups_y; ty++) {
 			int x = (tx + m_shift_x + (szx - dups_x)) % szx;
 			int y = (ty + m_shift_y + (szy - dups_y)) % szy;
-			auto stone_display = stone_to_display (b, to_move, x, y,
-							       startpos, count_map, n_back, vars, var_type);
+			auto stone_display = stone_to_display (mn_board, to_move, x, y, vars, var_type);
 			stone_color sc = stone_display.first;
 			int bp = b.bitpos (x, y);
 			mark mark_at_pos = b.mark_at (x, y);
 			mextra extra = b.mark_extra_at (x, y);
 			bool was_last_move = false;
-			int v = startpos ? count_map[bp] : 0;
 
-			if (m_edit_board == nullptr && m_displayed->was_move_p ()) {
+			if (m_edit_board == nullptr && !have_figure && m_displayed->was_move_p ()) {
 				int last_x = m_displayed->get_move_x ();
 				int last_y = m_displayed->get_move_y ();
 				if (last_x == x && last_y == y)
@@ -1091,8 +1141,8 @@ void BoardView::sync_appearance (bool)
 			double cx = svg_factor / 2 + svg_factor * tx;
 			double cy = svg_factor / 2 + svg_factor * ty;
 
-			if (v > 0 && n_back != 0)
-				v = n_back - v + 1;
+			int v = mn_board.mark_at (x, y) == mark::num ? mn_board.mark_extra_at (x, y) : 0;
+
 			bool added = false;
 			bool an_child_mark = have_analysis && analysis_children && v == 0 && child_vars.stone_at (x, y) == to_move;
 			/* Put a percentage or letter mark on variations returned by the analysis engine,
@@ -1131,12 +1181,13 @@ void BoardView::sync_appearance (bool)
 				added = true;
 			} else if (an_child_mark) {
 				svg.circle_at (cx, cy, svg_factor * 0.45, "none", "white", "1");
-			} else
+			} else {
 				added = add_mark_svg (svg, cx, cy, svg_factor,
 						      mark_at_pos, extra,
 						      mark_at_pos == mark::text ? b.mark_text_at (x, y) : "",
 						      var_mark, var_me,
 						      sc, v, max_number, was_last_move, false, fi);
+			}
 
 			if (added)
 				grid_hidden.set_bit (tx + ty * (szx + 2 * dups_x));
@@ -1158,8 +1209,7 @@ void BoardView::sync_appearance (bool)
 		for (int ty = 0; ty < szy + 2 * dups_y; ty++) {
 			int x = (tx + m_shift_x + (szx - dups_x)) % szx;
 			int y = (ty + m_shift_y + (szy - dups_y)) % szy;
-			auto stone_display = stone_to_display (b, to_move, x, y,
-							       startpos, count_map, n_back, vars, var_type);
+			auto stone_display = stone_to_display (mn_board, to_move, x, y, vars, var_type);
 			stone_color sc = stone_display.first;
 			stone_type type = stone_display.second;
 			if (sc != none && type == stone_type::live) {
@@ -1175,8 +1225,7 @@ void BoardView::sync_appearance (bool)
 		for (int ty = 0; ty < szy + 2 * dups_y; ty++) {
 			int x = (tx + m_shift_x + (szx - dups_x)) % szx;
 			int y = (ty + m_shift_y + (szy - dups_y)) % szy;
-			auto stone_display = stone_to_display (b, to_move, x, y,
-							       startpos, count_map, n_back, vars, var_type);
+			auto stone_display = stone_to_display (mn_board, to_move, x, y, vars, var_type);
 			stone_color sc = stone_display.first;
 			stone_type type = stone_display.second;
 			if (sc != none) {
@@ -1855,6 +1904,36 @@ void BoardView::set_show_coords (bool b)
 		return;
 
 	changeSize();
+}
+
+void BoardView::set_show_hoshis (bool b)
+{
+	bool old = m_show_hoshis;
+	m_show_hoshis = b;
+	if (old == m_show_hoshis)
+		return;
+
+	sync_appearance ();
+}
+
+void BoardView::set_show_move_numbers (bool b)
+{
+	bool old = m_move_numbers;
+	m_move_numbers = b;
+	if (old == m_move_numbers)
+		return;
+
+	sync_appearance ();
+}
+
+void BoardView::set_show_figure_caps (bool b)
+{
+	bool old = m_show_figure_caps;
+	m_show_figure_caps = b;
+	if (old == m_show_figure_caps)
+		return;
+
+	sync_appearance ();
 }
 
 void BoardView::set_sgf_coords (bool b)

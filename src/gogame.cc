@@ -129,7 +129,8 @@ void game_state::extract_visualization (int x, int y,
 					visual_tree::bit_rect &stones_w,
 					visual_tree::bit_rect &stones_b,
 					visual_tree::bit_rect &edits,
-					visual_tree::bit_rect &collapsed)
+					visual_tree::bit_rect &collapsed,
+					visual_tree::bit_rect &figures)
 {
 	size_t n_children = m_children.size ();
 
@@ -148,10 +149,11 @@ void game_state::extract_visualization (int x, int y,
 		stones_b.set_bit (x, y);
 		break;
 	}
-
+	if (has_figure ())
+		figures.set_bit (x, y);
 	for (auto &it: m_children) {
 		int yoff = it->m_visualized.y_offset ();
-		it->extract_visualization (x + 1, y + yoff, stones_w, stones_b, edits, collapsed);
+		it->extract_visualization (x + 1, y + yoff, stones_w, stones_b, edits, collapsed, figures);
 	}
 }
 
@@ -266,26 +268,26 @@ void navigable_observer::next_comment ()
 	}
 }
 
-void navigable_observer::previous_count ()
+void navigable_observer::previous_figure ()
 {
 	game_state *st = m_state;
 
 	while (st != nullptr) {
 		st = st->prev_move ();
-		if (st != nullptr && st->get_start_count ()) {
+		if (st != nullptr && st->has_figure ()) {
 			move_state (st);
 			break;
 		}
 	}
 }
 
-void navigable_observer::next_count ()
+void navigable_observer::next_figure ()
 {
 	game_state *st = m_state;
 
 	while (st != nullptr) {
 		st = st->next_move ();
-		if (st != nullptr && st->get_start_count ()) {
+		if (st != nullptr && st->has_figure ()) {
 			move_state (st);
 			break;
 		}

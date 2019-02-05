@@ -123,12 +123,6 @@ private:
 	/* True if we should not be showing child nodes.  Always false if no children exist.  */
 	bool m_visual_collapse = false;
 
-	/* A slight violation of abstractions; this is not really a property of the game, but
-	   something handled by the user interface.  But the alternative is keeping some kind of
-	   map of game states in the board window and making sure it gets updated whenever we delete
-	   one.  The cost of simply carrying an extra boolean here is just way lower.  */
-	bool m_start_count = false;
-
 	/* The SGF PM property, or -1 if it wasn't set.  */
 	int m_print_numbering = -1;
 	sgf_figure m_figure;
@@ -500,6 +494,12 @@ public:
 			m_active = 0;
 		return m_children[m_active];
 	}
+	game_state *next_primary_move ()
+	{
+		if (m_children.size () == 0)
+			return nullptr;
+		return m_children[0];
+	}
 	game_state *prev_move ()
 	{
 		return m_parent;
@@ -569,6 +569,12 @@ public:
 	{
 		return m_children.size ();
 	}
+	/* I didn't really want to expose this, but avoiding it leads to contortions
+	   in some places, e.g. when trying to identify figures.  */
+	const std::vector<game_state *> children () const
+	{
+		return m_children;
+	}
 	game_state *find_child_move (int x, int y)
 	{
 		for (auto &it: m_children)
@@ -619,14 +625,7 @@ public:
 		for (auto it: m_observers)
 			it->observed_changed ();
 	}
-	void set_start_count (bool on)
-	{
-		m_start_count = on;
-	}
-	bool get_start_count () const
-	{
-		return m_start_count;
-	}
+
 	bool has_figure () const
 	{
 		return m_figure.present;
@@ -653,6 +652,7 @@ public:
 			m_visual_ok = false;
 		m_figure.present = false;
 	}
+
 	/* Return true if a change was made.  */
 	bool update_visualization ();
 	typedef std::function<void (int, int, int, int, bool)> draw_line;
@@ -660,7 +660,8 @@ public:
 	void extract_visualization (int x, int y, visual_tree::bit_rect &stones_w,
 				    visual_tree::bit_rect &stones_b,
 				    visual_tree::bit_rect &edits,
-				    visual_tree::bit_rect &collapsed);
+				    visual_tree::bit_rect &collapsed,
+				    visual_tree::bit_rect &figures);
 	void render_visualization (int, int, int, const draw_line &, bool first);
 	void render_active_trace (int, int, int, const add_point &, const draw_line &);
 	bool locate_visual (int, int, const game_state *active, int &, int &);
@@ -841,8 +842,8 @@ protected:
 public:
 	void next_move ();
 	void previous_move ();
-	void next_count ();
-	void previous_count ();
+	void next_figure ();
+	void previous_figure ();
 	void next_variation ();
 	void previous_variation ();
 	void next_comment ();
