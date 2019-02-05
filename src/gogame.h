@@ -91,7 +91,11 @@ public:
 
 private:
 	go_board m_board;
+	/* The move number within this game tree.  Unaffected by SGF MN properties.  */
 	int m_move_number;
+	/* Move number as specified by SGF MN, or as above.  */
+	int m_sgf_movenum;
+
 	std::vector<game_state *> m_children;
 	size_t m_active = 0;
 	game_state *m_parent;
@@ -125,22 +129,28 @@ private:
 	   one.  The cost of simply carrying an extra boolean here is just way lower.  */
 	bool m_start_count = false;
 
-	game_state (const go_board &b, int move, game_state *parent, stone_color to_move)
-		: m_board (b), m_move_number (move), m_parent (parent), m_to_move (to_move)
+	/* The SGF PM property, or -1 if it wasn't set.  */
+	int m_print_numbering = -1;
+	sgf_figure m_figure;
+
+	game_state (const go_board &b, int move, int sgf_move, game_state *parent, stone_color to_move)
+		: m_board (b), m_move_number (move), m_sgf_movenum (sgf_move), m_parent (parent), m_to_move (to_move)
 	{
 	}
 
-	game_state (const go_board &b, int move, game_state *parent, stone_color to_move, int x, int y, stone_color move_col)
-		: m_board (b), m_move_number (move), m_parent (parent), m_to_move (to_move), m_move_x (x), m_move_y (y), m_move_color (move_col)
+	game_state (const go_board &b, int move, int sgf_move, game_state *parent, stone_color to_move, int x, int y, stone_color move_col)
+		: m_board (b), m_move_number (move), m_sgf_movenum (sgf_move), m_parent (parent), m_to_move (to_move), m_move_x (x), m_move_y (y), m_move_color (move_col)
 	{
 	}
 
-	game_state (const go_board &b, int move, game_state *parent,
+	game_state (const go_board &b, int move, int sgf_move, game_state *parent,
 		    stone_color to_move, int x, int y, stone_color move_col,
-		    const sgf::node::proplist &unrecognized, const visual_tree &vt, bool vtok)
-		: m_board (b), m_move_number (move), m_parent (parent),
+		    const sgf::node::proplist &unrecognized, const visual_tree &vt, bool vtok,
+		    int print_numbering, const sgf_figure &fig)
+		: m_board (b), m_move_number (move), m_sgf_movenum (sgf_move), m_parent (parent),
 		m_to_move (to_move), m_move_x (x), m_move_y (y), m_move_color (move_col),
-		m_unrecognized_props (unrecognized), m_visualized (vt), m_visual_ok (vtok)
+		m_unrecognized_props (unrecognized), m_visualized (vt), m_visual_ok (vtok),
+		m_print_numbering (print_numbering), m_figure (fig)
 	{
 	}
 
@@ -185,18 +195,18 @@ public:
 		}
 	};
 
-	game_state (int size) : m_board (size), m_move_number (0), m_parent (0), m_to_move (black)
+	game_state (int size) : m_board (size), m_move_number (0), m_sgf_movenum (0), m_parent (0), m_to_move (black)
 	{
 	}
 	game_state (const go_board &b, stone_color to_move)
-		: m_board (b), m_move_number (0), m_parent (nullptr), m_to_move (to_move)
+		: m_board (b), m_move_number (0), m_sgf_movenum (0), m_parent (nullptr), m_to_move (to_move)
 	{
 	}
 	/* Deep copy.  Don't copy observers.  */
 	game_state (const game_state &other, game_state *parent)
-		: game_state (other.m_board, other.m_move_number, parent, other.m_to_move,
+		: game_state (other.m_board, other.m_move_number, other.m_sgf_movenum, parent, other.m_to_move,
 			      other.m_move_x, other.m_move_y, other.m_move_color, other.m_unrecognized_props,
-			      other.m_visualized, other.m_visual_ok)
+			      other.m_visualized, other.m_visual_ok, m_print_numbering, other.m_figure)
 	{
 		for (auto c: other.m_children) {
 			game_state *new_c = new game_state (*c, this);
@@ -204,6 +214,7 @@ public:
 		}
 		m_comment = other.m_comment;
 		m_active = other.m_active;
+		m_figure = other.m_figure;
 	}
 	void disconnect ()
 	{
@@ -264,6 +275,35 @@ public:
 	int move_number () const
 	{
 		return m_move_number;
+	}
+	int sgf_move_number () const
+	{
+		return m_sgf_movenum;
+	}
+	void set_sgf_move_number (int n)
+	{
+		m_sgf_movenum = n;
+	}
+	int print_numbering () const
+	{
+		return m_print_numbering;
+	}
+	int print_numbering_inherited () const
+	{
+		const game_state *gs = this;
+		while (gs != nullptr) {
+			if (gs->m_print_numbering >= 0)
+				return gs->m_print_numbering;
+			gs = gs->m_parent;
+		}
+		return -1;
+	}
+	void set_print_numbering (int n)
+	{
+		if (n >= 0 && n <= 2)
+			m_print_numbering = n;
+		else
+			m_print_numbering = -1;
 	}
 	int active_var_max () const
 	{
@@ -369,7 +409,8 @@ public:
 	{
 		m_visual_ok = false;
 		int code = scored ? -3 : -2;
-		game_state *tmp = new game_state (new_board, m_move_number + 1, this, to_move, code, code, none);
+		game_state *tmp = new game_state (new_board, m_move_number + 1, m_sgf_movenum + 1,
+						  this, to_move, code, code, none);
 		m_children.push_back (tmp);
 		if (set_active)
 			m_active = m_children.size() - 1;
@@ -387,7 +428,8 @@ public:
 	{
 		stone_color next_to_move = to_move == black ? white : black;
 		m_visual_ok = false;
-		game_state *tmp = new game_state (new_board, m_move_number + 1, this, next_to_move, x, y, to_move);
+		game_state *tmp = new game_state (new_board, m_move_number + 1, m_sgf_movenum + 1,
+						  this, next_to_move, x, y, to_move);
 		m_children.push_back (tmp);
 		if (set_active)
 			m_active = m_children.size() - 1;
@@ -426,7 +468,8 @@ public:
 	game_state *add_child_pass_nochecks (const go_board &new_board, bool set_active)
 	{
 		m_visual_ok = false;
-		game_state *tmp = new game_state (new_board, m_move_number + 1, this, m_to_move == black ? white : black);
+		game_state *tmp = new game_state (new_board, m_move_number + 1, m_sgf_movenum + 1,
+						  this, m_to_move == black ? white : black);
 		tmp->m_move_color = m_to_move;
 		m_children.push_back (tmp);
 		if (set_active)
@@ -584,7 +627,32 @@ public:
 	{
 		return m_start_count;
 	}
-
+	bool has_figure () const
+	{
+		return m_figure.present;
+	}
+	const std::string &figure_title () const
+	{
+		return m_figure.title;
+	}
+	int figure_flags () const
+	{
+		return m_figure.flags;
+	}
+	void set_figure (int flags, const std::string &title)
+	{
+		if (!m_figure.present)
+			m_visual_ok = false;
+		m_figure.present = true;
+		m_figure.flags = flags;
+		m_figure.title = title;
+	}
+	void clear_figure ()
+	{
+		if (m_figure.present)
+			m_visual_ok = false;
+		m_figure.present = false;
+	}
 	/* Return true if a change was made.  */
 	bool update_visualization ();
 	typedef std::function<void (int, int, int, int, bool)> draw_line;

@@ -136,6 +136,40 @@ static bool add_comment (game_state *gs, sgf::node *n, QTextCodec *codec)
 	return true;
 }
 
+static bool add_figure (game_state *gs, sgf::node *n, QTextCodec *codec)
+{
+	sgf::node::property *figure = n->find_property ("FG");
+	if (figure == nullptr)
+		return true;
+	if (figure->values.size () != 1)
+		throw broken_sgf ();
+
+	std::string v = *figure->values.begin ();
+	size_t sep = v.find (':');
+	int flags;
+	bool retval = true;
+	if (sep != std::string::npos) {
+		flags = stoi (v.substr (0, sep - 1));
+		v = v.substr (sep + 1);
+		if (codec != nullptr) {
+			const char *bytes = v.c_str ();
+			QTextCodec::ConverterState state;
+			QString tmp = codec->toUnicode (bytes, strlen (bytes), &state);
+			if (state.invalidChars > 0) {
+				retval = false;
+				v = "";
+			} else
+				v = tmp.toStdString ();
+		}
+		gs->set_figure (flags, v);
+	} else {
+		flags = stoi (v);
+		gs->set_figure (flags, "");
+	}
+
+	return retval;
+}
+
 static void add_to_game_state (game_state *gs, sgf::node *n, bool force, QTextCodec *codec, sgf_errors &errs)
 {
 	while (n) {
@@ -216,6 +250,22 @@ static void add_to_game_state (game_state *gs, sgf::node *n, bool force, QTextCo
 		} else
 			gs = gs->add_child_move_nochecks (new_board, to_move, move_x, move_y, false);
 
+		const std::string *pm = n->find_property_val ("PM");
+		if (pm) {
+			if (pm->length () != 1 || (*pm)[0] < '0' || (*pm)[0] > '2')
+				errs.invalid_val = true;
+			else
+				gs->set_print_numbering ((*pm)[0] - '0');
+		}
+		const std::string *mn = n->find_property_val ("MN");
+		if (mn) {
+			try {
+				int n = stoi (*mn);
+				gs->set_sgf_move_number (n);
+			} catch (...) {
+				errs.invalid_val = true;
+			}
+		}
 		const std::string *wl = n->find_property_val ("WL");
 		const std::string *bl = n->find_property_val ("BL");
 		const std::string *ow = n->find_property_val ("OW");
@@ -229,6 +279,7 @@ static void add_to_game_state (game_state *gs, sgf::node *n, bool force, QTextCo
 		if (ob)
 			gs->set_stones_left (black, *ob);
 		errs.charset_error |= !add_comment (gs, n, codec);
+		errs.charset_error |= !add_figure (gs, n, codec);
 		for (auto p: n->props) {
 			if (!p->handled)
 				unrecognized.push_back (new sgf::node::property (*p));
@@ -374,6 +425,7 @@ std::shared_ptr<game_record> sgf2record (const sgf &s)
 	sgf_errors errs;
 
 	errs.charset_error |= !add_comment (&game->m_root, s.nodes, codec);
+	errs.charset_error |= !add_figure (&game->m_root, s.nodes, codec);
 
 	sgf::node::proplist unrecognized;
 	for (auto p: s.nodes->props) {
@@ -556,6 +608,17 @@ void game_state::append_to_sgf (std::string &s) const
 			s += "OB[" + ob + "]";
 			linecount++;
 		}
+		if (gs->has_figure ()) {
+			s += "FG[" + std::to_string (gs->m_figure.flags);
+			if (gs->m_figure.title.length () > 0)
+				s += ":" + gs->m_figure.title;
+			s += "]";
+		}
+		if (gs->m_print_numbering >= 0)
+			s += "PM[" + std::to_string (gs->m_print_numbering);
+		int prev_nr = gs->m_parent == nullptr ? -1 : gs->m_parent->m_sgf_movenum;
+		if (gs->m_sgf_movenum != prev_nr + 1)
+			s += "MN[" + std::to_string (gs->m_sgf_movenum) + "]";
 
 		for (auto p: gs->m_unrecognized_props) {
 			s += p->ident;

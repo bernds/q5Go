@@ -22,6 +22,14 @@ struct sgf_errors
 {
 	bool played_on_stone = false;
 	bool charset_error = false;
+	bool invalid_val = false;
+};
+
+struct sgf_figure
+{
+	bool present = false;
+	int flags = 0;
+	std::string title;
 };
 
 class sgf
