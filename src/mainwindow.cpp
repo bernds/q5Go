@@ -57,11 +57,6 @@
 #include ICON_LEFTCOMMENT
 #include ICON_TWO_RIGHTARROW
 #include ICON_TWO_LEFTARROW
-#include ICON_NEXT_VAR
-#include ICON_PREV_VAR
-#include ICON_MAIN_BRANCH
-#include ICON_START_VAR
-#include ICON_NEXT_BRANCH
 #include ICON_AUTOPLAY
 #include ICON_DELETE
 #include ICON_FULLSCREEN
@@ -377,8 +372,7 @@ void MainWindow::initActions()
 	QPixmap fileNewboardIcon, fileNewIcon, fileOpenIcon, fileSaveIcon, fileSaveAsIcon,
 		transformIcon, charIcon, deleteIcon,
 		nextCommentIcon, previousCommentIcon, navIntersectionIcon,
-		rightArrowIcon, leftArrowIcon,two_rightArrowIcon, two_leftArrowIcon,
-		prevVarIcon, nextVarIcon, startVarIcon,	mainBranchIcon, nextBranchIcon, autoplayIcon,
+		rightArrowIcon, leftArrowIcon, two_rightArrowIcon, two_leftArrowIcon, autoplayIcon,
 		prefsIcon, infoIcon, fullscreenIcon, manualIcon, coordsIcon, sound_onIcon, sound_offIcon;
 
 	prefsIcon = QPixmap((package_settings_xpm));
@@ -397,11 +391,6 @@ void MainWindow::initActions()
 	previousCommentIcon = QPixmap((leftcomment_xpm));
 	two_rightArrowIcon = QPixmap((two_rightarrow_xpm));
 	two_leftArrowIcon = QPixmap((two_leftarrow_xpm));
-	nextVarIcon = QPixmap((down_xpm));
-	prevVarIcon = QPixmap((up_xpm));
-	mainBranchIcon = QPixmap((start_xpm));
-	startVarIcon = QPixmap((top_xpm));
-	nextBranchIcon = QPixmap((bottom_xpm));
 	fullscreenIcon = QPixmap((window_fullscreen_xpm));
 	manualIcon = QPixmap((help_xpm));
 	autoplayIcon = QPixmap((player_pause_xpm));
@@ -625,29 +614,34 @@ void MainWindow::initActions()
 	navLast->setWhatsThis(tr("Last move\n\nMove to last move."));
 	connect (navLast, &QAction::triggered, [=] () { gfx_board->goto_last_move (); });
 
-	navPrevVar = new QAction(prevVarIcon, tr("P&revious variation") + "\t" + tr("Up"), this);
+	navPrevVar = new QAction(QIcon (":/BoardWindow/images/boardwindow/bluearrow-up.png"),
+				 tr("P&revious variation") + "\t" + tr("Up"), this);
 	navPrevVar->setStatusTip(tr("To previous variation"));
 	navPrevVar->setWhatsThis(tr("Previous variation\n\nMove to the previous variation of this move."));
 	connect (navPrevVar, &QAction::triggered, [=] () { gfx_board->previous_variation (); });
 
-	navNextVar = new QAction(nextVarIcon, tr("N&ext variation") + "\t" + tr("Down"), this);
+	navNextVar = new QAction(QIcon (":/BoardWindow/images/boardwindow/bluearrow-down.png"),
+				 tr("N&ext variation") + "\t" + tr("Down"), this);
 	navNextVar->setStatusTip(tr("To next variation"));
 	navNextVar->setWhatsThis(tr("Next variation\n\nMove to the next variation of this move."));
 	connect (navNextVar, &QAction::triggered, [=] () { gfx_board->next_variation (); });
 
-	navMainBranch = new QAction(mainBranchIcon, tr("&Main branch"), this);
+	navMainBranch = new QAction(QIcon (":/BoardWindow/images/boardwindow/bluearrow-end-up.png"),
+				    tr("&Main branch"), this);
 	navMainBranch->setShortcut (Qt::Key_Insert);
 	navMainBranch->setStatusTip(tr("To main branch"));
 	navMainBranch->setWhatsThis(tr("Main Branch\n\nMove to the main branch where variation started."));
 	connect (navMainBranch, &QAction::triggered, [=] () { gfx_board->goto_main_branch (); });
 
-	navStartVar = new QAction(startVarIcon, tr("Variation &start"), this);
+	navStartVar = new QAction(QIcon (":/BoardWindow/images/boardwindow/bluearrow-end-left.png"),
+				  tr("Variation &start") + "\t" + tr("PgUp"), this);
 	navStartVar->setShortcut (Qt::Key_PageUp);
 	navStartVar->setStatusTip(tr("To top of variation"));
 	navStartVar->setWhatsThis(tr("Variation start\n\nMove to the top variation of this branch."));
 	connect (navStartVar, &QAction::triggered, [=] () { gfx_board->goto_var_start (); });
 
-	navNextBranch = new QAction(nextBranchIcon, tr("Next &branch"), this);
+	navNextBranch = new QAction(QIcon (":/BoardWindow/images/boardwindow/bluearrow-end-right.png"),
+				    tr("Next &branch") + "\t" + tr("PgDn"), this);
 	navNextBranch->setShortcut (Qt::Key_PageDown);
 	navNextBranch->setStatusTip(tr("To next branch starting a variation"));
 	navNextBranch->setWhatsThis(tr("Next branch\n\nMove to the next branch starting a variation."));
@@ -942,9 +936,9 @@ void MainWindow::initMenuBar(GameMode mode)
 
 	navMenu->addSeparator ();
 	navMenu->addAction (navMainBranch);
-	navMenu->addAction (navStartVar);
 	navMenu->addAction (navPrevVar);
 	navMenu->addAction (navNextVar);
+	navMenu->addAction (navStartVar);
 	navMenu->addAction (navNextBranch);
 
 	navMenu->addSeparator ();
@@ -1018,9 +1012,9 @@ void MainWindow::initToolBar()
 	toolBar = addToolBar ("toolbar");
 
 	toolBar->addAction (navMainBranch);
-	toolBar->addAction (navStartVar);
 	toolBar->addAction (navPrevVar);
 	toolBar->addAction (navNextVar);
+	toolBar->addAction (navStartVar);
 	toolBar->addAction (navNextBranch);
 
 	toolBar->addSeparator();

@@ -11,6 +11,14 @@
     <file>images/mainwidget/warning.png</file>
   </qresource>
   <qresource prefix="/BoardWindow">
+    <file>images/boardwindow/bluearrow-down.png</file>
+    <file>images/boardwindow/bluearrow-end-down.png</file>
+    <file>images/boardwindow/bluearrow-end-left.png</file>
+    <file>images/boardwindow/bluearrow-end-right.png</file>
+    <file>images/boardwindow/bluearrow-end-up.png</file>
+    <file>images/boardwindow/bluearrow-left.png</file>
+    <file>images/boardwindow/bluearrow-right.png</file>
+    <file>images/boardwindow/bluearrow-up.png</file>
     <file>images/board/wood2.png</file>
     <file>images/board/wood1.png</file>
     <file>images/board/wood3.png</file>
