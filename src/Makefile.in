@@ -67,10 +67,10 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am__objects_1 = audio.$(OBJEXT) board.$(OBJEXT) figuredlg.$(OBJEXT) \
-	goboard.$(OBJEXT) gogame.$(OBJEXT) gamedialog.$(OBJEXT) \
-	gamestable.$(OBJEXT) gametree.$(OBJEXT) grid.$(OBJEXT) \
-	helpviewer.$(OBJEXT) igsconnection.$(OBJEXT) \
+am__objects_1 = audio.$(OBJEXT) board.$(OBJEXT) clockview.$(OBJEXT) \
+	figuredlg.$(OBJEXT) goboard.$(OBJEXT) gogame.$(OBJEXT) \
+	gamedialog.$(OBJEXT) gamestable.$(OBJEXT) gametree.$(OBJEXT) \
+	grid.$(OBJEXT) helpviewer.$(OBJEXT) igsconnection.$(OBJEXT) \
 	imagehandler.$(OBJEXT) main.$(OBJEXT) mainwidget.$(OBJEXT) \
 	clientwin.$(OBJEXT) mainwindow.$(OBJEXT) misc.$(OBJEXT) \
 	msg_handler.$(OBJEXT) parser.$(OBJEXT) playertable.$(OBJEXT) \
@@ -286,7 +286,7 @@ DISTHEADERS_NOMOC = goboard.h config.h defines.h grid.h goboard.h gogame.h gs_gl
 	misc.h msg_handler.h setting.h sgf.h sgfparser.h \
 	svgbuilder.h ui_helpers.h
 
-DISTSOURCES = audio.cpp board.cpp figuredlg.cpp goboard.cc gogame.cc gamedialog.cpp \
+DISTSOURCES = audio.cpp board.cpp clockview.cpp figuredlg.cpp goboard.cc gogame.cc gamedialog.cpp \
 		gamestable.cpp gametree.cpp grid.cpp helpviewer.cpp \
 		igsconnection.cpp imagehandler.cpp main.cpp \
 		mainwidget.cpp  clientwin.cpp mainwindow.cpp \
@@ -405,6 +405,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/board.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/clientwin.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/clientwin.moc.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/clockview.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/clockview.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/figuredlg.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/figuredlg.moc.Po@am__quote@

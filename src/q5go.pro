@@ -64,6 +64,7 @@ HEADERS		      = config.h \
                         audio.h
 
 SOURCES		      = clientwin.cpp \
+			clockview.cpp \
 			figuredlg.cpp \
 			gamedialog.cpp \
 			gamestable.cpp \

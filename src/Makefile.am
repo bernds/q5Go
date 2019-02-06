@@ -17,7 +17,7 @@ DISTHEADERS_NOMOC = goboard.h config.h defines.h grid.h goboard.h gogame.h gs_gl
 	misc.h msg_handler.h setting.h sgf.h sgfparser.h \
 	svgbuilder.h ui_helpers.h
 
-DISTSOURCES = audio.cpp board.cpp figuredlg.cpp goboard.cc gogame.cc gamedialog.cpp \
+DISTSOURCES = audio.cpp board.cpp clockview.cpp figuredlg.cpp goboard.cc gogame.cc gamedialog.cpp \
 		gamestable.cpp gametree.cpp grid.cpp helpviewer.cpp \
 		igsconnection.cpp imagehandler.cpp main.cpp \
 		mainwidget.cpp  clientwin.cpp mainwindow.cpp \
