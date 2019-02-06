@@ -210,14 +210,14 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 	connect(mainWidget->normalTools->anPauseButton, &QToolButton::clicked,
 		[=] (bool on) { gfx_board->pause_analysis (on); });
 
-	connect(m_ascii_dlg.cb_coords, &QCheckBox::toggled, this, &MainWindow::slotFileExportASCII);
-	connect(m_ascii_dlg.cb_numbering, &QCheckBox::toggled, this, &MainWindow::slotFileExportASCII);
-	connect(m_svg_dlg.cb_coords, &QCheckBox::toggled, this, &MainWindow::slotFileExportSVG);
-	connect(m_svg_dlg.cb_numbering, &QCheckBox::toggled, this, &MainWindow::slotFileExportSVG);
+	connect(m_ascii_dlg.cb_coords, &QCheckBox::toggled, [=] (bool) { update_ascii_dialog (); });
+	connect(m_ascii_dlg.cb_numbering, &QCheckBox::toggled, [=] (bool) { update_ascii_dialog (); });
+	connect(m_svg_dlg.cb_coords, &QCheckBox::toggled, [=] (bool) { update_svg_dialog (); });
+	connect(m_svg_dlg.cb_numbering, &QCheckBox::toggled, [=] (bool) { update_svg_dialog (); });
 	/* These don't do anything that toggling the checkboxes wouldn't also do, but it's slightly more
 	   intuitive to have a button for it.  */
-	connect(m_ascii_dlg.buttonRefresh, &QPushButton::clicked, this, &MainWindow::slotFileExportASCII);
-	connect(m_svg_dlg.buttonRefresh, &QPushButton::clicked, this, &MainWindow::slotFileExportSVG);
+	connect(m_ascii_dlg.buttonRefresh, &QPushButton::clicked, [=] (bool) { update_ascii_dialog (); });
+	connect(m_svg_dlg.buttonRefresh, &QPushButton::clicked, [=] (bool) { update_svg_dialog (); });
 
 	setCentralWidget(splitter);
 
@@ -1353,21 +1353,41 @@ void MainWindow::slotFileExportSgfClipB(bool)
 	statusBar()->showMessage(tr("SGF exported."));
 }
 
+void MainWindow::update_ascii_dialog ()
+{
+	QString s = m_ascii_update_source->render_ascii (m_ascii_dlg.cb_numbering->isChecked (),
+							 m_ascii_dlg.cb_coords->isChecked ());
+	m_ascii_dlg.textEdit->setText (s);
+}
+
+void MainWindow::update_svg_dialog ()
+{
+	QByteArray s = m_svg_update_source->render_svg (m_svg_dlg.cb_numbering->isChecked (),
+							m_svg_dlg.cb_coords->isChecked ());
+	m_svg_dlg.set (s);
+}
+
 void MainWindow::slotFileExportASCII(bool)
 {
+	m_ascii_update_source = gfx_board;
+	if (!m_ascii_dlg.isVisible ()) {
+		/* Set defaults if the dialog is not open.  */
+		m_ascii_dlg.cb_numbering->setChecked (viewNumbers->isChecked ());
+	}
+	update_ascii_dialog ();
 	m_ascii_dlg.show ();
-	QString s = gfx_board->render_ascii (m_ascii_dlg.cb_numbering->isChecked (),
-					     m_ascii_dlg.cb_coords->isChecked ());
-	m_ascii_dlg.textEdit->setText (s);
 	statusBar()->showMessage(tr("Ready."));
 }
 
 void MainWindow::slotFileExportSVG(bool)
 {
+	m_svg_update_source = gfx_board;
+	if (!m_svg_dlg.isVisible ()) {
+		/* Set defaults if the dialog is not open.  */
+		m_svg_dlg.cb_numbering->setChecked (viewNumbers->isChecked ());
+	}
+	update_svg_dialog ();
 	m_svg_dlg.show ();
-	QByteArray s = gfx_board->render_svg (m_svg_dlg.cb_numbering->isChecked (),
-					      m_svg_dlg.cb_coords->isChecked ());
-	m_svg_dlg.set (s);
 	statusBar()->showMessage(tr("Ready."));
 }
 
@@ -1461,19 +1481,21 @@ void MainWindow::slotDiagEdit (bool)
 
 void MainWindow::slotDiagASCII (bool)
 {
-	m_ascii_dlg.show ();
-	QString s = gfx_board->render_ascii (m_ascii_dlg.cb_numbering->isChecked (),
-					     m_ascii_dlg.cb_coords->isChecked ());
-	m_ascii_dlg.textEdit->setText (s);
+	m_ascii_update_source = mainWidget->diagView;
+	int print_num = m_ascii_update_source->displayed ()->print_numbering_inherited ();
+	m_ascii_dlg.cb_numbering->setChecked (print_num != 0);
+	update_ascii_dialog ();
+	m_ascii_dlg.exec ();
 	statusBar()->showMessage(tr("Ready."));
 }
 
 void MainWindow::slotDiagSVG (bool)
 {
-	m_svg_dlg.show ();
-	QByteArray s = gfx_board->render_svg (m_svg_dlg.cb_numbering->isChecked (),
-					      m_svg_dlg.cb_coords->isChecked ());
-	m_svg_dlg.set (s);
+	m_svg_update_source = mainWidget->diagView;
+	int print_num = m_svg_update_source->displayed ()->print_numbering_inherited ();
+	m_svg_dlg.cb_numbering->setChecked (print_num != 0);
+	update_svg_dialog ();
+	m_svg_dlg.exec ();
 	statusBar()->showMessage(tr("Ready."));
 }
 

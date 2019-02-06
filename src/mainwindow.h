@@ -36,6 +36,8 @@ class MainWindow : public QMainWindow
 	bool m_sgf_var_style;
 
 	QList<game_state *> m_figures;
+	BoardView *m_svg_update_source;
+	BoardView *m_ascii_update_source;
 public:
 	MainWindow(QWidget* parent, std::shared_ptr<game_record>, GameMode mode = modeNormal);
 	virtual ~MainWindow();
@@ -75,6 +77,9 @@ public:
 	void update_figures (game_state *);
 
 	void coords_changed (const QString &, const QString &);
+
+	void update_ascii_dialog ();
+	void update_svg_dialog ();
 
 protected:
 	void initActions();
