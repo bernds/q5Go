@@ -1495,7 +1495,9 @@ void MainWindow::slotDiagASCII (bool)
 	int print_num = m_ascii_update_source->displayed ()->print_numbering_inherited ();
 	m_ascii_dlg.cb_numbering->setChecked (print_num != 0);
 	update_ascii_dialog ();
+	m_ascii_dlg.buttonRefresh->hide ();
 	m_ascii_dlg.exec ();
+	m_ascii_dlg.buttonRefresh->show ();
 	statusBar()->showMessage(tr("Ready."));
 }
 
@@ -1505,7 +1507,9 @@ void MainWindow::slotDiagSVG (bool)
 	int print_num = m_svg_update_source->displayed ()->print_numbering_inherited ();
 	m_svg_dlg.cb_numbering->setChecked (print_num != 0);
 	update_svg_dialog ();
+	m_svg_dlg.buttonRefresh->hide ();
 	m_svg_dlg.exec ();
+	m_svg_dlg.buttonRefresh->show ();
 	statusBar()->showMessage(tr("Ready."));
 }
 
