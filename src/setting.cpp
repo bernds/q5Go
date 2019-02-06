@@ -122,8 +122,10 @@ Setting::Setting()
 	writeBoolEntry("ANALYSIS_CHILDREN", 1);
 	writeBoolEntry("ANALYSIS_HIDEOTHER", 1);
 
-	writeIntEntry("GAMETREE_SIZE", 30);
-
+	writeIntEntry ("GAMETREE_SIZE", 30);
+	writeBoolEntry ("GAMETREE_DIAGHIDE", 1);
+	writeIntEntry ("BOARD_DIAGMODE", 1);
+	writeIntEntry ("BOARD_DIAGCLEAR", 1);
 	writeIntEntry ("TOROID_DUPS", 2);
 
 	language = "Default";

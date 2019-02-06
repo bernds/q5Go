@@ -56,26 +56,29 @@ void visual_tree::add_variation (visual_tree &other)
 		m_rep.set_bit (0, y);
 }
 
-bool game_state::update_visualization ()
+bool game_state::update_visualization (bool hide_figures)
 {
 	bool changes = false;
 	int max_width = 1;
 	for (auto &it: m_children) {
-		changes |= it->update_visualization ();
-		max_width = std::max (max_width, it->m_visualized.width ());
+		changes |= it->update_visualization (hide_figures);
+		bool show = it == m_children[0] || !it->has_figure () || !hide_figures;
+		changes |= show != it->m_visual_shown;
+		it->m_visual_shown = show;
+		if (it->m_visual_shown)
+			max_width = std::max (max_width, it->m_visualized.width ());
 	}
+
 	if (!changes && m_visual_ok)
 		return false;
 	if (m_children.size () == 0 || m_visual_collapse) {
 		m_visualized = visual_tree (m_children.size () > 0 && m_visual_collapse);
 	} else {
-		bool first = true;
 		for (auto &it: m_children) {
-			if (first)
+			if (it == m_children[0])
 				m_visualized = visual_tree (it->m_visualized, max_width);
-			else
+			else if (it->m_visual_shown)
 				m_visualized.add_variation (it->m_visualized);
-			first = false;
 		}
 	}
 	m_visual_ok = true;
@@ -83,7 +86,9 @@ bool game_state::update_visualization ()
 }
 
 /* CX and CY are the cumulative offsets from the root node, and should count in pixels.
-   They give the center of the node; modulo that they are multiples of SIZE.  */
+   They give the center of the node; modulo that they are multiples of SIZE.
+   FIRST is true if this is the first node in a subtree.  It means we should draw a straight
+   line to the end.  */
 void game_state::render_visualization (int cx, int cy, int size, const draw_line &line_fn, bool first)
 {
 	size_t n_children = m_children.size ();
@@ -103,12 +108,18 @@ void game_state::render_visualization (int cx, int cy, int size, const draw_line
 			}
 			line_fn (cx, cy, cx + size * count, cy, false);
 		}
-		game_state *last = m_children.back ();
+		size_t last_idx = m_children.size ();
+		while (last_idx-- > 0 && !m_children[last_idx]->m_visual_shown)
+			/* nothing */;
+
+		game_state *last = m_children[last_idx];
 		int yoff = last->m_visualized.y_offset () - 1;
-		if (n_children > 1 && yoff > 0) {
+		if (last_idx > 0 && yoff > 0) {
 			line_fn (cx, cy + size * 0.45, cx, cy + size * yoff, false);
 		}
 		for (auto it: m_children) {
+			if (!it->m_visual_shown)
+				continue;
 			int y0 = it->m_visualized.y_offset () * size;
 			int y1 = y0;
 			if (y0 > 0) {
@@ -119,6 +130,8 @@ void game_state::render_visualization (int cx, int cy, int size, const draw_line
 	}
 
 	for (auto &it: m_children) {
+		if (!it->m_visual_shown)
+			continue;
 		int yoff = it->m_visualized.y_offset ();
 		it->render_visualization (cx + size, cy + size * yoff, size,
 					  line_fn, it != m_children[0]);
@@ -130,7 +143,8 @@ void game_state::extract_visualization (int x, int y,
 					visual_tree::bit_rect &stones_b,
 					visual_tree::bit_rect &edits,
 					visual_tree::bit_rect &collapsed,
-					visual_tree::bit_rect &figures)
+					visual_tree::bit_rect &figures,
+					visual_tree::bit_rect &hidden_figs)
 {
 	size_t n_children = m_children.size ();
 
@@ -152,8 +166,14 @@ void game_state::extract_visualization (int x, int y,
 	if (has_figure ())
 		figures.set_bit (x, y);
 	for (auto &it: m_children) {
+		if (it != m_children[0] && !it->m_visual_shown)
+			hidden_figs.set_bit (x, y);
+	}
+	for (auto &it: m_children) {
+		if (!it->m_visual_shown)
+			continue;
 		int yoff = it->m_visualized.y_offset ();
-		it->extract_visualization (x + 1, y + yoff, stones_w, stones_b, edits, collapsed, figures);
+		it->extract_visualization (x + 1, y + yoff, stones_w, stones_b, edits, collapsed, figures, hidden_figs);
 	}
 }
 
@@ -167,6 +187,9 @@ void game_state::render_active_trace (int cx, int cy, int size, const add_point 
 		return;
 
 	game_state *c = m_children[m_active];
+	if (!c->m_visual_shown)
+		return;
+
 	int yoff = c->m_visualized.y_offset ();
 	if (m_active > 0 && yoff > 1)
 		point_fn (cx, cy + size * (yoff - 1));
@@ -185,6 +208,8 @@ bool game_state::locate_visual (int x, int y, const game_state *active, int &ax,
 		return true;
 	}
 	for (auto &it: m_children) {
+		if (!it->m_visual_shown)
+			continue;
 		int yoff = it->m_visualized.y_offset ();
 
 		if (it->locate_visual (x + 1, y + yoff, active, ax, ay)) {
@@ -207,6 +232,8 @@ game_state *game_state::locate_by_vis_coords (int x, int y, int off_x, int off_y
 	if (x >= off_x + m_visualized.width () || y >= off_y + m_visualized.height ())
 		return nullptr;
 	for (auto &it: m_children) {
+		if (!it->m_visual_shown)
+			continue;
 		game_state *ret = it->locate_by_vis_coords (x, y, off_x + 1, off_y + it->m_visualized.y_offset ());
 		if (ret != nullptr)
 			return ret;
@@ -225,6 +252,24 @@ bool game_state::vis_expand_one ()
 	return true;
 }
 
+bool game_state::has_figure_recursive () const
+{
+	const game_state *st = this;
+	for (;;) {
+		if (st->has_figure ())
+			return true;
+		if (st->m_children.size () == 0)
+			return false;
+		const game_state *next = st->m_children[0];
+		for (auto it: st->m_children)
+			if (it != next) {
+				if (it->has_figure_recursive ())
+					return true;
+			}
+		st = next;
+	}
+	return false;
+}
 
 void navigable_observer::next_move ()
 {

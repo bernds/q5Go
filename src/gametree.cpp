@@ -106,11 +106,12 @@ GameTree::GameTree (MainWindow *win, QWidget *parent)
 	setViewportMargins (0, m_header_view.height (), 0, 0);
 	QScrollBar *hscr = horizontalScrollBar ();
 	connect (hscr, &QScrollBar::valueChanged, [=] (int v) { m_header_view.setOffset (v); });
-	update_item_size ();
+	update_prefs ();
 }
 
-void GameTree::update_item_size ()
+void GameTree::update_prefs ()
 {
+	m_hide_diags = setting->readBoolEntry ("GAMETREE_DIAGHIDE");
 	m_size = setting->readIntEntry ("GAMETREE_SIZE");
 	m_size = std::max (30, std::min (120, m_size));
 
@@ -236,7 +237,7 @@ void GameTree::show_menu (int x, int y, const QPoint &pos)
 void GameTree::update (std::shared_ptr<game_record> gr, game_state *active, bool force)
 {
 	game_state *r = gr->get_root ();
-	bool changed = r->update_visualization () || force;
+	bool changed = r->update_visualization (m_hide_diags) || force;
 	bool active_changed = m_active != active;
 	if (gr != m_game)
 		changed = true;
@@ -264,13 +265,16 @@ void GameTree::update (std::shared_ptr<game_record> gr, game_state *active, bool
 		visual_tree::bit_rect edits (w, h);
 		visual_tree::bit_rect collapsed (w, h);
 		visual_tree::bit_rect figures (w, h);
+		visual_tree::bit_rect hidden_figs (w, h);
 
-		r->extract_visualization (0, 0, stones_w, stones_b, edits, collapsed, figures);
+		r->extract_visualization (0, 0, stones_w, stones_b, edits, collapsed, figures, hidden_figs);
 		visual_tree::bit_rect all_items = stones_w;
 		all_items.ior (stones_b, 0, 0);
 		all_items.ior (edits, 0, 0);
 		all_items.ior (collapsed, 0, 0);
 
+		QPen diag_pen (Qt::blue);
+		diag_pen.setWidth (2);
 		for (int y = 0; y < h; y++)
 			for (int x0 = 0; x0 < w; ) {
 				int len = 1;
@@ -292,6 +296,12 @@ void GameTree::update (std::shared_ptr<game_record> gr, game_state *active, bool
 						else if (stones_b.test_bit (x0 + i, y))
 							src = fig ? &m_pm_bfig : &m_pm_b;
 						painter.drawPixmap (i * m_size + 1, 1, *src);
+						if (hidden_figs.test_bit (x0 + i, y)) {
+							painter.setPen (diag_pen);
+							painter.drawRect (i * m_size + m_size / 2 + 2, 2,
+									  m_size / 2 - 4, m_size / 2 - 4);
+							painter.setPen (Qt::NoPen);
+						}
 					}
 					painter.end ();
 					QGraphicsPixmapItem *pm = new ClickablePixmap (this, m_scene, x0, y, m_size, combined);
@@ -321,8 +331,6 @@ void GameTree::update (std::shared_ptr<game_record> gr, game_state *active, bool
 		m_headers.setColumnCount (w);
 		m_header_view.setModel (&m_headers);
 	}
-	int acx = 0, acy = 0;
-	r->locate_visual (0, 0, active, acx, acy);
 
 	QPen pen;
 	pen.setColor (Qt::red);
@@ -352,13 +360,19 @@ void GameTree::update (std::shared_ptr<game_record> gr, game_state *active, bool
 	m_path = m_scene->addPath (path, pen);
 	m_path->setZValue (3);
 
+	int acx = 0, acy = 0;
+	bool found = r->locate_visual (0, 0, active, acx, acy);
+
 	/* Ideally we'd keep the m_sel object around and just move it.  The problem is that when scrolling,
 	   Qt leaves behind ghost copies at the old location as graphical garbage.  */
 	delete m_sel;
 	m_sel = m_scene->addRect (0, 0, m_size, m_size, Qt::NoPen, QBrush (Qt::red));
-	m_sel->setPos (acx * m_size, acy * m_size);
 	m_sel->setZValue (-1);
-	if (active_changed)
-		ensureVisible (m_sel);
+	if (found) {
+		m_sel->setPos (acx * m_size, acy * m_size);
+		if (active_changed)
+			ensureVisible (m_sel);
+	} else
+		m_sel->hide ();
 	m_scene->update ();
 }

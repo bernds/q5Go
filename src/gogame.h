@@ -122,6 +122,8 @@ private:
 	bool m_visual_ok = true;
 	/* True if we should not be showing child nodes.  Always false if no children exist.  */
 	bool m_visual_collapse = false;
+	/* True if this node was considered visible when calculating the parent's visualization.  */
+	bool m_visual_shown = false;
 
 	/* The SGF PM property, or -1 if it wasn't set.  */
 	int m_print_numbering = -1;
@@ -630,6 +632,7 @@ public:
 	{
 		return m_figure.present;
 	}
+	bool has_figure_recursive () const;
 	const std::string &figure_title () const
 	{
 		return m_figure.title;
@@ -654,14 +657,15 @@ public:
 	}
 
 	/* Return true if a change was made.  */
-	bool update_visualization ();
+	bool update_visualization (bool hide_figures);
 	typedef std::function<void (int, int, int, int, bool)> draw_line;
 	typedef std::function<void (int, int)> add_point;
 	void extract_visualization (int x, int y, visual_tree::bit_rect &stones_w,
 				    visual_tree::bit_rect &stones_b,
 				    visual_tree::bit_rect &edits,
 				    visual_tree::bit_rect &collapsed,
-				    visual_tree::bit_rect &figures);
+				    visual_tree::bit_rect &figures,
+				    visual_tree::bit_rect &hidden_figs);
 	void render_visualization (int, int, int, const draw_line &, bool first);
 	void render_active_trace (int, int, int, const add_point &, const draw_line &);
 	bool locate_visual (int, int, const game_state *active, int &, int &);

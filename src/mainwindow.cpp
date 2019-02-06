@@ -257,11 +257,22 @@ void MainWindow::init_game_record (std::shared_ptr<game_record> gr)
 	m_ascii_dlg.hide ();
 
 	m_game = gr;
+	game_state *root = gr->get_root ();
+	const go_board b (root->get_board (), none);
+	delete m_empty_state;
+	m_empty_state = new game_state (b, black);
+
 	mainWidget->init_game_record (gr);
 	updateCaption (false);
-	const go_board &b = gr->get_root ()->get_board ();
+
 	bool disable_rect = (b.torus_h () || b.torus_v ()) && setting->readIntEntry ("TOROID_DUPS") > 0;
 	editRectSelect->setEnabled (!disable_rect);
+
+	int figuremode = setting->readIntEntry ("BOARD_DIAGMODE");
+	if (!viewFigures->isChecked () && figuremode == 1 && root->has_figure_recursive ()) {
+		slotViewFigures (true);
+		viewFigures->setChecked (true);
+	}
 }
 
 void MainWindow::update_game_record ()
@@ -272,6 +283,8 @@ void MainWindow::update_game_record ()
 MainWindow::~MainWindow()
 {
 	main_window_list.remove (this);
+
+	delete m_empty_state;
 
 	delete timer;
 	delete commentEdit;
@@ -816,9 +829,10 @@ void MainWindow::initActions()
 	viewFullscreen->setWhatsThis(tr("Fullscreen\n\nEnable/disable fullscreen mode."));
 	connect(viewFullscreen, &QAction::toggled, this, &MainWindow::slotViewFullscreen);
 
+	int figuremode = setting->readIntEntry ("BOARD_DIAGMODE");
 	viewFigures = new QAction(tr("Fi&gures and eval graph"), this);
 	viewFigures->setCheckable (true);
-	viewFigures->setChecked (false);
+	viewFigures->setChecked (figuremode == 2);
 	viewFigures->setStatusTip(tr("Enable/disable the figure and score graph view"));
 	viewFigures->setWhatsThis(tr("Figures\n\nEnable/disable the figure and score graph view."));
 	connect(viewFigures, &QAction::toggled, this, &MainWindow::slotViewFigures);
@@ -1565,6 +1579,8 @@ void MainWindow::updateBoard()
 	const go_board &b = m_game->get_root ()->get_board ();
 	bool disable_rect = (b.torus_h () || b.torus_v ()) && setting->readIntEntry ("TOROID_DUPS") > 0;
 	editRectSelect->setEnabled (!disable_rect);
+
+	gameTreeView->update_prefs ();
 }
 
 void MainWindow::slotSetGameInfo(bool)
@@ -2122,7 +2138,6 @@ void MainWindow::updateFont()
 
 	// rest: standard font
 	mainWidget->updateFont ();
-	gameTreeView->update_item_size ();
 }
 
 // used in slot_editBoardInNewWindow()
@@ -2314,6 +2329,11 @@ void MainWindow::update_figures (game_state *gs)
 	mainWidget->diagEditButton->setEnabled (have_any);
 	mainWidget->diagASCIIButton->setEnabled (have_any);
 	mainWidget->diagSVGButton->setEnabled (have_any);
+	if (setting->readBoolEntry ("BOARD_DIAGCLEAR")) {
+		mainWidget->diagView->setEnabled (have_any);
+		if (!have_any)
+			mainWidget->diagView->set_displayed (m_empty_state);
+	}
 	if (!have_any) {
 		mainWidget->diagComboBox->addItem ("No diagrams available");
 	} else if (main_fig)

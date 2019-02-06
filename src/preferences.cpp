@@ -203,6 +203,9 @@ void PreferencesDialog::init_from_settings ()
 	antiClickoCheckBox->setChecked(setting->readBoolEntry("ANTICLICKO"));
 
 	gameTreeSizeSlider->setValue(setting->readIntEntry("GAMETREE_SIZE"));
+	diagShowComboBox->setCurrentIndex(setting->readIntEntry("BOARD_DIAGMODE"));
+	diagClearCheckBox->setChecked(setting->readBoolEntry("BOARD_DIAGCLEAR"));
+	diagHideCheckBox->setChecked(setting->readBoolEntry("GAMETREE_DIAGHIDE"));
 
 	// Client Window tab
 	LineEdit_watch->setText(setting->readEntry("WATCH"));
@@ -451,6 +454,9 @@ void PreferencesDialog::slot_apply()
 	setting->writeIntEntry ("ANALYSIS_MAXMOVES", anMaxMovesEdit->text().toInt());
 
 	setting->writeIntEntry("GAMETREE_SIZE", gameTreeSizeSlider->value());
+	setting->writeIntEntry("BOARD_DIAGMODE", diagShowComboBox->currentIndex());
+	setting->writeBoolEntry("BOARD_DIAGCLEAR", diagClearCheckBox->isChecked());
+	setting->writeBoolEntry("GAMETREE_DIAGHIDE", diagHideCheckBox->isChecked());
 
 	setting->writeIntEntry("TOROID_DUPS", toroidDupsSpin->text().toInt());
 

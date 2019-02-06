@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>673</width>
-    <height>778</height>
+    <width>666</width>
+    <height>780</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -183,7 +183,7 @@
       <string/>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="InterfaceTabWidget">
       <attribute name="title">
@@ -1144,6 +1144,9 @@ Globally disables all tool tips that would show up if the mouse hovers over a GU
             <property name="text">
              <string>Side bar:</string>
             </property>
+            <property name="buddy">
+             <cstring>sidebarComboBox</cstring>
+            </property>
            </widget>
           </item>
           <item row="1" column="1">
@@ -1170,6 +1173,9 @@ Globally disables all tool tips that would show up if the mouse hovers over a GU
             <property name="text">
              <string>Coordinates:</string>
             </property>
+            <property name="buddy">
+             <cstring>coordsComboBox</cstring>
+            </property>
            </widget>
           </item>
          </layout>
@@ -1178,7 +1184,7 @@ Globally disables all tool tips that would show up if the mouse hovers over a GU
        <item row="1" column="0">
         <widget class="QGroupBox" name="antiClickoGroup">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -1223,29 +1229,19 @@ If you press to enter a move on the board, the move will not be acknowledged if 
             <property name="orientation">
              <enum>Qt::Vertical</enum>
             </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Preferred</enum>
+            </property>
             <property name="sizeHint" stdset="0">
              <size>
               <width>20</width>
-              <height>40</height>
+              <height>0</height>
              </size>
             </property>
            </spacer>
           </item>
          </layout>
         </widget>
-       </item>
-       <item row="3" column="2">
-        <spacer name="horizontalSpacer_4">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
        </item>
        <item row="0" column="0">
         <widget class="QGroupBox" name="GroupBox7">
@@ -1279,8 +1275,11 @@ Select how to display all brothers of the current move. Either not at all, or as
           <item row="2" column="0">
            <widget class="QLabel" name="label_5">
             <property name="text">
-             <string>Allow SGF files to override
-child/sibling setting:</string>
+             <string>Allow SGF files to
+override child/sibling setting:</string>
+            </property>
+            <property name="buddy">
+             <cstring>varSGFStyleComboBox</cstring>
             </property>
            </widget>
           </item>
@@ -1308,12 +1307,18 @@ child/sibling setting:</string>
             <property name="text">
              <string>Show which:</string>
             </property>
+            <property name="buddy">
+             <cstring>varChildrenComboBox</cstring>
+            </property>
            </widget>
           </item>
           <item row="0" column="0">
            <widget class="QLabel" name="label">
             <property name="text">
              <string>Show as:</string>
+            </property>
+            <property name="buddy">
+             <cstring>variationComboBox</cstring>
             </property>
            </widget>
           </item>
@@ -1353,6 +1358,22 @@ child/sibling setting:</string>
             </item>
            </widget>
           </item>
+          <item row="3" column="0">
+           <spacer name="verticalSpacer_18">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Preferred</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>0</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
          </layout>
         </widget>
        </item>
@@ -1360,6 +1381,9 @@ child/sibling setting:</string>
         <spacer name="verticalSpacer_16">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::MinimumExpanding</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -1369,31 +1393,133 @@ child/sibling setting:</string>
          </property>
         </spacer>
        </item>
-       <item row="3" column="0">
+       <item row="2" column="0">
+        <widget class="QGroupBox" name="groupBox_7">
+         <property name="title">
+          <string>Diagrams</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_6">
+          <item>
+           <widget class="QCheckBox" name="diagClearCheckBox">
+            <property name="whatsThis">
+             <string>If checked, the diagram display will revert to an empty board whenever no diagrams are available, rather than retaining the previously shown diagram (which might be confusing).</string>
+            </property>
+            <property name="text">
+             <string>Clear diagram display
+when navigating away</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_16">
+            <item>
+             <widget class="QLabel" name="label_23">
+              <property name="text">
+               <string>Open windows with
+diagram pane shown:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="diagShowComboBox">
+              <property name="whatsThis">
+               <string>This option controls the layout of the board window. You can choose whether to show the diagram/evaluation graph pane, with an option to do so only if the opened file contains diagrams.</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>Never</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>If diagrams found</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Always</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="2">
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
           <string>Game tree</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout_12">
-          <item row="0" column="1">
-           <widget class="QSlider" name="gameTreeSizeSlider">
-            <property name="minimum">
-             <number>30</number>
+         <layout class="QVBoxLayout" name="verticalLayout_7">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_15">
+            <item>
+             <widget class="QLabel" name="label_21">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="whatsThis">
+               <string>Adjust the visual size of the nodes in the game tree display.</string>
+              </property>
+              <property name="text">
+               <string>Display size:</string>
+              </property>
+              <property name="buddy">
+               <cstring>gameTreeSizeSlider</cstring>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSlider" name="gameTreeSizeSlider">
+              <property name="maximumSize">
+               <size>
+                <width>120</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="minimum">
+               <number>30</number>
+              </property>
+              <property name="maximum">
+               <number>60</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="diagHideCheckBox">
+            <property name="whatsThis">
+             <string>Annotated games can potentially have very many figures. This option stops them from being displayed in the game tree. Instead, an icon is shown for any move that has diagrams as children.</string>
             </property>
-            <property name="maximum">
-             <number>60</number>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+            <property name="text">
+             <string>Hide child diagrams in game tree</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_21">
-            <property name="text">
-             <string>Display size:</string>
+          <item>
+           <spacer name="verticalSpacer_17">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
             </property>
-           </widget>
+            <property name="sizeType">
+             <enum>QSizePolicy::Preferred</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>0</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </widget>

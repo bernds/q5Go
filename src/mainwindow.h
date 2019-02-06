@@ -159,6 +159,7 @@ public slots:
 
 protected:
 	std::shared_ptr<game_record> m_game;
+	game_state *m_empty_state {};
 	Board *gfx_board;
 	MainWidget *mainWidget;
 	TextView m_ascii_dlg;
