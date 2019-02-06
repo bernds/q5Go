@@ -1491,16 +1491,6 @@ void Board::play_one_move (int x, int y)
 	m_board_win->player_move (col, x, y);
 }
 
-void Board::play_external_move (int x, int y)
-{
-	game_state *st = m_displayed;
-
-	setModified();
-
-	game_state *st_new = st->add_child_move (x, y);
-	st->transfer_observers (st_new);
-}
-
 void Board::mouseReleaseEvent(QMouseEvent* e)
 {
 	mouseState = Qt::NoButton;
@@ -1528,28 +1518,6 @@ void Board::mouseReleaseEvent(QMouseEvent* e)
 		return;
 
 	play_one_move (x, y);
-}
-
-void Board::mark_dead_external (int x, int y)
-{
-	m_edit_board->toggle_alive (x, y, false);
-	/* There's evidence to suggest that the IGS algorithm at least has
-	   no fancy tricks to find false eyes and such, and we should at
-	   least try to match the final result that the server will
-	   caclulate.
-	   See also the modeScoreRemote case in the mouse event handler.  */
-	m_edit_board->calc_scoring_markers_simple ();
-	observed_changed ();
-}
-
-stone_color Board::swap_edit_to_move ()
-{
-	if (m_edit_board != nullptr)
-		return m_edit_to_move = m_edit_to_move == black ? white : black;
-	stone_color newcol = m_displayed->to_move () == black ? white : black;
-	m_displayed->set_to_move (newcol);
-	m_board_win->setMoveData (*m_displayed, m_displayed->get_board (), m_game_mode);
-	return newcol;
 }
 
 void Board::click_add_mark (QMouseEvent *e, int x, int y)
@@ -1944,6 +1912,38 @@ void BoardView::set_sgf_coords (bool b)
 		return;
 
 	draw_background ();
+}
+
+void Board::play_external_move (int x, int y)
+{
+	game_state *st = m_displayed;
+
+	setModified();
+
+	game_state *st_new = st->add_child_move (x, y);
+	st->transfer_observers (st_new);
+}
+
+void Board::mark_dead_external (int x, int y)
+{
+	m_edit_board->toggle_alive (x, y, false);
+	/* There's evidence to suggest that the IGS algorithm at least has
+	   no fancy tricks to find false eyes and such, and we should at
+	   least try to match the final result that the server will
+	   caclulate.
+	   See also the modeScoreRemote case in the mouse event handler.  */
+	m_edit_board->calc_scoring_markers_simple ();
+	observed_changed ();
+}
+
+stone_color Board::swap_edit_to_move ()
+{
+	if (m_edit_board != nullptr)
+		return m_edit_to_move = m_edit_to_move == black ? white : black;
+	stone_color newcol = m_displayed->to_move () == black ? white : black;
+	m_displayed->set_to_move (newcol);
+	m_board_win->setMoveData (*m_displayed, m_displayed->get_board (), m_game_mode);
+	return newcol;
 }
 
 void BoardView::set_vardisplay (bool children, int type)
