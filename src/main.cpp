@@ -26,6 +26,7 @@
 #include <qdir.h>
 
 qGo *qgo;
+QApplication *qgo_app;
 
 // global
 Setting *setting = 0;
@@ -33,7 +34,7 @@ Setting *setting = 0;
 QString program_dir;
 
 #ifdef OWN_DEBUG_MODE
-QTextEdit *view =0 ;
+QTextEdit *debug_view;
 #endif
 
 std::shared_ptr<game_record> new_game_dialog (QWidget *parent)
@@ -301,10 +302,6 @@ std::string get_candidate_filename (const std::string &dir, const game_info &inf
 
 int main(int argc, char **argv)
 {
-//#ifdef OWN_DEBUG_MODE
-//	qInstallMsgHandler(myMessageHandler);
-//#endif
-
 	bool found_debug = false;
 	bool found_sgf = false;
 	const char *sgf_file;
@@ -343,12 +340,14 @@ int main(int argc, char **argv)
 	}
 
 	QApplication myapp(argc, argv);
+	qgo_app = &myapp;
+
 	myapp.setAttribute (Qt::AA_EnableHighDpiScaling);
 
 #ifdef OWN_DEBUG_MODE
 	qInstallMessageHandler(myMessageHandler);
 	Debug_Dialog *nonModal = new Debug_Dialog();
-	view = nonModal->TextView1;
+	debug_view = nonModal->TextView1;
 #endif
 
 	// get application path
