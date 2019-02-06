@@ -471,6 +471,20 @@ void MainWidget::setMoveData(game_state &gs, const go_board &b, GameMode mode)
 
 	bool is_root_node = gs.root_node_p ();
 	bool good_mode = mode == modeNormal || mode == modeObserve;
+
+	const QStyle *style = qgo_app->style ();
+	int iconsz = style->pixelMetric (QStyle::PixelMetric::PM_ToolBarIconSize);
+
+	QSize sz (iconsz, iconsz);
+	goPrevButton->setIconSize (sz);
+	goNextButton->setIconSize (sz);
+	goFirstButton->setIconSize (sz);
+	goLastButton->setIconSize (sz);
+	prevCommentButton->setIconSize (sz);
+	nextCommentButton->setIconSize (sz);
+	prevNumberButton->setIconSize (sz);
+	nextNumberButton->setIconSize (sz);
+
 	goPrevButton->setEnabled (good_mode && !is_root_node);
 	goNextButton->setEnabled (good_mode && sons > 0);
 	goFirstButton->setEnabled (good_mode && !is_root_node);

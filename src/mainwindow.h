@@ -194,7 +194,8 @@ protected:
 	QAction *editRectSelect, *editClearSelect, *editFigure;
 	QAction *navBackward, *navForward, *navFirst, *navLast, *navNextVar, *navPrevVar,
 		*navMainBranch, *navStartVar, *navNextBranch, *navNthMove, *navAutoplay, *navEmptyBranch,
-		*navCloneNode, *navSwapVariations, *navNextComment, *navPrevComment, *navIntersection ;       //SL added eb 11                               // added eb the 2 last
+		*navCloneNode, *navSwapVariations, *navNextComment, *navPrevComment, *navIntersection;
+	QAction *navPrevFigure, *navNextFigure;
 	QAction *setPreferences, *setGameInfo, *soundToggle;
 	QAction *anConnect, *anDisconnect, *anPause;
 	QAction *viewFileBar, *viewToolBar, *viewEditBar, *viewMenuBar, *viewStatusBar, *viewCoords,

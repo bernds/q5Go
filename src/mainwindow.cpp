@@ -51,17 +51,10 @@
 #include ICON_FILESAVEAS
 #include ICON_TRANSFORM
 #include ICON_CHARSET
-#include ICON_RIGHTARROW
-#include ICON_LEFTARROW
-#include ICON_RIGHTCOMMENT
-#include ICON_LEFTCOMMENT
-#include ICON_TWO_RIGHTARROW
-#include ICON_TWO_LEFTARROW
 #include ICON_AUTOPLAY
 #include ICON_DELETE
 #include ICON_FULLSCREEN
 #include ICON_MANUAL
-#include ICON_NAV_INTERSECTION
 #include ICON_COORDS
 #include ICON_SOUND_ON
 #include ICON_SOUND_OFF
@@ -353,7 +346,9 @@ MainWindow::~MainWindow()
 	delete navNextBranch;
 	delete navPrevComment;
 	delete navNextComment;
-	delete navIntersection; //SL added eb 11
+	delete navPrevFigure;
+	delete navNextFigure;
+	delete navIntersection;
 	delete navNthMove;
 	delete navAutoplay;
 	delete navSwapVariations;
@@ -382,9 +377,7 @@ void MainWindow::initActions()
 {
 	// Load the pixmaps
 	QPixmap fileNewboardIcon, fileNewIcon, fileOpenIcon, fileSaveIcon, fileSaveAsIcon,
-		transformIcon, charIcon, deleteIcon,
-		nextCommentIcon, previousCommentIcon, navIntersectionIcon,
-		rightArrowIcon, leftArrowIcon, two_rightArrowIcon, two_leftArrowIcon, autoplayIcon,
+		transformIcon, charIcon, deleteIcon, autoplayIcon,
 		prefsIcon, infoIcon, fullscreenIcon, manualIcon, coordsIcon, sound_onIcon, sound_offIcon;
 
 	prefsIcon = QPixmap((package_settings_xpm));
@@ -397,16 +390,9 @@ void MainWindow::initActions()
 	transformIcon = QPixmap((transform_xpm));
 	charIcon = QPixmap((charset_xpm));
 	deleteIcon = QPixmap((editdelete_xpm));
-	rightArrowIcon = QPixmap((rightarrow_xpm));
-	leftArrowIcon = QPixmap((leftarrow_xpm));
-	nextCommentIcon = QPixmap((rightcomment_xpm));
-	previousCommentIcon = QPixmap((leftcomment_xpm));
-	two_rightArrowIcon = QPixmap((two_rightarrow_xpm));
-	two_leftArrowIcon = QPixmap((two_leftarrow_xpm));
 	fullscreenIcon = QPixmap((window_fullscreen_xpm));
 	manualIcon = QPixmap((help_xpm));
 	autoplayIcon = QPixmap((player_pause_xpm));
-	navIntersectionIcon  = QPixmap((navIntersection_xpm));  //SL added eb 11
 	coordsIcon = QPixmap((coords_xpm));
 	sound_onIcon= QPixmap((sound_on_xpm));
 	sound_offIcon= QPixmap((sound_off_xpm));
@@ -607,22 +593,26 @@ void MainWindow::initActions()
 	/*
 	* Menu Navigation
 	*/
-	navBackward = new QAction(leftArrowIcon, tr("&Previous move") + "\t" + tr("Left"), this);
+	navBackward = new QAction(QIcon (":/MainWidgetGui/images/mainwidget/1leftarrow.png"),
+				  tr("&Previous move") + "\t" + tr("Left"), this);
 	navBackward->setStatusTip(tr("To previous move"));
 	navBackward->setWhatsThis(tr("Previous move\n\nMove one move backward."));
 	connect (navBackward, &QAction::triggered, [=] () { gfx_board->previous_move (); });
 
-	navForward = new QAction(rightArrowIcon, tr("&Next move") + "\t" + tr("Right"), this);
+	navForward = new QAction(QIcon (":/MainWidgetGui/images/mainwidget/1rightarrow.png"),
+				 tr("&Next move") + "\t" + tr("Right"), this);
 	navForward->setStatusTip(tr("To next move"));
 	navForward->setWhatsThis(tr("Next move\n\nMove one move forward."));
 	connect (navForward, &QAction::triggered, [=] () { gfx_board->next_move (); });
 
-	navFirst = new QAction(two_leftArrowIcon, tr("&First move") + "\t" + tr("Home"), this);
+	navFirst = new QAction(QIcon (":/MainWidgetGui/images/mainwidget/2leftarrow.png"),
+			       tr("&First move") + "\t" + tr("Home"), this);
 	navFirst->setStatusTip(tr("To first move"));
 	navFirst->setWhatsThis(tr("First move\n\nMove to first move."));
 	connect (navFirst, &QAction::triggered, [=] () { gfx_board->goto_first_move (); });
 
-	navLast = new QAction(two_rightArrowIcon, tr("&Last move") + "\t" + tr("End"), this);
+	navLast = new QAction(QIcon (":/MainWidgetGui/images/mainwidget/2rightarrow.png"),
+			      tr("&Last move") + "\t" + tr("End"), this);
 	navLast->setStatusTip(tr("To last move"));
 	navLast->setWhatsThis(tr("Last move\n\nMove to last move."));
 	connect (navLast, &QAction::triggered, [=] () { gfx_board->goto_last_move (); });
@@ -679,19 +669,35 @@ void MainWindow::initActions()
 	navSwapVariations->setWhatsThis(tr("Swap variations\n\nSwap current move with previous variation."));
 	connect(navSwapVariations, &QAction::triggered, this, &MainWindow::slotNavSwapVariations);
 
-	navPrevComment = new QAction(previousCommentIcon, tr("Previous &commented move"), this);
+	navPrevComment = new QAction(QIcon (":/MainWidgetGui/images/mainwidget/1leftcomment.png"),
+				     tr("Previous &commented move"), this);
 	navPrevComment->setStatusTip(tr("To previous comment"));
 	navPrevComment->setWhatsThis(tr("Previous comment\n\nMove to the previous move that has a comment"));
 	connect (navPrevComment, &QAction::triggered, [=] () { gfx_board->previous_comment (); });
 
-	navNextComment = new QAction(nextCommentIcon, tr("Next c&ommented move"), this);
+	navNextComment = new QAction(QIcon (":/MainWidgetGui/images/mainwidget/1rightcomment.png"),
+				     tr("Next c&ommented move"), this);
 	navNextComment->setStatusTip(tr("To next comment"));
 	navNextComment->setWhatsThis(tr("Next comment\n\nMove to the next move that has a comment"));
 	connect (navNextComment, &QAction::triggered, [=] () { gfx_board->next_comment (); });
 
-	navIntersection = new QAction(navIntersectionIcon, tr("Goto clic&ked move"), this);
+	navPrevFigure = new QAction(QIcon (":/MainWidgetGui/images/mainwidget/1left123.png"),
+				     tr("Previous &diagram"), this);
+	navPrevFigure->setStatusTip(tr("To previous diagram"));
+	navPrevFigure->setWhatsThis(tr("Previous diagram\n\nMove to the previous move that starts a diagram"));
+	connect (navPrevFigure, &QAction::triggered, [=] () { gfx_board->previous_figure (); });
+
+	navNextFigure = new QAction(QIcon (":/MainWidgetGui/images/mainwidget/1right123.png"),
+				     tr("Next dia&gram"), this);
+	navNextFigure->setStatusTip(tr("To next diagram"));
+	navNextFigure->setWhatsThis(tr("Next diagram\n\nMove to the next move that starts a diagram"));
+	connect (navNextFigure, &QAction::triggered, [=] () { gfx_board->next_figure (); });
+
+	navIntersection = new QAction(QIcon (":/BoardWindow/images/boardwindow/navclicked.png"),
+				      tr("Goto clic&ked move"), this);
 	navIntersection->setStatusTip(tr("To clicked move"));
-	navIntersection->setWhatsThis(tr("Click on a board intersection\n\nMove to the stone played at this intersection (if any)"));
+	navIntersection->setWhatsThis(tr("Click on a board intersection\n\n"
+					 "Move to the stone played at this intersection (if any)"));
 	connect (navIntersection, &QAction::triggered, this, &MainWindow::slotNavIntersection);
 
 	/*
@@ -898,6 +904,8 @@ void MainWindow::initActions()
 	navSwapVariations->setEnabled(false);
 	navPrevComment->setEnabled(false);
 	navNextComment->setEnabled(false);
+	navNextFigure->setEnabled(false);
+	navPrevFigure->setEnabled(false);
 	navIntersection->setEnabled(false);
 
 	whatsThis = QWhatsThis::createAction (this);
@@ -971,7 +979,9 @@ void MainWindow::initMenuBar(GameMode mode)
 	navMenu->addSeparator ();
 	navMenu->addAction (navNthMove);
 	navMenu->addAction (navPrevComment);
-	navMenu->addAction (navNextComment);		// end add
+	navMenu->addAction (navNextComment);
+	navMenu->addAction (navPrevFigure);
+	navMenu->addAction (navNextFigure);
 
 	// menuBar entry settingsMenu
 	settingsMenu = new QMenu(tr("&Settings"));
