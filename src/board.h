@@ -42,6 +42,10 @@ class BoardView : public QGraphicsView
 {
 	Q_OBJECT
 
+	void update_rect_select (int, int);
+	/* Used by mouse event handlers during rectangle selection.  */
+	int m_rect_down_x = -1, m_rect_down_y = -1;
+
 protected:
 	/* Size of the (abstract) board.  */
 	int board_size_x, board_size_y;
@@ -150,11 +154,17 @@ public slots:
 	void changeSize();
 
 protected:
+	virtual void mousePressEvent(QMouseEvent *e) override;
+	virtual void mouseReleaseEvent(QMouseEvent*) override;
+	virtual void mouseMoveEvent(QMouseEvent *e) override;
 	virtual void resizeEvent(QResizeEvent*) override;
 
 	void calculateSize ();
 	void draw_background ();
 	void draw_grid (QPainter &, bit_array &);
+
+	int coord_vis_to_board_x (int);
+	int coord_vis_to_board_y (int);
 
 	void resizeBoard(int w, int h);
 
@@ -208,8 +218,6 @@ class Board : public BoardView, public navigable_observer, public Gtp_Controller
 
 	bool show_cursor_p ();
 	void update_shift (int x, int y);
-	int coord_vis_to_board_x (int);
-	int coord_vis_to_board_y (int);
 
 	void play_one_move (int x, int y);
 	void setup_analyzer_position ();
@@ -282,7 +290,6 @@ protected:
 	virtual void sync_appearance (bool board_only = true) override;
 
 private:
-	void updateRectSel(int, int);
 	void click_add_mark (QMouseEvent *, int, int);
 
 	QTime wheelTime;

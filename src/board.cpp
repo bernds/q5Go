@@ -1295,7 +1295,7 @@ void Board::leaveEvent(QEvent*)
 	sync_appearance (true);
 }
 
-int Board::coord_vis_to_board_x (int p)
+int BoardView::coord_vis_to_board_x (int p)
 {
 	p -= m_board_rect.x () - square_size / 2;
 	if (p < 0)
@@ -1311,7 +1311,7 @@ int Board::coord_vis_to_board_x (int p)
 	return p;
 }
 
-int Board::coord_vis_to_board_y (int p)
+int BoardView::coord_vis_to_board_y (int p)
 {
 	p -= m_board_rect.y () - square_size / 2;
 	if (p < 0)
@@ -1355,7 +1355,14 @@ void BoardView::updateCovers ()
 	coverRight->setBrush (QColor (0, 0, 0, alpha));
 }
 
-void Board::updateRectSel (int x, int y)
+void BoardView::mouseReleaseEvent(QMouseEvent* e)
+{
+	if (e->button () != Qt::LeftButton)
+		return;
+	m_rect_down_x = -1;
+}
+
+void BoardView::update_rect_select (int x, int y)
 {
 	if (x < 0)
 		x = 0;
@@ -1365,8 +1372,12 @@ void Board::updateRectSel (int x, int y)
 		x = board_size_x - 1;
 	if (y >= board_size_y)
 		y = board_size_y - 1;
-	int minx = m_down_x;
-	int miny = m_down_y;
+
+	if (m_rect_down_x == -1)
+		m_rect_down_x = x, m_rect_down_y = y;
+
+	int minx = m_rect_down_x;
+	int miny = m_rect_down_y;
 	if (x < minx)
 		std::swap (minx, x);
 	if (y < miny)
@@ -1376,6 +1387,29 @@ void Board::updateRectSel (int x, int y)
 	m_rect_x2 = x + 1;
 	m_rect_y2 = y + 1;
 	updateCovers ();
+	canvas->update ();
+}
+
+void BoardView::mouseMoveEvent(QMouseEvent *e)
+{
+	if (m_rect_down_x == -1)
+		return;
+
+	int x = coord_vis_to_board_x (e->x ());
+	int y = coord_vis_to_board_y (e->y ());
+
+	update_rect_select (x, y);
+}
+
+void BoardView::mousePressEvent(QMouseEvent *e)
+{
+	if (e->button () != Qt::LeftButton)
+		return;
+
+	int x = coord_vis_to_board_x (e->x ());
+	int y = coord_vis_to_board_y (e->y ());
+
+	update_rect_select (x, y);
 }
 
 void Board::update_shift (int x, int y)
@@ -1395,7 +1429,9 @@ void Board::update_shift (int x, int y)
 
 void Board::mouseMoveEvent(QMouseEvent *e)
 {
-	if (m_dragging) {
+	if (m_mark_rect) {
+		BoardView::mouseMoveEvent (e);
+	} else if (m_dragging) {
 		int dist_x = (m_down_x - e->x ()) / square_size;
 		int dist_y = (m_down_y - e->y ()) / square_size;
 		dist_x += m_drag_begin_x;
@@ -1412,9 +1448,6 @@ void Board::mouseMoveEvent(QMouseEvent *e)
 
 	int x = coord_vis_to_board_x (e->x ());
 	int y = coord_vis_to_board_y (e->y ());
-
-	if (m_mark_rect)
-		updateRectSel (x, y);
 
 	// Outside the valid board?
 	if (x < 0 || x >= board_size_x || y < 0 || y >= board_size_y)
@@ -1502,8 +1535,9 @@ void Board::mouseReleaseEvent(QMouseEvent* e)
 
 	if (m_mark_rect) {
 		m_mark_rect = false;
-		m_down_x = -1;
+		BoardView::mouseReleaseEvent (e);
 		m_board_win->done_rect_select (m_rect_x1, m_rect_y1, m_rect_x2, m_rect_y2);
+		return;
 	}
 	int x = coord_vis_to_board_x (e->x ());
 	int y = coord_vis_to_board_y (e->y ());
@@ -1583,25 +1617,12 @@ void Board::click_add_mark (QMouseEvent *e, int x, int y)
 
 void Board::mousePressEvent(QMouseEvent *e)
 {
-	mouseState = e->button();
-
-	int x = coord_vis_to_board_x (e->x ());
-	int y = coord_vis_to_board_y (e->y ());
+	mouseState = e->button ();
 
 	if (m_request_mark_rect && e->button () == Qt::LeftButton) {
+		BoardView::mousePressEvent (e);
 		m_mark_rect = true;
 		m_request_mark_rect = false;
-		if (x < 0)
-			x = 0;
-		if (y < 0)
-			y = 0;
-		if (x >= board_size_x)
-			x = board_size_x - 1;
-		if (y >= board_size_y)
-			y = board_size_y - 1;
-		m_down_x = x;
-		m_down_y = y;
-		updateRectSel (x, y);
 		return;
 	}
 	if (e->button () == Qt::MiddleButton) {
@@ -1612,8 +1633,11 @@ void Board::mousePressEvent(QMouseEvent *e)
 		m_drag_begin_y = m_shift_y;
 		return;
 	}
+
 	m_down_x = m_down_y = -1;
 
+	int x = coord_vis_to_board_x (e->x ());
+	int y = coord_vis_to_board_y (e->y ());
 	if (x < 0 || x >= board_size_x || y < 0 || y >= board_size_y)
 		return;
 
