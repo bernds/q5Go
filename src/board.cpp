@@ -89,7 +89,7 @@ BoardView::~BoardView()
 
 
 Board::Board (QWidget *parent, QGraphicsScene *c)
-	: BoardView (parent, c), Gtp_Controller (parent)
+	: BoardView (parent, c), GTP_Controller (parent)
 {
 	viewport()->setMouseTracking(true);
 	curX = curY = -1;

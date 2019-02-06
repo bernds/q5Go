@@ -184,7 +184,7 @@ protected:
 #endif
 };
 
-class Board : public BoardView, public navigable_observer, public Gtp_Controller
+class Board : public BoardView, public navigable_observer, public GTP_Controller
 {
 	Q_OBJECT
 	MainWindow *m_board_win {};

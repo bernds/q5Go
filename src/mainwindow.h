@@ -218,7 +218,7 @@ public:
 	virtual void player_toggle_dead (int, int) { }
 };
 
-class MainWindow_GTP : public MainWindow, public Gtp_Controller
+class MainWindow_GTP : public MainWindow, public GTP_Controller
 {
 	GTP_Process *m_gtp;
 public:

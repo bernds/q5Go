@@ -34,13 +34,13 @@ public:
 
 class GTP_Process;
 
-class Gtp_Controller
+class GTP_Controller
 {
 	friend class GTP_Process;
 	QWidget *m_parent;
 
 public:
-	Gtp_Controller (QWidget *p) : m_parent (p) { }
+	GTP_Controller (QWidget *p) : m_parent (p) { }
 	GTP_Process *create_gtp (const Engine &engine, int size, double komi, int hc);
 	virtual void gtp_played_move (int x, int y) = 0;
 	virtual void gtp_played_pass () = 0;
@@ -60,7 +60,7 @@ class GTP_Process : public QProcess
 	QString m_buffer;
 
 	TextView m_dlg;
-	Gtp_Controller *m_controller;
+	GTP_Controller *m_controller;
 
 	int m_size;
 	double m_komi;
@@ -92,7 +92,7 @@ public slots:
 	void slot_abort_request (bool);
 
 public:
-	GTP_Process (QWidget *parent, Gtp_Controller *c, const Engine &engine,
+	GTP_Process (QWidget *parent, GTP_Controller *c, const Engine &engine,
 		     int size, float komi, int hc);
 	~GTP_Process ();
 	bool started () { return m_started; }
