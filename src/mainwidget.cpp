@@ -317,43 +317,6 @@ void MainWidget::setGameMode(GameMode mode)
 
 }
 
-static QString time_string (const std::string &timeleft, const std::string &stonesleft)
-{
-	QString timestr;
-	if (timeleft.length () == 0)
-		return QString ();
-	try {
-		double t = stod (timeleft);
-		int seconds = (int)t;
-		bool neg = seconds < 0;
-		if (neg)
-			seconds = -seconds;
-
-		int h = seconds / 3600;
-		seconds -= h*3600;
-		int m = seconds / 60;
-		int s = seconds - m*60;
-
-		QString sec = QString::number (s);
-		QString min = QString::number (m);
-		if ((h || m) && s < 10)
-			sec = "0" + sec;
-		if (h)
-		{
-			if (m < 10)
-				min = "0" + min;
-			timestr = (neg ? "-" : "") + QString::number(h) + ":" + min + ":" + sec;
-		} else
-			timestr = (neg ? "-" : "") + min + ":" + sec;
-
-	} catch (...) {
-		return QString ();
-	}
-	if (stonesleft.length () > 0)
-		timestr += " / " + QString::fromStdString (stonesleft);
-	return timestr;
-}
-
 void MainWidget::setMoveData(game_state &gs, const go_board &b, GameMode mode)
 {
 	int brothers = gs.n_siblings ();
@@ -440,20 +403,8 @@ void MainWidget::setMoveData(game_state &gs, const go_board &b, GameMode mode)
 	normalTools->setVisible (mode != modeScore && mode != modeScoreRemote && !gs.was_score_p ());
 
 	if (mode == modeNormal) {
-		QString wt = time_string (gs.time_left (white), gs.stones_left (white));
-		QString bt = time_string (gs.time_left (black), gs.stones_left (black));
-		if (!wt.isNull () || !bt.isNull ()) {
-			if (wt.isNull () && !is_root_node) {
-				wt = time_string (gs.prev_move ()->time_left (white),
-						  gs.prev_move ()->stones_left (white));
-			}
-			if (bt.isNull () && !is_root_node) {
-				bt = time_string (gs.prev_move ()->time_left (black),
-						  gs.prev_move ()->stones_left (black));
-			}
-		}
-		normalTools->wtimeView->set_text (wt.isNull () ? "--:--" : wt);
-		normalTools->btimeView->set_text (bt.isNull () ? "--:--" : bt);
+		normalTools->wtimeView->set_time (&gs, white);
+		normalTools->btimeView->set_time (&gs, black);
 	}
 	// Update slider
 	toggleSliderSignal (false);

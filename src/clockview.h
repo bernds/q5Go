@@ -1,8 +1,10 @@
 #ifndef CLOCKVIEW_H
 #define CLOCKVIEW_H
 
+#include "goboard.h"
 #include <QGraphicsView>
 
+class game_state;
 class ClockView: public QGraphicsView
 {
 	Q_OBJECT
@@ -22,6 +24,7 @@ public:
 	void update_pos ();
 	void set_text (const QString &s);
 	void flash (bool on);
+	void set_time (game_state *, stone_color);
 };
 
 #endif
