@@ -73,8 +73,10 @@ void MainWidget::update_game_record (std::shared_ptr<game_record> gr)
 void MainWidget::init_game_record (std::shared_ptr<game_record> gr)
 {
 	update_game_record (gr);
-	gfx_board->reset_game (gr);
+	/* The order actually matters here.  The gfx_board will call back into MainWindow
+	   to update figures, which means we need to have diagView set up.  */
 	diagView->reset_game (gr);
+	gfx_board->reset_game (gr);
 }
 
 /*
