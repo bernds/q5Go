@@ -9,8 +9,23 @@
 
 #include <QTextEdit>
 
+#include "ui_gui_dialog.h"
+
+class Debug_Dialog : public QDialog, public Ui::Debug_Dialog
+{
+	Q_OBJECT
+
+public:
+	Debug_Dialog (QWidget* parent = 0)
+		: QDialog (parent)
+	{
+		setupUi (this);
+	}
+};
+
 void myMessageHandler(QtMsgType, const QMessageLogContext&, const QString&);
 
 extern QTextEdit *debug_view;
+extern Debug_Dialog *debug_dialog;
 
 #endif

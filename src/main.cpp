@@ -33,6 +33,7 @@ Setting *setting = 0;
 
 QString program_dir;
 
+Debug_Dialog *debug_dialog;
 #ifdef OWN_DEBUG_MODE
 QTextEdit *debug_view;
 #endif
@@ -302,52 +303,34 @@ std::string get_candidate_filename (const std::string &dir, const game_info &inf
 
 int main(int argc, char **argv)
 {
-	bool found_debug = false;
-	bool found_sgf = false;
-	const char *sgf_file;
-
-	// look for arguments
-	int ac = argc;
-	while (ac--)
-	{
-		if (argv[ac] == QString("-debug"))
-		{
-			// view debug window
-			found_debug = true;
-		}
-		else if (argv[ac] == QString("-sgf"))
-		{
-			// view board
-			found_sgf = true;
-		}
-		else if (argv[ac] == QString("-sgf19"))
-		{
-			// set up board 19x19 immediately
-			found_sgf = true;
-			sgf_file = "/19/";
-		}
-		else if (argv[ac] == QString("-desktop"))
-		{
-			// set standard options
-			qApp->setDesktopSettingsAware(true);
-		}
-		else if (ac && argv[ac][0] != '-')
-		{
-			// file name
-			found_sgf = true;
-			sgf_file = argv[ac];
-		}
-	}
-
 	QApplication myapp(argc, argv);
 	qgo_app = &myapp;
 
 	myapp.setAttribute (Qt::AA_EnableHighDpiScaling);
 
+	QCommandLineParser cmdp;
+	QCommandLineOption clo_client { { "c", "client" }, QObject::tr ("Show the Go server client window (default if no other arguments)") };
+	QCommandLineOption clo_board { { "b", "board" }, QObject::tr ("Start up with a board window (ignored if files are loaded).") };
+	QCommandLineOption clo_debug { { "d", "debug" }, QObject::tr ("Display debug messages in a window") };
+
+	cmdp.addOption (clo_client);
+	cmdp.addOption (clo_board);
 #ifdef OWN_DEBUG_MODE
-	qInstallMessageHandler(myMessageHandler);
-	Debug_Dialog *nonModal = new Debug_Dialog();
-	debug_view = nonModal->TextView1;
+	cmdp.addOption (clo_debug);
+#endif
+	cmdp.addHelpOption ();
+	cmdp.addPositionalArgument ("file", QObject::tr ("Load <file> and display it in a board window."));
+
+	cmdp.process (myapp);
+	const QStringList args = cmdp.positionalArguments ();
+
+	bool show_client = cmdp.isSet (clo_client) || (args.isEmpty () && !cmdp.isSet (clo_board));
+
+#ifdef OWN_DEBUG_MODE
+	qInstallMessageHandler (myMessageHandler);
+	debug_dialog = new Debug_Dialog ();
+	debug_dialog->setVisible (cmdp.isSet (clo_debug));
+	debug_view = debug_dialog->TextView1;
 #endif
 
 	// get application path
@@ -355,10 +338,7 @@ int main(int argc, char **argv)
 	program_dir = program.absolutePath ();
 	qDebug() << "main:qt->PROGRAM.DIRPATH = " << program_dir;
 
-	// restore last setting
 	setting = new Setting();
-
-	// load values from file
 	setting->loadSettings();
 
 	// Load translation
@@ -367,63 +347,49 @@ int main(int argc, char **argv)
 	qDebug() << "Checking for language settings..." << lang;
 	QString tr_dir = setting->getTranslationsDirectory(), loc;
 
-	if (lang.isEmpty ())
-	{
+	if (lang.isEmpty ()) {
 		QLocale locale = QLocale::system ();
 		qDebug() << "No language settings found, using system locale %s" << locale.name ();
 		loc = QString("qgo_") + locale.language ();
-	}
-	else
-	{
+	} else {
 		qDebug () << "Language settings found: " + lang;
 		loc = QString("qgo_") + lang;
 	}
 
-	if (trans.load(loc, tr_dir))
-	{
+	if (trans.load(loc, tr_dir)) {
 		qDebug () << "Translation loaded.";
 		myapp.installTranslator(&trans);
 	} else if (lang != "en" && lang != "C")  // Skip warning for en and C default.
 		qWarning() << "Failed to find translation file for " << lang;
 
-	client_window = new ClientWindow(0);
+	client_window = new ClientWindow (0);
+	client_window->setWindowTitle (PACKAGE1 + QString(" V") + VERSION);
 
 #ifdef OWN_DEBUG_MODE
 	// restore size and pos
 	if (client_window->getViewSize().width() > 0)
 	{
-		nonModal->resize(client_window->getViewSize());
-		nonModal->move(client_window->getViewPos());
+		debug_dialog->resize(client_window->getViewSize());
+		debug_dialog->move(client_window->getViewPos());
 	}
-
-	if (found_debug)
-		nonModal->show();
-	else
-		nonModal->hide();
-
-	// for storing size
-	client_window->setDebugDialog(nonModal);
-#endif
-
-	// if debugging allow enhanced output
-	if (found_debug)
-		client_window->DODEBUG = true;
-
-	client_window->hide();
-#if 0
-	// set main widget
-	myapp.setMainWidget(client_window);
 #endif
 
 	QObject::connect(&myapp, &QApplication::lastWindowClosed, client_window, &ClientWindow::slot_last_window_closed);
 
-	if (found_sgf) {
-		if (!open_window_from_file (sgf_file))
-			return 1;
-	} else {
-		client_window->setWindowTitle (PACKAGE1 + QString(" V") + VERSION);
-		client_window->show();
+	client_window->setVisible (show_client);
+
+	bool windows_open = false;
+	for (auto arg: args) {
+		std::string filename = arg.toStdString ();
+		windows_open |= open_window_from_file (filename);
 	}
+	if (cmdp.isSet (clo_board) && !windows_open) {
+		open_local_board (client_window, game_dialog_type::none);
+		windows_open = true;
+	}
+	windows_open |= show_client;
+	if (!windows_open)
+		return 1;
 
 	if (setting->getNewVersionWarning())
 		help_new_version ();

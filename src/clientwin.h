@@ -58,7 +58,6 @@ public:
 	QSize getViewSize() { return view_s; }
 	QPoint getPrefPos() { return pref_p; }
 	QSize getPrefSize() { return pref_s; }
-	void setDebugDialog(Debug_Dialog *d) { DD = d; }
 	void setColumnsForExtUserInfo();
 	void reStoreWindowSize(QString strKey, bool store);
 	void setBytesIn(int i) { if (i == -1) bytesIn = 0; else bytesIn += i; }
@@ -69,9 +68,7 @@ public:
 	void dlgSetPreferences(int tab=-1);
 
 	Engine *analysis_engine ();
-	bool DODEBUG;
-//	QSortedList<Host>  hostlist;
-//	QPtrList<Host>  hostlist;
+
 	HostList hostlist;
 	QList<Engine *> m_engines;
 
@@ -243,8 +240,6 @@ private:
 	QSize		view_s;
 	QPoint		pref_p;
 	QSize		pref_s;
-	Debug_Dialog	*DD;
-
 
 	// popup window save
 	PlayerTableItem	*lv_popupPlayer;

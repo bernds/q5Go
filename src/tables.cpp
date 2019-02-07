@@ -89,21 +89,10 @@ QString ClientWindow::getPlayerExcludeListEntry(QString player)
 	QTreeWidgetItemIterator lvp(ListView_players);
 	QTreeWidgetItem *lvpi;
 
-	if (DODEBUG)
-		qDebug() << QString("getPlayerExcludeListEntry(%1)").arg(player);
-
 	// look for players in playerlist
 	for (; (lvpi = *lvp); lvp++)
-	{
-		// check if names are identical
 		if (lvpi->text(1) == player)
-		{
-			if (DODEBUG)
-				qDebug() << QString("text(1) = %1, player = %2").arg(lvpi->text(1)).arg(player);
-
 			return lvpi->text(6);
-		}
-	}
 
 	return QString::null;
 }

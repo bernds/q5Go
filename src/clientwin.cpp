@@ -22,6 +22,7 @@
 #include "mainwindow.h"
 #include "newaigamedlg.h"
 #include "ui_helpers.h"
+#include "msg_handler.h"
 
 #include <qaction.h>
 #include <qcombobox.h>
@@ -55,8 +56,6 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 
 	// init
 
-	DODEBUG = false;
-	DD = 0;
 	setting->cw = this;
 	setWindowIcon (QIcon (":/ClientWindowGui/images/clientwindow/qgo.png"));
 	myAccount = new Account(this);
@@ -637,13 +636,12 @@ void ClientWindow::saveSettings()
 		QString::number(s3->sizes().first()) + DELIMITER +
 		QString::number(s3->sizes().last()));
 
-	if (DD)
+	if (debug_dialog->isVisible ())
 		setting->writeEntry("DEBUGWINDOW",
-			QString::number(DD->pos().x()) + DELIMITER +
-			QString::number(DD->pos().y()) + DELIMITER +
-			QString::number(DD->size().width()) + DELIMITER +
-			QString::number(DD->size().height()));
-//	DD = 0;
+			QString::number(debug_dialog->pos().x()) + DELIMITER +
+			QString::number(debug_dialog->pos().y()) + DELIMITER +
+			QString::number(debug_dialog->size().width()) + DELIMITER +
+			QString::number(debug_dialog->size().height()));
 
 	if (menu_s.width() > 0)
 		setting->writeEntry("MENUWINDOW",
@@ -897,35 +895,6 @@ void ClientWindow::sendTextToApp(const QString &txt)
 		default:
 			break;
 	}
-/*
-	// skip player list and game list
-	if (!DODEBUG)
-		switch (it_)
-		{
-			case PLAYER42:
-				if (!extUserInfo || myAccount->get_gsname() != IGS)
-					slot_message(txt);
-			case PLAYER:
-			case GAME:
-//			case WS:
-			case READY:
-			case GAME7:
-			case PLAYER27:
-			case MOVE:
-			case SHOUT:
-			case BEEP:
-			case KIBITZ:
-				return;
-				break;
-
-			default:
-				break;
-		}
-
-	// show all in messages window, but players and games
-	// Scroll at bottom of text, set cursor to end of line
-	MultiLineEdit_messages->insertLine(txt);
-*/
 	qDebug() << txt;
 }
 
@@ -1020,32 +989,17 @@ void ClientWindow::sendcommand(const QString &cmd, bool localecho)
 		if (testcmd.length() <= 1)
 		{
 			sendTextToApp("local cmds available:\n"
-				"#+dbgwin\t#+dbg\t\t#-dbg\n");
+				      "#+dbg\t\t#-dbg\n");
 			return;
 		}
 
 		// detect internal commands
-		if (testcmd.contains("+dbgwin"))
+		if (testcmd.contains("+dbg"))
 		{
-			// show debug window
-			DD->show();
+			debug_dialog->show();
 			this->activateWindow();
-		}
-		else if (testcmd.contains("+dbg"))
-		{
-			// show debug window and activate debug mode
-			qDebug("*** set Debug on ***");
-			DD->show();
-			DODEBUG = true;
-			this->activateWindow();
-		}
-		else if (testcmd.contains("-dbg"))
-		{
-			// hide debug window and deactivate debug mode
-			qDebug("*** set Debug off ***");
-			DODEBUG = false;
-			DD->hide();
-		}
+		} else if (testcmd.contains("-dbg"))
+			debug_dialog->hide();
 
 		sendTextToApp(testcmd);
 		return;

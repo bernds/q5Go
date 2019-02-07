@@ -4,19 +4,6 @@
 
 #ifndef DEBUGDIALOG_H
 #define DEBUGDIALOG_H
-#include "ui_gui_dialog.h"
-
-class Debug_Dialog : public QDialog, public Ui::Debug_Dialog
-{
-	Q_OBJECT
-
-public:
-	Debug_Dialog( QWidget* parent = 0)
-		: QDialog (parent)
-	{
-		setupUi (this);
-	}
-};
 
 #include "ui_gameinfo_gui.h"
 class GameInfoDialog : public QDialog, public Ui::GameInfoDialog
