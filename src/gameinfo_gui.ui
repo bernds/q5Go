@@ -456,11 +456,6 @@
         <height>-1</height>
       </sizehint>
       <container>0</container>
-      <sizepolicy>
-        <hordata>1</hordata>
-        <verdata>0</verdata>
-      </sizepolicy>
-      <pixmap>image0</pixmap>
     </customwidget>
   </customwidgets>
   <tabstops>
@@ -478,11 +473,6 @@
     <tabstop>buttonOk</tabstop>
     <tabstop>buttonCancel</tabstop>
   </tabstops>
-  <images>
-    <image name="image0">
-      <data format="XPM.GZ" length="646">789c6dd2c10ac2300c00d07bbf2234b7229d1be245fc04c5a3201e4615f430059d0711ff5ddb2e6bb236ec90eed134cb5a19d8ef36602af5ecdbfeeac05dda0798d3abebde87e3faa374d3807fa0d633a52d38d8de6f679fe33fc776e196f53cd010188256a3600a292882096246517815ca99884606e18044a3a40d91824820924265a7923a2e8bcd05f33db1173e002913175f2a6be6d3294871a2d95fa00e8a94ee017b69d339d90df1e77c57ea072ede6758</data>
-    </image>
-  </images>
   <connections>
     <connection>
       <sender>buttonOk</sender>
