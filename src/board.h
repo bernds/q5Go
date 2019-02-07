@@ -111,9 +111,9 @@ protected:
 	{
 		delete m_eval_state;
 		m_eval_state = nullptr;
-		delete m_winrate;
+		delete[] m_winrate;
 		m_winrate = nullptr;
-		delete m_visits;
+		delete[] m_visits;
 		m_visits = nullptr;
 	}
 
