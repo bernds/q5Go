@@ -29,14 +29,14 @@ class InterfaceHandler;
 class QNewGameDlg;
 class MainWindow;
 class MainWidget;
+class svg_builder;
+class QFontInfo;
 
 /* We split the Board view into two classes: a BoardView, dealing only with display, and
    Board, which also interacts with the board window.
    The split is not 100% clean, as BoardView contains a few members that are modified only
    by the derived Board class (such as stuff related the rectangle selection), but it's
    good enough for the moment.  */
-
-enum class analyzer { disconnected, starting, running, paused };
 
 class BoardView : public QGraphicsView
 {
@@ -90,11 +90,6 @@ protected:
 	int m_vars_type = 1;
 	bool m_vars_children = false;
 
-	double m_primary_eval;
-	game_state *m_eval_state {};
-	double *m_winrate {};
-	int *m_visits {};
-
 	QGraphicsPixmapItem m_stone_layer;
 
 	virtual void sync_appearance (bool board_only = true);
@@ -106,19 +101,16 @@ protected:
 	void clear_graphics_elts ();
 	void clear_stones ();
 
-	void clear_eval_data ()
-	{
-		delete m_eval_state;
-		m_eval_state = nullptr;
-		delete[] m_winrate;
-		m_winrate = nullptr;
-		delete[] m_visits;
-		m_visits = nullptr;
-	}
-
 	/* Overridden by Board.  */
 	virtual stone_color cursor_color (int, int, stone_color) { return none; }
 	virtual int extract_analysis (go_board &) { return 0; }
+	enum class ram_result { none, hide, nohide };
+	virtual ram_result render_analysis_marks (svg_builder &, double, double, double, const QFontInfo &,
+						  int, int, bool, int, int)
+	{
+		return ram_result::none;
+	}
+	virtual bool have_analysis () { return false; }
 	std::pair<stone_color, stone_type> stone_to_display (const go_board &, stone_color to_move, int x, int y,
 							     const go_board &vars, int var_type);
 
@@ -183,7 +175,7 @@ protected:
 #endif
 };
 
-class Board : public BoardView, public navigable_observer, public GTP_Controller
+class Board : public BoardView, public navigable_observer, public GTP_Eval_Controller
 {
 	Q_OBJECT
 	MainWindow *m_board_win {};
@@ -211,9 +203,6 @@ class Board : public BoardView, public navigable_observer, public GTP_Controller
 	/* Variables related to rectangle selection.  */
 	bool m_mark_rect = false;
 	bool m_request_mark_rect = false;
-
-	GTP_Process *m_analyzer {};
-	bool m_pause_eval = false;
 
 	bool show_cursor_p ();
 	void update_shift (int x, int y);
@@ -244,7 +233,6 @@ public:
 	void navIntersection();
 	void set_rect_select (int on) { m_request_mark_rect = on; }
 
-	analyzer analyzer_state ();
 	void start_analysis ();
 	void stop_analysis ();
 	void pause_analysis (bool);
@@ -269,13 +257,9 @@ public:
 	virtual void observed_changed () override;
 
 	/* Virtuals from Gtp_Controller.  */
-	virtual void gtp_played_move (int, int) override { /* Should not happen.  */ }
-	virtual void gtp_played_resign () override { /* Should not happen.  */ }
-	virtual void gtp_played_pass () override { /* Should not happen.  */ }
 	virtual void gtp_startup_success () override;
 	virtual void gtp_exited () override;
 	virtual void gtp_failure (const QString &) override;
-	virtual void gtp_eval (const QString &) override;
 
 protected:
 	virtual void mousePressEvent(QMouseEvent *e) override;
@@ -284,9 +268,15 @@ protected:
 	virtual void wheelEvent(QWheelEvent *e) override;
 	virtual void leaveEvent(QEvent*) override;
 
+	virtual bool have_analysis () override { return m_eval_state != nullptr && !m_pause_eval; }
 	virtual stone_color cursor_color (int x, int y, stone_color to_move) override;
-	virtual int extract_analysis (go_board &) override;
+	virtual ram_result render_analysis_marks (svg_builder &, double svg_factor, double cx, double cy, const QFontInfo &,
+						  int x, int y, bool child_mark,
+						  int v, int max_number) override;
 	virtual void sync_appearance (bool board_only = true) override;
+
+	virtual int extract_analysis (go_board &) override;
+	virtual void eval_received (const QString &, int) override;
 
 private:
 	void click_add_mark (QMouseEvent *, int, int);

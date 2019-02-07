@@ -6,6 +6,8 @@
 #include "goboard.h"
 #include "textview.h"
 
+class game_state;
+
 class Engine
 {
 	QString m_title;
@@ -39,9 +41,10 @@ class GTP_Controller
 	friend class GTP_Process;
 	QWidget *m_parent;
 
-public:
+protected:
 	GTP_Controller (QWidget *p) : m_parent (p) { }
 	GTP_Process *create_gtp (const Engine &engine, int size, double komi, int hc);
+public:
 	virtual void gtp_played_move (int x, int y) = 0;
 	virtual void gtp_played_pass () = 0;
 	virtual void gtp_played_resign () = 0;
@@ -51,6 +54,41 @@ public:
 	virtual void gtp_eval (const QString &)
 	{
 	}
+};
+
+enum class analyzer { disconnected, starting, running, paused };
+
+class GTP_Eval_Controller : public GTP_Controller
+{
+	game_state *m_eval_pos {};
+
+protected:
+	using GTP_Controller::GTP_Controller;
+	~GTP_Eval_Controller();
+	GTP_Process *m_analyzer {};
+	bool m_pause_eval = false;
+	bool m_pause_updates = false;
+
+	double m_primary_eval;
+	game_state *m_eval_state {};
+	double *m_winrate {};
+	int *m_visits {};
+
+	void clear_eval_data ();
+
+	void start_analyzer (const Engine &engine, int size, double komi, int hc);
+	void stop_analyzer ();
+	void pause_eval_updates (bool on) { m_pause_updates = on; }
+	bool pause_analyzer (bool on, game_state *);
+	void request_analysis (game_state *);
+	virtual void eval_received (const QString &, int) = 0;
+public:
+	analyzer analyzer_state ();
+
+	virtual void gtp_played_move (int, int) override { /* Should not happen.  */ }
+	virtual void gtp_played_resign () override { /* Should not happen.  */ }
+	virtual void gtp_played_pass () override { /* Should not happen.  */ }
+	virtual void gtp_eval (const QString &) override;
 };
 
 class GTP_Process : public QProcess

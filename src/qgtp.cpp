@@ -1,6 +1,9 @@
 #include <QProcess>
 
+#include "qgo.h"
+#include "setting.h"
 #include "qgtp.h"
+#include "gogame.h"
 
 GTP_Process *GTP_Controller::create_gtp (const Engine &engine, int size, double komi, int hc)
 {
@@ -287,4 +290,180 @@ GTP_Process::~GTP_Process ()
 	disconnect (this, &QProcess::errorOccurred, nullptr, nullptr);
 	void (QProcess::*fini)(int, QProcess::ExitStatus) = &QProcess::finished;
 	disconnect (this, fini, nullptr, nullptr);
+}
+
+GTP_Eval_Controller::~GTP_Eval_Controller ()
+{
+	clear_eval_data ();
+	delete m_analyzer;
+}
+
+analyzer GTP_Eval_Controller::analyzer_state ()
+{
+	if (m_analyzer == nullptr)
+		return analyzer::disconnected;
+	if (m_analyzer->stopped ())
+		return analyzer::disconnected;
+	if (!m_analyzer->started ())
+		return analyzer::starting;
+	if (m_pause_eval)
+		return analyzer::paused;
+	return analyzer::running;
+}
+
+void GTP_Eval_Controller::request_analysis (game_state *st)
+{
+	if (analyzer_state () != analyzer::running)
+		return;
+
+	m_eval_pos = st;
+	std::vector<game_state *> moves;
+	while (st->was_move_p () && !st->root_node_p ()) {
+		moves.push_back (st);
+		st = st->prev_move ();
+	}
+	const go_board &b = st->get_board ();
+	m_analyzer->clear_board ();
+	for (int i = 0; i < b.size_x (); i++)
+		for (int j = 0; j < b.size_y (); j++) {
+			stone_color c = b.stone_at (i, j);
+			if (c != none)
+				m_analyzer->played_move (c, i, j);
+		}
+	while (!moves.empty ()) {
+		st = moves.back ();
+		moves.pop_back ();
+		m_analyzer->played_move (st->get_move_color (),
+					 st->get_move_x (),
+					 st->get_move_y ());
+	}
+	clear_eval_data ();
+
+	stone_color to_move = st->to_move ();
+	m_winrate = new double[b.bitsize ()] ();
+	m_visits = new int[b.bitsize ()] ();
+	m_analyzer->analyze (to_move, 100);
+}
+
+void GTP_Eval_Controller::clear_eval_data ()
+{
+	delete m_eval_state;
+	m_eval_state = nullptr;
+	delete[] m_winrate;
+	m_winrate = nullptr;
+	delete[] m_visits;
+	m_visits = nullptr;
+}
+
+void GTP_Eval_Controller::start_analyzer (const Engine &engine, int size, double komi, int hc)
+{
+	if (m_analyzer != nullptr) {
+		m_analyzer->quit ();
+		delete m_analyzer;
+		m_analyzer = nullptr;
+	}
+	m_analyzer = create_gtp (engine, size, komi, hc);
+}
+
+void GTP_Eval_Controller::stop_analyzer ()
+{
+	clear_eval_data ();
+	m_pause_eval = false;
+	if (m_analyzer != nullptr && !m_analyzer->stopped ())
+		m_analyzer->quit ();
+}
+
+/* Return true iff the state changed.  */
+bool GTP_Eval_Controller::pause_analyzer (bool on, game_state *st)
+{
+	if (m_analyzer == nullptr || !m_analyzer->started () || m_analyzer->stopped ())
+		return false;
+	if (m_pause_eval == on)
+		return false;
+	m_pause_eval = on;
+	if (on) {
+		clear_eval_data ();
+		m_analyzer->pause_analysis ();
+	} else {
+		request_analysis (st);
+	}
+
+	return true;
+}
+
+void GTP_Eval_Controller::gtp_eval (const QString &s)
+{
+	if (m_pause_updates)
+		return;
+
+	bool prune = setting->readBoolEntry("ANALYSIS_PRUNE");
+
+	QStringList moves = s.split ("info move ", QString::SkipEmptyParts);
+	if (moves.isEmpty ())
+		return;
+
+	const go_board &b = m_eval_pos->get_board ();
+	stone_color to_move = m_eval_pos->to_move ();
+	delete m_eval_state;
+	m_eval_state = new game_state (b, to_move);
+
+	int an_maxmoves = setting->readIntEntry ("ANALYSIS_MAXMOVES");
+	int count = 0;
+	m_primary_eval = 0.5;
+	QString primary_move;
+	int primary_visits = 0;
+
+	for (auto &e: moves) {
+//		m_board_win->append_comment (e);
+		QRegExp re ("(\\S+)\\s+visits\\s+(\\d+)\\s+winrate\\s+(\\d+)\\s+prior\\s+(\\d+)\\s+order\\s+(\\d+)\\s+pv\\s+(.*)$");
+		if (re.indexIn (e) == -1)
+			continue;
+		QString move = re.cap (1);
+		int visits = re.cap (2).toInt ();
+		int winrate = re.cap (3).toInt ();
+		QString pv = re.cap (6);
+		double wr = winrate / 10000.;
+
+		if (count == 0) {
+			primary_move = move;
+			m_primary_eval = wr;
+			primary_visits = visits;
+		}
+		qDebug () << move << " PV: " << pv;
+
+		QStringList pvmoves = pv.split (" ", QString::SkipEmptyParts);
+		if (count < 52 && (!prune || pvmoves.length () > 1 || visits >= 2)) {
+			game_state *cur = m_eval_state;
+			bool pv_first = true;
+			for (auto &pm: pvmoves) {
+				QChar sx = pm[0];
+
+				int i = sx.toLatin1 () - 'A';
+				if (i > 7)
+					i--;
+				int szx = m_eval_pos->get_board ().size_x ();
+				int szy = m_eval_pos->get_board ().size_y ();
+				int j = szy - pm.mid (1).toInt ();
+				if (i >= 0 && i < szx && j >= 0 && j < szy) {
+					if (pv_first) {
+						int bp = b.bitpos (i, j);
+						cur->set_mark (i, j, mark::letter, count);
+
+						m_winrate[bp] = wr - m_primary_eval;
+						m_visits[bp] = visits;
+					}
+					cur = cur->add_child_move (i, j);
+				} else
+					break;
+				if (cur == nullptr)
+					break;
+				pv_first = false;
+			}
+		}
+		count++;
+		if (an_maxmoves > 0 && count == an_maxmoves)
+			break;
+	}
+	if (!primary_move.isNull ())
+		eval_received (primary_move, primary_visits);
 }
