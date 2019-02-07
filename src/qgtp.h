@@ -54,6 +54,7 @@ public:
 	virtual void gtp_eval (const QString &)
 	{
 	}
+	virtual void gtp_switch_ready () { }
 };
 
 enum class analyzer { disconnected, starting, running, paused };
@@ -69,6 +70,14 @@ protected:
 	double m_analyzer_komi = 0;
 
 	bool m_pause_eval = false;
+	/* Set if we are in the process of changing positions to analyze.  We send
+	   a request to stop analyzing the current position to the GTP process and
+	   set this variable.  It is cleared when a response arrives.
+	   This solves the problem of receiving updates for an old position.  */
+	bool m_switch_pending = false;
+	/* Set if we should continue to receive updates, but do not want to update
+	   the evaluation data.  Used by the board display to pause when the user
+	   holds the right button.  */
 	bool m_pause_updates = false;
 
 	double m_primary_eval;
@@ -80,6 +89,7 @@ protected:
 	void stop_analyzer ();
 	void pause_eval_updates (bool on) { m_pause_updates = on; }
 	bool pause_analyzer (bool on, game_state *);
+	void initiate_switch ();
 	void request_analysis (game_state *);
 	virtual void eval_received (const QString &, int) = 0;
 public:
@@ -89,6 +99,7 @@ public:
 	virtual void gtp_played_resign () override { /* Should not happen.  */ }
 	virtual void gtp_played_pass () override { /* Should not happen.  */ }
 	virtual void gtp_eval (const QString &) override;
+	virtual void gtp_switch_ready () override;
 };
 
 class GTP_Process : public QProcess
@@ -119,6 +130,7 @@ class GTP_Process : public QProcess
 	void startup_part5 (const QString &);
 	void startup_part6 (const QString &);
 	void receive_move (const QString &);
+	void pause_callback (const QString &);
 	void internal_quit ();
 
 public slots:
@@ -143,6 +155,7 @@ public:
 	void played_move_resign (stone_color col);
 	void analyze (stone_color col, int interval);
 	void pause_analysis ();
+	void initiate_analysis_switch ();
 
 	void quit ();
 };

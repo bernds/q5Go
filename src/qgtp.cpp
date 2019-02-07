@@ -174,6 +174,18 @@ void GTP_Process::pause_analysis ()
 	send_request ("known_command known_command");
 }
 
+void GTP_Process::pause_callback (const QString &)
+{
+	m_controller->gtp_switch_ready ();
+}
+
+/* Like pause, but the controller wants to be called back when the program has
+   responded.  */
+void GTP_Process::initiate_analysis_switch ()
+{
+	send_request ("known_command known_command", &GTP_Process::pause_callback);
+}
+
 /* Code */
 
 // exit
@@ -316,6 +328,8 @@ void GTP_Eval_Controller::request_analysis (game_state *st)
 	if (analyzer_state () != analyzer::running)
 		return;
 
+	initiate_switch ();
+
 	m_eval_pos = st;
 	std::vector<game_state *> moves;
 	while (st->was_move_p () && !st->root_node_p ()) {
@@ -349,6 +363,17 @@ void GTP_Eval_Controller::clear_eval_data ()
 	m_eval_state = nullptr;
 }
 
+void GTP_Eval_Controller::initiate_switch ()
+{
+	m_switch_pending = true;
+	m_analyzer->initiate_analysis_switch ();
+}
+
+void GTP_Eval_Controller::gtp_switch_ready ()
+{
+	m_switch_pending = false;
+}
+
 void GTP_Eval_Controller::start_analyzer (const Engine &engine, int size, double komi, int hc)
 {
 	if (m_analyzer != nullptr) {
@@ -364,6 +389,7 @@ void GTP_Eval_Controller::stop_analyzer ()
 {
 	clear_eval_data ();
 	m_pause_eval = false;
+	m_switch_pending = false;
 	if (m_analyzer != nullptr && !m_analyzer->stopped ())
 		m_analyzer->quit ();
 }
@@ -388,7 +414,7 @@ bool GTP_Eval_Controller::pause_analyzer (bool on, game_state *st)
 
 void GTP_Eval_Controller::gtp_eval (const QString &s)
 {
-	if (m_pause_updates)
+	if (m_pause_updates || m_switch_pending)
 		return;
 
 	bool prune = setting->readBoolEntry("ANALYSIS_PRUNE");
