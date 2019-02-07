@@ -2535,7 +2535,7 @@ When in score mode, left click to mark a group as dead, right click to mark it a
              <item>
               <widget class="QComboBox" name="diagComboBox">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
@@ -2636,6 +2636,11 @@ When in score mode, left click to mark a group as dead, right click to mark it a
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
+   <class>SizeGraphicsView</class>
+   <extends>QGraphicsView</extends>
+   <header>sizegraphicsview.h</header>
+  </customwidget>
+  <customwidget>
    <class>Board</class>
    <extends>QWidget</extends>
    <header>board.h</header>
@@ -2650,11 +2655,6 @@ When in score mode, left click to mark a group as dead, right click to mark it a
    <extends>QWidget</extends>
    <header>scoretools.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>SizeGraphicsView</class>
-   <extends>QGraphicsView</extends>
-   <header>sizegraphicsview.h</header>
   </customwidget>
   <customwidget>
    <class>BoardView</class>

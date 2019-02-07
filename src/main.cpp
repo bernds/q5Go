@@ -16,6 +16,7 @@
 #include "miscdialogs.h"
 #include "ui_helpers.h"
 #include "variantgamedlg.h"
+#include "analyzedlg.h"
 
 #include <fstream>
 #include <qtranslator.h>
@@ -311,10 +312,12 @@ int main(int argc, char **argv)
 	QCommandLineParser cmdp;
 	QCommandLineOption clo_client { { "c", "client" }, QObject::tr ("Show the Go server client window (default if no other arguments)") };
 	QCommandLineOption clo_board { { "b", "board" }, QObject::tr ("Start up with a board window (ignored if files are loaded).") };
+	QCommandLineOption clo_analysis { { "a", "analyze" }, QObject::tr ("Start up with the computer analysis dialog to analyze <file>."), QObject::tr ("file") };
 	QCommandLineOption clo_debug { { "d", "debug" }, QObject::tr ("Display debug messages in a window") };
 
 	cmdp.addOption (clo_client);
 	cmdp.addOption (clo_board);
+	cmdp.addOption (clo_analysis);
 #ifdef OWN_DEBUG_MODE
 	cmdp.addOption (clo_debug);
 #endif
@@ -324,7 +327,7 @@ int main(int argc, char **argv)
 	cmdp.process (myapp);
 	const QStringList args = cmdp.positionalArguments ();
 
-	bool show_client = cmdp.isSet (clo_client) || (args.isEmpty () && !cmdp.isSet (clo_board));
+	bool show_client = cmdp.isSet (clo_client) || (args.isEmpty () && !cmdp.isSet (clo_board) && !cmdp.isSet (clo_analysis));
 
 #ifdef OWN_DEBUG_MODE
 	qInstallMessageHandler (myMessageHandler);
@@ -388,8 +391,15 @@ int main(int argc, char **argv)
 		windows_open = true;
 	}
 	windows_open |= show_client;
+	windows_open |= cmdp.isSet (clo_analysis);
 	if (!windows_open)
 		return 1;
+
+	if (cmdp.isSet (clo_analysis)) {
+		analyze_dialog = new AnalyzeDialog (nullptr, cmdp.value (clo_analysis));
+	} else
+		analyze_dialog = new AnalyzeDialog (nullptr, QString ());
+	analyze_dialog->setVisible (cmdp.isSet (clo_analysis));
 
 	if (setting->getNewVersionWarning())
 		help_new_version ();

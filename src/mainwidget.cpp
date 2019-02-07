@@ -282,7 +282,7 @@ void MainWidget::setGameMode(GameMode mode)
 	editPosButton->setEnabled (mode == modeNormal || mode == modeEdit);
 	colorButton->setEnabled (mode == modeEdit || mode == modeNormal);
 
-	slider->setEnabled (mode == modeNormal || mode == modeObserve);
+	slider->setEnabled (mode == modeNormal || mode == modeObserve || mode == modeBatch);
 
 	passButton->setEnabled (mode != modeScore && mode != modeScoreRemote);
 	editButton->setEnabled (mode != modeScore);
@@ -377,7 +377,7 @@ void MainWidget::setMoveData(game_state &gs, const go_board &b, GameMode mode)
 		turnLabel->setText(QObject::tr ("White to play"));
 
 	bool is_root_node = gs.root_node_p ();
-	bool good_mode = mode == modeNormal || mode == modeObserve;
+	bool good_mode = mode == modeNormal || mode == modeObserve || mode == modeBatch;
 
 	const QStyle *style = qgo_app->style ();
 	int iconsz = style->pixelMetric (QStyle::PixelMetric::PM_ToolBarIconSize);

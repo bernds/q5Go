@@ -82,7 +82,7 @@ public:
 	void update_svg_dialog ();
 
 protected:
-	void initActions();
+	void initActions(GameMode);
 	void initMenuBar(GameMode);
 	void initToolBar();
 	void initStatusBar();

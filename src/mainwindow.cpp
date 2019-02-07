@@ -114,7 +114,7 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 			m_sgf_var_style = true;
 	}
 
-	initActions();
+	initActions(mode);
 	initMenuBar(mode);
 	initToolBar();
 	initStatusBar();
@@ -373,7 +373,7 @@ MainWindow::~MainWindow()
 	delete whatsThis;
 }
 
-void MainWindow::initActions()
+void MainWindow::initActions(GameMode mode)
 {
 	// Load the pixmaps
 	QPixmap fileNewboardIcon, fileNewIcon, fileOpenIcon, fileSaveIcon, fileSaveAsIcon,
@@ -838,7 +838,7 @@ void MainWindow::initActions()
 	int figuremode = setting->readIntEntry ("BOARD_DIAGMODE");
 	viewFigures = new QAction(tr("Fi&gures and eval graph"), this);
 	viewFigures->setCheckable (true);
-	viewFigures->setChecked (figuremode == 2);
+	viewFigures->setChecked (figuremode == 2 || mode == modeBatch);
 	viewFigures->setStatusTip(tr("Enable/disable the figure and score graph view"));
 	viewFigures->setWhatsThis(tr("Figures\n\nEnable/disable the figure and score graph view."));
 	connect(viewFigures, &QAction::toggled, this, &MainWindow::slotViewFigures);
@@ -2248,7 +2248,7 @@ void MainWindow::setGameMode(GameMode mode)
 
 	fileImportSgfClipB->setEnabled (enable_nav);
 
-	bool editable_comments = mode == modeNormal || mode == modeEdit || mode == modeScore || mode == modeComputer;
+	bool editable_comments = mode == modeNormal || mode == modeEdit || mode == modeScore || mode == modeComputer || mode == modeBatch;
 	commentEdit->setReadOnly (!editable_comments || mode == modeEdit);
 	// commentEdit->setDisabled (editable_comments);
 	commentEdit2->setEnabled (!editable_comments);
@@ -2304,6 +2304,11 @@ void MainWindow::setGameMode(GameMode mode)
 	case modeScoreRemote:
 		statusMode->setText(" " + QObject::tr("S", "Board status line: score mode") + " ");
 		break;
+
+	case modeBatch:
+		statusMode->setText(" " + QObject::tr("A", "Board status line: batch analysis") + " ");
+		break;
+
 	}
 	mainWidget->setGameMode (mode);
 }
@@ -2391,12 +2396,15 @@ void MainWindow::setMoveData (game_state &gs, const go_board &b, GameMode mode)
 	switch (mode)
 	{
 	case modeNormal:
+		navSwapVariations->setEnabled(!is_root_node);
+
+		/* fall through */
+	case modeBatch:
 		navPrevVar->setEnabled(gs.has_prev_sibling ());
 		navNextVar->setEnabled(gs.has_next_sibling ());
 		navStartVar->setEnabled(!is_root_node);
 		navMainBranch->setEnabled(!is_root_node);
 		navNextBranch->setEnabled(sons > 0);
-		navSwapVariations->setEnabled(!is_root_node);
 
 		/* fall through */
 	case modeObserve:
