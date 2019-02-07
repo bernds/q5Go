@@ -662,7 +662,7 @@ QByteArray BoardView::render_svg (bool do_number, bool coords)
 QString BoardView::render_ascii (bool do_number, bool coords)
 {
 	const go_board &db = m_displayed->get_board ();
-	bool have_figure = m_figure_moves && m_edit_board == nullptr && m_displayed->has_figure ();
+	bool have_figure = m_figure_view && m_edit_board == nullptr && m_displayed->has_figure ();
 	int bitsz = db.bitsize ();
 	int szx = db.size_x ();
 	int szy = db.size_y ();
@@ -1093,7 +1093,7 @@ Board::ram_result Board::render_analysis_marks (svg_builder &svg, double svg_fac
 void BoardView::sync_appearance (bool)
 {
 	bool numbering = !have_analysis () && m_edit_board == nullptr && m_move_numbers;
-	bool have_figure = m_figure_moves && !have_analysis () && m_edit_board == nullptr && m_displayed->has_figure ();
+	bool have_figure = m_figure_view && !have_analysis () && m_edit_board == nullptr && m_displayed->has_figure ();
 	int print_num = m_displayed->print_numbering_inherited ();
 
 	bool analysis_children = setting->values.analysis_children;
@@ -1827,7 +1827,7 @@ void BoardView::clear_selection ()
 int BoardView::n_dups_h ()
 {
 	const go_board &b = m_displayed->get_board ();
-	if (b.torus_h ())
+	if (!m_figure_view && b.torus_h ())
 		return std::min (b.size_x (), setting->values.toroid_dups);
 	return 0;
 }
@@ -1835,7 +1835,7 @@ int BoardView::n_dups_h ()
 int BoardView::n_dups_v ()
 {
 	const go_board &b = m_displayed->get_board ();
-	if (b.torus_v ())
+	if (!m_figure_view && b.torus_v ())
 		return std::min (b.size_y (), setting->values.toroid_dups);
 	return 0;
 }

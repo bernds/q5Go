@@ -70,7 +70,7 @@ protected:
 	int m_rect_y1, m_rect_y2;
 
 	/* A few board display options.  */
-	bool m_figure_moves = false;
+	bool m_figure_view = false;
 	bool m_move_numbers = false;
 	bool m_show_coords, m_sgf_coords, m_show_hoshis, m_show_figure_caps;
 
@@ -131,7 +131,7 @@ public:
 
 	bool lockResize;
 
-	void set_figure_view_enabled (bool on) { m_figure_moves = on; }
+	void set_figure_view_enabled (bool on) { m_figure_view = on; }
 	void set_show_move_numbers (bool);
 	void set_show_hoshis (bool);
 	void set_show_figure_caps (bool);
