@@ -64,7 +64,6 @@ protected:
 
 	/* Toroid support.  */
 	int m_shift_x = 0, m_shift_y = 0;
-	int m_pref_dups = 0;
 
 	/* Variables related to rectangle selection.  */
 	int m_rect_x1, m_rect_x2;

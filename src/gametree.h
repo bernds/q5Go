@@ -32,7 +32,6 @@ class GameTree : public QGraphicsView
 	QPixmap m_pm_e, m_pm_box;
 	QStandardItemModel m_headers;
 	QHeaderView m_header_view;
-	bool m_hide_diags = true;
 
 protected:
 	virtual void resizeEvent(QResizeEvent*) override;

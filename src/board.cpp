@@ -43,7 +43,6 @@ BoardView::BoardView(QWidget *parent, QGraphicsScene *c)
 	m_show_figure_caps = false;
 	m_show_coords = setting->readBoolEntry ("BOARD_COORDS");
 	m_sgf_coords = setting->readBoolEntry ("SGF_BOARD_COORDS");
-	m_pref_dups = setting->readIntEntry ("TOROID_DUPS");
 
 	setStyleSheet( "QGraphicsView { border-style: none; }" );
 
@@ -1041,10 +1040,11 @@ void BoardView::sync_appearance (bool)
 	bool have_figure = m_figure_moves && !have_analysis && m_edit_board == nullptr && m_displayed->has_figure ();
 	int print_num = m_displayed->print_numbering_inherited ();
 
-	bool analysis_hide = setting->readBoolEntry ("ANALYSIS_HIDEOTHER");
-	bool analysis_children = setting->readBoolEntry ("ANALYSIS_CHILDREN");
-	int analysis_vartype = setting->readIntEntry ("ANALYSIS_VARTYPE");
-	int winrate_for = setting->readIntEntry ("ANALYSIS_WINRATE");
+	bool analysis_hide = setting->values.analysis_hideother;
+	bool analysis_children = setting->values.analysis_children;
+	int analysis_vartype = setting->values.analysis_vartype;
+	int winrate_for = setting->values.analysis_winrate;
+
 	stone_color wr_swap_col = winrate_for == 0 ? white : winrate_for == 1 ? black : none;
 
 	int var_type = (have_analysis && analysis_children) || have_figure ? 0 : m_vars_type;
@@ -1810,7 +1810,7 @@ int BoardView::n_dups_h ()
 {
 	const go_board &b = m_displayed->get_board ();
 	if (b.torus_h ())
-		return std::min (b.size_x (), m_pref_dups);
+		return std::min (b.size_x (), setting->values.toroid_dups);
 	return 0;
 }
 
@@ -1818,7 +1818,7 @@ int BoardView::n_dups_v ()
 {
 	const go_board &b = m_displayed->get_board ();
 	if (b.torus_v ())
-		return std::min (b.size_y (), m_pref_dups);
+		return std::min (b.size_y (), setting->values.toroid_dups);
 	return 0;
 }
 
@@ -1877,8 +1877,6 @@ void Board::reset_game (std::shared_ptr<game_record> gr)
 
 void BoardView::update_prefs ()
 {
-	m_pref_dups = setting->readIntEntry ("TOROID_DUPS");
-
 	clear_graphics_elts ();
 	alloc_graphics_elts ();
 

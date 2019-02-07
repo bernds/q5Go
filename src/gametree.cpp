@@ -111,9 +111,7 @@ GameTree::GameTree (MainWindow *win, QWidget *parent)
 
 void GameTree::update_prefs ()
 {
-	m_hide_diags = setting->readBoolEntry ("GAMETREE_DIAGHIDE");
-	m_size = setting->readIntEntry ("GAMETREE_SIZE");
-	m_size = std::max (30, std::min (120, m_size));
+	m_size = std::max (30, std::min (120, setting->values.gametree_size));
 
 	QFont f = setting->fontStandard;
 	QFontMetrics fm (f);
@@ -237,7 +235,7 @@ void GameTree::show_menu (int x, int y, const QPoint &pos)
 void GameTree::update (std::shared_ptr<game_record> gr, game_state *active, bool force)
 {
 	game_state *r = gr->get_root ();
-	bool changed = r->update_visualization (m_hide_diags) || force;
+	bool changed = r->update_visualization (setting->values.gametree_diaghide) || force;
 	bool active_changed = m_active != active;
 	if (gr != m_game)
 		changed = true;

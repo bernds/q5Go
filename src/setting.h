@@ -24,6 +24,23 @@ class qGo;
 class ClientWindow;
 class ImageHandler;
 
+/* A few settings which are used frequently enough that we don't want
+   to spend a lookup each time.  The alternative is caching them locally
+   in the classes that use them, or passing them around through arguments,
+   neither of which option is any more elegant than this.
+   These are updated in extract_frequent_settings.  */
+struct setting_vals
+{
+	bool analysis_hideother;
+	bool analysis_children;
+	int analysis_vartype;
+	int analysis_winrate;
+
+	int gametree_diaghide;
+	int gametree_size;
+
+	int toroid_dups;
+};
 
 class Setting
 {
@@ -61,11 +78,13 @@ public:
 	void saveSettings();
 	QString fontToString(QFont);
 
-	QFont fontStandard, fontMarks, fontComments, fontLists, fontClocks, fontConsole;
-	QString language;
 	QString program_dir;
 
-	//const char* getLanguage(); //{ return readEntry("LANG") == NULL ? getenv("LANG") : readEntry("LANG").latin1(); }
+	QFont fontStandard, fontMarks, fontComments, fontLists, fontClocks, fontConsole;
+	QString language;
+	setting_vals values;
+
+	void extract_frequent_settings ();
 	QString getLanguage();
 	const QStringList getAvailableLanguages();
 	QString convertNumberToLanguage(int n);

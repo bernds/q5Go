@@ -141,13 +141,10 @@ Setting::Setting()
 	qgo = 0;
 	cw = 0;
 
-	nmatch_settings_modified=false;
+	nmatch_settings_modified = false;
 
-//#ifdef USE_XPM
+	extract_frequent_settings ();
 	image0 = QPixmap((const char **)Bowl_xpm);
-//#else
-//	image0 = QPixmap(ICON_APPICON);
-//#endif
 }
 
 Setting::~Setting()
@@ -213,6 +210,8 @@ void Setting::loadSettings()
 	}
 
 	file.close();
+
+	extract_frequent_settings ();
 
 	// Read obsolete font entries first, and then try to replace them with more current ones.
 	updateFont(fontStandard, "FONT_MAIN");
@@ -351,6 +350,19 @@ QString Setting::readEntry(const QString &key)
 	return params.value (key);
 }
 
+void Setting::extract_frequent_settings ()
+{
+	values.analysis_hideother = readBoolEntry ("ANALYSIS_HIDEOTHER");
+	values.analysis_children = readBoolEntry ("ANALYSIS_CHILDREN");
+	values.analysis_vartype = readIntEntry ("ANALYSIS_VARTYPE");
+	values.analysis_winrate = readIntEntry ("ANALYSIS_WINRATE");
+
+	values.gametree_diaghide = readBoolEntry ("GAMETREE_DIAGHIDE");
+	values.gametree_size = readIntEntry ("GAMETREE_SIZE");
+
+	values.toroid_dups = readIntEntry ("TOROID_DUPS");
+}
+
 const QStringList Setting::getAvailableLanguages()
 {
 	// This is ugly, but I want those defines in defines.h, so all settings are in that file
@@ -435,14 +447,10 @@ QString Setting::getTranslationsDirectory()
 QString Setting::getLanguage()
 {
 	QString l = readEntry("LANG");
-	
-	//const char *hop[2];
-	//hop[0] = char(12)  ;
 
 	if (l.isEmpty() || l == QString("Default"))
 	{
 		const char *p = getenv("LANG");
-	
 		if (p == NULL)
 			return QString::null;
 		return QString(p).left(2);

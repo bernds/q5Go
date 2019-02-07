@@ -460,6 +460,8 @@ void PreferencesDialog::slot_apply()
 
 	setting->writeIntEntry("TOROID_DUPS", toroidDupsSpin->text().toInt());
 
+	setting->extract_frequent_settings ();
+
 	client_window->preferencesAccept();
 }
 
