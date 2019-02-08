@@ -73,8 +73,6 @@ protected:
 
 	double m_primary_eval;
 	game_state *m_eval_state {};
-	double *m_winrate {};
-	int *m_visits {};
 
 	void clear_eval_data ();
 

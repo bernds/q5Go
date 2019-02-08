@@ -340,8 +340,6 @@ void GTP_Eval_Controller::request_analysis (game_state *st)
 	clear_eval_data ();
 
 	stone_color to_move = st->to_move ();
-	m_winrate = new double[b.bitsize ()] ();
-	m_visits = new int[b.bitsize ()] ();
 	m_analyzer->analyze (to_move, 100);
 }
 
@@ -349,10 +347,6 @@ void GTP_Eval_Controller::clear_eval_data ()
 {
 	delete m_eval_state;
 	m_eval_state = nullptr;
-	delete[] m_winrate;
-	m_winrate = nullptr;
-	delete[] m_visits;
-	m_visits = nullptr;
 }
 
 void GTP_Eval_Controller::start_analyzer (const Engine &engine, int size, double komi, int hc)
@@ -448,15 +442,12 @@ void GTP_Eval_Controller::gtp_eval (const QString &s)
 				if (i >= 0 && i < szx && j >= 0 && j < szy) {
 					game_state *next = cur->add_child_move (i, j);
 					if (pv_first) {
-						int bp = b.bitpos (i, j);
 						cur->set_mark (i, j, mark::letter, count);
 						next->set_eval_data (visits, to_move == white ? 1 - wr : wr,
 								     m_analyzer_komi, false);
 						/* Leave it to a higher level to add a title if it wants
 						   to place these variations into the actual file.  */
 						next->set_figure (256, "");
-						m_winrate[bp] = wr - m_primary_eval;
-						m_visits[bp] = visits;
 					}
 					cur = next;
 				} else
