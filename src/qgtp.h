@@ -66,6 +66,8 @@ protected:
 	using GTP_Controller::GTP_Controller;
 	~GTP_Eval_Controller();
 	GTP_Process *m_analyzer {};
+	double m_analyzer_komi = 0;
+
 	bool m_pause_eval = false;
 	bool m_pause_updates = false;
 

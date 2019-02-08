@@ -128,6 +128,10 @@ private:
 	/* The SGF PM property, or -1 if it wasn't set.  */
 	int m_print_numbering = -1;
 	sgf_figure m_figure;
+	/* Win rate information.  Zero visits means it is unset.  */
+	int m_eval_visits = 0;
+	double m_eval_wr_black = 0.5;
+	double m_eval_komi = 0;
 
 	game_state (const go_board &b, int move, int sgf_move, game_state *parent, stone_color to_move)
 		: m_board (b), m_move_number (move), m_sgf_movenum (sgf_move), m_parent (parent), m_to_move (to_move)
@@ -139,14 +143,14 @@ private:
 	{
 	}
 
+	/* This isn't used except for delegation when doing a deep copy.  Uncertain how
+	   much we should copy here vs there.  */
 	game_state (const go_board &b, int move, int sgf_move, game_state *parent,
 		    stone_color to_move, int x, int y, stone_color move_col,
-		    const sgf::node::proplist &unrecognized, const visual_tree &vt, bool vtok,
-		    int print_numbering, const sgf_figure &fig)
+		    const sgf::node::proplist &unrecognized, const visual_tree &vt, bool vtok)
 		: m_board (b), m_move_number (move), m_sgf_movenum (sgf_move), m_parent (parent),
 		m_to_move (to_move), m_move_x (x), m_move_y (y), m_move_color (move_col),
-		m_unrecognized_props (unrecognized), m_visualized (vt), m_visual_ok (vtok),
-		m_print_numbering (print_numbering), m_figure (fig)
+		m_unrecognized_props (unrecognized), m_visualized (vt), m_visual_ok (vtok)
 	{
 	}
 
@@ -202,7 +206,7 @@ public:
 	game_state (const game_state &other, game_state *parent)
 		: game_state (other.m_board, other.m_move_number, other.m_sgf_movenum, parent, other.m_to_move,
 			      other.m_move_x, other.m_move_y, other.m_move_color, other.m_unrecognized_props,
-			      other.m_visualized, other.m_visual_ok, m_print_numbering, other.m_figure)
+			      other.m_visualized, other.m_visual_ok)
 	{
 		for (auto c: other.m_children) {
 			game_state *new_c = new game_state (*c, this);
@@ -211,6 +215,10 @@ public:
 		m_comment = other.m_comment;
 		m_active = other.m_active;
 		m_figure = other.m_figure;
+		m_print_numbering = other.m_print_numbering;
+		m_eval_visits = other.m_eval_visits;
+		m_eval_wr_black = other.m_eval_wr_black;
+		m_eval_komi = other.m_eval_komi;
 	}
 	void disconnect ()
 	{
@@ -616,7 +624,26 @@ public:
 	{
 		return m_comment;
 	}
-
+	void set_eval_data (int visits, double winrate_black, double komi, bool force_replace)
+	{
+		if (m_eval_visits > visits && m_eval_komi == komi && !force_replace)
+			return;
+		m_eval_visits = visits;
+		m_eval_wr_black = winrate_black;
+		m_eval_komi = komi;
+	}
+	int eval_visits ()
+	{
+		return m_eval_visits;
+	}
+	double eval_wr_black ()
+	{
+		return m_eval_wr_black;
+	}
+	double eval_komi ()
+	{
+		return m_eval_komi;
+	}
 	void append_to_sgf (std::string &) const;
 
 	/* Should really only be used for setting handicap at the root node.  */

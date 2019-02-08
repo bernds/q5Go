@@ -362,6 +362,7 @@ void GTP_Eval_Controller::start_analyzer (const Engine &engine, int size, double
 		delete m_analyzer;
 		m_analyzer = nullptr;
 	}
+	m_analyzer_komi = komi;
 	m_analyzer = create_gtp (engine, size, komi, hc);
 }
 
@@ -445,14 +446,19 @@ void GTP_Eval_Controller::gtp_eval (const QString &s)
 				int szy = m_eval_pos->get_board ().size_y ();
 				int j = szy - pm.mid (1).toInt ();
 				if (i >= 0 && i < szx && j >= 0 && j < szy) {
+					game_state *next = cur->add_child_move (i, j);
 					if (pv_first) {
 						int bp = b.bitpos (i, j);
 						cur->set_mark (i, j, mark::letter, count);
-
+						next->set_eval_data (visits, to_move == white ? 1 - wr : wr,
+								     m_analyzer_komi, false);
+						/* Leave it to a higher level to add a title if it wants
+						   to place these variations into the actual file.  */
+						next->set_figure (256, "");
 						m_winrate[bp] = wr - m_primary_eval;
 						m_visits[bp] = visits;
 					}
-					cur = cur->add_child_move (i, j);
+					cur = next;
 				} else
 					break;
 				if (cur == nullptr)
