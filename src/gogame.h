@@ -491,6 +491,12 @@ public:
 	{
 		return add_child_pass (m_board, set_active);
 	}
+	void add_child_tree (game_state *other)
+	{
+		m_children.push_back (other);
+		other->m_parent = this;
+		m_visual_ok = false;
+	}
 	bool valid_move_p (int x, int y, stone_color);
 	void toggle_group_alive (int x, int y)
 	{
@@ -584,6 +590,16 @@ public:
 	const std::vector<game_state *> children () const
 	{
 		return m_children;
+	}
+	std::vector<game_state *> take_children ()
+	{
+		std::vector<game_state *> tmp;
+		std::swap (tmp, m_children);
+		m_active = 0;
+		m_visual_ok = false;
+		for (auto it: tmp)
+			it->m_parent = nullptr;
+		return tmp;
 	}
 	game_state *find_child_move (int x, int y)
 	{
