@@ -1173,9 +1173,10 @@ void MainWindow::updateCaption (bool modified)
 	mainWidget->scoreTools->blackLabel->setText(player_b);
 }
 
-void MainWindow::update_game_tree (game_state *active)
+void MainWindow::update_game_tree ()
 {
-	gameTreeView->update (m_game, active);
+	game_state *st = gfx_board->displayed ();
+	gameTreeView->update (m_game, st);
 }
 
 void MainWindow::slotFileNewBoard (bool)
@@ -1471,8 +1472,8 @@ void MainWindow::slotEditFigure (bool on)
 		st->set_figure (256, "");
 	else
 		st->clear_figure ();
-	update_figures (st);
-	update_game_tree (st);
+	update_figures ();
+	update_game_tree ();
 }
 
 void MainWindow::slotDiagChosen (int idx)
@@ -1486,7 +1487,7 @@ void MainWindow::slotDiagEdit (bool)
 	game_state *st = mainWidget->diagView->displayed ();
 	FigureDialog dlg (st, this);
 	dlg.exec ();
-	update_figures (st);
+	update_figures ();
 }
 
 void MainWindow::slotDiagASCII (bool)
@@ -2319,8 +2320,9 @@ void MainWindow::update_figure_display ()
 	}
 }
 
-void MainWindow::update_figures (game_state *gs)
+void MainWindow::update_figures ()
 {
+	game_state *gs = gfx_board->displayed ();
 	game_state *old_fig = mainWidget->diagView->displayed ();
 	bool keep_old_fig = false;
 	m_figures.clear ();
@@ -2440,7 +2442,7 @@ void MainWindow::setMoveData (game_state &gs, const go_board &b, GameMode mode)
 		m_allow_text_update_signal = old;
 	}
 
-	update_figures (&gs);
+	update_figures ();
 	mainWidget->setMoveData (gs, b, mode);
 }
 

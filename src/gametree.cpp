@@ -223,11 +223,11 @@ void GameTree::show_menu (int x, int y, const QPoint &pos)
 	if (st->has_figure ())
 		menu.addAction (QIcon (":/BoardWindow/images/boardwindow/figure.png"),
 				QObject::tr("Clear diagram status for this node"),
-				[=] () { toggle_figure (x, y); m_win->update_figures (m_active); });
+				[=] () { toggle_figure (x, y); m_win->update_figures (); });
 	else
 		menu.addAction (QIcon (":/BoardWindow/images/boardwindow/figure.png"),
 				QObject::tr("Set this move to be the start of a diagram"),
-				[=] () { toggle_figure (x, y); m_win->update_figures (m_active); });
+				[=] () { toggle_figure (x, y); m_win->update_figures (); });
 	menu.addAction (QObject::tr ("Navigate to this node"), [=] () { item_clicked (x, y); });
 	menu.exec (pos);
 }

@@ -1273,7 +1273,7 @@ void Board::sync_appearance (bool board_only)
 	m_main_widget->recalc_scores (b);
 	if (!board_only) {
 		m_board_win->setMoveData (*m_displayed, b, m_game_mode);
-		m_board_win->update_game_tree (m_displayed);
+		m_board_win->update_game_tree ();
 	}
 }
 
@@ -1698,7 +1698,7 @@ void Board::mousePressEvent(QMouseEvent *e)
 		}
 		if (!first) {
 			sync_appearance ();
-			m_board_win->update_game_tree (m_displayed);
+			m_board_win->update_game_tree ();
 			return;
 		}
 	}

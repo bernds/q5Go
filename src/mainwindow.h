@@ -73,8 +73,8 @@ public:
 	void append_comment (const QString &);
 
 	void update_analysis (analyzer);
-	void update_game_tree (game_state *);
-	void update_figures (game_state *);
+	void update_game_tree ();
+	void update_figures ();
 
 	void coords_changed (const QString &, const QString &);
 
