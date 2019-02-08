@@ -383,6 +383,7 @@ void GTP_Eval_Controller::start_analyzer (const Engine &engine, int size, double
 	}
 	m_analyzer_komi = komi;
 	m_analyzer = create_gtp (engine, size, komi, hc);
+	analyzer_state_changed ();
 }
 
 void GTP_Eval_Controller::stop_analyzer ()
@@ -390,8 +391,10 @@ void GTP_Eval_Controller::stop_analyzer ()
 	clear_eval_data ();
 	m_pause_eval = false;
 	m_switch_pending = false;
-	if (m_analyzer != nullptr && !m_analyzer->stopped ())
+	if (m_analyzer != nullptr && !m_analyzer->stopped ()) {
 		m_analyzer->quit ();
+		analyzer_state_changed ();
+	}
 }
 
 /* Return true iff the state changed.  */
@@ -408,7 +411,7 @@ bool GTP_Eval_Controller::pause_analyzer (bool on, game_state *st)
 	} else {
 		request_analysis (st);
 	}
-
+		analyzer_state_changed ();
 	return true;
 }
 

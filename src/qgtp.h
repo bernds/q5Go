@@ -92,6 +92,7 @@ protected:
 	void initiate_switch ();
 	void request_analysis (game_state *);
 	virtual void eval_received (const QString &, int) = 0;
+	virtual void analyzer_state_changed () { }
 public:
 	analyzer analyzer_state ();
 
@@ -158,6 +159,8 @@ public:
 	void initiate_analysis_switch ();
 
 	void quit ();
+
+	QDialog *dialog () { return &m_dlg; }
 };
 
 #endif
