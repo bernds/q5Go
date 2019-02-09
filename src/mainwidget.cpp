@@ -23,9 +23,6 @@ MainWidget::MainWidget(MainWindow *win, QWidget* parent)
 	figSplitter->setStretchFactor (0, 1);
 	figSplitter->setStretchFactor (1, 0);
 
-	void (QTabWidget::*changed) (int) = &QTabWidget::currentChanged;
-	connect(toolsTabWidget, changed, this, &MainWidget::slot_toolsTabChanged);
-
 	connect(passButton, SIGNAL(clicked()), win, SLOT(doPass()));
         connect(undoButton, SIGNAL(clicked()), win, SLOT(doUndo()));
         connect(adjournButton, SIGNAL(clicked()), win, SLOT(doAdjourn()));
@@ -87,27 +84,6 @@ MainWidget::~MainWidget()
 	// no need to delete child widgets, Qt does it all for us
 	delete scoreTools;
 	delete normalTools;
-}
-
-// a tab has been clicked
-void MainWidget::slot_toolsTabChanged(int idx)
-{
-	Board *b = gfx_board;
-	switch (idx)
-	{
-		// normal/score tools
-	case tabNormalScore:
-		b->setMode (modeNormal);
-		m_mainwin->setGameMode (modeNormal);
-		break;
-
-		// teach tools + game tree
-	case tabTeachGameTree:
-		break;
-
-	default:
-		break;
-	}
 }
 
 // set a tab on toolsTabWidget

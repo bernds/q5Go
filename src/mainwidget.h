@@ -43,7 +43,6 @@ public:
 	void set_2nd_eval (const QString &, double, stone_color, int);
 public slots:
 	void on_colorButton_clicked(bool);
-	void slot_toolsTabChanged(int);
 	virtual void doRealScore(bool);
 	virtual void doEdit();
 	virtual void doEditPos(bool);
