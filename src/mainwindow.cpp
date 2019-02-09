@@ -18,7 +18,6 @@
 #include <QWhatsThis>
 #include <QAction>
 #include <QToolBar>
-#include <QStatusBar>
 #include <QMessageBox>
 #include <QApplication>
 #include <QCheckBox>
@@ -73,6 +72,10 @@ QString screen_key ()
 MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMode mode)
 	: QMainWindow(parent), m_game (gr), m_ascii_dlg (this), m_svg_dlg (this)
 {
+	setupUi (this);
+	gfx_board->init2 (this);
+	diagView->set_figure_view_enabled (true);
+
 	setProperty("icon", setting->image0);
 	setAttribute (Qt::WA_DeleteOnClose);
 
@@ -134,73 +137,77 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 		viewMenuBar->setChecked(false); //menuBar()->hide();
 #endif
 
-	if (viewVertComment->isChecked ()) {
-		// show vertical comment
-		splitter = new QSplitter(Qt::Horizontal, this);
-		mainWidget = new MainWidget(this, splitter);
-		splitter_comment = new QSplitter(Qt::Vertical, splitter);
-	} else {
-		splitter = new QSplitter(Qt::Vertical, this);
-		mainWidget = new MainWidget(this, splitter);
-		splitter_comment = new QSplitter(Qt::Horizontal, splitter);
-	}
-	splitter->setOpaqueResize(false);
 	splitter_comment->setVisible (viewComment->isChecked ());
-	mainWidget->figuresWidget->setVisible (viewFigures->isChecked ());
+	figuresWidget->setVisible (viewFigures->isChecked ());
 
 	if (setting->readBoolEntry("SIDEBAR_LEFT"))
 		slotViewLeftSidebar ();
 
-	//commentEdit = new QTextEdit(splitter_comment, "comments");
-	comments_widget = new QWidget (splitter_comment);
-	comments_layout = new QVBoxLayout (comments_widget);
-	comments_layout->setContentsMargins (0, 0, 0, 0);
-	commentEdit = new QTextEdit;
 	commentEdit->setWordWrapMode(QTextOption::WordWrap);
-	comments_layout->addWidget (commentEdit);
-	commentEdit2 = new QLineEdit;
-	comments_layout->addWidget (commentEdit2);
 
 	commentEdit->addAction (escapeFocus);
 	commentEdit2->addAction (escapeFocus);
-
-	ListView_observers = new QTreeView (splitter_comment);
-	ListView_observers->setFocusPolicy (Qt::NoFocus);
-	ListView_observers->setSortingEnabled (true);
 
 	gameTreeView = new GameTree (this, splitter_comment);
 
 	splitter->setStretchFactor (splitter->indexOf (mainWidget), 0);
 	splitter_comment->setStretchFactor(splitter_comment->indexOf (ListView_observers), 0);
 	splitter_comment->setStretchFactor(splitter_comment->indexOf (gameTreeView), 0);
+	bool vert = viewVertComment->isChecked ();
+	splitter->setOrientation(vert ? Qt::Horizontal : Qt::Vertical);
+	splitter_comment->setOrientation(!vert ? Qt::Horizontal : Qt::Vertical);
 
 	if (mode == modeMatch || mode == modeObserve || mode == modeTeach)
 		gameTreeView->setParent (nullptr);
 	else
 		ListView_observers->setParent (nullptr);
 
-	gfx_board = mainWidget->gfx_board;
+	normalTools->show();
+	scoreTools->hide();
 
-	CHECK_PTR(board);
+	figSplitter->setStretchFactor (0, 1);
+	figSplitter->setStretchFactor (1, 0);
 
-	connect(mainWidget->goLastButton, &QToolButton::clicked, [=] () { gfx_board->goto_last_move (); });
-	connect(mainWidget->goFirstButton, &QToolButton::clicked, [=] () { gfx_board->goto_first_move (); });
-	connect(mainWidget->goNextButton, &QToolButton::clicked, [=] () { gfx_board->next_move (); });
-	connect(mainWidget->goPrevButton, &QToolButton::clicked, [=] () { gfx_board->previous_move (); });
-	connect(mainWidget->prevNumberButton, &QToolButton::clicked, [=] () { gfx_board->previous_figure (); });
-	connect(mainWidget->nextNumberButton, &QToolButton::clicked, [=] () { gfx_board->next_figure (); });
-	connect(mainWidget->prevCommentButton, &QToolButton::clicked, [=] () { gfx_board->previous_comment (); });
-	connect(mainWidget->nextCommentButton, &QToolButton::clicked, [=] () { gfx_board->next_comment (); });
+	showSlider = true;
+	toggleSlider(setting->readBoolEntry("SLIDER"));
+	slider->setMaximum(SLIDER_INIT);
+	sliderRightLabel->setText(QString::number(SLIDER_INIT));
+	sliderSignalToggle = true;
 
-	connect(mainWidget->diagEditButton, &QToolButton::clicked, this, &MainWindow::slotDiagEdit);
-	connect(mainWidget->diagASCIIButton, &QToolButton::clicked, this, &MainWindow::slotDiagASCII);
-	connect(mainWidget->diagSVGButton, &QToolButton::clicked, this, &MainWindow::slotDiagSVG);
+	int w = evalView->width ();
+	int h = evalView->height ();
+
+	m_eval_canvas = new QGraphicsScene (0, 0, w, h, evalView);
+	evalView->setScene (m_eval_canvas);
+	m_eval_bar = m_eval_canvas->addRect (QRectF (0, 0, w, h / 2), Qt::NoPen, QBrush (Qt::black));
+
+	m_eval = 0.5;
+	connect (evalView, &SizeGraphicsView::resized, this, [=] () { set_eval (m_eval); });
+
+	connect(passButton, &QPushButton::clicked, this, &MainWindow::doPass);
+        connect(undoButton, &QPushButton::clicked, this, &MainWindow::doUndo);
+        connect(adjournButton, &QPushButton::clicked, this, &MainWindow::doAdjourn);
+        connect(resignButton, &QPushButton::clicked, this, &MainWindow::doResign);
+        connect(doneButton, &QPushButton::clicked, this, &MainWindow::doCountDone);
+
+	connect(goLastButton, &QToolButton::clicked, [=] () { gfx_board->goto_last_move (); });
+	connect(goFirstButton, &QToolButton::clicked, [=] () { gfx_board->goto_first_move (); });
+	connect(goNextButton, &QToolButton::clicked, [=] () { gfx_board->next_move (); });
+	connect(goPrevButton, &QToolButton::clicked, [=] () { gfx_board->previous_move (); });
+	connect(prevNumberButton, &QToolButton::clicked, [=] () { gfx_board->previous_figure (); });
+	connect(nextNumberButton, &QToolButton::clicked, [=] () { gfx_board->next_figure (); });
+	connect(prevCommentButton, &QToolButton::clicked, [=] () { gfx_board->previous_comment (); });
+	connect(nextCommentButton, &QToolButton::clicked, [=] () { gfx_board->next_comment (); });
+
+	connect(diagEditButton, &QToolButton::clicked, this, &MainWindow::slotDiagEdit);
+	connect(diagASCIIButton, &QToolButton::clicked, this, &MainWindow::slotDiagASCII);
+	connect(diagSVGButton, &QToolButton::clicked, this, &MainWindow::slotDiagSVG);
 	void (QComboBox::*cact) (int) = &QComboBox::activated;
-	connect(mainWidget->diagComboBox, cact, this, &MainWindow::slotDiagChosen);
+	connect(diagComboBox, cact, this, &MainWindow::slotDiagChosen);
 
-	connect(mainWidget->normalTools->anStartButton, &QToolButton::clicked,
+	connect(normalTools->anStartButton, &QToolButton::clicked,
 		[=] (bool on) { if (on) gfx_board->start_analysis (); else gfx_board->stop_analysis (); });
-	connect(mainWidget->normalTools->anPauseButton, &QToolButton::clicked,
+	connect(normalTools->anPauseButton, &QToolButton::clicked,
 		[=] (bool on) { gfx_board->pause_analysis (on); });
 
 	connect(m_ascii_dlg.cb_coords, &QCheckBox::toggled, [=] (bool) { update_ascii_dialog (); });
@@ -236,8 +243,8 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 
 	updateBoard();
 
-	connect(commentEdit, SIGNAL(textChanged()), this, SLOT(slotUpdateComment()));
-	connect(commentEdit2, SIGNAL(returnPressed()), this, SLOT(slotUpdateComment2()));
+	connect(commentEdit, &QTextEdit::textChanged, this, &MainWindow::slotUpdateComment);
+	connect(commentEdit2, &QLineEdit::returnPressed, this, &MainWindow::slotUpdateComment2);
 	m_allow_text_update_signal = true;
 
 	update_analysis (analyzer::disconnected);
@@ -255,8 +262,12 @@ void MainWindow::init_game_record (std::shared_ptr<game_record> gr)
 	delete m_empty_state;
 	m_empty_state = new game_state (b, black);
 
-	mainWidget->init_game_record (gr);
+	/* The order actually matters here.  The gfx_board will call back into MainWindow
+	   to update figures, which means we need to have diagView set up.  */
+	diagView->reset_game (gr);
+	gfx_board->reset_game (gr);
 	updateCaption (false);
+	update_game_record ();
 
 	bool disable_rect = (b.torus_h () || b.torus_v ()) && setting->readIntEntry ("TOROID_DUPS") > 0;
 	editRectSelect->setEnabled (!disable_rect);
@@ -270,6 +281,15 @@ void MainWindow::init_game_record (std::shared_ptr<game_record> gr)
 
 void MainWindow::update_game_record ()
 {
+	if (m_game->ranked_type () == ranked::free)
+		normalTools->TextLabel_free->setText(QApplication::tr("free"));
+	else if (m_game->ranked_type () == ranked::ranked)
+		normalTools->TextLabel_free->setText(QApplication::tr("rated"));
+	else
+		normalTools->TextLabel_free->setText(QApplication::tr("teach"));
+	normalTools->komi->setText(QString::number(m_game->komi ()));
+	scoreTools->komi->setText(QString::number(m_game->komi ()));
+	normalTools->handicap->setText(QString::number(m_game->handicap ()));
 	updateCaption (gfx_board->modified ());
 }
 
@@ -280,14 +300,6 @@ MainWindow::~MainWindow()
 	delete m_empty_state;
 
 	delete timer;
-	delete commentEdit;
-	delete commentEdit2;
-	delete mainWidget;
-	delete ListView_observers;
-	delete comments_layout;
-	delete comments_widget;
-	delete splitter_comment;
-	delete splitter;
 
 	// status bar
 	delete statusMode;
@@ -301,12 +313,6 @@ MainWindow::~MainWindow()
 	delete fileBar;
 
 	// menu bar
-	delete helpMenu;
-	delete viewMenu;
-	delete settingsMenu;
-	delete navMenu;
-	delete editMenu;
-	delete fileMenu;
 	delete importExportMenu;
 
 	// Actions
@@ -862,7 +868,7 @@ void MainWindow::initActions(GameMode mode)
 	anPause->setCheckable (true);
 	anPause->setStatusTip(tr("Stop the analysis temporarily"));
 	anPause->setWhatsThis(tr("Click to pause or unpause the analysis engine.\n"));
-	connect(anPause, &QAction::toggled, this, [=] (bool on) { if (on) { mainWidget->grey_eval_bar (); } gfx_board->pause_analysis (on); });
+	connect(anPause, &QAction::toggled, this, [=] (bool on) { if (on) { grey_eval_bar (); } gfx_board->pause_analysis (on); });
 
 	anDisconnect = new QAction(tr("&Disconnect analysis engine"), this);
 	anDisconnect->setStatusTip(tr("Detach the running analysis engine"));
@@ -925,8 +931,6 @@ void MainWindow::initMenuBar(GameMode mode)
 	importExportMenu->insertSeparator(fileImportSgfClipB);
 	importExportMenu->insertSeparator(fileExportPic);
 
-	// menuBar entry fileMenu
-	fileMenu = new QMenu(tr("&File"));
 	fileMenu->addAction (fileNewBoard);
 	fileMenu->addAction (fileNew);
 	fileMenu->addAction (fileNewVariant);
@@ -939,8 +943,6 @@ void MainWindow::initMenuBar(GameMode mode)
 	fileMenu->addSeparator ();
 	fileMenu->addAction (fileQuit);
 
-	// menuBar entry editMenu
-	editMenu = new QMenu(tr("&Edit"));
 	editMenu->addAction (setGameInfo);
 
 	editMenu->addSeparator ();
@@ -962,8 +964,6 @@ void MainWindow::initMenuBar(GameMode mode)
 	editMenu->addAction (editRectSelect);
 	editMenu->addAction (editClearSelect);
 
-	// menuBar entry navMenu
-	navMenu = new QMenu(tr("&Navigation"));
 	navMenu->addAction (navFirst);
 	navMenu->addAction (navBackward);
 	navMenu->addAction (navForward);
@@ -983,15 +983,11 @@ void MainWindow::initMenuBar(GameMode mode)
 	navMenu->addAction (navPrevFigure);
 	navMenu->addAction (navNextFigure);
 
-	// menuBar entry settingsMenu
-	settingsMenu = new QMenu(tr("&Settings"));
 	settingsMenu->addAction (setPreferences);
 	settingsMenu->addAction (soundToggle);
 
 	settingsMenu->insertSeparator(soundToggle);
 
-	// menuBar entry viewMenu
-	viewMenu = new QMenu(tr("&View"));
 	viewMenu->addAction (viewFileBar);
 	viewMenu->addAction (viewToolBar);
 	viewMenu->addAction (viewEditBar);
@@ -1012,28 +1008,17 @@ void MainWindow::initMenuBar(GameMode mode)
 	viewMenu->addAction (viewFigures);
 	viewMenu->addAction (viewNumbers);
 
-	anMenu = new QMenu (tr ("&Analysis"));
 	anMenu->addAction (anConnect);
 	anMenu->addAction (anDisconnect);
 	anMenu->addAction (anPause);
 
-	// menuBar entry helpMenu
-	helpMenu = new QMenu(tr("&Help"));
 	helpMenu->addAction (helpManual);
 	helpMenu->addAction (whatsThis);
 	helpMenu->addAction (helpAboutApp);
 	helpMenu->addAction (helpAboutQt);
 	helpMenu->insertSeparator(helpAboutApp);
 
-	// menubar configuration
-	menuBar()->addMenu(fileMenu);
-	menuBar()->addMenu(editMenu);
-	menuBar()->addMenu(navMenu);
-	menuBar()->addMenu(settingsMenu);
-	menuBar()->addMenu(viewMenu);
-	if (mode == modeNormal || mode == modeObserve)
-		menuBar()->addMenu(anMenu);
-	menuBar()->addMenu(helpMenu);
+	anMenu->setVisible (mode == modeNormal || mode == modeObserve);
 }
 
 void MainWindow::initToolBar()
@@ -1161,16 +1146,16 @@ void MainWindow::updateCaption (bool modified)
 	player_w.truncate(15 - rwlen);
 	if (rwlen > 0)
 		player_w += " " + rank_w;
-	mainWidget->normalTools->whiteLabel->setText(player_w);
-	mainWidget->scoreTools->whiteLabel->setText(player_w);
+	normalTools->whiteLabel->setText(player_w);
+	scoreTools->whiteLabel->setText(player_w);
 
 	rank_b.truncate (5);
 	int rblen = rank_b.length ();
 	player_b.truncate(15 - rblen);
 	if (rblen > 0)
 		player_b += " " + rank_b;
-	mainWidget->normalTools->blackLabel->setText(player_b);
-	mainWidget->scoreTools->blackLabel->setText(player_b);
+	normalTools->blackLabel->setText(player_b);
+	scoreTools->blackLabel->setText(player_b);
 }
 
 void MainWindow::update_game_tree ()
@@ -1479,12 +1464,12 @@ void MainWindow::slotEditFigure (bool on)
 void MainWindow::slotDiagChosen (int idx)
 {
 	game_state *st = m_figures.at (idx);
-	mainWidget->diagView->set_displayed (st);
+	diagView->set_displayed (st);
 }
 
 void MainWindow::slotDiagEdit (bool)
 {
-	game_state *st = mainWidget->diagView->displayed ();
+	game_state *st = diagView->displayed ();
 	FigureDialog dlg (st, this);
 	dlg.exec ();
 	update_figures ();
@@ -1492,7 +1477,7 @@ void MainWindow::slotDiagEdit (bool)
 
 void MainWindow::slotDiagASCII (bool)
 {
-	m_ascii_update_source = mainWidget->diagView;
+	m_ascii_update_source = diagView;
 	int print_num = m_ascii_update_source->displayed ()->print_numbering_inherited ();
 	m_ascii_dlg.cb_numbering->setChecked (print_num != 0);
 	update_ascii_dialog ();
@@ -1504,7 +1489,7 @@ void MainWindow::slotDiagASCII (bool)
 
 void MainWindow::slotDiagSVG (bool)
 {
-	m_svg_update_source = mainWidget->diagView;
+	m_svg_update_source = diagView;
 	int print_num = m_svg_update_source->displayed ()->print_numbering_inherited ();
 	m_svg_dlg.cb_numbering->setChecked (print_num != 0);
 	update_svg_dialog ();
@@ -1650,11 +1635,8 @@ void MainWindow::slotSetGameInfo(bool)
 		m_game->set_place (dlg.placeEdit->text().toStdString ());
 		m_game->set_copyright (dlg.copyrightEdit->text().toStdString ());
 
-		/* The board may call it if it wasn't modified yet, but otherwise
-		   we must call it ourselves to update the information.  */
-		updateCaption (true);
-		mainWidget->update_game_record (m_game);
-		gfx_board->setModified (true);
+ 		gfx_board->setModified (true);
+		update_game_record ();
 	}
 }
 
@@ -1725,9 +1707,9 @@ void MainWindow::slotViewMoveNumbers(bool toggle)
 void MainWindow::slotViewSlider(bool toggle)
 {
 	if (!toggle)
-		mainWidget->toggleSlider(false);
+		toggleSlider(false);
 	else
-		mainWidget->toggleSlider(true);
+		toggleSlider(true);
 
 	statusBar()->showMessage(tr("Ready."));
 }
@@ -1743,7 +1725,7 @@ void MainWindow::slotViewComment(bool toggle)
 
 void MainWindow::slotViewFigures(bool toggle)
 {
-	mainWidget->figuresWidget->setVisible (toggle);
+	figuresWidget->setVisible (toggle);
 	setFocus();
 
 	statusBar()->showMessage(tr("Ready."));
@@ -1764,24 +1746,24 @@ void MainWindow::slotViewVertComment(bool toggle)
 // set sidbar left or right
 void MainWindow::slotViewLeftSidebar()
 {
-	mainWidget->mainGridLayout->removeWidget(mainWidget->boardFrame);
-	mainWidget->mainGridLayout->removeWidget(mainWidget->toolsFrame);
+	mainGridLayout->removeWidget(boardFrame);
+	mainGridLayout->removeWidget(toolsFrame);
 
 	if (setting->readBoolEntry("SIDEBAR_LEFT"))
 	{
-		mainWidget->mainGridLayout->addWidget(mainWidget->toolsFrame, 0, 0, 2, 1);
-		mainWidget->mainGridLayout->addWidget(mainWidget->boardFrame, 0, 1, 2, 1);
+		mainGridLayout->addWidget(toolsFrame, 0, 0, 2, 1);
+		mainGridLayout->addWidget(boardFrame, 0, 1, 2, 1);
 	}
 	else
 	{
-		mainWidget->mainGridLayout->addWidget(mainWidget->toolsFrame, 0, 1, 2, 1);
-		mainWidget->mainGridLayout->addWidget(mainWidget->boardFrame, 0, 0, 2, 1);
+		mainGridLayout->addWidget(toolsFrame, 0, 1, 2, 1);
+		mainGridLayout->addWidget(boardFrame, 0, 0, 2, 1);
 	}
 }
 
 void MainWindow::slotViewSidebar(bool toggle)
 {
-	mainWidget->toggleSidebar(toggle);
+	toggleSidebar(toggle);
 	setting->writeBoolEntry("SIDEBAR", toggle);
 
 	statusBar()->showMessage(tr("Ready."));
@@ -1811,9 +1793,9 @@ void MainWindow::slotTimerForward()
 		int seconds;
 
 		if (isBlacksTurn)
-			tmp = mainWidget->normalTools->pb_timeBlack->text();
+			tmp = normalTools->pb_timeBlack->text();
 		else
-			tmp = mainWidget->normalTools->pb_timeWhite->text();
+			tmp = normalTools->pb_timeWhite->text();
 
 		int pos1 = 0;
 		int pos2;
@@ -2168,13 +2150,48 @@ void MainWindow::slotUpdateComment2()
 void MainWindow::updateFont()
 {
 	// editable fields
-	setFont(setting->fontComments);
+	setFont (setting->fontComments);
 
 	// observer
-	ListView_observers->setFont(setting->fontLists);
+	ListView_observers->setFont (setting->fontLists);
 
-	// rest: standard font
-	mainWidget->updateFont ();
+	QFont f (setting->fontStandard);
+	f.setBold (true);
+	scoreTools->totalBlack->setFont (f);
+	scoreTools->totalWhite->setFont (f);
+
+	setFont (setting->fontStandard);
+	normalTools->wtimeView->update_font (setting->fontClocks);
+	normalTools->btimeView->update_font (setting->fontClocks);
+
+	QFontMetrics fm (setting->fontStandard);
+	QRect r = fm.boundingRect ("Variation 12 of 15");
+	QRect r2 = fm.boundingRect ("Move 359 (W M19)");
+	int strings_width = std::max (r.width (), r2.width ());
+	int min_width = std::max (125, strings_width) + 25;
+	toolsFrame->setMaximumWidth (min_width);
+	toolsFrame->setMinimumWidth (min_width);
+	toolsFrame->resize (min_width, toolsFrame->height ());
+
+	int h = fm.height ();
+	QString wimg = ":/images/stone_w16.png";
+	QString bimg = ":/images/stone_b16.png";
+	if (h >= 32) {
+		 wimg = ":/images/stone_w32.png";
+		 bimg = ":/images/stone_b32.png";
+	} else if (h >= 22) {
+		wimg = ":/images/stone_w22.png";
+		bimg = ":/images/stone_b22.png";
+	}
+	QIcon icon (bimg);
+	icon.addPixmap (wimg, QIcon::Normal, QIcon::On);
+
+	colorButton->setIcon (icon);
+	colorButton->setIconSize (QSize (h, h));
+	normalTools->whiteStoneLabel->setPixmap (QPixmap (wimg));
+	normalTools->blackStoneLabel->setPixmap (QPixmap (bimg));
+	scoreTools->whiteStoneLabel->setPixmap (wimg);
+	scoreTools->blackStoneLabel->setPixmap (bimg);
 }
 
 // used in slot_editBoardInNewWindow()
@@ -2193,16 +2210,16 @@ void MainWindow::slot_editBoardInNewWindow(bool)
 
 #if 0 /* @@@ This has never worked.  */
 	// create update button
-	w->mainWidget->refreshButton->setText(tr("Update"));
+	w->refreshButton->setText(tr("Update"));
 #if 0
 	QToolTip::add(w->getInterfaceHandler()->refreshButton, tr("Update from online game"));
 	QWhatsThis::add(w->getInterfaceHandler()->refreshButton, tr("Update from online game to local board and supersede own changes."));
 #endif
-	w->mainWidget->refreshButton->setEnabled(true);
-	connect(w->mainWidget->refreshButton, SIGNAL(clicked()), this, SLOT(slotFileExportSgfClipB()));
-	connect(w->mainWidget->refreshButton, SIGNAL(clicked()), w, SLOT(slotFileImportSgfClipB()));
-	connect(w->mainWidget->refreshButton, SIGNAL(clicked()), w, SLOT(slotNavLastByTime()));
-	QTimer::singleShot(100, w, SLOT(slot_animateClick()));
+	w->refreshButton->setEnabled(true);
+	connect(w->refreshButton, &QPushButton::clicked, this, &MainWindow::slotFileExportSgfClipB);
+	connect(w->refreshButton, &QPushButton::clicked, w, &MainWindow::slotFileImportSgfClipB);
+	connect(w->refreshButton, &QPushButton::clicked, w, &MainWindow::slotNavLastByTime);
+	QTimer::singleShot(100, w, &MainWindow::slot_animateClick);
 #endif
 
 	w->navLast->trigger ();
@@ -2212,6 +2229,43 @@ void MainWindow::slot_editBoardInNewWindow(bool)
 void MainWindow::slotSoundToggle(bool toggle)
 {
 	local_stone_sound = !toggle;
+}
+
+// set a tab on toolsTabWidget
+void MainWindow::setToolsTabWidget(enum tabType p, enum tabState s)
+{
+	QWidget *w = NULL;
+
+	switch (p)
+	{
+		case tabNormalScore:
+			w = tab_ns;
+			break;
+
+		case tabTeachGameTree:
+			w = tab_tg;
+			break;
+
+		default:
+			return;
+	}
+
+	if (s == tabSet)
+	{
+		// check whether the page to switch to is enabled
+		if (!toolsTabWidget->isEnabled())
+			toolsTabWidget->setTabEnabled(toolsTabWidget->indexOf (w), true);
+
+		toolsTabWidget->setCurrentIndex(p);
+	}
+	else
+	{
+		// check whether the current page is to disable; then set to 'normal'
+		if (s == tabDisable && toolsTabWidget->currentIndex() == p)
+			toolsTabWidget->setCurrentIndex(tabNormalScore);
+
+		toolsTabWidget->setTabEnabled(toolsTabWidget->indexOf (w), s == tabEnable);
+	}
 }
 
 void MainWindow::setGameMode(GameMode mode)
@@ -2224,9 +2278,9 @@ void MainWindow::setGameMode(GameMode mode)
 		editGroup->setEnabled (false);
 	}
 
-	mainWidget->normalTools->anGroup->setVisible (mode == modeNormal || mode == modeObserve);
-	mainWidget->normalTools->anStartButton->setVisible (mode == modeNormal || mode == modeObserve);
-	mainWidget->normalTools->anPauseButton->setVisible (mode == modeNormal || mode == modeObserve);
+	normalTools->anGroup->setVisible (mode == modeNormal || mode == modeObserve);
+	normalTools->anStartButton->setVisible (mode == modeNormal || mode == modeObserve);
+	normalTools->anPauseButton->setVisible (mode == modeNormal || mode == modeObserve);
 
 	bool enable_nav = mode == modeNormal; /* @@@ teach perhaps? */
 
@@ -2310,37 +2364,89 @@ void MainWindow::setGameMode(GameMode mode)
 		break;
 
 	}
-	mainWidget->setGameMode (mode);
+
+	setToolsTabWidget(tabTeachGameTree, mode == modeTeach ? tabEnable : tabDisable);
+	if (mode != modeTeach && mode != modeScoreRemote && mode != modeScore && tab_tg->parent () != nullptr)
+		tab_tg->setParent (nullptr);
+
+	passButton->setVisible (mode != modeObserve);
+	doneButton->setVisible (mode == modeScore || mode == modeScoreRemote);
+	scoreButton->setVisible (mode == modeNormal || mode == modeEdit || mode == modeScore);
+	undoButton->setVisible (mode == modeScoreRemote || mode == modeMatch || mode == modeComputer || mode == modeTeach);
+	adjournButton->setVisible (mode == modeMatch || mode == modeTeach || mode == modeScoreRemote);
+	resignButton->setVisible (mode == modeMatch || mode == modeComputer || mode == modeTeach || mode == modeScoreRemote);
+	resignButton->setEnabled (mode != modeScoreRemote);
+	refreshButton->setVisible (false);
+	editButton->setVisible (mode == modeObserve);
+	editPosButton->setVisible (mode == modeNormal || mode == modeEdit || mode == modeScore);
+	editPosButton->setEnabled (mode == modeNormal || mode == modeEdit);
+	colorButton->setEnabled (mode == modeEdit || mode == modeNormal);
+
+	slider->setEnabled (mode == modeNormal || mode == modeObserve || mode == modeBatch);
+
+	passButton->setEnabled (mode != modeScore && mode != modeScoreRemote);
+	editButton->setEnabled (mode != modeScore);
+	scoreButton->setEnabled (mode != modeEdit);
+
+	gfx_board->setMode (mode);
+
+	scoreTools->setVisible (mode == modeScore || mode == modeScoreRemote);
+	normalTools->setVisible (mode != modeScore && mode != modeScoreRemote);
+
+	if (mode == modeMatch || mode == modeTeach) {
+		qDebug () << gfx_board->player_is (white) << " : " << gfx_board->player_is (black);
+		QWidget *timeSelf = gfx_board->player_is (black) ? normalTools->btimeView : normalTools->wtimeView;
+		QWidget *timeOther = gfx_board->player_is (black) ? normalTools->wtimeView : normalTools->btimeView;
+#if 0
+		switch (gsName)
+		{
+		case IGS:
+			timeSelf->setToolTip(tr("remaining time / stones"));
+			break;
+
+		default:
+			timeSelf->setToolTip(tr("click to pause/unpause the game"));
+			break;
+		}
+#else
+		timeSelf->setToolTip (tr("click to pause/unpause the game"));
+#endif
+		timeOther->setToolTip (tr("click to add 1 minute to your opponent's clock"));
+	} else {
+		normalTools->btimeView->setToolTip (tr ("Time remaining for this move"));
+		normalTools->wtimeView->setToolTip (tr ("Time remaining for this move"));
+	}
+
 }
 
 void MainWindow::update_figure_display ()
 {
-	game_state *fig = mainWidget->diagView->displayed ();
+	game_state *fig = diagView->displayed ();
 	if (fig != nullptr) {
 		int flags = fig->figure_flags ();
-		mainWidget->diagView->set_show_coords (!(flags & 1));
-		mainWidget->diagView->set_show_figure_caps (!(flags & 256));
-		mainWidget->diagView->set_show_hoshis (!(flags & 512));
-		mainWidget->diagView->changeSize ();
+		diagView->set_show_coords (!(flags & 1));
+		diagView->set_show_figure_caps (!(flags & 256));
+		diagView->set_show_hoshis (!(flags & 512));
+		diagView->changeSize ();
 	}
 }
 
 void MainWindow::update_figures ()
 {
 	game_state *gs = gfx_board->displayed ();
-	game_state *old_fig = mainWidget->diagView->displayed ();
+	game_state *old_fig = diagView->displayed ();
 	bool keep_old_fig = false;
 	m_figures.clear ();
-	mainWidget->diagComboBox->clear ();
+	diagComboBox->clear ();
 	bool main_fig = gs->has_figure ();
 	editFigure->setChecked (main_fig);
 	if (main_fig) {
 		const std::string &title = gs->figure_title ();
 		m_figures.push_back (gs);
 		if (title == "")
-			mainWidget->diagComboBox->addItem ("Current position (untitled)");
+			diagComboBox->addItem ("Current position (untitled)");
 		else
-			mainWidget->diagComboBox->addItem (QString::fromStdString (title));
+			diagComboBox->addItem (QString::fromStdString (title));
 		if (gs == old_fig)
 			keep_old_fig = true;
 	}
@@ -2354,13 +2460,13 @@ void MainWindow::update_figures ()
 		if (it->has_figure ()) {
 			if (count == 1 && m_figures.size () != 0) {
 				m_figures.push_back (nullptr);
-				mainWidget->diagComboBox->insertSeparator (1);
+				diagComboBox->insertSeparator (1);
 			}
 			const std::string &title = it->figure_title ();
 			if (title == "")
-				mainWidget->diagComboBox->addItem ("Subposition " + QString::number (count) + " (untitled)");
+				diagComboBox->addItem ("Subposition " + QString::number (count) + " (untitled)");
 			else
-				mainWidget->diagComboBox->addItem (QString::fromStdString (title));
+				diagComboBox->addItem (QString::fromStdString (title));
 			m_figures.push_back (it);
 			count++;
 			if (it == old_fig)
@@ -2368,30 +2474,33 @@ void MainWindow::update_figures ()
 		}
 	}
 	bool have_any = m_figures.size () != 0;
-	mainWidget->diagComboBox->setEnabled (have_any);
-	mainWidget->diagEditButton->setEnabled (have_any);
-	mainWidget->diagASCIIButton->setEnabled (have_any);
-	mainWidget->diagSVGButton->setEnabled (have_any);
+	diagComboBox->setEnabled (have_any);
+	diagEditButton->setEnabled (have_any);
+	diagASCIIButton->setEnabled (have_any);
+	diagSVGButton->setEnabled (have_any);
 	if (setting->readBoolEntry ("BOARD_DIAGCLEAR")) {
-		mainWidget->diagView->setEnabled (have_any);
+		diagView->setEnabled (have_any);
 		if (!have_any)
-			mainWidget->diagView->set_displayed (m_empty_state);
+			diagView->set_displayed (m_empty_state);
 	}
 	if (!have_any) {
-		mainWidget->diagComboBox->addItem ("No diagrams available");
+		diagComboBox->addItem ("No diagrams available");
 	} else if (main_fig)
-		mainWidget->diagView->set_displayed (gs);
+		diagView->set_displayed (gs);
 	else if (!keep_old_fig) {
-		mainWidget->diagView->set_displayed (m_figures[0]);
+		diagView->set_displayed (m_figures[0]);
 	}
 	update_figure_display ();
 }
 
 void MainWindow::setMoveData (game_state &gs, const go_board &b, GameMode mode)
 {
-	int sons = gs.n_children ();
-
 	bool is_root_node = gs.root_node_p ();
+	int brothers = gs.n_siblings ();
+	int sons = gs.n_children ();
+	stone_color to_move = gs.to_move ();
+	int move_nr = gs.move_number ();
+	int var_nr = gs.var_number ();
 
 	switch (mode)
 	{
@@ -2451,7 +2560,117 @@ void MainWindow::setMoveData (game_state &gs, const go_board &b, GameMode mode)
 	}
 
 	update_figures ();
-	mainWidget->setMoveData (gs, b, mode);
+
+	QString w_str = QObject::tr("W");
+	QString b_str = QObject::tr("B");
+
+	QString s (QObject::tr ("Move") + " ");
+	s.append (QString::number (move_nr));
+	if (move_nr == 0) {
+		/* Nothing to add for the root.  */
+	} else if (gs.was_pass_p ()) {
+		s.append(" (" + (to_move == black ? w_str : b_str) + " ");
+		s.append(" " + QObject::tr("Pass") + ")");
+	} else if (gs.was_score_p ()) {
+		s.append(tr (" (Scoring)"));
+	} else if (!gs.was_edit_p ()) {
+		int x = gs.get_move_x ();
+		int y = gs.get_move_y ();
+		s.append(" (");
+		s.append((to_move == black ? w_str : b_str) + " ");
+		s.append(QString(QChar(static_cast<const char>('A' + (x < 9 ? x : x + 1)))));
+		s.append(QString::number (b.size_y () - y) + ")");
+	}
+	s.append (QObject::tr ("\nVariation ") + QString::number (var_nr)
+		  + QObject::tr (" of ") + QString::number (1 + brothers) + "\n");
+	s.append (QString::number (sons) + " ");
+	if (sons == 1)
+		s.append (QObject::tr("child position"));
+	else
+		s.append (QObject::tr("child positions"));
+	moveNumLabel->setText(s);
+
+	bool warn = false;
+	if (gs.was_move_p () && gs.get_move_color () == to_move)
+		warn = true;
+	if (gs.root_node_p ()) {
+		bool empty = b.position_empty_p ();
+		bool b_to_move = to_move == black;
+		warn |= empty != b_to_move;
+	}
+	turnWarning->setVisible (warn);
+	colorButton->setChecked (to_move == white);
+#if 0
+	statusTurn->setText(" " + s.right (s.length() - 5) + " ");  // Without 'Move '
+	statusNav->setText(" " + QString::number(brothers) + "/" + QString::number(sons));
+#endif
+
+	if (to_move == black)
+		turnLabel->setText(QObject::tr ("Black to play"));
+	else
+		turnLabel->setText(QObject::tr ("White to play"));
+
+	bool good_mode = mode == modeNormal || mode == modeObserve || mode == modeBatch;
+
+	const QStyle *style = qgo_app->style ();
+	int iconsz = style->pixelMetric (QStyle::PixelMetric::PM_ToolBarIconSize);
+
+	QSize sz (iconsz, iconsz);
+	goPrevButton->setIconSize (sz);
+	goNextButton->setIconSize (sz);
+	goFirstButton->setIconSize (sz);
+	goLastButton->setIconSize (sz);
+	prevCommentButton->setIconSize (sz);
+	nextCommentButton->setIconSize (sz);
+	prevNumberButton->setIconSize (sz);
+	nextNumberButton->setIconSize (sz);
+
+	goPrevButton->setEnabled (good_mode && !is_root_node);
+	goNextButton->setEnabled (good_mode && sons > 0);
+	goFirstButton->setEnabled (good_mode && !is_root_node);
+	goLastButton->setEnabled (good_mode && sons > 0);
+	prevCommentButton->setEnabled (good_mode && !is_root_node);
+	nextCommentButton->setEnabled (good_mode && sons > 0);
+	prevNumberButton->setEnabled (good_mode && !is_root_node);
+	nextNumberButton->setEnabled (good_mode && sons > 0);
+
+	scoreTools->setVisible (mode == modeScore || mode == modeScoreRemote || gs.was_score_p ());
+	normalTools->setVisible (mode != modeScore && mode != modeScoreRemote && !gs.was_score_p ());
+
+	if (mode == modeNormal) {
+		normalTools->wtimeView->set_time (&gs, white);
+		normalTools->btimeView->set_time (&gs, black);
+	}
+	// Update slider
+	toggleSliderSignal (false);
+
+	int mv = gs.active_var_max ();
+	setSliderMax (mv);
+	slider->setValue (move_nr);
+	toggleSliderSignal (true);
+}
+
+void MainWindow::on_colorButton_clicked (bool)
+{
+	stone_color col = gfx_board->swap_edit_to_move ();
+	colorButton->setChecked (col == white);
+}
+
+/* The "Edit Position" button: Switch to edit mode.  */
+void MainWindow::doEditPos (bool toggle)
+{
+	qDebug("MainWindow::doEditPos()");
+	if (toggle)
+		setGameMode (modeEdit);
+	else
+		setGameMode (modeNormal);
+}
+
+/* The "Edit Game" button: Open a new window to edit observed game.  */
+void MainWindow::doEdit()
+{
+	qDebug("MainWindow::doEdit()");
+	slot_editBoardInNewWindow(false);
 }
 
 void MainWindow::player_move (stone_color, int, int)
@@ -2466,6 +2685,30 @@ void MainWindow::doPass()
 	emit signal_pass();
 }
 
+void MainWindow::doRealScore (bool toggle)
+{
+	qDebug("MainWindow::doRealScore()");
+	/* Can be called when the user toggles the button, but also when a GTP board
+	   enters scoring after two passes.  */
+	scoreButton->setChecked (toggle);
+	if (toggle)
+	{
+		m_remember_mode = gfx_board->getGameMode();
+		m_remember_tab = toolsTabWidget->currentIndex();
+
+		setToolsTabWidget(tabTeachGameTree, tabDisable);
+
+		setGameMode (modeScore);
+	}
+	else
+	{
+		setToolsTabWidget(tabTeachGameTree, tabEnable);
+
+		setGameMode (m_remember_mode);
+		setToolsTabWidget(static_cast<tabType>(m_remember_tab));
+	}
+}
+
 void MainWindow::doCountDone()
 {
 	if (gfx_board->getGameMode () == modeScoreRemote) {
@@ -2474,10 +2717,10 @@ void MainWindow::doCountDone()
 	}
 
 	float komi = m_game->komi ();
-	int capW = mainWidget->scoreTools->capturesWhite->text().toInt();
-	int capB = mainWidget->scoreTools->capturesBlack->text().toInt();
-	int terrW = mainWidget->scoreTools->terrWhite->text().toInt();
-	int terrB = mainWidget->scoreTools->terrBlack->text().toInt();
+	int capW = scoreTools->capturesWhite->text().toInt();
+	int capB = scoreTools->capturesBlack->text().toInt();
+	int terrW = scoreTools->terrWhite->text().toInt();
+	int terrB = scoreTools->terrBlack->text().toInt();
 
 	float totalWhite = capW + terrW + komi;
 	int totalBlack = capB + terrB;
@@ -2514,7 +2757,7 @@ void MainWindow::doCountDone()
 	//if (QMessageBox::information(this, PACKAGE " - " + tr("Game Over"), s, tr("Ok"), tr("Update gameinfo")) == 1)
 
 	gfx_board->doCountDone();
-	mainWidget->doRealScore (false);
+	doRealScore (false);
 }
 
 void MainWindow::doResign()
@@ -2577,7 +2820,7 @@ void MainWindow_GTP::gtp_played_pass ()
 		/* As of now, we're disconnected, and the scoring function should
 		   remember normal mode.  */
 		setGameMode (modeNormal);
-		mainWidget->doRealScore (true);
+		doRealScore (true);
 	}
 }
 
@@ -2652,7 +2895,7 @@ void MainWindow_GTP::doPass ()
 		/* As of now, we're disconnected, and the scoring function should
 		   remember normal mode.  */
 		setGameMode (modeNormal);
-		mainWidget->doRealScore (true);
+		doRealScore (true);
 	} else
 		m_gtp->request_move (col == black ? white : black);
 }
@@ -2671,30 +2914,197 @@ void MainWindow_GTP::doResign ()
 
 void MainWindow::update_analysis (analyzer state)
 {
-	mainWidget->evalView->setVisible (state == analyzer::running || state == analyzer::paused);
+	evalView->setVisible (state == analyzer::running || state == analyzer::paused);
 	anConnect->setEnabled (state == analyzer::disconnected);
 	anConnect->setChecked (state != analyzer::disconnected);
 	anDisconnect->setEnabled (state != analyzer::disconnected);
-	mainWidget->normalTools->anStartButton->setChecked (state != analyzer::disconnected);
+	normalTools->anStartButton->setChecked (state != analyzer::disconnected);
 	if (state == analyzer::disconnected)
-		mainWidget->normalTools->anStartButton->setIcon (QIcon (":/images/exit.png"));
+		normalTools->anStartButton->setIcon (QIcon (":/images/exit.png"));
 	else if (state == analyzer::starting)
-		mainWidget->normalTools->anStartButton->setIcon (QIcon (":/images/power-standby.png"));
+		normalTools->anStartButton->setIcon (QIcon (":/images/power-standby.png"));
 	else
-		mainWidget->normalTools->anStartButton->setIcon (QIcon (":/images/power-on.png"));
-	mainWidget->normalTools->anPrimaryBox->setEnabled (state == analyzer::running);
-	mainWidget->normalTools->anShownBox->setEnabled (state == analyzer::running);
+		normalTools->anStartButton->setIcon (QIcon (":/images/power-on.png"));
+	normalTools->anPrimaryBox->setEnabled (state == analyzer::running);
+	normalTools->anShownBox->setEnabled (state == analyzer::running);
 	anPause->setEnabled (state != analyzer::disconnected);
-	mainWidget->normalTools->anPauseButton->setEnabled (state != analyzer::disconnected);
-	mainWidget->normalTools->anPauseButton->setChecked (state == analyzer::paused);
+	normalTools->anPauseButton->setEnabled (state != analyzer::disconnected);
+	normalTools->anPauseButton->setChecked (state == analyzer::paused);
 	anPause->setChecked (state == analyzer::paused);
 
 	if (state == analyzer::disconnected) {
-		mainWidget->normalTools->primaryCoords->setText ("");
-		mainWidget->normalTools->primaryWR->setText ("");
-		mainWidget->normalTools->primaryVisits->setText ("");
-		mainWidget->normalTools->shownCoords->setText ("");
-		mainWidget->normalTools->shownWR->setText ("");
-		mainWidget->normalTools->shownVisits->setText ("");
+		normalTools->primaryCoords->setText ("");
+		normalTools->primaryWR->setText ("");
+		normalTools->primaryVisits->setText ("");
+		normalTools->shownCoords->setText ("");
+		normalTools->shownWR->setText ("");
+		normalTools->shownVisits->setText ("");
 	}
+}
+
+void MainWindow::recalc_scores(const go_board &b)
+{
+	int caps_b, caps_w, score_b, score_w;
+	b.get_scores (caps_b, caps_w, score_b, score_w);
+
+	scoreTools->capturesWhite->setText(QString::number(caps_w));
+	scoreTools->capturesBlack->setText(QString::number(caps_b));
+	normalTools->capturesWhite->setText(QString::number(caps_w));
+	normalTools->capturesBlack->setText(QString::number(caps_b));
+
+	scoreTools->terrWhite->setText(QString::number(score_w));
+	scoreTools->totalWhite->setText(QString::number(score_w + caps_w + m_game->komi ()));
+	scoreTools->terrBlack->setText(QString::number(score_b));
+	scoreTools->totalBlack->setText(QString::number(score_b + caps_b));
+
+	double res = score_w + caps_w + m_game->komi () - score_b - caps_b;
+	if (res < 0)
+		scoreTools->result->setText ("B+" + QString::number (-res));
+	else if (res == 0)
+		scoreTools->result->setText ("Jigo");
+	else
+		scoreTools->result->setText ("W+" + QString::number (res));
+}
+
+void MainWindow::setSliderMax(int n)
+{
+	if (n < 0)
+		n = 0;
+
+	slider->setMaximum(n);
+	sliderRightLabel->setText(QString::number(n));
+}
+
+void MainWindow::sliderChanged(int n)
+{
+	if (sliderSignalToggle)
+		gfx_board->goto_nth_move_in_var (n);
+}
+
+void MainWindow::toggleSlider(bool b)
+{
+	if (showSlider == b)
+		return;
+
+	showSlider = b;
+
+	if (b)
+	{
+		slider->show();
+		sliderLeftLabel->show();
+		sliderRightLabel->show();
+	}
+	else
+	{
+		slider->hide();
+		sliderLeftLabel->hide();
+		sliderRightLabel->hide();
+	}
+}
+
+void MainWindow::toggleSidebar(bool toggle)
+{
+	if (!toggle)
+		toolsFrame->hide();
+	else
+		toolsFrame->show();
+}
+
+void MainWindow::setTimes(const QString &btime, const QString &bstones, const QString &wtime, const QString &wstones,
+			  bool warn_black, bool warn_white, int timer_cnt)
+{
+	if (!btime.isEmpty())
+	{
+		if (bstones != QString("-1"))
+			normalTools->btimeView->set_text(btime + " / " + bstones);
+		else
+			normalTools->btimeView->set_text(btime);
+	}
+
+	if (!wtime.isEmpty())
+	{
+		if (wstones != QString("-1"))
+			normalTools->wtimeView->set_text(wtime + " / " + wstones);
+		else
+			normalTools->wtimeView->set_text(wtime);
+	}
+
+	// warn if I am within the last 10 seconds
+	if (gfx_board->getGameMode() == modeMatch)
+	{
+		if (gfx_board->player_is (black))
+		{
+			normalTools->wtimeView->flash (false);
+			normalTools->btimeView->flash (timer_cnt % 2 != 0 && warn_black);
+			if (warn_black)
+				qgo->playTimeSound();
+		}
+		else if (gfx_board->player_is (white) && warn_white)
+		{
+			normalTools->btimeView->flash (false);
+			normalTools->wtimeView->flash (timer_cnt % 2 != 0 && warn_white);
+			if (warn_white)
+				qgo->playTimeSound();
+		}
+	} else {
+		normalTools->btimeView->flash (false);
+		normalTools->wtimeView->flash (false);
+	}
+}
+
+void MainWindow::set_eval (double eval)
+{
+	m_eval = eval;
+	int w = evalView->width ();
+	int h = evalView->height ();
+	m_eval_canvas->setSceneRect (0, 0, w, h);
+	m_eval_bar->setRect (0, 0, w, h * eval);
+	m_eval_bar->setPos (0, 0);
+	m_eval_canvas->update ();
+}
+
+void MainWindow::set_eval (const QString &move, double eval, stone_color to_move, int visits)
+{
+	evalView->setBackgroundBrush (QBrush (Qt::white));
+	m_eval_bar->setBrush (QBrush (Qt::black));
+	set_eval (to_move == black ? eval : 1 - eval);
+
+	int winrate_for = setting->readIntEntry ("ANALYSIS_WINRATE");
+	stone_color wr_swap_col = winrate_for == 0 ? white : winrate_for == 1 ? black : none;
+	if (to_move == wr_swap_col)
+		eval = 1 - eval;
+
+	normalTools->primaryCoords->setText (move);
+	normalTools->primaryWR->setText (QString::number (100 * eval, 'f', 1));
+	normalTools->primaryVisits->setText (QString::number (visits));
+	if (winrate_for == 0 || (winrate_for == 2 && to_move == black)) {
+		normalTools->pWRLabel->setText (tr ("B Win %"));
+		normalTools->sWRLabel->setText (tr ("B Win %"));
+	} else {
+		normalTools->pWRLabel->setText (tr ("W Win %"));
+		normalTools->sWRLabel->setText (tr ("W Win %"));
+	}
+}
+
+void MainWindow::set_2nd_eval (const QString &move, double eval, stone_color to_move, int visits)
+{
+	if (move.isEmpty ()) {
+		normalTools->shownCoords->setText ("");
+		normalTools->shownWR->setText ("");
+		normalTools->shownVisits->setText ("");
+	} else {
+		int winrate_for = setting->readIntEntry ("ANALYSIS_WINRATE");
+		stone_color wr_swap_col = winrate_for == 0 ? white : winrate_for == 1 ? black : none;
+		if (to_move == wr_swap_col)
+			eval = 1 - eval;
+		normalTools->shownCoords->setText (move);
+		normalTools->shownWR->setText (QString::number (100 * eval, 'f', 1));
+		normalTools->shownVisits->setText (QString::number (visits));
+	}
+}
+
+void MainWindow::grey_eval_bar ()
+{
+	evalView->setBackgroundBrush (QBrush (Qt::lightGray));
+	m_eval_bar->setBrush (QBrush (Qt::darkGray));
 }

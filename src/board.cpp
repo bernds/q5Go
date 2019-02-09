@@ -1043,7 +1043,7 @@ int Board::extract_analysis (go_board &b)
 	double primary;
 	game_state *pv = analysis_at (curX, curY, idx, primary);
 	if (pv == nullptr) {
-		m_main_widget->set_2nd_eval (nullptr, 0, none, 0);
+		m_board_win->set_2nd_eval (nullptr, 0, none, 0);
 		return 0;
 	} else {
 		int x = pv->get_move_x ();
@@ -1056,7 +1056,7 @@ int Board::extract_analysis (go_board &b)
 		if (x > 7)
 			x++;
 		QString move = QChar ('A' + x) + QString::number (b.size_y () - y);
-		m_main_widget->set_2nd_eval (move, wr, to_move, visits);
+		m_board_win->set_2nd_eval (move, wr, to_move, visits);
 	}
 	int depth = 0;
 	game_state *first = pv;
@@ -1312,7 +1312,7 @@ void Board::sync_appearance (bool board_only)
 	}
 	BoardView::sync_appearance (board_only);
 	const go_board &b = m_edit_board == nullptr ? m_displayed->get_board () : *m_edit_board;
-	m_main_widget->recalc_scores (b);
+	m_board_win->recalc_scores (b);
 	if (!board_only) {
 		m_board_win->setMoveData (*m_displayed, b, m_game_mode);
 		m_board_win->update_game_tree ();
@@ -2110,7 +2110,7 @@ void Board::gtp_exited ()
 
 void Board::eval_received (const QString &move, int visits)
 {
-	m_main_widget->set_eval (move, m_primary_eval, m_displayed->to_move (), visits);
+	m_board_win->set_eval (move, m_primary_eval, m_displayed->to_move (), visits);
 	sync_appearance ();
 }
 

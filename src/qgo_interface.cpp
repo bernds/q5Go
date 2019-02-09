@@ -68,7 +68,7 @@ MainWindow_IGS::MainWindow_IGS (QWidget *parent, std::shared_ptr<game_record> gr
 {
 	gfx_board->set_player_colors (playing_w, playing_b);
 	/* Update clock tooltips after recording the player colors.  */
-	mainWidget->setGameMode (mode);
+	setGameMode (mode);
 }
 
 MainWindow_IGS::~MainWindow_IGS ()
@@ -215,7 +215,7 @@ void qGoIF::game_end (qGoBoard *qb, const QString &txt)
 			QString bplayer = qb->get_bplayer();
 			if (bplayer == myName || wplayer == myName)
 				// can only reload own games
-				qb->get_win()->getMainWidget()->refreshButton->setText(tr("LOAD"));
+				qb->get_win()->refreshButton->setText(tr("LOAD"));
 			qDebug() << "game adjourned... #" << QString::number(qb->get_id());
 			qb->set_adj(true);
 		}
@@ -315,7 +315,7 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 						qb->get_win()->updateCaption(true);
 
 						// renew refresh button
-						qb->get_win()->getMainWidget()->refreshButton->setText(QObject::tr("Refresh", "button label"));
+						qb->get_win()->refreshButton->setText(QObject::tr("Refresh", "button label"));
 
 						// increase number of observed games
 						emit signal_addToObservationList(-2);
@@ -1121,13 +1121,13 @@ qGoBoard::~qGoBoard()
 void qGoBoard::observer_list_start ()
 {
 	if (win) {
-		win->getMainWidget()->cb_opponent->clear();
-		win->getMainWidget()->TextLabel_opponent->setText(tr("opponent:"));
-		win->getMainWidget()->cb_opponent->addItem(tr("-- none --"));
+		win->cb_opponent->clear();
+		win->TextLabel_opponent->setText(tr("opponent:"));
+		win->cb_opponent->addItem(tr("-- none --"));
 		if (havePupil && ttOpponent != tr("-- none --"))
 		{
-			win->getMainWidget()->cb_opponent->addItem(ttOpponent, 1);
-			win->getMainWidget()->cb_opponent->setCurrentIndex(1);
+			win->cb_opponent->addItem(ttOpponent, 1);
+			win->cb_opponent->setCurrentIndex(1);
 		}
 	}
 
@@ -1145,9 +1145,9 @@ void qGoBoard::observer_list_entry (const QString &n, const QString &r)
 	list.append (rk_item);
 	m_observers.appendRow (list);
 	if (win) {
-		win->getMainWidget()->cb_opponent->addItem (n);
-		int cnt = win->getMainWidget()->cb_opponent->count();
-		win->getMainWidget()->TextLabel_opponent->setText(tr("opponent:") + " (" + QString::number(cnt-1) + ")");
+		win->cb_opponent->addItem (n);
+		int cnt = win->cb_opponent->count();
+		win->TextLabel_opponent->setText(tr("opponent:") + " (" + QString::number(cnt-1) + ")");
 	}
 }
 
@@ -1231,21 +1231,21 @@ void qGoBoard::game_startup ()
 	connect(win, SIGNAL(signal_done()), this, SLOT(slot_doDone()));
 
 	// teach tools
-	connect(win->getMainWidget()->cb_opponent, SIGNAL(activated(const QString&)), this, SLOT(slot_ttOpponentSelected(const QString&)));
-	connect(win->getMainWidget()->pb_controls, SIGNAL(toggled(bool)), this, SLOT(slot_ttControls(bool)));
-	connect(win->getMainWidget()->pb_mark, SIGNAL(toggled(bool)), this, SLOT(slot_ttMark(bool)));
+	connect(win->cb_opponent, SIGNAL(activated(const QString&)), this, SLOT(slot_ttOpponentSelected(const QString&)));
+	connect(win->pb_controls, SIGNAL(toggled(bool)), this, SLOT(slot_ttControls(bool)));
+	connect(win->pb_mark, SIGNAL(toggled(bool)), this, SLOT(slot_ttMark(bool)));
 
 	if (ExtendedTeachingGame) {
 		// make teaching features visible while observing
-		win->getMainWidget()->cb_opponent->setDisabled(IamTeacher);
-		win->getMainWidget()->pb_controls->setDisabled(IamTeacher);
-		win->getMainWidget()->pb_mark->setDisabled(IamTeacher);
+		win->cb_opponent->setDisabled(IamTeacher);
+		win->pb_controls->setDisabled(IamTeacher);
+		win->pb_mark->setDisabled(IamTeacher);
 	}
 
 	if (gameMode == modeMatch || gameMode == modeTeach) {
-		connect (win->getMainWidget()->normalTools->btimeView,
+		connect (win->normalTools->btimeView,
 			 &ClockView::clicked, this, &qGoBoard::slot_addtimePauseB);
-		connect (win->getMainWidget()->normalTools->wtimeView,
+		connect (win->normalTools->wtimeView,
 			 &ClockView::clicked, this, &qGoBoard::slot_addtimePauseW);
 	}
 
@@ -1355,7 +1355,7 @@ void qGoBoard::set_komi(const QString &k)
 #if 0
 	gd.komi = k_.toFloat();
 	win->getBoard()->setGameData(&gd);
-	win->getMainWidget()->normalTools->komi->setText(k_);
+	win->normalTools->komi->setText(k_);
 #endif
 }
 
@@ -1419,11 +1419,11 @@ void qGoBoard::timerEvent(QTimerEvent*)
 		chk_b--;
 		if (chk_b < bt_i + 20)
 			chk_b = bt_i;
-		win->getMainWidget ()->setTimes("(" + secToTime(chk_b) + ") " + secToTime(bt_i), b_stones,
+		win->setTimes("(" + secToTime(chk_b) + ") " + secToTime(bt_i), b_stones,
 						"(" + secToTime(chk_w) + ") " + wt, w_stones,
 						warn, false, bt_i);
 #else
-		win->getMainWidget ()->setTimes(secToTime(bt_i), b_stones, wt, w_stones, warn, false, bt_i);
+		win->setTimes(secToTime(bt_i), b_stones, wt, w_stones, warn, false, bt_i);
 #endif
 	}
 	else
@@ -1437,11 +1437,11 @@ void qGoBoard::timerEvent(QTimerEvent*)
 		chk_w--;
 		if (chk_w < bt_i + 20)
 			chk_w = wt_i;
-		win->getMainWidget ()->setTimes("(" + secToTime(chk_b) + ") " + bt, b_stones,
+		win->setTimes("(" + secToTime(chk_b) + ") " + bt, b_stones,
 					  "(" + secToTime(chk_w) + ") " + secToTime(wt_i), w_stones,
 						false, warn, wt_i);
 #else
-		win->getMainWidget ()->setTimes(bt, b_stones, secToTime(wt_i), w_stones, false, warn, wt_i);
+		win->setTimes(bt, b_stones, secToTime(wt_i), w_stones, false, warn, wt_i);
 #endif
 	}
 }
@@ -1485,7 +1485,7 @@ void qGoBoard::setTimerInfo(const QString &btime, const QString &bstones, const 
 #if 0
 	// set initial timer until game is initialized
 	if (!have_gameData)
-		win->getMainWidget ()->setTimes(bt, bstones, wt, wstones,
+		win->setTimes(bt, bstones, wt, wstones,
 					  bt_i <= BY_timer && bt_i > -1 && mv_counter % 2 && bt_i %2,
 					  wt_i <= BY_timer && wt_i > -1 && (mv_counter % 2 && bt_i %2) == 0);
 #endif
@@ -1496,14 +1496,14 @@ void qGoBoard::addtime_b(int m)
 {
 	bt_i += m*60;
 	bt = secToTime(bt_i);
-	win->getMainWidget ()->setTimes(secToTime(bt_i), b_stones, wt, w_stones, false, false, 0);
+	win->setTimes(secToTime(bt_i), b_stones, wt, w_stones, false, false, 0);
 }
 
 void qGoBoard::addtime_w(int m)
 {
 	wt_i += m*60;
 	wt = secToTime(wt_i);
-	win->getMainWidget ()->setTimes(bt, b_stones, secToTime(wt_i), w_stones, false, false, 0);
+	win->setTimes(bt, b_stones, secToTime(wt_i), w_stones, false, false, 0);
 }
 
 void qGoBoard::set_Mode_real(GameMode mode)
@@ -1700,16 +1700,16 @@ void qGoBoard::send_kibitz(const QString &msg)
 			{
 				// teacher gives controls to pupil
 				haveControls = true;
-				win->getMainWidget()->pb_controls->setEnabled(true);
-				win->getMainWidget()->pb_controls->setChecked(true);
+				win->pb_controls->setEnabled(true);
+				win->pb_controls->setChecked(true);
 				return;
 			}
 			else if (msg.indexOf("#TC:OFF") != -1)
 			{
 				// teacher takes controls back
 				haveControls = false;
-				win->getMainWidget()->pb_controls->setDisabled(true);
-				win->getMainWidget()->pb_controls->setChecked(false);
+				win->pb_controls->setDisabled(true);
+				win->pb_controls->setChecked(false);
 				return;
 			}
 		}
@@ -1721,7 +1721,7 @@ void qGoBoard::send_kibitz(const QString &msg)
 		{
 			// pupil gives controls back
 			haveControls = true;
-			win->getMainWidget()->pb_controls->setChecked(false);
+			win->pb_controls->setChecked(false);
 			return;
 		}
 		else if (havePupil
@@ -1996,7 +1996,7 @@ void qGoBoard::slot_ttOpponentSelected(const QString &opponent)
 		// teacher has controls when opponent is selected
 		haveControls = IamTeacher;
 	}
-	win->getMainWidget()->pb_controls->setEnabled(IamTeacher && havePupil);
+	win->pb_controls->setEnabled(IamTeacher && havePupil);
 
 	if (IamTeacher)
 	{
@@ -2011,7 +2011,7 @@ void qGoBoard::slot_ttOpponentSelected(const QString &opponent)
 	{
 		bool found = false;
 		// look for correct item
-		QComboBox *cb = win->getMainWidget()->cb_opponent;
+		QComboBox *cb = win->cb_opponent;
 		int cnt = cb->count();
 		for (int i = 0; i < cnt && !found; i++)
 		{
@@ -2091,7 +2091,7 @@ void qGoBoard::slot_ttControls(bool on)
 			return;
 
 		emit signal_sendcommand("kibitz " + QString::number(id) + " #OC:OFF", false);
-		win->getMainWidget()->pb_controls->setDisabled(true);
+		win->pb_controls->setDisabled(true);
 		haveControls = false;
 	}
 }

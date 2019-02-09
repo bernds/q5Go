@@ -1,42 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWidgetGui</class>
- <widget class="QWidget" name="MainWidgetGui">
+ <class>BoardWindow</class>
+ <widget class="QMainWindow" name="BoardWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1026</width>
-    <height>769</height>
+    <width>1266</width>
+    <height>934</height>
    </rect>
   </property>
-  <property name="minimumSize">
-   <size>
-    <width>400</width>
-    <height>500</height>
-   </size>
-  </property>
-  <property name="font">
-   <font/>
-  </property>
   <property name="windowTitle">
-   <string>MainWidgetGui</string>
+   <string>MainWindow</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_5">
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
-    <number>0</number>
-   </property>
-   <item>
-    <widget class="QWidget" name="widget_3" native="true">
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QSplitter" name="splitter">
+    <property name="geometry">
+     <rect>
+      <x>-50</x>
+      <y>10</y>
+      <width>989</width>
+      <height>703</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+    <widget class="QWidget" name="mainWidget" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>0</horstretch>
@@ -118,7 +108,7 @@
               <number>2</number>
              </property>
              <item row="0" column="0">
-              <layout class="QVBoxLayout">
+              <layout class="QVBoxLayout" name="_2">
                <property name="spacing">
                 <number>6</number>
                </property>
@@ -135,7 +125,7 @@
                 <number>0</number>
                </property>
                <item>
-                <layout class="QVBoxLayout">
+                <layout class="QVBoxLayout" name="_3">
                  <property name="spacing">
                   <number>0</number>
                  </property>
@@ -254,7 +244,7 @@ When in score mode, left click to mark a group as dead, right click to mark it a
                   </layout>
                  </item>
                  <item>
-                  <layout class="QHBoxLayout">
+                  <layout class="QHBoxLayout" name="_4">
                    <property name="spacing">
                     <number>6</number>
                    </property>
@@ -383,7 +373,7 @@ Maximum game move the slider can currently show.</string>
             <property name="frameShadow">
              <enum>QFrame::Raised</enum>
             </property>
-            <layout class="QVBoxLayout">
+            <layout class="QVBoxLayout" name="_5">
              <property name="spacing">
               <number>6</number>
              </property>
@@ -400,7 +390,7 @@ Maximum game move the slider can currently show.</string>
               <number>0</number>
              </property>
              <item>
-              <layout class="QVBoxLayout">
+              <layout class="QVBoxLayout" name="_6">
                <property name="spacing">
                 <number>6</number>
                </property>
@@ -894,7 +884,7 @@ Variation 1 of 20
                 </widget>
                </item>
                <item>
-                <layout class="QHBoxLayout" name="_2">
+                <layout class="QHBoxLayout" name="_7">
                  <property name="spacing">
                   <number>6</number>
                  </property>
@@ -1588,7 +1578,7 @@ Indicates whether it is black's or white's turn.</string>
                 <enum>Qt::Horizontal</enum>
                </property>
                <widget class="QWidget" name="layout14">
-                <layout class="QVBoxLayout">
+                <layout class="QVBoxLayout" name="_8">
                  <property name="spacing">
                   <number>0</number>
                  </property>
@@ -2236,6 +2226,9 @@ TG	teaching tools</string>
                <property name="tabPosition">
                 <enum>QTabWidget::South</enum>
                </property>
+               <property name="currentIndex">
+                <number>1</number>
+               </property>
                <property name="tabBarAutoHide">
                 <bool>true</bool>
                </property>
@@ -2243,7 +2236,7 @@ TG	teaching tools</string>
                 <attribute name="title">
                  <string>NS</string>
                 </attribute>
-                <layout class="QVBoxLayout">
+                <layout class="QVBoxLayout" name="_9">
                  <property name="spacing">
                   <number>2</number>
                  </property>
@@ -2278,7 +2271,7 @@ TG	teaching tools</string>
                 <attribute name="title">
                  <string>TG</string>
                 </attribute>
-                <layout class="QGridLayout">
+                <layout class="QGridLayout" name="_10">
                  <property name="leftMargin">
                   <number>0</number>
                  </property>
@@ -2314,7 +2307,7 @@ TG	teaching tools</string>
                    <property name="frameShadow">
                     <enum>QFrame::Raised</enum>
                    </property>
-                   <layout class="QGridLayout">
+                   <layout class="QGridLayout" name="_11">
                     <property name="leftMargin">
                      <number>0</number>
                     </property>
@@ -2331,7 +2324,7 @@ TG	teaching tools</string>
                      <number>2</number>
                     </property>
                     <item row="0" column="0">
-                     <layout class="QVBoxLayout">
+                     <layout class="QVBoxLayout" name="_12">
                       <property name="spacing">
                        <number>6</number>
                       </property>
@@ -2375,7 +2368,7 @@ choose opponent from list to enable him playing with you in a teaching game.</st
                        </widget>
                       </item>
                       <item>
-                       <layout class="QHBoxLayout">
+                       <layout class="QHBoxLayout" name="_13">
                         <property name="spacing">
                          <number>6</number>
                         </property>
@@ -2630,10 +2623,104 @@ When in score mode, left click to mark a group as dead, right click to mark it a
       </item>
      </layout>
     </widget>
-   </item>
-  </layout>
+    <widget class="QSplitter" name="splitter_comment">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <widget class="QWidget" name="comments_widget" native="true">
+      <layout class="QVBoxLayout" name="_14">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QTextEdit" name="commentEdit">
+         <property name="acceptRichText">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="commentEdit2"/>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QTreeView" name="ListView_observers">
+      <property name="focusPolicy">
+       <enum>Qt::NoFocus</enum>
+      </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
+      <property name="sortingEnabled">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1266</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="fileMenu">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="editMenu">
+    <property name="title">
+     <string>&amp;Edit</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="navMenu">
+    <property name="title">
+     <string>&amp;Navigation</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="settingsMenu">
+    <property name="title">
+     <string>&amp;Settings</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="viewMenu">
+    <property name="title">
+     <string>&amp;View</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="anMenu">
+    <property name="title">
+     <string>&amp;Analysis</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="helpMenu">
+    <property name="title">
+     <string>&amp;Help</string>
+    </property>
+   </widget>
+   <addaction name="fileMenu"/>
+   <addaction name="editMenu"/>
+   <addaction name="navMenu"/>
+   <addaction name="viewMenu"/>
+   <addaction name="anMenu"/>
+   <addaction name="settingsMenu"/>
+   <addaction name="helpMenu"/>
+  </widget>
  </widget>
- <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
    <class>SizeGraphicsView</class>
@@ -2663,17 +2750,15 @@ When in score mode, left click to mark a group as dead, right click to mark it a
    <container>1</container>
   </customwidget>
  </customwidgets>
- <tabstops>
-  <tabstop>slider</tabstop>
- </tabstops>
  <resources>
   <include location="q4go.qrc"/>
+  <include location="../q4go.qrc"/>
  </resources>
  <connections>
   <connection>
    <sender>slider</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>MainWidgetGui</receiver>
+   <receiver>BoardWindow</receiver>
    <slot>sliderChanged(int)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -2689,7 +2774,7 @@ When in score mode, left click to mark a group as dead, right click to mark it a
   <connection>
    <sender>editButton</sender>
    <signal>clicked()</signal>
-   <receiver>MainWidgetGui</receiver>
+   <receiver>BoardWindow</receiver>
    <slot>doEdit()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -2705,7 +2790,7 @@ When in score mode, left click to mark a group as dead, right click to mark it a
   <connection>
    <sender>editPosButton</sender>
    <signal>clicked(bool)</signal>
-   <receiver>MainWidgetGui</receiver>
+   <receiver>BoardWindow</receiver>
    <slot>doEditPos(bool)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -2721,7 +2806,7 @@ When in score mode, left click to mark a group as dead, right click to mark it a
   <connection>
    <sender>scoreButton</sender>
    <signal>clicked(bool)</signal>
-   <receiver>MainWidgetGui</receiver>
+   <receiver>BoardWindow</receiver>
    <slot>doRealScore(bool)</slot>
    <hints>
     <hint type="sourcelabel">

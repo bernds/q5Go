@@ -19,6 +19,7 @@
 #include "textview.h"
 #include "figuredlg.h"
 #include "qgtp.h"
+#include "ui_boardwindow_gui.h"
 
 class Board;
 class QSplitter;
@@ -28,7 +29,7 @@ class GameTree;
 
 extern QString screen_key ();
 
-class MainWindow : public QMainWindow
+class MainWindow : public QMainWindow, public Ui::BoardWindow
 {
 	Q_OBJECT
 
@@ -38,6 +39,23 @@ class MainWindow : public QMainWindow
 	QList<game_state *> m_figures;
 	BoardView *m_svg_update_source;
 	BoardView *m_ascii_update_source;
+
+	bool showSlider, sliderSignalToggle;
+	GameMode m_remember_mode;
+	int m_remember_tab;
+	QGraphicsScene *m_eval_canvas;
+	QGraphicsRectItem *m_eval_bar;
+	QGraphicsTextItem *m_w_time, *m_b_time;
+	double m_eval;
+
+	void toggleSlider (bool);
+	bool getSlider() { return showSlider; }
+	void toggleSliderSignal(bool b) { sliderSignalToggle = b; }
+
+	void setToolsTabWidget(enum tabType=tabNormalScore, enum tabState=tabSet);
+	void toggleSidebar (bool);
+	void setSliderMax(int n);
+
 public:
 	MainWindow(QWidget* parent, std::shared_ptr<game_record>, GameMode mode = modeNormal);
 	virtual ~MainWindow();
@@ -46,11 +64,6 @@ public:
 	int checkModified(bool interactive=true);
 	void updateFont();
 	static QString getFileExtension(const QString &fileName, bool defaultExt=true);
-#if 0
-	void doScore(bool toggle) { mainWidget->doRealScore(toggle); }
-#endif
-	void doRealScore(bool toggle) { mainWidget->doRealScore(toggle); }
-	MainWidget *getMainWidget() { return mainWidget; }
 	void saveWindowSize ();
 	bool restoreWindowSize ();
 	void updateBoard();
@@ -80,6 +93,17 @@ public:
 
 	void update_ascii_dialog ();
 	void update_svg_dialog ();
+
+	void recalc_scores (const go_board &);
+
+	void grey_eval_bar ();
+	void set_eval (double);
+	void set_eval (const QString &, double, stone_color, int);
+	void set_2nd_eval (const QString &, double, stone_color, int);
+
+	void setTimes(const QString &btime, const QString &bstones,
+		      const QString &wtime, const QString &wstones,
+		      bool warn_b, bool warn_w, int);
 
 protected:
 	void initActions(GameMode);
@@ -156,34 +180,31 @@ public slots:
 	void slotDiagSVG (bool);
 	void slotDiagChosen (int);
 
-	virtual void doPass();
-	virtual void doCountDone();
-	virtual void doUndo();
-	virtual void doAdjourn();
-	virtual void doResign();
+	virtual void doPass ();
+	virtual void doCountDone ();
+	virtual void doUndo ();
+	virtual void doAdjourn ();
+	virtual void doResign ();
+	void on_colorButton_clicked (bool);
+	void doRealScore (bool);
+	void doEdit ();
+	void doEditPos (bool);
+	void sliderChanged (int);
 
 protected:
 	std::shared_ptr<game_record> m_game;
 	game_state *m_empty_state {};
-	Board *gfx_board;
-	MainWidget *mainWidget;
 	TextView m_ascii_dlg;
 	SvgView m_svg_dlg;
 	bool local_stone_sound;
 
 	QLabel *statusCoords, *statusMode, *statusTurn, *statusNav;
 
-	QSplitter *splitter, *splitter_comment;
-	QWidget *comments_widget;
-	QLayout *comments_layout;
-	QTextEdit *commentEdit;
-	QLineEdit *commentEdit2;
-	QTreeView *ListView_observers;
 	GameTree *gameTreeView;
 
 	QToolBar *fileBar, *toolBar, *editBar;
 
-	QMenu *fileMenu, *importExportMenu, *editMenu, *navMenu, *settingsMenu, *viewMenu, *anMenu, *helpMenu;
+	QMenu *importExportMenu;
 
 	QAction *escapeFocus;
 	QAction *fileNewBoard, *fileNew, *fileNewVariant, *fileOpen, *fileSave, *fileSaveAs, *fileClose,
@@ -207,8 +228,6 @@ protected:
 
 	float timerIntervals[6];
 	bool isFullScreen;
-
-	QGridLayout *mainWidgetGuiLayout;
 
 public:
 	/* Called when the user performed a board action.  Just plays an

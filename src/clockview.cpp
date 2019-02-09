@@ -1,7 +1,11 @@
+#include <QGraphicsTextItem>
+#include <QMouseEvent>
+
 #include "qgo.h"
 #include "defines.h"
 #include "gogame.h"
-#include "mainwidget.h"
+#include "setting.h"
+#include "clockview.h"
 
 /* Convert SGF style time information to something we can display on the clock.  */
 static QString time_string (const std::string &timeleft, const std::string &stonesleft)

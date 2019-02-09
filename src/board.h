@@ -28,7 +28,6 @@ class Tip;
 class InterfaceHandler;
 class QNewGameDlg;
 class MainWindow;
-class MainWidget;
 class svg_builder;
 class QFontInfo;
 
@@ -179,7 +178,6 @@ class Board : public BoardView, public navigable_observer, public GTP_Eval_Contr
 {
 	Q_OBJECT
 	MainWindow *m_board_win {};
-	MainWidget *m_main_widget {};
 
 	GameMode m_game_mode = modeNormal;
 	bool isModified = false;
@@ -215,7 +213,7 @@ public:
 	~Board();
 
 	/* Should be part of the constructor, but Qt doesn't seem to allow such a construction with the .ui files.  */
-	void init2 (MainWindow *w, MainWidget *mw) { m_board_win = w; m_main_widget = mw; }
+	void init2 (MainWindow *w) { m_board_win = w; }
 	virtual void reset_game (std::shared_ptr<game_record>) override;
 	const std::shared_ptr<game_record> get_record () { return m_game; }
 	virtual void set_displayed (game_state *) override;

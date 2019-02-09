@@ -2,6 +2,7 @@ TEMPLATE	      = app
 CONFIG		     += qt warn_on release thread
 FORMS	      = gui_dialog.ui \
 		analyze_gui.ui \
+		boardwindow_gui.ui \
 		clientwindow_gui.ui \
                 figuredlg_gui.ui \
                 gameinfo_gui.ui \
@@ -10,7 +11,6 @@ FORMS	      = gui_dialog.ui \
 		newvariantgame_gui.ui \
 		scoretools_gui.ui \
 		normaltools_gui.ui \
-		mainwidget_gui.ui \
 		preferences_gui.ui \
 		newaigamedlg_gui.ui \
 		talk_gui.ui \
@@ -46,7 +46,6 @@ HEADERS		      = analyzedlg.h \
 			icons.h \
 			imagehandler.h \
 			komispinbox.h \
-			mainwidget.h \
                         mainwindow.h \
                         normaltools.h \
 			preferences.h \
@@ -60,7 +59,6 @@ HEADERS		      = analyzedlg.h \
 			textview.h \
                         ui_helpers.h \
                         grid.h \
-                        misctools.h \
                         miscdialogs.h \
                         variantgamedlg.h \
                         audio.h
@@ -87,7 +85,6 @@ SOURCES		      = analyzedlg.cpp \
 			board.cpp \
 			helpviewer.cpp \
 			imagehandler.cpp \
-			mainwidget.cpp \
 			mainwindow.cpp \
 			preferences.cpp \
 			qgo.cpp \

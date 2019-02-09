@@ -72,13 +72,13 @@ am__objects_1 = analyzedlg.$(OBJEXT) audio.$(OBJEXT) board.$(OBJEXT) \
 	gogame.$(OBJEXT) gamedialog.$(OBJEXT) gamestable.$(OBJEXT) \
 	gametree.$(OBJEXT) grid.$(OBJEXT) helpviewer.$(OBJEXT) \
 	igsconnection.$(OBJEXT) imagehandler.$(OBJEXT) main.$(OBJEXT) \
-	mainwidget.$(OBJEXT) clientwin.$(OBJEXT) mainwindow.$(OBJEXT) \
-	misc.$(OBJEXT) msg_handler.$(OBJEXT) parser.$(OBJEXT) \
-	playertable.$(OBJEXT) preferences.$(OBJEXT) qgo.$(OBJEXT) \
-	qgo_interface.$(OBJEXT) qgtp.$(OBJEXT) newaigamedlg.$(OBJEXT) \
-	setting.$(OBJEXT) sgfload.$(OBJEXT) sgf2board.$(OBJEXT) \
-	svgbuilder.$(OBJEXT) tables.$(OBJEXT) telnet.$(OBJEXT) \
-	textview.$(OBJEXT) variantgamedlg.$(OBJEXT)
+	clientwin.$(OBJEXT) mainwindow.$(OBJEXT) misc.$(OBJEXT) \
+	msg_handler.$(OBJEXT) parser.$(OBJEXT) playertable.$(OBJEXT) \
+	preferences.$(OBJEXT) qgo.$(OBJEXT) qgo_interface.$(OBJEXT) \
+	qgtp.$(OBJEXT) newaigamedlg.$(OBJEXT) setting.$(OBJEXT) \
+	sgfload.$(OBJEXT) sgf2board.$(OBJEXT) svgbuilder.$(OBJEXT) \
+	tables.$(OBJEXT) telnet.$(OBJEXT) textview.$(OBJEXT) \
+	variantgamedlg.$(OBJEXT)
 am__objects_2 =
 am_q5go_OBJECTS = $(am__objects_1) $(am__objects_2)
 am__objects_3 = analyzedlg.moc.$(OBJEXT) audio.moc.$(OBJEXT) \
@@ -87,9 +87,8 @@ am__objects_3 = analyzedlg.moc.$(OBJEXT) audio.moc.$(OBJEXT) \
 	gamedialog.moc.$(OBJEXT) gamestable.moc.$(OBJEXT) \
 	gametree.moc.$(OBJEXT) helpviewer.moc.$(OBJEXT) \
 	icons.moc.$(OBJEXT) igsconnection.moc.$(OBJEXT) \
-	mainwidget.moc.$(OBJEXT) mainwindow.moc.$(OBJEXT) \
-	clientwin.moc.$(OBJEXT) miscdialogs.moc.$(OBJEXT) \
-	misctools.moc.$(OBJEXT) msg_handler.moc.$(OBJEXT) \
+	mainwindow.moc.$(OBJEXT) clientwin.moc.$(OBJEXT) \
+	miscdialogs.moc.$(OBJEXT) msg_handler.moc.$(OBJEXT) \
 	normaltools.moc.$(OBJEXT) scoretools.moc.$(OBJEXT) \
 	parser.moc.$(OBJEXT) playertable.moc.$(OBJEXT) \
 	preferences.moc.$(OBJEXT) qgo.moc.$(OBJEXT) \
@@ -277,8 +276,8 @@ INCLUDES = $(all_includes)
 q5go_METASOURCES = AUTO
 KDE_OPTIONS = qtonly
 DISTHEADERS_MOC = analyzedlg.h audio.h bitarray.h board.h clockview.h figuredlg.h gamedialog.h gamestable.h gametree.h \
-	helpviewer.h icons.h igsconnection.h mainwidget.h mainwindow.h clientwin.h miscdialogs.h \
-	misctools.h msg_handler.h normaltools.h scoretools.h parser.h playertable.h preferences.h qgo.h \
+	helpviewer.h icons.h igsconnection.h mainwindow.h clientwin.h miscdialogs.h \
+	msg_handler.h normaltools.h scoretools.h parser.h playertable.h preferences.h qgo.h \
 	qgo_interface.h qgtp.h newaigamedlg.h sizegraphicsview.h tables.h telnet.h textview.h \
 	variantgamedlg.h
 
@@ -290,13 +289,13 @@ DISTHEADERS_NOMOC = goboard.h config.h defines.h grid.h goboard.h gogame.h gs_gl
 DISTSOURCES = analyzedlg.cpp audio.cpp board.cpp clockview.cpp figuredlg.cpp goboard.cc gogame.cc gamedialog.cpp \
 		gamestable.cpp gametree.cpp grid.cpp helpviewer.cpp \
 		igsconnection.cpp imagehandler.cpp main.cpp \
-		mainwidget.cpp  clientwin.cpp mainwindow.cpp \
+		clientwin.cpp mainwindow.cpp \
 		misc.cpp msg_handler.cpp parser.cpp \
 		playertable.cpp preferences.cpp qgo.cpp qgo_interface.cpp qgtp.cpp \
 		newaigamedlg.cpp setting.cpp  sgfload.cc sgf2board.cc \
 		svgbuilder.cpp tables.cpp telnet.cpp textview.cpp variantgamedlg.cpp
 
-FORMS = analyze_gui.ui clientwindow_gui.ui figuredlg_gui.ui gameinfo_gui.ui gui_dialog.ui mainwidget_gui.ui \
+FORMS = analyze_gui.ui boardwindow_gui.ui clientwindow_gui.ui figuredlg_gui.ui gameinfo_gui.ui gui_dialog.ui \
 	newgame_gui.ui newlocalgame_gui.ui newvariantgame_gui.ui normaltools_gui.ui nthmove_gui.ui \
 	preferences_gui.ui newaigamedlg_gui.ui scoretools_gui.ui svgview_gui.ui talk_gui.ui textedit_gui.ui \
 	textview_gui.ui
@@ -429,13 +428,10 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/igsconnection.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/imagehandler.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mainwidget.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mainwidget.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mainwindow.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mainwindow.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/misc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/miscdialogs.moc.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/misctools.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/msg_handler.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/msg_handler.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/newaigamedlg.Po@am__quote@
