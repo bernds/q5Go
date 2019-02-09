@@ -237,11 +237,7 @@ void GTP_Process::slot_receive_stdout ()
 			return;
 		m_buffer = m_buffer.mid (idx + 1);
 
-		if (output[0] != '=') {
-			m_controller->gtp_failure (tr ("Invalid response from GTP engine"));
-			quit ();
-			return;
-		}
+		bool err = output[0] != '=';
 		output.remove (0, 1);
 		int len = output.length ();
 		int n_digits = 0;
@@ -250,7 +246,8 @@ void GTP_Process::slot_receive_stdout ()
 		while (n_digits < len && output[n_digits].isSpace ())
 			n_digits++;
 		int cmd_nr = output.left (n_digits).toInt ();
-		QMap<int, t_receiver>::const_iterator map_iter = m_receivers.constFind (cmd_nr);
+		auto &rcv_map = err ? m_err_receivers : m_receivers;
+		QMap<int, t_receiver>::const_iterator map_iter = rcv_map.constFind (cmd_nr);
 		if (map_iter == m_receivers.constEnd ()) {
 			m_controller->gtp_failure (tr ("Invalid response from GTP engine"));
 			quit ();
@@ -258,16 +255,24 @@ void GTP_Process::slot_receive_stdout ()
 		}
 		t_receiver rcv = *map_iter;
 		m_receivers.remove (cmd_nr);
+		m_err_receivers.remove (cmd_nr);
 		output.remove (0, n_digits);
 		if (rcv != nullptr)
 			(this->*rcv) (output);
 	}
 }
 
-void GTP_Process::send_request(const QString &s, t_receiver rcv)
+void GTP_Process::default_err_receiver (const QString &)
+{
+	m_controller->gtp_failure (tr ("Invalid response from GTP engine"));
+	quit ();
+}
+
+void GTP_Process::send_request(const QString &s, t_receiver rcv, t_receiver err_rcv)
 {
 	qDebug() << "send_request -> " << req_cnt << " " << s << "\n";
 	m_receivers[req_cnt] = rcv;
+	m_err_receivers[req_cnt] = err_rcv;
 #if 1
 	m_dlg.textEdit->setTextColor (Qt::blue);
 	m_dlg.append (s);
