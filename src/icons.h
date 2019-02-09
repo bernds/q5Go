@@ -10,7 +10,6 @@
 #define SEEK_ANIMATION "./pics/seeking.gif"
 
 #define ICON_PREFS "./pics/package_settings.xpm"
-#define ICON_GAMEINFO "./pics/idea.xpm"
 #define ICON_TELNET "./pics/openterm.xpm"
 #define ICON_EXIT "./pics/exit.xpm"
 #define ICON_FILENEWBOARD "./pics/newboard.xpm"
@@ -21,7 +20,6 @@
 #define ICON_TRANSFORM "./pics/transform.xpm"
 #define ICON_CHARSET "./pics/charset.xpm"
 #define ICON_AUTOPLAY "./pics/player_pause.xpm"
-#define ICON_DELETE "./pics/editdelete.xpm"
 #define ICON_FULLSCREEN "./pics/window_fullscreen.xpm"
 #define ICON_MANUAL "./pics/help.xpm"
 #define ICON_HOME "./pics/gohome.xpm"

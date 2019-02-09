@@ -24,12 +24,14 @@
     <file>images/boardwindow/editletter.png</file>
     <file>images/boardwindow/editnumber.png</file>
     <file>images/boardwindow/editdelete.png</file>
+    <file>images/boardwindow/edit-cut.png</file>
     <file>images/boardwindow/editstone.png</file>
     <file>images/boardwindow/rect_select.png</file>
     <file>images/boardwindow/clear_select.png</file>
     <file>images/boardwindow/figure.png</file>
     <file>images/boardwindow/123.png</file>
     <file>images/boardwindow/navclicked.png</file>
+    <file>images/boardwindow/docprop.png</file>
     <file>images/board/wood2.png</file>
     <file>images/board/wood1.png</file>
     <file>images/board/wood3.png</file>

@@ -41,7 +41,6 @@
 
 //#ifdef USE_XPM
 #include ICON_PREFS
-#include ICON_GAMEINFO
 #include ICON_FILENEWBOARD
 #include ICON_FILENEW
 #include ICON_FILEOPEN
@@ -50,7 +49,6 @@
 #include ICON_TRANSFORM
 #include ICON_CHARSET
 #include ICON_AUTOPLAY
-#include ICON_DELETE
 #include ICON_FULLSCREEN
 #include ICON_MANUAL
 #include ICON_COORDS
@@ -325,20 +323,10 @@ MainWindow::~MainWindow()
 	delete fileExportPic;
 	delete fileExportPicClipB;
 	delete fileQuit;
-	delete editDelete;
-	delete editStone;
-	delete editCircle;
-	delete editSquare;
-	delete editTriangle;
-	delete editCross;
-	delete editNumber;
-	delete editLetter;
 	delete editGroup;
-	delete editFigure;
 	delete navAutoplay;
 	delete navSwapVariations;
 	delete setPreferences;
-	delete setGameInfo;
 	delete viewFileBar;
 	delete viewToolBar;
 	delete viewEditBar;
@@ -362,11 +350,10 @@ void MainWindow::initActions(GameMode mode)
 {
 	// Load the pixmaps
 	QPixmap fileNewboardIcon, fileNewIcon, fileOpenIcon, fileSaveIcon, fileSaveAsIcon,
-		transformIcon, charIcon, deleteIcon, autoplayIcon,
-		prefsIcon, infoIcon, fullscreenIcon, manualIcon, coordsIcon, sound_onIcon, sound_offIcon;
+		transformIcon, charIcon, autoplayIcon,
+		prefsIcon, fullscreenIcon, manualIcon, coordsIcon, sound_onIcon, sound_offIcon;
 
 	prefsIcon = QPixmap((package_settings_xpm));
-	infoIcon = QPixmap((idea_xpm));
 	fileNewboardIcon = QPixmap((newboard_xpm));
 	fileNewIcon = QPixmap((filenew_xpm));
 	fileOpenIcon = QPixmap((fileopen_xpm));
@@ -374,7 +361,6 @@ void MainWindow::initActions(GameMode mode)
 	fileSaveAsIcon = QPixmap((filesaveas_xpm));
 	transformIcon = QPixmap((transform_xpm));
 	charIcon = QPixmap((charset_xpm));
-	deleteIcon = QPixmap((editdelete_xpm));
 	fullscreenIcon = QPixmap((window_fullscreen_xpm));
 	manualIcon = QPixmap((help_xpm));
 	autoplayIcon = QPixmap((player_pause_xpm));
@@ -491,59 +477,15 @@ void MainWindow::initActions(GameMode mode)
 	* Menu Edit
 	*/
 
-	// Edit delete
-	editDelete = new QAction (deleteIcon, tr("&Delete"), this);
-	editDelete->setShortcut (QKeySequence (Qt::CTRL + Qt::Key_D));
-	editDelete->setStatusTip(tr("Delete this and all following positions"));
-	editDelete->setWhatsThis(tr("Delete\n\nDelete this and all following positions."));
 	connect(editDelete, &QAction::triggered, this, &MainWindow::slotEditDelete);
-
-	setGameInfo = new QAction(infoIcon, tr("&Game Info"), this);
-	setGameInfo->setShortcut (QKeySequence (Qt::CTRL + Qt::Key_I));
-	setGameInfo->setStatusTip(tr("Display game information"));
-	setGameInfo->setWhatsThis(tr("Game Info\n\nDisplay game information."));
 	connect(setGameInfo, &QAction::triggered, this, &MainWindow::slotSetGameInfo);
 
-	editStone = new QAction(QIcon (":/BoardWindow/images/boardwindow/editstone.png"), tr("Play stone"), this);
-	editStone->setCheckable (true);
-	editStone->setStatusTip(tr("Normal mode, click to place a stone."));
-	editStone->setWhatsThis(tr("Select normal behaviour in play or edit mode, click to place a stone normally."));
 	connect(editStone, &QAction::triggered, this, &MainWindow::slotEditGroup);
-
-	editTriangle = new QAction(QIcon (":/BoardWindow/images/boardwindow/edittriangle.png"), tr("Set triangle mark"), this);
-	editTriangle->setCheckable (true);
-	editTriangle->setStatusTip(tr("Click places a triangle mark."));
-	editTriangle->setWhatsThis(tr("In play or edit mode, click to place a triangle mark."));
 	connect(editTriangle, &QAction::triggered, this, &MainWindow::slotEditGroup);
-
-	editCircle = new QAction(QIcon (":/BoardWindow/images/boardwindow/editcircle.png"), tr("Set circle mark"), this);
-	editCircle->setCheckable (true);
-	editCircle->setStatusTip(tr("Click places a circle mark."));
-	editCircle->setWhatsThis(tr("In play or edit mode, click to place a circle mark."));
 	connect(editCircle, &QAction::triggered, this, &MainWindow::slotEditGroup);
-
-	editCross = new QAction(QIcon (":/BoardWindow/images/boardwindow/editcross.png"), tr("Set cross mark"), this);
-	editCross->setCheckable (true);
-	editCross->setStatusTip(tr("Click places a cross mark."));
-	editCross->setWhatsThis(tr("In play or edit mode, click to place a cross mark."));
 	connect(editCross, &QAction::triggered, this, &MainWindow::slotEditGroup);
-
-	editSquare = new QAction(QIcon (":/BoardWindow/images/boardwindow/editsquare.png"), tr("Set square mark"), this);
-	editSquare->setCheckable (true);
-	editSquare->setStatusTip(tr("Click places a square mark."));
-	editSquare->setWhatsThis(tr("In play or edit mode, click to place a square mark."));
 	connect(editSquare, &QAction::triggered, this, &MainWindow::slotEditGroup);
-
-	editNumber = new QAction(QIcon (":/BoardWindow/images/boardwindow/editnumber.png"), tr("Set number mark"), this);
-	editNumber->setCheckable (true);
-	editNumber->setStatusTip(tr("Click places a number mark."));
-	editNumber->setWhatsThis(tr("In play or edit mode, click to place a number mark."));
 	connect(editNumber, &QAction::triggered, this, &MainWindow::slotEditGroup);
-
-	editLetter = new QAction(QIcon (":/BoardWindow/images/boardwindow/editletter.png"), tr("Set letter mark"), this);
-	editLetter->setCheckable (true);
-	editLetter->setStatusTip(tr("Click places a letter mark."));
-	editLetter->setWhatsThis(tr("In play or edit mode, click to place a letter mark."));
 	connect(editLetter, &QAction::triggered, this, &MainWindow::slotEditGroup);
 
 	editGroup = new QActionGroup (this);
@@ -556,23 +498,8 @@ void MainWindow::initActions(GameMode mode)
 	editGroup->addAction (editLetter);
 	editStone->setChecked (true);
 
-	editFigure = new QAction(QIcon (":/BoardWindow/images/boardwindow/figure.png"), tr("Set this move as the start of a diagram"), this);
-	editFigure->setCheckable (true);
-	editFigure->setStatusTip(tr("Select to make this move the start of a diagram."));
-	editFigure->setWhatsThis(tr("If selected, the current node starts a diagram.\n"
-				    "Enable diagram display in the View menu to see and edit diagrams."));
 	connect(editFigure, &QAction::triggered, this, &MainWindow::slotEditFigure);
-
-	editRectSelect = new QAction(QIcon (":/BoardWindow/images/boardwindow/rect_select.png"), tr("Select rectangle"), this);
-	editRectSelect->setCheckable (true);
-	editRectSelect->setStatusTip(tr("Choose a rectangle to export."));
-	editRectSelect->setWhatsThis(tr("In play or edit mode, click to begin choosing a rectangle to be used when exporting."));
-	editRectSelect->setShortcut(Qt::Key_R);
 	connect(editRectSelect, &QAction::toggled, this, &MainWindow::slotEditRectSelect);
-
-	editClearSelect = new QAction(QIcon (":/BoardWindow/images/boardwindow/clear_select.png"), tr("Clear selection"), this);
-	editClearSelect->setStatusTip(tr("Clear selection."));
-	editClearSelect->setWhatsThis(tr("Click to clear the selected rectangle and select the whole board again."));
 	connect(editClearSelect, &QAction::triggered, this, &MainWindow::slotEditClearSelect);
 
 	connect (navBackward, &QAction::triggered, [=] () { gfx_board->previous_move (); });
@@ -842,27 +769,6 @@ void MainWindow::initMenuBar(GameMode mode)
 	fileMenu->addSeparator ();
 	fileMenu->addAction (fileQuit);
 
-	editMenu->addAction (setGameInfo);
-
-	editMenu->addSeparator ();
-
-	editMenu->addAction (editDelete);
-
-	editMenu->addSeparator ();
-
-	editMenu->addAction (editStone);
-	editMenu->addAction (editTriangle);
-	editMenu->addAction (editSquare);
-	editMenu->addAction (editCircle);
-	editMenu->addAction (editCross);
-	editMenu->addAction (editNumber);
-	editMenu->addAction (editLetter);
-
-	editMenu->addSeparator ();
-
-	editMenu->addAction (editRectSelect);
-	editMenu->addAction (editClearSelect);
-
 	settingsMenu->addAction (setPreferences);
 	settingsMenu->addAction (soundToggle);
 
@@ -915,23 +821,6 @@ void MainWindow::initToolBar()
 
 	toolBar->addSeparator();
 	toolBar->addAction (whatsThis);
-
-	editBar->addAction (setGameInfo);
-
-	editBar->addSeparator ();
-	editBar->addAction (editDelete);
-	editBar->addAction (editStone);
-	editBar->addAction (editTriangle);
-	editBar->addAction (editSquare);
-	editBar->addAction (editCircle);
-	editBar->addAction (editCross);
-	editBar->addAction (editNumber);
-	editBar->addAction (editLetter);
-	editBar->addSeparator ();
-	editBar->addAction (editFigure);
-	editBar->addSeparator ();
-	editBar->addAction (editRectSelect);
-	editBar->addAction (editClearSelect);
 }
 
 void MainWindow::initStatusBar()

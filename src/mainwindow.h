@@ -208,10 +208,8 @@ protected:
 		*fileExportASCII, *fileExportSVG, *fileImportSgfClipB, *fileExportSgfClipB,
 		*fileExportPic, *fileExportPicClipB,
 		*fileQuit;
-	QAction *editDelete, *editStone, *editTriangle, *editSquare, *editCircle, *editCross, *editNumber, *editLetter;
-	QAction *editRectSelect, *editClearSelect, *editFigure;
 	QAction *navAutoplay, *navSwapVariations;
-	QAction *setPreferences, *setGameInfo, *soundToggle;
+	QAction *setPreferences, *soundToggle;
 	QAction *anConnect, *anDisconnect, *anPause;
 	QAction *viewFileBar, *viewToolBar, *viewEditBar, *viewMenuBar, *viewStatusBar, *viewCoords,
 		*viewSlider, *viewSidebar, *viewComment, *viewVertComment, *viewSaveSize, *viewFullscreen,

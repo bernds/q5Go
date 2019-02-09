@@ -2686,6 +2686,22 @@ When in score mode, left click to mark a group as dead, right click to mark it a
     <property name="title">
      <string>&amp;Edit</string>
     </property>
+    <addaction name="setGameInfo"/>
+    <addaction name="separator"/>
+    <addaction name="editDelete"/>
+    <addaction name="separator"/>
+    <addaction name="editStone"/>
+    <addaction name="editTriangle"/>
+    <addaction name="editCircle"/>
+    <addaction name="editSquare"/>
+    <addaction name="editCross"/>
+    <addaction name="editLetter"/>
+    <addaction name="editNumber"/>
+    <addaction name="separator"/>
+    <addaction name="editFigure"/>
+    <addaction name="separator"/>
+    <addaction name="editRectSelect"/>
+    <addaction name="editClearSelect"/>
    </widget>
    <widget class="QMenu" name="navMenu">
     <property name="title">
@@ -2775,6 +2791,21 @@ When in score mode, left click to mark a group as dead, right click to mark it a
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="setGameInfo"/>
+   <addaction name="separator"/>
+   <addaction name="editDelete"/>
+   <addaction name="separator"/>
+   <addaction name="editStone"/>
+   <addaction name="editTriangle"/>
+   <addaction name="editCircle"/>
+   <addaction name="editSquare"/>
+   <addaction name="editLetter"/>
+   <addaction name="editNumber"/>
+   <addaction name="separator"/>
+   <addaction name="editFigure"/>
+   <addaction name="separator"/>
+   <addaction name="editRectSelect"/>
+   <addaction name="editClearSelect"/>
   </widget>
   <action name="navForward">
    <property name="icon">
@@ -2959,6 +2990,193 @@ When in score mode, left click to mark a group as dead, right click to mark it a
    </property>
    <property name="toolTip">
     <string>Click on an intersection and move to stone played there (if any)</string>
+   </property>
+  </action>
+  <action name="setGameInfo">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/docprop.png</normaloff>:/BoardWindow/images/boardwindow/docprop.png</iconset>
+   </property>
+   <property name="text">
+    <string>Game &amp;information...</string>
+   </property>
+   <property name="toolTip">
+    <string>Display and edit game information</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+I</string>
+   </property>
+  </action>
+  <action name="editStone">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/editstone.png</normaloff>:/BoardWindow/images/boardwindow/editstone.png</iconset>
+   </property>
+   <property name="text">
+    <string>Place &amp;stone</string>
+   </property>
+   <property name="toolTip">
+    <string>&quot;Normal mode, click to place a stone.</string>
+   </property>
+  </action>
+  <action name="editTriangle">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/edittriangle.png</normaloff>:/BoardWindow/images/boardwindow/edittriangle.png</iconset>
+   </property>
+   <property name="text">
+    <string>Set &amp;triangle mark</string>
+   </property>
+   <property name="toolTip">
+    <string>Clicking places a triangle mark.</string>
+   </property>
+  </action>
+  <action name="editCircle">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/editcircle.png</normaloff>:/BoardWindow/images/boardwindow/editcircle.png</iconset>
+   </property>
+   <property name="text">
+    <string>Set &amp;circle mark</string>
+   </property>
+   <property name="toolTip">
+    <string>Clicking places a circle mark.</string>
+   </property>
+  </action>
+  <action name="editSquare">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/editsquare.png</normaloff>:/BoardWindow/images/boardwindow/editsquare.png</iconset>
+   </property>
+   <property name="text">
+    <string>Set s&amp;quare mark</string>
+   </property>
+   <property name="toolTip">
+    <string>Clicking places a square mark.</string>
+   </property>
+  </action>
+  <action name="editCross">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/editcross.png</normaloff>:/BoardWindow/images/boardwindow/editcross.png</iconset>
+   </property>
+   <property name="text">
+    <string>Set cr&amp;oss mark</string>
+   </property>
+   <property name="toolTip">
+    <string>Clicking places a cross mark.</string>
+   </property>
+  </action>
+  <action name="editLetter">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/editletter.png</normaloff>:/BoardWindow/images/boardwindow/editletter.png</iconset>
+   </property>
+   <property name="text">
+    <string>Set &amp;letter mark</string>
+   </property>
+   <property name="toolTip">
+    <string>Clicking places a letter mark.
+Hold shift to add a freely editable text mark.
+</string>
+   </property>
+  </action>
+  <action name="editNumber">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/editnumber.png</normaloff>:/BoardWindow/images/boardwindow/editnumber.png</iconset>
+   </property>
+   <property name="text">
+    <string>Set &amp;number mark</string>
+   </property>
+   <property name="toolTip">
+    <string>Clicking places a number mark.</string>
+   </property>
+  </action>
+  <action name="editDelete">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/edit-cut.png</normaloff>:/BoardWindow/images/boardwindow/edit-cut.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Delete </string>
+   </property>
+   <property name="toolTip">
+    <string>Delete this and all following positions.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+D</string>
+   </property>
+  </action>
+  <action name="editRectSelect">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/rect_select.png</normaloff>:/BoardWindow/images/boardwindow/rect_select.png</iconset>
+   </property>
+   <property name="text">
+    <string>Select &amp;rectangle</string>
+   </property>
+   <property name="toolTip">
+    <string>Choose a rectangle to export.
+In play or edit mode, click to begin choosing a rectangle to be used when exporting to ASCII or SVG.</string>
+   </property>
+   <property name="shortcut">
+    <string>R</string>
+   </property>
+  </action>
+  <action name="editClearSelect">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/clear_select.png</normaloff>:/BoardWindow/images/boardwindow/clear_select.png</iconset>
+   </property>
+   <property name="text">
+    <string>Cle&amp;ar selection</string>
+   </property>
+   <property name="toolTip">
+    <string>Clear the selected rectangle and select the whole board again.</string>
+   </property>
+  </action>
+  <action name="editFigure">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/figure.png</normaloff>:/BoardWindow/images/boardwindow/figure.png</iconset>
+   </property>
+   <property name="text">
+    <string>Start dia&amp;gram here</string>
+   </property>
+   <property name="toolTip">
+    <string>If selected, the current node starts a diagram.
+Enable diagram display in the View menu to view and edit diagrams.</string>
+   </property>
+   <property name="shortcut">
+    <string>G</string>
    </property>
   </action>
  </widget>
