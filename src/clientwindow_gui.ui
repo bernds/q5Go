@@ -632,8 +632,8 @@
 	      <property name="orientation">
 		<enum>Qt::Vertical</enum>
 	      </property>
-	      <widget class="QGroupBox" name="groupBox2" native="true">
-		<property name="title" stdset="0">
+	      <widget class="QGroupBox" name="groupBox2">
+		<property name="title">
 		  <string>Games</string>
 		</property>
 		<layout class="QGridLayout">
@@ -718,9 +718,11 @@
       <attribute name="toolBarBreak">
 	<bool>false</bool>
       </attribute>
-      <addaction name="fileNew"/>
-      <addaction name="fileOpen"/>
       <addaction name="fileNewBoard"/>
+      <addaction name="fileNew"/>
+      <addaction name="fileNewVariant"/>
+      <addaction name="fileOpen"/>
+      <addaction name="separator"/>
       <addaction name="computerPlay"/>
     </widget>
     <widget class="QToolBar" name="Toolbar">
@@ -1165,6 +1167,10 @@
       </property>
     </action>
     <action name="setPreferences">
+      <property name="icon">
+	<iconset resource="q4go.qrc">
+	<normaloff>:/ClientWindowGui/images/clientwindow/prefs.png</normaloff>:/ClientWindowGui/images/clientwindow/prefs.png</iconset>
+      </property>
       <property name="text">
 	<string>Preferences</string>
       </property>
@@ -1179,10 +1185,6 @@
 
 	Edit the applications preferences.</string>
       </property>
-      <property name="icon">
-	<iconset resource="q4go.qrc">
-	<normaloff>:/ClientWindowGui/images/clientwindow/prefs.png</normaloff>:/ClientWindowGui/images/clientwindow/prefs.png</iconset>
-      </property>
       <property name="shortcut">
 	<string>Alt+P</string>
       </property>
@@ -1191,6 +1193,10 @@
       </property>
     </action>
     <action name="fileQuit">
+      <property name="icon">
+	<iconset resource="q4go.qrc">
+	<normaloff>:/ClientWindowGui/images/clientwindow/fileexit.png</normaloff>:/ClientWindowGui/images/clientwindow/fileexit.png</iconset>
+      </property>
       <property name="text">
 	<string>E&amp;xit</string>
       </property>

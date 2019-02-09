@@ -41,13 +41,6 @@
 
 //#ifdef USE_XPM
 #include ICON_PREFS
-#include ICON_FILENEWBOARD
-#include ICON_FILENEW
-#include ICON_FILEOPEN
-#include ICON_FILESAVE
-#include ICON_FILESAVEAS
-#include ICON_TRANSFORM
-#include ICON_CHARSET
 #include ICON_AUTOPLAY
 #include ICON_FULLSCREEN
 #include ICON_MANUAL
@@ -304,25 +297,8 @@ MainWindow::~MainWindow()
 	delete statusTurn;
 	delete statusCoords;
 
-	// menu bar
-	delete importExportMenu;
-
 	// Actions
 	delete escapeFocus;
-	delete fileNewBoard;
-	delete fileNew;
-	delete fileNewVariant;
-	delete fileOpen;
-	delete fileSave;
-	delete fileSaveAs;
-	delete fileClose;
-	delete fileExportASCII;
-	delete fileExportSVG;
-	delete fileImportSgfClipB;
-	delete fileExportSgfClipB;
-	delete fileExportPic;
-	delete fileExportPicClipB;
-	delete fileQuit;
 	delete editGroup;
 	delete navAutoplay;
 	delete navSwapVariations;
@@ -349,18 +325,9 @@ MainWindow::~MainWindow()
 void MainWindow::initActions(GameMode mode)
 {
 	// Load the pixmaps
-	QPixmap fileNewboardIcon, fileNewIcon, fileOpenIcon, fileSaveIcon, fileSaveAsIcon,
-		transformIcon, charIcon, autoplayIcon,
-		prefsIcon, fullscreenIcon, manualIcon, coordsIcon, sound_onIcon, sound_offIcon;
+	QPixmap autoplayIcon, prefsIcon, fullscreenIcon, manualIcon, coordsIcon, sound_onIcon, sound_offIcon;
 
 	prefsIcon = QPixmap((package_settings_xpm));
-	fileNewboardIcon = QPixmap((newboard_xpm));
-	fileNewIcon = QPixmap((filenew_xpm));
-	fileOpenIcon = QPixmap((fileopen_xpm));
-	fileSaveIcon = QPixmap((filesave_xpm));
-	fileSaveAsIcon = QPixmap((filesaveas_xpm));
-	transformIcon = QPixmap((transform_xpm));
-	charIcon = QPixmap((charset_xpm));
 	fullscreenIcon = QPixmap((window_fullscreen_xpm));
 	manualIcon = QPixmap((help_xpm));
 	autoplayIcon = QPixmap((player_pause_xpm));
@@ -376,107 +343,24 @@ void MainWindow::initActions(GameMode mode)
 	escapeFocus->setShortcut(Qt::Key_Escape);
 	connect(escapeFocus, &QAction::triggered, this, &MainWindow::slotFocus);
 
-	/*
-	* Menu File
-	*/
-	// File New Board
-	fileNewBoard = new QAction(fileNewboardIcon, tr("New &Board"), this);
-	fileNewBoard->setShortcut (Qt::CTRL + Qt::Key_B);
-	fileNewBoard->setStatusTip(tr("Creates a new board"));
-	fileNewBoard->setWhatsThis(tr("New\n\nCreates a new board."));
+	/* File menu.  */
 	connect(fileNewBoard, &QAction::triggered, this, &MainWindow::slotFileNewBoard);
-
-	// File New Game
-	fileNew = new QAction(fileNewIcon, tr("&New game"), this);
-	fileNew->setShortcut (QKeySequence (Qt::CTRL + Qt::Key_N));
-	fileNew->setStatusTip(tr("Creates a new game on this board"));
-	fileNew->setWhatsThis(tr("New\n\nCreates a new game on this board."));
 	connect(fileNew, &QAction::triggered, this, &MainWindow::slotFileNewGame);
-
-	// File New Variant Game
-	fileNewVariant = new QAction(QIcon (":/ClientWindowGui/images/clientwindow/torus.png"),
-				     tr("New &variant game"), this);
-	fileNewVariant->setShortcut (QKeySequence (Qt::CTRL + Qt::Key_V));
-	fileNewVariant->setStatusTip(tr("Creates a new game on this board"));
-	fileNewVariant->setWhatsThis(tr("New\n\nCreates a new variant game on this board."));
 	connect(fileNewVariant, &QAction::triggered, this, &MainWindow::slotFileNewVariantGame);
-
-	// File Open
-	fileOpen = new QAction(fileOpenIcon, tr("&Open"), this);
-	fileOpen->setShortcut (QKeySequence (Qt::CTRL + Qt::Key_O));
-	fileOpen->setStatusTip(tr("Open a sgf file"));
-	fileOpen->setWhatsThis(tr("Open\n\nOpen a sgf file."));
 	connect(fileOpen, &QAction::triggered, this, &MainWindow::slotFileOpen);
-
-	// File Save
-	fileSave = new QAction(fileSaveIcon, tr("&Save"), this);
-	fileSave->setShortcut (QKeySequence (Qt::CTRL + Qt::Key_S));
-	fileSave->setStatusTip(tr("Save a sgf file"));
-	fileSave->setWhatsThis(tr("Save\n\nSave a sgf file."));
 	connect(fileSave, &QAction::triggered, this, &MainWindow::slotFileSave);
-
-	// File SaveAs
-	fileSaveAs = new QAction(fileSaveAsIcon, tr("Save &As"), this);
-	fileSaveAs->setStatusTip(tr("Save a sgf file under a new name"));
-	fileSaveAs->setWhatsThis(tr("Save As\n\nSave a sgf file under a new name."));
 	connect(fileSaveAs, &QAction::triggered, this, &MainWindow::slotFileSaveAs);
-
-	// File Close
-	fileClose = new QAction(tr("&Close"), this);
-	fileClose->setShortcut (QKeySequence (Qt::CTRL + Qt::Key_W));
-	fileClose->setStatusTip(tr("Close this board"));
-	fileClose->setWhatsThis(tr("Exit\n\nClose this board."));
 	connect(fileClose, &QAction::triggered, this, &MainWindow::slotFileClose);
-
-	// File ExportASCII
-	fileExportASCII = new QAction(charIcon, tr("&Export ASCII"), this);
-	fileExportASCII->setStatusTip(tr("Export current board to ASCII"));
-	fileExportASCII->setWhatsThis(tr("Export ASCII\n\nExport current board to ASCII."));
-	connect(fileExportASCII, &QAction::triggered, this, &MainWindow::slotFileExportASCII);
-
-	// File ExportSVG
-	fileExportSVG = new QAction(charIcon, tr("Export S&VG"), this);
-	fileExportSVG->setStatusTip(tr("Export current board to SVG"));
-	fileExportSVG->setWhatsThis(tr("Export SVG\n\nExport current board to SVG."));
-	connect(fileExportSVG, &QAction::triggered, this, &MainWindow::slotFileExportSVG);
-
-	// File ImportSgfClipB
-	fileImportSgfClipB = new QAction(fileOpenIcon, tr("Import SGF &from clipboard"), this);
-	fileImportSgfClipB->setStatusTip(tr("Import a complete game in SGF format from clipboard"));
-	fileImportSgfClipB->setWhatsThis(tr("Import SGF from clipboard\n\n"
-		"Import a complete game in SGF format from clipboard."));
-	connect(fileImportSgfClipB, &QAction::triggered, this, &MainWindow::slotFileImportSgfClipB);
-
-	// File ExportSgfClipB
-	fileExportSgfClipB = new QAction(fileSaveIcon, tr("Export SGF &to clipboard"), this);
-	fileExportSgfClipB->setStatusTip(tr("Export a complete game in SGF format to clipboard"));
-	fileExportSgfClipB->setWhatsThis(tr("Export SGF to clipboard\n\n"
-		"Export a complete game in SGF format to clipboard."));
-	connect(fileExportSgfClipB, &QAction::triggered, this, &MainWindow::slotFileExportSgfClipB);
-
-	// File ExportPic
-	fileExportPic = new QAction(transformIcon, tr("Export &Image"), this);
-	fileExportPic->setStatusTip(tr("Export current board to an image"));
-	fileExportPic->setWhatsThis(tr("Export Image\n\nExport current board to an image."));
-	connect(fileExportPic, &QAction::triggered, this, &MainWindow::slotFileExportPic);
-
-	// File ExportPic
-	fileExportPicClipB = new QAction(transformIcon, tr("E&xport Image to clipboard"), this);
-	fileExportPicClipB->setStatusTip(tr("Export current board to the clipboard as image"));
-	fileExportPicClipB->setWhatsThis(tr("Export Image to clipboard\n\nExport current board to the clipboard as image."));
-	connect(fileExportPicClipB, &QAction::triggered, this, &MainWindow::slotFileExportPicClipB);
-
-	// File Quit
-	fileQuit = new QAction(QIcon (":/images/exit.png"), tr("E&xit"), this);
-	fileQuit->setShortcut (QKeySequence (Qt::CTRL + Qt::Key_Q));
-	fileQuit->setStatusTip(tr("Quits the application"));
-	fileQuit->setWhatsThis(tr("Exit\n\nQuits the application."));
 	connect(fileQuit, &QAction::triggered, this, &MainWindow::slotFileClose);//(qGo*)qApp, SLOT(quit);
 
-	/*
-	* Menu Edit
-	*/
+	connect(fileExportASCII, &QAction::triggered, this, &MainWindow::slotFileExportASCII);
+	connect(fileExportSVG, &QAction::triggered, this, &MainWindow::slotFileExportSVG);
+	connect(fileImportSgfClipB, &QAction::triggered, this, &MainWindow::slotFileImportSgfClipB);
+	connect(fileExportSgfClipB, &QAction::triggered, this, &MainWindow::slotFileExportSgfClipB);
+	connect(fileExportPic, &QAction::triggered, this, &MainWindow::slotFileExportPic);
+	connect(fileExportPicClipB, &QAction::triggered, this, &MainWindow::slotFileExportPicClipB);
 
+	/* Edit menu.  */
 	connect(editDelete, &QAction::triggered, this, &MainWindow::slotEditDelete);
 	connect(setGameInfo, &QAction::triggered, this, &MainWindow::slotSetGameInfo);
 
@@ -502,6 +386,7 @@ void MainWindow::initActions(GameMode mode)
 	connect(editRectSelect, &QAction::toggled, this, &MainWindow::slotEditRectSelect);
 	connect(editClearSelect, &QAction::triggered, this, &MainWindow::slotEditClearSelect);
 
+	/* Navigation menu.  */
 	connect (navBackward, &QAction::triggered, [=] () { gfx_board->previous_move (); });
 	connect (navForward, &QAction::triggered, [=] () { gfx_board->next_move (); });
 	connect (navFirst, &QAction::triggered, [=] () { gfx_board->goto_first_move (); });
@@ -532,9 +417,7 @@ void MainWindow::initActions(GameMode mode)
 	navSwapVariations->setWhatsThis(tr("Swap variations\n\nSwap current move with previous variation."));
 	connect(navSwapVariations, &QAction::triggered, this, &MainWindow::slotNavSwapVariations);
 
-	/*
-	* Menu Settings
-	*/
+	/* Settings menu.  */
 	// Settings Preferences
 	setPreferences = new QAction(prefsIcon, tr("&Preferences"), this);
 	setPreferences->setShortcut (Qt::ALT + Qt::Key_P);
@@ -745,30 +628,6 @@ void MainWindow::initActions(GameMode mode)
 
 void MainWindow::initMenuBar(GameMode mode)
 {
-	// submenu Import/Export
-	importExportMenu = new QMenu(tr("&Import/Export"));
-	importExportMenu->addAction (fileExportASCII);
-	importExportMenu->addAction (fileExportSVG);
-	importExportMenu->addAction (fileImportSgfClipB);
-	importExportMenu->addAction (fileExportSgfClipB);
-	importExportMenu->addAction (fileExportPic);
-	importExportMenu->addAction (fileExportPicClipB);
-
-	importExportMenu->insertSeparator(fileImportSgfClipB);
-	importExportMenu->insertSeparator(fileExportPic);
-
-	fileMenu->addAction (fileNewBoard);
-	fileMenu->addAction (fileNew);
-	fileMenu->addAction (fileNewVariant);
-	fileMenu->addAction (fileOpen);
-	fileMenu->addAction (fileSave);
-	fileMenu->addAction (fileSaveAs);
-	fileMenu->addAction (fileClose);
-	fileMenu->addSeparator ();
-	fileMenu->addMenu (importExportMenu);
-	fileMenu->addSeparator ();
-	fileMenu->addAction (fileQuit);
-
 	settingsMenu->addAction (setPreferences);
 	settingsMenu->addAction (soundToggle);
 
@@ -809,12 +668,6 @@ void MainWindow::initMenuBar(GameMode mode)
 
 void MainWindow::initToolBar()
 {
-	fileBar->addAction (fileNew);
-	// fileBar->addAction (fileNewVariant);
-	fileBar->addAction (fileOpen);
-	fileBar->addAction (fileSave);
-	fileBar->addAction (fileSaveAs);
-
 	toolBar->addSeparator();
 	toolBar->addAction (soundToggle);
 	toolBar->addAction (viewCoords);

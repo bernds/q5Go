@@ -201,13 +201,7 @@ protected:
 
 	GameTree *gameTreeView;
 
-	QMenu *importExportMenu;
-
 	QAction *escapeFocus;
-	QAction *fileNewBoard, *fileNew, *fileNewVariant, *fileOpen, *fileSave, *fileSaveAs, *fileClose,
-		*fileExportASCII, *fileExportSVG, *fileImportSgfClipB, *fileExportSgfClipB,
-		*fileExportPic, *fileExportPicClipB,
-		*fileQuit;
 	QAction *navAutoplay, *navSwapVariations;
 	QAction *setPreferences, *soundToggle;
 	QAction *anConnect, *anDisconnect, *anPause;

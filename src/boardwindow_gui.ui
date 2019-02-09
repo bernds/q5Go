@@ -2681,6 +2681,30 @@ When in score mode, left click to mark a group as dead, right click to mark it a
     <property name="title">
      <string>&amp;File</string>
     </property>
+    <widget class="QMenu" name="menu_Import_Export">
+     <property name="title">
+      <string>&amp;Import/Export</string>
+     </property>
+     <addaction name="fileExportASCII"/>
+     <addaction name="fileExportSVG"/>
+     <addaction name="separator"/>
+     <addaction name="fileImportSgfClipB"/>
+     <addaction name="fileExportSgfClipB"/>
+     <addaction name="separator"/>
+     <addaction name="fileExportPic"/>
+     <addaction name="fileExportPicClipB"/>
+    </widget>
+    <addaction name="fileNewBoard"/>
+    <addaction name="fileNew"/>
+    <addaction name="fileNewVariant"/>
+    <addaction name="fileOpen"/>
+    <addaction name="fileSave"/>
+    <addaction name="fileSaveAs"/>
+    <addaction name="fileClose"/>
+    <addaction name="separator"/>
+    <addaction name="menu_Import_Export"/>
+    <addaction name="separator"/>
+    <addaction name="fileQuit"/>
    </widget>
    <widget class="QMenu" name="editMenu">
     <property name="title">
@@ -2763,6 +2787,12 @@ When in score mode, left click to mark a group as dead, right click to mark it a
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="fileNewBoard"/>
+   <addaction name="fileNew"/>
+   <addaction name="fileNewVariant"/>
+   <addaction name="fileOpen"/>
+   <addaction name="fileSave"/>
+   <addaction name="fileSaveAs"/>
   </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="windowTitle">
@@ -3177,6 +3207,170 @@ Enable diagram display in the View menu to view and edit diagrams.</string>
    </property>
    <property name="shortcut">
     <string>G</string>
+   </property>
+  </action>
+  <action name="fileNewBoard">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/ClientWindowGui/images/clientwindow/new_board.png</normaloff>:/ClientWindowGui/images/clientwindow/new_board.png</iconset>
+   </property>
+   <property name="text">
+    <string>New &amp;board window</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+B</string>
+   </property>
+  </action>
+  <action name="fileNew">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/ClientWindowGui/images/clientwindow/filenew.png</normaloff>:/ClientWindowGui/images/clientwindow/filenew.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;New game</string>
+   </property>
+   <property name="toolTip">
+    <string>Creates a new game on this board.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="fileNewVariant">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/ClientWindowGui/images/clientwindow/torus.png</normaloff>:/ClientWindowGui/images/clientwindow/torus.png</iconset>
+   </property>
+   <property name="text">
+    <string>New &amp;variant game</string>
+   </property>
+   <property name="toolTip">
+    <string>Creates a new Go variant game on this board</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+V</string>
+   </property>
+  </action>
+  <action name="fileSave">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/filesave.png</normaloff>:/BoardWindow/images/boardwindow/filesave.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Save</string>
+   </property>
+   <property name="toolTip">
+    <string>Save an sgf file.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="fileOpen">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/ClientWindowGui/images/clientwindow/fileopen.png</normaloff>:/ClientWindowGui/images/clientwindow/fileopen.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Open...</string>
+   </property>
+   <property name="toolTip">
+    <string>Open an sgf file</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="fileSaveAs">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/filesaveas.png</normaloff>:/BoardWindow/images/boardwindow/filesaveas.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save &amp;as...</string>
+   </property>
+   <property name="toolTip">
+    <string>Save a sgf file under a new name.</string>
+   </property>
+  </action>
+  <action name="fileClose">
+   <property name="text">
+    <string>&amp;Close</string>
+   </property>
+   <property name="toolTip">
+    <string>Close this window.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
+   </property>
+  </action>
+  <action name="fileQuit">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/ClientWindowGui/images/clientwindow/fileexit.png</normaloff>:/ClientWindowGui/images/clientwindow/fileexit.png</iconset>
+   </property>
+   <property name="text">
+    <string>E&amp;xit</string>
+   </property>
+   <property name="toolTip">
+    <string>Quit the application.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="fileExportASCII">
+   <property name="text">
+    <string>Export &amp;ASCII...</string>
+   </property>
+   <property name="toolTip">
+    <string>Export ASCII
+Export current board to ASCII diagrams, for use in web forums.</string>
+   </property>
+  </action>
+  <action name="fileExportSVG">
+   <property name="text">
+    <string>Export S&amp;VG...</string>
+   </property>
+   <property name="toolTip">
+    <string>Export SVG
+Export the current board to an SVG vector graphics file</string>
+   </property>
+  </action>
+  <action name="fileImportSgfClipB">
+   <property name="text">
+    <string>Import SGF from clipboard</string>
+   </property>
+   <property name="toolTip">
+    <string>Import SGF from clipboard
+Import a complete game in SGF format from the clipboard.</string>
+   </property>
+  </action>
+  <action name="fileExportSgfClipB">
+   <property name="text">
+    <string>E&amp;xport SGF &amp;to clipboard</string>
+   </property>
+   <property name="toolTip">
+    <string>Export SGF to clipboard
+Export a complete game in SGF format to the clipboard.</string>
+   </property>
+  </action>
+  <action name="fileExportPic">
+   <property name="text">
+    <string>Export &amp;image...</string>
+   </property>
+   <property name="toolTip">
+    <string>Export image
+Take a screen grab of the current board and export it to an image file.</string>
+   </property>
+  </action>
+  <action name="fileExportPicClipB">
+   <property name="text">
+    <string>&amp;Export image to clipboard</string>
+   </property>
+   <property name="toolTip">
+    <string>Export image to clipboard
+Take a screen grab of the current board position and export it to the clipboard as an image.</string>
    </property>
   </action>
  </widget>
