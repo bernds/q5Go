@@ -14,7 +14,6 @@
 #include "qgo.h"
 #include "preferences.h"
 #include "board.h"
-#include "mainwidget.h"
 #include "setting.h"
 #include "textview.h"
 #include "figuredlg.h"
@@ -202,8 +201,6 @@ protected:
 
 	GameTree *gameTreeView;
 
-	QToolBar *fileBar, *toolBar, *editBar;
-
 	QMenu *importExportMenu;
 
 	QAction *escapeFocus;
@@ -213,10 +210,7 @@ protected:
 		*fileQuit;
 	QAction *editDelete, *editStone, *editTriangle, *editSquare, *editCircle, *editCross, *editNumber, *editLetter;
 	QAction *editRectSelect, *editClearSelect, *editFigure;
-	QAction *navBackward, *navForward, *navFirst, *navLast, *navNextVar, *navPrevVar,
-		*navMainBranch, *navStartVar, *navNextBranch, *navNthMove, *navAutoplay, *navEmptyBranch,
-		*navCloneNode, *navSwapVariations, *navNextComment, *navPrevComment, *navIntersection;
-	QAction *navPrevFigure, *navNextFigure;
+	QAction *navAutoplay, *navSwapVariations;
 	QAction *setPreferences, *setGameInfo, *soundToggle;
 	QAction *anConnect, *anDisconnect, *anPause;
 	QAction *viewFileBar, *viewToolBar, *viewEditBar, *viewMenuBar, *viewStatusBar, *viewCoords,

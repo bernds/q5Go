@@ -29,7 +29,6 @@
 
 #include "clientwin.h"
 #include "mainwindow.h"
-#include "mainwidget.h"
 #include "board.h"
 #include "gametree.h"
 #include "sgf.h"
@@ -190,14 +189,14 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
         connect(resignButton, &QPushButton::clicked, this, &MainWindow::doResign);
         connect(doneButton, &QPushButton::clicked, this, &MainWindow::doCountDone);
 
-	connect(goLastButton, &QToolButton::clicked, [=] () { gfx_board->goto_last_move (); });
-	connect(goFirstButton, &QToolButton::clicked, [=] () { gfx_board->goto_first_move (); });
-	connect(goNextButton, &QToolButton::clicked, [=] () { gfx_board->next_move (); });
-	connect(goPrevButton, &QToolButton::clicked, [=] () { gfx_board->previous_move (); });
-	connect(prevNumberButton, &QToolButton::clicked, [=] () { gfx_board->previous_figure (); });
-	connect(nextNumberButton, &QToolButton::clicked, [=] () { gfx_board->next_figure (); });
-	connect(prevCommentButton, &QToolButton::clicked, [=] () { gfx_board->previous_comment (); });
-	connect(nextCommentButton, &QToolButton::clicked, [=] () { gfx_board->next_comment (); });
+	goLastButton->setDefaultAction (navLast);
+	goFirstButton->setDefaultAction (navFirst);
+	goNextButton->setDefaultAction (navForward);
+	goPrevButton->setDefaultAction (navBackward);
+	prevNumberButton->setDefaultAction (navPrevFigure);
+	nextNumberButton->setDefaultAction (navNextFigure);
+	prevCommentButton->setDefaultAction (navPrevComment);
+	nextCommentButton->setDefaultAction (navNextComment);
 
 	connect(diagEditButton, &QToolButton::clicked, this, &MainWindow::slotDiagEdit);
 	connect(diagASCIIButton, &QToolButton::clicked, this, &MainWindow::slotDiagASCII);
@@ -307,11 +306,6 @@ MainWindow::~MainWindow()
 	delete statusTurn;
 	delete statusCoords;
 
-	// tool bar;
-	delete editBar;
-	delete toolBar;
-	delete fileBar;
-
 	// menu bar
 	delete importExportMenu;
 
@@ -341,21 +335,6 @@ MainWindow::~MainWindow()
 	delete editLetter;
 	delete editGroup;
 	delete editFigure;
-	delete navBackward;
-	delete navForward;
-	delete navFirst;
-	delete navLast;
-	delete navPrevVar;
-	delete navNextVar;
-	delete navMainBranch;
-	delete navStartVar;
-	delete navNextBranch;
-	delete navPrevComment;
-	delete navNextComment;
-	delete navPrevFigure;
-	delete navNextFigure;
-	delete navIntersection;
-	delete navNthMove;
 	delete navAutoplay;
 	delete navSwapVariations;
 	delete setPreferences;
@@ -596,71 +575,22 @@ void MainWindow::initActions(GameMode mode)
 	editClearSelect->setWhatsThis(tr("Click to clear the selected rectangle and select the whole board again."));
 	connect(editClearSelect, &QAction::triggered, this, &MainWindow::slotEditClearSelect);
 
-	/*
-	* Menu Navigation
-	*/
-	navBackward = new QAction(QIcon (":/MainWidgetGui/images/mainwidget/1leftarrow.png"),
-				  tr("&Previous move") + "\t" + tr("Left"), this);
-	navBackward->setStatusTip(tr("To previous move"));
-	navBackward->setWhatsThis(tr("Previous move\n\nMove one move backward."));
 	connect (navBackward, &QAction::triggered, [=] () { gfx_board->previous_move (); });
-
-	navForward = new QAction(QIcon (":/MainWidgetGui/images/mainwidget/1rightarrow.png"),
-				 tr("&Next move") + "\t" + tr("Right"), this);
-	navForward->setStatusTip(tr("To next move"));
-	navForward->setWhatsThis(tr("Next move\n\nMove one move forward."));
 	connect (navForward, &QAction::triggered, [=] () { gfx_board->next_move (); });
-
-	navFirst = new QAction(QIcon (":/MainWidgetGui/images/mainwidget/2leftarrow.png"),
-			       tr("&First move") + "\t" + tr("Home"), this);
-	navFirst->setStatusTip(tr("To first move"));
-	navFirst->setWhatsThis(tr("First move\n\nMove to first move."));
 	connect (navFirst, &QAction::triggered, [=] () { gfx_board->goto_first_move (); });
-
-	navLast = new QAction(QIcon (":/MainWidgetGui/images/mainwidget/2rightarrow.png"),
-			      tr("&Last move") + "\t" + tr("End"), this);
-	navLast->setStatusTip(tr("To last move"));
-	navLast->setWhatsThis(tr("Last move\n\nMove to last move."));
 	connect (navLast, &QAction::triggered, [=] () { gfx_board->goto_last_move (); });
-
-	navPrevVar = new QAction(QIcon (":/BoardWindow/images/boardwindow/bluearrow-up.png"),
-				 tr("P&revious variation") + "\t" + tr("Up"), this);
-	navPrevVar->setStatusTip(tr("To previous variation"));
-	navPrevVar->setWhatsThis(tr("Previous variation\n\nMove to the previous variation of this move."));
 	connect (navPrevVar, &QAction::triggered, [=] () { gfx_board->previous_variation (); });
-
-	navNextVar = new QAction(QIcon (":/BoardWindow/images/boardwindow/bluearrow-down.png"),
-				 tr("N&ext variation") + "\t" + tr("Down"), this);
-	navNextVar->setStatusTip(tr("To next variation"));
-	navNextVar->setWhatsThis(tr("Next variation\n\nMove to the next variation of this move."));
 	connect (navNextVar, &QAction::triggered, [=] () { gfx_board->next_variation (); });
-
-	navMainBranch = new QAction(QIcon (":/BoardWindow/images/boardwindow/bluearrow-end-up.png"),
-				    tr("&Main branch"), this);
-	navMainBranch->setShortcut (Qt::Key_Insert);
-	navMainBranch->setStatusTip(tr("To main branch"));
-	navMainBranch->setWhatsThis(tr("Main Branch\n\nMove to the main branch where variation started."));
 	connect (navMainBranch, &QAction::triggered, [=] () { gfx_board->goto_main_branch (); });
-
-	navStartVar = new QAction(QIcon (":/BoardWindow/images/boardwindow/bluearrow-end-left.png"),
-				  tr("Variation &start") + "\t" + tr("PgUp"), this);
-	navStartVar->setShortcut (Qt::Key_PageUp);
-	navStartVar->setStatusTip(tr("To top of variation"));
-	navStartVar->setWhatsThis(tr("Variation start\n\nMove to the top variation of this branch."));
 	connect (navStartVar, &QAction::triggered, [=] () { gfx_board->goto_var_start (); });
-
-	navNextBranch = new QAction(QIcon (":/BoardWindow/images/boardwindow/bluearrow-end-right.png"),
-				    tr("Next &branch") + "\t" + tr("PgDn"), this);
-	navNextBranch->setShortcut (Qt::Key_PageDown);
-	navNextBranch->setStatusTip(tr("To next branch starting a variation"));
-	navNextBranch->setWhatsThis(tr("Next branch\n\nMove to the next branch starting a variation."));
 	connect (navNextBranch, &QAction::triggered, [=] () { gfx_board->goto_next_branch (); });
+	connect (navPrevComment, &QAction::triggered, [=] () { gfx_board->previous_comment (); });
+	connect (navNextComment, &QAction::triggered, [=] () { gfx_board->next_comment (); });
+	connect (navPrevFigure, &QAction::triggered, [=] () { gfx_board->previous_figure (); });
+	connect (navNextFigure, &QAction::triggered, [=] () { gfx_board->next_figure (); });
 
-	navNthMove = new QAction(tr("&Goto Move"), this);
-	navNthMove->setShortcut (QKeySequence (Qt::CTRL + Qt::Key_G));
-	navNthMove->setStatusTip(tr("Goto a move of main branch by number"));
-	navNthMove->setWhatsThis(tr("Goto move\n\nGoto a move of main branch by number."));
-	connect(navNthMove, &QAction::triggered, this, &MainWindow::slotNavNthMove);
+	connect (navNthMove, &QAction::triggered, this, &MainWindow::slotNavNthMove);
+	connect (navIntersection, &QAction::triggered, this, &MainWindow::slotNavIntersection);
 
 	navAutoplay = new QAction(autoplayIcon, tr("&Autoplay"), this);
 	navAutoplay->setCheckable (true);
@@ -674,37 +604,6 @@ void MainWindow::initActions(GameMode mode)
 	navSwapVariations->setStatusTip(tr("Swap current move with previous variation"));
 	navSwapVariations->setWhatsThis(tr("Swap variations\n\nSwap current move with previous variation."));
 	connect(navSwapVariations, &QAction::triggered, this, &MainWindow::slotNavSwapVariations);
-
-	navPrevComment = new QAction(QIcon (":/MainWidgetGui/images/mainwidget/1leftcomment.png"),
-				     tr("Previous &commented move"), this);
-	navPrevComment->setStatusTip(tr("To previous comment"));
-	navPrevComment->setWhatsThis(tr("Previous comment\n\nMove to the previous move that has a comment"));
-	connect (navPrevComment, &QAction::triggered, [=] () { gfx_board->previous_comment (); });
-
-	navNextComment = new QAction(QIcon (":/MainWidgetGui/images/mainwidget/1rightcomment.png"),
-				     tr("Next c&ommented move"), this);
-	navNextComment->setStatusTip(tr("To next comment"));
-	navNextComment->setWhatsThis(tr("Next comment\n\nMove to the next move that has a comment"));
-	connect (navNextComment, &QAction::triggered, [=] () { gfx_board->next_comment (); });
-
-	navPrevFigure = new QAction(QIcon (":/MainWidgetGui/images/mainwidget/1left123.png"),
-				     tr("Previous &diagram"), this);
-	navPrevFigure->setStatusTip(tr("To previous diagram"));
-	navPrevFigure->setWhatsThis(tr("Previous diagram\n\nMove to the previous move that starts a diagram"));
-	connect (navPrevFigure, &QAction::triggered, [=] () { gfx_board->previous_figure (); });
-
-	navNextFigure = new QAction(QIcon (":/MainWidgetGui/images/mainwidget/1right123.png"),
-				     tr("Next dia&gram"), this);
-	navNextFigure->setStatusTip(tr("To next diagram"));
-	navNextFigure->setWhatsThis(tr("Next diagram\n\nMove to the next move that starts a diagram"));
-	connect (navNextFigure, &QAction::triggered, [=] () { gfx_board->next_figure (); });
-
-	navIntersection = new QAction(QIcon (":/BoardWindow/images/boardwindow/navclicked.png"),
-				      tr("Goto clic&ked move"), this);
-	navIntersection->setStatusTip(tr("To clicked move"));
-	navIntersection->setWhatsThis(tr("Click on a board intersection\n\n"
-					 "Move to the stone played at this intersection (if any)"));
-	connect (navIntersection, &QAction::triggered, this, &MainWindow::slotNavIntersection);
 
 	/*
 	* Menu Settings
@@ -964,25 +863,6 @@ void MainWindow::initMenuBar(GameMode mode)
 	editMenu->addAction (editRectSelect);
 	editMenu->addAction (editClearSelect);
 
-	navMenu->addAction (navFirst);
-	navMenu->addAction (navBackward);
-	navMenu->addAction (navForward);
-	navMenu->addAction (navLast);
-
-	navMenu->addSeparator ();
-	navMenu->addAction (navMainBranch);
-	navMenu->addAction (navPrevVar);
-	navMenu->addAction (navNextVar);
-	navMenu->addAction (navStartVar);
-	navMenu->addAction (navNextBranch);
-
-	navMenu->addSeparator ();
-	navMenu->addAction (navNthMove);
-	navMenu->addAction (navPrevComment);
-	navMenu->addAction (navNextComment);
-	navMenu->addAction (navPrevFigure);
-	navMenu->addAction (navNextFigure);
-
 	settingsMenu->addAction (setPreferences);
 	settingsMenu->addAction (soundToggle);
 
@@ -1023,40 +903,18 @@ void MainWindow::initMenuBar(GameMode mode)
 
 void MainWindow::initToolBar()
 {
-	// File toolbar
-	fileBar = addToolBar ("filebar");
-
 	fileBar->addAction (fileNew);
 	// fileBar->addAction (fileNewVariant);
 	fileBar->addAction (fileOpen);
 	fileBar->addAction (fileSave);
 	fileBar->addAction (fileSaveAs);
 
-	// Navigation toolbar
-	toolBar = addToolBar ("toolbar");
-
-	toolBar->addAction (navMainBranch);
-	toolBar->addAction (navPrevVar);
-	toolBar->addAction (navNextVar);
-	toolBar->addAction (navStartVar);
-	toolBar->addAction (navNextBranch);
-
 	toolBar->addSeparator();
-	toolBar->addAction (navIntersection);
-	toolBar->addSeparator();
-
-	toolBar->addSeparator();
-
 	toolBar->addAction (soundToggle);
 	toolBar->addAction (viewCoords);
 
 	toolBar->addSeparator();
-
 	toolBar->addAction (whatsThis);
-	toolBar->addSeparator();
-
-	// Edit toolbar
-	editBar = addToolBar ("editbar");
 
 	editBar->addAction (setGameInfo);
 
@@ -2502,6 +2360,18 @@ void MainWindow::setMoveData (game_state &gs, const go_board &b, GameMode mode)
 	int move_nr = gs.move_number ();
 	int var_nr = gs.var_number ();
 
+	bool good_mode = mode == modeNormal || mode == modeObserve || mode == modeBatch;
+
+	navBackward->setEnabled (good_mode && !is_root_node);
+	navForward->setEnabled (good_mode && sons > 0);
+	navFirst->setEnabled (good_mode && !is_root_node);
+	navLast->setEnabled (good_mode && sons > 0);
+	navPrevComment->setEnabled (good_mode && !is_root_node);
+	navNextComment->setEnabled (good_mode && sons > 0);
+	navPrevFigure->setEnabled (good_mode && !is_root_node);
+	navNextFigure->setEnabled (good_mode && sons > 0);
+	navIntersection->setEnabled (good_mode);
+
 	switch (mode)
 	{
 	case modeNormal:
@@ -2517,30 +2387,16 @@ void MainWindow::setMoveData (game_state &gs, const go_board &b, GameMode mode)
 
 		/* fall through */
 	case modeObserve:
-		navBackward->setEnabled(!is_root_node);
-		navForward->setEnabled(sons > 0);
-		navFirst->setEnabled(!is_root_node);
-		navLast->setEnabled(sons > 0);
-		navPrevComment->setEnabled(!is_root_node);
-		navNextComment->setEnabled(sons > 0);
-		navIntersection->setEnabled(true);
 		break;
 
 	case modeScore:
 	case modeEdit:
 		navPrevVar->setEnabled(false);
 		navNextVar->setEnabled(false);
-		navBackward->setEnabled(false);
-		navForward->setEnabled(false);
-		navFirst->setEnabled(false);
 		navStartVar->setEnabled(false);
 		navMainBranch->setEnabled(false);
-		navLast->setEnabled(false);
 		navNextBranch->setEnabled(false);
 		navSwapVariations->setEnabled(false);
-		navPrevComment->setEnabled(false);
-		navNextComment->setEnabled(false);
-		navIntersection->setEnabled(false);
 		break;
 	default:
 		break;
@@ -2610,8 +2466,6 @@ void MainWindow::setMoveData (game_state &gs, const go_board &b, GameMode mode)
 	else
 		turnLabel->setText(QObject::tr ("White to play"));
 
-	bool good_mode = mode == modeNormal || mode == modeObserve || mode == modeBatch;
-
 	const QStyle *style = qgo_app->style ();
 	int iconsz = style->pixelMetric (QStyle::PixelMetric::PM_ToolBarIconSize);
 
@@ -2624,15 +2478,6 @@ void MainWindow::setMoveData (game_state &gs, const go_board &b, GameMode mode)
 	nextCommentButton->setIconSize (sz);
 	prevNumberButton->setIconSize (sz);
 	nextNumberButton->setIconSize (sz);
-
-	goPrevButton->setEnabled (good_mode && !is_root_node);
-	goNextButton->setEnabled (good_mode && sons > 0);
-	goFirstButton->setEnabled (good_mode && !is_root_node);
-	goLastButton->setEnabled (good_mode && sons > 0);
-	prevCommentButton->setEnabled (good_mode && !is_root_node);
-	nextCommentButton->setEnabled (good_mode && sons > 0);
-	prevNumberButton->setEnabled (good_mode && !is_root_node);
-	nextNumberButton->setEnabled (good_mode && sons > 0);
 
 	scoreTools->setVisible (mode == modeScore || mode == modeScoreRemote || gs.was_score_p ());
 	normalTools->setVisible (mode != modeScore && mode != modeScoreRemote && !gs.was_score_p ());

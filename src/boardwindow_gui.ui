@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1266</width>
-    <height>934</height>
+    <width>996</width>
+    <height>755</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,8 +17,8 @@
    <widget class="QSplitter" name="splitter">
     <property name="geometry">
      <rect>
-      <x>-50</x>
-      <y>10</y>
+      <x>0</x>
+      <y>0</y>
       <width>989</width>
       <height>703</height>
      </rect>
@@ -913,7 +913,7 @@ Variation 1 of 20
                    </property>
                    <property name="icon">
                     <iconset resource="q4go.qrc">
-                     <normaloff>:/MainWidgetGui/images/mainwidget/2leftarrow.png</normaloff>:/MainWidgetGui/images/mainwidget/2leftarrow.png</iconset>
+                     <normaloff>:/BoardWindow/images/boardwindow/2leftarrow.png</normaloff>:/BoardWindow/images/boardwindow/2leftarrow.png</iconset>
                    </property>
                   </widget>
                  </item>
@@ -930,7 +930,7 @@ Variation 1 of 20
                    </property>
                    <property name="icon">
                     <iconset resource="q4go.qrc">
-                     <normaloff>:/MainWidgetGui/images/mainwidget/1leftarrow.png</normaloff>:/MainWidgetGui/images/mainwidget/1leftarrow.png</iconset>
+                     <normaloff>:/BoardWindow/images/boardwindow/1leftarrow.png</normaloff>:/BoardWindow/images/boardwindow/1leftarrow.png</iconset>
                    </property>
                   </widget>
                  </item>
@@ -947,7 +947,7 @@ Variation 1 of 20
                    </property>
                    <property name="icon">
                     <iconset resource="q4go.qrc">
-                     <normaloff>:/MainWidgetGui/images/mainwidget/1rightarrow.png</normaloff>:/MainWidgetGui/images/mainwidget/1rightarrow.png</iconset>
+                     <normaloff>:/BoardWindow/images/boardwindow/1rightarrow.png</normaloff>:/BoardWindow/images/boardwindow/1rightarrow.png</iconset>
                    </property>
                   </widget>
                  </item>
@@ -964,7 +964,7 @@ Variation 1 of 20
                    </property>
                    <property name="icon">
                     <iconset resource="q4go.qrc">
-                     <normaloff>:/MainWidgetGui/images/mainwidget/2rightarrow.png</normaloff>:/MainWidgetGui/images/mainwidget/2rightarrow.png</iconset>
+                     <normaloff>:/BoardWindow/images/boardwindow/2rightarrow.png</normaloff>:/BoardWindow/images/boardwindow/2rightarrow.png</iconset>
                    </property>
                   </widget>
                  </item>
@@ -991,7 +991,7 @@ Variation 1 of 20
                    </property>
                    <property name="icon">
                     <iconset resource="q4go.qrc">
-                     <normaloff>:/MainWidgetGui/images/mainwidget/1leftcomment.png</normaloff>:/MainWidgetGui/images/mainwidget/1leftcomment.png</iconset>
+                     <normaloff>:/BoardWindow/images/boardwindow/1leftcomment.png</normaloff>:/BoardWindow/images/boardwindow/1leftcomment.png</iconset>
                    </property>
                   </widget>
                  </item>
@@ -1008,7 +1008,7 @@ Variation 1 of 20
                    </property>
                    <property name="icon">
                     <iconset resource="q4go.qrc">
-                     <normaloff>:/MainWidgetGui/images/mainwidget/1rightcomment.png</normaloff>:/MainWidgetGui/images/mainwidget/1rightcomment.png</iconset>
+                     <normaloff>:/BoardWindow/images/boardwindow/1rightcomment.png</normaloff>:/BoardWindow/images/boardwindow/1rightcomment.png</iconset>
                    </property>
                   </widget>
                  </item>
@@ -1025,7 +1025,7 @@ Variation 1 of 20
                    </property>
                    <property name="icon">
                     <iconset resource="q4go.qrc">
-                     <normaloff>:/MainWidgetGui/images/mainwidget/1left123.png</normaloff>:/MainWidgetGui/images/mainwidget/1left123.png</iconset>
+                     <normaloff>:/BoardWindow/images/boardwindow/1left123.png</normaloff>:/BoardWindow/images/boardwindow/1left123.png</iconset>
                    </property>
                   </widget>
                  </item>
@@ -1042,7 +1042,7 @@ Variation 1 of 20
                    </property>
                    <property name="icon">
                     <iconset resource="q4go.qrc">
-                     <normaloff>:/MainWidgetGui/images/mainwidget/1right123.png</normaloff>:/MainWidgetGui/images/mainwidget/1right123.png</iconset>
+                     <normaloff>:/BoardWindow/images/boardwindow/1right123.png</normaloff>:/BoardWindow/images/boardwindow/1right123.png</iconset>
                    </property>
                   </widget>
                  </item>
@@ -1546,7 +1546,7 @@ Indicates whether it is black's or white's turn.</string>
                     <string/>
                    </property>
                    <property name="pixmap">
-                    <pixmap resource="q4go.qrc">:/MainWidgetGui/images/mainwidget/warning.png</pixmap>
+                    <pixmap resource="q4go.qrc">:/BoardWindow/images/boardwindow/warning.png</pixmap>
                    </property>
                   </widget>
                  </item>
@@ -2227,7 +2227,7 @@ TG	teaching tools</string>
                 <enum>QTabWidget::South</enum>
                </property>
                <property name="currentIndex">
-                <number>1</number>
+                <number>0</number>
                </property>
                <property name="tabBarAutoHide">
                 <bool>true</bool>
@@ -2673,7 +2673,7 @@ When in score mode, left click to mark a group as dead, right click to mark it a
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1266</width>
+     <width>996</width>
      <height>23</height>
     </rect>
    </property>
@@ -2691,6 +2691,23 @@ When in score mode, left click to mark a group as dead, right click to mark it a
     <property name="title">
      <string>&amp;Navigation</string>
     </property>
+    <addaction name="navFirst"/>
+    <addaction name="navBackward"/>
+    <addaction name="navForward"/>
+    <addaction name="navLast"/>
+    <addaction name="navPrevComment"/>
+    <addaction name="navNextComment"/>
+    <addaction name="navPrevFigure"/>
+    <addaction name="navNextFigure"/>
+    <addaction name="separator"/>
+    <addaction name="navNthMove"/>
+    <addaction name="separator"/>
+    <addaction name="navMainBranch"/>
+    <addaction name="navPrevVar"/>
+    <addaction name="navNextVar"/>
+    <addaction name="navStartVar"/>
+    <addaction name="navNextBranch"/>
+    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="settingsMenu">
     <property name="title">
@@ -2720,6 +2737,230 @@ When in score mode, left click to mark a group as dead, right click to mark it a
    <addaction name="settingsMenu"/>
    <addaction name="helpMenu"/>
   </widget>
+  <widget class="QToolBar" name="fileBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="navMainBranch"/>
+   <addaction name="navPrevVar"/>
+   <addaction name="navNextVar"/>
+   <addaction name="navStartVar"/>
+   <addaction name="navNextBranch"/>
+   <addaction name="navIntersection"/>
+  </widget>
+  <widget class="QToolBar" name="editBar">
+   <property name="windowTitle">
+    <string>toolBar_2</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <action name="navForward">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/1rightarrow.png</normaloff>:/BoardWindow/images/boardwindow/1rightarrow.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Next move</string>
+   </property>
+   <property name="shortcut">
+    <string>Right</string>
+   </property>
+  </action>
+  <action name="navBackward">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/1leftarrow.png</normaloff>:/BoardWindow/images/boardwindow/1leftarrow.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Previous move</string>
+   </property>
+   <property name="shortcut">
+    <string>Left</string>
+   </property>
+  </action>
+  <action name="navFirst">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/2leftarrow.png</normaloff>:/BoardWindow/images/boardwindow/2leftarrow.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;First move</string>
+   </property>
+   <property name="shortcut">
+    <string>Home</string>
+   </property>
+  </action>
+  <action name="navLast">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/2rightarrow.png</normaloff>:/BoardWindow/images/boardwindow/2rightarrow.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Last move</string>
+   </property>
+   <property name="shortcut">
+    <string>End</string>
+   </property>
+  </action>
+  <action name="navPrevVar">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/bluearrow-up.png</normaloff>:/BoardWindow/images/boardwindow/bluearrow-up.png</iconset>
+   </property>
+   <property name="text">
+    <string>P&amp;revious variation</string>
+   </property>
+   <property name="shortcut">
+    <string>Up</string>
+   </property>
+  </action>
+  <action name="navNextVar">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/bluearrow-down.png</normaloff>:/BoardWindow/images/boardwindow/bluearrow-down.png</iconset>
+   </property>
+   <property name="text">
+    <string>N&amp;ext variation</string>
+   </property>
+   <property name="shortcut">
+    <string>Down</string>
+   </property>
+  </action>
+  <action name="navMainBranch">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/bluearrow-end-up.png</normaloff>:/BoardWindow/images/boardwindow/bluearrow-end-up.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Main branch</string>
+   </property>
+   <property name="shortcut">
+    <string>Ins</string>
+   </property>
+  </action>
+  <action name="navStartVar">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/bluearrow-end-left.png</normaloff>:/BoardWindow/images/boardwindow/bluearrow-end-left.png</iconset>
+   </property>
+   <property name="text">
+    <string>Variation &amp;start</string>
+   </property>
+   <property name="toolTip">
+    <string>To start of variation</string>
+   </property>
+   <property name="shortcut">
+    <string>PgUp</string>
+   </property>
+  </action>
+  <action name="navNextBranch">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/bluearrow-end-right.png</normaloff>:/BoardWindow/images/boardwindow/bluearrow-end-right.png</iconset>
+   </property>
+   <property name="text">
+    <string>Next &amp;branch</string>
+   </property>
+   <property name="toolTip">
+    <string>Move to next branch starting a variation</string>
+   </property>
+   <property name="shortcut">
+    <string>PgDown</string>
+   </property>
+  </action>
+  <action name="navPrevComment">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/1leftcomment.png</normaloff>:/BoardWindow/images/boardwindow/1leftcomment.png</iconset>
+   </property>
+   <property name="text">
+    <string>Previous &amp;commented move</string>
+   </property>
+   <property name="toolTip">
+    <string>Move to the previous move that has a comment</string>
+   </property>
+  </action>
+  <action name="navNextComment">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/1rightcomment.png</normaloff>:/BoardWindow/images/boardwindow/1rightcomment.png</iconset>
+   </property>
+   <property name="text">
+    <string>Next c&amp;ommented move</string>
+   </property>
+   <property name="toolTip">
+    <string>Move to the next move that has a comment</string>
+   </property>
+  </action>
+  <action name="navPrevFigure">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/1left123.png</normaloff>:/BoardWindow/images/boardwindow/1left123.png</iconset>
+   </property>
+   <property name="text">
+    <string>Previous &amp;diagram</string>
+   </property>
+   <property name="toolTip">
+    <string>nMove to the previous move that starts a diagram</string>
+   </property>
+  </action>
+  <action name="navNextFigure">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/1right123.png</normaloff>:/BoardWindow/images/boardwindow/1right123.png</iconset>
+   </property>
+   <property name="text">
+    <string>Next dia&amp;gram</string>
+   </property>
+   <property name="toolTip">
+    <string>Move to the next move that starts a diagram</string>
+   </property>
+  </action>
+  <action name="navNthMove">
+   <property name="text">
+    <string>&amp;Go to move...</string>
+   </property>
+   <property name="toolTip">
+    <string>Enter a move number and move there</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+G</string>
+   </property>
+  </action>
+  <action name="navIntersection">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/navclicked.png</normaloff>:/BoardWindow/images/boardwindow/navclicked.png</iconset>
+   </property>
+   <property name="text">
+    <string>Go to clic&amp;ked move</string>
+   </property>
+   <property name="toolTip">
+    <string>Click on an intersection and move to stone played there (if any)</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -2752,7 +2993,6 @@ When in score mode, left click to mark a group as dead, right click to mark it a
  </customwidgets>
  <resources>
   <include location="q4go.qrc"/>
-  <include location="../q4go.qrc"/>
  </resources>
  <connections>
   <connection>

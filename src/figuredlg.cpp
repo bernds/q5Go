@@ -1,8 +1,8 @@
 #include <QPushButton>
 
 #include "gogame.h"
-#include "figuredlg.h"
 #include "mainwindow.h"
+#include "figuredlg.h"
 
 FigureDialog::FigureDialog (game_state *st, MainWindow *parent) : QDialog (parent), m_win (parent), m_state (st)
 {

@@ -1,16 +1,14 @@
 <RCC>
-  <qresource prefix="/MainWidgetGui">
-    <file>images/mainwidget/1leftarrow.png</file>
-    <file>images/mainwidget/1rightarrow.png</file>
-    <file>images/mainwidget/2leftarrow.png</file>
-    <file>images/mainwidget/1left123.png</file>
-    <file>images/mainwidget/1right123.png</file>
-    <file>images/mainwidget/2rightarrow.png</file>
-    <file>images/mainwidget/1leftcomment.png</file>
-    <file>images/mainwidget/1rightcomment.png</file>
-    <file>images/mainwidget/warning.png</file>
-  </qresource>
   <qresource prefix="/BoardWindow">
+    <file>images/boardwindow/1leftarrow.png</file>
+    <file>images/boardwindow/1rightarrow.png</file>
+    <file>images/boardwindow/2leftarrow.png</file>
+    <file>images/boardwindow/1left123.png</file>
+    <file>images/boardwindow/1right123.png</file>
+    <file>images/boardwindow/2rightarrow.png</file>
+    <file>images/boardwindow/1leftcomment.png</file>
+    <file>images/boardwindow/1rightcomment.png</file>
+    <file>images/boardwindow/warning.png</file>
     <file>images/boardwindow/bluearrow-down.png</file>
     <file>images/boardwindow/bluearrow-end-down.png</file>
     <file>images/boardwindow/bluearrow-end-left.png</file>
