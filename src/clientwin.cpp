@@ -144,7 +144,18 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 		m_engines.append (new Engine(s, setting->readEntry("ENGINE" + QString::number(i) + "b"),
 					     setting->readEntry("ENGINE" + QString::number(i) + "c"),
 					     setting->readEntry("ENGINE" + QString::number(i) + "d"),
-					     setting->readBoolEntry("ENGINE" + QString::number(i) + "e")));
+					     setting->readBoolEntry("ENGINE" + QString::number(i) + "e"),
+					     setting->readEntry("ENGINE" + QString::number(i) + "f")));
+		bool updated = false;
+		for (auto it: m_engines)
+			if (it->analysis () && it->boardsize ().isEmpty ()) {
+				updated = true;
+				it->set_boardsize ("19");
+			}
+		if (updated)
+			QMessageBox::information (this, PACKAGE,
+						  tr("Engine configuration updated\n"
+						     "Analysis engines now require a board size to be set, assuming 19 for existing entries."));
 	}
 	std::sort (hostlist.begin (), hostlist.end (), [] (Host *a, Host *b) { return *a < *b; });
 
@@ -616,6 +627,7 @@ void ClientWindow::saveSettings()
 		setting->writeEntry("ENGINE" + QString::number(i) + "c", h->args());
 		setting->writeEntry("ENGINE" + QString::number(i) + "d", h->komi());
 		setting->writeBoolEntry("ENGINE" + QString::number(i) + "e", h->analysis());
+		setting->writeEntry("ENGINE" + QString::number(i) + "f", h->boardsize());
 	}
 
 	// save current connection if at least one host exists

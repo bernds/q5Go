@@ -36,10 +36,12 @@ PreferencesDialog::PreferencesDialog(QWidget* parent)
 	engine_w = std::max (engine_w, enginelabel_2->width ());
 	engine_w = std::max (engine_w, enginelabel_3->width ());
 	engine_w = std::max (engine_w, enginelabel_4->width ());
+	engine_w = std::max (engine_w, enginelabel_5->width ());
 	enginelabel_1->setMinimumWidth (engine_w);
 	enginelabel_2->setMinimumWidth (engine_w);
 	enginelabel_3->setMinimumWidth (engine_w);
 	enginelabel_4->setMinimumWidth (engine_w);
+	enginelabel_5->setMinimumWidth (engine_w);
 
 	// init random-number generator
 	srand ((unsigned)time (nullptr));
@@ -613,6 +615,21 @@ void PreferencesDialog::slot_add_engine()
 			return;
 		}
 	}
+	if (engineSize->text ().isEmpty ()) {
+		if (engineAnalysis->isChecked ()) {
+			QMessageBox::warning (this, tr ("Missing board size"),
+					      tr ("Analysis engines require a board size to be specified.\n"
+						  "If your engine allows multiple board sizes, you need to configure them in separate entires."));
+			return;
+		}
+	} else {
+		int sz = engineSize->text ().toInt ();
+		if (sz < 5 || sz > 25) {
+			QMessageBox::warning (this, tr ("Invalid board size"),
+					      tr ("Only a range of 5 to 25 is allowed."));
+			return;
+		}
+	}
 	const QString name = engineName->text();
 	// check if at least title and path are set
 	if (!name.isEmpty() && !enginePath->text().isEmpty())
@@ -629,10 +646,11 @@ void PreferencesDialog::slot_add_engine()
 				break;
 			}
 
-		parent_cw->m_engines.append(new Engine(engineName->text(),
-						       enginePath->text(), engineArgs->text (),
-						       engineKomi->text(),
-						       engineAnalysis->isChecked ()));
+		parent_cw->m_engines.append (new Engine (engineName->text (),
+							 enginePath->text (), engineArgs->text (),
+							 engineKomi->text (),
+							 engineAnalysis->isChecked (),
+							 engineSize->text ()));
 		std::sort (parent_cw->m_engines.begin (), parent_cw->m_engines.end (),
 			   [] (Engine *a, Engine *b) { return *a < *b; });
 
@@ -693,11 +711,12 @@ void PreferencesDialog::slot_clickedEngines (QListWidgetItem *lvi)
 	// fill host info of selected title
 	for (auto h: parent_cw->m_engines) {
 		if (h->title() == lvi->text ()) {
-			engineName->setText(h->title ());
-			enginePath->setText(h->path ());
-			engineArgs->setText(h->args ());
-			engineKomi->setText(h->komi ());
+			engineName->setText (h->title ());
+			enginePath->setText (h->path ());
+			engineArgs->setText (h->args ());
+			engineKomi->setText (h->komi ());
 			engineAnalysis->setChecked (h->analysis ());
+			engineSize->setText (h->boardsize ());
 			break;
 		}
 	}

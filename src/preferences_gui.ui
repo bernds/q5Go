@@ -2140,14 +2140,7 @@ If the picture is not set, or unvalid, a default goban is used by qgo</string>
           <string>Go Engines</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_7">
-          <item row="4" column="0">
-           <widget class="QCheckBox" name="engineAnalysis">
-            <property name="text">
-             <string>Use for analysis (LZ or compatible)</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="0">
+          <item row="7" column="0">
            <widget class="QWidget" name="widget_6" native="true">
             <layout class="QGridLayout" name="gridLayout_6">
              <property name="leftMargin">
@@ -2274,33 +2267,18 @@ Note: 'Delete' concerns saved records.</string>
             </layout>
            </widget>
           </item>
-          <item row="0" column="1" rowspan="7">
-           <widget class="QListWidget" name="ListView_engines">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
+          <item row="6" column="0">
+           <spacer name="verticalSpacer_14">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
             </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout_10">
-            <item>
-             <widget class="QLabel" name="enginelabel_3">
-              <property name="text">
-               <string>Arguments:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="engineArgs">
-              <property name="toolTip">
-               <string>Any command line arguments that should be passed at startup.</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>0</height>
+             </size>
+            </property>
+           </spacer>
           </item>
           <item row="1" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_9">
@@ -2308,6 +2286,9 @@ Note: 'Delete' concerns saved records.</string>
              <widget class="QLabel" name="enginelabel_2">
               <property name="text">
                <string>Executable:</string>
+              </property>
+              <property name="buddy">
+               <cstring>enginePath</cstring>
               </property>
              </widget>
             </item>
@@ -2338,6 +2319,9 @@ Note: 'Delete' concerns saved records.</string>
               <property name="text">
                <string>Name:</string>
               </property>
+              <property name="buddy">
+               <cstring>engineName</cstring>
+              </property>
              </widget>
             </item>
             <item>
@@ -2349,18 +2333,22 @@ Note: 'Delete' concerns saved records.</string>
             </item>
            </layout>
           </item>
+          <item row="0" column="1" rowspan="8">
+           <widget class="QListWidget" name="ListView_engines">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
           <item row="5" column="0">
-           <spacer name="verticalSpacer_14">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
+           <widget class="QCheckBox" name="engineAnalysis">
+            <property name="text">
+             <string>Use for analysis (LZ or compatible)</string>
             </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>0</height>
-             </size>
-            </property>
-           </spacer>
+           </widget>
           </item>
           <item row="3" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_7">
@@ -2369,10 +2357,51 @@ Note: 'Delete' concerns saved records.</string>
               <property name="text">
                <string>Fixed komi:</string>
               </property>
+              <property name="buddy">
+               <cstring>engineKomi</cstring>
+              </property>
              </widget>
             </item>
             <item>
              <widget class="QLineEdit" name="engineKomi"/>
+            </item>
+           </layout>
+          </item>
+          <item row="2" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_10">
+            <item>
+             <widget class="QLabel" name="enginelabel_3">
+              <property name="text">
+               <string>Arguments:</string>
+              </property>
+              <property name="buddy">
+               <cstring>engineArgs</cstring>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="engineArgs">
+              <property name="toolTip">
+               <string>Any command line arguments that should be passed at startup.</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="4" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_17">
+            <item>
+             <widget class="QLabel" name="enginelabel_5">
+              <property name="text">
+               <string>Board size:</string>
+              </property>
+              <property name="buddy">
+               <cstring>engineSize</cstring>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="engineSize"/>
             </item>
            </layout>
           </item>
@@ -4379,15 +4408,6 @@ Note: 'Delete' concerns saved records.</string>
   <tabstop>pb_server_add</tabstop>
   <tabstop>pb_server_delete</tabstop>
   <tabstop>ListView_hosts</tabstop>
-  <tabstop>pb_engine_new</tabstop>
-  <tabstop>pb_engine_add</tabstop>
-  <tabstop>pb_engine_delete</tabstop>
-  <tabstop>computerSizeSpin</tabstop>
-  <tabstop>computerHandicapSpin</tabstop>
-  <tabstop>computerWhiteButton</tabstop>
-  <tabstop>humanName</tabstop>
-  <tabstop>anVarComboBox</tabstop>
-  <tabstop>winrateComboBox</tabstop>
   <tabstop>BYSpin_Nmatch</tabstop>
   <tabstop>timeSpin</tabstop>
   <tabstop>buttonCancel</tabstop>
@@ -4395,7 +4415,6 @@ Note: 'Delete' concerns saved records.</string>
   <tabstop>komiSpinDefault</tabstop>
   <tabstop>buttonOk</tabstop>
   <tabstop>stoneView</tabstop>
-  <tabstop>enginePath</tabstop>
   <tabstop>buttonApply</tabstop>
   <tabstop>buttonHelp</tabstop>
   <tabstop>ListView_engines</tabstop>
@@ -4439,14 +4458,30 @@ Note: 'Delete' concerns saved records.</string>
   <tabstop>timerComboBox</tabstop>
   <tabstop>sgfTimeTagsCheckBox</tabstop>
   <tabstop>checkBox_Nmatch_White</tabstop>
-  <tabstop>engineAnalysis</tabstop>
   <tabstop>checkBox_Nmatch_Nigiri</tabstop>
   <tabstop>HandicapSpin_Nmatch</tabstop>
-  <tabstop>enginePathButton</tabstop>
   <tabstop>tabWidget</tabstop>
   <tabstop>engineName</tabstop>
+  <tabstop>enginePath</tabstop>
+  <tabstop>enginePathButton</tabstop>
   <tabstop>engineArgs</tabstop>
   <tabstop>engineKomi</tabstop>
+  <tabstop>engineSize</tabstop>
+  <tabstop>engineAnalysis</tabstop>
+  <tabstop>pb_engine_new</tabstop>
+  <tabstop>pb_engine_add</tabstop>
+  <tabstop>pb_engine_delete</tabstop>
+  <tabstop>computerSizeSpin</tabstop>
+  <tabstop>computerHandicapSpin</tabstop>
+  <tabstop>computerWhiteButton</tabstop>
+  <tabstop>humanName</tabstop>
+  <tabstop>anVarComboBox</tabstop>
+  <tabstop>winrateComboBox</tabstop>
+  <tabstop>anMaxMovesEdit</tabstop>
+  <tabstop>anDepthEdit</tabstop>
+  <tabstop>anHideCheckBox</tabstop>
+  <tabstop>anChildMovesCheckBox</tabstop>
+  <tabstop>anPruneCheckBox</tabstop>
   <tabstop>LineEdit_watch</tabstop>
   <tabstop>LineEdit_exclude</tabstop>
   <tabstop>radioButtonStones_2D</tabstop>
