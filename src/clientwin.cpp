@@ -173,7 +173,8 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	whoOpenCheck->setChecked(setting->readIntEntry("WHO_CB"));
 
 	// restore size of client window
-	s = setting->readEntry("CLIENTWINDOW");
+	QString scrkey = screen_key (this);
+	s = setting->readEntry("CLIENTWINDOW_" + scrkey);
 	if (s.length() > 5)
 	{
 		QPoint p;
@@ -187,7 +188,7 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	}
 
 	// restore splitter in client window
-	s = setting->readEntry("CLIENTSPLITTER");
+	s = setting->readEntry("CLIENTSPLITTER_" + scrkey);
 	if (s.length() > 5)
 	{
 		QList<int> w1, h1, w2;
@@ -634,19 +635,19 @@ void ClientWindow::saveSettings()
 	if (!hostlist.isEmpty())
 		setting->writeEntry("ACTIVEHOST",cb_connect->currentText());
 
-	setting->writeEntry("CLIENTWINDOW",
-		QString::number(pos().x()) + DELIMITER +
-		QString::number(pos().y()) + DELIMITER +
-		QString::number(size().width()) + DELIMITER +
-		QString::number(size().height()));
-
-	setting->writeEntry("CLIENTSPLITTER",
-		QString::number(s1->sizes().first()) + DELIMITER +
-		QString::number(s1->sizes().last()) + DELIMITER +
-		QString::number(s2->sizes().first()) + DELIMITER +
-		QString::number(s2->sizes().last()) + DELIMITER +
-		QString::number(s3->sizes().first()) + DELIMITER +
-		QString::number(s3->sizes().last()));
+	QString scrkey = screen_key (this);
+	setting->writeEntry("CLIENTWINDOW_" + scrkey,
+			    QString::number(pos().x()) + DELIMITER +
+			    QString::number(pos().y()) + DELIMITER +
+			    QString::number(size().width()) + DELIMITER +
+			    QString::number(size().height()));
+	setting->writeEntry("CLIENTSPLITTER_" + scrkey,
+			    QString::number(s1->sizes().first()) + DELIMITER +
+			    QString::number(s1->sizes().last()) + DELIMITER +
+			    QString::number(s2->sizes().first()) + DELIMITER +
+			    QString::number(s2->sizes().last()) + DELIMITER +
+			    QString::number(s3->sizes().first()) + DELIMITER +
+			    QString::number(s3->sizes().last()));
 
 	if (debug_dialog->isVisible ())
 		setting->writeEntry("DEBUGWINDOW",
@@ -2213,60 +2214,6 @@ void ClientWindow::slot_preferences(bool)
 	dlgSetPreferences ();
 }
 
-void ClientWindow::reStoreWindowSize(QString strKey, bool store)
-{
-	if (store)
-	{
-		// ALT-<num>
-		setting->writeEntry("CLIENTWINDOW_" + strKey,
-			QString::number(pos().x()) + DELIMITER +
-			QString::number(pos().y()) + DELIMITER +
-			QString::number(size().width()) + DELIMITER +
-			QString::number(size().height()));
-
-		setting->writeEntry("CLIENTSPLITTER_" + strKey,
-			QString::number(s1->sizes().first()) + DELIMITER +
-			QString::number(s1->sizes().last()) + DELIMITER +
-			QString::number(s2->sizes().first()) + DELIMITER +
-			QString::number(s2->sizes().last()) + DELIMITER +
-			QString::number(s3->sizes().first()) + DELIMITER +
-			QString::number(s3->sizes().last()));
-      //QString::number(mainTable->s3->sizes().last()));
-      
-		statusBar()->showMessage(tr("Window size saved.") + " (" + strKey + ")");
-	}
-	else
-	{
-		// restore size of client window
-		QString s = setting->readEntry("CLIENTWINDOW_" + strKey);
-		if (s.length() > 5)
-		{
-			QPoint p;
-			p.setX(s.section(DELIMITER, 0, 0).toInt());
-			p.setY(s.section(DELIMITER, 1, 1).toInt());
-			QSize sz;
-			sz.setWidth(s.section(DELIMITER, 2, 2).toInt());
-			sz.setHeight(s.section(DELIMITER, 3, 3).toInt());
-			resize(sz);
-			move(p);
-		}
-
-		// restore splitter in client window
-		s = setting->readEntry("CLIENTSPLITTER_" + strKey);
-		if (s.length() > 5)
-		{
-			QList<int> w1, h1, w2;
-			w1 << s.section(DELIMITER, 0, 0).toInt() << s.section(DELIMITER, 1, 1).toInt();
-			h1 << s.section(DELIMITER, 2, 2).toInt() << s.section(DELIMITER, 3, 3).toInt();
-			w2 << s.section(DELIMITER, 4, 4).toInt() << s.section(DELIMITER, 5, 5).toInt();
-			s1->setSizes(w1);
-			s2->setSizes(h1);
-			s3->setSizes(w2);
-		}
-
-		statusBar()->showMessage(tr("Window size restored.") + " (" + strKey + ")");
-	}
-}
 /*
 // set Cursor to last position
 void ClientWindow::slot_tabWidgetMainChanged(QWidget *w)
@@ -2283,60 +2230,6 @@ void ClientWindow::slot_tabWidgetMainChanged(QWidget *w)
 		MultiLineEdit2->setCursorPosition(MultiLineEdit2->numLines(), 999);
 		MultiLineEdit2->insertLine("");
 		MultiLineEdit2->removeLine(MultiLineEdit2->numLines()-2);
-	}
-}
-*/
-bool ClientWindow::eventFilter(QObject *obj, QEvent *ev)
-{
-	if (ev->type() == QEvent::KeyPress)
-	{
-//qDebug(QString("eventFilter: %1").arg(ev->type()));
-//qDebug(QString("eventFilter: obj = %1, class = %2, parent = %3").arg(obj->name()).arg(obj->className()).arg(obj->parent() ? obj->parent()->name() : "0"));
-	    QKeyEvent *keyEvent = (QKeyEvent *) ev;
-	    int key = keyEvent->key();
-
-//qDebug(QString("eventFilter: keyPress %1").arg(key));
-
-	    if (key >= Qt::Key_0 && key <= Qt::Key_9)
-	    {
-//qDebug("eventFilter: keyPress -> 0..9");
-			QString strKey = QString::number(key - Qt::Key_0);
-
-			if (obj == cb_cmdLine || obj->parent() && obj->parent() == cb_cmdLine || obj == this)
-			{
-				if (keyEvent->modifiers() & Qt::AltModifier)
-				{
-qDebug("eventFilter: keyPress -> Alt + 0..9");
-					// store sizes
-					reStoreWindowSize(strKey, true);
-					return true;
-				}
-				else if (keyEvent->modifiers() & Qt::ControlModifier)
-				{
-qDebug("eventFilter: keyPress -> Control + 0..9");
-					// restore sizes
-					reStoreWindowSize(strKey, false);
-					return true;
-				}
-			}
-		}
-		else if (key == Qt::Key_F1)
-		{
-			// help
-			qgo->openManual();
-		}
-	}
-
-	return false;
-}
-
-/*
-void ClientWindow::keyReleaseEvent(QKeyEvent *e)
-{
-	if (!(e->state() & AltModifier || e->state() & ControlModifier))
-	{
-		// release Keyboard
-		releaseKeyboard();
 	}
 }
 */

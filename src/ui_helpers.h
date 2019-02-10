@@ -1,6 +1,8 @@
 #ifndef UI_HELPERS_H
 #define UI_HELPERS_H
 
+extern QString screen_key (QWidget *);
+
 enum class game_dialog_type { none, normal, variant };
 extern std::shared_ptr<game_record> new_game_dialog (QWidget *);
 extern std::shared_ptr<game_record> new_variant_game_dialog (QWidget *);

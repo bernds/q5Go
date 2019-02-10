@@ -59,7 +59,6 @@ public:
 	QPoint getPrefPos() { return pref_p; }
 	QSize getPrefSize() { return pref_s; }
 	void setColumnsForExtUserInfo();
-	void reStoreWindowSize(QString strKey, bool store);
 	void setBytesIn(int i) { if (i == -1) bytesIn = 0; else bytesIn += i; }
 	void setBytesOut(int i) { if (i == -1) bytesOut = 0; else bytesOut += i; }
 	void saveSettings();
@@ -252,7 +251,6 @@ private:
 	int		bytesIn, bytesOut;
 
 	// event filter
-	virtual bool	eventFilter(QObject *obj, QEvent *ev);
  	int		seekButtonTimer ;
 	int oneSecondTimer;
 

@@ -26,8 +26,6 @@ class QToolBar;
 class Engine;
 class GameTree;
 
-extern QString screen_key ();
-
 class MainWindow : public QMainWindow, public Ui::BoardWindow
 {
 	Q_OBJECT

@@ -39,9 +39,14 @@
 std::list<MainWindow *> main_window_list;
 
 /* Return a string to identify the screen.  We use its dimensions.  */
-QString screen_key ()
+QString screen_key (QWidget *w)
 {
-	QScreen *scr = QApplication::primaryScreen ();
+	QScreen *scr = nullptr;
+	QWindow *win = w->windowHandle ();
+	if (win != nullptr)
+		scr = win->screen ();
+	if (scr == nullptr)
+		scr = QApplication::primaryScreen ();
 	QSize sz = scr->size ();
 	return QString::number (sz.width ()) + "x" + QString::number (sz.height ());
 }
@@ -1254,7 +1259,7 @@ void MainWindow::restore_visibility_from_key (const QString &v)
 
 void MainWindow::saveWindowLayout (bool dflt)
 {
-	QString strKey = screen_key ();
+	QString strKey = screen_key (this);
 	QString panesKey = visible_panes_key ();
 
 	if (!dflt)
@@ -1273,7 +1278,7 @@ void MainWindow::saveWindowLayout (bool dflt)
 
 bool MainWindow::restoreWindowLayout (bool dflt)
 {
-	QString strKey = screen_key ();
+	QString strKey = screen_key (this);
 	QString panesKey = visible_panes_key ();
 
 	if (!dflt)
