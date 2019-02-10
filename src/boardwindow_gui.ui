@@ -2860,6 +2860,21 @@ When in score mode, left click to mark a group as dead, right click to mark it a
        <property name="focusPolicy">
         <enum>Qt::NoFocus</enum>
        </property>
+       <property name="verticalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="horizontalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="backgroundBrush">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>211</red>
+          <green>215</green>
+          <blue>207</blue>
+         </color>
+        </brush>
+       </property>
       </widget>
      </item>
     </layout>
@@ -2945,7 +2960,20 @@ When in score mode, left click to mark a group as dead, right click to mark it a
       <number>0</number>
      </property>
      <item row="0" column="0">
-      <widget class="GameTree" name="gameTreeView"/>
+      <widget class="GameTree" name="gameTreeView">
+       <property name="sizeAdjustPolicy">
+        <enum>QAbstractScrollArea::AdjustToContents</enum>
+       </property>
+       <property name="backgroundBrush">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>211</red>
+          <green>215</green>
+          <blue>207</blue>
+         </color>
+        </brush>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
