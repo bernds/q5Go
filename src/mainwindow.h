@@ -115,7 +115,6 @@ protected:
 	void initMenuBar(GameMode);
 	void initToolBar();
 	void initStatusBar();
-	void keyPressEvent(QKeyEvent *e);
 	void closeEvent(QCloseEvent *e);
 //	bool doSave(QString fileName, bool force=false);
 	void rememberLastDir(const QString &file);

@@ -2564,6 +2564,7 @@ After placing and/or undo release button for returning to starting point automat
      <addaction name="layoutPortrait"/>
     </widget>
     <addaction name="viewStatusBar"/>
+    <addaction name="viewMenuBar"/>
     <addaction name="viewSlider"/>
     <addaction name="viewSidebar"/>
     <addaction name="separator"/>
@@ -3498,6 +3499,9 @@ Take a screen grab of the current board position and export it to the clipboard 
    <property name="text">
     <string>Sidebar</string>
    </property>
+   <property name="shortcut">
+    <string>F9</string>
+   </property>
   </action>
   <action name="viewFullscreen">
    <property name="checkable">
@@ -3505,6 +3509,9 @@ Take a screen grab of the current board position and export it to the clipboard 
    </property>
    <property name="text">
     <string>&amp;Fullscreen</string>
+   </property>
+   <property name="shortcut">
+    <string>F11</string>
    </property>
   </action>
   <action name="viewNumbers">
@@ -3525,6 +3532,9 @@ Take a screen grab of the current board position and export it to the clipboard 
    </property>
    <property name="text">
     <string>&amp;Coordinates</string>
+   </property>
+   <property name="shortcut">
+    <string>F8</string>
    </property>
   </action>
   <action name="layoutSaveDefault">
@@ -3563,6 +3573,17 @@ Take a screen grab of the current board position and export it to the clipboard 
    </property>
    <property name="text">
     <string>Default &amp;portrait arrangement</string>
+   </property>
+  </action>
+  <action name="viewMenuBar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Menu bar</string>
+   </property>
+   <property name="shortcut">
+    <string>F7</string>
    </property>
   </action>
  </widget>

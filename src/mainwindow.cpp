@@ -111,13 +111,8 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 	initToolBar();
 	initStatusBar();
 
-	if (!setting->readBoolEntry("STATUSBAR"))
-		viewStatusBar->setChecked(false); //statusBar()->hide();
-
-#if 0
-	if (!setting->readBoolEntry("MENUBAR"))
-		viewMenuBar->setChecked(false); //menuBar()->hide();
-#endif
+	viewStatusBar->setChecked (setting->readBoolEntry("STATUSBAR"));
+	viewMenuBar->setChecked (setting->readBoolEntry("MENUBAR"));
 
 	if (setting->readBoolEntry("SIDEBAR_LEFT"))
 		slotViewLeftSidebar ();
@@ -423,10 +418,7 @@ void MainWindow::initActions ()
 	* Menu View
 	*/
 
-#if 0 /* After porting from Q3Action, these no longer trigger when the menu is hidden, so it can't be unhidden.  */
-	// View Menubar toggle
 	connect(viewMenuBar, &QAction::toggled, this, &MainWindow::slotViewMenuBar);
-#endif
 	connect(viewStatusBar, &QAction::toggled, this, &MainWindow::slotViewStatusBar);
 	connect(viewCoords, &QAction::toggled, this, &MainWindow::slotViewCoords);
 	connect(viewSlider, &QAction::toggled, this, &MainWindow::slotViewSlider);
@@ -499,6 +491,16 @@ void MainWindow::initActions ()
 	navIntersection->setEnabled(false);
 
 	whatsThis = QWhatsThis::createAction (this);
+
+	/* Need actions with shortcuts added to the window, so that the shortcut still works
+	   if the menubar is hidden.  */
+	addActions ({ fileNewBoard, fileNew, fileOpen, fileSave, fileSaveAs, fileClose, fileQuit });
+	addActions ({ navForward, navBackward, navFirst, navLast, navPrevVar, navNextVar });
+	addActions ({ setGameInfo, editDelete, editFigure, editRectSelect, editClearSelect });
+	addActions ({ navMainBranch, navStartVar, navNextBranch, navNthMove });
+	addActions ({ setPreferences, soundToggle });
+	addActions ({ viewMenuBar, viewSidebar, viewCoords, viewFullscreen });
+	addActions ({ helpManual, whatsThis });
 }
 
 void MainWindow::initMenuBar (GameMode mode)
@@ -513,9 +515,7 @@ void MainWindow::initMenuBar (GameMode mode)
 	viewMenu->insertAction (view_first, fileBar->toggleViewAction ());
 	viewMenu->insertAction (view_first, toolBar->toggleViewAction ());
 	viewMenu->insertAction (view_first, editBar->toggleViewAction ());
-#if 0
-	viewMenu->insertAction (view_first, viewMenuBar);
-#endif
+	viewMenu->insertSeparator(view_first);
 	viewMenu->insertAction (view_first, commentsDock->toggleViewAction ());
 	viewMenu->insertAction (view_first, observersDock->toggleViewAction ());
 	viewMenu->insertAction (view_first, diagsDock->toggleViewAction ());
@@ -1471,68 +1471,6 @@ void MainWindow::defaultLandscapeLayout ()
 	restore_visibility_from_key (panesKey);
 	hide_panes_for_mode ();
 	setFocus ();
-}
-
-void MainWindow::keyPressEvent(QKeyEvent *e)
-{
-	switch (e->key())
-	{
-/*
-		// TODO: DEBUG
-#ifndef NO_DEBUG
-	case Key_W:
-		gfx_board->debug();
-		break;
-		
-	case Key_L:
-		gfx_board->openSGF("foo.sgf");
-		break;
-		
-	case Key_S:
-		gfx_board->saveBoard("foo.sgf");
-		break;
-		
-	case Key_X:
-		gfx_board->openSGF("foo.xml", "XML");
-		break;
-		// /DEBUG
-#endif
-*/
-	case Qt::Key_Left:
-		if (navBackward->isEnabled ())
-			navBackward->trigger ();
-		break;
-
-	case Qt::Key_Right:
-		if (navForward->isEnabled ())
-			navForward->trigger ();
-		break;
-
-	case Qt::Key_Up:
-		if (navPrevVar->isEnabled ())
-			navPrevVar->trigger ();
-		break;
-
-	case Qt::Key_Down:
-		if (navNextVar->isEnabled ())
-			navNextVar->trigger ();
-		break;
-
-	case Qt::Key_Home:
-		if (navFirst->isEnabled ())
-			navFirst->trigger ();
-		break;
-
-	case Qt::Key_End:
-		if (navLast->isEnabled ())
-			navLast->trigger ();
-		break;
-
-	default:
-		e->ignore();
-	}
-
-	e->accept();
 }
 
 void MainWindow::closeEvent(QCloseEvent *e)
