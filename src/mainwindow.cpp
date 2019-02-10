@@ -1993,15 +1993,15 @@ void MainWindow::doCountDone()
 		return;
 	}
 
-	float komi = m_game->komi ();
+	double komi = m_game->komi ();
 	int capW = scoreTools->capturesWhite->text().toInt();
 	int capB = scoreTools->capturesBlack->text().toInt();
 	int terrW = scoreTools->terrWhite->text().toInt();
 	int terrB = scoreTools->terrBlack->text().toInt();
 
-	float totalWhite = capW + terrW + komi;
+	double totalWhite = capW + terrW + komi;
 	int totalBlack = capB + terrB;
-	float result = 0;
+	double result = 0;
 	QString rs;
 
 	QString s;
