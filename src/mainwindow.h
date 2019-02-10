@@ -40,6 +40,7 @@ class MainWindow : public QMainWindow, public Ui::BoardWindow
 	BoardView *m_ascii_update_source;
 
 	bool showSlider, sliderSignalToggle;
+	GameMode m_gamemode;
 	GameMode m_remember_mode;
 	int m_remember_tab;
 	QGraphicsScene *m_eval_canvas;
@@ -63,9 +64,14 @@ public:
 	int checkModified(bool interactive=true);
 	void updateFont();
 	static QString getFileExtension(const QString &fileName, bool defaultExt=true);
-	void saveWindowSize ();
-	bool restoreWindowSize ();
-	void updateBoard();
+	void hide_panes_for_mode ();
+	QString visible_panes_key ();
+	void restore_visibility_from_key (const QString &);
+	void saveWindowLayout (bool);
+	bool restoreWindowLayout (bool);
+	void defaultPortraitLayout ();
+	void defaultLandscapeLayout ();
+	void updateBoard ();
 
 	void set_observer_model (QStandardItemModel *m);
 	bool doSave(QString fileName, bool force=false);
@@ -105,7 +111,7 @@ public:
 		      bool warn_b, bool warn_w, int);
 
 protected:
-	void initActions(GameMode);
+	void initActions();
 	void initMenuBar(GameMode);
 	void initToolBar();
 	void initStatusBar();
@@ -159,11 +165,8 @@ public slots:
 	void slotViewSlider(bool toggle);
 	void slotViewLeftSidebar();
 	void slotViewSidebar(bool toggle);
-	void slotViewComment(bool toggle);
-	void slotViewVertComment(bool toggle);
 	void slotViewFullscreen(bool toggle);
 	void slotViewMoveNumbers(bool toggle);
-	void slotViewFigures(bool toggle);
 	void slotTimerForward();
 	void slot_editBoardInNewWindow(bool);
 	void slot_animateClick(bool);
@@ -199,15 +202,10 @@ protected:
 
 	QLabel *statusCoords, *statusMode, *statusTurn, *statusNav;
 
-	GameTree *gameTreeView;
-
 	QAction *escapeFocus;
 	QAction *navAutoplay, *navSwapVariations;
 	QAction *setPreferences, *soundToggle;
 	QAction *anConnect, *anDisconnect, *anPause;
-	QAction *viewFileBar, *viewToolBar, *viewEditBar, *viewMenuBar, *viewStatusBar, *viewCoords,
-		*viewSlider, *viewSidebar, *viewComment, *viewVertComment, *viewSaveSize, *viewFullscreen,
-		*viewNumbers, *viewFigures;
 	QAction *helpManual, *helpAboutApp, *helpAboutQt, *whatsThis;
 	QActionGroup *editGroup;
 	QTimer *timer;

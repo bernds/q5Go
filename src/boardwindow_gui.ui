@@ -6,60 +6,55 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>996</width>
-    <height>755</height>
+    <width>1161</width>
+    <height>982</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QSplitter" name="splitter">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>989</width>
-      <height>703</height>
-     </rect>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <layout class="QGridLayout" name="gridLayout_5">
+    <property name="leftMargin">
+     <number>0</number>
     </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
+    <property name="topMargin">
+     <number>0</number>
     </property>
-    <widget class="QWidget" name="mainWidget" native="true">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <layout class="QGridLayout" name="topGridLayout">
-      <property name="leftMargin">
-       <number>0</number>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item row="0" column="1">
+     <widget class="QWidget" name="mainWidget" native="true">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
       </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
-       <number>0</number>
-      </property>
-      <item row="0" column="0">
-       <widget class="QSplitter" name="figSplitter">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="childrenCollapsible">
-         <bool>false</bool>
-        </property>
+      <layout class="QGridLayout" name="gridLayout_6">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item row="0" column="0">
         <widget class="QWidget" name="widget" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -85,6 +80,12 @@
           </property>
           <item row="0" column="0">
            <widget class="QFrame" name="boardFrame">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="frameShape">
              <enum>QFrame::StyledPanel</enum>
             </property>
@@ -222,8 +223,8 @@
                      </property>
                      <property name="minimumSize">
                       <size>
-                       <width>250</width>
-                       <height>250</height>
+                       <width>300</width>
+                       <height>300</height>
                       </size>
                      </property>
                      <property name="whatsThis">
@@ -2448,224 +2449,11 @@ After placing and/or undo release button for returning to starting point automat
           </item>
          </layout>
         </widget>
-        <widget class="QSplitter" name="figuresWidget">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <widget class="QGroupBox" name="groupBox">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="title">
-           <string>Diagrams</string>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout">
-           <property name="leftMargin">
-            <number>0</number>
-           </property>
-           <property name="topMargin">
-            <number>0</number>
-           </property>
-           <property name="rightMargin">
-            <number>0</number>
-           </property>
-           <property name="bottomMargin">
-            <number>0</number>
-           </property>
-           <item>
-            <widget class="BoardView" name="diagView" native="true">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-               <horstretch>1</horstretch>
-               <verstretch>1</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>250</width>
-               <height>250</height>
-              </size>
-             </property>
-             <property name="whatsThis">
-              <string>Click on the board to place a stone.
-
-When in normal mode, left click plays moves in alternating colors.
-Shift + left click moves to the first move in the main branch.
-Shift + right click moves to the next move in the current branch.
-When in edit mode and editing stones, left click places a black, right click a white stone, clicking on an existant stone removes it.
-When editing marks, left click sets, right click removes the mark. When editing letter marks, shift-click allows to customize the mark text.
-When in score mode, left click to mark a group as dead, right click to mark it alive in seki. Click again to unmark as dead or seki.</string>
-             </property>
-             <property name="caption" stdset="0">
-              <string/>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_4">
-             <item>
-              <widget class="QLabel" name="label">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Choose:</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="diagComboBox">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_3">
-             <item>
-              <spacer name="spacer">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>0</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item>
-              <widget class="QPushButton" name="diagASCIIButton">
-               <property name="text">
-                <string>E&amp;xport ASCII</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="diagSVGButton">
-               <property name="text">
-                <string>Export S&amp;VG</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="diagEditButton">
-               <property name="focusPolicy">
-                <enum>Qt::NoFocus</enum>
-               </property>
-               <property name="text">
-                <string>Edit &amp;Diagram</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
-         <widget class="QGroupBox" name="groupBox_2">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="title">
-           <string>Evaluation graph</string>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_2">
-           <property name="leftMargin">
-            <number>0</number>
-           </property>
-           <property name="topMargin">
-            <number>0</number>
-           </property>
-           <property name="rightMargin">
-            <number>0</number>
-           </property>
-           <property name="bottomMargin">
-            <number>0</number>
-           </property>
-           <item>
-            <widget class="QGraphicsView" name="graphicsView">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="focusPolicy">
-              <enum>Qt::NoFocus</enum>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </widget>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-    <widget class="QSplitter" name="splitter_comment">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <widget class="QWidget" name="comments_widget" native="true">
-      <layout class="QVBoxLayout" name="_14">
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
-       <item>
-        <widget class="QTextEdit" name="commentEdit">
-         <property name="acceptRichText">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="commentEdit2"/>
        </item>
       </layout>
      </widget>
-     <widget class="QTreeView" name="ListView_observers">
-      <property name="focusPolicy">
-       <enum>Qt::NoFocus</enum>
-      </property>
-      <property name="editTriggers">
-       <set>QAbstractItemView::NoEditTriggers</set>
-      </property>
-      <property name="sortingEnabled">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </widget>
-   </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QMenuBar" name="menubar">
@@ -2673,7 +2461,7 @@ When in score mode, left click to mark a group as dead, right click to mark it a
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>996</width>
+     <width>1161</width>
      <height>23</height>
     </rect>
    </property>
@@ -2758,6 +2546,34 @@ When in score mode, left click to mark a group as dead, right click to mark it a
     <property name="title">
      <string>&amp;View</string>
     </property>
+    <widget class="QMenu" name="menuSave_layout">
+     <property name="title">
+      <string>&amp;Save layout</string>
+     </property>
+     <addaction name="layoutSaveDefault"/>
+     <addaction name="layoutSaveCurrent"/>
+    </widget>
+    <widget class="QMenu" name="menuRestore_layout">
+     <property name="title">
+      <string>&amp;Restore layout</string>
+     </property>
+     <addaction name="layoutRestoreDefault"/>
+     <addaction name="layoutRestoreCurrent"/>
+     <addaction name="separator"/>
+     <addaction name="layoutLandscape"/>
+     <addaction name="layoutPortrait"/>
+    </widget>
+    <addaction name="viewStatusBar"/>
+    <addaction name="viewSlider"/>
+    <addaction name="viewSidebar"/>
+    <addaction name="separator"/>
+    <addaction name="viewFullscreen"/>
+    <addaction name="separator"/>
+    <addaction name="menuSave_layout"/>
+    <addaction name="menuRestore_layout"/>
+    <addaction name="separator"/>
+    <addaction name="viewNumbers"/>
+    <addaction name="viewCoords"/>
    </widget>
    <widget class="QMenu" name="anMenu">
     <property name="title">
@@ -2772,14 +2588,14 @@ When in score mode, left click to mark a group as dead, right click to mark it a
    <addaction name="fileMenu"/>
    <addaction name="editMenu"/>
    <addaction name="navMenu"/>
-   <addaction name="viewMenu"/>
    <addaction name="anMenu"/>
+   <addaction name="viewMenu"/>
    <addaction name="settingsMenu"/>
    <addaction name="helpMenu"/>
   </widget>
   <widget class="QToolBar" name="fileBar">
    <property name="windowTitle">
-    <string>toolBar</string>
+    <string>File toolbar</string>
    </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
@@ -2796,7 +2612,7 @@ When in score mode, left click to mark a group as dead, right click to mark it a
   </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="windowTitle">
-    <string>toolBar</string>
+    <string>Navigation toolbar</string>
    </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
@@ -2813,7 +2629,7 @@ When in score mode, left click to mark a group as dead, right click to mark it a
   </widget>
   <widget class="QToolBar" name="editBar">
    <property name="windowTitle">
-    <string>toolBar_2</string>
+    <string>Edit toolbar</string>
    </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
@@ -2836,6 +2652,292 @@ When in score mode, left click to mark a group as dead, right click to mark it a
    <addaction name="separator"/>
    <addaction name="editRectSelect"/>
    <addaction name="editClearSelect"/>
+  </widget>
+  <widget class="QDockWidget" name="diagsDock">
+   <property name="windowTitle">
+    <string>Diagrams</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>2</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents">
+    <layout class="QVBoxLayout" name="verticalLayout_3">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="BoardView" name="diagView" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>1</horstretch>
+         <verstretch>1</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>190</width>
+         <height>190</height>
+        </size>
+       </property>
+       <property name="whatsThis">
+        <string>Click on the board to place a stone.
+
+When in normal mode, left click plays moves in alternating colors.
+Shift + left click moves to the first move in the main branch.
+Shift + right click moves to the next move in the current branch.
+When in edit mode and editing stones, left click places a black, right click a white stone, clicking on an existant stone removes it.
+When editing marks, left click sets, right click removes the mark. When editing letter marks, shift-click allows to customize the mark text.
+When in score mode, left click to mark a group as dead, right click to mark it alive in seki. Click again to unmark as dead or seki.</string>
+       </property>
+       <property name="caption" stdset="0">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Choose:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="diagComboBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <spacer name="spacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>0</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="diagASCIIButton">
+         <property name="text">
+          <string>E&amp;xport ASCII</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="diagSVGButton">
+         <property name="text">
+          <string>Export S&amp;VG</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="diagEditButton">
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
+         <property name="text">
+          <string>Edit &amp;Diagram</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="observersDock">
+   <property name="windowTitle">
+    <string>Observers</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_4">
+    <layout class="QGridLayout" name="gridLayout_2">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item row="0" column="0">
+      <widget class="QTreeView" name="ListView_observers">
+       <property name="minimumSize">
+        <size>
+         <width>120</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
+       </property>
+       <property name="sortingEnabled">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="graphDock">
+   <property name="windowTitle">
+    <string>Evaluation graph</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_5">
+    <layout class="QGridLayout" name="gridLayout_3">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item row="0" column="0">
+      <widget class="QGraphicsView" name="graphicsView">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="commentsDock">
+   <property name="windowTitle">
+    <string>Comments</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>2</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_8">
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QWidget" name="comments_widget" native="true">
+       <layout class="QVBoxLayout" name="_15">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QTextEdit" name="commentEdit">
+          <property name="minimumSize">
+           <size>
+            <width>120</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="acceptRichText">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="commentEdit2"/>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="treeDock">
+   <property name="windowTitle">
+    <string>Game tree</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="treeDockContents">
+    <layout class="QGridLayout" name="gridLayout">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item row="0" column="0">
+      <widget class="GameTree" name="gameTreeView"/>
+     </item>
+    </layout>
+   </widget>
   </widget>
   <action name="navForward">
    <property name="icon">
@@ -3373,6 +3475,96 @@ Take a screen grab of the current board and export it to an image file.</string>
 Take a screen grab of the current board position and export it to the clipboard as an image.</string>
    </property>
   </action>
+  <action name="viewStatusBar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Status bar</string>
+   </property>
+  </action>
+  <action name="viewSlider">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Slider</string>
+   </property>
+  </action>
+  <action name="viewSidebar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Sidebar</string>
+   </property>
+  </action>
+  <action name="viewFullscreen">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Fullscreen</string>
+   </property>
+  </action>
+  <action name="viewNumbers">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Move &amp;numbers</string>
+   </property>
+  </action>
+  <action name="viewCoords">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/coords.png</normaloff>:/BoardWindow/images/boardwindow/coords.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Coordinates</string>
+   </property>
+  </action>
+  <action name="layoutSaveDefault">
+   <property name="text">
+    <string>As general default</string>
+   </property>
+  </action>
+  <action name="layoutSaveCurrent">
+   <property name="text">
+    <string>For current combination of visible docks</string>
+   </property>
+  </action>
+  <action name="layoutRestoreDefault">
+   <property name="text">
+    <string>General &amp;default</string>
+   </property>
+  </action>
+  <action name="layoutRestoreCurrent">
+   <property name="text">
+    <string>For &amp;current combination of visible docks</string>
+   </property>
+  </action>
+  <action name="layoutLandscape">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/landscape.png</normaloff>:/BoardWindow/images/boardwindow/landscape.png</iconset>
+   </property>
+   <property name="text">
+    <string>Default &amp;landscape arrangement</string>
+   </property>
+  </action>
+  <action name="layoutPortrait">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/portrait.png</normaloff>:/BoardWindow/images/boardwindow/portrait.png</iconset>
+   </property>
+   <property name="text">
+    <string>Default &amp;portrait arrangement</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -3401,6 +3593,11 @@ Take a screen grab of the current board position and export it to the clipboard 
    <extends>QWidget</extends>
    <header>board.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>GameTree</class>
+   <extends>QGraphicsView</extends>
+   <header>gametree.h</header>
   </customwidget>
  </customwidgets>
  <resources>

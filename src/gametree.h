@@ -19,7 +19,7 @@ class GameTree : public QGraphicsView
 {
 	Q_OBJECT
 
-	MainWindow *m_win;
+	MainWindow *m_win {};
 
 	int m_size = 30;
 	std::shared_ptr<game_record> m_game {};
@@ -37,7 +37,8 @@ protected:
 	virtual void resizeEvent(QResizeEvent*) override;
 
 public:
-	GameTree(MainWindow *win, QWidget *parent);
+	GameTree(QWidget *parent);
+	void set_board_win (MainWindow *win) { m_win = win; }
 	void update (std::shared_ptr<game_record> gr, game_state *, bool force = false);
 	void show_menu (int x, int y, const QPoint &pos);
 	void item_clicked (int x, int y);

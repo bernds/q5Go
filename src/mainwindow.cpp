@@ -7,7 +7,6 @@
 #include <fstream>
 #include <sstream>
 
-//Added by qt3to4:
 #include <QLabel>
 #include <QPixmap>
 #include <QCloseEvent>
@@ -21,7 +20,6 @@
 #include <QMessageBox>
 #include <QApplication>
 #include <QCheckBox>
-#include <QSplitter>
 #include <QPushButton>
 #include <QSlider>
 #include <QLineEdit>
@@ -68,6 +66,7 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 
 	setProperty("icon", setting->image0);
 	setAttribute (Qt::WA_DeleteOnClose);
+	setDockNestingEnabled (true);
 
 	isFullScreen = 0;
 	setFocusPolicy(Qt::StrongFocus);
@@ -107,17 +106,10 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 			m_sgf_var_style = true;
 	}
 
-	initActions(mode);
+	initActions ();
 	initMenuBar(mode);
 	initToolBar();
 	initStatusBar();
-
-	if (!setting->readBoolEntry("FILEBAR"))
-		viewFileBar->setChecked(false);
-	if (!setting->readBoolEntry("TOOLBAR"))
-		viewToolBar->setChecked(false);
-	if (!setting->readBoolEntry("EDITBAR"))
-		viewEditBar->setChecked(false);
 
 	if (!setting->readBoolEntry("STATUSBAR"))
 		viewStatusBar->setChecked(false); //statusBar()->hide();
@@ -127,9 +119,6 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 		viewMenuBar->setChecked(false); //menuBar()->hide();
 #endif
 
-	splitter_comment->setVisible (viewComment->isChecked ());
-	figuresWidget->setVisible (viewFigures->isChecked ());
-
 	if (setting->readBoolEntry("SIDEBAR_LEFT"))
 		slotViewLeftSidebar ();
 
@@ -138,25 +127,10 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 	commentEdit->addAction (escapeFocus);
 	commentEdit2->addAction (escapeFocus);
 
-	gameTreeView = new GameTree (this, splitter_comment);
-
-	splitter->setStretchFactor (splitter->indexOf (mainWidget), 0);
-	splitter_comment->setStretchFactor(splitter_comment->indexOf (ListView_observers), 0);
-	splitter_comment->setStretchFactor(splitter_comment->indexOf (gameTreeView), 0);
-	bool vert = viewVertComment->isChecked ();
-	splitter->setOrientation(vert ? Qt::Horizontal : Qt::Vertical);
-	splitter_comment->setOrientation(!vert ? Qt::Horizontal : Qt::Vertical);
-
-	if (mode == modeMatch || mode == modeObserve || mode == modeTeach)
-		gameTreeView->setParent (nullptr);
-	else
-		ListView_observers->setParent (nullptr);
+	// gameTreeView = new GameTree (this, treeDockContents);
 
 	normalTools->show();
 	scoreTools->hide();
-
-	figSplitter->setStretchFactor (0, 1);
-	figSplitter->setStretchFactor (1, 0);
 
 	showSlider = true;
 	toggleSlider(setting->readBoolEntry("SLIDER"));
@@ -209,8 +183,6 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 	connect(m_ascii_dlg.buttonRefresh, &QPushButton::clicked, [=] (bool) { update_ascii_dialog (); });
 	connect(m_svg_dlg.buttonRefresh, &QPushButton::clicked, [=] (bool) { update_svg_dialog (); });
 
-	setCentralWidget(splitter);
-
 	// Create a timer instance
 	// timerInterval = 2;  // 1000 msec
 	timer = new QTimer(this);
@@ -226,12 +198,36 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 	updateFont();
 
 	init_game_record (gr);
+
+#if 1
+	/* This is a hack.  We appear to be hitting Qt bugs 70571/65592, where dock sizes snap back
+	   violently as soon as the user moves the mouse over the board window.
+	   There is a thread at
+	     https://forum.qt.io/topic/94473/qdockwidget-resize-issue/16
+	   where someone seems to have the same issue, also involving a QGraphicsView, and the
+	   following is an adpatation of the suggested workaround.
+	   This should be removed once we can assume Qt 5.12 and the bug is indeed fixed.  */
+	resizeDocks ({diagsDock, treeDock, commentsDock, observersDock, graphDock}, { 0, 0, 0, 0, 0 }, Qt::Horizontal);
+	resizeDocks ({diagsDock, treeDock, commentsDock, observersDock, graphDock}, { 0, 0, 0, 0, 0 }, Qt::Vertical);
+#endif
+	/* Order of operations here: restore a default layout if the user saved one.  We
+	   need to have the game mode variable set for this.
+	   Then, choose visibility defaults for the docks.
+	   Then, do a proper setGameMode, to hide all panes that should not be visible.
+	   Finally, restore the specific layout if one was saved.  */
+	m_gamemode = mode;
+	restoreWindowLayout (true);
+
+	int figuremode = setting->readIntEntry ("BOARD_DIAGMODE");
+	if (figuremode == 1 && m_game->get_root ()->has_figure_recursive ())
+		figuremode = 2;
+	diagsDock->setVisible (figuremode == 2 || mode == modeBatch);
+	graphDock->setVisible (figuremode == 2 || mode == modeBatch);
+	if (mode == modeMatch || mode == modeTeach || mode == modeObserve)
+		observersDock->setVisible (true);
 	setGameMode (mode);
-
-	splitter_comment->resize (100, 100);
-	restoreWindowSize ();
-
 	updateBoard();
+	restoreWindowLayout (false);
 
 	connect(commentEdit, &QTextEdit::textChanged, this, &MainWindow::slotUpdateComment);
 	connect(commentEdit2, &QLineEdit::returnPressed, this, &MainWindow::slotUpdateComment2);
@@ -263,9 +259,8 @@ void MainWindow::init_game_record (std::shared_ptr<game_record> gr)
 	editRectSelect->setEnabled (!disable_rect);
 
 	int figuremode = setting->readIntEntry ("BOARD_DIAGMODE");
-	if (!viewFigures->isChecked () && figuremode == 1 && root->has_figure_recursive ()) {
-		slotViewFigures (true);
-		viewFigures->setChecked (true);
+	if (!diagsDock->isVisible () && figuremode == 1 && root->has_figure_recursive ()) {
+		diagsDock->show ();
 	}
 }
 
@@ -303,26 +298,14 @@ MainWindow::~MainWindow()
 	delete navAutoplay;
 	delete navSwapVariations;
 	delete setPreferences;
-	delete viewFileBar;
-	delete viewToolBar;
-	delete viewEditBar;
-	delete viewMenuBar;
-	delete viewStatusBar;
-	delete viewCoords;
-	delete viewSidebar;
-	delete viewComment;
-	delete viewVertComment;
-	delete viewSaveSize;
-	delete viewFullscreen;
-	delete viewFigures;
-	delete viewNumbers;
+
 	delete helpManual;
 	delete helpAboutApp;
 	delete helpAboutQt;
 	delete whatsThis;
 }
 
-void MainWindow::initActions(GameMode mode)
+void MainWindow::initActions ()
 {
 	// Load the pixmaps
 	QPixmap autoplayIcon, prefsIcon, fullscreenIcon, manualIcon, coordsIcon, sound_onIcon, sound_offIcon;
@@ -439,130 +422,22 @@ void MainWindow::initActions(GameMode mode)
 	/*
 	* Menu View
 	*/
-	// View Filebar toggle
-	viewFileBar = new QAction(tr("&File toolbar"), this);
-	viewFileBar->setCheckable (true);
-	viewFileBar->setChecked(true);
-	viewFileBar->setStatusTip(tr("Enables/disables the file toolbar"));
-	viewFileBar->setWhatsThis(tr("File toolbar\n\nEnables/disables the file toolbar."));
-	connect(viewFileBar, &QAction::toggled, this, &MainWindow::slotViewFileBar);
 
-	// View Toolbar toggle
-	viewToolBar = new QAction(tr("Navigation &toolbar"), this);
-	viewToolBar->setCheckable (true);
-	viewToolBar->setChecked(true);
-	viewToolBar->setStatusTip(tr("Enables/disables the navigation toolbar"));
-	viewToolBar->setWhatsThis(tr("Navigation toolbar\n\nEnables/disables the navigation toolbar."));
-	connect(viewToolBar, &QAction::toggled, this, &MainWindow::slotViewToolBar);
-
-	// View Editbar toggle
-	viewEditBar = new QAction(tr("&Edit toolbar"), this);
-	viewEditBar->setCheckable (true);
-	viewEditBar->setChecked(true);
-	viewEditBar->setStatusTip(tr("Enables/disables the edit toolbar"));
-	viewEditBar->setWhatsThis(tr("Edit toolbar\n\nEnables/disables the edit toolbar."));
-	connect(viewEditBar, &QAction::toggled, this, &MainWindow::slotViewEditBar);
-
-	viewMenuBar = new QAction(tr("&Menubar"), this);
 #if 0 /* After porting from Q3Action, these no longer trigger when the menu is hidden, so it can't be unhidden.  */
 	// View Menubar toggle
-	viewMenuBar->setCheckable (true);
-	viewMenuBar->setShortcut (Qt::Key_F7);
-	viewMenuBar->setChecked(true);
-	viewMenuBar->setStatusTip(tr("Enables/disables the menubar"));
-	viewMenuBar->setWhatsThis(tr("Menubar\n\nEnables/disables the menubar."));
 	connect(viewMenuBar, &QAction::toggled, this, &MainWindow::slotViewMenuBar);
 #endif
-
-	// View Statusbar toggle
-	viewStatusBar = new QAction(tr("&Statusbar"), this);
-	viewStatusBar->setCheckable (true);
-	viewStatusBar->setChecked(true);
-	viewStatusBar->setStatusTip(tr("Enables/disables the statusbar"));
-	viewStatusBar->setWhatsThis(tr("Statusbar\n\nEnables/disables the statusbar."));
 	connect(viewStatusBar, &QAction::toggled, this, &MainWindow::slotViewStatusBar);
-
-	// View Coordinates toggle
-	viewCoords = new QAction(coordsIcon, tr("C&oordinates"), this);
-	viewCoords->setCheckable (true);
-	viewCoords->setShortcut (Qt::Key_F8);
-	viewCoords->setChecked(false);
-	viewCoords->setStatusTip(tr("Enables/disables the coordinates"));
-	viewCoords->setWhatsThis(tr("Coordinates\n\nEnables/disables the coordinates."));
 	connect(viewCoords, &QAction::toggled, this, &MainWindow::slotViewCoords);
-
-	// View Slider toggle
-	viewSlider = new QAction(tr("Sli&der"), this);
-	viewSlider->setCheckable (true);
-	viewSlider->setShortcut (Qt::CTRL + Qt::Key_F8);
-	viewSlider->setChecked(false);
-	viewSlider->setStatusTip(tr("Enables/disables the slider"));
-	viewSlider->setWhatsThis(tr("Slider\n\nEnables/disables the slider."));
 	connect(viewSlider, &QAction::toggled, this, &MainWindow::slotViewSlider);
-
-	// View Sidebar toggle
-	viewSidebar = new QAction(tr("Side&bar"), this);
-	viewSidebar->setCheckable (true);
-	viewSidebar->setShortcut (Qt::Key_F9);
-	viewSidebar->setChecked(true);
-	viewSidebar->setStatusTip(tr("Enables/disables the sidebar"));
-	viewSidebar->setWhatsThis(tr("Sidebar\n\nEnables/disables the sidebar."));
 	connect(viewSidebar, &QAction::toggled, this, &MainWindow::slotViewSidebar);
-
-	QString scrkey = screen_key ();
-	/* Inverted meaning, so that if the option does not exist, we choose the correct default
-	   (visible comment).  */
-	int inv_view_comment = setting->readIntEntry("INV_VIEW_COMMENT_" + scrkey);
-	int vertical = setting->readIntEntry("BOARDVERTCOMMENT_" + scrkey);
-
-	// View Comment toggle
-	viewComment = new QAction(tr("&Comment"), this);
-	viewComment->setCheckable (true);
-	viewComment->setShortcut (Qt::Key_F10);
-	viewComment->setChecked (!inv_view_comment);
-	viewComment->setStatusTip(tr("Enables/disables the comment field"));
-	viewComment->setWhatsThis(tr("Comment field\n\nEnables/disables the comment field."));
-	connect(viewComment, &QAction::toggled, this, &MainWindow::slotViewComment);
-
-	// View Vertical Comment toggle
-
-	viewVertComment = new QAction(tr("&Vertical comment"), this);
-	viewVertComment->setCheckable (true);
-	viewVertComment->setShortcut (Qt::SHIFT + Qt::Key_F10);
-	viewVertComment->setChecked (vertical);
-	viewVertComment->setStatusTip(tr("Enables/disables a vertical direction of the comment field"));
-	viewVertComment->setWhatsThis(tr("Vertical comment field\n\n"
-					 "Enables/disables a vertical direction of the comment field."));
-	connect(viewVertComment, &QAction::toggled, this, &MainWindow::slotViewVertComment);
-
-	// View Save Size
-	viewSaveSize = new QAction(tr("Save si&ze"), this);
-	viewSaveSize->setStatusTip(tr("Save the current window size"));
-	viewSaveSize->setWhatsThis(tr("Save size\n\n"
-				      "Saves the current window size and restores it on the next program start.\n"));
-	connect(viewSaveSize, &QAction::triggered, this, [=] () { saveWindowSize (); });
-
-	viewFullscreen = new QAction(fullscreenIcon, tr("&Fullscreen"), this);
-	viewFullscreen->setCheckable (true);
-	viewFullscreen->setShortcut (Qt::Key_F11);
-	viewFullscreen->setChecked (false);
-	viewFullscreen->setStatusTip(tr("Enable/disable fullscreen mode"));
-	viewFullscreen->setWhatsThis(tr("Fullscreen\n\nEnable/disable fullscreen mode."));
+	connect(layoutSaveDefault, &QAction::triggered, this, [=] () { saveWindowLayout (true); });
+	connect(layoutRestoreDefault, &QAction::triggered, this, [=] () { restoreWindowLayout (true); });
+	connect(layoutSaveCurrent, &QAction::triggered, this, [=] () { saveWindowLayout (false); });
+	connect(layoutRestoreCurrent, &QAction::triggered, this, [=] () { restoreWindowLayout (false); });
+	connect(layoutPortrait, &QAction::triggered, this, [=] () { defaultPortraitLayout (); });
+	connect(layoutLandscape, &QAction::triggered, this, [=] () { defaultLandscapeLayout (); });
 	connect(viewFullscreen, &QAction::toggled, this, &MainWindow::slotViewFullscreen);
-
-	int figuremode = setting->readIntEntry ("BOARD_DIAGMODE");
-	viewFigures = new QAction(tr("Fi&gures and eval graph"), this);
-	viewFigures->setCheckable (true);
-	viewFigures->setChecked (figuremode == 2 || mode == modeBatch);
-	viewFigures->setStatusTip(tr("Enable/disable the figure and score graph view"));
-	viewFigures->setWhatsThis(tr("Figures\n\nEnable/disable the figure and score graph view."));
-	connect(viewFigures, &QAction::toggled, this, &MainWindow::slotViewFigures);
-
-	viewNumbers = new QAction(QIcon (":/BoardWindow/images/boardwindow/123.png"), tr("Move &numbers"), this);
-	viewNumbers->setCheckable (true);
-	viewNumbers->setChecked (false);
-	viewNumbers->setStatusTip(tr("Enable/disable move numbering"));
-	viewNumbers->setWhatsThis(tr("Figures\n\nEnable/disable move numbering on the main board."));
 	connect(viewNumbers, &QAction::toggled, this, &MainWindow::slotViewMoveNumbers);
 
 	/* Analyze menu.  */
@@ -626,32 +501,26 @@ void MainWindow::initActions(GameMode mode)
 	whatsThis = QWhatsThis::createAction (this);
 }
 
-void MainWindow::initMenuBar(GameMode mode)
+void MainWindow::initMenuBar (GameMode mode)
 {
 	settingsMenu->addAction (setPreferences);
 	settingsMenu->addAction (soundToggle);
 
 	settingsMenu->insertSeparator(soundToggle);
 
-	viewMenu->addAction (viewFileBar);
-	viewMenu->addAction (viewToolBar);
-	viewMenu->addAction (viewEditBar);
+	QAction *view_first = viewMenu->actions().at(0);
+
+	viewMenu->insertAction (view_first, fileBar->toggleViewAction ());
+	viewMenu->insertAction (view_first, toolBar->toggleViewAction ());
+	viewMenu->insertAction (view_first, editBar->toggleViewAction ());
 #if 0
-	viewMenu->addAction (viewMenuBar);
+	viewMenu->insertAction (view_first, viewMenuBar);
 #endif
-	viewMenu->addAction (viewStatusBar);
-	viewMenu->addAction (viewCoords);
-	viewMenu->addAction (viewSlider);
-	viewMenu->addAction (viewSidebar);
-	viewMenu->addAction (viewComment);
-	viewMenu->addAction (viewVertComment);
-	viewMenu->addSeparator ();
-	viewMenu->addAction (viewSaveSize);
-	viewMenu->addSeparator ();
-	viewMenu->addAction (viewFullscreen);
-	viewMenu->addSeparator ();
-	viewMenu->addAction (viewFigures);
-	viewMenu->addAction (viewNumbers);
+	viewMenu->insertAction (view_first, commentsDock->toggleViewAction ());
+	viewMenu->insertAction (view_first, observersDock->toggleViewAction ());
+	viewMenu->insertAction (view_first, diagsDock->toggleViewAction ());
+	viewMenu->insertAction (view_first, graphDock->toggleViewAction ());
+	viewMenu->insertAction (view_first, treeDock->toggleViewAction ());
 
 	anMenu->addAction (anConnect);
 	anMenu->addAction (anDisconnect);
@@ -1152,6 +1021,27 @@ void MainWindow::slotNavSwapVariations(bool)
 #endif
 }
 
+/* Some of the docks shouldn't be available in certain modes: offline boards don't need
+   observers, and match games shouldn't get an evaluation and don't need figures.
+   We call this when setting up the window, and also when restoring the layout, since
+   restoreState may do things we don't want.  */
+
+void MainWindow::hide_panes_for_mode ()
+{
+	bool is_online = m_gamemode == modeMatch || m_gamemode == modeObserve || m_gamemode == modeTeach;
+	if (is_online) {
+		treeDock->setVisible (false);
+		treeDock->toggleViewAction ()->setVisible (false);
+		graphDock->setVisible (false);
+		graphDock->toggleViewAction ()->setVisible (false);
+		diagsDock->setVisible (false);
+		diagsDock->toggleViewAction ()->setVisible (false);
+	} else {
+		observersDock->setVisible (false);
+		observersDock->toggleViewAction ()->setVisible (false);
+	}
+}
+
 void MainWindow::updateBoard()
 {
 	viewSlider->setChecked (setting->readBoolEntry ("SLIDER"));
@@ -1177,12 +1067,6 @@ void MainWindow::updateBoard()
 			ghosts = 2;
 	}
 	gfx_board->set_vardisplay (children, ghosts);
-
-	QString scrkey = screen_key ();
-	int inv_view_comment = setting->readIntEntry("INV_VIEW_COMMENT_" + scrkey);
-	bool vertical = setting->readIntEntry("BOARDVERTCOMMENT_" + scrkey);
-	viewComment->setChecked(!inv_view_comment);
-	viewVertComment->setChecked (vertical);
 
 #if 0 // @@@
 	QToolTip::setEnabled(setting->readBoolEntry("TOOLTIPS"));
@@ -1312,35 +1196,6 @@ void MainWindow::slotViewSlider(bool toggle)
 		toggleSlider(true);
 
 	statusBar()->showMessage(tr("Ready."));
-}
-
-void MainWindow::slotViewComment(bool toggle)
-{
-	setting->writeIntEntry("INV_VIEW_COMMENT_" + screen_key (), toggle ? 0 : 1);
-	splitter_comment->setVisible (toggle);
-	setFocus();
-
-	statusBar()->showMessage(tr("Ready."));
-}
-
-void MainWindow::slotViewFigures(bool toggle)
-{
-	figuresWidget->setVisible (toggle);
-	setFocus();
-
-	statusBar()->showMessage(tr("Ready."));
-}
-
-void MainWindow::slotViewVertComment(bool toggle)
-{
-	setting->writeIntEntry("BOARDVERTCOMMENT_" + screen_key (), toggle ? 1 : 0);
-	splitter->setOrientation(toggle ? Qt::Horizontal : Qt::Vertical);
-	splitter->setStretchFactor(0, 0);
-	splitter_comment->setOrientation(!toggle ? Qt::Horizontal : Qt::Vertical);
-	if (ListView_observers->parent () == splitter_comment)
-		splitter_comment->setStretchFactor(splitter_comment->indexOf (ListView_observers), 0);
-	if (gameTreeView->parent () == splitter_comment)
-		splitter_comment->setStretchFactor(splitter_comment->indexOf (gameTreeView), 0);
 }
 
 // set sidbar left or right
@@ -1499,87 +1354,71 @@ void MainWindow::coords_changed (const QString &t1, const QString &t2)
 	statusCoords->setText (" " + t1 + " " + t2 + " ");
 }
 
-void MainWindow::saveWindowSize()
+QString MainWindow::visible_panes_key ()
+{
+	QString v;
+	v += diagsDock->isVisibleTo (this) ? "1" : "0";
+	v += treeDock->isVisibleTo (this) ? "1" : "0";
+	v += graphDock->isVisibleTo (this) ? "1" : "0";
+	v += commentsDock->isVisibleTo (this) ? "1" : "0";
+	v += observersDock->isVisibleTo (this) ? "1" : "0";
+	return v;
+}
+
+void MainWindow::restore_visibility_from_key (const QString &v)
+{
+	diagsDock->setVisible (v[0] == '1');
+	treeDock->setVisible (v[1] == '1');
+	graphDock->setVisible (v[2] == '1');
+	commentsDock->setVisible (v[3] == '1');
+	observersDock->setVisible (v[4] == '1');
+}
+
+void MainWindow::saveWindowLayout (bool dflt)
 {
 	QString strKey = screen_key ();
+	QString panesKey = visible_panes_key ();
+
+	if (!dflt)
+		strKey += "_" + panesKey;
 
 	// store window size, format, comment format
 	setting->writeBoolEntry("BOARDFULLSCREEN_" + strKey, isFullScreen);
 
-	setting->writeEntry("BOARDWINDOW_" + strKey,
-			    QString::number(pos().x()) + DELIMITER +
-			    QString::number(pos().y()) + DELIMITER +
-			    QString::number(size().width()) + DELIMITER +
-			    QString::number(size().height()));
+	QByteArray v1 = saveState ().toHex ();
+	QByteArray v2 = saveGeometry ().toHex ();
+	setting->writeEntry("BOARDLAYOUT1_" + strKey, QString::fromLatin1 (v1));
+	setting->writeEntry("BOARDLAYOUT2_" + strKey, QString::fromLatin1 (v2));
 
-	if (viewComment->isChecked ()) {
-		QString key = "BOARDSPLITTER_";
-		if (gameTreeView->parent () != nullptr)
-			key = "BOARDSPLITTER_GT_";
-		setting->writeEntry(key + strKey,
-				    QString::number(splitter->sizes().first()) + DELIMITER +
-				    QString::number(splitter->sizes().last()) + DELIMITER +
-				    QString::number(splitter_comment->sizes().first()) + DELIMITER +
-				    QString::number(splitter_comment->sizes().last()));
-	}
 	statusBar()->showMessage(tr("Window size saved.") + " (" + strKey + ")");
 }
 
-bool MainWindow::restoreWindowSize ()
+bool MainWindow::restoreWindowLayout (bool dflt)
 {
 	QString strKey = screen_key ();
+	QString panesKey = visible_panes_key ();
+
+	if (!dflt)
+		strKey += "_" + panesKey;
 
 	// restore board window
-	QString s = setting->readEntry("BOARDWINDOW_" + strKey);
-	if (s.length() <= 5)
+	QString s1 = setting->readEntry("BOARDLAYOUT1_" + strKey);
+	QString s2 = setting->readEntry("BOARDLAYOUT2_" + strKey);
+	if (s1.isEmpty () || s2.isEmpty ())
+		return false;
+	QRegExp verify ("^[0-9A-Fa-f]*$");
+	if (!verify.exactMatch (s1) || !verify.exactMatch (s2))
 		return false;
 
 	// do not resize until end of this procedure
 	gfx_board->lockResize = true;
 
-	if (setting->readBoolEntry("BOARDFULLSCREEN_" + strKey))
-		viewFullscreen->setChecked(true);
-	else {
-		viewFullscreen->setChecked(false);
-		QPoint p;
-		p.setX(s.section(DELIMITER, 0, 0).toInt());
-		p.setY(s.section(DELIMITER, 1, 1).toInt());
-		QSize sz;
-		sz.setWidth(s.section(DELIMITER, 2, 2).toInt());
-		sz.setHeight(s.section(DELIMITER, 3, 3).toInt());
-		resize(sz);
-		move(p);
-	}
+	restoreGeometry (QByteArray::fromHex (s2.toLatin1 ()));
+	restoreState (QByteArray::fromHex (s1.toLatin1 ()));
 
-	if (viewComment->isChecked ()) {
-		// restore splitter in board window
-		QString split1 = setting->readEntry("BOARDSPLITTER_" + strKey);
-		QString split2 = setting->readEntry("BOARDSPLITTER_GT_" + strKey);
-		if (gameTreeView->parent () == nullptr)
-			s = split1;
-		else
-			s = split2;
-		if (s.length() > 5) {
-			int i, j;
-
-			i = s.section(DELIMITER, 2, 2).toInt();
-			j = s.section(DELIMITER, 3, 3).toInt();
-			QList<int> w1;
-			w1 << i << j;
-			splitter_comment->setSizes(w1);
-
-			w1.clear();
-			i = s.section(DELIMITER, 0, 0).toInt();
-			j = s.section(DELIMITER, 1, 1).toInt();
-			if (i && j)
-				w1 << i << j;
-			splitter->setSizes(w1);
-		}
-	}
-
-	// do some other stuff
-	// maybe not correct set at startup time
-	slotViewCoords (viewCoords->isChecked ());
+	if (!dflt)
+		restore_visibility_from_key (panesKey);
+	hide_panes_for_mode ();
 
 	// ok, resize
 	gfx_board->lockResize = false;
@@ -1587,12 +1426,51 @@ bool MainWindow::restoreWindowSize ()
 
 	statusBar()->showMessage(tr("Window size restored.") + " (" + strKey + ")");
 
-	// update current move
-#if 0 /* @@@ */
-	gfx_board->refreshDisplay();
-#endif
-
 	return true;
+}
+
+void MainWindow::defaultPortraitLayout ()
+{
+	commentsDock->setVisible (true);
+	if (m_gamemode == modeMatch || m_gamemode == modeObserve || m_gamemode == modeTeach)
+		observersDock->setVisible (true);
+
+	QString panesKey = visible_panes_key ();
+	removeDockWidget (diagsDock);
+	removeDockWidget (treeDock);
+	removeDockWidget (graphDock);
+	removeDockWidget (commentsDock);
+	removeDockWidget (observersDock);
+	addDockWidget (Qt::BottomDockWidgetArea, graphDock);
+	splitDockWidget (graphDock, diagsDock, Qt::Vertical);
+	splitDockWidget (diagsDock, commentsDock, Qt::Horizontal);
+	splitDockWidget (commentsDock, observersDock, Qt::Horizontal);
+	splitDockWidget (commentsDock, treeDock, Qt::Horizontal);
+	restore_visibility_from_key (panesKey);
+	hide_panes_for_mode ();
+	setFocus ();
+}
+
+void MainWindow::defaultLandscapeLayout ()
+{
+	commentsDock->setVisible (true);
+	if (m_gamemode == modeMatch || m_gamemode == modeObserve || m_gamemode == modeTeach)
+		observersDock->setVisible (true);
+
+	QString panesKey = visible_panes_key ();
+	removeDockWidget (diagsDock);
+	removeDockWidget (treeDock);
+	removeDockWidget (graphDock);
+	removeDockWidget (commentsDock);
+	removeDockWidget (observersDock);
+	addDockWidget (Qt::BottomDockWidgetArea, treeDock);
+	addDockWidget (Qt::RightDockWidgetArea, diagsDock);
+	splitDockWidget (diagsDock, commentsDock, Qt::Horizontal);
+	splitDockWidget (diagsDock, graphDock, Qt::Vertical);
+	splitDockWidget (commentsDock, observersDock, Qt::Vertical);
+	restore_visibility_from_key (panesKey);
+	hide_panes_for_mode ();
+	setFocus ();
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *e)
@@ -1870,6 +1748,7 @@ void MainWindow::setToolsTabWidget(enum tabType p, enum tabState s)
 
 void MainWindow::setGameMode(GameMode mode)
 {
+	m_gamemode = mode;
 	if (mode == modeEdit || mode == modeNormal || mode == modeObserve) {
 		editGroup->setEnabled (true);
 	} else {
@@ -1908,17 +1787,7 @@ void MainWindow::setGameMode(GameMode mode)
 	commentEdit2->setEnabled (!editable_comments);
 	commentEdit2->setVisible (!editable_comments);
 
-	if (mode == modeMatch || mode == modeObserve || mode == modeTeach) {
-		if (gameTreeView->parent () != nullptr) {
-			splitter_comment->addWidget (ListView_observers);
-			gameTreeView->setParent (nullptr);
-		}
-	} else {
-		if (ListView_observers->parent () != nullptr) {
-			ListView_observers->setParent (nullptr);
-			splitter_comment->addWidget (gameTreeView);
-		}
-	}
+	hide_panes_for_mode ();
 
 	fileNew->setEnabled (mode == modeNormal || mode == modeEdit);
 	fileNewVariant->setEnabled (mode == modeNormal || mode == modeEdit);

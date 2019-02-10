@@ -82,8 +82,8 @@ void ClickablePixmap::hoverLeaveEvent (QGraphicsSceneHoverEvent *)
 	m_view->setDragMode (QGraphicsView::ScrollHandDrag);
 }
 
-GameTree::GameTree (MainWindow *win, QWidget *parent)
-	: QGraphicsView (parent), m_win (win), m_header_view (Qt::Horizontal, this)
+GameTree::GameTree (QWidget *parent)
+	: QGraphicsView (parent), m_header_view (Qt::Horizontal, this)
 {
 	setFocusPolicy (Qt::NoFocus);
 	m_scene = new QGraphicsScene (0, 0, 30, 30, this);
