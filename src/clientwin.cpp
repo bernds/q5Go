@@ -1295,7 +1295,6 @@ void ClientWindow::slot_updateFont()
 	// lists
 	ListView_players->setFont(setting->fontLists);
 	ListView_games->setFont(setting->fontLists);
-	cb_connect->setFont(setting->fontLists);
 
 	// comment fields
 	QTextCursor c = MultiLineEdit2->textCursor ();
