@@ -1505,7 +1505,7 @@ void MainWindow::slot_editBoardInNewWindow(bool)
 {
 	std::shared_ptr<game_record> newgr = std::make_shared<game_record> (*m_game);
 	// online mode -> don't score, open new Window instead
-	MainWindow *w = new MainWindow (0, newgr);
+	MainWindow *w = new MainWindow (nullptr, newgr);
 
 #if 0 /* @@@ This has never worked.  */
 	// create update button
@@ -1533,7 +1533,7 @@ void MainWindow::slotSoundToggle(bool toggle)
 // set a tab on toolsTabWidget
 void MainWindow::setToolsTabWidget(enum tabType p, enum tabState s)
 {
-	QWidget *w = NULL;
+	QWidget *w = nullptr;
 
 	switch (p)
 	{

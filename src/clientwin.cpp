@@ -1466,7 +1466,7 @@ void ClientWindow::slot_menu_games(const QPoint &pt)
 // mouse click on ListView_games
 void ClientWindow::slot_mouse_games(int button, QTreeWidgetItem *lv)
 {
-	static QMenu *puw = 0;
+	static QMenu *puw = nullptr;
 
 	// create popup window
 	if (!puw)
@@ -1529,7 +1529,7 @@ void ClientWindow::slot_matchrequest(const QString &line, bool myrequest)
 {
 	// set up match dialog
 	// match_dialog()
-	GameDialog *dlg = NULL;
+	GameDialog *dlg = nullptr;
 	QString opponent;
 
 	// seek dialog
@@ -1618,7 +1618,7 @@ void ClientWindow::slot_matchrequest(const QString &line, bool myrequest)
 		dlg->playerBlackEdit->setText(opponent);
 		dlg->playerBlackEdit->setReadOnly(false);
 		*/
-		dlg->playerOpponentEdit->setText(opponent);		
+		dlg->playerOpponentEdit->setText(opponent);
 		dlg->playerOpponentEdit->setReadOnly(true);
 		dlg->set_myName( myAccount->acc_name);
 
@@ -1640,7 +1640,7 @@ void ClientWindow::slot_matchrequest(const QString &line, bool myrequest)
 		if (dlg->playerOpponentEdit->text() == myAccount->acc_name)
 			dlg->buttonOffer->setText(tr("Teaching"));
 
-		//nmatch settings from opponent 
+		//nmatch settings from opponent
 		bool is_nmatch = false;
 
 		// we want to make sure the player is selected, because the match request may come from an other command (match button on the tab dialog)
@@ -1961,8 +1961,8 @@ void ClientWindow::slot_menu_players(const QPoint& pt)
 // mouse click on ListView_players
 void ClientWindow::slot_mouse_players(int button, QTreeWidgetItem *lv)
 {
-	static QMenu *puw = 0;
-	static QAction *puw11 = 0;
+	static QMenu *puw = nullptr;
+	static QAction *puw11 = nullptr;
 	lv_popupPlayer = static_cast<PlayerTableItem*>(lv);
 	// create popup window
 	if (!puw)
