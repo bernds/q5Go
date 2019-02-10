@@ -31,21 +31,10 @@
 #include "gametree.h"
 #include "sgf.h"
 #include "setting.h"
-#include "icons.h"
 #include "komispinbox.h"
 #include "config.h"
 #include "qgo_interface.h"
 #include "ui_helpers.h"
-
-//#ifdef USE_XPM
-#include ICON_PREFS
-#include ICON_AUTOPLAY
-#include ICON_FULLSCREEN
-#include ICON_MANUAL
-#include ICON_COORDS
-#include ICON_SOUND_ON
-#include ICON_SOUND_OFF
-//#endif
 
 std::list<MainWindow *> main_window_list;
 
@@ -292,30 +281,12 @@ MainWindow::~MainWindow()
 	delete editGroup;
 	delete navAutoplay;
 	delete navSwapVariations;
-	delete setPreferences;
 
-	delete helpManual;
-	delete helpAboutApp;
-	delete helpAboutQt;
 	delete whatsThis;
 }
 
 void MainWindow::initActions ()
 {
-	// Load the pixmaps
-	QPixmap autoplayIcon, prefsIcon, fullscreenIcon, manualIcon, coordsIcon, sound_onIcon, sound_offIcon;
-
-	prefsIcon = QPixmap((package_settings_xpm));
-	fullscreenIcon = QPixmap((window_fullscreen_xpm));
-	manualIcon = QPixmap((help_xpm));
-	autoplayIcon = QPixmap((player_pause_xpm));
-	coordsIcon = QPixmap((coords_xpm));
-	sound_onIcon= QPixmap((sound_on_xpm));
-	sound_offIcon= QPixmap((sound_off_xpm));
-
-	/*
-	* Global actions
-	*/
 	// Escape focus: Escape key to get the focus from comment field to main window.
  	escapeFocus = new QAction(this);
 	escapeFocus->setShortcut(Qt::Key_Escape);
@@ -382,7 +353,7 @@ void MainWindow::initActions ()
 	connect (navNthMove, &QAction::triggered, this, &MainWindow::slotNavNthMove);
 	connect (navIntersection, &QAction::triggered, this, &MainWindow::slotNavIntersection);
 
-	navAutoplay = new QAction(autoplayIcon, tr("&Autoplay"), this);
+	navAutoplay = new QAction(tr("&Autoplay"), this);
 	navAutoplay->setCheckable (true);
 	navAutoplay->setShortcut (QKeySequence (Qt::CTRL + Qt::Key_A));
 	navAutoplay->setChecked(false);
@@ -396,28 +367,11 @@ void MainWindow::initActions ()
 	connect(navSwapVariations, &QAction::triggered, this, &MainWindow::slotNavSwapVariations);
 
 	/* Settings menu.  */
-	// Settings Preferences
-	setPreferences = new QAction(prefsIcon, tr("&Preferences"), this);
-	setPreferences->setShortcut (Qt::ALT + Qt::Key_P);
-	setPreferences->setStatusTip(tr("Edit the preferences"));
-	setPreferences->setWhatsThis(tr("Preferences\n\nEdit the applications preferences."));
 	connect(setPreferences, &QAction::triggered, client_window, &ClientWindow::slot_preferences);
-
-	//Toggling sound
-	QIcon  OIC;
-	OIC.addPixmap ( sound_offIcon, QIcon::Normal, QIcon::On);
-	OIC.addPixmap ( sound_onIcon, QIcon::Normal, QIcon::Off );
-	soundToggle = new QAction(OIC, tr("&Mute stones sound"), this);
-	soundToggle->setCheckable (true);
-	soundToggle->setChecked(!local_stone_sound);
-	soundToggle->setStatusTip(tr("Toggle stones sound on/off"));
-	soundToggle->setWhatsThis(tr("Stones sound\n\nToggle stones sound on/off\nthis toggles only the stones sounds"));
 	connect(soundToggle, &QAction::toggled, this, &MainWindow::slotSoundToggle);
+	soundToggle->setChecked(!local_stone_sound);
 
-	/*
-	* Menu View
-	*/
-
+	/* View menu.  */
 	connect(viewMenuBar, &QAction::toggled, this, &MainWindow::slotViewMenuBar);
 	connect(viewStatusBar, &QAction::toggled, this, &MainWindow::slotViewStatusBar);
 	connect(viewCoords, &QAction::toggled, this, &MainWindow::slotViewCoords);
@@ -433,45 +387,18 @@ void MainWindow::initActions ()
 	connect(viewNumbers, &QAction::toggled, this, &MainWindow::slotViewMoveNumbers);
 
 	/* Analyze menu.  */
-
-	anConnect = new QAction(tr("&Connect analysis engine"), this);
-	anConnect->setStatusTip(tr("Start up a configured analysis engine"));
-	anConnect->setWhatsThis(tr("Try to find an engine configured as an analysis tool in the engine list,\n"
-				      "and connect to it.\n"));
 	connect(anConnect, &QAction::triggered, this, [=] () { gfx_board->start_analysis (); });
-
-	anPause = new QAction(tr("&Pause analysis engine"), this);
-	anPause->setCheckable (true);
-	anPause->setStatusTip(tr("Stop the analysis temporarily"));
-	anPause->setWhatsThis(tr("Click to pause or unpause the analysis engine.\n"));
 	connect(anPause, &QAction::toggled, this, [=] (bool on) { if (on) { grey_eval_bar (); } gfx_board->pause_analysis (on); });
-
-	anDisconnect = new QAction(tr("&Disconnect analysis engine"), this);
-	anDisconnect->setStatusTip(tr("Detach the running analysis engine"));
-	anDisconnect->setWhatsThis(tr("Detach the currently running analysis engine.\n"));
 	connect(anDisconnect, &QAction::triggered, this, [=] () { gfx_board->stop_analysis (); });
 
-	/*
-	 * Menu Help
-	 */
-	// Help Manual
-	helpManual = new QAction(manualIcon, tr("&Manual"), this);
-	helpManual->setShortcut (Qt::Key_F1);
-	helpManual->setStatusTip(tr("Opens the manual"));
-	helpManual->setWhatsThis(tr("Help\n\nOpens the manual of the application."));
+	/* Help menu.  */
 	connect(helpManual, &QAction::triggered, this, [=] (bool) { qgo->openManual (); });
-
-	// Help About
-	helpAboutApp = new QAction(tr("&About..."), this);
-	helpAboutApp->setStatusTip(tr("About the application"));
-	helpAboutApp->setWhatsThis(tr("About\n\nAbout the application."));
-	connect(helpAboutApp, &QAction::triggered, [=] (bool) { help_about (); });
-
-	// Help AboutQt
-	helpAboutQt = new QAction(tr("About &Qt..."), this);
-	helpAboutQt->setStatusTip(tr("About Qt"));
-	helpAboutQt->setWhatsThis(tr("About Qt\n\nAbout Qt."));
+	/* There isn't actually a manual.  Well, there is, but it's outdated and we don't ship it.  */
+	helpManual->setVisible (false);
+	helpManual->setEnabled (false);
+	connect(helpAbout, &QAction::triggered, [=] (bool) { help_about (); });
 	connect(helpAboutQt, &QAction::triggered, [=] (bool) { QMessageBox::aboutQt (this); });
+	whatsThis = QWhatsThis::createAction (this);
 
 	// Disable some toolbuttons at startup
 	navForward->setEnabled(false);
@@ -490,8 +417,6 @@ void MainWindow::initActions ()
 	navPrevFigure->setEnabled(false);
 	navIntersection->setEnabled(false);
 
-	whatsThis = QWhatsThis::createAction (this);
-
 	/* Need actions with shortcuts added to the window, so that the shortcut still works
 	   if the menubar is hidden.  */
 	addActions ({ fileNewBoard, fileNew, fileOpen, fileSave, fileSaveAs, fileClose, fileQuit });
@@ -505,16 +430,12 @@ void MainWindow::initActions ()
 
 void MainWindow::initMenuBar (GameMode mode)
 {
-	settingsMenu->addAction (setPreferences);
-	settingsMenu->addAction (soundToggle);
-
-	settingsMenu->insertSeparator(soundToggle);
-
 	QAction *view_first = viewMenu->actions().at(0);
 
 	viewMenu->insertAction (view_first, fileBar->toggleViewAction ());
 	viewMenu->insertAction (view_first, toolBar->toggleViewAction ());
 	viewMenu->insertAction (view_first, editBar->toggleViewAction ());
+	viewMenu->insertAction (view_first, miscBar->toggleViewAction ());
 	viewMenu->insertSeparator(view_first);
 	viewMenu->insertAction (view_first, commentsDock->toggleViewAction ());
 	viewMenu->insertAction (view_first, observersDock->toggleViewAction ());
@@ -522,27 +443,20 @@ void MainWindow::initMenuBar (GameMode mode)
 	viewMenu->insertAction (view_first, graphDock->toggleViewAction ());
 	viewMenu->insertAction (view_first, treeDock->toggleViewAction ());
 
-	anMenu->addAction (anConnect);
-	anMenu->addAction (anDisconnect);
-	anMenu->addAction (anPause);
-
-	helpMenu->addAction (helpManual);
+	helpMenu->addSeparator ();
 	helpMenu->addAction (whatsThis);
-	helpMenu->addAction (helpAboutApp);
-	helpMenu->addAction (helpAboutQt);
-	helpMenu->insertSeparator(helpAboutApp);
 
 	anMenu->setVisible (mode == modeNormal || mode == modeObserve);
 }
 
 void MainWindow::initToolBar()
 {
-	toolBar->addSeparator();
-	toolBar->addAction (soundToggle);
-	toolBar->addAction (viewCoords);
+	miscBar->addSeparator();
+	miscBar->addAction (soundToggle);
+	miscBar->addAction (viewCoords);
 
-	toolBar->addSeparator();
-	toolBar->addAction (whatsThis);
+	miscBar->addSeparator();
+	miscBar->addAction (whatsThis);
 }
 
 void MainWindow::initStatusBar()
@@ -1122,42 +1036,6 @@ void MainWindow::slotSetGameInfo(bool)
  		gfx_board->setModified (true);
 		update_game_record ();
 	}
-}
-
-void MainWindow::slotViewFileBar(bool toggle)
-{
-	if (!toggle)
-		fileBar->hide();
-	else
-		fileBar->show();
-
-	setting->writeBoolEntry("FILEBAR", toggle);
-
-	statusBar()->showMessage(tr("Ready."));
-}
-
-void MainWindow::slotViewToolBar(bool toggle)
-{
-	if (!toggle)
-		toolBar->hide();
-	else
-		toolBar->show();
-
-	setting->writeBoolEntry("TOOLBAR", toggle);
-
-	statusBar()->showMessage(tr("Ready."));
-}
-
-void MainWindow::slotViewEditBar(bool toggle)
-{
-	if (!toggle)
-		editBar->hide();
-	else
-		editBar->show();
-
-	setting->writeBoolEntry("EDITBAR", toggle);
-
-	statusBar()->showMessage(tr("Ready."));
 }
 
 void MainWindow::slotViewMenuBar(bool toggle)

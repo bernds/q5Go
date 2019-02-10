@@ -2541,6 +2541,9 @@ After placing and/or undo release button for returning to starting point automat
     <property name="title">
      <string>&amp;Settings</string>
     </property>
+    <addaction name="setPreferences"/>
+    <addaction name="separator"/>
+    <addaction name="soundToggle"/>
    </widget>
    <widget class="QMenu" name="viewMenu">
     <property name="title">
@@ -2580,11 +2583,18 @@ After placing and/or undo release button for returning to starting point automat
     <property name="title">
      <string>&amp;Analysis</string>
     </property>
+    <addaction name="anConnect"/>
+    <addaction name="anDisconnect"/>
+    <addaction name="anPause"/>
    </widget>
    <widget class="QMenu" name="helpMenu">
     <property name="title">
      <string>&amp;Help</string>
     </property>
+    <addaction name="helpManual"/>
+    <addaction name="separator"/>
+    <addaction name="helpAbout"/>
+    <addaction name="helpAboutQt"/>
    </widget>
    <addaction name="fileMenu"/>
    <addaction name="editMenu"/>
@@ -2939,6 +2949,19 @@ When in score mode, left click to mark a group as dead, right click to mark it a
      </item>
     </layout>
    </widget>
+  </widget>
+  <widget class="QToolBar" name="miscBar">
+   <property name="windowTitle">
+    <string>Miscellaneous toolbar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="soundToggle"/>
+   <addaction name="viewCoords"/>
   </widget>
   <action name="navForward">
    <property name="icon">
@@ -3507,6 +3530,10 @@ Take a screen grab of the current board position and export it to the clipboard 
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/fullscreen.png</normaloff>:/BoardWindow/images/boardwindow/fullscreen.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Fullscreen</string>
    </property>
@@ -3584,6 +3611,77 @@ Take a screen grab of the current board position and export it to the clipboard 
    </property>
    <property name="shortcut">
     <string>F7</string>
+   </property>
+  </action>
+  <action name="setPreferences">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/ClientWindowGui/images/clientwindow/prefs.png</normaloff>:/ClientWindowGui/images/clientwindow/prefs.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Preferences...</string>
+   </property>
+   <property name="toolTip">
+    <string>Bring up the preferences dialog</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+P</string>
+   </property>
+  </action>
+  <action name="soundToggle">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/audio-on.png</normaloff>
+     <normalon>:/BoardWindow/images/boardwindow/audio-muted.png</normalon>:/BoardWindow/images/boardwindow/audio-on.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Mute stone sound</string>
+   </property>
+  </action>
+  <action name="helpManual">
+   <property name="text">
+    <string>&amp;Manual</string>
+   </property>
+   <property name="shortcut">
+    <string>F1</string>
+   </property>
+  </action>
+  <action name="helpAbout">
+   <property name="text">
+    <string>&amp;About..</string>
+   </property>
+  </action>
+  <action name="helpAboutQt">
+   <property name="text">
+    <string>About &amp;Qt...</string>
+   </property>
+  </action>
+  <action name="anConnect">
+   <property name="text">
+    <string>&amp;Connect analysis engine</string>
+   </property>
+   <property name="toolTip">
+    <string>Connect analysis engine
+Try to find an engine configured as an analysis tool in the engine list and connect to it.</string>
+   </property>
+  </action>
+  <action name="anDisconnect">
+   <property name="text">
+    <string>&amp;Disconnect analysis engine</string>
+   </property>
+  </action>
+  <action name="anPause">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Pause analysis engine</string>
+   </property>
+   <property name="toolTip">
+    <string>Click to pause or unpause the analysis engine</string>
    </property>
   </action>
  </widget>

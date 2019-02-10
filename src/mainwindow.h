@@ -155,9 +155,6 @@ public slots:
 	void slotNavSwapVariations(bool);
 
 	void slotSetGameInfo(bool);
-	void slotViewFileBar(bool toggle);
-	void slotViewToolBar(bool toggle);
-	void slotViewEditBar(bool toggle);
 	void slotViewMenuBar(bool toggle);
 	void slotViewStatusBar(bool toggle);
 	void slotViewCoords(bool toggle);
@@ -201,11 +198,8 @@ protected:
 
 	QLabel *statusCoords, *statusMode, *statusTurn, *statusNav;
 
-	QAction *escapeFocus;
+	QAction *escapeFocus, *whatsThis;
 	QAction *navAutoplay, *navSwapVariations;
-	QAction *setPreferences, *soundToggle;
-	QAction *anConnect, *anDisconnect, *anPause;
-	QAction *helpManual, *helpAboutApp, *helpAboutQt, *whatsThis;
 	QActionGroup *editGroup;
 	QTimer *timer;
 
