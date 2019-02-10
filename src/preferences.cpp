@@ -100,6 +100,9 @@ PreferencesDialog::PreferencesDialog(QWidget* parent)
 	update_w_stones ();
 	update_b_stones ();
 	connect (stoneView, &SizeGraphicsView::resized, [=] () { update_board_image (); update_w_stones (); update_b_stones (); });
+
+	connect (GobanPicturePathButton, &QToolButton::clicked, this, &PreferencesDialog::slot_getGobanPicturePath);
+	connect (TablePicturePathButton, &QToolButton::clicked, this, &PreferencesDialog::slot_getTablePicturePath);
 }
 
 void PreferencesDialog::update_board_image ()
@@ -1022,6 +1025,7 @@ void PreferencesDialog::slot_getGobanPicturePath()
 		return;
 
   	LineEdit_goban->setText(fileName);
+	update_board_image ();
 }
 
 void PreferencesDialog::slot_getTablePicturePath()
