@@ -436,6 +436,8 @@ std::shared_ptr<game_record> sgf2record (const sgf &s)
 
 	add_to_game_state (&game->m_root, s.nodes->m_children, false, codec, errs);
 	game->set_errors (errs);
+	if (errs.any_set ())
+		game->set_modified ();
 
 	/* Fix up situations where we have a handicap game without a PL property.
 	   If it really looks like white to move, fix up the root node.  */

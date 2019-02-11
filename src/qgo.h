@@ -35,11 +35,10 @@ public:
 	void updateFont();
 
 signals:
-	void signal_leave_qgo();
 	void signal_updateFont();
 
 public slots:
-	void quit();
+	void unused_quit();
 
 private:
 	HelpViewer *helpViewer;

@@ -31,24 +31,23 @@ qGo::~qGo()
 	delete helpViewer;
 }
 
-void qGo::quit()
+/* @@@ check if there is a use case for this, and repair or remove as necessary.  */
+void qGo::unused_quit()
 {
+#if 0
 	emit signal_leave_qgo();
-	int check;
-	if ((check = checkModified()) == 1 ||
-		(!check &&
-		!QMessageBox::warning(0, PACKAGE,
-		tr("At least one board is modified.\n"
-		"If you exit the application now, all changes will be lost!"
-		"\nExit anyway?"),
-		tr("Yes"), tr("No"), QString::null,
-		1, 0)))
-	{
-		//	qApp->quit();
-		qDebug() << "Program quits now...";
+	int check = checkModified();
+	if (check == 0) {
+		QMessageBox::warning(0, PACKAGE,
+				     tr("At least one board is modified.\n"
+					"If you exit the application now, all changes will be lost!"
+					"\nExit anyway?"),
+				     tr("Yes"), tr("No"), QString::null,
+				     1, 0);
+		/* This code never did anything with the message box result.  */
 	}
-	
-	//    emit signal_leave_qgo();
+	qDebug() << "Program quits now...";
+#endif
 }
 
 void qGo::openManual()

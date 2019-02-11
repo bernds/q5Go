@@ -1919,7 +1919,6 @@ void Board::reset_game (std::shared_ptr<game_record> gr)
 
 	start_observing (gr->get_root ());
 
-	setModified (false);
 	m_dragging = false;
 	m_request_mark_rect = false;
 }
@@ -1989,7 +1988,7 @@ void Board::play_external_move (int x, int y)
 {
 	game_state *st = m_displayed;
 
-	setModified();
+	setModified ();
 
 	game_state *st_new = st->add_child_move (x, y);
 	st->transfer_observers (st_new);
@@ -2025,19 +2024,20 @@ void BoardView::set_vardisplay (bool children, int type)
 	sync_appearance (true);
 }
 
-void Board::update_comment(const QString &qs)
+void Board::update_comment (const QString &qs)
 {
 	std::string s = qs.toStdString ();
 	m_displayed->set_comment (s);
 	setModified (true);
 }
-void Board::setModified(bool m)
+
+void Board::setModified (bool m)
 {
-	if (m == isModified || m_game_mode == modeObserve)
+	if (m == m_game->modified () || m_game_mode == modeObserve)
 		return;
 
-	isModified = m;
-	m_board_win->updateCaption (isModified);
+	m_game->set_modified (m);
+	m_board_win->update_game_record ();
 }
 
 QPixmap BoardView::grabPicture()

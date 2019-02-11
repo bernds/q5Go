@@ -241,7 +241,7 @@ void MainWindow::init_game_record (std::shared_ptr<game_record> gr)
 	   to update figures, which means we need to have diagView set up.  */
 	diagView->reset_game (gr);
 	gfx_board->reset_game (gr);
-	updateCaption (false);
+	updateCaption ();
 	update_game_record ();
 
 	bool disable_rect = (b.torus_h () || b.torus_v ()) && setting->readIntEntry ("TOROID_DUPS") > 0;
@@ -264,7 +264,7 @@ void MainWindow::update_game_record ()
 	normalTools->komi->setText(QString::number(m_game->komi ()));
 	scoreTools->komi->setText(QString::number(m_game->komi ()));
 	normalTools->handicap->setText(QString::number(m_game->handicap ()));
-	updateCaption (gfx_board->modified ());
+	updateCaption ();
 }
 
 MainWindow::~MainWindow()
@@ -498,8 +498,10 @@ void MainWindow::initStatusBar()
 	statusMode->setWhatsThis (tr("Mode\nShows the current mode. 'N' for normal mode, 'E' for edit mode."));
 }
 
-void MainWindow::updateCaption (bool modified)
+void MainWindow::updateCaption ()
 {
+	bool modified = m_game->modified ();
+
 	// Print caption
 	// example: qGo 0.0.5 - Zotan 8k vs. tgmouse 10k
 	// or if game name is given: qGo 0.0.5 - Kogo's Joseki Dictionary
@@ -660,8 +662,16 @@ bool MainWindow::slotFileSaveAs (bool)
 	return doSave (fileName, false);
 }
 
-bool MainWindow::doSave(QString fileName, bool force)
+bool MainWindow::doSave (QString fileName, bool force)
 {
+	if (m_game->errors ().any_set ()) {
+		QMessageBox::StandardButton choice;
+		choice = QMessageBox::warning (this, PACKAGE,
+					       tr ("This file had errors during loading and may be corrupt.\nDo you still want to save it?"),
+					       QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+		if (choice != QMessageBox::Yes)
+			return false;
+	}
 	if (fileName.isNull () || fileName.isEmpty () || !force)
   	{
 		if (QDir(fileName).exists())
@@ -698,17 +708,15 @@ bool MainWindow::doSave(QString fileName, bool force)
 	}
 
 	statusBar()->showMessage (fileName + " " + tr("saved."));
-	gfx_board->setModified (false);
+	m_game->set_modified (false);
+	m_game->clear_errors ();
+	update_game_record ();
 	return true;
 }
 
 void MainWindow::slotFileClose (bool)
 {
-	if (checkModified() == 1)
-	{
-		gfx_board->setModified(false);  // Prevent to ask a second time in qGo::quit()
-		close();
-	}
+	close ();
 }
 
 void MainWindow::slotFileImportSgfClipB(bool)
@@ -1038,7 +1046,7 @@ void MainWindow::slotSetGameInfo(bool)
 		m_game->set_place (dlg.placeEdit->text().toStdString ());
 		m_game->set_copyright (dlg.copyrightEdit->text().toStdString ());
 
- 		gfx_board->setModified (true);
+		m_game->set_modified (true);
 		update_game_record ();
 	}
 }
@@ -1356,10 +1364,10 @@ void MainWindow::defaultLandscapeLayout ()
 	setFocus ();
 }
 
-void MainWindow::closeEvent(QCloseEvent *e)
+void MainWindow::closeEvent (QCloseEvent *e)
 {
 	// qDebug("MainWindow::closeEvent(QCloseEvent *e)");
-	if (getBoard()->getGameMode() == modeObserve || checkModified() == 1)
+	if (getBoard()->getGameMode() == modeObserve || checkModified ())
 	{
 		emit signal_closeevent();
 		e->accept();
@@ -1368,34 +1376,34 @@ void MainWindow::closeEvent(QCloseEvent *e)
 		e->ignore();
 }
 
-int MainWindow::checkModified(bool interactive)
+int MainWindow::checkModified (bool interactive)
 {
-	if (!gfx_board->modified ())
+	if (!m_game->modified ())
 		return 1;
 
 	if (!interactive)
 		return 0;
 
-	switch (QMessageBox::warning(this, PACKAGE,
-		tr("You modified the game.\nDo you want to save your changes?"),
-		tr("Yes"), tr("No"), tr("Cancel"),
-		0, 2))
+	QMessageBox::StandardButton choice;
+	choice = QMessageBox::warning(this, PACKAGE,
+				      tr("You modified the game.\nDo you want to save your changes?"),
+				      QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Yes);
+
+	switch (choice)
 	{
-	case 0:
-		return slotFileSave() && !gfx_board->modified ();
+	case QMessageBox::Yes:
+		return slotFileSave() && !m_game->modified ();
 
-	case 1:
-		return 1;
-
-	case 2:
+	case QMessageBox::No:
 		return 2;
+
+	case QMessageBox::Cancel:
+		return 0;
 
 	default:
 		qWarning("Unknown messagebox input.");
 		return 0;
 	}
-
-	return 1;
 }
 
 void MainWindow::rememberLastDir(const QString &file)

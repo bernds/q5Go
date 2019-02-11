@@ -180,7 +180,6 @@ class Board : public BoardView, public navigable_observer, public GTP_Eval_Contr
 	MainWindow *m_board_win {};
 
 	GameMode m_game_mode = modeNormal;
-	bool isModified = false;
 
 	/* Controls whether moves are allowed for either color.  */
 	bool m_player_is_b = true;
@@ -218,8 +217,7 @@ public:
 	const std::shared_ptr<game_record> get_record () { return m_game; }
 	virtual void set_displayed (game_state *) override;
 
-	void setModified(bool m=true);
-	bool modified () { return isModified; }
+	void setModified (bool m=true);
 	void external_move (game_state *st) { move_state (st); }
 	void mark_dead_external (int x, int y);
 	void update_comment(const QString &);

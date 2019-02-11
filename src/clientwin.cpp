@@ -2376,8 +2376,6 @@ void ClientWindow::initToolBar()
 
 void ClientWindow::slotFileOpen(bool)
 {
-	//if (!checkModified())
-	//	return;
 	QString fileName(QFileDialog::getOpenFileName(this, tr ("Open SGF file"), setting->readEntry("LAST_DIR"),
 						      tr("SGF Files (*.sgf *.SGF);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)")));
 	if (fileName.isEmpty())
@@ -2464,7 +2462,7 @@ void ClientWindow::slotViewMenuBar(bool toggle)
 	statusBar()->showMessage(tr("Ready."));
 }
 
-void ClientWindow::slotViewToolBar(bool toggle)  
+void ClientWindow::slotViewToolBar(bool toggle)
 {
 	if (!toggle)
 		Toolbar->hide();

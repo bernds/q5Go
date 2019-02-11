@@ -312,7 +312,7 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 
 						qb->send_kibitz(tr("Game continued as Game number %1").arg(g->nr));
 						// show new game number;
-						qb->get_win()->updateCaption(true);
+						qb->get_win()->update_game_record ();
 
 						// renew refresh button
 						qb->get_win()->refreshButton->setText(QObject::tr("Refresh", "button label"));
@@ -1596,7 +1596,7 @@ void qGoBoard::set_move(stone_color sc, QString pt, QString mv_nr)
 	}
 	else
 	{
-		if ((gameMode == modeMatch) && (mv_counter < 2) && m_own_color == white)
+		if (gameMode == modeMatch && mv_counter < 2 && m_own_color == white)
 		{
 			// if black has not already done - maybe too late here???
 			if (requests_set)

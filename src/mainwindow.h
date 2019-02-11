@@ -53,6 +53,7 @@ class MainWindow : public QMainWindow, public Ui::BoardWindow
 	void setToolsTabWidget(enum tabType=tabNormalScore, enum tabState=tabSet);
 	void toggleSidebar (bool);
 	void setSliderMax(int n);
+	void updateCaption ();
 
 public:
 	MainWindow(QWidget* parent, std::shared_ptr<game_record>, GameMode mode = modeNormal);
@@ -81,7 +82,6 @@ public:
 	/* Called when the record was changed by some external source (say, a Go server
 	   providing a title string).  */
 	void update_game_record ();
-	void updateCaption (bool modified);
 	void update_figure_display ();
 	void done_rect_select (int minx, int miny, int maxx, int maxy);
 

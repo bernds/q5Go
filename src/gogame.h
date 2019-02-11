@@ -835,7 +835,7 @@ class game_record : public game_info
 {
 	friend std::shared_ptr<game_record> sgf2record (const sgf &s);
 	game_state m_root;
-
+	bool m_modified = false;
 	sgf_errors m_errors;
 
 public:
@@ -849,7 +849,8 @@ public:
 	{
 
 	}
-	game_record (const game_record &other) : game_info (other), m_root (other.m_root, nullptr)
+	game_record (const game_record &other) : game_info (other), m_root (other.m_root, nullptr),
+		m_modified (other.m_modified), m_errors (other.m_errors)
 	{
 	}
 
@@ -867,10 +868,22 @@ public:
 		const go_board &b = m_root.get_board ();
 		return std::max (b.size_x (), b.size_y ());
 	}
+	void set_modified (bool on = true)
+	{
+		m_modified = on;
+	}
+	bool modified () const
+	{
+		return m_modified;
+	}
 	std::string to_sgf () const;
 	void set_errors (const sgf_errors &errs)
 	{
 		m_errors = errs;
+	}
+	void clear_errors ()
+	{
+		m_errors = sgf_errors ();
 	}
 	const sgf_errors &errors ()
 	{
