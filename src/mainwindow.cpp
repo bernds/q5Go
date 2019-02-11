@@ -688,11 +688,11 @@ bool MainWindow::doSave (QString fileName, bool force)
 	if (fileName.isNull () || fileName.isEmpty () || !force)
   	{
 		if (QDir(fileName).exists())
-			fileName = QString::fromStdString (get_candidate_filename (fileName.toStdString (), *m_game));
+			fileName = get_candidate_filename (fileName, *m_game);
 		else if (fileName.isNull() || fileName.isEmpty()) {
-			std::string dir = setting->readEntry("LAST_DIR").toStdString ();
+			QString dir = setting->readEntry("LAST_DIR");
 
-			fileName = QString::fromStdString (get_candidate_filename (dir, *m_game));
+			fileName = get_candidate_filename (dir, *m_game);
 		}
 		if (!force)
 			fileName = QFileDialog::getSaveFileName(this, tr ("Save SGF file"),

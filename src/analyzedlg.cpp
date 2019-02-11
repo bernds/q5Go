@@ -303,8 +303,7 @@ void AnalyzeDialog::start_job ()
 {
 	QString f = filenameEdit->text ();
 	std::string filename = f.toStdString ();
-	std::ifstream isgf (filename);
-	std::shared_ptr<game_record> gr = record_from_stream (isgf);
+	std::shared_ptr<game_record> gr = record_from_file (filename);
 	if (gr == nullptr)
 		return;
 

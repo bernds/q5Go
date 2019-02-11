@@ -112,10 +112,18 @@ std::shared_ptr<game_record> record_from_stream (std::istream &isgf)
 	return nullptr;
 }
 
-bool open_window_from_file (const std::string &filename)
+std::shared_ptr<game_record> record_from_file (const std::string &filename)
 {
 	std::ifstream isgf (filename);
 	std::shared_ptr<game_record> gr = record_from_stream (isgf);
+	if (gr != nullptr)
+		gr->set_filename (filename);
+	return gr;
+}
+
+bool open_window_from_file (const std::string &filename)
+{
+	std::shared_ptr<game_record> gr = record_from_file (filename);
 	if (gr == nullptr)
 		return false;
 
@@ -285,21 +293,20 @@ go_board new_handicap_board (int size, int handicap)
 }
 
 /* Generate a candidate for the filename for this game */
-std::string get_candidate_filename (const std::string &dir, const game_info &info)
+QString get_candidate_filename (const QString &dir, const game_info &info)
 {
-	const std::string &pw = info.name_white ();
-	const std::string &pb = info.name_black ();
+	const QString pw = QString::fromStdString (info.name_white ());
+	const QString pb = QString::fromStdString (info.name_black ());
 	QString date = QDate::currentDate().toString("yyyy-MM-dd");
-	std::string cand = date.toStdString() + "-" + pw + "-" + pb;
-	std::string base = cand;
+	QString cand = date + "-" + pw + "-" + pb;
+	QString base = cand;
+	QDir d (dir);
 	int i = 1;
-	while (QFile(QString::fromStdString (dir) + QString::fromStdString (cand) + ".sgf").exists())
+	while (QFile (d.filePath (cand + ".sgf")).exists())
 	{
-		//number = Q.number(i++);
-		cand = base + "-" + QString::number(i++).toStdString ();
-		//fileName = fileName + ".sgf";
+		cand = base + "-" + QString::number(i++);
 	}
-	return dir + cand + ".sgf";
+	return d.filePath (cand + ".sgf");
 }
 
 int main(int argc, char **argv)
