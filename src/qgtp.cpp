@@ -475,6 +475,10 @@ void GTP_Eval_Controller::gtp_eval (const QString &s)
 				int j = szy - pm.mid (1).toInt ();
 				if (i >= 0 && i < szx && j >= 0 && j < szy) {
 					game_state *next = cur->add_child_move (i, j);
+					/* The program might have given us an invalid move.  Don't
+					   crash if it did.  */
+					if (next == nullptr)
+						break;
 					if (pv_first) {
 						cur->set_mark (i, j, mark::letter, count);
 						next->set_eval_data (visits, to_move == white ? 1 - wr : wr,
