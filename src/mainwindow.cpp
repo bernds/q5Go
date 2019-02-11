@@ -55,6 +55,13 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 	: QMainWindow(parent), m_game (gr), m_ascii_dlg (this), m_svg_dlg (this)
 {
 	setupUi (this);
+
+	/* This needs to be set early, before calling setGameMode.  It is used in two places:
+	   when setting the window caption through init_game_record, and when restoring the
+	   initial default layout (the results of that aren't used, but we want to avoid
+	   uninitialized reads).  */
+	m_gamemode = mode;
+
 	gfx_board->init2 (this);
 	diagView->set_figure_view_enabled (true);
 
@@ -209,7 +216,6 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 	   Then, choose visibility defaults for the docks.
 	   Then, do a proper setGameMode, to hide all panes that should not be visible.
 	   Finally, restore the specific layout if one was saved.  */
-	m_gamemode = mode;
 	restoreWindowLayout (true);
 
 	int figuremode = setting->readIntEntry ("BOARD_DIAGMODE");
@@ -514,6 +520,8 @@ void MainWindow::updateCaption ()
 	QString s;
 	if (modified)
 		s += "* ";
+	if (m_gamemode == modeBatch)
+		s += tr ("Analysis in progress: ");
 	if (game_number != 0)
 		s += "(" + QString::number(game_number) + ") ";
 	QString title = QString::fromStdString (m_game->title ());
@@ -1697,7 +1705,7 @@ void MainWindow::setGameMode(GameMode mode)
 		normalTools->btimeView->setToolTip (tr ("Time remaining for this move"));
 		normalTools->wtimeView->setToolTip (tr ("Time remaining for this move"));
 	}
-
+	updateCaption ();
 }
 
 void MainWindow::update_figure_display ()
