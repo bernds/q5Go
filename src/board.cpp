@@ -1258,7 +1258,7 @@ void BoardView::sync_appearance (bool)
 			int v = mn_board.mark_at (x, y) == mark::num ? mn_board.mark_extra_at (x, y) : 0;
 
 			bool added = false;
-			bool an_child_mark = analysis_children && v == 0 && child_vars.stone_at (x, y) == to_move;
+			bool an_child_mark = analysis_children && v == 0 && max_number == 0 && child_vars.stone_at (x, y) == to_move;
 			ram_result rs = render_analysis_marks (svg, svg_factor, cx, cy, fi,
 							       x, y, an_child_mark, v, max_number);
 			if (rs == ram_result::none) {
