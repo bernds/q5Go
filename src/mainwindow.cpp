@@ -1805,8 +1805,8 @@ void MainWindow::update_figures ()
 void MainWindow::setMoveData (game_state &gs, const go_board &b, GameMode mode)
 {
 	bool is_root_node = gs.root_node_p ();
-	int brothers = gs.n_siblings ();
-	int sons = gs.n_children ();
+	size_t brothers = gs.n_siblings ();
+	size_t sons = gs.n_children ();
 	stone_color to_move = gs.to_move ();
 	int move_nr = gs.move_number ();
 	int var_nr = gs.var_number ();

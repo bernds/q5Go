@@ -572,13 +572,13 @@ public:
 		}
 		throw std::logic_error ("variation not present in parent");
 	}
-	int n_siblings () const
+	size_t n_siblings () const
 	{
 		if (m_parent == nullptr)
 			return 0;
 		return m_parent->m_children.size () - 1;
 	}
-	int var_number () const
+	size_t var_number () const
 	{
 		if (m_parent == nullptr)
 			return 1;
@@ -587,7 +587,7 @@ public:
 				return i + 1;
 		throw std::logic_error ("not a child of its parent");
 	}
-	int n_children () const
+	size_t n_children () const
 	{
 		return m_children.size ();
 	}
