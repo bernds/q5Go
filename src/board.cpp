@@ -1163,9 +1163,9 @@ void BoardView::sync_appearance (bool)
 	bool analysis_children = setting->values.analysis_children;
 
 	int var_type = (have_analysis () && analysis_children) || have_figure ? 0 : m_vars_type;
-
-	const go_board child_vars = m_displayed->child_moves (nullptr);
-	const go_board sibling_vars = m_displayed->sibling_moves ();
+	bool exclude_diag = setting->readBoolEntry ("VAR_IGNORE_DIAGS");
+	const go_board child_vars = m_displayed->child_moves (nullptr, exclude_diag);
+	const go_board sibling_vars = m_displayed->sibling_moves (exclude_diag);
 	const go_board &vars = m_vars_children ? child_vars : sibling_vars;
 
 	const go_board &b = m_edit_board == nullptr ? m_displayed->get_board () : *m_edit_board;

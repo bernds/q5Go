@@ -59,6 +59,7 @@ Setting::Setting()
 
 	writeIntEntry("VAR_GHOSTS", 1);
 	writeBoolEntry("VAR_CHILDREN", false);
+	writeBoolEntry("VAR_IGNORE_DIAGS", true);
 	writeIntEntry("VAR_SGF_STYLE", 2);
 
 	writeEntry("SKIN", "1");

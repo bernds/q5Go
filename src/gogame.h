@@ -619,15 +619,15 @@ public:
 		return m_parent == nullptr;
 	}
 	/* Collect a set of child moves to a board, for use in variation display.  */
-	const go_board child_moves (const game_state *excluding) const;
-	const go_board sibling_moves () const
+	const go_board child_moves (const game_state *excluding, bool exclude_figs) const;
+	const go_board sibling_moves (bool exclude_figs) const
 	{
 		game_state *p = m_parent;
 		if (p == nullptr)
 			/* No need to copy special properties if we're just going to use this
 			   as a bit mask.  */
 			return go_board (m_board.size_x (), m_board.size_y ());
-		return p->child_moves (this);
+		return p->child_moves (this, exclude_figs);
 	}
 	/* Set a mark on the current board, and return true if that made a change.  */
 	bool set_mark (int x, int y, mark m, mextra extra)

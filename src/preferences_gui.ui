@@ -183,7 +183,7 @@
       <string/>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="InterfaceTabWidget">
       <attribute name="title">
@@ -1272,17 +1272,6 @@ Select how to display all brothers of the current move. Either not at all, or as
           <property name="spacing">
            <number>6</number>
           </property>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_5">
-            <property name="text">
-             <string>Allow SGF files to override
-child/sibling setting:</string>
-            </property>
-            <property name="buddy">
-             <cstring>varSGFStyleComboBox</cstring>
-            </property>
-           </widget>
-          </item>
           <item row="2" column="1">
            <widget class="QComboBox" name="varSGFStyleComboBox">
             <item>
@@ -1312,6 +1301,44 @@ child/sibling setting:</string>
             </property>
            </widget>
           </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="variationComboBox">
+            <property name="focusPolicy">
+             <enum>Qt::TabFocus</enum>
+            </property>
+            <item>
+             <property name="text">
+              <string>None</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Ghosts</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Letters</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <spacer name="verticalSpacer_18">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Preferred</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>0</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
           <item row="0" column="0">
            <widget class="QLabel" name="label">
             <property name="text">
@@ -1336,43 +1363,23 @@ child/sibling setting:</string>
             </item>
            </widget>
           </item>
-          <item row="0" column="1">
-           <widget class="QComboBox" name="variationComboBox">
-            <property name="focusPolicy">
-             <enum>Qt::TabFocus</enum>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>Allow SGF files to override
+child/sibling setting:</string>
             </property>
-            <item>
-             <property name="text">
-              <string>None</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Ghosts</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Letters</string>
-             </property>
-            </item>
+            <property name="buddy">
+             <cstring>varSGFStyleComboBox</cstring>
+            </property>
            </widget>
           </item>
-          <item row="3" column="0">
-           <spacer name="verticalSpacer_18">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
+          <item row="4" column="0">
+           <widget class="QCheckBox" name="varDiagsCheckBox">
+            <property name="text">
+             <string>Ignore diagrams</string>
             </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Preferred</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>0</height>
-             </size>
-            </property>
-           </spacer>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -4449,6 +4456,7 @@ Note: 'Delete' concerns saved records.</string>
   <tabstop>variationComboBox</tabstop>
   <tabstop>varChildrenComboBox</tabstop>
   <tabstop>varSGFStyleComboBox</tabstop>
+  <tabstop>varDiagsCheckBox</tabstop>
   <tabstop>coordsComboBox</tabstop>
   <tabstop>sidebarComboBox</tabstop>
   <tabstop>sliderCheckBox</tabstop>

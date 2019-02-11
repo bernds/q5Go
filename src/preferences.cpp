@@ -190,6 +190,7 @@ void PreferencesDialog::init_from_settings ()
 	variationComboBox->setCurrentIndex(setting->readIntEntry("VAR_GHOSTS"));
 	varChildrenComboBox->setCurrentIndex(setting->readBoolEntry("VAR_CHILDREN") != 0);
 	varSGFStyleComboBox->setCurrentIndex(setting->readIntEntry("VAR_SGF_STYLE"));
+	varDiagsCheckBox->setChecked(setting->readBoolEntry("VAR_IGNORE_DIAGS"));
 
 	int coords = (setting->readBoolEntry("BOARD_COORDS")
 		      ? (setting->readBoolEntry("SGF_BOARD_COORDS") ? 2 : 1)
@@ -394,6 +395,7 @@ void PreferencesDialog::slot_apply()
 	setting->writeIntEntry("VAR_GHOSTS", variationComboBox->currentIndex());
 	setting->writeBoolEntry("VAR_CHILDREN", varChildrenComboBox->currentIndex() == 1);
 	setting->writeIntEntry("VAR_SGF_STYLE", varSGFStyleComboBox->currentIndex());
+	setting->writeBoolEntry("VAR_IGNORE_DIAGS", varDiagsCheckBox->isChecked());
 
 	int coords = coordsComboBox->currentIndex();
 	int sidebar = sidebarComboBox->currentIndex();

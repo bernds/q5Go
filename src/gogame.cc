@@ -7,12 +7,12 @@ bool game_state::valid_move_p (int x, int y, stone_color col)
 	return m_board.valid_move_p (x, y, col);
 }
 
-const go_board game_state::child_moves (const game_state *excluding) const
+const go_board game_state::child_moves (const game_state *excluding, bool exclude_figs) const
 {
 	go_board b (m_board.size_x (), m_board.size_y ());
 	size_t n = 0;
 	for (auto &it: m_children) {
-		if (it == excluding)
+		if (it == excluding || (it->has_figure () && exclude_figs))
 			continue;
 		/* It's unclear if letters should skip the current variation,
 		   which would make them consistent when displaying any of
