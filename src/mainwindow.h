@@ -159,6 +159,8 @@ public slots:
 	void slotViewSidebar(bool toggle);
 	void slotViewFullscreen(bool toggle);
 	void slotViewMoveNumbers(bool toggle);
+	void slotViewDiagComments (bool);
+
 	void slotTimerForward();
 	void slot_editBoardInNewWindow(bool);
 	void slot_animateClick(bool);

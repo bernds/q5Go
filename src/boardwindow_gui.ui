@@ -2578,6 +2578,7 @@ After placing and/or undo release button for returning to starting point automat
     <addaction name="separator"/>
     <addaction name="viewNumbers"/>
     <addaction name="viewCoords"/>
+    <addaction name="viewDiagComments"/>
    </widget>
    <widget class="QMenu" name="anMenu">
     <property name="title">
@@ -2849,7 +2850,7 @@ When in score mode, left click to mark a group as dead, right click to mark it a
      <property name="bottomMargin">
       <number>0</number>
      </property>
-     <item row="0" column="0">
+     <item row="1" column="0">
       <widget class="QGraphicsView" name="graphicsView">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -2933,6 +2934,13 @@ When in score mode, left click to mark a group as dead, right click to mark it a
          <widget class="QLineEdit" name="commentEdit2"/>
         </item>
        </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QTextEdit" name="diagCommentView">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
     </layout>
@@ -3710,6 +3718,17 @@ Try to find an engine configured as an analysis tool in the engine list and conn
    </property>
    <property name="toolTip">
     <string>Click to pause or unpause the analysis engine</string>
+   </property>
+  </action>
+  <action name="viewDiagComments">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Dia&amp;gram comments</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+G</string>
    </property>
   </action>
  </widget>

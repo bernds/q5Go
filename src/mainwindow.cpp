@@ -124,6 +124,8 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 		slotViewLeftSidebar ();
 
 	commentEdit->setWordWrapMode(QTextOption::WordWrap);
+	diagCommentView->setWordWrapMode(QTextOption::WordWrap);
+	diagCommentView->setVisible (false);
 
 	commentEdit->addAction (escapeFocus);
 	commentEdit2->addAction (escapeFocus);
@@ -401,6 +403,7 @@ void MainWindow::initActions ()
 	connect(layoutLandscape, &QAction::triggered, this, [=] () { defaultLandscapeLayout (); });
 	connect(viewFullscreen, &QAction::toggled, this, &MainWindow::slotViewFullscreen);
 	connect(viewNumbers, &QAction::toggled, this, &MainWindow::slotViewMoveNumbers);
+	connect(viewDiagComments, &QAction::toggled, this, &MainWindow::slotViewDiagComments);
 
 	/* Analyze menu.  */
 	connect(anConnect, &QAction::triggered, this, [=] () { gfx_board->start_analysis (); });
@@ -869,6 +872,7 @@ void MainWindow::slotDiagChosen (int idx)
 {
 	game_state *st = m_figures.at (idx);
 	diagView->set_displayed (st);
+	diagCommentView->setText (QString::fromStdString (st->comment ()));
 }
 
 void MainWindow::slotDiagEdit (bool)
@@ -1084,6 +1088,17 @@ void MainWindow::slotViewCoords(bool toggle)
 void MainWindow::slotViewMoveNumbers(bool toggle)
 {
 	gfx_board->set_show_move_numbers (toggle);
+	statusBar()->showMessage(tr("Ready."));
+}
+
+void MainWindow::slotViewDiagComments(bool toggle)
+{
+	diagCommentView->setVisible (toggle);
+	comments_widget->setVisible (!toggle);
+	if (toggle)
+		commentsDock->setWindowTitle (tr ("Diag. comments"));
+	else
+		commentsDock->setWindowTitle (tr ("Comments"));
 	statusBar()->showMessage(tr("Ready."));
 }
 
@@ -1724,7 +1739,7 @@ void MainWindow::update_figures ()
 {
 	game_state *gs = gfx_board->displayed ();
 	game_state *old_fig = diagView->displayed ();
-	bool keep_old_fig = false;
+	int keep_old_fig = -1;
 	m_figures.clear ();
 	diagComboBox->clear ();
 	bool main_fig = gs->has_figure ();
@@ -1737,7 +1752,7 @@ void MainWindow::update_figures ()
 		else
 			diagComboBox->addItem (QString::fromStdString (title));
 		if (gs == old_fig)
-			keep_old_fig = true;
+			keep_old_fig = 0;
 	}
 	int count = 1;
 	auto children = gs->children ();
@@ -1757,9 +1772,9 @@ void MainWindow::update_figures ()
 			else
 				diagComboBox->addItem (QString::fromStdString (title));
 			m_figures.push_back (it);
-			count++;
 			if (it == old_fig)
-				keep_old_fig = true;
+				keep_old_fig = count;
+			count++;
 		}
 	}
 	bool have_any = m_figures.size () != 0;
@@ -1774,10 +1789,15 @@ void MainWindow::update_figures ()
 	}
 	if (!have_any) {
 		diagComboBox->addItem ("No diagrams available");
-	} else if (main_fig)
+		diagCommentView->clear ();
+	} else if (main_fig) {
 		diagView->set_displayed (gs);
-	else if (!keep_old_fig) {
+		diagCommentView->setText (QString::fromStdString (gs->comment ()));
+	} else if (keep_old_fig == -1) {
 		diagView->set_displayed (m_figures[0]);
+		diagCommentView->setText (QString::fromStdString (m_figures[0]->comment ()));
+	} else {
+		diagComboBox->setCurrentIndex (keep_old_fig);
 	}
 	update_figure_display ();
 }
