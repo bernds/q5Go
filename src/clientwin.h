@@ -226,9 +226,6 @@ private:
 
 	void colored_message(QString, QColor);
 
-	void keyPressEvent(QKeyEvent*);
-//	void keyReleaseEvent(QKeyEvent*);
-
 	QString		watch;
 	QString		exclude;
 
@@ -260,7 +257,7 @@ private:
 	QMenu *seekMenu;
 	//QStringList 	*seekConditionList ;
 
-	QAction *whatsThis;
+	QAction *whatsThis, *escapeFocus;
 };
 
 /* Constructed in main, potentially hidden but always present.  */

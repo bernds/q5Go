@@ -80,10 +80,13 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	bytesOut = 0;
 	seekButtonTimer = 0;
 
-	// set focus, clear entry field
-	cb_cmdLine->setFocus();
 	cb_cmdLine->clear();
 	cb_cmdLine->addItem("");
+
+ 	escapeFocus = new QAction(this);
+	escapeFocus->setShortcut(Qt::Key_Escape);
+	connect(escapeFocus, &QAction::triggered, [=] () { setFocus (); });
+	cb_cmdLine->addAction (escapeFocus);
 
 	// create instance of telnetConnection
 	telnetConnection = new TelnetConnection(this, ListView_players, ListView_games);
@@ -2233,28 +2236,6 @@ void ClientWindow::slot_tabWidgetMainChanged(QWidget *w)
 }
 */
 
-// key pressed
-void ClientWindow::keyPressEvent(QKeyEvent *e)
-{
-	switch (e->key())
-	{
-		case Qt::Key_F1:
-			// help
-			qgo->openManual();
-			break;
-
-		case Qt::Key_Escape:
-			cb_cmdLine->setFocus();
-			cb_cmdLine->setCurrentIndex(0);
-			break;
-
-		default:
-			e->ignore();
-			break;
-	}
-	e->accept();
-}
-
 void ClientWindow::initActions()
 {
 
@@ -2355,7 +2336,7 @@ void ClientWindow::initActions()
 	connect(helpAboutQt, &QAction::triggered, [=] (bool) { QMessageBox::aboutQt (this); });
 	connect(helpNewVersion, &QAction::triggered, [=] (bool) { help_new_version (); });
 }
-  
+
 void ClientWindow::initToolBar()
 {
 	//connect( cb_connect, SIGNAL( activated(const QString&) ), this, SLOT( slot_cbconnect(const QString&) ) );
