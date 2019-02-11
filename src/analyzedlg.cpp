@@ -220,9 +220,11 @@ void AnalyzeDialog::eval_received (const QString &, int)
 			QString title = tr ("PV ") + cnt + ": " + tr ("W Win ") + wrw + "%, " + tr ("B Win ") + wrb + "% " + tr ("at ") + vis + tr (" visits.");
 			it->set_figure (256, title.toStdString ());
 			st->add_child_tree (it);
+			j->m_game->set_modified ();
 			if (j->m_win) {
 				j->m_win->update_game_tree ();
 				j->m_win->update_figures ();
+				j->m_win->update_game_record ();
 			}
 			count++;
 			if (count >= j->m_n_lines)
