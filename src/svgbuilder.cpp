@@ -27,6 +27,22 @@ void svg_builder::text_at (double cx, double cy, double sidelen, int len,
 	m_elts += txt + "</text>\n";
 }
 
+void svg_builder::fixed_height_text_at (double cx, double cy, double sidelen,
+					const QString &txt, const QString &fill, const QFontInfo &fi)
+{
+	int font_h = sidelen;
+
+	const QString family = fi.family() + ",sans-serif";
+	const QString str = "none";
+	m_elts += "<text x=\"" + QString::number (cx);
+	m_elts += "\" y=\"" + QString::number (cy);
+	m_elts += "\" style=\"stroke:" + str + "; font-family:" + family + "; text-anchor: middle; fill: " + fill;
+	if (fi.bold ())
+		m_elts += "; font-weight:bold";
+	m_elts += "; font-size: " + QString::number (font_h) + "px;\">";
+	m_elts += txt + "</text>\n";
+}
+
 void svg_builder::circle_at (double cx, double cy, double r,
 			     const QString &fill, const QString &stroke, const QString &width)
 {

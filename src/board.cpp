@@ -518,7 +518,8 @@ QByteArray BoardView::render_svg (bool do_number, bool coords)
 	std::vector<int> count_map (board_size_x * board_size_y);
 	bool numbering = do_number && m_edit_board == nullptr;
 	bool have_figure = numbering && m_displayed->has_figure ();
-
+	int fig_flags = have_figure ? m_displayed->figure_flags () : 0;
+	QString fig_title = have_figure ? QString::fromStdString (m_displayed->figure_title ()) : QString ();
 	int max_number = 0;
 	go_board mn_board (b, mark::none);
 
@@ -533,7 +534,6 @@ QByteArray BoardView::render_svg (bool do_number, bool coords)
 			st = st->next_primary_move ();
 		}
 		if (last != startpos || startpos->was_move_p ()) {
-			int fig_flags = m_displayed->figure_flags ();
 			game_state *real_start = startpos->was_move_p () ? startpos->prev_move () : startpos;
 			mn_board = (fig_flags & 256) == 0 ? last->get_board () : real_start->get_board ();
 			max_number = collect_moves (mn_board, startpos, last, true);
@@ -566,11 +566,30 @@ QByteArray BoardView::render_svg (bool do_number, bool coords)
 	}
 
 	QFontInfo fi (setting->fontMarks);
-	svg_builder svg (w, h);
-
+	int full_h = h;
+	if ((fig_flags & 2) == 0 && !fig_title.isEmpty ()) {
+#if 0
+		 /* @@@ This would be nice but svg apparently doesn't support word wrap and there
+		    isn't really a nice QFontMetrics function to break a string into a QStringList.  */
+		QFont f = setting->fontMarks;
+		f.setPixelSize (factor * 0.75);
+		QFontMetrics fm (f);
+		QRect r1 (0, 0, w, factor * 80);
+		QRect br = fm.boundingRect (r1, Qt::TextWordWrap, fig_title);
+		int lines = round (br.height () / (double)fm.height ());
+		full_h += lines * factor;
+#endif
+		full_h += factor;
+	}
+	svg_builder svg (w, full_h);
 	/* A white background, since use white squares to clear the grid when showing marks.
 	   Against a clear background that wouldn't look very good.  */
 	svg.rect (0, 0, w, h, "white", "none");
+
+	if ((fig_flags & 2) == 0 && !fig_title.isEmpty ()) {
+		int fh = factor * 0.75;
+		svg.fixed_height_text_at (w / 2, full_h, fh, fig_title, "black", fi);
+	}
 
 	if (coords) {
 		double dist = margin + factor / 2;
