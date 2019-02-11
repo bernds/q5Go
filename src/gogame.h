@@ -133,6 +133,9 @@ private:
 	double m_eval_wr_black = 0.5;
 	double m_eval_komi = 0;
 
+	/* Support for SGF VW.  */
+	bit_array *m_visible {};
+
 	game_state (const go_board &b, int move, int sgf_move, game_state *parent, stone_color to_move)
 		: m_board (b), m_move_number (move), m_sgf_movenum (sgf_move), m_parent (parent), m_to_move (to_move)
 	{
@@ -147,10 +150,12 @@ private:
 	   much we should copy here vs there.  */
 	game_state (const go_board &b, int move, int sgf_move, game_state *parent,
 		    stone_color to_move, int x, int y, stone_color move_col,
-		    const sgf::node::proplist &unrecognized, const visual_tree &vt, bool vtok)
+		    const sgf::node::proplist &unrecognized, const visual_tree &vt, bool vtok,
+		    bit_array *visible)
 		: m_board (b), m_move_number (move), m_sgf_movenum (sgf_move), m_parent (parent),
 		m_to_move (to_move), m_move_x (x), m_move_y (y), m_move_color (move_col),
-		m_unrecognized_props (unrecognized), m_visualized (vt), m_visual_ok (vtok)
+		m_unrecognized_props (unrecognized), m_visualized (vt), m_visual_ok (vtok),
+		m_visible (visible == nullptr ? nullptr : new bit_array (*visible))
 	{
 	}
 
@@ -206,7 +211,7 @@ public:
 	game_state (const game_state &other, game_state *parent)
 		: game_state (other.m_board, other.m_move_number, other.m_sgf_movenum, parent, other.m_to_move,
 			      other.m_move_x, other.m_move_y, other.m_move_color, other.m_unrecognized_props,
-			      other.m_visualized, other.m_visual_ok)
+			      other.m_visualized, other.m_visual_ok, other.m_visible)
 	{
 		for (auto c: other.m_children) {
 			game_state *new_c = new game_state (*c, this);
@@ -261,6 +266,7 @@ public:
 			game_state *c = m_children.back ();
 			delete c;
 		}
+		delete m_visible;
 
 		disconnect ();
 	}
@@ -698,7 +704,26 @@ public:
 			m_visual_ok = false;
 		m_figure.present = false;
 	}
-
+	const bit_array *visible () const
+	{
+		return m_visible;
+	}
+	const bit_array *visible_inherited () const
+	{
+		const game_state *gs = this;
+		while (gs != nullptr) {
+			if (gs->m_visible != nullptr)
+				return gs->m_visible;
+			gs = gs->m_parent;
+		}
+		return nullptr;
+	}
+	/* Takes ownership of the pointer.  */
+	void set_visible (bit_array *v)
+	{
+		delete m_visible;
+		m_visible = v;
+	}
 	/* Return true if a change was made.  */
 	bool update_visualization (bool hide_figures);
 	typedef std::function<void (int, int, int, int, bool)> draw_line;

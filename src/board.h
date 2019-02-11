@@ -110,7 +110,8 @@ protected:
 		return ram_result::none;
 	}
 	virtual bool have_analysis () { return false; }
-	std::pair<stone_color, stone_type> stone_to_display (const go_board &, stone_color to_move, int x, int y,
+	std::pair<stone_color, stone_type> stone_to_display (const go_board &, const bit_array *visible,
+							     stone_color to_move, int x, int y,
 							     const go_board &vars, int var_type);
 
 public:

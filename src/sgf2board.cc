@@ -1,5 +1,6 @@
 #include <list>
 #include <string>
+#include <functional>
 
 /* Ideally this code would be independent of Qt, but plain C++ seems to have little
    support for converting text encodings.  */
@@ -19,7 +20,7 @@ static int coord_from_letter (char x)
 	return x;
 }
 
-static void put_stones (go_board &b, sgf::node::property *p, stone_color col)
+static void put_stones (sgf::node::property *p, int maxx, int maxy, std::function<void (int, int)> func)
 {
 	for (auto &v: p->values)
 	{
@@ -48,12 +49,12 @@ static void put_stones (go_board &b, sgf::node::property *p, stone_color col)
 		} else {
 			x2 = x1, y2 = y1;
 		}
-		if (x2 >= b.size_x () || y2 >= b.size_y ())
+		if (x2 >= maxx || y2 >= maxy)
 			throw broken_sgf ();
 
 		for (int x = x1; x <= x2; x++)
 			for (int y = y1; y <= y2; y++)
-				b.set_stone (x, y, col);
+				func (x, y);
 	}
 }
 
@@ -136,6 +137,7 @@ static bool add_comment (game_state *gs, sgf::node *n, QTextCodec *codec)
 	return true;
 }
 
+/* Return true if OK, false if there was a charset conversion error.  */
 static bool add_figure (game_state *gs, sgf::node *n, QTextCodec *codec)
 {
 	sgf::node::property *figure = n->find_property ("FG");
@@ -168,6 +170,24 @@ static bool add_figure (game_state *gs, sgf::node *n, QTextCodec *codec)
 	}
 
 	return retval;
+}
+
+void add_visible (game_state *gs, sgf::node *n)
+{
+	sgf::node::property *vw = n->find_property ("VW");
+	if (vw == nullptr)
+		return;
+	if (vw->values.size () == 1) {
+		std::string v = *vw->values.begin ();
+		if (v.length () == 0) {
+			gs->set_visible (nullptr);
+			return;
+		}
+	}
+	const go_board &b = gs->get_board ();
+	bit_array *a = new bit_array (b.bitsize ());
+	put_stones (vw, b.size_x (), b.size_y (), [=] (int x, int y) { a->set_bit (b.bitpos (x, y)); });
+	gs->set_visible (a);
 }
 
 static void add_to_game_state (game_state *gs, sgf::node *n, bool force, QTextCodec *codec, sgf_errors &errs)
@@ -233,7 +253,8 @@ static void add_to_game_state (game_state *gs, sgf::node *n, bool force, QTextCo
 					new_board.add_stone (move_x, move_y, sc);
 					to_move = sc;
 				} else {
-					put_stones (new_board, p, sc);
+					put_stones (p, new_board.size_x (), new_board.size_y (),
+						    [&] (int x, int y) { new_board.set_stone (x, y, sc); });
 				}
 			}
 		}
@@ -280,6 +301,7 @@ static void add_to_game_state (game_state *gs, sgf::node *n, bool force, QTextCo
 			gs->set_stones_left (black, *ob);
 		errs.charset_error |= !add_comment (gs, n, codec);
 		errs.charset_error |= !add_figure (gs, n, codec);
+		add_visible (gs, n);
 		for (auto p: n->props) {
 			if (!p->handled)
 				unrecognized.push_back (new sgf::node::property (*p));
@@ -411,10 +433,10 @@ std::shared_ptr<game_record> sgf2record (const sgf &s)
 	go_board initpos (size_x, size_y, torus_h, torus_v);
 	for (auto n: s.nodes->props)
 		if (n->ident == "AB")
-			put_stones (initpos, n, black);
+			put_stones (n, size_x, size_y, [&] (int x, int y) { initpos.set_stone (x, y, black); });
 	for (auto n: s.nodes->props)
 		if (n->ident == "AW")
-			put_stones (initpos, n, white);
+			put_stones (n, size_x, size_y, [&] (int x, int y) { initpos.set_stone (x, y, white); });
 	initpos.identify_units ();
 	add_marks (initpos, s.nodes);
 
@@ -426,6 +448,7 @@ std::shared_ptr<game_record> sgf2record (const sgf &s)
 
 	errs.charset_error |= !add_comment (&game->m_root, s.nodes, codec);
 	errs.charset_error |= !add_figure (&game->m_root, s.nodes, codec);
+	add_visible (&game->m_root, s.nodes);
 
 	sgf::node::proplist unrecognized;
 	for (auto p: s.nodes->props) {
@@ -548,6 +571,69 @@ static void encode_string (std::string &s, const char *id, std::string src, bool
 	}
 }
 
+static void write_visible (std::string &s, const game_state *gs)
+{
+	/* Note that the SGF standard is slightly defective here.  Points
+	   in VW properties are visible, while VW[] defines the whole
+	   board to be visible.  Hence there is no way to write out an
+	   entirely-invisible board.  However, given that it is impossible
+	   to read one and our user interface makes it impossible to set one,
+	   that should not be an issue in practice.  */
+	const bit_array *vis_orig = gs->visible ();
+	if (vis_orig == nullptr || vis_orig->popcnt () == 0)
+		return;
+	s += "VW";
+	bit_array vis = *vis_orig;
+	const go_board &b = gs->get_board ();
+	int szx = b.size_x ();
+	int szy = b.size_y ();
+	for (int x = 0; x < szx; x++)
+		for (int y = 0; y < szy; y++) {
+			int bp = b.bitpos (x, y);
+			if (!vis.test_bit (bp))
+				continue;
+			int x2 = x;
+			int y2 = y;
+			while (x2 + 1 < szx || y2 + 1 < szy) {
+				bool changed = false;
+				if (x2 + 1 < szx) {
+					int i;
+					for (i = y; i <= y2; i++) {
+						int tp = b.bitpos (x2 + 1, i);
+						if (!vis.test_bit (tp))
+							break;
+					}
+					if (i > y2)
+						changed = true, x2++;
+				}
+				if (y2 + 1 < szy) {
+					int i;
+					for (i = x; i <= x2; i++) {
+						int tp = b.bitpos (i, y2 + 1);
+						if (!vis.test_bit (tp))
+							break;
+					}
+					if (i > x2)
+						changed = true, y2++;
+				}
+				if (!changed)
+					break;
+			}
+			for (int i = x; i <= x2; i++)
+				for (int j = y; j <= y2; j++)
+					vis.clear_bit (b.bitpos (i, j));
+			s += "[";
+			s += 'a' + x;
+			s += 'a' + y;
+			if (x2 != x || y2 != y) {
+				s += ':';
+				s += 'a' + x2;
+				s += 'a' + y2;
+			}
+			s += "]";
+		}
+}
+
 void game_state::append_to_sgf (std::string &s) const
 {
 	int linecount = 0;
@@ -622,6 +708,8 @@ void game_state::append_to_sgf (std::string &s) const
 		int prev_nr = gs->m_parent == nullptr ? -1 : gs->m_parent->m_sgf_movenum;
 		if (gs->m_sgf_movenum != prev_nr + 1)
 			s += "MN[" + std::to_string (gs->m_sgf_movenum) + "]";
+
+		write_visible (s, gs);
 
 		for (auto p: gs->m_unrecognized_props) {
 			for (auto v: p->values) {

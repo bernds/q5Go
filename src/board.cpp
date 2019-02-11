@@ -973,9 +973,13 @@ const QPixmap &BoardView::choose_stone_pixmap (stone_color c, stone_type type, i
 	}
 }
 
-std::pair<stone_color, stone_type> BoardView::stone_to_display (const go_board &b, stone_color to_move, int x, int y,
+std::pair<stone_color, stone_type> BoardView::stone_to_display (const go_board &b, const bit_array *visible,
+								stone_color to_move, int x, int y,
 								const go_board &vars, int var_type)
 {
+	if (visible != nullptr && !visible->test_bit (b.bitpos (x, y)))
+		return std::make_pair (none, stone_type::live);
+
 	stone_color sc = b.stone_at (x, y);
 	stone_type type = stone_type::live;
 	mark mark_at_pos = b.mark_at (x, y);
@@ -1147,6 +1151,7 @@ void BoardView::sync_appearance (bool)
 
 	const go_board &b = m_edit_board == nullptr ? m_displayed->get_board () : *m_edit_board;
 	stone_color to_move = m_edit_board == nullptr ? m_displayed->to_move () : m_edit_to_move;
+	const bit_array *visible = m_figure_view ? m_displayed->visible_inherited () : nullptr;
 
 	/* There are several ways we can get move numbering: showing a PV line from analysis, or
 	   when displaying a figure, or displaying numbers on a normal board.  The first and
@@ -1203,7 +1208,11 @@ void BoardView::sync_appearance (bool)
 		for (int ty = 0; ty < szy + 2 * dups_y; ty++) {
 			int x = (tx + m_shift_x + (szx - dups_x)) % szx;
 			int y = (ty + m_shift_y + (szy - dups_y)) % szy;
-			auto stone_display = stone_to_display (mn_board, to_move, x, y, vars, var_type);
+			if (visible != nullptr && !visible->test_bit (b.bitpos (x, y))) {
+				grid_hidden.set_bit (tx + ty * (szx + 2 * dups_x));
+				continue;
+			}
+			auto stone_display = stone_to_display (mn_board, visible, to_move, x, y, vars, var_type);
 			stone_color sc = stone_display.first;
 			mark mark_at_pos = b.mark_at (x, y);
 			mextra extra = b.mark_extra_at (x, y);
@@ -1262,7 +1271,7 @@ void BoardView::sync_appearance (bool)
 		for (int ty = 0; ty < szy + 2 * dups_y; ty++) {
 			int x = (tx + m_shift_x + (szx - dups_x)) % szx;
 			int y = (ty + m_shift_y + (szy - dups_y)) % szy;
-			auto stone_display = stone_to_display (mn_board, to_move, x, y, vars, var_type);
+			auto stone_display = stone_to_display (mn_board, visible, to_move, x, y, vars, var_type);
 			stone_color sc = stone_display.first;
 			stone_type type = stone_display.second;
 			if (sc != none && type == stone_type::live) {
@@ -1278,7 +1287,7 @@ void BoardView::sync_appearance (bool)
 		for (int ty = 0; ty < szy + 2 * dups_y; ty++) {
 			int x = (tx + m_shift_x + (szx - dups_x)) % szx;
 			int y = (ty + m_shift_y + (szy - dups_y)) % szy;
-			auto stone_display = stone_to_display (mn_board, to_move, x, y, vars, var_type);
+			auto stone_display = stone_to_display (mn_board, visible, to_move, x, y, vars, var_type);
 			stone_color sc = stone_display.first;
 			stone_type type = stone_display.second;
 			if (sc != none) {
