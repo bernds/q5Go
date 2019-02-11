@@ -432,11 +432,15 @@ std::shared_ptr<game_record> sgf2record (const sgf &s)
 			style);
 	go_board initpos (size_x, size_y, torus_h, torus_v);
 	for (auto n: s.nodes->props)
-		if (n->ident == "AB")
+		if (n->ident == "AB") {
+			n->handled = true;
 			put_stones (n, size_x, size_y, [&] (int x, int y) { initpos.set_stone (x, y, black); });
+		}
 	for (auto n: s.nodes->props)
-		if (n->ident == "AW")
+		if (n->ident == "AW") {
+			n->handled = true;
 			put_stones (n, size_x, size_y, [&] (int x, int y) { initpos.set_stone (x, y, white); });
+		}
 	initpos.identify_units ();
 	add_marks (initpos, s.nodes);
 
