@@ -151,8 +151,19 @@ sounds.files          = sounds/*
 INSTALLS += sounds
 
 documentation.path    = $$DOCDIR/
-documentation.files   = ../AUTHORS ../COPYING ../NEWS ../README ../TODO ../ChangeLog
+documentation.files   = ../AUTHORS ../COPYING ../NEWS ../README.md ../TODO ../ChangeLog
 INSTALLS += documentation
+
+system("pandoc --help >/dev/null 2>&1"): HAS_PANDOC = TRUE
+
+equals (HAS_PANDOC, TRUE) {
+readme.path            = $$DOCDIR/html/
+readme.files		= readme.html
+readme.commands		= pandoc -f markdown_github -o readme.html ../README.md
+readme_images.path	= $$DOCDIR/html/screens/
+readme_images.files	= ../screens/*.png ../screens/*.jpg
+INSTALLS += readme readme_images
+}
 
 html.path             = $$DOCDIR/html/
 html.files            = ../html/*.html ../html/images/*.png
