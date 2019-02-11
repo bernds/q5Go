@@ -527,11 +527,12 @@ static void maybe_add_property (std::string &s, const go_board &b, const char *n
 		}
 }
 
-static void encode_string (std::string &s, const char *id, std::string src)
+static void encode_string (std::string &s, const char *id, std::string src, bool force = false)
 {
-	if (src.length () > 0) {
+	if (force || src.length () > 0) {
 		if (id != nullptr) {
-			s += "\n";
+			if (src.length () > 0)
+				s += "\n";
 			s += id;
 		}
 		s += "[";
@@ -621,9 +622,8 @@ void game_state::append_to_sgf (std::string &s) const
 			s += "MN[" + std::to_string (gs->m_sgf_movenum) + "]";
 
 		for (auto p: gs->m_unrecognized_props) {
-			s += p->ident;
 			for (auto v: p->values) {
-				encode_string (s, nullptr, v);
+				encode_string (s, p->ident.c_str (), v, true);
 				linecount++;
 			}
 		}
