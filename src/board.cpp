@@ -516,7 +516,6 @@ QByteArray BoardView::render_svg (bool do_number, bool coords)
 	const go_board &b = m_edit_board == nullptr ? m_displayed->get_board () : *m_edit_board;
 	/* Look back through previous moves to see if we should do numbering.  */
 	std::vector<int> count_map (board_size_x * board_size_y);
-	game_state *startpos = nullptr;
 	bool numbering = do_number && m_edit_board == nullptr;
 	bool have_figure = numbering && m_displayed->has_figure ();
 
