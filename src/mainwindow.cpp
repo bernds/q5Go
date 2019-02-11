@@ -411,7 +411,8 @@ void MainWindow::initActions ()
 	connect(anDisconnect, &QAction::triggered, this, [=] () { gfx_board->stop_analysis (); });
 
 	/* Help menu.  */
-	connect(helpManual, &QAction::triggered, this, [=] (bool) { qgo->openManual (); });
+	connect(helpManual, &QAction::triggered, [=] (bool) { qgo->openManual (QUrl ("index.html")); });
+	connect(helpReadme, &QAction::triggered, [=] (bool) { qgo->openManual (QUrl ("readme.html")); });
 	/* There isn't actually a manual.  Well, there is, but it's outdated and we don't ship it.  */
 	helpManual->setVisible (false);
 	helpManual->setEnabled (false);

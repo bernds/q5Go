@@ -2593,6 +2593,7 @@ After placing and/or undo release button for returning to starting point automat
      <string>&amp;Help</string>
     </property>
     <addaction name="helpManual"/>
+    <addaction name="helpReadme"/>
     <addaction name="separator"/>
     <addaction name="helpAbout"/>
     <addaction name="helpAboutQt"/>
@@ -3729,6 +3730,11 @@ Try to find an engine configured as an analysis tool in the engine list and conn
    </property>
    <property name="shortcut">
     <string>Alt+G</string>
+   </property>
+  </action>
+  <action name="helpReadme">
+   <property name="text">
+    <string>View &amp;README</string>
    </property>
   </action>
  </widget>

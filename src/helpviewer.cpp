@@ -23,6 +23,13 @@ HelpViewer::HelpViewer(QWidget* parent)
 
 	browser = new QTextBrowser(this);
 
+	setCentralWidget(browser);
+
+	initToolBar();
+}
+
+void HelpViewer::set_url (const QUrl &url)
+{
 	QStringList strList;
 
 #ifdef Q_OS_WIN
@@ -44,10 +51,7 @@ HelpViewer::HelpViewer(QWidget* parent)
 #endif
 
 	browser->setSearchPaths(strList);
-	browser->setSource(QUrl ("index.html"));
-	setCentralWidget(browser);
-
-	initToolBar();
+	browser->setSource(url);
 }
 
 HelpViewer::~HelpViewer()

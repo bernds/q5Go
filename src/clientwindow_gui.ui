@@ -886,6 +886,7 @@
 	  <string>&amp;Help</string>
 	</property>
 	<addaction name="helpManual"/>
+	<addaction name="helpReadme"/>
 	<addaction name="separator"/>
 	<addaction name="helpAboutApp"/>
 	<addaction name="helpAboutQt"/>
@@ -1429,6 +1430,11 @@
       </property>
       <property name="name" stdset="0">
 	<cstring>helpNewVersion</cstring>
+      </property>
+    </action>
+    <action name="helpReadme">
+      <property name="text">
+	<string>View &amp;README</string>
       </property>
     </action>
   </widget>

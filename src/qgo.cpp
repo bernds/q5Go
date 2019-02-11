@@ -50,10 +50,11 @@ void qGo::unused_quit()
 #endif
 }
 
-void qGo::openManual()
+void qGo::openManual(const QUrl &url)
 {
 	if (helpViewer == nullptr)
 		helpViewer = new HelpViewer(0);
+	helpViewer->set_url (url);
 	helpViewer->show();
 	helpViewer->raise();
 }

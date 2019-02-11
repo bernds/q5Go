@@ -2331,7 +2331,11 @@ void ClientWindow::initActions()
 	/*
 	* Menu Help
 	*/
-	connect(helpManual, &QAction::triggered, [=] (bool) { qgo->openManual (); });
+	connect(helpManual, &QAction::triggered, [=] (bool) { qgo->openManual (QUrl ("index.html")); });
+	connect(helpReadme, &QAction::triggered, [=] (bool) { qgo->openManual (QUrl ("readme.html")); });
+	/* There isn't actually a manual.  Well, there is, but it's outdated and we don't ship it.  */
+	helpManual->setVisible (false);
+	helpManual->setEnabled (false);
 	connect(helpAboutApp, &QAction::triggered, [=] (bool) { help_about (); });
 	connect(helpAboutQt, &QAction::triggered, [=] (bool) { QMessageBox::aboutQt (this); });
 	connect(helpNewVersion, &QAction::triggered, [=] (bool) { help_new_version (); });

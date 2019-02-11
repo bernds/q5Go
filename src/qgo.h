@@ -8,6 +8,7 @@
 #include <QObject>
 
 class HelpViewer;
+class QUrl;
 
 class qGo : public QObject
 {
@@ -16,7 +17,7 @@ public:
 
 	qGo();
 	~qGo();
-	void openManual();
+	void openManual(const QUrl &);
 	int checkModified();
 	void updateAllBoardSettings();
 	void playClick();
