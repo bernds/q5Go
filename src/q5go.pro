@@ -146,10 +146,6 @@ translation.path      = $$DATADIR/translations
 translation.files     = translations/*
 INSTALLS += translation
 
-sounds.path           = $$DATADIR/sounds
-sounds.files          = sounds/*
-INSTALLS += sounds
-
 documentation.path    = $$DOCDIR/
 documentation.files   = ../AUTHORS ../COPYING ../NEWS ../README.md ../TODO ../ChangeLog
 INSTALLS += documentation

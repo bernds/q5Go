@@ -47,7 +47,7 @@ nodist_q5go_SOURCES = $(MOC_CC) $(RCC_CC)
 
 ####### kdevelop will overwrite this part!!! (end)############
 bin_PROGRAMS = q5go
-SUBDIRS = pics translations sounds
+SUBDIRS = pics translations
 
 q5go_LDFLAGS = $(all_libraries) $(USER_LDFLAGS)
 q5go_LDADD = $(LIBSOCKET) $(LIB_QPE) $(LIB_QT) $(QT5_LIBS)
