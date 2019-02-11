@@ -114,8 +114,6 @@ protected:
 	void initToolBar();
 	void initStatusBar();
 	void closeEvent(QCloseEvent *e);
-//	bool doSave(QString fileName, bool force=false);
-	void rememberLastDir(const QString &file);
 
 signals:
 	void signal_sendcomment(const QString&);

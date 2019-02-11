@@ -67,6 +67,11 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 
 	setWindowIcon (setting->image0);
 
+	if (!gr->filename ().empty ()) {
+		QFileInfo fi (QString::fromStdString (gr->filename ()));
+		setting->writeEntry ("LAST_DIR", fi.dir ().absolutePath ());
+	}
+
 	local_stone_sound = setting->readBoolEntry(mode == modeMatch ? "SOUND_MATCH_BOARD"
 						   : mode == modeObserve ? "SOUND_OBSERVE"
 						   : mode == modeComputer ? "SOUND_COMPUTER"
@@ -596,11 +601,11 @@ void MainWindow::slotFileOpen (bool)
 	QString fileName(QFileDialog::getOpenFileName(this, tr ("Open SGF file"),
 						      setting->readEntry("LAST_DIR"),
 						      tr("SGF Files (*.sgf *.SGF);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)")));
-	if (fileName.isEmpty())
+	if (fileName.isEmpty ())
 		return;
-
-	if (setting->readBoolEntry("REM_DIR"))
-		rememberLastDir(fileName);
+	QFileInfo fi (fileName);
+	if (fi.exists ())
+		setting->writeEntry ("LAST_DIR", fi.dir ().absolutePath ());
 
 	QByteArray qba = fileName.toUtf8();
 	if (doOpen(qba.constData ()))
@@ -645,10 +650,7 @@ bool MainWindow::slotFileSave (bool)
 	QString fileName = QString::fromStdString (m_game->filename ());
 	if (fileName.isEmpty())
 	{
-		if (setting->readBoolEntry("REM_DIR"))
-			fileName = setting->readEntry("LAST_DIR");
-		else
-			fileName = QString::null;
+		fileName = setting->readEntry("LAST_DIR");
 		return doSave(fileName, false);
 	}
 	else
@@ -677,9 +679,7 @@ bool MainWindow::doSave (QString fileName, bool force)
 		if (QDir(fileName).exists())
 			fileName = QString::fromStdString (get_candidate_filename (fileName.toStdString (), *m_game));
 		else if (fileName.isNull() || fileName.isEmpty()) {
-			std::string dir = "";
-			if (setting->readBoolEntry("REM_DIR"))
-				dir = setting->readEntry("LAST_DIR").toStdString ();
+			std::string dir = setting->readEntry("LAST_DIR").toStdString ();
 
 			fileName = QString::fromStdString (get_candidate_filename (dir, *m_game));
 		}
@@ -700,8 +700,8 @@ bool MainWindow::doSave (QString fileName, bool force)
 		std::string sgf = m_game->to_sgf ();
 		of << sgf;
 		m_game->set_filename (fileName.toStdString ());
-		if (setting->readBoolEntry("REM_DIR"))
-			rememberLastDir(fileName);
+		QFileInfo fi (fileName);
+		setting->writeEntry ("LAST_DIR", fi.dir ().absolutePath ());
 	} catch (...) {
 		QMessageBox::warning(this, PACKAGE, tr("Cannot save SGF file."));
 		return false;
@@ -1404,23 +1404,6 @@ int MainWindow::checkModified (bool interactive)
 		qWarning("Unknown messagebox input.");
 		return 0;
 	}
-}
-
-void MainWindow::rememberLastDir(const QString &file)
-{
-	int pos = 0, lastpos = -1;
-
-	while ((pos =  file.indexOf('/', pos)) != -1 && pos++ < static_cast<int>(file.length()))
-		lastpos = pos;
-
-	if (lastpos == -1)
-	{
-		setting->writeEntry("LAST_DIR", "");
-	}
-	else
-		setting->writeEntry("LAST_DIR", file.left(lastpos));
-
-	// qDebug("LAST DIR: %s", qGo::getSettings()->lastDir.latin1());
 }
 
 void MainWindow::slotUpdateComment()

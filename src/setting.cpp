@@ -99,8 +99,6 @@ Setting::Setting()
         if (!docdirs.isEmpty ())
                 writeEntry("LAST_DIR", docdirs.first ());
 
-	writeBoolEntry("REM_DIR", true);
-
 	writeIntEntry("STONES_BFLAT", 1);
 	writeIntEntry("STONES_BROUND", 80);
 	writeIntEntry("STONES_BHARD", 30);
