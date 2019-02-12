@@ -457,6 +457,8 @@ void GTP_Eval_Controller::gtp_eval (const QString &s)
 			primary_move = move;
 			m_primary_eval = wr;
 			primary_visits = visits;
+			m_eval_state->set_eval_data (visits, to_move == white ? 1 - wr : wr,
+						     m_analyzer_komi, false);
 		}
 		qDebug () << move << " PV: " << pv;
 

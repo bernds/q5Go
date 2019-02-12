@@ -22,6 +22,7 @@ FORMS	      = gui_dialog.ui \
 HEADERS		      = analyzedlg.h \
 			config.h \
 			clockview.h \
+			evalgraph.h \
                         figuredlg.h \
                         gamedialog.h \
 			gamestable.h \
@@ -66,6 +67,7 @@ HEADERS		      = analyzedlg.h \
 SOURCES		      = analyzedlg.cpp \
 			clientwin.cpp \
 			clockview.cpp \
+			evalgraph.cpp \
 			figuredlg.cpp \
 			gamedialog.cpp \
 			gamestable.cpp \

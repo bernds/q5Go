@@ -2137,6 +2137,7 @@ void Board::gtp_exited ()
 
 void Board::eval_received (const QString &move, int visits)
 {
+	m_displayed->set_eval_data (*m_eval_state, false);
 	m_board_win->set_eval (move, m_primary_eval, m_displayed->to_move (), visits);
 	sync_appearance ();
 }

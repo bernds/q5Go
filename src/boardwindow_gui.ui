@@ -2852,7 +2852,7 @@ When in score mode, left click to mark a group as dead, right click to mark it a
       <number>0</number>
      </property>
      <item row="1" column="0">
-      <widget class="QGraphicsView" name="graphicsView">
+      <widget class="EvalGraph" name="evalGraph">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>0</horstretch>
@@ -3770,6 +3770,11 @@ Try to find an engine configured as an analysis tool in the engine list and conn
    <class>GameTree</class>
    <extends>QGraphicsView</extends>
    <header>gametree.h</header>
+  </customwidget>
+  <customwidget>
+   <class>EvalGraph</class>
+   <extends>QGraphicsView</extends>
+   <header>evalgraph.h</header>
   </customwidget>
  </customwidgets>
  <resources>

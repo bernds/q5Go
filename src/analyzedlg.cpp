@@ -209,6 +209,7 @@ void AnalyzeDialog::eval_received (const QString &, int)
 		delete j;
 		update_progress ();
 	} else {
+		st->set_eval_data (*m_eval_state, false);
 		auto variations = m_eval_state->take_children ();
 		int count = 0;
 		for (auto it: variations) {

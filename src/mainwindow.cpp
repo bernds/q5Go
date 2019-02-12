@@ -57,6 +57,7 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 	setupUi (this);
 
 	gameTreeView->set_board_win (this);
+	evalGraph->set_board_win (this);
 
 	/* This needs to be set early, before calling setGameMode.  It is used in two places:
 	   when setting the window caption through init_game_record, and when restoring the
@@ -571,6 +572,7 @@ void MainWindow::update_game_tree ()
 {
 	game_state *st = gfx_board->displayed ();
 	gameTreeView->update (m_game, st);
+	evalGraph->update (m_game, st);
 }
 
 void MainWindow::slotFileNewBoard (bool)

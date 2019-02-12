@@ -654,6 +654,14 @@ public:
 		m_eval_wr_black = winrate_black;
 		m_eval_komi = komi;
 	}
+	void set_eval_data (const game_state &other, bool force_replace)
+	{
+		if (m_eval_visits > other.m_eval_visits && m_eval_komi == other.m_eval_komi && !force_replace)
+			return;
+		m_eval_visits = other.m_eval_visits;
+		m_eval_wr_black = other.m_eval_wr_black;
+		m_eval_komi = other.m_eval_komi;
+	}
 	int eval_visits ()
 	{
 		return m_eval_visits;
