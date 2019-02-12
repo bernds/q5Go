@@ -132,6 +132,7 @@ private:
 	int m_eval_visits = 0;
 	double m_eval_wr_black = 0.5;
 	double m_eval_komi = 0;
+	bool m_eval_komi_set = false;
 
 	/* Support for SGF VW.  */
 	bit_array *m_visible {};
@@ -224,6 +225,7 @@ public:
 		m_eval_visits = other.m_eval_visits;
 		m_eval_wr_black = other.m_eval_wr_black;
 		m_eval_komi = other.m_eval_komi;
+		m_eval_komi_set = other.m_eval_komi_set;
 	}
 	void disconnect ()
 	{
@@ -648,19 +650,32 @@ public:
 	}
 	void set_eval_data (int visits, double winrate_black, double komi, bool force_replace)
 	{
-		if (m_eval_visits > visits && m_eval_komi == komi && !force_replace)
+		if (m_eval_visits > visits && m_eval_komi_set && m_eval_komi == komi && !force_replace)
 			return;
 		m_eval_visits = visits;
 		m_eval_wr_black = winrate_black;
 		m_eval_komi = komi;
+		m_eval_komi_set = true;
+	}
+	void set_eval_data (int visits, double winrate_black, bool force_replace)
+	{
+		if ((m_eval_visits > visits || m_eval_komi_set) && !force_replace)
+			return;
+		m_eval_visits = visits;
+		m_eval_wr_black = winrate_black;
+		m_eval_komi_set = false;
 	}
 	void set_eval_data (const game_state &other, bool force_replace)
 	{
-		if (m_eval_visits > other.m_eval_visits && m_eval_komi == other.m_eval_komi && !force_replace)
+		if (!force_replace
+		    && m_eval_visits > other.m_eval_visits
+		    && ((m_eval_komi_set && other.m_eval_komi_set && m_eval_komi == other.m_eval_komi)
+			|| !other.m_eval_komi_set))
 			return;
 		m_eval_visits = other.m_eval_visits;
 		m_eval_wr_black = other.m_eval_wr_black;
 		m_eval_komi = other.m_eval_komi;
+		m_eval_komi_set = other.m_eval_komi_set;
 	}
 	int eval_visits ()
 	{
@@ -669,6 +684,10 @@ public:
 	double eval_wr_black ()
 	{
 		return m_eval_wr_black;
+	}
+	bool eval_komi_set ()
+	{
+		return m_eval_komi_set;
 	}
 	double eval_komi ()
 	{

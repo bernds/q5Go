@@ -23,10 +23,10 @@ struct sgf_errors
 	bool played_on_stone = false;
 	bool charset_error = false;
 	bool invalid_val = false;
-
+	bool malformed_eval = false;
 	bool any_set () const
 	{
-		return played_on_stone || charset_error || invalid_val;
+		return played_on_stone || charset_error || invalid_val || malformed_eval;
 	}
 };
 

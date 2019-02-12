@@ -1,5 +1,6 @@
 #include <list>
 #include <string>
+#include <sstream>
 #include <functional>
 
 /* Ideally this code would be independent of Qt, but plain C++ seems to have little
@@ -172,7 +173,7 @@ static bool add_figure (game_state *gs, sgf::node *n, QTextCodec *codec)
 	return retval;
 }
 
-void add_visible (game_state *gs, sgf::node *n)
+static void add_visible (game_state *gs, sgf::node *n)
 {
 	sgf::node::property *vw = n->find_property ("VW");
 	if (vw == nullptr)
@@ -188,6 +189,48 @@ void add_visible (game_state *gs, sgf::node *n)
 	bit_array *a = new bit_array (b.bitsize ());
 	put_stones (vw, b.size_x (), b.size_y (), [=] (int x, int y) { a->set_bit (b.bitpos (x, y)); });
 	gs->set_visible (a);
+}
+
+static bool add_eval (game_state *gs, sgf::node *n)
+{
+	sgf::node::property *qlzv = n->find_property ("QLZV");
+	if (qlzv == nullptr)
+		return true;
+	bool retval = true;
+	for (auto &v: qlzv->values) {
+		std::stringstream ss (v);
+		std::vector<std::string> vals;
+		for (;;) {
+			std::string elt;
+			if (!getline (ss, elt, ':'))
+				break;
+			vals.push_back (elt);
+		}
+		size_t sz = vals.size ();
+		if (sz < 2) {
+			retval = false;
+			continue;
+		}
+		int visits;
+		double winrate;
+		double komi = 0;
+		try {
+			visits = stoi (vals[0]);
+			winrate = stod (vals[1]);
+			if (sz >= 3)
+				komi = stod (vals[2]);
+		} catch (...) {
+			retval = false;
+		}
+		if (sz == 2) {
+			gs->set_eval_data (visits, winrate, false);
+		} else {
+			/* Ignore everything beyond value 3.  Those will hold things
+			   like engine name and version in the future.  */
+			gs->set_eval_data (visits, winrate, komi, false);
+		}
+	}
+	return retval;
 }
 
 static void add_to_game_state (game_state *gs, sgf::node *n, bool force, QTextCodec *codec, sgf_errors &errs)
@@ -301,6 +344,7 @@ static void add_to_game_state (game_state *gs, sgf::node *n, bool force, QTextCo
 			gs->set_stones_left (black, *ob);
 		errs.charset_error |= !add_comment (gs, n, codec);
 		errs.charset_error |= !add_figure (gs, n, codec);
+		errs.malformed_eval |= !add_eval (gs, n);
 		add_visible (gs, n);
 		for (auto p: n->props) {
 			if (!p->handled)
@@ -452,6 +496,7 @@ std::shared_ptr<game_record> sgf2record (const sgf &s)
 
 	errs.charset_error |= !add_comment (&game->m_root, s.nodes, codec);
 	errs.charset_error |= !add_figure (&game->m_root, s.nodes, codec);
+	errs.malformed_eval |= !add_eval (&game->m_root, s.nodes);
 	add_visible (&game->m_root, s.nodes);
 
 	sgf::node::proplist unrecognized;
@@ -702,10 +747,15 @@ void game_state::append_to_sgf (std::string &s) const
 			linecount++;
 		}
 		if (gs->has_figure ()) {
+			bool have_title = gs->m_figure.title.length () > 0;
+			if (have_title)
+				s += "\n";
 			s += "FG[" + std::to_string (gs->m_figure.flags);
-			if (gs->m_figure.title.length () > 0)
+			if (have_title)
 				s += ":" + gs->m_figure.title;
 			s += "]";
+			if (have_title)
+				s += "\n", linecount = 0;
 		}
 		if (gs->m_print_numbering >= 0)
 			s += "PM[" + std::to_string (gs->m_print_numbering);
@@ -714,7 +764,13 @@ void game_state::append_to_sgf (std::string &s) const
 			s += "MN[" + std::to_string (gs->m_sgf_movenum) + "]";
 
 		write_visible (s, gs);
-
+		if (gs->m_eval_visits > 0) {
+			s += "QLZV[" + std::to_string (gs->m_eval_visits) + ":" + std::to_string (gs->m_eval_wr_black);
+			if (gs->m_eval_komi_set)
+				s += ":" + std::to_string (gs->m_eval_komi);
+			s += "]";
+			linecount++;
+		}
 		for (auto p: gs->m_unrecognized_props) {
 			s += p->ident;
 			for (auto v: p->values) {
