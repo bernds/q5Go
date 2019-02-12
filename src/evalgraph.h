@@ -23,10 +23,7 @@ class EvalGraph : public QGraphicsView
 	std::shared_ptr<game_record> m_game {};
 	game_state *m_active {};
 	QGraphicsScene *m_scene;
-	QGraphicsRectItem *m_sel {};
-	QGraphicsRectItem *m_grect {};
-	QGraphicsPathItem *m_path {};
-	QGraphicsLineItem *m_line {};
+	QBrush *m_brush;
 	double m_step;
 
 protected:
@@ -35,6 +32,7 @@ protected:
 
 public:
 	EvalGraph (QWidget *parent);
+	~EvalGraph () { delete m_brush; delete m_scene; }
 	void set_board_win (MainWindow *win) { m_win = win; }
 	void update (std::shared_ptr<game_record> gr, game_state *);
 	void show_menu (int x, int y, const QPoint &pos);

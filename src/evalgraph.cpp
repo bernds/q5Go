@@ -26,11 +26,10 @@ EvalGraph::EvalGraph (QWidget *parent)
 	gradient.setColorAt (0, Qt::white);
 	gradient.setColorAt (1, Qt::black);
 	gradient.setCoordinateMode (QGradient::StretchToDeviceMode);
-	QBrush gbr (gradient);
-	m_grect = m_scene->addRect (0, 0, GRADIENT_WIDTH, h, Qt::NoPen, gbr);
-	m_grect->setZValue (-2);
-
-	m_line = m_scene->addLine (0, h / 2, w, h / 2);
+	m_brush = new QBrush (gradient);
+	QGraphicsRectItem *r = m_scene->addRect (0, 0, GRADIENT_WIDTH, h, Qt::NoPen, *m_brush);
+	r->setZValue (-2);
+	m_scene->addLine (0, h / 2, w, h / 2);
 	setAlignment (Qt::AlignTop | Qt::AlignLeft);
 
 	setToolTip (tr ("The evaluation graph.\nDisplays evaluation data found in the game record."));
@@ -95,8 +94,11 @@ void EvalGraph::update (std::shared_ptr<game_record> gr, game_state *active)
 {
 	int w = width ();
 	int h = height ();
-	m_line->setLine (0, h / 2, w, h / 2);
-	m_grect->setRect (0, 0, GRADIENT_WIDTH, h);
+
+	m_scene->clear ();
+	QGraphicsRectItem *gradr = m_scene->addRect (0, 0, GRADIENT_WIDTH, h, Qt::NoPen, *m_brush);
+	gradr->setZValue (-2);
+	m_scene->addLine (0, h / 2, w, h / 2);
 
 	if (gr == nullptr)
 		return;
@@ -121,14 +123,24 @@ void EvalGraph::update (std::shared_ptr<game_record> gr, game_state *active)
 	QPainterPath path;
 	bool on_path = false;
 	game_state *st = r;
+	double prev = 0;
 	for (int x = 0;; x++) {
 		int v = st == nullptr ? 0 : st->eval_visits ();
 		if (v > 0) {
 			double wr = st->eval_wr_black ();
-			if (on_path)
+			if (on_path) {
 				path.lineTo (GRADIENT_WIDTH + x * m_step, h * wr);
-			else
+				double chg = wr - prev;
+				if (chg != 0 && st->was_move_p ()) {
+					QBrush br (st->get_move_color () == black ? Qt::black : Qt::white);
+					/* One idea was to offset this by half the width of a step, so as to
+					   make the change appear between moves, but I found that confusing.  */
+					m_scene->addRect (GRADIENT_WIDTH + x * m_step, h / 2, m_step, h * chg,
+							  Qt::NoPen, br);
+				}
+			} else
 				path.moveTo (GRADIENT_WIDTH + x * m_step, h * wr);
+			prev = wr;
 		}
 		on_path = v > 0;
 
@@ -140,17 +152,12 @@ void EvalGraph::update (std::shared_ptr<game_record> gr, game_state *active)
 	QPen pen;
 	pen.setWidth (2);
 	pen.setColor (Qt::blue);
-	delete m_path;
-	m_path = m_scene->addPath (path, pen);
-	m_path->setZValue (3);
+	QGraphicsPathItem *p = m_scene->addPath (path, pen);
+	p->setZValue (3);
 
-	delete m_sel;
-	if (active_point == -1) {
-		m_sel = nullptr;
-	} else {
-		m_sel = m_scene->addRect (GRADIENT_WIDTH + active_point * m_step, 0, m_step, h,
-					  Qt::NoPen, QBrush (Qt::gray));
-		m_sel->setZValue (-1);
-	}
+	QGraphicsRectItem *sel = m_scene->addRect (GRADIENT_WIDTH + (int)(active_point * m_step), 0, round (m_step), h,
+						   Qt::NoPen, QBrush (Qt::gray));
+	sel->setZValue (-1);
+
 	m_scene->update ();
 }
