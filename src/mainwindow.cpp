@@ -976,13 +976,18 @@ void MainWindow::hide_panes_for_mode ()
 	if (is_online) {
 		treeDock->setVisible (false);
 		treeDock->toggleViewAction ()->setVisible (false);
-		graphDock->setVisible (false);
-		graphDock->toggleViewAction ()->setVisible (false);
+		if (m_gamemode != modeObserve) {
+			graphDock->setVisible (false);
+			graphDock->toggleViewAction ()->setVisible (false);
+		}
 		diagsDock->setVisible (false);
 		diagsDock->toggleViewAction ()->setVisible (false);
 	} else {
 		observersDock->setVisible (false);
 		observersDock->toggleViewAction ()->setVisible (false);
+		treeDock->toggleViewAction ()->setVisible (true);
+		diagsDock->toggleViewAction ()->setVisible (true);
+		graphDock->toggleViewAction ()->setVisible (true);
 	}
 }
 
