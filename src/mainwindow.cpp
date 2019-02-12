@@ -1783,7 +1783,7 @@ void MainWindow::update_figures ()
 				diagComboBox->addItem (QString::fromStdString (title));
 			m_figures.push_back (it);
 			if (it == old_fig)
-				keep_old_fig = count;
+				keep_old_fig = diagComboBox->count () - 1;
 			count++;
 		}
 	}
