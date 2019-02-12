@@ -148,11 +148,17 @@ static bool add_figure (game_state *gs, sgf::node *n, QTextCodec *codec)
 		throw broken_sgf ();
 
 	std::string v = *figure->values.begin ();
+	if (v.empty ()) {
+		/* It seems unspecified what should be used as the flags value if the
+		   FG property has no value.  */
+		gs->set_figure (32768, "");
+		return true;
+	}
 	size_t sep = v.find (':');
 	int flags;
 	bool retval = true;
 	if (sep != std::string::npos) {
-		flags = stoi (v.substr (0, sep - 1));
+		flags = stoi (v.substr (0, sep));
 		v = v.substr (sep + 1);
 		if (codec != nullptr) {
 			const char *bytes = v.c_str ();
@@ -221,6 +227,7 @@ static bool add_eval (game_state *gs, sgf::node *n)
 				komi = stod (vals[2]);
 		} catch (...) {
 			retval = false;
+			continue;
 		}
 		if (sz == 2) {
 			gs->set_eval_data (visits, winrate, false);
