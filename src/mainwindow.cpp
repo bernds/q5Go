@@ -56,6 +56,8 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 {
 	setupUi (this);
 
+	gameTreeView->set_board_win (this);
+
 	/* This needs to be set early, before calling setGameMode.  It is used in two places:
 	   when setting the window caption through init_game_record, and when restoring the
 	   initial default layout (the results of that aren't used, but we want to avoid
@@ -1801,6 +1803,14 @@ void MainWindow::update_figures ()
 		diagComboBox->setCurrentIndex (keep_old_fig);
 	}
 	update_figure_display ();
+}
+
+void MainWindow::set_game_position (game_state *gs)
+{
+	/* Have to call this first so we trace the correct path in the game tree
+	   once move_state calls back into there.  */
+	gs->make_active ();
+	gfx_board->move_state (gs);
 }
 
 void MainWindow::setMoveData (game_state &gs, const go_board &b, GameMode mode)

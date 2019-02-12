@@ -205,10 +205,7 @@ void GameTree::item_clicked (int x, int y)
 	game_state *st = m_game->get_root ()->locate_by_vis_coords (x, y, 0, 0);
 	if (st == m_active)
 		return;
-	/* Have to call this first so we trace the correct path - transfer_observers
-	   eventually ends up calling into our update function.  */
-	st->make_active ();
-	m_active->transfer_observers (st);
+	m_win->set_game_position (st);
 }
 
 void GameTree::show_menu (int x, int y, const QPoint &pos)

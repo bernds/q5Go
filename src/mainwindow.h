@@ -83,6 +83,9 @@ public:
 	   providing a title string).  */
 	void update_game_record ();
 	void update_figure_display ();
+	/* Called by the game tree or eval graph if the user wants to change the
+	   displayed position.  */
+	void set_game_position (game_state *);
 	void done_rect_select (int minx, int miny, int maxx, int maxy);
 
 	/* Called from external source.  */
