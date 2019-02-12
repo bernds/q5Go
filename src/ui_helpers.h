@@ -14,6 +14,8 @@ extern go_board new_handicap_board (int, int);
 extern QString get_candidate_filename (const QString &dir, const game_info &);
 extern bit_array calculate_hoshis (const go_board &);
 
+extern void show_batch_analysis ();
+
 extern void help_about ();
 extern void help_new_version ();
 

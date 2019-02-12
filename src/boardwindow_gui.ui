@@ -2587,6 +2587,8 @@ After placing and/or undo release button for returning to starting point automat
     <addaction name="anConnect"/>
     <addaction name="anDisconnect"/>
     <addaction name="anPause"/>
+    <addaction name="separator"/>
+    <addaction name="anBatch"/>
    </widget>
    <widget class="QMenu" name="helpMenu">
     <property name="title">
@@ -3735,6 +3737,15 @@ Try to find an engine configured as an analysis tool in the engine list and conn
   <action name="helpReadme">
    <property name="text">
     <string>View &amp;README</string>
+   </property>
+  </action>
+  <action name="anBatch">
+   <property name="text">
+    <string>Batch analysis...</string>
+   </property>
+   <property name="toolTip">
+    <string>Batch analysis
+Open the batch analysis dialog which allows you to add SGF files to a queue to be analysed by an engine.</string>
    </property>
   </action>
  </widget>

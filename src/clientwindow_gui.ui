@@ -723,6 +723,7 @@
       <addaction name="fileNewVariant"/>
       <addaction name="fileOpen"/>
       <addaction name="separator"/>
+      <addaction name="fileBatchAnalysis"/>
       <addaction name="computerPlay"/>
     </widget>
     <widget class="QToolBar" name="Toolbar">
@@ -851,6 +852,7 @@
 	<addaction name="fileOpen"/>
 	<addaction name="separator"/>
 	<addaction name="computerPlay"/>
+	<addaction name="fileBatchAnalysis"/>
 	<addaction name="separator"/>
 	<addaction name="fileQuit"/>
       </widget>
@@ -1435,6 +1437,20 @@
     <action name="helpReadme">
       <property name="text">
 	<string>View &amp;README</string>
+      </property>
+    </action>
+    <action name="fileBatchAnalysis">
+      <property name="icon">
+	<iconset resource="q4go.qrc">
+	<normaloff>:/ClientWindowGui/images/clientwindow/gear.png</normaloff>:/ClientWindowGui/images/clientwindow/gear.png</iconset>
+      </property>
+      <property name="text">
+	<string>Batch analysis...</string>
+      </property>
+      <property name="toolTip">
+	<string>Batch analysis
+	Open the batch analysis dialog which allows you to add SGF files to a queue to be analysed by an engine.
+	</string>
       </property>
     </action>
   </widget>

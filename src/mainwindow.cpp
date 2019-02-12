@@ -412,6 +412,7 @@ void MainWindow::initActions ()
 	connect(anConnect, &QAction::triggered, this, [=] () { gfx_board->start_analysis (); });
 	connect(anPause, &QAction::toggled, this, [=] (bool on) { if (on) { grey_eval_bar (); } gfx_board->pause_analysis (on); });
 	connect(anDisconnect, &QAction::triggered, this, [=] () { gfx_board->stop_analysis (); });
+	connect(anBatch, &QAction::triggered, [] (bool) { show_batch_analysis (); });
 
 	/* Help menu.  */
 	connect(helpManual, &QAction::triggered, [=] (bool) { qgo->openManual (QUrl ("index.html")); });

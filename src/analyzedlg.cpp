@@ -65,6 +65,7 @@ void AnalyzeDialog::closeEvent (QCloseEvent *e)
 	m_job_model.clear ();
 	m_jobs.clear ();
 	m_job_map.clear ();
+	update_progress ();
 	e->accept ();
 }
 
@@ -248,6 +249,7 @@ void AnalyzeDialog::update_progress ()
 	jobView->setEnabled (entries);
 	progressBar->setEnabled (selection);
 	if (!selection) {
+		progressBar->setValue (0);
 		openButton->setEnabled (false);
 		openButton->setChecked (false);
 		return;
@@ -257,6 +259,7 @@ void AnalyzeDialog::update_progress ()
 	int jidx = item->data (Qt::UserRole + 1).toInt ();
 	job *j = m_job_map[jidx];
 	if (j == nullptr) {
+		progressBar->setValue (0);
 		openButton->setEnabled (false);
 		openButton->setChecked (false);
 		return;

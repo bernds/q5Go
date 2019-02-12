@@ -2304,6 +2304,7 @@ void ClientWindow::initActions()
 	connect(fileNewVariant, &QAction::triggered, [=] (bool) { open_local_board (this, game_dialog_type::variant); });
 	connect(fileNew, &QAction::triggered, [=] (bool) { open_local_board (this, game_dialog_type::normal); });
 	connect(fileOpen, &QAction::triggered, this, &ClientWindow::slotFileOpen);
+	connect(fileBatchAnalysis, &QAction::triggered, this, [] (bool) { show_batch_analysis (); });
 	connect(computerPlay, &QAction::triggered, this, &ClientWindow::slotComputerPlay);
 	connect(fileQuit, &QAction::triggered, this, &ClientWindow::quit);
 

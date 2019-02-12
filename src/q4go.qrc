@@ -87,6 +87,7 @@
   <qresource prefix="/ClientWindowGui">
     <file>images/clientwindow/Bowl.png</file>
     <file>images/clientwindow/computerplay.png</file>
+    <file>images/clientwindow/gear.png</file>
     <file>images/clientwindow/connected.png</file>
     <file>images/clientwindow/disconnected.png</file>
     <file>images/clientwindow/looking.png</file>

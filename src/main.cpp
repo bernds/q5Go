@@ -309,6 +309,14 @@ QString get_candidate_filename (const QString &dir, const game_info &info)
 	return d.filePath (cand + ".sgf");
 }
 
+void show_batch_analysis ()
+{
+	if (analyze_dialog == nullptr)
+		analyze_dialog = new AnalyzeDialog (nullptr, QString ());
+	analyze_dialog->setVisible (true);
+	analyze_dialog->activateWindow ();
+}
+
 int main(int argc, char **argv)
 {
 	QApplication myapp(argc, argv);
