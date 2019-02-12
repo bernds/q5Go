@@ -487,7 +487,7 @@ void GTP_Eval_Controller::gtp_eval (const QString &s)
 								     m_analyzer_komi, false);
 						/* Leave it to a higher level to add a title if it wants
 						   to place these variations into the actual file.  */
-						next->set_figure (256, "");
+						next->set_figure (257, "");
 					}
 					cur = next;
 				} else
