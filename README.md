@@ -53,7 +53,7 @@ be added to the game record.
 There is also a batch analysis mode, where the use can queue a number of
 SGF files for analysis. Evaluations and variations are added automatically,
 the variations are presented as diagrams.  The file can be observed
-during analysis
+during analysis.
 
 ![screenshot](screens/batch.png)
 ![screenshot](screens/new-analysis.png)
