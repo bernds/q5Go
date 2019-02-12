@@ -58,15 +58,14 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 
 	gameTreeView->set_board_win (this);
 	evalGraph->set_board_win (this);
+	gfx_board->set_board_win (this);
+	diagView->set_board_win (this);
 
 	/* This needs to be set early, before calling setGameMode.  It is used in two places:
 	   when setting the window caption through init_game_record, and when restoring the
 	   initial default layout (the results of that aren't used, but we want to avoid
 	   uninitialized reads).  */
 	m_gamemode = mode;
-
-	gfx_board->init2 (this);
-	diagView->set_figure_view_enabled (true);
 
 	setProperty("icon", setting->image0);
 	setAttribute (Qt::WA_DeleteOnClose);

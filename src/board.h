@@ -46,6 +46,8 @@ class BoardView : public QGraphicsView
 	int m_rect_down_x = -1, m_rect_down_y = -1;
 
 protected:
+	MainWindow *m_board_win {};
+
 	/* Size of the (abstract) board.  */
 	int board_size_x, board_size_y;
 	bit_array m_hoshis;
@@ -100,6 +102,7 @@ protected:
 	void clear_graphics_elts ();
 	void clear_stones ();
 
+	bool have_selection ();
 	/* Overridden by Board.  */
 	virtual stone_color cursor_color (int, int, stone_color) { return none; }
 	virtual int extract_analysis (go_board &) { return 0; }
@@ -117,6 +120,8 @@ protected:
 public:
 	BoardView (QWidget *parent=0, QGraphicsScene *c = 0);
 	~BoardView ();
+	/* Should be part of the constructor, but Qt doesn't seem to allow such a construction with the .ui files.  */
+	void set_board_win (MainWindow *w) { m_board_win = w; }
 	virtual void reset_game (std::shared_ptr<game_record>);
 	virtual void set_displayed (game_state *);
 	game_state *displayed () { return m_displayed; }
@@ -131,7 +136,6 @@ public:
 
 	bool lockResize;
 
-	void set_figure_view_enabled (bool on) { m_figure_view = on; }
 	void set_show_move_numbers (bool);
 	void set_show_hoshis (bool);
 	void set_show_figure_caps (bool);
@@ -178,7 +182,6 @@ protected:
 class Board : public BoardView, public navigable_observer, public GTP_Eval_Controller
 {
 	Q_OBJECT
-	MainWindow *m_board_win {};
 
 	GameMode m_game_mode = modeNormal;
 
@@ -212,8 +215,6 @@ public:
 	Board(QWidget *parent=0, QGraphicsScene *c = 0);
 	~Board();
 
-	/* Should be part of the constructor, but Qt doesn't seem to allow such a construction with the .ui files.  */
-	void init2 (MainWindow *w) { m_board_win = w; }
 	virtual void reset_game (std::shared_ptr<game_record>) override;
 	const std::shared_ptr<game_record> get_record () { return m_game; }
 	virtual void set_displayed (game_state *) override;
@@ -285,6 +286,20 @@ private:
 	bool navIntersectionStatus = false;
 	bool antiClicko;
 	short curX, curY;
+};
+
+class FigureView : public BoardView
+{
+	Q_OBJECT
+
+public:
+	FigureView (QWidget *parent = 0, QGraphicsScene *c = 0);
+
+protected:
+	virtual void contextMenuEvent (QContextMenuEvent *e) override;
+public slots:
+	void hide_unselected (bool);
+	void make_all_visible (bool);
 };
 
 #endif

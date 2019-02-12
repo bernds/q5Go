@@ -1443,6 +1443,11 @@ void BoardView::mouseReleaseEvent(QMouseEvent* e)
 	m_rect_down_x = -1;
 }
 
+bool BoardView::have_selection ()
+{
+	return m_rect_x1 > 1 || m_rect_x2 < board_size_x || m_rect_y1 > 1 || m_rect_y2 < board_size_y;
+}
+
 void BoardView::update_rect_select (int x, int y)
 {
 	if (x < 0)
@@ -2168,4 +2173,58 @@ void Board::pause_analysis (bool on)
 {
 	if (pause_analyzer (on, m_displayed))
 		m_board_win->update_analysis (analyzer_state ());
+}
+
+FigureView::FigureView(QWidget *parent, QGraphicsScene *c)
+	: BoardView(parent, c)
+{
+	m_figure_view = true;
+}
+
+void FigureView::hide_unselected (bool)
+{
+	const go_board &b = m_displayed->get_board ();
+	bit_array arr (b.bitsize ());
+	for (int x = 0; x < b.size_x (); x++)
+		for (int y = 0; y < b.size_y (); y++) {
+			if (x + 1 >= m_rect_x1 && x + 1 <= m_rect_x2
+			    && y + 1 >= m_rect_y1 && y + 1 <= m_rect_y2)
+				arr.set_bit (b.bitpos (x, y));
+		}
+	m_displayed->set_visible (new bit_array (arr));
+	sync_appearance (true);
+}
+
+void FigureView::make_all_visible (bool)
+{
+	if (m_displayed->root_node_p () || m_displayed->prev_move ()->visible_inherited () == nullptr) {
+		m_displayed->set_visible (nullptr);
+	} else {
+		const go_board &b = m_displayed->get_board ();
+		bit_array arr (b.bitsize (), true);
+		m_displayed->set_visible (new bit_array (arr));
+	}
+	sync_appearance (true);
+}
+
+void FigureView::contextMenuEvent (QContextMenuEvent *e)
+{
+	QMenu menu;
+	menu.addAction (QObject::tr ("Edit diagram options..."), m_board_win, &MainWindow::slotDiagEdit);
+	menu.addSeparator ();
+	menu.addAction (QObject::tr ("Export &ASCII..."), m_board_win, &MainWindow::slotDiagASCII);
+	menu.addAction (QObject::tr ("Export S&VG..."), m_board_win, &MainWindow::slotDiagSVG);
+	if (have_selection ()) {
+		menu.addSeparator ();
+		menu.addAction (QObject::tr ("&Clear selection"), [this] (bool) { clear_selection (); });
+		menu.addAction (QObject::tr ("&Hide unselected"), this, &FigureView::hide_unselected);
+	}
+	if (m_displayed->visible_inherited () != nullptr) {
+		menu.addSeparator ();
+		menu.addAction (QObject::tr ("Make all &visible"), this, &FigureView::make_all_visible);
+		if (m_displayed->visible () != nullptr)
+			menu.addAction (QObject::tr ("C&lear visibility state, inherit from parent"),
+					[this] (bool) { m_displayed->set_visible (nullptr); sync_appearance (true); });
+	}
+	menu.exec (e->globalPos ());
 }

@@ -2690,33 +2690,7 @@ After placing and/or undo release button for returning to starting point automat
       <number>0</number>
      </property>
      <item>
-      <widget class="BoardView" name="diagView" native="true">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-         <horstretch>1</horstretch>
-         <verstretch>1</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>190</width>
-         <height>190</height>
-        </size>
-       </property>
-       <property name="whatsThis">
-        <string>Click on the board to place a stone.
-
-When in normal mode, left click plays moves in alternating colors.
-Shift + left click moves to the first move in the main branch.
-Shift + right click moves to the next move in the current branch.
-When in edit mode and editing stones, left click places a black, right click a white stone, clicking on an existant stone removes it.
-When editing marks, left click sets, right click removes the mark. When editing letter marks, shift-click allows to customize the mark text.
-When in score mode, left click to mark a group as dead, right click to mark it alive in seki. Click again to unmark as dead or seki.</string>
-       </property>
-       <property name="caption" stdset="0">
-        <string/>
-       </property>
-      </widget>
+      <widget class="FigureView" name="diagView"/>
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -3772,12 +3746,6 @@ Open the batch analysis dialog which allows you to add SGF files to a queue to b
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>BoardView</class>
-   <extends>QWidget</extends>
-   <header>board.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>GameTree</class>
    <extends>QGraphicsView</extends>
    <header>gametree.h</header>
@@ -3786,6 +3754,11 @@ Open the batch analysis dialog which allows you to add SGF files to a queue to b
    <class>EvalGraph</class>
    <extends>QGraphicsView</extends>
    <header>evalgraph.h</header>
+  </customwidget>
+  <customwidget>
+   <class>FigureView</class>
+   <extends>QGraphicsView</extends>
+   <header>board.h</header>
   </customwidget>
  </customwidgets>
  <resources>
