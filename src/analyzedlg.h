@@ -34,6 +34,7 @@ class AnalyzeDialog : public QMainWindow, public Ui::AnalyzeDialog, public GTP_E
 		AnalyzeDialog *m_dlg;
 		std::shared_ptr<game_record> m_game;
 		MainWindow *m_win {};
+		QMetaObject::Connection m_connection;
 		int m_n_seconds;
 		int m_n_lines;
 		stone_color m_side;

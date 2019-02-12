@@ -107,6 +107,8 @@ AnalyzeDialog::job::job (AnalyzeDialog *dlg, QString &title, std::shared_ptr<gam
 
 AnalyzeDialog::job::~job ()
 {
+	if (m_win)
+		disconnect (m_connection);
 	for (int i = 0; i < m_dlg->m_job_model.rowCount (); i++) {
 		QStandardItem *item = m_dlg->m_job_model.item (i);
 		int jidx = item->data (Qt::UserRole + 1).toInt ();
@@ -140,7 +142,8 @@ void AnalyzeDialog::job::show_window ()
 {
 	if (m_win == nullptr) {
 		m_win = new MainWindow (m_dlg, m_game, modeBatch);
-		connect (m_win, &MainWindow::signal_closeevent, [=] () { m_win = nullptr; m_dlg->update_progress (); });
+		m_connection = connect (m_win, &MainWindow::signal_closeevent,
+					[=] () { m_win = nullptr; m_dlg->update_progress (); });
 	}
 	m_win->show ();
 	m_win->activateWindow ();
