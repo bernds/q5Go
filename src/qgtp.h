@@ -47,7 +47,7 @@ class GTP_Controller
 
 protected:
 	GTP_Controller (QWidget *p) : m_parent (p) { }
-	GTP_Process *create_gtp (const Engine &engine, int size, double komi, int hc);
+	GTP_Process *create_gtp (const Engine &engine, int size, double komi, int hc, bool show_dialog = true);
 public:
 	virtual void gtp_played_move (int x, int y) = 0;
 	virtual void gtp_played_pass () = 0;
@@ -89,7 +89,7 @@ protected:
 
 	void clear_eval_data ();
 
-	void start_analyzer (const Engine &engine, int size, double komi, int hc);
+	void start_analyzer (const Engine &engine, int size, double komi, int hc, bool show_dialog = true);
 	void stop_analyzer ();
 	void pause_eval_updates (bool on) { m_pause_updates = on; }
 	bool pause_analyzer (bool on, game_state *);
@@ -150,7 +150,7 @@ public slots:
 
 public:
 	GTP_Process (QWidget *parent, GTP_Controller *c, const Engine &engine,
-		     int size, float komi, int hc);
+		     int size, float komi, int hc, bool show_dialog = true);
 	~GTP_Process ();
 	bool started () { return m_started; }
 	bool stopped () { return m_stopped; }

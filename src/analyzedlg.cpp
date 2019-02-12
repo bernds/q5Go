@@ -303,7 +303,7 @@ void AnalyzeDialog::start_engine ()
 		return;
 	}
 	m_running_boardsize = e->boardsize ().toInt ();
-	start_analyzer (*e, m_running_boardsize, 7.5, 0);
+	start_analyzer (*e, m_running_boardsize, 7.5, 0, false);
 }
 
 void AnalyzeDialog::start_job ()

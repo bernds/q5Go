@@ -5,9 +5,9 @@
 #include "qgtp.h"
 #include "gogame.h"
 
-GTP_Process *GTP_Controller::create_gtp (const Engine &engine, int size, double komi, int hc)
+GTP_Process *GTP_Controller::create_gtp (const Engine &engine, int size, double komi, int hc, bool show_dialog)
 {
-	GTP_Process *g = new GTP_Process (m_parent, this, engine, size, komi, hc);
+	GTP_Process *g = new GTP_Process (m_parent, this, engine, size, komi, hc, show_dialog);
 	return g;
 }
 
@@ -17,15 +17,17 @@ GTP_Process *GTP_Controller::create_gtp (const Engine &engine, int size, double 
 * Returns:   nothing
 */
 GTP_Process::GTP_Process(QWidget *parent, GTP_Controller *c, const Engine &engine,
-			 int size, float komi, int hc)
+			 int size, float komi, int hc, bool show_dialog)
 	: m_dlg (parent, TextView::type::gtp), m_controller (c), m_size (size), m_komi (komi), m_hc (hc)
 {
 	const QString &prog = engine.path ();
 	const QString &args = engine.args ();
 	req_cnt = 1;
 
-	m_dlg.show ();
-	m_dlg.activateWindow ();
+	if (show_dialog) {
+		m_dlg.show ();
+		m_dlg.activateWindow ();
+	}
 	connect (m_dlg.buttonAbort, &QPushButton::clicked, this, &GTP_Process::slot_abort_request);
 
 	connect (this, &QProcess::started, this, &GTP_Process::slot_started);
@@ -379,7 +381,7 @@ void GTP_Eval_Controller::gtp_switch_ready ()
 	m_switch_pending = false;
 }
 
-void GTP_Eval_Controller::start_analyzer (const Engine &engine, int size, double komi, int hc)
+void GTP_Eval_Controller::start_analyzer (const Engine &engine, int size, double komi, int hc, bool show_dialog)
 {
 	if (m_analyzer != nullptr) {
 		m_analyzer->quit ();
@@ -387,7 +389,7 @@ void GTP_Eval_Controller::start_analyzer (const Engine &engine, int size, double
 		m_analyzer = nullptr;
 	}
 	m_analyzer_komi = komi;
-	m_analyzer = create_gtp (engine, size, komi, hc);
+	m_analyzer = create_gtp (engine, size, komi, hc, show_dialog);
 	analyzer_state_changed ();
 }
 
