@@ -143,7 +143,7 @@ game_state *AnalyzeDialog::job::select_request (bool pop)
 void AnalyzeDialog::job::show_window ()
 {
 	if (m_win == nullptr) {
-		m_win = new MainWindow (m_dlg, m_game, modeBatch);
+		m_win = new MainWindow (nullptr, m_game, modeBatch);
 		m_connection = connect (m_win, &MainWindow::signal_closeevent,
 					[=] () { m_win = nullptr; m_dlg->update_progress (); });
 	}
