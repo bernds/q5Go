@@ -7,6 +7,7 @@
    support for converting text encodings.  */
 #include <QTextCodec>
 
+#include "config.h"
 #include "sgf.h"
 #include "goboard.h"
 #include "gogame.h"
@@ -458,6 +459,10 @@ std::shared_ptr<game_record> sgf2record (const sgf &s)
 
 	const std::string *st = s.nodes->find_property_val ("ST");
 
+	/* Ignored, but ensure it doesn't go on the list of unrecognized properties to
+	   write out later.  */
+	s.nodes->find_property_val ("AP");
+
 	if (km && km->length () > 0) {
 		size_t pos = 0;
 		if ((*km)[0] == '-')
@@ -819,7 +824,7 @@ std::string game_record::to_sgf () const
 	/* UTF-8 encoding should be guaranteed, since we convert other charsets
 	   when loading, and Qt uses Unicode internally and toStdString conversions
 	   guarantee UTF-8.  */
-	std::string s = "(;FF[4]GM[" + gm + "]CA[UTF-8]";
+	std::string s = "(;FF[4]GM[" + gm + "]CA[UTF-8]AP[" PACKAGE ":" VERSION "]";
 	std::string szx = std::to_string (rootb.size_x ());
 	std::string szy = std::to_string (rootb.size_y ());
 	encode_string (s, "SZ", szx == szy ? szx : szx + ":" + szy);
