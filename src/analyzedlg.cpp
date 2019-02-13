@@ -104,6 +104,7 @@ AnalyzeDialog::job::job (AnalyzeDialog *dlg, QString &title, std::shared_ptr<gam
 	m_dlg->m_job_map.insert (m_idx, this);
 	item->setData (m_idx, Qt::UserRole + 1);
 	m_dlg->m_job_model.appendRow (item);
+	m_dlg->jobView->setCurrentIndex (item->index ());
 }
 
 AnalyzeDialog::job::~job ()
