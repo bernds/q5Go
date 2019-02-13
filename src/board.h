@@ -118,7 +118,7 @@ protected:
 							     const go_board &vars, int var_type);
 
 public:
-	BoardView (QWidget *parent=0, QGraphicsScene *c = 0);
+	BoardView (QWidget *parent = nullptr);
 	~BoardView ();
 	/* Should be part of the constructor, but Qt doesn't seem to allow such a construction with the .ui files.  */
 	void set_board_win (MainWindow *w) { m_board_win = w; }
@@ -212,8 +212,8 @@ class Board : public BoardView, public navigable_observer, public GTP_Eval_Contr
 	void setup_analyzer_position ();
 
 public:
-	Board(QWidget *parent=0, QGraphicsScene *c = 0);
-	~Board();
+	Board (QWidget *parent = nullptr);
+	~Board ();
 
 	virtual void reset_game (std::shared_ptr<game_record>) override;
 	const std::shared_ptr<game_record> get_record () { return m_game; }
@@ -293,7 +293,7 @@ class FigureView : public BoardView
 	Q_OBJECT
 
 public:
-	FigureView (QWidget *parent = 0, QGraphicsScene *c = 0);
+	FigureView (QWidget *parent = nullptr);
 
 protected:
 	virtual void contextMenuEvent (QContextMenuEvent *e) override;

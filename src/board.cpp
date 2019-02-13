@@ -30,8 +30,8 @@
 #include "svgbuilder.h"
 #include "ui_helpers.h"
 
-BoardView::BoardView(QWidget *parent, QGraphicsScene *c)
-	: QGraphicsView(c, parent), m_hoshis (361)
+BoardView::BoardView(QWidget *parent)
+	: QGraphicsView(parent), m_hoshis (361)
 {
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -86,8 +86,8 @@ BoardView::~BoardView()
 }
 
 
-Board::Board (QWidget *parent, QGraphicsScene *c)
-	: BoardView (parent, c), GTP_Eval_Controller (parent)
+Board::Board (QWidget *parent)
+	: BoardView (parent), GTP_Eval_Controller (parent)
 {
 	viewport()->setMouseTracking(true);
 	curX = curY = -1;
@@ -2175,8 +2175,8 @@ void Board::pause_analysis (bool on)
 		m_board_win->update_analysis (analyzer_state ());
 }
 
-FigureView::FigureView(QWidget *parent, QGraphicsScene *c)
-	: BoardView(parent, c)
+FigureView::FigureView(QWidget *parent)
+	: BoardView (parent)
 {
 	m_figure_view = true;
 }
