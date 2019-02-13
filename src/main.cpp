@@ -56,7 +56,7 @@ std::shared_ptr<game_record> new_game_dialog (QWidget *parent)
 			dlg.playerBlackRkEdit->text().toStdString (),
 			"", dlg.komiSpin->value(), hc,
 			ranked::free,
-			"", "", "", "", "", "", -1);
+			"", "", "", "", "", "", "", "", -1);
 	std::shared_ptr<game_record> gr = std::make_shared<game_record> (starting_pos, hc > 1 ? white : black, info);
 
 	return gr;
@@ -81,7 +81,7 @@ std::shared_ptr<game_record> new_variant_game_dialog (QWidget *parent)
 			dlg.playerBlackRkEdit->text().toStdString (),
 			"", dlg.komiSpin->value(), 0,
 			ranked::free,
-			"", "", "", "", "", "", -1);
+			"", "", "", "", "", "", "", "", -1);
 	std::shared_ptr<game_record> gr = std::make_shared<game_record> (starting_pos, black, info);
 
 	return gr;

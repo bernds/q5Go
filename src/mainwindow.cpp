@@ -1050,6 +1050,8 @@ void MainWindow::slotSetGameInfo(bool)
 	dlg.resultEdit->setText(QString::fromStdString (m_game->result ()));
 	dlg.dateEdit->setText(QString::fromStdString (m_game->date ()));
 	dlg.placeEdit->setText(QString::fromStdString (m_game->place ()));
+	dlg.eventEdit->setText(QString::fromStdString (m_game->event ()));
+	dlg.roundEdit->setText(QString::fromStdString (m_game->round ()));
 	dlg.copyrightEdit->setText(QString::fromStdString (m_game->copyright ()));
  	dlg.komiSpin->setValue(m_game->komi ());
 	dlg.handicapSpin->setValue(m_game->handicap ());
@@ -1066,6 +1068,8 @@ void MainWindow::slotSetGameInfo(bool)
 		m_game->set_result (dlg.resultEdit->text().toStdString ());
 		m_game->set_date (dlg.dateEdit->text().toStdString ());
 		m_game->set_place (dlg.placeEdit->text().toStdString ());
+		m_game->set_event (dlg.eventEdit->text().toStdString ());
+		m_game->set_round (dlg.roundEdit->text().toStdString ());
 		m_game->set_copyright (dlg.copyrightEdit->text().toStdString ());
 
 		m_game->set_modified (true);

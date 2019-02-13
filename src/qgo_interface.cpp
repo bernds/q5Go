@@ -1305,7 +1305,7 @@ void qGoBoard::set_game(Game *g, GameMode mode, stone_color own_color)
 			g->wrank.toStdString (), g->brank.toStdString (),
 			"", g->K.toFloat(), handi, rt, "",
 			QDate::currentDate().toString("dd MM yyyy").toStdString (),
-			place, "",
+			place, "", "", "",
 			std::to_string (timelimit), overtime, -1);
 
 	m_game = std::make_shared<game_record> (startpos, handi >= 2 ? white : black, info);

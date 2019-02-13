@@ -809,6 +809,8 @@ protected:
 
 	std::string m_date = "";
 	std::string m_place = "";
+	std::string m_event = "";
+	std::string m_round = "";
 	ranked m_ranked = ranked::unknown;
 
 	std::string m_time = "";
@@ -838,6 +840,8 @@ public:
 	const std::string &result () const { return m_result; }
 	const std::string &date () const { return m_date; }
 	const std::string &place () const { return m_place; }
+	const std::string &event () const { return m_event; }
+	const std::string &round () const { return m_round; }
 	const std::string &copyright () const { return m_copyright; }
 	const std::string &rules () const { return m_rules; }
 	const std::string &time () const { return m_time; }
@@ -853,6 +857,8 @@ public:
 	void set_result (const std::string &s) { m_result = s; }
 	void set_date (const std::string &s) { m_date = s; }
 	void set_place (const std::string &s) { m_place = s; }
+	void set_event (const std::string &s) { m_event = s; }
+	void set_round (const std::string &s) { m_round = s; }
 	void set_copyright (const std::string &s) { m_copyright = s; }
 	void set_rules (const std::string &s) { m_rules = s; }
 	void set_time (const std::string &s) { m_time = s; }
@@ -868,10 +874,13 @@ public:
 	game_info (const std::string title, const std::string &w, const std::string &b,
 		   const std::string &rw, const std::string &rb,
 		   const std::string &ru, double komi, int hc, ranked rt, const std::string &re,
-		   const std::string &dt, const std::string &pc, const std::string &cp,
+		   const std::string &dt, const std::string &pc,
+		   const std::string &ev, const std::string &ro,
+		   const std::string &cp,
 		   const std::string &tm, const std::string &ot, int style)
 		: m_title (title), m_name_w (w), m_name_b (b), m_rank_w (rw), m_rank_b (rb),
 		m_rules (ru), m_komi (komi), m_handicap (hc), m_result (re), m_date (dt), m_place (pc),
+		m_event (ev), m_round (ro),
 		m_ranked (rt), m_time (tm), m_overtime (ot),
 	  m_copyright (cp), m_style (style)
 	{

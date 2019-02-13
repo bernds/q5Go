@@ -454,6 +454,8 @@ std::shared_ptr<game_record> sgf2record (const sgf &s)
 
 	const std::string *dt = s.nodes->find_property_val ("DT");
 	const std::string *pc = s.nodes->find_property_val ("PC");
+	const std::string *ev = s.nodes->find_property_val ("EV");
+	const std::string *ro = s.nodes->find_property_val ("RO");
 
 	const std::string *cp = s.nodes->find_property_val ("CP");
 
@@ -483,6 +485,7 @@ std::shared_ptr<game_record> sgf2record (const sgf &s)
 			translated_prop_str (ru, codec), komi, hc, ranked::free,
 			translated_prop_str (re, codec),
 			translated_prop_str (dt, codec), translated_prop_str (pc, codec),
+			translated_prop_str (ev, codec), translated_prop_str (ro, codec),
 			translated_prop_str (cp, codec),
 			translated_prop_str (tm, codec), translated_prop_str (ot, codec),
 			style);
@@ -840,6 +843,8 @@ std::string game_record::to_sgf () const
 	encode_string (s, "DT", m_date);
 	encode_string (s, "RU", m_rules);
 	encode_string (s, "TM", m_time);
+	encode_string (s, "EV", m_event);
+	encode_string (s, "RO", m_round);
 	encode_string (s, "OT", m_overtime);
 	encode_string (s, "CP", m_copyright);
 	if (m_handicap > 0)
