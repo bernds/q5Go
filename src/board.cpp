@@ -1165,7 +1165,7 @@ Board::ram_result Board::render_analysis_marks (svg_builder &svg, double svg_fac
 }
 
 /* The central function for synchronizing visual appearance with the abstract board data.  */
-void BoardView::sync_appearance (bool)
+QPixmap BoardView::draw_position ()
 {
 	bool numbering = !have_analysis () && m_edit_board == nullptr && m_move_numbers;
 	bool have_figure = m_figure_view && !have_analysis () && m_edit_board == nullptr && m_displayed->has_figure ();
@@ -1290,10 +1290,10 @@ void BoardView::sync_appearance (bool)
 		}
 
 	/* Now we're ready to draw the grid.  */
-	QPixmap stones (m_wood_rect.size ());
-	stones.fill (QColor (0, 0, 0, 0));
+	QPixmap image (m_wood_rect.size ());
+	image.fill (QColor (0, 0, 0, 0));
 	QPainter painter;
-	painter.begin (&stones);
+	painter.begin (&image);
 
 	draw_grid (painter, grid_hidden, bm_linewidth);
 
@@ -1343,6 +1343,13 @@ void BoardView::sync_appearance (bool)
 	renderer.render (&painter);
 
 	painter.end ();
+	return image;
+}
+
+/* The central function for synchronizing visual appearance with the abstract board data.  */
+void BoardView::sync_appearance (bool)
+{
+	QPixmap stones = draw_position ();
 	m_stone_layer.setPixmap (stones);
 	m_stone_layer.setPos (m_wood_rect.x (), m_wood_rect.y ());
 }

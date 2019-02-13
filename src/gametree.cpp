@@ -2,6 +2,8 @@
 * gametree.cpp
 */
 
+#include <QHelpEvent>
+
 #include "config.h"
 #include "setting.h"
 #include "goboard.h"
@@ -9,6 +11,7 @@
 #include "gametree.h"
 #include "mainwindow.h"
 #include "svgbuilder.h"
+#include "board.h"
 
 static QByteArray box_svg =
 	"<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"
@@ -107,6 +110,8 @@ GameTree::GameTree (QWidget *parent)
 	QScrollBar *hscr = horizontalScrollBar ();
 	connect (hscr, &QScrollBar::valueChanged, [=] (int v) { m_header_view.setOffset (v); });
 	update_prefs ();
+
+	m_previewer = new BoardView;
 }
 
 void GameTree::update_prefs ()
@@ -371,3 +376,36 @@ void GameTree::update (std::shared_ptr<game_record> gr, game_state *active, bool
 		m_sel->hide ();
 	m_scene->update ();
 }
+
+bool GameTree::event (QEvent *e)
+{
+	if (e->type() != QEvent::ToolTip)
+		return QGraphicsView::event(e);
+
+	QHelpEvent *helpEvent = static_cast<QHelpEvent *>(e);
+	QPoint event_point = helpEvent->pos();
+	event_point -= { 0, m_header_view.height () };
+	QPointF point = mapToScene (event_point);
+	int x = point.x () / m_size;
+	int y = point.y () / m_size;
+	game_state *st = m_game->get_root ()->locate_by_vis_coords (x, y, 0, 0);
+
+        if (st != nullptr) {
+		m_previewer->set_displayed (st);
+		m_previewer->set_show_coords (false);
+		m_previewer->resizeBoard (250, 250);
+		QPixmap pix = m_previewer->draw_position ();
+		QImage img = pix.toImage ();
+		QByteArray bytes;
+		QBuffer buffer(&bytes);
+		img.save (&buffer, "PNG", 100);
+		QString tip = QString("<img src='data:image/png;base64, %0'>").arg (QString (bytes.toBase64()));
+		QToolTip::showText (helpEvent->globalPos(), tip);
+	} else {
+		QToolTip::hideText ();
+		e->ignore ();
+	}
+
+        return true;
+}
+

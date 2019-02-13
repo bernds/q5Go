@@ -14,12 +14,14 @@ class ImageHandler;
 class game_state;
 class game_record;
 class MainWindow;
+class BoardView;
 
 class GameTree : public QGraphicsView
 {
 	Q_OBJECT
 
 	MainWindow *m_win {};
+	BoardView *m_previewer {};
 
 	int m_size = 30;
 	std::shared_ptr<game_record> m_game {};
@@ -35,6 +37,7 @@ class GameTree : public QGraphicsView
 
 protected:
 	virtual void resizeEvent(QResizeEvent*) override;
+	virtual bool event (QEvent *e) override;
 
 public:
 	GameTree(QWidget *parent);

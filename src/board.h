@@ -133,6 +133,7 @@ public:
 	stone_color to_move () { return m_displayed->to_move (); }
 
 	QPixmap grabPicture();
+	QPixmap draw_position ();
 	QString render_ascii (bool, bool);
 	QByteArray render_svg (bool, bool);
 
@@ -151,6 +152,8 @@ public:
 
 	void update_prefs ();
 
+	void resizeBoard(int w, int h);
+
 public slots:
 	void changeSize();
 
@@ -166,8 +169,6 @@ protected:
 
 	int coord_vis_to_board_x (int);
 	int coord_vis_to_board_y (int);
-
-	void resizeBoard(int w, int h);
 
 	void updateCovers ();
 
