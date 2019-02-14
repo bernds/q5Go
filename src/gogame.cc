@@ -252,6 +252,43 @@ bool game_state::vis_expand_one ()
 	return true;
 }
 
+void game_state::expand_all ()
+{
+	game_state *st = this;
+	for (;;) {
+		if (st->m_visual_collapse)
+			st->toggle_vis_collapse ();
+		if (st->n_children () == 0)
+			break;
+		for (auto it: st->m_children)
+			if (it != st->m_children[0])
+				it->expand_all ();
+		st = st->m_children[0];
+	}
+}
+
+/* Follow the game tree, collapsing everything that is not on the active branch,
+   until we reach UNTIL, when we switch to expanding everything.  */
+void game_state::collapse_nonactive (const game_state *until)
+{
+	game_state *st = this;
+	for (;;) {
+		if (st->m_visual_collapse)
+			st->toggle_vis_collapse ();
+		if (st == until) {
+			st->expand_all ();
+			return;
+		}
+		if (st->n_children () == 0)
+			break;
+		for (auto it: st->m_children) {
+			if (it != st->m_children[st->m_active] && !it->m_visual_collapse)
+				it->toggle_vis_collapse ();
+		}
+		st = st->m_children[st->m_active];
+	}
+}
+
 bool game_state::has_figure_recursive () const
 {
 	const game_state *st = this;

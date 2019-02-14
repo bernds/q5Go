@@ -781,6 +781,9 @@ public:
 	{
 		return m_visual_collapse;
 	}
+	void expand_all ();
+	void collapse_nonactive (const game_state *until);
+
 	/* Expand this node, but keep its children collapsed.
 	   Does nothing if already expanded, and returns false iff that is
 	   the case.  */

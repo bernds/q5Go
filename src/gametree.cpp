@@ -237,14 +237,15 @@ void GameTree::show_menu (int x, int y, const QPoint &pos)
 void GameTree::update (std::shared_ptr<game_record> gr, game_state *active, bool force)
 {
 	game_state *r = gr->get_root ();
-	bool changed = r->update_visualization (setting->values.gametree_diaghide) || force;
+	bool changed = gr != m_game;
 	bool active_changed = m_active != active;
-	if (gr != m_game)
-		changed = true;
+	m_active = active;
+	if (active_changed)
+		do_autocollapse ();
+	changed |= r->update_visualization (setting->values.gametree_diaghide) || force;
 	if (!changed && !active_changed)
 		return;
 	m_game = gr;
-	m_active = active;
 	if (changed) {
 		const visual_tree &vroot = r->visualization ();
 		int w = vroot.width ();
@@ -407,5 +408,29 @@ bool GameTree::event (QEvent *e)
 	}
 
         return true;
+}
+
+void GameTree::do_autocollapse ()
+{
+	if (m_autocollapse)
+		m_game->get_root ()->collapse_nonactive (m_active);
+}
+
+void GameTree::contextMenuEvent (QContextMenuEvent *e)
+{
+	/* The dragMode test is shorthand for "are we hovering over an item?"  */
+	if (dragMode () != QGraphicsView::ScrollHandDrag) {
+		QGraphicsView::contextMenuEvent (e);
+		return;
+	}
+	QMenu menu;
+	QAction autoAction (tr ("&Auto collapse on/off"));
+	autoAction.setCheckable (true);
+	autoAction.setChecked (m_autocollapse);
+	connect (&autoAction, &QAction::triggered,
+		 [this] (bool on) { m_autocollapse = on; do_autocollapse (); update (m_game, m_active); });
+
+	menu.addAction (&autoAction);
+	menu.exec (e->globalPos ());
 }
 

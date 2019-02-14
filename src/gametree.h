@@ -34,8 +34,12 @@ class GameTree : public QGraphicsView
 	QPixmap m_pm_e, m_pm_box;
 	QStandardItemModel m_headers;
 	QHeaderView m_header_view;
+	bool m_autocollapse = false;
+
+	void do_autocollapse ();
 
 protected:
+	virtual void contextMenuEvent (QContextMenuEvent *e) override;
 	virtual void resizeEvent(QResizeEvent*) override;
 	virtual bool event (QEvent *e) override;
 
