@@ -55,6 +55,7 @@ public:
 	}
 
 	void paint_one_stone (QImage &, bool white, int size, int idx = 0);
+	void paint_shadow_stone (QImage &si, int d);
 	QColor white_color () { return m_w_col; }
 	QColor black_color () { return m_b_col; }
 	void set_white_color (const QColor &c) { m_w_col = c; }
@@ -69,7 +70,6 @@ private:
 	void stone_params_from_settings ();
 	void paint_black_stone_old (QImage &bi, int d);
 	void paint_white_stone_old (QImage &wi, int d, bool clamshell, int idx = 0);
-	void paintShadowStone (QImage &si, int d);
 	void paint_stone_new (QImage &wi, int d, const QColor &, double, double, int, double,
 			      bool clamshell, int idx = 0);
 	void ghostImage(QImage *img);

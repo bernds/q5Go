@@ -98,7 +98,7 @@ static double getStripe(WhiteDesc &white, double bright, double z, int x, int y,
 }
 extern bool isHidingStones;
 // shadow under stones
-void ImageHandler::paintShadowStone (QImage &si, int d)
+void ImageHandler::paint_shadow_stone (QImage &si, int d)
 {
 	//const double pixel=0.8,shadow=0.99;
 
@@ -561,7 +561,7 @@ void ImageHandler::init(int size)
 	//shadow under the stones
 	QImage is = QImage(size, size, QImage::Format_ARGB32);
 	if (m_look > 1)
-		paintShadowStone(is, size);
+		paint_shadow_stone(is, size);
 	else
 		is.fill(0);
 	stonePixmaps.append(QPixmap::fromImage(is,
@@ -605,7 +605,7 @@ void ImageHandler::rescale(int size)
 	// shadow
 	QImage is = QImage(size, size, QImage::Format_ARGB32);
 	if (m_look > 1)
-		paintShadowStone(is, size);
+		paint_shadow_stone(is, size);
 	else
 		is.fill(0);
 	stonePixmaps[WHITE_STONES_NB+1].convertFromImage(is, Qt::PreferDither |

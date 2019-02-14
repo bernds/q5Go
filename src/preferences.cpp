@@ -75,6 +75,7 @@ PreferencesDialog::PreferencesDialog(QWidget* parent)
 	m_w_stone = new QGraphicsPixmapItem;
 	m_stone_canvas->addItem (m_w_stone);
 	m_stone_canvas->addItem (m_b_stone);
+	m_w_stone->setZValue (1);
 
 	connect (radioButtonStones_2D, &QRadioButton::toggled, this, &PreferencesDialog::select_stone_look);
 	connect (radioButtonStones_3D, &QRadioButton::toggled, this, &PreferencesDialog::select_stone_look);
@@ -131,8 +132,10 @@ void PreferencesDialog::update_board_image ()
 	m_stone_canvas->setBackgroundBrush (QBrush (image));
 
 	m_stone_size = std::min (w / 2, h);
-	m_w_stone->setPos (w / 2 - m_stone_size, 0);
-	m_b_stone->setPos (w / 2, 0);
+	int real_width = m_stone_size * 9. / 8;
+	int w_diff = real_width - m_stone_size;
+	m_w_stone->setPos (w / 2 - real_width, 0);
+	m_b_stone->setPos (w / 2 - w_diff, 0);
 }
 
 void PreferencesDialog::init_from_settings ()
@@ -309,18 +312,46 @@ void PreferencesDialog::update_stone_params ()
 void PreferencesDialog::update_w_stones ()
 {
 	update_stone_params ();
+
+	int real_size = m_stone_size;
+	if (!radioButtonStones_2D->isChecked ())
+		real_size = m_stone_size * 9. / 8;
+
+	QPixmap pm (real_size, real_size);
+	pm.fill (QColor(0, 0, 0, 0));
+	QPainter painter;
+	painter.begin (&pm);
 	QImage img (m_stone_size, m_stone_size, QImage::Format_ARGB32);
+	if (!radioButtonStones_2D->isChecked ()) {
+		m_ih->paint_shadow_stone (img, m_stone_size);
+		painter.drawImage (0, real_size - m_stone_size, img);
+	}
 	m_ih->paint_one_stone (img, true, m_stone_size);
-	QPixmap pm = QPixmap::fromImage (img);
+	painter.drawImage (real_size - m_stone_size, 0, img);
+	painter.end ();
 	m_w_stone->setPixmap (pm);
 }
 
 void PreferencesDialog::update_b_stones ()
 {
 	update_stone_params ();
+
+	int real_size = m_stone_size;
+	if (!radioButtonStones_2D->isChecked ())
+		real_size = m_stone_size * 9. / 8;
+
+	QPixmap pm (real_size, real_size);
+	pm.fill (QColor(0, 0, 0, 0));
+	QPainter painter;
+	painter.begin (&pm);
 	QImage img (m_stone_size, m_stone_size, QImage::Format_ARGB32);
+	if (!radioButtonStones_2D->isChecked ()) {
+		m_ih->paint_shadow_stone (img, m_stone_size);
+		painter.drawImage (0, real_size - m_stone_size, img);
+	}
 	m_ih->paint_one_stone (img, false, m_stone_size);
-	QPixmap pm = QPixmap::fromImage (img);
+	painter.drawImage (real_size - m_stone_size, 0, img);
+	painter.end ();
 	m_b_stone->setPixmap (pm);
 }
 
