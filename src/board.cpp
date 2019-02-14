@@ -1165,7 +1165,7 @@ Board::ram_result Board::render_analysis_marks (svg_builder &svg, double svg_fac
 }
 
 /* The central function for synchronizing visual appearance with the abstract board data.  */
-QPixmap BoardView::draw_position ()
+QPixmap BoardView::draw_position (int default_vars_type)
 {
 	bool numbering = !have_analysis () && m_edit_board == nullptr && m_move_numbers;
 	bool have_figure = m_figure_view && !have_analysis () && m_edit_board == nullptr && m_displayed->has_figure ();
@@ -1173,7 +1173,7 @@ QPixmap BoardView::draw_position ()
 
 	bool analysis_children = setting->values.analysis_children;
 
-	int var_type = (have_analysis () && analysis_children) || have_figure ? 0 : m_vars_type;
+	int var_type = (have_analysis () && analysis_children) || have_figure ? 0 : default_vars_type;
 	bool exclude_diag = setting->readBoolEntry ("VAR_IGNORE_DIAGS");
 	const go_board child_vars = m_displayed->child_moves (nullptr, exclude_diag);
 	const go_board sibling_vars = m_displayed->sibling_moves (exclude_diag);
@@ -1349,7 +1349,7 @@ QPixmap BoardView::draw_position ()
 /* The central function for synchronizing visual appearance with the abstract board data.  */
 void BoardView::sync_appearance (bool)
 {
-	QPixmap stones = draw_position ();
+	QPixmap stones = draw_position (m_vars_type);
 	m_stone_layer.setPixmap (stones);
 	m_stone_layer.setPos (m_wood_rect.x (), m_wood_rect.y ());
 }

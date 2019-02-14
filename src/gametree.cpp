@@ -394,7 +394,7 @@ bool GameTree::event (QEvent *e)
 		m_previewer->set_displayed (st);
 		m_previewer->set_show_coords (false);
 		m_previewer->resizeBoard (250, 250);
-		QPixmap pix = m_previewer->draw_position ();
+		QPixmap pix = m_previewer->draw_position (0);
 		QImage img = pix.toImage ();
 		QByteArray bytes;
 		QBuffer buffer(&bytes);
