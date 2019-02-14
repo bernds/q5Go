@@ -226,6 +226,7 @@ PreferencesDialog::PreferencesDialog (int tab, QWidget* parent)
 
 	void (QComboBox::*cic) (int) = &QComboBox::currentIndexChanged;
 	connect (ui->woodComboBox, cic, [=] (int i) { ui->GobanPicturePathButton->setEnabled (i == 0); ui->LineEdit_goban->setEnabled (i == 0); update_board_image (); });
+	connect (ui->shadersComboBox, cic, [=] (int) { update_w_stones (); update_b_stones (); });
 	connect (ui->LineEdit_goban, &QLineEdit::editingFinished, [=] () { update_board_image (); });
 
 	update_board_image ();
@@ -435,6 +436,7 @@ void PreferencesDialog::init_from_settings ()
 	ui->whiteFlatSlider->setValue (setting->readIntEntry("STONES_WFLAT"));
 	ui->blackFlatSlider->setValue (setting->readIntEntry("STONES_BFLAT"));
 	ui->ambientSlider->setValue (setting->readIntEntry("STONES_AMBIENT"));
+	ui->shadersComboBox->setCurrentIndex (setting->readIntEntry("STONES_PRESET"));
 
 	ui->lineScaleCheckBox->setChecked (setting->readBoolEntry("BOARD_LINESCALE"));
 	ui->lineWidenCheckBox->setChecked (setting->readBoolEntry("BOARD_LINEWIDEN"));
@@ -562,24 +564,26 @@ void PreferencesDialog::select_black_color (bool)
 
 void PreferencesDialog::update_stone_params ()
 {
-	double br = 2.05 + (100 - ui->blackRoundSlider->value ()) / 30.0;
-	double wr = 2.05 + (100 - ui->whiteRoundSlider->value ()) / 30.0;
-	double bs = ui->blackSpecSlider->value () / 100.0;
-	double ws = ui->whiteSpecSlider->value () / 100.0;
-	double bf = ui->blackFlatSlider->value ();
-	double wf = ui->whiteFlatSlider->value ();
-	double bh = 1 + ui->blackHardSlider->value () / 10.0;
-	double wh = 1 + ui->whiteHardSlider->value () / 10.0;
-	double ambient = ui->ambientSlider->value () / 100.0;
-	bool clamshell = ui->stripesCheckBox->isChecked ();
+	int shader_idx = ui->shadersComboBox->currentIndex ();
+	if (shader_idx == 0) {
+		auto vals = std::make_tuple (std::make_tuple (ui->blackRoundSlider->value (), ui->blackSpecSlider->value (), ui->blackFlatSlider->value (), ui->blackHardSlider->value ()),
+					     std::make_tuple (ui->whiteRoundSlider->value (), ui->whiteSpecSlider->value (), ui->whiteFlatSlider->value (), ui->whiteHardSlider->value ()),
+					     ui->ambientSlider->value (), ui->stripesCheckBox->isChecked ());
+		m_ih->set_stone_params (vals);
+	} else
+		m_ih->set_stone_params (shader_idx - 1);
+
 	int look = 3;
 	if (ui->radioButtonStones_2D->isChecked ())
 		look = 1;
 	else if (ui->radioButtonStones_3D->isChecked ())
 		look = 2;
-	ui->blackGroupBox->setEnabled (look == 3);
-	ui->whiteGroupBox->setEnabled (look == 3);
-	m_ih->set_stone_params (wh, bh, ws, bs, wr, br, wf, bf, ambient, look, clamshell);
+	ui->blackGroupBox->setEnabled (look == 3 && shader_idx == 0);
+	ui->whiteGroupBox->setEnabled (look == 3 && shader_idx == 0);
+	ui->ambientSlider->setEnabled (look == 3 && shader_idx == 0);
+	ui->stripesCheckBox->setEnabled (look == 3 && shader_idx == 0);
+	ui->shadersComboBox->setEnabled (look == 3);
+	m_ih->set_stone_look (look);
 }
 
 void PreferencesDialog::update_w_stones ()
@@ -690,6 +694,7 @@ void PreferencesDialog::slot_apply()
 	setting->writeIntEntry ("STONES_WFLAT", ui->whiteFlatSlider->value ());
 	setting->writeIntEntry ("STONES_BFLAT", ui->blackFlatSlider->value ());
 	setting->writeIntEntry ("STONES_AMBIENT", ui->ambientSlider->value ());
+	setting->writeIntEntry ("STONES_PRESET", ui->shadersComboBox->currentIndex ());
 	setting->writeEntry ("STONES_BCOL", black_color ().name ());
 	setting->writeEntry ("STONES_WCOL", white_color ().name ());
 

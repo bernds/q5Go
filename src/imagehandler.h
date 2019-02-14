@@ -37,23 +37,11 @@ public:
 	const QList<QPixmap> *getStonePixmaps() const { return &stonePixmaps; }
 	const QList<QPixmap> *getGhostPixmaps() const { return &ghostPixmaps; }
 
-	void set_stone_params (double w_hard, double b_hard, double w_spec, double b_spec,
-			       double w_radius, double b_radius, int w_flat, int b_flat,
-			       double ambient, int look, bool clamshell)
-	{
-		m_w_hard = w_hard;
-		m_b_hard = b_hard;
-		m_w_spec = w_spec;
-		m_b_spec = b_spec;
-		m_w_radius = w_radius;
-		m_b_radius = b_radius;
-		m_w_flat = w_flat;
-		m_b_flat = b_flat;
-		m_ambient = ambient;
-		m_clamshell = clamshell;
-		m_look = look;
-	}
+	typedef std::tuple<int, int, int, int> t_params;
 
+	void set_stone_params (const std::tuple<t_params, t_params, int, bool> &);
+	void set_stone_params (int preset);
+	void set_stone_look (int l) { m_look = l; }
 	void paint_one_stone (QImage &, bool white, int size, int idx = 0);
 	void paint_shadow_stone (QImage &si, int d);
 	QColor white_color () { return m_w_col; }

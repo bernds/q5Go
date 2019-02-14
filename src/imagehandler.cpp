@@ -640,18 +640,61 @@ void ImageHandler::ghostImage(QImage *img)
 	}
 }
 
+/* round, spec, flat, hard */
+static std::vector<std::tuple<ImageHandler::t_params, ImageHandler::t_params, int, bool>> presets =
+{ { { 95, 38, 1, 16 }, { 95, 61, 1, 0 }, 15, true },
+  { { 95, 35, 1, 21 }, { 95, 39, 2, 8 }, 15, true },
+  { { 66, 50, 1, 47 }, { 55, 97, 1, 3 }, 27, true },
+  { { 83, 85, 1, 45 }, { 80, 77, 1, 50 }, 63, false },
+  { { 29, 49, 0, 36 }, { 36, 32, 0, 45 }, 28, false },
+  { { 84, 85, 5, 88 }, { 95, 87, 5, 3 }, 22, false },
+  { { 99, 38, 5, 20 }, { 99, 27, 5, 31 }, 15, false },
+  { { 73, 50, 4, 60 }, { 66, 19, 4, 65 }, 20, true },
+  { { 84, 90, 0, 29 }, { 84, 89, 0, 91 }, 75, true },
+  { { 8, 90, 0, 41 }, { 8, 61, 0, 27 }, 58, true } };
+
+void ImageHandler::set_stone_params (const std::tuple<t_params, t_params, int, bool> &used_vals)
+{
+	ImageHandler::t_params bvals, wvals;
+	int ambv;
+	std::tie (bvals, wvals, ambv, m_clamshell) = used_vals;
+	int brv, wrv, bsv, wsv, bfv, wfv, bhv, whv;
+	std::tie (brv, bsv, bfv, bhv) = bvals;
+	std::tie (wrv, wsv, wfv, whv) = wvals;
+
+	m_b_radius = 2.05 + (100 - brv) / 30.0;
+	m_w_radius = 2.05 + (100 - wrv) / 30.0;
+	m_b_spec = bsv / 100.0;
+	m_w_spec = wsv / 100.0;
+	m_b_flat = bfv;
+	m_w_flat = wfv;
+	m_b_hard = 1 + bhv / 10.0;
+	m_w_hard = 1 + whv / 10.0;
+	m_ambient = ambv / 100.0;
+}
+
+void ImageHandler::set_stone_params (int preset)
+{
+	set_stone_params (presets[preset]);
+}
+
 void ImageHandler::stone_params_from_settings ()
 {
-	m_b_radius = 2.05 + (100 - setting->readIntEntry ("STONES_BROUND")) / 30.0;
-	m_w_radius = 2.05 + (100 - setting->readIntEntry ("STONES_WROUND")) / 30.0;
-	m_b_spec = setting->readIntEntry ("STONES_BSPEC") / 100.0;
-	m_w_spec = setting->readIntEntry ("STONES_WSPEC") / 100.0;
-	m_b_hard = 1 + setting->readIntEntry ("STONES_BHARD") / 10.0;
-	m_w_hard = 1 + setting->readIntEntry ("STONES_WHARD") / 10.0;
-	m_clamshell = setting->readBoolEntry ("STONES_STRIPES");
-	m_b_flat = setting->readIntEntry ("STONES_BFLAT");
-	m_w_flat = setting->readIntEntry ("STONES_WFLAT");
-	m_ambient = setting->readIntEntry ("STONES_AMBIENT") / 100.0;
+	int preset = setting->readIntEntry ("STONES_PRESET");
+	if (preset == 0) {
+		auto vals = std::make_tuple (std::make_tuple (setting->readIntEntry ("STONES_BROUND"),
+							      setting->readIntEntry ("STONES_BSPEC"),
+							      setting->readIntEntry ("STONES_BFLAT"),
+							      setting->readIntEntry ("STONES_BHARD")),
+					     std::make_tuple (setting->readIntEntry ("STONES_WROUND"),
+							      setting->readIntEntry ("STONES_WSPEC"),
+							      setting->readIntEntry ("STONES_WFLAT"),
+							      setting->readIntEntry ("STONES_WHARD")),
+					     setting->readIntEntry ("STONES_AMBIENT"),
+					     setting->readBoolEntry ("STONES_STRIPES"));
+		set_stone_params (vals);
+	} else
+		set_stone_params (preset - 1);
 
 	m_look = setting->readIntEntry ("STONES_LOOK");
 
