@@ -70,6 +70,16 @@
     <file>sounds/pass.wav</file>
     <file>sounds/say.wav</file>
     <file>sounds/stone.wav</file>
+    <file>sounds/stone2.wav</file>
+    <file>sounds/stone3.wav</file>
+    <file>sounds/stone4.wav</file>
+    <file>sounds/stone5.wav</file>
+    <file>sounds/stone6.wav</file>
+    <file>sounds/stone7.wav</file>
+    <file>sounds/stone8.wav</file>
+    <file>sounds/stone9.wav</file>
+    <file>sounds/stone10.wav</file>
+    <file>sounds/stone11.wav</file>
     <file>sounds/talk.wav</file>
     <file>sounds/tictoc.wav</file>
   </qresource>

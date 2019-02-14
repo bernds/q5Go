@@ -91,7 +91,44 @@ void qGo::playClick()
 
 void qGo::playStoneSound()
 {
-	QSound::play (":/sounds/stone.wav");
+	static int idx = 0;
+
+	switch (idx % 11) {
+	default:
+		QSound::play (":/sounds/stone.wav");
+		break;
+	case 0:
+		QSound::play (":/sounds/stone2.wav");
+		break;
+	case 1:
+		QSound::play (":/sounds/stone3.wav");
+		break;
+	case 2:
+		QSound::play (":/sounds/stone4.wav");
+		break;
+	case 3:
+		QSound::play (":/sounds/stone5.wav");
+		break;
+	case 4:
+		QSound::play (":/sounds/stone6.wav");
+		break;
+	case 5:
+		QSound::play (":/sounds/stone7.wav");
+		break;
+	case 6:
+		QSound::play (":/sounds/stone8.wav");
+		break;
+	case 7:
+		QSound::play (":/sounds/stone9.wav");
+		break;
+	case 8:
+		QSound::play (":/sounds/stone10.wav");
+		break;
+	case 9:
+		QSound::play (":/sounds/stone11.wav");
+		break;
+	}
+	idx += 1 + rand () % 4;
 }
 
 void qGo::playAutoPlayClick()
