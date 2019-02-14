@@ -1601,15 +1601,15 @@ Indicates whether it is black's or white's turn.</string>
                     <enum>Qt::NoFocus</enum>
                    </property>
                    <property name="toolTip">
-                    <string>Refresh display</string>
+                    <string>Update game record from on-line game</string>
                    </property>
                    <property name="whatsThis">
-                    <string>Refresh
-
-Refresh board. Use this if you cannot see any stones on the board.</string>
+                    <string>Update from online game.
+This window was opened through &quot;Edit game&quot; while observing an online game.
+The update button refreshes the game in this window, adding any moves that were made in the actual game in the meantime. This operation discards any edits you may have made.</string>
                    </property>
                    <property name="text">
-                    <string>Refresh</string>
+                    <string>Update</string>
                    </property>
                   </widget>
                  </item>

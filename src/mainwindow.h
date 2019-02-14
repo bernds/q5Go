@@ -166,7 +166,6 @@ public slots:
 
 	void slotTimerForward();
 	void slot_editBoardInNewWindow(bool);
-	void slot_animateClick(bool);
 	void slotSoundToggle(bool toggle);
 	void slotUpdateComment();
 	void slotUpdateComment2();

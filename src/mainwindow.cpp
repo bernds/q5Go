@@ -539,6 +539,9 @@ void MainWindow::updateCaption ()
 		s += "* ";
 	if (m_gamemode == modeBatch)
 		s += tr ("Analysis in progress: ");
+	else if (refreshButton->isVisibleTo (this))
+		s += tr ("Off-line copy: ");
+
 	if (game_number != 0)
 		s += "(" + QString::number(game_number) + ") ";
 	QString title = QString::fromStdString (m_game->title ());
@@ -1531,33 +1534,21 @@ void MainWindow::updateFont()
 	scoreTools->blackStoneLabel->setPixmap (bimg);
 }
 
-// used in slot_editBoardInNewWindow()
-void MainWindow::slot_animateClick(bool)
-{
-#if 0
-	getInterfaceHandler()->refreshButton->animateClick();
-#endif
-}
-
 void MainWindow::slot_editBoardInNewWindow(bool)
 {
 	std::shared_ptr<game_record> newgr = std::make_shared<game_record> (*m_game);
 	// online mode -> don't score, open new Window instead
 	MainWindow *w = new MainWindow (nullptr, newgr);
 
-#if 0 /* @@@ This has never worked.  */
-	// create update button
-	w->refreshButton->setText(tr("Update"));
-#if 0
-	QToolTip::add(w->getInterfaceHandler()->refreshButton, tr("Update from online game"));
-	QWhatsThis::add(w->getInterfaceHandler()->refreshButton, tr("Update from online game to local board and supersede own changes."));
-#endif
-	w->refreshButton->setEnabled(true);
-	connect(w->refreshButton, &QPushButton::clicked, this, &MainWindow::slotFileExportSgfClipB);
-	connect(w->refreshButton, &QPushButton::clicked, w, &MainWindow::slotFileImportSgfClipB);
-	connect(w->refreshButton, &QPushButton::clicked, w, &MainWindow::slotNavLastByTime);
-	QTimer::singleShot(100, w, &MainWindow::slot_animateClick);
-#endif
+	connect (w->refreshButton, &QPushButton::clicked,
+		 [gr = m_game, w] (bool)
+		 {
+			 w->init_game_record (std::make_shared<game_record> (*gr));
+			 w->navLast->trigger ();
+		 });
+	w->refreshButton->setEnabled (true);
+	w->refreshButton->setVisible (true);
+	w->updateCaption ();
 
 	w->navLast->trigger ();
 	w->show ();
