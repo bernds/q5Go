@@ -34,6 +34,7 @@
 #include "komispinbox.h"
 #include "config.h"
 #include "qgo_interface.h"
+#include "autodiagsdlg.h"
 #include "ui_helpers.h"
 
 std::list<MainWindow *> main_window_list;
@@ -351,9 +352,18 @@ void MainWindow::initActions ()
 	editGroup->addAction (editLetter);
 	editStone->setChecked (true);
 
-	connect(editFigure, &QAction::triggered, this, &MainWindow::slotEditFigure);
-	connect(editRectSelect, &QAction::toggled, this, &MainWindow::slotEditRectSelect);
-	connect(editClearSelect, &QAction::triggered, this, &MainWindow::slotEditClearSelect);
+	connect (editFigure, &QAction::triggered, this, &MainWindow::slotEditFigure);
+	connect (editRectSelect, &QAction::toggled, this, &MainWindow::slotEditRectSelect);
+	connect (editClearSelect, &QAction::triggered, this, &MainWindow::slotEditClearSelect);
+
+	connect (editAutoDiags, &QAction::triggered,
+		 [this] (bool)
+		 {
+			 AutoDiagsDialog dlg (m_game, this);
+			 dlg.exec ();
+			 update_game_tree ();
+			 update_figures ();
+		 });
 
 	/* Navigation menu.  */
 	connect (navBackward, &QAction::triggered, [=] () { gfx_board->previous_move (); });

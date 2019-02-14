@@ -2511,6 +2511,7 @@ After placing and/or undo release button for returning to starting point automat
     <addaction name="editNumber"/>
     <addaction name="separator"/>
     <addaction name="editFigure"/>
+    <addaction name="editAutoDiags"/>
     <addaction name="separator"/>
     <addaction name="editRectSelect"/>
     <addaction name="editClearSelect"/>
@@ -3720,6 +3721,11 @@ Try to find an engine configured as an analysis tool in the engine list and conn
    <property name="toolTip">
     <string>Batch analysis
 Open the batch analysis dialog which allows you to add SGF files to a queue to be analysed by an engine.</string>
+   </property>
+  </action>
+  <action name="editAutoDiags">
+   <property name="text">
+    <string>A&amp;utomatic diagrams...</string>
    </property>
   </action>
  </widget>

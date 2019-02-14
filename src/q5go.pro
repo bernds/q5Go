@@ -2,10 +2,11 @@ TEMPLATE	      = app
 CONFIG		     += qt warn_on release thread
 FORMS	      = gui_dialog.ui \
 		analyze_gui.ui \
+		autodiags_gui.ui \
 		boardwindow_gui.ui \
 		clientwindow_gui.ui \
-                figuredlg_gui.ui \
-                gameinfo_gui.ui \
+		figuredlg_gui.ui \
+		gameinfo_gui.ui \
 		newgame_gui.ui \
 		newlocalgame_gui.ui \
 		newvariantgame_gui.ui \
@@ -20,6 +21,7 @@ FORMS	      = gui_dialog.ui \
                 nthmove_gui.ui
 
 HEADERS		      = analyzedlg.h \
+		        autodiagsdlg.h \
 			config.h \
 			clockview.h \
 			evalgraph.h \
@@ -65,6 +67,7 @@ HEADERS		      = analyzedlg.h \
                         audio.h
 
 SOURCES		      = analyzedlg.cpp \
+			autodiagsdlg.cpp \
 			clientwin.cpp \
 			clockview.cpp \
 			evalgraph.cpp \
