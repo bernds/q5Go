@@ -3597,6 +3597,9 @@ Take a screen grab of the current board position and export it to the clipboard 
    <property name="text">
     <string>For &amp;current combination of visible docks</string>
    </property>
+   <property name="shortcut">
+    <string>L</string>
+   </property>
   </action>
   <action name="layoutLandscape">
    <property name="icon">
