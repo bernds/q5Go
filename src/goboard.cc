@@ -49,7 +49,7 @@ static const bit_array *create_boardmask_right (int w, int h)
 	return m;
 }
 
-static const bit_array *create_column_left (int w, int h)
+const bit_array *create_column_left (int w, int h)
 {
 	auto it = left_columns.find ({w, h});
 	if (it != left_columns.end ())
@@ -73,14 +73,14 @@ static const bit_array *create_column_right (int w, int h)
 	return m;
 }
 
-static const bit_array *create_row_top (int w, int h)
+const bit_array *create_row_top (int w, int h)
 {
 	auto it = top_rows.find ({w, h});
 	if (it != top_rows.end ())
 		return it->second;
-	bit_array *m = new bit_array (w * h, true);
-	for (int i = 0; i < h; i++)
-		m->clear_bit (i * w);
+	bit_array *m = new bit_array (w * h);
+	for (int i = 0; i < w; i++)
+		m->set_bit (i);
 	top_rows.insert ({ {w, h}, m});
 	return m;
 }
@@ -90,9 +90,9 @@ static const bit_array *create_row_bottom (int w, int h)
 	auto it = bottom_rows.find ({w, h});
 	if (it != bottom_rows.end ())
 		return it->second;
-	bit_array *m = new bit_array (w * h, true);
-	for (int i = 0; i < h; i++)
-		m->clear_bit (i * w + w - 1);
+	bit_array *m = new bit_array (w * h);
+	for (int i = 0; i < w; i++)
+		m->set_bit (i + (w * (h - 1)));
 	bottom_rows.insert ({ {w, h}, m});
 	return m;
 }

@@ -434,4 +434,10 @@ struct board_rect
 	}
 	bool is_square () { return width () == height (); }
 };
+
+/* Some functions to create unique bit sets of particular shapes.  These are the
+   ones required elsewhere, the others are private to goboard.cc.  */
+extern const bit_array *create_row_top (int w, int h);
+extern const bit_array *create_column_left (int w, int h);
+
 #endif

@@ -292,6 +292,67 @@ go_board new_handicap_board (int size, int handicap)
 	return b;
 }
 
+board_rect find_crop (const game_state *gs)
+{
+	const go_board &b = gs->get_board ();
+	const bit_array *col_left = create_column_left (b.size_x (), b.size_y ());
+	const bit_array *row_top = create_row_top (b.size_x (), b.size_y ());
+	board_rect rect (b);
+	const bit_array *visible = gs->visible_inherited ();
+	if (visible != nullptr && visible->popcnt () > 0) {
+		for (rect.x1 = 0; rect.x1 < b.size_x (); rect.x1++)
+			if (visible->intersect_p (*col_left, rect.x1))
+				break;
+		for (rect.x2 = b.size_x (); rect.x2-- > 0;)
+			if (visible->intersect_p (*col_left, rect.x2))
+				break;
+		for (rect.y1 = 0; rect.y1 < b.size_y (); rect.y1++)
+			if (visible->intersect_p (*row_top, rect.y1 * b.size_x ()))
+				break;
+		for (rect.y2 = b.size_y (); rect.y2-- > 0;)
+			if (visible->intersect_p (*row_top, rect.y2 * b.size_x ()))
+				break;
+		return rect;
+	}
+	bit_array stones = b.get_stones_w ();
+	stones.ior (b.get_stones_b ());
+	if (stones.popcnt () == 0)
+		return rect;
+	for (rect.x1 = 0; rect.x1 < b.size_x (); rect.x1++)
+		if (stones.intersect_p (*col_left, rect.x1)) {
+			if (rect.x1 < 5)
+				rect.x1 = 0;
+			else
+				rect.x1 = std::max (rect.x1 - 2, 0);
+			break;
+		}
+	for (rect.x2 = b.size_x (); rect.x2-- > 0;)
+		if (stones.intersect_p (*col_left, rect.x2)) {
+			if (b.size_x () - 1 - rect.x2 < 5)
+				rect.x2 = b.size_x () - 1;
+			else
+				rect.x2 = std::min (rect.x2 + 2, b.size_x () - 1);
+			break;
+		}
+	for (rect.y1 = 0; rect.y1 < b.size_y (); rect.y1++)
+		if (stones.intersect_p (*row_top, rect.y1 * b.size_x ())) {
+			if (rect.y1 < 5)
+				rect.y1 = 0;
+			else
+				rect.y1 = std::max (rect.y1 - 2, 0);
+			break;
+		}
+	for (rect.y2 = b.size_y (); rect.y2-- > 0;)
+		if (stones.intersect_p (*row_top, rect.y2 * b.size_x ())) {
+			if (b.size_y () - 1 - rect.y2 < 5)
+				rect.y2 = b.size_y () - 1;
+			else
+				rect.y2 = std::min (rect.y2 + 2, b.size_y () - 1);
+			break;
+		}
+	return rect;
+}
+
 /* Generate a candidate for the filename for this game */
 QString get_candidate_filename (const QString &dir, const game_info &info)
 {

@@ -13,6 +13,7 @@ extern void open_local_board (QWidget *, game_dialog_type);
 extern go_board new_handicap_board (int, int);
 extern QString get_candidate_filename (const QString &dir, const game_info &);
 extern bit_array calculate_hoshis (const go_board &);
+extern board_rect find_crop (const game_state *gs);
 
 extern void show_batch_analysis ();
 

@@ -66,8 +66,13 @@ protected:
 	/* Toroid support.  */
 	int m_shift_x = 0, m_shift_y = 0;
 
-	/* Variables related to rectangle selection.  */
+	/* Variables related to rectangle selection and crop.  */
 	board_rect m_sel;
+	/* It can be somewhat scary to think about how crop would interact with shifts
+	   and duplications.  The solution is: it does not.  Cropping is only allowable
+	   on fairly plain boards without shift/duplicate, such as the figure view, or
+	   tooltips.  */
+	board_rect m_crop;
 
 	/* A few board display options.  */
 	bool m_figure_view = false;
@@ -97,7 +102,7 @@ protected:
 
 	int n_dups_h ();
 	int n_dups_v ();
-	void alloc_graphics_elts ();
+	void alloc_graphics_elts (bool);
 	void clear_graphics_elts ();
 	void clear_stones ();
 
@@ -132,6 +137,8 @@ public:
 	QByteArray render_svg (bool, bool);
 
 	void clear_selection ();
+	void clear_crop ();
+	void set_crop (const board_rect &);
 
 	bool lockResize;
 
@@ -155,7 +162,7 @@ protected:
 
 	void calculateSize ();
 	void draw_background ();
-	void draw_grid (QPainter &, bit_array &);
+	void draw_grid (QPainter &, bit_array &, int);
 
 	int coord_vis_to_board_x (int);
 	int coord_vis_to_board_y (int);
