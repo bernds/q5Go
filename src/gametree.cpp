@@ -12,6 +12,7 @@
 #include "mainwindow.h"
 #include "svgbuilder.h"
 #include "board.h"
+#include "ui_helpers.h"
 
 static QByteArray box_svg =
 	"<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"
@@ -111,7 +112,7 @@ GameTree::GameTree (QWidget *parent)
 	connect (hscr, &QScrollBar::valueChanged, [=] (int v) { m_header_view.setOffset (v); });
 	update_prefs ();
 
-	m_previewer = new BoardView;
+	m_previewer = new FigureView;
 }
 
 void GameTree::update_prefs ()
@@ -240,6 +241,11 @@ void GameTree::update (std::shared_ptr<game_record> gr, game_state *active, bool
 	bool changed = gr != m_game;
 	bool active_changed = m_active != active;
 	m_active = active;
+	if (changed) {
+		m_previewer->reset_game (gr);
+		m_previewer->resizeBoard (250, 250);
+		m_previewer->set_show_coords (false);
+	}
 	if (active_changed)
 		do_autocollapse ();
 	changed |= r->update_visualization (setting->values.gametree_diaghide) || force;
@@ -392,9 +398,9 @@ bool GameTree::event (QEvent *e)
 	game_state *st = m_game->get_root ()->locate_by_vis_coords (x, y, 0, 0);
 
         if (st != nullptr) {
-		m_previewer->set_displayed (st);
-		m_previewer->set_show_coords (false);
 		m_previewer->resizeBoard (250, 250);
+		m_previewer->set_crop (find_crop (st));
+		m_previewer->set_displayed (st);
 		QPixmap pix = m_previewer->draw_position (0);
 		QImage img = pix.toImage ();
 		QByteArray bytes;

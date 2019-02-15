@@ -14,14 +14,14 @@ class ImageHandler;
 class game_state;
 class game_record;
 class MainWindow;
-class BoardView;
+class FigureView;
 
 class GameTree : public QGraphicsView
 {
 	Q_OBJECT
 
 	MainWindow *m_win {};
-	BoardView *m_previewer {};
+	FigureView *m_previewer {};
 
 	int m_size = 30;
 	std::shared_ptr<game_record> m_game {};
