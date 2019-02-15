@@ -49,7 +49,7 @@ protected:
 	MainWindow *m_board_win {};
 
 	/* Size of the (abstract) board.  */
-	int board_size_x, board_size_y;
+	board_rect m_dims;
 	bit_array m_hoshis;
 
 	game_state *m_displayed {};
@@ -67,8 +67,7 @@ protected:
 	int m_shift_x = 0, m_shift_y = 0;
 
 	/* Variables related to rectangle selection.  */
-	int m_rect_x1, m_rect_x2;
-	int m_rect_y1, m_rect_y2;
+	board_rect m_sel;
 
 	/* A few board display options.  */
 	bool m_figure_view = false;

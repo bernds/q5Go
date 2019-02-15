@@ -31,14 +31,13 @@
 #include "ui_helpers.h"
 
 BoardView::BoardView(QWidget *parent)
-	: QGraphicsView(parent), m_hoshis (361)
+	: QGraphicsView(parent), m_dims (0, 0, DEFAULT_BOARD_SIZE, DEFAULT_BOARD_SIZE), m_hoshis (361)
 {
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
 	setUpdatesEnabled(true);
 
-	board_size_x = board_size_y = DEFAULT_BOARD_SIZE;
 	m_show_hoshis = true;
 	m_show_figure_caps = false;
 	m_show_coords = setting->readBoolEntry ("BOARD_COORDS");
@@ -118,7 +117,7 @@ void BoardView::calculateSize()
 	int table_size_x = w - 2 * margin;
 	int table_size_y = h - 2 * margin;
 
-	QGraphicsSimpleTextItem coordV (QString::number(board_size_y));
+	QGraphicsSimpleTextItem coordV (QString::number(m_dims.height ()));
 	QGraphicsSimpleTextItem coordH ("A");
 	canvas->addItem (&coordV);
 	canvas->addItem (&coordH);
@@ -132,8 +131,8 @@ void BoardView::calculateSize()
 	int cmargin = m_show_coords ? 2 * (coord_offset + coord_margin * 2) : 0;
 	int square_size_w = table_size_x - cmargin;
 	int square_size_h = table_size_y - cmargin;
-	int shown_size_x = board_size_x + 2 * n_dups_h ();
-	int shown_size_y = board_size_y + 2 * n_dups_v ();
+	int shown_size_x = m_dims.width () + 2 * n_dups_h ();
+	int shown_size_y = m_dims.height () + 2 * n_dups_v ();
 	square_size = std::min ((double)square_size_w / shown_size_x, (double)square_size_h / shown_size_y);
 
 	// Should not happen, but safe is safe.
@@ -260,8 +259,8 @@ void BoardView::draw_background()
 		int vdups = n_dups_v ();
 		painter.setPen (Qt::black);
 
-		for (int tx = 0; tx < board_size_x; tx++) {
-			int x = (tx + m_shift_x) % board_size_x;
+		for (int tx = m_dims.x1; tx <= m_dims.x2; tx++) {
+			int x = (tx + m_shift_x) % m_dims.width ();
 			auto name = b.coords_name (x, 0, m_sgf_coords);
 			QString nm = QString::fromStdString (name.first);
 			QRect brect = fm.boundingRect (nm);
@@ -272,8 +271,8 @@ void BoardView::draw_background()
 						  m_wood_rect.y () + m_wood_rect.height () - center));
 			painter.drawText (brect, Qt::AlignLeft | Qt::AlignTop, nm);
 		}
-		for (int ty = 0; ty < board_size_y; ty++) {
-			int y = (ty + m_shift_y) % board_size_y;
+		for (int ty = m_dims.y1; ty <= m_dims.y2; ty++) {
+			int y = (ty + m_shift_y) % m_dims.height ();
 			auto name = b.coords_name (0, y, m_sgf_coords);
 			QString nm = QString::fromStdString (name.second);
 			QRect brect = fm.boundingRect (nm);
@@ -515,7 +514,6 @@ QByteArray BoardView::render_svg (bool do_number, bool coords)
 {
 	const go_board &b = m_edit_board == nullptr ? m_displayed->get_board () : *m_edit_board;
 	/* Look back through previous moves to see if we should do numbering.  */
-	std::vector<int> count_map (board_size_x * board_size_y);
 	bool numbering = do_number && m_edit_board == nullptr;
 	bool have_figure = numbering && m_displayed->has_figure ();
 	int fig_flags = have_figure ? m_displayed->figure_flags () : 0;
@@ -550,18 +548,18 @@ QByteArray BoardView::render_svg (bool do_number, bool coords)
 	double margin = 10;
 	double offset_x = margin + factor / 2;
 	double offset_y = margin + factor / 2;
-	int cols = (m_rect_x2 - m_rect_x1 + 1);
-	int rows = (m_rect_y2 - m_rect_y1 + 1);
+	int cols = m_sel.width ();
+	int rows = m_sel.height ();
 	int w = factor * cols + 2 * margin;
 	int h = factor * rows + 2 * margin;
 	if (coords) {
-		if (m_rect_x1 == 1)
+		if (m_sel.aligned_left (m_dims))
 			offset_x += factor, w += factor;
-		if (m_rect_y1 == 1)
+		if (m_sel.aligned_top (m_dims))
 			offset_y += factor, h += factor;
-		if (m_rect_x2 == b.size_x ())
+		if (m_sel.aligned_right (m_dims))
 			w += factor;
-		if (m_rect_y2 == b.size_y ())
+		if (m_sel.aligned_bottom (m_dims))
 			h += factor;
 	}
 
@@ -594,42 +592,43 @@ QByteArray BoardView::render_svg (bool do_number, bool coords)
 	if (coords) {
 		double dist = margin + factor / 2;
 		for (int y = 0; y < rows; y++) {
-			int ry = y + m_rect_y1;
+			int ry = y + m_sel.y1;
 			double center_y = offset_y + y * factor;
-			if (m_rect_x1 == 1)
+			if (m_sel.aligned_left (m_dims))
 				svg.text_at (dist, center_y, factor,
-					     board_size_y < 10 ? 1 : 2, QString::number (board_size_y - ry + 1),
+					     m_dims.height () < 10 ? 1 : 2, QString::number (m_dims.height () - ry),
 					     "black", fi);
-			if (m_rect_x2 == board_size_x)
+			if (m_sel.aligned_right (m_dims))
 				svg.text_at (w - dist , center_y, factor,
-					     board_size_y < 10 ? 1 : 2, QString::number (board_size_y - ry + 1),
+					     m_dims.height () < 10 ? 1 : 2, QString::number (m_dims.height () - ry),
 					     "black", fi);
 		}
 		for (int x = 0; x < cols; x++) {
-			int rx = x + m_rect_x1;
+			int rx = x + m_sel.x1;
 			double center_x = offset_x + x * factor;
 			QString label;
 			if (rx < 9)
-				label = QChar ('A' + rx - 1);
-			else
 				label = QChar ('A' + rx);
-			if (m_rect_y1 == 1)
+			else
+				label = QChar ('A' + rx + 1);
+			if (m_sel.aligned_top (m_dims))
 				svg.text_at (center_x, dist, factor,
-					     board_size_x < 10 ? 1 : 2, label, "black", fi);
-			if (m_rect_y2 == board_size_y)
+					     m_dims.width () < 10 ? 1 : 2, label, "black", fi);
+			if (m_sel.aligned_bottom (m_dims))
 				svg.text_at (center_x, h - dist, factor,
-					     board_size_x < 10 ? 1 : 2, label, "black", fi);
+					     m_dims.width () < 10 ? 1 : 2, label, "black", fi);
 		}
 	}
 
 	/* The grid.  */
-	int top = m_rect_y1 > 1 ? -factor / 2 : 0;
-	int bot = m_rect_y2 < b.size_y () ? factor / 2 : 0;
-	int lef = m_rect_x1 > 1 ? -factor / 2 : 0;
-	int rig = m_rect_x2 < b.size_x () ? factor / 2 : 0;
+	int top = !m_sel.aligned_top (m_dims) ? -factor / 2 : 0;
+	int bot = !m_sel.aligned_bottom (m_dims) ? factor / 2 : 0;
+	int lef = !m_sel.aligned_left (m_dims) ? -factor / 2 : 0;
+	int rig = !m_sel.aligned_right (m_dims) ? factor / 2 : 0;
 	for (int x = 0; x < cols; x++) {
 		QString width = "1";
-		if ((x == 0 && m_rect_x1 == 1) || (x + 1 == cols && m_rect_x2 == b.size_x ()))
+		if ((x == 0 && m_sel.aligned_left (m_dims))
+		    || (x + 1 == cols && m_sel.aligned_right (m_dims)))
 			width = "2";
 		svg.line (offset_x + x * factor, offset_y + top,
 			  offset_x + x * factor, offset_y + (rows - 1) * factor + bot,
@@ -637,7 +636,8 @@ QByteArray BoardView::render_svg (bool do_number, bool coords)
 	}
 	for (int y = 0; y < rows; y++) {
 		QString width = "1";
-		if ((y == 0 && m_rect_y1 == 1) || (y + 1 == rows && m_rect_y2 == b.size_y ()))
+		if ((y == 0 && m_sel.aligned_top (m_dims))
+		    || (y + 1 == rows && m_sel.aligned_bottom (m_dims)))
 			width = "2";
 		svg.line (offset_x + lef, offset_y + y * factor,
 			  offset_x + (cols - 1) * factor + rig, offset_y + y * factor,
@@ -645,8 +645,8 @@ QByteArray BoardView::render_svg (bool do_number, bool coords)
 	}
 	for (int y = 0; y < rows; y++) {
 		for (int x = 0; x < cols; x++) {
-			int rx = x + m_rect_x1 - 1;
-			int ry = y + m_rect_y1 - 1;
+			int rx = x + m_sel.x1;
+			int ry = y + m_sel.y1;
 			stone_color c = mn_board.stone_at (rx, ry);
 			mark m = b.mark_at (rx, ry);
 			mextra extra = b.mark_extra_at (rx, ry);
@@ -748,29 +748,29 @@ QString BoardView::render_ascii (bool do_number, bool coords)
 			result += "m" + QString::number (moves);
 		}
 		result += "\n";
-		if (m_rect_y1 == 1) {
+		if (m_sel.aligned_top (m_dims)) {
 			result += "$$";
-			if (m_rect_x1 == 1)
+			if (m_sel.aligned_left (m_dims))
 				result += " +";
-			for (int i = 0; i < m_rect_x2 - m_rect_x1 + 1; i++)
+			for (int i = 0; i < m_sel.width (); i++)
 				result += "--";
-			if (m_rect_x2 == szx)
+			if (m_sel.aligned_right (m_dims))
 				result += "-+";
 			result += "\n";
 		}
-		for (int y = m_rect_y1; y <= m_rect_y2; y++) {
+		for (int y = m_sel.y1; y <= m_sel.y2; y++) {
 			result += "$$";
-			if (m_rect_x1 == 1)
+			if (m_sel.aligned_left (m_dims))
 				result += " |";
-			for (int x = m_rect_x1; x <= m_rect_x2; x++) {
-				int bp = initial_board.bitpos (x - 1, y - 1);
+			for (int x = m_sel.x1; x <= m_sel.x2; x++) {
+				int bp = initial_board.bitpos (x, y);
 				int v = count_map[bp];
 				if (v != 0) {
 					result += " " + QString::number (v % 10);
 				} else {
-					stone_color c = initial_board.stone_at (x - 1, y - 1);
-					mark m = initial_board.mark_at (x - 1, y - 1);
-					mextra me = initial_board.mark_extra_at (x - 1, y - 1);
+					stone_color c = initial_board.stone_at (x, y);
+					mark m = initial_board.mark_at (x, y);
+					mextra me = initial_board.mark_extra_at (x, y);
 					char rslt[] = " .";
 					if (c == none) {
 						if (m == mark::letter && me < 26)
@@ -794,17 +794,17 @@ QString BoardView::render_ascii (bool do_number, bool coords)
 					result += rslt;
 				}
 			}
-			if (m_rect_x2 == szx)
+			if (m_sel.aligned_right (m_dims))
 				result += " |";
 			result += "\n";
 		}
-		if (m_rect_y2 == szy) {
+		if (m_sel.aligned_bottom (m_dims)) {
 			result += "$$";
-			if (m_rect_x1 == 1)
+			if (m_sel.aligned_left (m_dims))
 				result += " +";
-			for (int i = 0; i < m_rect_x2 - m_rect_x1 + 1; i++)
+			for (int i = 0; i < m_sel.width (); i++)
 				result += "--";
-			if (m_rect_x2 == szx)
+			if (m_sel.aligned_right (m_dims))
 				result += "-+";
 			result += "\n";
 		}
@@ -823,8 +823,8 @@ QString BoardView::render_ascii (bool do_number, bool coords)
 
 void BoardView::draw_grid (QPainter &painter, bit_array &grid_hidden)
 {
-	int szx = board_size_x;
-	int szy = board_size_y;
+	int szx = m_dims.width ();
+	int szy = m_dims.height ();
 	int dups_x = n_dups_h ();
 	int dups_y = n_dups_v ();
 	const go_board &b = m_displayed->get_board();
@@ -1385,10 +1385,10 @@ int BoardView::coord_vis_to_board_x (int p)
 	p -= n_dups_h ();
 	if (p < 0)
 		return -1;
-	if (p >= board_size_x)
-		return board_size_x;
+	if (p >= m_dims.width ())
+		return m_dims.width ();
 	p += m_shift_x;
-	p %= board_size_x;
+	p %= m_dims.width ();
 	return p;
 }
 
@@ -1401,25 +1401,25 @@ int BoardView::coord_vis_to_board_y (int p)
 	p -= n_dups_v ();
 	if (p < 0)
 		return -1;
-	if (p >= board_size_y)
-		return board_size_y;
+	if (p >= m_dims.height ())
+		return m_dims.height ();
 	p += m_shift_y;
-	p %= board_size_y;
+	p %= m_dims.height ();
 	return p;
 }
 
 void BoardView::updateCovers ()
 {
-	coverLeft->setVisible (m_rect_x1 > 1 || n_dups_h () > 0);
-	coverRight->setVisible (m_rect_x2 < board_size_x || n_dups_h () > 0);
-	coverTop->setVisible (m_rect_y1 > 1 || n_dups_v () > 0);
-	coverBot->setVisible (m_rect_y2 < board_size_y || n_dups_v () > 0);
+	coverLeft->setVisible (!m_sel.aligned_left (m_dims) || n_dups_h () > 0);
+	coverRight->setVisible (!m_sel.aligned_right (m_dims) || n_dups_h () > 0);
+	coverTop->setVisible (!m_sel.aligned_top (m_dims) || n_dups_v () > 0);
+	coverBot->setVisible (!m_sel.aligned_bottom (m_dims) || n_dups_v () > 0);
 
 	QRectF sceneRect = canvas->sceneRect ();
-	int top_edge = m_board_rect.y () + square_size * (m_rect_y1 + n_dups_v () - 1.5);
-	int bot_edge = m_board_rect.y () + square_size * (m_rect_y2 + n_dups_v () - 0.5);
-	int left_edge = m_board_rect.x () + square_size * (m_rect_x1 + n_dups_h () - 1.5);
-	int right_edge = m_board_rect.x () + square_size * (m_rect_x2 + n_dups_h () - 0.5);
+	int top_edge = m_board_rect.y () + square_size * (m_sel.y1 + n_dups_v () - 0.5);
+	int bot_edge = m_board_rect.y () + square_size * (m_sel.y2 + n_dups_v () + 0.5);
+	int left_edge = m_board_rect.x () + square_size * (m_sel.x1 + n_dups_h () - 0.5);
+	int right_edge = m_board_rect.x () + square_size * (m_sel.x2 + n_dups_h () + 0.5);
 
 	int sides_top_edge = coverTop->isVisible () ? top_edge : 0;
 	int sides_bot_edge = coverBot->isVisible () ? bot_edge : sceneRect.bottom();
@@ -1445,7 +1445,7 @@ void BoardView::mouseReleaseEvent(QMouseEvent* e)
 
 bool BoardView::have_selection ()
 {
-	return m_rect_x1 > 1 || m_rect_x2 < board_size_x || m_rect_y1 > 1 || m_rect_y2 < board_size_y;
+	return m_dims != m_sel;
 }
 
 void BoardView::update_rect_select (int x, int y)
@@ -1454,10 +1454,10 @@ void BoardView::update_rect_select (int x, int y)
 		x = 0;
 	if (y < 0)
 		y = 0;
-	if (x >= board_size_x)
-		x = board_size_x - 1;
-	if (y >= board_size_y)
-		y = board_size_y - 1;
+	if (x >= m_dims.width ())
+		x = m_dims.width () - 1;
+	if (y >= m_dims.height ())
+		y = m_dims.height () - 1;
 
 	if (m_rect_down_x == -1)
 		m_rect_down_x = x, m_rect_down_y = y;
@@ -1468,10 +1468,10 @@ void BoardView::update_rect_select (int x, int y)
 		std::swap (minx, x);
 	if (y < miny)
 		std::swap (miny, y);
-	m_rect_x1 = minx + 1;
-	m_rect_y1 = miny + 1;
-	m_rect_x2 = x + 1;
-	m_rect_y2 = y + 1;
+	m_sel.x1 = minx;
+	m_sel.y1 = miny;
+	m_sel.x2 = x;
+	m_sel.y2 = y;
 	updateCovers ();
 	canvas->update ();
 }
@@ -1523,11 +1523,11 @@ void Board::mouseMoveEvent(QMouseEvent *e)
 		dist_x += m_drag_begin_x;
 		dist_y += m_drag_begin_y;
 		while (dist_x < 0)
-			dist_x += board_size_x;
+			dist_x += m_dims.width ();
 		while (dist_y < 0)
-			dist_y += board_size_y;
-		dist_x %= board_size_x;
-		dist_y %= board_size_y;
+			dist_y += m_dims.height ();
+		dist_x %= m_dims.width ();
+		dist_y %= m_dims.height ();
 		update_shift (dist_x, dist_y);
 		return;
 	}
@@ -1536,7 +1536,7 @@ void Board::mouseMoveEvent(QMouseEvent *e)
 	int y = coord_vis_to_board_y (e->y ());
 
 	// Outside the valid board?
-	if (x < 0 || x >= board_size_x || y < 0 || y >= board_size_y)
+	if (!m_dims.contained (x, y))
 	{
 		x = -1;
 		y = -1;
@@ -1625,7 +1625,7 @@ void Board::mouseReleaseEvent(QMouseEvent* e)
 	if (m_mark_rect) {
 		m_mark_rect = false;
 		BoardView::mouseReleaseEvent (e);
-		m_board_win->done_rect_select (m_rect_x1, m_rect_y1, m_rect_x2, m_rect_y2);
+		m_board_win->done_rect_select (m_sel.x1, m_sel.y1, m_sel.x2, m_sel.y2);
 		return;
 	}
 	int x = coord_vis_to_board_x (e->x ());
@@ -1730,7 +1730,7 @@ void Board::mousePressEvent(QMouseEvent *e)
 
 	int x = coord_vis_to_board_x (e->x ());
 	int y = coord_vis_to_board_y (e->y ());
-	if (x < 0 || x >= board_size_x || y < 0 || y >= board_size_y)
+	if (!m_dims.contained (x, y))
 		return;
 
 	m_down_x = x;
@@ -1881,9 +1881,7 @@ void BoardView::changeSize()
 
 void BoardView::clear_selection ()
 {
-	m_rect_x1 = m_rect_y1 = 1;
-	m_rect_x2 = board_size_x;
-	m_rect_y2 = board_size_y;
+	m_sel = m_dims;
 	updateCovers ();
 }
 
@@ -1912,8 +1910,7 @@ void BoardView::alloc_graphics_elts ()
 {
 	const go_board &b = m_displayed->get_board ();
 
-	board_size_x = b.size_x ();
-	board_size_y = b.size_y ();
+	m_dims = board_rect (b);
 
 	calculateSize ();
 }
@@ -1924,6 +1921,7 @@ void BoardView::reset_game (std::shared_ptr<game_record> gr)
 
 	game_state *root = gr->get_root ();
 	m_displayed = root;
+	m_dims = board_rect (root->get_board ());
 	m_hoshis = calculate_hoshis (root->get_board ());
 
 	alloc_graphics_elts ();
@@ -2078,13 +2076,13 @@ QPixmap BoardView::grabPicture()
 	int miny = m_wood_rect.y () + 2;
 	int maxx = minx + m_wood_rect.width () - 4;
 	int maxy = miny + m_wood_rect.height () - 4;
-	if (m_rect_x1 > 1)
+	if (!m_sel.aligned_left (m_dims))
 		minx = coverLeft->rect ().right ();
-	if (m_rect_x2 < board_size_x)
+	if (!m_sel.aligned_right (m_dims))
 		maxx = coverRight->rect ().left ();
-	if (m_rect_y1 > 1)
+	if (!m_sel.aligned_top (m_dims))
 		miny = coverTop->rect ().bottom ();
-	if (m_rect_y2 < board_size_y)
+	if (!m_sel.aligned_bottom (m_dims))
 		maxy = coverBot->rect ().top ();
 	return grab (QRect (minx, miny, maxx - minx, maxy - miny));
 }
@@ -2149,7 +2147,7 @@ void Board::eval_received (const QString &move, int visits)
 
 void Board::start_analysis ()
 {
-	if (board_size_x != board_size_y) {
+	if (!m_dims.is_square ()) {
 		QMessageBox::warning(this, PACKAGE, tr("Analysis is supported only for square boards!"));
 		return;
 	}
@@ -2159,7 +2157,7 @@ void Board::start_analysis ()
 		return;
 	}
 
-	start_analyzer (*e, board_size_x, 7.5, 0);
+	start_analyzer (*e, m_dims.width (), 7.5, 0);
 	m_board_win->update_analysis (analyzer::starting);
 }
 
@@ -2187,8 +2185,7 @@ void FigureView::hide_unselected (bool)
 	bit_array arr (b.bitsize ());
 	for (int x = 0; x < b.size_x (); x++)
 		for (int y = 0; y < b.size_y (); y++) {
-			if (x + 1 >= m_rect_x1 && x + 1 <= m_rect_x2
-			    && y + 1 >= m_rect_y1 && y + 1 <= m_rect_y2)
+			if (m_sel.contained (x, y))
 				arr.set_bit (b.bitpos (x, y));
 		}
 	m_displayed->set_visible (new bit_array (arr));

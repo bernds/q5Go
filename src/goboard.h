@@ -390,4 +390,48 @@ private:
 	void verify_invariants ();
 };
 
+struct board_rect
+{
+	int x1 = 0, y1 = 0, x2 = 0, y2 = 0;
+	board_rect () = default;
+	board_rect (const go_board &b)
+	{
+		x2 = b.size_x () - 1;
+		y2 = b.size_y () - 1;
+	}
+	board_rect (int xi1, int yi1, int xi2, int yi2) : x1 (xi1), y1 (yi1), x2 (xi2), y2 (yi2)
+	{
+	}
+	bool operator== (const board_rect &other) const
+	{
+		return x1 == other.x1 && x2 == other.x2 && y1 == other.y1 && y2 == other.y2;
+	}
+	bool operator!= (const board_rect &other) const
+	{
+		return !(*this == other);
+	}
+	int width () const { return x2 - x1 + 1; }
+	int height () const { return y2 - y1 + 1; }
+	bool contained (int x, int y) const
+	{
+		return x >= x1 && x <= x2 && y >= y1 && y <= y2;
+	}
+	bool aligned_left (const board_rect &other) const
+	{
+		return x1 == other.x1;
+	}
+	bool aligned_right (const board_rect &other) const
+	{
+		return x2 == other.x2;
+	}
+	bool aligned_top (const board_rect &other) const
+	{
+		return y1 == other.y1;
+	}
+	bool aligned_bottom (const board_rect &other) const
+	{
+		return y2 == other.y2;
+	}
+	bool is_square () { return width () == height (); }
+};
 #endif
