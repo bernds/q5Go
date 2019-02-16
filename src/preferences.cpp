@@ -155,6 +155,8 @@ void PreferencesDialog::init_from_settings ()
 	languageComboBox->insertItems(1, setting->getAvailableLanguages());
 	languageComboBox->setCurrentIndex(setting->convertLanguageCodeToNumber());
 
+	fileSelComboBox->setCurrentIndex(setting->readIntEntry("FILESEL"));
+
 	radioButtonStones_2D->setChecked((setting->readIntEntry("STONES_LOOK")==1));
 	radioButtonStones_3D->setChecked((setting->readIntEntry("STONES_LOOK")==2));
 	radioButtonStone_real->setChecked((setting->readIntEntry("STONES_LOOK")==3));
@@ -381,6 +383,7 @@ void PreferencesDialog::slot_apply()
 	setting->obtain_skin_images ();
 
 	setting->writeEntry("LANG", setting->convertNumberToLanguage(languageComboBox->currentIndex()));
+	setting->writeIntEntry("FILESEL", fileSelComboBox->currentIndex());
 //	setting->writeBoolEntry("STONES_SHADOW", stonesShadowCheckBox->isChecked());
 //	setting->writeBoolEntry("STONES_SHELLS", stonesShellsCheckBox->isChecked());
 	int i = 3;

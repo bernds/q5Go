@@ -17,6 +17,7 @@
 #include "ui_helpers.h"
 #include "variantgamedlg.h"
 #include "analyzedlg.h"
+#include "sgfpreview.h"
 
 #include <fstream>
 #include <qtranslator.h>
@@ -87,6 +88,17 @@ std::shared_ptr<game_record> new_variant_game_dialog (QWidget *parent)
 	return gr;
 }
 
+static void warn_errors (std::shared_ptr<game_record> gr)
+{
+	const sgf_errors &errs = gr->errors ();
+	if (errs.played_on_stone) {
+		QMessageBox::warning (0, PACKAGE, QObject::tr ("The SGF file contained an invalid move that was played on top of another stone. Variations have been truncated at that point."));
+	}
+	if (errs.charset_error) {
+		QMessageBox::warning (0, PACKAGE, QObject::tr ("One or more comments have been dropped since they contained invalid characters."));
+	}
+}
+
 /* A wrapper around sgf2record to handle exceptions with message boxes.  */
 
 std::shared_ptr<game_record> record_from_stream (std::istream &isgf)
@@ -94,13 +106,7 @@ std::shared_ptr<game_record> record_from_stream (std::istream &isgf)
 	try {
 		sgf *sgf = load_sgf (isgf);
 		std::shared_ptr<game_record> gr = sgf2record (*sgf);
-		const sgf_errors &errs = gr->errors ();
-		if (errs.played_on_stone) {
-			QMessageBox::warning (0, PACKAGE, QObject::tr ("The SGF file contained an invalid move that was played on top of another stone. Variations have been truncated at that point."));
-		}
-		if (errs.charset_error) {
-			QMessageBox::warning (0, PACKAGE, QObject::tr ("One or more comments have been dropped since they contained invalid characters."));
-		}
+		warn_errors (gr);
 		return gr;
 	} catch (invalid_boardsize &) {
 		QMessageBox::warning (0, PACKAGE, QObject::tr ("Unsupported board size in SGF file."));
@@ -131,6 +137,80 @@ bool open_window_from_file (const std::string &filename)
 	MainWindow *win = new MainWindow (0, gr);
 	win->show ();
 	return true;
+}
+
+std::shared_ptr<game_record> open_file_dialog (QWidget *parent)
+{
+	QString fileName;
+	if (setting->readIntEntry ("FILESEL") == 1) {
+		QString geokey = "FILESEL_GEOM_" + screen_key (parent);
+		SGFPreview file_open_dialog (parent, setting->readEntry ("LAST_DIR"));
+		QString saved = setting->readEntry (geokey);
+		if (!saved.isEmpty ()) {
+			QByteArray geometry = QByteArray::fromHex (saved.toLatin1 ());
+			file_open_dialog.restoreGeometry (geometry);
+		}
+		int result = file_open_dialog.exec ();
+		setting->writeEntry (geokey, QString::fromLatin1 (file_open_dialog.saveGeometry ().toHex ()));
+		if (result == QDialog::Accepted) {
+			/* If the file selector successfully loaded a preview, just use
+			   that game record.  Otherwise extract the filename and try to
+			   open it to show message boxes about whatever error occurs.  */
+
+			std::shared_ptr<game_record> gr = file_open_dialog.selected_record ();
+			if (gr != nullptr) {
+				warn_errors (gr);
+				return gr;
+			}
+
+			QStringList l = file_open_dialog.selected ();
+			if (!l.isEmpty ())
+				fileName = l.first ();
+		} else
+			return nullptr;
+	} else {
+		fileName = QFileDialog::getOpenFileName (parent, QObject::tr ("Open SGF file"),
+							 setting->readEntry ("LAST_DIR"),
+							 QObject::tr ("SGF Files (*.sgf *.SGF);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)"));
+		if (fileName.isEmpty ())
+			return nullptr;
+	}
+	QFileInfo fi (fileName);
+	if (fi.exists ())
+		setting->writeEntry ("LAST_DIR", fi.dir ().absolutePath ());
+	return record_from_file (fileName.toStdString ());
+}
+
+QString open_filename_dialog (QWidget *parent)
+{
+	QString fileName;
+	if (setting->readIntEntry ("FILESEL") == 1) {
+		QString geokey = "FILESEL_GEOM_" + screen_key (parent);
+		SGFPreview file_open_dialog (parent, setting->readEntry ("LAST_DIR"));
+		QString saved = setting->readEntry (geokey);
+		if (!saved.isEmpty ()) {
+			QByteArray geometry = QByteArray::fromHex (saved.toLatin1 ());
+			file_open_dialog.restoreGeometry (geometry);
+		}
+		int result = file_open_dialog.exec ();
+		setting->writeEntry (geokey, QString::fromLatin1 (file_open_dialog.saveGeometry ().toHex ()));
+		if (result == QDialog::Accepted) {
+			QStringList l = file_open_dialog.selected ();
+			if (!l.isEmpty ())
+				fileName = l.first ();
+		} else
+			return nullptr;
+	} else {
+		fileName = QFileDialog::getOpenFileName (parent, QObject::tr ("Open SGF file"),
+							 setting->readEntry ("LAST_DIR"),
+							 QObject::tr ("SGF Files (*.sgf *.SGF);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)"));
+		if (fileName.isEmpty ())
+			return nullptr;
+	}
+	QFileInfo fi (fileName);
+	if (fi.exists ())
+		setting->writeEntry ("LAST_DIR", fi.dir ().absolutePath ());
+	return fileName;
 }
 
 void open_local_board (QWidget *parent, game_dialog_type type)

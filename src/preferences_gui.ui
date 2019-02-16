@@ -183,7 +183,7 @@
       <string/>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="InterfaceTabWidget">
       <attribute name="title">
@@ -826,7 +826,7 @@ You can set the warning time besides</string>
          </layout>
         </widget>
        </item>
-       <item row="3" column="0">
+       <item row="4" column="0">
         <spacer name="spacer10_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -927,6 +927,34 @@ If your language is not supported, you might consider translating qGo. Please ch
           </item>
          </layout>
         </widget>
+       </item>
+       <item row="3" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_21">
+         <item>
+          <widget class="QLabel" name="label_27">
+           <property name="text">
+            <string>File selectors:</string>
+           </property>
+           <property name="buddy">
+            <cstring>fileSelComboBox</cstring>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="fileSelComboBox">
+           <item>
+            <property name="text">
+             <string>System default</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Qt selector with SGF preview</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>
@@ -4453,6 +4481,7 @@ Note: 'Delete' concerns saved records.</string>
   <tabstop>fontClocksButton</tabstop>
   <tabstop>fontConsoleButton</tabstop>
   <tabstop>languageComboBox</tabstop>
+  <tabstop>fileSelComboBox</tabstop>
   <tabstop>variationComboBox</tabstop>
   <tabstop>varChildrenComboBox</tabstop>
   <tabstop>varSGFStyleComboBox</tabstop>

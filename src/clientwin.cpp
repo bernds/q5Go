@@ -2362,11 +2362,12 @@ void ClientWindow::initToolBar()
 
 void ClientWindow::slotFileOpen(bool)
 {
-	QString fileName(QFileDialog::getOpenFileName(this, tr ("Open SGF file"), setting->readEntry("LAST_DIR"),
-						      tr("SGF Files (*.sgf *.SGF);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)")));
-	if (fileName.isEmpty())
+	std::shared_ptr<game_record> gr = open_file_dialog (this);
+	if (gr == nullptr)
 		return;
-	open_window_from_file (fileName.toStdString ());
+
+	MainWindow *win = new MainWindow (0, gr);
+	win->show ();
 }
 
 Engine *ClientWindow::analysis_engine ()

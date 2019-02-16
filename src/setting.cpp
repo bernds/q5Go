@@ -66,6 +66,8 @@ Setting::Setting()
 	writeEntry("SKIN_TABLE", "");
 	writeIntEntry ("SKIN_INDEX", 1);
 
+	writeIntEntry("FILESEL", 1);
+
 	writeBoolEntry("TOOLTIPS", true);
 	//writeBoolEntry("STONES_SHADOW", true);
 	//writeBoolEntry("STONES_SHELLS", true);

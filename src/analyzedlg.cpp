@@ -167,9 +167,7 @@ void AnalyzeDialog::open_in_progress_window ()
 
 void AnalyzeDialog::select_file ()
 {
-	QString filename = QFileDialog::getOpenFileName(this, tr ("Select SGF file"),
-							m_last_dir,
-							tr("SGF Files (*.sgf *.SGF);;All Files (*)"));
+	QString filename = open_filename_dialog (this);
 	if (filename.isEmpty())
 		return;
 	QFileInfo fi (filename);

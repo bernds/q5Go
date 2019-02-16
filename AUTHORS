@@ -12,6 +12,8 @@ Some icons taken from the Tango icon theme, which is in the public domain.
 https://commons.wikimedia.org/wiki/Tango_icons
 
 Other acknowledgements:
-The idea of using dock widgets for the board window is from Pavel
-Zorin-Kranich's version of qgo2.
+Pavel Zorin-Kranich's version of qgo2 inspired the following:
+- the idea of using dock widgets for the board window
+- SGF preview in the file selector (some code borrowed as well)
+
 The idea of an autocollapsing game tree is from Jago.

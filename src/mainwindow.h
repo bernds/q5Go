@@ -59,7 +59,6 @@ public:
 	MainWindow(QWidget* parent, std::shared_ptr<game_record>, GameMode mode = modeNormal);
 	virtual ~MainWindow();
 	Board* getBoard() const { return gfx_board; }
-	bool doOpen(const char *fileName);
 	int checkModified(bool interactive=true);
 	void updateFont();
 	static QString getFileExtension(const QString &fileName, bool defaultExt=true);

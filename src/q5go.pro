@@ -14,6 +14,7 @@ FORMS	      = gui_dialog.ui \
 		normaltools_gui.ui \
 		preferences_gui.ui \
 		newaigamedlg_gui.ui \
+		sgfpreview.ui \
 		talk_gui.ui \
 		textedit_gui.ui \
 		textview_gui.ui \
@@ -56,6 +57,7 @@ HEADERS		      = analyzedlg.h \
 			qgtp.h \
 			newaigamedlg.h \
                         sgf.h \
+                        sgfpreview.h \
                         scoretools.h \
                         sizegraphicsview.h \
                         svgbuilder.h \
@@ -97,7 +99,8 @@ SOURCES		      = analyzedlg.cpp \
 			newaigamedlg.cpp \
 			sgf2board.cc \
 			sgfload.cc \
-                        svgbuilder.cpp \
+			sgfpreview.cpp \
+			svgbuilder.cpp \
 			textview.cpp \
                         grid.cpp \
                         variantgamedlg.cpp \

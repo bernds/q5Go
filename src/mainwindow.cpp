@@ -627,18 +627,13 @@ void MainWindow::slotFileOpen (bool)
 {
 	if (!checkModified())
 		return;
-	QString fileName(QFileDialog::getOpenFileName(this, tr ("Open SGF file"),
-						      setting->readEntry("LAST_DIR"),
-						      tr("SGF Files (*.sgf *.SGF);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)")));
-	if (fileName.isEmpty ())
-		return;
-	QFileInfo fi (fileName);
-	if (fi.exists ())
-		setting->writeEntry ("LAST_DIR", fi.dir ().absolutePath ());
 
-	QByteArray qba = fileName.toUtf8();
-	if (doOpen(qba.constData ()))
-	  	statusBar()->showMessage(fileName + " " + tr("loaded."));
+	std::shared_ptr<game_record> gr = open_file_dialog (this);
+	if (gr == nullptr)
+		return;
+
+	init_game_record (gr);
+	setGameMode (modeNormal);
 }
 
 QString MainWindow::getFileExtension(const QString &fileName, bool defaultExt)
@@ -658,20 +653,6 @@ QString MainWindow::getFileExtension(const QString &fileName, bool defaultExt)
 		filter = fileName.mid(oldpos+1, fileName.length()-pos).toUpper();
 
 	return filter;
-}
-
-bool MainWindow::doOpen(const char *fileName)
-{
-	std::ifstream isgf (fileName);
-	std::shared_ptr<game_record> gr = record_from_stream (isgf);
-	if (gr == nullptr)
-		/* Assume alerts were shown in record_from_stream.  */
-		return false;
-
-	init_game_record (gr);
-	setGameMode (modeNormal);
-
-	return true;
 }
 
 bool MainWindow::slotFileSave (bool)
