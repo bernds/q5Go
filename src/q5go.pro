@@ -146,6 +146,10 @@ TRANSLATIONS	      = qgo_cz.ts \
 			qgo_zh.ts \
                         qgo_zh_cn.ts
 
+macx :{
+    LIBS += -framework CoreFoundation
+}
+
 !win32 {
 translation.path      = $$DATADIR/translations
 translation.files     = translations/*
