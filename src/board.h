@@ -41,6 +41,12 @@ class BoardView : public QGraphicsView
 {
 	Q_OBJECT
 
+	/* The navigable_observer defines m_game for navigation, so Board actually
+	   ends up with two game pointers.  That's a little unfortunate.
+	   But we want a reference to the game record of the displayed position to
+	   ensure that it isn't deleted before a BoardView is.  */
+	std::shared_ptr<game_record> m_displayed_game;
+
 	void update_rect_select (int, int);
 	/* Used by mouse event handlers during rectangle selection.  */
 	int m_rect_down_x = -1, m_rect_down_y = -1;
@@ -223,7 +229,6 @@ public:
 	~Board ();
 
 	virtual void reset_game (std::shared_ptr<game_record>) override;
-	const std::shared_ptr<game_record> get_record () { return m_game; }
 	virtual void set_displayed (game_state *) override;
 
 	void setModified (bool m=true);

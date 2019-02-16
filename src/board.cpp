@@ -1943,6 +1943,7 @@ void BoardView::reset_game (std::shared_ptr<game_record> gr)
 {
 	clear_graphics_elts ();
 
+	m_displayed_game = gr;
 	game_state *root = gr->get_root ();
 	m_displayed = root;
 	m_dims = board_rect (root->get_board ());
