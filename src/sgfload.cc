@@ -93,7 +93,24 @@ sgf *load_sgf (std::istream &in)
 {
     char nextch;
 
-    nextch = skip_whitespace (in);
+    if (!in.get (nextch))
+	throw premature_eof ();
+    /* Look for (and discard) a UTF-8 BOM.  Bogus, since SGF is a
+       binary file format, but it occurs in the wild.  */
+    if (nextch == (char)0xEF) {
+	if (!in.get (nextch))
+	    throw premature_eof ();
+	if (nextch != (char)0xBB)
+	    throw broken_sgf ();
+	if (!in.get (nextch))
+	    throw premature_eof ();
+	if (nextch != (char)0xBF)
+	    throw broken_sgf ();
+	if (!in.get (nextch))
+	    throw premature_eof ();
+    }
+    if (isspace (nextch))
+	nextch = skip_whitespace (in);
     if (nextch != '(')
 	throw broken_sgf ();
     sgf *s = new sgf (parse_gametree (in));
