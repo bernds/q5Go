@@ -716,7 +716,7 @@ void PreferencesDialog::clear_engine ()
 void PreferencesDialog::slot_delete_engine()
 {
 	for (auto h: parent_cw->m_engines) {
-		if (h->title() == LineEdit_title->text())
+		if (h->title() == engineName->text())
 		{
 			// if found, delete current entry
 			parent_cw->m_engines.removeOne(h);
