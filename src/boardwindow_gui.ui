@@ -3644,6 +3644,9 @@ Take a screen grab of the current board position and export it to the clipboard 
    <property name="shortcut">
     <string>Alt+P</string>
    </property>
+   <property name="menuRole">
+    <enum>QAction::PreferencesRole</enum>
+   </property>
   </action>
   <action name="soundToggle">
    <property name="checkable">
@@ -3670,10 +3673,16 @@ Take a screen grab of the current board position and export it to the clipboard 
    <property name="text">
     <string>&amp;About..</string>
    </property>
+   <property name="menuRole">
+    <enum>QAction::AboutRole</enum>
+   </property>
   </action>
   <action name="helpAboutQt">
    <property name="text">
     <string>About &amp;Qt...</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::AboutQtRole</enum>
    </property>
   </action>
   <action name="anConnect">
