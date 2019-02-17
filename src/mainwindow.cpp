@@ -704,18 +704,19 @@ bool MainWindow::doSave (QString fileName, bool force)
 	if (getFileExtension(fileName, false).isEmpty())
 		fileName.append(".sgf");
 
-	std::string sfn = fileName.toStdString ();
-	try {
-		std::ofstream of (sfn);
-		std::string sgf = m_game->to_sgf ();
-		of << sgf;
-		m_game->set_filename (fileName.toStdString ());
-		QFileInfo fi (fileName);
-		setting->writeEntry ("LAST_DIR", fi.dir ().absolutePath ());
-	} catch (...) {
-		QMessageBox::warning(this, PACKAGE, tr("Cannot save SGF file."));
+	QFile of (fileName);
+	if (!of.open (QIODevice::WriteOnly)) {
+		QMessageBox::warning (this, PACKAGE, tr("Cannot open SGF file for saving."));
 		return false;
 	}
+	std::string sgf = m_game->to_sgf ();
+	QByteArray bytes = QByteArray::fromStdString (sgf);
+	qint64 written = of.write (bytes);
+	if (written != bytes.length ()) {
+		QMessageBox::warning (this, PACKAGE, tr("Failed to save SGF file."));
+		return false;
+	}
+	of.close ();
 
 	statusBar()->showMessage (fileName + " " + tr("saved."));
 	m_game->set_modified (false);
@@ -735,9 +736,10 @@ void MainWindow::slotFileImportSgfClipB(bool)
 		return;
 
         QString sgfString = QApplication::clipboard()->text();
-	std::string sgf_str = sgfString.toStdString ();
-	std::stringstream isgf (sgf_str);
-	std::shared_ptr<game_record> gr = record_from_stream (isgf);
+	QByteArray bytes = sgfString.toUtf8 ();
+	QBuffer buf (&bytes);
+	buf.open (QBuffer::ReadOnly);
+	std::shared_ptr<game_record> gr = record_from_stream (buf);
 	if (gr == nullptr)
 		/* Assume alerts were shown in record_from_stream.  */
 		return;

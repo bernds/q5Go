@@ -113,6 +113,31 @@ public:
 	sgf (node *n) : nodes (n) { }
 };
 
-extern sgf *load_sgf (std::istream &);
+/* There is pain around trying to support Unicode characters in file names
+   across multiple platforms.
+   QFile in Qt4 did not support them correctly on either Windows or Linux.
+   std::istream did support them properly on Linux by using UTF-8.  For
+   that reason, and because it's a low-level part trying to be independent
+   of Qt, load_sgf used to use plain istream.  However, that still doesn't
+   work on Windows.
+   Qt got better with Qt5, so now we use the following adapter to make
+   a QFile appear somewhat like an istream.  */
+
+#include <QDataStream>
+#include <QFile>
+class IODeviceAdapter
+{
+	QIODevice &m_dev;
+public:
+	IODeviceAdapter (QIODevice &d) : m_dev (d)
+	{
+	}
+	bool get (char &c) const
+	{
+		return m_dev.getChar (&c);
+	}
+};
+
+extern sgf *load_sgf (const IODeviceAdapter &);
 
 #endif

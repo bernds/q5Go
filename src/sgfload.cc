@@ -1,9 +1,7 @@
-#include <iostream>
-
 #include "goboard.h"
 #include "sgf.h"
 
-char skip_whitespace (std::istream &in)
+char skip_whitespace (const IODeviceAdapter &in)
 {
     char nextch;
     do {
@@ -13,7 +11,7 @@ char skip_whitespace (std::istream &in)
     return nextch;
 }
 
-sgf::node *parse_gametree (std::istream &in)
+sgf::node *parse_gametree (const IODeviceAdapter &in)
 {
     sgf::node *prev_node = 0, *first_node = 0;
 
@@ -89,7 +87,7 @@ sgf::node *parse_gametree (std::istream &in)
     return first_node;
 }
 
-sgf *load_sgf (std::istream &in)
+sgf *load_sgf (const IODeviceAdapter &in)
 {
     char nextch;
 

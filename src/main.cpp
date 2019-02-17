@@ -19,7 +19,6 @@
 #include "analyzedlg.h"
 #include "sgfpreview.h"
 
-#include <fstream>
 #include <qtranslator.h>
 #include <qtextcodec.h>
 #include <qapplication.h>
@@ -101,7 +100,7 @@ static void warn_errors (std::shared_ptr<game_record> gr)
 
 /* A wrapper around sgf2record to handle exceptions with message boxes.  */
 
-std::shared_ptr<game_record> record_from_stream (std::istream &isgf)
+std::shared_ptr<game_record> record_from_stream (QIODevice &isgf)
 {
 	try {
 		sgf *sgf = load_sgf (isgf);
@@ -118,22 +117,23 @@ std::shared_ptr<game_record> record_from_stream (std::istream &isgf)
 	return nullptr;
 }
 
-std::shared_ptr<game_record> record_from_file (const std::string &filename)
+std::shared_ptr<game_record> record_from_file (const QString &filename)
 {
-	std::ifstream isgf (filename);
-	std::shared_ptr<game_record> gr = record_from_stream (isgf);
+	QFile f (filename);
+	f.open (QIODevice::ReadOnly);
+
+	std::shared_ptr<game_record> gr = record_from_stream (f);
 	if (gr != nullptr)
-		gr->set_filename (filename);
+		gr->set_filename (filename.toStdString ());
 	return gr;
 }
 
-bool open_window_from_file (const std::string &filename)
+bool open_window_from_file (const QString &filename)
 {
 	std::shared_ptr<game_record> gr = record_from_file (filename);
 	if (gr == nullptr)
 		return false;
 
-	gr->set_filename (filename);
 	MainWindow *win = new MainWindow (0, gr);
 	win->show ();
 	return true;
@@ -178,7 +178,7 @@ std::shared_ptr<game_record> open_file_dialog (QWidget *parent)
 	QFileInfo fi (fileName);
 	if (fi.exists ())
 		setting->writeEntry ("LAST_DIR", fi.dir ().absolutePath ());
-	return record_from_file (fileName.toStdString ());
+	return record_from_file (fileName);
 }
 
 QString open_filename_dialog (QWidget *parent)
@@ -539,8 +539,7 @@ int main(int argc, char **argv)
 
 	bool windows_open = false;
 	for (auto arg: args) {
-		std::string filename = arg.toStdString ();
-		windows_open |= open_window_from_file (filename);
+		windows_open |= open_window_from_file (arg);
 	}
 	if (cmdp.isSet (clo_board) && !windows_open) {
 		open_local_board (client_window, game_dialog_type::none);
