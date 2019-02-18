@@ -27,15 +27,17 @@ class EvalGraph : public QGraphicsView
 	double m_step;
 
 protected:
-	virtual void mousePressEvent(QMouseEvent *e) override;
-	virtual void resizeEvent(QResizeEvent*) override;
-
+	virtual void mousePressEvent (QMouseEvent *e) override;
+	virtual void resizeEvent (QResizeEvent*) override;
+	virtual void contextMenuEvent (QContextMenuEvent *e) override;
+public slots:
+	void export_clipboard (bool);
+	void export_file (bool);
 public:
 	EvalGraph (QWidget *parent);
 	~EvalGraph () { delete m_brush; delete m_scene; }
 	void set_board_win (MainWindow *win) { m_win = win; }
 	void update (std::shared_ptr<game_record> gr, game_state *);
-	void show_menu (int x, int y, const QPoint &pos);
 
 	void update_prefs ();
 

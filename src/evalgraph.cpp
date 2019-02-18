@@ -67,27 +67,36 @@ QSize EvalGraph::sizeHint () const
 	return QSize (100, 100);
 }
 
-void EvalGraph::show_menu (int x, int y, const QPoint &pos)
+void EvalGraph::contextMenuEvent (QContextMenuEvent *e)
 {
-#if 0
-	game_state *st = m_game->get_root ()->locate_by_vis_coords (x, y, 0, 0);
 	QMenu menu;
-	if (st->vis_collapsed ()) {
-		menu.addAction (QIcon (m_pm_box), QObject::tr ("Expand subtree"), [=] () { toggle_collapse (x, y, false); });
-		menu.addAction (QObject::tr ("Expand one level of child nodes"), [=] () { toggle_collapse (x, y, true); });
-	} else
-		menu.addAction (QIcon (m_pm_box), QObject::tr ("Collapse subtree"), [=] () { toggle_collapse (x, y, false); });
-	if (st->has_figure ())
-		menu.addAction (QIcon (":/BoardWindow/images/boardwindow/figure.png"),
-				QObject::tr("Clear diagram status for this node"),
-				[=] () { toggle_figure (x, y); m_win->update_figures (); });
-	else
-		menu.addAction (QIcon (":/BoardWindow/images/boardwindow/figure.png"),
-				QObject::tr("Set this move to be the start of a diagram"),
-				[=] () { toggle_figure (x, y); m_win->update_figures (); });
-	menu.addAction (QObject::tr ("Navigate to this node"), [=] () { item_clicked (x, y); });
-	menu.exec (pos);
-#endif
+	menu.addAction (tr ("Export image to clipboard"), this, &EvalGraph::export_clipboard);
+	menu.addAction (tr ("Export image to file"), this, &EvalGraph::export_file);
+	menu.exec (e->globalPos ());
+}
+
+void EvalGraph::export_clipboard (bool)
+{
+	QPixmap pm = grab ();
+	QApplication::clipboard()->setPixmap (pm);
+}
+
+void EvalGraph::export_file (bool)
+{
+	QString filter;
+	QString fileName = QFileDialog::getSaveFileName (this, tr ("Export evaluation graph image as"),
+							 setting->readEntry ("LAST_DIR"),
+							 "PNG (*.png);;BMP (*.bmp);;XPM (*.xpm);;XBM (*.xbm);;PNM (*.pnm);;GIF (*.gif);;JPG (*.jpg);;MNG (*.mng)",
+							 &filter);
+
+
+	if (fileName.isEmpty())
+		return;
+
+	filter.truncate (3);
+	QPixmap pm = grab ();
+	if (!pm.save (fileName, filter.toLatin1 ()))
+		QMessageBox::warning (this, PACKAGE, tr("Failed to save image!"));
 }
 
 void EvalGraph::update (std::shared_ptr<game_record> gr, game_state *active)
