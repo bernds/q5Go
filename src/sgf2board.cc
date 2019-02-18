@@ -385,7 +385,7 @@ std::string translated_prop_str (const std::string *val, QTextCodec *codec)
 
 std::shared_ptr<game_record> sgf2record (const sgf &s, QTextCodec *codec)
 {
-	sgf_errors errs;
+	sgf_errors errs = s.errs;
 
 	const std::string *ff = s.nodes->find_property_val ("FF");
 	const std::string *gm = s.nodes->find_property_val ("GM");

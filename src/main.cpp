@@ -90,6 +90,9 @@ std::shared_ptr<game_record> new_variant_game_dialog (QWidget *parent)
 static void warn_errors (std::shared_ptr<game_record> gr)
 {
 	const sgf_errors &errs = gr->errors ();
+	if (errs.invalid_structure) {
+		QMessageBox::warning (0, PACKAGE, QObject::tr ("The file did not quite have the correct structure of an SGF file, but could otherwise be understood."));
+	}
 	if (errs.played_on_stone) {
 		QMessageBox::warning (0, PACKAGE, QObject::tr ("The SGF file contained an invalid move that was played on top of another stone. Variations have been truncated at that point."));
 	}

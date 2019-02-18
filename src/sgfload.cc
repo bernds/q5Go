@@ -11,14 +11,18 @@ char skip_whitespace (const IODeviceAdapter &in)
     return nextch;
 }
 
-sgf::node *parse_gametree (const IODeviceAdapter &in)
+sgf::node *parse_gametree (const IODeviceAdapter &in, sgf_errors &errs)
 {
     sgf::node *prev_node = 0, *first_node = 0;
 
+    bool at_start = true;
     char nextch = skip_whitespace (in);
     for (;;) {
-	if (nextch != ';')
+	if (nextch != ';' && (nextch == ')' || !at_start))
 	    break;
+	if (nextch != ';')
+	    errs.invalid_structure = true;
+	at_start = false;
 
 	sgf::node *this_node = new sgf::node ();
 	if (prev_node)
@@ -27,7 +31,8 @@ sgf::node *parse_gametree (const IODeviceAdapter &in)
 	    first_node = this_node;
 	prev_node = this_node;
 
-	nextch = skip_whitespace (in);
+	if (nextch == ';' || isspace (nextch))
+	    nextch = skip_whitespace (in);
 	for (;;) {
 	    std::string idstr = "";
 	    while (isalpha (nextch) && isalpha (nextch)) {
@@ -79,7 +84,7 @@ sgf::node *parse_gametree (const IODeviceAdapter &in)
 	if (! prev_node)
 	    throw broken_sgf ();
 
-	sgf::node *n = parse_gametree (in);
+	sgf::node *n = parse_gametree (in, errs);
 	prev_node->add_child (n);
 	nextch = skip_whitespace (in);
     }
@@ -111,6 +116,8 @@ sgf *load_sgf (const IODeviceAdapter &in)
 	nextch = skip_whitespace (in);
     if (nextch != '(')
 	throw broken_sgf ();
-    sgf *s = new sgf (parse_gametree (in));
+    sgf_errors errs;
+    sgf::node *nodes = parse_gametree (in, errs);
+    sgf *s = new sgf (nodes, errs);
     return s;
 }
