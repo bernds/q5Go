@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <map>
+#include <forward_list>
 
 #include "defines.h"
 #include "setting.h"
@@ -24,14 +25,22 @@ class AnalyzeDialog : public QMainWindow, public Ui::AnalyzeDialog, public GTP_E
 
 	struct job;
 	friend struct job;
-	std::vector<job *> m_jobs;
-	QMap<int, job *> m_job_map;
-	QStandardItemModel m_job_model;
+	struct display {
+		std::vector<job *> jobs;
+		QMap<int, job *> map;
+		QStandardItemModel model;
+	};
+	/* Keeps all jobs so that they can be deleted once the dialog is destroyed.
+	   Or we could clear it manually if we have no running jobs in the displays.  */
+	std::forward_list<job> m_all_jobs;
+	struct display m_jobs, m_done;
+
 	int m_job_count = 0;
 
 	struct job
 	{
 		AnalyzeDialog *m_dlg;
+		QString m_title;
 		std::shared_ptr<game_record> m_game;
 		MainWindow *m_win {};
 		QMetaObject::Connection m_connection;
@@ -44,13 +53,14 @@ class AnalyzeDialog : public QMainWindow, public Ui::AnalyzeDialog, public GTP_E
 		size_t m_initial_size;
 		size_t m_done = 0;
 
+		display *m_display;
 		int m_idx;
 
 		job (AnalyzeDialog *dlg, QString &title, std::shared_ptr<game_record> gr, int n_seconds, int n_lines,
 		     stone_color col, bool all);
 		~job ();
 		game_state *select_request (bool pop);
-		void show_window ();
+		void show_window (bool done);
 	private:
 		void collect_positions (game_state *);
 	};
@@ -68,8 +78,16 @@ class AnalyzeDialog : public QMainWindow, public Ui::AnalyzeDialog, public GTP_E
 	void select_file ();
 	void start_engine ();
 	void start_job ();
+
+	/* Maintaining the job queue listviews and assorted data structures.  */
+	void insert_job (display &, QListView *, job *);
+	void remove_job (display &, job *);
+
 	void update_progress ();
-	void open_in_progress_window ();
+	void update_buttons (display &, QListView *, QProgressBar *, QToolButton *, QToolButton *);
+	job *selected_job (bool done);
+	void open_in_progress_window (bool done);
+	void discard_job (bool done);
 
 	/* Virtuals from Gtp_Controller.  */
 	virtual void eval_received (const QString &, int) override;

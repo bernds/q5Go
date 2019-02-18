@@ -61,6 +61,8 @@
     <file>images/power-on.png</file>
     <file>images/exit.png</file>
     <file>images/pause.png</file>
+    <file>images/trash.png</file>
+
     <file>sounds/click.wav</file>
     <file>sounds/connect.wav</file>
     <file>sounds/enter.wav</file>

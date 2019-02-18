@@ -20,12 +20,25 @@ AnalyzeDialog::AnalyzeDialog (QWidget *parent, const QString &filename)
 	secondsEdit->setValidator (&m_seconds_vald);
 	maxlinesEdit->setValidator (&m_lines_vald);
 
+	const QStyle *style = qgo_app->style ();
+	int iconsz = style->pixelMetric (QStyle::PixelMetric::PM_ToolBarIconSize);
+
+	QSize sz (iconsz, iconsz);
+	openButton->setIconSize (sz);
+	trashButton->setIconSize (sz);
+	openDoneButton->setIconSize (sz);
+	trashDoneButton->setIconSize (sz);
+
 	openButton->setEnabled (false);
 
 	connect (enqueueButton, &QPushButton::clicked, [=] (bool) { start_job (); });
 	connect (fileselButton, &QPushButton::clicked, [=] (bool) { select_file (); });
-	connect (openButton, &QPushButton::clicked, [=] (bool) { open_in_progress_window (); });
-	jobView->setModel (&m_job_model);
+	connect (openButton, &QPushButton::clicked, [=] (bool) { open_in_progress_window (false); });
+	connect (openDoneButton, &QPushButton::clicked, [=] (bool) { open_in_progress_window (true); });
+	connect (trashButton, &QPushButton::clicked, [=] (bool) { discard_job (false); });
+	connect (trashDoneButton, &QPushButton::clicked, [=] (bool) { discard_job (true); });
+	jobView->setModel (&m_jobs.model);
+	doneView->setModel (&m_done.model);
 	connect (jobView, &QListView::clicked, [=] (QModelIndex) { update_progress (); });
 	connect (jobView->selectionModel (), &QItemSelectionModel::selectionChanged,
 		 [=] (const QItemSelection &, const QItemSelection &) { update_progress (); });
@@ -50,7 +63,7 @@ void AnalyzeDialog::closeEvent (QCloseEvent *e)
 	   The downside of that is that this may be the only window and we'd have to check
 	   for that case.  Also, I think it's good to have the window open as a reminder
 	   that an engine is running.  */
-	if (m_jobs.size () != 0) {
+	if (m_jobs.jobs.size () != 0) {
 		QMessageBox::StandardButton choice;
 		choice = QMessageBox::warning (this, PACKAGE,
 					       tr ("Jobs are still running.  Do you wish to terminate the engine and discard the jobs?"),
@@ -60,11 +73,21 @@ void AnalyzeDialog::closeEvent (QCloseEvent *e)
 			e->ignore ();
 			return;
 		}
+	} else if (m_done.jobs.size () != 0) {
+		QMessageBox::StandardButton choice;
+		choice = QMessageBox::warning (this, PACKAGE,
+					       tr ("Completed jobs contain unsaved data.  Do you wish to discard the jobs?"),
+					       QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Yes);
+
+		if (choice == QMessageBox::Cancel) {
+			e->ignore ();
+			return;
+		}
 	}
 	stop_analyzer ();
-	m_job_model.clear ();
-	m_jobs.clear ();
-	m_job_map.clear ();
+	m_jobs.model.clear ();
+	m_jobs.jobs.clear ();
+	m_jobs.map.clear ();
 	update_progress ();
 	e->accept ();
 }
@@ -92,34 +115,17 @@ void AnalyzeDialog::analyzer_state_changed ()
 
 AnalyzeDialog::job::job (AnalyzeDialog *dlg, QString &title, std::shared_ptr<game_record> gr, int n_seconds, int n_lines,
 			 stone_color col, bool all)
-	: m_dlg (dlg), m_game (gr), m_n_seconds (n_seconds), m_n_lines (n_lines),
+	: m_dlg (dlg), m_title (title), m_game (gr), m_n_seconds (n_seconds), m_n_lines (n_lines),
 	  m_side (col), m_analyze_all (all)
 {
 	collect_positions (m_game->get_root ());
 	m_initial_size = m_queue.size ();
-	QStandardItem *item = new QStandardItem (title);
-	item->setDropEnabled (false);
-	item->setEditable (false);
-	m_idx = m_dlg->m_job_count++;
-	m_dlg->m_job_map.insert (m_idx, this);
-	item->setData (m_idx, Qt::UserRole + 1);
-	m_dlg->m_job_model.appendRow (item);
-	m_dlg->jobView->setCurrentIndex (item->index ());
 }
 
 AnalyzeDialog::job::~job ()
 {
 	if (m_win)
 		disconnect (m_connection);
-	for (int i = 0; i < m_dlg->m_job_model.rowCount (); i++) {
-		QStandardItem *item = m_dlg->m_job_model.item (i);
-		int jidx = item->data (Qt::UserRole + 1).toInt ();
-		if (jidx == m_idx) {
-			m_dlg->m_job_model.removeRow (i);
-			break;
-		}
-	}
-	m_dlg->m_job_map.remove (m_idx);
 }
 
 void AnalyzeDialog::job::collect_positions (game_state *st)
@@ -140,28 +146,96 @@ game_state *AnalyzeDialog::job::select_request (bool pop)
 	return st;
 }
 
-void AnalyzeDialog::job::show_window ()
+void AnalyzeDialog::job::show_window (bool done)
 {
 	if (m_win == nullptr) {
-		m_win = new MainWindow (nullptr, m_game, modeBatch);
+		m_win = new MainWindow (nullptr, m_game, done ? modeNormal : modeBatch);
 		m_connection = connect (m_win, &MainWindow::signal_closeevent,
-					[=] () { m_win = nullptr; m_dlg->update_progress (); });
+					[this] ()
+					{
+						m_win = nullptr;
+						m_dlg->update_progress ();
+						if (m_display == &m_dlg->m_done && !m_game->modified ()) {
+							m_dlg->remove_job (*m_display, this);
+							m_dlg->update_progress ();
+						}
+					});
 	}
 	m_win->show ();
 	m_win->activateWindow ();
 }
 
-void AnalyzeDialog::open_in_progress_window ()
+void AnalyzeDialog::insert_job (display &q, QListView *view, job *j)
 {
-	const QModelIndexList &selected = jobView->selectionModel ()->selectedIndexes ();
+	int idx = m_job_count++;
+
+	QStandardItem *item = new QStandardItem (j->m_title);
+	item->setDropEnabled (false);
+	item->setEditable (false);
+	item->setData (idx, Qt::UserRole + 1);
+
+	j->m_display = &q;
+	q.jobs.push_back (j);
+	q.map.insert (idx, j);
+	q.model.appendRow (item);
+	view->setCurrentIndex (item->index ());
+}
+
+void AnalyzeDialog::remove_job (display &q, job *j)
+{
+	q.jobs.erase (std::remove (std::begin (q.jobs), std::end (q.jobs), j), std::end (q.jobs));
+	j->m_display = nullptr;
+	for (int i = 0; i < q.model.rowCount (); i++) {
+		QStandardItem *item = q.model.item (i);
+		int jidx = item->data (Qt::UserRole + 1).toInt ();
+		if (q.map[jidx] == j) {
+			q.map.remove (jidx);
+			q.model.removeRow (i);
+			return;
+		}
+	}
+	throw std::logic_error ("did not find job");
+}
+
+AnalyzeDialog::job *AnalyzeDialog::selected_job (bool done)
+{
+	QListView *view = done ? doneView : jobView;
+	display &q = done ? m_done : m_jobs;
+	const QModelIndexList &selected = view->selectionModel ()->selectedIndexes ();
 	if (selected.length () == 0)
-		return;
+		return nullptr;
 
 	QModelIndex i = selected.first ();
-	QStandardItem *item = m_job_model.itemFromIndex (i);
+	QStandardItem *item = q.model.itemFromIndex (i);
 	int jidx = item->data (Qt::UserRole + 1).toInt ();
-	job *j = m_job_map[jidx];
-	j->show_window ();
+	return q.map[jidx];
+}
+
+void AnalyzeDialog::discard_job (bool done)
+{
+	job *j = selected_job (done);
+	if (j == nullptr)
+		return;
+	QMessageBox::StandardButton choice;
+	choice = QMessageBox::warning (this, PACKAGE, tr ("Really discard selected job?"),
+				       QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Yes);
+	if (choice != QMessageBox::Yes)
+		return;
+	/* Not sure if the job could have moved while the message box was open.
+	   In any case, using m_display should always give the correct answer.
+	   Checking for nullptr is ultra-paranoid.  */
+	if (j->m_display == nullptr)
+		return;
+	remove_job (*j->m_display, j);
+	update_progress ();
+}
+
+void AnalyzeDialog::open_in_progress_window (bool done)
+{
+	job *j = selected_job (done);
+	if (j == nullptr)
+		return;
+	j->show_window (done);
 	update_progress ();
 }
 
@@ -178,10 +252,10 @@ void AnalyzeDialog::select_file ()
 /* Called only in situations when we know the engine is running.  */
 void AnalyzeDialog::queue_next ()
 {
-	if (m_jobs.size () != 0) {
-		QStandardItem *item = m_job_model.item (0);
+	if (m_jobs.jobs.size () != 0) {
+		QStandardItem *item = m_jobs.model.item (0);
 		int jidx = item->data (Qt::UserRole + 1).toInt ();
-		job *j = m_job_map[jidx];
+		job *j = m_jobs.map[jidx];
 		game_state *st = j->select_request (false);
 		if (st != nullptr && st->get_board ().size_x () == m_running_boardsize) {
 			m_seconds_count = 0;
@@ -206,10 +280,11 @@ void AnalyzeDialog::eval_received (const QString &, int)
 
 	game_state *st = j->select_request (true);
 	if (j->m_queue.size () == 0) {
-		m_jobs.erase (std::remove (std::begin (m_jobs), std::end (m_jobs), j), std::end (m_jobs));
-		j->show_window ();
-		j->m_win->setGameMode (modeNormal);
-		delete j;
+		if (j->m_win != nullptr)
+			j->m_win->setGameMode (modeNormal);
+
+		remove_job (m_jobs, j);
+		insert_job (m_done, doneView, j);
 		update_progress ();
 	} else {
 		st->set_eval_data (*m_eval_state, false);
@@ -238,35 +313,53 @@ void AnalyzeDialog::eval_received (const QString &, int)
 	queue_next ();
 }
 
-void AnalyzeDialog::update_progress ()
+void AnalyzeDialog::update_buttons (display &d, QListView *view, QProgressBar *bar, QToolButton *trash, QToolButton *open)
 {
-	QItemSelectionModel *sel = jobView->selectionModel ();
+	QItemSelectionModel *sel = view->selectionModel ();
 	const QModelIndexList &selected = sel->selectedRows ();
-	bool entries = m_job_model.rowCount () != 0;
+	bool entries = d.model.rowCount () != 0;
 	bool selection = selected.length () != 0;
 
-	jobView->setEnabled (entries);
-	progressBar->setEnabled (selection);
+	view->setEnabled (entries);
+	if (bar != nullptr)
+		bar->setEnabled (selection);
 	if (!selection) {
-		progressBar->setValue (0);
-		openButton->setEnabled (false);
-		openButton->setChecked (false);
+		if (bar != nullptr)
+			bar->setValue (0);
+		open->setEnabled (false);
+		open->setChecked (false);
+		trash->setEnabled (false);
 		return;
 	}
 	QModelIndex i = selected.first ();
-	QStandardItem *item = m_job_model.itemFromIndex (i);
+	QStandardItem *item = d.model.itemFromIndex (i);
 	int jidx = item->data (Qt::UserRole + 1).toInt ();
-	job *j = m_job_map[jidx];
+	job *j = d.map[jidx];
 	if (j == nullptr) {
-		progressBar->setValue (0);
-		openButton->setEnabled (false);
-		openButton->setChecked (false);
+		if (bar != nullptr)
+			bar->setValue (0);
+		open->setEnabled (false);
+		open->setChecked (false);
+		trash->setEnabled (false);
 		return;
 	}
-	progressBar->setRange (0, j->m_initial_size);
-	progressBar->setValue (j->m_done);
-	openButton->setChecked (j->m_win != nullptr);
-	openButton->setEnabled (j->m_win == nullptr);
+	trash->setEnabled (true);
+	open->setChecked (j->m_win != nullptr);
+	open->setEnabled (j->m_win == nullptr);
+	if (bar != nullptr) {
+		bar->setRange (0, j->m_initial_size);
+		bar->setValue (j->m_done);
+	}
+}
+
+void AnalyzeDialog::update_progress ()
+{
+	update_buttons (m_jobs, jobView, progressBar, openButton, trashButton);
+	update_buttons (m_done, doneView, nullptr, openDoneButton, trashDoneButton);
+
+	/* Garbage collect.  */
+	if (m_jobs.model.rowCount () == 0 && m_done.model.rowCount () == 0)
+		m_all_jobs.clear ();
 }
 
 void AnalyzeDialog::gtp_startup_success ()
@@ -329,10 +422,11 @@ void AnalyzeDialog::start_job ()
 		}
 	}
 	filenameEdit->setText ("");
-	job *j = new job (this, f, gr, secondsEdit->text ().toInt (), maxlinesEdit->text ().toInt (),
-			  none, true);
+	m_all_jobs.emplace_front (this, f, gr, secondsEdit->text ().toInt (), maxlinesEdit->text ().toInt (),
+				  none, true);
+	job *j = &m_all_jobs.front ();
 	update_progress ();
-	m_jobs.push_back (j);
+	insert_job (m_jobs, jobView, j);
 	if (analyzer_state () == analyzer::paused) {
 		queue_next ();
 	}
