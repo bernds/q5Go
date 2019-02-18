@@ -96,6 +96,18 @@ static void warn_errors (std::shared_ptr<game_record> gr)
 	if (errs.charset_error) {
 		QMessageBox::warning (0, PACKAGE, QObject::tr ("One or more comments have been dropped since they contained invalid characters."));
 	}
+	if (errs.empty_komi) {
+		QMessageBox::warning (0, PACKAGE, QObject::tr ("The SGF contained an empty value for komi. Assuming zero."));
+	}
+	if (errs.empty_handicap) {
+		QMessageBox::warning (0, PACKAGE, QObject::tr ("The SGF contained an empty value for the handicap. Assuming zero."));
+	}
+	if (errs.invalid_val) {
+		QMessageBox::warning (0, PACKAGE, QObject::tr ("The SGF contained an invalid value in a property related to display.  Things like move numbers might not show up correctly."));
+	}
+	if (errs.malformed_eval) {
+		QMessageBox::warning (0, PACKAGE, QObject::tr ("The SGF contained evaluation data that could not be understood."));
+	}
 }
 
 /* A wrapper around sgf2record to handle exceptions with message boxes.  */

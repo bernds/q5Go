@@ -385,6 +385,8 @@ std::string translated_prop_str (const std::string *val, QTextCodec *codec)
 
 std::shared_ptr<game_record> sgf2record (const sgf &s, QTextCodec *codec)
 {
+	sgf_errors errs;
+
 	const std::string *ff = s.nodes->find_property_val ("FF");
 	const std::string *gm = s.nodes->find_property_val ("GM");
 	bool our_extensions = false;
@@ -466,7 +468,10 @@ std::shared_ptr<game_record> sgf2record (const sgf &s, QTextCodec *codec)
 	/* Ignored, but ensure it doesn't go on the list of unrecognized properties to
 	   write out later.  */
 	s.nodes->find_property_val ("AP");
-
+	if (km && km->length () == 0) {
+		errs.empty_komi = true;
+		km = nullptr;
+	}
 	if (km && km->length () > 0) {
 		size_t pos = 0;
 		if ((*km)[0] == '-')
@@ -475,6 +480,10 @@ std::shared_ptr<game_record> sgf2record (const sgf &s, QTextCodec *codec)
 			throw broken_sgf ();
 	}
 	double komi = km ? stod (*km) : 0;
+	if (ha && ha->length () == 0) {
+		errs.empty_handicap = true;
+		ha = nullptr;
+	}
 	if (ha && (ha->find_first_not_of ("0123456789") != std::string::npos))
 		throw broken_sgf ();
 	int hc = ha ? stoi (*ha) : 0;
@@ -508,8 +517,6 @@ std::shared_ptr<game_record> sgf2record (const sgf &s, QTextCodec *codec)
 	const std::string *pl = s.nodes->find_property_val ("PL");
 	stone_color to_play = pl && *pl == "W" ? white : black;
 	std::shared_ptr<game_record> game = std::make_shared<game_record> (initpos, to_play, info);
-
-	sgf_errors errs;
 
 	errs.charset_error |= !add_comment (&game->m_root, s.nodes, codec);
 	errs.charset_error |= !add_figure (&game->m_root, s.nodes, codec);

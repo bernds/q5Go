@@ -22,11 +22,15 @@ struct sgf_errors
 {
 	bool played_on_stone = false;
 	bool charset_error = false;
+	/* For decorative things like move numbers.  */
 	bool invalid_val = false;
 	bool malformed_eval = false;
+	bool empty_komi = false;
+	bool empty_handicap = false;
 	bool any_set () const
 	{
-		return played_on_stone || charset_error || invalid_val || malformed_eval;
+		return (played_on_stone || charset_error || invalid_val || malformed_eval
+			|| empty_komi || empty_handicap);
 	}
 };
 
