@@ -13,7 +13,7 @@ SGFPreview::SGFPreview (QWidget *parent, const QString &dir)
 {
 	setupUi (this);
 
-	QHBoxLayout *l = new QHBoxLayout (dialogWidget);
+	QVBoxLayout *l = new QVBoxLayout (dialogWidget);
 	fileDialog = new QFileDialog (dialogWidget, Qt::Widget);
 	fileDialog->setOption (QFileDialog::DontUseNativeDialog, true);
 	fileDialog->setWindowFlags (Qt::Widget);
@@ -25,6 +25,8 @@ SGFPreview::SGFPreview (QWidget *parent, const QString &dir)
 	l->setContentsMargins (0, 0, 0, 0);
 	fileDialog->setSizePolicy (QSizePolicy::Preferred, QSizePolicy::Preferred);
 	fileDialog->show ();
+	connect (encodingList, &QComboBox::currentTextChanged, this, &SGFPreview::reloadPreview);
+	connect (overwriteSGFEncoding, &QGroupBox::toggled, this, &SGFPreview::reloadPreview);
 	connect (fileDialog, &QFileDialog::currentChanged, this, &SGFPreview::setPath);
 	connect (fileDialog, &QFileDialog::accepted, this, &QDialog::accept);
 	connect (fileDialog, &QFileDialog::rejected, this, &QDialog::reject);
@@ -66,7 +68,11 @@ void SGFPreview::setPath(QString path)
 		f.open (QIODevice::ReadOnly);
 		// IOStreamAdapter adapter (&f);
 		sgf *sgf = load_sgf (f);
-		m_game = sgf2record (*sgf);
+		if (overwriteSGFEncoding->isChecked ()) {
+			m_game = sgf2record (*sgf, QTextCodec::codecForName (encodingList->currentText ().toLatin1 ()));
+		} else {
+			m_game = sgf2record (*sgf, nullptr);
+		}
 		m_game->set_filename (path.toStdString ());
 
 		boardView->reset_game (m_game);
@@ -84,6 +90,13 @@ void SGFPreview::setPath(QString path)
 		File_Size->setText (QString::number (st->get_board ().size_x ()));
 	} catch (...) {
 	}
+}
+
+void SGFPreview::reloadPreview ()
+{
+	auto files = fileDialog->selectedFiles ();
+	if (!files.isEmpty ())
+		setPath (files.at (0));
 }
 
 void SGFPreview::accept ()

@@ -104,7 +104,7 @@ std::shared_ptr<game_record> record_from_stream (QIODevice &isgf)
 {
 	try {
 		sgf *sgf = load_sgf (isgf);
-		std::shared_ptr<game_record> gr = sgf2record (*sgf);
+		std::shared_ptr<game_record> gr = sgf2record (*sgf, nullptr);
 		warn_errors (gr);
 		return gr;
 	} catch (invalid_boardsize &) {

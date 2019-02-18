@@ -17,6 +17,70 @@
    </size>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <item row="3" column="1">
+    <layout class="QGridLayout" name="gridLayout_2"/>
+   </item>
+   <item row="0" column="0" rowspan="4">
+    <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0">
+     <item>
+      <widget class="QWidget" name="dialogWidget" native="true"/>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="overwriteSGFEncoding">
+       <property name="title">
+        <string>Override character set for text in SGF file:</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QComboBox" name="encodingList">
+          <item>
+           <property name="text">
+            <string>UTF-8</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>GB18030</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>EUC-KR</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>EUC-JP</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>ISO-2022-JP</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Shift-JIS</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Big5</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
    <item row="0" column="1">
     <widget class="FigureView" name="boardView">
      <property name="enabled">
@@ -29,9 +93,6 @@
       </size>
      </property>
     </widget>
-   </item>
-   <item row="0" column="0" rowspan="4">
-    <widget class="QWidget" name="dialogWidget" native="true"/>
    </item>
    <item row="2" column="1">
     <layout class="QGridLayout" name="gridLayout_3">
@@ -191,9 +252,6 @@
       </widget>
      </item>
     </layout>
-   </item>
-   <item row="3" column="1">
-    <layout class="QGridLayout" name="gridLayout_2"/>
    </item>
   </layout>
  </widget>

@@ -17,6 +17,7 @@ class SGFPreview : public QDialog, public Ui::SGFPreview
 	std::shared_ptr<game_record> m_game;
 
 	void setPath (QString path);
+	void reloadPreview ();
 	void clear ();
 
 public:

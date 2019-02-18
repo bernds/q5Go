@@ -892,12 +892,12 @@ public:
 
 class game_record;
 extern game_state *sgf2board (sgf &);
-extern std::shared_ptr<game_record> sgf2record (const sgf &);
+extern std::shared_ptr<game_record> sgf2record (const sgf &, QTextCodec *codec);
 extern std::string record2sgf (const game_record &);
 
 class game_record : public game_info
 {
-	friend std::shared_ptr<game_record> sgf2record (const sgf &s);
+	friend std::shared_ptr<game_record> sgf2record (const sgf &s, QTextCodec *codec);
 	game_state m_root;
 	bool m_modified = false;
 	sgf_errors m_errors;
