@@ -6,6 +6,7 @@
 #include <QStandardPaths>
 #include <QMessageBox>
 #include <QPixmap>
+#include <QTextCodec>
 
 #include "setting.h"
 #include "config.h"
@@ -193,6 +194,7 @@ void Setting::loadSettings()
 
 	// read file
 	QTextStream txt(&file);
+	txt.setCodec(QTextCodec::codecForName("UTF-8"));
 	QString s;
 	int pos, pos1, pos2;
 	while (!txt.atEnd ())
@@ -324,7 +326,7 @@ void Setting::saveSettings()
 	if (file.open(QIODevice::WriteOnly))
 	{
 		QTextStream txtfile(&file);
-
+		txtfile.setCodec(QTextCodec::codecForName("UTF-8"));
 		// write list to file: KEY [TXT]
 		QMap<QString, QString>::const_iterator i = params.constBegin();
 		while (i != params.constEnd()) {
