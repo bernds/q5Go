@@ -1,4 +1,4 @@
-## q5Go 0.5
+## q5Go 0.6
 
 This is a tool for Go players which performs the following functions:
 - SGF editor
@@ -18,23 +18,23 @@ and modernized.
 
 ![screenshot](screens/screenshot.png)
 
-Version 0.5 adds the following features:
- * Support for diagrams.  These can be used to either subdivide a game into
-   printable diagrams, or to provide a variation display when browsing a
-   file in the editor.  The latter case is used by the engine analysis
-   mode.
- * A new batch review mode, where the user can choose files to be reviewed
-   and hand them off to an engine.  The files can be viewed while the
-   analysis is in progress, and there is a winrate graph.
- * A redesigned layout for the user interface.  The various elements of
-   the board window (comments, diagram display, game tree, evaluation
-   graph and observer list) now exist in docks and can be freely moved
-   around.  It is possible to save and restore these layouts.
- * Most icons have been replaced with larger ones, and q5go now uses a
-   Qt feature for better results on high-DPI displays.  This is untested,
-   I would appreciate feedback as to how well it works on such devices.
- * The command line options have changed.  They are now processed by
-   standard library functions and follow normal conventions as a result.
+Version 0.6 adds no major new features, but adds a number of smaller fixes
+and refinements:
+ * Better support for various character sets
+ * Better support for various broken SGF files that occur in the wild
+ * An "auto-collapse" mode for the game tree, which shows only the
+   current variation and the ones following it and collapses everything
+   else
+ * A tooltip preview for the game tree
+ * A file open dialog with an SGF preview
+ * An improved version of the batch analysis dialog, with a list view
+   for finished jobs and an engine selector
+ * Better stone sounds
+ * An "automatic diagrams" dialog which can create figures and diagrams
+   for an entire file
+ * Image export functionality for the evaluation graph
+ * Better game tree headers on Windows, working around a Qt problem
+ * An updated Chinese translation
 
 See VERSION_HISTORY for a history of changes.
 

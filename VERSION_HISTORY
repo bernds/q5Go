@@ -1,3 +1,23 @@
+q5Go 0.6
+
+Version 0.6 adds no major new features, but adds a number of smaller fixes
+and refinements:
+ * Better support for various character sets
+ * Better support for various broken SGF files that occur in the wild
+ * An "auto-collapse" mode for the game tree, which shows only the
+   current variation and the ones following it and collapses everything
+   else
+ * A tooltip preview for the game tree
+ * A file open dialog with an SGF preview
+ * An improved version of the batch analysis dialog, with a list view
+   for finished jobs and an engine selector
+ * Better stone sounds
+ * An "automatic diagrams" dialog which can create figures and diagrams
+   for an entire file
+ * Image export functionality for the evaluation graph
+ * Better game tree headers on Windows, working around a Qt problem
+ * An updated Chinese translation
+
 q5Go 0.5
 
 Version 0.5 adds the following features:

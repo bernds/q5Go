@@ -6,12 +6,11 @@
 #define PACKAGE1 "q5goClient"
 
 /* Version number of package */
-#define VERSION "0.5"
+#define VERSION "0.6"
 
-#define NEWVERSIONWARNING "<p>Welcome to version 0.5 of q5go.</p>\n" \
-  "<p>This version adds support for diagrams, intended either for exporting or viewing variations on a separate board.</p>" \
-  "<p>There is also a new review feature to analyze entire games with an engine, which makes use of the diagram display for engine lines.</p>" \
-  "<p>The board window has a new UI layout, with elements like the comments view in freely draggable docks.</p>" \
+#define NEWVERSIONWARNING "<p>Welcome to version 0.6 of q5go.</p>\n" \
+  "<p>This version contains a variety of smaller enhancements, such as better support for CJK character sets, or previews in the game tree and file open dialog.</p>" \
+  "<p>For a full list of changes, please refer to the README.</p>" \
   "<p>This message will not be shown anymore on startup.</p>"
 
 
