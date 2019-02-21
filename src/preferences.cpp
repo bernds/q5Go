@@ -713,6 +713,7 @@ void PreferencesDialog::clear_engine ()
 	engineArgs->clear ();
 	engineKomi->clear ();
 	engineAnalysis->setChecked (false);
+	engineSize->clear ();
 	m_changing_engine = false;
 }
 

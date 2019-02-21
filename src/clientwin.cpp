@@ -2370,13 +2370,23 @@ void ClientWindow::slotFileOpen(bool)
 	win->show ();
 }
 
-Engine *ClientWindow::analysis_engine ()
+Engine *ClientWindow::analysis_engine (int boardsize)
 {
 	for (auto e: m_engines) {
-		if (e->analysis ())
+		if (e->analysis () && e->boardsize ().toInt () == boardsize)
 			return e;
 	}
 	return nullptr;
+}
+
+QList<Engine> ClientWindow::analysis_engines (int boardsize)
+{
+	QList<Engine> l;
+	for (auto e: m_engines) {
+		if (e->analysis () && e->boardsize ().toInt () == boardsize)
+			l.append (*e);
+	}
+	return l;
 }
 
 void ClientWindow::slotComputerPlay(bool)

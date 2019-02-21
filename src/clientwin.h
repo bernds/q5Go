@@ -66,7 +66,8 @@ public:
 	bool preferencesAccept();
 	void dlgSetPreferences(int tab=-1);
 
-	Engine *analysis_engine ();
+	Engine *analysis_engine (int boardsize);
+	QList<Engine> analysis_engines (int boardsize);
 
 	HostList hostlist;
 	QList<Engine *> m_engines;

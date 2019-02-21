@@ -23,6 +23,8 @@ class AnalyzeDialog : public QMainWindow, public Ui::AnalyzeDialog, public GTP_E
 {
 	Q_OBJECT
 
+	QList<Engine> m_engines;
+
 	struct job;
 	friend struct job;
 	struct display {
@@ -71,7 +73,6 @@ class AnalyzeDialog : public QMainWindow, public Ui::AnalyzeDialog, public GTP_E
 	QIntValidator m_lines_vald { 1, 100 };
 
 	QString m_last_dir;
-	int m_running_boardsize;
 
 	void queue_next ();
 
@@ -83,6 +84,7 @@ class AnalyzeDialog : public QMainWindow, public Ui::AnalyzeDialog, public GTP_E
 	void insert_job (display &, QListView *, job *);
 	void remove_job (display &, job *);
 
+	void update_engines ();
 	void update_progress ();
 	void update_buttons (display &, QListView *, QProgressBar *, QToolButton *, QToolButton *);
 	job *selected_job (bool done);

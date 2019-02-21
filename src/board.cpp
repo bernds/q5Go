@@ -2190,12 +2190,12 @@ void Board::eval_received (const QString &move, int visits)
 void Board::start_analysis ()
 {
 	if (!m_dims.is_square ()) {
-		QMessageBox::warning(this, PACKAGE, tr("Analysis is supported only for square boards!"));
+		QMessageBox::warning (this, PACKAGE, tr ("Analysis is supported only for square boards!"));
 		return;
 	}
-	Engine *e = client_window->analysis_engine ();
+	Engine *e = client_window->analysis_engine (m_dims.width ());
 	if (e == nullptr) {
-		QMessageBox::warning(this, PACKAGE, tr("You did not configure any analysis engine!"));
+		QMessageBox::warning (this, PACKAGE, tr ("You did not configure any analysis engine for this boardsize!"));
 		return;
 	}
 

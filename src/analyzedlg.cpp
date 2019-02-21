@@ -43,11 +43,17 @@ AnalyzeDialog::AnalyzeDialog (QWidget *parent, const QString &filename)
 	connect (jobView->selectionModel (), &QItemSelectionModel::selectionChanged,
 		 [=] (const QItemSelection &, const QItemSelection &) { update_progress (); });
 
+	void (QSpinBox::*changed) (int) = &QSpinBox::valueChanged;
+	connect (boardsizeSpinBox, changed, [this] (int) { update_engines (); });
+	void (QComboBox::*cic) (int) = &QComboBox::currentIndexChanged;
+	connect (engineComboBox, cic, [this] (int v) { engineStartButton->setEnabled (v != -1 && analyzer_state () == analyzer::disconnected ); });
 	connect (configureButton, &QPushButton::clicked, [=] (bool) { client_window->dlgSetPreferences (3); });
 	connect (engineStartButton, &QPushButton::clicked, [=] (bool) { start_engine (); });
 	connect (engineLogButton, &QPushButton::clicked, [=] (bool) { m_analyzer->dialog ()->show (); });
 
 	connect (closeButton, &QPushButton::clicked, [=] (bool) { close (); });
+
+	update_engines ();
 
 	analyzer_state_changed ();
 }
@@ -97,20 +103,24 @@ void AnalyzeDialog::analyzer_state_changed ()
 	analyzer s = analyzer_state ();
 	switch (s) {
 	case analyzer::disconnected:
-		engineStatusLabel->setText (tr ("Status: not running"));
+		engineStatusLabel->setText (tr ("not running"));
 		break;
 	case analyzer::starting:
-		engineStatusLabel->setText (tr ("Status: starting up"));
+		engineStatusLabel->setText (tr ("starting up"));
 		break;
 	case analyzer::paused:
-		engineStatusLabel->setText (tr ("Status: idle"));
+		engineStatusLabel->setText (tr ("idle"));
 		break;
 	case analyzer::running:
-		engineStatusLabel->setText (tr ("Status: working"));
+		engineStatusLabel->setText (tr ("working"));
 		break;
 	}
-	engineStartButton->setEnabled (s == analyzer::disconnected);
+	engineStartButton->setEnabled (engineComboBox->currentIndex () != -1 && s == analyzer::disconnected);
+	engineComboBox->setEnabled (s == analyzer::disconnected);
 	engineLogButton->setEnabled (m_analyzer != nullptr && !m_analyzer->dialog ()->isVisible ());
+
+	bool any_jobs = m_jobs.model.rowCount () != 0 || m_done.model.rowCount () != 0;
+	boardsizeSpinBox->setEnabled (!any_jobs && s == analyzer::disconnected);
 }
 
 AnalyzeDialog::job::job (AnalyzeDialog *dlg, QString &title, std::shared_ptr<game_record> gr, int n_seconds, int n_lines,
@@ -257,7 +267,7 @@ void AnalyzeDialog::queue_next ()
 		int jidx = item->data (Qt::UserRole + 1).toInt ();
 		job *j = m_jobs.map[jidx];
 		game_state *st = j->select_request (false);
-		if (st != nullptr && st->get_board ().size_x () == m_running_boardsize) {
+		if (st != nullptr && st->get_board ().size_x () == boardsizeSpinBox->value ()) {
 			m_seconds_count = 0;
 			m_requester = j;
 			if (analyzer_state () == analyzer::paused)
@@ -352,13 +362,30 @@ void AnalyzeDialog::update_buttons (display &d, QListView *view, QProgressBar *b
 	}
 }
 
+void AnalyzeDialog::update_engines ()
+{
+	/* Keep old entry showing if the engine is running.  */
+	if (!engineComboBox->isEnabled ())
+		return;
+
+	auto new_list = client_window->analysis_engines (boardsizeSpinBox->value ());
+	engineComboBox->clear ();
+	for (auto &it: new_list) {
+		engineComboBox->addItem (it.title ());
+	}
+	m_engines = new_list;
+}
+
 void AnalyzeDialog::update_progress ()
 {
 	update_buttons (m_jobs, jobView, progressBar, openButton, trashButton);
 	update_buttons (m_done, doneView, nullptr, openDoneButton, trashDoneButton);
 
+	bool any_jobs = m_jobs.model.rowCount () != 0 || m_done.model.rowCount () != 0;
+	boardsizeSpinBox->setEnabled (!any_jobs && analyzer_state () == analyzer::disconnected);
+
 	/* Garbage collect.  */
-	if (m_jobs.model.rowCount () == 0 && m_done.model.rowCount () == 0)
+	if (!any_jobs)
 		m_all_jobs.clear ();
 }
 
@@ -388,14 +415,14 @@ void AnalyzeDialog::start_engine ()
 {
 	if (analyzer_state () != analyzer::disconnected)
 		return;
-
-	Engine *e = client_window->analysis_engine ();
-	if (e == nullptr) {
-		QMessageBox::warning(this, PACKAGE, tr("You did not configure any analysis engine!"));
+	int idx = engineComboBox->currentIndex ();
+	if (idx < 0 || idx >= m_engines.count ())
 		return;
-	}
-	m_running_boardsize = e->boardsize ().toInt ();
-	start_analyzer (*e, m_running_boardsize, 7.5, 0, false);
+
+	boardsizeSpinBox->setEnabled (false);
+
+	const Engine &e = m_engines.at (idx);
+	start_analyzer (e, e.boardsize ().toInt (), 7.5, 0, false);
 }
 
 void AnalyzeDialog::start_job ()
@@ -411,22 +438,20 @@ void AnalyzeDialog::start_job ()
 	game_state *root = gr->get_root ();
 	const go_board &b = root->get_board ();
 	if (b.size_x () != b.size_y ()) {
-		QMessageBox::warning(this, PACKAGE, tr("Analysis is supported only for square boards!"));
+		QMessageBox::warning (this, PACKAGE, tr ("Analysis is supported only for square boards!"));
 		return;
 	}
-	analyzer ast = analyzer_state ();
-	if (ast != analyzer::disconnected) {
-		if (b.size_x () != m_running_boardsize) {
-			QMessageBox::warning(this, PACKAGE, tr("File has a different boardsize than expected by the running engine!"));
-			return;
-		}
+	if (b.size_x () != boardsizeSpinBox->value ()) {
+		QMessageBox::warning (this, PACKAGE,
+				      tr ("File has a different boardsize than selected!"));
+		return;
 	}
 	filenameEdit->setText ("");
 	m_all_jobs.emplace_front (this, f, gr, secondsEdit->text ().toInt (), maxlinesEdit->text ().toInt (),
 				  none, true);
 	job *j = &m_all_jobs.front ();
-	update_progress ();
 	insert_job (m_jobs, jobView, j);
+	update_progress ();
 	if (analyzer_state () == analyzer::paused) {
 		queue_next ();
 	}
