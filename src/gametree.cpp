@@ -395,13 +395,17 @@ bool GameTree::event (QEvent *e)
 	QPointF point = mapToScene (event_point);
 	int x = point.x () / m_size;
 	int y = point.y () / m_size;
-	game_state *st = m_game->get_root ()->locate_by_vis_coords (x, y, 0, 0);
+	game_state *root = m_game->get_root ();
+	game_state *st = root->locate_by_vis_coords (x, y, 0, 0);
 
         if (st != nullptr) {
 		m_previewer->resizeBoard (250, 250);
 		m_previewer->set_crop (find_crop (st));
 		m_previewer->set_displayed (st);
 		QPixmap pix = m_previewer->draw_position (0);
+		/* This node may get deleted before the next tooltip is shown,
+		   so reset back to something we know is safe.  */
+		m_previewer->set_displayed (root);
 		QImage img = pix.toImage ();
 		QByteArray bytes;
 		QBuffer buffer(&bytes);
@@ -410,6 +414,7 @@ bool GameTree::event (QEvent *e)
 		QToolTip::showText (helpEvent->globalPos(), tip);
 	} else {
 		QToolTip::hideText ();
+		m_previewer->set_displayed (root);
 		e->ignore ();
 	}
 
