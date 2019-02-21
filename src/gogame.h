@@ -178,7 +178,7 @@ public:
 			m_state = nullptr;
 		}
 	public:
-		game_state *m_state;
+		game_state *m_state = nullptr;
 		virtual void observed_changed () = 0;
 		void move_state (game_state *s, bool deleting_state = false)
 		{
