@@ -1486,6 +1486,7 @@ void MainWindow::updateFont()
 	setFont (setting->fontStandard);
 	normalTools->wtimeView->update_font (setting->fontClocks);
 	normalTools->btimeView->update_font (setting->fontClocks);
+	commentEdit->setCurrentFont(setting->fontComments);
 
 	QFontMetrics fm (setting->fontStandard);
 	QRect r = fm.boundingRect ("Variation 12 of 15");
