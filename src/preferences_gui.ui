@@ -855,7 +855,7 @@ If 'System default' is selected, qGo will use the standard language of your syst
 
 This change will take effect only after qGo has been restarted.
 
-If your language is not supported, you might consider translating qGo. Please check the qGo homepage at http://qgo.sourceforge.net</string>
+If your language is not supported, you might consider translating q5go. Please visit https://github.com/bernds/q5go</string>
          </property>
          <property name="title">
           <string>Language</string>
