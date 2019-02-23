@@ -57,7 +57,7 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 {
 	setupUi (this);
 
-	gameTreeView->set_board_win (this);
+	gameTreeView->set_board_win (this, gtHeaderView);
 	evalGraph->set_board_win (this);
 	gfx_board->set_board_win (this);
 	diagView->set_board_win (this);

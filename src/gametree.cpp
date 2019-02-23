@@ -87,11 +87,12 @@ void ClickablePixmap::hoverLeaveEvent (QGraphicsSceneHoverEvent *)
 }
 
 GameTree::GameTree (QWidget *parent)
-	: QGraphicsView (parent), m_header_view (Qt::Horizontal, this)
+	: QGraphicsView (parent), m_scene (new QGraphicsScene (0, 0, 30, 30, this)),
+	  m_header_scene (new QGraphicsScene (0, 0, 30, 30, this))
 {
 	setFocusPolicy (Qt::NoFocus);
-	m_scene = new QGraphicsScene (0, 0, 30, 30, this);
 	setScene (m_scene);
+	setSceneRect (QRectF ());
 	setBackgroundBrush (QBrush (Qt::white));
 
 	setAlignment (Qt::AlignTop | Qt::AlignLeft);
@@ -101,18 +102,31 @@ GameTree::GameTree (QWidget *parent)
 			"Shift-click or middle-click nodes to collapse or expand their sub-variations.\n"
 			"Control-click a collapsed node to expand one level of its children."));
 
-	m_header_view.setModel (&m_headers);
-	m_header_view.setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Expanding);
-	int frame_width = frameWidth ();
-	m_header_view.resize (width () - 2 * frame_width, m_header_view.height ());
-	m_header_view.move (frame_width, frame_width);
-
-	setViewportMargins (0, m_header_view.height (), 0, 0);
-	QScrollBar *hscr = horizontalScrollBar ();
-	connect (hscr, &QScrollBar::valueChanged, [=] (int v) { m_header_view.setOffset (v); });
 	update_prefs ();
 
 	m_previewer = new FigureView;
+}
+
+void GameTree::resize_header ()
+{
+	m_header_view->resize (viewport ()->width (), m_header_view->height ());
+}
+
+void GameTree::set_board_win (MainWindow *win, QGraphicsView *header)
+{
+	m_win = win;
+	m_header_view = header;
+
+	QFontMetrics fm (m_header_font);
+
+	m_header_scene->setSceneRect (0, 0, 30, fm.height ());
+	m_header_view->setScene (m_header_scene);
+	m_header_view->resize (m_header_view->width (), fm.height ());
+	QScrollBar *hscr = horizontalScrollBar ();
+	QScrollBar *hscr2 = m_header_view->horizontalScrollBar ();
+	connect (hscr, &QScrollBar::valueChanged, hscr2, &QAbstractSlider::setSliderPosition);
+	connect (verticalScrollBar (), &QAbstractSlider::rangeChanged,
+		 [this] (int, int) { QMetaObject::invokeMethod (this, &GameTree::resize_header, Qt::QueuedConnection); });
 }
 
 void GameTree::update_prefs ()
@@ -134,10 +148,14 @@ void GameTree::update_prefs ()
 		/* Don't scale too heavily.  */
 		ratio = std::max (0.5, ratio);
 		f.setPointSize (f.pointSize () * ratio);
-		m_header_view.setFont (f);
-	} else
-		m_header_view.setFont (f);
-
+	}
+	m_header_font = f;
+	if (m_header_view != nullptr) {
+		QFontMetrics fm2 (f);
+		m_header_scene->setSceneRect (0, 0, m_header_scene->width (), fm2.height ());
+		m_header_view->setMaximumHeight (fm2.height ());
+		m_header_view->resize (viewport ()->width (), fm2.height ());
+	}
 	int ssize = m_size - 2;
 	int soff = ssize / 2;
 	svg_builder wstone (ssize, ssize);
@@ -171,10 +189,13 @@ void GameTree::update_prefs ()
 		update (m_game, m_active, true);
 }
 
-void GameTree::resizeEvent(QResizeEvent*)
+void GameTree::resizeEvent(QResizeEvent *e)
 {
-	int frame_width = frameWidth ();
-	m_header_view.resize (width () - 2 * frame_width, m_header_view.height ());
+	QGraphicsView::resizeEvent (e);
+	m_header_view->resize (viewport ()->width (), m_header_view->height ());
+	QScrollBar *hscr = horizontalScrollBar ();
+	QScrollBar *hscr2 = m_header_view->horizontalScrollBar ();
+	hscr2->setSliderPosition (hscr->sliderPosition ());
 }
 
 QSize GameTree::sizeHint () const
@@ -258,7 +279,6 @@ void GameTree::update (std::shared_ptr<game_record> gr, game_state *active, bool
 		int h = vroot.height ();
 
 		m_scene->setSceneRect (0, 0, m_size * w, m_size * h);
-		setSceneRect (0, 0, m_size * w, m_size * h);
 
 		m_scene->clear ();
 		m_sel = nullptr;
@@ -326,17 +346,21 @@ void GameTree::update (std::shared_ptr<game_record> gr, game_state *active, bool
 				m_scene->addLine (line, pen);
 			};
 		r->render_visualization (m_size / 2, m_size / 2, m_size, line, true);
-
-		m_header_view.setDefaultSectionSize (m_size);
-		m_header_view.setSectionResizeMode (QHeaderView::Fixed);
-
-		/* ??? Uncertain whether this is helpful for performance.
-		   The idea is to avoid many dataChanged calls.  */
-		m_header_view.setModel (nullptr);
-		for (int i = 0; i < w; i++)
-			m_headers.setHorizontalHeaderItem (i, new QStandardItem (QString::number (i)));
-		m_headers.setColumnCount (w);
-		m_header_view.setModel (&m_headers);
+		m_header_scene->clear ();
+		m_header_scene->setSceneRect (0, 0, m_size * w, m_header_scene->height ());
+		m_header_view->setSceneRect (0, 0, m_size * w, m_header_scene->height ());
+		for (int i = 0; i < w; i++) {
+			auto *item = m_header_scene->addSimpleText (QString::number (i), m_header_font);
+			QRectF bounds = item->boundingRect ();
+			bounds.moveCenter ({ (i + 0.5) * m_size, m_header_view->height () / 2. });
+			item->setPos (bounds.x (), 0);
+			if (i % 2) {
+				auto *ritem = m_header_scene->addRect (i * m_size, 0, m_size, m_header_scene->height (),
+								       QPen (Qt::NoPen), QBrush (Qt::white));
+				ritem->setZValue (-1);
+			}
+		}
+		m_header_view->verticalScrollBar ()->setSliderPosition (0);
 	}
 
 	QPen pen;
@@ -391,7 +415,6 @@ bool GameTree::event (QEvent *e)
 
 	QHelpEvent *helpEvent = static_cast<QHelpEvent *>(e);
 	QPoint event_point = helpEvent->pos();
-	event_point -= { 0, m_header_view.height () };
 	QPointF point = mapToScene (event_point);
 	int x = point.x () / m_size;
 	int y = point.y () / m_size;
