@@ -366,16 +366,17 @@ void Setting::extract_frequent_settings ()
 	values.toroid_dups = readIntEntry ("TOROID_DUPS");
 }
 
+static std::array<const char *, NUMBER_OF_AVAILABLE_LANGUAGES> language_codes LANGUAGE_CODES;
+static std::array<const char *, NUMBER_OF_AVAILABLE_LANGUAGES> available_languages AVAILABLE_LANGUAGES;
+
+static_assert (language_codes.size () == available_languages.size ());
+
 const QStringList Setting::getAvailableLanguages()
 {
-	// This is ugly, but I want those defines in defines.h, so all settings are in that file
-	const char *available_languages[] = AVAILABLE_LANGUAGES;
-	const int number_of_available_languages = NUMBER_OF_AVAILABLE_LANGUAGES;
 	QStringList list;
-	int i;
 
-	for (i=0; i<number_of_available_languages; i++)
-		list << available_languages[i];
+	for (auto it: available_languages)
+		list << it;
 
 	return list;
 }
@@ -392,15 +393,10 @@ QString Setting::convertNumberToLanguage(int n)
 
 int Setting::convertLanguageCodeToNumber()
 {
-	const char *language_codes[] = LANGUAGE_CODES;
-	const int number_of_available_languages = NUMBER_OF_AVAILABLE_LANGUAGES;
-	int i;
-
-	for (i=0; i<number_of_available_languages; i++)
-	{
-		if (readEntry("LANG") == QString(language_codes[i]))
-			return i+1;
-	}
+	QString lang = readEntry("LANG");
+	for (size_t i = 0; i < language_codes.size (); i++)
+		if (lang == QString (language_codes[i]))
+			return i + 1;
 
 	return 0;
 }
