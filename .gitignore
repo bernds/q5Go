@@ -1,5 +1,9 @@
 Makefile
 *.sgf
+*~
+*.diff
+*.orig
+*.rej
 autom4te.cache
 /config.*
 /libtool
