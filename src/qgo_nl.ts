@@ -1,81 +1,1280 @@
-<!DOCTYPE TS><TS>
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1">
+<context>
+    <name>AnalyzeDialog</name>
+    <message>
+        <source>Batch computer analysis</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Analysis parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Maximum number of lines to add:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Number of seconds per move: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Limits the number of variations added for engine lines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>10</source>
+        <translation type="unfinished">10</translation>
+    </message>
+    <message>
+        <source>5</source>
+        <translation type="unfinished">5</translation>
+    </message>
+    <message>
+        <source>Job queue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Observe progress in board window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Completed jobs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File to analyse</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add to &amp;queue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Engine status</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start engine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show messages...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Board size:</source>
+        <translation type="unfinished">Bordgrootte:</translation>
+    </message>
+    <message>
+        <source>Choose:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>stopped</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Status:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open the preferences dialog to configure engines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Configure engines...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Jobs are still running.  Do you wish to terminate the engine and discard the jobs?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Completed jobs contain unsaved data.  Do you wish to discard the jobs?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>not running</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>starting up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>idle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>working</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Really discard selected job?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PV </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>W Win </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>B Win </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>at </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> visits.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Analysis is supported only for square boards!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File has a different boardsize than selected!</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>AutoDiagsDialog</name>
+    <message>
+        <source>Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Main line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>30</source>
+        <translation type="unfinished">30</translation>
+    </message>
+    <message>
+        <source>Break when overlap occurs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Maximum number of moves per diagram:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove preexisting diagrams</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Variations</source>
+        <translation type="unfinished">Variaties</translation>
+    </message>
+    <message>
+        <source>Add diagram for each variation start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set move number for variation start to 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default flags</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show &amp;hoshi points</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Remove stones (base display on final position)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Show title in export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show coor&amp;dinates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Figure %1 (%2-%3)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Diagram %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
 <context>
     <name>Board</name>
     <message>
         <source>Pass</source>
-        <translation>Pas</translation>
+        <translation type="vanished">Pas</translation>
     </message>
     <message>
         <source>vs.</source>
-        <translation>tegen.</translation>
+        <translation type="vanished">tegen.</translation>
     </message>
     <message>
         <source>White</source>
-        <translation>Wit</translation>
+        <translation type="vanished">Wit</translation>
     </message>
     <message>
         <source>W</source>
-        <translation>W</translation>
+        <translation type="vanished">W</translation>
     </message>
     <message>
         <source>Black</source>
-        <translation>Zwart</translation>
+        <translation type="vanished">Zwart</translation>
     </message>
     <message>
         <source>B</source>
-        <translation>Z</translation>
+        <translation type="vanished">Z</translation>
     </message>
     <message>
         <source>Failed to save image!</source>
-        <translation>Afbeelding opslaan niet gelukt!</translation>
+        <translation type="vanished">Afbeelding opslaan niet gelukt!</translation>
     </message>
     <message>
         <source>Black wins with %1</source>
-        <translation>Zwart wint met %1</translation>
+        <translation type="vanished">Zwart wint met %1</translation>
     </message>
     <message>
         <source>White wins with %1</source>
-        <translation>Wit wint met %1</translation>
+        <translation type="vanished">Wit wint met %1</translation>
     </message>
     <message>
         <source>Jigo</source>
-        <translation>Jigo</translation>
+        <translation type="vanished">Jigo</translation>
     </message>
     <message>
         <source>XML</source>
-        <translation>XML</translation>
+        <translation type="vanished">XML</translation>
     </message>
     <message>
         <source>Could not find file:</source>
-        <translation>Kan bestand niet vinden:</translation>
+        <translation type="vanished">Kan bestand niet vinden:</translation>
     </message>
     <message>
         <source>Could not open file:</source>
-        <translation>Kan bestand niet openen:</translation>
+        <translation type="vanished">Kan bestand niet openen:</translation>
     </message>
     <message>
         <source>Invalid text encoding given. Please check preferences!</source>
-        <translation>Ongeldige tekst codering gegeven. Kijk voorkeuren na!</translation>
+        <translation type="vanished">Ongeldige tekst codering gegeven. Kijk voorkeuren na!</translation>
     </message>
     <message>
         <source>Reading sgf file...</source>
-        <translation>Lezen van sgf bestand...</translation>
+        <translation type="vanished">Lezen van sgf bestand...</translation>
     </message>
     <message>
         <source>Abort</source>
-        <translation>Afbreken</translation>
+        <translation type="vanished">Afbreken</translation>
     </message>
     <message>
         <source>Corrupt SGF file at position</source>
-        <translation>SGS bestand beschadigd op positie</translation>
+        <translation type="vanished">SGS bestand beschadigd op positie</translation>
     </message>
     <message>
         <source>No filename given!</source>
-        <translation>Geen bestandsnaam opgegeven!</translation>
+        <translation type="vanished">Geen bestandsnaam opgegeven!</translation>
     </message>
     <message>
         <source>Importing ASCII failed. Clipboard empty?</source>
-        <translation>Importeren van ASCII mislukt. Klembord leeg?</translation>
+        <translation type="vanished">Importeren van ASCII mislukt. Klembord leeg?</translation>
+    </message>
+    <message>
+        <source>Live evaluation: W %1%2 B %3%4 at %5 visits</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Analysis is supported only for square boards!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You did not configure any analysis engine for this boardsize!</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>BoardWindow</name>
+    <message>
+        <source>MainWindow</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Click on the board to place a stone.
+
+When in normal mode, left click plays moves in alternating colors.
+Shift + left click moves to the first move in the main branch.
+Shift + right click moves to the next move in the current branch.
+When in edit mode and editing stones, left click places a black, right click a white stone, clicking on an existant stone removes it.
+When editing marks, left click sets, right click removes the mark. When editing letter marks, shift-click allows to customize the mark text.
+When in score mode, left click to mark a group as dead, right click to mark it alive in seki. Click again to unmark as dead or seki.</source>
+        <translation type="unfinished">Klik op het bord om een steen te plaatsen.
+
+In normale modus zal links klikken stenen plaatsen in afwisselende kleuren.
+Shift + linkse klik gaat naar de eerste zet in de huidige tak.
+Shift + rechts klik gaat naar de volgende zet in de huidige tak.
+In wijzigingsmodus en bij het wijzigen van stenen, zal een linkse klik een zwarte steen plaatsen, rechts klik een witte, en klikken op een bestaande steen verwijdert deze.
+Bij het wijzigen van markeringen zal een linkse klik een markering plaatsen en een rechtse een verwijderen. Bij het bewerken van letter markeringen laat een linkse klik toe om de tekst aan ta passen.
+In score modus kan u links klikken om een groep als dood te markeren, en rechts klikken om deze als levend in seki te markeren. Klik nogmaals om de markering van dood of seki op te heffen.</translation>
+    </message>
+    <message>
+        <source>Slider min value
+
+Minimum game move the slider can currently show.</source>
+        <translation type="unfinished">Schuifknop min waarde
+
+Minimum spelbeurt die de schuifknop momenteel kan tonen.</translation>
+    </message>
+    <message>
+        <source>0</source>
+        <translation type="unfinished">0</translation>
+    </message>
+    <message>
+        <source>Navigate through the game</source>
+        <translation type="unfinished">Navigeer door het spel</translation>
+    </message>
+    <message>
+        <source>Navigate to move
+
+Use the slider to quickly navigate through the current branch of the game.</source>
+        <translation type="unfinished">Navigeer naar zet
+
+Gebruik de schuifknop om snel door de huidige tak van het spel te navigeren.</translation>
+    </message>
+    <message>
+        <source>Slider max value
+
+Maximum game move the slider can currently show.</source>
+        <translation type="unfinished">Schuifknop max waarde
+
+Maximum spelbeurt die de schuifknop momenteel kan tonen.</translation>
+    </message>
+    <message>
+        <source>000</source>
+        <translation type="unfinished">000</translation>
+    </message>
+    <message>
+        <source>Move number</source>
+        <translation type="unfinished">Zet nummer</translation>
+    </message>
+    <message>
+        <source>Move number
+
+Number of the currently displayed move.</source>
+        <translation type="unfinished">Zet nummer
+
+Nummer van de huidig weergegeven zet.</translation>
+    </message>
+    <message>
+        <source>Move 0
+Variation 1 of 20
+0 child positions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to first move.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to previous move.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to next move.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to last move.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to previous commented move.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to next commented move.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to previous figure.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to next figure.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>next</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Player to play</source>
+        <translation type="unfinished">Beurt aan speler</translation>
+    </message>
+    <message>
+        <source>Player to play
+
+Indicates whether it is black&apos;s or white&apos;s turn.</source>
+        <translation type="unfinished">Speler aan zet
+
+Geeft aan of het de beurt is aan zwart of wit.</translation>
+    </message>
+    <message>
+        <source>Black to play</source>
+        <translation type="unfinished">Beurt aan zwart</translation>
+    </message>
+    <message>
+        <source>Indicates that it&apos;s not the expected player&apos;s move.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toggle player to move.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Update game record from on-line game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Update from online game.
+This window was opened through &quot;Edit game&quot; while observing an online game.
+The update button refreshes the game in this window, adding any moves that were made in the actual game in the meantime. This operation discards any edits you may have made.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Update</source>
+        <translation type="unfinished">Bijwerken</translation>
+    </message>
+    <message>
+        <source>Pass move</source>
+        <translation type="unfinished">Pas beurt</translation>
+    </message>
+    <message>
+        <source>Pass
+
+Pass your turn.</source>
+        <translation type="unfinished">Pas
+
+Pas uw beurt.</translation>
+    </message>
+    <message>
+        <source>Pass</source>
+        <translation type="unfinished">Pas</translation>
+    </message>
+    <message>
+        <source>Undo last move</source>
+        <translation type="unfinished">Maak laatste zet ongedaan</translation>
+    </message>
+    <message>
+        <source>Undo
+
+Undo the opponent&apos;s last move.</source>
+        <translation type="unfinished">Ongedaan maken
+
+Maak de laatste zet van de tegenstander ongedaan.</translation>
+    </message>
+    <message>
+        <source>Undo</source>
+        <translation type="unfinished">Ongedaan maken</translation>
+    </message>
+    <message>
+        <source>Request adjournment</source>
+        <translation type="unfinished">Verzoek uitstelling</translation>
+    </message>
+    <message>
+        <source>Adjourn.
+
+Send adjournment request to your opponent. If he accept it, the game will be adjourned and saved.</source>
+        <translation type="unfinished">Uitstellen
+
+Zend verzoek tot uitstelling naar uw tegenstander. Als hij dit aanvaardt wordt het spel uitgesteld en opgeslagen.</translation>
+    </message>
+    <message>
+        <source>Adjourn</source>
+        <translation type="unfinished">Uitstellen</translation>
+    </message>
+    <message>
+        <source>Score the game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Switch to coring mode.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Score</source>
+        <translation type="unfinished">Score</translation>
+    </message>
+    <message>
+        <source>Accept the score and end the game.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Accept the score, leave scoring mode and end the game.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Done</source>
+        <translation type="unfinished">Klaar</translation>
+    </message>
+    <message>
+        <source>Edit the game in a new window.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open a window with an offline copy of the game for editing.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit Game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter and leave edit mode where stones can be placed freely.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Freely edit the board position. Edited positions are added below the current one.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit Position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default Loss</source>
+        <translation type="unfinished">Standaard nederlaag</translation>
+    </message>
+    <message>
+        <source>Resign.
+
+Resign the game immediately. Clicking here is a default loss. Your opponent wins. Game ends.</source>
+        <translation type="unfinished">Geef op
+
+Geef het spel onmiddellijk op. Hier klikken is een standaard nederlaag. Uw tegenstander wint. Het spel eindigt.</translation>
+    </message>
+    <message>
+        <source>RESIGN</source>
+        <translation type="unfinished">GEEF OP</translation>
+    </message>
+    <message>
+        <source>Tools tab
+
+N/S	normal/score tools
+TG	teaching tools</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>NS</source>
+        <translation type="unfinished">NS</translation>
+    </message>
+    <message>
+        <source>TG</source>
+        <translation type="unfinished">TG</translation>
+    </message>
+    <message>
+        <source>opponent:</source>
+        <translation type="unfinished">tegenstander:</translation>
+    </message>
+    <message>
+        <source>opponent: invited by teacher</source>
+        <translation type="unfinished">tegenstander: uitgenodigd door leraar</translation>
+    </message>
+    <message>
+        <source>opponent
+
+choose opponent from list to enable him playing with you in a teaching game.</source>
+        <translation type="unfinished">tegenstander
+
+kies tegenstander uit lijst om hem toe te laten me u te spelen in een lesspel.</translation>
+    </message>
+    <message>
+        <source>-- none --</source>
+        <translation type="unfinished">-- geen --</translation>
+    </message>
+    <message>
+        <source>hand over controls to opponent</source>
+        <translation type="unfinished">geef de controle over aan de tegenstander</translation>
+    </message>
+    <message>
+        <source>hand over controls to opponent to allow him placing black and white stones, undo etc.
+
+Only teacher can give control,
+both teacher and pupil can release control.</source>
+        <translation type="unfinished">geeft de controle over aan de tegenstander zodat hij zwarte en witte stenen kan plaatsen, ongedaan maken etc.
+
+Enkel de leraar kan de controle geven,
+zowal de leraar als de leerling kunnen de controle afstaan.</translation>
+    </message>
+    <message>
+        <source>controls</source>
+        <translation type="unfinished">controle</translation>
+    </message>
+    <message>
+        <source>remember that point for fast return</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>push button at starting point to enable remembering.
+After placing and/or undo release button for returning to starting point automatically.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mark</source>
+        <translation type="unfinished">markering</translation>
+    </message>
+    <message>
+        <source>&amp;File</source>
+        <translation type="unfinished">&amp;Bestand</translation>
+    </message>
+    <message>
+        <source>&amp;Import/Export</source>
+        <translation type="unfinished">&amp;Importeren/exporteren</translation>
+    </message>
+    <message>
+        <source>&amp;Edit</source>
+        <translation type="unfinished">B&amp;ewerk</translation>
+    </message>
+    <message>
+        <source>&amp;Navigation</source>
+        <translation type="unfinished">&amp;Navigatie</translation>
+    </message>
+    <message>
+        <source>&amp;Settings</source>
+        <translation type="unfinished">&amp;Opties</translation>
+    </message>
+    <message>
+        <source>&amp;View</source>
+        <translation type="unfinished">&amp;Venster</translation>
+    </message>
+    <message>
+        <source>&amp;Save layout</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Restore layout</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Analysis</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Help</source>
+        <translation type="unfinished">&amp;Help</translation>
+    </message>
+    <message>
+        <source>File toolbar</source>
+        <translation type="unfinished">Bestand hulpbalk</translation>
+    </message>
+    <message>
+        <source>Navigation toolbar</source>
+        <translation type="unfinished">Navigatie hulpbalk</translation>
+    </message>
+    <message>
+        <source>Edit toolbar</source>
+        <translation type="unfinished">Bewerk hulpbalk</translation>
+    </message>
+    <message>
+        <source>Diagrams</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>E&amp;xport ASCII</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export S&amp;VG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit &amp;Diagram</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Observers</source>
+        <translation type="unfinished">Waarnemers</translation>
+    </message>
+    <message>
+        <source>Evaluation graph</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Comments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game tree</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Miscellaneous toolbar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Next move</source>
+        <translation type="unfinished">V&amp;olgende zet</translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation type="unfinished">Rechts</translation>
+    </message>
+    <message>
+        <source>&amp;Previous move</source>
+        <translation type="unfinished">&amp;Vorige zet</translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation type="unfinished">Links</translation>
+    </message>
+    <message>
+        <source>&amp;First move</source>
+        <translation type="unfinished">&amp;Eerste zet</translation>
+    </message>
+    <message>
+        <source>Home</source>
+        <translation type="unfinished">Begin</translation>
+    </message>
+    <message>
+        <source>&amp;Last move</source>
+        <translation type="unfinished">&amp;Laatste zet</translation>
+    </message>
+    <message>
+        <source>End</source>
+        <translation type="unfinished">Einde</translation>
+    </message>
+    <message>
+        <source>P&amp;revious variation</source>
+        <translation type="unfinished">Vo&amp;rige variatie</translation>
+    </message>
+    <message>
+        <source>Up</source>
+        <translation type="unfinished">Op</translation>
+    </message>
+    <message>
+        <source>N&amp;ext variation</source>
+        <translation type="unfinished">Volg&amp;ende variatie</translation>
+    </message>
+    <message>
+        <source>Down</source>
+        <translation type="unfinished">Neer</translation>
+    </message>
+    <message>
+        <source>&amp;Main branch</source>
+        <translation type="unfinished">&amp;Hoofdtak</translation>
+    </message>
+    <message>
+        <source>Ins</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Variation &amp;start</source>
+        <translation type="unfinished">&amp;Start van variatie</translation>
+    </message>
+    <message>
+        <source>To start of variation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PgUp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Next &amp;branch</source>
+        <translation type="unfinished">Volgende &amp;tak</translation>
+    </message>
+    <message>
+        <source>Move to next branch starting a variation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PgDown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Previous &amp;commented move</source>
+        <translation type="unfinished">Vorige ge&amp;comentarieerde zet</translation>
+    </message>
+    <message>
+        <source>Move to the previous move that has a comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Next c&amp;ommented move</source>
+        <translation type="unfinished">V&amp;olgende gecommentarieerde zet</translation>
+    </message>
+    <message>
+        <source>Move to the next move that has a comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Previous &amp;diagram</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>nMove to the previous move that starts a diagram</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Next dia&amp;gram</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move to the next move that starts a diagram</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Go to move...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter a move number and move there</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+G</source>
+        <translation type="unfinished">Ctrl+G</translation>
+    </message>
+    <message>
+        <source>Go to clic&amp;ked move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Click on an intersection and move to stone played there (if any)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game &amp;information...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Display and edit game information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+I</source>
+        <translation type="unfinished">Ctrl+I</translation>
+    </message>
+    <message>
+        <source>Place &amp;stone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&quot;Normal mode, click to place a stone.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set &amp;triangle mark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clicking places a triangle mark.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set &amp;circle mark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clicking places a circle mark.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set s&amp;quare mark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clicking places a square mark.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set cr&amp;oss mark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clicking places a cross mark.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set &amp;letter mark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clicking places a letter mark.
+Hold shift to add a freely editable text mark.
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set &amp;number mark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clicking places a number mark.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Delete </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete this and all following positions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+D</source>
+        <translation type="unfinished">Ctrl+V</translation>
+    </message>
+    <message>
+        <source>Select &amp;rectangle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose a rectangle to export.
+In play or edit mode, click to begin choosing a rectangle to be used when exporting to ASCII or SVG.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>R</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cle&amp;ar selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear the selected rectangle and select the whole board again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start dia&amp;gram here</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If selected, the current node starts a diagram.
+Enable diagram display in the View menu to view and edit diagrams.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>G</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New &amp;board window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+B</source>
+        <translation type="unfinished">Ctrl+B</translation>
+    </message>
+    <message>
+        <source>&amp;New game</source>
+        <translation type="unfinished">&amp;Nieuw spel</translation>
+    </message>
+    <message>
+        <source>Creates a new game on this board.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+N</source>
+        <translation type="unfinished">Ctrl+N</translation>
+    </message>
+    <message>
+        <source>New &amp;variant game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Creates a new Go variant game on this board</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+V</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save an sgf file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+S</source>
+        <translation type="unfinished">Ctrl+S</translation>
+    </message>
+    <message>
+        <source>&amp;Open...</source>
+        <translation type="unfinished">&amp;Openen...</translation>
+    </message>
+    <message>
+        <source>Open an sgf file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+O</source>
+        <translation type="unfinished">Ctrl+O</translation>
+    </message>
+    <message>
+        <source>Save &amp;as...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save a sgf file under a new name.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Close this window.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+W</source>
+        <translation type="unfinished">Ctrl+L</translation>
+    </message>
+    <message>
+        <source>E&amp;xit</source>
+        <translation type="unfinished">&amp;Afsluiten</translation>
+    </message>
+    <message>
+        <source>Quit the application.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+Q</source>
+        <translation type="unfinished">Ctrl+A</translation>
+    </message>
+    <message>
+        <source>Export &amp;ASCII...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export ASCII
+Export current board to ASCII diagrams, for use in web forums.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export S&amp;VG...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export SVG
+Export the current board to an SVG vector graphics file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Import SGF from clipboard</source>
+        <translation type="unfinished">Importeer SGF van klembord</translation>
+    </message>
+    <message>
+        <source>Import SGF from clipboard
+Import a complete game in SGF format from the clipboard.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>E&amp;xport SGF &amp;to clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export SGF to clipboard
+Export a complete game in SGF format to the clipboard.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export &amp;image...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export image
+Take a screen grab of the current board and export it to an image file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Export image to clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export image to clipboard
+Take a screen grab of the current board position and export it to the clipboard as an image.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Status bar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Slider</source>
+        <translation type="unfinished">Schuifknop</translation>
+    </message>
+    <message>
+        <source>Sidebar</source>
+        <translation type="unfinished">Zijbalk</translation>
+    </message>
+    <message>
+        <source>F9</source>
+        <translation type="unfinished">F9</translation>
+    </message>
+    <message>
+        <source>&amp;Fullscreen</source>
+        <translation type="unfinished">&amp;Volledig scherm</translation>
+    </message>
+    <message>
+        <source>F11</source>
+        <translation type="unfinished">F11</translation>
+    </message>
+    <message>
+        <source>Move &amp;numbers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Coordinates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>F8</source>
+        <translation type="unfinished">F8</translation>
+    </message>
+    <message>
+        <source>As general default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>For current combination of visible docks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>General &amp;default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>For &amp;current combination of visible docks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>L</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default &amp;landscape arrangement</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default &amp;portrait arrangement</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Menu bar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>F7</source>
+        <translation type="unfinished">F7</translation>
+    </message>
+    <message>
+        <source>&amp;Preferences...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bring up the preferences dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alt+P</source>
+        <translation type="unfinished">Alt+I</translation>
+    </message>
+    <message>
+        <source>&amp;Mute stone sound</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Manual</source>
+        <translation type="unfinished">&amp;Handleiding</translation>
+    </message>
+    <message>
+        <source>F1</source>
+        <translation type="unfinished">F1</translation>
+    </message>
+    <message>
+        <source>&amp;About..</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About &amp;Qt...</source>
+        <translation type="unfinished">Over &amp;Qt...</translation>
+    </message>
+    <message>
+        <source>&amp;Connect analysis engine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Connect analysis engine
+Try to find an engine configured as an analysis tool in the engine list and connect to it.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Disconnect analysis engine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pause analysis engine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Click to pause or unpause the analysis engine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dia&amp;gram comments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alt+G</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View &amp;README</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Batch analysis...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Batch analysis
+Open the batch analysis dialog which allows you to add SGF files to a queue to be analysed by an engine.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A&amp;utomatic diagrams...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -248,11 +1447,11 @@ De tekst van de tooltip bevat de titels van de kanalen en de namen van de gebrui
     </message>
     <message>
         <source>Window size saved.</source>
-        <translation>Venstergrootte opgeslagen.</translation>
+        <translation type="vanished">Venstergrootte opgeslagen.</translation>
     </message>
     <message>
         <source>Window size restored.</source>
-        <translation>Venstergrootte hersteld.</translation>
+        <translation type="vanished">Venstergrootte hersteld.</translation>
     </message>
     <message>
         <source>&amp;File</source>
@@ -668,7 +1867,7 @@ Verbind met/Verbreek verbinding met de geselecteerde Go server.</translation>
     </message>
     <message>
         <source>You did not set the Computer program path !</source>
-        <translation>U hebt het pad naar het computerprogramma niet opgegeven!</translation>
+        <translation type="vanished">U hebt het pad naar het computerprogramma niet opgegeven!</translation>
     </message>
     <message>
         <source>User defineable button %1</source>
@@ -684,16 +1883,16 @@ Verbind met/Verbreek verbinding met de geselecteerde Go server.</translation>
 right click to observe
 
 Symbol explanation: (click on tab to sort by)
-Id<byte value="x9"/>game number
-White/WR<byte value="x9"/>white player&apos;s name and rank
-Black/BR<byte value="x9"/>black player&apos;s name and rank
-Mv<byte value="x9"/>number of moves at last refresh
-Sz<byte value="x9"/>board size
-H<byte value="x9"/>handicap
-K<byte value="x9"/>komi
-By<byte value="x9"/>byoyomi time
-FR<byte value="x9"/>free (FI), rated (I) or teach (TI) game
-(Ob)<byte value="x9"/>number of observers at last refresh
+Id	game number
+White/WR	white player&apos;s name and rank
+Black/BR	black player&apos;s name and rank
+Mv	number of moves at last refresh
+Sz	board size
+H	handicap
+K	komi
+By	byoyomi time
+FR	free (FI), rated (I) or teach (TI) game
+(Ob)	number of observers at last refresh
 
 This table can be updated by &apos;Refresh games&apos;</source>
         <translation>Spellentabel
@@ -701,16 +1900,16 @@ This table can be updated by &apos;Refresh games&apos;</source>
 klik rechts om te observeren
 
 Symboolverklaring: (klik op tab om te sorteren)
-Id<byte value="x9"/>spelnummer
-Wit/WR<byte value="x9"/>naam en rang van witte speler
-Zwart/ZR<byte value="x9"/>naam en rang van zwarte speler
-Zt<byte value="x9"/>aantal zetten bij laatste vernieuwing
-Gr<byte value="x9"/>bordgrootte
-H<byte value="x9"/>handicap
-K<byte value="x9"/>komi
-By<byte value="x9"/>byoyomi-tijd
-VR<byte value="x9"/>vrij (FO), officiëel (O) of leerspel (LI)
-(Ob)<byte value="x9"/>aantal observators bij laatste vernieuwing
+Id	spelnummer
+Wit/WR	naam en rang van witte speler
+Zwart/ZR	naam en rang van zwarte speler
+Zt	aantal zetten bij laatste vernieuwing
+Gr	bordgrootte
+H	handicap
+K	komi
+By	byoyomi-tijd
+VR	vrij (FO), officiëel (O) of leerspel (LI)
+(Ob)	aantal observators bij laatste vernieuwing
 
 Deze tabel kan bijgewerkt worden door &apos;Vernieuw spellen&apos;</translation>
     </message>
@@ -720,83 +1919,83 @@ Deze tabel kan bijgewerkt worden door &apos;Vernieuw spellen&apos;</translation>
 right click for menu
 
 Symbol explanation: (click on tab to sort by)
-Stat<byte value="x9"/>player&apos;s stats:
-<byte value="x9"/>X...close
-<byte value="x9"/>!...looking = wants to play a game
-<byte value="x9"/>Q...quiet = doesn&apos;t receive system messages
-<byte value="x9"/>S...shout = can&apos;t receive shouts
-<byte value="x9"/>??...unknown - player entered after last table update
-name<byte value="x9"/>player&apos;s name
-Rk<byte value="x9"/>player&apos;s rank
-pl<byte value="x9"/>playing game (only one game visible)
-ob<byte value="x9"/>observing game (only one game visible)
-Idle<byte value="x9"/>idle time
-X<byte value="x9"/>private info:
-<byte value="x9"/>M..me
-<byte value="x9"/>X..excluded from shout
-<byte value="x9"/>W..watched (sort: X entries, then Rk)
+Stat	player&apos;s stats:
+	X...close
+	!...looking = wants to play a game
+	Q...quiet = doesn&apos;t receive system messages
+	S...shout = can&apos;t receive shouts
+	??...unknown - player entered after last table update
+name	player&apos;s name
+Rk	player&apos;s rank
+pl	playing game (only one game visible)
+ob	observing game (only one game visible)
+Idle	idle time
+X	private info:
+	M..me
+	X..excluded from shout
+	W..watched (sort: X entries, then Rk)
 and, if extended player info (Toolbox) is active (IGS only):
-Info<byte value="x9"/>player&apos;s info string
-Won<byte value="x9"/>number of games won by player
-Lost<byte value="x9"/>number of games lost by player
-Country<byte value="x9"/>origin of player (from e-mail address)
-Lang<byte value="x9"/>preferred language
+Info	player&apos;s info string
+Won	number of games won by player
+Lost	number of games lost by player
+Country	origin of player (from e-mail address)
+Lang	preferred language
 
 This table can be updated by &apos;Refresh players&apos;
 
 Menu entries (right click):
-match<byte value="x9"/>request for match (dialog arises)
-talk<byte value="x9"/>talk to player (tab arises)
+match	request for match (dialog arises)
+talk	talk to player (tab arises)
 ----
-stats<byte value="x9"/><byte value="x9"/>show player&apos;s stats
-stored games<byte value="x9"/>show stored games
-results<byte value="x9"/><byte value="x9"/>show results
-rating<byte value="x9"/><byte value="x9"/>show rating (NNGS/IGS only)
-observe game<byte value="x9"/>show game currently played by player
+stats		show player&apos;s stats
+stored games	show stored games
+results		show results
+rating		show rating (NNGS/IGS only)
+observe game	show game currently played by player
 ----
-toggle watch list<byte value="x9"/><byte value="x9"/>put/remove player to/from watch list - make &apos;W&apos; entry at &apos;X&apos; column; entry/leave sounds are activated
-toggle exclude list<byte value="x9"/>similar to watch - make &apos;X&apos; entry; player&apos;s shouts are no longer shown</source>
+toggle watch list		put/remove player to/from watch list - make &apos;W&apos; entry at &apos;X&apos; column; entry/leave sounds are activated
+toggle exclude list	similar to watch - make &apos;X&apos; entry; player&apos;s shouts are no longer shown</source>
         <translation>Spelerstabel
 
 Klik rechts voor menu
 
 Symbolenverklaring (klik op tab om te sorteren)
-Status<byte value="x9"/>status van de speler
-<byte value="x9"/>X..sluit
-<byte value="x9"/>!..zoekt = wil een spel spelen
-<byte value="x9"/>S..stil = ontvangt geen systeemboodschappen
-<byte value="x9"/>R..roep = ontvangt geen roep
-<byte value="x9"/>??..onbekend = speler kwam binnen na laatste update
-naam<byte value="x9"/>naam van de speler
-Rg<byte value="x9"/>rang van de speler
-Sp<byte value="x9"/>speelt een spel (slechts 1 spel zichtbaar)
-Ob<byte value="x9"/>observeert een spel (slechts 1 spel zichtbaar)
-Niet actief<byte value="x9"/>tijd niet actief
-X<byte value="x9"/>private informatie
-<byte value="x9"/>M..mezelf
-<byte value="x9"/>G..ontvang geen roep
-<byte value="x9"/>O..geobserveerd (sorteer: X regels, dan Rg)
+Status	status van de speler
+	X..sluit
+	!..zoekt = wil een spel spelen
+	S..stil = ontvangt geen systeemboodschappen
+	R..roep = ontvangt geen roep
+	??..onbekend = speler kwam binnen na laatste update
+naam	naam van de speler
+Rg	rang van de speler
+Sp	speelt een spel (slechts 1 spel zichtbaar)
+Ob	observeert een spel (slechts 1 spel zichtbaar)
+Niet actief	tijd niet actief
+X	private informatie
+	M..mezelf
+	G..ontvang geen roep
+	O..geobserveerd (sorteer: X regels, dan Rg)
 en, als uitgebreide spelersinfo actief is (alleen IGS):
-Info<byte value="x9"/>informatieregel van de speler
-Gewonnen<byte value="x9"/>aantal gewonnen spellen
-Verloren<byte value="x9"/>aantal verloren spellen
-Land<byte value="x9"/>afkomst van de speler (volgens e-mail)
-Taal<byte value="x9"/>voorkeurtaal
+Info	informatieregel van de speler
+Gewonnen	aantal gewonnen spellen
+Verloren	aantal verloren spellen
+Land	afkomst van de speler (volgens e-mail)
+Taal	voorkeurtaal
 
 Deze tabel kan bijgewerkt worden door &apos;Spelers vernieuwen&apos;.
 
 Menuopties (klik rechts):
-wedstrijd<byte value="x9"/>vraag wedstrijd (dialoog komt tevoorschijn)
-praat<byte value="x9"/>praat met speler (tab komt tevoorschijn)
+wedstrijd	vraag wedstrijd (dialoog komt tevoorschijn)
+praat	praat met speler (tab komt tevoorschijn)
 ----
-stats<byte value="x9"/><byte value="x9"/>toon statistieken van speler
-bewaarde spellen<byte value="x9"/>toon bewaarde spellen
-resultaten<byte value="x9"/>toon resultaten
-rang<byte value="x9"/><byte value="x9"/>toon rang (alleen bij NNGS/IGS)
-observeer spel<byte value="x9"/>toon het spel dat de speler momenteel speelt
+stats		toon statistieken van speler
+bewaarde spellen	toon bewaarde spellen
+resultaten	toon resultaten
+rang		toon rang (alleen bij NNGS/IGS)
+observeer spel	toon het spel dat de speler momenteel speelt
 ----
-observeerlijst<byte value="x9"/>plaats/verwijder speler op/van observeerlijst - Maak &apos;W&apos; regel in &apos;X&apos; kolom; binnen/buitengaan geluiden worden actief
-uitsluitlijst<byte value="x9"/>gelijkaardig aan observeerlijst - Maak &apos;X&apos; regel; speler&apos;s geroep wordt niet langer getoond</translation>
+observeerlijst	plaats/verwijder speler op/van observeerlijst - Maak &apos;W&apos; regel in &apos;X&apos; kolom; binnen/buitengaan geluiden worden actief
+uitsluitlijst	gelijkaardig aan observeerlijst - Maak &apos;X&apos; regel; speler&apos;s geroep wordt niet langer getoond</translation>
     </message>
     <message>
         <source>Shouts*</source>
@@ -831,7 +2030,12 @@ uitsluitlijst<byte value="x9"/>gelijkaardig aan observeerlijst - Maak &apos;X&ap
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>SGF Files (*.sgf *.SGF);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)</source>
+        <source>Engine configuration updated
+Analysis engines now require a board size to be set, assuming 19 for existing entries.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You did not configure any engines!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -889,7 +2093,7 @@ uitsluitlijst<byte value="x9"/>gelijkaardig aan observeerlijst - Maak &apos;X&ap
         <source>Connect
 
 Connect with/Disconnect from selected Go server.</source>
-        <translation>Verbind
+        <translation type="vanished">Verbind
 
 Verbind met/Verbreek verbinding met de geselecteerde Go server.</translation>
     </message>
@@ -925,7 +2129,7 @@ Verbind met/Verbreek verbinding met de geselecteerde Go server.</translation>
         <source>Open
 
 Open a sgf file.</source>
-        <translation>Openen
+        <translation type="vanished">Openen
 
 Open een sgf bestand.</translation>
     </message>
@@ -949,7 +2153,7 @@ Open een sgf bestand.</translation>
         <source>Help
 
 Opens the manual of the application.</source>
-        <translation>Help
+        <translation type="vanished">Help
 
 Opent de handleiding van het programma.</translation>
     </message>
@@ -973,7 +2177,7 @@ Opent de handleiding van het programma.</translation>
         <source>About
 
 About the application.</source>
-        <translation>Over
+        <translation type="vanished">Over
 
 Over het programma.</translation>
     </message>
@@ -1037,7 +2241,7 @@ Activeert/desactiveert de menubalk.</translation>
         <source>Play with a program
 
 Sets a playing session with a pGo program using GTP (like GNUGO)</source>
-        <translation>Speel met een programma
+        <translation type="vanished">Speel met een programma
 
 Maakt een speelsessie met een pGo programma d.m.v. GTP (zoals GNUGO)</translation>
     </message>
@@ -1077,13 +2281,13 @@ Maakt een speelsessie met een pGo programma d.m.v. GTP (zoals GNUGO)</translatio
         <source>If checked then you don&apos;t receive system messages, that means you are not informed about connecting/disconnecting players, started/finished games etc. Clicking this checkbox toggles the mode. To be quiet is indicated with a &apos;Q&apos; in the playertable.
 
 Note : some features cannot work if set to quiet (checked box):
-<byte value="x9"/>- sound when watched players enter/leave
-<byte value="x9"/>- update of player/gamestable</source>
-        <translation>Indien aangevinkt ontvangt u geen systeemboodschappen.  Dat wil zeggen dat u niet geïnformeerd wordt over het komen en gaan van spelers, het starten en eindigen van spellen enz.  Dit vinkje aanduiden specifieert de modus.  &quot;stil&quot; zijn wordt weergegeven met een &apos;S&apos; in de spelerstabel.
+	- sound when watched players enter/leave
+	- update of player/gamestable</source>
+        <translation type="vanished">Indien aangevinkt ontvangt u geen systeemboodschappen.  Dat wil zeggen dat u niet geïnformeerd wordt over het komen en gaan van spelers, het starten en eindigen van spellen enz.  Dit vinkje aanduiden specifieert de modus.  &quot;stil&quot; zijn wordt weergegeven met een &apos;S&apos; in de spelerstabel.
 
 Merk op: sommige zaken werken niet wanneer stille modus actief is:
-<byte value="x9"/>- geluid wanneer geobserveerde spelers aanmelden/weggaan
-<byte value="x9"/>- update van spelers- en spellentabel</translation>
+	- geluid wanneer geobserveerde spelers aanmelden/weggaan
+	- update van spelers- en spellentabel</translation>
     </message>
     <message>
         <source>Connect</source>
@@ -1109,7 +2313,7 @@ Merk op: sommige zaken werken niet wanneer stille modus actief is:
         <source>Preferences
 
 Edit the applications preferences.</source>
-        <translation>Instellingen
+        <translation type="vanished">Instellingen
 
 Wijzig de instellingen van het programma.</translation>
     </message>
@@ -1133,7 +2337,7 @@ Wijzig de instellingen van het programma.</translation>
         <source>Exit
 
 Quits the application.</source>
-        <translation>Afsluiten
+        <translation type="vanished">Afsluiten
 
 Sluit het programma af.</translation>
     </message>
@@ -1157,7 +2361,7 @@ Sluit het programma af.</translation>
         <source>New
 
 Creates a new 19x19 board.</source>
-        <translation>Nieuw
+        <translation type="vanished">Nieuw
 
 Maakt een nieuw 19x19 bord.</translation>
     </message>
@@ -1181,7 +2385,7 @@ Maakt een nieuw 19x19 bord.</translation>
         <source>Navigation toolbar
 
 Enables/disables the toolbar.</source>
-        <translation>Navigatie hulpbalk
+        <translation type="vanished">Navigatie hulpbalk
 
 Activeert/desactiveert de hulpbalk.</translation>
     </message>
@@ -1225,27 +2429,27 @@ Activeert/desactiveert de hulpbalk.</translation>
         <source>Statusbar
 
 Enables/disables the statusbar.</source>
-        <translation>Statusbalk
+        <translation type="vanished">Statusbalk
 
 Activeert/desactiveert de statusbalk.</translation>
     </message>
     <message>
         <source>Sound</source>
-        <translation>Geluid</translation>
+        <translation type="vanished">Geluid</translation>
     </message>
     <message>
         <source>&amp;Sound</source>
-        <translation>&amp;Geluid</translation>
+        <translation type="vanished">&amp;Geluid</translation>
     </message>
     <message>
         <source>Short info on sound availability</source>
-        <translation>Korte info over beschikbaarheid van geluid</translation>
+        <translation type="vanished">Korte info over beschikbaarheid van geluid</translation>
     </message>
     <message>
         <source>Sound Info
 
 Views a message box with a short comment about sound.</source>
-        <translation>Geluidsinformatie
+        <translation type="vanished">Geluidsinformatie
 
 Geeft een boodschappenvenster met een korte toelichting over het geluid.</translation>
     </message>
@@ -1261,7 +2465,7 @@ Geeft een boodschappenvenster met een korte toelichting over het geluid.</transl
         <source>About Qt
 
 About Qt.</source>
-        <translation>Over Qt
+        <translation type="vanished">Over Qt
 
 Over Qt.</translation>
     </message>
@@ -1450,7 +2654,7 @@ Over Qt.</translation>
 
 Use these lists to select the rank of players you want to see in the list
 This will take effect after refreshing the players list.</source>
-        <translation>Selecteer grenzen voor spelersrangen
+        <translation type="vanished">Selecteer grenzen voor spelersrangen
 
 Gebruik deze lijsten om de rang van spelers te selecteren die je wil zien in de lijst
 Dit zal doorgevoerd worden nadat u de spelerslijst vernieuwd hebt.</translation>
@@ -1468,7 +2672,7 @@ Dit zal doorgevoerd worden nadat u de spelerslijst vernieuwd hebt.</translation>
 
 Check this box if you want the list to display only open players (uncheck if you want all players).
 This will take effect after refreshing the players list.</source>
-        <translation>Open spelers
+        <translation type="vanished">Open spelers
 
 Vink dit vakje aan als u wil dat de lijst enkel open spelers toont (vink uit als u alle spelers wilt).
 Dit zal doorgevoerd worden nadat u de spelerslijst vernieuwd hebt.</translation>
@@ -1479,11 +2683,11 @@ Dit zal doorgevoerd worden nadat u de spelerslijst vernieuwd hebt.</translation>
     </message>
     <message>
         <source>View user toolbar</source>
-        <translation>Toon hulpbalk van gebruiker</translation>
+        <translation type="vanished">Toon hulpbalk van gebruiker</translation>
     </message>
     <message>
         <source>View &amp;user toolbar</source>
-        <translation>Toon h&amp;ulpbalk van gebruiker</translation>
+        <translation type="vanished">Toon h&amp;ulpbalk van gebruiker</translation>
     </message>
     <message>
         <source>Rooms*</source>
@@ -1506,7 +2710,7 @@ Dit zal doorgevoerd worden nadat u de spelerslijst vernieuwd hebt.</translation>
 
 Use this button to &apos;seek&apos; a game, with the given time settings (popup menu), and handicap range (list beside)
 The server will automatically launch a game against an opponent with matching settings.</source>
-        <translation>Zoek spel
+        <translation type="vanished">Zoek spel
 
 Gebruik deze knop om een spel te &apos;zoeken&apos;, met de gegeven tijdsinstellingen (popup menu), en handicapbereik (lijst ernaast)
 De server zal automatisch een spel starten tegen een tegenstander met overeenkomende waarden.</translation>
@@ -1543,13 +2747,13 @@ De server zal automatisch een spel starten tegen een tegenstander met overeenkom
         <source>handicap range
 
 Set the handicap range you wish when seeking a game. See &apos;seek&apos; button for more</source>
-        <translation>handicapbereik
+        <translation type="vanished">handicapbereik
 
 Stel het handicapbereik in voor het zoeken naar een spel. Zie &apos;zoek&apos; knop voor meer info</translation>
     </message>
     <message>
         <source>user defined toolbar</source>
-        <translation>door gebruiker gedefinieerde hulpbalk</translation>
+        <translation type="vanished">door gebruiker gedefinieerde hulpbalk</translation>
     </message>
     <message>
         <source>Action</source>
@@ -1567,9 +2771,153 @@ Stel het handicapbereik in voor het zoeken naar een spel. Zie &apos;zoek&apos; k
         <source>new version message
 
 displays the message box that appears at launch of a new version</source>
-        <translation>Boodschap bij nieuwe versie
+        <translation type="vanished">Boodschap bij nieuwe versie
 
 toont de boodschap die verschijnt bij het starten van een nieuwe versie</translation>
+    </message>
+    <message>
+        <source>Select players ranks boundaries
+
+			Use these lists to select the rank of players you want to see in the list
+			This will take effect after refreshing the players list.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open players
+
+			Check this box if you want the list to display only open players (uncheck if you want all players).
+			This will take effect after refreshing the players list.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File toolbar</source>
+        <translation type="unfinished">Bestand hulpbalk</translation>
+    </message>
+    <message>
+        <source>Connect
+
+	  Connect with/Disconnect from selected Go server.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Seek game
+
+	  Use this button to &apos;seek&apos; a game, with the given time settings (popup menu), and handicap range (list beside)
+	  The server will automatically launch a game against an opponent with matching settings.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>handicap range
+
+	  Set the handicap range you wish when seeking a game. See &apos;seek&apos; button for more</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open
+
+	Open a sgf file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Help
+
+	Opens the manual of the application.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About
+
+	About the application.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play with a program
+
+	Sets a playing session with a pGo program using GTP (like GNUGO)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If checked then you don&apos;t receive system messages, that means you are not informed about connecting/disconnecting players, started/finished games etc. Clicking this checkbox toggles the mode. To be quiet is indicated with a &apos;Q&apos; in the playertable.
+
+	Note : some features cannot work if set to quiet (checked box):
+	- sound when watched players enter/leave
+	- update of player/gamestable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Preferences
+
+	Edit the applications preferences.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Exit
+
+	Quits the application.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New
+
+	Creates a new 19x19 board.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Navigation toolbar
+
+	Enables/disables the toolbar.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Statusbar
+
+	Enables/disables the statusbar.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About Qt
+
+	About Qt.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New &amp;Variant Board</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New Variant Board</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+V</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Seek game
+
+	Use this button to &apos;seek&apos; a game, with the given time settings (popup menu), and handicap range (list beside)
+	The server will automatically launch a game against an opponent with matching settings.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>new version message
+
+	displays the message box that appears at launch of a new version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View &amp;README</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Batch analysis...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Batch analysis
+	Open the batch analysis dialog which allows you to add SGF files to a queue to be analysed by an engine.
+	</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1577,6 +2925,96 @@ toont de boodschap die verschijnt bij het starten van een nieuwe versie</transla
     <message>
         <source>Debug</source>
         <translation>Debug</translation>
+    </message>
+</context>
+<context>
+    <name>EvalGraph</name>
+    <message>
+        <source>The evaluation graph.
+Displays evaluation data found in the game record.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export image to clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export image to file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export evaluation graph image as</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to save image!</source>
+        <translation type="unfinished">Afbeelding opslaan niet gelukt!</translation>
+    </message>
+</context>
+<context>
+    <name>FigureDialog</name>
+    <message>
+        <source>Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Title:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move &amp;numbering:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unchanged from previous node</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>None</source>
+        <translation type="unfinished">Geen</translation>
+    </message>
+    <message>
+        <source>Shown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shown modulo 100</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Override move number:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show coor&amp;dinates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Show title in export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show &amp;hoshi points</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Remove stones (base display on final position)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Display invisible moves as text</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>GTP_Process</name>
+    <message>
+        <source>GTP engine reported unsupported protocol version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid response from GTP engine</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1660,6 +3098,79 @@ toont de boodschap die verschijnt bij het starten van een nieuwe versie</transla
         <source>Copyright:</source>
         <translation>Copyright:</translation>
     </message>
+    <message>
+        <source>Event:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Round:</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>GameTree</name>
+    <message>
+        <source>The game tree.
+Click nodes to move to them, click empty areas to drag.
+Shift-click or middle-click nodes to collapse or expand their sub-variations.
+Control-click a collapsed node to expand one level of its children.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Auto collapse on/off</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>GamesTable</name>
+    <message>
+        <source>Id</source>
+        <translation type="unfinished">Id</translation>
+    </message>
+    <message>
+        <source>White</source>
+        <translation type="unfinished">Wit</translation>
+    </message>
+    <message>
+        <source>WR</source>
+        <translation type="unfinished">WR</translation>
+    </message>
+    <message>
+        <source>Black</source>
+        <translation type="unfinished">Zwart</translation>
+    </message>
+    <message>
+        <source>BR</source>
+        <translation type="unfinished">ZW</translation>
+    </message>
+    <message>
+        <source>Mv</source>
+        <translation type="unfinished">Zt</translation>
+    </message>
+    <message>
+        <source>Sz</source>
+        <translation type="unfinished">Gr</translation>
+    </message>
+    <message>
+        <source>H</source>
+        <translation type="unfinished">H</translation>
+    </message>
+    <message>
+        <source>K</source>
+        <translation type="unfinished">K</translation>
+    </message>
+    <message>
+        <source>By</source>
+        <translation type="unfinished">By</translation>
+    </message>
+    <message>
+        <source>FR</source>
+        <translation type="unfinished">VO</translation>
+    </message>
+    <message>
+        <source>Ob</source>
+        <translation type="unfinished">Ob</translation>
+    </message>
 </context>
 <context>
     <name>IGSConnection</name>
@@ -1680,7 +3191,7 @@ toont de boodschap die verschijnt bij het starten van een nieuwe versie</transla
     <name>MainAppWidget</name>
     <message>
         <source>MainAppWidget</source>
-        <translation>MainAppWidget</translation>
+        <translation type="vanished">MainAppWidget</translation>
     </message>
     <message>
         <source>Command line
@@ -1690,7 +3201,7 @@ Type &lt;command&gt;+&lt;ENTER&gt; to send to Go server. If not online use &apos
 Starting with &apos;#&apos; is a internal command as if the server sent the line (without &apos;#&apos;).
 
 In order to open a window use the mouse click instead of entering the &apos;observe&apos; command.</source>
-        <translation>Opdrachtregel
+        <translation type="vanished">Opdrachtregel
 
 Typ &lt;opdracht&gt;+&lt;ENTER&gt; om naar de Go server te zenden. Gebruik &apos;verbind&apos; knop eerst indien niet online.
 
@@ -1707,43 +3218,43 @@ Gebruik een muisklik om een venster te openen i.p.v. de opdracht &apos;observe&a
 right click to observe
 
 Symbol explanation: (click on tab to sort by)
-Id<byte value="x9"/>game number
-White/WR<byte value="x9"/>white player&apos;s name and rank
-Black/BR<byte value="x9"/>black player&apos;s name and rank
-Mv<byte value="x9"/>number of moves at last refresh
-Sz<byte value="x9"/>board size
-H<byte value="x9"/>handicap
-K<byte value="x9"/>komi
-By<byte value="x9"/>byoyomi time
-FR<byte value="x9"/>free (FI), rated (I) or teach (TI) game
-(Ob)<byte value="x9"/>number of observers at last refresh
+Id	game number
+White/WR	white player&apos;s name and rank
+Black/BR	black player&apos;s name and rank
+Mv	number of moves at last refresh
+Sz	board size
+H	handicap
+K	komi
+By	byoyomi time
+FR	free (FI), rated (I) or teach (TI) game
+(Ob)	number of observers at last refresh
 
 This table can be updated by &apos;Refresh games&apos;</source>
-        <translation>Spellentabel
+        <translation type="vanished">Spellentabel
 
 klik rechts om te observeren
 
 Symboolverklaring: (klik om tab om te sorteren)
-Id<byte value="x9"/>spelnummer
-Wit/WR<byte value="x9"/>naam en rang van witte speler
-Zwart/ZR<byte value="x9"/>naam en rang van zwarte speler
-Zt<byte value="x9"/>aantal zetten bij laatste vernieuwing
-Gr<byte value="x9"/>bordgrootte
-H<byte value="x9"/>handicap
-K<byte value="x9"/>komi
-By<byte value="x9"/>byoyomi-tijd
-VR<byte value="x9"/>vrij (FO), officiëel (O) of leerspel (LI)
-(Ob)<byte value="x9"/>aantal observators bij laatste vernieuwing
+Id	spelnummer
+Wit/WR	naam en rang van witte speler
+Zwart/ZR	naam en rang van zwarte speler
+Zt	aantal zetten bij laatste vernieuwing
+Gr	bordgrootte
+H	handicap
+K	komi
+By	byoyomi-tijd
+VR	vrij (FO), officiëel (O) of leerspel (LI)
+(Ob)	aantal observators bij laatste vernieuwing
 
 Deze tabel kan bijgewerkt worden door &apos;Vernieuw spellen&apos;</translation>
     </message>
     <message>
         <source>Games</source>
-        <translation>Spellen</translation>
+        <translation type="vanished">Spellen</translation>
     </message>
     <message>
         <source>relevant messages from/to server</source>
-        <translation>relevante berichten van/naar server</translation>
+        <translation type="vanished">relevante berichten van/naar server</translation>
     </message>
     <message>
         <source>Table of players
@@ -1751,125 +3262,125 @@ Deze tabel kan bijgewerkt worden door &apos;Vernieuw spellen&apos;</translation>
 right click for menu
 
 Symbol explanation: (click on tab to sort by)
-Stat<byte value="x9"/>player&apos;s stats:
-<byte value="x9"/>X...close
-<byte value="x9"/>!...looking = wants to play a game
-<byte value="x9"/>Q...quiet = doesn&apos;t receive system messages
-<byte value="x9"/>S...shout = can&apos;t receive shouts
-<byte value="x9"/>??...unknown - player entered after last table update
-name<byte value="x9"/>player&apos;s name
-Rk<byte value="x9"/>player&apos;s rank
-pl<byte value="x9"/>playing game (only one game visible)
-ob<byte value="x9"/>observing game (only one game visible)
-Idle<byte value="x9"/>idle time
-X<byte value="x9"/>private info:
-<byte value="x9"/>M..me
-<byte value="x9"/>X..excluded from shout
-<byte value="x9"/>W..watched (sort: X entries, then Rk)
+Stat	player&apos;s stats:
+	X...close
+	!...looking = wants to play a game
+	Q...quiet = doesn&apos;t receive system messages
+	S...shout = can&apos;t receive shouts
+	??...unknown - player entered after last table update
+name	player&apos;s name
+Rk	player&apos;s rank
+pl	playing game (only one game visible)
+ob	observing game (only one game visible)
+Idle	idle time
+X	private info:
+	M..me
+	X..excluded from shout
+	W..watched (sort: X entries, then Rk)
 and, if extended player info (Toolbox) is active (IGS only):
-Info<byte value="x9"/>player&apos;s info string
-Won<byte value="x9"/>number of games won by player
-Lost<byte value="x9"/>number of games lost by player
-Country<byte value="x9"/>origin of player (from e-mail address)
-Lang<byte value="x9"/>preferred language
+Info	player&apos;s info string
+Won	number of games won by player
+Lost	number of games lost by player
+Country	origin of player (from e-mail address)
+Lang	preferred language
 
 This table can be updated by &apos;Refresh players&apos;
 
 Menu entries (right click):
-match<byte value="x9"/>request for match (dialog arises)
-talk<byte value="x9"/>talk to player (tab arises)
+match	request for match (dialog arises)
+talk	talk to player (tab arises)
 ----
-stats<byte value="x9"/><byte value="x9"/>show player&apos;s stats
-stored games<byte value="x9"/>show stored games
-results<byte value="x9"/><byte value="x9"/>show results
-rating<byte value="x9"/><byte value="x9"/>show rating (NNGS/IGS only)
-observe game<byte value="x9"/>show game currently played by player
+stats		show player&apos;s stats
+stored games	show stored games
+results		show results
+rating		show rating (NNGS/IGS only)
+observe game	show game currently played by player
 ----
-toggle watch list<byte value="x9"/><byte value="x9"/>put/remove player to/from watch list - make &apos;W&apos; entry at &apos;X&apos; column; entry/leave sounds are activated
-toggle exclude list<byte value="x9"/>similar to watch - make &apos;X&apos; entry; player&apos;s shouts are no longer shown</source>
-        <translation>Spelerstabel
+toggle watch list		put/remove player to/from watch list - make &apos;W&apos; entry at &apos;X&apos; column; entry/leave sounds are activated
+toggle exclude list	similar to watch - make &apos;X&apos; entry; player&apos;s shouts are no longer shown</source>
+        <translation type="vanished">Spelerstabel
 
 Klik rechts voor menu
 
 Symbolenverklaring (klik op tab om te sorteren op)
-Status<byte value="x9"/>status van de speler
-<byte value="x9"/>X..sluit
-<byte value="x9"/>!..zoekt = wil een spel spelen
-<byte value="x9"/>S..stil = ontvangt geen systeemboodschappen
-<byte value="x9"/>R..roep = ontvangt geen roep
-<byte value="x9"/>??..onbekend = speler kwam binnen na laatste update
-naam<byte value="x9"/>naam van de speler
-Rg<byte value="x9"/>rang van de speler
-Sp<byte value="x9"/>speelt een spel (slechts 1 spel zichtbaar)
-Ob<byte value="x9"/>observeert een spel (slechts 1 spel zichtbaar)
-Niet actief<byte value="x9"/>tijd niet actief
-X<byte value="x9"/>private informatie
-<byte value="x9"/>M..mezelf
-<byte value="x9"/>G..ontvang geen roep
-<byte value="x9"/>O..geobserveerd (sorteer X regels, dan Rg)
+Status	status van de speler
+	X..sluit
+	!..zoekt = wil een spel spelen
+	S..stil = ontvangt geen systeemboodschappen
+	R..roep = ontvangt geen roep
+	??..onbekend = speler kwam binnen na laatste update
+naam	naam van de speler
+Rg	rang van de speler
+Sp	speelt een spel (slechts 1 spel zichtbaar)
+Ob	observeert een spel (slechts 1 spel zichtbaar)
+Niet actief	tijd niet actief
+X	private informatie
+	M..mezelf
+	G..ontvang geen roep
+	O..geobserveerd (sorteer X regels, dan Rg)
 en, als uitgebreide spelersinfo actief is (alleen IGS):
-Info<byte value="x9"/>informatieregel van de speler
-Gewonnen<byte value="x9"/>aantal gewonnen spellen
-Verloren<byte value="x9"/>aantal verloren spellen
-Land<byte value="x9"/>afkomst van de speler (volgens e-mail)
-Taal<byte value="x9"/>voorkeurtaal
+Info	informatieregel van de speler
+Gewonnen	aantal gewonnen spellen
+Verloren	aantal verloren spellen
+Land	afkomst van de speler (volgens e-mail)
+Taal	voorkeurtaal
 
 Deze tabel kan bijgewerkt worden door &apos;Spelers vernieuwen&apos;.
 
 Menuopties (klik rechts):
-wedstrijd<byte value="x9"/>vraag wedstrijd (dialoog komt tevoorschijn)
-praat<byte value="x9"/>praat met speler (tab komt tevoorschijn)
+wedstrijd	vraag wedstrijd (dialoog komt tevoorschijn)
+praat	praat met speler (tab komt tevoorschijn)
 ----
-stats<byte value="x9"/><byte value="x9"/>toon statistieken van speler
-bewaarde spellen<byte value="x9"/>toon bewaarde spellen
-resultaten<byte value="x9"/>toon resultaten
-rang<byte value="x9"/><byte value="x9"/>toon rang (alleen bij NNGS/IGS)
-observeer spel<byte value="x9"/>toon het spel dat de speler momenteel speelt
+stats		toon statistieken van speler
+bewaarde spellen	toon bewaarde spellen
+resultaten	toon resultaten
+rang		toon rang (alleen bij NNGS/IGS)
+observeer spel	toon het spel dat de speler momenteel speelt
 ----
-observeerlijst<byte value="x9"/>plaats/verwijder speler op/van observeerlijst - Maak &apos;W&apos; regel in &apos;X&apos; kolom; binnen/buitengaan geluiden worden actief
-uitsluitlijst<byte value="x9"/>gelijkaardig aan observeerlijst - Maak &apos;X&apos; regel; speler&apos;s geroep wordt niet langer getoond</translation>
+observeerlijst	plaats/verwijder speler op/van observeerlijst - Maak &apos;W&apos; regel in &apos;X&apos; kolom; binnen/buitengaan geluiden worden actief
+uitsluitlijst	gelijkaardig aan observeerlijst - Maak &apos;X&apos; regel; speler&apos;s geroep wordt niet langer getoond</translation>
     </message>
     <message>
         <source>Players</source>
-        <translation>Spelers</translation>
+        <translation type="vanished">Spelers</translation>
     </message>
     <message>
         <source>Log online-time and name of arriving message</source>
-        <translation>Voeg online-tijd en naam van toekomend bericht toe aan log</translation>
+        <translation type="vanished">Voeg online-tijd en naam van toekomend bericht toe aan log</translation>
     </message>
     <message>
         <source>Close all talk tabs</source>
-        <translation>Sluit alle praat tabs</translation>
+        <translation type="vanished">Sluit alle praat tabs</translation>
     </message>
     <message>
         <source>Close all tabs containing a player&apos;s name (without &apos;*&apos;). The messages will not be deleted. If you want to see it again click with right button on player&apos;s name and choose talk (same as &apos;#24 *name*&apos;)</source>
-        <translation>Sluit alle tabs die een speler&apos;s naam bevatten (zonder &apos;*&apos;).  De berichten worden niet verwijderd. Als je ze opnieuw wil zien, klik dan met de rechter muisknop op de naam van de speler en kies praat (zelfde als &apos;#24 *name*&apos;)</translation>
+        <translation type="vanished">Sluit alle tabs die een speler&apos;s naam bevatten (zonder &apos;*&apos;).  De berichten worden niet verwijderd. Als je ze opnieuw wil zien, klik dan met de rechter muisknop op de naam van de speler en kies praat (zelfde als &apos;#24 *name*&apos;)</translation>
     </message>
     <message>
         <source>msg*</source>
-        <translation>bericht*</translation>
+        <translation type="vanished">bericht*</translation>
     </message>
 </context>
 <context>
     <name>MainWidget</name>
     <message>
         <source>Edit</source>
-        <translation>Bewerk</translation>
+        <translation type="vanished">Bewerk</translation>
     </message>
     <message>
         <source>Done</source>
-        <translation>Klaar</translation>
+        <translation type="vanished">Klaar</translation>
     </message>
     <message>
         <source>Pass</source>
-        <translation>Pas</translation>
+        <translation type="vanished">Pas</translation>
     </message>
 </context>
 <context>
     <name>MainWidgetGui</name>
     <message>
         <source>MainWidgetGui</source>
-        <translation>MainWidgetGui</translation>
+        <translation type="vanished">MainWidgetGui</translation>
     </message>
     <message>
         <source>Click on the board to place a stone.
@@ -1880,7 +3391,7 @@ Shift + right click moves to the next move in the current branch.
 When in edit mode and editing stones, left click places a black, right click a white stone, clicking on an existant stone removes it.
 When editing marks, left click sets, right click removes the mark. When editing letter marks, shift-click allows to customize the mark text.
 When in score mode, left click to mark a group as dead, right click to mark it alive in seki. Click again to unmark as dead or seki.</source>
-        <translation>Klik op het bord om een steen te plaatsen.
+        <translation type="vanished">Klik op het bord om een steen te plaatsen.
 
 In normale modus zal links klikken stenen plaatsen in afwisselende kleuren.
 Shift + linkse klik gaat naar de eerste zet in de huidige tak.
@@ -1891,13 +3402,13 @@ In score modus kan u links klikken om een groep als dood te markeren, en rechts 
     </message>
     <message>
         <source>0</source>
-        <translation>0</translation>
+        <translation type="vanished">0</translation>
     </message>
     <message>
         <source>Slider min value
 
 Minimum game move the slider can currently show.</source>
-        <translation>Schuifknop min waarde
+        <translation type="vanished">Schuifknop min waarde
 
 Minimum spelbeurt die de schuifknop momenteel kan tonen.</translation>
     </message>
@@ -1905,7 +3416,7 @@ Minimum spelbeurt die de schuifknop momenteel kan tonen.</translation>
         <source>Navigate to move
 
 Use the slider to quickly navigate through the current branch of the game.</source>
-        <translation>Navigeer naar zet
+        <translation type="vanished">Navigeer naar zet
 
 Gebruik de schuifknop om snel door de huidige tak van het spel te navigeren.</translation>
     </message>
@@ -1917,219 +3428,219 @@ Gebruik de schuifknop om snel door de huidige tak van het spel te navigeren.</tr
         <source>Slider max value
 
 Maximum game move the slider can currently show.</source>
-        <translation>Schuifknop max waarde
+        <translation type="vanished">Schuifknop max waarde
 
 Maximum spelbeurt die de schuifknop momenteel kan tonen.</translation>
     </message>
     <message>
         <source>Tools tab
 
-N/S<byte value="x9"/>normal/score tools
-E<byte value="x9"/>edit tools
-TG<byte value="x9"/>teach tools / game tree</source>
-        <translation>Hulpmiddelen tab
+N/S	normal/score tools
+E	edit tools
+TG	teach tools / game tree</source>
+        <translation type="vanished">Hulpmiddelen tab
 
-N/S<byte value="x9"/>normaal/score hulpmiddelen
-W<byte value="x9"/>wijzigings hulpmiddelen
-LB<byte value="x9"/>leer hulpmiddelen / spel boom</translation>
+N/S	normaal/score hulpmiddelen
+W	wijzigings hulpmiddelen
+LB	leer hulpmiddelen / spel boom</translation>
     </message>
     <message>
         <source>NS</source>
-        <translation>NS</translation>
+        <translation type="vanished">NS</translation>
     </message>
     <message>
         <source>E</source>
-        <translation>E</translation>
+        <translation type="vanished">E</translation>
     </message>
     <message>
         <source>Edit Tools</source>
-        <translation>Bewerk hulpmiddelen</translation>
+        <translation type="vanished">Bewerk hulpmiddelen</translation>
     </message>
     <message>
         <source>Change the edit tool</source>
-        <translation>Verander wijzighulpmiddel</translation>
+        <translation type="vanished">Verander wijzighulpmiddel</translation>
     </message>
     <message>
         <source>Change the edit mode
 
 When in edit mode, you can choose what you want to edit, like setting stones or certain marks.</source>
-        <translation>Verander de wijzigmode
+        <translation type="vanished">Verander de wijzigmode
 
 In de wijzigmode kan u kiezen wat u wil wijzigen, zoals het plaatsen van stenen of bepaalde markeringen.</translation>
     </message>
     <message>
         <source>Square</source>
-        <translation>Vierkant</translation>
+        <translation type="vanished">Vierkant</translation>
     </message>
     <message>
         <source>Square
 
 Edit square marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation>Vierkant
+        <translation type="vanished">Vierkant
 
 Wijzig vierkante markeringen op het bord.  Linkse klik plaatst een markering, rechtse klik verwijdert het.</translation>
     </message>
     <message>
         <source>Circle</source>
-        <translation>Cirkel</translation>
+        <translation type="vanished">Cirkel</translation>
     </message>
     <message>
         <source>Circle
 
 Edit circle marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation>Cirkel
+        <translation type="vanished">Cirkel
 
 Wijzig cirkelmarkeringen op het bord.  Linkse klik plaatst een markering, rechtse klik verwijdert het.</translation>
     </message>
     <message>
         <source>Letter</source>
-        <translation>Letter</translation>
+        <translation type="vanished">Letter</translation>
     </message>
     <message>
         <source>Letter
 
 Edit letter marks on the board. Left click sets a mark, right click removes it. Shift-click lets you edit a custom text.</source>
-        <translation>Letter
+        <translation type="vanished">Letter
 
 Wijzig lettermarkeringen op het bord. Linkse klik plaatst een markering, rechtse klik verwijdert het. Shift-klik laat toe de tekst te wijzigen.</translation>
     </message>
     <message>
         <source>Cross</source>
-        <translation>Kruis</translation>
+        <translation type="vanished">Kruis</translation>
     </message>
     <message>
         <source>Cross
 
 Edit cross marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation>Kruis
+        <translation type="vanished">Kruis
 
 Wijzig kruismarkeringen op het bord. Linkse klik plaatst een markering, rechtse klik verwijdert het.</translation>
     </message>
     <message>
         <source>Triangle</source>
-        <translation>Driehoek</translation>
+        <translation type="vanished">Driehoek</translation>
     </message>
     <message>
         <source>Triangle
 
 Edit triangle marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation>Driehoek
+        <translation type="vanished">Driehoek
 
 Wijzig driehoeksmarkeringen op het bord. Linkse klik plaatst een markering, rechtse klik verwijdert het.</translation>
     </message>
     <message>
         <source>Number</source>
-        <translation>Getal</translation>
+        <translation type="vanished">Getal</translation>
     </message>
     <message>
         <source>Number
 
 Edit Number marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation>Wijzig getalmarkeringen op het bord. Linkse klik plaatst een markering, rechtse klik verwijdert het.</translation>
+        <translation type="vanished">Wijzig getalmarkeringen op het bord. Linkse klik plaatst een markering, rechtse klik verwijdert het.</translation>
     </message>
     <message>
         <source>Stone</source>
-        <translation>Steen</translation>
+        <translation type="vanished">Steen</translation>
     </message>
     <message>
         <source>Stone
 
 Edit stones on the board. Left click for a black, right click for a white stone.</source>
-        <translation>Steen
+        <translation type="vanished">Steen
 
 Wijzig steenmarkeringen op het bord. Linkse klik voor een zwarte steen, rechtse klik voor een witte.</translation>
     </message>
     <message>
         <source>Color of next move</source>
-        <translation>Kleur van volgende zet</translation>
+        <translation type="vanished">Kleur van volgende zet</translation>
     </message>
     <message>
         <source>Color
 
 Set the color of next move. If left untouched, default color is chosen.</source>
-        <translation>Kleur
+        <translation type="vanished">Kleur
 
 Stelt de kleur van de volgende zet in. Indien niet ingesteld wordt de standaard kleur gekozen.</translation>
     </message>
     <message>
         <source>TG</source>
-        <translation>TG</translation>
+        <translation type="vanished">TG</translation>
     </message>
     <message>
         <source>opponent:</source>
-        <translation>tegenstander:</translation>
+        <translation type="vanished">tegenstander:</translation>
     </message>
     <message>
         <source>-- none --</source>
-        <translation>-- geen --</translation>
+        <translation type="vanished">-- geen --</translation>
     </message>
     <message>
         <source>opponent: invited by teacher</source>
-        <translation>tegenstander: uitgenodigd door leraar</translation>
+        <translation type="vanished">tegenstander: uitgenodigd door leraar</translation>
     </message>
     <message>
         <source>opponent
 
 choose opponent from list to enable him playing with you in a teaching game.</source>
-        <translation>tegenstander
+        <translation type="vanished">tegenstander
 
 kies tegenstander uit lijst om hem toe te laten me u te spelen in een lesspel.</translation>
     </message>
     <message>
         <source>controls</source>
-        <translation>controle</translation>
+        <translation type="vanished">controle</translation>
     </message>
     <message>
         <source>hand over controls to opponent</source>
-        <translation>geef de controle over aan de tegenstander</translation>
+        <translation type="vanished">geef de controle over aan de tegenstander</translation>
     </message>
     <message>
         <source>hand over controls to opponent to allow him placing black and white stones, undo etc.
 
 Only teacher can give control,
 both teacher and pupil can release control.</source>
-        <translation>geeft de controle over aan de tegenstander zodat hij zwarte en witte stenen kan plaatsen, ongedaan maken etc.
+        <translation type="vanished">geeft de controle over aan de tegenstander zodat hij zwarte en witte stenen kan plaatsen, ongedaan maken etc.
 
 Enkel de leraar kan de controle geven,
 zowal de leraar als de leerling kunnen de controle afstaan.</translation>
     </message>
     <message>
         <source>mark</source>
-        <translation>markering</translation>
+        <translation type="vanished">markering</translation>
     </message>
     <message>
         <source>remember that point for fast return</source>
-        <translation>onthoud dat punt voor snelle terugkeer</translation>
+        <translation type="vanished">onthoud dat punt voor snelle terugkeer</translation>
     </message>
     <message>
         <source>push button at starting point to enable remembering.
 After placing and/or undo release button for returning to starting point automatically.</source>
-        <translation>druk knop bij het startpunt om onthoudmodus in te schakelen.
+        <translation type="vanished">druk knop bij het startpunt om onthoudmodus in te schakelen.
 Na plaatsen en/of ongedaan maken, laat knop los om automatisch naar startpunt terug te keren.</translation>
     </message>
     <message>
         <source>Move 0</source>
-        <translation>Zet 0</translation>
+        <translation type="vanished">Zet 0</translation>
     </message>
     <message>
         <source>Move number</source>
-        <translation>Zet nummer</translation>
+        <translation type="vanished">Zet nummer</translation>
     </message>
     <message>
         <source>Move number
 
 Number of the currently displayed move.</source>
-        <translation>Zet nummer
+        <translation type="vanished">Zet nummer
 
 Nummer van de huidig weergegeven zet.</translation>
     </message>
     <message>
         <source>Black to play</source>
-        <translation>Beurt aan zwart</translation>
+        <translation type="vanished">Beurt aan zwart</translation>
     </message>
     <message>
         <source>Player to play</source>
-        <translation>Beurt aan speler</translation>
+        <translation type="vanished">Beurt aan speler</translation>
     </message>
     <message>
         <source>Player to play
@@ -2142,88 +3653,88 @@ Geeft weer of de beurt aan zwart of wit is.</translation>
     <message>
         <source>0 brothers
 0 sons</source>
-        <translation>0 broers
+        <translation type="vanished">0 broers
 0 zonen</translation>
     </message>
     <message>
         <source>Variations</source>
-        <translation>Variaties</translation>
+        <translation type="vanished">Variaties</translation>
     </message>
     <message>
         <source>Variations
 
 Shows the number of sons and brothers within the current node.</source>
-        <translation>Variaties
+        <translation type="vanished">Variaties
 
 Geeft het aantal zonen of broers binnen de huidige node weer.</translation>
     </message>
     <message>
         <source>Refresh</source>
-        <translation>Vernieuwen</translation>
+        <translation type="vanished">Vernieuwen</translation>
     </message>
     <message>
         <source>Refresh display</source>
-        <translation>Vernieuw beeld</translation>
+        <translation type="vanished">Vernieuw beeld</translation>
     </message>
     <message>
         <source>Refresh
 
 Refresh board. Use this if you cannot see any stones on the board.</source>
-        <translation>Vernieuwen
+        <translation type="vanished">Vernieuwen
 
 Vernieuw het bord. Gebruik dit als u geen stenen op het bord kan zien.</translation>
     </message>
     <message>
         <source>Pass</source>
-        <translation>Pas</translation>
+        <translation type="vanished">Pas</translation>
     </message>
     <message>
         <source>Pass move</source>
-        <translation>Pas beurt</translation>
+        <translation type="vanished">Pas beurt</translation>
     </message>
     <message>
         <source>Pass
 
 Pass your turn.</source>
-        <translation>Pas
+        <translation type="vanished">Pas
 
 Pas uw beurt.</translation>
     </message>
     <message>
         <source>Undo</source>
-        <translation>Ongedaan maken</translation>
+        <translation type="vanished">Ongedaan maken</translation>
     </message>
     <message>
         <source>Undo last move</source>
-        <translation>Maak laatste zet ongedaan</translation>
+        <translation type="vanished">Maak laatste zet ongedaan</translation>
     </message>
     <message>
         <source>Undo
 
 Undo the opponent&apos;s last move.</source>
-        <translation>Ongedaan maken
+        <translation type="vanished">Ongedaan maken
 
 Maak de laatste zet van de tegenstander ongedaan.</translation>
     </message>
     <message>
         <source>Adjourn</source>
-        <translation>Uitstellen</translation>
+        <translation type="vanished">Uitstellen</translation>
     </message>
     <message>
         <source>Request adjournment</source>
-        <translation>Verzoek uitstelling</translation>
+        <translation type="vanished">Verzoek uitstelling</translation>
     </message>
     <message>
         <source>Adjourn.
 
 Send adjournment request to your opponent. If he accept it, the game will be adjourned and saved.</source>
-        <translation>Uitstellen
+        <translation type="vanished">Uitstellen
 
 Zend verzoek tot uitstelling naar uw tegenstander. Als hij dit aanvaardt wordt het spel uitgesteld en opgeslagen.</translation>
     </message>
     <message>
         <source>Score</source>
-        <translation>Score</translation>
+        <translation type="vanished">Score</translation>
     </message>
     <message>
         <source>Score/Edit</source>
@@ -2251,33 +3762,33 @@ Klik om een nieuw, wijzigbaar offline venster te krijgen.</translation>
     </message>
     <message>
         <source>RESIGN</source>
-        <translation>GEEF OP</translation>
+        <translation type="vanished">GEEF OP</translation>
     </message>
     <message>
         <source>Default Loss</source>
-        <translation>Standaard nederlaag</translation>
+        <translation type="vanished">Standaard nederlaag</translation>
     </message>
     <message>
         <source>Resign.
 
 Resign the game immediately. Clicking here is a default loss. Your opponent wins. Game ends.</source>
-        <translation>Geef op
+        <translation type="vanished">Geef op
 
 Geef het spel onmiddellijk op. Hier klikken is een standaard nederlaag. Uw tegenstander wint. Het spel eindigt.</translation>
     </message>
     <message>
         <source>Navigate through the game</source>
-        <translation>Navigeer door het spel</translation>
+        <translation type="vanished">Navigeer door het spel</translation>
     </message>
     <message>
         <source>000</source>
-        <translation>000</translation>
+        <translation type="vanished">000</translation>
     </message>
     <message>
         <source>Player to play
 
 Indicates whether it is black&apos;s or white&apos;s turn.</source>
-        <translation>Speler aan zet
+        <translation type="vanished">Speler aan zet
 
 Geeft aan of het de beurt is aan zwart of wit.</translation>
     </message>
@@ -2286,715 +3797,715 @@ Geeft aan of het de beurt is aan zwart of wit.</translation>
     <name>MainWindow</name>
     <message>
         <source>Observers</source>
-        <translation>Waarnemers</translation>
+        <translation type="vanished">Waarnemers</translation>
     </message>
     <message>
         <source>Ctrl+E</source>
-        <translation>Ctrl+E</translation>
+        <translation type="vanished">Ctrl+E</translation>
     </message>
     <message>
         <source>Ctrl+T</source>
-        <translation>Ctrl+T</translation>
+        <translation type="vanished">Ctrl+T</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Nieuw</translation>
+        <translation type="vanished">Nieuw</translation>
     </message>
     <message>
         <source>New &amp;Board</source>
-        <translation>Nieuw &amp;Bord</translation>
+        <translation type="vanished">Nieuw &amp;Bord</translation>
     </message>
     <message>
         <source>Ctrl+B</source>
-        <translation>Ctrl+B</translation>
+        <translation type="vanished">Ctrl+B</translation>
     </message>
     <message>
         <source>Creates a new board</source>
-        <translation>Maakt een nieuw bord</translation>
+        <translation type="vanished">Maakt een nieuw bord</translation>
     </message>
     <message>
         <source>New
 
 Creates a new board.</source>
-        <translation>Nieuw
+        <translation type="vanished">Nieuw
 
 Maakt een nieuw bord.</translation>
     </message>
     <message>
         <source>New game</source>
-        <translation>Nieuw spel</translation>
+        <translation type="vanished">Nieuw spel</translation>
     </message>
     <message>
         <source>&amp;New game</source>
-        <translation>&amp;Nieuw spel</translation>
+        <translation type="vanished">&amp;Nieuw spel</translation>
     </message>
     <message>
         <source>Ctrl+N</source>
-        <translation>Ctrl+N</translation>
+        <translation type="vanished">Ctrl+N</translation>
     </message>
     <message>
         <source>Creates a new game on this board</source>
-        <translation>Maakt een nieuw spel op dit bord</translation>
+        <translation type="vanished">Maakt een nieuw spel op dit bord</translation>
     </message>
     <message>
         <source>New
 
 Creates a new game on this board.</source>
-        <translation>Nieuw
+        <translation type="vanished">Nieuw
 
 Maakt een nieuw spel op dit bord.</translation>
     </message>
     <message>
         <source>Open</source>
-        <translation>Openen</translation>
+        <translation type="vanished">Openen</translation>
     </message>
     <message>
         <source>&amp;Open</source>
-        <translation>&amp;Openen</translation>
+        <translation type="vanished">&amp;Openen</translation>
     </message>
     <message>
         <source>Ctrl+O</source>
-        <translation>Ctrl+O</translation>
+        <translation type="vanished">Ctrl+O</translation>
     </message>
     <message>
         <source>Open a sgf file</source>
-        <translation>Open een sgf bestand</translation>
+        <translation type="vanished">Open een sgf bestand</translation>
     </message>
     <message>
         <source>Open
 
 Open a sgf file.</source>
-        <translation>Openen
+        <translation type="vanished">Openen
 
 Open een sgf bestand.</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>Opslaan</translation>
+        <translation type="vanished">Opslaan</translation>
     </message>
     <message>
         <source>&amp;Save</source>
-        <translation>Op&amp;slaan</translation>
+        <translation type="vanished">Op&amp;slaan</translation>
     </message>
     <message>
         <source>Ctrl+S</source>
-        <translation>Ctrl+S</translation>
+        <translation type="vanished">Ctrl+S</translation>
     </message>
     <message>
         <source>Save a sgf file</source>
-        <translation>Opslaan van een sgf bestand</translation>
+        <translation type="vanished">Opslaan van een sgf bestand</translation>
     </message>
     <message>
         <source>Save
 
 Save a sgf file.</source>
-        <translation>Opslaan
+        <translation type="vanished">Opslaan
 
 Opslaan van een sgf bestand.</translation>
     </message>
     <message>
         <source>Save As</source>
-        <translation>Opslaan als</translation>
+        <translation type="vanished">Opslaan als</translation>
     </message>
     <message>
         <source>Save &amp;As</source>
-        <translation>Opslaan &amp;als</translation>
+        <translation type="vanished">Opslaan &amp;als</translation>
     </message>
     <message>
         <source>Save a sgf file under a new name</source>
-        <translation>Opslaan van een sgf bestand onder een nieuwe naam</translation>
+        <translation type="vanished">Opslaan van een sgf bestand onder een nieuwe naam</translation>
     </message>
     <message>
         <source>Save As
 
 Save a sgf file under a new name.</source>
-        <translation>Opslaan als
+        <translation type="vanished">Opslaan als
 
 Opslaan van een sgf bestand onder een nieuwe nieuw.</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation>Sluiten</translation>
+        <translation type="vanished">Sluiten</translation>
     </message>
     <message>
         <source>&amp;Close</source>
-        <translation>S&amp;luiten</translation>
+        <translation type="vanished">S&amp;luiten</translation>
     </message>
     <message>
         <source>Ctrl+W</source>
-        <translation>Ctrl+L</translation>
+        <translation type="vanished">Ctrl+L</translation>
     </message>
     <message>
         <source>Close this board</source>
-        <translation>Sluit dit bord</translation>
+        <translation type="vanished">Sluit dit bord</translation>
     </message>
     <message>
         <source>Exit
 
 Close this board.</source>
-        <translation>Verlaten
+        <translation type="vanished">Verlaten
 
 Sluit dit bord.</translation>
     </message>
     <message>
         <source>Import ASCII</source>
-        <translation>Importeer ASCII</translation>
+        <translation type="vanished">Importeer ASCII</translation>
     </message>
     <message>
         <source>Import &amp;ASCII</source>
-        <translation>Importeer &amp;ASCII</translation>
+        <translation type="vanished">Importeer &amp;ASCII</translation>
     </message>
     <message>
         <source>Import an ASCII file as new variation</source>
-        <translation>Importeer een ASCII bestand als nieuwe variatie</translation>
+        <translation type="vanished">Importeer een ASCII bestand als nieuwe variatie</translation>
     </message>
     <message>
         <source>Import ASCII
 
 Import an ASCII file as new variation.</source>
-        <translation>Importeren van ASCII
+        <translation type="vanished">Importeren van ASCII
 
 Importeer een ASCII bestand als nieuwe variatie.</translation>
     </message>
     <message>
         <source>Import ASCII from clipboard</source>
-        <translation>Importeer ASCII van klembord</translation>
+        <translation type="vanished">Importeer ASCII van klembord</translation>
     </message>
     <message>
         <source>Import ASCII from &amp;clipboard</source>
-        <translation>Importeer ASCII van &amp;klembord</translation>
+        <translation type="vanished">Importeer ASCII van &amp;klembord</translation>
     </message>
     <message>
         <source>Import an ASCII board as new variation from the clipboard</source>
-        <translation>Importeer een ASCII bord van het klembord als nieuwe variatie</translation>
+        <translation type="vanished">Importeer een ASCII bord van het klembord als nieuwe variatie</translation>
     </message>
     <message>
         <source>Import ASCII from clipboard
 
 Import an ASCII file as new variation from the clipboard.</source>
-        <translation>Importeer ASCII van klembord
+        <translation type="vanished">Importeer ASCII van klembord
 
 Importeer een ASCII bestand van het klembord als nieuwe variatie.</translation>
     </message>
     <message>
         <source>Export ASCII</source>
-        <translation>Exporteer ASCII</translation>
+        <translation type="vanished">Exporteer ASCII</translation>
     </message>
     <message>
         <source>&amp;Export ASCII</source>
-        <translation>&amp;Exporteer ASCII</translation>
+        <translation type="vanished">&amp;Exporteer ASCII</translation>
     </message>
     <message>
         <source>Export current board to ASCII</source>
-        <translation>Exporteer huidig bord naar ASCII</translation>
+        <translation type="vanished">Exporteer huidig bord naar ASCII</translation>
     </message>
     <message>
         <source>Export ASCII
 
 Export current board to ASCII.</source>
-        <translation>Exporteer ASCII
+        <translation type="vanished">Exporteer ASCII
 
 Exporteer huidig bord naar ASCII.</translation>
     </message>
     <message>
         <source>Import SGF from clipboard</source>
-        <translation>Importeer SGF van klembord</translation>
+        <translation type="vanished">Importeer SGF van klembord</translation>
     </message>
     <message>
         <source>Import SGF &amp;from clipboard</source>
-        <translation>Importeer SGF &amp;van klembord</translation>
+        <translation type="vanished">Importeer SGF &amp;van klembord</translation>
     </message>
     <message>
         <source>Import a complete game in SGF format from clipboard</source>
-        <translation>Importeer een volledig spel in SGF formaat van het klembord</translation>
+        <translation type="vanished">Importeer een volledig spel in SGF formaat van het klembord</translation>
     </message>
     <message>
         <source>Import SGF from clipboard
 
 Import a complete game in SGF format from clipboard.</source>
-        <translation>Importeer SGF van klembord
+        <translation type="vanished">Importeer SGF van klembord
 
 Importeer een volledig spel in SGF formaat van het klembord.</translation>
     </message>
     <message>
         <source>Export SGF to clipboard</source>
-        <translation>Exporteer SGF naar klembord</translation>
+        <translation type="vanished">Exporteer SGF naar klembord</translation>
     </message>
     <message>
         <source>Export SGF &amp;to clipboard</source>
-        <translation>Exporteer SGF &amp;naar klembord</translation>
+        <translation type="vanished">Exporteer SGF &amp;naar klembord</translation>
     </message>
     <message>
         <source>Export a complete game in SGF format to clipboard</source>
-        <translation>Exporteer een volledig spel in SGF formaat naar het klembord</translation>
+        <translation type="vanished">Exporteer een volledig spel in SGF formaat naar het klembord</translation>
     </message>
     <message>
         <source>Export SGF to clipboard
 
 Export a complete game in SGF format to clipboard.</source>
-        <translation>Exporteer SGF naar klembord
+        <translation type="vanished">Exporteer SGF naar klembord
 
 Exporteer een volledig spel in SGF formaat naar het klembord.</translation>
     </message>
     <message>
         <source>Export Image</source>
-        <translation>Exporteer afbeelding</translation>
+        <translation type="vanished">Exporteer afbeelding</translation>
     </message>
     <message>
         <source>Export &amp;Image</source>
-        <translation>Exporteer a&amp;fbeelding</translation>
+        <translation type="vanished">Exporteer a&amp;fbeelding</translation>
     </message>
     <message>
         <source>Export current board to an image</source>
-        <translation>Exporteer huidig bord naar een afbeelding</translation>
+        <translation type="vanished">Exporteer huidig bord naar een afbeelding</translation>
     </message>
     <message>
         <source>Export Image
 
 Export current board to an image.</source>
-        <translation>Exporteer afbeelding
+        <translation type="vanished">Exporteer afbeelding
 
 Exporteer huidig bord naar een afbeelding.</translation>
     </message>
     <message>
         <source>Export Image to clipboard</source>
-        <translation>Exporteer afbeelding naar klembord</translation>
+        <translation type="vanished">Exporteer afbeelding naar klembord</translation>
     </message>
     <message>
         <source>E&amp;xport Image to clipboard</source>
-        <translation>E&amp;xporteer afbeelding naar klembord</translation>
+        <translation type="vanished">E&amp;xporteer afbeelding naar klembord</translation>
     </message>
     <message>
         <source>Export current board to the clipboard as image</source>
-        <translation>Exporteer huidig bord naar het klembord als afbeelding</translation>
+        <translation type="vanished">Exporteer huidig bord naar het klembord als afbeelding</translation>
     </message>
     <message>
         <source>Export Image to clipboard
 
 Export current board to the clipboard as image.</source>
-        <translation>Exporteer afbeelding naar klembord
+        <translation type="vanished">Exporteer afbeelding naar klembord
 
 Exporteer huidig bord naar het klembord als afbeelding.</translation>
     </message>
     <message>
         <source>Exit</source>
-        <translation>Afsluiten</translation>
+        <translation type="vanished">Afsluiten</translation>
     </message>
     <message>
         <source>E&amp;xit</source>
-        <translation>&amp;Afsluiten</translation>
+        <translation type="vanished">&amp;Afsluiten</translation>
     </message>
     <message>
         <source>Ctrl+Q</source>
-        <translation>Ctrl+A</translation>
+        <translation type="vanished">Ctrl+A</translation>
     </message>
     <message>
         <source>Quits the application</source>
-        <translation>Sluit het programma af</translation>
+        <translation type="vanished">Sluit het programma af</translation>
     </message>
     <message>
         <source>Exit
 
 Quits the application.</source>
-        <translation>Afsluiten
+        <translation type="vanished">Afsluiten
 
 Sluit het programma af.</translation>
     </message>
     <message>
         <source>Cut</source>
-        <translation>Knippen</translation>
+        <translation type="vanished">Knippen</translation>
     </message>
     <message>
         <source>&amp;Cut</source>
-        <translation>&amp;Knippen</translation>
+        <translation type="vanished">&amp;Knippen</translation>
     </message>
     <message>
         <source>Ctrl+X</source>
-        <translation>Ctrl+X</translation>
+        <translation type="vanished">Ctrl+X</translation>
     </message>
     <message>
         <source>Cut this and all following positions</source>
-        <translation>Knip deze en alle volgende posities</translation>
+        <translation type="vanished">Knip deze en alle volgende posities</translation>
     </message>
     <message>
         <source>Cut
 
 Cut this and all following positions.</source>
-        <translation>Knippen
+        <translation type="vanished">Knippen
 
 Knip deze en alle volgende posities.</translation>
     </message>
     <message>
         <source>Paste</source>
-        <translation>Plakken</translation>
+        <translation type="vanished">Plakken</translation>
     </message>
     <message>
         <source>&amp;Paste</source>
-        <translation>&amp;Plakken</translation>
+        <translation type="vanished">&amp;Plakken</translation>
     </message>
     <message>
         <source>Ctrl+P</source>
-        <translation>Ctrl+P</translation>
+        <translation type="vanished">Ctrl+P</translation>
     </message>
     <message>
         <source>Paste as son of the current move</source>
-        <translation>Plakken als zoon van de huidige zet</translation>
+        <translation type="vanished">Plakken als zoon van de huidige zet</translation>
     </message>
     <message>
         <source>Paste
 
 Paste as son of the current move.</source>
-        <translation>Plakken
+        <translation type="vanished">Plakken
 
 Plakken als zoon van de huidige zet.</translation>
     </message>
     <message>
         <source>Paste as brother</source>
-        <translation>Plakken als broer</translation>
+        <translation type="vanished">Plakken als broer</translation>
     </message>
     <message>
         <source>Paste as &amp;brother</source>
-        <translation>Plakken als &amp;broer</translation>
+        <translation type="vanished">Plakken als &amp;broer</translation>
     </message>
     <message>
         <source>Paste as brother of the current move</source>
-        <translation>Plakken als broer van de huidige zet</translation>
+        <translation type="vanished">Plakken als broer van de huidige zet</translation>
     </message>
     <message>
         <source>Paste
 
 Paste as brother of the current move.</source>
-        <translation>Plakken
+        <translation type="vanished">Plakken
 
 Plakken als broer van de huidige zet.</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Verwijderen</translation>
+        <translation type="vanished">Verwijderen</translation>
     </message>
     <message>
         <source>&amp;Delete</source>
-        <translation>&amp;Verwijderen</translation>
+        <translation type="vanished">&amp;Verwijderen</translation>
     </message>
     <message>
         <source>Ctrl+D</source>
-        <translation>Ctrl+V</translation>
+        <translation type="vanished">Ctrl+V</translation>
     </message>
     <message>
         <source>Delete this and all following positions</source>
-        <translation>Verwijder deze en alle volgende posities</translation>
+        <translation type="vanished">Verwijder deze en alle volgende posities</translation>
     </message>
     <message>
         <source>Delete
 
 Delete this and all following positions.</source>
-        <translation>Verwijderen
+        <translation type="vanished">Verwijderen
 
 Verwijder deze en alle volgende posities.</translation>
     </message>
     <message>
         <source>Number Moves</source>
-        <translation>Nummeren van zetten</translation>
+        <translation type="vanished">Nummeren van zetten</translation>
     </message>
     <message>
         <source>&amp;Number Moves</source>
-        <translation>&amp;Nummeren van zetten</translation>
+        <translation type="vanished">&amp;Nummeren van zetten</translation>
     </message>
     <message>
         <source>Shift+F2</source>
-        <translation>Shift+F2</translation>
+        <translation type="vanished">Shift+F2</translation>
     </message>
     <message>
         <source>Mark all moves with the number of their turn</source>
-        <translation>Markeer alle zetten met het nummer van hun beurt</translation>
+        <translation type="vanished">Markeer alle zetten met het nummer van hun beurt</translation>
     </message>
     <message>
         <source>Number moves
 
 Mark all moves with the number of their turn.</source>
-        <translation>Nummeren van zetten
+        <translation type="vanished">Nummeren van zetten
 
 Markeer alle zetten met het nummer van hun beurt.</translation>
     </message>
     <message>
         <source>Mark brothers</source>
-        <translation>Markeer broers</translation>
+        <translation type="vanished">Markeer broers</translation>
     </message>
     <message>
         <source>Mark &amp;brothers</source>
-        <translation>Markeer &amp;broers</translation>
+        <translation type="vanished">Markeer &amp;broers</translation>
     </message>
     <message>
         <source>Shift+F3</source>
-        <translation>Shift+F3</translation>
+        <translation type="vanished">Shift+F3</translation>
     </message>
     <message>
         <source>Mark all brothers of the current move</source>
-        <translation>Markeer alle broers van de huidige zet</translation>
+        <translation type="vanished">Markeer alle broers van de huidige zet</translation>
     </message>
     <message>
         <source>Mark brothers
 
 Mark all brothers of the current move.</source>
-        <translation>Markeer broers
+        <translation type="vanished">Markeer broers
 
 Markeer alle broers van de huidige zet.</translation>
     </message>
     <message>
         <source>Mark sons</source>
-        <translation>Markeer zonen</translation>
+        <translation type="vanished">Markeer zonen</translation>
     </message>
     <message>
         <source>Mark &amp;sons</source>
-        <translation>Markeer &amp;zonen</translation>
+        <translation type="vanished">Markeer &amp;zonen</translation>
     </message>
     <message>
         <source>Shift+F4</source>
-        <translation>Shift+F4</translation>
+        <translation type="vanished">Shift+F4</translation>
     </message>
     <message>
         <source>Mark all sons of the current move</source>
-        <translation>Markeer alle zonen van de huidige zet</translation>
+        <translation type="vanished">Markeer alle zonen van de huidige zet</translation>
     </message>
     <message>
         <source>Mark sons
 
 Mark all sons of the current move.</source>
-        <translation>Markeer zonen
+        <translation type="vanished">Markeer zonen
 
 Markeer alle zonen van de huidige zet.</translation>
     </message>
     <message>
         <source>Previous move (Left)</source>
-        <translation>Vorige zet (Links)</translation>
+        <translation type="vanished">Vorige zet (Links)</translation>
     </message>
     <message>
         <source>&amp;Previous move</source>
-        <translation>&amp;Vorige zet</translation>
+        <translation type="vanished">&amp;Vorige zet</translation>
     </message>
     <message>
         <source>Left</source>
-        <translation>Links</translation>
+        <translation type="vanished">Links</translation>
     </message>
     <message>
         <source>To previous move</source>
-        <translation>Naar vorige zet</translation>
+        <translation type="vanished">Naar vorige zet</translation>
     </message>
     <message>
         <source>Previous move
 
 Move one move backward.</source>
-        <translation>Vorige zet
+        <translation type="vanished">Vorige zet
 
 Ga een zet terug.</translation>
     </message>
     <message>
         <source>Next move (Right)</source>
-        <translation>Volgende zet (Rechts)</translation>
+        <translation type="vanished">Volgende zet (Rechts)</translation>
     </message>
     <message>
         <source>&amp;Next move</source>
-        <translation>V&amp;olgende zet</translation>
+        <translation type="vanished">V&amp;olgende zet</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation>Rechts</translation>
+        <translation type="vanished">Rechts</translation>
     </message>
     <message>
         <source>To next move</source>
-        <translation>Naar volgende zet</translation>
+        <translation type="vanished">Naar volgende zet</translation>
     </message>
     <message>
         <source>Next move
 
 Move one move forward.</source>
-        <translation>Volgende zet
+        <translation type="vanished">Volgende zet
 
 Ga een zet vooruit.</translation>
     </message>
     <message>
         <source>First move (Home)</source>
-        <translation>Eerste zet (Begin)</translation>
+        <translation type="vanished">Eerste zet (Begin)</translation>
     </message>
     <message>
         <source>&amp;First move</source>
-        <translation>&amp;Eerste zet</translation>
+        <translation type="vanished">&amp;Eerste zet</translation>
     </message>
     <message>
         <source>Home</source>
-        <translation>Begin</translation>
+        <translation type="vanished">Begin</translation>
     </message>
     <message>
         <source>To first move</source>
-        <translation>Naar eerste zet</translation>
+        <translation type="vanished">Naar eerste zet</translation>
     </message>
     <message>
         <source>First move
 
 Move to first move.</source>
-        <translation>Eerste zet
+        <translation type="vanished">Eerste zet
 
 Ga naar eerste zet.</translation>
     </message>
     <message>
         <source>Last move (End)</source>
-        <translation>Laatste zet (Einde)</translation>
+        <translation type="vanished">Laatste zet (Einde)</translation>
     </message>
     <message>
         <source>&amp;Last move</source>
-        <translation>&amp;Laatste zet</translation>
+        <translation type="vanished">&amp;Laatste zet</translation>
     </message>
     <message>
         <source>End</source>
-        <translation>Einde</translation>
+        <translation type="vanished">Einde</translation>
     </message>
     <message>
         <source>To last move</source>
-        <translation>Naar laatste zet</translation>
+        <translation type="vanished">Naar laatste zet</translation>
     </message>
     <message>
         <source>Last move
 
 Move to last move.</source>
-        <translation>Laatste zet
+        <translation type="vanished">Laatste zet
 
 Ga naar laatste zet.</translation>
     </message>
     <message>
         <source>Previous variation (Up)</source>
-        <translation>Vorige variatie (Op)</translation>
+        <translation type="vanished">Vorige variatie (Op)</translation>
     </message>
     <message>
         <source>P&amp;revious variation</source>
-        <translation>Vo&amp;rige variatie</translation>
+        <translation type="vanished">Vo&amp;rige variatie</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation>Op</translation>
+        <translation type="vanished">Op</translation>
     </message>
     <message>
         <source>To previous variation</source>
-        <translation>Naar vorige variatie</translation>
+        <translation type="vanished">Naar vorige variatie</translation>
     </message>
     <message>
         <source>Previous variation
 
 Move to the previous variation of this move.</source>
-        <translation>Vorige variatie
+        <translation type="vanished">Vorige variatie
 
 Ga naar vorige variatie van deze zet.</translation>
     </message>
     <message>
         <source>Next variation (Down)</source>
-        <translation>Volgende variatie (neer)</translation>
+        <translation type="vanished">Volgende variatie (neer)</translation>
     </message>
     <message>
         <source>N&amp;ext variation</source>
-        <translation>Volg&amp;ende variatie</translation>
+        <translation type="vanished">Volg&amp;ende variatie</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation>Neer</translation>
+        <translation type="vanished">Neer</translation>
     </message>
     <message>
         <source>To next variation</source>
-        <translation>Naar volgende variatie</translation>
+        <translation type="vanished">Naar volgende variatie</translation>
     </message>
     <message>
         <source>Next variation
 
 Move to the next variation of this move.</source>
-        <translation>Volgende variatie
+        <translation type="vanished">Volgende variatie
 
 Ga naar de volgende variatie van deze zet.</translation>
     </message>
     <message>
         <source>Main Branch</source>
-        <translation>Hoofdtak</translation>
+        <translation type="vanished">Hoofdtak</translation>
     </message>
     <message>
         <source>&amp;Main branch</source>
-        <translation>&amp;Hoofdtak</translation>
+        <translation type="vanished">&amp;Hoofdtak</translation>
     </message>
     <message>
         <source>To main branch</source>
-        <translation>Naar hoofdtak</translation>
+        <translation type="vanished">Naar hoofdtak</translation>
     </message>
     <message>
         <source>Main Branch
 
 Move to the main branch where variation started.</source>
-        <translation>Hoofdtak
+        <translation type="vanished">Hoofdtak
 
 Ga naar de hoofdtak waar de variatie startte.</translation>
     </message>
     <message>
         <source>Variation start</source>
-        <translation>Start van variatie</translation>
+        <translation type="vanished">Start van variatie</translation>
     </message>
     <message>
         <source>Variation &amp;start</source>
-        <translation>&amp;Start van variatie</translation>
+        <translation type="vanished">&amp;Start van variatie</translation>
     </message>
     <message>
         <source>To top of variation</source>
-        <translation>Naar de top van de variatie</translation>
+        <translation type="vanished">Naar de top van de variatie</translation>
     </message>
     <message>
         <source>Variation start
 
 Move to the top variation of this branch.</source>
-        <translation>Start van variatie
+        <translation type="vanished">Start van variatie
 
 Ga naar de eerste variatie van deze tak.</translation>
     </message>
     <message>
         <source>Next branch</source>
-        <translation>Volgende tak</translation>
+        <translation type="vanished">Volgende tak</translation>
     </message>
     <message>
         <source>Next &amp;branch</source>
-        <translation>Volgende &amp;tak</translation>
+        <translation type="vanished">Volgende &amp;tak</translation>
     </message>
     <message>
         <source>To next branch starting a variation</source>
-        <translation>Naar volgende tak en start variatie</translation>
+        <translation type="vanished">Naar volgende tak en start variatie</translation>
     </message>
     <message>
         <source>Next branch
 
 Move to the next branch starting a variation.</source>
-        <translation>Volgende tak
+        <translation type="vanished">Volgende tak
 
 Ga naar de volgende tak en start een variatie.</translation>
     </message>
     <message>
         <source>Goto move</source>
-        <translation>Ga naar zet</translation>
+        <translation type="vanished">Ga naar zet</translation>
     </message>
     <message>
         <source>&amp;Goto Move</source>
-        <translation>&amp;Ga naar zet</translation>
+        <translation type="vanished">&amp;Ga naar zet</translation>
     </message>
     <message>
         <source>Ctrl+G</source>
-        <translation>Ctrl+G</translation>
+        <translation type="vanished">Ctrl+G</translation>
     </message>
     <message>
         <source>Goto a move of main branch by number</source>
-        <translation>Ga naar een zet of hoofdtak op nummer</translation>
+        <translation type="vanished">Ga naar een zet of hoofdtak op nummer</translation>
     </message>
     <message>
         <source>Goto move
 
 Goto a move of main branch by number.</source>
-        <translation>Ga naar zet
+        <translation type="vanished">Ga naar zet
 
 Ga naar een zet of hoofdtak op nummer.</translation>
     </message>
     <message>
         <source>Autoplay</source>
-        <translation>Automatisch spelen</translation>
+        <translation type="vanished">Automatisch spelen</translation>
     </message>
     <message>
         <source>&amp;Autoplay</source>
@@ -3002,7 +4513,7 @@ Ga naar een zet of hoofdtak op nummer.</translation>
     </message>
     <message>
         <source>Ctrl+A</source>
-        <translation>Ctrl+A</translation>
+        <translation type="vanished">Ctrl+A</translation>
     </message>
     <message>
         <source>Start/Stop autoplaying current game</source>
@@ -3018,47 +4529,47 @@ Start/Stop automatisch spelen van huidig spel.</translation>
     </message>
     <message>
         <source>Empty branch</source>
-        <translation>Lege tak</translation>
+        <translation type="vanished">Lege tak</translation>
     </message>
     <message>
         <source>Empt&amp;y branch</source>
-        <translation>Le&amp;ge tak</translation>
+        <translation type="vanished">Le&amp;ge tak</translation>
     </message>
     <message>
         <source>Create an empty branch</source>
-        <translation>Maak een lege tak</translation>
+        <translation type="vanished">Maak een lege tak</translation>
     </message>
     <message>
         <source>Empty branch
 
 Create an empty branch.</source>
-        <translation>Lege tak
+        <translation type="vanished">Lege tak
 
 Maak een lege tak.</translation>
     </message>
     <message>
         <source>Duplicate move</source>
-        <translation>Dupliceer zet</translation>
+        <translation type="vanished">Dupliceer zet</translation>
     </message>
     <message>
         <source>D&amp;uplicate move</source>
-        <translation>D&amp;upliceer zet</translation>
+        <translation type="vanished">D&amp;upliceer zet</translation>
     </message>
     <message>
         <source>Copies and duplicates this move</source>
-        <translation>Kopieert en dupliceert deze zet</translation>
+        <translation type="vanished">Kopieert en dupliceert deze zet</translation>
     </message>
     <message>
         <source>Duplicate move
 
 Copies and duplicates this move.</source>
-        <translation>Dupliceer zet
+        <translation type="vanished">Dupliceer zet
 
 Kopieert en dupliceert deze zet.</translation>
     </message>
     <message>
         <source>Swap variations</source>
-        <translation>Verwissen variaties</translation>
+        <translation type="vanished">Verwissen variaties</translation>
     </message>
     <message>
         <source>S&amp;wap variations</source>
@@ -3078,35 +4589,35 @@ Verwissel huidige zet met de vorige variatie.</translation>
     </message>
     <message>
         <source>Previous commented move</source>
-        <translation>Vorige gecommentarieerde zet</translation>
+        <translation type="vanished">Vorige gecommentarieerde zet</translation>
     </message>
     <message>
         <source>Previous &amp;commented move</source>
-        <translation>Vorige ge&amp;comentarieerde zet</translation>
+        <translation type="vanished">Vorige ge&amp;comentarieerde zet</translation>
     </message>
     <message>
         <source>To previous comment</source>
-        <translation>Naar vorige opmerking</translation>
+        <translation type="vanished">Naar vorige opmerking</translation>
     </message>
     <message>
         <source>Previous comment
 
 Move to the previous move that has a comment</source>
-        <translation>Vorige opmerking
+        <translation type="vanished">Vorige opmerking
 
 Ga naar de vorige zet die gecommentarieerd is</translation>
     </message>
     <message>
         <source>Next commented move</source>
-        <translation>Volgende gecommentarieerde zet</translation>
+        <translation type="vanished">Volgende gecommentarieerde zet</translation>
     </message>
     <message>
         <source>Next c&amp;ommented move</source>
-        <translation>V&amp;olgende gecommentarieerde zet</translation>
+        <translation type="vanished">V&amp;olgende gecommentarieerde zet</translation>
     </message>
     <message>
         <source>To next comment</source>
-        <translation>Naar volgende opmerking</translation>
+        <translation type="vanished">Naar volgende opmerking</translation>
     </message>
     <message>
         <source>Previous comment
@@ -3118,287 +4629,287 @@ Ga naar de volgende zet die gecommentarieerd is</translation>
     </message>
     <message>
         <source>Goto stone at clicked move</source>
-        <translation>Ga naar steen van aangeduide zet</translation>
+        <translation type="vanished">Ga naar steen van aangeduide zet</translation>
     </message>
     <message>
         <source>Goto clic&amp;ked move</source>
-        <translation>Ga naar aan&amp;geduide zet</translation>
+        <translation type="vanished">Ga naar aan&amp;geduide zet</translation>
     </message>
     <message>
         <source>To clicked move</source>
-        <translation>Naar aangeduide zet</translation>
+        <translation type="vanished">Naar aangeduide zet</translation>
     </message>
     <message>
         <source>Click on a board intersection
 
 Move to the stone played at this intersection (if any)</source>
-        <translation>Klik op een snijpunt van het bord
+        <translation type="vanished">Klik op een snijpunt van het bord
 
 Ga naar de steen die op dit kruispunt gezet is (als die bestaat)</translation>
     </message>
     <message>
         <source>Preferences</source>
-        <translation>Instellingen</translation>
+        <translation type="vanished">Instellingen</translation>
     </message>
     <message>
         <source>&amp;Preferences</source>
-        <translation>&amp;Instellingen</translation>
+        <translation type="vanished">&amp;Instellingen</translation>
     </message>
     <message>
         <source>Alt+P</source>
-        <translation>Alt+I</translation>
+        <translation type="vanished">Alt+I</translation>
     </message>
     <message>
         <source>Edit the preferences</source>
-        <translation>Wijzig de instellingen</translation>
+        <translation type="vanished">Wijzig de instellingen</translation>
     </message>
     <message>
         <source>Preferences
 
 Edit the applications preferences.</source>
-        <translation>Instellingen
+        <translation type="vanished">Instellingen
 
 Wijzig de instellingen van het programma.</translation>
     </message>
     <message>
         <source>Game Info</source>
-        <translation>Spelinformatie</translation>
+        <translation type="vanished">Spelinformatie</translation>
     </message>
     <message>
         <source>&amp;Game Info</source>
-        <translation>Spel&amp;informatie</translation>
+        <translation type="vanished">Spel&amp;informatie</translation>
     </message>
     <message>
         <source>Ctrl+I</source>
-        <translation>Ctrl+I</translation>
+        <translation type="vanished">Ctrl+I</translation>
     </message>
     <message>
         <source>Display game information</source>
-        <translation>Spelinformatie weergeven</translation>
+        <translation type="vanished">Spelinformatie weergeven</translation>
     </message>
     <message>
         <source>Game Info
 
 Display game information.</source>
-        <translation>Spelinformatie
+        <translation type="vanished">Spelinformatie
 
 Spelinformatie weergeven.</translation>
     </message>
     <message>
         <source>File toolbar</source>
-        <translation>Bestand hulpbalk</translation>
+        <translation type="vanished">Bestand hulpbalk</translation>
     </message>
     <message>
         <source>&amp;File toolbar</source>
-        <translation>&amp;Bestand hulpbalk</translation>
+        <translation type="vanished">&amp;Bestand hulpbalk</translation>
     </message>
     <message>
         <source>Enables/disables the file toolbar</source>
-        <translation>Activeert/desactiveert de bestand hulpbalk</translation>
+        <translation type="vanished">Activeert/desactiveert de bestand hulpbalk</translation>
     </message>
     <message>
         <source>File toolbar
 
 Enables/disables the file toolbar.</source>
-        <translation>Bestand hulpbalk
+        <translation type="vanished">Bestand hulpbalk
 
 Activeert/desactiveert de bestand hulpbalk.</translation>
     </message>
     <message>
         <source>Navigation toolbar</source>
-        <translation>Navigatie hulpbalk</translation>
+        <translation type="vanished">Navigatie hulpbalk</translation>
     </message>
     <message>
         <source>Navigation &amp;toolbar</source>
-        <translation>Naviga&amp;tie hulpbalk</translation>
+        <translation type="vanished">Naviga&amp;tie hulpbalk</translation>
     </message>
     <message>
         <source>Enables/disables the navigation toolbar</source>
-        <translation>Activeer/desactiveer de navigatie hulpbalk</translation>
+        <translation type="vanished">Activeer/desactiveer de navigatie hulpbalk</translation>
     </message>
     <message>
         <source>Navigation toolbar
 
 Enables/disables the navigation toolbar.</source>
-        <translation>Navigatie hulpbalk
+        <translation type="vanished">Navigatie hulpbalk
 
 Activeer/desactiveer de navigatie hulpbalk.</translation>
     </message>
     <message>
         <source>Edit toolbar</source>
-        <translation>Bewerk hulpbalk</translation>
+        <translation type="vanished">Bewerk hulpbalk</translation>
     </message>
     <message>
         <source>&amp;Edit toolbar</source>
-        <translation>B&amp;ewerk hulpbalk</translation>
+        <translation type="vanished">B&amp;ewerk hulpbalk</translation>
     </message>
     <message>
         <source>Enables/disables the edit toolbar</source>
-        <translation>Activeert/desactiveert de bewerk hulpbalk</translation>
+        <translation type="vanished">Activeert/desactiveert de bewerk hulpbalk</translation>
     </message>
     <message>
         <source>Edit toolbar
 
 Enables/disables the edit toolbar.</source>
-        <translation>Bewerk hulpbalk
+        <translation type="vanished">Bewerk hulpbalk
 
 Activeert/desactiveert de bewerk hulpbalk.</translation>
     </message>
     <message>
         <source>Menubar</source>
-        <translation>Menubalk</translation>
+        <translation type="vanished">Menubalk</translation>
     </message>
     <message>
         <source>&amp;Menubar</source>
-        <translation>&amp;Menubalk</translation>
+        <translation type="vanished">&amp;Menubalk</translation>
     </message>
     <message>
         <source>F7</source>
-        <translation>F7</translation>
+        <translation type="vanished">F7</translation>
     </message>
     <message>
         <source>Enables/disables the menubar</source>
-        <translation>Activeert/desactiveert de menubalk</translation>
+        <translation type="vanished">Activeert/desactiveert de menubalk</translation>
     </message>
     <message>
         <source>Menubar
 
 Enables/disables the menubar.</source>
-        <translation>Menubalk
+        <translation type="vanished">Menubalk
 
 Activeert/desactiveert de menubalk.</translation>
     </message>
     <message>
         <source>Statusbar</source>
-        <translation>Statusbalk</translation>
+        <translation type="vanished">Statusbalk</translation>
     </message>
     <message>
         <source>&amp;Statusbar</source>
-        <translation>&amp;Statusbalk</translation>
+        <translation type="vanished">&amp;Statusbalk</translation>
     </message>
     <message>
         <source>Enables/disables the statusbar</source>
-        <translation>Activeert/desactiveert de statusbalk</translation>
+        <translation type="vanished">Activeert/desactiveert de statusbalk</translation>
     </message>
     <message>
         <source>Statusbar
 
 Enables/disables the statusbar.</source>
-        <translation>Statusbalk
+        <translation type="vanished">Statusbalk
 
 Activeert/desactiveert de statusbalk.</translation>
     </message>
     <message>
         <source>Coordinates</source>
-        <translation>Coördinaten</translation>
+        <translation type="vanished">Coördinaten</translation>
     </message>
     <message>
         <source>C&amp;oordinates</source>
-        <translation>C&amp;oördinaten</translation>
+        <translation type="vanished">C&amp;oördinaten</translation>
     </message>
     <message>
         <source>F8</source>
-        <translation>F8</translation>
+        <translation type="vanished">F8</translation>
     </message>
     <message>
         <source>Enables/disables the coordinates</source>
-        <translation>Activeert/desactiveert de coördinaten</translation>
+        <translation type="vanished">Activeert/desactiveert de coördinaten</translation>
     </message>
     <message>
         <source>Coordinates
 
 Enables/disables the coordinates.</source>
-        <translation>Coördinaten
+        <translation type="vanished">Coördinaten
 
 Activeert/desactiveert de coördinaten.</translation>
     </message>
     <message>
         <source>Slider</source>
-        <translation>Schuifknop</translation>
+        <translation type="vanished">Schuifknop</translation>
     </message>
     <message>
         <source>Sli&amp;der</source>
-        <translation>Sc&amp;huifknop</translation>
+        <translation type="vanished">Sc&amp;huifknop</translation>
     </message>
     <message>
         <source>Ctrl+F8</source>
-        <translation>Ctrl+F8</translation>
+        <translation type="vanished">Ctrl+F8</translation>
     </message>
     <message>
         <source>Enables/disables the slider</source>
-        <translation>Activeert/desactiveert de schuifknop</translation>
+        <translation type="vanished">Activeert/desactiveert de schuifknop</translation>
     </message>
     <message>
         <source>Slider
 
 Enables/disables the slider.</source>
-        <translation>Schuifknop
+        <translation type="vanished">Schuifknop
 
 Activeert/desactiveert de schuifknop.</translation>
     </message>
     <message>
         <source>Sidebar</source>
-        <translation>Zijbalk</translation>
+        <translation type="vanished">Zijbalk</translation>
     </message>
     <message>
         <source>Side&amp;bar</source>
-        <translation>Zij&amp;balk</translation>
+        <translation type="vanished">Zij&amp;balk</translation>
     </message>
     <message>
         <source>F9</source>
-        <translation>F9</translation>
+        <translation type="vanished">F9</translation>
     </message>
     <message>
         <source>Enables/disables the sidebar</source>
-        <translation>Activeer/desactiveer de zijbalk</translation>
+        <translation type="vanished">Activeer/desactiveer de zijbalk</translation>
     </message>
     <message>
         <source>Sidebar
 
 Enables/disables the sidebar.</source>
-        <translation>Zijbalk
+        <translation type="vanished">Zijbalk
 
 Activeert/desactiveert de zijbalk.</translation>
     </message>
     <message>
         <source>Comment</source>
-        <translation>Opmerking</translation>
+        <translation type="vanished">Opmerking</translation>
     </message>
     <message>
         <source>&amp;Comment</source>
-        <translation>Op&amp;merking</translation>
+        <translation type="vanished">Op&amp;merking</translation>
     </message>
     <message>
         <source>F10</source>
-        <translation>F10</translation>
+        <translation type="vanished">F10</translation>
     </message>
     <message>
         <source>Enables/disables the comment field</source>
-        <translation>Activeer/desactiveer het opmerkingenveld</translation>
+        <translation type="vanished">Activeer/desactiveer het opmerkingenveld</translation>
     </message>
     <message>
         <source>Comment field
 
 Enables/disables the comment field.</source>
-        <translation>Opmerkingenveld
+        <translation type="vanished">Opmerkingenveld
 
 Activeert/desactiveert het opmerkingenveld.</translation>
     </message>
     <message>
         <source>Vertical comment</source>
-        <translation>Verticale opmerking</translation>
+        <translation type="vanished">Verticale opmerking</translation>
     </message>
     <message>
         <source>&amp;Vertical comment</source>
-        <translation>&amp;Verticale opmerking</translation>
+        <translation type="vanished">&amp;Verticale opmerking</translation>
     </message>
     <message>
         <source>Shift+F10</source>
-        <translation>Shift+F10</translation>
+        <translation type="vanished">Shift+F10</translation>
     </message>
     <message>
         <source>Enables/disables a vertical direction of the comment field</source>
-        <translation>Activeert/desactiveert de verticale richting van het opmerkingenveld</translation>
+        <translation type="vanished">Activeert/desactiveert de verticale richting van het opmerkingenveld</translation>
     </message>
     <message>
         <source>Vertical comment field
@@ -3406,7 +4917,7 @@ Activeert/desactiveert het opmerkingenveld.</translation>
 Enables/disables a vertical direction of the comment field.
 
 Note: This setting is temporary for this board. In order to set permanent horizontal/vertical comment use &apos;Preferences&apos;.</source>
-        <translation>Verticaal opmerkingenveld
+        <translation type="vanished">Verticaal opmerkingenveld
 
 Activeert/desactiveert de verticale richting van het opmerkingenveld.
 
@@ -3414,87 +4925,87 @@ Merk op: deze instelling geldt slechts voor dit bord. Om deze instelling permane
     </message>
     <message>
         <source>Pin comment</source>
-        <translation>Opmerking verankeren</translation>
+        <translation type="vanished">Opmerking verankeren</translation>
     </message>
     <message>
         <source>&amp;Pin comment</source>
-        <translation>O&amp;pmerking verankeren</translation>
+        <translation type="vanished">O&amp;pmerking verankeren</translation>
     </message>
     <message>
         <source>Ctrl+F10</source>
-        <translation>Ctrl+F10</translation>
+        <translation type="vanished">Ctrl+F10</translation>
     </message>
     <message>
         <source>Enables/disables pinning the comment field</source>
-        <translation>Activeert/desactiveert het verankeren van het opmerkingenveld</translation>
+        <translation type="vanished">Activeert/desactiveert het verankeren van het opmerkingenveld</translation>
     </message>
     <message>
         <source>Pin comment field
 
 Enables/disables pinning the comment field.</source>
-        <translation>Veranker opmerkingenveld
+        <translation type="vanished">Veranker opmerkingenveld
 
 Activeert/desactiveert het verankeren van het opmerkingenveld.</translation>
     </message>
     <message>
         <source>Zoom In</source>
-        <translation>Inzoomen</translation>
+        <translation type="vanished">Inzoomen</translation>
     </message>
     <message>
         <source>Zoom &amp;In</source>
-        <translation>&amp;Inzoomen</translation>
+        <translation type="vanished">&amp;Inzoomen</translation>
     </message>
     <message>
         <source>Alt++</source>
-        <translation>Alt++</translation>
+        <translation type="vanished">Alt++</translation>
     </message>
     <message>
         <source>Zooms in the board</source>
-        <translation>Zoomt in op het bord</translation>
+        <translation type="vanished">Zoomt in op het bord</translation>
     </message>
     <message>
         <source>Zoom In
 
 Zooms in the board.</source>
-        <translation>Inzoomen
+        <translation type="vanished">Inzoomen
 
 Zoomt in op het bord.</translation>
     </message>
     <message>
         <source>Zoom Out</source>
-        <translation>Uitzoomen</translation>
+        <translation type="vanished">Uitzoomen</translation>
     </message>
     <message>
         <source>Zoom &amp;Out</source>
-        <translation>&amp;Uitzoomen</translation>
+        <translation type="vanished">&amp;Uitzoomen</translation>
     </message>
     <message>
         <source>Alt+-</source>
-        <translation>Alt+-</translation>
+        <translation type="vanished">Alt+-</translation>
     </message>
     <message>
         <source>Zooms out the board</source>
-        <translation>Zoomt uit op het bord</translation>
+        <translation type="vanished">Zoomt uit op het bord</translation>
     </message>
     <message>
         <source>Zoom Out
 
 Zooms out the board.</source>
-        <translation>Uitzoomen
+        <translation type="vanished">Uitzoomen
 
 Zoomt uit op het bord.</translation>
     </message>
     <message>
         <source>Save size</source>
-        <translation>Grootte opslaan</translation>
+        <translation type="vanished">Grootte opslaan</translation>
     </message>
     <message>
         <source>Save si&amp;ze</source>
-        <translation>Grootte op&amp;slaan</translation>
+        <translation type="vanished">Grootte op&amp;slaan</translation>
     </message>
     <message>
         <source>Save the current window size</source>
-        <translation>Sla de huidige venstergrootte op</translation>
+        <translation type="vanished">Sla de huidige venstergrootte op</translation>
     </message>
     <message>
         <source>Save size
@@ -3506,7 +5017,7 @@ Restore with CTRL + &lt;number key&gt;
 
 &lt;0&gt; is default value at program start.
 &lt;9&gt; is default for edit window.</source>
-        <translation>Grootte opslaan
+        <translation type="vanished">Grootte opslaan
 
 Bewaart de huidige venstergrootte en herstelt deze bij de volgende start van het programma.
 
@@ -3518,139 +5029,139 @@ Herstel met CTRL+&lt;cijfertoets&gt;
     </message>
     <message>
         <source>Fullscreen</source>
-        <translation>Volledig scherm</translation>
+        <translation type="vanished">Volledig scherm</translation>
     </message>
     <message>
         <source>&amp;Fullscreen</source>
-        <translation>&amp;Volledig scherm</translation>
+        <translation type="vanished">&amp;Volledig scherm</translation>
     </message>
     <message>
         <source>F11</source>
-        <translation>F11</translation>
+        <translation type="vanished">F11</translation>
     </message>
     <message>
         <source>Enable/disable fullscreen mode</source>
-        <translation>Activeert/desactiveert volledig scherm modus</translation>
+        <translation type="vanished">Activeert/desactiveert volledig scherm modus</translation>
     </message>
     <message>
         <source>Fullscreen
 
 Enable/disable fullscreen mode.</source>
-        <translation>Volledig scherm
+        <translation type="vanished">Volledig scherm
 
 Activeert/desactiveert volledig scherm modus.</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>Handleiding</translation>
+        <translation type="vanished">Handleiding</translation>
     </message>
     <message>
         <source>&amp;Manual</source>
-        <translation>&amp;Handleiding</translation>
+        <translation type="vanished">&amp;Handleiding</translation>
     </message>
     <message>
         <source>F1</source>
-        <translation>F1</translation>
+        <translation type="vanished">F1</translation>
     </message>
     <message>
         <source>Opens the manual</source>
-        <translation>Opent de handleiding</translation>
+        <translation type="vanished">Opent de handleiding</translation>
     </message>
     <message>
         <source>Help
 
 Opens the manual of the application.</source>
-        <translation>Help
+        <translation type="vanished">Help
 
 Opent de handleiding van het programma.</translation>
     </message>
     <message>
         <source>Sound Info</source>
-        <translation>Geluidsinformatie</translation>
+        <translation type="vanished">Geluidsinformatie</translation>
     </message>
     <message>
         <source>&amp;Sound</source>
-        <translation>&amp;Geluid</translation>
+        <translation type="vanished">&amp;Geluid</translation>
     </message>
     <message>
         <source>Short info on sound availability</source>
-        <translation>Korte info over beschikbaarheid van geluid</translation>
+        <translation type="vanished">Korte info over beschikbaarheid van geluid</translation>
     </message>
     <message>
         <source>Sound Info
 
 Views a message box with a short comment about sound.</source>
-        <translation>Geluidsinformatie
+        <translation type="vanished">Geluidsinformatie
 
 Geeft een boodschappenvenster met een korte toelichting over het geluid.</translation>
     </message>
     <message>
         <source>About</source>
-        <translation>Over</translation>
+        <translation type="vanished">Over</translation>
     </message>
     <message>
         <source>&amp;About...</source>
-        <translation>&amp;Over...</translation>
+        <translation type="vanished">&amp;Over...</translation>
     </message>
     <message>
         <source>About the application</source>
-        <translation>Over het programma</translation>
+        <translation type="vanished">Over het programma</translation>
     </message>
     <message>
         <source>About
 
 About the application.</source>
-        <translation>Over
+        <translation type="vanished">Over
 
 Over het programma.</translation>
     </message>
     <message>
         <source>About Qt</source>
-        <translation>Over Qt</translation>
+        <translation type="vanished">Over Qt</translation>
     </message>
     <message>
         <source>About &amp;Qt...</source>
-        <translation>Over &amp;Qt...</translation>
+        <translation type="vanished">Over &amp;Qt...</translation>
     </message>
     <message>
         <source>About Qt
 
 About Qt.</source>
-        <translation>Over Qt
+        <translation type="vanished">Over Qt
 
 Over Qt.</translation>
     </message>
     <message>
         <source>&amp;Import/Export</source>
-        <translation>&amp;Importeren/exporteren</translation>
+        <translation type="vanished">&amp;Importeren/exporteren</translation>
     </message>
     <message>
         <source>What&apos;s &amp;This?</source>
-        <translation>Wat is &amp;dit?</translation>
+        <translation type="vanished">Wat is &amp;dit?</translation>
     </message>
     <message>
         <source>&amp;File</source>
-        <translation>&amp;Bestand</translation>
+        <translation type="vanished">&amp;Bestand</translation>
     </message>
     <message>
         <source>&amp;Edit</source>
-        <translation>B&amp;ewerk</translation>
+        <translation type="vanished">B&amp;ewerk</translation>
     </message>
     <message>
         <source>&amp;Navigation</source>
-        <translation>&amp;Navigatie</translation>
+        <translation type="vanished">&amp;Navigatie</translation>
     </message>
     <message>
         <source>&amp;Settings</source>
-        <translation>&amp;Opties</translation>
+        <translation type="vanished">&amp;Opties</translation>
     </message>
     <message>
         <source>&amp;View</source>
-        <translation>&amp;Venster</translation>
+        <translation type="vanished">&amp;Venster</translation>
     </message>
     <message>
         <source>&amp;Help</source>
-        <translation>&amp;Help</translation>
+        <translation type="vanished">&amp;Help</translation>
     </message>
     <message>
         <source>Ready.</source>
@@ -3688,17 +5199,17 @@ Geeft de huidige modus weer. &apos;N&apos; voor normale modus, &apos;W&apos; voo
     </message>
     <message>
         <source>Current edit mark</source>
-        <translation>Huidige bewerkingsmarkering</translation>
+        <translation type="vanished">Huidige bewerkingsmarkering</translation>
     </message>
     <message>
         <source>Mark
 Shows the current edit mark. &apos;-&apos; in normal mode.</source>
-        <translation>Markering
+        <translation type="vanished">Markering
 Geeft de huidige bewerkingsmarkering &apos;-&apos; weer in normale modus.</translation>
     </message>
     <message>
         <source>newgame</source>
-        <translation>nieuwspel</translation>
+        <translation type="vanished">nieuwspel</translation>
     </message>
     <message>
         <source>New board prepared.</source>
@@ -3714,7 +5225,7 @@ Geeft de huidige bewerkingsmarkering &apos;-&apos; weer in normale modus.</trans
     </message>
     <message>
         <source>loaded.</source>
-        <translation>geladen.</translation>
+        <translation type="vanished">geladen.</translation>
     </message>
     <message>
         <source>SGF Files (*.sgf);;All Files (*)</source>
@@ -3722,19 +5233,19 @@ Geeft de huidige bewerkingsmarkering &apos;-&apos; weer in normale modus.</trans
     </message>
     <message>
         <source>This file already exists. Do you want to overwrite it?</source>
-        <translation>Dit bestand bestaat al. Wilt u het overschrijven?</translation>
+        <translation type="vanished">Dit bestand bestaat al. Wilt u het overschrijven?</translation>
     </message>
     <message>
         <source>Yes</source>
-        <translation>Ja</translation>
+        <translation type="vanished">Ja</translation>
     </message>
     <message>
         <source>No</source>
-        <translation>Nee</translation>
+        <translation type="vanished">Nee</translation>
     </message>
     <message>
         <source>Cannot save SGF file.</source>
-        <translation>Kan SGF bestand niet opslaan.</translation>
+        <translation type="vanished">Kan SGF bestand niet opslaan.</translation>
     </message>
     <message>
         <source>saved.</source>
@@ -3742,11 +5253,11 @@ Geeft de huidige bewerkingsmarkering &apos;-&apos; weer in normale modus.</trans
     </message>
     <message>
         <source>Update</source>
-        <translation>Bijwerken</translation>
+        <translation type="vanished">Bijwerken</translation>
     </message>
     <message>
         <source>Cannot load from clipboard. Is it empty?</source>
-        <translation>Kan niet van het klembord laden. Is het leeg?</translation>
+        <translation type="vanished">Kan niet van het klembord laden. Is het leeg?</translation>
     </message>
     <message>
         <source>SGF imported.</source>
@@ -3754,7 +5265,7 @@ Geeft de huidige bewerkingsmarkering &apos;-&apos; weer in normale modus.</trans
     </message>
     <message>
         <source>Failed to export SGF to clipboard.</source>
-        <translation>Exporteren van SGF naar klembord mislukt.</translation>
+        <translation type="vanished">Exporteren van SGF naar klembord mislukt.</translation>
     </message>
     <message>
         <source>SGF exported.</source>
@@ -3762,15 +5273,15 @@ Geeft de huidige bewerkingsmarkering &apos;-&apos; weer in normale modus.</trans
     </message>
     <message>
         <source>Text Files (*.txt);;All Files (*)</source>
-        <translation>Tekst bestanden (*.txt);;Alle bestanden (*)</translation>
+        <translation type="vanished">Tekst bestanden (*.txt);;Alle bestanden (*)</translation>
     </message>
     <message>
         <source>ASCII imported.</source>
-        <translation>ASCII geïmporteerd.</translation>
+        <translation type="vanished">ASCII geïmporteerd.</translation>
     </message>
     <message>
         <source>Importing ASCII failed. Clipboard empty?</source>
-        <translation>Importeren van ASCII mislukt. Klembord leeg?</translation>
+        <translation type="vanished">Importeren van ASCII mislukt. Klembord leeg?</translation>
     </message>
     <message>
         <source>Export image as</source>
@@ -3778,7 +5289,7 @@ Geeft de huidige bewerkingsmarkering &apos;-&apos; weer in normale modus.</trans
     </message>
     <message>
         <source>entermove</source>
-        <translation>geefzet</translation>
+        <translation type="vanished">geefzet</translation>
     </message>
     <message>
         <source>Autoplay stopped.</source>
@@ -3790,7 +5301,7 @@ Geeft de huidige bewerkingsmarkering &apos;-&apos; weer in normale modus.</trans
     </message>
     <message>
         <source>Variation duplicated.</source>
-        <translation>Variatie gedupliceerd.</translation>
+        <translation type="vanished">Variatie gedupliceerd.</translation>
     </message>
     <message>
         <source>Variations swapped.</source>
@@ -3802,7 +5313,7 @@ Geeft de huidige bewerkingsmarkering &apos;-&apos; weer in normale modus.</trans
     </message>
     <message>
         <source>preferences</source>
-        <translation>instellingen</translation>
+        <translation type="vanished">instellingen</translation>
     </message>
     <message>
         <source>Window size saved.</source>
@@ -3820,53 +5331,240 @@ Wilt u uw wijzigingen opslaan?</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Annuleren</translation>
+        <translation type="vanished">Annuleren</translation>
     </message>
     <message>
         <source>Update from online game</source>
-        <translation>Bijwerken vanuit online spel</translation>
+        <translation type="vanished">Bijwerken vanuit online spel</translation>
     </message>
     <message>
         <source>Update from online game to local board and supersede own changes.</source>
-        <translation>Werk bij vanuit het online spel naar het lokale bord en vervang eigen wijzigingen.</translation>
+        <translation type="vanished">Werk bij vanuit het online spel naar het lokale bord en vervang eigen wijzigingen.</translation>
     </message>
     <message>
         <source>Next comment
 
 Move to the next move that has a comment</source>
-        <translation>Volgende opmerking
+        <translation type="vanished">Volgende opmerking
 
 Ga naar de volgende zet die een opmerking heeft</translation>
     </message>
     <message>
         <source>Rk</source>
-        <translation>Rg</translation>
+        <translation type="vanished">Rg</translation>
     </message>
     <message>
         <source>Mute stones sound</source>
-        <translation>Geluid van stenen dempen</translation>
+        <translation type="vanished">Geluid van stenen dempen</translation>
     </message>
     <message>
         <source>&amp;Mute stones sound</source>
-        <translation>Geluid van stenen &amp;dempen</translation>
+        <translation type="vanished">Geluid van stenen &amp;dempen</translation>
     </message>
     <message>
         <source>Toggle stones sound on/off</source>
-        <translation>Steengeluiden aan/uitschakelen</translation>
+        <translation type="vanished">Steengeluiden aan/uitschakelen</translation>
     </message>
     <message>
         <source>Stones sound
 
 Toggle stones sound on/off
 this toggles only the stones sounds</source>
-        <translation>Geluiden van stenen
+        <translation type="vanished">Geluiden van stenen
 
 Aan- en uitschakelen van geluiden van stenen
 dit wijzigt alleen het geluid van de stenen</translation>
     </message>
     <message>
-        <source>SGF Files (*.sgf *.SGF);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)</source>
+        <source>Choose variation display</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The SGF file that is being opened uses a different style
+of variation display.  Use the style found in the file?
+
+You can customize this behaviour (and disable this dialog)
+in the preferences.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Analysis in progress: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Off-line copy: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>vs.</source>
+        <translation type="unfinished">tegen.</translation>
+    </message>
+    <message>
+        <source>This file had errors during loading and may be corrupt.
+Do you still want to save it?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save SGF file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot open SGF file for saving.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to save SGF file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to save image!</source>
+        <translation type="unfinished">Afbeelding opslaan niet gelukt!</translation>
+    </message>
+    <message>
+        <source>Diag. comments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Comments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>remaining time / stones</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>click to pause/unpause the game</source>
+        <translation type="unfinished">klik om het spel te pauzeren/hernemen</translation>
+    </message>
+    <message>
+        <source>click to add 1 minute to your opponent&apos;s clock</source>
+        <translation type="unfinished">klik om 1 minuut toe te voegen aan de klok van je tegenstander</translation>
+    </message>
+    <message>
+        <source>Time remaining for this move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> (Scoring)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>White</source>
+        <translation type="unfinished">Wit</translation>
+    </message>
+    <message>
+        <source>Black</source>
+        <translation type="unfinished">Zwart</translation>
+    </message>
+    <message>
+        <source>Black wins with %1</source>
+        <translation type="unfinished">Zwart wint met %1</translation>
+    </message>
+    <message>
+        <source>White wins with %1</source>
+        <translation type="unfinished">Wit wint met %1</translation>
+    </message>
+    <message>
+        <source>Jigo</source>
+        <translation type="unfinished">Jigo</translation>
+    </message>
+    <message>
+        <source>Game result differs from the one stored.
+Overwrite stored game result?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>B Win %</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>W Win %</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MainWindow_GTP</name>
+    <message>
+        <source>Game end</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The computer has resigned the game.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>NewAIGameDlg</name>
+    <message>
+        <source>Error</source>
+        <translation type="unfinished">Fout</translation>
+    </message>
+    <message>
+        <source>You entered an invalid Handicap (1 is not legal)</source>
+        <translation type="unfinished">U hebt een ongeldige handicap ingevoerd (1 is niet geldig)</translation>
+    </message>
+    <message>
+        <source>Choose an SGF file to load</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SGF Files (*.sgf);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)</source>
+        <translation type="unfinished">SGF bestanden (*.sgf);;MGT bestanden (*.mgt);;XML bestanden (*.xml);;Alle bestanden (*)</translation>
+    </message>
+</context>
+<context>
+    <name>NewAIGameDlgGui</name>
+    <message>
+        <source>Computer Game</source>
+        <translation type="unfinished">Computer spel</translation>
+    </message>
+    <message>
+        <source>Load game</source>
+        <translation type="unfinished">Laad spel</translation>
+    </message>
+    <message>
+        <source>&amp;OK</source>
+        <translation type="unfinished">&amp;OK</translation>
+    </message>
+    <message>
+        <source>&amp;Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Players</source>
+        <translation type="unfinished">Spelers</translation>
+    </message>
+    <message>
+        <source>Human:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Engine:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Computer plays:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Komi:</source>
+        <translation type="unfinished">Komi:</translation>
+    </message>
+    <message>
+        <source>Board size:</source>
+        <translation type="unfinished">Bordgrootte:</translation>
+    </message>
+    <message>
+        <source>Handicap:</source>
+        <translation type="unfinished">Handicap:</translation>
     </message>
 </context>
 <context>
@@ -4076,14 +5774,77 @@ dit wijzigt alleen het geluid van de stenen</translation>
     </message>
 </context>
 <context>
+    <name>NewVariantGameDialog</name>
+    <message>
+        <source>New Variant Game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Players</source>
+        <translation type="unfinished">Spelers</translation>
+    </message>
+    <message>
+        <source>Black</source>
+        <translation type="unfinished">Zwart</translation>
+    </message>
+    <message>
+        <source>Name:</source>
+        <translation type="unfinished">Naam:</translation>
+    </message>
+    <message>
+        <source>White</source>
+        <translation type="unfinished">Wit</translation>
+    </message>
+    <message>
+        <source>Rank:</source>
+        <translation type="unfinished">Rang:</translation>
+    </message>
+    <message>
+        <source>Board shape</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Komi:</source>
+        <translation type="unfinished">Komi:</translation>
+    </message>
+    <message>
+        <source>Board size:</source>
+        <translation type="unfinished">Bordgrootte:</translation>
+    </message>
+    <message>
+        <source>x</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toroidal Go</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Horizontally</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Vertically</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Ok</source>
+        <translation type="unfinished">&amp;OK</translation>
+    </message>
+    <message>
+        <source>&amp;Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>NodeResultsGUI</name>
     <message>
         <source>Results</source>
-        <translation>Resultaten</translation>
+        <translation type="vanished">Resultaten</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation>Sluit</translation>
+        <translation type="vanished">Sluit</translation>
     </message>
 </context>
 <context>
@@ -4098,11 +5859,11 @@ dit wijzigt alleen het geluid van de stenen</translation>
     </message>
     <message>
         <source>00:00</source>
-        <translation>00:00</translation>
+        <translation type="vanished">00:00</translation>
     </message>
     <message>
         <source>remaining time / stones</source>
-        <translation>resterende tijd / stenen</translation>
+        <translation type="vanished">resterende tijd / stenen</translation>
     </message>
     <message>
         <source>Clock
@@ -4112,7 +5873,7 @@ shows remaining time or byoyomi time / remaining stones.
 Click on
 - your own clock for pause request (NNGS) or
 - the opponent&apos;s clock to give him additional time of one minute.</source>
-        <translation>Klok
+        <translation type="vanished">Klok
 
 toont resterende tijd of byoyomi tijd / resterende stenen
 
@@ -4220,6 +5981,38 @@ use &quot;free&quot; command to make game rated or unrated (free)</source>
 
 gebruik &quot;free&quot; commando om een spel vrij of officiëel te maken</translation>
     </message>
+    <message>
+        <source>Analysis</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Primary move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Coords:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>B Win%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Visits:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Highlighted move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>B Win%:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>NthMoveDialog</name>
@@ -4245,6 +6038,57 @@ gebruik &quot;free&quot; commando om een spel vrij of officiëel te maken</trans
     <message>
         <source>msg*</source>
         <translation>bericht*</translation>
+    </message>
+</context>
+<context>
+    <name>PlayerTable</name>
+    <message>
+        <source>Stat</source>
+        <translation type="unfinished">Status</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Naam</translation>
+    </message>
+    <message>
+        <source>Rk</source>
+        <translation type="unfinished">Rg</translation>
+    </message>
+    <message>
+        <source>pl</source>
+        <translation type="unfinished">Sp</translation>
+    </message>
+    <message>
+        <source>ob</source>
+        <translation type="unfinished">Ob</translation>
+    </message>
+    <message>
+        <source>Idle</source>
+        <translation type="unfinished">Niet actief</translation>
+    </message>
+    <message>
+        <source>X</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Info</source>
+        <translation type="unfinished">Info</translation>
+    </message>
+    <message>
+        <source>Won</source>
+        <translation type="unfinished">Gewonnen</translation>
+    </message>
+    <message>
+        <source>Lost</source>
+        <translation type="unfinished">Verloren</translation>
+    </message>
+    <message>
+        <source>Country</source>
+        <translation type="unfinished">Land</translation>
+    </message>
+    <message>
+        <source>Match prefs</source>
+        <translation type="unfinished">Wedstrijd inst</translation>
     </message>
 </context>
 <context>
@@ -4311,11 +6155,72 @@ gebruik &quot;free&quot; commando om een spel vrij of officiëel te maken</trans
     </message>
     <message>
         <source>Images (*.png *.jpg *.xpm *.ico)</source>
-        <translation>Afbeeldingen (*.png *.jpg *.xpm *.ico)</translation>
+        <translation type="vanished">Afbeeldingen (*.png *.jpg *.xpm *.ico)</translation>
     </message>
     <message>
         <source>Images (*.png *.xpm *.jpg)</source>
         <translation>Afbeeldingen (*.png *.xpm *.jpg)</translation>
+    </message>
+    <message>
+        <source>Select white stone base color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select black stone base color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unsaved data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The engine input fields contain
+potentially unsaved data.
+Really close the preferences?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The host input fields contain
+potentially unsaved data.
+Really close the preferences?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid komi entered</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please enter a valid komi before adding the engine.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Missing board size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Analysis engines require a board size to be specified.
+If your engine allows multiple board sizes, you need to configure them in separate entires.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid board size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Only a range of 5 to 25 is allowed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose GTP engine path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select a goban wood image</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select a table background image</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4334,12 +6239,12 @@ gebruik &quot;free&quot; commando om een spel vrij of officiëel te maken</trans
     </message>
     <message>
         <source>remember that point for fast return</source>
-        <translation>onthoudt dat punt voor een snelle terugkomst</translation>
+        <translation type="vanished">onthoudt dat punt voor een snelle terugkomst</translation>
     </message>
     <message>
         <source>push button at starting point to enable remembering.
 After placing and/or undo release button for returning to starting point automatically.</source>
-        <translation>Druk knop bij het startpunt om onthoudmodus aan te zetten.
+        <translation type="vanished">Druk knop bij het startpunt om onthoudmodus aan te zetten.
 Na het plaatsen en/of het ongedaan maken, laat knop los om automatisch terug te keren naar het startpunt.</translation>
     </message>
     <message>
@@ -4348,14 +6253,14 @@ Na het plaatsen en/of het ongedaan maken, laat knop los om automatisch terug te 
     </message>
     <message>
         <source>hand over controls to opponent</source>
-        <translation>geef de controle over aan de tegenstander</translation>
+        <translation type="vanished">geef de controle over aan de tegenstander</translation>
     </message>
     <message>
         <source>hand over controls to opponent to allow him placing black and white stones, undo etc.
 
 Only teacher can give control,
 both teacher and pupil can release control.</source>
-        <translation>geeft de controle over aan de tegenstander zodat hij zwarte en witte stenen kan plaatsen, ongedaan maken etc.
+        <translation type="vanished">geeft de controle over aan de tegenstander zodat hij zwarte en witte stenen kan plaatsen, ongedaan maken etc.
 
 Enkel de leraar kan de controle geven,
 zowal de leraar als de leerling kunnen de controle afstaan.</translation>
@@ -4418,17 +6323,17 @@ Wanneer geactiveerd zullen de stenen op het bord iets kleiner getekend worden en
     </message>
     <message>
         <source>Coordinates</source>
-        <translation>Coördinaten</translation>
+        <translation type="vanished">Coördinaten</translation>
     </message>
     <message>
         <source>Show board coordinates</source>
-        <translation>Toon bordcoördinaten</translation>
+        <translation type="vanished">Toon bordcoördinaten</translation>
     </message>
     <message>
         <source>Show board coordinates
 
 Toggles if the board coordinates are shown.</source>
-        <translation>Toon bordcoördinaten
+        <translation type="vanished">Toon bordcoördinaten
 
 Zet aan/af dat bordcoördinaten weergegeven worden.</translation>
     </message>
@@ -4450,7 +6355,7 @@ Zet de schuifknop aan de onderkant van het bord aan of af.</translation>
     </message>
     <message>
         <source>Cursor</source>
-        <translation>Cursor</translation>
+        <translation type="vanished">Cursor</translation>
     </message>
     <message>
         <source>Show a ghost stone at mouse pointer</source>
@@ -4466,33 +6371,33 @@ Een denkbeeldige steen de huidige positie van de muiswijzer laten tonen op het b
     </message>
     <message>
         <source>ToolTip coords</source>
-        <translation>Hulptekst coordn</translation>
+        <translation type="vanished">Hulptekst coordn</translation>
     </message>
     <message>
         <source>Show coordinates as ToolTip</source>
-        <translation>Toon coördinaten als hulptekst</translation>
+        <translation type="vanished">Toon coördinaten als hulptekst</translation>
     </message>
     <message>
         <source>Show coordinates as ToolTip
 
 When the mouse hovers over a point on the board, show a tooltip with the current coordinate.</source>
-        <translation>Toon coördinaten als hulptekst
+        <translation type="vanished">Toon coördinaten als hulptekst
 
 Toon een hulptekst met de huidige coördinaten wanneer de muis zich boven een punt op het bord bevindt.</translation>
     </message>
     <message>
         <source>Variable mark font</source>
-        <translation>Variabel markeringslettertype</translation>
+        <translation type="vanished">Variabel markeringslettertype</translation>
     </message>
     <message>
         <source>Variable font size for marks</source>
-        <translation>Variabel lettertypegrootte voor markeringen</translation>
+        <translation type="vanished">Variabel lettertypegrootte voor markeringen</translation>
     </message>
     <message>
         <source>Variable font size for marks 
 
 Ignore the size of the chosen font for marks and set size to about stone dimension.</source>
-        <translation>Variabel lettertypegrootte voor markeringen
+        <translation type="vanished">Variabel lettertypegrootte voor markeringen
 
 Negeer de grootte van het gekozen lettertype voor markeringen en zet de grootte op ongeveer een steengrootte.</translation>
     </message>
@@ -4514,27 +6419,27 @@ Globaal uitschakelen van alle hulpteksten die tevoorschijn zouden komen wanneer 
     </message>
     <message>
         <source>Smaller marks</source>
-        <translation>Kleinere markeringen</translation>
+        <translation type="vanished">Kleinere markeringen</translation>
     </message>
     <message>
         <source>Draw marks slightly smaller</source>
-        <translation>Teken markeringen een beetje kleiner</translation>
+        <translation type="vanished">Teken markeringen een beetje kleiner</translation>
     </message>
     <message>
         <source>Draw marks slightly smaller
 
 If activated, all types of marks on the board will be drawn slightly smaller.</source>
-        <translation>Teken markeringen een beetje kleiner
+        <translation type="vanished">Teken markeringen een beetje kleiner
 
 Indien geactiveerd worden alle soorten markeringen een beetje kleiner getekend op het bord.</translation>
     </message>
     <message>
         <source>Adjust font size</source>
-        <translation>Lettergrootte bijregelen</translation>
+        <translation type="vanished">Lettergrootte bijregelen</translation>
     </message>
     <message>
         <source>Adjust font size for text and number labels</source>
-        <translation>Lettergrootte bijregelen voor tekst- en getal labels</translation>
+        <translation type="vanished">Lettergrootte bijregelen voor tekst- en getal labels</translation>
     </message>
     <message>
         <source>Adjust font size for text and number labels
@@ -4548,49 +6453,49 @@ Bij het wijzigen van slechts eencijferige markeringen kan het handig zijn dit ui
     </message>
     <message>
         <source>Bold marks</source>
-        <translation>Vetgedrukte markeringen</translation>
+        <translation type="vanished">Vetgedrukte markeringen</translation>
     </message>
     <message>
         <source>Draw marks bold</source>
-        <translation>Teken vetgedrukte markeringen</translation>
+        <translation type="vanished">Teken vetgedrukte markeringen</translation>
     </message>
     <message>
         <source>Draw marks bold
 
 If activated, all types of marks except characters and numbers on the board will be drawn bold.</source>
-        <translation>Teken vetgedrukte markeringen
+        <translation type="vanished">Teken vetgedrukte markeringen
 
 Indien geactiveerd zullen alle soorten markeringen behalve lettertekens en getallen vetgedrukt getekend worden op het bord.</translation>
     </message>
     <message>
         <source>Sidebar</source>
-        <translation>Zijbalk</translation>
+        <translation type="vanished">Zijbalk</translation>
     </message>
     <message>
         <source>Show sidebar</source>
-        <translation>Toon zijbalk</translation>
+        <translation type="vanished">Toon zijbalk</translation>
     </message>
     <message>
         <source>Show sidebar
 
 Enables or disables the navigation and tool sidebar.</source>
-        <translation>Toon zijbalk
+        <translation type="vanished">Toon zijbalk
 
 Schakelt de navigatie- en toolzijbalk aan en uit.</translation>
     </message>
     <message>
         <source>left</source>
-        <translation>links</translation>
+        <translation type="vanished">links</translation>
     </message>
     <message>
         <source>Show sidebar on the left</source>
-        <translation>Toon zijbalk aan de linkerkant</translation>
+        <translation type="vanished">Toon zijbalk aan de linkerkant</translation>
     </message>
     <message>
         <source>Show sidebar on the left
 
 Swaps sidebar and board, thus board is on the left and sidbar is on the right.</source>
-        <translation>Toon zijbalk aan de linkerkant
+        <translation type="vanished">Toon zijbalk aan de linkerkant
 
 Verwisselt zijbalk en bord, zodat het bord links staat en de zijbalk rechts.</translation>
     </message>
@@ -4785,7 +6690,7 @@ If &apos;System default&apos; is selected, qGo will use the standard language of
 This change will take effect only after qGo has been restarted.
 
 If your language is not supported, you might consider translating qGo. Please check the qGo homepage at http://qgo.sourceforge.net</source>
-        <translation>Stel applicatietaal in
+        <translation type="vanished">Stel applicatietaal in
 
 Kies uw taal voor qGo.
 Als &apos;Systeem standaard&apos; geselecteerd wordt, zal qGo de standaard taal van uw systeem gebruiken. In Linux wordt hiervoor de omgevingsvariabele LANG getest, in Windows gewoon de taal die u in uw instellingen hebt gekozen.
@@ -4800,11 +6705,11 @@ Als uw taal niet ondersteund wordt, kunt u misschien qGo vertalen. Gelieve de ho
     </message>
     <message>
         <source>Comment orientation</source>
-        <translation>Opmerkingen oriëntatie</translation>
+        <translation type="vanished">Opmerkingen oriëntatie</translation>
     </message>
     <message>
         <source>Horizontal or vertical comment orientation</source>
-        <translation>Horizontale of verticale oriëntatie van opmerkingen</translation>
+        <translation type="vanished">Horizontale of verticale oriëntatie van opmerkingen</translation>
     </message>
     <message>
         <source>Horizontal or vertical comment orientation
@@ -4814,7 +6719,7 @@ The comment field will either be displayed on the bottom of the board or on the 
 For more dynamic display, pin off the comment field in the View menu.
 
 If None is selected, the comment field is by default hidden.</source>
-        <translation>Horizontale of verticale oriëntatie van opmerkingen
+        <translation type="vanished">Horizontale of verticale oriëntatie van opmerkingen
 
 Het opmerkingenveld zal ofwel aan de onderkant of aan de rechterkant van het bord weergegeven worden.
 
@@ -4824,35 +6729,35 @@ Als Geen geselecteerd is, wordt het opmerkingenveld standaard niet weergegeven.<
     </message>
     <message>
         <source>as saved</source>
-        <translation>zoals opgeslagen</translation>
+        <translation type="vanished">zoals opgeslagen</translation>
     </message>
     <message>
         <source>horizontal</source>
-        <translation>horizontaal</translation>
+        <translation type="vanished">horizontaal</translation>
     </message>
     <message>
         <source>vertical</source>
-        <translation>verticaal</translation>
+        <translation type="vanished">verticaal</translation>
     </message>
     <message>
         <source>choose default comment orientation</source>
-        <translation>kies standaardoriëntatie van opmerkingen</translation>
+        <translation type="vanished">kies standaardoriëntatie van opmerkingen</translation>
     </message>
     <message>
         <source>default comment field orientation
 
-as saved<byte value="x9"/>use ALT+&lt;0..9&gt; to save position, size and comment orientation, 
-<byte value="x9"/><byte value="x9"/>restore with CTRL+&lt;0..9&gt;
-horizontal<byte value="x9"/>always show horizontal comment field
-vertical<byte value="x9"/><byte value="x9"/>always show vertical comment field
+as saved	use ALT+&lt;0..9&gt; to save position, size and comment orientation, 
+		restore with CTRL+&lt;0..9&gt;
+horizontal	always show horizontal comment field
+vertical		always show vertical comment field
 
 To use saved comment field orientation you must select &apos;as saved&apos;. By using ALT/CTRL+&lt;number&gt; while horizontal/vertical is chosen, the saved comment field orientation is ignored.</source>
-        <translation>standaardoriëntatie opmerkingenveld
+        <translation type="vanished">standaardoriëntatie opmerkingenveld
 
-zoals opgeslagen<byte value="x9"/>gebruik ALT+&lt;0..9&gt; om positie, grootte en opmerkingenoriëntatie op te slaan,
-<byte value="x9"/><byte value="x9"/>herstel met CTRL+&lt;0..9&gt;
-horizontaal<byte value="x9"/>toon altijd een horizontaal opmerkingenveld
-verticaal<byte value="x9"/>toon altijd een verticaal opmerkingenveld
+zoals opgeslagen	gebruik ALT+&lt;0..9&gt; om positie, grootte en opmerkingenoriëntatie op te slaan,
+		herstel met CTRL+&lt;0..9&gt;
+horizontaal	toon altijd een horizontaal opmerkingenveld
+verticaal	toon altijd een verticaal opmerkingenveld
 
 Om de opgeslagen oriëntatie van het opmerkingenveld te gebruiken moet u &apos;zoals opgeslagen&apos; selecteren. Door ALT/CTRL+&lt;cijfer&gt; te gebruiken wanneer horizontaal/verticaal gekozen is, wordt de bewaarde oriëntatie van het opmerkingenveld genegeerd.</translation>
     </message>
@@ -4882,7 +6787,7 @@ Selecteer hoe alle broers van de huidige zet moeten weergegeven worden. Ofwel he
     </message>
     <message>
         <source>Small stones</source>
-        <translation>Kleine stenen</translation>
+        <translation type="vanished">Kleine stenen</translation>
     </message>
     <message>
         <source>Windows</source>
@@ -5042,7 +6947,7 @@ Onthoud het geselecteerde lettertype wanneer qGo volgende keer opstart. Indien n
     </message>
     <message>
         <source>Color</source>
-        <translation>Kleur</translation>
+        <translation type="vanished">Kleur</translation>
     </message>
     <message>
         <source>color: Background</source>
@@ -5050,17 +6955,17 @@ Onthoud het geselecteerde lettertype wanneer qGo volgende keer opstart. Indien n
     </message>
     <message>
         <source>Current background color</source>
-        <translation>Huidige achtergrondkleur</translation>
+        <translation type="vanished">Huidige achtergrondkleur</translation>
     </message>
     <message>
         <source>Select new color</source>
-        <translation>Selecteer nieuwe kleur</translation>
+        <translation type="vanished">Selecteer nieuwe kleur</translation>
     </message>
     <message>
         <source>Select new color
 
 Select the color for dialog background in the application.</source>
-        <translation>Selecteer nieuwe kleur
+        <translation type="vanished">Selecteer nieuwe kleur
 
 Selecteer de kleur voor de achtergrond van de dialogen in het programma.</translation>
     </message>
@@ -5070,67 +6975,67 @@ Selecteer de kleur voor de achtergrond van de dialogen in het programma.</transl
     </message>
     <message>
         <source>ASCII Characters</source>
-        <translation>ASCII Lettertekens</translation>
+        <translation type="vanished">ASCII Lettertekens</translation>
     </message>
     <message>
         <source>ASCII character for import/export</source>
-        <translation>ASCII letterteken voor invoer/uitvoer</translation>
+        <translation type="vanished">ASCII letterteken voor invoer/uitvoer</translation>
     </message>
     <message>
         <source>ASCII character for import
 
 When importing or exporting ASCII files, use these characters to indicate the given stone or point on the board.</source>
-        <translation>ASCII letterteken voor invoer
+        <translation type="vanished">ASCII letterteken voor invoer
 
 Bij het invoeren of uitvoeren van ASCII bestanden, gebruik deze lettertekens om de gegeven steen of punt op het bord aan te duiden.</translation>
     </message>
     <message>
         <source>Black stone:</source>
-        <translation>Zwarte steen:</translation>
+        <translation type="vanished">Zwarte steen:</translation>
     </message>
     <message>
         <source>#</source>
-        <translation>#</translation>
+        <translation type="vanished">#</translation>
     </message>
     <message>
         <source>White stone:</source>
-        <translation>Witte steen:</translation>
+        <translation type="vanished">Witte steen:</translation>
     </message>
     <message>
         <source>O</source>
-        <translation>O</translation>
+        <translation type="vanished">O</translation>
     </message>
     <message>
         <source>Star point:</source>
-        <translation>Ster punt:</translation>
+        <translation type="vanished">Ster punt:</translation>
     </message>
     <message>
         <source>,</source>
-        <translation>,</translation>
+        <translation type="vanished">,</translation>
     </message>
     <message>
         <source>Empty point:</source>
-        <translation>Leeg punt:</translation>
+        <translation type="vanished">Leeg punt:</translation>
     </message>
     <message>
         <source>.</source>
-        <translation>.</translation>
+        <translation type="vanished">.</translation>
     </message>
     <message>
         <source>Horizontal border:</source>
-        <translation>Horizontale rand:</translation>
+        <translation type="vanished">Horizontale rand:</translation>
     </message>
     <message>
         <source>|</source>
-        <translation>|</translation>
+        <translation type="vanished">|</translation>
     </message>
     <message>
         <source>Vertical border:</source>
-        <translation>Verticale rand:</translation>
+        <translation type="vanished">Verticale rand:</translation>
     </message>
     <message>
         <source>-</source>
-        <translation>-</translation>
+        <translation type="vanished">-</translation>
     </message>
     <message>
         <source>Circle</source>
@@ -5146,17 +7051,17 @@ Wijzig cirkelmarkeringen op het bord. Linkse klik plaatst een markering, rechtse
     </message>
     <message>
         <source>Add as brother</source>
-        <translation>Voeg toe als broer</translation>
+        <translation type="vanished">Voeg toe als broer</translation>
     </message>
     <message>
         <source>Add imported position as brother</source>
-        <translation>Voeg ingevoerde positie toe als broer</translation>
+        <translation type="vanished">Voeg ingevoerde positie toe als broer</translation>
     </message>
     <message>
         <source>Add imported position as brother
 
 If disabled, the imported position is added as son.</source>
-        <translation>Voeg ingevoerde positie toe als broer
+        <translation type="vanished">Voeg ingevoerde positie toe als broer
 
 Wanneer uitgeschakeld wordt de ingevoerde positie toegevoegd als zoon.</translation>
     </message>
@@ -5166,31 +7071,31 @@ Wanneer uitgeschakeld wordt de ingevoerde positie toegevoegd als zoon.</translat
     </message>
     <message>
         <source>Square</source>
-        <translation>Vierkant</translation>
+        <translation type="vanished">Vierkant</translation>
     </message>
     <message>
         <source>Square
 
 Edit square marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation>Vierkant
+        <translation type="vanished">Vierkant
 
 Wijzig vierkante markeringen op het bord.  Linkse klik plaatst een markering, rechtse klik verwijdert het.</translation>
     </message>
     <message>
         <source>Remember last directory</source>
-        <translation>Onthoud laatste map</translation>
+        <translation type="vanished">Onthoud laatste map</translation>
     </message>
     <message>
         <source>Remember last directory
 
 When toggled on, the last used directory when loading or saving sgf files will be remembered.</source>
-        <translation>Onthoud laatste map
+        <translation type="vanished">Onthoud laatste map
 
 Indien ingeschakeld wordt de laatste gebruikte map onthouden voor laden en opslaan van sgf bestanden.</translation>
     </message>
     <message>
         <source>Text encoding for loading and saving</source>
-        <translation>Tekstcodering voor laden en opslaan</translation>
+        <translation type="vanished">Tekstcodering voor laden en opslaan</translation>
     </message>
     <message>
         <source>Text encoding for loading and saving
@@ -5198,7 +7103,7 @@ Indien ingeschakeld wordt de laatste gebruikte map onthouden voor laden en opsla
 This is used for loading and saving files containing asian letters.
 If &apos;None&apos; is selected, Latin1 encoding will be used, common in western world.
 &apos;None&apos; will speed up loading large files like Kogos Joseki dictionary significantly.</source>
-        <translation>Tekstcodering voor laden en opslaan
+        <translation type="vanished">Tekstcodering voor laden en opslaan
 
 Dit wordt gebruikt voor het laden en opslaan van bestanden die Aziatische letters bevatten.
 Als &apos;Geen&apos; geselecteerd wordt, zal de in de westerse wereld gebruikelijke Latin1 codering gebruikt worden.
@@ -5206,63 +7111,63 @@ Als &apos;Geen&apos; geselecteerd wordt, zal de in de westerse wereld gebruikeli
     </message>
     <message>
         <source>Text encoding:</source>
-        <translation>Tekstcodering:</translation>
+        <translation type="vanished">Tekstcodering:</translation>
     </message>
     <message>
         <source>EUC-JP</source>
-        <translation>EUC-JP</translation>
+        <translation type="vanished">EUC-JP</translation>
     </message>
     <message>
         <source>JIS</source>
-        <translation>JIS</translation>
+        <translation type="vanished">JIS</translation>
     </message>
     <message>
         <source>Shift-JIS</source>
-        <translation>Shift-JIS</translation>
+        <translation type="vanished">Shift-JIS</translation>
     </message>
     <message>
         <source>EUC-KR</source>
-        <translation>EUC-KR</translation>
+        <translation type="vanished">EUC-KR</translation>
     </message>
     <message>
         <source>GBK</source>
-        <translation>GBK</translation>
+        <translation type="vanished">GBK</translation>
     </message>
     <message>
         <source>Tamil TSCII</source>
-        <translation>Tamil TSCII</translation>
+        <translation type="vanished">Tamil TSCII</translation>
     </message>
     <message>
         <source>Request adjournment</source>
-        <translation>Verzoek uitstelling</translation>
+        <translation type="vanished">Verzoek uitstelling</translation>
     </message>
     <message>
         <source>Adjourn.
 
 Send adjournment request to your opponent. If he accept it, the game will be adjourned and saved.</source>
-        <translation>Uitstellen
+        <translation type="vanished">Uitstellen
 
 Zend verzoek tot uitstelling naar uw tegenstander. Als hij dit aanvaardt wordt het spel uitgesteld en opgeslagen.</translation>
     </message>
     <message>
         <source>Fast loading (EXPERIMENTAL)</source>
-        <translation>Snel laden (EXPERIMENTEEL)</translation>
+        <translation type="vanished">Snel laden (EXPERIMENTEEL)</translation>
     </message>
     <message>
         <source>Enable fast loading</source>
-        <translation>Activeer snel laden</translation>
+        <translation type="vanished">Activeer snel laden</translation>
     </message>
     <message>
         <source>Enable fast loading
 
 Warning: This is experimental and does not work properly!</source>
-        <translation>Activeer snel laden
+        <translation type="vanished">Activeer snel laden
 
 Opgepast: dit is experimenteel en werkt niet volledig!</translation>
     </message>
     <message>
         <source>Fast loading is experimental right now and does not work completely!</source>
-        <translation>Snel laden is momenteel nog experimenteel en werkt niet helemaal!</translation>
+        <translation type="vanished">Snel laden is momenteel nog experimenteel en werkt niet helemaal!</translation>
     </message>
     <message>
         <source>Client Window</source>
@@ -5394,15 +7299,15 @@ Enkel op IGS.</translation>
     </message>
     <message>
         <source>Go Engine</source>
-        <translation>Go programma</translation>
+        <translation type="vanished">Go programma</translation>
     </message>
     <message>
         <source>Path to the Go program</source>
-        <translation>Pad naar het Go programma</translation>
+        <translation type="vanished">Pad naar het Go programma</translation>
     </message>
     <message>
         <source>Path to the Go playing program, e.g. GnuGo</source>
-        <translation>Pad naar het Go programma, b.v. GnuGo</translation>
+        <translation type="vanished">Pad naar het Go programma, b.v. GnuGo</translation>
     </message>
     <message>
         <source>Go Server</source>
@@ -5410,23 +7315,23 @@ Enkel op IGS.</translation>
     </message>
     <message>
         <source>Title</source>
-        <translation>Titel</translation>
+        <translation type="vanished">Titel</translation>
     </message>
     <message>
         <source>Host</source>
-        <translation>Host</translation>
+        <translation type="vanished">Host</translation>
     </message>
     <message>
         <source>Port</source>
-        <translation>Poort</translation>
+        <translation type="vanished">Poort</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Naam</translation>
+        <translation type="vanished">Naam</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation>Paswoord</translation>
+        <translation type="vanished">Paswoord</translation>
     </message>
     <message>
         <source>Host Entries
@@ -5561,16 +7466,16 @@ Registered users:
 use your login name and password provided by the go server operator after registration
 
 New users: depends on server
-NNGS, CWS:<byte value="x9"/>use a unique name like &apos;hotdog17&apos;
-others:<byte value="x9"/><byte value="x9"/>guest</source>
+NNGS, CWS:	use a unique name like &apos;hotdog17&apos;
+others:		guest</source>
         <translation>naam
 
 Geregistreerde gebruikers:
 gebruik uw loginnaam en paswoord dat de go server operator u heeft gegeven na registratie
 
 Nieuwe gebruikers: hangt af van server
-NNGS, CWS:<byte value="x9"/>gebruik een unieke naam zoals &apos;hotdog17&apos;
-anderen:<byte value="x9"/><byte value="x9"/>gast</translation>
+NNGS, CWS:	gebruik een unieke naam zoals &apos;hotdog17&apos;
+anderen:		gast</translation>
     </message>
     <message>
         <source>Password:</source>
@@ -5624,7 +7529,7 @@ Klik om een nieuw, wijzigbaar offline venster te krijgen.</translation>
     </message>
     <message>
         <source>clear form</source>
-        <translation>formulier leegmaken</translation>
+        <translation type="vanished">formulier leegmaken</translation>
     </message>
     <message>
         <source>New
@@ -5640,7 +7545,7 @@ formulier leegmaken; maakt geen wijzigingen aan de regels</translation>
     </message>
     <message>
         <source>add/change current entry</source>
-        <translation>toevoegen/wijzigen van huidige regel</translation>
+        <translation type="vanished">toevoegen/wijzigen van huidige regel</translation>
     </message>
     <message>
         <source>Add or Change
@@ -5660,7 +7565,7 @@ Het label &apos;Toevoegen&apos; is standaard. De gegeven regels zullen opgeslage
     </message>
     <message>
         <source>delete current entry</source>
-        <translation>verwijder huidige regel</translation>
+        <translation type="vanished">verwijder huidige regel</translation>
     </message>
     <message>
         <source>Delete
@@ -5715,20 +7620,16 @@ Stel hier de instellingen in die u standaard wil gebruiken wanneer u een spel vo
         <translation type="obsolete">Standaard (OS stijl)</translation>
     </message>
     <message>
-        <source>Default for White</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Computer</source>
-        <translation>Computer</translation>
+        <translation type="vanished">Computer</translation>
     </message>
     <message>
         <source>Human</source>
-        <translation>Mens</translation>
+        <translation type="vanished">Mens</translation>
     </message>
     <message>
         <source>Default for Black</source>
-        <translation>Wit standaard</translation>
+        <translation type="vanished">Wit standaard</translation>
     </message>
     <message>
         <source>font: console</source>
@@ -5810,7 +7711,7 @@ Opgepast: het kan vervelend zijn wanneer de tegenstander uw standaard waarden ni
     </message>
     <message>
         <source>User buttons toolbar</source>
-        <translation>Knoppenhulpbalk van gebruiker</translation>
+        <translation type="vanished">Knoppenhulpbalk van gebruiker</translation>
     </message>
     <message>
         <source>Delete
@@ -5818,7 +7719,7 @@ Opgepast: het kan vervelend zijn wanneer de tegenstander uw standaard waarden ni
 Deletes the saved entries with same label
 
 Note: &apos;Delete&apos; concerns saved records.</source>
-        <translation>Verwijderen
+        <translation type="vanished">Verwijderen
 
 Verwijdert de opgeslagen regels met dezelfde Titel.
 
@@ -5826,91 +7727,91 @@ Merk op: &apos;Verwijderen&apos; heeft alleen te maken met opgeslagen fiches.</t
     </message>
     <message>
         <source>Help text:</source>
-        <translation>Hulptekst:</translation>
+        <translation type="vanished">Hulptekst:</translation>
     </message>
     <message>
         <source>Help text, displayed as tooltip</source>
-        <translation>Hulptekst, weergegeven als tiptekst</translation>
+        <translation type="vanished">Hulptekst, weergegeven als tiptekst</translation>
     </message>
     <message>
         <source>help text
 
 This text is displayed as tooltip of the created button</source>
-        <translation>hulp tekst
+        <translation type="vanished">hulp tekst
 
 Deze tekst wordt weergegeven als tiptekst van de aangemaakte knop</translation>
     </message>
     <message>
         <source>Command:</source>
-        <translation>Commando:</translation>
+        <translation type="vanished">Commando:</translation>
     </message>
     <message>
         <source>command passed to the server</source>
-        <translation>commando dat aan de server wordt doorgegeven</translation>
+        <translation type="vanished">commando dat aan de server wordt doorgegeven</translation>
     </message>
     <message>
         <source>command
 
 the command is passed to the server</source>
-        <translation>commando
+        <translation type="vanished">commando
 
 het commando wordt doorgegeven aan de server</translation>
     </message>
     <message>
         <source>Pixmap file:</source>
-        <translation>Pixmap bestand:</translation>
+        <translation type="vanished">Pixmap bestand:</translation>
     </message>
     <message>
         <source>file path to the button pixmap</source>
-        <translation>Pad naar de pixmap van de knop</translation>
+        <translation type="vanished">Pad naar de pixmap van de knop</translation>
     </message>
     <message>
         <source>file path to the button pixmap
 
 Set it with the file chooser</source>
-        <translation>Pad naar de pixmap van de knop
+        <translation type="vanished">Pad naar de pixmap van de knop
 
 Stel het in via de bestandskiezer</translation>
     </message>
     <message>
         <source>pixmap file chooser</source>
-        <translation>pixmap bestandskiezer</translation>
+        <translation type="vanished">pixmap bestandskiezer</translation>
     </message>
     <message>
         <source>Label:</source>
-        <translation>Label:</translation>
+        <translation type="vanished">Label:</translation>
     </message>
     <message>
         <source>Button label</source>
-        <translation>Label van de knop</translation>
+        <translation type="vanished">Label van de knop</translation>
     </message>
     <message>
         <source>unique label, 
 
 The label is displayed as button text.</source>
-        <translation>uniek label,
+        <translation type="vanished">uniek label,
 
 Het label wordt weergegeven als knoptekst.</translation>
     </message>
     <message>
         <source>Pixmap</source>
-        <translation>Pixmap</translation>
+        <translation type="vanished">Pixmap</translation>
     </message>
     <message>
         <source>Label</source>
-        <translation>Label</translation>
+        <translation type="vanished">Label</translation>
     </message>
     <message>
         <source>Command</source>
-        <translation>Commando</translation>
+        <translation type="vanished">Commando</translation>
     </message>
     <message>
         <source>Help Text</source>
-        <translation>Hulptekst</translation>
+        <translation type="vanished">Hulptekst</translation>
     </message>
     <message>
         <source>User defined button list</source>
-        <translation>Door gebruiker gedefinieerde knoppenlijst</translation>
+        <translation type="vanished">Door gebruiker gedefinieerde knoppenlijst</translation>
     </message>
     <message>
         <source>Button Entries
@@ -5919,7 +7820,7 @@ Select &apos;New&apos; to clear input fields. After filling in at least label an
 
 Select an entry to edit, change (label keeps unchanged) or delete a line.
 </source>
-        <translation>Knop regels
+        <translation type="vanished">Knop regels
 
 Selecteer &apos;Nieuw&apos; om de invoervelden leeg te maken. Gebruik Toevoegen/Wijzigen na tenminste het label en het commando te hebben ingevoerd.
 
@@ -5940,15 +7841,15 @@ Selecteer een regel om te wijzigen, wijzig (label blijft ongewijzigd) of verwijd
     </message>
     <message>
         <source>Import / Export</source>
-        <translation>Importeren / Exporteren</translation>
+        <translation type="vanished">Importeren / Exporteren</translation>
     </message>
     <message>
         <source>Imported game position</source>
-        <translation>Geïmporteerde spelpositie</translation>
+        <translation type="vanished">Geïmporteerde spelpositie</translation>
     </message>
     <message>
         <source>Big5</source>
-        <translation>Big5</translation>
+        <translation type="vanished">Big5</translation>
     </message>
     <message>
         <source>Handicap :</source>
@@ -5964,18 +7865,18 @@ Selecteer een regel om te wijzigen, wijzig (label blijft ongewijzigd) of verwijd
     </message>
     <message>
         <source>SGF Style</source>
-        <translation>SGF Stijl</translation>
+        <translation type="vanished">SGF Stijl</translation>
     </message>
     <message>
         <source>Show SGF board coordinates</source>
-        <translation>Toon SGF bord coördinaten</translation>
+        <translation type="vanished">Toon SGF bord coördinaten</translation>
     </message>
     <message>
         <source>Show SGF board coordinates
-<byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/>
+										
 Toggles if SGF style board coordinates are shown.</source>
-        <translation>Toon SGF bord coördinaten
-<byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/>
+        <translation type="vanished">Toon SGF bord coördinaten
+										
 Bepaalt of coördinaten worden weergegeven in SGF stijl.</translation>
     </message>
     <message>
@@ -5983,14 +7884,14 @@ Bepaalt of coördinaten worden weergegeven in SGF stijl.</translation>
 
 This is useful when numbering all moves of a game, so the font size of all one, two or three digits numbers is equal.
 When editing only single digit marks, it might be convenient to switch this off.</source>
-        <translation>Lettertype grootte aanpassen voor tekst- en nummerlabels
+        <translation type="vanished">Lettertype grootte aanpassen voor tekst- en nummerlabels
 
 Dit is nuttig bij het nummeren van alle zetten van een spel, zodat de lettertype grootte van alle nummers (een, twee of drie cijfers) gelijk is.
 Voor het bewerken van nummers van een cijfer kan het handig zijn deze optie uit te schakelen.</translation>
     </message>
     <message>
         <source>On line games</source>
-        <translation>On line spellen</translation>
+        <translation type="vanished">On line spellen</translation>
     </message>
     <message>
         <source>Anti clicko (1/4 second click latency)</source>
@@ -6080,7 +7981,7 @@ Indien geactiveerd en een gevolgd spel eindigt, dan wordt het automatisch opgesl
     </message>
     <message>
         <source>Board picture</source>
-        <translation>Bord afbeelding</translation>
+        <translation type="vanished">Bord afbeelding</translation>
     </message>
     <message>
         <source>observed games</source>
@@ -6104,11 +8005,11 @@ Indien geactiveerd en een gespeeld spel beëindigd wordt, dan wordt het automati
     </message>
     <message>
         <source>Background</source>
-        <translation>Achtergrond</translation>
+        <translation type="vanished">Achtergrond</translation>
     </message>
     <message>
         <source>Alternate (lists)</source>
-        <translation>Vervangen (lijsten)</translation>
+        <translation type="vanished">Vervangen (lijsten)</translation>
     </message>
     <message>
         <source>Path to the goban picture</source>
@@ -6171,10 +8072,6 @@ When both players use this protocol, they can set handicap before playing, have 
 Wanneer beide spelers dit protocol gebruiken kunnen ze een handicap instellen voor het spel en &apos;nigiri&apos; hebben voor even spellen.  IGS laat ook het gebruik van de japanese Byo yomi klok toe, maar dit wordt nog niet ondersteund door qGo</translation>
     </message>
     <message>
-        <source>Ugly 2D</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>flat circled ... ugly but asked for ...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6185,10 +8082,6 @@ This will display back and white circles</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Plain 3D</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>plain 3D (no shadow, no stripes)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6196,10 +8089,6 @@ This will display back and white circles</source>
         <source>Stone appearance
 
 this will display simple 3D stones, with no shadow and neither stripes on white stones</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Realistic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -6266,6 +8155,396 @@ up to :</source>
 up to :</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Accept changes and close dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>cancel changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alt+C</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Graphics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sound defaults by game type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Local editing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Observed games</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Computer games</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>On-line matches</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File selectors:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Qt selector with SGF preview</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cursor stone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Standard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SGF style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Side bar:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hidden</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation type="unfinished">Links</translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation type="unfinished">Rechts</translation>
+    </message>
+    <message>
+        <source>Coordinates:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Online games</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation type="unfinished">Nee</translation>
+    </message>
+    <message>
+        <source>Yes</source>
+        <translation type="unfinished">Ja</translation>
+    </message>
+    <message>
+        <source>Ask</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show which:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Letters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show as:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Siblings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Children</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Allow SGF files to override
+child/sibling setting:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ignore diagrams</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Diagrams</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If checked, the diagram display will revert to an empty board whenever no diagrams are available, rather than retaining the previously shown diagram (which might be confusing).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear diagram display
+when navigating away</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open windows with
+diagram pane shown:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This option controls the layout of the board window. You can choose whether to show the diagram/evaluation graph pane, with an option to do so only if the opened file contains diagrams.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Never</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If diagrams found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Always</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game tree</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Adjust the visual size of the nodes in the game tree display.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Display size:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Annotated games can potentially have very many figures. This option stops them from being displayed in the game tree. Instead, an icon is shown for any move that has diagrams as children.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hide child diagrams in game tree</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Plain 2D</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Old 3D look</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shaded 3D</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>White stone appearance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Specular hardness:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Thickness:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Specular ratio:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select base color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flattened:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Black stone appearance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Simulate clamshell appearance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ambient light:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wood filename:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default 2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default 3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default 4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default 5</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wood image:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scale line widths</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Widen outside lines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Computer color:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default human player name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go Engines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear the engine form.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add or change the current entry.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete the current entry.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Executable:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The path to the GTP engine&apos;s executable.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The name of the engine by which it is selected in the new computer game dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use for analysis (LZ or compatible)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fixed komi:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Arguments:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Any command line arguments that should be passed at startup.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Analysis</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show variations as:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Percentage difference</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Absolute percentage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Winning percentages shown for:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Side to move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Max. variation depth:
+(0 is unlimited)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Max. moves shown:
+(0 is unlimited)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Override variation display settings
+(show child moves as circles when analysing)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hide other moves when showing
+a variation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Don&apos;t display moves with few visits</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear the server form.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Variants</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Duplicates shown either side of toroidal boards:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set application language
+
+Choose your language for qGo.
+If &apos;System default&apos; is selected, qGo will use the standard language of your system. On Linux this will check the environment variable LANG, on Windows simply the language you have set in your preferences.
+
+This change will take effect only after qGo has been restarted.
+
+If your language is not supported, you might consider translating q5go. Please visit https://github.com/bernds/q5go</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QApplication</name>
@@ -6286,78 +8565,78 @@ up to :</source>
     <name>QNewGameDlg</name>
     <message>
         <source>Human</source>
-        <translation>Mens</translation>
+        <translation type="vanished">Mens</translation>
     </message>
     <message>
         <source>Computer</source>
-        <translation>Computer</translation>
+        <translation type="vanished">Computer</translation>
     </message>
     <message>
         <source>SGF Files (*.sgf);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)</source>
-        <translation>SGF bestanden (*.sgf);;MGT bestanden (*.mgt);;XML bestanden (*.xml);;Alle bestanden (*)</translation>
+        <translation type="vanished">SGF bestanden (*.sgf);;MGT bestanden (*.mgt);;XML bestanden (*.xml);;Alle bestanden (*)</translation>
     </message>
     <message>
         <source>Error</source>
-        <translation>Fout</translation>
+        <translation type="vanished">Fout</translation>
     </message>
     <message>
         <source>You entered an invalid Handicap (1 is not legal)</source>
-        <translation>U hebt een ongeldige handicap ingevoerd (1 is niet geldig)</translation>
+        <translation type="vanished">U hebt een ongeldige handicap ingevoerd (1 is niet geldig)</translation>
     </message>
 </context>
 <context>
     <name>QNewGameDlgGui</name>
     <message>
         <source>Computer Game</source>
-        <translation>Computer spel</translation>
+        <translation type="vanished">Computer spel</translation>
     </message>
     <message>
         <source>White Player</source>
-        <translation>Witte speler</translation>
+        <translation type="vanished">Witte speler</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Naam</translation>
+        <translation type="vanished">Naam</translation>
     </message>
     <message>
         <source>Computer Level</source>
-        <translation>Computer niveau</translation>
+        <translation type="vanished">Computer niveau</translation>
     </message>
     <message>
         <source>Black Player</source>
-        <translation>Zwarte speler</translation>
+        <translation type="vanished">Zwarte speler</translation>
     </message>
     <message>
         <source>Load game</source>
-        <translation>Laad spel</translation>
+        <translation type="vanished">Laad spel</translation>
     </message>
     <message>
         <source>&amp;OK</source>
-        <translation>&amp;OK</translation>
+        <translation type="vanished">&amp;OK</translation>
     </message>
     <message>
         <source>&amp;Cancel</source>
-        <translation>&amp;Annuleer</translation>
+        <translation type="vanished">&amp;Annuleer</translation>
     </message>
     <message>
         <source>New Game</source>
-        <translation>Nieuw spel</translation>
+        <translation type="vanished">Nieuw spel</translation>
     </message>
     <message>
         <source>Board size:</source>
-        <translation>Bordgrootte:</translation>
+        <translation type="vanished">Bordgrootte:</translation>
     </message>
     <message>
         <source>Handicap:</source>
-        <translation>Handicap:</translation>
+        <translation type="vanished">Handicap:</translation>
     </message>
     <message>
         <source>Komi:</source>
-        <translation>Komi:</translation>
+        <translation type="vanished">Komi:</translation>
     </message>
     <message>
         <source>One Color Go</source>
-        <translation>Eén kleur Go</translation>
+        <translation type="vanished">Eén kleur Go</translation>
     </message>
 </context>
 <context>
@@ -6373,62 +8652,62 @@ up to :</source>
     <message>
         <source>Id</source>
         <comment>GamesTable Id number</comment>
-        <translation>Id</translation>
+        <translation type="vanished">Id</translation>
     </message>
     <message>
         <source>White</source>
         <comment>GamesTable White name</comment>
-        <translation>Wit</translation>
+        <translation type="vanished">Wit</translation>
     </message>
     <message>
         <source>WR</source>
         <comment>GamesTable White Rank</comment>
-        <translation>WR</translation>
+        <translation type="vanished">WR</translation>
     </message>
     <message>
         <source>Black</source>
         <comment>GamesTable Black name</comment>
-        <translation>Zwart</translation>
+        <translation type="vanished">Zwart</translation>
     </message>
     <message>
         <source>BR</source>
         <comment>GamesTable Black Rank</comment>
-        <translation>ZW</translation>
+        <translation type="vanished">ZW</translation>
     </message>
     <message>
         <source>Mv</source>
         <comment>GamesTable Move</comment>
-        <translation>Zt</translation>
+        <translation type="vanished">Zt</translation>
     </message>
     <message>
         <source>Sz</source>
         <comment>GamesTable Size</comment>
-        <translation>Gr</translation>
+        <translation type="vanished">Gr</translation>
     </message>
     <message>
         <source>H</source>
         <comment>GamesTable Handicap</comment>
-        <translation>H</translation>
+        <translation type="vanished">H</translation>
     </message>
     <message>
         <source>K</source>
         <comment>GamesTable Komi</comment>
-        <translation>K</translation>
+        <translation type="vanished">K</translation>
     </message>
     <message>
         <source>By</source>
         <comment>GamesTable Byoyomi time</comment>
-        <translation>By</translation>
+        <translation type="vanished">By</translation>
     </message>
     <message>
         <source>FR</source>
         <comment>GamesTable Free/Rated type of game</comment>
-        <translation>VO</translation>
+        <translation type="vanished">VO</translation>
     </message>
     <message>
         <source>Ob</source>
         <comment>GamesTable number of Observers</comment>
-        <translation>Ob</translation>
+        <translation type="vanished">Ob</translation>
     </message>
     <message>
         <source>Open</source>
@@ -6463,32 +8742,32 @@ up to :</source>
     <message>
         <source>Stat</source>
         <comment>PlayerTable: status [X!SQ]</comment>
-        <translation>Status</translation>
+        <translation type="vanished">Status</translation>
     </message>
     <message>
         <source>Name</source>
         <comment>PlayerTable: player&apos;s name</comment>
-        <translation>Naam</translation>
+        <translation type="vanished">Naam</translation>
     </message>
     <message>
         <source>Rk</source>
         <comment>PlayerTable: rank</comment>
-        <translation>Rg</translation>
+        <translation type="vanished">Rg</translation>
     </message>
     <message>
         <source>pl</source>
         <comment>PlayerTable: playing in game</comment>
-        <translation>Sp</translation>
+        <translation type="vanished">Sp</translation>
     </message>
     <message>
         <source>ob</source>
         <comment>PlayerTable: observing game</comment>
-        <translation>Ob</translation>
+        <translation type="vanished">Ob</translation>
     </message>
     <message>
         <source>Idle</source>
         <comment>PlayerTable: idle time</comment>
-        <translation>Niet actief</translation>
+        <translation type="vanished">Niet actief</translation>
     </message>
     <message>
         <source>Refresh</source>
@@ -6498,7 +8777,7 @@ up to :</source>
     <message>
         <source>Score</source>
         <comment>button label</comment>
-        <translation>Score</translation>
+        <translation type="vanished">Score</translation>
     </message>
     <message>
         <source>N</source>
@@ -6513,7 +8792,7 @@ up to :</source>
     <message>
         <source>Edit</source>
         <comment>button label</comment>
-        <translation>Wijzigen</translation>
+        <translation type="vanished">Wijzigen</translation>
     </message>
     <message>
         <source>O</source>
@@ -6523,7 +8802,7 @@ up to :</source>
     <message>
         <source>Pass</source>
         <comment>button label</comment>
-        <translation>Pas</translation>
+        <translation type="vanished">Pas</translation>
     </message>
     <message>
         <source>P</source>
@@ -6566,23 +8845,23 @@ up to :</source>
     </message>
     <message>
         <source>brother</source>
-        <translation>broer</translation>
+        <translation type="vanished">broer</translation>
     </message>
     <message>
         <source>brothers</source>
-        <translation>broers</translation>
+        <translation type="vanished">broers</translation>
     </message>
     <message>
         <source>son</source>
-        <translation>zoon</translation>
+        <translation type="vanished">zoon</translation>
     </message>
     <message>
         <source>sons</source>
-        <translation>zonen</translation>
+        <translation type="vanished">zonen</translation>
     </message>
     <message>
         <source>textedit</source>
-        <translation>bewerktekst</translation>
+        <translation type="vanished">bewerktekst</translation>
     </message>
     <message>
         <source>Error</source>
@@ -6590,21 +8869,271 @@ up to :</source>
     </message>
     <message>
         <source>Error opening program: %1</source>
-        <translation>Fout bij het openen van programma: %1</translation>
+        <translation type="vanished">Fout bij het openen van programma: %1</translation>
+    </message>
+    <message>
+        <source>GTP process exited unexpectedly.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit diagram options...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export &amp;ASCII...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export S&amp;VG...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Clear selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Hide unselected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Make all &amp;visible</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>C&amp;lear visibility state, inherit from parent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Expand subtree</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Expand one level of child nodes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Collapse subtree</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear diagram status for this node</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set this move to be the start of a diagram</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Navigate to this node</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The file did not quite have the correct structure of an SGF file, but could otherwise be understood.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The SGF file contained an invalid move that was played on top of another stone. Variations have been truncated at that point.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>One or more comments have been dropped since they contained invalid characters.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The SGF contained an empty value for komi. Assuming zero.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The SGF contained an empty value for the handicap. Assuming zero.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The SGF contained an invalid value in a property related to display.  Things like move numbers might not show up correctly.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The SGF contained evaluation data that could not be understood.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unsupported board size in SGF file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Errors found in SGF file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error while trying to load SGF file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open SGF file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SGF Files (*.sgf *.SGF);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show the Go server client window (default if no other arguments)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start up with a board window (ignored if files are loaded).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start up with the computer analysis dialog to analyze &lt;file&gt;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Display debug messages in a window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Specify text &lt;encoding&gt; of SGF files passed by command line.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load &lt;file&gt; and display it in a board window.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A</source>
+        <comment>Board status line: batch analysis</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>
+Variation </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> of </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>child position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>child positions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>GTP code originally from Goliath, thanks to: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not load custom board image,
+reverting to default.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unable to save settings to </source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>QPushButton</name>
     <message>
         <source>Move</source>
-        <translation>Verplaats</translation>
+        <translation type="vanished">Verplaats</translation>
+    </message>
+</context>
+<context>
+    <name>SGFPreview</name>
+    <message>
+        <source>Override character set for text in SGF file:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>UTF-8</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>GB18030</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>EUC-KR</source>
+        <translation type="unfinished">EUC-KR</translation>
+    </message>
+    <message>
+        <source>EUC-JP</source>
+        <translation type="unfinished">EUC-JP</translation>
+    </message>
+    <message>
+        <source>ISO-2022-JP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shift-JIS</source>
+        <translation type="unfinished">Shift-JIS</translation>
+    </message>
+    <message>
+        <source>Big5</source>
+        <translation type="unfinished">Big5</translation>
+    </message>
+    <message>
+        <source>Handicap:</source>
+        <translation type="unfinished">Handicap:</translation>
+    </message>
+    <message>
+        <source>Date:</source>
+        <translation type="unfinished">Datum:</translation>
+    </message>
+    <message>
+        <source>Size:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>6.5</source>
+        <translation type="unfinished">6.5</translation>
+    </message>
+    <message>
+        <source>Result:</source>
+        <translation type="unfinished">Uitslag:</translation>
+    </message>
+    <message>
+        <source>19</source>
+        <translation type="unfinished">19</translation>
+    </message>
+    <message>
+        <source>Komi:</source>
+        <translation type="unfinished">Komi:</translation>
+    </message>
+    <message>
+        <source>Black</source>
+        <translation type="unfinished">Zwart</translation>
+    </message>
+    <message>
+        <source>White</source>
+        <translation type="unfinished">Wit</translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SGF files (*.sgf *.SGF)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All files (*)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>ScoreTools</name>
     <message>
         <source>ScoreTools</source>
-        <translation>ScoreHulpmiddelen</translation>
+        <translation type="vanished">ScoreHulpmiddelen</translation>
     </message>
     <message>
         <source>White</source>
@@ -6633,6 +9162,18 @@ up to :</source>
     <message>
         <source>Black</source>
         <translation>Zwart</translation>
+    </message>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Result</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>TextLabel</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -6664,6 +9205,68 @@ up to :</source>
     <message>
         <source>Preferences</source>
         <translation type="obsolete">Instellingen</translation>
+    </message>
+</context>
+<context>
+    <name>SvgView</name>
+    <message>
+        <source>Export to SVG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save SVG export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Svg Files (*.txt);;All Files (*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to write to file </source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SvgViewGUI</name>
+    <message>
+        <source>SVG export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move numbering</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Coordinates</source>
+        <translation type="unfinished">Coördinaten</translation>
+    </message>
+    <message>
+        <source>Copy position to clipboard</source>
+        <translation type="unfinished">Kopieer positie naar klembord</translation>
+    </message>
+    <message>
+        <source>&amp;To clipboard (as text)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation type="unfinished">Vernieuwen</translation>
+    </message>
+    <message>
+        <source>Save position to file</source>
+        <translation type="unfinished">Bewaar positie in bestand</translation>
+    </message>
+    <message>
+        <source>&amp;Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Close this window</source>
+        <translation type="unfinished">Sluit dit venster</translation>
+    </message>
+    <message>
+        <source>&amp;Close</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -6827,19 +9430,35 @@ sluit het tabblad (en dialoogvenster)</translation>
     </message>
     <message>
         <source>This file already exists. Do you want to overwrite it?</source>
-        <translation>Dit bestand bestaat al. Wilt u het overschrijven?</translation>
+        <translation type="vanished">Dit bestand bestaat al. Wilt u het overschrijven?</translation>
     </message>
     <message>
         <source>Yes</source>
-        <translation>Ja</translation>
+        <translation type="vanished">Ja</translation>
     </message>
     <message>
         <source>No</source>
-        <translation>Nee</translation>
+        <translation type="vanished">Nee</translation>
     </message>
     <message>
         <source>Failed to write to file</source>
-        <translation>Schrijven naar bestand niet gelukt</translation>
+        <translation type="vanished">Schrijven naar bestand niet gelukt</translation>
+    </message>
+    <message>
+        <source>GTP program startup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export to ASCII</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save ASCII export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to write to file </source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -6872,6 +9491,26 @@ sluit het tabblad (en dialoogvenster)</translation>
         <source>Close this window</source>
         <translation>Sluit dit venster</translation>
     </message>
+    <message>
+        <source>Move numbering</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Coordinates</source>
+        <translation type="unfinished">Coördinaten</translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation type="unfinished">Vernieuwen</translation>
+    </message>
+    <message>
+        <source>Abort program startup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Abort</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>qGo</name>
@@ -6893,11 +9532,11 @@ Toch afsluiten?</translation>
     </message>
     <message>
         <source>No sound available.</source>
-        <translation>Geen geluid beschikbaar.</translation>
+        <translation type="vanished">Geen geluid beschikbaar.</translation>
     </message>
     <message>
         <source>No sound available. Qt on Mac uses QuickTime sound.</source>
-        <translation>Geen geluid beschikbaar.  Qt op Mac gebruikt QuickTime geluid.</translation>
+        <translation type="vanished">Geen geluid beschikbaar.  Qt op Mac gebruikt QuickTime geluid.</translation>
     </message>
     <message>
         <source>You are not running the Network Audio sytem.
@@ -6921,47 +9560,47 @@ In ieder geval, als u oss hebt zou het geluid moeten werken en naar /dev/dsp ges
     </message>
     <message>
         <source>Sound available.</source>
-        <translation>Geluid beschikbaar.</translation>
+        <translation type="vanished">Geluid beschikbaar.</translation>
     </message>
     <message>
         <source>Sound files not found.</source>
-        <translation>Geluidsbestanden niet gevonden.</translation>
+        <translation type="vanished">Geluidsbestanden niet gevonden.</translation>
     </message>
     <message>
         <source>Please check for the directories</source>
-        <translation>Gelieve de mappen na te kijken</translation>
+        <translation type="vanished">Gelieve de mappen na te kijken</translation>
     </message>
     <message>
         <source>or</source>
-        <translation>of</translation>
+        <translation type="vanished">of</translation>
     </message>
     <message>
         <source>depending on your installation.</source>
-        <translation>afhankelijk van uw installatie.</translation>
+        <translation type="vanished">afhankelijk van uw installatie.</translation>
     </message>
     <message>
         <source>You can navigate to the main qGo directory (for example:</source>
-        <translation>U kan naar de hoofdmap van qGo navigeren (bijvoorbeeld:</translation>
+        <translation type="vanished">U kan naar de hoofdmap van qGo navigeren (bijvoorbeeld:</translation>
     </message>
     <message>
         <source>If the directory was given correctly, this data will be saved and you won&apos;tbe asked
 anymore except you install qGo again into a different directory.
 To abort this procedure, click &apos;Cancel&apos; in the following dialog.</source>
-        <translation>Als de map correct werd opgegeven, zullen deze gegevens opgeslagen worden en zal u
+        <translation type="vanished">Als de map correct werd opgegeven, zullen deze gegevens opgeslagen worden en zal u
 dit niet meer gevraagd worden tenzij u qGo opnieuw installeert in een andere map.
 Om deze procedure af te breken, klik op &apos;Annuleren&apos; in de volgende dialoog.</translation>
     </message>
     <message>
         <source>qGo directory</source>
-        <translation>qGo map</translation>
+        <translation type="vanished">qGo map</translation>
     </message>
     <message>
         <source>No valid directory was given. Sound is not available.</source>
-        <translation>Er werd geen geldige map opgegeven. Geluid is niet beschikbaar.</translation>
+        <translation type="vanished">Er werd geen geldige map opgegeven. Geluid is niet beschikbaar.</translation>
     </message>
     <message>
         <source>GTP code from Goliath, thanks to:</source>
-        <translation>GTP code van Goliath, dank aan:</translation>
+        <translation type="vanished">GTP code van Goliath, dank aan:</translation>
     </message>
     <message>
         <source>English translation by:
@@ -6969,17 +9608,17 @@ Peter Strempel
 Johannes Mesa
 Emmanuel Beranger</source>
         <comment>Please set your own language and your name! Use your own language!</comment>
-        <translation>Nederlandse vertaling door:
+        <translation type="vanished">Nederlandse vertaling door:
 Tim Fooy</translation>
     </message>
     <message>
         <source>About...</source>
-        <translation>Over...</translation>
+        <translation type="vanished">Over...</translation>
     </message>
     <message>
         <source>No sound files in bundle, strange.
 </source>
-        <translation>Geen geluidsbestanden in de bundel, vreemd.</translation>
+        <translation type="vanished">Geen geluidsbestanden in de bundel, vreemd.</translation>
     </message>
     <message>
         <source>At least one board is modified.
@@ -6999,7 +9638,7 @@ ftp.x.org:/contrib/audio/nas
 Release 1.2 of NAS is also included with the X11R6 contrib distribution. After installing NAS, you will then need to reconfigure Qt with NAS sound support.
 
 Nevertheless, if you have oss, sound should be working and directed to /dev/dsp</source>
-        <translation>U hebt geen Network Audio System geactiveerd.
+        <translation type="vanished">U hebt geen Network Audio System geactiveerd.
 Als u het commando &apos;au&apos; hebt, start het dan in de achtergrond voor u dit programma start.  De laatste versie van het Network Audio System kan gedownload worden van:
 
 ftp.ncd.com:/pub/ncd/technology/src/nas
@@ -7014,11 +9653,11 @@ Desondanks, als u oss hebt zou het geluid moeten werken en naar /dev/dsp moeten 
     <name>qGoBoard</name>
     <message>
         <source>free</source>
-        <translation>vrij</translation>
+        <translation type="vanished">vrij</translation>
     </message>
     <message>
         <source>rated</source>
-        <translation>officiëel</translation>
+        <translation type="vanished">officiëel</translation>
     </message>
     <message>
         <source>opponent:</source>
@@ -7031,38 +9670,54 @@ Desondanks, als u oss hebt zou het geluid moeten werken en naar /dev/dsp moeten 
     <message>
         <source>Failed to play the stone within program 
 </source>
-        <translation>Spelen van steen in het programma mislukt
+        <translation type="vanished">Spelen van steen in het programma mislukt
 </translation>
     </message>
     <message>
         <source>Failed to pass within program 
 </source>
-        <translation>Passen in programma mislukt
+        <translation type="vanished">Passen in programma mislukt
 </translation>
     </message>
     <message>
         <source>Failed to undo within program 
 </source>
-        <translation>Ongedaan maken in het programma mislukt
+        <translation type="vanished">Ongedaan maken in het programma mislukt
 </translation>
     </message>
     <message>
         <source>Failed to have the program play its stone
 </source>
-        <translation>Plaatsen van een steen door het programma niet gelukt
+        <translation type="vanished">Plaatsen van een steen door het programma niet gelukt
 </translation>
     </message>
     <message>
         <source>remaining time / stones</source>
-        <translation>overblijvende tijd / stenen</translation>
+        <translation type="vanished">overblijvende tijd / stenen</translation>
     </message>
     <message>
         <source>click to pause/unpause the game</source>
-        <translation>klik om het spel te pauzeren/hernemen</translation>
+        <translation type="vanished">klik om het spel te pauzeren/hernemen</translation>
     </message>
     <message>
         <source>click to add 1 minute to your opponent&apos;s clock</source>
-        <translation>klik om 1 minuut toe te voegen aan de klok van je tegenstander</translation>
+        <translation type="vanished">klik om 1 minuut toe te voegen aan de klok van je tegenstander</translation>
+    </message>
+    <message>
+        <source>GAME MODE: place stones...</source>
+        <translation type="unfinished">SPEL MODE: plaats stenen...</translation>
+    </message>
+    <message>
+        <source>SCORE MODE: click on a stone to mark as dead...</source>
+        <translation type="unfinished">SCORE MODE: klik op een steen om als dood te markeren...</translation>
+    </message>
+    <message>
+        <source>GAME MODE: click to play stones...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game #</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -7101,7 +9756,7 @@ Desondanks, als u oss hebt zou het geluid moeten werken en naar /dev/dsp moeten 
     </message>
     <message>
         <source>*** Both players are Human ! ***</source>
-        <translation>*** Beide spelers zijn Mens ! ***</translation>
+        <translation type="vanished">*** Beide spelers zijn Mens ! ***</translation>
     </message>
     <message>
         <source>komi </source>
@@ -7133,31 +9788,31 @@ ANNULEER = %4</translation>
     </message>
     <message>
         <source>Done</source>
-        <translation>Klaar</translation>
+        <translation type="vanished">Klaar</translation>
     </message>
     <message>
         <source>SCORE MODE: RESET - click on a stone to mark as dead...</source>
-        <translation>SCORE MODE: RESET - klik op een steen om als dood te markeren...</translation>
+        <translation type="vanished">SCORE MODE: RESET - klik op een steen om als dood te markeren...</translation>
     </message>
     <message>
         <source>SCORE MODE: click on a stone to mark as dead...</source>
-        <translation>SCORE MODE: klik op een steen om als dood te markeren...</translation>
+        <translation type="vanished">SCORE MODE: klik op een steen om als dood te markeren...</translation>
     </message>
     <message>
         <source>GAME MODE: place stones...</source>
-        <translation>SPEL MODE: plaats stenen...</translation>
+        <translation type="vanished">SPEL MODE: plaats stenen...</translation>
     </message>
     <message>
         <source>Game Status: W:</source>
-        <translation>Spel status: W:</translation>
+        <translation type="vanished">Spel status: W:</translation>
     </message>
     <message>
         <source>B:</source>
-        <translation>Z:</translation>
+        <translation type="vanished">Z:</translation>
     </message>
     <message>
-        <source>Game n&#xb0; </source>
-        <translation>Spel nr </translation>
+        <source>Game n° </source>
+        <translation type="vanished">Spel nr </translation>
     </message>
     <message>
         <source>%1 wants to %2

@@ -1,81 +1,1280 @@
-<!DOCTYPE TS><TS>
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1">
+<context>
+    <name>AnalyzeDialog</name>
+    <message>
+        <source>Batch computer analysis</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Analysis parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Maximum number of lines to add:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Number of seconds per move: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Limits the number of variations added for engine lines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>10</source>
+        <translation type="unfinished">10</translation>
+    </message>
+    <message>
+        <source>5</source>
+        <translation type="unfinished">5</translation>
+    </message>
+    <message>
+        <source>Job queue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Observe progress in board window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Completed jobs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File to analyse</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add to &amp;queue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Engine status</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start engine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show messages...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Board size:</source>
+        <translation type="unfinished">Velikost desky:</translation>
+    </message>
+    <message>
+        <source>Choose:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>stopped</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Status:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open the preferences dialog to configure engines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Configure engines...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Close</source>
+        <translation type="unfinished">&amp;Zavři</translation>
+    </message>
+    <message>
+        <source>Jobs are still running.  Do you wish to terminate the engine and discard the jobs?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Completed jobs contain unsaved data.  Do you wish to discard the jobs?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>not running</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>starting up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>idle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>working</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Really discard selected job?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PV </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>W Win </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>B Win </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>at </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> visits.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Analysis is supported only for square boards!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File has a different boardsize than selected!</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>AutoDiagsDialog</name>
+    <message>
+        <source>Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Main line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>30</source>
+        <translation type="unfinished">30</translation>
+    </message>
+    <message>
+        <source>Break when overlap occurs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Maximum number of moves per diagram:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove preexisting diagrams</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Variations</source>
+        <translation type="unfinished">Variace</translation>
+    </message>
+    <message>
+        <source>Add diagram for each variation start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set move number for variation start to 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default flags</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show &amp;hoshi points</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Remove stones (base display on final position)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Show title in export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show coor&amp;dinates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Figure %1 (%2-%3)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Diagram %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
 <context>
     <name>Board</name>
     <message>
         <source>Pass</source>
-        <translation>Pas</translation>
+        <translation type="vanished">Pas</translation>
     </message>
     <message>
         <source>vs.</source>
-        <translation>vs.</translation>
+        <translation type="vanished">vs.</translation>
     </message>
     <message>
         <source>White</source>
-        <translation>Bílý</translation>
+        <translation type="vanished">Bílý</translation>
     </message>
     <message>
         <source>W</source>
-        <translation>B</translation>
+        <translation type="vanished">B</translation>
     </message>
     <message>
         <source>Black</source>
-        <translation>Černý</translation>
+        <translation type="vanished">Černý</translation>
     </message>
     <message>
         <source>B</source>
-        <translation>Č</translation>
+        <translation type="vanished">Č</translation>
     </message>
     <message>
         <source>Failed to save image!</source>
-        <translation>Nepodařilo se uložit obrázek!</translation>
+        <translation type="vanished">Nepodařilo se uložit obrázek!</translation>
     </message>
     <message>
         <source>Black wins with %1</source>
-        <translation>Černý vítězí s %1</translation>
+        <translation type="vanished">Černý vítězí s %1</translation>
     </message>
     <message>
         <source>White wins with %1</source>
-        <translation>Bílý vítězí s %1</translation>
+        <translation type="vanished">Bílý vítězí s %1</translation>
     </message>
     <message>
         <source>Jigo</source>
-        <translation>Jigo</translation>
+        <translation type="vanished">Jigo</translation>
     </message>
     <message>
         <source>XML</source>
-        <translation>XML</translation>
+        <translation type="vanished">XML</translation>
     </message>
     <message>
         <source>Could not find file:</source>
-        <translation>Nemohl jsem nalézt soubor:</translation>
+        <translation type="vanished">Nemohl jsem nalézt soubor:</translation>
     </message>
     <message>
         <source>Could not open file:</source>
-        <translation>Nemohl jsem otevřít soubor:</translation>
+        <translation type="vanished">Nemohl jsem otevřít soubor:</translation>
     </message>
     <message>
         <source>Invalid text encoding given. Please check preferences!</source>
-        <translation>Poskytnuto neplatné textové kódování. Prosím zkontroluj nastavení!</translation>
+        <translation type="vanished">Poskytnuto neplatné textové kódování. Prosím zkontroluj nastavení!</translation>
     </message>
     <message>
         <source>Reading sgf file...</source>
-        <translation>Čtu sgf soubor...</translation>
+        <translation type="vanished">Čtu sgf soubor...</translation>
     </message>
     <message>
         <source>Abort</source>
-        <translation>Zrušit</translation>
+        <translation type="vanished">Zrušit</translation>
     </message>
     <message>
         <source>Corrupt SGF file at position</source>
-        <translation>Poškozený SGF soubor na pozici</translation>
+        <translation type="vanished">Poškozený SGF soubor na pozici</translation>
     </message>
     <message>
         <source>No filename given!</source>
-        <translation>Neuvedeno žádné jméno souboru!</translation>
+        <translation type="vanished">Neuvedeno žádné jméno souboru!</translation>
     </message>
     <message>
         <source>Importing ASCII failed. Clipboard empty?</source>
-        <translation>Chyba v importu ASCII. Je schránka prázdná?</translation>
+        <translation type="vanished">Chyba v importu ASCII. Je schránka prázdná?</translation>
+    </message>
+    <message>
+        <source>Live evaluation: W %1%2 B %3%4 at %5 visits</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Analysis is supported only for square boards!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You did not configure any analysis engine for this boardsize!</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>BoardWindow</name>
+    <message>
+        <source>MainWindow</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Click on the board to place a stone.
+
+When in normal mode, left click plays moves in alternating colors.
+Shift + left click moves to the first move in the main branch.
+Shift + right click moves to the next move in the current branch.
+When in edit mode and editing stones, left click places a black, right click a white stone, clicking on an existant stone removes it.
+When editing marks, left click sets, right click removes the mark. When editing letter marks, shift-click allows to customize the mark text.
+When in score mode, left click to mark a group as dead, right click to mark it alive in seki. Click again to unmark as dead or seki.</source>
+        <translation type="unfinished">Klikni na desku k umístění kamene.
+
+Když si v normálním módu, levé stisknutí zahraje pohyb v druhé barvě.
+Shift+ levé kliknutí se pohne na první pohyb v hlavní větvi. 
+Shift+ pravé kliknutí se pohne na další pohyb v hlavní větvi. 
+Když si v editovacím módu a edituješ kameny, levé stisknutí umístí černou, pravé umístí bílou, kliknutí na existující kámen ho odebere.
+Když edituješ značky, levé kliknutí umístí značku, pravé ji odebere. Když edituješ písmenkové značky, levé kliknutí umožní pozměnit text značky.
+Když jsi ve skóre módu, levé kliknutí označuje skupinu jako mrtvou, pravé označuje skupinu jako živou v seki. Klikni znovu, aby jsi odoznačil jako mrtvý nebo seki.</translation>
+    </message>
+    <message>
+        <source>Slider min value
+
+Minimum game move the slider can currently show.</source>
+        <translation type="unfinished">Minimální hodnota klouzáku
+
+Minimální herní tah, o který se klouzák může posunout.</translation>
+    </message>
+    <message>
+        <source>0</source>
+        <translation type="unfinished">0</translation>
+    </message>
+    <message>
+        <source>Navigate through the game</source>
+        <translation type="unfinished">Pohybuj se ve hře</translation>
+    </message>
+    <message>
+        <source>Navigate to move
+
+Use the slider to quickly navigate through the current branch of the game.</source>
+        <translation type="unfinished">Naviguj k pohybu
+
+Použij klouzák k rychlé navigaci současnou větví hry.</translation>
+    </message>
+    <message>
+        <source>Slider max value
+
+Maximum game move the slider can currently show.</source>
+        <translation type="unfinished">Maximální hodnota kluzáku
+
+Maximální herní tah, o který se klouzák může posunout.</translation>
+    </message>
+    <message>
+        <source>000</source>
+        <translation type="unfinished">000</translation>
+    </message>
+    <message>
+        <source>Move number</source>
+        <translation type="unfinished">Číslo pohybu</translation>
+    </message>
+    <message>
+        <source>Move number
+
+Number of the currently displayed move.</source>
+        <translation type="unfinished">Číslo pohybu
+
+Číslo současně ukazovaného pohybu.</translation>
+    </message>
+    <message>
+        <source>Move 0
+Variation 1 of 20
+0 child positions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to first move.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to previous move.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to next move.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to last move.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to previous commented move.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to next commented move.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to previous figure.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to next figure.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>next</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Player to play</source>
+        <translation type="unfinished">Hráč na tahu</translation>
+    </message>
+    <message>
+        <source>Player to play
+
+Indicates whether it is black&apos;s or white&apos;s turn.</source>
+        <translation type="unfinished">Hráč na tahu
+
+Ukazuje, jestli je na tahu černý nebo bílý.
+</translation>
+    </message>
+    <message>
+        <source>Black to play</source>
+        <translation type="unfinished">Černý na tahu</translation>
+    </message>
+    <message>
+        <source>Indicates that it&apos;s not the expected player&apos;s move.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toggle player to move.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Update game record from on-line game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Update from online game.
+This window was opened through &quot;Edit game&quot; while observing an online game.
+The update button refreshes the game in this window, adding any moves that were made in the actual game in the meantime. This operation discards any edits you may have made.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Update</source>
+        <translation type="unfinished">Update</translation>
+    </message>
+    <message>
+        <source>Pass move</source>
+        <translation type="unfinished">Pohyb pas</translation>
+    </message>
+    <message>
+        <source>Pass
+
+Pass your turn.</source>
+        <translation type="unfinished">Pas 
+
+Pasuješ svůj tah.</translation>
+    </message>
+    <message>
+        <source>Pass</source>
+        <translation type="unfinished">Pas</translation>
+    </message>
+    <message>
+        <source>Undo last move</source>
+        <translation type="unfinished">Zpět poslední tah</translation>
+    </message>
+    <message>
+        <source>Undo
+
+Undo the opponent&apos;s last move.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Undo</source>
+        <translation type="unfinished">Zpět</translation>
+    </message>
+    <message>
+        <source>Request adjournment</source>
+        <translation type="unfinished">Požadavek přerušení</translation>
+    </message>
+    <message>
+        <source>Adjourn.
+
+Send adjournment request to your opponent. If he accept it, the game will be adjourned and saved.</source>
+        <translation type="unfinished">Přerušit
+
+Pošli požadavek na přerušení protivníkovi. Pokud souhlasí, hra se přeruší a uloží.</translation>
+    </message>
+    <message>
+        <source>Adjourn</source>
+        <translation type="unfinished">Přerušit</translation>
+    </message>
+    <message>
+        <source>Score the game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Switch to coring mode.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Score</source>
+        <translation type="unfinished">Skóre</translation>
+    </message>
+    <message>
+        <source>Accept the score and end the game.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Accept the score, leave scoring mode and end the game.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Done</source>
+        <translation type="unfinished">Hotovo</translation>
+    </message>
+    <message>
+        <source>Edit the game in a new window.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open a window with an offline copy of the game for editing.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit Game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter and leave edit mode where stones can be placed freely.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Freely edit the board position. Edited positions are added below the current one.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit Position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default Loss</source>
+        <translation type="unfinished">Porážka (základní)</translation>
+    </message>
+    <message>
+        <source>Resign.
+
+Resign the game immediately. Clicking here is a default loss. Your opponent wins. Game ends.</source>
+        <translation type="unfinished">Vzdej se.
+
+Vzdej hru okamžitě. Kliknutí sem je absolutní porážka. Tvůj protivník vyhraje. Hra končí.</translation>
+    </message>
+    <message>
+        <source>RESIGN</source>
+        <translation type="unfinished">VZDEJ SE</translation>
+    </message>
+    <message>
+        <source>Tools tab
+
+N/S	normal/score tools
+TG	teaching tools</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>NS</source>
+        <translation type="unfinished">NS</translation>
+    </message>
+    <message>
+        <source>TG</source>
+        <translation type="unfinished">TG</translation>
+    </message>
+    <message>
+        <source>opponent:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>opponent: invited by teacher</source>
+        <translation type="unfinished">protivník: pozván učitelem</translation>
+    </message>
+    <message>
+        <source>opponent
+
+choose opponent from list to enable him playing with you in a teaching game.</source>
+        <translation type="unfinished">protivník
+
+vyber protivníka ze seznamu a umožni mu, aby s tebou hrál ve výukové hře.</translation>
+    </message>
+    <message>
+        <source>-- none --</source>
+        <translation type="unfinished">-- nikdo --</translation>
+    </message>
+    <message>
+        <source>hand over controls to opponent</source>
+        <translation type="unfinished">předej kontrolu protivníkovi</translation>
+    </message>
+    <message>
+        <source>hand over controls to opponent to allow him placing black and white stones, undo etc.
+
+Only teacher can give control,
+both teacher and pupil can release control.</source>
+        <translation type="unfinished">předej kontrolu protivníkovi, aby mohl umísťovat černé a bílé kameny, atd. 
+
+Pouze učitel může předat kontrolu,
+jak učitel tak žák mohou kontrolu opustit.</translation>
+    </message>
+    <message>
+        <source>controls</source>
+        <translation type="unfinished">kontroly</translation>
+    </message>
+    <message>
+        <source>remember that point for fast return</source>
+        <translation type="unfinished">pamatuj tento bod pro rychlý návrat</translation>
+    </message>
+    <message>
+        <source>push button at starting point to enable remembering.
+After placing and/or undo release button for returning to starting point automatically.</source>
+        <translation type="unfinished">stiskni tlačítko v počátečním bodě, aby jsi umožnil zapamatování
+Po umístění odemkni obnovovací tlačítko k návratu na začínající bod automaticky.</translation>
+    </message>
+    <message>
+        <source>mark</source>
+        <translation type="unfinished">značka</translation>
+    </message>
+    <message>
+        <source>&amp;File</source>
+        <translation type="unfinished">&amp;Soubor</translation>
+    </message>
+    <message>
+        <source>&amp;Import/Export</source>
+        <translation type="unfinished">&amp;Import/Export</translation>
+    </message>
+    <message>
+        <source>&amp;Edit</source>
+        <translation type="unfinished">&amp;Edituj</translation>
+    </message>
+    <message>
+        <source>&amp;Navigation</source>
+        <translation type="unfinished">&amp;Navigace</translation>
+    </message>
+    <message>
+        <source>&amp;Settings</source>
+        <translation type="unfinished">&amp;Nastavení</translation>
+    </message>
+    <message>
+        <source>&amp;View</source>
+        <translation type="unfinished">&amp;Pohledy</translation>
+    </message>
+    <message>
+        <source>&amp;Save layout</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Restore layout</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Analysis</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Help</source>
+        <translation type="unfinished">&amp;Nápověda</translation>
+    </message>
+    <message>
+        <source>File toolbar</source>
+        <translation type="unfinished">Paleta Soubor</translation>
+    </message>
+    <message>
+        <source>Navigation toolbar</source>
+        <translation type="unfinished">Paleta navigace</translation>
+    </message>
+    <message>
+        <source>Edit toolbar</source>
+        <translation type="unfinished">Paleta Úpravy</translation>
+    </message>
+    <message>
+        <source>Diagrams</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>E&amp;xport ASCII</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export S&amp;VG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit &amp;Diagram</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Observers</source>
+        <translation type="unfinished">Diváci</translation>
+    </message>
+    <message>
+        <source>Evaluation graph</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Comments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game tree</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Miscellaneous toolbar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Next move</source>
+        <translation type="unfinished">&amp;Další tah</translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation type="unfinished">Doprava</translation>
+    </message>
+    <message>
+        <source>&amp;Previous move</source>
+        <translation type="unfinished">&amp;Předchozí tah</translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation type="unfinished">Doleva</translation>
+    </message>
+    <message>
+        <source>&amp;First move</source>
+        <translation type="unfinished">&amp;První tah</translation>
+    </message>
+    <message>
+        <source>Home</source>
+        <translation type="unfinished">Domov</translation>
+    </message>
+    <message>
+        <source>&amp;Last move</source>
+        <translation type="unfinished">&amp;Poslední tah</translation>
+    </message>
+    <message>
+        <source>End</source>
+        <translation type="unfinished">Konec</translation>
+    </message>
+    <message>
+        <source>P&amp;revious variation</source>
+        <translation type="unfinished">Př&amp;edchozí variace</translation>
+    </message>
+    <message>
+        <source>Up</source>
+        <translation type="unfinished">Nahoru</translation>
+    </message>
+    <message>
+        <source>N&amp;ext variation</source>
+        <translation type="unfinished">Další varia&amp;ce</translation>
+    </message>
+    <message>
+        <source>Down</source>
+        <translation type="unfinished">Dolů</translation>
+    </message>
+    <message>
+        <source>&amp;Main branch</source>
+        <translation type="unfinished">&amp;Hlavní větev</translation>
+    </message>
+    <message>
+        <source>Ins</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Variation &amp;start</source>
+        <translation type="unfinished">&amp;Začátek variace</translation>
+    </message>
+    <message>
+        <source>To start of variation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PgUp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Next &amp;branch</source>
+        <translation type="unfinished">Další vě&amp;tev</translation>
+    </message>
+    <message>
+        <source>Move to next branch starting a variation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PgDown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Previous &amp;commented move</source>
+        <translation type="unfinished">Předchozí komentovaný t&amp;ah</translation>
+    </message>
+    <message>
+        <source>Move to the previous move that has a comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Next c&amp;ommented move</source>
+        <translation type="unfinished">Da&amp;lší komentovaný tah</translation>
+    </message>
+    <message>
+        <source>Move to the next move that has a comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Previous &amp;diagram</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>nMove to the previous move that starts a diagram</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Next dia&amp;gram</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move to the next move that starts a diagram</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Go to move...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter a move number and move there</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+G</source>
+        <translation type="unfinished">Ctrl+G</translation>
+    </message>
+    <message>
+        <source>Go to clic&amp;ked move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Click on an intersection and move to stone played there (if any)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game &amp;information...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Display and edit game information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+I</source>
+        <translation type="unfinished">Ctrl+I</translation>
+    </message>
+    <message>
+        <source>Place &amp;stone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&quot;Normal mode, click to place a stone.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set &amp;triangle mark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clicking places a triangle mark.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set &amp;circle mark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clicking places a circle mark.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set s&amp;quare mark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clicking places a square mark.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set cr&amp;oss mark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clicking places a cross mark.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set &amp;letter mark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clicking places a letter mark.
+Hold shift to add a freely editable text mark.
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set &amp;number mark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clicking places a number mark.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Delete </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete this and all following positions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+D</source>
+        <translation type="unfinished">Ctrl+D</translation>
+    </message>
+    <message>
+        <source>Select &amp;rectangle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose a rectangle to export.
+In play or edit mode, click to begin choosing a rectangle to be used when exporting to ASCII or SVG.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>R</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cle&amp;ar selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear the selected rectangle and select the whole board again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start dia&amp;gram here</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If selected, the current node starts a diagram.
+Enable diagram display in the View menu to view and edit diagrams.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>G</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New &amp;board window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+B</source>
+        <translation type="unfinished">Ctrl+B</translation>
+    </message>
+    <message>
+        <source>&amp;New game</source>
+        <translation type="unfinished">&amp;Nová hra</translation>
+    </message>
+    <message>
+        <source>Creates a new game on this board.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+N</source>
+        <translation type="unfinished">Ctrl+N</translation>
+    </message>
+    <message>
+        <source>New &amp;variant game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Creates a new Go variant game on this board</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+V</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Save</source>
+        <translation type="unfinished">&amp;Ulož</translation>
+    </message>
+    <message>
+        <source>Save an sgf file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+S</source>
+        <translation type="unfinished">Ctrl+S</translation>
+    </message>
+    <message>
+        <source>&amp;Open...</source>
+        <translation type="unfinished">&amp;Otevři...</translation>
+    </message>
+    <message>
+        <source>Open an sgf file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+O</source>
+        <translation type="unfinished">Ctrl+O</translation>
+    </message>
+    <message>
+        <source>Save &amp;as...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save a sgf file under a new name.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Close</source>
+        <translation type="unfinished">&amp;Zavři</translation>
+    </message>
+    <message>
+        <source>Close this window.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+W</source>
+        <translation type="unfinished">Ctrl+W</translation>
+    </message>
+    <message>
+        <source>E&amp;xit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Quit the application.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+Q</source>
+        <translation type="unfinished">Ctrl+Q</translation>
+    </message>
+    <message>
+        <source>Export &amp;ASCII...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export ASCII
+Export current board to ASCII diagrams, for use in web forums.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export S&amp;VG...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export SVG
+Export the current board to an SVG vector graphics file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Import SGF from clipboard</source>
+        <translation type="unfinished">Import SGF ze schránky</translation>
+    </message>
+    <message>
+        <source>Import SGF from clipboard
+Import a complete game in SGF format from the clipboard.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>E&amp;xport SGF &amp;to clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export SGF to clipboard
+Export a complete game in SGF format to the clipboard.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export &amp;image...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export image
+Take a screen grab of the current board and export it to an image file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Export image to clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export image to clipboard
+Take a screen grab of the current board position and export it to the clipboard as an image.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Status bar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Slider</source>
+        <translation type="unfinished">Posuvník</translation>
+    </message>
+    <message>
+        <source>Sidebar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>F9</source>
+        <translation type="unfinished">F9</translation>
+    </message>
+    <message>
+        <source>&amp;Fullscreen</source>
+        <translation type="unfinished">&amp;Celá obrazovka</translation>
+    </message>
+    <message>
+        <source>F11</source>
+        <translation type="unfinished">F11</translation>
+    </message>
+    <message>
+        <source>Move &amp;numbers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Coordinates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>F8</source>
+        <translation type="unfinished">F8</translation>
+    </message>
+    <message>
+        <source>As general default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>For current combination of visible docks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>General &amp;default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>For &amp;current combination of visible docks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>L</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default &amp;landscape arrangement</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default &amp;portrait arrangement</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Menu bar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>F7</source>
+        <translation type="unfinished">F7</translation>
+    </message>
+    <message>
+        <source>&amp;Preferences...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bring up the preferences dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alt+P</source>
+        <translation type="unfinished">Alt+P</translation>
+    </message>
+    <message>
+        <source>&amp;Mute stone sound</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Manual</source>
+        <translation type="unfinished">&amp;Manuál</translation>
+    </message>
+    <message>
+        <source>F1</source>
+        <translation type="unfinished">F1</translation>
+    </message>
+    <message>
+        <source>&amp;About..</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About &amp;Qt...</source>
+        <translation type="unfinished">O &amp;Qt...</translation>
+    </message>
+    <message>
+        <source>&amp;Connect analysis engine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Connect analysis engine
+Try to find an engine configured as an analysis tool in the engine list and connect to it.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Disconnect analysis engine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pause analysis engine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Click to pause or unpause the analysis engine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dia&amp;gram comments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alt+G</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View &amp;README</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Batch analysis...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Batch analysis
+Open the batch analysis dialog which allows you to add SGF files to a queue to be analysed by an engine.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A&amp;utomatic diagrams...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -246,11 +1445,11 @@ Textová nápověda obsahuje jména kanálů a jména uživatelů</translation>
     </message>
     <message>
         <source>Window size saved.</source>
-        <translation>Velikost okna uložena.</translation>
+        <translation type="vanished">Velikost okna uložena.</translation>
     </message>
     <message>
         <source>Window size restored.</source>
-        <translation>Velikost okna obnovena.</translation>
+        <translation type="vanished">Velikost okna obnovena.</translation>
     </message>
     <message>
         <source>Statusbar
@@ -266,7 +1465,7 @@ Zobrazit/ skrýt stavový řádek.</translation>
     </message>
     <message>
         <source>You did not set the Computer program path !</source>
-        <translation>Neuvedl jsi cestu pro  Počítačový program !</translation>
+        <translation type="vanished">Neuvedl jsi cestu pro  Počítačový program !</translation>
     </message>
     <message>
         <source>Shouts*</source>
@@ -278,16 +1477,16 @@ Zobrazit/ skrýt stavový řádek.</translation>
 right click to observe
 
 Symbol explanation: (click on tab to sort by)
-Id<byte value="x9"/>game number
-White/WR<byte value="x9"/>white player&apos;s name and rank
-Black/BR<byte value="x9"/>black player&apos;s name and rank
-Mv<byte value="x9"/>number of moves at last refresh
-Sz<byte value="x9"/>board size
-H<byte value="x9"/>handicap
-K<byte value="x9"/>komi
-By<byte value="x9"/>byoyomi time
-FR<byte value="x9"/>free (FI), rated (I) or teach (TI) game
-(Ob)<byte value="x9"/>number of observers at last refresh
+Id	game number
+White/WR	white player&apos;s name and rank
+Black/BR	black player&apos;s name and rank
+Mv	number of moves at last refresh
+Sz	board size
+H	handicap
+K	komi
+By	byoyomi time
+FR	free (FI), rated (I) or teach (TI) game
+(Ob)	number of observers at last refresh
 
 This table can be updated by &apos;Refresh games&apos;</source>
         <translation>Seznam her
@@ -314,42 +1513,42 @@ Tento seznam může být obnoven kliknutím &quot;na Obnovit hry&quot;</translat
 right click for menu
 
 Symbol explanation: (click on tab to sort by)
-Stat<byte value="x9"/>player&apos;s stats:
-<byte value="x9"/>X...close
-<byte value="x9"/>!...looking = wants to play a game
-<byte value="x9"/>Q...quiet = doesn&apos;t receive system messages
-<byte value="x9"/>S...shout = can&apos;t receive shouts
-<byte value="x9"/>??...unknown - player entered after last table update
-name<byte value="x9"/>player&apos;s name
-Rk<byte value="x9"/>player&apos;s rank
-pl<byte value="x9"/>playing game (only one game visible)
-ob<byte value="x9"/>observing game (only one game visible)
-Idle<byte value="x9"/>idle time
-X<byte value="x9"/>private info:
-<byte value="x9"/>M..me
-<byte value="x9"/>X..excluded from shout
-<byte value="x9"/>W..watched (sort: X entries, then Rk)
+Stat	player&apos;s stats:
+	X...close
+	!...looking = wants to play a game
+	Q...quiet = doesn&apos;t receive system messages
+	S...shout = can&apos;t receive shouts
+	??...unknown - player entered after last table update
+name	player&apos;s name
+Rk	player&apos;s rank
+pl	playing game (only one game visible)
+ob	observing game (only one game visible)
+Idle	idle time
+X	private info:
+	M..me
+	X..excluded from shout
+	W..watched (sort: X entries, then Rk)
 and, if extended player info (Toolbox) is active (IGS only):
-Info<byte value="x9"/>player&apos;s info string
-Won<byte value="x9"/>number of games won by player
-Lost<byte value="x9"/>number of games lost by player
-Country<byte value="x9"/>origin of player (from e-mail address)
-Lang<byte value="x9"/>preferred language
+Info	player&apos;s info string
+Won	number of games won by player
+Lost	number of games lost by player
+Country	origin of player (from e-mail address)
+Lang	preferred language
 
 This table can be updated by &apos;Refresh players&apos;
 
 Menu entries (right click):
-match<byte value="x9"/>request for match (dialog arises)
-talk<byte value="x9"/>talk to player (tab arises)
+match	request for match (dialog arises)
+talk	talk to player (tab arises)
 ----
-stats<byte value="x9"/><byte value="x9"/>show player&apos;s stats
-stored games<byte value="x9"/>show stored games
-results<byte value="x9"/><byte value="x9"/>show results
-rating<byte value="x9"/><byte value="x9"/>show rating (NNGS/IGS only)
-observe game<byte value="x9"/>show game currently played by player
+stats		show player&apos;s stats
+stored games	show stored games
+results		show results
+rating		show rating (NNGS/IGS only)
+observe game	show game currently played by player
 ----
-toggle watch list<byte value="x9"/><byte value="x9"/>put/remove player to/from watch list - make &apos;W&apos; entry at &apos;X&apos; column; entry/leave sounds are activated
-toggle exclude list<byte value="x9"/>similar to watch - make &apos;X&apos; entry; player&apos;s shouts are no longer shown</source>
+toggle watch list		put/remove player to/from watch list - make &apos;W&apos; entry at &apos;X&apos; column; entry/leave sounds are activated
+toggle exclude list	similar to watch - make &apos;X&apos; entry; player&apos;s shouts are no longer shown</source>
         <translation>Seznam hráčů
 
 stiskni pravé tlačítko myši pro menu
@@ -421,7 +1620,12 @@ změnit vyjmutý seznam     podobné ke sledování - vytvoř &apos;X&apos; vstu
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>SGF Files (*.sgf *.SGF);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)</source>
+        <source>Engine configuration updated
+Analysis engines now require a board size to be set, assuming 19 for existing entries.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You did not configure any engines!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -604,7 +1808,7 @@ změnit vyjmutý seznam     podobné ke sledování - vytvoř &apos;X&apos; vstu
 
 Use these lists to select the rank of players you want to see in the list
 This will take effect after refreshing the players list.</source>
-        <translation>Zvolit rank hráčů
+        <translation type="vanished">Zvolit rank hráčů
 
 Zde je možné si vybrat od jaké třídy do jaké třídy se budou hráči zobrazovat v seznamu
 Efekt se dostaví, až po obnovení seznamu hráčů.</translation>
@@ -622,7 +1826,7 @@ Efekt se dostaví, až po obnovení seznamu hráčů.</translation>
 
 Check this box if you want the list to display only open players (uncheck if you want all players).
 This will take effect after refreshing the players list.</source>
-        <translation>Hráči otevření pro hru
+        <translation type="vanished">Hráči otevření pro hru
 
 Zaškrtni čtvereček, jestli chceš, aby seznam zobrazoval pouze hráče otevřené pro hru (odškrtni, jestli chceš vidět všechny hráče).
 Změna se zobrazí, až po obnovení seznamu hráčů.</translation>
@@ -671,7 +1875,7 @@ Změna se zobrazí, až po obnovení seznamu hráčů.</translation>
         <source>Connect
 
 Connect with/Disconnect from selected Go server.</source>
-        <translation>Připoj se
+        <translation type="vanished">Připoj se
 
 Připoj se / Odpoj se od vybraného Go serveru.</translation>
     </message>
@@ -695,7 +1899,7 @@ Připoj se / Odpoj se od vybraného Go serveru.</translation>
         <source>Open
 
 Open a sgf file.</source>
-        <translation>Otevři
+        <translation type="vanished">Otevři
 
 Otevři sgf soubor.</translation>
     </message>
@@ -719,7 +1923,7 @@ Otevři sgf soubor.</translation>
         <source>Help
 
 Opens the manual of the application.</source>
-        <translation>Nápověda
+        <translation type="vanished">Nápověda
 
 Otevře manuál aplikace.</translation>
     </message>
@@ -743,7 +1947,7 @@ Otevře manuál aplikace.</translation>
         <source>About
 
 About the application.</source>
-        <translation>O 
+        <translation type="vanished">O 
 
 O aplikaci.</translation>
     </message>
@@ -807,7 +2011,7 @@ Umožňuje/zakazuje menubar.</translation>
         <source>Play with a program
 
 Sets a playing session with a pGo program using GTP (like GNUGO)</source>
-        <translation>Hrát s programem
+        <translation type="vanished">Hrát s programem
 
 Nastavuje hru s pGo programem použitím GTP (jako GNUGO)</translation>
     </message>
@@ -847,9 +2051,9 @@ Nastavuje hru s pGo programem použitím GTP (jako GNUGO)</translation>
         <source>If checked then you don&apos;t receive system messages, that means you are not informed about connecting/disconnecting players, started/finished games etc. Clicking this checkbox toggles the mode. To be quiet is indicated with a &apos;Q&apos; in the playertable.
 
 Note : some features cannot work if set to quiet (checked box):
-<byte value="x9"/>- sound when watched players enter/leave
-<byte value="x9"/>- update of player/gamestable</source>
-        <translation>Jestliže zaškrtnuto, neobdržíš systémové zprávy, to znamená, že nejsi informován o připojených / odpojených hráčích, začínajících / skončených hrách atd. Kliknutí na tento čtvereček to mění. Být po tichu je vyznačené symbolem &quot;Q&quot; v seznamu hráčů.
+	- sound when watched players enter/leave
+	- update of player/gamestable</source>
+        <translation type="vanished">Jestliže zaškrtnuto, neobdržíš systémové zprávy, to znamená, že nejsi informován o připojených / odpojených hráčích, začínajících / skončených hrách atd. Kliknutí na tento čtvereček to mění. Být po tichu je vyznačené symbolem &quot;Q&quot; v seznamu hráčů.
 
 Poznámka: některé volby nepracují, pokud je nastaveno na Ticho(zaškrtnuto):
        - zvuk, když sledovaní hráči vstoupí  nebo odejdou 
@@ -879,7 +2083,7 @@ Poznámka: některé volby nepracují, pokud je nastaveno na Ticho(zaškrtnuto):
         <source>Preferences
 
 Edit the applications preferences.</source>
-        <translation>Možnosti
+        <translation type="vanished">Možnosti
 
 Edituj možnosti aplikace.</translation>
     </message>
@@ -903,7 +2107,7 @@ Edituj možnosti aplikace.</translation>
         <source>Exit
 
 Quits the application.</source>
-        <translation>Konec
+        <translation type="vanished">Konec
 
 Opustí aplikaci.</translation>
     </message>
@@ -927,7 +2131,7 @@ Opustí aplikaci.</translation>
         <source>New
 
 Creates a new 19x19 board.</source>
-        <translation>Nový
+        <translation type="vanished">Nový
 
 Vytvoří novou 19x19 desku.</translation>
     </message>
@@ -951,7 +2155,7 @@ Vytvoří novou 19x19 desku.</translation>
         <source>Navigation toolbar
 
 Enables/disables the toolbar.</source>
-        <translation>Paleta tlačítek pro navigaci
+        <translation type="vanished">Paleta tlačítek pro navigaci
 
 umožňuje / zakazuje paletu.</translation>
     </message>
@@ -995,27 +2199,27 @@ umožňuje / zakazuje paletu.</translation>
         <source>Statusbar
 
 Enables/disables the statusbar.</source>
-        <translation>Stavový řádek
+        <translation type="vanished">Stavový řádek
 
 Umožňuje / zakazuje stavový řádek.</translation>
     </message>
     <message>
         <source>Sound</source>
-        <translation>Zvuk</translation>
+        <translation type="vanished">Zvuk</translation>
     </message>
     <message>
         <source>&amp;Sound</source>
-        <translation>&amp;Zvuk</translation>
+        <translation type="vanished">&amp;Zvuk</translation>
     </message>
     <message>
         <source>Short info on sound availability</source>
-        <translation>Krátká informace o dostupnosti zvuku</translation>
+        <translation type="vanished">Krátká informace o dostupnosti zvuku</translation>
     </message>
     <message>
         <source>Sound Info
 
 Views a message box with a short comment about sound.</source>
-        <translation>Zvukové informace
+        <translation type="vanished">Zvukové informace
 
 Objeví se dialog s krátkým komentářem o zvuku.</translation>
     </message>
@@ -1031,7 +2235,7 @@ Objeví se dialog s krátkým komentářem o zvuku.</translation>
         <source>About Qt
 
 About Qt.</source>
-        <translation>O Qt
+        <translation type="vanished">O Qt
 
 O Qt.</translation>
     </message>
@@ -1053,11 +2257,11 @@ O Qt.</translation>
     </message>
     <message>
         <source>View user toolbar</source>
-        <translation>Paleta tlačítek uživatele</translation>
+        <translation type="vanished">Paleta tlačítek uživatele</translation>
     </message>
     <message>
         <source>View &amp;user toolbar</source>
-        <translation>&amp;U Paleta tlačítek uživatele</translation>
+        <translation type="vanished">&amp;U Paleta tlačítek uživatele</translation>
     </message>
     <message>
         <source>Rooms*</source>
@@ -1080,7 +2284,7 @@ O Qt.</translation>
 
 Use this button to &apos;seek&apos; a game, with the given time settings (popup menu), and handicap range (list beside)
 The server will automatically launch a game against an opponent with matching settings.</source>
-        <translation>Vyhledat hru
+        <translation type="vanished">Vyhledat hru
 
 Použij toto tlačítko pro vyhledání hry, s nastavením času (z nabidky), a rozmezí handicapu (seznam podtím)
 Server automaticky zahájí hru proti oponentu se stejným nastavením.</translation>
@@ -1117,14 +2321,14 @@ Server automaticky zahájí hru proti oponentu se stejným nastavením.</transla
         <source>handicap range
 
 Set the handicap range you wish when seeking a game. See &apos;seek&apos; button for more</source>
-        <translation>rozmezí handicapu
+        <translation type="vanished">rozmezí handicapu
 
 Nastavit rozmezí handicapů pro vyhledání hry. Podívej se na tlačítko pro vyhledání, aby jsi se více dozvěděl
 </translation>
     </message>
     <message>
         <source>user defined toolbar</source>
-        <translation>uživatelem nadefinovaný toolbar</translation>
+        <translation type="vanished">uživatelem nadefinovaný toolbar</translation>
     </message>
     <message>
         <source>Action</source>
@@ -1142,9 +2346,153 @@ Nastavit rozmezí handicapů pro vyhledání hry. Podívej se na tlačítko pro 
         <source>new version message
 
 displays the message box that appears at launch of a new version</source>
-        <translation>vzkaz nové verze
+        <translation type="vanished">vzkaz nové verze
 
 ukáže vzkaz, který se objeví po vydání nové verze</translation>
+    </message>
+    <message>
+        <source>Select players ranks boundaries
+
+			Use these lists to select the rank of players you want to see in the list
+			This will take effect after refreshing the players list.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open players
+
+			Check this box if you want the list to display only open players (uncheck if you want all players).
+			This will take effect after refreshing the players list.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File toolbar</source>
+        <translation type="unfinished">Paleta Soubor</translation>
+    </message>
+    <message>
+        <source>Connect
+
+	  Connect with/Disconnect from selected Go server.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Seek game
+
+	  Use this button to &apos;seek&apos; a game, with the given time settings (popup menu), and handicap range (list beside)
+	  The server will automatically launch a game against an opponent with matching settings.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>handicap range
+
+	  Set the handicap range you wish when seeking a game. See &apos;seek&apos; button for more</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open
+
+	Open a sgf file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Help
+
+	Opens the manual of the application.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About
+
+	About the application.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play with a program
+
+	Sets a playing session with a pGo program using GTP (like GNUGO)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If checked then you don&apos;t receive system messages, that means you are not informed about connecting/disconnecting players, started/finished games etc. Clicking this checkbox toggles the mode. To be quiet is indicated with a &apos;Q&apos; in the playertable.
+
+	Note : some features cannot work if set to quiet (checked box):
+	- sound when watched players enter/leave
+	- update of player/gamestable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Preferences
+
+	Edit the applications preferences.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Exit
+
+	Quits the application.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New
+
+	Creates a new 19x19 board.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Navigation toolbar
+
+	Enables/disables the toolbar.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Statusbar
+
+	Enables/disables the statusbar.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About Qt
+
+	About Qt.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New &amp;Variant Board</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New Variant Board</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+V</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Seek game
+
+	Use this button to &apos;seek&apos; a game, with the given time settings (popup menu), and handicap range (list beside)
+	The server will automatically launch a game against an opponent with matching settings.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>new version message
+
+	displays the message box that appears at launch of a new version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View &amp;README</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Batch analysis...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Batch analysis
+	Open the batch analysis dialog which allows you to add SGF files to a queue to be analysed by an engine.
+	</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1152,6 +2500,96 @@ ukáže vzkaz, který se objeví po vydání nové verze</translation>
     <message>
         <source>Debug</source>
         <translation>Ladit</translation>
+    </message>
+</context>
+<context>
+    <name>EvalGraph</name>
+    <message>
+        <source>The evaluation graph.
+Displays evaluation data found in the game record.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export image to clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export image to file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export evaluation graph image as</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to save image!</source>
+        <translation type="unfinished">Nepodařilo se uložit obrázek!</translation>
+    </message>
+</context>
+<context>
+    <name>FigureDialog</name>
+    <message>
+        <source>Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Title:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move &amp;numbering:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unchanged from previous node</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>None</source>
+        <translation type="unfinished">Žádný</translation>
+    </message>
+    <message>
+        <source>Shown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shown modulo 100</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Override move number:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show coor&amp;dinates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Show title in export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show &amp;hoshi points</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Remove stones (base display on final position)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Display invisible moves as text</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>GTP_Process</name>
+    <message>
+        <source>GTP engine reported unsupported protocol version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid response from GTP engine</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1236,6 +2674,79 @@ ukáže vzkaz, který se objeví po vydání nové verze</translation>
         <source>Copyright:</source>
         <translation>Copyright:</translation>
     </message>
+    <message>
+        <source>Event:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Round:</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>GameTree</name>
+    <message>
+        <source>The game tree.
+Click nodes to move to them, click empty areas to drag.
+Shift-click or middle-click nodes to collapse or expand their sub-variations.
+Control-click a collapsed node to expand one level of its children.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Auto collapse on/off</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>GamesTable</name>
+    <message>
+        <source>Id</source>
+        <translation type="unfinished">Id</translation>
+    </message>
+    <message>
+        <source>White</source>
+        <translation type="unfinished">Bílý</translation>
+    </message>
+    <message>
+        <source>WR</source>
+        <translation type="unfinished">Bhod</translation>
+    </message>
+    <message>
+        <source>Black</source>
+        <translation type="unfinished">Černý</translation>
+    </message>
+    <message>
+        <source>BR</source>
+        <translation type="unfinished">Čhod</translation>
+    </message>
+    <message>
+        <source>Mv</source>
+        <translation type="unfinished">Tah</translation>
+    </message>
+    <message>
+        <source>Sz</source>
+        <translation type="unfinished">Size</translation>
+    </message>
+    <message>
+        <source>H</source>
+        <translation type="unfinished">H</translation>
+    </message>
+    <message>
+        <source>K</source>
+        <translation type="unfinished">K</translation>
+    </message>
+    <message>
+        <source>By</source>
+        <translation type="unfinished">By</translation>
+    </message>
+    <message>
+        <source>FR</source>
+        <translation type="unfinished">Volná/hodn</translation>
+    </message>
+    <message>
+        <source>Ob</source>
+        <translation type="unfinished">Diváci</translation>
+    </message>
 </context>
 <context>
     <name>IGSConnection</name>
@@ -1256,7 +2767,7 @@ ukáže vzkaz, který se objeví po vydání nové verze</translation>
     <name>MainAppWidget</name>
     <message>
         <source>MainAppWidget</source>
-        <translation>MainAppWidget</translation>
+        <translation type="vanished">MainAppWidget</translation>
     </message>
     <message>
         <source>Command line
@@ -1266,7 +2777,7 @@ Type &lt;command&gt;+&lt;ENTER&gt; to send to Go server. If not online use &apos
 Starting with &apos;#&apos; is a internal command as if the server sent the line (without &apos;#&apos;).
 
 In order to open a window use the mouse click instead of entering the &apos;observe&apos; command.</source>
-        <translation>Příkazový řádek
+        <translation type="vanished">Příkazový řádek
 
 Napiš &lt;příkaz&gt;+&lt;ENTER&gt; k odeslání na Go server. Pokud nejsi připojen, nejdříve stiskni tlačítko Připojit se.
 
@@ -1283,19 +2794,19 @@ Aby jsi otevřel okno, použij pokliknutí myši místo příkazu &quot;observe&
 right click to observe
 
 Symbol explanation: (click on tab to sort by)
-Id<byte value="x9"/>game number
-White/WR<byte value="x9"/>white player&apos;s name and rank
-Black/BR<byte value="x9"/>black player&apos;s name and rank
-Mv<byte value="x9"/>number of moves at last refresh
-Sz<byte value="x9"/>board size
-H<byte value="x9"/>handicap
-K<byte value="x9"/>komi
-By<byte value="x9"/>byoyomi time
-FR<byte value="x9"/>free (FI), rated (I) or teach (TI) game
-(Ob)<byte value="x9"/>number of observers at last refresh
+Id	game number
+White/WR	white player&apos;s name and rank
+Black/BR	black player&apos;s name and rank
+Mv	number of moves at last refresh
+Sz	board size
+H	handicap
+K	komi
+By	byoyomi time
+FR	free (FI), rated (I) or teach (TI) game
+(Ob)	number of observers at last refresh
 
 This table can be updated by &apos;Refresh games&apos;</source>
-        <translation>Seznam her
+        <translation type="vanished">Seznam her
 
 stiskni pravé tlačítko myši pro sledování
 
@@ -1315,11 +2826,11 @@ Tento seznam může být obnoven kliknutím &quot;na Obnovit hry&quot;</translat
     </message>
     <message>
         <source>Games</source>
-        <translation>Hry</translation>
+        <translation type="vanished">Hry</translation>
     </message>
     <message>
         <source>relevant messages from/to server</source>
-        <translation>Vzkazy od/k serveru</translation>
+        <translation type="vanished">Vzkazy od/k serveru</translation>
     </message>
     <message>
         <source>Table of players
@@ -1327,43 +2838,43 @@ Tento seznam může být obnoven kliknutím &quot;na Obnovit hry&quot;</translat
 right click for menu
 
 Symbol explanation: (click on tab to sort by)
-Stat<byte value="x9"/>player&apos;s stats:
-<byte value="x9"/>X...close
-<byte value="x9"/>!...looking = wants to play a game
-<byte value="x9"/>Q...quiet = doesn&apos;t receive system messages
-<byte value="x9"/>S...shout = can&apos;t receive shouts
-<byte value="x9"/>??...unknown - player entered after last table update
-name<byte value="x9"/>player&apos;s name
-Rk<byte value="x9"/>player&apos;s rank
-pl<byte value="x9"/>playing game (only one game visible)
-ob<byte value="x9"/>observing game (only one game visible)
-Idle<byte value="x9"/>idle time
-X<byte value="x9"/>private info:
-<byte value="x9"/>M..me
-<byte value="x9"/>X..excluded from shout
-<byte value="x9"/>W..watched (sort: X entries, then Rk)
+Stat	player&apos;s stats:
+	X...close
+	!...looking = wants to play a game
+	Q...quiet = doesn&apos;t receive system messages
+	S...shout = can&apos;t receive shouts
+	??...unknown - player entered after last table update
+name	player&apos;s name
+Rk	player&apos;s rank
+pl	playing game (only one game visible)
+ob	observing game (only one game visible)
+Idle	idle time
+X	private info:
+	M..me
+	X..excluded from shout
+	W..watched (sort: X entries, then Rk)
 and, if extended player info (Toolbox) is active (IGS only):
-Info<byte value="x9"/>player&apos;s info string
-Won<byte value="x9"/>number of games won by player
-Lost<byte value="x9"/>number of games lost by player
-Country<byte value="x9"/>origin of player (from e-mail address)
-Lang<byte value="x9"/>preferred language
+Info	player&apos;s info string
+Won	number of games won by player
+Lost	number of games lost by player
+Country	origin of player (from e-mail address)
+Lang	preferred language
 
 This table can be updated by &apos;Refresh players&apos;
 
 Menu entries (right click):
-match<byte value="x9"/>request for match (dialog arises)
-talk<byte value="x9"/>talk to player (tab arises)
+match	request for match (dialog arises)
+talk	talk to player (tab arises)
 ----
-stats<byte value="x9"/><byte value="x9"/>show player&apos;s stats
-stored games<byte value="x9"/>show stored games
-results<byte value="x9"/><byte value="x9"/>show results
-rating<byte value="x9"/><byte value="x9"/>show rating (NNGS/IGS only)
-observe game<byte value="x9"/>show game currently played by player
+stats		show player&apos;s stats
+stored games	show stored games
+results		show results
+rating		show rating (NNGS/IGS only)
+observe game	show game currently played by player
 ----
-toggle watch list<byte value="x9"/><byte value="x9"/>put/remove player to/from watch list - make &apos;W&apos; entry at &apos;X&apos; column; entry/leave sounds are activated
-toggle exclude list<byte value="x9"/>similar to watch - make &apos;X&apos; entry; player&apos;s shouts are no longer shown</source>
-        <translation>Seznam hráčů
+toggle watch list		put/remove player to/from watch list - make &apos;W&apos; entry at &apos;X&apos; column; entry/leave sounds are activated
+toggle exclude list	similar to watch - make &apos;X&apos; entry; player&apos;s shouts are no longer shown</source>
+        <translation type="vanished">Seznam hráčů
 
 stiskni pravé tlačítko myši pro menu
 
@@ -1407,45 +2918,45 @@ změnit vyjmutý seznam     podobné ke sledování - vytvoř &apos;X&apos; vstu
     </message>
     <message>
         <source>Players</source>
-        <translation>Hráči</translation>
+        <translation type="vanished">Hráči</translation>
     </message>
     <message>
         <source>Log online-time and name of arriving message</source>
-        <translation>Čas přihlášení se a jméno došlých vzkazů</translation>
+        <translation type="vanished">Čas přihlášení se a jméno došlých vzkazů</translation>
     </message>
     <message>
         <source>Close all talk tabs</source>
-        <translation>Zavři všechny taby povídání</translation>
+        <translation type="vanished">Zavři všechny taby povídání</translation>
     </message>
     <message>
         <source>Close all tabs containing a player&apos;s name (without &apos;*&apos;). The messages will not be deleted. If you want to see it again click with right button on player&apos;s name and choose talk (same as &apos;#24 *name*&apos;)</source>
-        <translation>Zavři všechny taby obsahující jméno hráče (bez &quot;*&quot;). Vzkazy nebudou smazány. Jestli je chceš znovu vidět, poklikni pravým tlačítkem myši na jméno hráče a zvol Povídání si (stejné s příkazem &quot;#24 *name*&apos;)</translation>
+        <translation type="vanished">Zavři všechny taby obsahující jméno hráče (bez &quot;*&quot;). Vzkazy nebudou smazány. Jestli je chceš znovu vidět, poklikni pravým tlačítkem myši na jméno hráče a zvol Povídání si (stejné s příkazem &quot;#24 *name*&apos;)</translation>
     </message>
     <message>
         <source>msg*</source>
-        <translation>zpráva*</translation>
+        <translation type="vanished">zpráva*</translation>
     </message>
 </context>
 <context>
     <name>MainWidget</name>
     <message>
         <source>Edit</source>
-        <translation>Edituj</translation>
+        <translation type="vanished">Edituj</translation>
     </message>
     <message>
         <source>Done</source>
-        <translation>Hotovo</translation>
+        <translation type="vanished">Hotovo</translation>
     </message>
     <message>
         <source>Pass</source>
-        <translation>Pas</translation>
+        <translation type="vanished">Pas</translation>
     </message>
 </context>
 <context>
     <name>MainWidgetGui</name>
     <message>
         <source>MainWidgetGui</source>
-        <translation>MainWidgetGui</translation>
+        <translation type="vanished">MainWidgetGui</translation>
     </message>
     <message>
         <source>Click on the board to place a stone.
@@ -1456,7 +2967,7 @@ Shift + right click moves to the next move in the current branch.
 When in edit mode and editing stones, left click places a black, right click a white stone, clicking on an existant stone removes it.
 When editing marks, left click sets, right click removes the mark. When editing letter marks, shift-click allows to customize the mark text.
 When in score mode, left click to mark a group as dead, right click to mark it alive in seki. Click again to unmark as dead or seki.</source>
-        <translation>Klikni na desku k umístění kamene.
+        <translation type="vanished">Klikni na desku k umístění kamene.
 
 Když si v normálním módu, levé stisknutí zahraje pohyb v druhé barvě.
 Shift+ levé kliknutí se pohne na první pohyb v hlavní větvi. 
@@ -1467,13 +2978,13 @@ Když jsi ve skóre módu, levé kliknutí označuje skupinu jako mrtvou, pravé
     </message>
     <message>
         <source>0</source>
-        <translation>0</translation>
+        <translation type="vanished">0</translation>
     </message>
     <message>
         <source>Slider min value
 
 Minimum game move the slider can currently show.</source>
-        <translation>Minimální hodnota klouzáku
+        <translation type="vanished">Minimální hodnota klouzáku
 
 Minimální herní tah, o který se klouzák může posunout.</translation>
     </message>
@@ -1481,7 +2992,7 @@ Minimální herní tah, o který se klouzák může posunout.</translation>
         <source>Navigate to move
 
 Use the slider to quickly navigate through the current branch of the game.</source>
-        <translation>Naviguj k pohybu
+        <translation type="vanished">Naviguj k pohybu
 
 Použij klouzák k rychlé navigaci současnou větví hry.</translation>
     </message>
@@ -1489,17 +3000,17 @@ Použij klouzák k rychlé navigaci současnou větví hry.</translation>
         <source>Slider max value
 
 Maximum game move the slider can currently show.</source>
-        <translation>Maximální hodnota kluzáku
+        <translation type="vanished">Maximální hodnota kluzáku
 
 Maximální herní tah, o který se klouzák může posunout.</translation>
     </message>
     <message>
         <source>Tools tab
 
-N/S<byte value="x9"/>normal/score tools
-E<byte value="x9"/>edit tools
-TG<byte value="x9"/>teach tools / game tree</source>
-        <translation>Tab nástrojů
+N/S	normal/score tools
+E	edit tools
+TG	teach tools / game tree</source>
+        <translation type="vanished">Tab nástrojů
 
 N/S     normální/skóre nástroje
 E      edituj nástroje
@@ -1507,203 +3018,203 @@ T/G     výukové nástroje / herní strom</translation>
     </message>
     <message>
         <source>NS</source>
-        <translation>NS</translation>
+        <translation type="vanished">NS</translation>
     </message>
     <message>
         <source>E</source>
-        <translation>E</translation>
+        <translation type="vanished">E</translation>
     </message>
     <message>
         <source>Edit Tools</source>
-        <translation>Editovací nástroje</translation>
+        <translation type="vanished">Editovací nástroje</translation>
     </message>
     <message>
         <source>Change the edit tool</source>
-        <translation>Změň editovací nástroj</translation>
+        <translation type="vanished">Změň editovací nástroj</translation>
     </message>
     <message>
         <source>Change the edit mode
 
 When in edit mode, you can choose what you want to edit, like setting stones or certain marks.</source>
-        <translation>Změň editovací mód
+        <translation type="vanished">Změň editovací mód
 
 Když jsi v editovacím módu, můžeš si vybrat, co budeš editovat, jako např umístění kamenů nebo určitých značek.</translation>
     </message>
     <message>
         <source>Square</source>
-        <translation>Čtverec</translation>
+        <translation type="vanished">Čtverec</translation>
     </message>
     <message>
         <source>Square
 
 Edit square marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation>Čtverec
+        <translation type="vanished">Čtverec
 
 Edituj čtvercové značky na desce. Levé kliknutí umístí značku, pravé ji odebere.</translation>
     </message>
     <message>
         <source>Circle</source>
-        <translation>Kroužek</translation>
+        <translation type="vanished">Kroužek</translation>
     </message>
     <message>
         <source>Circle
 
 Edit circle marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation>Kroužek
+        <translation type="vanished">Kroužek
 
 Edituj kroužkové značky na desce. Levé kliknutí značku umístí, pravé ji odebere.</translation>
     </message>
     <message>
         <source>Letter</source>
-        <translation>Písmeno</translation>
+        <translation type="vanished">Písmeno</translation>
     </message>
     <message>
         <source>Letter
 
 Edit letter marks on the board. Left click sets a mark, right click removes it. Shift-click lets you edit a custom text.</source>
-        <translation>Písmeno
+        <translation type="vanished">Písmeno
 
 Edituj písmenové značky na desce. Levé kliknutí značku umístí, pravé ji odebere. Shift+ kliknutí edituješ text.</translation>
     </message>
     <message>
         <source>Cross</source>
-        <translation>Křížek</translation>
+        <translation type="vanished">Křížek</translation>
     </message>
     <message>
         <source>Cross
 
 Edit cross marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation>Křížek
+        <translation type="vanished">Křížek
 
 Edituj křížkové značky na desce. Levé kliknutí značku umístí, pravé ji odebere.</translation>
     </message>
     <message>
         <source>Triangle</source>
-        <translation>Trojúhelník</translation>
+        <translation type="vanished">Trojúhelník</translation>
     </message>
     <message>
         <source>Triangle
 
 Edit triangle marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation>Trojúhelník
+        <translation type="vanished">Trojúhelník
 
 Edituj trojúhelníkové značky na desce. Levé kliknutí značku umístí, pravé ji odebere.</translation>
     </message>
     <message>
         <source>Number</source>
-        <translation>Číslo</translation>
+        <translation type="vanished">Číslo</translation>
     </message>
     <message>
         <source>Number
 
 Edit Number marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation>Číslo
+        <translation type="vanished">Číslo
 
 Edituj číselné značky na desce. Levé kliknutí značku umístí, pravé ji odebere.</translation>
     </message>
     <message>
         <source>Stone</source>
-        <translation>Kámen</translation>
+        <translation type="vanished">Kámen</translation>
     </message>
     <message>
         <source>Stone
 
 Edit stones on the board. Left click for a black, right click for a white stone.</source>
-        <translation>Kámen
+        <translation type="vanished">Kámen
 
 Edituj kameny na desce. Levé kliknutí pro černý, pravé pro bílý kámen.</translation>
     </message>
     <message>
         <source>Color of next move</source>
-        <translation>Barva následujícího pohybu</translation>
+        <translation type="vanished">Barva následujícího pohybu</translation>
     </message>
     <message>
         <source>Color
 
 Set the color of next move. If left untouched, default color is chosen.</source>
-        <translation>Barva 
+        <translation type="vanished">Barva 
 
 Nastav barvu následujícího pohybu. Jestliže je nechána netknutá, vybere se základní barva.</translation>
     </message>
     <message>
         <source>TG</source>
-        <translation>TG</translation>
+        <translation type="vanished">TG</translation>
     </message>
     <message>
         <source>opponent:</source>
-        <translation>protivník:</translation>
+        <translation type="vanished">protivník:</translation>
     </message>
     <message>
         <source>-- none --</source>
-        <translation>-- nikdo --</translation>
+        <translation type="vanished">-- nikdo --</translation>
     </message>
     <message>
         <source>opponent: invited by teacher</source>
-        <translation>protivník: pozván učitelem</translation>
+        <translation type="vanished">protivník: pozván učitelem</translation>
     </message>
     <message>
         <source>opponent
 
 choose opponent from list to enable him playing with you in a teaching game.</source>
-        <translation>protivník
+        <translation type="vanished">protivník
 
 vyber protivníka ze seznamu a umožni mu, aby s tebou hrál ve výukové hře.</translation>
     </message>
     <message>
         <source>controls</source>
-        <translation>kontroly</translation>
+        <translation type="vanished">kontroly</translation>
     </message>
     <message>
         <source>hand over controls to opponent</source>
-        <translation>předej kontrolu protivníkovi</translation>
+        <translation type="vanished">předej kontrolu protivníkovi</translation>
     </message>
     <message>
         <source>hand over controls to opponent to allow him placing black and white stones, undo etc.
 
 Only teacher can give control,
 both teacher and pupil can release control.</source>
-        <translation>předej kontrolu protivníkovi, aby mohl umísťovat černé a bílé kameny, atd. 
+        <translation type="vanished">předej kontrolu protivníkovi, aby mohl umísťovat černé a bílé kameny, atd. 
 
 Pouze učitel může předat kontrolu,
 jak učitel tak žák mohou kontrolu opustit.</translation>
     </message>
     <message>
         <source>mark</source>
-        <translation>značka</translation>
+        <translation type="vanished">značka</translation>
     </message>
     <message>
         <source>remember that point for fast return</source>
-        <translation>pamatuj tento bod pro rychlý návrat</translation>
+        <translation type="vanished">pamatuj tento bod pro rychlý návrat</translation>
     </message>
     <message>
         <source>push button at starting point to enable remembering.
 After placing and/or undo release button for returning to starting point automatically.</source>
-        <translation>stiskni tlačítko v počátečním bodě, aby jsi umožnil zapamatování
+        <translation type="vanished">stiskni tlačítko v počátečním bodě, aby jsi umožnil zapamatování
 Po umístění odemkni obnovovací tlačítko k návratu na začínající bod automaticky.</translation>
     </message>
     <message>
         <source>Move 0</source>
-        <translation>Pohyb 0</translation>
+        <translation type="vanished">Pohyb 0</translation>
     </message>
     <message>
         <source>Move number</source>
-        <translation>Číslo pohybu</translation>
+        <translation type="vanished">Číslo pohybu</translation>
     </message>
     <message>
         <source>Move number
 
 Number of the currently displayed move.</source>
-        <translation>Číslo pohybu
+        <translation type="vanished">Číslo pohybu
 
 Číslo současně ukazovaného pohybu.</translation>
     </message>
     <message>
         <source>Black to play</source>
-        <translation>Černý na tahu</translation>
+        <translation type="vanished">Černý na tahu</translation>
     </message>
     <message>
         <source>Player to play</source>
-        <translation>Hráč na tahu</translation>
+        <translation type="vanished">Hráč na tahu</translation>
     </message>
     <message>
         <source>Player to play
@@ -1716,88 +3227,88 @@ Značí zda je na tahu bílý nebo černý.</translation>
     <message>
         <source>0 brothers
 0 sons</source>
-        <translation>0 bratři(new line)
+        <translation type="vanished">0 bratři(new line)
 0 synové (new line)</translation>
     </message>
     <message>
         <source>Variations</source>
-        <translation>Variace</translation>
+        <translation type="vanished">Variace</translation>
     </message>
     <message>
         <source>Variations
 
 Shows the number of sons and brothers within the current node.</source>
-        <translation>Variace
+        <translation type="vanished">Variace
 
 Ukazuje počet synů a bratrů v současném uzlu.</translation>
     </message>
     <message>
         <source>Refresh</source>
-        <translation>Obnovit</translation>
+        <translation type="vanished">Obnovit</translation>
     </message>
     <message>
         <source>Refresh display</source>
-        <translation>Obnovit obrazovku</translation>
+        <translation type="vanished">Obnovit obrazovku</translation>
     </message>
     <message>
         <source>Refresh
 
 Refresh board. Use this if you cannot see any stones on the board.</source>
-        <translation>Obnovit
+        <translation type="vanished">Obnovit
 
 Obnovit desku. Použij, pokud nevidíš žádné kameny na desce.</translation>
     </message>
     <message>
         <source>Pass</source>
-        <translation>Pas</translation>
+        <translation type="vanished">Pas</translation>
     </message>
     <message>
         <source>Pass move</source>
-        <translation>Pohyb pas</translation>
+        <translation type="vanished">Pohyb pas</translation>
     </message>
     <message>
         <source>Pass
 
 Pass your turn.</source>
-        <translation>Pas 
+        <translation type="vanished">Pas 
 
 Pasuješ svůj tah.</translation>
     </message>
     <message>
         <source>Undo</source>
-        <translation>Zpět</translation>
+        <translation type="vanished">Zpět</translation>
     </message>
     <message>
         <source>Undo last move</source>
-        <translation>Zpět poslední tah</translation>
+        <translation type="vanished">Zpět poslední tah</translation>
     </message>
     <message>
         <source>Undo
 
 Undo the opponent&apos;s last move.</source>
-        <translation>Zpět 
+        <translation type="vanished">Zpět 
 
 Zpět protivníkův poslední tah.</translation>
     </message>
     <message>
         <source>Adjourn</source>
-        <translation>Přerušit</translation>
+        <translation type="vanished">Přerušit</translation>
     </message>
     <message>
         <source>Request adjournment</source>
-        <translation>Požadavek přerušení</translation>
+        <translation type="vanished">Požadavek přerušení</translation>
     </message>
     <message>
         <source>Adjourn.
 
 Send adjournment request to your opponent. If he accept it, the game will be adjourned and saved.</source>
-        <translation>Přerušit
+        <translation type="vanished">Přerušit
 
 Pošli požadavek na přerušení protivníkovi. Pokud souhlasí, hra se přeruší a uloží.</translation>
     </message>
     <message>
         <source>Score</source>
-        <translation>Skóre</translation>
+        <translation type="vanished">Skóre</translation>
     </message>
     <message>
         <source>Score/Edit</source>
@@ -1825,33 +3336,33 @@ Klikni, aby se otevřelo nové offline okno.</translation>
     </message>
     <message>
         <source>RESIGN</source>
-        <translation>VZDEJ SE</translation>
+        <translation type="vanished">VZDEJ SE</translation>
     </message>
     <message>
         <source>Default Loss</source>
-        <translation>Porážka (základní)</translation>
+        <translation type="vanished">Porážka (základní)</translation>
     </message>
     <message>
         <source>Resign.
 
 Resign the game immediately. Clicking here is a default loss. Your opponent wins. Game ends.</source>
-        <translation>Vzdej se.
+        <translation type="vanished">Vzdej se.
 
 Vzdej hru okamžitě. Kliknutí sem je absolutní porážka. Tvůj protivník vyhraje. Hra končí.</translation>
     </message>
     <message>
         <source>Navigate through the game</source>
-        <translation>Pohybuj se ve hře</translation>
+        <translation type="vanished">Pohybuj se ve hře</translation>
     </message>
     <message>
         <source>000</source>
-        <translation>000</translation>
+        <translation type="vanished">000</translation>
     </message>
     <message>
         <source>Player to play
 
 Indicates whether it is black&apos;s or white&apos;s turn.</source>
-        <translation>Hráč na tahu
+        <translation type="vanished">Hráč na tahu
 
 Ukazuje, jestli je na tahu černý nebo bílý.
 </translation>
@@ -1861,716 +3372,712 @@ Ukazuje, jestli je na tahu černý nebo bílý.
     <name>MainWindow</name>
     <message>
         <source>Observers</source>
-        <translation>Diváci</translation>
+        <translation type="vanished">Diváci</translation>
     </message>
     <message>
         <source>Ctrl+E</source>
-        <translation>Ctrl+E</translation>
+        <translation type="vanished">Ctrl+E</translation>
     </message>
     <message>
         <source>Ctrl+T</source>
-        <translation>Ctrl+T</translation>
+        <translation type="vanished">Ctrl+T</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Nový</translation>
+        <translation type="vanished">Nový</translation>
     </message>
     <message>
         <source>New &amp;Board</source>
-        <translation>Nová  &amp;Deska</translation>
+        <translation type="vanished">Nová  &amp;Deska</translation>
     </message>
     <message>
         <source>Ctrl+B</source>
-        <translation>Ctrl+B</translation>
+        <translation type="vanished">Ctrl+B</translation>
     </message>
     <message>
         <source>Creates a new board</source>
-        <translation>Vytvoří novou desku</translation>
+        <translation type="vanished">Vytvoří novou desku</translation>
     </message>
     <message>
         <source>New
 
 Creates a new board.</source>
-        <translation>Nový (new line)
+        <translation type="vanished">Nový (new line)
 (new line)
 Vytvoří novou desku.</translation>
     </message>
     <message>
         <source>New game</source>
-        <translation>Nová hra</translation>
+        <translation type="vanished">Nová hra</translation>
     </message>
     <message>
         <source>&amp;New game</source>
-        <translation>&amp;Nová hra</translation>
+        <translation type="vanished">&amp;Nová hra</translation>
     </message>
     <message>
         <source>Ctrl+N</source>
-        <translation>Ctrl+N</translation>
+        <translation type="vanished">Ctrl+N</translation>
     </message>
     <message>
         <source>Creates a new game on this board</source>
-        <translation>Vytvoří novou hru na této desce</translation>
+        <translation type="vanished">Vytvoří novou hru na této desce</translation>
     </message>
     <message>
         <source>New
 
 Creates a new game on this board.</source>
-        <translation>Nový(new line)
+        <translation type="vanished">Nový(new line)
 (new line)
 Vytvoří novou hru na této desce.</translation>
     </message>
     <message>
         <source>Open</source>
-        <translation>Otevři</translation>
+        <translation type="vanished">Otevři</translation>
     </message>
     <message>
         <source>&amp;Open</source>
-        <translation>&amp;Otevři</translation>
+        <translation type="vanished">&amp;Otevři</translation>
     </message>
     <message>
         <source>Ctrl+O</source>
-        <translation>Ctrl+O</translation>
+        <translation type="vanished">Ctrl+O</translation>
     </message>
     <message>
         <source>Open a sgf file</source>
-        <translation>Otevři sgf soubor</translation>
+        <translation type="vanished">Otevři sgf soubor</translation>
     </message>
     <message>
         <source>Open
 
 Open a sgf file.</source>
-        <translation>Otevři(new line)
+        <translation type="vanished">Otevři(new line)
 (new line)
 Otevři sgf soubor.</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>Ulož</translation>
+        <translation type="vanished">Ulož</translation>
     </message>
     <message>
         <source>&amp;Save</source>
-        <translation>&amp;Ulož</translation>
+        <translation type="vanished">&amp;Ulož</translation>
     </message>
     <message>
         <source>Ctrl+S</source>
-        <translation>Ctrl+S</translation>
+        <translation type="vanished">Ctrl+S</translation>
     </message>
     <message>
         <source>Save a sgf file</source>
-        <translation>Ulož sgf soubor</translation>
+        <translation type="vanished">Ulož sgf soubor</translation>
     </message>
     <message>
         <source>Save
 
 Save a sgf file.</source>
-        <translation>Ulož(new line)
+        <translation type="vanished">Ulož(new line)
 (new line)
 Ulož sgf soubor.</translation>
     </message>
     <message>
         <source>Save As</source>
-        <translation>Ulož jako</translation>
+        <translation type="vanished">Ulož jako</translation>
     </message>
     <message>
         <source>Save &amp;As</source>
-        <translation>Ulož &amp;jako</translation>
+        <translation type="vanished">Ulož &amp;jako</translation>
     </message>
     <message>
         <source>Save a sgf file under a new name</source>
-        <translation>Ulož sgf soubor pod novým jménem</translation>
+        <translation type="vanished">Ulož sgf soubor pod novým jménem</translation>
     </message>
     <message>
         <source>Save As
 
 Save a sgf file under a new name.</source>
-        <translation>Ulož jako(new line)
+        <translation type="vanished">Ulož jako(new line)
 (new line)
 Ulož sgf soubor pod novým jménem.</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation>Zavři</translation>
+        <translation type="vanished">Zavři</translation>
     </message>
     <message>
         <source>&amp;Close</source>
-        <translation>&amp;Zavři</translation>
+        <translation type="vanished">&amp;Zavři</translation>
     </message>
     <message>
         <source>Ctrl+W</source>
-        <translation>Ctrl+W</translation>
+        <translation type="vanished">Ctrl+W</translation>
     </message>
     <message>
         <source>Close this board</source>
-        <translation>Zavři tuto desku</translation>
+        <translation type="vanished">Zavři tuto desku</translation>
     </message>
     <message>
         <source>Exit
 
 Close this board.</source>
-        <translation>Konec/new line)
+        <translation type="vanished">Konec/new line)
 (new line)
 Zavři tuto desku.</translation>
     </message>
     <message>
         <source>Import ASCII</source>
-        <translation>Import ASCII</translation>
+        <translation type="vanished">Import ASCII</translation>
     </message>
     <message>
         <source>Import &amp;ASCII</source>
-        <translation>Import &amp;ASCII</translation>
+        <translation type="vanished">Import &amp;ASCII</translation>
     </message>
     <message>
         <source>Import an ASCII file as new variation</source>
-        <translation>Import ASCII soubor jako novou variaci</translation>
+        <translation type="vanished">Import ASCII soubor jako novou variaci</translation>
     </message>
     <message>
         <source>Import ASCII
 
 Import an ASCII file as new variation.</source>
-        <translation>Import ASCII(new line)
+        <translation type="vanished">Import ASCII(new line)
 (new line)
 Import ASCII soubor jako novou variaci.</translation>
     </message>
     <message>
         <source>Import ASCII from clipboard</source>
-        <translation>Import ASCII ze schránky</translation>
+        <translation type="vanished">Import ASCII ze schránky</translation>
     </message>
     <message>
         <source>Import ASCII from &amp;clipboard</source>
-        <translation>Import ASCII ze &amp;schránky</translation>
+        <translation type="vanished">Import ASCII ze &amp;schránky</translation>
     </message>
     <message>
         <source>Import an ASCII board as new variation from the clipboard</source>
-        <translation>Import ASCII desky jako nové variace ze schránky</translation>
+        <translation type="vanished">Import ASCII desky jako nové variace ze schránky</translation>
     </message>
     <message>
         <source>Import ASCII from clipboard
 
 Import an ASCII file as new variation from the clipboard.</source>
-        <translation>Import ASCII ze schránky
+        <translation type="vanished">Import ASCII ze schránky
 
 Import ASCII souboru jako nové variace ze schránky.</translation>
     </message>
     <message>
         <source>Export ASCII</source>
-        <translation>Export ASCII</translation>
+        <translation type="vanished">Export ASCII</translation>
     </message>
     <message>
         <source>&amp;Export ASCII</source>
-        <translation>&amp;Export ASCII</translation>
+        <translation type="vanished">&amp;Export ASCII</translation>
     </message>
     <message>
         <source>Export current board to ASCII</source>
-        <translation>Export současné desky do ASCII</translation>
+        <translation type="vanished">Export současné desky do ASCII</translation>
     </message>
     <message>
         <source>Export ASCII
 
 Export current board to ASCII.</source>
-        <translation>Export ASCII
+        <translation type="vanished">Export ASCII
 
 Export současné desky do ASCII.</translation>
     </message>
     <message>
         <source>Import SGF from clipboard</source>
-        <translation>Import SGF ze schránky</translation>
+        <translation type="vanished">Import SGF ze schránky</translation>
     </message>
     <message>
         <source>Import SGF &amp;from clipboard</source>
-        <translation>Import SGF ze schránky</translation>
+        <translation type="vanished">Import SGF ze schránky</translation>
     </message>
     <message>
         <source>Import a complete game in SGF format from clipboard</source>
-        <translation>Import kompletní hry v SGF formátu ze schránky</translation>
+        <translation type="vanished">Import kompletní hry v SGF formátu ze schránky</translation>
     </message>
     <message>
         <source>Import SGF from clipboard
 
 Import a complete game in SGF format from clipboard.</source>
-        <translation>Import SGF ze schránky
+        <translation type="vanished">Import SGF ze schránky
 
 Import kompletní hry v SGF formátu ze schránky.</translation>
     </message>
     <message>
         <source>Export SGF to clipboard</source>
-        <translation>Export SGF do schránky</translation>
+        <translation type="vanished">Export SGF do schránky</translation>
     </message>
     <message>
         <source>Export SGF &amp;to clipboard</source>
-        <translation>Export SGF do schránky</translation>
+        <translation type="vanished">Export SGF do schránky</translation>
     </message>
     <message>
         <source>Export a complete game in SGF format to clipboard</source>
-        <translation>Export kompletní hry v SGF formátu do schránky</translation>
+        <translation type="vanished">Export kompletní hry v SGF formátu do schránky</translation>
     </message>
     <message>
         <source>Export SGF to clipboard
 
 Export a complete game in SGF format to clipboard.</source>
-        <translation>Export SGF do schránky
+        <translation type="vanished">Export SGF do schránky
 
 Export kompletní hry v SGF formátu do schránky.</translation>
     </message>
     <message>
         <source>Export Image</source>
-        <translation>Export obrázku</translation>
+        <translation type="vanished">Export obrázku</translation>
     </message>
     <message>
         <source>Export &amp;Image</source>
-        <translation>Export obrázku</translation>
+        <translation type="vanished">Export obrázku</translation>
     </message>
     <message>
         <source>Export current board to an image</source>
-        <translation>Export současné desky do obrázku</translation>
+        <translation type="vanished">Export současné desky do obrázku</translation>
     </message>
     <message>
         <source>Export Image
 
 Export current board to an image.</source>
-        <translation>Export obrázku
+        <translation type="vanished">Export obrázku
 
 Export současné desky do obrázku.</translation>
     </message>
     <message>
         <source>Export Image to clipboard</source>
-        <translation>Export obrázku do schránky</translation>
+        <translation type="vanished">Export obrázku do schránky</translation>
     </message>
     <message>
         <source>E&amp;xport Image to clipboard</source>
-        <translation>Export obrázku do schránky</translation>
+        <translation type="vanished">Export obrázku do schránky</translation>
     </message>
     <message>
         <source>Export current board to the clipboard as image</source>
-        <translation>
+        <translation type="vanished">
 Export současné desky do schránky jako obrázek</translation>
     </message>
     <message>
         <source>Export Image to clipboard
 
 Export current board to the clipboard as image.</source>
-        <translation>Export obrázku do schránky
+        <translation type="vanished">Export obrázku do schránky
 
 Export současné desky do schránky jako obrázek.</translation>
     </message>
     <message>
         <source>Exit</source>
-        <translation>Konec</translation>
+        <translation type="vanished">Konec</translation>
     </message>
     <message>
         <source>E&amp;xit</source>
-        <translation>K&amp;onec</translation>
+        <translation type="vanished">K&amp;onec</translation>
     </message>
     <message>
         <source>Ctrl+Q</source>
-        <translation>Ctrl+Q</translation>
+        <translation type="vanished">Ctrl+Q</translation>
     </message>
     <message>
         <source>Quits the application</source>
-        <translation>Opustit aplikaci</translation>
+        <translation type="vanished">Opustit aplikaci</translation>
     </message>
     <message>
         <source>Exit
 
 Quits the application.</source>
-        <translation>Konec
+        <translation type="vanished">Konec
 
 Opustí aplikaci.</translation>
     </message>
     <message>
         <source>Cut</source>
-        <translation>Vyjmout</translation>
+        <translation type="vanished">Vyjmout</translation>
     </message>
     <message>
         <source>&amp;Cut</source>
-        <translation>Vyjmou&amp;t</translation>
+        <translation type="vanished">Vyjmou&amp;t</translation>
     </message>
     <message>
         <source>Ctrl+X</source>
-        <translation>Ctrl+X</translation>
-    </message>
-    <message>
-        <source>Cut this and all following positions</source>
-        <translation></translation>
+        <translation type="vanished">Ctrl+X</translation>
     </message>
     <message>
         <source>Cut
 
 Cut this and all following positions.</source>
-        <translation>Vyjmout
+        <translation type="vanished">Vyjmout
 
 Vyjmi tuto a následující pozice.</translation>
     </message>
     <message>
         <source>Paste</source>
-        <translation>Vložit</translation>
+        <translation type="vanished">Vložit</translation>
     </message>
     <message>
         <source>&amp;Paste</source>
-        <translation>V&amp;ložit</translation>
+        <translation type="vanished">V&amp;ložit</translation>
     </message>
     <message>
         <source>Ctrl+P</source>
-        <translation>Ctrl+P</translation>
+        <translation type="vanished">Ctrl+P</translation>
     </message>
     <message>
         <source>Paste as son of the current move</source>
-        <translation>Vlož jako syna současného tahu</translation>
+        <translation type="vanished">Vlož jako syna současného tahu</translation>
     </message>
     <message>
         <source>Paste
 
 Paste as son of the current move.</source>
-        <translation>Vložit
+        <translation type="vanished">Vložit
 
 Vlož jako syna současného tahu.</translation>
     </message>
     <message>
         <source>Paste as brother</source>
-        <translation>Vlož jako bratra</translation>
+        <translation type="vanished">Vlož jako bratra</translation>
     </message>
     <message>
         <source>Paste as &amp;brother</source>
-        <translation>Vlož jako &amp;bratra</translation>
+        <translation type="vanished">Vlož jako &amp;bratra</translation>
     </message>
     <message>
         <source>Paste as brother of the current move</source>
-        <translation>Vlož jako bratra současného tahu</translation>
+        <translation type="vanished">Vlož jako bratra současného tahu</translation>
     </message>
     <message>
         <source>Paste
 
 Paste as brother of the current move.</source>
-        <translation>Vložit
+        <translation type="vanished">Vložit
 
 Vlož jako bratra současného tahu.</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Smazat</translation>
+        <translation type="vanished">Smazat</translation>
     </message>
     <message>
         <source>&amp;Delete</source>
-        <translation>S&amp;mazat</translation>
+        <translation type="vanished">S&amp;mazat</translation>
     </message>
     <message>
         <source>Ctrl+D</source>
-        <translation>Ctrl+D</translation>
+        <translation type="vanished">Ctrl+D</translation>
     </message>
     <message>
         <source>Delete this and all following positions</source>
-        <translation>Smaž tuto a následující pozice</translation>
+        <translation type="vanished">Smaž tuto a následující pozice</translation>
     </message>
     <message>
         <source>Delete
 
 Delete this and all following positions.</source>
-        <translation>Smazat
+        <translation type="vanished">Smazat
 
 Smaž tuto a následující pozice.</translation>
     </message>
     <message>
         <source>Number Moves</source>
-        <translation>Počet tahů</translation>
+        <translation type="vanished">Počet tahů</translation>
     </message>
     <message>
         <source>&amp;Number Moves</source>
-        <translation>&amp;Počet tahů</translation>
+        <translation type="vanished">&amp;Počet tahů</translation>
     </message>
     <message>
         <source>Shift+F2</source>
-        <translation>Shift+F2</translation>
+        <translation type="vanished">Shift+F2</translation>
     </message>
     <message>
         <source>Mark all moves with the number of their turn</source>
-        <translation>Označ všechny tahy číslem jejich kola</translation>
+        <translation type="vanished">Označ všechny tahy číslem jejich kola</translation>
     </message>
     <message>
         <source>Number moves
 
 Mark all moves with the number of their turn.</source>
-        <translation>Počet tahů
+        <translation type="vanished">Počet tahů
 
 Označ všechny tahy číslem jejich kola.</translation>
     </message>
     <message>
         <source>Mark brothers</source>
-        <translation>Označ bratry</translation>
+        <translation type="vanished">Označ bratry</translation>
     </message>
     <message>
         <source>Mark &amp;brothers</source>
-        <translation>Označ &amp;bratry</translation>
+        <translation type="vanished">Označ &amp;bratry</translation>
     </message>
     <message>
         <source>Shift+F3</source>
-        <translation>Shift+F3</translation>
+        <translation type="vanished">Shift+F3</translation>
     </message>
     <message>
         <source>Mark all brothers of the current move</source>
-        <translation>Označ všechny bratry současného tahu</translation>
+        <translation type="vanished">Označ všechny bratry současného tahu</translation>
     </message>
     <message>
         <source>Mark brothers
 
 Mark all brothers of the current move.</source>
-        <translation>Označ bratry
+        <translation type="vanished">Označ bratry
 
 Označ všechny bratry současného tahu.</translation>
     </message>
     <message>
         <source>Mark sons</source>
-        <translation>Označ syny</translation>
+        <translation type="vanished">Označ syny</translation>
     </message>
     <message>
         <source>Mark &amp;sons</source>
-        <translation>Označ &amp;syny</translation>
+        <translation type="vanished">Označ &amp;syny</translation>
     </message>
     <message>
         <source>Shift+F4</source>
-        <translation>Shift+F4</translation>
+        <translation type="vanished">Shift+F4</translation>
     </message>
     <message>
         <source>Mark all sons of the current move</source>
-        <translation>Označ všechny syny současného tahu</translation>
+        <translation type="vanished">Označ všechny syny současného tahu</translation>
     </message>
     <message>
         <source>Mark sons
 
 Mark all sons of the current move.</source>
-        <translation>Označ syny
+        <translation type="vanished">Označ syny
 
 Označ všechny syny současného tahu.</translation>
     </message>
     <message>
         <source>Previous move (Left)</source>
-        <translation>Předchozí tah (Doleva)</translation>
+        <translation type="vanished">Předchozí tah (Doleva)</translation>
     </message>
     <message>
         <source>&amp;Previous move</source>
-        <translation>&amp;Předchozí tah</translation>
+        <translation type="vanished">&amp;Předchozí tah</translation>
     </message>
     <message>
         <source>Left</source>
-        <translation>Doleva</translation>
+        <translation type="vanished">Doleva</translation>
     </message>
     <message>
         <source>To previous move</source>
-        <translation>K předchozímu tahu</translation>
+        <translation type="vanished">K předchozímu tahu</translation>
     </message>
     <message>
         <source>Previous move
 
 Move one move backward.</source>
-        <translation>Předchozí tah
+        <translation type="vanished">Předchozí tah
 
 Pohne se o jeden tah zpátky.</translation>
     </message>
     <message>
         <source>Next move (Right)</source>
-        <translation>Další tah (Doprava)</translation>
+        <translation type="vanished">Další tah (Doprava)</translation>
     </message>
     <message>
         <source>&amp;Next move</source>
-        <translation>&amp;Další tah</translation>
+        <translation type="vanished">&amp;Další tah</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation>Doprava</translation>
+        <translation type="vanished">Doprava</translation>
     </message>
     <message>
         <source>To next move</source>
-        <translation>K dalšímu tahu</translation>
+        <translation type="vanished">K dalšímu tahu</translation>
     </message>
     <message>
         <source>Next move
 
 Move one move forward.</source>
-        <translation>Další tah
+        <translation type="vanished">Další tah
 
 Pohne se o jeden tah dopředu.</translation>
     </message>
     <message>
         <source>First move (Home)</source>
-        <translation>První tah (Domov)</translation>
+        <translation type="vanished">První tah (Domov)</translation>
     </message>
     <message>
         <source>&amp;First move</source>
-        <translation>&amp;První tah</translation>
+        <translation type="vanished">&amp;První tah</translation>
     </message>
     <message>
         <source>Home</source>
-        <translation>Domov</translation>
+        <translation type="vanished">Domov</translation>
     </message>
     <message>
         <source>To first move</source>
-        <translation>K prvnímu tahu</translation>
+        <translation type="vanished">K prvnímu tahu</translation>
     </message>
     <message>
         <source>First move
 
 Move to first move.</source>
-        <translation>První tah
+        <translation type="vanished">První tah
 
 Pohne se k prvnímu tahu.</translation>
     </message>
     <message>
         <source>Last move (End)</source>
-        <translation>Poslední tah (Konec)</translation>
+        <translation type="vanished">Poslední tah (Konec)</translation>
     </message>
     <message>
         <source>&amp;Last move</source>
-        <translation>&amp;Poslední tah</translation>
+        <translation type="vanished">&amp;Poslední tah</translation>
     </message>
     <message>
         <source>End</source>
-        <translation>Konec</translation>
+        <translation type="vanished">Konec</translation>
     </message>
     <message>
         <source>To last move</source>
-        <translation>K poslednímu tahu</translation>
+        <translation type="vanished">K poslednímu tahu</translation>
     </message>
     <message>
         <source>Last move
 
 Move to last move.</source>
-        <translation>Poslední tah
+        <translation type="vanished">Poslední tah
 
 Pohne se k poslednímu tahu.</translation>
     </message>
     <message>
         <source>Previous variation (Up)</source>
-        <translation>Předchozí variace (Nahoru)</translation>
+        <translation type="vanished">Předchozí variace (Nahoru)</translation>
     </message>
     <message>
         <source>P&amp;revious variation</source>
-        <translation>Př&amp;edchozí variace</translation>
+        <translation type="vanished">Př&amp;edchozí variace</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation>Nahoru</translation>
+        <translation type="vanished">Nahoru</translation>
     </message>
     <message>
         <source>To previous variation</source>
-        <translation>K předchozí variaci</translation>
+        <translation type="vanished">K předchozí variaci</translation>
     </message>
     <message>
         <source>Previous variation
 
 Move to the previous variation of this move.</source>
-        <translation>Předchozí variace
+        <translation type="vanished">Předchozí variace
 
 Pohne se k přechozí variaci tohoto pohybu.</translation>
     </message>
     <message>
         <source>Next variation (Down)</source>
-        <translation>Další variace (Dolů)</translation>
+        <translation type="vanished">Další variace (Dolů)</translation>
     </message>
     <message>
         <source>N&amp;ext variation</source>
-        <translation>Další varia&amp;ce</translation>
+        <translation type="vanished">Další varia&amp;ce</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation>Dolů</translation>
+        <translation type="vanished">Dolů</translation>
     </message>
     <message>
         <source>To next variation</source>
-        <translation>K další variaci</translation>
+        <translation type="vanished">K další variaci</translation>
     </message>
     <message>
         <source>Next variation
 
 Move to the next variation of this move.</source>
-        <translation>Další variace
+        <translation type="vanished">Další variace
 
 Pohne se k další variaci současného tahu.</translation>
     </message>
     <message>
         <source>Main Branch</source>
-        <translation>Hlavní větev</translation>
+        <translation type="vanished">Hlavní větev</translation>
     </message>
     <message>
         <source>&amp;Main branch</source>
-        <translation>&amp;Hlavní větev</translation>
+        <translation type="vanished">&amp;Hlavní větev</translation>
     </message>
     <message>
         <source>To main branch</source>
-        <translation>K hlavní větvi</translation>
+        <translation type="vanished">K hlavní větvi</translation>
     </message>
     <message>
         <source>Main Branch
 
 Move to the main branch where variation started.</source>
-        <translation>Hlavní větev
+        <translation type="vanished">Hlavní větev
 
 Pohne se k hlavní větvi kde variace začala.</translation>
     </message>
     <message>
         <source>Variation start</source>
-        <translation>Začátek variace</translation>
+        <translation type="vanished">Začátek variace</translation>
     </message>
     <message>
         <source>Variation &amp;start</source>
-        <translation>&amp;Začátek variace</translation>
+        <translation type="vanished">&amp;Začátek variace</translation>
     </message>
     <message>
         <source>To top of variation</source>
-        <translation>K vrcholu variace</translation>
+        <translation type="vanished">K vrcholu variace</translation>
     </message>
     <message>
         <source>Variation start
 
 Move to the top variation of this branch.</source>
-        <translation>Začátek variace
+        <translation type="vanished">Začátek variace
 
 Pohne se k vrcholu variace této větve.</translation>
     </message>
     <message>
         <source>Next branch</source>
-        <translation>Další větev</translation>
+        <translation type="vanished">Další větev</translation>
     </message>
     <message>
         <source>Next &amp;branch</source>
-        <translation>Další vě&amp;tev</translation>
+        <translation type="vanished">Další vě&amp;tev</translation>
     </message>
     <message>
         <source>To next branch starting a variation</source>
-        <translation>K další větvi začínající variaci</translation>
+        <translation type="vanished">K další větvi začínající variaci</translation>
     </message>
     <message>
         <source>Next branch
 
 Move to the next branch starting a variation.</source>
-        <translation>Další větev
+        <translation type="vanished">Další větev
 
 Pohne se k další větvi začínající variaci.</translation>
     </message>
     <message>
         <source>Goto move</source>
-        <translation>Jdi na tah</translation>
+        <translation type="vanished">Jdi na tah</translation>
     </message>
     <message>
         <source>&amp;Goto Move</source>
-        <translation>&amp;Jdi na tah</translation>
+        <translation type="vanished">&amp;Jdi na tah</translation>
     </message>
     <message>
         <source>Ctrl+G</source>
-        <translation>Ctrl+G</translation>
+        <translation type="vanished">Ctrl+G</translation>
     </message>
     <message>
         <source>Goto a move of main branch by number</source>
-        <translation>Jdi na tah (číslo tahu) hlavní větve</translation>
+        <translation type="vanished">Jdi na tah (číslo tahu) hlavní větve</translation>
     </message>
     <message>
         <source>Goto move
 
 Goto a move of main branch by number.</source>
-        <translation>Jdi na tah
+        <translation type="vanished">Jdi na tah
 
 Jdi na tah (číslo tahu) hlavní větve.</translation>
     </message>
     <message>
         <source>Autoplay</source>
-        <translation>Promítání</translation>
+        <translation type="vanished">Promítání</translation>
     </message>
     <message>
         <source>&amp;Autoplay</source>
@@ -2578,7 +4085,7 @@ Jdi na tah (číslo tahu) hlavní větve.</translation>
     </message>
     <message>
         <source>Ctrl+A</source>
-        <translation>Ctrl+A</translation>
+        <translation type="vanished">Ctrl+A</translation>
     </message>
     <message>
         <source>Start/Stop autoplaying current game</source>
@@ -2594,47 +4101,47 @@ Začni / Zastav promítání současné hry.</translation>
     </message>
     <message>
         <source>Empty branch</source>
-        <translation>Prázdná větev</translation>
+        <translation type="vanished">Prázdná větev</translation>
     </message>
     <message>
         <source>Empt&amp;y branch</source>
-        <translation>Prázdná vět&amp;ev</translation>
+        <translation type="vanished">Prázdná vět&amp;ev</translation>
     </message>
     <message>
         <source>Create an empty branch</source>
-        <translation>Vytvoř novou prázdnou větev</translation>
+        <translation type="vanished">Vytvoř novou prázdnou větev</translation>
     </message>
     <message>
         <source>Empty branch
 
 Create an empty branch.</source>
-        <translation>Prázdná větev
+        <translation type="vanished">Prázdná větev
 
 Vytvoř novou prázdnou větev.</translation>
     </message>
     <message>
         <source>Duplicate move</source>
-        <translation>Duplikuj tah</translation>
+        <translation type="vanished">Duplikuj tah</translation>
     </message>
     <message>
         <source>D&amp;uplicate move</source>
-        <translation>D&amp;uplikuj tah</translation>
+        <translation type="vanished">D&amp;uplikuj tah</translation>
     </message>
     <message>
         <source>Copies and duplicates this move</source>
-        <translation>Kopíruj a duplikuj tento tah</translation>
+        <translation type="vanished">Kopíruj a duplikuj tento tah</translation>
     </message>
     <message>
         <source>Duplicate move
 
 Copies and duplicates this move.</source>
-        <translation>Duplikuj tah
+        <translation type="vanished">Duplikuj tah
 
 Kopíruj a duplikuj tento tah.</translation>
     </message>
     <message>
         <source>Swap variations</source>
-        <translation>Prohoď variace</translation>
+        <translation type="vanished">Prohoď variace</translation>
     </message>
     <message>
         <source>S&amp;wap variations</source>
@@ -2654,319 +4161,319 @@ Prohoď současný tah s předchozí variací.</translation>
     </message>
     <message>
         <source>Previous commented move</source>
-        <translation>Předchozí komentovaný tah</translation>
+        <translation type="vanished">Předchozí komentovaný tah</translation>
     </message>
     <message>
         <source>Previous &amp;commented move</source>
-        <translation>Předchozí komentovaný t&amp;ah</translation>
+        <translation type="vanished">Předchozí komentovaný t&amp;ah</translation>
     </message>
     <message>
         <source>To previous comment</source>
-        <translation>K předchozímu komentáři</translation>
+        <translation type="vanished">K předchozímu komentáři</translation>
     </message>
     <message>
         <source>Previous comment
 
 Move to the previous move that has a comment</source>
-        <translation>Předchozí komentář
+        <translation type="vanished">Předchozí komentář
 
 Pohne se k předchozímu tahu, který má komentář</translation>
     </message>
     <message>
         <source>Next commented move</source>
-        <translation>Další komentovaný tah</translation>
+        <translation type="vanished">Další komentovaný tah</translation>
     </message>
     <message>
         <source>Next c&amp;ommented move</source>
-        <translation>Da&amp;lší komentovaný tah</translation>
+        <translation type="vanished">Da&amp;lší komentovaný tah</translation>
     </message>
     <message>
         <source>To next comment</source>
-        <translation>K dalšímu komentáři</translation>
+        <translation type="vanished">K dalšímu komentáři</translation>
     </message>
     <message>
         <source>Goto stone at clicked move</source>
-        <translation>Jdi na kámen při tahu kliknutím</translation>
+        <translation type="vanished">Jdi na kámen při tahu kliknutím</translation>
     </message>
     <message>
         <source>Goto clic&amp;ked move</source>
-        <translation>Jdi na klik&amp;nutý tah</translation>
+        <translation type="vanished">Jdi na klik&amp;nutý tah</translation>
     </message>
     <message>
         <source>To clicked move</source>
-        <translation>Ke kliknutému tahu</translation>
+        <translation type="vanished">Ke kliknutému tahu</translation>
     </message>
     <message>
         <source>Click on a board intersection
 
 Move to the stone played at this intersection (if any)</source>
-        <translation>Klikni na průsečnici desky
+        <translation type="vanished">Klikni na průsečnici desky
 
 Pohne se na kámen hraný na této průsečnici (pokud tam je)</translation>
     </message>
     <message>
         <source>Preferences</source>
-        <translation>Možnosti</translation>
+        <translation type="vanished">Možnosti</translation>
     </message>
     <message>
         <source>&amp;Preferences</source>
-        <translation>&amp;Možnosti</translation>
+        <translation type="vanished">&amp;Možnosti</translation>
     </message>
     <message>
         <source>Alt+P</source>
-        <translation>Alt+P</translation>
+        <translation type="vanished">Alt+P</translation>
     </message>
     <message>
         <source>Edit the preferences</source>
-        <translation>Edituj možnosti</translation>
+        <translation type="vanished">Edituj možnosti</translation>
     </message>
     <message>
         <source>Preferences
 
 Edit the applications preferences.</source>
-        <translation>Možnosti
+        <translation type="vanished">Možnosti
 
 Edituj možnosti aplikace.</translation>
     </message>
     <message>
         <source>Game Info</source>
-        <translation>Informace o hře</translation>
+        <translation type="vanished">Informace o hře</translation>
     </message>
     <message>
         <source>&amp;Game Info</source>
-        <translation>&amp;Informace o hře</translation>
+        <translation type="vanished">&amp;Informace o hře</translation>
     </message>
     <message>
         <source>Ctrl+I</source>
-        <translation>Ctrl+I</translation>
+        <translation type="vanished">Ctrl+I</translation>
     </message>
     <message>
         <source>Display game information</source>
-        <translation>Zobraz informace o hře</translation>
+        <translation type="vanished">Zobraz informace o hře</translation>
     </message>
     <message>
         <source>Game Info
 
 Display game information.</source>
-        <translation>Informace o hře
+        <translation type="vanished">Informace o hře
 
 Zobraz informace o hře.</translation>
     </message>
     <message>
         <source>File toolbar</source>
-        <translation>Paleta Soubor</translation>
+        <translation type="vanished">Paleta Soubor</translation>
     </message>
     <message>
         <source>&amp;File toolbar</source>
-        <translation>Paleta &amp;Soubor</translation>
+        <translation type="vanished">Paleta &amp;Soubor</translation>
     </message>
     <message>
         <source>Enables/disables the file toolbar</source>
-        <translation>Zobrazit / Skrýt paletu Soubor</translation>
+        <translation type="vanished">Zobrazit / Skrýt paletu Soubor</translation>
     </message>
     <message>
         <source>File toolbar
 
 Enables/disables the file toolbar.</source>
-        <translation>Paleta Soubor
+        <translation type="vanished">Paleta Soubor
 
 Zobrazit/ skrýt  paletu Soubor. </translation>
     </message>
     <message>
         <source>Navigation toolbar</source>
-        <translation>Paleta navigace</translation>
+        <translation type="vanished">Paleta navigace</translation>
     </message>
     <message>
         <source>Navigation &amp;toolbar</source>
-        <translation>Paleta &amp;Navigace</translation>
+        <translation type="vanished">Paleta &amp;Navigace</translation>
     </message>
     <message>
         <source>Enables/disables the navigation toolbar</source>
-        <translation>Zobrazit / Skrýt paletu Navigace</translation>
+        <translation type="vanished">Zobrazit / Skrýt paletu Navigace</translation>
     </message>
     <message>
         <source>Navigation toolbar
 
 Enables/disables the navigation toolbar.</source>
-        <translation>Paleta Navigace
+        <translation type="vanished">Paleta Navigace
 
 Zobrazit/ skrýt  paletu Navigace. </translation>
     </message>
     <message>
         <source>Edit toolbar</source>
-        <translation>Paleta Úpravy</translation>
+        <translation type="vanished">Paleta Úpravy</translation>
     </message>
     <message>
         <source>&amp;Edit toolbar</source>
-        <translation>Paleta &amp;Úpravy</translation>
+        <translation type="vanished">Paleta &amp;Úpravy</translation>
     </message>
     <message>
         <source>Enables/disables the edit toolbar</source>
-        <translation>Zobrazit / skrýt paletu Úpravy</translation>
+        <translation type="vanished">Zobrazit / skrýt paletu Úpravy</translation>
     </message>
     <message>
         <source>Edit toolbar
 
 Enables/disables the edit toolbar.</source>
-        <translation>Paleta Úpravy
+        <translation type="vanished">Paleta Úpravy
 
 Zobrazit/ skrýt  paletu Úpravy.</translation>
     </message>
     <message>
         <source>Menubar</source>
-        <translation>Menubar</translation>
+        <translation type="vanished">Menubar</translation>
     </message>
     <message>
         <source>&amp;Menubar</source>
-        <translation>&amp;Menubar</translation>
+        <translation type="vanished">&amp;Menubar</translation>
     </message>
     <message>
         <source>F7</source>
-        <translation>F7</translation>
+        <translation type="vanished">F7</translation>
     </message>
     <message>
         <source>Enables/disables the menubar</source>
-        <translation>Zobrazit / skrýt menubar</translation>
+        <translation type="vanished">Zobrazit / skrýt menubar</translation>
     </message>
     <message>
         <source>Menubar
 
 Enables/disables the menubar.</source>
-        <translation>Menubar
+        <translation type="vanished">Menubar
 
 Zobrazit / Skrýt menubar.</translation>
     </message>
     <message>
         <source>Statusbar</source>
-        <translation>Stavový řádek</translation>
+        <translation type="vanished">Stavový řádek</translation>
     </message>
     <message>
         <source>&amp;Statusbar</source>
-        <translation>&amp;Stavový řádek</translation>
+        <translation type="vanished">&amp;Stavový řádek</translation>
     </message>
     <message>
         <source>Enables/disables the statusbar</source>
-        <translation>Zobrazit / Skrýt stavový řádek</translation>
+        <translation type="vanished">Zobrazit / Skrýt stavový řádek</translation>
     </message>
     <message>
         <source>Statusbar
 
 Enables/disables the statusbar.</source>
-        <translation>Stavový řádek
+        <translation type="vanished">Stavový řádek
 
 Zobrazit/ skrýt stavový řádek.</translation>
     </message>
     <message>
         <source>Coordinates</source>
-        <translation>Souřadnice</translation>
+        <translation type="vanished">Souřadnice</translation>
     </message>
     <message>
         <source>C&amp;oordinates</source>
-        <translation>S&amp;ouřadnice</translation>
+        <translation type="vanished">S&amp;ouřadnice</translation>
     </message>
     <message>
         <source>F8</source>
-        <translation>F8</translation>
+        <translation type="vanished">F8</translation>
     </message>
     <message>
         <source>Enables/disables the coordinates</source>
-        <translation>Zobrazit / Skrýt souřadnice</translation>
+        <translation type="vanished">Zobrazit / Skrýt souřadnice</translation>
     </message>
     <message>
         <source>Coordinates
 
 Enables/disables the coordinates.</source>
-        <translation>Souřadnice
+        <translation type="vanished">Souřadnice
 
 Zobrazit/ skrýt souřadnice.</translation>
     </message>
     <message>
         <source>Slider</source>
-        <translation>Posuvník</translation>
+        <translation type="vanished">Posuvník</translation>
     </message>
     <message>
         <source>Sli&amp;der</source>
-        <translation>Posuvník&amp;</translation>
+        <translation type="vanished">Posuvník&amp;</translation>
     </message>
     <message>
         <source>Ctrl+F8</source>
-        <translation>Ctrl+F8</translation>
+        <translation type="vanished">Ctrl+F8</translation>
     </message>
     <message>
         <source>Enables/disables the slider</source>
-        <translation>Zobrazit / Skrýt posuvník</translation>
+        <translation type="vanished">Zobrazit / Skrýt posuvník</translation>
     </message>
     <message>
         <source>Slider
 
 Enables/disables the slider.</source>
-        <translation>Posuvník
+        <translation type="vanished">Posuvník
 
 Zobrazit / Skrýt posuvník.</translation>
     </message>
     <message>
         <source>Sidebar</source>
-        <translation>Postranní panel</translation>
+        <translation type="vanished">Postranní panel</translation>
     </message>
     <message>
         <source>Side&amp;bar</source>
-        <translation>Postranní &amp;panel</translation>
+        <translation type="vanished">Postranní &amp;panel</translation>
     </message>
     <message>
         <source>F9</source>
-        <translation>F9</translation>
+        <translation type="vanished">F9</translation>
     </message>
     <message>
         <source>Enables/disables the sidebar</source>
-        <translation>Zobrazit / Skrýt sidebar</translation>
+        <translation type="vanished">Zobrazit / Skrýt sidebar</translation>
     </message>
     <message>
         <source>Sidebar
 
 Enables/disables the sidebar.</source>
-        <translation>Sidebar
+        <translation type="vanished">Sidebar
 
 Zobrazit/ skrýt sidebar.</translation>
     </message>
     <message>
         <source>Comment</source>
-        <translation>Komentář</translation>
+        <translation type="vanished">Komentář</translation>
     </message>
     <message>
         <source>&amp;Comment</source>
-        <translation>&amp;Komentář</translation>
+        <translation type="vanished">&amp;Komentář</translation>
     </message>
     <message>
         <source>F10</source>
-        <translation>F10</translation>
+        <translation type="vanished">F10</translation>
     </message>
     <message>
         <source>Enables/disables the comment field</source>
-        <translation>Zobrazit / Skrýt pole s komentáři</translation>
+        <translation type="vanished">Zobrazit / Skrýt pole s komentáři</translation>
     </message>
     <message>
         <source>Comment field
 
 Enables/disables the comment field.</source>
-        <translation>Komentář
+        <translation type="vanished">Komentář
 
 Zobrazit / Skrýt pole s komentáři.</translation>
     </message>
     <message>
         <source>Vertical comment</source>
-        <translation>Vertikální komentář</translation>
+        <translation type="vanished">Vertikální komentář</translation>
     </message>
     <message>
         <source>&amp;Vertical comment</source>
-        <translation>&amp;Vertikální komentář</translation>
+        <translation type="vanished">&amp;Vertikální komentář</translation>
     </message>
     <message>
         <source>Shift+F10</source>
-        <translation>Shift+F10</translation>
+        <translation type="vanished">Shift+F10</translation>
     </message>
     <message>
         <source>Enables/disables a vertical direction of the comment field</source>
-        <translation>Komentář
+        <translation type="vanished">Komentář
 
 Zobrazit / Skrýt vertikální směr komentáře</translation>
     </message>
@@ -2976,7 +4483,7 @@ Zobrazit / Skrýt vertikální směr komentáře</translation>
 Enables/disables a vertical direction of the comment field.
 
 Note: This setting is temporary for this board. In order to set permanent horizontal/vertical comment use &apos;Preferences&apos;.</source>
-        <translation>Vertikální komentář
+        <translation type="vanished">Vertikální komentář
 
 Zobrazit / Skrýt vertikální směr komentáře.
 
@@ -2984,87 +4491,87 @@ Poznámka: Toto nastavení je se vztahuje k této desce. Pokud chcete nastavit h
     </message>
     <message>
         <source>Pin comment</source>
-        <translation>Uchycený komentář</translation>
+        <translation type="vanished">Uchycený komentář</translation>
     </message>
     <message>
         <source>&amp;Pin comment</source>
-        <translation>&amp;Uchycený komentář</translation>
+        <translation type="vanished">&amp;Uchycený komentář</translation>
     </message>
     <message>
         <source>Ctrl+F10</source>
-        <translation>Ctrl+F10</translation>
+        <translation type="vanished">Ctrl+F10</translation>
     </message>
     <message>
         <source>Enables/disables pinning the comment field</source>
-        <translation>Zobrazit / Skrýt uchycený komentář</translation>
+        <translation type="vanished">Zobrazit / Skrýt uchycený komentář</translation>
     </message>
     <message>
         <source>Pin comment field
 
 Enables/disables pinning the comment field.</source>
-        <translation>Uchycený komentář
+        <translation type="vanished">Uchycený komentář
 
 Zobrazit / Skrýt uchycený komentář.</translation>
     </message>
     <message>
         <source>Zoom In</source>
-        <translation>Přiblížit</translation>
+        <translation type="vanished">Přiblížit</translation>
     </message>
     <message>
         <source>Zoom &amp;In</source>
-        <translation>Př&amp;iblížit</translation>
+        <translation type="vanished">Př&amp;iblížit</translation>
     </message>
     <message>
         <source>Alt++</source>
-        <translation>Alt++</translation>
+        <translation type="vanished">Alt++</translation>
     </message>
     <message>
         <source>Zooms in the board</source>
-        <translation>Přiblíží pohled k desce</translation>
+        <translation type="vanished">Přiblíží pohled k desce</translation>
     </message>
     <message>
         <source>Zoom In
 
 Zooms in the board.</source>
-        <translation>Přiblížit
+        <translation type="vanished">Přiblížit
 
 Přiblíží pohled k desce.</translation>
     </message>
     <message>
         <source>Zoom Out</source>
-        <translation>Oddálit</translation>
+        <translation type="vanished">Oddálit</translation>
     </message>
     <message>
         <source>Zoom &amp;Out</source>
-        <translation>&amp;Oddálit</translation>
+        <translation type="vanished">&amp;Oddálit</translation>
     </message>
     <message>
         <source>Alt+-</source>
-        <translation>Alt+-</translation>
+        <translation type="vanished">Alt+-</translation>
     </message>
     <message>
         <source>Zooms out the board</source>
-        <translation>Oddálí pohled od desky</translation>
+        <translation type="vanished">Oddálí pohled od desky</translation>
     </message>
     <message>
         <source>Zoom Out
 
 Zooms out the board.</source>
-        <translation>Oddálit
+        <translation type="vanished">Oddálit
 
 Oddálí pohled od desky.</translation>
     </message>
     <message>
         <source>Save size</source>
-        <translation>Uložit velikost</translation>
+        <translation type="vanished">Uložit velikost</translation>
     </message>
     <message>
         <source>Save si&amp;ze</source>
-        <translation>Uložit veli&amp;kost</translation>
+        <translation type="vanished">Uložit veli&amp;kost</translation>
     </message>
     <message>
         <source>Save the current window size</source>
-        <translation>Uloží současnou velikost okna</translation>
+        <translation type="vanished">Uloží současnou velikost okna</translation>
     </message>
     <message>
         <source>Save size
@@ -3076,7 +4583,7 @@ Restore with CTRL + &lt;number key&gt;
 
 &lt;0&gt; is default value at program start.
 &lt;9&gt; is default for edit window.</source>
-        <translation>Uložit velikost
+        <translation type="vanished">Uložit velikost
 
 Uloží současnou velikost okna a nastaví ji při příštím spuštění programu.
 
@@ -3088,139 +4595,139 @@ Vrať k původnímu s CTRL + &lt;číslo klávesy&gt;
     </message>
     <message>
         <source>Fullscreen</source>
-        <translation>Celá obrazovka</translation>
+        <translation type="vanished">Celá obrazovka</translation>
     </message>
     <message>
         <source>&amp;Fullscreen</source>
-        <translation>&amp;Celá obrazovka</translation>
+        <translation type="vanished">&amp;Celá obrazovka</translation>
     </message>
     <message>
         <source>F11</source>
-        <translation>F11</translation>
+        <translation type="vanished">F11</translation>
     </message>
     <message>
         <source>Enable/disable fullscreen mode</source>
-        <translation>Zobrazit / Skrýt celoobrazový mód</translation>
+        <translation type="vanished">Zobrazit / Skrýt celoobrazový mód</translation>
     </message>
     <message>
         <source>Fullscreen
 
 Enable/disable fullscreen mode.</source>
-        <translation>Celá obrazovka
+        <translation type="vanished">Celá obrazovka
 
 Zobrazit / Skrýt celoobrazový mód.</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>Manuál</translation>
+        <translation type="vanished">Manuál</translation>
     </message>
     <message>
         <source>&amp;Manual</source>
-        <translation>&amp;Manuál</translation>
+        <translation type="vanished">&amp;Manuál</translation>
     </message>
     <message>
         <source>F1</source>
-        <translation>F1</translation>
+        <translation type="vanished">F1</translation>
     </message>
     <message>
         <source>Opens the manual</source>
-        <translation>Otevře manuál</translation>
+        <translation type="vanished">Otevře manuál</translation>
     </message>
     <message>
         <source>Help
 
 Opens the manual of the application.</source>
-        <translation>Nápověda
+        <translation type="vanished">Nápověda
 
 Otevře manuál aplikace.</translation>
     </message>
     <message>
         <source>Sound Info</source>
-        <translation>Informace o zvuku</translation>
+        <translation type="vanished">Informace o zvuku</translation>
     </message>
     <message>
         <source>&amp;Sound</source>
-        <translation>&amp;Zvuk</translation>
+        <translation type="vanished">&amp;Zvuk</translation>
     </message>
     <message>
         <source>Short info on sound availability</source>
-        <translation>Krátká informace o dostupnosti zvuku</translation>
+        <translation type="vanished">Krátká informace o dostupnosti zvuku</translation>
     </message>
     <message>
         <source>Sound Info
 
 Views a message box with a short comment about sound.</source>
-        <translation>Zvukové informace
+        <translation type="vanished">Zvukové informace
 
 Objeví se dialog s krátkým komentářem o zvuku.</translation>
     </message>
     <message>
         <source>About</source>
-        <translation>O aplikaci</translation>
+        <translation type="vanished">O aplikaci</translation>
     </message>
     <message>
         <source>&amp;About...</source>
-        <translation>&amp;O aplikaci...</translation>
+        <translation type="vanished">&amp;O aplikaci...</translation>
     </message>
     <message>
         <source>About the application</source>
-        <translation>O aplikaci</translation>
+        <translation type="vanished">O aplikaci</translation>
     </message>
     <message>
         <source>About
 
 About the application.</source>
-        <translation>O 
+        <translation type="vanished">O 
 
 O aplikaci.</translation>
     </message>
     <message>
         <source>About Qt</source>
-        <translation>O Qt</translation>
+        <translation type="vanished">O Qt</translation>
     </message>
     <message>
         <source>About &amp;Qt...</source>
-        <translation>O &amp;Qt...</translation>
+        <translation type="vanished">O &amp;Qt...</translation>
     </message>
     <message>
         <source>About Qt
 
 About Qt.</source>
-        <translation>O Qt
+        <translation type="vanished">O Qt
 
 O programu Qt.</translation>
     </message>
     <message>
         <source>&amp;Import/Export</source>
-        <translation>&amp;Import/Export</translation>
+        <translation type="vanished">&amp;Import/Export</translation>
     </message>
     <message>
         <source>What&apos;s &amp;This?</source>
-        <translation>Co je &amp;to?</translation>
+        <translation type="vanished">Co je &amp;to?</translation>
     </message>
     <message>
         <source>&amp;File</source>
-        <translation>&amp;Soubor</translation>
+        <translation type="vanished">&amp;Soubor</translation>
     </message>
     <message>
         <source>&amp;Edit</source>
-        <translation>&amp;Edituj</translation>
+        <translation type="vanished">&amp;Edituj</translation>
     </message>
     <message>
         <source>&amp;Navigation</source>
-        <translation>&amp;Navigace</translation>
+        <translation type="vanished">&amp;Navigace</translation>
     </message>
     <message>
         <source>&amp;Settings</source>
-        <translation>&amp;Nastavení</translation>
+        <translation type="vanished">&amp;Nastavení</translation>
     </message>
     <message>
         <source>&amp;View</source>
-        <translation>&amp;Pohledy</translation>
+        <translation type="vanished">&amp;Pohledy</translation>
     </message>
     <message>
         <source>&amp;Help</source>
-        <translation>&amp;Nápověda</translation>
+        <translation type="vanished">&amp;Nápověda</translation>
     </message>
     <message>
         <source>Ready.</source>
@@ -3258,17 +4765,17 @@ Ukazuje současný mód. &quot;N&quot; pro normální, &quot;E&quot; pro editova
     </message>
     <message>
         <source>Current edit mark</source>
-        <translation>Současná editovaná značka</translation>
+        <translation type="vanished">Současná editovaná značka</translation>
     </message>
     <message>
         <source>Mark
 Shows the current edit mark. &apos;-&apos; in normal mode.</source>
-        <translation>Značka
+        <translation type="vanished">Značka
 Ukazuje současnou editovanou značku. &quot;-&quot; v normálním módu.</translation>
     </message>
     <message>
         <source>newgame</source>
-        <translation>nová hra</translation>
+        <translation type="vanished">nová hra</translation>
     </message>
     <message>
         <source>New board prepared.</source>
@@ -3284,7 +4791,7 @@ Ukazuje současnou editovanou značku. &quot;-&quot; v normálním módu.</trans
     </message>
     <message>
         <source>loaded.</source>
-        <translation>nahráno.</translation>
+        <translation type="vanished">nahráno.</translation>
     </message>
     <message>
         <source>SGF Files (*.sgf);;All Files (*)</source>
@@ -3292,19 +4799,19 @@ Ukazuje současnou editovanou značku. &quot;-&quot; v normálním módu.</trans
     </message>
     <message>
         <source>This file already exists. Do you want to overwrite it?</source>
-        <translation>Tento soubor již existuje. Chceš ho přepsat?</translation>
+        <translation type="vanished">Tento soubor již existuje. Chceš ho přepsat?</translation>
     </message>
     <message>
         <source>Yes</source>
-        <translation>Ano</translation>
+        <translation type="vanished">Ano</translation>
     </message>
     <message>
         <source>No</source>
-        <translation>Ne</translation>
+        <translation type="vanished">Ne</translation>
     </message>
     <message>
         <source>Cannot save SGF file.</source>
-        <translation>Nepodařilo se uložit SGF soubor.</translation>
+        <translation type="vanished">Nepodařilo se uložit SGF soubor.</translation>
     </message>
     <message>
         <source>saved.</source>
@@ -3312,11 +4819,11 @@ Ukazuje současnou editovanou značku. &quot;-&quot; v normálním módu.</trans
     </message>
     <message>
         <source>Update</source>
-        <translation>Update</translation>
+        <translation type="vanished">Update</translation>
     </message>
     <message>
         <source>Cannot load from clipboard. Is it empty?</source>
-        <translation>Nemůžu nahrát ze schránky. Je prázdná?</translation>
+        <translation type="vanished">Nemůžu nahrát ze schránky. Je prázdná?</translation>
     </message>
     <message>
         <source>SGF imported.</source>
@@ -3324,7 +4831,7 @@ Ukazuje současnou editovanou značku. &quot;-&quot; v normálním módu.</trans
     </message>
     <message>
         <source>Failed to export SGF to clipboard.</source>
-        <translation>Nepodařilo se exportovat SGF do schránky.</translation>
+        <translation type="vanished">Nepodařilo se exportovat SGF do schránky.</translation>
     </message>
     <message>
         <source>SGF exported.</source>
@@ -3332,15 +4839,15 @@ Ukazuje současnou editovanou značku. &quot;-&quot; v normálním módu.</trans
     </message>
     <message>
         <source>Text Files (*.txt);;All Files (*)</source>
-        <translation>Textové soubory (*.txt);;Všechny soubory (*)</translation>
+        <translation type="vanished">Textové soubory (*.txt);;Všechny soubory (*)</translation>
     </message>
     <message>
         <source>ASCII imported.</source>
-        <translation>ASCII importován.</translation>
+        <translation type="vanished">ASCII importován.</translation>
     </message>
     <message>
         <source>Importing ASCII failed. Clipboard empty?</source>
-        <translation>Import ASCII se nepodařil. Je schránka prázdná?</translation>
+        <translation type="vanished">Import ASCII se nepodařil. Je schránka prázdná?</translation>
     </message>
     <message>
         <source>Export image as</source>
@@ -3348,7 +4855,7 @@ Ukazuje současnou editovanou značku. &quot;-&quot; v normálním módu.</trans
     </message>
     <message>
         <source>entermove</source>
-        <translation>vlož tah</translation>
+        <translation type="vanished">vlož tah</translation>
     </message>
     <message>
         <source>Autoplay stopped.</source>
@@ -3360,7 +4867,7 @@ Ukazuje současnou editovanou značku. &quot;-&quot; v normálním módu.</trans
     </message>
     <message>
         <source>Variation duplicated.</source>
-        <translation>Variace duplikována.</translation>
+        <translation type="vanished">Variace duplikována.</translation>
     </message>
     <message>
         <source>Variations swapped.</source>
@@ -3372,7 +4879,7 @@ Ukazuje současnou editovanou značku. &quot;-&quot; v normálním módu.</trans
     </message>
     <message>
         <source>preferences</source>
-        <translation>možnosti</translation>
+        <translation type="vanished">možnosti</translation>
     </message>
     <message>
         <source>Window size saved.</source>
@@ -3390,53 +4897,240 @@ Chceš uložit tyto změny?</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Zrušit</translation>
+        <translation type="vanished">Zrušit</translation>
     </message>
     <message>
         <source>Update from online game</source>
-        <translation>Update z online hry</translation>
+        <translation type="vanished">Update z online hry</translation>
     </message>
     <message>
         <source>Update from online game to local board and supersede own changes.</source>
-        <translation>Update z online hry do místní desky a nahradit vlastní změny.</translation>
+        <translation type="vanished">Update z online hry do místní desky a nahradit vlastní změny.</translation>
     </message>
     <message>
         <source>Next comment
 
 Move to the next move that has a comment</source>
-        <translation>Další komentář
+        <translation type="vanished">Další komentář
 
 Pohne se k dalšímu tahu, který má komentář</translation>
     </message>
     <message>
         <source>Rk</source>
-        <translation>Rk</translation>
+        <translation type="vanished">Rk</translation>
     </message>
     <message>
         <source>Mute stones sound</source>
-        <translation>Kameny bez zvuku</translation>
+        <translation type="vanished">Kameny bez zvuku</translation>
     </message>
     <message>
         <source>&amp;Mute stones sound</source>
-        <translation>&amp;Kameny bez zvuku</translation>
+        <translation type="vanished">&amp;Kameny bez zvuku</translation>
     </message>
     <message>
         <source>Toggle stones sound on/off</source>
-        <translation>Vypínání/zapínání zvuků pro kameny</translation>
+        <translation type="vanished">Vypínání/zapínání zvuků pro kameny</translation>
     </message>
     <message>
         <source>Stones sound
 
 Toggle stones sound on/off
 this toggles only the stones sounds</source>
-        <translation>Zvuky kamenů
+        <translation type="vanished">Zvuky kamenů
 
 Vypínání/zapínání zvuků pro kameny
 mění to pouze zvuky kamenů</translation>
     </message>
     <message>
-        <source>SGF Files (*.sgf *.SGF);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)</source>
+        <source>Choose variation display</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The SGF file that is being opened uses a different style
+of variation display.  Use the style found in the file?
+
+You can customize this behaviour (and disable this dialog)
+in the preferences.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Analysis in progress: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Off-line copy: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>vs.</source>
+        <translation type="unfinished">vs.</translation>
+    </message>
+    <message>
+        <source>This file had errors during loading and may be corrupt.
+Do you still want to save it?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save SGF file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot open SGF file for saving.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to save SGF file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to save image!</source>
+        <translation type="unfinished">Nepodařilo se uložit obrázek!</translation>
+    </message>
+    <message>
+        <source>Diag. comments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Comments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>remaining time / stones</source>
+        <translation type="unfinished">zbývající čas / kameny</translation>
+    </message>
+    <message>
+        <source>click to pause/unpause the game</source>
+        <translation type="unfinished">klikni na pozastavení / pokračování hry</translation>
+    </message>
+    <message>
+        <source>click to add 1 minute to your opponent&apos;s clock</source>
+        <translation type="unfinished">klikni k přidání jedné minuty hodinám protivníka</translation>
+    </message>
+    <message>
+        <source>Time remaining for this move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> (Scoring)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>White</source>
+        <translation type="unfinished">Bílý</translation>
+    </message>
+    <message>
+        <source>Black</source>
+        <translation type="unfinished">Černý</translation>
+    </message>
+    <message>
+        <source>Black wins with %1</source>
+        <translation type="unfinished">Černý vítězí s %1</translation>
+    </message>
+    <message>
+        <source>White wins with %1</source>
+        <translation type="unfinished">Bílý vítězí s %1</translation>
+    </message>
+    <message>
+        <source>Jigo</source>
+        <translation type="unfinished">Jigo</translation>
+    </message>
+    <message>
+        <source>Game result differs from the one stored.
+Overwrite stored game result?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>B Win %</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>W Win %</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MainWindow_GTP</name>
+    <message>
+        <source>Game end</source>
+        <translation type="unfinished">Konec hry</translation>
+    </message>
+    <message>
+        <source>The computer has resigned the game.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>NewAIGameDlg</name>
+    <message>
+        <source>Error</source>
+        <translation type="unfinished">Chyba</translation>
+    </message>
+    <message>
+        <source>You entered an invalid Handicap (1 is not legal)</source>
+        <translation type="unfinished">Vložil jsi nevhodný Handicap (1 není povolená)</translation>
+    </message>
+    <message>
+        <source>Choose an SGF file to load</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SGF Files (*.sgf);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>NewAIGameDlgGui</name>
+    <message>
+        <source>Computer Game</source>
+        <translation type="unfinished">Hra počítače</translation>
+    </message>
+    <message>
+        <source>Load game</source>
+        <translation type="unfinished">Nahraj hru</translation>
+    </message>
+    <message>
+        <source>&amp;OK</source>
+        <translation type="unfinished">&amp;OK</translation>
+    </message>
+    <message>
+        <source>&amp;Cancel</source>
+        <translation type="unfinished">&amp;Zrušit</translation>
+    </message>
+    <message>
+        <source>Players</source>
+        <translation type="unfinished">Hráči</translation>
+    </message>
+    <message>
+        <source>Human:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Engine:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Computer plays:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Komi:</source>
+        <translation type="unfinished">Komi:</translation>
+    </message>
+    <message>
+        <source>Board size:</source>
+        <translation type="unfinished">Velikost desky:</translation>
+    </message>
+    <message>
+        <source>Handicap:</source>
+        <translation type="unfinished">Handicap:</translation>
     </message>
 </context>
 <context>
@@ -3635,14 +5329,77 @@ S&amp;tatistika</translation>
     </message>
 </context>
 <context>
+    <name>NewVariantGameDialog</name>
+    <message>
+        <source>New Variant Game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Players</source>
+        <translation type="unfinished">Hráči</translation>
+    </message>
+    <message>
+        <source>Black</source>
+        <translation type="unfinished">Černý</translation>
+    </message>
+    <message>
+        <source>Name:</source>
+        <translation type="unfinished">Jméno:</translation>
+    </message>
+    <message>
+        <source>White</source>
+        <translation type="unfinished">Bílý</translation>
+    </message>
+    <message>
+        <source>Rank:</source>
+        <translation type="unfinished">Rank:</translation>
+    </message>
+    <message>
+        <source>Board shape</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Komi:</source>
+        <translation type="unfinished">Komi:</translation>
+    </message>
+    <message>
+        <source>Board size:</source>
+        <translation type="unfinished">Velikost desky:</translation>
+    </message>
+    <message>
+        <source>x</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toroidal Go</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Horizontally</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Vertically</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Ok</source>
+        <translation type="unfinished">&amp;OK</translation>
+    </message>
+    <message>
+        <source>&amp;Cancel</source>
+        <translation type="unfinished">&amp;Zrušit</translation>
+    </message>
+</context>
+<context>
     <name>NodeResultsGUI</name>
     <message>
         <source>Results</source>
-        <translation>Výsledky</translation>
+        <translation type="vanished">Výsledky</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation>Zavři</translation>
+        <translation type="vanished">Zavři</translation>
     </message>
 </context>
 <context>
@@ -3657,11 +5414,11 @@ S&amp;tatistika</translation>
     </message>
     <message>
         <source>00:00</source>
-        <translation>00:00</translation>
+        <translation type="vanished">00:00</translation>
     </message>
     <message>
         <source>remaining time / stones</source>
-        <translation>zbývající čas / kameny</translation>
+        <translation type="vanished">zbývající čas / kameny</translation>
     </message>
     <message>
         <source>Clock
@@ -3671,7 +5428,7 @@ shows remaining time or byoyomi time / remaining stones.
 Click on
 - your own clock for pause request (NNGS) or
 - the opponent&apos;s clock to give him additional time of one minute.</source>
-        <translation>Hodiny
+        <translation type="vanished">Hodiny
 
 ukazují zbývající čas nebo čas byoyomi / zbývající kameny.
 
@@ -3779,6 +5536,38 @@ use &quot;free&quot; command to make game rated or unrated (free)</source>
 
 použij &quot;free&quot; příkaz k  nastavení hry na volnou nebo hodnocenou </translation>
     </message>
+    <message>
+        <source>Analysis</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Primary move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Coords:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>B Win%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Visits:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Highlighted move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>B Win%:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>NthMoveDialog</name>
@@ -3804,6 +5593,57 @@ použij &quot;free&quot; příkaz k  nastavení hry na volnou nebo hodnocenou </
     <message>
         <source>msg*</source>
         <translation>zpráva*</translation>
+    </message>
+</context>
+<context>
+    <name>PlayerTable</name>
+    <message>
+        <source>Stat</source>
+        <translation type="unfinished">Status</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Jméno</translation>
+    </message>
+    <message>
+        <source>Rk</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>pl</source>
+        <translation type="unfinished">hr</translation>
+    </message>
+    <message>
+        <source>ob</source>
+        <translation type="unfinished">divá</translation>
+    </message>
+    <message>
+        <source>Idle</source>
+        <translation type="unfinished">Záhalčivý</translation>
+    </message>
+    <message>
+        <source>X</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Info</source>
+        <translation type="unfinished">Informace</translation>
+    </message>
+    <message>
+        <source>Won</source>
+        <translation type="unfinished">Výhry</translation>
+    </message>
+    <message>
+        <source>Lost</source>
+        <translation type="unfinished">Prohry</translation>
+    </message>
+    <message>
+        <source>Country</source>
+        <translation type="unfinished">Země</translation>
+    </message>
+    <message>
+        <source>Match prefs</source>
+        <translation type="unfinished">Nastavení hry</translation>
     </message>
 </context>
 <context>
@@ -3870,11 +5710,72 @@ použij &quot;free&quot; příkaz k  nastavení hry na volnou nebo hodnocenou </
     </message>
     <message>
         <source>Images (*.png *.jpg *.xpm *.ico)</source>
-        <translation>Obrázky (*.png *.jpg *.xpm *.ico)</translation>
+        <translation type="vanished">Obrázky (*.png *.jpg *.xpm *.ico)</translation>
     </message>
     <message>
         <source>Images (*.png *.xpm *.jpg)</source>
         <translation>Obrázky (*.png *.xpm *.jpg)</translation>
+    </message>
+    <message>
+        <source>Select white stone base color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select black stone base color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unsaved data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The engine input fields contain
+potentially unsaved data.
+Really close the preferences?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The host input fields contain
+potentially unsaved data.
+Really close the preferences?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid komi entered</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please enter a valid komi before adding the engine.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Missing board size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Analysis engines require a board size to be specified.
+If your engine allows multiple board sizes, you need to configure them in separate entires.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid board size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Only a range of 5 to 25 is allowed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose GTP engine path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select a goban wood image</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select a table background image</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3893,12 +5794,12 @@ použij &quot;free&quot; příkaz k  nastavení hry na volnou nebo hodnocenou </
     </message>
     <message>
         <source>remember that point for fast return</source>
-        <translation>pamatuj tento bod pro rychlý návrat</translation>
+        <translation type="vanished">pamatuj tento bod pro rychlý návrat</translation>
     </message>
     <message>
         <source>push button at starting point to enable remembering.
 After placing and/or undo release button for returning to starting point automatically.</source>
-        <translation>stiskni tlačítko v počátečním bodě, aby jsi umožnil zapamatování
+        <translation type="vanished">stiskni tlačítko v počátečním bodě, aby jsi umožnil zapamatování
 Po umístění odemkni obnovovací tlačítko k návratu na začínající bod automaticky.</translation>
     </message>
     <message>
@@ -3907,14 +5808,14 @@ Po umístění odemkni obnovovací tlačítko k návratu na začínající bod a
     </message>
     <message>
         <source>hand over controls to opponent</source>
-        <translation>předej kontrolu protivníkovi</translation>
+        <translation type="vanished">předej kontrolu protivníkovi</translation>
     </message>
     <message>
         <source>hand over controls to opponent to allow him placing black and white stones, undo etc.
 
 Only teacher can give control,
 both teacher and pupil can release control.</source>
-        <translation>předej kontrolu protivníkovi, aby mohl umísťovat černé a bílé kameny, atd. 
+        <translation type="vanished">předej kontrolu protivníkovi, aby mohl umísťovat černé a bílé kameny, atd. 
 
 Pouze učitel může předat kontrolu,
 jak učitel tak žák mohou kontrolu opustit.</translation>
@@ -3973,17 +5874,17 @@ Pokud spuštěno, namaluji kameny o trochu menší a spodní mřížka bude vidi
     </message>
     <message>
         <source>Coordinates</source>
-        <translation>Souřadnice</translation>
+        <translation type="vanished">Souřadnice</translation>
     </message>
     <message>
         <source>Show board coordinates</source>
-        <translation>Ukaž souřadnice desky</translation>
+        <translation type="vanished">Ukaž souřadnice desky</translation>
     </message>
     <message>
         <source>Show board coordinates
 
 Toggles if the board coordinates are shown.</source>
-        <translation>Ukaž souřadnice desky
+        <translation type="vanished">Ukaž souřadnice desky
 
 Zobraz / Skryj souřadnice desky.</translation>
     </message>
@@ -4005,7 +5906,7 @@ Ukazuje / Skrývá klouzače dole na desce.</translation>
     </message>
     <message>
         <source>Cursor</source>
-        <translation>Kurzor</translation>
+        <translation type="vanished">Kurzor</translation>
     </message>
     <message>
         <source>Show a ghost stone at mouse pointer</source>
@@ -4021,32 +5922,32 @@ Ukazuje kámen jako duch současnou pozici myši na desce?</translation>
     </message>
     <message>
         <source>ToolTip coords</source>
-        <translation>Souřadnice tipu nástrojů</translation>
+        <translation type="vanished">Souřadnice tipu nástrojů</translation>
     </message>
     <message>
         <source>Show coordinates as ToolTip</source>
-        <translation>Ukaž souřadnice jako tipy nástrojů</translation>
+        <translation type="vanished">Ukaž souřadnice jako tipy nástrojů</translation>
     </message>
     <message>
         <source>Show coordinates as ToolTip
 
 When the mouse hovers over a point on the board, show a tooltip with the current coordinate.</source>
-        <translation>Ukaž souřadnice jako tipy nástrojů
+        <translation type="vanished">Ukaž souřadnice jako tipy nástrojů
 Když se myš zastaví někde na desce, pak ukazuje tipy nástrojů se  současnými souřadnicemi.</translation>
     </message>
     <message>
         <source>Variable mark font</source>
-        <translation>Font pro různé značky</translation>
+        <translation type="vanished">Font pro různé značky</translation>
     </message>
     <message>
         <source>Variable font size for marks</source>
-        <translation>Různá velikost fontů pro značky</translation>
+        <translation type="vanished">Různá velikost fontů pro značky</translation>
     </message>
     <message>
         <source>Variable font size for marks 
 
 Ignore the size of the chosen font for marks and set size to about stone dimension.</source>
-        <translation>Různá velikost fontů pro značky
+        <translation type="vanished">Různá velikost fontů pro značky
 
 Ignoruj velikost vybraného fontu pro značky a nastav velikost podle velikost kamenů.</translation>
     </message>
@@ -4068,27 +5969,27 @@ Znemožni všechny tipy nápovědy, které by se ukázaly, když myš dlí nad j
     </message>
     <message>
         <source>Smaller marks</source>
-        <translation>Menší značky</translation>
+        <translation type="vanished">Menší značky</translation>
     </message>
     <message>
         <source>Draw marks slightly smaller</source>
-        <translation>Namaluj značky o trochu menší</translation>
+        <translation type="vanished">Namaluj značky o trochu menší</translation>
     </message>
     <message>
         <source>Draw marks slightly smaller
 
 If activated, all types of marks on the board will be drawn slightly smaller.</source>
-        <translation>Namaluj značky o trochu menší
+        <translation type="vanished">Namaluj značky o trochu menší
 
 Když aktivováno, všechny typy značek na desce budou o trochu menší.</translation>
     </message>
     <message>
         <source>Adjust font size</source>
-        <translation>Uprav velikost písma</translation>
+        <translation type="vanished">Uprav velikost písma</translation>
     </message>
     <message>
         <source>Adjust font size for text and number labels</source>
-        <translation>Uprav velikost písma pro text a číselné štítky</translation>
+        <translation type="vanished">Uprav velikost písma pro text a číselné štítky</translation>
     </message>
     <message>
         <source>Adjust font size for text and number labels
@@ -4102,49 +6003,49 @@ Když se edituje pouze jednočíselná značka, je asi lepší tuto volbu vypnou
     </message>
     <message>
         <source>Bold marks</source>
-        <translation>Tučné značky</translation>
+        <translation type="vanished">Tučné značky</translation>
     </message>
     <message>
         <source>Draw marks bold</source>
-        <translation>Namaluj tučné značky</translation>
+        <translation type="vanished">Namaluj tučné značky</translation>
     </message>
     <message>
         <source>Draw marks bold
 
 If activated, all types of marks except characters and numbers on the board will be drawn bold.</source>
-        <translation>Namaluj tučné značky
+        <translation type="vanished">Namaluj tučné značky
 
 Když aktivováno, všechny značky kromě písma a číslic budou na desce namalovány tučně.</translation>
     </message>
     <message>
         <source>Sidebar</source>
-        <translation>Sidebar</translation>
+        <translation type="vanished">Sidebar</translation>
     </message>
     <message>
         <source>Show sidebar</source>
-        <translation>Ukaž sidebar</translation>
+        <translation type="vanished">Ukaž sidebar</translation>
     </message>
     <message>
         <source>Show sidebar
 
 Enables or disables the navigation and tool sidebar.</source>
-        <translation>Ukaž sidebar
+        <translation type="vanished">Ukaž sidebar
 
 Zobrazuje / Skrývá navigaci a sidebar.</translation>
     </message>
     <message>
         <source>left</source>
-        <translation>levý</translation>
+        <translation type="vanished">levý</translation>
     </message>
     <message>
         <source>Show sidebar on the left</source>
-        <translation>Ukaž sidebar nalevo</translation>
+        <translation type="vanished">Ukaž sidebar nalevo</translation>
     </message>
     <message>
         <source>Show sidebar on the left
 
 Swaps sidebar and board, thus board is on the left and sidbar is on the right.</source>
-        <translation>Ukaž sidebar nalevo
+        <translation type="vanished">Ukaž sidebar nalevo
 
 Prohodí sidebar a desku, takže je deska nalevo a sidebar napravo.</translation>
     </message>
@@ -4333,7 +6234,7 @@ If &apos;System default&apos; is selected, qGo will use the standard language of
 This change will take effect only after qGo has been restarted.
 
 If your language is not supported, you might consider translating qGo. Please check the qGo homepage at http://qgo.sourceforge.net</source>
-        <translation>Nastav jazyk aplikace
+        <translation type="vanished">Nastav jazyk aplikace
 
 Zvol si svůj jazyk pro qGo.
 Pokud je zvolena volba &quot;Systému původní&quot;, pak qGo použije jazyk tvého systému. Na Linuxu se shoduje s proměnnou LANG, ve Windows pouze s jazykem, který jsi zvolil v možnostech.
@@ -4348,11 +6249,11 @@ Pokud tvůj jazyk není dostupný, může zkusit qGo přeložit. Podívej se na 
     </message>
     <message>
         <source>Comment orientation</source>
-        <translation>Orientace komentáře</translation>
+        <translation type="vanished">Orientace komentáře</translation>
     </message>
     <message>
         <source>Horizontal or vertical comment orientation</source>
-        <translation>Horizontální nebo vertikální orientace komentáře</translation>
+        <translation type="vanished">Horizontální nebo vertikální orientace komentáře</translation>
     </message>
     <message>
         <source>Horizontal or vertical comment orientation
@@ -4362,7 +6263,7 @@ The comment field will either be displayed on the bottom of the board or on the 
 For more dynamic display, pin off the comment field in the View menu.
 
 If None is selected, the comment field is by default hidden.</source>
-        <translation>Horizontální nebo vertikální orientace komentáře
+        <translation type="vanished">Horizontální nebo vertikální orientace komentáře
 
 Pole komentáře se buď zobrazí dole na desce nebo na její pravé straně.
 
@@ -4372,30 +6273,30 @@ Pole komentáře je původně schované, jestliže nic není vybráno.</translat
     </message>
     <message>
         <source>as saved</source>
-        <translation>jako uložené</translation>
+        <translation type="vanished">jako uložené</translation>
     </message>
     <message>
         <source>horizontal</source>
-        <translation>horizontální</translation>
+        <translation type="vanished">horizontální</translation>
     </message>
     <message>
         <source>vertical</source>
-        <translation>vertikální</translation>
+        <translation type="vanished">vertikální</translation>
     </message>
     <message>
         <source>choose default comment orientation</source>
-        <translation>vyber si původní orientaci komentáře</translation>
+        <translation type="vanished">vyber si původní orientaci komentáře</translation>
     </message>
     <message>
         <source>default comment field orientation
 
-as saved<byte value="x9"/>use ALT+&lt;0..9&gt; to save position, size and comment orientation, 
-<byte value="x9"/><byte value="x9"/>restore with CTRL+&lt;0..9&gt;
-horizontal<byte value="x9"/>always show horizontal comment field
-vertical<byte value="x9"/><byte value="x9"/>always show vertical comment field
+as saved	use ALT+&lt;0..9&gt; to save position, size and comment orientation, 
+		restore with CTRL+&lt;0..9&gt;
+horizontal	always show horizontal comment field
+vertical		always show vertical comment field
 
 To use saved comment field orientation you must select &apos;as saved&apos;. By using ALT/CTRL+&lt;number&gt; while horizontal/vertical is chosen, the saved comment field orientation is ignored.</source>
-        <translation>původní orientace pole komentáře
+        <translation type="vanished">původní orientace pole komentáře
 
 jako uložené     použij ALT + &lt;0..9&gt; k uložení pozice, velikost a orientaci komentáře,
            obnov pomocí CTRL + &lt;0..9&gt;
@@ -4430,7 +6331,7 @@ Vyber si, jak zobrazit všechny bratry současného tahu. Buď vůbec ne, nebo j
     </message>
     <message>
         <source>Small stones</source>
-        <translation>Menší kameny</translation>
+        <translation type="vanished">Menší kameny</translation>
     </message>
     <message>
         <source>Windows</source>
@@ -4574,7 +6475,7 @@ Vyber sí písmo pro hodiny.</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation>Barva</translation>
+        <translation type="vanished">Barva</translation>
     </message>
     <message>
         <source>color: Background</source>
@@ -4582,127 +6483,127 @@ Vyber sí písmo pro hodiny.</translation>
     </message>
     <message>
         <source>Current background color</source>
-        <translation>Současná barva pozadí</translation>
+        <translation type="vanished">Současná barva pozadí</translation>
     </message>
     <message>
         <source>Select new color</source>
-        <translation>Vyber si novou barvu</translation>
+        <translation type="vanished">Vyber si novou barvu</translation>
     </message>
     <message>
         <source>Select new color
 
 Select the color for dialog background in the application.</source>
-        <translation>Vyber si novou barvu
+        <translation type="vanished">Vyber si novou barvu
 
 Vyber si novou barvu pro pozadí dialogů v této aplikaci.</translation>
     </message>
     <message>
         <source>ASCII Characters</source>
-        <translation>ASCII znaky</translation>
+        <translation type="vanished">ASCII znaky</translation>
     </message>
     <message>
         <source>ASCII character for import/export</source>
-        <translation>ASCII znaky na import / export</translation>
+        <translation type="vanished">ASCII znaky na import / export</translation>
     </message>
     <message>
         <source>ASCII character for import
 
 When importing or exporting ASCII files, use these characters to indicate the given stone or point on the board.</source>
-        <translation>ASCII znaky na import
+        <translation type="vanished">ASCII znaky na import
 
 Při importu nebo exportu ASCII souborů, použij tyto znaky k označení daného kamene nebo bodu na desce.</translation>
     </message>
     <message>
         <source>Black stone:</source>
-        <translation>Černé kameny:</translation>
+        <translation type="vanished">Černé kameny:</translation>
     </message>
     <message>
         <source>#</source>
-        <translation>#</translation>
+        <translation type="vanished">#</translation>
     </message>
     <message>
         <source>White stone:</source>
-        <translation>Bílé kameny:</translation>
+        <translation type="vanished">Bílé kameny:</translation>
     </message>
     <message>
         <source>O</source>
-        <translation>O</translation>
+        <translation type="vanished">O</translation>
     </message>
     <message>
         <source>Star point:</source>
-        <translation>Hvězdný bod:</translation>
+        <translation type="vanished">Hvězdný bod:</translation>
     </message>
     <message>
         <source>,</source>
-        <translation>,</translation>
+        <translation type="vanished">,</translation>
     </message>
     <message>
         <source>Empty point:</source>
-        <translation>Prázdný bod:</translation>
+        <translation type="vanished">Prázdný bod:</translation>
     </message>
     <message>
         <source>.</source>
-        <translation>.</translation>
+        <translation type="vanished">.</translation>
     </message>
     <message>
         <source>Horizontal border:</source>
-        <translation>Horizontální okraj:</translation>
+        <translation type="vanished">Horizontální okraj:</translation>
     </message>
     <message>
         <source>|</source>
-        <translation>|</translation>
+        <translation type="vanished">|</translation>
     </message>
     <message>
         <source>Vertical border:</source>
-        <translation>Vertikální okraj:</translation>
+        <translation type="vanished">Vertikální okraj:</translation>
     </message>
     <message>
         <source>-</source>
-        <translation>-</translation>
+        <translation type="vanished">-</translation>
     </message>
     <message>
         <source>Add as brother</source>
-        <translation>Přidej jako bratra</translation>
+        <translation type="vanished">Přidej jako bratra</translation>
     </message>
     <message>
         <source>Add imported position as brother</source>
-        <translation>Přidej importovanou pozici jako bratra</translation>
+        <translation type="vanished">Přidej importovanou pozici jako bratra</translation>
     </message>
     <message>
         <source>Add imported position as brother
 
 If disabled, the imported position is added as son.</source>
-        <translation>Přidej importovanou pozici jako bratra
+        <translation type="vanished">Přidej importovanou pozici jako bratra
 
 Když není zatrhnuto, je importovaná pozice přidána jako syn.</translation>
     </message>
     <message>
         <source>Square</source>
-        <translation>Čtverec</translation>
+        <translation type="vanished">Čtverec</translation>
     </message>
     <message>
         <source>Square
 
 Edit square marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation>Čtverec
+        <translation type="vanished">Čtverec
 
 Edituj čtvercové značky na desce. Levé kliknutí umístí značku, pravé ji odebere.</translation>
     </message>
     <message>
         <source>Remember last directory</source>
-        <translation>Pamatuj posledně vybraný adresář</translation>
+        <translation type="vanished">Pamatuj posledně vybraný adresář</translation>
     </message>
     <message>
         <source>Remember last directory
 
 When toggled on, the last used directory when loading or saving sgf files will be remembered.</source>
-        <translation>Pamatuj posledně vybraný adresář
+        <translation type="vanished">Pamatuj posledně vybraný adresář
 
 Když je zapnuto, posledně vybraný adresář se otevře při ukládání nebo nahrávání sgf souboru.</translation>
     </message>
     <message>
         <source>Text encoding for loading and saving</source>
-        <translation>Kódování textu pro nahrávání a ukládání</translation>
+        <translation type="vanished">Kódování textu pro nahrávání a ukládání</translation>
     </message>
     <message>
         <source>Text encoding for loading and saving
@@ -4710,7 +6611,7 @@ Když je zapnuto, posledně vybraný adresář se otevře při ukládání nebo 
 This is used for loading and saving files containing asian letters.
 If &apos;None&apos; is selected, Latin1 encoding will be used, common in western world.
 &apos;None&apos; will speed up loading large files like Kogos Joseki dictionary significantly.</source>
-        <translation>Kódování textu pro ukládání a nahrávání
+        <translation type="vanished">Kódování textu pro ukládání a nahrávání
 
 Tato volba je pro nahrávání a ukládání souborů obsahujících asijské znaky.
 Jestliže je zvolen &quot;Žádný&quot;, Latin1 kódování je použito, běžné v západní světě.
@@ -4718,63 +6619,63 @@ Jestliže je zvolen &quot;Žádný&quot;, Latin1 kódování je použito, běžn
     </message>
     <message>
         <source>Text encoding:</source>
-        <translation>Kódování textu:</translation>
+        <translation type="vanished">Kódování textu:</translation>
     </message>
     <message>
         <source>EUC-JP</source>
-        <translation>EUC-JP</translation>
+        <translation type="vanished">EUC-JP</translation>
     </message>
     <message>
         <source>JIS</source>
-        <translation>JIS</translation>
+        <translation type="vanished">JIS</translation>
     </message>
     <message>
         <source>Shift-JIS</source>
-        <translation>Shift-JIS</translation>
+        <translation type="vanished">Shift-JIS</translation>
     </message>
     <message>
         <source>EUC-KR</source>
-        <translation>EUC-KR</translation>
+        <translation type="vanished">EUC-KR</translation>
     </message>
     <message>
         <source>GBK</source>
-        <translation>GBK</translation>
+        <translation type="vanished">GBK</translation>
     </message>
     <message>
         <source>Tamil TSCII</source>
-        <translation>Tamil TSCII</translation>
+        <translation type="vanished">Tamil TSCII</translation>
     </message>
     <message>
         <source>Request adjournment</source>
-        <translation>Požadavek přerušení</translation>
+        <translation type="vanished">Požadavek přerušení</translation>
     </message>
     <message>
         <source>Adjourn.
 
 Send adjournment request to your opponent. If he accept it, the game will be adjourned and saved.</source>
-        <translation>Přerušit
+        <translation type="vanished">Přerušit
 
 Pošli požadavek na přerušení protivníkovi. Pokud souhlasí, hra se přeruší a uloží.</translation>
     </message>
     <message>
         <source>Fast loading (EXPERIMENTAL)</source>
-        <translation>Rychlé nahrávání (V TESTOVÁNÍ)</translation>
+        <translation type="vanished">Rychlé nahrávání (V TESTOVÁNÍ)</translation>
     </message>
     <message>
         <source>Enable fast loading</source>
-        <translation>Umožni rychlé nahrávání</translation>
+        <translation type="vanished">Umožni rychlé nahrávání</translation>
     </message>
     <message>
         <source>Enable fast loading
 
 Warning: This is experimental and does not work properly!</source>
-        <translation>Umožni rychlé nahrávání
+        <translation type="vanished">Umožni rychlé nahrávání
 
 Upozornění: Tato volba je ve fázi testování a nepracuje kompletně!</translation>
     </message>
     <message>
         <source>Fast loading is experimental right now and does not work completely!</source>
-        <translation>Rychlé nahrávání je ve fázi testování a nepracuje kompletně!</translation>
+        <translation type="vanished">Rychlé nahrávání je ve fázi testování a nepracuje kompletně!</translation>
     </message>
     <message>
         <source>Special players</source>
@@ -4854,15 +6755,15 @@ Pouze IGS.</translation>
     </message>
     <message>
         <source>Go Engine</source>
-        <translation>Go engine (mechanismus)</translation>
+        <translation type="vanished">Go engine (mechanismus)</translation>
     </message>
     <message>
         <source>Path to the Go program</source>
-        <translation>Cesta ke Go programu</translation>
+        <translation type="vanished">Cesta ke Go programu</translation>
     </message>
     <message>
         <source>Path to the Go playing program, e.g. GnuGo</source>
-        <translation>Cesta k programu hrající Go, jako je GnuGo</translation>
+        <translation type="vanished">Cesta k programu hrající Go, jako je GnuGo</translation>
     </message>
     <message>
         <source>Go Server</source>
@@ -4870,23 +6771,23 @@ Pouze IGS.</translation>
     </message>
     <message>
         <source>Title</source>
-        <translation>Titul</translation>
+        <translation type="vanished">Titul</translation>
     </message>
     <message>
         <source>Host</source>
-        <translation>Hostitel</translation>
+        <translation type="vanished">Hostitel</translation>
     </message>
     <message>
         <source>Port</source>
-        <translation>Port</translation>
+        <translation type="vanished">Port</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Jméno</translation>
+        <translation type="vanished">Jméno</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation>Heslo</translation>
+        <translation type="vanished">Heslo</translation>
     </message>
     <message>
         <source>Host Entries
@@ -5021,8 +6922,8 @@ Registered users:
 use your login name and password provided by the go server operator after registration
 
 New users: depends on server
-NNGS, CWS:<byte value="x9"/>use a unique name like &apos;hotdog17&apos;
-others:<byte value="x9"/><byte value="x9"/>guest</source>
+NNGS, CWS:	use a unique name like &apos;hotdog17&apos;
+others:		guest</source>
         <translation>jméno
 
 Registrovaní uživatelé:
@@ -5084,7 +6985,7 @@ Klikni, aby se otevřelo nové offline okno.</translation>
     </message>
     <message>
         <source>clear form</source>
-        <translation>vyčisti formulář</translation>
+        <translation type="vanished">vyčisti formulář</translation>
     </message>
     <message>
         <source>New
@@ -5100,7 +7001,7 @@ vyčisti formulář; nevytvoří žádné změny údajům</translation>
     </message>
     <message>
         <source>add/change current entry</source>
-        <translation>přidej/změň současné hodnoty</translation>
+        <translation type="vanished">přidej/změň současné hodnoty</translation>
     </message>
     <message>
         <source>Add or Change
@@ -5120,7 +7021,7 @@ Label &apos;Add&apos; is default. The given entries will be saved under the give
     </message>
     <message>
         <source>delete current entry</source>
-        <translation>vymaž současné hodnoty</translation>
+        <translation type="vanished">vymaž současné hodnoty</translation>
     </message>
     <message>
         <source>Delete
@@ -5206,7 +7107,7 @@ Můžeš nastavit čas, kdy budeš upozorňován</translation>
     </message>
     <message>
         <source>User buttons toolbar</source>
-        <translation>Paleta tlačítek uživatele</translation>
+        <translation type="vanished">Paleta tlačítek uživatele</translation>
     </message>
     <message>
         <source>Delete
@@ -5214,7 +7115,7 @@ Můžeš nastavit čas, kdy budeš upozorňován</translation>
 Deletes the saved entries with same label
 
 Note: &apos;Delete&apos; concerns saved records.</source>
-        <translation>Vymaž
+        <translation type="vanished">Vymaž
 
 Vymaž uložené hodnoty s tímto titulem.
 
@@ -5222,91 +7123,91 @@ Poznámka: &quot;Vymaž&quot; zahrnuje uložené záznamy.</translation>
     </message>
     <message>
         <source>Help text:</source>
-        <translation>Text nápovědy:</translation>
+        <translation type="vanished">Text nápovědy:</translation>
     </message>
     <message>
         <source>Help text, displayed as tooltip</source>
-        <translation>Text nápovědy, zobrazený jako tip</translation>
+        <translation type="vanished">Text nápovědy, zobrazený jako tip</translation>
     </message>
     <message>
         <source>help text
 
 This text is displayed as tooltip of the created button</source>
-        <translation>text nápovědy
+        <translation type="vanished">text nápovědy
 
 Tento text je zobrazen jako tip vytvořeného tlačítka</translation>
     </message>
     <message>
         <source>Command:</source>
-        <translation>Příkaz:</translation>
+        <translation type="vanished">Příkaz:</translation>
     </message>
     <message>
         <source>command passed to the server</source>
-        <translation>příkaz předán serveru</translation>
+        <translation type="vanished">příkaz předán serveru</translation>
     </message>
     <message>
         <source>command
 
 the command is passed to the server</source>
-        <translation>příkaz
+        <translation type="vanished">příkaz
 
 příkaz předán serveru</translation>
     </message>
     <message>
         <source>Pixmap file:</source>
-        <translation>Pixmap soubor:</translation>
+        <translation type="vanished">Pixmap soubor:</translation>
     </message>
     <message>
         <source>file path to the button pixmap</source>
-        <translation>souborová cesta k Pixmap </translation>
+        <translation type="vanished">souborová cesta k Pixmap </translation>
     </message>
     <message>
         <source>file path to the button pixmap
 
 Set it with the file chooser</source>
-        <translation>souborová cesta k Pixmap
+        <translation type="vanished">souborová cesta k Pixmap
 
 Nastav ji pomocí vybírače souboru</translation>
     </message>
     <message>
         <source>pixmap file chooser</source>
-        <translation>Vybírač Pixmap souboru</translation>
+        <translation type="vanished">Vybírač Pixmap souboru</translation>
     </message>
     <message>
         <source>Label:</source>
-        <translation>Štítek:</translation>
+        <translation type="vanished">Štítek:</translation>
     </message>
     <message>
         <source>Button label</source>
-        <translation>Tlačítkový štítek</translation>
+        <translation type="vanished">Tlačítkový štítek</translation>
     </message>
     <message>
         <source>unique label, 
 
 The label is displayed as button text.</source>
-        <translation>jedinečný štítek,
+        <translation type="vanished">jedinečný štítek,
 
 Štítek je zobrazen jako text tlačítka.</translation>
     </message>
     <message>
         <source>Pixmap</source>
-        <translation>Pixmap</translation>
+        <translation type="vanished">Pixmap</translation>
     </message>
     <message>
         <source>Label</source>
-        <translation>Štítek</translation>
+        <translation type="vanished">Štítek</translation>
     </message>
     <message>
         <source>Command</source>
-        <translation>Příkaz</translation>
+        <translation type="vanished">Příkaz</translation>
     </message>
     <message>
         <source>Help Text</source>
-        <translation>Text nápovědy</translation>
+        <translation type="vanished">Text nápovědy</translation>
     </message>
     <message>
         <source>User defined button list</source>
-        <translation>Uživatelem definovaný tlačítkový seznam</translation>
+        <translation type="vanished">Uživatelem definovaný tlačítkový seznam</translation>
     </message>
     <message>
         <source>Button Entries
@@ -5315,7 +7216,7 @@ Select &apos;New&apos; to clear input fields. After filling in at least label an
 
 Select an entry to edit, change (label keeps unchanged) or delete a line.
 </source>
-        <translation>Hodnoty tlačítek
+        <translation type="vanished">Hodnoty tlačítek
 
 Vyber &quot;Nový&quot; k vyprázdnění polí. Po vyplnění alespoň jednoho štítku a příkazu použij Přidej / Změň.
 
@@ -5335,31 +7236,31 @@ Vyber hodnotu k editaci, pozměň (štítky zůstanou nezměněny) nebo vymaž �
     </message>
     <message>
         <source>Default for White</source>
-        <translation>Původní pro Bílou</translation>
+        <translation type="vanished">Původní pro Bílou</translation>
     </message>
     <message>
         <source>Computer</source>
-        <translation>Počítač (AI)</translation>
+        <translation type="vanished">Počítač (AI)</translation>
     </message>
     <message>
         <source>Human</source>
-        <translation>Člověk</translation>
+        <translation type="vanished">Člověk</translation>
     </message>
     <message>
         <source>Default for Black</source>
-        <translation>Původní pro Černou</translation>
+        <translation type="vanished">Původní pro Černou</translation>
     </message>
     <message>
         <source>Import / Export</source>
-        <translation>Import/Export</translation>
+        <translation type="vanished">Import/Export</translation>
     </message>
     <message>
         <source>Big5</source>
-        <translation>Big5</translation>
+        <translation type="vanished">Big5</translation>
     </message>
     <message>
         <source>Imported game position</source>
-        <translation>Importovaná herní pozice</translation>
+        <translation type="vanished">Importovaná herní pozice</translation>
     </message>
     <message>
         <source>board size</source>
@@ -5411,17 +7312,17 @@ Buď opatrný: může být únavné, když protivník neakceptuje tvé původní
     </message>
     <message>
         <source>SGF Style</source>
-        <translation>SGF Styl</translation>
+        <translation type="vanished">SGF Styl</translation>
     </message>
     <message>
         <source>Show SGF board coordinates</source>
-        <translation>Zobrazit pojmenování souřadnic</translation>
+        <translation type="vanished">Zobrazit pojmenování souřadnic</translation>
     </message>
     <message>
         <source>Show SGF board coordinates
-<byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/>
+										
 Toggles if SGF style board coordinates are shown.</source>
-        <translation>Zobrazit pojmenování souřadnic     
+        <translation type="vanished">Zobrazit pojmenování souřadnic     
 
 Vypíná nebo zapíná pojmenování souřadnic.
 </translation>
@@ -5431,14 +7332,14 @@ Vypíná nebo zapíná pojmenování souřadnic.
 
 This is useful when numbering all moves of a game, so the font size of all one, two or three digits numbers is equal.
 When editing only single digit marks, it might be convenient to switch this off.</source>
-        <translation>Uprav velikost písma textu a očísluj štítky
+        <translation type="vanished">Uprav velikost písma textu a očísluj štítky
 
 Je to užitečné, když se číslují všechny tahy hry, takže velikost čísel je stejná.
 Když se upravují jen jednočíselné značky, může být vhodné tuto volbu vypnout.</translation>
     </message>
     <message>
         <source>On line games</source>
-        <translation>Hry on-line</translation>
+        <translation type="vanished">Hry on-line</translation>
     </message>
     <message>
         <source>Anti clicko (1/4 second click latency)</source>
@@ -5528,7 +7429,7 @@ Jestliže je zaškrtnuto a pozorovaná hra je dokončena, automaticky se uloží
     </message>
     <message>
         <source>Board picture</source>
-        <translation>Obrázek desky</translation>
+        <translation type="vanished">Obrázek desky</translation>
     </message>
     <message>
         <source>observed games</source>
@@ -5552,11 +7453,11 @@ Je-li zaškrtnuto, uloží se Tvá hra do pracovního adresáře automaticky</tr
     </message>
     <message>
         <source>Background</source>
-        <translation>Pozadí</translation>
+        <translation type="vanished">Pozadí</translation>
     </message>
     <message>
         <source>Alternate (lists)</source>
-        <translation>Alternativní (seznam)</translation>
+        <translation type="vanished">Alternativní (seznam)</translation>
     </message>
     <message>
         <source>Path to the goban picture</source>
@@ -5603,10 +7504,6 @@ Pokud tam obrázek není, nebo je neplatný, je použit obrázek původní</tran
         <translation>zaškrtni pro automatické ukládání tvých her</translation>
     </message>
     <message>
-        <source>Ugly 2D</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>flat circled ... ugly but asked for ...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5617,10 +7514,6 @@ This will display back and white circles</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Plain 3D</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>plain 3D (no shadow, no stripes)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5628,10 +7521,6 @@ This will display back and white circles</source>
         <source>Stone appearance
 
 this will display simple 3D stones, with no shadow and neither stripes on white stones</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Realistic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5698,6 +7587,396 @@ up to :</source>
 up to :</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Accept changes and close dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>cancel changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alt+C</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Graphics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sound defaults by game type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Local editing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Observed games</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Computer games</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>On-line matches</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File selectors:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Qt selector with SGF preview</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cursor stone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Standard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SGF style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Side bar:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hidden</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation type="unfinished">Doleva</translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation type="unfinished">Doprava</translation>
+    </message>
+    <message>
+        <source>Coordinates:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Online games</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation type="unfinished">Ne</translation>
+    </message>
+    <message>
+        <source>Yes</source>
+        <translation type="unfinished">Ano</translation>
+    </message>
+    <message>
+        <source>Ask</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show which:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Letters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show as:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Siblings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Children</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Allow SGF files to override
+child/sibling setting:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ignore diagrams</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Diagrams</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If checked, the diagram display will revert to an empty board whenever no diagrams are available, rather than retaining the previously shown diagram (which might be confusing).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear diagram display
+when navigating away</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open windows with
+diagram pane shown:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This option controls the layout of the board window. You can choose whether to show the diagram/evaluation graph pane, with an option to do so only if the opened file contains diagrams.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Never</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If diagrams found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Always</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game tree</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Adjust the visual size of the nodes in the game tree display.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Display size:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Annotated games can potentially have very many figures. This option stops them from being displayed in the game tree. Instead, an icon is shown for any move that has diagrams as children.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hide child diagrams in game tree</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Plain 2D</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Old 3D look</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shaded 3D</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>White stone appearance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Specular hardness:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Thickness:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Specular ratio:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select base color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flattened:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Black stone appearance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Simulate clamshell appearance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ambient light:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wood filename:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default 2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default 3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default 4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default 5</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wood image:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scale line widths</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Widen outside lines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Computer color:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default human player name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go Engines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear the engine form.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add or change the current entry.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete the current entry.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Executable:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The path to the GTP engine&apos;s executable.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The name of the engine by which it is selected in the new computer game dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use for analysis (LZ or compatible)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fixed komi:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Arguments:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Any command line arguments that should be passed at startup.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Analysis</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show variations as:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Percentage difference</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Absolute percentage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Winning percentages shown for:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Side to move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Max. variation depth:
+(0 is unlimited)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Max. moves shown:
+(0 is unlimited)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Override variation display settings
+(show child moves as circles when analysing)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hide other moves when showing
+a variation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Don&apos;t display moves with few visits</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear the server form.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Variants</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Duplicates shown either side of toroidal boards:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set application language
+
+Choose your language for qGo.
+If &apos;System default&apos; is selected, qGo will use the standard language of your system. On Linux this will check the environment variable LANG, on Windows simply the language you have set in your preferences.
+
+This change will take effect only after qGo has been restarted.
+
+If your language is not supported, you might consider translating q5go. Please visit https://github.com/bernds/q5go</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QApplication</name>
@@ -5718,78 +7997,78 @@ up to :</source>
     <name>QNewGameDlg</name>
     <message>
         <source>Human</source>
-        <translation>Člověk</translation>
+        <translation type="vanished">Člověk</translation>
     </message>
     <message>
         <source>Computer</source>
-        <translation>Počítač (AI)</translation>
+        <translation type="vanished">Počítač (AI)</translation>
     </message>
     <message>
         <source>SGF Files (*.sgf);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)</source>
-        <translation>SGF soubry (*.sgf);;MGT soubory (*.mgt);;XML soubry (*.xml);;všechny soubory (*)</translation>
+        <translation type="vanished">SGF soubry (*.sgf);;MGT soubory (*.mgt);;XML soubry (*.xml);;všechny soubory (*)</translation>
     </message>
     <message>
         <source>Error</source>
-        <translation>Chyba</translation>
+        <translation type="vanished">Chyba</translation>
     </message>
     <message>
         <source>You entered an invalid Handicap (1 is not legal)</source>
-        <translation>Vložil jsi nevhodný Handicap (1 není povolená)</translation>
+        <translation type="vanished">Vložil jsi nevhodný Handicap (1 není povolená)</translation>
     </message>
 </context>
 <context>
     <name>QNewGameDlgGui</name>
     <message>
         <source>Computer Game</source>
-        <translation>Hra počítače</translation>
+        <translation type="vanished">Hra počítače</translation>
     </message>
     <message>
         <source>White Player</source>
-        <translation>Bílý hráč</translation>
+        <translation type="vanished">Bílý hráč</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Jméno</translation>
+        <translation type="vanished">Jméno</translation>
     </message>
     <message>
         <source>Computer Level</source>
-        <translation>Úroveň počítače</translation>
+        <translation type="vanished">Úroveň počítače</translation>
     </message>
     <message>
         <source>Black Player</source>
-        <translation>Černý hráč</translation>
+        <translation type="vanished">Černý hráč</translation>
     </message>
     <message>
         <source>Load game</source>
-        <translation>Nahraj hru</translation>
+        <translation type="vanished">Nahraj hru</translation>
     </message>
     <message>
         <source>&amp;OK</source>
-        <translation>&amp;OK</translation>
+        <translation type="vanished">&amp;OK</translation>
     </message>
     <message>
         <source>&amp;Cancel</source>
-        <translation>&amp;Zrušit</translation>
+        <translation type="vanished">&amp;Zrušit</translation>
     </message>
     <message>
         <source>New Game</source>
-        <translation>Nová hra</translation>
+        <translation type="vanished">Nová hra</translation>
     </message>
     <message>
         <source>Board size:</source>
-        <translation>Velikost desky:</translation>
+        <translation type="vanished">Velikost desky:</translation>
     </message>
     <message>
         <source>Komi:</source>
-        <translation>Komi:</translation>
+        <translation type="vanished">Komi:</translation>
     </message>
     <message>
         <source>Handicap:</source>
-        <translation>Handicap:</translation>
+        <translation type="vanished">Handicap:</translation>
     </message>
     <message>
         <source>One Color Go</source>
-        <translation>Jedno barevné Go</translation>
+        <translation type="vanished">Jedno barevné Go</translation>
     </message>
 </context>
 <context>
@@ -5805,92 +8084,92 @@ up to :</source>
     <message>
         <source>Id</source>
         <comment>GamesTable Id number</comment>
-        <translation>Id</translation>
+        <translation type="vanished">Id</translation>
     </message>
     <message>
         <source>White</source>
         <comment>GamesTable White name</comment>
-        <translation>Bílý</translation>
+        <translation type="vanished">Bílý</translation>
     </message>
     <message>
         <source>WR</source>
         <comment>GamesTable White Rank</comment>
-        <translation>Bhod</translation>
+        <translation type="vanished">Bhod</translation>
     </message>
     <message>
         <source>Black</source>
         <comment>GamesTable Black name</comment>
-        <translation>Černý</translation>
+        <translation type="vanished">Černý</translation>
     </message>
     <message>
         <source>BR</source>
         <comment>GamesTable Black Rank</comment>
-        <translation>Čhod</translation>
+        <translation type="vanished">Čhod</translation>
     </message>
     <message>
         <source>Mv</source>
         <comment>GamesTable Move</comment>
-        <translation>Tah</translation>
+        <translation type="vanished">Tah</translation>
     </message>
     <message>
         <source>Sz</source>
         <comment>GamesTable Size</comment>
-        <translation>Size</translation>
+        <translation type="vanished">Size</translation>
     </message>
     <message>
         <source>H</source>
         <comment>GamesTable Handicap</comment>
-        <translation>H</translation>
+        <translation type="vanished">H</translation>
     </message>
     <message>
         <source>K</source>
         <comment>GamesTable Komi</comment>
-        <translation>K</translation>
+        <translation type="vanished">K</translation>
     </message>
     <message>
         <source>By</source>
         <comment>GamesTable Byoyomi time</comment>
-        <translation>By</translation>
+        <translation type="vanished">By</translation>
     </message>
     <message>
         <source>FR</source>
         <comment>GamesTable Free/Rated type of game</comment>
-        <translation>Volná/hodn</translation>
+        <translation type="vanished">Volná/hodn</translation>
     </message>
     <message>
         <source>Ob</source>
         <comment>GamesTable number of Observers</comment>
-        <translation>Diváci</translation>
+        <translation type="vanished">Diváci</translation>
     </message>
     <message>
         <source>Stat</source>
         <comment>PlayerTable: status [X!SQ]</comment>
-        <translation>Status</translation>
+        <translation type="vanished">Status</translation>
     </message>
     <message>
         <source>Name</source>
         <comment>PlayerTable: player&apos;s name</comment>
-        <translation>Jméno</translation>
+        <translation type="vanished">Jméno</translation>
     </message>
     <message>
         <source>Rk</source>
         <comment>PlayerTable: rank</comment>
-        <translation>Hodn</translation>
+        <translation type="vanished">Hodn</translation>
     </message>
     <message>
         <source>pl</source>
         <comment>PlayerTable: playing in game</comment>
-        <translation>hr</translation>
+        <translation type="vanished">hr</translation>
     </message>
     <message>
         <source>ob</source>
         <comment>PlayerTable: observing game</comment>
-        <translation>divá</translation>
+        <translation type="vanished">divá</translation>
     </message>
     <message>
         <source>Idle</source>
         <comment>PlayerTable: idle time</comment>
-        <translation>Záhalčivý</translation>
+        <translation type="vanished">Záhalčivý</translation>
     </message>
     <message>
         <source>Refresh</source>
@@ -5900,7 +8179,7 @@ up to :</source>
     <message>
         <source>Score</source>
         <comment>button label</comment>
-        <translation>Skóre</translation>
+        <translation type="vanished">Skóre</translation>
     </message>
     <message>
         <source>N</source>
@@ -5915,7 +8194,7 @@ up to :</source>
     <message>
         <source>Edit</source>
         <comment>button label</comment>
-        <translation>Edituj</translation>
+        <translation type="vanished">Edituj</translation>
     </message>
     <message>
         <source>O</source>
@@ -5925,7 +8204,7 @@ up to :</source>
     <message>
         <source>Pass</source>
         <comment>button label</comment>
-        <translation>Pas</translation>
+        <translation type="vanished">Pas</translation>
     </message>
     <message>
         <source>P</source>
@@ -5968,23 +8247,23 @@ up to :</source>
     </message>
     <message>
         <source>brother</source>
-        <translation>bratr</translation>
+        <translation type="vanished">bratr</translation>
     </message>
     <message>
         <source>brothers</source>
-        <translation>bratři</translation>
+        <translation type="vanished">bratři</translation>
     </message>
     <message>
         <source>son</source>
-        <translation>syn</translation>
+        <translation type="vanished">syn</translation>
     </message>
     <message>
         <source>sons</source>
-        <translation>syni</translation>
+        <translation type="vanished">syni</translation>
     </message>
     <message>
         <source>textedit</source>
-        <translation>editace textu</translation>
+        <translation type="vanished">editace textu</translation>
     </message>
     <message>
         <source>Error</source>
@@ -5992,21 +8271,271 @@ up to :</source>
     </message>
     <message>
         <source>Error opening program: %1</source>
-        <translation>Chyba při otevírání programu: %1</translation>
+        <translation type="vanished">Chyba při otevírání programu: %1</translation>
+    </message>
+    <message>
+        <source>GTP process exited unexpectedly.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit diagram options...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export &amp;ASCII...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export S&amp;VG...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Clear selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Hide unselected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Make all &amp;visible</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>C&amp;lear visibility state, inherit from parent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Expand subtree</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Expand one level of child nodes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Collapse subtree</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear diagram status for this node</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set this move to be the start of a diagram</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Navigate to this node</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The file did not quite have the correct structure of an SGF file, but could otherwise be understood.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The SGF file contained an invalid move that was played on top of another stone. Variations have been truncated at that point.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>One or more comments have been dropped since they contained invalid characters.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The SGF contained an empty value for komi. Assuming zero.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The SGF contained an empty value for the handicap. Assuming zero.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The SGF contained an invalid value in a property related to display.  Things like move numbers might not show up correctly.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The SGF contained evaluation data that could not be understood.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unsupported board size in SGF file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Errors found in SGF file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error while trying to load SGF file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open SGF file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SGF Files (*.sgf *.SGF);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show the Go server client window (default if no other arguments)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start up with a board window (ignored if files are loaded).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start up with the computer analysis dialog to analyze &lt;file&gt;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Display debug messages in a window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Specify text &lt;encoding&gt; of SGF files passed by command line.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load &lt;file&gt; and display it in a board window.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A</source>
+        <comment>Board status line: batch analysis</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>
+Variation </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> of </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>child position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>child positions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>GTP code originally from Goliath, thanks to: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not load custom board image,
+reverting to default.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unable to save settings to </source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>QPushButton</name>
     <message>
         <source>Move</source>
-        <translation>Pohyb</translation>
+        <translation type="vanished">Pohyb</translation>
+    </message>
+</context>
+<context>
+    <name>SGFPreview</name>
+    <message>
+        <source>Override character set for text in SGF file:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>UTF-8</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>GB18030</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>EUC-KR</source>
+        <translation type="unfinished">EUC-KR</translation>
+    </message>
+    <message>
+        <source>EUC-JP</source>
+        <translation type="unfinished">EUC-JP</translation>
+    </message>
+    <message>
+        <source>ISO-2022-JP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shift-JIS</source>
+        <translation type="unfinished">Shift-JIS</translation>
+    </message>
+    <message>
+        <source>Big5</source>
+        <translation type="unfinished">Big5</translation>
+    </message>
+    <message>
+        <source>Handicap:</source>
+        <translation type="unfinished">Handicap:</translation>
+    </message>
+    <message>
+        <source>Date:</source>
+        <translation type="unfinished">Datum:</translation>
+    </message>
+    <message>
+        <source>Size:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>6.5</source>
+        <translation type="unfinished">6.5</translation>
+    </message>
+    <message>
+        <source>Result:</source>
+        <translation type="unfinished">Výsledek:</translation>
+    </message>
+    <message>
+        <source>19</source>
+        <translation type="unfinished">19</translation>
+    </message>
+    <message>
+        <source>Komi:</source>
+        <translation type="unfinished">Komi:</translation>
+    </message>
+    <message>
+        <source>Black</source>
+        <translation type="unfinished">Černý</translation>
+    </message>
+    <message>
+        <source>White</source>
+        <translation type="unfinished">Bílý</translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SGF files (*.sgf *.SGF)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All files (*)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>ScoreTools</name>
     <message>
         <source>ScoreTools</source>
-        <translation>Nástroje skóre</translation>
+        <translation type="vanished">Nástroje skóre</translation>
     </message>
     <message>
         <source>White</source>
@@ -6035,6 +8564,80 @@ up to :</source>
     <message>
         <source>Black</source>
         <translation>Černý</translation>
+    </message>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Result</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>TextLabel</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SvgView</name>
+    <message>
+        <source>Export to SVG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save SVG export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Svg Files (*.txt);;All Files (*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to write to file </source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SvgViewGUI</name>
+    <message>
+        <source>SVG export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move numbering</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Coordinates</source>
+        <translation type="unfinished">Souřadnice</translation>
+    </message>
+    <message>
+        <source>Copy position to clipboard</source>
+        <translation type="unfinished">Zkopíruj pozici do schránky</translation>
+    </message>
+    <message>
+        <source>&amp;To clipboard (as text)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation type="unfinished">Obnovit</translation>
+    </message>
+    <message>
+        <source>Save position to file</source>
+        <translation type="unfinished">Ulož pozici do souboru</translation>
+    </message>
+    <message>
+        <source>&amp;Save</source>
+        <translation type="unfinished">&amp;Ulož</translation>
+    </message>
+    <message>
+        <source>Close this window</source>
+        <translation type="unfinished">Zavři toto okno</translation>
+    </message>
+    <message>
+        <source>&amp;Close</source>
+        <translation type="unfinished">&amp;Zavři</translation>
     </message>
 </context>
 <context>
@@ -6192,19 +8795,35 @@ zavře tento štítek (a povídání)</translation>
     </message>
     <message>
         <source>This file already exists. Do you want to overwrite it?</source>
-        <translation>Tento soubor již existuje. Chceš ho přepsat?</translation>
+        <translation type="vanished">Tento soubor již existuje. Chceš ho přepsat?</translation>
     </message>
     <message>
         <source>Yes</source>
-        <translation>Ano</translation>
+        <translation type="vanished">Ano</translation>
     </message>
     <message>
         <source>No</source>
-        <translation>Ne</translation>
+        <translation type="vanished">Ne</translation>
     </message>
     <message>
         <source>Failed to write to file</source>
-        <translation>Chyba při zápisu souboru</translation>
+        <translation type="vanished">Chyba při zápisu souboru</translation>
+    </message>
+    <message>
+        <source>GTP program startup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export to ASCII</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save ASCII export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to write to file </source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -6237,6 +8856,26 @@ zavře tento štítek (a povídání)</translation>
         <source>Close this window</source>
         <translation>Zavři toto okno</translation>
     </message>
+    <message>
+        <source>Move numbering</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Coordinates</source>
+        <translation type="unfinished">Souřadnice</translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation type="unfinished">Obnovit</translation>
+    </message>
+    <message>
+        <source>Abort program startup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Abort</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>qGo</name>
@@ -6258,11 +8897,11 @@ I tak opustit program?</translation>
     </message>
     <message>
         <source>No sound available.</source>
-        <translation>Zvuk není dostupný.</translation>
+        <translation type="vanished">Zvuk není dostupný.</translation>
     </message>
     <message>
         <source>No sound available. Qt on Mac uses QuickTime sound.</source>
-        <translation>Zvuk není dostupný. Qt na Macu používá QuickTime zvuk.</translation>
+        <translation type="vanished">Zvuk není dostupný. Qt na Macu používá QuickTime zvuk.</translation>
     </message>
     <message>
         <source>You are not running the Network Audio sytem.
@@ -6286,51 +8925,51 @@ Pokus máš &quot;oss&quot;, zvuk by měl fungovat a směřovat k /dev/dsp </tra
     </message>
     <message>
         <source>Sound available.</source>
-        <translation>Zvuk dostupný.</translation>
+        <translation type="vanished">Zvuk dostupný.</translation>
     </message>
     <message>
         <source>Sound files not found.</source>
-        <translation>Zvukové soubory nenalezeny.</translation>
+        <translation type="vanished">Zvukové soubory nenalezeny.</translation>
     </message>
     <message>
         <source>Please check for the directories</source>
-        <translation>Prosím zkontroluj adresáře</translation>
+        <translation type="vanished">Prosím zkontroluj adresáře</translation>
     </message>
     <message>
         <source>or</source>
-        <translation>nebo</translation>
+        <translation type="vanished">nebo</translation>
     </message>
     <message>
         <source>depending on your installation.</source>
-        <translation>závisí na tvé instalaci.</translation>
+        <translation type="vanished">závisí na tvé instalaci.</translation>
     </message>
     <message>
         <source>You can navigate to the main qGo directory (for example:</source>
-        <translation>Můžeš navigovat do hlavního adresáře qGo (na příklad:</translation>
+        <translation type="vanished">Můžeš navigovat do hlavního adresáře qGo (na příklad:</translation>
     </message>
     <message>
         <source>If the directory was given correctly, this data will be saved and you won&apos;tbe asked
 anymore except you install qGo again into a different directory.
 To abort this procedure, click &apos;Cancel&apos; in the following dialog.</source>
-        <translation>Pokud byl adresář uveden správně, data budou uložena a již se tě program nedotáže
+        <translation type="vanished">Pokud byl adresář uveden správně, data budou uložena a již se tě program nedotáže
 pouze tehdy, když jsi instaloval qGo do jiného adresáře.
 K zastavení procedury stiskni &quot;Zrušit&quot; v následujícím dialogu.</translation>
     </message>
     <message>
         <source>qGo directory</source>
-        <translation>qGo adresář</translation>
+        <translation type="vanished">qGo adresář</translation>
     </message>
     <message>
         <source>No valid directory was given. Sound is not available.</source>
-        <translation>Byl zadán neplatný adresář. Zvuk není dostupný.</translation>
+        <translation type="vanished">Byl zadán neplatný adresář. Zvuk není dostupný.</translation>
     </message>
     <message>
         <source>About...</source>
-        <translation>O...</translation>
+        <translation type="vanished">O...</translation>
     </message>
     <message>
         <source>GTP code from Goliath, thanks to:</source>
-        <translation>GTP kód od Goliath, děkujeme :</translation>
+        <translation type="vanished">GTP kód od Goliath, děkujeme :</translation>
     </message>
     <message>
         <source>English translation by:
@@ -6338,7 +8977,7 @@ Peter Strempel
 Johannes Mesa
 Emmanuel Beranger</source>
         <comment>Please set your own language and your name! Use your own language!</comment>
-        <translation>Anglický překlad:
+        <translation type="vanished">Anglický překlad:
 Peter Strempel
 Johannes Mesa
 Emmanuel Beranger
@@ -6348,7 +8987,7 @@ Aleš Chejn</translation>
     <message>
         <source>No sound files in bundle, strange.
 </source>
-        <translation>Žádný zvukový soubor v svazku, zvláštní.
+        <translation type="vanished">Žádný zvukový soubor v svazku, zvláštní.
 </translation>
     </message>
     <message>
@@ -6369,7 +9008,7 @@ ftp.x.org:/contrib/audio/nas
 Release 1.2 of NAS is also included with the X11R6 contrib distribution. After installing NAS, you will then need to reconfigure Qt with NAS sound support.
 
 Nevertheless, if you have oss, sound should be working and directed to /dev/dsp</source>
-        <translation>Nepoužíváš Network Audio system.
+        <translation type="vanished">Nepoužíváš Network Audio system.
 Pokud máš &quot;au&quot; příkaz, spusť ho na pozadí před tímto programem. Nejnovější verze Network Audio System je dostupná:
 
 ftp.ncd.com:/pub/ncd/technology/src/nas
@@ -6386,11 +9025,11 @@ Pokud máš oss, zvuk by měl pracovat a být propojen na /dev/dsp
     <name>qGoBoard</name>
     <message>
         <source>free</source>
-        <translation>volný</translation>
+        <translation type="vanished">volný</translation>
     </message>
     <message>
         <source>rated</source>
-        <translation>hodnocený</translation>
+        <translation type="vanished">hodnocený</translation>
     </message>
     <message>
         <source>opponent:</source>
@@ -6403,34 +9042,50 @@ Pokud máš oss, zvuk by měl pracovat a být propojen na /dev/dsp
     <message>
         <source>Failed to play the stone within program 
 </source>
-        <translation>Chyba při hraní kamene v programu</translation>
+        <translation type="vanished">Chyba při hraní kamene v programu</translation>
     </message>
     <message>
         <source>Failed to pass within program 
 </source>
-        <translation>Chyba při pasování v programu</translation>
+        <translation type="vanished">Chyba při pasování v programu</translation>
     </message>
     <message>
         <source>Failed to have the program play its stone
 </source>
-        <translation>Chyba při hraní kamene programem</translation>
+        <translation type="vanished">Chyba při hraní kamene programem</translation>
     </message>
     <message>
         <source>remaining time / stones</source>
-        <translation>zbývající čas / kameny</translation>
+        <translation type="vanished">zbývající čas / kameny</translation>
     </message>
     <message>
         <source>click to pause/unpause the game</source>
-        <translation>klikni na pozastavení / pokračování hry</translation>
+        <translation type="vanished">klikni na pozastavení / pokračování hry</translation>
     </message>
     <message>
         <source>click to add 1 minute to your opponent&apos;s clock</source>
-        <translation>klikni k přidání jedné minuty hodinám protivníka</translation>
+        <translation type="vanished">klikni k přidání jedné minuty hodinám protivníka</translation>
     </message>
     <message>
         <source>Failed to undo within program 
 </source>
-        <translation>Chyba při pohybu zpět v programu</translation>
+        <translation type="vanished">Chyba při pohybu zpět v programu</translation>
+    </message>
+    <message>
+        <source>GAME MODE: place stones...</source>
+        <translation type="unfinished">MÓD HRY: umísti kameny...</translation>
+    </message>
+    <message>
+        <source>SCORE MODE: click on a stone to mark as dead...</source>
+        <translation type="unfinished">MÓD SKÓRE: klikni na kámen, abys ho označil jako mrtvý...</translation>
+    </message>
+    <message>
+        <source>GAME MODE: click to play stones...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game #</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -6465,7 +9120,7 @@ Pokud máš oss, zvuk by měl pracovat a být propojen na /dev/dsp
     </message>
     <message>
         <source>*** Both players are Human ! ***</source>
-        <translation>*** Oba hráči jsou lidé ! ***</translation>
+        <translation type="vanished">*** Oba hráči jsou lidé ! ***</translation>
     </message>
     <message>
         <source>komi </source>
@@ -6497,31 +9152,31 @@ ZRUŠIT = %4</translation>
     </message>
     <message>
         <source>Done</source>
-        <translation>Hotovo</translation>
+        <translation type="vanished">Hotovo</translation>
     </message>
     <message>
         <source>SCORE MODE: RESET - click on a stone to mark as dead...</source>
-        <translation>MÓD SKÓRE: RESETOVAT - klikni na kámen, abys ho označil jako mrtvý...</translation>
+        <translation type="vanished">MÓD SKÓRE: RESETOVAT - klikni na kámen, abys ho označil jako mrtvý...</translation>
     </message>
     <message>
         <source>SCORE MODE: click on a stone to mark as dead...</source>
-        <translation>MÓD SKÓRE: klikni na kámen, abys ho označil jako mrtvý...</translation>
+        <translation type="vanished">MÓD SKÓRE: klikni na kámen, abys ho označil jako mrtvý...</translation>
     </message>
     <message>
         <source>GAME MODE: place stones...</source>
-        <translation>MÓD HRY: umísti kameny...</translation>
+        <translation type="vanished">MÓD HRY: umísti kameny...</translation>
     </message>
     <message>
         <source>Game Status: W:</source>
-        <translation>Herní status: B:</translation>
+        <translation type="vanished">Herní status: B:</translation>
     </message>
     <message>
         <source>B:</source>
-        <translation>Č:</translation>
+        <translation type="vanished">Č:</translation>
     </message>
     <message>
-        <source>Game n&#xb0; </source>
-        <translation>Hra n° </translation>
+        <source>Game n° </source>
+        <translation type="vanished">Hra n° </translation>
     </message>
     <message>
         <source>%1 wants to %2

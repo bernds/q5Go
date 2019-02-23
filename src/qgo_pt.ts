@@ -1,4 +1,6 @@
-<!DOCTYPE TS><TS>
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1">
 <context>
     <name></name>
     <message>
@@ -15,26 +17,244 @@
     </message>
 </context>
 <context>
+    <name>AnalyzeDialog</name>
+    <message>
+        <source>Batch computer analysis</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Analysis parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Maximum number of lines to add:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Number of seconds per move: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Limits the number of variations added for engine lines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>10</source>
+        <translation type="unfinished">10</translation>
+    </message>
+    <message>
+        <source>5</source>
+        <translation type="unfinished">5</translation>
+    </message>
+    <message>
+        <source>Job queue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Observe progress in board window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Completed jobs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File to analyse</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add to &amp;queue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Engine status</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start engine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show messages...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Board size:</source>
+        <translation type="unfinished">Tamanho do tabuleiro:</translation>
+    </message>
+    <message>
+        <source>Choose:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>stopped</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Status:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open the preferences dialog to configure engines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Configure engines...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Close</source>
+        <translation type="unfinished">&amp;Fechar</translation>
+    </message>
+    <message>
+        <source>Jobs are still running.  Do you wish to terminate the engine and discard the jobs?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Completed jobs contain unsaved data.  Do you wish to discard the jobs?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>not running</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>starting up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>idle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>working</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Really discard selected job?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PV </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>W Win </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>B Win </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>at </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> visits.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Analysis is supported only for square boards!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File has a different boardsize than selected!</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>AutoDiagsDialog</name>
+    <message>
+        <source>Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Main line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>30</source>
+        <translation type="unfinished">30</translation>
+    </message>
+    <message>
+        <source>Break when overlap occurs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Maximum number of moves per diagram:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove preexisting diagrams</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Variations</source>
+        <translation type="unfinished">Variações</translation>
+    </message>
+    <message>
+        <source>Add diagram for each variation start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set move number for variation start to 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default flags</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show &amp;hoshi points</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Remove stones (base display on final position)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Show title in export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show coor&amp;dinates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Figure %1 (%2-%3)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Diagram %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Board</name>
     <message>
         <source>Pass</source>
-        <translation>Passar</translation>
+        <translation type="vanished">Passar</translation>
     </message>
     <message>
         <source>vs.</source>
-        <translation>vs.</translation>
+        <translation type="vanished">vs.</translation>
     </message>
     <message>
         <source>Failed to save image!</source>
-        <translation>Falha ao salvar imagem!</translation>
+        <translation type="vanished">Falha ao salvar imagem!</translation>
     </message>
     <message>
         <source>White</source>
-        <translation>Branco</translation>
+        <translation type="vanished">Branco</translation>
     </message>
     <message>
         <source>Black</source>
-        <translation>Preto</translation>
+        <translation type="vanished">Preto</translation>
     </message>
     <message>
         <source>Black wins with</source>
@@ -46,7 +266,7 @@
     </message>
     <message>
         <source>Jigo</source>
-        <translation>Jigo</translation>
+        <translation type="vanished">Jigo</translation>
     </message>
     <message>
         <source>Game Over</source>
@@ -62,55 +282,1020 @@
     </message>
     <message>
         <source>XML</source>
-        <translation>XML</translation>
+        <translation type="vanished">XML</translation>
     </message>
     <message>
         <source>Could not find file:</source>
-        <translation>Impossível achar o arquivo:</translation>
+        <translation type="vanished">Impossível achar o arquivo:</translation>
     </message>
     <message>
         <source>Could not open file:</source>
-        <translation>Impossível abrir o arquivo:</translation>
+        <translation type="vanished">Impossível abrir o arquivo:</translation>
     </message>
     <message>
         <source>Invalid text encoding given. Please check preferences!</source>
-        <translation>Codificação do texto inválida. Por favor, cheque as preferências!</translation>
+        <translation type="vanished">Codificação do texto inválida. Por favor, cheque as preferências!</translation>
     </message>
     <message>
         <source>Reading sgf file...</source>
-        <translation>Lendo o arquivo sgf...</translation>
+        <translation type="vanished">Lendo o arquivo sgf...</translation>
     </message>
     <message>
         <source>Abort</source>
-        <translation>Abortar</translation>
+        <translation type="vanished">Abortar</translation>
     </message>
     <message>
         <source>Corrupt SGF file at position</source>
-        <translation>Erro no arquivo SGF, na posição</translation>
+        <translation type="vanished">Erro no arquivo SGF, na posição</translation>
     </message>
     <message>
         <source>No filename given!</source>
-        <translation>O nome do arquivo não foi informado!</translation>
+        <translation type="vanished">O nome do arquivo não foi informado!</translation>
     </message>
     <message>
         <source>Importing ASCII failed. Clipboard empty?</source>
-        <translation>Falha ao importar ASCII. Área de transferência vazia?</translation>
+        <translation type="vanished">Falha ao importar ASCII. Área de transferência vazia?</translation>
     </message>
     <message>
         <source>W</source>
-        <translation>B</translation>
+        <translation type="vanished">B</translation>
     </message>
     <message>
         <source>B</source>
-        <translation>P</translation>
+        <translation type="vanished">P</translation>
     </message>
     <message>
         <source>Black wins with %1</source>
-        <translation>Preto ganha com %1</translation>
+        <translation type="vanished">Preto ganha com %1</translation>
     </message>
     <message>
         <source>White wins with %1</source>
-        <translation>Branco ganha com %1</translation>
+        <translation type="vanished">Branco ganha com %1</translation>
+    </message>
+    <message>
+        <source>Live evaluation: W %1%2 B %3%4 at %5 visits</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Analysis is supported only for square boards!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You did not configure any analysis engine for this boardsize!</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>BoardWindow</name>
+    <message>
+        <source>MainWindow</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Click on the board to place a stone.
+
+When in normal mode, left click plays moves in alternating colors.
+Shift + left click moves to the first move in the main branch.
+Shift + right click moves to the next move in the current branch.
+When in edit mode and editing stones, left click places a black, right click a white stone, clicking on an existant stone removes it.
+When editing marks, left click sets, right click removes the mark. When editing letter marks, shift-click allows to customize the mark text.
+When in score mode, left click to mark a group as dead, right click to mark it alive in seki. Click again to unmark as dead or seki.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Slider min value
+
+Minimum game move the slider can currently show.</source>
+        <translation type="unfinished">Valor mínimo da barra deslizante
+
+A menor jogada da partida que a barra pode mostrar agora.</translation>
+    </message>
+    <message>
+        <source>0</source>
+        <translation type="unfinished">0</translation>
+    </message>
+    <message>
+        <source>Navigate through the game</source>
+        <translation type="unfinished">Navegar através da partida</translation>
+    </message>
+    <message>
+        <source>Navigate to move
+
+Use the slider to quickly navigate through the current branch of the game.</source>
+        <translation type="unfinished">Navegar para a jogada
+
+Utilize a barra deslizante para se mover rapidamente através do braço atual da partida.</translation>
+    </message>
+    <message>
+        <source>Slider max value
+
+Maximum game move the slider can currently show.</source>
+        <translation type="unfinished">Valor máximo da barra deslizante
+
+A maior jogada da partida que a barra pode mostrar agora.</translation>
+    </message>
+    <message>
+        <source>000</source>
+        <translation type="unfinished">000</translation>
+    </message>
+    <message>
+        <source>Move number</source>
+        <translation type="unfinished">Número da jogada</translation>
+    </message>
+    <message>
+        <source>Move number
+
+Number of the currently displayed move.</source>
+        <translation type="unfinished">Número da jogada
+
+Número da jogada mostrada atualmente.</translation>
+    </message>
+    <message>
+        <source>Move 0
+Variation 1 of 20
+0 child positions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to first move.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to previous move.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to next move.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to last move.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to previous commented move.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to next commented move.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to previous figure.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to next figure.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>next</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Player to play</source>
+        <translation type="unfinished">Jogador a jogar</translation>
+    </message>
+    <message>
+        <source>Player to play
+
+Indicates whether it is black&apos;s or white&apos;s turn.</source>
+        <translation type="unfinished">Jogador a jogar
+
+Indica se é a vez do preto ou do branco jogar.</translation>
+    </message>
+    <message>
+        <source>Black to play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Indicates that it&apos;s not the expected player&apos;s move.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toggle player to move.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Update game record from on-line game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Update from online game.
+This window was opened through &quot;Edit game&quot; while observing an online game.
+The update button refreshes the game in this window, adding any moves that were made in the actual game in the meantime. This operation discards any edits you may have made.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Update</source>
+        <translation type="unfinished">Atualizar</translation>
+    </message>
+    <message>
+        <source>Pass move</source>
+        <translation type="unfinished">Passar a jogada</translation>
+    </message>
+    <message>
+        <source>Pass
+
+Pass your turn.</source>
+        <translation type="unfinished">Passar
+
+Passar sua vez.</translation>
+    </message>
+    <message>
+        <source>Pass</source>
+        <translation type="unfinished">Passar</translation>
+    </message>
+    <message>
+        <source>Undo last move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Undo
+
+Undo the opponent&apos;s last move.</source>
+        <translation type="unfinished">Desfazer
+
+Desfazer a última jogada do oponente.</translation>
+    </message>
+    <message>
+        <source>Undo</source>
+        <translation type="unfinished">Desfazer</translation>
+    </message>
+    <message>
+        <source>Request adjournment</source>
+        <translation type="unfinished">Requisitar adiamento</translation>
+    </message>
+    <message>
+        <source>Adjourn.
+
+Send adjournment request to your opponent. If he accept it, the game will be adjourned and saved.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Adjourn</source>
+        <translation type="unfinished">Adiar</translation>
+    </message>
+    <message>
+        <source>Score the game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Switch to coring mode.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Score</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Accept the score and end the game.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Accept the score, leave scoring mode and end the game.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Done</source>
+        <translation type="unfinished">Feito</translation>
+    </message>
+    <message>
+        <source>Edit the game in a new window.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open a window with an offline copy of the game for editing.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit Game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter and leave edit mode where stones can be placed freely.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Freely edit the board position. Edited positions are added below the current one.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit Position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default Loss</source>
+        <translation type="unfinished">Perda da partida</translation>
+    </message>
+    <message>
+        <source>Resign.
+
+Resign the game immediately. Clicking here is a default loss. Your opponent wins. Game ends.</source>
+        <translation type="unfinished">Desistir.
+
+Abandonar a partida imediatamente. Clicar aqui significa uma perda da partida, ou seja, seu oponente ganha. A partida termina.</translation>
+    </message>
+    <message>
+        <source>RESIGN</source>
+        <translation type="unfinished">DESISTIR</translation>
+    </message>
+    <message>
+        <source>Tools tab
+
+N/S	normal/score tools
+TG	teaching tools</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>NS</source>
+        <translation type="unfinished">NP</translation>
+    </message>
+    <message>
+        <source>TG</source>
+        <translation type="unfinished">DJ</translation>
+    </message>
+    <message>
+        <source>opponent:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>opponent: invited by teacher</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>opponent
+
+choose opponent from list to enable him playing with you in a teaching game.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>-- none --</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>hand over controls to opponent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>hand over controls to opponent to allow him placing black and white stones, undo etc.
+
+Only teacher can give control,
+both teacher and pupil can release control.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>controls</source>
+        <translation type="unfinished">controles</translation>
+    </message>
+    <message>
+        <source>remember that point for fast return</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>push button at starting point to enable remembering.
+After placing and/or undo release button for returning to starting point automatically.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;File</source>
+        <translation type="unfinished">&amp;Arquivo</translation>
+    </message>
+    <message>
+        <source>&amp;Import/Export</source>
+        <translation type="unfinished">&amp;Importar/Exportar</translation>
+    </message>
+    <message>
+        <source>&amp;Edit</source>
+        <translation type="unfinished">&amp;Editar</translation>
+    </message>
+    <message>
+        <source>&amp;Navigation</source>
+        <translation type="unfinished">&amp;Navegação</translation>
+    </message>
+    <message>
+        <source>&amp;Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Save layout</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Restore layout</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Analysis</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Help</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File toolbar</source>
+        <translation type="unfinished">Barra de ferramentas de arquivos</translation>
+    </message>
+    <message>
+        <source>Navigation toolbar</source>
+        <translation type="unfinished">Barra de ferramentas de navegação</translation>
+    </message>
+    <message>
+        <source>Edit toolbar</source>
+        <translation type="unfinished">Editar a barra de ferramentas</translation>
+    </message>
+    <message>
+        <source>Diagrams</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>E&amp;xport ASCII</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export S&amp;VG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit &amp;Diagram</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Observers</source>
+        <translation type="unfinished">Observadores</translation>
+    </message>
+    <message>
+        <source>Evaluation graph</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Comments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game tree</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Miscellaneous toolbar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Next move</source>
+        <translation type="unfinished">Jogada &amp;seguinte</translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation type="unfinished">Direita</translation>
+    </message>
+    <message>
+        <source>&amp;Previous move</source>
+        <translation type="unfinished">Jogada &amp;anterior</translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation type="unfinished">Esquerda</translation>
+    </message>
+    <message>
+        <source>&amp;First move</source>
+        <translation type="unfinished">&amp;Primeira jogada</translation>
+    </message>
+    <message>
+        <source>Home</source>
+        <translation type="unfinished">Início</translation>
+    </message>
+    <message>
+        <source>&amp;Last move</source>
+        <translation type="unfinished">Ú&amp;ltima jogada</translation>
+    </message>
+    <message>
+        <source>End</source>
+        <translation type="unfinished">Fim</translation>
+    </message>
+    <message>
+        <source>P&amp;revious variation</source>
+        <translation type="unfinished">Va&amp;riação anterior</translation>
+    </message>
+    <message>
+        <source>Up</source>
+        <translation type="unfinished">Acima</translation>
+    </message>
+    <message>
+        <source>N&amp;ext variation</source>
+        <translation type="unfinished">Variação s&amp;eguinte</translation>
+    </message>
+    <message>
+        <source>Down</source>
+        <translation type="unfinished">Abaixo</translation>
+    </message>
+    <message>
+        <source>&amp;Main branch</source>
+        <translation type="unfinished">&amp;Braço principal</translation>
+    </message>
+    <message>
+        <source>Ins</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Variation &amp;start</source>
+        <translation type="unfinished">&amp;Início da variação</translation>
+    </message>
+    <message>
+        <source>To start of variation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PgUp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Next &amp;branch</source>
+        <translation type="unfinished">Novo &amp;braço</translation>
+    </message>
+    <message>
+        <source>Move to next branch starting a variation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PgDown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Previous &amp;commented move</source>
+        <translation type="unfinished">Jogada &amp;comentada anterior</translation>
+    </message>
+    <message>
+        <source>Move to the previous move that has a comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Next c&amp;ommented move</source>
+        <translation type="unfinished">Próxima jogada c&amp;omentada</translation>
+    </message>
+    <message>
+        <source>Move to the next move that has a comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Previous &amp;diagram</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>nMove to the previous move that starts a diagram</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Next dia&amp;gram</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move to the next move that starts a diagram</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Go to move...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter a move number and move there</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+G</source>
+        <translation type="unfinished">Ctrl+G</translation>
+    </message>
+    <message>
+        <source>Go to clic&amp;ked move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Click on an intersection and move to stone played there (if any)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game &amp;information...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Display and edit game information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+I</source>
+        <translation type="unfinished">Ctrl+I</translation>
+    </message>
+    <message>
+        <source>Place &amp;stone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&quot;Normal mode, click to place a stone.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set &amp;triangle mark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clicking places a triangle mark.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set &amp;circle mark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clicking places a circle mark.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set s&amp;quare mark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clicking places a square mark.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set cr&amp;oss mark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clicking places a cross mark.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set &amp;letter mark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clicking places a letter mark.
+Hold shift to add a freely editable text mark.
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set &amp;number mark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clicking places a number mark.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Delete </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete this and all following positions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+D</source>
+        <translation type="unfinished">Ctrl+D</translation>
+    </message>
+    <message>
+        <source>Select &amp;rectangle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose a rectangle to export.
+In play or edit mode, click to begin choosing a rectangle to be used when exporting to ASCII or SVG.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>R</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cle&amp;ar selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear the selected rectangle and select the whole board again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start dia&amp;gram here</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If selected, the current node starts a diagram.
+Enable diagram display in the View menu to view and edit diagrams.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>G</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New &amp;board window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+B</source>
+        <translation type="unfinished">Ctrl+B</translation>
+    </message>
+    <message>
+        <source>&amp;New game</source>
+        <translation type="unfinished">&amp;Nova partida</translation>
+    </message>
+    <message>
+        <source>Creates a new game on this board.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+N</source>
+        <translation type="unfinished">Ctrl+N</translation>
+    </message>
+    <message>
+        <source>New &amp;variant game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Creates a new Go variant game on this board</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+V</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Save</source>
+        <translation type="unfinished">&amp;Salvar</translation>
+    </message>
+    <message>
+        <source>Save an sgf file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+S</source>
+        <translation type="unfinished">Ctrl+S</translation>
+    </message>
+    <message>
+        <source>&amp;Open...</source>
+        <translation type="unfinished">&amp;Abrir...</translation>
+    </message>
+    <message>
+        <source>Open an sgf file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+O</source>
+        <translation type="unfinished">Ctrl+O</translation>
+    </message>
+    <message>
+        <source>Save &amp;as...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save a sgf file under a new name.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Close</source>
+        <translation type="unfinished">&amp;Fechar</translation>
+    </message>
+    <message>
+        <source>Close this window.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+W</source>
+        <translation type="unfinished">Ctrl+W</translation>
+    </message>
+    <message>
+        <source>E&amp;xit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Quit the application.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+Q</source>
+        <translation type="unfinished">Ctrl+Q</translation>
+    </message>
+    <message>
+        <source>Export &amp;ASCII...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export ASCII
+Export current board to ASCII diagrams, for use in web forums.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export S&amp;VG...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export SVG
+Export the current board to an SVG vector graphics file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Import SGF from clipboard</source>
+        <translation type="unfinished">Importar SGF da </translation>
+    </message>
+    <message>
+        <source>Import SGF from clipboard
+Import a complete game in SGF format from the clipboard.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>E&amp;xport SGF &amp;to clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export SGF to clipboard
+Export a complete game in SGF format to the clipboard.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export &amp;image...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export image
+Take a screen grab of the current board and export it to an image file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Export image to clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export image to clipboard
+Take a screen grab of the current board position and export it to the clipboard as an image.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Status bar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Slider</source>
+        <translation type="unfinished">Barra deslizante</translation>
+    </message>
+    <message>
+        <source>Sidebar</source>
+        <translation type="unfinished">Barra lateral</translation>
+    </message>
+    <message>
+        <source>F9</source>
+        <translation type="unfinished">F9</translation>
+    </message>
+    <message>
+        <source>&amp;Fullscreen</source>
+        <translation type="unfinished">Tela &amp;cheia</translation>
+    </message>
+    <message>
+        <source>F11</source>
+        <translation type="unfinished">F11</translation>
+    </message>
+    <message>
+        <source>Move &amp;numbers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Coordinates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>F8</source>
+        <translation type="unfinished">F8</translation>
+    </message>
+    <message>
+        <source>As general default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>For current combination of visible docks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>General &amp;default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>For &amp;current combination of visible docks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>L</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default &amp;landscape arrangement</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default &amp;portrait arrangement</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Menu bar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>F7</source>
+        <translation type="unfinished">F7</translation>
+    </message>
+    <message>
+        <source>&amp;Preferences...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bring up the preferences dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alt+P</source>
+        <translation type="unfinished">Alt+P</translation>
+    </message>
+    <message>
+        <source>&amp;Mute stone sound</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Manual</source>
+        <translation type="unfinished">&amp;Manual</translation>
+    </message>
+    <message>
+        <source>F1</source>
+        <translation type="unfinished">F1</translation>
+    </message>
+    <message>
+        <source>&amp;About..</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About &amp;Qt...</source>
+        <translation type="unfinished">Sobre o &amp;Qt...</translation>
+    </message>
+    <message>
+        <source>&amp;Connect analysis engine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Connect analysis engine
+Try to find an engine configured as an analysis tool in the engine list and connect to it.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Disconnect analysis engine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pause analysis engine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Click to pause or unpause the analysis engine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dia&amp;gram comments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alt+G</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View &amp;README</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Batch analysis...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Batch analysis
+Open the batch analysis dialog which allows you to add SGF files to a queue to be analysed by an engine.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A&amp;utomatic diagrams...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -245,11 +1430,11 @@ Um jogador que você estiver observando terá uma entrada no campo &apos;observa
     </message>
     <message>
         <source>Window size saved.</source>
-        <translation>Tamanho da janela foi salvo.</translation>
+        <translation type="vanished">Tamanho da janela foi salvo.</translation>
     </message>
     <message>
         <source>Window size restored.</source>
-        <translation>Tamanho da janela foi restaurado.</translation>
+        <translation type="vanished">Tamanho da janela foi restaurado.</translation>
     </message>
     <message>
         <source>observe game</source>
@@ -782,7 +1967,7 @@ Define uma sess</translation>
     </message>
     <message>
         <source>You did not set the Computer program path !</source>
-        <translation>Você não definiu o caminho para o programa do Computador !</translation>
+        <translation type="vanished">Você não definiu o caminho para o programa do Computador !</translation>
     </message>
     <message>
         <source>Shouts*</source>
@@ -830,16 +2015,16 @@ Esta tabela pode ser atualizada por &apos;Atualizar jogos&apos;</translation>
 right click to observe
 
 Symbol explanation: (click on tab to sort by)
-Id<byte value="x9"/>game number
-White/WR<byte value="x9"/>white player&apos;s name and rank
-Black/BR<byte value="x9"/>black player&apos;s name and rank
-Mv<byte value="x9"/>number of moves at last refresh
-Sz<byte value="x9"/>board size
-H<byte value="x9"/>handicap
-K<byte value="x9"/>komi
-By<byte value="x9"/>byoyomi time
-FR<byte value="x9"/>free (FI), rated (I) or teach (TI) game
-(Ob)<byte value="x9"/>number of observers at last refresh
+Id	game number
+White/WR	white player&apos;s name and rank
+Black/BR	black player&apos;s name and rank
+Mv	number of moves at last refresh
+Sz	board size
+H	handicap
+K	komi
+By	byoyomi time
+FR	free (FI), rated (I) or teach (TI) game
+(Ob)	number of observers at last refresh
 
 This table can be updated by &apos;Refresh games&apos;</source>
         <translation>Tabela de jogos
@@ -847,16 +2032,16 @@ This table can be updated by &apos;Refresh games&apos;</source>
 clique com o botão à direita para observar
 
 Expliação sobre símbolos: (clique na aba para ordenar por)
-Id<byte value="x9"/>número do jogo
-Branco/CB<byte value="x9"/>nome e colocação do jogador branco
-Preto/CP<byte value="x9"/><byte value="x9"/>nome e colocação do jogador preto
-Jg<byte value="x9"/>número de jogadas na última atualização
-Tm<byte value="x9"/>tamanho do tabuleiro
-V<byte value="x9"/>vantagens
-K<byte value="x9"/>komi
-By<byte value="x9"/>tempo byoyomi
-LC<byte value="x9"/>jogo livre (FI), classificado (l) ou didático (Tl)
-Ob<byte value="x9"/>número de observadores na última atualização
+Id	número do jogo
+Branco/CB	nome e colocação do jogador branco
+Preto/CP		nome e colocação do jogador preto
+Jg	número de jogadas na última atualização
+Tm	tamanho do tabuleiro
+V	vantagens
+K	komi
+By	tempo byoyomi
+LC	jogo livre (FI), classificado (l) ou didático (Tl)
+Ob	número de observadores na última atualização
 
 Esta tabela pode ser atualizada por &apos;Atualizar jogos&apos;</translation>
     </message>
@@ -866,84 +2051,84 @@ Esta tabela pode ser atualizada por &apos;Atualizar jogos&apos;</translation>
 right click for menu
 
 Symbol explanation: (click on tab to sort by)
-Stat<byte value="x9"/>player&apos;s stats:
-<byte value="x9"/>X...close
-<byte value="x9"/>!...looking = wants to play a game
-<byte value="x9"/>Q...quiet = doesn&apos;t receive system messages
-<byte value="x9"/>S...shout = can&apos;t receive shouts
-<byte value="x9"/>??...unknown - player entered after last table update
-name<byte value="x9"/>player&apos;s name
-Rk<byte value="x9"/>player&apos;s rank
-pl<byte value="x9"/>playing game (only one game visible)
-ob<byte value="x9"/>observing game (only one game visible)
-Idle<byte value="x9"/>idle time
-X<byte value="x9"/>private info:
-<byte value="x9"/>M..me
-<byte value="x9"/>X..excluded from shout
-<byte value="x9"/>W..watched (sort: X entries, then Rk)
+Stat	player&apos;s stats:
+	X...close
+	!...looking = wants to play a game
+	Q...quiet = doesn&apos;t receive system messages
+	S...shout = can&apos;t receive shouts
+	??...unknown - player entered after last table update
+name	player&apos;s name
+Rk	player&apos;s rank
+pl	playing game (only one game visible)
+ob	observing game (only one game visible)
+Idle	idle time
+X	private info:
+	M..me
+	X..excluded from shout
+	W..watched (sort: X entries, then Rk)
 and, if extended player info (Toolbox) is active (IGS only):
-Info<byte value="x9"/>player&apos;s info string
-Won<byte value="x9"/>number of games won by player
-Lost<byte value="x9"/>number of games lost by player
-Country<byte value="x9"/>origin of player (from e-mail address)
-Lang<byte value="x9"/>preferred language
+Info	player&apos;s info string
+Won	number of games won by player
+Lost	number of games lost by player
+Country	origin of player (from e-mail address)
+Lang	preferred language
 
 This table can be updated by &apos;Refresh players&apos;
 
 Menu entries (right click):
-match<byte value="x9"/>request for match (dialog arises)
-talk<byte value="x9"/>talk to player (tab arises)
+match	request for match (dialog arises)
+talk	talk to player (tab arises)
 ----
-stats<byte value="x9"/><byte value="x9"/>show player&apos;s stats
-stored games<byte value="x9"/>show stored games
-results<byte value="x9"/><byte value="x9"/>show results
-rating<byte value="x9"/><byte value="x9"/>show rating (NNGS/IGS only)
-observe game<byte value="x9"/>show game currently played by player
+stats		show player&apos;s stats
+stored games	show stored games
+results		show results
+rating		show rating (NNGS/IGS only)
+observe game	show game currently played by player
 ----
-toggle watch list<byte value="x9"/><byte value="x9"/>put/remove player to/from watch list - make &apos;W&apos; entry at &apos;X&apos; column; entry/leave sounds are activated
-toggle exclude list<byte value="x9"/>similar to watch - make &apos;X&apos; entry; player&apos;s shouts are no longer shown</source>
+toggle watch list		put/remove player to/from watch list - make &apos;W&apos; entry at &apos;X&apos; column; entry/leave sounds are activated
+toggle exclude list	similar to watch - make &apos;X&apos; entry; player&apos;s shouts are no longer shown</source>
         <translation>Tabela de jogadores
 
 clique com o botão à direita para ver o menu
 
 Explicação sobre os símbolos: (clique na aba para ordenar por)
 
-Est<byte value="x9"/>estatísticas sobre o jogador
-<byte value="x9"/>X...fechar
-<byte value="x9"/>!...procurando = quer iniciar uma partida
-<byte value="x9"/>Q...quieto = não recebe mensagens do sistema
-<byte value="x9"/>S...gritos = não pode receber gritos
-<byte value="x9"/>??...desconhecido = jogador que entrou após a última atualização da tabela
-nome<byte value="x9"/>nome do jogador
-Cl<byte value="x9"/>classificação do jogador
-jg<byte value="x9"/>jogo em andamento (somente um jogo visível)
-ob<byte value="x9"/>jogo em observação (somente um jogo visível)
-Inat<byte value="x9"/>tempo inativo
-X<byte value="x9"/>informação privada:
-<byte value="x9"/>M..mim
-<byte value="x9"/>X..excluído dos gritos
-<byte value="x9"/>W..observado (ordenação: entradas X, e então Cl)
+Est	estatísticas sobre o jogador
+	X...fechar
+	!...procurando = quer iniciar uma partida
+	Q...quieto = não recebe mensagens do sistema
+	S...gritos = não pode receber gritos
+	??...desconhecido = jogador que entrou após a última atualização da tabela
+nome	nome do jogador
+Cl	classificação do jogador
+jg	jogo em andamento (somente um jogo visível)
+ob	jogo em observação (somente um jogo visível)
+Inat	tempo inativo
+X	informação privada:
+	M..mim
+	X..excluído dos gritos
+	W..observado (ordenação: entradas X, e então Cl)
 e, se as informações extendidas (Ferramentas) estiverem ativas (só IGS):
-Info<byte value="x9"/>informações sobre o jogador
-Ganhou<byte value="x9"/>número de partidas vencidas pelo jogador
-Perdeu<byte value="x9"/>número de partidas perdidas pelo jogador
-País<byte value="x9"/>origem do jogador (do endereço de emeil)
-Idioma<byte value="x9"/>idioma preferido
+Info	informações sobre o jogador
+Ganhou	número de partidas vencidas pelo jogador
+Perdeu	número de partidas perdidas pelo jogador
+País	origem do jogador (do endereço de emeil)
+Idioma	idioma preferido
 
 Esta tabela pode ser atualizada por &apos;Atualizar jogadores&apos;
 
 Entradas de menu (clique à direita):
-partida<byte value="x9"/><byte value="x9"/>requisitar uma partida (surge uma janela de diálogo)
-conversar<byte value="x9"/>conversar com jogador (surge uma aba)
+partida		requisitar uma partida (surge uma janela de diálogo)
+conversar	conversar com jogador (surge uma aba)
 ----
-estatísticas<byte value="x9"/>mostra as estatísticas do jogador
-jogos salvos<byte value="x9"/>mostra os jogos que foram salvos
-resultados<byte value="x9"/>mostra os resultados
-classificação<byte value="x9"/>mostra a classificação (só NNGS/IGS)
-observar jogo<byte value="x9"/>mostra o jogo em andamento para o jogador
+estatísticas	mostra as estatísticas do jogador
+jogos salvos	mostra os jogos que foram salvos
+resultados	mostra os resultados
+classificação	mostra a classificação (só NNGS/IGS)
+observar jogo	mostra o jogo em andamento para o jogador
 ----
-alternar lista de observação<byte value="x9"/><byte value="x9"/>insere/remove o jogador na/da lista de observação - faz uma entrada &apos;W&apos; na coluna &apos;X&apos;; sons de entrada/saída são ativados
-alternar lista de exclusão<byte value="x9"/><byte value="x9"/>similar à observação - faz uma entrada &apos;X&apos;; os gritos do jogador não mais são mostrados
+alternar lista de observação		insere/remove o jogador na/da lista de observação - faz uma entrada &apos;W&apos; na coluna &apos;X&apos;; sons de entrada/saída são ativados
+alternar lista de exclusão		similar à observação - faz uma entrada &apos;X&apos;; os gritos do jogador não mais são mostrados
 
 </translation>
     </message>
@@ -952,7 +2137,12 @@ alternar lista de exclusão<byte value="x9"/><byte value="x9"/>similar à observ
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>SGF Files (*.sgf *.SGF);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)</source>
+        <source>Engine configuration updated
+Analysis engines now require a board size to be set, assuming 19 for existing entries.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You did not configure any engines!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1135,7 +2325,7 @@ alternar lista de exclusão<byte value="x9"/><byte value="x9"/>similar à observ
 
 Use these lists to select the rank of players you want to see in the list
 This will take effect after refreshing the players list.</source>
-        <translation>Selecionar faixa de classificação de jogadores
+        <translation type="vanished">Selecionar faixa de classificação de jogadores
 
 Use estas listas para selecionar a classificação de jogadores que você quer ver na lista
 
@@ -1154,7 +2344,7 @@ Isto terá efeito após atualizar a lista de jogadores.</translation>
 
 Check this box if you want the list to display only open players (uncheck if you want all players).
 This will take effect after refreshing the players list.</source>
-        <translation>Jogadores disponíveis
+        <translation type="vanished">Jogadores disponíveis
 
 Marque esta caixa se você quiser que a lista mostre só jogares disponíveis (desmarque se você quiser todos os jogadores).
 Isto terá efeito após atualizar a lista de jogadores.</translation>
@@ -1207,7 +2397,7 @@ Isto terá efeito após atualizar a lista de jogadores.</translation>
         <source>Connect
 
 Connect with/Disconnect from selected Go server.</source>
-        <translation>Conectar
+        <translation type="vanished">Conectar
 
 Conectar/desconectar do servidor de Go selecionado.</translation>
     </message>
@@ -1231,7 +2421,7 @@ Conectar/desconectar do servidor de Go selecionado.</translation>
         <source>Open
 
 Open a sgf file.</source>
-        <translation>Abrir
+        <translation type="vanished">Abrir
 
 Abrir um arquivo SGF.</translation>
     </message>
@@ -1255,7 +2445,7 @@ Abrir um arquivo SGF.</translation>
         <source>Help
 
 Opens the manual of the application.</source>
-        <translation>Ajuda
+        <translation type="vanished">Ajuda
 
 Abre o manual do aplicativo.</translation>
     </message>
@@ -1279,7 +2469,7 @@ Abre o manual do aplicativo.</translation>
         <source>About
 
 About the application.</source>
-        <translation>Sobre
+        <translation type="vanished">Sobre
 
 Sobre o aplicativo.</translation>
     </message>
@@ -1343,7 +2533,7 @@ Ativa/desativa a barra de menu.</translation>
         <source>Play with a program
 
 Sets a playing session with a pGo program using GTP (like GNUGO)</source>
-        <translation>Jogar contra um programa
+        <translation type="vanished">Jogar contra um programa
 
 Define uma sessão de partidas com um programa pGo que use GTP (como GNUGO)</translation>
     </message>
@@ -1407,7 +2597,7 @@ Define uma sessão de partidas com um programa pGo que use GTP (como GNUGO)</tra
         <source>Preferences
 
 Edit the applications preferences.</source>
-        <translation>Preferências
+        <translation type="vanished">Preferências
 
 Editar as preferências sobre o aplicativo.</translation>
     </message>
@@ -1431,7 +2621,7 @@ Editar as preferências sobre o aplicativo.</translation>
         <source>Exit
 
 Quits the application.</source>
-        <translation>Sair
+        <translation type="vanished">Sair
 
 Sai do aplicativo.</translation>
     </message>
@@ -1455,7 +2645,7 @@ Sai do aplicativo.</translation>
         <source>New
 
 Creates a new 19x19 board.</source>
-        <translation>Novo
+        <translation type="vanished">Novo
 
 Cria um novo tabuleiro 19x19.</translation>
     </message>
@@ -1479,7 +2669,7 @@ Cria um novo tabuleiro 19x19.</translation>
         <source>Navigation toolbar
 
 Enables/disables the toolbar.</source>
-        <translation>Barra de navegação
+        <translation type="vanished">Barra de navegação
 
 Ativa/desativa a barra de navegação.</translation>
     </message>
@@ -1523,27 +2713,27 @@ Ativa/desativa a barra de navegação.</translation>
         <source>Statusbar
 
 Enables/disables the statusbar.</source>
-        <translation>Barra de estado
+        <translation type="vanished">Barra de estado
 
 Ativa/desativa a barra de estado.</translation>
     </message>
     <message>
         <source>Sound</source>
-        <translation>Som</translation>
+        <translation type="vanished">Som</translation>
     </message>
     <message>
         <source>&amp;Sound</source>
-        <translation>&amp;Som</translation>
+        <translation type="vanished">&amp;Som</translation>
     </message>
     <message>
         <source>Short info on sound availability</source>
-        <translation>Curta informação sobre a disponibilidade do som</translation>
+        <translation type="vanished">Curta informação sobre a disponibilidade do som</translation>
     </message>
     <message>
         <source>Sound Info
 
 Views a message box with a short comment about sound.</source>
-        <translation>Informação de Som
+        <translation type="vanished">Informação de Som
 
 Mostra uma caixa de mensagens com um curto comentário sobre o som.</translation>
     </message>
@@ -1559,7 +2749,7 @@ Mostra uma caixa de mensagens com um curto comentário sobre o som.</translation
         <source>About Qt
 
 About Qt.</source>
-        <translation>Sobre o Qt
+        <translation type="vanished">Sobre o Qt
 
 Sobre o Qt.</translation>
     </message>
@@ -1581,11 +2771,11 @@ Sobre o Qt.</translation>
     </message>
     <message>
         <source>View user toolbar</source>
-        <translation>Ver ferramentas do usuário</translation>
+        <translation type="vanished">Ver ferramentas do usuário</translation>
     </message>
     <message>
         <source>View &amp;user toolbar</source>
-        <translation>Ver ferramentas do &amp;usuário</translation>
+        <translation type="vanished">Ver ferramentas do &amp;usuário</translation>
     </message>
     <message>
         <source>main toolbar</source>
@@ -1604,7 +2794,7 @@ Sobre o Qt.</translation>
 
 Use this button to &apos;seek&apos; a game, with the given time settings (popup menu), and handicap range (list beside)
 The server will automatically launch a game against an opponent with matching settings.</source>
-        <translation>Procurar jogo
+        <translation type="vanished">Procurar jogo
 
 Use este botão para &apos;procurar&apos; um jogo, com as configurações de tempo dadas (menu de contexto), e gama de vantagens (lista ao lado)
 O servidor automaticamente lançará um jogo contra um oponente que se enquadre nas configurações.</translation>
@@ -1641,13 +2831,13 @@ O servidor automaticamente lançará um jogo contra um oponente que se enquadre 
         <source>handicap range
 
 Set the handicap range you wish when seeking a game. See &apos;seek&apos; button for more</source>
-        <translation>gama de vantagens
+        <translation type="vanished">gama de vantagens
 
 Defina a gama de vantagens que você quiser ao procurar jogos. Veja o botão &apos;procurar&apos; para saber mais</translation>
     </message>
     <message>
         <source>user defined toolbar</source>
-        <translation>barra de ferramentas personalizada</translation>
+        <translation type="vanished">barra de ferramentas personalizada</translation>
     </message>
     <message>
         <source>Action</source>
@@ -1657,13 +2847,13 @@ Defina a gama de vantagens que você quiser ao procurar jogos. Veja o botão &ap
         <source>If checked then you don&apos;t receive system messages, that means you are not informed about connecting/disconnecting players, started/finished games etc. Clicking this checkbox toggles the mode. To be quiet is indicated with a &apos;Q&apos; in the playertable.
 
 Note : some features cannot work if set to quiet (checked box):
-<byte value="x9"/>- sound when watched players enter/leave
-<byte value="x9"/>- update of player/gamestable</source>
-        <translation>Se ativado então você não recebe mensagens do sistema, ou seja, você não é informado sobre conexão/desconexão de jogadores, início/fim de partidas, etc. Clicando nesta caixa de verificação alterna o modo. Estar quieto é indicado com um &apos;Q&apos; na tabela de jogadores.
+	- sound when watched players enter/leave
+	- update of player/gamestable</source>
+        <translation type="vanished">Se ativado então você não recebe mensagens do sistema, ou seja, você não é informado sobre conexão/desconexão de jogadores, início/fim de partidas, etc. Clicando nesta caixa de verificação alterna o modo. Estar quieto é indicado com um &apos;Q&apos; na tabela de jogadores.
 
 Nota: algumas funções podem não funcionar se for ativado o modo quieto (caixa verificada):
-<byte value="x9"/>- som para a entrada/saída de jogadores observados
-<byte value="x9"/>- atualização da tabela de jogador/partidas</translation>
+	- som para a entrada/saída de jogadores observados
+	- atualização da tabela de jogador/partidas</translation>
     </message>
     <message>
         <source>New version message</source>
@@ -1677,9 +2867,153 @@ Nota: algumas funções podem não funcionar se for ativado o modo quieto (caixa
         <source>new version message
 
 displays the message box that appears at launch of a new version</source>
-        <translation>mensagem de nova versão
+        <translation type="vanished">mensagem de nova versão
 
 mostra a caixa de mensagem que surge quando uma nova versão é lançada</translation>
+    </message>
+    <message>
+        <source>Select players ranks boundaries
+
+			Use these lists to select the rank of players you want to see in the list
+			This will take effect after refreshing the players list.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open players
+
+			Check this box if you want the list to display only open players (uncheck if you want all players).
+			This will take effect after refreshing the players list.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File toolbar</source>
+        <translation type="unfinished">Barra de ferramentas de arquivos</translation>
+    </message>
+    <message>
+        <source>Connect
+
+	  Connect with/Disconnect from selected Go server.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Seek game
+
+	  Use this button to &apos;seek&apos; a game, with the given time settings (popup menu), and handicap range (list beside)
+	  The server will automatically launch a game against an opponent with matching settings.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>handicap range
+
+	  Set the handicap range you wish when seeking a game. See &apos;seek&apos; button for more</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open
+
+	Open a sgf file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Help
+
+	Opens the manual of the application.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About
+
+	About the application.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play with a program
+
+	Sets a playing session with a pGo program using GTP (like GNUGO)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If checked then you don&apos;t receive system messages, that means you are not informed about connecting/disconnecting players, started/finished games etc. Clicking this checkbox toggles the mode. To be quiet is indicated with a &apos;Q&apos; in the playertable.
+
+	Note : some features cannot work if set to quiet (checked box):
+	- sound when watched players enter/leave
+	- update of player/gamestable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Preferences
+
+	Edit the applications preferences.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Exit
+
+	Quits the application.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New
+
+	Creates a new 19x19 board.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Navigation toolbar
+
+	Enables/disables the toolbar.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Statusbar
+
+	Enables/disables the statusbar.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About Qt
+
+	About Qt.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New &amp;Variant Board</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New Variant Board</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+V</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Seek game
+
+	Use this button to &apos;seek&apos; a game, with the given time settings (popup menu), and handicap range (list beside)
+	The server will automatically launch a game against an opponent with matching settings.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>new version message
+
+	displays the message box that appears at launch of a new version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View &amp;README</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Batch analysis...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Batch analysis
+	Open the batch analysis dialog which allows you to add SGF files to a queue to be analysed by an engine.
+	</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1789,6 +3123,96 @@ Modifier les marques cercle. Click gauche pour placer une marque, click droit po
     </message>
 </context>
 <context>
+    <name>EvalGraph</name>
+    <message>
+        <source>The evaluation graph.
+Displays evaluation data found in the game record.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export image to clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export image to file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export evaluation graph image as</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to save image!</source>
+        <translation type="unfinished">Falha ao salvar imagem!</translation>
+    </message>
+</context>
+<context>
+    <name>FigureDialog</name>
+    <message>
+        <source>Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Title:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move &amp;numbering:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unchanged from previous node</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>None</source>
+        <translation type="unfinished">Nenhum</translation>
+    </message>
+    <message>
+        <source>Shown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shown modulo 100</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Override move number:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show coor&amp;dinates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Show title in export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show &amp;hoshi points</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Remove stones (base display on final position)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Display invisible moves as text</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>GTP_Process</name>
+    <message>
+        <source>GTP engine reported unsupported protocol version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid response from GTP engine</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>GameDialog</name>
     <message>
         <source>yes</source>
@@ -1869,32 +3293,54 @@ Modifier les marques cercle. Click gauche pour placer une marque, click droit po
         <source>Copyright:</source>
         <translation>Direitos de cópia:</translation>
     </message>
+    <message>
+        <source>Event:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Round:</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>GameTree</name>
+    <message>
+        <source>The game tree.
+Click nodes to move to them, click empty areas to drag.
+Shift-click or middle-click nodes to collapse or expand their sub-variations.
+Control-click a collapsed node to expand one level of its children.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Auto collapse on/off</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>GamesTable</name>
     <message>
         <source>Id</source>
-        <translation type="obsolete">Id</translation>
+        <translation type="unfinished">Id</translation>
     </message>
     <message>
         <source>White</source>
-        <translation type="obsolete">Blanc</translation>
+        <translation type="unfinished">Blanc</translation>
     </message>
     <message>
         <source>WR</source>
-        <translation type="obsolete">RB</translation>
+        <translation type="unfinished">RB</translation>
     </message>
     <message>
         <source>Black</source>
-        <translation type="obsolete">Noir</translation>
+        <translation type="unfinished">Noir</translation>
     </message>
     <message>
         <source>BR</source>
-        <translation type="obsolete">RN</translation>
+        <translation type="unfinished">RN</translation>
     </message>
     <message>
         <source>Mv</source>
-        <translation type="obsolete">Cp</translation>
+        <translation type="unfinished">Cp</translation>
     </message>
     <message>
         <source>Sz H K By Fr (Ob)</source>
@@ -1933,6 +3379,30 @@ Modifier les marques cercle. Click gauche pour placer une marque, click droit po
         <source>Mv</source>
         <comment>GamesTable Move</comment>
         <translation type="obsolete">Cp</translation>
+    </message>
+    <message>
+        <source>Sz</source>
+        <translation type="unfinished">Tm</translation>
+    </message>
+    <message>
+        <source>H</source>
+        <translation type="unfinished">V</translation>
+    </message>
+    <message>
+        <source>K</source>
+        <translation type="unfinished">K</translation>
+    </message>
+    <message>
+        <source>By</source>
+        <translation type="unfinished">By</translation>
+    </message>
+    <message>
+        <source>FR</source>
+        <translation type="unfinished">LC</translation>
+    </message>
+    <message>
+        <source>Ob</source>
+        <translation type="unfinished">Ob</translation>
     </message>
 </context>
 <context>
@@ -2090,7 +3560,7 @@ Select one of the predefined hosts -- xxx -- and add a title to use it.</source>
     <name>MainAppWidget</name>
     <message>
         <source>MainAppWidget</source>
-        <translation>MainAppWidget</translation>
+        <translation type="vanished">MainAppWidget</translation>
     </message>
     <message>
         <source>right click to observe</source>
@@ -2416,7 +3886,7 @@ Type &lt;command&gt;+&lt;ENTER&gt; to send to Go server. If not online use &apos
 Starting with &apos;#&apos; is a internal command as if the server sent the line (without &apos;#&apos;).
 
 In order to open a window use the mouse click instead of entering the &apos;observe&apos; command.</source>
-        <translation>Linha de comando
+        <translation type="vanished">Linha de comando
 
 Digite &lt;comando&gt;+&lt;ENTER&gt; para enviar ao servidor Go. Se não estiver conectado use o botão &apos;conectar&apos; primeiro.
 
@@ -2535,15 +4005,15 @@ Use semicolon &quot;;&quot; as delimiter (no spaces)</source>
     </message>
     <message>
         <source>Games</source>
-        <translation>Partidas</translation>
+        <translation type="vanished">Partidas</translation>
     </message>
     <message>
         <source>relevant messages from/to server</source>
-        <translation>mensagens relevantes de/para o servidor</translation>
+        <translation type="vanished">mensagens relevantes de/para o servidor</translation>
     </message>
     <message>
         <source>msg*</source>
-        <translation>msg*</translation>
+        <translation type="vanished">msg*</translation>
     </message>
     <message>
         <source>right click for menu</source>
@@ -2569,7 +4039,7 @@ use &apos;Refresh players&apos; after changing exclude/watch list (even if manua
     </message>
     <message>
         <source>Log online-time and name of arriving message</source>
-        <translation>Registrar o tempo e o nome das mensagens que chegam</translation>
+        <translation type="vanished">Registrar o tempo e o nome das mensagens que chegam</translation>
     </message>
     <message>
         <source>Hide all tabs containing a player&apos;s name (without &apos;*&apos;). The messages will not be deleted. If you want to see it again click with right button on player&apos;s name and choose talk (same as &apos;#24 *name*&apos;)</source>
@@ -2581,15 +4051,15 @@ use &apos;Refresh players&apos; after changing exclude/watch list (even if manua
     </message>
     <message>
         <source>Players</source>
-        <translation>Jogadores</translation>
+        <translation type="vanished">Jogadores</translation>
     </message>
     <message>
         <source>Close all talk tabs</source>
-        <translation>Fechar todas as abas de conversa</translation>
+        <translation type="vanished">Fechar todas as abas de conversa</translation>
     </message>
     <message>
         <source>Close all tabs containing a player&apos;s name (without &apos;*&apos;). The messages will not be deleted. If you want to see it again click with right button on player&apos;s name and choose talk (same as &apos;#24 *name*&apos;)</source>
-        <translation>Fechar todas as abas contendo um nome de jogador (sem &apos;*&apos;). As mensagesns não serão apagadas. Se você quiser as mostrar novamente, clique à direita sobre o nome do jogador e escolha conversar (o mesmo que &apos;#24 *name*&apos;)</translation>
+        <translation type="vanished">Fechar todas as abas contendo um nome de jogador (sem &apos;*&apos;). As mensagesns não serão apagadas. Se você quiser as mostrar novamente, clique à direita sobre o nome do jogador e escolha conversar (o mesmo que &apos;#24 *name*&apos;)</translation>
     </message>
     <message>
         <source>Table of games
@@ -2597,33 +4067,33 @@ use &apos;Refresh players&apos; after changing exclude/watch list (even if manua
 right click to observe
 
 Symbol explanation: (click on tab to sort by)
-Id<byte value="x9"/>game number
-White/WR<byte value="x9"/>white player&apos;s name and rank
-Black/BR<byte value="x9"/>black player&apos;s name and rank
-Mv<byte value="x9"/>number of moves at last refresh
-Sz<byte value="x9"/>board size
-H<byte value="x9"/>handicap
-K<byte value="x9"/>komi
-By<byte value="x9"/>byoyomi time
-FR<byte value="x9"/>free (FI), rated (I) or teach (TI) game
-(Ob)<byte value="x9"/>number of observers at last refresh
+Id	game number
+White/WR	white player&apos;s name and rank
+Black/BR	black player&apos;s name and rank
+Mv	number of moves at last refresh
+Sz	board size
+H	handicap
+K	komi
+By	byoyomi time
+FR	free (FI), rated (I) or teach (TI) game
+(Ob)	number of observers at last refresh
 
 This table can be updated by &apos;Refresh games&apos;</source>
-        <translation>Tabela de jogos
+        <translation type="vanished">Tabela de jogos
 
 clique com o botão à direita para observar
 
 Expliação sobre símbolos: (clique na aba para ordenar por)
-Id<byte value="x9"/>número do jogo
-Branco/CB<byte value="x9"/>nome e colocação do jogador branco
-Preto/CP<byte value="x9"/><byte value="x9"/>nome e colocação do jogador preto
-Jg<byte value="x9"/>número de jogadas na última atualização
-Tm<byte value="x9"/>tamanho do tabuleiro
-V<byte value="x9"/>vantagens
-K<byte value="x9"/>komi
-By<byte value="x9"/>tempo byoyomi
-LC<byte value="x9"/>jogo livre (FI), classificado (l) ou didático (Tl)
-Ob<byte value="x9"/>número de observadores na última atualização
+Id	número do jogo
+Branco/CB	nome e colocação do jogador branco
+Preto/CP		nome e colocação do jogador preto
+Jg	número de jogadas na última atualização
+Tm	tamanho do tabuleiro
+V	vantagens
+K	komi
+By	tempo byoyomi
+LC	jogo livre (FI), classificado (l) ou didático (Tl)
+Ob	número de observadores na última atualização
 
 Esta tabela pode ser atualizada por &apos;Atualizar jogos&apos;</translation>
     </message>
@@ -2633,84 +4103,84 @@ Esta tabela pode ser atualizada por &apos;Atualizar jogos&apos;</translation>
 right click for menu
 
 Symbol explanation: (click on tab to sort by)
-Stat<byte value="x9"/>player&apos;s stats:
-<byte value="x9"/>X...close
-<byte value="x9"/>!...looking = wants to play a game
-<byte value="x9"/>Q...quiet = doesn&apos;t receive system messages
-<byte value="x9"/>S...shout = can&apos;t receive shouts
-<byte value="x9"/>??...unknown - player entered after last table update
-name<byte value="x9"/>player&apos;s name
-Rk<byte value="x9"/>player&apos;s rank
-pl<byte value="x9"/>playing game (only one game visible)
-ob<byte value="x9"/>observing game (only one game visible)
-Idle<byte value="x9"/>idle time
-X<byte value="x9"/>private info:
-<byte value="x9"/>M..me
-<byte value="x9"/>X..excluded from shout
-<byte value="x9"/>W..watched (sort: X entries, then Rk)
+Stat	player&apos;s stats:
+	X...close
+	!...looking = wants to play a game
+	Q...quiet = doesn&apos;t receive system messages
+	S...shout = can&apos;t receive shouts
+	??...unknown - player entered after last table update
+name	player&apos;s name
+Rk	player&apos;s rank
+pl	playing game (only one game visible)
+ob	observing game (only one game visible)
+Idle	idle time
+X	private info:
+	M..me
+	X..excluded from shout
+	W..watched (sort: X entries, then Rk)
 and, if extended player info (Toolbox) is active (IGS only):
-Info<byte value="x9"/>player&apos;s info string
-Won<byte value="x9"/>number of games won by player
-Lost<byte value="x9"/>number of games lost by player
-Country<byte value="x9"/>origin of player (from e-mail address)
-Lang<byte value="x9"/>preferred language
+Info	player&apos;s info string
+Won	number of games won by player
+Lost	number of games lost by player
+Country	origin of player (from e-mail address)
+Lang	preferred language
 
 This table can be updated by &apos;Refresh players&apos;
 
 Menu entries (right click):
-match<byte value="x9"/>request for match (dialog arises)
-talk<byte value="x9"/>talk to player (tab arises)
+match	request for match (dialog arises)
+talk	talk to player (tab arises)
 ----
-stats<byte value="x9"/><byte value="x9"/>show player&apos;s stats
-stored games<byte value="x9"/>show stored games
-results<byte value="x9"/><byte value="x9"/>show results
-rating<byte value="x9"/><byte value="x9"/>show rating (NNGS/IGS only)
-observe game<byte value="x9"/>show game currently played by player
+stats		show player&apos;s stats
+stored games	show stored games
+results		show results
+rating		show rating (NNGS/IGS only)
+observe game	show game currently played by player
 ----
-toggle watch list<byte value="x9"/><byte value="x9"/>put/remove player to/from watch list - make &apos;W&apos; entry at &apos;X&apos; column; entry/leave sounds are activated
-toggle exclude list<byte value="x9"/>similar to watch - make &apos;X&apos; entry; player&apos;s shouts are no longer shown</source>
-        <translation>Tabela de jogadores
+toggle watch list		put/remove player to/from watch list - make &apos;W&apos; entry at &apos;X&apos; column; entry/leave sounds are activated
+toggle exclude list	similar to watch - make &apos;X&apos; entry; player&apos;s shouts are no longer shown</source>
+        <translation type="vanished">Tabela de jogadores
 
 clique com o botão à direita para ver o menu
 
 Explicação sobre os símbolos: (clique na aba para ordenar por)
 
-Est<byte value="x9"/>estatísticas sobre o jogador
-<byte value="x9"/>X...fechar
-<byte value="x9"/>!...procurando = quer iniciar uma partida
-<byte value="x9"/>Q...quieto = não recebe mensagens do sistema
-<byte value="x9"/>S...gritos = não pode receber gritos
-<byte value="x9"/>??...desconhecido = jogador que entrou após a última atualização da tabela
-nome<byte value="x9"/>nome do jogador
-Cl<byte value="x9"/>classificação do jogador
-jg<byte value="x9"/>jogo em andamento (somente um jogo visível)
-ob<byte value="x9"/>jogo em observação (somente um jogo visível)
-Inat<byte value="x9"/>tempo inativo
-X<byte value="x9"/>informação privada:
-<byte value="x9"/>M..mim
-<byte value="x9"/>X..excluído dos gritos
-<byte value="x9"/>W..observado (ordenação: entradas X, e então Cl)
+Est	estatísticas sobre o jogador
+	X...fechar
+	!...procurando = quer iniciar uma partida
+	Q...quieto = não recebe mensagens do sistema
+	S...gritos = não pode receber gritos
+	??...desconhecido = jogador que entrou após a última atualização da tabela
+nome	nome do jogador
+Cl	classificação do jogador
+jg	jogo em andamento (somente um jogo visível)
+ob	jogo em observação (somente um jogo visível)
+Inat	tempo inativo
+X	informação privada:
+	M..mim
+	X..excluído dos gritos
+	W..observado (ordenação: entradas X, e então Cl)
 e, se as informações extendidas (Ferramentas) estiverem ativas (só IGS):
-Info<byte value="x9"/>informações sobre o jogador
-Ganhou<byte value="x9"/>número de partidas vencidas pelo jogador
-Perdeu<byte value="x9"/>número de partidas perdidas pelo jogador
-País<byte value="x9"/>origem do jogador (do endereço de emeil)
-Idioma<byte value="x9"/>idioma preferido
+Info	informações sobre o jogador
+Ganhou	número de partidas vencidas pelo jogador
+Perdeu	número de partidas perdidas pelo jogador
+País	origem do jogador (do endereço de emeil)
+Idioma	idioma preferido
 
 Esta tabela pode ser atualizada por &apos;Atualizar jogadores&apos;
 
 Entradas de menu (clique à direita):
-partida<byte value="x9"/><byte value="x9"/>requisitar uma partida (surge uma janela de diálogo)
-conversar<byte value="x9"/>conversar com jogador (surge uma aba)
+partida		requisitar uma partida (surge uma janela de diálogo)
+conversar	conversar com jogador (surge uma aba)
 ----
-estatísticas<byte value="x9"/>mostra as estatísticas do jogador
-jogos salvos<byte value="x9"/>mostra os jogos que foram salvos
-resultados<byte value="x9"/>mostra os resultados
-classificação<byte value="x9"/>mostra a classificação (só NNGS/IGS)
-observar jogo<byte value="x9"/>mostra o jogo em andamento para o jogador
+estatísticas	mostra as estatísticas do jogador
+jogos salvos	mostra os jogos que foram salvos
+resultados	mostra os resultados
+classificação	mostra a classificação (só NNGS/IGS)
+observar jogo	mostra o jogo em andamento para o jogador
 ----
-alternar lista de observação<byte value="x9"/><byte value="x9"/>insere/remove o jogador na/da lista de observação - faz uma entrada &apos;W&apos; na coluna &apos;X&apos;; sons de entrada/saída são ativados
-alternar lista de exclusão<byte value="x9"/><byte value="x9"/>similar à observação - faz uma entrada &apos;X&apos;; os gritos do jogador não mais são mostrados</translation>
+alternar lista de observação		insere/remove o jogador na/da lista de observação - faz uma entrada &apos;W&apos; na coluna &apos;X&apos;; sons de entrada/saída são ativados
+alternar lista de exclusão		similar à observação - faz uma entrada &apos;X&apos;; os gritos do jogador não mais são mostrados</translation>
     </message>
 </context>
 <context>
@@ -2725,11 +4195,11 @@ alternar lista de exclusão<byte value="x9"/><byte value="x9"/>similar à observ
     </message>
     <message>
         <source>Done</source>
-        <translation>Feito</translation>
+        <translation type="vanished">Feito</translation>
     </message>
     <message>
         <source>Pass</source>
-        <translation>Passar</translation>
+        <translation type="vanished">Passar</translation>
     </message>
     <message>
         <source>Black to play</source>
@@ -2793,7 +4263,7 @@ alternar lista de exclusão<byte value="x9"/><byte value="x9"/>similar à observ
     </message>
     <message>
         <source>Edit</source>
-        <translation>Editar</translation>
+        <translation type="vanished">Editar</translation>
     </message>
     <message>
         <source>textedit</source>
@@ -2829,31 +4299,31 @@ alternar lista de exclusão<byte value="x9"/><byte value="x9"/>similar à observ
     <name>MainWidgetGui</name>
     <message>
         <source>MainWidgetGui</source>
-        <translation>MainWidgetGui</translation>
+        <translation type="vanished">MainWidgetGui</translation>
     </message>
     <message>
         <source>Move 0</source>
-        <translation>Jogada 0</translation>
+        <translation type="vanished">Jogada 0</translation>
     </message>
     <message>
         <source>Move number</source>
-        <translation>Número da jogada</translation>
+        <translation type="vanished">Número da jogada</translation>
     </message>
     <message>
         <source>Move number
 
 Number of the currently displayed move.</source>
-        <translation>Número da jogada
+        <translation type="vanished">Número da jogada
 
 Número da jogada mostrada atualmente.</translation>
     </message>
     <message>
         <source>Black to play</source>
-        <translation>Preto a jogar</translation>
+        <translation type="vanished">Preto a jogar</translation>
     </message>
     <message>
         <source>Player to play</source>
-        <translation>Jogador a jogar</translation>
+        <translation type="vanished">Jogador a jogar</translation>
     </message>
     <message>
         <source>Player to play
@@ -2866,36 +4336,36 @@ Indica se é a vez do preto ou do branco.</translation>
     <message>
         <source>0 brothers
 0 sons</source>
-        <translation>0 variações
+        <translation type="vanished">0 variações
 0 derivações</translation>
     </message>
     <message>
         <source>Variations</source>
-        <translation>Variações</translation>
+        <translation type="vanished">Variações</translation>
     </message>
     <message>
         <source>Variations
 
 Shows the number of sons and brothers within the current node.</source>
-        <translation>Variações
+        <translation type="vanished">Variações
 
 Mostra o número de derivações e variações dentro do nó atual.</translation>
     </message>
     <message>
         <source>Pass</source>
-        <translation>Passar</translation>
+        <translation type="vanished">Passar</translation>
     </message>
     <message>
         <source>Pass
 
 Pass your turn.</source>
-        <translation>Passar
+        <translation type="vanished">Passar
 
 Passar sua vez.</translation>
     </message>
     <message>
         <source>Score</source>
-        <translation>Pontuação</translation>
+        <translation type="vanished">Pontuação</translation>
     </message>
     <message>
         <source>Score
@@ -2933,7 +4403,7 @@ Shift + right click moves to the next move in the current branch.
 When in edit mode and editing stones, left click places a black, right click a white stone, clicking on an existant stone removes it.
 When editing marks, left click sets, right click removes the mark. When editing letter marks, shift-click allows to customize the mark text.
 When in score mode, left click to mark a group as dead, right click to mark it alive in seki. Click again to unmark as dead or seki.</source>
-        <translation>Clique sobre o tabuleiro para colocar uma pedra.
+        <translation type="vanished">Clique sobre o tabuleiro para colocar uma pedra.
 
 Em modo normal, o clique à esquerda faz jogadas alternando as cores.
 &apos;Shift&apos; + clique à esquerda move para a primeira jogada dentro do braço principal.
@@ -2944,13 +4414,13 @@ Quando no modo de pontuação, um clique à esquerda marca um grupo como morto e
     </message>
     <message>
         <source>0</source>
-        <translation>0</translation>
+        <translation type="vanished">0</translation>
     </message>
     <message>
         <source>Slider min value
 
 Minimum game move the slider can currently show.</source>
-        <translation>Valor mínimo da barra deslizante
+        <translation type="vanished">Valor mínimo da barra deslizante
 
 A menor jogada da partida que a barra pode mostrar agora.</translation>
     </message>
@@ -2962,7 +4432,7 @@ A menor jogada da partida que a barra pode mostrar agora.</translation>
         <source>Slider max value
 
 Maximum game move the slider can currently show.</source>
-        <translation>Valor máximo da barra deslizante
+        <translation type="vanished">Valor máximo da barra deslizante
 
 A maior jogada da partida que a barra pode mostrar agora.</translation>
     </message>
@@ -2970,21 +4440,21 @@ A maior jogada da partida que a barra pode mostrar agora.</translation>
         <source>Navigate to move
 
 Use the slider to quickly navigate through the current branch of the game.</source>
-        <translation>Navegar para a jogada
+        <translation type="vanished">Navegar para a jogada
 
 Utilize a barra deslizante para se mover rapidamente através do braço atual da partida.</translation>
     </message>
     <message>
         <source>Undo</source>
-        <translation>Desfazer</translation>
+        <translation type="vanished">Desfazer</translation>
     </message>
     <message>
         <source>Refresh</source>
-        <translation>Atualizar</translation>
+        <translation type="vanished">Atualizar</translation>
     </message>
     <message>
         <source>Adjourn</source>
-        <translation>Adiar</translation>
+        <translation type="vanished">Adiar</translation>
     </message>
     <message>
         <source>Request Adjourn</source>
@@ -2992,11 +4462,11 @@ Utilize a barra deslizante para se mover rapidamente através do braço atual da
     </message>
     <message>
         <source>RESIGN</source>
-        <translation>DESISTIR</translation>
+        <translation type="vanished">DESISTIR</translation>
     </message>
     <message>
         <source>Default Loss</source>
-        <translation>Perda da partida</translation>
+        <translation type="vanished">Perda da partida</translation>
     </message>
     <message>
         <source>Score/Edit</source>
@@ -3026,7 +4496,7 @@ Clique para obter uma nova janela desconectada que pode ser editada.</translatio
         <source>Undo
 
 Undo the opponent&apos;s last move.</source>
-        <translation>Desfazer
+        <translation type="vanished">Desfazer
 
 Desfazer a última jogada do oponente.</translation>
     </message>
@@ -3034,7 +4504,7 @@ Desfazer a última jogada do oponente.</translation>
         <source>Adjourn.
 
 Send adjournment request to your opponent. If he accept it, the game will be adjourned and saved.</source>
-        <translation>Adiar
+        <translation type="vanished">Adiar
 
 Envie uma requisição de adiamento para seu oponente. Se ele a aceitar, a partida será adiada e salva.</translation>
     </message>
@@ -3042,7 +4512,7 @@ Envie uma requisição de adiamento para seu oponente. Se ele a aceitar, a parti
         <source>Resign.
 
 Resign the game immediately. Clicking here is a default loss. Your opponent wins. Game ends.</source>
-        <translation>Desistir.
+        <translation type="vanished">Desistir.
 
 Abandonar a partida imediatamente. Clicar aqui significa uma perda da partida, ou seja, seu oponente ganha. A partida termina.</translation>
     </message>
@@ -3050,25 +4520,25 @@ Abandonar a partida imediatamente. Clicar aqui significa uma perda da partida, o
         <source>Refresh
 
 Refresh board. Use this if you cannot see any stones on the board.</source>
-        <translation>Atualizar
+        <translation type="vanished">Atualizar
 
 Atualizar o tabuleiro. Use isto se você não puder ver nenhuma pedra no tabuleiro.</translation>
     </message>
     <message>
         <source>Pass move</source>
-        <translation>Passar a jogada</translation>
+        <translation type="vanished">Passar a jogada</translation>
     </message>
     <message>
         <source>Undo last move</source>
-        <translation>Desfazer a última jogada</translation>
+        <translation type="vanished">Desfazer a última jogada</translation>
     </message>
     <message>
         <source>Refresh display</source>
-        <translation>Redesenhar a tela</translation>
+        <translation type="vanished">Redesenhar a tela</translation>
     </message>
     <message>
         <source>Request adjournment</source>
-        <translation>Requisitar adiamento</translation>
+        <translation type="vanished">Requisitar adiamento</translation>
     </message>
     <message>
         <source>teach tools / game tree</source>
@@ -3076,460 +4546,460 @@ Atualizar o tabuleiro. Use isto se você não puder ver nenhuma pedra no tabulei
     </message>
     <message>
         <source>NS</source>
-        <translation>NP</translation>
+        <translation type="vanished">NP</translation>
     </message>
     <message>
         <source>E</source>
-        <translation>E</translation>
+        <translation type="vanished">E</translation>
     </message>
     <message>
         <source>Edit Tools</source>
-        <translation>Ferramentas de edição</translation>
+        <translation type="vanished">Ferramentas de edição</translation>
     </message>
     <message>
         <source>Change the edit tool</source>
-        <translation>Mudar a ferramenta de edição</translation>
+        <translation type="vanished">Mudar a ferramenta de edição</translation>
     </message>
     <message>
         <source>Change the edit mode
 
 When in edit mode, you can choose what you want to edit, like setting stones or certain marks.</source>
-        <translation>Mudar o modo de edição
+        <translation type="vanished">Mudar o modo de edição
 
 Em modo de edição, você pode escolher o que editar, como posicionar pedras ou certificar marcas.</translation>
     </message>
     <message>
         <source>Square</source>
-        <translation>Quadrado</translation>
+        <translation type="vanished">Quadrado</translation>
     </message>
     <message>
         <source>Square
 
 Edit square marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation>Quadrado
+        <translation type="vanished">Quadrado
 
 Modificar as marcas quadradas. Um clique à esquerda define a marca, um clique à direita a remove.</translation>
     </message>
     <message>
         <source>Circle</source>
-        <translation>Círculo</translation>
+        <translation type="vanished">Círculo</translation>
     </message>
     <message>
         <source>Circle
 
 Edit circle marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation>Círculo
+        <translation type="vanished">Círculo
 
 Modificar as marcas circulares. Um clique à esquerda define a marca, um clique à direita a remove.</translation>
     </message>
     <message>
         <source>Letter</source>
-        <translation>Letra</translation>
+        <translation type="vanished">Letra</translation>
     </message>
     <message>
         <source>Letter
 
 Edit letter marks on the board. Left click sets a mark, right click removes it. Shift-click lets you edit a custom text.</source>
-        <translation>Letra
+        <translation type="vanished">Letra
 
 Modificar as marcas literais. Um clique à esquerda define a marca, um clique à direita a remove.</translation>
     </message>
     <message>
         <source>Cross</source>
-        <translation>Cruz</translation>
+        <translation type="vanished">Cruz</translation>
     </message>
     <message>
         <source>Cross
 
 Edit cross marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation>Cruz
+        <translation type="vanished">Cruz
 
 Modificar as marcas em cruz. Um clique à esquerda define a marca, um clique à direita a remove.</translation>
     </message>
     <message>
         <source>Triangle</source>
-        <translation>Triângulo</translation>
+        <translation type="vanished">Triângulo</translation>
     </message>
     <message>
         <source>Triangle
 
 Edit triangle marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation>Triângulo
+        <translation type="vanished">Triângulo
 
 Modificar as marcas triangulares. Um clique à esquerda define a marca, um clique à direita a remove.</translation>
     </message>
     <message>
         <source>Number</source>
-        <translation>Número</translation>
+        <translation type="vanished">Número</translation>
     </message>
     <message>
         <source>Number
 
 Edit Number marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation>Nmero
+        <translation type="vanished">Nmero
 
 Modificar as marcas numéricas. Um clique à esquerda define a marca, um clique à direita a remove.</translation>
     </message>
     <message>
         <source>Stone</source>
-        <translation>Pedra</translation>
+        <translation type="vanished">Pedra</translation>
     </message>
     <message>
         <source>Stone
 
 Edit stones on the board. Left click for a black, right click for a white stone.</source>
-        <translation>Pedra
+        <translation type="vanished">Pedra
 
 Modificar as pedras no tabuleiro. Um clique à esquerda para a preta, um clique à direita para a pedra branca.</translation>
     </message>
     <message>
         <source>Color of next move</source>
-        <translation>Cor da próxima jogada</translation>
+        <translation type="vanished">Cor da próxima jogada</translation>
     </message>
     <message>
         <source>Color
 
 Set the color of next move. If left untouched, default color is chosen.</source>
-        <translation>Cor
+        <translation type="vanished">Cor
 
 Deifinir a cor da próxima jogada. Se deixar intacta, a cor padrão será usada.</translation>
     </message>
     <message>
         <source>TG</source>
-        <translation>DJ</translation>
+        <translation type="vanished">DJ</translation>
     </message>
     <message>
         <source>opponent:</source>
-        <translation>oponente:</translation>
+        <translation type="vanished">oponente:</translation>
     </message>
     <message>
         <source>-- none --</source>
-        <translation>-- ninguém --</translation>
+        <translation type="vanished">-- ninguém --</translation>
     </message>
     <message>
         <source>opponent: invited by teacher</source>
-        <translation>oponente: convidado pelo instrutor</translation>
+        <translation type="vanished">oponente: convidado pelo instrutor</translation>
     </message>
     <message>
         <source>opponent
 
 choose opponent from list to enable him playing with you in a teaching game.</source>
-        <translation>oponente
+        <translation type="vanished">oponente
 
 Escolha um oponente da lista para permitir que ele jogue com você uma partida pedagógica.</translation>
     </message>
     <message>
         <source>controls</source>
-        <translation>controles</translation>
+        <translation type="vanished">controles</translation>
     </message>
     <message>
         <source>hand over controls to opponent</source>
-        <translation>dar o controle para o oponente</translation>
+        <translation type="vanished">dar o controle para o oponente</translation>
     </message>
     <message>
         <source>hand over controls to opponent to allow him placing black and white stones, undo etc.
 
 Only teacher can give control,
 both teacher and pupil can release control.</source>
-        <translation>dar o controle ao oponente para permitir a ele colocar pedras pretas e brancas, desfazer, etc.
+        <translation type="vanished">dar o controle ao oponente para permitir a ele colocar pedras pretas e brancas, desfazer, etc.
 
 Só o instrutor pode passar o controle, 
 Tanto o aprendiz como o instrutor podem liberar o controle.</translation>
     </message>
     <message>
         <source>mark</source>
-        <translation>marcar</translation>
+        <translation type="vanished">marcar</translation>
     </message>
     <message>
         <source>remember that point for fast return</source>
-        <translation>memorizar este ponto para retornar rapidamente</translation>
+        <translation type="vanished">memorizar este ponto para retornar rapidamente</translation>
     </message>
     <message>
         <source>push button at starting point to enable remembering.
 After placing and/or undo release button for returning to starting point automatically.</source>
-        <translation>Pressione o botão no início para habilitar a memorização.
+        <translation type="vanished">Pressione o botão no início para habilitar a memorização.
 Após colocar e/ou desfazer, solte o botão para retornar ao ponto inicial automaticamente.</translation>
     </message>
     <message>
         <source>Navigate through the game</source>
-        <translation>Navegar através da partida</translation>
+        <translation type="vanished">Navegar através da partida</translation>
     </message>
     <message>
         <source>000</source>
-        <translation>000</translation>
+        <translation type="vanished">000</translation>
     </message>
     <message>
         <source>Player to play
 
 Indicates whether it is black&apos;s or white&apos;s turn.</source>
-        <translation>Jogador a jogar
+        <translation type="vanished">Jogador a jogar
 
 Indica se é a vez do preto ou do branco jogar.</translation>
     </message>
     <message>
         <source>Tools tab
 
-N/S<byte value="x9"/>normal/score tools
-E<byte value="x9"/>edit tools
-TG<byte value="x9"/>teach tools / game tree</source>
-        <translation>Aba de ferramentas
+N/S	normal/score tools
+E	edit tools
+TG	teach tools / game tree</source>
+        <translation type="vanished">Aba de ferramentas
 
-N/P<byte value="x9"/>ferramentas normais ou de pontuação
-E<byte value="x9"/>ferramentas de edição
-DJ<byte value="x9"/>ferramentas didáticas ou árvore do jogo</translation>
+N/P	ferramentas normais ou de pontuação
+E	ferramentas de edição
+DJ	ferramentas didáticas ou árvore do jogo</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
         <source>Ctrl+E</source>
-        <translation>Ctrl+E</translation>
+        <translation type="vanished">Ctrl+E</translation>
     </message>
     <message>
         <source>Ctrl+T</source>
-        <translation>Ctrl+T</translation>
+        <translation type="vanished">Ctrl+T</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Novo</translation>
+        <translation type="vanished">Novo</translation>
     </message>
     <message>
         <source>New &amp;Board</source>
-        <translation>Novo &amp;Tabuleiro</translation>
+        <translation type="vanished">Novo &amp;Tabuleiro</translation>
     </message>
     <message>
         <source>Ctrl+B</source>
-        <translation>Ctrl+B</translation>
+        <translation type="vanished">Ctrl+B</translation>
     </message>
     <message>
         <source>Creates a new board</source>
-        <translation>Criar um novo tabuleiro</translation>
+        <translation type="vanished">Criar um novo tabuleiro</translation>
     </message>
     <message>
         <source>New
 
 Creates a new board.</source>
-        <translation>Novo
+        <translation type="vanished">Novo
 
 Cria um novo tabuleiro.</translation>
     </message>
     <message>
         <source>New game</source>
-        <translation>Nova partida</translation>
+        <translation type="vanished">Nova partida</translation>
     </message>
     <message>
         <source>&amp;New game</source>
-        <translation>&amp;Nova partida</translation>
+        <translation type="vanished">&amp;Nova partida</translation>
     </message>
     <message>
         <source>Ctrl+N</source>
-        <translation>Ctrl+N</translation>
+        <translation type="vanished">Ctrl+N</translation>
     </message>
     <message>
         <source>Creates a new game on this board</source>
-        <translation>Cria uma nova partida neste tabuleiro</translation>
+        <translation type="vanished">Cria uma nova partida neste tabuleiro</translation>
     </message>
     <message>
         <source>New
 
 Creates a new game on this board.</source>
-        <translation>Novo
+        <translation type="vanished">Novo
 
 Cria uma nova partida neste tabuleiro.</translation>
     </message>
     <message>
         <source>Open</source>
-        <translation>Abrir</translation>
+        <translation type="vanished">Abrir</translation>
     </message>
     <message>
         <source>&amp;Open</source>
-        <translation>&amp;Abrir</translation>
+        <translation type="vanished">&amp;Abrir</translation>
     </message>
     <message>
         <source>Ctrl+O</source>
-        <translation>Ctrl+O</translation>
+        <translation type="vanished">Ctrl+O</translation>
     </message>
     <message>
         <source>Open a sgf file</source>
-        <translation>Abrir um arquivo SGF</translation>
+        <translation type="vanished">Abrir um arquivo SGF</translation>
     </message>
     <message>
         <source>Open
 
 Open a sgf file.</source>
-        <translation>Abrir
+        <translation type="vanished">Abrir
 
 Abrir um arquivo SGF.</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>Salvar</translation>
+        <translation type="vanished">Salvar</translation>
     </message>
     <message>
         <source>&amp;Save</source>
-        <translation>&amp;Salvar</translation>
+        <translation type="vanished">&amp;Salvar</translation>
     </message>
     <message>
         <source>Ctrl+S</source>
-        <translation>Ctrl+S</translation>
+        <translation type="vanished">Ctrl+S</translation>
     </message>
     <message>
         <source>Save a sgf file</source>
-        <translation>Salvar um arquivo SGF</translation>
+        <translation type="vanished">Salvar um arquivo SGF</translation>
     </message>
     <message>
         <source>Save
 
 Save a sgf file.</source>
-        <translation>Salvar
+        <translation type="vanished">Salvar
 
 Salvar um arquivo SGF.</translation>
     </message>
     <message>
         <source>Save As</source>
-        <translation>Salvar Como</translation>
+        <translation type="vanished">Salvar Como</translation>
     </message>
     <message>
         <source>Save &amp;As</source>
-        <translation>Salvar &amp;Como</translation>
+        <translation type="vanished">Salvar &amp;Como</translation>
     </message>
     <message>
         <source>Save a sgf file under a new name</source>
-        <translation>Salvar um arquivo SGF sobre um novo nome</translation>
+        <translation type="vanished">Salvar um arquivo SGF sobre um novo nome</translation>
     </message>
     <message>
         <source>Save As
 
 Save a sgf file under a new name.</source>
-        <translation>Salvar Como
+        <translation type="vanished">Salvar Como
 
 Salvar um arquivo SGF sobre um novo nome.</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation>Fechar</translation>
+        <translation type="vanished">Fechar</translation>
     </message>
     <message>
         <source>&amp;Close</source>
-        <translation>&amp;Fechar</translation>
+        <translation type="vanished">&amp;Fechar</translation>
     </message>
     <message>
         <source>Ctrl+W</source>
-        <translation>Ctrl+W</translation>
+        <translation type="vanished">Ctrl+W</translation>
     </message>
     <message>
         <source>Close this board</source>
-        <translation>Fechar este tabuleiro</translation>
+        <translation type="vanished">Fechar este tabuleiro</translation>
     </message>
     <message>
         <source>Exit
 
 Close this board.</source>
-        <translation>Sair
+        <translation type="vanished">Sair
 
 Fechar este tabuleiro.</translation>
     </message>
     <message>
         <source>Import SGF from clipboard</source>
-        <translation>Importar SGF da </translation>
+        <translation type="vanished">Importar SGF da </translation>
     </message>
     <message>
         <source>Import a complete game in SGF format from clipboard</source>
-        <translation>Importar uma partida completa no formato SGF a partir da área de transferência</translation>
+        <translation type="vanished">Importar uma partida completa no formato SGF a partir da área de transferência</translation>
     </message>
     <message>
         <source>Import SGF from clipboard
 
 Import a complete game in SGF format from clipboard.</source>
-        <translation>Importar SGF da área de transferência
+        <translation type="vanished">Importar SGF da área de transferência
 
 Importar uma partida completa no formato SGF a partir da área de transferência.</translation>
     </message>
     <message>
         <source>Import ASCII</source>
-        <translation>Importar ASCII</translation>
+        <translation type="vanished">Importar ASCII</translation>
     </message>
     <message>
         <source>Import an ASCII file as new variation</source>
-        <translation>Importar um arquivo ASCII como sendo uma nova variação</translation>
+        <translation type="vanished">Importar um arquivo ASCII como sendo uma nova variação</translation>
     </message>
     <message>
         <source>Import ASCII
 
 Import an ASCII file as new variation.</source>
-        <translation>Importar ASCII
+        <translation type="vanished">Importar ASCII
 
 Importar um arquivo ASCII como sendo uma nova variação.</translation>
     </message>
     <message>
         <source>Import ASCII from clipboard</source>
-        <translation>Importar ASCII da área de transferência</translation>
+        <translation type="vanished">Importar ASCII da área de transferência</translation>
     </message>
     <message>
         <source>Import ASCII from &amp;clipboard</source>
-        <translation>Importar ASCII da área de &amp;transferência</translation>
+        <translation type="vanished">Importar ASCII da área de &amp;transferência</translation>
     </message>
     <message>
         <source>Import an ASCII board as new variation from the clipboard</source>
-        <translation>Importar um tabuleiro ASCII como sendo uma nova variação, a partir da área de transferência</translation>
+        <translation type="vanished">Importar um tabuleiro ASCII como sendo uma nova variação, a partir da área de transferência</translation>
     </message>
     <message>
         <source>Import ASCII from clipboard
 
 Import an ASCII file as new variation from the clipboard.</source>
-        <translation>Importar ASCII da área de transferência
+        <translation type="vanished">Importar ASCII da área de transferência
 
 Importar um arquivo ASCII como sendo uma nova variação, a partir da área de transferência.</translation>
     </message>
     <message>
         <source>Export ASCII</source>
-        <translation>Exportar ASCII</translation>
+        <translation type="vanished">Exportar ASCII</translation>
     </message>
     <message>
         <source>Export current board to ASCII</source>
-        <translation>Exportar o tabuleiro atual no formato ASCII</translation>
+        <translation type="vanished">Exportar o tabuleiro atual no formato ASCII</translation>
     </message>
     <message>
         <source>Export ASCII
 
 Export current board to ASCII.</source>
-        <translation>Exportar ASCII
+        <translation type="vanished">Exportar ASCII
 
 Exportar o tabuleiro atual no formato ASCII.</translation>
     </message>
     <message>
         <source>Export Image</source>
-        <translation>Exportar imagem</translation>
+        <translation type="vanished">Exportar imagem</translation>
     </message>
     <message>
         <source>Export current board to an image</source>
-        <translation>Exportar o tabuleiro atual como uma imagem</translation>
+        <translation type="vanished">Exportar o tabuleiro atual como uma imagem</translation>
     </message>
     <message>
         <source>Export Image
 
 Export current board to an image.</source>
-        <translation>Exportar Imagem
+        <translation type="vanished">Exportar Imagem
 
 Exportar o tabuleiro atual como uma imagem.</translation>
     </message>
     <message>
         <source>Export Image to clipboard</source>
-        <translation>Exportar imagem para a área de transferência</translation>
+        <translation type="vanished">Exportar imagem para a área de transferência</translation>
     </message>
     <message>
         <source>E&amp;xport Image to clipboard</source>
-        <translation>E&amp;xportar imagem para a área de transferência</translation>
+        <translation type="vanished">E&amp;xportar imagem para a área de transferência</translation>
     </message>
     <message>
         <source>Export current board to the clipboard as image</source>
-        <translation>Exportar o tabuleiro atual como imagem para a área de transferência</translation>
+        <translation type="vanished">Exportar o tabuleiro atual como imagem para a área de transferência</translation>
     </message>
     <message>
         <source>Export Image to clipboard
 
 Export current board to the clipboard as image.</source>
-        <translation>Exportar imagem para a área de transferência
+        <translation type="vanished">Exportar imagem para a área de transferência
 
 Exportar o tabuleiro atual como imagem para a área de transferência.</translation>
     </message>
@@ -3555,379 +5025,379 @@ Ouvre une fen</translation>
     </message>
     <message>
         <source>Exit</source>
-        <translation>Sair</translation>
+        <translation type="vanished">Sair</translation>
     </message>
     <message>
         <source>E&amp;xit</source>
-        <translation>&amp;Sair</translation>
+        <translation type="vanished">&amp;Sair</translation>
     </message>
     <message>
         <source>Ctrl+Q</source>
-        <translation>Ctrl+Q</translation>
+        <translation type="vanished">Ctrl+Q</translation>
     </message>
     <message>
         <source>Quits the application</source>
-        <translation>Sai do aplicativo</translation>
+        <translation type="vanished">Sai do aplicativo</translation>
     </message>
     <message>
         <source>Exit
 
 Quits the application.</source>
-        <translation>Sair
+        <translation type="vanished">Sair
 
 Sai do aplicativo.</translation>
     </message>
     <message>
         <source>Cut</source>
-        <translation>Cortar</translation>
+        <translation type="vanished">Cortar</translation>
     </message>
     <message>
         <source>&amp;Cut</source>
-        <translation>&amp;Cortar</translation>
+        <translation type="vanished">&amp;Cortar</translation>
     </message>
     <message>
         <source>Ctrl+X</source>
-        <translation>Ctrl+X</translation>
+        <translation type="vanished">Ctrl+X</translation>
     </message>
     <message>
         <source>Cut this and all following positions</source>
-        <translation>Cortar esta e todas as posições seguintes</translation>
+        <translation type="vanished">Cortar esta e todas as posições seguintes</translation>
     </message>
     <message>
         <source>Cut
 
 Cut this and all following positions.</source>
-        <translation>Cortar
+        <translation type="vanished">Cortar
 
 Cortar esta e todas as posições seguintes.</translation>
     </message>
     <message>
         <source>Paste</source>
-        <translation>Colar</translation>
+        <translation type="vanished">Colar</translation>
     </message>
     <message>
         <source>&amp;Paste</source>
-        <translation>C&amp;olar</translation>
+        <translation type="vanished">C&amp;olar</translation>
     </message>
     <message>
         <source>Ctrl+P</source>
-        <translation>Ctrl+P</translation>
+        <translation type="vanished">Ctrl+P</translation>
     </message>
     <message>
         <source>Paste as son of the current move</source>
-        <translation>Colar como derivação da jogada atual</translation>
+        <translation type="vanished">Colar como derivação da jogada atual</translation>
     </message>
     <message>
         <source>Paste
 
 Paste as son of the current move.</source>
-        <translation>Colar
+        <translation type="vanished">Colar
 
 Colar como derivação da jogada atual.</translation>
     </message>
     <message>
         <source>Paste as brother</source>
-        <translation>Colar como variação</translation>
+        <translation type="vanished">Colar como variação</translation>
     </message>
     <message>
         <source>Paste as &amp;brother</source>
-        <translation>Colar como &amp;variação</translation>
+        <translation type="vanished">Colar como &amp;variação</translation>
     </message>
     <message>
         <source>Paste as brother of the current move</source>
-        <translation>Colar como variação da jogada atual</translation>
+        <translation type="vanished">Colar como variação da jogada atual</translation>
     </message>
     <message>
         <source>Paste
 
 Paste as brother of the current move.</source>
-        <translation>Colar
+        <translation type="vanished">Colar
 
 Colar como variação da jogada atual.</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Apagar</translation>
+        <translation type="vanished">Apagar</translation>
     </message>
     <message>
         <source>&amp;Delete</source>
-        <translation>&amp;Apagar</translation>
+        <translation type="vanished">&amp;Apagar</translation>
     </message>
     <message>
         <source>Ctrl+D</source>
-        <translation>Ctrl+D</translation>
+        <translation type="vanished">Ctrl+D</translation>
     </message>
     <message>
         <source>Delete this and all following positions</source>
-        <translation>Apagar esta e todas as posições seguintes</translation>
+        <translation type="vanished">Apagar esta e todas as posições seguintes</translation>
     </message>
     <message>
         <source>Delete
 
 Delete this and all following positions.</source>
-        <translation>Apagar
+        <translation type="vanished">Apagar
 
 Apagar esta e todas as posições seguintes.</translation>
     </message>
     <message>
         <source>Number Moves</source>
-        <translation>Numerar jogadas</translation>
+        <translation type="vanished">Numerar jogadas</translation>
     </message>
     <message>
         <source>&amp;Number Moves</source>
-        <translation>&amp;Numerar jogadas</translation>
+        <translation type="vanished">&amp;Numerar jogadas</translation>
     </message>
     <message>
         <source>Shift+F2</source>
-        <translation>Shift+F2</translation>
+        <translation type="vanished">Shift+F2</translation>
     </message>
     <message>
         <source>Mark all moves with the number of their turn</source>
-        <translation>Marcar todas as jogadas com o número de sua vez</translation>
+        <translation type="vanished">Marcar todas as jogadas com o número de sua vez</translation>
     </message>
     <message>
         <source>Number moves
 
 Mark all moves with the number of their turn.</source>
-        <translation>Numerar jogadas
+        <translation type="vanished">Numerar jogadas
 
 Marcar todas as jogadas com o número de sua vez.</translation>
     </message>
     <message>
         <source>Mark brothers</source>
-        <translation>Marcar variações</translation>
+        <translation type="vanished">Marcar variações</translation>
     </message>
     <message>
         <source>Mark &amp;brothers</source>
-        <translation>&amp;Marcar variações</translation>
+        <translation type="vanished">&amp;Marcar variações</translation>
     </message>
     <message>
         <source>Shift+F3</source>
-        <translation>Shift+F3</translation>
+        <translation type="vanished">Shift+F3</translation>
     </message>
     <message>
         <source>Mark all brothers of the current move</source>
-        <translation>Marcar todas as variações da jogada atual</translation>
+        <translation type="vanished">Marcar todas as variações da jogada atual</translation>
     </message>
     <message>
         <source>Mark brothers
 
 Mark all brothers of the current move.</source>
-        <translation>Marcar as variações
+        <translation type="vanished">Marcar as variações
 
 Marcar todas as variações da jogada atual.</translation>
     </message>
     <message>
         <source>Mark sons</source>
-        <translation>Marcar as derivações</translation>
+        <translation type="vanished">Marcar as derivações</translation>
     </message>
     <message>
         <source>Mark &amp;sons</source>
-        <translation>Marcar as &amp;derivações</translation>
+        <translation type="vanished">Marcar as &amp;derivações</translation>
     </message>
     <message>
         <source>Shift+F4</source>
-        <translation>Shift+F4</translation>
+        <translation type="vanished">Shift+F4</translation>
     </message>
     <message>
         <source>Mark all sons of the current move</source>
-        <translation>Marcar todas as derivações da jogada atual</translation>
+        <translation type="vanished">Marcar todas as derivações da jogada atual</translation>
     </message>
     <message>
         <source>Mark sons
 
 Mark all sons of the current move.</source>
-        <translation>Marcar derivações
+        <translation type="vanished">Marcar derivações
 
 Marcar as derivações da jogada atual.</translation>
     </message>
     <message>
         <source>Previous move (Left)</source>
-        <translation>Jogada anterior (Esquerda)</translation>
+        <translation type="vanished">Jogada anterior (Esquerda)</translation>
     </message>
     <message>
         <source>Left</source>
-        <translation>Esquerda</translation>
+        <translation type="vanished">Esquerda</translation>
     </message>
     <message>
         <source>To previous move</source>
-        <translation>Para a jogada anterior</translation>
+        <translation type="vanished">Para a jogada anterior</translation>
     </message>
     <message>
         <source>Previous move
 
 Move one move backward.</source>
-        <translation>Jogada anterior 
+        <translation type="vanished">Jogada anterior 
 
 Voltar uma jogada atrás.</translation>
     </message>
     <message>
         <source>Next move (Right)</source>
-        <translation>Jogada seguinte (Direita)</translation>
+        <translation type="vanished">Jogada seguinte (Direita)</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation>Direita</translation>
+        <translation type="vanished">Direita</translation>
     </message>
     <message>
         <source>To next move</source>
-        <translation>Para a jogada seguinte</translation>
+        <translation type="vanished">Para a jogada seguinte</translation>
     </message>
     <message>
         <source>Next move
 
 Move one move forward.</source>
-        <translation>Jogada seguinte 
+        <translation type="vanished">Jogada seguinte 
 
 Avançar uma jogada à frente.</translation>
     </message>
     <message>
         <source>First move (Home)</source>
-        <translation>Primeira jogada (Início)</translation>
+        <translation type="vanished">Primeira jogada (Início)</translation>
     </message>
     <message>
         <source>Home</source>
-        <translation>Início</translation>
+        <translation type="vanished">Início</translation>
     </message>
     <message>
         <source>To first move</source>
-        <translation>Para a primeira jogada</translation>
+        <translation type="vanished">Para a primeira jogada</translation>
     </message>
     <message>
         <source>First move
 
 Move to first move.</source>
-        <translation>Primeira jogada
+        <translation type="vanished">Primeira jogada
 
 Voltar para a primeira jogada.</translation>
     </message>
     <message>
         <source>Last move (End)</source>
-        <translation>Última jogada (Fim)</translation>
+        <translation type="vanished">Última jogada (Fim)</translation>
     </message>
     <message>
         <source>End</source>
-        <translation>Fim</translation>
+        <translation type="vanished">Fim</translation>
     </message>
     <message>
         <source>To last move</source>
-        <translation>Para a última jogada</translation>
+        <translation type="vanished">Para a última jogada</translation>
     </message>
     <message>
         <source>Last move
 
 Move to last move.</source>
-        <translation>Última jogada
+        <translation type="vanished">Última jogada
 
 Ir para a última jogada.</translation>
     </message>
     <message>
         <source>Previous variation (Up)</source>
-        <translation>Variações anteriores (Acima)</translation>
+        <translation type="vanished">Variações anteriores (Acima)</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation>Acima</translation>
+        <translation type="vanished">Acima</translation>
     </message>
     <message>
         <source>To previous variation</source>
-        <translation>Voltar para a variação anterior</translation>
+        <translation type="vanished">Voltar para a variação anterior</translation>
     </message>
     <message>
         <source>Previous variation
 
 Move to the previous variation of this move.</source>
-        <translation>Variação anterior
+        <translation type="vanished">Variação anterior
 
 Ir para a variação anterior à esta jogada.</translation>
     </message>
     <message>
         <source>Next variation (Down)</source>
-        <translation>Variação seguinte (Abaixo)</translation>
+        <translation type="vanished">Variação seguinte (Abaixo)</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation>Abaixo</translation>
+        <translation type="vanished">Abaixo</translation>
     </message>
     <message>
         <source>To next variation</source>
-        <translation>Para a próxima variação</translation>
+        <translation type="vanished">Para a próxima variação</translation>
     </message>
     <message>
         <source>Next variation
 
 Move to the next variation of this move.</source>
-        <translation>Variação seguinte
+        <translation type="vanished">Variação seguinte
 
 Ir para a variação posterior à esta jogada.</translation>
     </message>
     <message>
         <source>Variation start</source>
-        <translation>Início da variação</translation>
+        <translation type="vanished">Início da variação</translation>
     </message>
     <message>
         <source>Variation &amp;start</source>
-        <translation>&amp;Início da variação</translation>
+        <translation type="vanished">&amp;Início da variação</translation>
     </message>
     <message>
         <source>To top of variation</source>
-        <translation>Para o topo da variação</translation>
+        <translation type="vanished">Para o topo da variação</translation>
     </message>
     <message>
         <source>Variation start
 
 Move to the top variation of this branch.</source>
-        <translation>Início da variação
+        <translation type="vanished">Início da variação
 
 Ir para a variação no topo deste braço.</translation>
     </message>
     <message>
         <source>Next branch</source>
-        <translation>Novo braço</translation>
+        <translation type="vanished">Novo braço</translation>
     </message>
     <message>
         <source>Next &amp;branch</source>
-        <translation>Novo &amp;braço</translation>
+        <translation type="vanished">Novo &amp;braço</translation>
     </message>
     <message>
         <source>To next branch starting a variation</source>
-        <translation>Para o práximo braço</translation>
+        <translation type="vanished">Para o práximo braço</translation>
     </message>
     <message>
         <source>Next branch
 
 Move to the next branch starting a variation.</source>
-        <translation>Braço seguinte
+        <translation type="vanished">Braço seguinte
 
 Ir para o próximo braço que começa uma variação.</translation>
     </message>
     <message>
         <source>Goto move</source>
-        <translation>Ir para a jogada</translation>
+        <translation type="vanished">Ir para a jogada</translation>
     </message>
     <message>
         <source>&amp;Goto Move</source>
-        <translation>&amp;Ir para a jogada</translation>
+        <translation type="vanished">&amp;Ir para a jogada</translation>
     </message>
     <message>
         <source>Ctrl+G</source>
-        <translation>Ctrl+G</translation>
+        <translation type="vanished">Ctrl+G</translation>
     </message>
     <message>
         <source>Goto a move of main branch by number</source>
-        <translation>Ir para uma jogada do braço principal pelo número</translation>
+        <translation type="vanished">Ir para uma jogada do braço principal pelo número</translation>
     </message>
     <message>
         <source>Goto move
 
 Goto a move of main branch by number.</source>
-        <translation>Ir para a jogada
+        <translation type="vanished">Ir para a jogada
 
 Ir paraa uma jogada do braço principal pelo número.</translation>
     </message>
     <message>
         <source>Autoplay</source>
-        <translation>Jogar automaticamente</translation>
+        <translation type="vanished">Jogar automaticamente</translation>
     </message>
     <message>
         <source>&amp;Autoplay</source>
@@ -3935,7 +5405,7 @@ Ir paraa uma jogada do braço principal pelo número.</translation>
     </message>
     <message>
         <source>Ctrl+A</source>
-        <translation>Ctrl+A</translation>
+        <translation type="vanished">Ctrl+A</translation>
     </message>
     <message>
         <source>Start/Stop autoplaying current game</source>
@@ -3951,47 +5421,47 @@ Iniciar/Parar o atual jogo automático.</translation>
     </message>
     <message>
         <source>Empty branch</source>
-        <translation>Braço vazio</translation>
+        <translation type="vanished">Braço vazio</translation>
     </message>
     <message>
         <source>Empt&amp;y branch</source>
-        <translation>Braço &amp;vazio</translation>
+        <translation type="vanished">Braço &amp;vazio</translation>
     </message>
     <message>
         <source>Create an empty branch</source>
-        <translation>Criar um braço vazio</translation>
+        <translation type="vanished">Criar um braço vazio</translation>
     </message>
     <message>
         <source>Empty branch
 
 Create an empty branch.</source>
-        <translation>Braço vazio
+        <translation type="vanished">Braço vazio
 
 Criar um braço vazio.</translation>
     </message>
     <message>
         <source>Duplicate move</source>
-        <translation>Duplicar jogada</translation>
+        <translation type="vanished">Duplicar jogada</translation>
     </message>
     <message>
         <source>D&amp;uplicate move</source>
-        <translation>D&amp;uplicar jogada</translation>
+        <translation type="vanished">D&amp;uplicar jogada</translation>
     </message>
     <message>
         <source>Copies and duplicates this move</source>
-        <translation>Copia e duplica esta jogada</translation>
+        <translation type="vanished">Copia e duplica esta jogada</translation>
     </message>
     <message>
         <source>Duplicate move
 
 Copies and duplicates this move.</source>
-        <translation>Duplicar jogada
+        <translation type="vanished">Duplicar jogada
 
 Copia e duplica esta jogada.</translation>
     </message>
     <message>
         <source>Swap variations</source>
-        <translation>Trocar variações</translation>
+        <translation type="vanished">Trocar variações</translation>
     </message>
     <message>
         <source>S&amp;wap variations</source>
@@ -4011,299 +5481,299 @@ Trocar a jogada atual com a variação anterior.</translation>
     </message>
     <message>
         <source>Preferences</source>
-        <translation>Preferências</translation>
+        <translation type="vanished">Preferências</translation>
     </message>
     <message>
         <source>&amp;Preferences</source>
-        <translation>&amp;Preferências</translation>
+        <translation type="vanished">&amp;Preferências</translation>
     </message>
     <message>
         <source>Alt+P</source>
-        <translation>Alt+P</translation>
+        <translation type="vanished">Alt+P</translation>
     </message>
     <message>
         <source>Edit the preferences</source>
-        <translation>Editar as preferências</translation>
+        <translation type="vanished">Editar as preferências</translation>
     </message>
     <message>
         <source>Preferences
 
 Edit the applications preferences.</source>
-        <translation>Preferências
+        <translation type="vanished">Preferências
 
 Editar as preferências para o aplicativo.</translation>
     </message>
     <message>
         <source>Game Info</source>
-        <translation>Informação de jogo</translation>
+        <translation type="vanished">Informação de jogo</translation>
     </message>
     <message>
         <source>&amp;Game Info</source>
-        <translation>&amp;Informação de jogo</translation>
+        <translation type="vanished">&amp;Informação de jogo</translation>
     </message>
     <message>
         <source>Ctrl+I</source>
-        <translation>Ctrl+I</translation>
+        <translation type="vanished">Ctrl+I</translation>
     </message>
     <message>
         <source>Display game information</source>
-        <translation>Mostrar as informações de jogo</translation>
+        <translation type="vanished">Mostrar as informações de jogo</translation>
     </message>
     <message>
         <source>File toolbar</source>
-        <translation>Barra de ferramentas de arquivos</translation>
+        <translation type="vanished">Barra de ferramentas de arquivos</translation>
     </message>
     <message>
         <source>Enables/disables the file toolbar</source>
-        <translation>Ativar/desativar a barra de ferramentas de arquivos</translation>
+        <translation type="vanished">Ativar/desativar a barra de ferramentas de arquivos</translation>
     </message>
     <message>
         <source>File toolbar
 
 Enables/disables the file toolbar.</source>
-        <translation>Barra de ferramentas de arquivos
+        <translation type="vanished">Barra de ferramentas de arquivos
 
 Ativar/desativar a barra de ferramentas de arquivos.</translation>
     </message>
     <message>
         <source>Navigation toolbar</source>
-        <translation>Barra de ferramentas de navegação</translation>
+        <translation type="vanished">Barra de ferramentas de navegação</translation>
     </message>
     <message>
         <source>Navigation &amp;toolbar</source>
-        <translation>Barra de ferramentas de &amp;navegação</translation>
+        <translation type="vanished">Barra de ferramentas de &amp;navegação</translation>
     </message>
     <message>
         <source>Enables/disables the navigation toolbar</source>
-        <translation>Ativar/desativar a barra de ferramentas de navegação</translation>
+        <translation type="vanished">Ativar/desativar a barra de ferramentas de navegação</translation>
     </message>
     <message>
         <source>Navigation toolbar
 
 Enables/disables the navigation toolbar.</source>
-        <translation>Barra de ferramentas de navegação
+        <translation type="vanished">Barra de ferramentas de navegação
 
 Ativar/desativar a barra de ferramentas de navegação.</translation>
     </message>
     <message>
         <source>Edit toolbar</source>
-        <translation>Editar a barra de ferramentas</translation>
+        <translation type="vanished">Editar a barra de ferramentas</translation>
     </message>
     <message>
         <source>&amp;Edit toolbar</source>
-        <translation>&amp;Editar a barra de ferramentas</translation>
+        <translation type="vanished">&amp;Editar a barra de ferramentas</translation>
     </message>
     <message>
         <source>Enables/disables the edit toolbar</source>
-        <translation>Ativar/desativar a barra de ferramentas</translation>
+        <translation type="vanished">Ativar/desativar a barra de ferramentas</translation>
     </message>
     <message>
         <source>Edit toolbar
 
 Enables/disables the edit toolbar.</source>
-        <translation>Editar a barra de ferramentas
+        <translation type="vanished">Editar a barra de ferramentas
 
 Ativar/desativar a barra de ferramentas.</translation>
     </message>
     <message>
         <source>Menubar</source>
-        <translation>Barra de menus</translation>
+        <translation type="vanished">Barra de menus</translation>
     </message>
     <message>
         <source>&amp;Menubar</source>
-        <translation>Barra de &amp;menus</translation>
+        <translation type="vanished">Barra de &amp;menus</translation>
     </message>
     <message>
         <source>F7</source>
-        <translation>F7</translation>
+        <translation type="vanished">F7</translation>
     </message>
     <message>
         <source>Enables/disables the menubar</source>
-        <translation>Ativar/desativar a barra de menus</translation>
+        <translation type="vanished">Ativar/desativar a barra de menus</translation>
     </message>
     <message>
         <source>Menubar
 
 Enables/disables the menubar.</source>
-        <translation>Barra de menus
+        <translation type="vanished">Barra de menus
 
 Ativar/desativar a barra de menus.</translation>
     </message>
     <message>
         <source>Statusbar</source>
-        <translation>Barra de estado</translation>
+        <translation type="vanished">Barra de estado</translation>
     </message>
     <message>
         <source>&amp;Statusbar</source>
-        <translation>Barra de es&amp;tado</translation>
+        <translation type="vanished">Barra de es&amp;tado</translation>
     </message>
     <message>
         <source>Enables/disables the statusbar</source>
-        <translation>Ativar/desativar a barra de estado</translation>
+        <translation type="vanished">Ativar/desativar a barra de estado</translation>
     </message>
     <message>
         <source>Statusbar
 
 Enables/disables the statusbar.</source>
-        <translation>Barra de estado
+        <translation type="vanished">Barra de estado
 
 Ativar/desativar a barra de estado.</translation>
     </message>
     <message>
         <source>Coordinates</source>
-        <translation>Coordenadas</translation>
+        <translation type="vanished">Coordenadas</translation>
     </message>
     <message>
         <source>C&amp;oordinates</source>
-        <translation>C&amp;oordenadas</translation>
+        <translation type="vanished">C&amp;oordenadas</translation>
     </message>
     <message>
         <source>F8</source>
-        <translation>F8</translation>
+        <translation type="vanished">F8</translation>
     </message>
     <message>
         <source>Enables/disables the coordinates</source>
-        <translation>Ativar/desativar as coordenadas</translation>
+        <translation type="vanished">Ativar/desativar as coordenadas</translation>
     </message>
     <message>
         <source>Coordinates
 
 Enables/disables the coordinates.</source>
-        <translation>Coordenadas
+        <translation type="vanished">Coordenadas
 
 Ativar/desativar as coordenadas.</translation>
     </message>
     <message>
         <source>Slider</source>
-        <translation>Barra deslizante</translation>
+        <translation type="vanished">Barra deslizante</translation>
     </message>
     <message>
         <source>Sli&amp;der</source>
-        <translation>&amp;Cursor</translation>
+        <translation type="vanished">&amp;Cursor</translation>
     </message>
     <message>
         <source>Ctrl+F8</source>
-        <translation>Ctrl+F8</translation>
+        <translation type="vanished">Ctrl+F8</translation>
     </message>
     <message>
         <source>Enables/disables the slider</source>
-        <translation>Ativar/desativar a barra deslizante</translation>
+        <translation type="vanished">Ativar/desativar a barra deslizante</translation>
     </message>
     <message>
         <source>Sidebar</source>
-        <translation>Barra lateral</translation>
+        <translation type="vanished">Barra lateral</translation>
     </message>
     <message>
         <source>Side&amp;bar</source>
-        <translation>&amp;Barra lateral</translation>
+        <translation type="vanished">&amp;Barra lateral</translation>
     </message>
     <message>
         <source>F9</source>
-        <translation>F9</translation>
+        <translation type="vanished">F9</translation>
     </message>
     <message>
         <source>Enables/disables the comment field</source>
-        <translation>Ativar/desativar o campo de comentários</translation>
+        <translation type="vanished">Ativar/desativar o campo de comentários</translation>
     </message>
     <message>
         <source>Sidebar
 
 Enables/disables the sidebar.</source>
-        <translation>Barra lateral
+        <translation type="vanished">Barra lateral
 
 Ativar/desativar a barra lateral.</translation>
     </message>
     <message>
         <source>Comment</source>
-        <translation>Comentários</translation>
+        <translation type="vanished">Comentários</translation>
     </message>
     <message>
         <source>&amp;Comment</source>
-        <translation>&amp;Comentários</translation>
+        <translation type="vanished">&amp;Comentários</translation>
     </message>
     <message>
         <source>F10</source>
-        <translation>F10</translation>
+        <translation type="vanished">F10</translation>
     </message>
     <message>
         <source>Comment field
 
 Enables/disables the comment field.</source>
-        <translation>Comentários
+        <translation type="vanished">Comentários
 
 Ativar/desativar o campo de comentários.</translation>
     </message>
     <message>
         <source>Pin comment</source>
-        <translation>Pregar comentários</translation>
+        <translation type="vanished">Pregar comentários</translation>
     </message>
     <message>
         <source>&amp;Pin comment</source>
-        <translation>&amp;Pregar comentários</translation>
+        <translation type="vanished">&amp;Pregar comentários</translation>
     </message>
     <message>
         <source>Ctrl+F10</source>
-        <translation>Ctrl+F10</translation>
+        <translation type="vanished">Ctrl+F10</translation>
     </message>
     <message>
         <source>Enables/disables pinning the comment field</source>
-        <translation>Ativar/desativar a pregagem do campo de comentários</translation>
+        <translation type="vanished">Ativar/desativar a pregagem do campo de comentários</translation>
     </message>
     <message>
         <source>Pin comment field
 
 Enables/disables pinning the comment field.</source>
-        <translation>Pregar comentários
+        <translation type="vanished">Pregar comentários
 
 Ativar/desativar a pregagem do campo de comentários.</translation>
     </message>
     <message>
         <source>Zoom In</source>
-        <translation>Aproximar</translation>
+        <translation type="vanished">Aproximar</translation>
     </message>
     <message>
         <source>Alt++</source>
-        <translation>Alt++</translation>
+        <translation type="vanished">Alt++</translation>
     </message>
     <message>
         <source>Zooms in the board</source>
-        <translation>Aproximar o tabuleiro</translation>
+        <translation type="vanished">Aproximar o tabuleiro</translation>
     </message>
     <message>
         <source>Zoom In
 
 Zooms in the board.</source>
-        <translation>Aproximar
+        <translation type="vanished">Aproximar
 
 Aproximar o tabuleiro.</translation>
     </message>
     <message>
         <source>Zoom Out</source>
-        <translation>Distanciar</translation>
+        <translation type="vanished">Distanciar</translation>
     </message>
     <message>
         <source>Alt+-</source>
-        <translation>Alt+-</translation>
+        <translation type="vanished">Alt+-</translation>
     </message>
     <message>
         <source>Zooms out the board</source>
-        <translation>Distanciar o tabuleiro</translation>
+        <translation type="vanished">Distanciar o tabuleiro</translation>
     </message>
     <message>
         <source>Zoom Out
 
 Zooms out the board.</source>
-        <translation>Distanciar
+        <translation type="vanished">Distanciar
 
 Distanciar o tabuleiro.</translation>
     </message>
     <message>
         <source>Save size</source>
-        <translation>Salvar o tamanho</translation>
+        <translation type="vanished">Salvar o tamanho</translation>
     </message>
     <message>
         <source>Save the current window size</source>
-        <translation>Salvar o tamanho da janela atual</translation>
+        <translation type="vanished">Salvar o tamanho da janela atual</translation>
     </message>
     <message>
         <source>Save size
@@ -4315,103 +5785,103 @@ Enregistrer la taille actuelle de la fen</translation>
     </message>
     <message>
         <source>Fullscreen</source>
-        <translation>Tela cheia</translation>
+        <translation type="vanished">Tela cheia</translation>
     </message>
     <message>
         <source>&amp;Fullscreen</source>
-        <translation>Tela &amp;cheia</translation>
+        <translation type="vanished">Tela &amp;cheia</translation>
     </message>
     <message>
         <source>F11</source>
-        <translation>F11</translation>
+        <translation type="vanished">F11</translation>
     </message>
     <message>
         <source>Enable/disable fullscreen mode</source>
-        <translation>Ativar/desativar o modo de tela cheia</translation>
+        <translation type="vanished">Ativar/desativar o modo de tela cheia</translation>
     </message>
     <message>
         <source>Fullscreen
 
 Enable/disable fullscreen mode.</source>
-        <translation>Tela cheia
+        <translation type="vanished">Tela cheia
 
 Ativar/desativar o modo de tela cheia.</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>Manual</translation>
+        <translation type="vanished">Manual</translation>
     </message>
     <message>
         <source>&amp;Manual</source>
-        <translation>&amp;Manual</translation>
+        <translation type="vanished">&amp;Manual</translation>
     </message>
     <message>
         <source>F1</source>
-        <translation>F1</translation>
+        <translation type="vanished">F1</translation>
     </message>
     <message>
         <source>Opens the manual</source>
-        <translation>Abre o manual</translation>
+        <translation type="vanished">Abre o manual</translation>
     </message>
     <message>
         <source>Help
 
 Opens the manual of the application.</source>
-        <translation>Ajuda
+        <translation type="vanished">Ajuda
 
 Abre o manual do aplicativo.</translation>
     </message>
     <message>
         <source>About</source>
-        <translation>Sobre</translation>
+        <translation type="vanished">Sobre</translation>
     </message>
     <message>
         <source>&amp;About...</source>
-        <translation>&amp;Sobre...</translation>
+        <translation type="vanished">&amp;Sobre...</translation>
     </message>
     <message>
         <source>About the application</source>
-        <translation>Sobre o aplicativo</translation>
+        <translation type="vanished">Sobre o aplicativo</translation>
     </message>
     <message>
         <source>About
 
 About the application.</source>
-        <translation>Sobre
+        <translation type="vanished">Sobre
 
 Sobre o aplicativo.</translation>
     </message>
     <message>
         <source>About Qt</source>
-        <translation>Sobre o Qt</translation>
+        <translation type="vanished">Sobre o Qt</translation>
     </message>
     <message>
         <source>About &amp;Qt...</source>
-        <translation>Sobre o &amp;Qt...</translation>
+        <translation type="vanished">Sobre o &amp;Qt...</translation>
     </message>
     <message>
         <source>&amp;File</source>
-        <translation>&amp;Arquivo</translation>
+        <translation type="vanished">&amp;Arquivo</translation>
     </message>
     <message>
         <source>&amp;Edit</source>
-        <translation>&amp;Editar</translation>
+        <translation type="vanished">&amp;Editar</translation>
     </message>
     <message>
         <source>&amp;Navigation</source>
-        <translation>&amp;Navegação</translation>
+        <translation type="vanished">&amp;Navegação</translation>
     </message>
     <message>
         <source>&amp;Settings</source>
-        <translation>&amp;Configurações</translation>
+        <translation type="vanished">&amp;Configurações</translation>
     </message>
     <message>
         <source>&amp;View</source>
-        <translation>&amp;Ver</translation>
+        <translation type="vanished">&amp;Ver</translation>
     </message>
     <message>
         <source>&amp;Help</source>
-        <translation>&amp;Ajuda</translation>
+        <translation type="vanished">&amp;Ajuda</translation>
     </message>
     <message>
         <source>Ready.</source>
@@ -4429,37 +5899,37 @@ Sobre o aplicativo.</translation>
         <source>Game Info
 
 Display game information.</source>
-        <translation>Informações de jogo
+        <translation type="vanished">Informações de jogo
 
 Mostra informações de jogo.</translation>
     </message>
     <message>
         <source>This file already exists. Do you want to overwrite it?</source>
-        <translation>Este arquivo já existe. Você quer o sobreescrever?</translation>
+        <translation type="vanished">Este arquivo já existe. Você quer o sobreescrever?</translation>
     </message>
     <message>
         <source>Yes</source>
-        <translation>Sim</translation>
+        <translation type="vanished">Sim</translation>
     </message>
     <message>
         <source>No</source>
-        <translation>N</translation>
+        <translation type="vanished">N</translation>
     </message>
     <message>
         <source>Cannot save SGF file.</source>
-        <translation>Impossível salvar arquivo SGF.</translation>
+        <translation type="vanished">Impossível salvar arquivo SGF.</translation>
     </message>
     <message>
         <source>Cannot load from clipboard. Is it empty?</source>
-        <translation>Impossível carregar da área de transferência. Está vazia?</translation>
+        <translation type="vanished">Impossível carregar da área de transferência. Está vazia?</translation>
     </message>
     <message>
         <source>Text Files (*.txt);;All Files (*)</source>
-        <translation>Arquivos de texto (*.txt);;Todos os arquivos (*)</translation>
+        <translation type="vanished">Arquivos de texto (*.txt);;Todos os arquivos (*)</translation>
     </message>
     <message>
         <source>Importing ASCII failed. Clipboard empty?</source>
-        <translation>Falha ao importar arquivo ASCII. Área de transferência vazia?</translation>
+        <translation type="vanished">Falha ao importar arquivo ASCII. Área de transferência vazia?</translation>
     </message>
     <message>
         <source>Telnet connection disabled.
@@ -4490,11 +5960,11 @@ Quer salvar as modificações?</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation type="vanished">Cancelar</translation>
     </message>
     <message>
         <source>What&apos;s &amp;This?</source>
-        <translation>O &amp;que é isto?</translation>
+        <translation type="vanished">O &amp;que é isto?</translation>
     </message>
     <message>
         <source>English translation by Peter Strempel</source>
@@ -4533,12 +6003,12 @@ Mostra o modo atual. &apos;N&apos; para o modo normal, &apos;E&apos; para o modo
     </message>
     <message>
         <source>Current edit mark</source>
-        <translation>Marca de edição</translation>
+        <translation type="vanished">Marca de edição</translation>
     </message>
     <message>
         <source>Mark
 Shows the current edit mark. &apos;-&apos; in normal mode.</source>
-        <translation>Marca
+        <translation type="vanished">Marca
 Mostra a marca de edição atual. &apos;-&apos; no modo normal.</translation>
     </message>
     <message>
@@ -4547,7 +6017,7 @@ Mostra a marca de edição atual. &apos;-&apos; no modo normal.</translation>
     </message>
     <message>
         <source>loaded.</source>
-        <translation>carregado.</translation>
+        <translation type="vanished">carregado.</translation>
     </message>
     <message>
         <source>SGF Files (*.sgf);;All Files (*)</source>
@@ -4563,13 +6033,13 @@ Mostra a marca de edição atual. &apos;-&apos; no modo normal.</translation>
     </message>
     <message>
         <source>&amp;File toolbar</source>
-        <translation>Barra de ferramentas de &amp;arquivos</translation>
+        <translation type="vanished">Barra de ferramentas de &amp;arquivos</translation>
     </message>
     <message>
         <source>Slider
 
 Enables/disables the slider.</source>
-        <translation>Barra deslizante
+        <translation type="vanished">Barra deslizante
 
 Ativar/desativar a barra deslizante.</translation>
     </message>
@@ -4577,93 +6047,93 @@ Ativar/desativar a barra deslizante.</translation>
         <source>About Qt
 
 About Qt.</source>
-        <translation>Sobre o Qt
+        <translation type="vanished">Sobre o Qt
 
 Sobre o Qt.</translation>
     </message>
     <message>
         <source>Enables/disables the sidebar</source>
-        <translation>Ativar/desativar a barra lateral</translation>
+        <translation type="vanished">Ativar/desativar a barra lateral</translation>
     </message>
     <message>
         <source>Zoom &amp;In</source>
-        <translation>&amp;Aproximar</translation>
+        <translation type="vanished">&amp;Aproximar</translation>
     </message>
     <message>
         <source>Zoom &amp;Out</source>
-        <translation>&amp;Distanciar</translation>
+        <translation type="vanished">&amp;Distanciar</translation>
     </message>
     <message>
         <source>Variation duplicated.</source>
-        <translation>Variação duplicada.</translation>
+        <translation type="vanished">Variação duplicada.</translation>
     </message>
     <message>
         <source>Import &amp;ASCII</source>
-        <translation>Importar &amp;ASCII</translation>
+        <translation type="vanished">Importar &amp;ASCII</translation>
     </message>
     <message>
         <source>&amp;Export ASCII</source>
-        <translation>&amp;Exportar ASCII</translation>
+        <translation type="vanished">&amp;Exportar ASCII</translation>
     </message>
     <message>
         <source>Import SGF &amp;from clipboard</source>
-        <translation>Importar &amp;SGF a partir da área de trasferência</translation>
+        <translation type="vanished">Importar &amp;SGF a partir da área de trasferência</translation>
     </message>
     <message>
         <source>Export SGF to clipboard</source>
-        <translation>Exportar SGF para a área de trasferência</translation>
+        <translation type="vanished">Exportar SGF para a área de trasferência</translation>
     </message>
     <message>
         <source>Export SGF &amp;to clipboard</source>
-        <translation>Exportar SGF &amp;para a área de trasferência</translation>
+        <translation type="vanished">Exportar SGF &amp;para a área de trasferência</translation>
     </message>
     <message>
         <source>Export a complete game in SGF format to clipboard</source>
-        <translation>Exportar uma partida completa para a área de trasferência sob o format SGF</translation>
+        <translation type="vanished">Exportar uma partida completa para a área de trasferência sob o format SGF</translation>
     </message>
     <message>
         <source>Export SGF to clipboard
 
 Export a complete game in SGF format to clipboard.</source>
-        <translation>Exportar SGF para a área de trasferência
+        <translation type="vanished">Exportar SGF para a área de trasferência
 
 Exportar uma partida completa para a área de trasferência sob o format SGF.</translation>
     </message>
     <message>
         <source>Export &amp;Image</source>
-        <translation>Exportar &amp;imagem</translation>
+        <translation type="vanished">Exportar &amp;imagem</translation>
     </message>
     <message>
         <source>&amp;Main branch</source>
-        <translation>&amp;Braço principal</translation>
+        <translation type="vanished">&amp;Braço principal</translation>
     </message>
     <message>
         <source>To main branch</source>
-        <translation>Para o braço principal</translation>
+        <translation type="vanished">Para o braço principal</translation>
     </message>
     <message>
         <source>Main Branch
 
 Move to the main branch where variation started.</source>
-        <translation>Braço Principal
+        <translation type="vanished">Braço Principal
 
 Ir para o braço principal onde a variação começou.</translation>
     </message>
     <message>
         <source>Vertical comment</source>
-        <translation>Comentário vertical</translation>
+        <translation type="vanished">Comentário vertical</translation>
     </message>
     <message>
         <source>&amp;Vertical comment</source>
-        <translation>Comentário &amp;vertical</translation>
+        <translation type="vanished">Comentário &amp;vertical</translation>
     </message>
     <message>
         <source>Shift+F10</source>
-        <translation>Shift+F10</translation>
+        <translation type="vanished">Shift+F10</translation>
     </message>
     <message>
         <source>Enables/disables a vertical direction of the comment field</source>
-        <translation>Ativar/desativar a orientação vertical para o campo de comentários</translation>
+        <translation type="vanished">Ativar/desativar a orientação vertical para o campo de comentários</translation>
     </message>
     <message>
         <source>Vertical comment field
@@ -4675,11 +6145,11 @@ Active / d</translation>
     </message>
     <message>
         <source>Save si&amp;ze</source>
-        <translation>Salvar o &amp;tamanho</translation>
+        <translation type="vanished">Salvar o &amp;tamanho</translation>
     </message>
     <message>
         <source>&amp;Import/Export</source>
-        <translation>&amp;Importar/Exportar</translation>
+        <translation type="vanished">&amp;Importar/Exportar</translation>
     </message>
     <message>
         <source>N</source>
@@ -4695,7 +6165,7 @@ Active / d</translation>
     </message>
     <message>
         <source>Failed to export SGF to clipboard.</source>
-        <translation>Impossível exportar SGF para a área de transferência.</translation>
+        <translation type="vanished">Impossível exportar SGF para a área de transferência.</translation>
     </message>
     <message>
         <source>SGF exported.</source>
@@ -4703,7 +6173,7 @@ Active / d</translation>
     </message>
     <message>
         <source>ASCII imported.</source>
-        <translation>ASCII importado.</translation>
+        <translation type="vanished">ASCII importado.</translation>
     </message>
     <message>
         <source>PNG (*.png);;BMP (*.bmp);;XPM (*.xpm);;XBM (*.xbm);;PNM (*.pnm);;GIF (*.gif);;JPEG (*.jpeg);;MNG (*.mng)</source>
@@ -4711,7 +6181,7 @@ Active / d</translation>
     </message>
     <message>
         <source>Main Branch</source>
-        <translation>Braço Principal</translation>
+        <translation type="vanished">Braço Principal</translation>
     </message>
     <message>
         <source>New board prepared.</source>
@@ -4719,15 +6189,15 @@ Active / d</translation>
     </message>
     <message>
         <source>newgame</source>
-        <translation>nova partida</translation>
+        <translation type="vanished">nova partida</translation>
     </message>
     <message>
         <source>entermove</source>
-        <translation>Entre com uma jogada</translation>
+        <translation type="vanished">Entre com uma jogada</translation>
     </message>
     <message>
         <source>preferences</source>
-        <translation>preferências</translation>
+        <translation type="vanished">preferências</translation>
     </message>
     <message>
         <source>gameinfo</source>
@@ -4739,39 +6209,39 @@ Active / d</translation>
     </message>
     <message>
         <source>&amp;Previous move</source>
-        <translation>Jogada &amp;anterior</translation>
+        <translation type="vanished">Jogada &amp;anterior</translation>
     </message>
     <message>
         <source>&amp;Next move</source>
-        <translation>Jogada &amp;seguinte</translation>
+        <translation type="vanished">Jogada &amp;seguinte</translation>
     </message>
     <message>
         <source>&amp;First move</source>
-        <translation>&amp;Primeira jogada</translation>
+        <translation type="vanished">&amp;Primeira jogada</translation>
     </message>
     <message>
         <source>&amp;Last move</source>
-        <translation>Ú&amp;ltima jogada</translation>
+        <translation type="vanished">Ú&amp;ltima jogada</translation>
     </message>
     <message>
         <source>P&amp;revious variation</source>
-        <translation>Va&amp;riação anterior</translation>
+        <translation type="vanished">Va&amp;riação anterior</translation>
     </message>
     <message>
         <source>N&amp;ext variation</source>
-        <translation>Variação s&amp;eguinte</translation>
+        <translation type="vanished">Variação s&amp;eguinte</translation>
     </message>
     <message>
         <source>Update</source>
-        <translation>Atualizar</translation>
+        <translation type="vanished">Atualizar</translation>
     </message>
     <message>
         <source>Update from online game</source>
-        <translation>Atualizar a partir de um jogo conectado</translation>
+        <translation type="vanished">Atualizar a partir de um jogo conectado</translation>
     </message>
     <message>
         <source>Update from online game to local board and supersede own changes.</source>
-        <translation>Atualizar a partir de um jogo conectado para o tabuleiro e suplantar mudanças próprias.</translation>
+        <translation type="vanished">Atualizar a partir de um jogo conectado para o tabuleiro e suplantar mudanças próprias.</translation>
     </message>
     <message>
         <source>Window size restored.</source>
@@ -4787,7 +6257,7 @@ Restore with CTRL + &lt;number key&gt;
 
 &lt;0&gt; is default value at program start.
 &lt;9&gt; is default for edit window.</source>
-        <translation>Salvar o tamanho
+        <translation type="vanished">Salvar o tamanho
 
 Salva o tamanho da janela e restaura-o na próxima vez que o programa iniciar.
 
@@ -4799,27 +6269,27 @@ Restaurar é com CTRL + &lt;tecla numérica&gt;
     </message>
     <message>
         <source>Sound Info</source>
-        <translation>Informações de Som</translation>
+        <translation type="vanished">Informações de Som</translation>
     </message>
     <message>
         <source>&amp;Sound</source>
-        <translation>&amp;Som</translation>
+        <translation type="vanished">&amp;Som</translation>
     </message>
     <message>
         <source>Short info on sound availability</source>
-        <translation>Algumas informações sobre a disponibilidade do som</translation>
+        <translation type="vanished">Algumas informações sobre a disponibilidade do som</translation>
     </message>
     <message>
         <source>Sound Info
 
 Views a message box with a short comment about sound.</source>
-        <translation>Informações de Som
+        <translation type="vanished">Informações de Som
 
 Mostra uma caixa de mensagem com um pequeno comentário sobre o som.</translation>
     </message>
     <message>
         <source>Observers</source>
-        <translation>Observadores</translation>
+        <translation type="vanished">Observadores</translation>
     </message>
     <message>
         <source>N</source>
@@ -4828,35 +6298,35 @@ Mostra uma caixa de mensagem com um pequeno comentário sobre o som.</translatio
     </message>
     <message>
         <source>Previous commented move</source>
-        <translation>Jogada comentada anterior</translation>
+        <translation type="vanished">Jogada comentada anterior</translation>
     </message>
     <message>
         <source>Previous &amp;commented move</source>
-        <translation>Jogada &amp;comentada anterior</translation>
+        <translation type="vanished">Jogada &amp;comentada anterior</translation>
     </message>
     <message>
         <source>To previous comment</source>
-        <translation>Para o comentário anterior</translation>
+        <translation type="vanished">Para o comentário anterior</translation>
     </message>
     <message>
         <source>Previous comment
 
 Move to the previous move that has a comment</source>
-        <translation>Comentário anterior
+        <translation type="vanished">Comentário anterior
 
 Ir para a jogada anterior que tem um comentário</translation>
     </message>
     <message>
         <source>Next commented move</source>
-        <translation>Próxima jogada comentada</translation>
+        <translation type="vanished">Próxima jogada comentada</translation>
     </message>
     <message>
         <source>Next c&amp;ommented move</source>
-        <translation>Próxima jogada c&amp;omentada</translation>
+        <translation type="vanished">Próxima jogada c&amp;omentada</translation>
     </message>
     <message>
         <source>To next comment</source>
-        <translation>Para o próximo comentário</translation>
+        <translation type="vanished">Para o próximo comentário</translation>
     </message>
     <message>
         <source>Previous comment
@@ -4870,7 +6340,7 @@ Move to the next move that has a comment</source>
 Enables/disables a vertical direction of the comment field.
 
 Note: This setting is temporary for this board. In order to set permanent horizontal/vertical comment use &apos;Preferences&apos;.</source>
-        <translation>Comentário vertical
+        <translation type="vanished">Comentário vertical
 
 Ativa/desativa a direção vertical do campo de comentários.
 
@@ -4878,21 +6348,21 @@ Nota: este ajuste é temporário para este tabuleiro. para definir permanentemen
     </message>
     <message>
         <source>Goto stone at clicked move</source>
-        <translation>Ir para a pedra na jogada clicada</translation>
+        <translation type="vanished">Ir para a pedra na jogada clicada</translation>
     </message>
     <message>
         <source>Goto clic&amp;ked move</source>
-        <translation>Ir para a pedra na jogada c&amp;licada</translation>
+        <translation type="vanished">Ir para a pedra na jogada c&amp;licada</translation>
     </message>
     <message>
         <source>To clicked move</source>
-        <translation>Para a jogada clicada</translation>
+        <translation type="vanished">Para a jogada clicada</translation>
     </message>
     <message>
         <source>Click on a board intersection
 
 Move to the stone played at this intersection (if any)</source>
-        <translation>Clicar sobre uma interseção do tabuleiro
+        <translation type="vanished">Clicar sobre uma interseção do tabuleiro
 
 Ir para a pedra jogada nesta interseção (se alguma)</translation>
     </message>
@@ -4900,38 +6370,225 @@ Ir para a pedra jogada nesta interseção (se alguma)</translation>
         <source>Next comment
 
 Move to the next move that has a comment</source>
-        <translation>Comentário seguinte
+        <translation type="vanished">Comentário seguinte
 
 Ir para a próxima jogdaa que tem um comentário</translation>
     </message>
     <message>
         <source>Rk</source>
-        <translation>Cl</translation>
+        <translation type="vanished">Cl</translation>
     </message>
     <message>
         <source>Mute stones sound</source>
-        <translation>Silenciar o barulho das pedras</translation>
+        <translation type="vanished">Silenciar o barulho das pedras</translation>
     </message>
     <message>
         <source>&amp;Mute stones sound</source>
-        <translation>&amp;Silenciar o barulho das pedras</translation>
+        <translation type="vanished">&amp;Silenciar o barulho das pedras</translation>
     </message>
     <message>
         <source>Toggle stones sound on/off</source>
-        <translation>Alterna entre ligar/desligar o som das pedras</translation>
+        <translation type="vanished">Alterna entre ligar/desligar o som das pedras</translation>
     </message>
     <message>
         <source>Stones sound
 
 Toggle stones sound on/off
 this toggles only the stones sounds</source>
-        <translation>Som das pedras
+        <translation type="vanished">Som das pedras
 
 Alterna entre ligar/desligar o som das pedras
 isto afeta somente os sons das pedras</translation>
     </message>
     <message>
-        <source>SGF Files (*.sgf *.SGF);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)</source>
+        <source>Choose variation display</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The SGF file that is being opened uses a different style
+of variation display.  Use the style found in the file?
+
+You can customize this behaviour (and disable this dialog)
+in the preferences.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Analysis in progress: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Off-line copy: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>vs.</source>
+        <translation type="unfinished">vs.</translation>
+    </message>
+    <message>
+        <source>This file had errors during loading and may be corrupt.
+Do you still want to save it?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save SGF file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot open SGF file for saving.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to save SGF file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to save image!</source>
+        <translation type="unfinished">Falha ao salvar imagem!</translation>
+    </message>
+    <message>
+        <source>Diag. comments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Comments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>remaining time / stones</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>click to pause/unpause the game</source>
+        <translation type="unfinished">clique para pausar/retomar a partida</translation>
+    </message>
+    <message>
+        <source>click to add 1 minute to your opponent&apos;s clock</source>
+        <translation type="unfinished">clique para adicionar 1 minuto ao relógio do seu oponente</translation>
+    </message>
+    <message>
+        <source>Time remaining for this move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> (Scoring)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>White</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Black</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Black wins with %1</source>
+        <translation type="unfinished">Preto ganha com %1</translation>
+    </message>
+    <message>
+        <source>White wins with %1</source>
+        <translation type="unfinished">Branco ganha com %1</translation>
+    </message>
+    <message>
+        <source>Jigo</source>
+        <translation type="unfinished">Jigo</translation>
+    </message>
+    <message>
+        <source>Game result differs from the one stored.
+Overwrite stored game result?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>B Win %</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>W Win %</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MainWindow_GTP</name>
+    <message>
+        <source>Game end</source>
+        <translation type="unfinished">Fim da partida</translation>
+    </message>
+    <message>
+        <source>The computer has resigned the game.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>NewAIGameDlg</name>
+    <message>
+        <source>Error</source>
+        <translation type="unfinished">Erro</translation>
+    </message>
+    <message>
+        <source>You entered an invalid Handicap (1 is not legal)</source>
+        <translation type="unfinished">Você definiu uma Vantagem inválida (1 não é legal)</translation>
+    </message>
+    <message>
+        <source>Choose an SGF file to load</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SGF Files (*.sgf);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>NewAIGameDlgGui</name>
+    <message>
+        <source>Computer Game</source>
+        <translation type="unfinished">Partida contra o Computador</translation>
+    </message>
+    <message>
+        <source>Load game</source>
+        <translation type="unfinished">Carregar uma partida</translation>
+    </message>
+    <message>
+        <source>&amp;OK</source>
+        <translation type="unfinished">&amp;OK</translation>
+    </message>
+    <message>
+        <source>&amp;Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Players</source>
+        <translation type="unfinished">Jogadores</translation>
+    </message>
+    <message>
+        <source>Human:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Engine:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Computer plays:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Komi:</source>
+        <translation type="unfinished">Komi:</translation>
+    </message>
+    <message>
+        <source>Board size:</source>
+        <translation type="unfinished">Tamanho do tabuleiro:</translation>
+    </message>
+    <message>
+        <source>Handicap:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5146,14 +6803,77 @@ isto afeta somente os sons das pedras</translation>
     </message>
 </context>
 <context>
+    <name>NewVariantGameDialog</name>
+    <message>
+        <source>New Variant Game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Players</source>
+        <translation type="unfinished">Jogadores</translation>
+    </message>
+    <message>
+        <source>Black</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>White</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rank:</source>
+        <translation type="unfinished">Classificação:</translation>
+    </message>
+    <message>
+        <source>Board shape</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Komi:</source>
+        <translation type="unfinished">Komi:</translation>
+    </message>
+    <message>
+        <source>Board size:</source>
+        <translation type="unfinished">Tamanho do tabuleiro:</translation>
+    </message>
+    <message>
+        <source>x</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toroidal Go</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Horizontally</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Vertically</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Ok</source>
+        <translation type="unfinished">&amp;OK</translation>
+    </message>
+    <message>
+        <source>&amp;Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>NodeResultsGUI</name>
     <message>
         <source>Results</source>
-        <translation>Resultados</translation>
+        <translation type="vanished">Resultados</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation>Fechar</translation>
+        <translation type="vanished">Fechar</translation>
     </message>
 </context>
 <context>
@@ -5184,7 +6904,7 @@ isto afeta somente os sons das pedras</translation>
     </message>
     <message>
         <source>00:00</source>
-        <translation>00:00</translation>
+        <translation type="vanished">00:00</translation>
     </message>
     <message>
         <source>Captures:</source>
@@ -5208,7 +6928,7 @@ isto afeta somente os sons das pedras</translation>
     </message>
     <message>
         <source>remaining time / stones</source>
-        <translation>tempo/pedras remanescentes</translation>
+        <translation type="vanished">tempo/pedras remanescentes</translation>
     </message>
     <message>
         <source>Clock
@@ -5218,7 +6938,7 @@ shows remaining time or byoyomi time / remaining stones.
 Click on
 - your own clock for pause request (NNGS) or
 - the opponent&apos;s clock to give him additional time of one minute.</source>
-        <translation>Relógio
+        <translation type="vanished">Relógio
 
 mostra o tempo restante ou o tempo de byoyomi / pedras restantes.
 
@@ -5354,6 +7074,38 @@ Use &quot;komi x&quot; para pedir um komi de x (número).</translation>
         <source>5.5</source>
         <translation>5,5</translation>
     </message>
+    <message>
+        <source>Analysis</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Primary move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Coords:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>B Win%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Visits:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Highlighted move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>B Win%:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>NthMoveDialog</name>
@@ -5385,27 +7137,27 @@ Use &quot;komi x&quot; para pedir um komi de x (número).</translation>
     <name>PlayerTable</name>
     <message>
         <source>Stat</source>
-        <translation type="obsolete">Stat</translation>
+        <translation type="unfinished">Stat</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="obsolete">Nom</translation>
+        <translation type="unfinished">Nom</translation>
     </message>
     <message>
         <source>Rk</source>
-        <translation type="obsolete">Rg</translation>
+        <translation type="unfinished">Rg</translation>
     </message>
     <message>
         <source>pl</source>
-        <translation type="obsolete">Joue</translation>
+        <translation type="unfinished">Joue</translation>
     </message>
     <message>
         <source>ob</source>
-        <translation type="obsolete">ob</translation>
+        <translation type="unfinished">ob</translation>
     </message>
     <message>
         <source>Idle</source>
-        <translation type="obsolete">Inactif</translation>
+        <translation type="unfinished">Inactif</translation>
     </message>
     <message>
         <source>Stat</source>
@@ -5436,6 +7188,30 @@ Use &quot;komi x&quot; para pedir um komi de x (número).</translation>
         <source>Idle</source>
         <comment>PlayerTable: idle time</comment>
         <translation type="obsolete">Inactif</translation>
+    </message>
+    <message>
+        <source>X</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Info</source>
+        <translation type="unfinished">Informação</translation>
+    </message>
+    <message>
+        <source>Won</source>
+        <translation type="unfinished">Ganhou</translation>
+    </message>
+    <message>
+        <source>Lost</source>
+        <translation type="unfinished">Perdeu</translation>
+    </message>
+    <message>
+        <source>Country</source>
+        <translation type="unfinished">País</translation>
+    </message>
+    <message>
+        <source>Match prefs</source>
+        <translation type="unfinished">Preferências de disputa</translation>
     </message>
 </context>
 <context>
@@ -5502,11 +7278,72 @@ Use &quot;komi x&quot; para pedir um komi de x (número).</translation>
     </message>
     <message>
         <source>Images (*.png *.jpg *.xpm *.ico)</source>
-        <translation>Imagens (*.png *.jpg *.xpm *.ico)</translation>
+        <translation type="vanished">Imagens (*.png *.jpg *.xpm *.ico)</translation>
     </message>
     <message>
         <source>Images (*.png *.xpm *.jpg)</source>
         <translation>Imagens (*.png *.xpm *.jpg)</translation>
+    </message>
+    <message>
+        <source>Select white stone base color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select black stone base color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unsaved data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The engine input fields contain
+potentially unsaved data.
+Really close the preferences?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The host input fields contain
+potentially unsaved data.
+Really close the preferences?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid komi entered</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please enter a valid komi before adding the engine.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Missing board size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Analysis engines require a board size to be specified.
+If your engine allows multiple board sizes, you need to configure them in separate entires.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid board size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Only a range of 5 to 25 is allowed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose GTP engine path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select a goban wood image</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select a table background image</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -5589,19 +7426,19 @@ Escolha um estilo para o tabuleiro.</translation>
     </message>
     <message>
         <source>Comment orientation</source>
-        <translation>Orientação dos comentários</translation>
+        <translation type="vanished">Orientação dos comentários</translation>
     </message>
     <message>
         <source>Horizontal or vertical comment orientation</source>
-        <translation>Orientação horizontal ou vertical dos comentários</translation>
+        <translation type="vanished">Orientação horizontal ou vertical dos comentários</translation>
     </message>
     <message>
         <source>horizontal</source>
-        <translation>horizontal</translation>
+        <translation type="vanished">horizontal</translation>
     </message>
     <message>
         <source>vertical</source>
-        <translation>vertical</translation>
+        <translation type="vanished">vertical</translation>
     </message>
     <message>
         <source>Board</source>
@@ -5613,13 +7450,13 @@ Escolha um estilo para o tabuleiro.</translation>
     </message>
     <message>
         <source>Show board coordinates</source>
-        <translation>Mostrar coordenadas do tabuleiro</translation>
+        <translation type="vanished">Mostrar coordenadas do tabuleiro</translation>
     </message>
     <message>
         <source>Show board coordinates
 
 Toggles if the board coordinates are shown.</source>
-        <translation>Mostrar coordenadas do tabuleiro
+        <translation type="vanished">Mostrar coordenadas do tabuleiro
 
 Mostrar ou não as coordenadas do tabuleiro.</translation>
     </message>
@@ -5653,23 +7490,23 @@ Quer ter uma pedra fantasma sob o ponteiro do mause dentro do tabuleiro?</transl
     </message>
     <message>
         <source>ToolTip coords</source>
-        <translation>Coordenadas na ferramenta de dicas</translation>
+        <translation type="vanished">Coordenadas na ferramenta de dicas</translation>
     </message>
     <message>
         <source>Show coordinates as ToolTip</source>
-        <translation>Mostrar coordenadas como ferramenta de dicas</translation>
+        <translation type="vanished">Mostrar coordenadas como ferramenta de dicas</translation>
     </message>
     <message>
         <source>Show coordinates as ToolTip
 
 When the mouse hovers over a point on the board, show a tooltip with the current coordinate.</source>
-        <translation>Mostrar coordenadas como ferramenta de dicas
+        <translation type="vanished">Mostrar coordenadas como ferramenta de dicas
 
 Quando o mause passa sobre um ponto no tabuleiro, mostra uma dica com a coordenada corrente.</translation>
     </message>
     <message>
         <source>Bold marks</source>
-        <translation>Marcas en negrito</translation>
+        <translation type="vanished">Marcas en negrito</translation>
     </message>
     <message>
         <source>Use bold font for text marks</source>
@@ -5831,81 +7668,81 @@ Selecionar nova fonte para o aplicativo.</translation>
     </message>
     <message>
         <source>ASCII Characters</source>
-        <translation>Caracteres ASCII</translation>
+        <translation type="vanished">Caracteres ASCII</translation>
     </message>
     <message>
         <source>ASCII character for import/export</source>
-        <translation>Caracteres ASCII para importar/exportar</translation>
+        <translation type="vanished">Caracteres ASCII para importar/exportar</translation>
     </message>
     <message>
         <source>ASCII character for import
 
 When importing or exporting ASCII files, use these characters to indicate the given stone or point on the board.</source>
-        <translation>Caracteres ASCII para importar/exportar
+        <translation type="vanished">Caracteres ASCII para importar/exportar
 
 Ao importar ou exportar arquivos ASCII, use estes caracteres para indicar a pedra ou ponto presentes no tabuleiro.</translation>
     </message>
     <message>
         <source>Black stone:</source>
-        <translation>Pedra preta:</translation>
+        <translation type="vanished">Pedra preta:</translation>
     </message>
     <message>
         <source>#</source>
-        <translation>#</translation>
+        <translation type="vanished">#</translation>
     </message>
     <message>
         <source>White stone:</source>
-        <translation>Pedra branca:</translation>
+        <translation type="vanished">Pedra branca:</translation>
     </message>
     <message>
         <source>O</source>
-        <translation>O</translation>
+        <translation type="vanished">O</translation>
     </message>
     <message>
         <source>Star point:</source>
-        <translation>Ponto estrela:</translation>
+        <translation type="vanished">Ponto estrela:</translation>
     </message>
     <message>
         <source>,</source>
-        <translation>,</translation>
+        <translation type="vanished">,</translation>
     </message>
     <message>
         <source>Empty point:</source>
-        <translation>Ponto vazio:</translation>
+        <translation type="vanished">Ponto vazio:</translation>
     </message>
     <message>
         <source>.</source>
-        <translation>.</translation>
+        <translation type="vanished">.</translation>
     </message>
     <message>
         <source>Horizontal border:</source>
-        <translation>Borda horizontal:</translation>
+        <translation type="vanished">Borda horizontal:</translation>
     </message>
     <message>
         <source>|</source>
-        <translation>|</translation>
+        <translation type="vanished">|</translation>
     </message>
     <message>
         <source>Vertical border:</source>
-        <translation>Borda vertical:</translation>
+        <translation type="vanished">Borda vertical:</translation>
     </message>
     <message>
         <source>-</source>
-        <translation>-</translation>
+        <translation type="vanished">-</translation>
     </message>
     <message>
         <source>Add as brother</source>
-        <translation>Adicionar como variação</translation>
+        <translation type="vanished">Adicionar como variação</translation>
     </message>
     <message>
         <source>Add imported position as brother</source>
-        <translation>Adicionar a posição importada como derivação</translation>
+        <translation type="vanished">Adicionar a posição importada como derivação</translation>
     </message>
     <message>
         <source>Add imported position as brother
 
 If disabled, the imported position is added as son.</source>
-        <translation>Adicionar a posição importada como derivação
+        <translation type="vanished">Adicionar a posição importada como derivação
 
 Se desabilitado, a posição importada é adicionada como variação.</translation>
     </message>
@@ -5915,19 +7752,19 @@ Se desabilitado, a posição importada é adicionada como variação.</translati
     </message>
     <message>
         <source>Remember last directory</source>
-        <translation>Conservar o ltimo diretório</translation>
+        <translation type="vanished">Conservar o ltimo diretório</translation>
     </message>
     <message>
         <source>Remember last directory
 
 When toggled on, the last used directory when loading or saving sgf files will be remembered.</source>
-        <translation>Conservar o ltimo diretório
+        <translation type="vanished">Conservar o ltimo diretório
 
 Quando ativado, o último diretório usado ao carregar ou salvar arquivos sgf serão lembrados.</translation>
     </message>
     <message>
         <source>Text encoding for loading and saving</source>
-        <translation>Codificação do texto ao carregar ou salvar</translation>
+        <translation type="vanished">Codificação do texto ao carregar ou salvar</translation>
     </message>
     <message>
         <source>Text encoding for loading and saving
@@ -5935,7 +7772,7 @@ Quando ativado, o último diretório usado ao carregar ou salvar arquivos sgf se
 This is used for loading and saving files containing asian letters.
 If &apos;None&apos; is selected, Latin1 encoding will be used, common in western world.
 &apos;None&apos; will speed up loading large files like Kogos Joseki dictionary significantly.</source>
-        <translation>Codificação do texto ao carregar ou salvar
+        <translation type="vanished">Codificação do texto ao carregar ou salvar
 
 Isto é usado para carregar ou salvar textos contendo caracteres asiáticos.
 Se &apos;Nenhum&apos; for selecionado, a codificação &apos;Latin1&apos; será usada, a qual é comum no mundo ocidental.
@@ -5943,7 +7780,7 @@ Se &apos;Nenhum&apos; for selecionado, a codificação &apos;Latin1&apos; será 
     </message>
     <message>
         <source>Text encoding:</source>
-        <translation>Codificação do texto:</translation>
+        <translation type="vanished">Codificação do texto:</translation>
     </message>
     <message>
         <source>None</source>
@@ -5951,47 +7788,47 @@ Se &apos;Nenhum&apos; for selecionado, a codificação &apos;Latin1&apos; será 
     </message>
     <message>
         <source>EUC-JP</source>
-        <translation>EUC-JP</translation>
+        <translation type="vanished">EUC-JP</translation>
     </message>
     <message>
         <source>JIS</source>
-        <translation>JIS</translation>
+        <translation type="vanished">JIS</translation>
     </message>
     <message>
         <source>Shift-JIS</source>
-        <translation>Shift-JIS</translation>
+        <translation type="vanished">Shift-JIS</translation>
     </message>
     <message>
         <source>EUC-KR</source>
-        <translation>EUC-KR</translation>
+        <translation type="vanished">EUC-KR</translation>
     </message>
     <message>
         <source>GBK</source>
-        <translation>GBK</translation>
+        <translation type="vanished">GBK</translation>
     </message>
     <message>
         <source>Tamil TSCII</source>
-        <translation>Tamil TSCII</translation>
+        <translation type="vanished">Tamil TSCII</translation>
     </message>
     <message>
         <source>Fast loading (EXPERIMENTAL)</source>
-        <translation>Carregamento rápido (EXPERIMENTAL)</translation>
+        <translation type="vanished">Carregamento rápido (EXPERIMENTAL)</translation>
     </message>
     <message>
         <source>Enable fast loading</source>
-        <translation>Ativa o carregamento rápido</translation>
+        <translation type="vanished">Ativa o carregamento rápido</translation>
     </message>
     <message>
         <source>Enable fast loading
 
 Warning: This is experimental and does not work properly!</source>
-        <translation>Ativa o carregamento rápido
+        <translation type="vanished">Ativa o carregamento rápido
 
 Aviso: Isto é experimental e não funciona direito ainda!</translation>
     </message>
     <message>
         <source>Fast loading is experimental right now and does not work completely!</source>
-        <translation>O carregamento rápido é experimental ainda!</translation>
+        <translation type="vanished">O carregamento rápido é experimental ainda!</translation>
     </message>
     <message>
         <source>SGF Loading</source>
@@ -6005,7 +7842,7 @@ The comment field will either be displayed on the bottom of the board or on the 
 For more dynamic display, pin off the comment field in the View menu.
 
 If None is selected, the comment field is by default hidden.</source>
-        <translation>Orientação horizontal ou vertica dos comentários
+        <translation type="vanished">Orientação horizontal ou vertica dos comentários
 
 O campo de comentários será mostrado ou embaixo do tabuleiro ou à direita.
 
@@ -6035,27 +7872,27 @@ Selecione como mostrar todas as variações da jogada atual. Ou sem mostrar, ou 
     </message>
     <message>
         <source>Small stones</source>
-        <translation>Pedras pequenas</translation>
+        <translation type="vanished">Pedras pequenas</translation>
     </message>
     <message>
         <source>Show sidebar</source>
-        <translation>Mostrar a barra lateral</translation>
+        <translation type="vanished">Mostrar a barra lateral</translation>
     </message>
     <message>
         <source>Show sidebar
 
 Enables or disables the navigation and tool sidebar.</source>
-        <translation>Mostrar a barra lateral
+        <translation type="vanished">Mostrar a barra lateral
 
 Ativa/desativa a barra lateral de ferramentas e a de navegação.</translation>
     </message>
     <message>
         <source>Adjust font size</source>
-        <translation>Ajustar o tamanho da fonte</translation>
+        <translation type="vanished">Ajustar o tamanho da fonte</translation>
     </message>
     <message>
         <source>Adjust font size for text and number labels</source>
-        <translation>Ajustar o tamanho da fonte para rótulos de texto</translation>
+        <translation type="vanished">Ajustar o tamanho da fonte para rótulos de texto</translation>
     </message>
     <message>
         <source>Adjust font size for text and number labels
@@ -6104,7 +7941,7 @@ If &apos;System default&apos; is selected, qGo will use the standard language of
 This change will take effect only after qGo has been restarted.
 
 If your language is not supported, you might consider translating qGo. Please check the qGo homepage at http://qgo.sourceforge.net</source>
-        <translation>Definir o idioma do aplicativo
+        <translation type="vanished">Definir o idioma do aplicativo
 
 Escolha o seu idioma para o qGo.
 Se &apos;Idioma original&apos; for escolhido, qGo usará o idioma padrão de seu sistema. No Linux isto irá checar a variável LANG. No Windows,  o idioma definido em suas preferências.
@@ -6215,7 +8052,7 @@ Selecionar a fonte usada em todos os campos de entrada/saída.</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation>Cor</translation>
+        <translation type="vanished">Cor</translation>
     </message>
     <message>
         <source>color: Background</source>
@@ -6223,17 +8060,17 @@ Selecionar a fonte usada em todos os campos de entrada/saída.</translation>
     </message>
     <message>
         <source>Current background color</source>
-        <translation>Cor de fundo atual</translation>
+        <translation type="vanished">Cor de fundo atual</translation>
     </message>
     <message>
         <source>Select new color</source>
-        <translation>Selecionar nova cor</translation>
+        <translation type="vanished">Selecionar nova cor</translation>
     </message>
     <message>
         <source>Select new color
 
 Select the color for dialog background in the application.</source>
-        <translation>Selecionar nova cor
+        <translation type="vanished">Selecionar nova cor
 
 Selecionar cor para o fundo dos diálogo neste aplicativo.</translation>
     </message>
@@ -6247,45 +8084,45 @@ Selecionar cor para o fundo dos diálogo neste aplicativo.</translation>
     </message>
     <message>
         <source>Variable mark font</source>
-        <translation>Fonte para as marcas variáveis</translation>
+        <translation type="vanished">Fonte para as marcas variáveis</translation>
     </message>
     <message>
         <source>Variable font size for marks</source>
-        <translation>Variar o tamanho das fontes para as marcas</translation>
+        <translation type="vanished">Variar o tamanho das fontes para as marcas</translation>
     </message>
     <message>
         <source>Variable font size for marks 
 
 Ignore the size of the chosen font for marks and set size to about stone dimension.</source>
-        <translation>Variar o tamanho das fontes para as marcas
+        <translation type="vanished">Variar o tamanho das fontes para as marcas
 
 Igonora o tamanho escolhido da fonte para as marcas e o ajusta para ficar de acordo com o tamanho das pedras.</translation>
     </message>
     <message>
         <source>Smaller marks</source>
-        <translation>Marcas menores</translation>
+        <translation type="vanished">Marcas menores</translation>
     </message>
     <message>
         <source>Draw marks slightly smaller</source>
-        <translation>Desenha as marcas um pouco menores</translation>
+        <translation type="vanished">Desenha as marcas um pouco menores</translation>
     </message>
     <message>
         <source>Draw marks slightly smaller
 
 If activated, all types of marks on the board will be drawn slightly smaller.</source>
-        <translation>Desenha as marcas um pouco menores
+        <translation type="vanished">Desenha as marcas um pouco menores
 
 Se ativado, todos os tipos de marcas no tabuleiro serão desenhados um pouco menores.</translation>
     </message>
     <message>
         <source>Draw marks bold</source>
-        <translation>Desenhar as marcas em negrito</translation>
+        <translation type="vanished">Desenhar as marcas em negrito</translation>
     </message>
     <message>
         <source>Draw marks bold
 
 If activated, all types of marks except characters and numbers on the board will be drawn bold.</source>
-        <translation>Desenhar as marcas em negrito
+        <translation type="vanished">Desenhar as marcas em negrito
 
 Se ativado, todos os tipos de marcas no tabuleiro, exceto caracteres e nmeros, serão desenhados em negrito.</translation>
     </message>
@@ -6345,7 +8182,7 @@ Use isto para permitir aparência de concha sobre as pedras, com listras aleató
     </message>
     <message>
         <source>Coordinates</source>
-        <translation>Coordenadas</translation>
+        <translation type="vanished">Coordenadas</translation>
     </message>
     <message>
         <source>Slider</source>
@@ -6353,25 +8190,25 @@ Use isto para permitir aparência de concha sobre as pedras, com listras aleató
     </message>
     <message>
         <source>Cursor</source>
-        <translation>Cursor</translation>
+        <translation type="vanished">Cursor</translation>
     </message>
     <message>
         <source>Sidebar</source>
-        <translation>Barra lateral</translation>
+        <translation type="vanished">Barra lateral</translation>
     </message>
     <message>
         <source>left</source>
-        <translation>esquerda</translation>
+        <translation type="vanished">esquerda</translation>
     </message>
     <message>
         <source>Show sidebar on the left</source>
-        <translation>Mostrar a barra lateral </translation>
+        <translation type="vanished">Mostrar a barra lateral </translation>
     </message>
     <message>
         <source>Show sidebar on the left
 
 Swaps sidebar and board, thus board is on the left and sidbar is on the right.</source>
-        <translation>Mostrar a barra lateral 
+        <translation type="vanished">Mostrar a barra lateral 
 
 Troca a barra lateral e o tabuleiro, de modo que o tabuleiro fique à esquerda e a barra lateral à direita.</translation>
     </message>
@@ -6405,24 +8242,24 @@ Selecionar a fonte para os relógios.</translation>
     </message>
     <message>
         <source>remember that point for fast return</source>
-        <translation>memorizar aquele ponto para retornar rapidamente</translation>
+        <translation type="vanished">memorizar aquele ponto para retornar rapidamente</translation>
     </message>
     <message>
         <source>push button at starting point to enable remembering.
 After placing and/or undo release button for returning to starting point automatically.</source>
-        <translation>Aperte o botão no ponto inicial par habilitar memorização.
+        <translation type="vanished">Aperte o botão no ponto inicial par habilitar memorização.
 Após colocar e/ou desfazer, solte o botão para retornar ao ponto inicial automaticamente.</translation>
     </message>
     <message>
         <source>hand over controls to opponent</source>
-        <translation>dar o controle ao oponente</translation>
+        <translation type="vanished">dar o controle ao oponente</translation>
     </message>
     <message>
         <source>hand over controls to opponent to allow him placing black and white stones, undo etc.
 
 Only teacher can give control,
 both teacher and pupil can release control.</source>
-        <translation>dar o controle ao oponente para permitir a ele colocar pedras pretas e brancas, desfazer, etc.
+        <translation type="vanished">dar o controle ao oponente para permitir a ele colocar pedras pretas e brancas, desfazer, etc.
 
 Somente o instrutor pode dar controle,
 ambos instrutor e aprendiz podem soltar o controle.</translation>
@@ -6445,11 +8282,11 @@ En mode </translation>
     </message>
     <message>
         <source>as saved</source>
-        <translation>como salvo</translation>
+        <translation type="vanished">como salvo</translation>
     </message>
     <message>
         <source>choose default comment orientation</source>
-        <translation>escolha a orientação padrão do campo de comentários</translation>
+        <translation type="vanished">escolha a orientação padrão do campo de comentários</translation>
     </message>
     <message>
         <source>Circle</source>
@@ -6463,25 +8300,25 @@ Edit circle marks on the board. Left click sets a mark, right click removes it.<
     </message>
     <message>
         <source>Square</source>
-        <translation>Quadrado</translation>
+        <translation type="vanished">Quadrado</translation>
     </message>
     <message>
         <source>Square
 
 Edit square marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation>Quadrado
+        <translation type="vanished">Quadrado
 
 Editar as marcas quadradas no tabuleiro. Clique à esquerda define a marca, à direita a remove.</translation>
     </message>
     <message>
         <source>Request adjournment</source>
-        <translation>Requisitar adiamento</translation>
+        <translation type="vanished">Requisitar adiamento</translation>
     </message>
     <message>
         <source>Adjourn.
 
 Send adjournment request to your opponent. If he accept it, the game will be adjourned and saved.</source>
-        <translation>Adiar
+        <translation type="vanished">Adiar
 
 Enviar uma requisição de adiamento ao seu oponente. Se aceito, o jogo será adiado e salvo.</translation>
     </message>
@@ -6779,7 +8616,7 @@ Clique para obter uma nova janela, editável e desconectada.</translation>
     </message>
     <message>
         <source>clear form</source>
-        <translation>Limpar o formulário</translation>
+        <translation type="vanished">Limpar o formulário</translation>
     </message>
     <message>
         <source>New
@@ -6795,7 +8632,7 @@ limpar o formulário; não aplica nenhuma mudança às entradas</translation>
     </message>
     <message>
         <source>add/change current entry</source>
-        <translation>adicionar/mudar a entrada atual</translation>
+        <translation type="vanished">adicionar/mudar a entrada atual</translation>
     </message>
     <message>
         <source>Add or Change
@@ -6815,7 +8652,7 @@ O rótulo &apos;Adicionar&quot; é o padrão. As entradas dadas serão salvas co
     </message>
     <message>
         <source>delete current entry</source>
-        <translation>Apagar a entrada atual</translation>
+        <translation type="vanished">Apagar a entrada atual</translation>
     </message>
     <message>
         <source>Delete
@@ -6831,23 +8668,23 @@ Nota: &apos;Apagar&apos; diz respeito a registros salvos.</translation>
     </message>
     <message>
         <source>Title</source>
-        <translation>Título</translation>
+        <translation type="vanished">Título</translation>
     </message>
     <message>
         <source>Host</source>
-        <translation>Servidor</translation>
+        <translation type="vanished">Servidor</translation>
     </message>
     <message>
         <source>Port</source>
-        <translation>Porta</translation>
+        <translation type="vanished">Porta</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation type="vanished">Nome</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation>Senha</translation>
+        <translation type="vanished">Senha</translation>
     </message>
     <message>
         <source>Host Entries
@@ -6875,15 +8712,15 @@ Para salvar a orientação do campo de comentários você deve selecionar &apos;
     </message>
     <message>
         <source>Go Engine</source>
-        <translation>Programa de Go</translation>
+        <translation type="vanished">Programa de Go</translation>
     </message>
     <message>
         <source>Path to the Go program</source>
-        <translation>Caminho do programa de Go</translation>
+        <translation type="vanished">Caminho do programa de Go</translation>
     </message>
     <message>
         <source>Path to the Go playing program, e.g. GnuGo</source>
-        <translation>Caminho do programa de Go, p. ex. GnuGo</translation>
+        <translation type="vanished">Caminho do programa de Go, p. ex. GnuGo</translation>
     </message>
     <message>
         <source>Default games settings</source>
@@ -6975,7 +8812,7 @@ Você pode definir o tempo de aviso ao lado</translation>
     </message>
     <message>
         <source>User buttons toolbar</source>
-        <translation>Barra de botões do usuário</translation>
+        <translation type="vanished">Barra de botões do usuário</translation>
     </message>
     <message>
         <source>Delete
@@ -6983,7 +8820,7 @@ Você pode definir o tempo de aviso ao lado</translation>
 Deletes the saved entries with same label
 
 Note: &apos;Delete&apos; concerns saved records.</source>
-        <translation>Apagar
+        <translation type="vanished">Apagar
 
 Apaga as entradas salvas com o mesmo rótulo
 
@@ -6991,91 +8828,91 @@ Nota: &apos;Apagar&apos; diz respeito a registros salvos.</translation>
     </message>
     <message>
         <source>Help text:</source>
-        <translation>Texto de ajuda:</translation>
+        <translation type="vanished">Texto de ajuda:</translation>
     </message>
     <message>
         <source>Help text, displayed as tooltip</source>
-        <translation>Texto de ajuda, mostrado como dica</translation>
+        <translation type="vanished">Texto de ajuda, mostrado como dica</translation>
     </message>
     <message>
         <source>help text
 
 This text is displayed as tooltip of the created button</source>
-        <translation>texto de ajuda
+        <translation type="vanished">texto de ajuda
 
 Este texto é mostrado como dica do botão criado</translation>
     </message>
     <message>
         <source>Command:</source>
-        <translation>Comando:</translation>
+        <translation type="vanished">Comando:</translation>
     </message>
     <message>
         <source>command passed to the server</source>
-        <translation>comando passado ao servidor</translation>
+        <translation type="vanished">comando passado ao servidor</translation>
     </message>
     <message>
         <source>command
 
 the command is passed to the server</source>
-        <translation>comando
+        <translation type="vanished">comando
 
 o comando é passado ao servidor</translation>
     </message>
     <message>
         <source>Pixmap file:</source>
-        <translation>Arquivo de mapa de pixels:</translation>
+        <translation type="vanished">Arquivo de mapa de pixels:</translation>
     </message>
     <message>
         <source>file path to the button pixmap</source>
-        <translation>caminho do arquivo para o desenho do botão</translation>
+        <translation type="vanished">caminho do arquivo para o desenho do botão</translation>
     </message>
     <message>
         <source>file path to the button pixmap
 
 Set it with the file chooser</source>
-        <translation>caminho do arquivo para o desenho do botão
+        <translation type="vanished">caminho do arquivo para o desenho do botão
 
 Defina-o com o seletor de arquivos</translation>
     </message>
     <message>
         <source>pixmap file chooser</source>
-        <translation>seletor de arquivo de mapa de pixels</translation>
+        <translation type="vanished">seletor de arquivo de mapa de pixels</translation>
     </message>
     <message>
         <source>Label:</source>
-        <translation>Rótulo:</translation>
+        <translation type="vanished">Rótulo:</translation>
     </message>
     <message>
         <source>Button label</source>
-        <translation>Rótulo do botão</translation>
+        <translation type="vanished">Rótulo do botão</translation>
     </message>
     <message>
         <source>unique label, 
 
 The label is displayed as button text.</source>
-        <translation>rótulo único,
+        <translation type="vanished">rótulo único,
 
 O rótulo é mostrado como texto do botão.</translation>
     </message>
     <message>
         <source>Pixmap</source>
-        <translation>Mapa de pixels</translation>
+        <translation type="vanished">Mapa de pixels</translation>
     </message>
     <message>
         <source>Label</source>
-        <translation>Rótulo</translation>
+        <translation type="vanished">Rótulo</translation>
     </message>
     <message>
         <source>Command</source>
-        <translation>Comando</translation>
+        <translation type="vanished">Comando</translation>
     </message>
     <message>
         <source>Help Text</source>
-        <translation>Texto de Ajuda</translation>
+        <translation type="vanished">Texto de Ajuda</translation>
     </message>
     <message>
         <source>User defined button list</source>
-        <translation>Lista de botões definida pelo usuário</translation>
+        <translation type="vanished">Lista de botões definida pelo usuário</translation>
     </message>
     <message>
         <source>Button Entries
@@ -7084,7 +8921,7 @@ Select &apos;New&apos; to clear input fields. After filling in at least label an
 
 Select an entry to edit, change (label keeps unchanged) or delete a line.
 </source>
-        <translation>Entradas de Botões
+        <translation type="vanished">Entradas de Botões
 
 Selecione &apos;Novo&apos; para limpar os campos de entrada. Após preencher ao menos o rótulo e o comando, use Adicionar/Mudar.
 
@@ -7100,11 +8937,11 @@ Selecione uma entrada para editar, mudar (rótulos mantém-se os mesmos) ou apag
     </message>
     <message>
         <source>SGF Style</source>
-        <translation>Estilo SGF</translation>
+        <translation type="vanished">Estilo SGF</translation>
     </message>
     <message>
         <source>Show SGF board coordinates</source>
-        <translation>Mostrar coordenadas do tabuleiro em SGF</translation>
+        <translation type="vanished">Mostrar coordenadas do tabuleiro em SGF</translation>
     </message>
     <message>
         <source>
@@ -7117,19 +8954,19 @@ Toggles if SGF style board coordinates are shown.</source>
     </message>
     <message>
         <source>Default for White</source>
-        <translation>Padrão para o Branco</translation>
+        <translation type="vanished">Padrão para o Branco</translation>
     </message>
     <message>
         <source>Computer</source>
-        <translation>Computador</translation>
+        <translation type="vanished">Computador</translation>
     </message>
     <message>
         <source>Human</source>
-        <translation>Humano</translation>
+        <translation type="vanished">Humano</translation>
     </message>
     <message>
         <source>Default for Black</source>
-        <translation>Padrão para o Preto</translation>
+        <translation type="vanished">Padrão para o Preto</translation>
     </message>
     <message>
         <source>Handicap :</source>
@@ -7141,15 +8978,15 @@ Toggles if SGF style board coordinates are shown.</source>
     </message>
     <message>
         <source>Import / Export</source>
-        <translation>Importar / Exportar</translation>
+        <translation type="vanished">Importar / Exportar</translation>
     </message>
     <message>
         <source>Big5</source>
-        <translation>Big5</translation>
+        <translation type="vanished">Big5</translation>
     </message>
     <message>
         <source>Imported game position</source>
-        <translation>Importar posição da partida</translation>
+        <translation type="vanished">Importar posição da partida</translation>
     </message>
     <message>
         <source>Komi:</source>
@@ -7188,14 +9025,14 @@ Cuidado: pode ser chato se o oponente não quiser aceitar seus padrões mesmo se
 
 This is useful when numbering all moves of a game, so the font size of all one, two or three digits numbers is equal.
 When editing only single digit marks, it might be convenient to switch this off.</source>
-        <translation>Ajustar o tamanho da fonte para rótulos de texto
+        <translation type="vanished">Ajustar o tamanho da fonte para rótulos de texto
 
 Isto é útili ao numerar todas as fogadas de uma partida, de modo que o tamanho da fonte em todos os números de um, dois ou três dígitos seja igual.
 Ao editar marcas de dígito único, pode ser melhor desativar isto aqui.</translation>
     </message>
     <message>
         <source>On line games</source>
-        <translation>Jogos conectados</translation>
+        <translation type="vanished">Jogos conectados</translation>
     </message>
     <message>
         <source>Anti clicko (1/4 second click latency)</source>
@@ -7281,7 +9118,7 @@ Se estiver marcado, quando um jogo observado termina, ele é automaticamente sal
     </message>
     <message>
         <source>Board picture</source>
-        <translation>Imagem do tabuleiro</translation>
+        <translation type="vanished">Imagem do tabuleiro</translation>
     </message>
     <message>
         <source>observed games</source>
@@ -7305,18 +9142,18 @@ Se estiver marcado quando completar uma partida, ela é automaticamente salva no
     </message>
     <message>
         <source>Background</source>
-        <translation>Fundo</translation>
+        <translation type="vanished">Fundo</translation>
     </message>
     <message>
         <source>Alternate (lists)</source>
-        <translation>Alternar (listas)</translation>
+        <translation type="vanished">Alternar (listas)</translation>
     </message>
     <message>
         <source>Show SGF board coordinates
-<byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/>
+										
 Toggles if SGF style board coordinates are shown.</source>
-        <translation>Mostrar coordenadas SGF
-<byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/>
+        <translation type="vanished">Mostrar coordenadas SGF
+										
 Alterna entre mostrar ou não as coordenadas sob o estilo SGF.</translation>
     </message>
     <message>
@@ -7358,18 +9195,18 @@ Se a imagem não estiver definida ou for inválida, uma imagem padrão será usa
     <message>
         <source>default comment field orientation
 
-as saved<byte value="x9"/>use ALT+&lt;0..9&gt; to save position, size and comment orientation, 
-<byte value="x9"/><byte value="x9"/>restore with CTRL+&lt;0..9&gt;
-horizontal<byte value="x9"/>always show horizontal comment field
-vertical<byte value="x9"/><byte value="x9"/>always show vertical comment field
+as saved	use ALT+&lt;0..9&gt; to save position, size and comment orientation, 
+		restore with CTRL+&lt;0..9&gt;
+horizontal	always show horizontal comment field
+vertical		always show vertical comment field
 
 To use saved comment field orientation you must select &apos;as saved&apos;. By using ALT/CTRL+&lt;number&gt; while horizontal/vertical is chosen, the saved comment field orientation is ignored.</source>
-        <translation>orientação do campo de comentários padrão
+        <translation type="vanished">orientação do campo de comentários padrão
 
-como salvo<byte value="x9"/>use ALT+&lt;0..9&gt; para salvar a posição, o tamanho e a orientação dos comentários,
-<byte value="x9"/><byte value="x9"/>restaure com CTRL+&lt;0..9&gt;
-horizontal<byte value="x9"/>sempre mostra o campo de comentários na horizontal
-vertical<byte value="x9"/><byte value="x9"/>sempre mostra o campo de comentários na vertical
+como salvo	use ALT+&lt;0..9&gt; para salvar a posição, o tamanho e a orientação dos comentários,
+		restaure com CTRL+&lt;0..9&gt;
+horizontal	sempre mostra o campo de comentários na horizontal
+vertical		sempre mostra o campo de comentários na vertical
 
 Para usar a orientação salva você deve seleciorar &apos;como salvo&apos;. Ao usar ALT/CTRL+&lt;número&gt; enquanto horizontal/vertical está ativado, a orientação salva é ignorada.</translation>
     </message>
@@ -7384,8 +9221,8 @@ Registered users:
 use your login name and password provided by the go server operator after registration
 
 New users: depends on server
-NNGS, CWS:<byte value="x9"/>use a unique name like &apos;hotdog17&apos;
-others:<byte value="x9"/><byte value="x9"/>guest</source>
+NNGS, CWS:	use a unique name like &apos;hotdog17&apos;
+others:		guest</source>
         <translation>nome
 
 Usuários registrados:
@@ -7393,15 +9230,11 @@ use seu nome de acesso e senha dados pelo operador do servidor &apos;go&apos; ap
 
 Novos usuários: depende do servidor usado
 NNGS, CWS: use um único nome, como &apos;cachorro17&apos;
-outros:<byte value="x9"/><byte value="x9"/>&apos;guest&apos; (visitante)</translation>
+outros:		&apos;guest&apos; (visitante)</translation>
     </message>
     <message>
         <source>check for automatic saving for your games</source>
         <translation>ative para o salvamento automático de seus jogos</translation>
-    </message>
-    <message>
-        <source>Ugly 2D</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>flat circled ... ugly but asked for ...</source>
@@ -7414,10 +9247,6 @@ This will display back and white circles</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Plain 3D</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>plain 3D (no shadow, no stripes)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7425,10 +9254,6 @@ This will display back and white circles</source>
         <source>Stone appearance
 
 this will display simple 3D stones, with no shadow and neither stripes on white stones</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Realistic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7495,6 +9320,396 @@ up to :</source>
 up to :</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Accept changes and close dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>cancel changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alt+C</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Graphics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sound defaults by game type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Local editing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Observed games</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Computer games</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>On-line matches</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File selectors:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Qt selector with SGF preview</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cursor stone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Standard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SGF style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Side bar:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hidden</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation type="unfinished">Esquerda</translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation type="unfinished">Direita</translation>
+    </message>
+    <message>
+        <source>Coordinates:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Online games</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yes</source>
+        <translation type="unfinished">Sim</translation>
+    </message>
+    <message>
+        <source>Ask</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show which:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Letters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show as:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Siblings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Children</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Allow SGF files to override
+child/sibling setting:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ignore diagrams</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Diagrams</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If checked, the diagram display will revert to an empty board whenever no diagrams are available, rather than retaining the previously shown diagram (which might be confusing).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear diagram display
+when navigating away</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open windows with
+diagram pane shown:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This option controls the layout of the board window. You can choose whether to show the diagram/evaluation graph pane, with an option to do so only if the opened file contains diagrams.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Never</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If diagrams found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Always</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game tree</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Adjust the visual size of the nodes in the game tree display.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Display size:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Annotated games can potentially have very many figures. This option stops them from being displayed in the game tree. Instead, an icon is shown for any move that has diagrams as children.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hide child diagrams in game tree</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Plain 2D</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Old 3D look</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shaded 3D</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>White stone appearance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Specular hardness:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Thickness:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Specular ratio:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select base color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flattened:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Black stone appearance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Simulate clamshell appearance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ambient light:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wood filename:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default 2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default 3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default 4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default 5</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wood image:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scale line widths</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Widen outside lines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Computer color:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default human player name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go Engines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear the engine form.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add or change the current entry.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete the current entry.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Executable:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The path to the GTP engine&apos;s executable.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The name of the engine by which it is selected in the new computer game dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use for analysis (LZ or compatible)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fixed komi:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Arguments:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Any command line arguments that should be passed at startup.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Analysis</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show variations as:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Percentage difference</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Absolute percentage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Winning percentages shown for:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Side to move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Max. variation depth:
+(0 is unlimited)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Max. moves shown:
+(0 is unlimited)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Override variation display settings
+(show child moves as circles when analysing)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hide other moves when showing
+a variation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Don&apos;t display moves with few visits</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear the server form.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Variants</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Duplicates shown either side of toroidal boards:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set application language
+
+Choose your language for qGo.
+If &apos;System default&apos; is selected, qGo will use the standard language of your system. On Linux this will check the environment variable LANG, on Windows simply the language you have set in your preferences.
+
+This change will take effect only after qGo has been restarted.
+
+If your language is not supported, you might consider translating q5go. Please visit https://github.com/bernds/q5go</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QApplication</name>
@@ -7527,78 +9742,78 @@ up to :</source>
     <name>QNewGameDlg</name>
     <message>
         <source>Human</source>
-        <translation>Humano</translation>
+        <translation type="vanished">Humano</translation>
     </message>
     <message>
         <source>Computer</source>
-        <translation>Computador</translation>
+        <translation type="vanished">Computador</translation>
     </message>
     <message>
         <source>SGF Files (*.sgf);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)</source>
-        <translation>Arquivos SGF (*.sgf);;Arquivos MGT (*.mgt);;Arquivos XML (*.xml);;Todos arquivos (*)</translation>
+        <translation type="vanished">Arquivos SGF (*.sgf);;Arquivos MGT (*.mgt);;Arquivos XML (*.xml);;Todos arquivos (*)</translation>
     </message>
     <message>
         <source>Error</source>
-        <translation>Erro</translation>
+        <translation type="vanished">Erro</translation>
     </message>
     <message>
         <source>You entered an invalid Handicap (1 is not legal)</source>
-        <translation>Você definiu uma Vantagem inválida (1 não é legal)</translation>
+        <translation type="vanished">Você definiu uma Vantagem inválida (1 não é legal)</translation>
     </message>
 </context>
 <context>
     <name>QNewGameDlgGui</name>
     <message>
         <source>Computer Game</source>
-        <translation>Partida contra o Computador</translation>
+        <translation type="vanished">Partida contra o Computador</translation>
     </message>
     <message>
         <source>White Player</source>
-        <translation>Jogador branco</translation>
+        <translation type="vanished">Jogador branco</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation type="vanished">Nome</translation>
     </message>
     <message>
         <source>Computer Level</source>
-        <translation>Nível do Computador</translation>
+        <translation type="vanished">Nível do Computador</translation>
     </message>
     <message>
         <source>Black Player</source>
-        <translation>Jogador preto</translation>
+        <translation type="vanished">Jogador preto</translation>
     </message>
     <message>
         <source>Load game</source>
-        <translation>Carregar uma partida</translation>
+        <translation type="vanished">Carregar uma partida</translation>
     </message>
     <message>
         <source>&amp;OK</source>
-        <translation>&amp;OK</translation>
+        <translation type="vanished">&amp;OK</translation>
     </message>
     <message>
         <source>&amp;Cancel</source>
-        <translation>&amp;Cancelar</translation>
+        <translation type="vanished">&amp;Cancelar</translation>
     </message>
     <message>
         <source>New Game</source>
-        <translation>Nova partida</translation>
+        <translation type="vanished">Nova partida</translation>
     </message>
     <message>
         <source>Board size:</source>
-        <translation>Tamanho do tabuleiro:</translation>
+        <translation type="vanished">Tamanho do tabuleiro:</translation>
     </message>
     <message>
         <source>Komi:</source>
-        <translation>Komi:</translation>
+        <translation type="vanished">Komi:</translation>
     </message>
     <message>
         <source>Handicap:</source>
-        <translation>Vantagem:</translation>
+        <translation type="vanished">Vantagem:</translation>
     </message>
     <message>
         <source>One Color Go</source>
-        <translation>Go monocromático</translation>
+        <translation type="vanished">Go monocromático</translation>
     </message>
 </context>
 <context>
@@ -7606,92 +9821,92 @@ up to :</source>
     <message>
         <source>Id</source>
         <comment>GamesTable Id number</comment>
-        <translation>Id</translation>
+        <translation type="vanished">Id</translation>
     </message>
     <message>
         <source>White</source>
         <comment>GamesTable White name</comment>
-        <translation>Branco</translation>
+        <translation type="vanished">Branco</translation>
     </message>
     <message>
         <source>WR</source>
         <comment>GamesTable White Rank</comment>
-        <translation>CB</translation>
+        <translation type="vanished">CB</translation>
     </message>
     <message>
         <source>Black</source>
         <comment>GamesTable Black name</comment>
-        <translation>Preto</translation>
+        <translation type="vanished">Preto</translation>
     </message>
     <message>
         <source>BR</source>
         <comment>GamesTable Black Rank</comment>
-        <translation>CP</translation>
+        <translation type="vanished">CP</translation>
     </message>
     <message>
         <source>Mv</source>
         <comment>GamesTable Move</comment>
-        <translation>Jg</translation>
+        <translation type="vanished">Jg</translation>
     </message>
     <message>
         <source>Sz</source>
         <comment>GamesTable Size</comment>
-        <translation>Tm</translation>
+        <translation type="vanished">Tm</translation>
     </message>
     <message>
         <source>H</source>
         <comment>GamesTable Handicap</comment>
-        <translation>V</translation>
+        <translation type="vanished">V</translation>
     </message>
     <message>
         <source>K</source>
         <comment>GamesTable Komi</comment>
-        <translation>K</translation>
+        <translation type="vanished">K</translation>
     </message>
     <message>
         <source>By</source>
         <comment>GamesTable Byoyomi time</comment>
-        <translation>By</translation>
+        <translation type="vanished">By</translation>
     </message>
     <message>
         <source>FR</source>
         <comment>GamesTable Free/Rated type of game</comment>
-        <translation>LC</translation>
+        <translation type="vanished">LC</translation>
     </message>
     <message>
         <source>Ob</source>
         <comment>GamesTable number of Observers</comment>
-        <translation>Ob</translation>
+        <translation type="vanished">Ob</translation>
     </message>
     <message>
         <source>Stat</source>
         <comment>PlayerTable: status [X!SQ]</comment>
-        <translation>Est</translation>
+        <translation type="vanished">Est</translation>
     </message>
     <message>
         <source>Name</source>
         <comment>PlayerTable: player&apos;s name</comment>
-        <translation>Nome</translation>
+        <translation type="vanished">Nome</translation>
     </message>
     <message>
         <source>Rk</source>
         <comment>PlayerTable: rank</comment>
-        <translation>Cl</translation>
+        <translation type="vanished">Cl</translation>
     </message>
     <message>
         <source>pl</source>
         <comment>PlayerTable: playing in game</comment>
-        <translation>jg</translation>
+        <translation type="vanished">jg</translation>
     </message>
     <message>
         <source>ob</source>
         <comment>PlayerTable: observing game</comment>
-        <translation>ob</translation>
+        <translation type="vanished">ob</translation>
     </message>
     <message>
         <source>Idle</source>
         <comment>PlayerTable: idle time</comment>
-        <translation>Inat</translation>
+        <translation type="vanished">Inat</translation>
     </message>
     <message>
         <source>Refresh</source>
@@ -7701,7 +9916,7 @@ up to :</source>
     <message>
         <source>Score</source>
         <comment>button label</comment>
-        <translation>Pontuação</translation>
+        <translation type="vanished">Pontuação</translation>
     </message>
     <message>
         <source>N</source>
@@ -7716,7 +9931,7 @@ up to :</source>
     <message>
         <source>Edit</source>
         <comment>button label</comment>
-        <translation>Editar</translation>
+        <translation type="vanished">Editar</translation>
     </message>
     <message>
         <source>O</source>
@@ -7726,7 +9941,7 @@ up to :</source>
     <message>
         <source>Pass</source>
         <comment>button label</comment>
-        <translation>Passar</translation>
+        <translation type="vanished">Passar</translation>
     </message>
     <message>
         <source>P</source>
@@ -7764,23 +9979,23 @@ up to :</source>
     </message>
     <message>
         <source>brother</source>
-        <translation>variação</translation>
+        <translation type="vanished">variação</translation>
     </message>
     <message>
         <source>brothers</source>
-        <translation>variações</translation>
+        <translation type="vanished">variações</translation>
     </message>
     <message>
         <source>son</source>
-        <translation>derivaçã</translation>
+        <translation type="vanished">derivaçã</translation>
     </message>
     <message>
         <source>sons</source>
-        <translation>derivações</translation>
+        <translation type="vanished">derivações</translation>
     </message>
     <message>
         <source>textedit</source>
-        <translation>edita_texto</translation>
+        <translation type="vanished">edita_texto</translation>
     </message>
     <message>
         <source>Black</source>
@@ -7833,21 +10048,271 @@ Abrir um arquivo</translation>
     </message>
     <message>
         <source>Error opening program: %1</source>
-        <translation>Erro ao abrir o programa: %1</translation>
+        <translation type="vanished">Erro ao abrir o programa: %1</translation>
+    </message>
+    <message>
+        <source>GTP process exited unexpectedly.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit diagram options...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export &amp;ASCII...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export S&amp;VG...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Clear selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Hide unselected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Make all &amp;visible</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>C&amp;lear visibility state, inherit from parent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Expand subtree</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Expand one level of child nodes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Collapse subtree</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear diagram status for this node</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set this move to be the start of a diagram</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Navigate to this node</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The file did not quite have the correct structure of an SGF file, but could otherwise be understood.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The SGF file contained an invalid move that was played on top of another stone. Variations have been truncated at that point.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>One or more comments have been dropped since they contained invalid characters.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The SGF contained an empty value for komi. Assuming zero.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The SGF contained an empty value for the handicap. Assuming zero.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The SGF contained an invalid value in a property related to display.  Things like move numbers might not show up correctly.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The SGF contained evaluation data that could not be understood.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unsupported board size in SGF file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Errors found in SGF file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error while trying to load SGF file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open SGF file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SGF Files (*.sgf *.SGF);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show the Go server client window (default if no other arguments)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start up with a board window (ignored if files are loaded).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start up with the computer analysis dialog to analyze &lt;file&gt;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Display debug messages in a window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Specify text &lt;encoding&gt; of SGF files passed by command line.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load &lt;file&gt; and display it in a board window.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A</source>
+        <comment>Board status line: batch analysis</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>
+Variation </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> of </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>child position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>child positions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>GTP code originally from Goliath, thanks to: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not load custom board image,
+reverting to default.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unable to save settings to </source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>QPushButton</name>
     <message>
         <source>Move</source>
-        <translation>Jogada</translation>
+        <translation type="vanished">Jogada</translation>
+    </message>
+</context>
+<context>
+    <name>SGFPreview</name>
+    <message>
+        <source>Override character set for text in SGF file:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>UTF-8</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>GB18030</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>EUC-KR</source>
+        <translation type="unfinished">EUC-KR</translation>
+    </message>
+    <message>
+        <source>EUC-JP</source>
+        <translation type="unfinished">EUC-JP</translation>
+    </message>
+    <message>
+        <source>ISO-2022-JP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shift-JIS</source>
+        <translation type="unfinished">Shift-JIS</translation>
+    </message>
+    <message>
+        <source>Big5</source>
+        <translation type="unfinished">Big5</translation>
+    </message>
+    <message>
+        <source>Handicap:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date:</source>
+        <translation type="unfinished">Data:</translation>
+    </message>
+    <message>
+        <source>Size:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>6.5</source>
+        <translation type="unfinished">6.5</translation>
+    </message>
+    <message>
+        <source>Result:</source>
+        <translation type="unfinished">Resultado:</translation>
+    </message>
+    <message>
+        <source>19</source>
+        <translation type="unfinished">19</translation>
+    </message>
+    <message>
+        <source>Komi:</source>
+        <translation type="unfinished">Komi:</translation>
+    </message>
+    <message>
+        <source>Black</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>White</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SGF files (*.sgf *.SGF)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All files (*)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>ScoreTools</name>
     <message>
         <source>ScoreTools</source>
-        <translation>Ferramentas de pontuação</translation>
+        <translation type="vanished">Ferramentas de pontuação</translation>
     </message>
     <message>
         <source>White</source>
@@ -7876,6 +10341,18 @@ Abrir um arquivo</translation>
     <message>
         <source>Komi:</source>
         <translation>Komi:</translation>
+    </message>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Result</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>TextLabel</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -7911,6 +10388,68 @@ Abrir um arquivo</translation>
     <message>
         <source>Open board</source>
         <translation type="obsolete">Abrir um tabuleiro</translation>
+    </message>
+</context>
+<context>
+    <name>SvgView</name>
+    <message>
+        <source>Export to SVG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save SVG export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Svg Files (*.txt);;All Files (*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to write to file </source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SvgViewGUI</name>
+    <message>
+        <source>SVG export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move numbering</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Coordinates</source>
+        <translation type="unfinished">Coordenadas</translation>
+    </message>
+    <message>
+        <source>Copy position to clipboard</source>
+        <translation type="unfinished">Copiar a posição para área de transferência</translation>
+    </message>
+    <message>
+        <source>&amp;To clipboard (as text)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save position to file</source>
+        <translation type="unfinished">Salvar a posição para o arquivo</translation>
+    </message>
+    <message>
+        <source>&amp;Save</source>
+        <translation type="unfinished">&amp;Salvar</translation>
+    </message>
+    <message>
+        <source>Close this window</source>
+        <translation type="unfinished">Fechar esta janela</translation>
+    </message>
+    <message>
+        <source>&amp;Close</source>
+        <translation type="unfinished">&amp;Fechar</translation>
     </message>
 </context>
 <context>
@@ -8119,19 +10658,35 @@ After placing and/or undo release button for returning to starting point automat
     </message>
     <message>
         <source>This file already exists. Do you want to overwrite it?</source>
-        <translation>Este arquivo já existe. Quer sobreescrevê-lo?</translation>
+        <translation type="vanished">Este arquivo já existe. Quer sobreescrevê-lo?</translation>
     </message>
     <message>
         <source>Yes</source>
-        <translation>Sim</translation>
+        <translation type="vanished">Sim</translation>
     </message>
     <message>
         <source>No</source>
-        <translation>Não</translation>
+        <translation type="vanished">Não</translation>
     </message>
     <message>
         <source>Failed to write to file</source>
-        <translation>Impossível escrever para o arquivo</translation>
+        <translation type="vanished">Impossível escrever para o arquivo</translation>
+    </message>
+    <message>
+        <source>GTP program startup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export to ASCII</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save ASCII export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to write to file </source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -8164,6 +10719,26 @@ After placing and/or undo release button for returning to starting point automat
         <source>Close this window</source>
         <translation>Fechar esta janela</translation>
     </message>
+    <message>
+        <source>Move numbering</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Coordinates</source>
+        <translation type="unfinished">Coordenadas</translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Abort program startup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Abort</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>qGo</name>
@@ -8185,15 +10760,15 @@ Sair assim mesmo?</translation>
     </message>
     <message>
         <source>No sound available.</source>
-        <translation>Nenhum som está disponível.</translation>
+        <translation type="vanished">Nenhum som está disponível.</translation>
     </message>
     <message>
         <source>qGo directory</source>
-        <translation>Diretório qGo</translation>
+        <translation type="vanished">Diretório qGo</translation>
     </message>
     <message>
         <source>No valid directory was given. Sound is not available.</source>
-        <translation>Nenhum diretório válido foi dado. O som não está disponível.</translation>
+        <translation type="vanished">Nenhum diretório válido foi dado. O som não está disponível.</translation>
     </message>
     <message>
         <source>Sound files not found.
@@ -8202,29 +10777,29 @@ Please check for the directories /usr/local/share/qgo/sounds/ or /usr/share/qgo/
     </message>
     <message>
         <source>Sound files not found.</source>
-        <translation>Os arquivos de som não foram encontrados.</translation>
+        <translation type="vanished">Os arquivos de som não foram encontrados.</translation>
     </message>
     <message>
         <source>Please check for the directories</source>
-        <translation>Por favor verifique os diretórios</translation>
+        <translation type="vanished">Por favor verifique os diretórios</translation>
     </message>
     <message>
         <source>or</source>
-        <translation>ou</translation>
+        <translation type="vanished">ou</translation>
     </message>
     <message>
         <source>depending on your installation.</source>
-        <translation>dependendo de sua instalação.</translation>
+        <translation type="vanished">dependendo de sua instalação.</translation>
     </message>
     <message>
         <source>You can navigate to the main qGo directory (for example:</source>
-        <translation>Você pode navegar para o diretório principal qGo (por exemplo:</translation>
+        <translation type="vanished">Você pode navegar para o diretório principal qGo (por exemplo:</translation>
     </message>
     <message>
         <source>If the directory was given correctly, this data will be saved and you won&apos;tbe asked
 anymore except you install qGo again into a different directory.
 To abort this procedure, click &apos;Cancel&apos; in the following dialog.</source>
-        <translation>Se o diretório foi definido corretamente, este dado será salvo e não será questionado
+        <translation type="vanished">Se o diretório foi definido corretamente, este dado será salvo e não será questionado
 mais, exceto se você reinstalar o qGo em um diretório diferente.
 Para abortar este procedimento, clique em &apos;Cancelar&apos; no diálogo a seguir.</translation>
     </message>
@@ -8234,7 +10809,7 @@ Para abortar este procedimento, clique em &apos;Cancelar&apos; no diálogo a seg
     </message>
     <message>
         <source>No sound available. Qt on Mac uses QuickTime sound.</source>
-        <translation>Sem som disponível. Qt no Mac usa o som do QuickTime.</translation>
+        <translation type="vanished">Sem som disponível. Qt no Mac usa o som do QuickTime.</translation>
     </message>
     <message>
         <source>Sorry, you are not running the Network Audio sytem.
@@ -8248,7 +10823,7 @@ Release 1.2 of NAS is also included with the X11R6 contrib distribution. After i
     </message>
     <message>
         <source>Sound available.</source>
-        <translation>Som disponível.</translation>
+        <translation type="vanished">Som disponível.</translation>
     </message>
     <message>
         <source>English translation by Peter Strempel &amp; Johannes Mesa</source>
@@ -8256,7 +10831,7 @@ Release 1.2 of NAS is also included with the X11R6 contrib distribution. After i
     </message>
     <message>
         <source>About...</source>
-        <translation>Sobre...</translation>
+        <translation type="vanished">Sobre...</translation>
     </message>
     <message>
         <source>You are not running the Network Audio sytem.
@@ -8281,7 +10856,7 @@ De qualquer forma, se você tiver OSS, o som deveria estar funcionando, direcion
     </message>
     <message>
         <source>GTP code from Goliath, thanks to:</source>
-        <translation>Código GTP de Goliath, obrigado a:</translation>
+        <translation type="vanished">Código GTP de Goliath, obrigado a:</translation>
     </message>
     <message>
         <source>English translation by:
@@ -8289,13 +10864,13 @@ Peter Strempel
 Johannes Mesa
 Emmanuel Beranger</source>
         <comment>Please set your own language and your name! Use your own language!</comment>
-        <translation>Tradução para o português por:
+        <translation type="vanished">Tradução para o português por:
 Felipe Castro</translation>
     </message>
     <message>
         <source>No sound files in bundle, strange.
 </source>
-        <translation>Nenhum arquivo de som no pacote, estranho</translation>
+        <translation type="vanished">Nenhum arquivo de som no pacote, estranho</translation>
     </message>
     <message>
         <source>At least one board is modified.
@@ -8315,7 +10890,7 @@ ftp.x.org:/contrib/audio/nas
 Release 1.2 of NAS is also included with the X11R6 contrib distribution. After installing NAS, you will then need to reconfigure Qt with NAS sound support.
 
 Nevertheless, if you have oss, sound should be working and directed to /dev/dsp</source>
-        <translation>Você não está usando o Network Audio System (NAS).
+        <translation type="vanished">Você não está usando o Network Audio System (NAS).
 Se você tem o comando &apos;au&apos;, execute-o em plano de fundo antes deste programa.
 O lançamento mais recente do NAS pode ser obtido em:
 
@@ -8335,23 +10910,23 @@ De qualquer forma, se você tiver OSS, o som deveria estar funcionando, direcion
     </message>
     <message>
         <source>free</source>
-        <translation>livre</translation>
+        <translation type="vanished">livre</translation>
     </message>
     <message>
         <source>rated</source>
-        <translation>classificada</translation>
+        <translation type="vanished">classificada</translation>
     </message>
     <message>
         <source>remaining time / stones</source>
-        <translation>tempo/pedras restantes</translation>
+        <translation type="vanished">tempo/pedras restantes</translation>
     </message>
     <message>
         <source>click to pause/unpause the game</source>
-        <translation>clique para pausar/retomar a partida</translation>
+        <translation type="vanished">clique para pausar/retomar a partida</translation>
     </message>
     <message>
         <source>click to add 1 minute to your opponent&apos;s clock</source>
-        <translation>clique para adicionar 1 minuto ao relógio do seu oponente</translation>
+        <translation type="vanished">clique para adicionar 1 minuto ao relógio do seu oponente</translation>
     </message>
     <message>
         <source>-- none --</source>
@@ -8364,22 +10939,38 @@ De qualquer forma, se você tiver OSS, o som deveria estar funcionando, direcion
     <message>
         <source>Failed to play the stone within program 
 </source>
-        <translation>Falha ao mover a pedra dentro do programa</translation>
+        <translation type="vanished">Falha ao mover a pedra dentro do programa</translation>
     </message>
     <message>
         <source>Failed to pass within program 
 </source>
-        <translation>Falha ao passar dentro do programa</translation>
+        <translation type="vanished">Falha ao passar dentro do programa</translation>
     </message>
     <message>
         <source>Failed to have the program play its stone
 </source>
-        <translation>Falha ao fazer o programa jogar sua pedra</translation>
+        <translation type="vanished">Falha ao fazer o programa jogar sua pedra</translation>
     </message>
     <message>
         <source>Failed to undo within program 
 </source>
-        <translation>Falha ao tentar desfazer dentro do programa</translation>
+        <translation type="vanished">Falha ao tentar desfazer dentro do programa</translation>
+    </message>
+    <message>
+        <source>GAME MODE: place stones...</source>
+        <translation type="unfinished">MODO DE JOGADA : coloque pedras...</translation>
+    </message>
+    <message>
+        <source>SCORE MODE: click on a stone to mark as dead...</source>
+        <translation type="unfinished">MODO DE PONTUAÇÃO: clique em uma pedra para a marcar como morta...</translation>
+    </message>
+    <message>
+        <source>GAME MODE: click to play stones...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game #</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -8406,19 +10997,19 @@ De qualquer forma, se você tiver OSS, o som deveria estar funcionando, direcion
     </message>
     <message>
         <source>SCORE MODE: RESET - click on a stone to mark as dead...</source>
-        <translation>MODE DE PONTUAÇÃO: REINÍCIO - clique em uma pedra para a marcar como morta...</translation>
+        <translation type="vanished">MODE DE PONTUAÇÃO: REINÍCIO - clique em uma pedra para a marcar como morta...</translation>
     </message>
     <message>
         <source>SCORE MODE: click on a stone to mark as dead...</source>
-        <translation>MODO DE PONTUAÇÃO: clique em uma pedra para a marcar como morta...</translation>
+        <translation type="vanished">MODO DE PONTUAÇÃO: clique em uma pedra para a marcar como morta...</translation>
     </message>
     <message>
         <source>GAME MODE: place stones...</source>
-        <translation>MODO DE JOGADA : coloque pedras...</translation>
+        <translation type="vanished">MODO DE JOGADA : coloque pedras...</translation>
     </message>
     <message>
         <source>Game Status: W:</source>
-        <translation>Estado do jogo : B:</translation>
+        <translation type="vanished">Estado do jogo : B:</translation>
     </message>
     <message>
         <source>requests for</source>
@@ -8438,7 +11029,7 @@ De qualquer forma, se você tiver OSS, o som deveria estar funcionando, direcion
     </message>
     <message>
         <source>B:</source>
-        <translation>P:</translation>
+        <translation type="vanished">P:</translation>
     </message>
     <message>
         <source>Game continued as Game number</source>
@@ -8490,7 +11081,7 @@ CANCELAR = %4</translation>
     </message>
     <message>
         <source>Done</source>
-        <translation>Feito</translation>
+        <translation type="vanished">Feito</translation>
     </message>
     <message>
         <source>0</source>
@@ -8498,11 +11089,11 @@ CANCELAR = %4</translation>
     </message>
     <message>
         <source>*** Both players are Human ! ***</source>
-        <translation>*** Ambos os jogadores são Humanos ! ***</translation>
+        <translation type="vanished">*** Ambos os jogadores são Humanos ! ***</translation>
     </message>
     <message>
-        <source>Game n&#xb0; </source>
-        <translation>Jogo nº </translation>
+        <source>Game n° </source>
+        <translation type="vanished">Jogo nº </translation>
     </message>
     <message>
         <source>%1 wants to %2

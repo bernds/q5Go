@@ -1,81 +1,1274 @@
-<!DOCTYPE TS><TS>
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1">
+<context>
+    <name>AnalyzeDialog</name>
+    <message>
+        <source>Batch computer analysis</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Analysis parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Maximum number of lines to add:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Number of seconds per move: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Limits the number of variations added for engine lines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>10</source>
+        <translation type="unfinished">10</translation>
+    </message>
+    <message>
+        <source>5</source>
+        <translation type="unfinished">5</translation>
+    </message>
+    <message>
+        <source>Job queue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Observe progress in board window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Completed jobs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File to analyse</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add to &amp;queue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Engine status</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start engine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show messages...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Board size:</source>
+        <translation type="unfinished">棋盤大小:</translation>
+    </message>
+    <message>
+        <source>Choose:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>stopped</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Status:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open the preferences dialog to configure engines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Configure engines...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Close</source>
+        <translation type="unfinished">關閉(&amp;C)</translation>
+    </message>
+    <message>
+        <source>Jobs are still running.  Do you wish to terminate the engine and discard the jobs?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Completed jobs contain unsaved data.  Do you wish to discard the jobs?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>not running</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>starting up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>idle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>working</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Really discard selected job?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PV </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>W Win </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>B Win </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>at </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> visits.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Analysis is supported only for square boards!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File has a different boardsize than selected!</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>AutoDiagsDialog</name>
+    <message>
+        <source>Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Main line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>30</source>
+        <translation type="unfinished">30</translation>
+    </message>
+    <message>
+        <source>Break when overlap occurs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Maximum number of moves per diagram:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove preexisting diagrams</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Variations</source>
+        <translation type="unfinished">變化</translation>
+    </message>
+    <message>
+        <source>Add diagram for each variation start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set move number for variation start to 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default flags</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show &amp;hoshi points</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Remove stones (base display on final position)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Show title in export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show coor&amp;dinates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Figure %1 (%2-%3)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Diagram %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
 <context>
     <name>Board</name>
     <message>
         <source>Pass</source>
-        <translation>虛手</translation>
+        <translation type="vanished">虛手</translation>
     </message>
     <message>
         <source>vs.</source>
-        <translation>對</translation>
+        <translation type="vanished">對</translation>
     </message>
     <message>
         <source>White</source>
-        <translation>白棋</translation>
+        <translation type="vanished">白棋</translation>
     </message>
     <message>
         <source>W</source>
-        <translation>白</translation>
+        <translation type="vanished">白</translation>
     </message>
     <message>
         <source>Black</source>
-        <translation>黑棋</translation>
+        <translation type="vanished">黑棋</translation>
     </message>
     <message>
         <source>B</source>
-        <translation>黑</translation>
+        <translation type="vanished">黑</translation>
     </message>
     <message>
         <source>Failed to save image!</source>
-        <translation>儲存圖像失敗！</translation>
+        <translation type="vanished">儲存圖像失敗！</translation>
     </message>
     <message>
         <source>Black wins with %1</source>
-        <translation>黑棋贏 %1</translation>
+        <translation type="vanished">黑棋贏 %1</translation>
     </message>
     <message>
         <source>White wins with %1</source>
-        <translation>白棋贏 %1</translation>
+        <translation type="vanished">白棋贏 %1</translation>
     </message>
     <message>
         <source>Jigo</source>
-        <translation>Jigo</translation>
+        <translation type="vanished">Jigo</translation>
     </message>
     <message>
         <source>XML</source>
-        <translation>XML</translation>
+        <translation type="vanished">XML</translation>
     </message>
     <message>
         <source>Could not find file:</source>
-        <translation>無法找到檔案：</translation>
+        <translation type="vanished">無法找到檔案：</translation>
     </message>
     <message>
         <source>Could not open file:</source>
-        <translation>無法開啟檔案：</translation>
+        <translation type="vanished">無法開啟檔案：</translation>
     </message>
     <message>
         <source>Invalid text encoding given. Please check preferences!</source>
-        <translation>文字編碼方式無效。請檢查你的偏好設定！</translation>
+        <translation type="vanished">文字編碼方式無效。請檢查你的偏好設定！</translation>
     </message>
     <message>
         <source>Reading sgf file...</source>
-        <translation>讀取 SGF 棋譜檔中…</translation>
+        <translation type="vanished">讀取 SGF 棋譜檔中…</translation>
     </message>
     <message>
         <source>Abort</source>
-        <translation>中止</translation>
+        <translation type="vanished">中止</translation>
     </message>
     <message>
         <source>Corrupt SGF file at position</source>
-        <translation>SGF 棋譜檔損壞</translation>
+        <translation type="vanished">SGF 棋譜檔損壞</translation>
     </message>
     <message>
         <source>No filename given!</source>
-        <translation>沒有檔案名稱！</translation>
+        <translation type="vanished">沒有檔案名稱！</translation>
     </message>
     <message>
         <source>Importing ASCII failed. Clipboard empty?</source>
-        <translation>匯入 ASCII 失敗！剪貼簿為空白？</translation>
+        <translation type="vanished">匯入 ASCII 失敗！剪貼簿為空白？</translation>
+    </message>
+    <message>
+        <source>Live evaluation: W %1%2 B %3%4 at %5 visits</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Analysis is supported only for square boards!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You did not configure any analysis engine for this boardsize!</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>BoardWindow</name>
+    <message>
+        <source>MainWindow</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Click on the board to place a stone.
+
+When in normal mode, left click plays moves in alternating colors.
+Shift + left click moves to the first move in the main branch.
+Shift + right click moves to the next move in the current branch.
+When in edit mode and editing stones, left click places a black, right click a white stone, clicking on an existant stone removes it.
+When editing marks, left click sets, right click removes the mark. When editing letter marks, shift-click allows to customize the mark text.
+When in score mode, left click to mark a group as dead, right click to mark it alive in seki. Click again to unmark as dead or seki.</source>
+        <translation type="unfinished">點選棋盤放置棋石
+
+在一般模式時, 顏色自動轉換於滑鼠左鍵進行落子
+Shift + ← 到全譜的第一手
+Shift + → 到目前變化的下一手
+在編輯模式並結束落子時, 左鍵放置黑棋, 右鍵放置白棋, 點選已存在的棋子則移除
+在編輯標示時, 左鍵設定, 右鍵移除標示. 當編輯文字標示時, shift-點選能夠自訂標示文字
+在計地模式時, 左鍵標示棋塊為死子, 右鍵標示活棋或雙活. 再次點擊則取消標示.</translation>
+    </message>
+    <message>
+        <source>Slider min value
+
+Minimum game move the slider can currently show.</source>
+        <translation type="unfinished">捲軸最小值
+
+顯示目前對局的最小落子手數.</translation>
+    </message>
+    <message>
+        <source>0</source>
+        <translation type="unfinished">0</translation>
+    </message>
+    <message>
+        <source>Navigate through the game</source>
+        <translation type="unfinished">逐步巡覽對局</translation>
+    </message>
+    <message>
+        <source>Navigate to move
+
+Use the slider to quickly navigate through the current branch of the game.</source>
+        <translation type="unfinished">巡覽落子
+
+使用捲軸快速巡覽目前對局分支.</translation>
+    </message>
+    <message>
+        <source>Slider max value
+
+Maximum game move the slider can currently show.</source>
+        <translation type="unfinished">捲軸最大值
+
+顯示目前對局的最大落子手數.</translation>
+    </message>
+    <message>
+        <source>000</source>
+        <translation type="unfinished">000</translation>
+    </message>
+    <message>
+        <source>Move number</source>
+        <translation type="unfinished">落子數</translation>
+    </message>
+    <message>
+        <source>Move number
+
+Number of the currently displayed move.</source>
+        <translation type="unfinished">落子數
+
+顯示目前的落子手數</translation>
+    </message>
+    <message>
+        <source>Move 0
+Variation 1 of 20
+0 child positions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to first move.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to previous move.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to next move.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to last move.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to previous commented move.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to next commented move.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to previous figure.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to next figure.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>next</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Player to play</source>
+        <translation type="unfinished">輪到棋友落子</translation>
+    </message>
+    <message>
+        <source>Player to play
+
+Indicates whether it is black&apos;s or white&apos;s turn.</source>
+        <translation type="unfinished">玩家進行對局
+
+表示任意持白或持黑。</translation>
+    </message>
+    <message>
+        <source>Black to play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Indicates that it&apos;s not the expected player&apos;s move.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toggle player to move.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Update game record from on-line game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Update from online game.
+This window was opened through &quot;Edit game&quot; while observing an online game.
+The update button refreshes the game in this window, adding any moves that were made in the actual game in the meantime. This operation discards any edits you may have made.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Update</source>
+        <translation type="unfinished">更新</translation>
+    </message>
+    <message>
+        <source>Pass move</source>
+        <translation type="unfinished">虛手</translation>
+    </message>
+    <message>
+        <source>Pass
+
+Pass your turn.</source>
+        <translation type="unfinished">虛手
+
+此次落子虛手</translation>
+    </message>
+    <message>
+        <source>Pass</source>
+        <translation type="unfinished">虛手</translation>
+    </message>
+    <message>
+        <source>Undo last move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Undo
+
+Undo the opponent&apos;s last move.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Undo</source>
+        <translation type="unfinished">回手</translation>
+    </message>
+    <message>
+        <source>Request adjournment</source>
+        <translation type="unfinished">要求打掛</translation>
+    </message>
+    <message>
+        <source>Adjourn.
+
+Send adjournment request to your opponent. If he accept it, the game will be adjourned and saved.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Adjourn</source>
+        <translation type="unfinished">打掛</translation>
+    </message>
+    <message>
+        <source>Score the game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Switch to coring mode.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Score</source>
+        <translation type="unfinished">計地</translation>
+    </message>
+    <message>
+        <source>Accept the score and end the game.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Accept the score, leave scoring mode and end the game.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Done</source>
+        <translation type="unfinished">完成</translation>
+    </message>
+    <message>
+        <source>Edit the game in a new window.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open a window with an offline copy of the game for editing.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit Game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter and leave edit mode where stones can be placed freely.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Freely edit the board position. Edited positions are added below the current one.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit Position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default Loss</source>
+        <translation type="unfinished">判定輸棋</translation>
+    </message>
+    <message>
+        <source>Resign.
+
+Resign the game immediately. Clicking here is a default loss. Your opponent wins. Game ends.</source>
+        <translation type="unfinished">投子
+
+立即投子. 對手獲勝. 遊戲結束</translation>
+    </message>
+    <message>
+        <source>RESIGN</source>
+        <translation type="unfinished">投子</translation>
+    </message>
+    <message>
+        <source>Tools tab
+
+N/S	normal/score tools
+TG	teaching tools</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>NS</source>
+        <translation type="unfinished">一般</translation>
+    </message>
+    <message>
+        <source>TG</source>
+        <translation type="unfinished">教學</translation>
+    </message>
+    <message>
+        <source>opponent:</source>
+        <translation type="unfinished">對手:</translation>
+    </message>
+    <message>
+        <source>opponent: invited by teacher</source>
+        <translation type="unfinished">對手: 要求教學棋</translation>
+    </message>
+    <message>
+        <source>opponent
+
+choose opponent from list to enable him playing with you in a teaching game.</source>
+        <translation type="unfinished">對手
+
+由列表選擇的對手與許他與你進行教學局.</translation>
+    </message>
+    <message>
+        <source>-- none --</source>
+        <translation type="unfinished">-- 無 --</translation>
+    </message>
+    <message>
+        <source>hand over controls to opponent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>hand over controls to opponent to allow him placing black and white stones, undo etc.
+
+Only teacher can give control,
+both teacher and pupil can release control.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>controls</source>
+        <translation type="unfinished">控制</translation>
+    </message>
+    <message>
+        <source>remember that point for fast return</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>push button at starting point to enable remembering.
+After placing and/or undo release button for returning to starting point automatically.</source>
+        <translation type="unfinished">於啟始點按下按鈕開始記憶
+之後放置且或回手釋放返回按鈕到自動開始點</translation>
+    </message>
+    <message>
+        <source>mark</source>
+        <translation type="unfinished">標示</translation>
+    </message>
+    <message>
+        <source>&amp;File</source>
+        <translation type="unfinished">檔案(&amp;F)</translation>
+    </message>
+    <message>
+        <source>&amp;Import/Export</source>
+        <translation type="unfinished">匯入/匯出(&amp;I)</translation>
+    </message>
+    <message>
+        <source>&amp;Edit</source>
+        <translation type="unfinished">編輯(&amp;E)</translation>
+    </message>
+    <message>
+        <source>&amp;Navigation</source>
+        <translation type="unfinished">巡覽(&amp;N)</translation>
+    </message>
+    <message>
+        <source>&amp;Settings</source>
+        <translation type="unfinished">設定(&amp;S)</translation>
+    </message>
+    <message>
+        <source>&amp;View</source>
+        <translation type="unfinished">檢視(&amp;V)</translation>
+    </message>
+    <message>
+        <source>&amp;Save layout</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Restore layout</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Analysis</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Help</source>
+        <translation type="unfinished">協助(&amp;H)</translation>
+    </message>
+    <message>
+        <source>File toolbar</source>
+        <translation type="unfinished">檔案工具列</translation>
+    </message>
+    <message>
+        <source>Navigation toolbar</source>
+        <translation type="unfinished">巡覽工具列</translation>
+    </message>
+    <message>
+        <source>Edit toolbar</source>
+        <translation type="unfinished">編輯工具列</translation>
+    </message>
+    <message>
+        <source>Diagrams</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>E&amp;xport ASCII</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export S&amp;VG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit &amp;Diagram</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Observers</source>
+        <translation type="unfinished">觀局者</translation>
+    </message>
+    <message>
+        <source>Evaluation graph</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Comments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game tree</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Miscellaneous toolbar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Next move</source>
+        <translation type="unfinished">下一手 (&amp;N)</translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation type="unfinished">右鍵</translation>
+    </message>
+    <message>
+        <source>&amp;Previous move</source>
+        <translation type="unfinished">上一手 (&amp;P)</translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation type="unfinished">左方向鍵</translation>
+    </message>
+    <message>
+        <source>&amp;First move</source>
+        <translation type="unfinished">棋局開始(&amp;F)</translation>
+    </message>
+    <message>
+        <source>Home</source>
+        <translation type="unfinished">Home</translation>
+    </message>
+    <message>
+        <source>&amp;Last move</source>
+        <translation type="unfinished">最後一手 (&amp;L)</translation>
+    </message>
+    <message>
+        <source>End</source>
+        <translation type="unfinished">End</translation>
+    </message>
+    <message>
+        <source>P&amp;revious variation</source>
+        <translation type="unfinished">之前變化 (&amp;R)</translation>
+    </message>
+    <message>
+        <source>Up</source>
+        <translation type="unfinished">上</translation>
+    </message>
+    <message>
+        <source>N&amp;ext variation</source>
+        <translation type="unfinished">下一變量(&amp;E)</translation>
+    </message>
+    <message>
+        <source>Down</source>
+        <translation type="unfinished">下</translation>
+    </message>
+    <message>
+        <source>&amp;Main branch</source>
+        <translation type="unfinished">主要分支(&amp;M)</translation>
+    </message>
+    <message>
+        <source>Ins</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Variation &amp;start</source>
+        <translation type="unfinished">變化開始(&amp;S)</translation>
+    </message>
+    <message>
+        <source>To start of variation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PgUp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Next &amp;branch</source>
+        <translation type="unfinished">下一分支(&amp;B)</translation>
+    </message>
+    <message>
+        <source>Move to next branch starting a variation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PgDown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Previous &amp;commented move</source>
+        <translation type="unfinished">前一個落子註解(&amp;C)</translation>
+    </message>
+    <message>
+        <source>Move to the previous move that has a comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Next c&amp;ommented move</source>
+        <translation type="unfinished">下一個註解落子(&amp;O)</translation>
+    </message>
+    <message>
+        <source>Move to the next move that has a comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Previous &amp;diagram</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>nMove to the previous move that starts a diagram</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Next dia&amp;gram</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move to the next move that starts a diagram</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Go to move...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter a move number and move there</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+G</source>
+        <translation type="unfinished">Ctrl+G</translation>
+    </message>
+    <message>
+        <source>Go to clic&amp;ked move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Click on an intersection and move to stone played there (if any)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game &amp;information...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Display and edit game information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+I</source>
+        <translation type="unfinished">Ctrl+I</translation>
+    </message>
+    <message>
+        <source>Place &amp;stone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&quot;Normal mode, click to place a stone.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set &amp;triangle mark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clicking places a triangle mark.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set &amp;circle mark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clicking places a circle mark.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set s&amp;quare mark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clicking places a square mark.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set cr&amp;oss mark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clicking places a cross mark.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set &amp;letter mark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clicking places a letter mark.
+Hold shift to add a freely editable text mark.
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set &amp;number mark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clicking places a number mark.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Delete </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete this and all following positions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+D</source>
+        <translation type="unfinished">Ctrl+D</translation>
+    </message>
+    <message>
+        <source>Select &amp;rectangle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose a rectangle to export.
+In play or edit mode, click to begin choosing a rectangle to be used when exporting to ASCII or SVG.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>R</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cle&amp;ar selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear the selected rectangle and select the whole board again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start dia&amp;gram here</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If selected, the current node starts a diagram.
+Enable diagram display in the View menu to view and edit diagrams.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>G</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New &amp;board window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+B</source>
+        <translation type="unfinished">Ctrl+B</translation>
+    </message>
+    <message>
+        <source>&amp;New game</source>
+        <translation type="unfinished">新增對局(&amp;N)</translation>
+    </message>
+    <message>
+        <source>Creates a new game on this board.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+N</source>
+        <translation type="unfinished">Ctrl+N</translation>
+    </message>
+    <message>
+        <source>New &amp;variant game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Creates a new Go variant game on this board</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+V</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Save</source>
+        <translation type="unfinished">儲存(&amp;S)</translation>
+    </message>
+    <message>
+        <source>Save an sgf file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+S</source>
+        <translation type="unfinished">Ctrl+S</translation>
+    </message>
+    <message>
+        <source>&amp;Open...</source>
+        <translation type="unfinished">開啟(&amp;O)...</translation>
+    </message>
+    <message>
+        <source>Open an sgf file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+O</source>
+        <translation type="unfinished">Ctrl+O</translation>
+    </message>
+    <message>
+        <source>Save &amp;as...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save a sgf file under a new name.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Close</source>
+        <translation type="unfinished">關閉(&amp;C)</translation>
+    </message>
+    <message>
+        <source>Close this window.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+W</source>
+        <translation type="unfinished">Ctrl+W</translation>
+    </message>
+    <message>
+        <source>E&amp;xit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Quit the application.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+Q</source>
+        <translation type="unfinished">Ctrl+Q</translation>
+    </message>
+    <message>
+        <source>Export &amp;ASCII...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export ASCII
+Export current board to ASCII diagrams, for use in web forums.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export S&amp;VG...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export SVG
+Export the current board to an SVG vector graphics file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Import SGF from clipboard</source>
+        <translation type="unfinished">由剪貼簿匯入 SGF 棋譜</translation>
+    </message>
+    <message>
+        <source>Import SGF from clipboard
+Import a complete game in SGF format from the clipboard.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>E&amp;xport SGF &amp;to clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export SGF to clipboard
+Export a complete game in SGF format to the clipboard.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export &amp;image...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export image
+Take a screen grab of the current board and export it to an image file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Export image to clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export image to clipboard
+Take a screen grab of the current board position and export it to the clipboard as an image.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Status bar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Slider</source>
+        <translation type="unfinished">捲軸</translation>
+    </message>
+    <message>
+        <source>Sidebar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>F9</source>
+        <translation type="unfinished">F9</translation>
+    </message>
+    <message>
+        <source>&amp;Fullscreen</source>
+        <translation type="unfinished">全螢幕(&amp;F)</translation>
+    </message>
+    <message>
+        <source>F11</source>
+        <translation type="unfinished">F11</translation>
+    </message>
+    <message>
+        <source>Move &amp;numbers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Coordinates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>F8</source>
+        <translation type="unfinished">F8</translation>
+    </message>
+    <message>
+        <source>As general default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>For current combination of visible docks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>General &amp;default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>For &amp;current combination of visible docks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>L</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default &amp;landscape arrangement</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default &amp;portrait arrangement</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Menu bar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>F7</source>
+        <translation type="unfinished">F7</translation>
+    </message>
+    <message>
+        <source>&amp;Preferences...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bring up the preferences dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alt+P</source>
+        <translation type="unfinished">Alt+P</translation>
+    </message>
+    <message>
+        <source>&amp;Mute stone sound</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Manual</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>F1</source>
+        <translation type="unfinished">F1</translation>
+    </message>
+    <message>
+        <source>&amp;About..</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About &amp;Qt...</source>
+        <translation type="unfinished">關於 &amp;QT</translation>
+    </message>
+    <message>
+        <source>&amp;Connect analysis engine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Connect analysis engine
+Try to find an engine configured as an analysis tool in the engine list and connect to it.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Disconnect analysis engine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pause analysis engine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Click to pause or unpause the analysis engine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dia&amp;gram comments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alt+G</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View &amp;README</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Batch analysis...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Batch analysis
+Open the batch analysis dialog which allows you to add SGF files to a queue to be analysed by an engine.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A&amp;utomatic diagrams...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -247,11 +1440,11 @@ The tooltip text contains the channels&apos; title and users&apos; names</source
     </message>
     <message>
         <source>Window size saved.</source>
-        <translation>視窗大小已儲存</translation>
+        <translation type="vanished">視窗大小已儲存</translation>
     </message>
     <message>
         <source>Window size restored.</source>
-        <translation>還原視窗大小</translation>
+        <translation type="vanished">還原視窗大小</translation>
     </message>
     <message>
         <source>SGF Files (*.sgf);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)</source>
@@ -259,7 +1452,7 @@ The tooltip text contains the channels&apos; title and users&apos; names</source
     </message>
     <message>
         <source>You did not set the Computer program path !</source>
-        <translation>你沒有設定電腦圍棋程式的路徑 !</translation>
+        <translation type="vanished">你沒有設定電腦圍棋程式的路徑 !</translation>
     </message>
     <message>
         <source>Table of games
@@ -267,16 +1460,16 @@ The tooltip text contains the channels&apos; title and users&apos; names</source
 right click to observe
 
 Symbol explanation: (click on tab to sort by)
-Id<byte value="x9"/>game number
-White/WR<byte value="x9"/>white player&apos;s name and rank
-Black/BR<byte value="x9"/>black player&apos;s name and rank
-Mv<byte value="x9"/>number of moves at last refresh
-Sz<byte value="x9"/>board size
-H<byte value="x9"/>handicap
-K<byte value="x9"/>komi
-By<byte value="x9"/>byoyomi time
-FR<byte value="x9"/>free (FI), rated (I) or teach (TI) game
-(Ob)<byte value="x9"/>number of observers at last refresh
+Id	game number
+White/WR	white player&apos;s name and rank
+Black/BR	black player&apos;s name and rank
+Mv	number of moves at last refresh
+Sz	board size
+H	handicap
+K	komi
+By	byoyomi time
+FR	free (FI), rated (I) or teach (TI) game
+(Ob)	number of observers at last refresh
 
 This table can be updated by &apos;Refresh games&apos;</source>
         <translation>對局列表
@@ -303,42 +1496,42 @@ This table can be updated by &apos;Refresh games&apos;</source>
 right click for menu
 
 Symbol explanation: (click on tab to sort by)
-Stat<byte value="x9"/>player&apos;s stats:
-<byte value="x9"/>X...close
-<byte value="x9"/>!...looking = wants to play a game
-<byte value="x9"/>Q...quiet = doesn&apos;t receive system messages
-<byte value="x9"/>S...shout = can&apos;t receive shouts
-<byte value="x9"/>??...unknown - player entered after last table update
-name<byte value="x9"/>player&apos;s name
-Rk<byte value="x9"/>player&apos;s rank
-pl<byte value="x9"/>playing game (only one game visible)
-ob<byte value="x9"/>observing game (only one game visible)
-Idle<byte value="x9"/>idle time
-X<byte value="x9"/>private info:
-<byte value="x9"/>M..me
-<byte value="x9"/>X..excluded from shout
-<byte value="x9"/>W..watched (sort: X entries, then Rk)
+Stat	player&apos;s stats:
+	X...close
+	!...looking = wants to play a game
+	Q...quiet = doesn&apos;t receive system messages
+	S...shout = can&apos;t receive shouts
+	??...unknown - player entered after last table update
+name	player&apos;s name
+Rk	player&apos;s rank
+pl	playing game (only one game visible)
+ob	observing game (only one game visible)
+Idle	idle time
+X	private info:
+	M..me
+	X..excluded from shout
+	W..watched (sort: X entries, then Rk)
 and, if extended player info (Toolbox) is active (IGS only):
-Info<byte value="x9"/>player&apos;s info string
-Won<byte value="x9"/>number of games won by player
-Lost<byte value="x9"/>number of games lost by player
-Country<byte value="x9"/>origin of player (from e-mail address)
-Lang<byte value="x9"/>preferred language
+Info	player&apos;s info string
+Won	number of games won by player
+Lost	number of games lost by player
+Country	origin of player (from e-mail address)
+Lang	preferred language
 
 This table can be updated by &apos;Refresh players&apos;
 
 Menu entries (right click):
-match<byte value="x9"/>request for match (dialog arises)
-talk<byte value="x9"/>talk to player (tab arises)
+match	request for match (dialog arises)
+talk	talk to player (tab arises)
 ----
-stats<byte value="x9"/><byte value="x9"/>show player&apos;s stats
-stored games<byte value="x9"/>show stored games
-results<byte value="x9"/><byte value="x9"/>show results
-rating<byte value="x9"/><byte value="x9"/>show rating (NNGS/IGS only)
-observe game<byte value="x9"/>show game currently played by player
+stats		show player&apos;s stats
+stored games	show stored games
+results		show results
+rating		show rating (NNGS/IGS only)
+observe game	show game currently played by player
 ----
-toggle watch list<byte value="x9"/><byte value="x9"/>put/remove player to/from watch list - make &apos;W&apos; entry at &apos;X&apos; column; entry/leave sounds are activated
-toggle exclude list<byte value="x9"/>similar to watch - make &apos;X&apos; entry; player&apos;s shouts are no longer shown</source>
+toggle watch list		put/remove player to/from watch list - make &apos;W&apos; entry at &apos;X&apos; column; entry/leave sounds are activated
+toggle exclude list	similar to watch - make &apos;X&apos; entry; player&apos;s shouts are no longer shown</source>
         <translation>棋友名單
 
 滑鼠右鍵開啟目錄
@@ -422,7 +1615,12 @@ Enables/disables the statusbar.</source>
         <translation>拖曳</translation>
     </message>
     <message>
-        <source>SGF Files (*.sgf *.SGF);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)</source>
+        <source>Engine configuration updated
+Analysis engines now require a board size to be set, assuming 19 for existing entries.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You did not configure any engines!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -605,7 +1803,7 @@ Enables/disables the statusbar.</source>
 
 Use these lists to select the rank of players you want to see in the list
 This will take effect after refreshing the players list.</source>
-        <translation>選擇棋友棋力範圍
+        <translation type="vanished">選擇棋友棋力範圍
 
 選擇你想於棋友列表中顯示的棋友棋力範圍
 將會於重新整理棋友列表之後顯示</translation>
@@ -623,7 +1821,7 @@ This will take effect after refreshing the players list.</source>
 
 Check this box if you want the list to display only open players (uncheck if you want all players).
 This will take effect after refreshing the players list.</source>
-        <translation>切換顯示棋力範圍內的棋友
+        <translation type="vanished">切換顯示棋力範圍內的棋友
 
 點選此對話方塊之後將會套用你想要於棋友列表中顯示的棋友棋力範圍
 (顯示全部棋友不用選取)
@@ -674,7 +1872,7 @@ This will take effect after refreshing the players list.</source>
         <source>Connect
 
 Connect with/Disconnect from selected Go server.</source>
-        <translation>連線
+        <translation type="vanished">連線
 
 自選擇的伺服器連線或斷線</translation>
     </message>
@@ -694,7 +1892,7 @@ Connect with/Disconnect from selected Go server.</source>
         <source>Open
 
 Open a sgf file.</source>
-        <translation>開啟
+        <translation type="vanished">開啟
 
 開啟 SGF 棋譜案</translation>
     </message>
@@ -718,7 +1916,7 @@ Open a sgf file.</source>
         <source>Help
 
 Opens the manual of the application.</source>
-        <translation>協助
+        <translation type="vanished">協助
 
 開啟本程式的手冊.</translation>
     </message>
@@ -742,7 +1940,7 @@ Opens the manual of the application.</source>
         <source>About
 
 About the application.</source>
-        <translation>關於
+        <translation type="vanished">關於
 
 關於此程式</translation>
     </message>
@@ -806,7 +2004,7 @@ Enables/disables the menubar.</source>
         <source>Play with a program
 
 Sets a playing session with a pGo program using GTP (like GNUGO)</source>
-        <translation>和電腦對戰
+        <translation type="vanished">和電腦對戰
 
 設定與 qGo 對局時的程式 (使用 GTP 如 GNUGO)</translation>
     </message>
@@ -846,9 +2044,9 @@ Sets a playing session with a pGo program using GTP (like GNUGO)</source>
         <source>If checked then you don&apos;t receive system messages, that means you are not informed about connecting/disconnecting players, started/finished games etc. Clicking this checkbox toggles the mode. To be quiet is indicated with a &apos;Q&apos; in the playertable.
 
 Note : some features cannot work if set to quiet (checked box):
-<byte value="x9"/>- sound when watched players enter/leave
-<byte value="x9"/>- update of player/gamestable</source>
-        <translation>點選後你將不會接收系統訊息, 這代表你不會收到棋友的上下線及對局等資訊. 點選這個按鈕切換模式. 消音指示為 &apos;Q&apos; 於棋友表.
+	- sound when watched players enter/leave
+	- update of player/gamestable</source>
+        <translation type="vanished">點選後你將不會接收系統訊息, 這代表你不會收到棋友的上下線及對局等資訊. 點選這個按鈕切換模式. 消音指示為 &apos;Q&apos; 於棋友表.
 
 註 : 某些功能於消音無法作業 (對話方塊已勾選):
  - 棋友登入或離線播放音效
@@ -878,7 +2076,7 @@ Note : some features cannot work if set to quiet (checked box):
         <source>Preferences
 
 Edit the applications preferences.</source>
-        <translation>偏好設定
+        <translation type="vanished">偏好設定
 
 編緝程式偏好設定</translation>
     </message>
@@ -902,7 +2100,7 @@ Edit the applications preferences.</source>
         <source>Exit
 
 Quits the application.</source>
-        <translation>離開
+        <translation type="vanished">離開
 
 離開本程式.</translation>
     </message>
@@ -926,7 +2124,7 @@ Quits the application.</source>
         <source>New
 
 Creates a new 19x19 board.</source>
-        <translation>新增
+        <translation type="vanished">新增
 
 新棋盤 19路.</translation>
     </message>
@@ -950,7 +2148,7 @@ Creates a new 19x19 board.</source>
         <source>Navigation toolbar
 
 Enables/disables the toolbar.</source>
-        <translation>巡覽工具列
+        <translation type="vanished">巡覽工具列
 
 啟用或停用 工具列</translation>
     </message>
@@ -994,27 +2192,27 @@ Enables/disables the toolbar.</source>
         <source>Statusbar
 
 Enables/disables the statusbar.</source>
-        <translation>狀態列
+        <translation type="vanished">狀態列
 
 啟用或停用 狀態列</translation>
     </message>
     <message>
         <source>Sound</source>
-        <translation>音效</translation>
+        <translation type="vanished">音效</translation>
     </message>
     <message>
         <source>&amp;Sound</source>
-        <translation>音效(&amp;S)</translation>
+        <translation type="vanished">音效(&amp;S)</translation>
     </message>
     <message>
         <source>Short info on sound availability</source>
-        <translation>短訊息音效可用</translation>
+        <translation type="vanished">短訊息音效可用</translation>
     </message>
     <message>
         <source>Sound Info
 
 Views a message box with a short comment about sound.</source>
-        <translation>音效資訊
+        <translation type="vanished">音效資訊
 
 檢視訊息框有關於音效的短訊息註解</translation>
     </message>
@@ -1030,7 +2228,7 @@ Views a message box with a short comment about sound.</source>
         <source>About Qt
 
 About Qt.</source>
-        <translation>關於 QT
+        <translation type="vanished">關於 QT
 
 關於 QT</translation>
     </message>
@@ -1056,11 +2254,11 @@ About Qt.</source>
     </message>
     <message>
         <source>View user toolbar</source>
-        <translation>檢視自訂工具列</translation>
+        <translation type="vanished">檢視自訂工具列</translation>
     </message>
     <message>
         <source>View &amp;user toolbar</source>
-        <translation>檢視自訂工具列(&amp;U)</translation>
+        <translation type="vanished">檢視自訂工具列(&amp;U)</translation>
     </message>
     <message>
         <source>Rooms*</source>
@@ -1083,7 +2281,7 @@ About Qt.</source>
 
 Use this button to &apos;seek&apos; a game, with the given time settings (popup menu), and handicap range (list beside)
 The server will automatically launch a game against an opponent with matching settings.</source>
-        <translation>自動尋找對局
+        <translation type="vanished">自動尋找對局
 
 使用此按鈕來&apos; 自動尋找對局&apos; ，給予時間設定(跳出功能表)，及授子範圍(列表旁)
 伺服器將會自動開始一個對局且對方棋手符合對局設定。</translation>
@@ -1120,13 +2318,13 @@ The server will automatically launch a game against an opponent with matching se
         <source>handicap range
 
 Set the handicap range you wish when seeking a game. See &apos;seek&apos; button for more</source>
-        <translation>授子範圍
+        <translation type="vanished">授子範圍
 
 設定當自動搜尋對局時你希望的授子數範圍。 查看 &apos;seek&apos; 按鈕取得更多訊息。</translation>
     </message>
     <message>
         <source>user defined toolbar</source>
-        <translation>使用者定義工具列</translation>
+        <translation type="vanished">使用者定義工具列</translation>
     </message>
     <message>
         <source>Action</source>
@@ -1144,9 +2342,153 @@ Set the handicap range you wish when seeking a game. See &apos;seek&apos; button
         <source>new version message
 
 displays the message box that appears at launch of a new version</source>
-        <translation>新版本訊息
+        <translation type="vanished">新版本訊息
 
 使用顯示執行新版本訊息方塊</translation>
+    </message>
+    <message>
+        <source>Select players ranks boundaries
+
+			Use these lists to select the rank of players you want to see in the list
+			This will take effect after refreshing the players list.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open players
+
+			Check this box if you want the list to display only open players (uncheck if you want all players).
+			This will take effect after refreshing the players list.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File toolbar</source>
+        <translation type="unfinished">檔案工具列</translation>
+    </message>
+    <message>
+        <source>Connect
+
+	  Connect with/Disconnect from selected Go server.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Seek game
+
+	  Use this button to &apos;seek&apos; a game, with the given time settings (popup menu), and handicap range (list beside)
+	  The server will automatically launch a game against an opponent with matching settings.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>handicap range
+
+	  Set the handicap range you wish when seeking a game. See &apos;seek&apos; button for more</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open
+
+	Open a sgf file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Help
+
+	Opens the manual of the application.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About
+
+	About the application.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play with a program
+
+	Sets a playing session with a pGo program using GTP (like GNUGO)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If checked then you don&apos;t receive system messages, that means you are not informed about connecting/disconnecting players, started/finished games etc. Clicking this checkbox toggles the mode. To be quiet is indicated with a &apos;Q&apos; in the playertable.
+
+	Note : some features cannot work if set to quiet (checked box):
+	- sound when watched players enter/leave
+	- update of player/gamestable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Preferences
+
+	Edit the applications preferences.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Exit
+
+	Quits the application.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New
+
+	Creates a new 19x19 board.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Navigation toolbar
+
+	Enables/disables the toolbar.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Statusbar
+
+	Enables/disables the statusbar.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About Qt
+
+	About Qt.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New &amp;Variant Board</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New Variant Board</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+V</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Seek game
+
+	Use this button to &apos;seek&apos; a game, with the given time settings (popup menu), and handicap range (list beside)
+	The server will automatically launch a game against an opponent with matching settings.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>new version message
+
+	displays the message box that appears at launch of a new version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View &amp;README</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Batch analysis...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Batch analysis
+	Open the batch analysis dialog which allows you to add SGF files to a queue to be analysed by an engine.
+	</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1154,6 +2496,96 @@ displays the message box that appears at launch of a new version</source>
     <message>
         <source>Debug</source>
         <translation>除錯</translation>
+    </message>
+</context>
+<context>
+    <name>EvalGraph</name>
+    <message>
+        <source>The evaluation graph.
+Displays evaluation data found in the game record.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export image to clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export image to file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export evaluation graph image as</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to save image!</source>
+        <translation type="unfinished">儲存圖像失敗！</translation>
+    </message>
+</context>
+<context>
+    <name>FigureDialog</name>
+    <message>
+        <source>Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Title:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move &amp;numbering:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unchanged from previous node</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>None</source>
+        <translation type="unfinished">無</translation>
+    </message>
+    <message>
+        <source>Shown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shown modulo 100</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Override move number:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show coor&amp;dinates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Show title in export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show &amp;hoshi points</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Remove stones (base display on final position)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Display invisible moves as text</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>GTP_Process</name>
+    <message>
+        <source>GTP engine reported unsupported protocol version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid response from GTP engine</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1237,6 +2669,79 @@ displays the message box that appears at launch of a new version</source>
         <source>Copyright:</source>
         <translation>版權:</translation>
     </message>
+    <message>
+        <source>Event:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Round:</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>GameTree</name>
+    <message>
+        <source>The game tree.
+Click nodes to move to them, click empty areas to drag.
+Shift-click or middle-click nodes to collapse or expand their sub-variations.
+Control-click a collapsed node to expand one level of its children.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Auto collapse on/off</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>GamesTable</name>
+    <message>
+        <source>Id</source>
+        <translation type="unfinished">棋桌</translation>
+    </message>
+    <message>
+        <source>White</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>WR</source>
+        <translation type="unfinished">棋力</translation>
+    </message>
+    <message>
+        <source>Black</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>BR</source>
+        <translation type="unfinished">棋力</translation>
+    </message>
+    <message>
+        <source>Mv</source>
+        <translation type="unfinished">手數</translation>
+    </message>
+    <message>
+        <source>Sz</source>
+        <translation type="unfinished">路數</translation>
+    </message>
+    <message>
+        <source>H</source>
+        <translation type="unfinished">授子</translation>
+    </message>
+    <message>
+        <source>K</source>
+        <translation type="unfinished">讓子</translation>
+    </message>
+    <message>
+        <source>By</source>
+        <translation type="unfinished">讀秒</translation>
+    </message>
+    <message>
+        <source>FR</source>
+        <translation type="unfinished">類</translation>
+    </message>
+    <message>
+        <source>Ob</source>
+        <translation type="unfinished">觀局</translation>
+    </message>
 </context>
 <context>
     <name>IGSConnection</name>
@@ -1257,7 +2762,7 @@ displays the message box that appears at launch of a new version</source>
     <name>MainAppWidget</name>
     <message>
         <source>MainAppWidget</source>
-        <translation>MinaAppWidget</translation>
+        <translation type="vanished">MinaAppWidget</translation>
     </message>
     <message>
         <source>Command line
@@ -1267,7 +2772,7 @@ Type &lt;command&gt;+&lt;ENTER&gt; to send to Go server. If not online use &apos
 Starting with &apos;#&apos; is a internal command as if the server sent the line (without &apos;#&apos;).
 
 In order to open a window use the mouse click instead of entering the &apos;observe&apos; command.</source>
-        <translation>命令列
+        <translation type="vanished">命令列
 
 輸入 &lt;命令&gt;+&lt;ENTER&gt; 傳送到伺服器. 假如未連線請先按下「連線」鈕
 
@@ -1284,19 +2789,19 @@ In order to open a window use the mouse click instead of entering the &apos;obse
 right click to observe
 
 Symbol explanation: (click on tab to sort by)
-Id<byte value="x9"/>game number
-White/WR<byte value="x9"/>white player&apos;s name and rank
-Black/BR<byte value="x9"/>black player&apos;s name and rank
-Mv<byte value="x9"/>number of moves at last refresh
-Sz<byte value="x9"/>board size
-H<byte value="x9"/>handicap
-K<byte value="x9"/>komi
-By<byte value="x9"/>byoyomi time
-FR<byte value="x9"/>free (FI), rated (I) or teach (TI) game
-(Ob)<byte value="x9"/>number of observers at last refresh
+Id	game number
+White/WR	white player&apos;s name and rank
+Black/BR	black player&apos;s name and rank
+Mv	number of moves at last refresh
+Sz	board size
+H	handicap
+K	komi
+By	byoyomi time
+FR	free (FI), rated (I) or teach (TI) game
+(Ob)	number of observers at last refresh
 
 This table can be updated by &apos;Refresh games&apos;</source>
-        <translation>對局列表
+        <translation type="vanished">對局列表
 
 滑鼠右鍵進行觀局
 
@@ -1316,11 +2821,11 @@ This table can be updated by &apos;Refresh games&apos;</source>
     </message>
     <message>
         <source>Games</source>
-        <translation>對局</translation>
+        <translation type="vanished">對局</translation>
     </message>
     <message>
         <source>relevant messages from/to server</source>
-        <translation>往來於伺服器的重要訊息</translation>
+        <translation type="vanished">往來於伺服器的重要訊息</translation>
     </message>
     <message>
         <source>Table of players
@@ -1328,43 +2833,43 @@ This table can be updated by &apos;Refresh games&apos;</source>
 right click for menu
 
 Symbol explanation: (click on tab to sort by)
-Stat<byte value="x9"/>player&apos;s stats:
-<byte value="x9"/>X...close
-<byte value="x9"/>!...looking = wants to play a game
-<byte value="x9"/>Q...quiet = doesn&apos;t receive system messages
-<byte value="x9"/>S...shout = can&apos;t receive shouts
-<byte value="x9"/>??...unknown - player entered after last table update
-name<byte value="x9"/>player&apos;s name
-Rk<byte value="x9"/>player&apos;s rank
-pl<byte value="x9"/>playing game (only one game visible)
-ob<byte value="x9"/>observing game (only one game visible)
-Idle<byte value="x9"/>idle time
-X<byte value="x9"/>private info:
-<byte value="x9"/>M..me
-<byte value="x9"/>X..excluded from shout
-<byte value="x9"/>W..watched (sort: X entries, then Rk)
+Stat	player&apos;s stats:
+	X...close
+	!...looking = wants to play a game
+	Q...quiet = doesn&apos;t receive system messages
+	S...shout = can&apos;t receive shouts
+	??...unknown - player entered after last table update
+name	player&apos;s name
+Rk	player&apos;s rank
+pl	playing game (only one game visible)
+ob	observing game (only one game visible)
+Idle	idle time
+X	private info:
+	M..me
+	X..excluded from shout
+	W..watched (sort: X entries, then Rk)
 and, if extended player info (Toolbox) is active (IGS only):
-Info<byte value="x9"/>player&apos;s info string
-Won<byte value="x9"/>number of games won by player
-Lost<byte value="x9"/>number of games lost by player
-Country<byte value="x9"/>origin of player (from e-mail address)
-Lang<byte value="x9"/>preferred language
+Info	player&apos;s info string
+Won	number of games won by player
+Lost	number of games lost by player
+Country	origin of player (from e-mail address)
+Lang	preferred language
 
 This table can be updated by &apos;Refresh players&apos;
 
 Menu entries (right click):
-match<byte value="x9"/>request for match (dialog arises)
-talk<byte value="x9"/>talk to player (tab arises)
+match	request for match (dialog arises)
+talk	talk to player (tab arises)
 ----
-stats<byte value="x9"/><byte value="x9"/>show player&apos;s stats
-stored games<byte value="x9"/>show stored games
-results<byte value="x9"/><byte value="x9"/>show results
-rating<byte value="x9"/><byte value="x9"/>show rating (NNGS/IGS only)
-observe game<byte value="x9"/>show game currently played by player
+stats		show player&apos;s stats
+stored games	show stored games
+results		show results
+rating		show rating (NNGS/IGS only)
+observe game	show game currently played by player
 ----
-toggle watch list<byte value="x9"/><byte value="x9"/>put/remove player to/from watch list - make &apos;W&apos; entry at &apos;X&apos; column; entry/leave sounds are activated
-toggle exclude list<byte value="x9"/>similar to watch - make &apos;X&apos; entry; player&apos;s shouts are no longer shown</source>
-        <translation>棋友列表
+toggle watch list		put/remove player to/from watch list - make &apos;W&apos; entry at &apos;X&apos; column; entry/leave sounds are activated
+toggle exclude list	similar to watch - make &apos;X&apos; entry; player&apos;s shouts are no longer shown</source>
+        <translation type="vanished">棋友列表
 
 滑鼠右鍵開啟目錄
 
@@ -1408,45 +2913,45 @@ X 私人訊息:
     </message>
     <message>
         <source>Players</source>
-        <translation>棋友</translation>
+        <translation type="vanished">棋友</translation>
     </message>
     <message>
         <source>Log online-time and name of arriving message</source>
-        <translation>記錄時間及訊息</translation>
+        <translation type="vanished">記錄時間及訊息</translation>
     </message>
     <message>
         <source>Close all talk tabs</source>
-        <translation>關閉所有交談頁籤</translation>
+        <translation type="vanished">關閉所有交談頁籤</translation>
     </message>
     <message>
         <source>Close all tabs containing a player&apos;s name (without &apos;*&apos;). The messages will not be deleted. If you want to see it again click with right button on player&apos;s name and choose talk (same as &apos;#24 *name*&apos;)</source>
-        <translation>關閉所有標籤包含棋友名稱(未取得&apos;*&apos;). 訊息不會被刪除. 假如你想觀看點選右鍵於棋友名稱然後選擇交談 (像是 &apos;#24 *name*&apos;)</translation>
+        <translation type="vanished">關閉所有標籤包含棋友名稱(未取得&apos;*&apos;). 訊息不會被刪除. 假如你想觀看點選右鍵於棋友名稱然後選擇交談 (像是 &apos;#24 *name*&apos;)</translation>
     </message>
     <message>
         <source>msg*</source>
-        <translation>訊息*</translation>
+        <translation type="vanished">訊息*</translation>
     </message>
 </context>
 <context>
     <name>MainWidget</name>
     <message>
         <source>Edit</source>
-        <translation>編輯</translation>
+        <translation type="vanished">編輯</translation>
     </message>
     <message>
         <source>Done</source>
-        <translation>完成</translation>
+        <translation type="vanished">完成</translation>
     </message>
     <message>
         <source>Pass</source>
-        <translation>虛手</translation>
+        <translation type="vanished">虛手</translation>
     </message>
 </context>
 <context>
     <name>MainWidgetGui</name>
     <message>
         <source>MainWidgetGui</source>
-        <translation>MainWidgetGui</translation>
+        <translation type="vanished">MainWidgetGui</translation>
     </message>
     <message>
         <source>Click on the board to place a stone.
@@ -1457,7 +2962,7 @@ Shift + right click moves to the next move in the current branch.
 When in edit mode and editing stones, left click places a black, right click a white stone, clicking on an existant stone removes it.
 When editing marks, left click sets, right click removes the mark. When editing letter marks, shift-click allows to customize the mark text.
 When in score mode, left click to mark a group as dead, right click to mark it alive in seki. Click again to unmark as dead or seki.</source>
-        <translation>點選棋盤放置棋石
+        <translation type="vanished">點選棋盤放置棋石
 
 在一般模式時, 顏色自動轉換於滑鼠左鍵進行落子
 Shift + ← 到全譜的第一手
@@ -1468,13 +2973,13 @@ Shift + → 到目前變化的下一手
     </message>
     <message>
         <source>0</source>
-        <translation>0</translation>
+        <translation type="vanished">0</translation>
     </message>
     <message>
         <source>Slider min value
 
 Minimum game move the slider can currently show.</source>
-        <translation>捲軸最小值
+        <translation type="vanished">捲軸最小值
 
 顯示目前對局的最小落子手數.</translation>
     </message>
@@ -1482,7 +2987,7 @@ Minimum game move the slider can currently show.</source>
         <source>Navigate to move
 
 Use the slider to quickly navigate through the current branch of the game.</source>
-        <translation>巡覽落子
+        <translation type="vanished">巡覽落子
 
 使用捲軸快速巡覽目前對局分支.</translation>
     </message>
@@ -1490,17 +2995,17 @@ Use the slider to quickly navigate through the current branch of the game.</sour
         <source>Slider max value
 
 Maximum game move the slider can currently show.</source>
-        <translation>捲軸最大值
+        <translation type="vanished">捲軸最大值
 
 顯示目前對局的最大落子手數.</translation>
     </message>
     <message>
         <source>Tools tab
 
-N/S<byte value="x9"/>normal/score tools
-E<byte value="x9"/>edit tools
-TG<byte value="x9"/>teach tools / game tree</source>
-        <translation>工具頁籤
+N/S	normal/score tools
+E	edit tools
+TG	teach tools / game tree</source>
+        <translation type="vanished">工具頁籤
 
 一般 一般/計地 工具
 編輯 編輯工具
@@ -1508,202 +3013,202 @@ TG<byte value="x9"/>teach tools / game tree</source>
     </message>
     <message>
         <source>NS</source>
-        <translation>一般</translation>
+        <translation type="vanished">一般</translation>
     </message>
     <message>
         <source>E</source>
-        <translation>編輯</translation>
+        <translation type="vanished">編輯</translation>
     </message>
     <message>
         <source>Edit Tools</source>
-        <translation>編輯工具</translation>
+        <translation type="vanished">編輯工具</translation>
     </message>
     <message>
         <source>Change the edit tool</source>
-        <translation>修改編輯工具</translation>
+        <translation type="vanished">修改編輯工具</translation>
     </message>
     <message>
         <source>Change the edit mode
 
 When in edit mode, you can choose what you want to edit, like setting stones or certain marks.</source>
-        <translation>修改編輯模式
+        <translation type="vanished">修改編輯模式
 
 在編輯時, 你能夠選擇你想要編輯的, 像是設定棋石建立標記.</translation>
     </message>
     <message>
         <source>Square</source>
-        <translation>方形</translation>
+        <translation type="vanished">方形</translation>
     </message>
     <message>
         <source>Square
 
 Edit square marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation>方形
+        <translation type="vanished">方形
 
 編輯方形標示於棋盤. 左鍵設定標示, 右鍵移除</translation>
     </message>
     <message>
         <source>Circle</source>
-        <translation>圓形</translation>
+        <translation type="vanished">圓形</translation>
     </message>
     <message>
         <source>Circle
 
 Edit circle marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation>圓形
+        <translation type="vanished">圓形
 
 編輯圓形標示於棋盤. 左鍵設定標示, 右鍵移除</translation>
     </message>
     <message>
         <source>Letter</source>
-        <translation>文字</translation>
+        <translation type="vanished">文字</translation>
     </message>
     <message>
         <source>Letter
 
 Edit letter marks on the board. Left click sets a mark, right click removes it. Shift-click lets you edit a custom text.</source>
-        <translation>文字
+        <translation type="vanished">文字
 
 數入文字標記於棋盤. 左鍵設定標示, 右鍵移除. 按下Shift讓你編輯自訂文字</translation>
     </message>
     <message>
         <source>Cross</source>
-        <translation>Ｘ</translation>
+        <translation type="vanished">Ｘ</translation>
     </message>
     <message>
         <source>Cross
 
 Edit cross marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation>Ｘ
+        <translation type="vanished">Ｘ
 
 編輯Ｘ標示於棋盤. 左鍵設定標示, 右鍵移除.</translation>
     </message>
     <message>
         <source>Triangle</source>
-        <translation>三角</translation>
+        <translation type="vanished">三角</translation>
     </message>
     <message>
         <source>Triangle
 
 Edit triangle marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation>三角
+        <translation type="vanished">三角
 
 編輯三角標示於棋盤. 左鍵設定標示, 右鍵移除.</translation>
     </message>
     <message>
         <source>Number</source>
-        <translation>數字</translation>
+        <translation type="vanished">數字</translation>
     </message>
     <message>
         <source>Number
 
 Edit Number marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation>數字
+        <translation type="vanished">數字
 
 編輯數字標示於棋盤. 左鍵設定標示, 右鍵移除.</translation>
     </message>
     <message>
         <source>Stone</source>
-        <translation>棋子</translation>
+        <translation type="vanished">棋子</translation>
     </message>
     <message>
         <source>Stone
 
 Edit stones on the board. Left click for a black, right click for a white stone.</source>
-        <translation>棋子
+        <translation type="vanished">棋子
 
 編輯棋子於棋盤. 左鍵設定標示, 右鍵移除.</translation>
     </message>
     <message>
         <source>Color of next move</source>
-        <translation>下一手顏色</translation>
+        <translation type="vanished">下一手顏色</translation>
     </message>
     <message>
         <source>Color
 
 Set the color of next move. If left untouched, default color is chosen.</source>
-        <translation>顏色
+        <translation type="vanished">顏色
 
 設定下一手顏色. 假如之前沒按, 將會選用預設顏色.</translation>
     </message>
     <message>
         <source>TG</source>
-        <translation>教學</translation>
+        <translation type="vanished">教學</translation>
     </message>
     <message>
         <source>opponent:</source>
-        <translation>對手:</translation>
+        <translation type="vanished">對手:</translation>
     </message>
     <message>
         <source>-- none --</source>
-        <translation>-- 無 --</translation>
+        <translation type="vanished">-- 無 --</translation>
     </message>
     <message>
         <source>opponent: invited by teacher</source>
-        <translation>對手: 要求教學棋</translation>
+        <translation type="vanished">對手: 要求教學棋</translation>
     </message>
     <message>
         <source>opponent
 
 choose opponent from list to enable him playing with you in a teaching game.</source>
-        <translation>對手
+        <translation type="vanished">對手
 
 由列表選擇的對手與許他與你進行教學局.</translation>
     </message>
     <message>
         <source>controls</source>
-        <translation>控制</translation>
+        <translation type="vanished">控制</translation>
     </message>
     <message>
         <source>hand over controls to opponent</source>
-        <translation>結束控制對手落子</translation>
+        <translation type="vanished">結束控制對手落子</translation>
     </message>
     <message>
         <source>hand over controls to opponent to allow him placing black and white stones, undo etc.
 
 Only teacher can give control,
 both teacher and pupil can release control.</source>
-        <translation>結束控制對手落子讓對方能夠落子或回手等.
+        <translation type="vanished">結束控制對手落子讓對方能夠落子或回手等.
 
 僅教學者能夠給予控制, 教學者及學生都能釋出控制</translation>
     </message>
     <message>
         <source>mark</source>
-        <translation>標示</translation>
+        <translation type="vanished">標示</translation>
     </message>
     <message>
         <source>remember that point for fast return</source>
-        <translation>記憶快速返回落子點</translation>
+        <translation type="vanished">記憶快速返回落子點</translation>
     </message>
     <message>
         <source>push button at starting point to enable remembering.
 After placing and/or undo release button for returning to starting point automatically.</source>
-        <translation>於啟始點按下按鈕開始記憶
+        <translation type="vanished">於啟始點按下按鈕開始記憶
 之後放置且或回手釋放返回按鈕到自動開始點</translation>
     </message>
     <message>
         <source>Move 0</source>
-        <translation>開始對局</translation>
+        <translation type="vanished">開始對局</translation>
     </message>
     <message>
         <source>Move number</source>
-        <translation>落子數</translation>
+        <translation type="vanished">落子數</translation>
     </message>
     <message>
         <source>Move number
 
 Number of the currently displayed move.</source>
-        <translation>落子數
+        <translation type="vanished">落子數
 
 顯示目前的落子手數</translation>
     </message>
     <message>
         <source>Black to play</source>
-        <translation>輪到黑棋落子</translation>
+        <translation type="vanished">輪到黑棋落子</translation>
     </message>
     <message>
         <source>Player to play</source>
-        <translation>輪到棋友落子</translation>
+        <translation type="vanished">輪到棋友落子</translation>
     </message>
     <message>
         <source>Player to play
@@ -1716,88 +3221,88 @@ Indicates wether it is black&apos;s or white&apos;s turn.</source>
     <message>
         <source>0 brothers
 0 sons</source>
-        <translation>0 之後變化型
+        <translation type="vanished">0 之後變化型
 0 之前變化型</translation>
     </message>
     <message>
         <source>Variations</source>
-        <translation>變化</translation>
+        <translation type="vanished">變化</translation>
     </message>
     <message>
         <source>Variations
 
 Shows the number of sons and brothers within the current node.</source>
-        <translation>變化
+        <translation type="vanished">變化
 
 顯示主或支數目於現在節點.</translation>
     </message>
     <message>
         <source>Refresh</source>
-        <translation>更新</translation>
+        <translation type="vanished">更新</translation>
     </message>
     <message>
         <source>Refresh display</source>
-        <translation>更新顯示</translation>
+        <translation type="vanished">更新顯示</translation>
     </message>
     <message>
         <source>Refresh
 
 Refresh board. Use this if you cannot see any stones on the board.</source>
-        <translation>更新
+        <translation type="vanished">更新
 
 更新棋盤. 請使用當你看不到棋盤上的棋子時</translation>
     </message>
     <message>
         <source>Pass</source>
-        <translation>虛手</translation>
+        <translation type="vanished">虛手</translation>
     </message>
     <message>
         <source>Pass move</source>
-        <translation>虛手</translation>
+        <translation type="vanished">虛手</translation>
     </message>
     <message>
         <source>Pass
 
 Pass your turn.</source>
-        <translation>虛手
+        <translation type="vanished">虛手
 
 此次落子虛手</translation>
     </message>
     <message>
         <source>Undo</source>
-        <translation>回手</translation>
+        <translation type="vanished">回手</translation>
     </message>
     <message>
         <source>Undo last move</source>
-        <translation>打回上一手</translation>
+        <translation type="vanished">打回上一手</translation>
     </message>
     <message>
         <source>Undo
 
 Undo the opponent&apos;s last move.</source>
-        <translation>回手
+        <translation type="vanished">回手
 
 替對手打回一手</translation>
     </message>
     <message>
         <source>Adjourn</source>
-        <translation>打掛</translation>
+        <translation type="vanished">打掛</translation>
     </message>
     <message>
         <source>Request adjournment</source>
-        <translation>要求打掛</translation>
+        <translation type="vanished">要求打掛</translation>
     </message>
     <message>
         <source>Adjourn.
 
 Send adjournment request to your opponent. If he accept it, the game will be adjourned and saved.</source>
-        <translation>打掛
+        <translation type="vanished">打掛
 
 送出打掛請求給對手. 假如對方同意, 此對局將會打掛並儲存.</translation>
     </message>
     <message>
         <source>Score</source>
-        <translation>計地</translation>
+        <translation type="vanished">計地</translation>
     </message>
     <message>
         <source>Score/Edit</source>
@@ -1825,33 +3330,33 @@ Click to get a new, editable offline window.</source>
     </message>
     <message>
         <source>RESIGN</source>
-        <translation>投子</translation>
+        <translation type="vanished">投子</translation>
     </message>
     <message>
         <source>Default Loss</source>
-        <translation>判定輸棋</translation>
+        <translation type="vanished">判定輸棋</translation>
     </message>
     <message>
         <source>Resign.
 
 Resign the game immediately. Clicking here is a default loss. Your opponent wins. Game ends.</source>
-        <translation>投子
+        <translation type="vanished">投子
 
 立即投子. 對手獲勝. 遊戲結束</translation>
     </message>
     <message>
         <source>Navigate through the game</source>
-        <translation>逐步巡覽對局</translation>
+        <translation type="vanished">逐步巡覽對局</translation>
     </message>
     <message>
         <source>000</source>
-        <translation>000</translation>
+        <translation type="vanished">000</translation>
     </message>
     <message>
         <source>Player to play
 
 Indicates whether it is black&apos;s or white&apos;s turn.</source>
-        <translation>玩家進行對局
+        <translation type="vanished">玩家進行對局
 
 表示任意持白或持黑。</translation>
     </message>
@@ -1860,55 +3365,55 @@ Indicates whether it is black&apos;s or white&apos;s turn.</source>
     <name>MainWindow</name>
     <message>
         <source>Observers</source>
-        <translation>觀局者</translation>
+        <translation type="vanished">觀局者</translation>
     </message>
     <message>
         <source>Ctrl+E</source>
-        <translation>Ctrl+E</translation>
+        <translation type="vanished">Ctrl+E</translation>
     </message>
     <message>
         <source>Ctrl+T</source>
-        <translation>Ctrl+T</translation>
+        <translation type="vanished">Ctrl+T</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>新增</translation>
+        <translation type="vanished">新增</translation>
     </message>
     <message>
         <source>New &amp;Board</source>
-        <translation>新增棋盤(&amp;B)</translation>
+        <translation type="vanished">新增棋盤(&amp;B)</translation>
     </message>
     <message>
         <source>Ctrl+B</source>
-        <translation>Ctrl+B</translation>
+        <translation type="vanished">Ctrl+B</translation>
     </message>
     <message>
         <source>Creates a new board</source>
-        <translation>建立新棋盤</translation>
+        <translation type="vanished">建立新棋盤</translation>
     </message>
     <message>
         <source>New
 
 Creates a new board.</source>
-        <translation>新增
+        <translation type="vanished">新增
 
 建立新棋盤.</translation>
     </message>
     <message>
         <source>New game</source>
-        <translation>新增對局</translation>
+        <translation type="vanished">新增對局</translation>
     </message>
     <message>
         <source>&amp;New game</source>
-        <translation>新增對局(&amp;N)</translation>
+        <translation type="vanished">新增對局(&amp;N)</translation>
     </message>
     <message>
         <source>Ctrl+N</source>
-        <translation>Ctrl+N</translation>
+        <translation type="vanished">Ctrl+N</translation>
     </message>
     <message>
         <source>Creates a new game on this board</source>
-        <translation>新增
+        <translation type="vanished">新增
 
 新增對局</translation>
     </message>
@@ -1916,661 +3421,661 @@ Creates a new board.</source>
         <source>New
 
 Creates a new game on this board.</source>
-        <translation>新增
+        <translation type="vanished">新增
 
 新增對局</translation>
     </message>
     <message>
         <source>Open</source>
-        <translation>開啟</translation>
+        <translation type="vanished">開啟</translation>
     </message>
     <message>
         <source>&amp;Open</source>
-        <translation>開啟(&amp;O)</translation>
+        <translation type="vanished">開啟(&amp;O)</translation>
     </message>
     <message>
         <source>Ctrl+O</source>
-        <translation>Ctrl+O</translation>
+        <translation type="vanished">Ctrl+O</translation>
     </message>
     <message>
         <source>Open a sgf file</source>
-        <translation>開啟 SGF 棋譜檔案</translation>
+        <translation type="vanished">開啟 SGF 棋譜檔案</translation>
     </message>
     <message>
         <source>Open
 
 Open a sgf file.</source>
-        <translation>開啟
+        <translation type="vanished">開啟
 
 開啟 SGF 棋譜檔案</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>儲存</translation>
+        <translation type="vanished">儲存</translation>
     </message>
     <message>
         <source>&amp;Save</source>
-        <translation>儲存(&amp;S)</translation>
+        <translation type="vanished">儲存(&amp;S)</translation>
     </message>
     <message>
         <source>Ctrl+S</source>
-        <translation>Ctrl+S</translation>
+        <translation type="vanished">Ctrl+S</translation>
     </message>
     <message>
         <source>Save a sgf file</source>
-        <translation>儲存SGF棋譜</translation>
+        <translation type="vanished">儲存SGF棋譜</translation>
     </message>
     <message>
         <source>Save
 
 Save a sgf file.</source>
-        <translation>儲存
+        <translation type="vanished">儲存
 
 儲存SGF棋譜</translation>
     </message>
     <message>
         <source>Save As</source>
-        <translation>另存新檔</translation>
+        <translation type="vanished">另存新檔</translation>
     </message>
     <message>
         <source>Save &amp;As</source>
-        <translation>另存新檔(&amp;A)</translation>
+        <translation type="vanished">另存新檔(&amp;A)</translation>
     </message>
     <message>
         <source>Save a sgf file under a new name</source>
-        <translation>儲存 SGF 棋譜於新名稱</translation>
+        <translation type="vanished">儲存 SGF 棋譜於新名稱</translation>
     </message>
     <message>
         <source>Save As
 
 Save a sgf file under a new name.</source>
-        <translation>另存新檔
+        <translation type="vanished">另存新檔
 
 儲存SGF檔案於新名稱</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation>關閉</translation>
+        <translation type="vanished">關閉</translation>
     </message>
     <message>
         <source>&amp;Close</source>
-        <translation>關閉(&amp;C)</translation>
+        <translation type="vanished">關閉(&amp;C)</translation>
     </message>
     <message>
         <source>Ctrl+W</source>
-        <translation>Ctrl+W</translation>
+        <translation type="vanished">Ctrl+W</translation>
     </message>
     <message>
         <source>Close this board</source>
-        <translation>關閉此棋盤</translation>
+        <translation type="vanished">關閉此棋盤</translation>
     </message>
     <message>
         <source>Exit
 
 Close this board.</source>
-        <translation>離開
+        <translation type="vanished">離開
 
 關閉此棋盤</translation>
     </message>
     <message>
         <source>Import ASCII</source>
-        <translation>匯入 ASCII</translation>
+        <translation type="vanished">匯入 ASCII</translation>
     </message>
     <message>
         <source>Import &amp;ASCII</source>
-        <translation>匯入 &amp;ASCII </translation>
+        <translation type="vanished">匯入 &amp;ASCII </translation>
     </message>
     <message>
         <source>Import an ASCII file as new variation</source>
-        <translation>匯入 ASCII 檔案新變量</translation>
+        <translation type="vanished">匯入 ASCII 檔案新變量</translation>
     </message>
     <message>
         <source>Import ASCII
 
 Import an ASCII file as new variation.</source>
-        <translation>匯入 ASCII
+        <translation type="vanished">匯入 ASCII
 
 匯入 ASCII 檔新變量</translation>
     </message>
     <message>
         <source>Import ASCII from clipboard</source>
-        <translation>由剪貼簿匯入ASCII</translation>
+        <translation type="vanished">由剪貼簿匯入ASCII</translation>
     </message>
     <message>
         <source>Import ASCII from &amp;clipboard</source>
-        <translation>由剪貼簿匯入ASCII(&amp;C)</translation>
+        <translation type="vanished">由剪貼簿匯入ASCII(&amp;C)</translation>
     </message>
     <message>
         <source>Import an ASCII board as new variation from the clipboard</source>
-        <translation>由剪貼簿匯入 ASCII 棋盤新變量</translation>
+        <translation type="vanished">由剪貼簿匯入 ASCII 棋盤新變量</translation>
     </message>
     <message>
         <source>Import ASCII from clipboard
 
 Import an ASCII file as new variation from the clipboard.</source>
-        <translation>由剪貼簿匯入ASCII
+        <translation type="vanished">由剪貼簿匯入ASCII
 
 由剪貼簿匯入 ASCII 檔案於新變量.</translation>
     </message>
     <message>
         <source>Export ASCII</source>
-        <translation>匯出 ASCII</translation>
+        <translation type="vanished">匯出 ASCII</translation>
     </message>
     <message>
         <source>&amp;Export ASCII</source>
-        <translation>匯出 ASCII(&amp;E)</translation>
+        <translation type="vanished">匯出 ASCII(&amp;E)</translation>
     </message>
     <message>
         <source>Export current board to ASCII</source>
-        <translation>匯出現在盤面為 ASCII</translation>
+        <translation type="vanished">匯出現在盤面為 ASCII</translation>
     </message>
     <message>
         <source>Export ASCII
 
 Export current board to ASCII.</source>
-        <translation>匯出 ASCII
+        <translation type="vanished">匯出 ASCII
 
 匯出現在盤面為 ASCII</translation>
     </message>
     <message>
         <source>Import SGF from clipboard</source>
-        <translation>由剪貼簿匯入 SGF 棋譜</translation>
+        <translation type="vanished">由剪貼簿匯入 SGF 棋譜</translation>
     </message>
     <message>
         <source>Import SGF &amp;from clipboard</source>
-        <translation>由剪貼簿匯入 SGF 棋譜(&amp;F)</translation>
+        <translation type="vanished">由剪貼簿匯入 SGF 棋譜(&amp;F)</translation>
     </message>
     <message>
         <source>Import a complete game in SGF format from clipboard</source>
-        <translation>由剪貼簿匯入 SGF 格式完整棋局</translation>
+        <translation type="vanished">由剪貼簿匯入 SGF 格式完整棋局</translation>
     </message>
     <message>
         <source>Import SGF from clipboard
 
 Import a complete game in SGF format from clipboard.</source>
-        <translation>由剪貼簿匯入 SGF 棋譜
+        <translation type="vanished">由剪貼簿匯入 SGF 棋譜
 
 由剪貼簿匯入 SGF 格式完整棋局</translation>
     </message>
     <message>
         <source>Export SGF to clipboard</source>
-        <translation>匯出 SGF 到剪貼簿</translation>
+        <translation type="vanished">匯出 SGF 到剪貼簿</translation>
     </message>
     <message>
         <source>Export SGF &amp;to clipboard</source>
-        <translation>匯出 SGF 到剪貼簿(&amp;T)</translation>
+        <translation type="vanished">匯出 SGF 到剪貼簿(&amp;T)</translation>
     </message>
     <message>
         <source>Export a complete game in SGF format to clipboard</source>
-        <translation>由剪貼簿匯出 SGF 格式完整棋局</translation>
+        <translation type="vanished">由剪貼簿匯出 SGF 格式完整棋局</translation>
     </message>
     <message>
         <source>Export SGF to clipboard
 
 Export a complete game in SGF format to clipboard.</source>
-        <translation>由剪貼簿匯入 SGF 棋譜
+        <translation type="vanished">由剪貼簿匯入 SGF 棋譜
 
 由剪貼簿匯入 SGF 格式完整棋局.</translation>
     </message>
     <message>
         <source>Export Image</source>
-        <translation>匯出圖像</translation>
+        <translation type="vanished">匯出圖像</translation>
     </message>
     <message>
         <source>Export &amp;Image</source>
-        <translation>匯出圖像(&amp;I)</translation>
+        <translation type="vanished">匯出圖像(&amp;I)</translation>
     </message>
     <message>
         <source>Export current board to an image</source>
-        <translation>匯出現在的棋盤為圖像</translation>
+        <translation type="vanished">匯出現在的棋盤為圖像</translation>
     </message>
     <message>
         <source>Export Image
 
 Export current board to an image.</source>
-        <translation>匯出圖像
+        <translation type="vanished">匯出圖像
 
 匯出現在的棋盤為圖像</translation>
     </message>
     <message>
         <source>Export Image to clipboard</source>
-        <translation>匯出圖像到剪貼簿</translation>
+        <translation type="vanished">匯出圖像到剪貼簿</translation>
     </message>
     <message>
         <source>E&amp;xport Image to clipboard</source>
-        <translation>匯出圖像到剪貼簿(&amp;X)</translation>
+        <translation type="vanished">匯出圖像到剪貼簿(&amp;X)</translation>
     </message>
     <message>
         <source>Export current board to the clipboard as image</source>
-        <translation>匯出現在的棋盤圖像到剪貼簿</translation>
+        <translation type="vanished">匯出現在的棋盤圖像到剪貼簿</translation>
     </message>
     <message>
         <source>Export Image to clipboard
 
 Export current board to the clipboard as image.</source>
-        <translation>匯出圖像到剪貼簿
+        <translation type="vanished">匯出圖像到剪貼簿
 
 匯出現在的棋盤圖像到剪貼簿</translation>
     </message>
     <message>
         <source>Exit</source>
-        <translation>離開</translation>
+        <translation type="vanished">離開</translation>
     </message>
     <message>
         <source>E&amp;xit</source>
-        <translation>離開(&amp;E)</translation>
+        <translation type="vanished">離開(&amp;E)</translation>
     </message>
     <message>
         <source>Ctrl+Q</source>
-        <translation>Ctrl+Q</translation>
+        <translation type="vanished">Ctrl+Q</translation>
     </message>
     <message>
         <source>Quits the application</source>
-        <translation>離開本程式</translation>
+        <translation type="vanished">離開本程式</translation>
     </message>
     <message>
         <source>Exit
 
 Quits the application.</source>
-        <translation>離開
+        <translation type="vanished">離開
 
 離開本程式</translation>
     </message>
     <message>
         <source>Cut</source>
-        <translation>剪下</translation>
+        <translation type="vanished">剪下</translation>
     </message>
     <message>
         <source>&amp;Cut</source>
-        <translation>剪下(&amp;C)</translation>
+        <translation type="vanished">剪下(&amp;C)</translation>
     </message>
     <message>
         <source>Ctrl+X</source>
-        <translation>Ctrl+X</translation>
+        <translation type="vanished">Ctrl+X</translation>
     </message>
     <message>
         <source>Cut this and all following positions</source>
-        <translation>剪下此項及之後位置</translation>
+        <translation type="vanished">剪下此項及之後位置</translation>
     </message>
     <message>
         <source>Cut
 
 Cut this and all following positions.</source>
-        <translation>剪下
+        <translation type="vanished">剪下
 
 剪下並之後位置.</translation>
     </message>
     <message>
         <source>Paste</source>
-        <translation>貼上</translation>
+        <translation type="vanished">貼上</translation>
     </message>
     <message>
         <source>&amp;Paste</source>
-        <translation>貼上(&amp;P)</translation>
+        <translation type="vanished">貼上(&amp;P)</translation>
     </message>
     <message>
         <source>Ctrl+P</source>
-        <translation>Ctrl+P</translation>
+        <translation type="vanished">Ctrl+P</translation>
     </message>
     <message>
         <source>Paste as son of the current move</source>
-        <translation>於目前落子之後貼上變化型</translation>
+        <translation type="vanished">於目前落子之後貼上變化型</translation>
     </message>
     <message>
         <source>Paste
 
 Paste as son of the current move.</source>
-        <translation>貼上
+        <translation type="vanished">貼上
 
 於目前落子之後貼上變化型.</translation>
     </message>
     <message>
         <source>Paste as brother</source>
-        <translation>貼上為之前變化型</translation>
+        <translation type="vanished">貼上為之前變化型</translation>
     </message>
     <message>
         <source>Paste as &amp;brother</source>
-        <translation>貼上為之前變化型 (&amp;B)</translation>
+        <translation type="vanished">貼上為之前變化型 (&amp;B)</translation>
     </message>
     <message>
         <source>Paste as brother of the current move</source>
-        <translation>於目前落子之前貼上變化型</translation>
+        <translation type="vanished">於目前落子之前貼上變化型</translation>
     </message>
     <message>
         <source>Paste
 
 Paste as brother of the current move.</source>
-        <translation>貼上
+        <translation type="vanished">貼上
 
 於目前落子之前貼上變化型.</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation>刪除</translation>
+        <translation type="vanished">刪除</translation>
     </message>
     <message>
         <source>&amp;Delete</source>
-        <translation>刪除(&amp;D)</translation>
+        <translation type="vanished">刪除(&amp;D)</translation>
     </message>
     <message>
         <source>Ctrl+D</source>
-        <translation>Ctrl+D</translation>
+        <translation type="vanished">Ctrl+D</translation>
     </message>
     <message>
         <source>Delete this and all following positions</source>
-        <translation>刪除此項及所有之後的部份</translation>
+        <translation type="vanished">刪除此項及所有之後的部份</translation>
     </message>
     <message>
         <source>Delete
 
 Delete this and all following positions.</source>
-        <translation>刪除
+        <translation type="vanished">刪除
 
 刪除此項及所有之後的部份.</translation>
     </message>
     <message>
         <source>Number Moves</source>
-        <translation>落子手數</translation>
+        <translation type="vanished">落子手數</translation>
     </message>
     <message>
         <source>&amp;Number Moves</source>
-        <translation>落子手數(&amp;N)</translation>
+        <translation type="vanished">落子手數(&amp;N)</translation>
     </message>
     <message>
         <source>Shift+F2</source>
-        <translation>Shift+F2</translation>
+        <translation type="vanished">Shift+F2</translation>
     </message>
     <message>
         <source>Mark all moves with the number of their turn</source>
-        <translation>標示所有落子手數</translation>
+        <translation type="vanished">標示所有落子手數</translation>
     </message>
     <message>
         <source>Number moves
 
 Mark all moves with the number of their turn.</source>
-        <translation>落子手數
+        <translation type="vanished">落子手數
 
 標示所有落子手數.</translation>
     </message>
     <message>
         <source>Mark brothers</source>
-        <translation>標記之前變化型</translation>
+        <translation type="vanished">標記之前變化型</translation>
     </message>
     <message>
         <source>Mark &amp;brothers</source>
-        <translation>標記之前變化型(&amp;B)</translation>
+        <translation type="vanished">標記之前變化型(&amp;B)</translation>
     </message>
     <message>
         <source>Shift+F3</source>
-        <translation>Shift+F3</translation>
+        <translation type="vanished">Shift+F3</translation>
     </message>
     <message>
         <source>Mark all brothers of the current move</source>
-        <translation>標記目前落子所有的之前變化型</translation>
+        <translation type="vanished">標記目前落子所有的之前變化型</translation>
     </message>
     <message>
         <source>Mark brothers
 
 Mark all brothers of the current move.</source>
-        <translation>標記之前變化型
+        <translation type="vanished">標記之前變化型
 
 標記目前落子所有的之前變化型.</translation>
     </message>
     <message>
         <source>Mark sons</source>
-        <translation>標記之後變化型</translation>
+        <translation type="vanished">標記之後變化型</translation>
     </message>
     <message>
         <source>Mark &amp;sons</source>
-        <translation>標記之後變化型(&amp;S)</translation>
+        <translation type="vanished">標記之後變化型(&amp;S)</translation>
     </message>
     <message>
         <source>Shift+F4</source>
-        <translation>Shift+F4</translation>
+        <translation type="vanished">Shift+F4</translation>
     </message>
     <message>
         <source>Mark all sons of the current move</source>
-        <translation>標示所有目前落子之後的變化型</translation>
+        <translation type="vanished">標示所有目前落子之後的變化型</translation>
     </message>
     <message>
         <source>Mark sons
 
 Mark all sons of the current move.</source>
-        <translation>標記之後的變化型
+        <translation type="vanished">標記之後的變化型
 
 標示所有目前落子之後的變化型.</translation>
     </message>
     <message>
         <source>Previous move (Left)</source>
-        <translation>上一手 (←)</translation>
+        <translation type="vanished">上一手 (←)</translation>
     </message>
     <message>
         <source>&amp;Previous move</source>
-        <translation>上一手 (&amp;P)</translation>
+        <translation type="vanished">上一手 (&amp;P)</translation>
     </message>
     <message>
         <source>Left</source>
-        <translation>左方向鍵</translation>
+        <translation type="vanished">左方向鍵</translation>
     </message>
     <message>
         <source>To previous move</source>
-        <translation>上一步</translation>
+        <translation type="vanished">上一步</translation>
     </message>
     <message>
         <source>Previous move
 
 Move one move backward.</source>
-        <translation>上一手
+        <translation type="vanished">上一手
 
 移動落子到前一手.</translation>
     </message>
     <message>
         <source>Next move (Right)</source>
-        <translation>下一手 (→)</translation>
+        <translation type="vanished">下一手 (→)</translation>
     </message>
     <message>
         <source>&amp;Next move</source>
-        <translation>下一手 (&amp;N)</translation>
+        <translation type="vanished">下一手 (&amp;N)</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation>右鍵</translation>
+        <translation type="vanished">右鍵</translation>
     </message>
     <message>
         <source>To next move</source>
-        <translation>下一手</translation>
+        <translation type="vanished">下一手</translation>
     </message>
     <message>
         <source>Next move
 
 Move one move forward.</source>
-        <translation>下一手
+        <translation type="vanished">下一手
 
 移動到之後的一手.</translation>
     </message>
     <message>
         <source>First move (Home)</source>
-        <translation>棋局開始 (Home)</translation>
+        <translation type="vanished">棋局開始 (Home)</translation>
     </message>
     <message>
         <source>&amp;First move</source>
-        <translation>棋局開始(&amp;F)</translation>
+        <translation type="vanished">棋局開始(&amp;F)</translation>
     </message>
     <message>
         <source>Home</source>
-        <translation>Home</translation>
+        <translation type="vanished">Home</translation>
     </message>
     <message>
         <source>To first move</source>
-        <translation>到棋局開始</translation>
+        <translation type="vanished">到棋局開始</translation>
     </message>
     <message>
         <source>First move
 
 Move to first move.</source>
-        <translation>棋局開始
+        <translation type="vanished">棋局開始
 
 移到棋局開始.</translation>
     </message>
     <message>
         <source>Last move (End)</source>
-        <translation>最後一手 (End)</translation>
+        <translation type="vanished">最後一手 (End)</translation>
     </message>
     <message>
         <source>&amp;Last move</source>
-        <translation>最後一手 (&amp;L)</translation>
+        <translation type="vanished">最後一手 (&amp;L)</translation>
     </message>
     <message>
         <source>End</source>
-        <translation>End</translation>
+        <translation type="vanished">End</translation>
     </message>
     <message>
         <source>To last move</source>
-        <translation>到最後一手</translation>
+        <translation type="vanished">到最後一手</translation>
     </message>
     <message>
         <source>Last move
 
 Move to last move.</source>
-        <translation>最後一手
+        <translation type="vanished">最後一手
 
 移動到最後一手.</translation>
     </message>
     <message>
         <source>Previous variation (Up)</source>
-        <translation>之前變化 (↑)</translation>
+        <translation type="vanished">之前變化 (↑)</translation>
     </message>
     <message>
         <source>P&amp;revious variation</source>
-        <translation>之前變化 (&amp;R)</translation>
+        <translation type="vanished">之前變化 (&amp;R)</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation>上</translation>
+        <translation type="vanished">上</translation>
     </message>
     <message>
         <source>To previous variation</source>
-        <translation>到之前變化</translation>
+        <translation type="vanished">到之前變化</translation>
     </message>
     <message>
         <source>Previous variation
 
 Move to the previous variation of this move.</source>
-        <translation>之前變化
+        <translation type="vanished">之前變化
 
 移動到此落子的之前變化.</translation>
     </message>
     <message>
         <source>Next variation (Down)</source>
-        <translation>下一變量(Down)</translation>
+        <translation type="vanished">下一變量(Down)</translation>
     </message>
     <message>
         <source>N&amp;ext variation</source>
-        <translation>下一變量(&amp;E)</translation>
+        <translation type="vanished">下一變量(&amp;E)</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation>下</translation>
+        <translation type="vanished">下</translation>
     </message>
     <message>
         <source>To next variation</source>
-        <translation>到下一變量</translation>
+        <translation type="vanished">到下一變量</translation>
     </message>
     <message>
         <source>Next variation
 
 Move to the next variation of this move.</source>
-        <translation>下一變量
+        <translation type="vanished">下一變量
 
 移到到下一變量於此落子.</translation>
     </message>
     <message>
         <source>Main Branch</source>
-        <translation>主要分支</translation>
+        <translation type="vanished">主要分支</translation>
     </message>
     <message>
         <source>&amp;Main branch</source>
-        <translation>主要分支(&amp;M)</translation>
+        <translation type="vanished">主要分支(&amp;M)</translation>
     </message>
     <message>
         <source>To main branch</source>
-        <translation>到主要分支</translation>
+        <translation type="vanished">到主要分支</translation>
     </message>
     <message>
         <source>Main Branch
 
 Move to the main branch where variation started.</source>
-        <translation>主分支
+        <translation type="vanished">主分支
 
 移到主分支變化開始處.</translation>
     </message>
     <message>
         <source>Variation start</source>
-        <translation>變化開始</translation>
+        <translation type="vanished">變化開始</translation>
     </message>
     <message>
         <source>Variation &amp;start</source>
-        <translation>變化開始(&amp;S)</translation>
+        <translation type="vanished">變化開始(&amp;S)</translation>
     </message>
     <message>
         <source>To top of variation</source>
-        <translation>變化起始點</translation>
+        <translation type="vanished">變化起始點</translation>
     </message>
     <message>
         <source>Variation start
 
 Move to the top variation of this branch.</source>
-        <translation>變化開始
+        <translation type="vanished">變化開始
 
 移到主分支變化開始.</translation>
     </message>
     <message>
         <source>Next branch</source>
-        <translation>下一分支</translation>
+        <translation type="vanished">下一分支</translation>
     </message>
     <message>
         <source>Next &amp;branch</source>
-        <translation>下一分支(&amp;B)</translation>
+        <translation type="vanished">下一分支(&amp;B)</translation>
     </message>
     <message>
         <source>To next branch starting a variation</source>
-        <translation>到下一個分支變化開始</translation>
+        <translation type="vanished">到下一個分支變化開始</translation>
     </message>
     <message>
         <source>Next branch
 
 Move to the next branch starting a variation.</source>
-        <translation>下一分支
+        <translation type="vanished">下一分支
 
 到下一個分支變化開始.</translation>
     </message>
     <message>
         <source>Goto move</source>
-        <translation>前進到手數</translation>
+        <translation type="vanished">前進到手數</translation>
     </message>
     <message>
         <source>&amp;Goto Move</source>
-        <translation>前進到手數(&amp;G)</translation>
+        <translation type="vanished">前進到手數(&amp;G)</translation>
     </message>
     <message>
         <source>Ctrl+G</source>
-        <translation>Ctrl+G</translation>
+        <translation type="vanished">Ctrl+G</translation>
     </message>
     <message>
         <source>Goto a move of main branch by number</source>
-        <translation>前往主分支的落子手數</translation>
+        <translation type="vanished">前往主分支的落子手數</translation>
     </message>
     <message>
         <source>Goto move
 
 Goto a move of main branch by number.</source>
-        <translation>前進到手數
+        <translation type="vanished">前進到手數
 
 前往主分支的落子手數.</translation>
     </message>
     <message>
         <source>Autoplay</source>
-        <translation>自動播放</translation>
+        <translation type="vanished">自動播放</translation>
     </message>
     <message>
         <source>&amp;Autoplay</source>
@@ -2578,7 +4083,7 @@ Goto a move of main branch by number.</source>
     </message>
     <message>
         <source>Ctrl+A</source>
-        <translation>Ctrl+A</translation>
+        <translation type="vanished">Ctrl+A</translation>
     </message>
     <message>
         <source>Start/Stop autoplaying current game</source>
@@ -2594,47 +4099,47 @@ Start/Stop autoplaying current game.</source>
     </message>
     <message>
         <source>Empty branch</source>
-        <translation>空白分支</translation>
+        <translation type="vanished">空白分支</translation>
     </message>
     <message>
         <source>Empt&amp;y branch</source>
-        <translation>空白分支(&amp;Y)</translation>
+        <translation type="vanished">空白分支(&amp;Y)</translation>
     </message>
     <message>
         <source>Create an empty branch</source>
-        <translation>建立空白分支</translation>
+        <translation type="vanished">建立空白分支</translation>
     </message>
     <message>
         <source>Empty branch
 
 Create an empty branch.</source>
-        <translation>空白分支
+        <translation type="vanished">空白分支
 
 建立空白分支.</translation>
     </message>
     <message>
         <source>Duplicate move</source>
-        <translation>重製落子</translation>
+        <translation type="vanished">重製落子</translation>
     </message>
     <message>
         <source>D&amp;uplicate move</source>
-        <translation>重製落子(&amp;U)</translation>
+        <translation type="vanished">重製落子(&amp;U)</translation>
     </message>
     <message>
         <source>Copies and duplicates this move</source>
-        <translation>複製及重製這個落子</translation>
+        <translation type="vanished">複製及重製這個落子</translation>
     </message>
     <message>
         <source>Duplicate move
 
 Copies and duplicates this move.</source>
-        <translation>重製落子
+        <translation type="vanished">重製落子
 
 複製及重製這個落子</translation>
     </message>
     <message>
         <source>Swap variations</source>
-        <translation>交換變化</translation>
+        <translation type="vanished">交換變化</translation>
     </message>
     <message>
         <source>S&amp;wap variations</source>
@@ -2654,319 +4159,319 @@ Swap current move with previous variation.</source>
     </message>
     <message>
         <source>Previous commented move</source>
-        <translation>前一個落子註解</translation>
+        <translation type="vanished">前一個落子註解</translation>
     </message>
     <message>
         <source>Previous &amp;commented move</source>
-        <translation>前一個落子註解(&amp;C)</translation>
+        <translation type="vanished">前一個落子註解(&amp;C)</translation>
     </message>
     <message>
         <source>To previous comment</source>
-        <translation>到前一個註解</translation>
+        <translation type="vanished">到前一個註解</translation>
     </message>
     <message>
         <source>Previous comment
 
 Move to the previous move that has a comment</source>
-        <translation>前一個註解
+        <translation type="vanished">前一個註解
 
 移動到前一個有註解的落子</translation>
     </message>
     <message>
         <source>Next commented move</source>
-        <translation>下一個註解落子</translation>
+        <translation type="vanished">下一個註解落子</translation>
     </message>
     <message>
         <source>Next c&amp;ommented move</source>
-        <translation>下一個註解落子(&amp;O)</translation>
+        <translation type="vanished">下一個註解落子(&amp;O)</translation>
     </message>
     <message>
         <source>To next comment</source>
-        <translation>到下一註解</translation>
+        <translation type="vanished">到下一註解</translation>
     </message>
     <message>
         <source>Goto stone at clicked move</source>
-        <translation>前往點選棋子的落子</translation>
+        <translation type="vanished">前往點選棋子的落子</translation>
     </message>
     <message>
         <source>Goto clic&amp;ked move</source>
-        <translation>前往已點選落子(&amp;K)</translation>
+        <translation type="vanished">前往已點選落子(&amp;K)</translation>
     </message>
     <message>
         <source>To clicked move</source>
-        <translation>已點選落子</translation>
+        <translation type="vanished">已點選落子</translation>
     </message>
     <message>
         <source>Click on a board intersection
 
 Move to the stone played at this intersection (if any)</source>
-        <translation>點選棋盤交錯點
+        <translation type="vanished">點選棋盤交錯點
 
 下棋落子於這個交錯點 (任意)</translation>
     </message>
     <message>
         <source>Preferences</source>
-        <translation>偏好設定</translation>
+        <translation type="vanished">偏好設定</translation>
     </message>
     <message>
         <source>&amp;Preferences</source>
-        <translation>偏好設定(&amp;P)</translation>
+        <translation type="vanished">偏好設定(&amp;P)</translation>
     </message>
     <message>
         <source>Alt+P</source>
-        <translation>Alt+P</translation>
+        <translation type="vanished">Alt+P</translation>
     </message>
     <message>
         <source>Edit the preferences</source>
-        <translation>編輯偏好設定</translation>
+        <translation type="vanished">編輯偏好設定</translation>
     </message>
     <message>
         <source>Preferences
 
 Edit the applications preferences.</source>
-        <translation>偏好設定
+        <translation type="vanished">偏好設定
 
 編輯程式偏好設定.</translation>
     </message>
     <message>
         <source>Game Info</source>
-        <translation>對局資訊</translation>
+        <translation type="vanished">對局資訊</translation>
     </message>
     <message>
         <source>&amp;Game Info</source>
-        <translation>對局資訊(&amp;G)</translation>
+        <translation type="vanished">對局資訊(&amp;G)</translation>
     </message>
     <message>
         <source>Ctrl+I</source>
-        <translation>Ctrl+I</translation>
+        <translation type="vanished">Ctrl+I</translation>
     </message>
     <message>
         <source>Display game information</source>
-        <translation>顯示對局資訊</translation>
+        <translation type="vanished">顯示對局資訊</translation>
     </message>
     <message>
         <source>Game Info
 
 Display game information.</source>
-        <translation>對局資訊
+        <translation type="vanished">對局資訊
 
 顯示對局資訊.</translation>
     </message>
     <message>
         <source>File toolbar</source>
-        <translation>檔案工具列</translation>
+        <translation type="vanished">檔案工具列</translation>
     </message>
     <message>
         <source>&amp;File toolbar</source>
-        <translation>檔案工具列(&amp;F)</translation>
+        <translation type="vanished">檔案工具列(&amp;F)</translation>
     </message>
     <message>
         <source>Enables/disables the file toolbar</source>
-        <translation>啟用或停用 檔案工具列</translation>
+        <translation type="vanished">啟用或停用 檔案工具列</translation>
     </message>
     <message>
         <source>File toolbar
 
 Enables/disables the file toolbar.</source>
-        <translation>檔案工具列
+        <translation type="vanished">檔案工具列
 
 啟用或停用 檔案工具列</translation>
     </message>
     <message>
         <source>Navigation toolbar</source>
-        <translation>巡覽工具列</translation>
+        <translation type="vanished">巡覽工具列</translation>
     </message>
     <message>
         <source>Navigation &amp;toolbar</source>
-        <translation>巡覽工具列(&amp;T)</translation>
+        <translation type="vanished">巡覽工具列(&amp;T)</translation>
     </message>
     <message>
         <source>Enables/disables the navigation toolbar</source>
-        <translation>啟用或停用 巡覽工具列</translation>
+        <translation type="vanished">啟用或停用 巡覽工具列</translation>
     </message>
     <message>
         <source>Navigation toolbar
 
 Enables/disables the navigation toolbar.</source>
-        <translation>巡覽工具列
+        <translation type="vanished">巡覽工具列
 
 啟用或停用 巡覽工具列.</translation>
     </message>
     <message>
         <source>Edit toolbar</source>
-        <translation>編輯工具列</translation>
+        <translation type="vanished">編輯工具列</translation>
     </message>
     <message>
         <source>&amp;Edit toolbar</source>
-        <translation>編輯工具列(&amp;E)</translation>
+        <translation type="vanished">編輯工具列(&amp;E)</translation>
     </message>
     <message>
         <source>Enables/disables the edit toolbar</source>
-        <translation>啟用或停用 編輯工具列</translation>
+        <translation type="vanished">啟用或停用 編輯工具列</translation>
     </message>
     <message>
         <source>Edit toolbar
 
 Enables/disables the edit toolbar.</source>
-        <translation>編輯工具列
+        <translation type="vanished">編輯工具列
 
 啟用或停用 編輯工具列.</translation>
     </message>
     <message>
         <source>Menubar</source>
-        <translation>目錄列</translation>
+        <translation type="vanished">目錄列</translation>
     </message>
     <message>
         <source>&amp;Menubar</source>
-        <translation>目錄列(&amp;M)</translation>
+        <translation type="vanished">目錄列(&amp;M)</translation>
     </message>
     <message>
         <source>F7</source>
-        <translation>F7</translation>
+        <translation type="vanished">F7</translation>
     </message>
     <message>
         <source>Enables/disables the menubar</source>
-        <translation>啟用或停用 目錄列</translation>
+        <translation type="vanished">啟用或停用 目錄列</translation>
     </message>
     <message>
         <source>Menubar
 
 Enables/disables the menubar.</source>
-        <translation>目錄列
+        <translation type="vanished">目錄列
 
 啟用或停用目錄列.</translation>
     </message>
     <message>
         <source>Statusbar</source>
-        <translation>狀態列</translation>
+        <translation type="vanished">狀態列</translation>
     </message>
     <message>
         <source>&amp;Statusbar</source>
-        <translation>狀態列(&amp;S)</translation>
+        <translation type="vanished">狀態列(&amp;S)</translation>
     </message>
     <message>
         <source>Enables/disables the statusbar</source>
-        <translation>啟用或停用 狀態列</translation>
+        <translation type="vanished">啟用或停用 狀態列</translation>
     </message>
     <message>
         <source>Statusbar
 
 Enables/disables the statusbar.</source>
-        <translation>狀態列
+        <translation type="vanished">狀態列
 
 啟用或停用 狀態列.</translation>
     </message>
     <message>
         <source>Coordinates</source>
-        <translation>座標</translation>
+        <translation type="vanished">座標</translation>
     </message>
     <message>
         <source>C&amp;oordinates</source>
-        <translation>座標(&amp;O)</translation>
+        <translation type="vanished">座標(&amp;O)</translation>
     </message>
     <message>
         <source>F8</source>
-        <translation>F8</translation>
+        <translation type="vanished">F8</translation>
     </message>
     <message>
         <source>Enables/disables the coordinates</source>
-        <translation>啟用或停用 座標</translation>
+        <translation type="vanished">啟用或停用 座標</translation>
     </message>
     <message>
         <source>Coordinates
 
 Enables/disables the coordinates.</source>
-        <translation>座標
+        <translation type="vanished">座標
 
 啟用或停用 座標.</translation>
     </message>
     <message>
         <source>Slider</source>
-        <translation>捲軸</translation>
+        <translation type="vanished">捲軸</translation>
     </message>
     <message>
         <source>Sli&amp;der</source>
-        <translation>捲軸(&amp;D)</translation>
+        <translation type="vanished">捲軸(&amp;D)</translation>
     </message>
     <message>
         <source>Ctrl+F8</source>
-        <translation>Ctrl+F8</translation>
+        <translation type="vanished">Ctrl+F8</translation>
     </message>
     <message>
         <source>Enables/disables the slider</source>
-        <translation>允許或停用 捲軸</translation>
+        <translation type="vanished">允許或停用 捲軸</translation>
     </message>
     <message>
         <source>Slider
 
 Enables/disables the slider.</source>
-        <translation>捲軸
+        <translation type="vanished">捲軸
 
 允許或停用 捲軸.</translation>
     </message>
     <message>
         <source>Sidebar</source>
-        <translation>側邊列</translation>
+        <translation type="vanished">側邊列</translation>
     </message>
     <message>
         <source>Side&amp;bar</source>
-        <translation>側邊列(&amp;B)</translation>
+        <translation type="vanished">側邊列(&amp;B)</translation>
     </message>
     <message>
         <source>F9</source>
-        <translation>F9</translation>
+        <translation type="vanished">F9</translation>
     </message>
     <message>
         <source>Enables/disables the sidebar</source>
-        <translation>允許或停用 邊側列</translation>
+        <translation type="vanished">允許或停用 邊側列</translation>
     </message>
     <message>
         <source>Sidebar
 
 Enables/disables the sidebar.</source>
-        <translation>邊側列
+        <translation type="vanished">邊側列
 
 允許或停用 邊側列.</translation>
     </message>
     <message>
         <source>Comment</source>
-        <translation>註解</translation>
+        <translation type="vanished">註解</translation>
     </message>
     <message>
         <source>&amp;Comment</source>
-        <translation>註解(&amp;C)</translation>
+        <translation type="vanished">註解(&amp;C)</translation>
     </message>
     <message>
         <source>F10</source>
-        <translation>F10</translation>
+        <translation type="vanished">F10</translation>
     </message>
     <message>
         <source>Enables/disables the comment field</source>
-        <translation>允許或停用 註解欄</translation>
+        <translation type="vanished">允許或停用 註解欄</translation>
     </message>
     <message>
         <source>Comment field
 
 Enables/disables the comment field.</source>
-        <translation>註解欄
+        <translation type="vanished">註解欄
 
 允許或停用 註解欄.</translation>
     </message>
     <message>
         <source>Vertical comment</source>
-        <translation>垂直註解</translation>
+        <translation type="vanished">垂直註解</translation>
     </message>
     <message>
         <source>&amp;Vertical comment</source>
-        <translation>垂直註解(&amp;V)</translation>
+        <translation type="vanished">垂直註解(&amp;V)</translation>
     </message>
     <message>
         <source>Shift+F10</source>
-        <translation>Shift+F10</translation>
+        <translation type="vanished">Shift+F10</translation>
     </message>
     <message>
         <source>Enables/disables a vertical direction of the comment field</source>
-        <translation>啟用或停用 垂直方向於命令欄</translation>
+        <translation type="vanished">啟用或停用 垂直方向於命令欄</translation>
     </message>
     <message>
         <source>Vertical comment field
@@ -2974,7 +4479,7 @@ Enables/disables the comment field.</source>
 Enables/disables a vertical direction of the comment field.
 
 Note: This setting is temporary for this board. In order to set permanent horizontal/vertical comment use &apos;Preferences&apos;.</source>
-        <translation>垂直命令欄
+        <translation type="vanished">垂直命令欄
 
 啟用或停用 垂直方向於命令欄
 
@@ -2982,87 +4487,87 @@ Note: This setting is temporary for this board. In order to set permanent horizo
     </message>
     <message>
         <source>Pin comment</source>
-        <translation>固定註解</translation>
+        <translation type="vanished">固定註解</translation>
     </message>
     <message>
         <source>&amp;Pin comment</source>
-        <translation>固定註解(&amp;P)</translation>
+        <translation type="vanished">固定註解(&amp;P)</translation>
     </message>
     <message>
         <source>Ctrl+F10</source>
-        <translation>Ctrl+F10</translation>
+        <translation type="vanished">Ctrl+F10</translation>
     </message>
     <message>
         <source>Enables/disables pinning the comment field</source>
-        <translation>允許或停用 固定註解欄</translation>
+        <translation type="vanished">允許或停用 固定註解欄</translation>
     </message>
     <message>
         <source>Pin comment field
 
 Enables/disables pinning the comment field.</source>
-        <translation>固定註解欄
+        <translation type="vanished">固定註解欄
 
 允許或停用 固定註解欄.</translation>
     </message>
     <message>
         <source>Zoom In</source>
-        <translation>放大</translation>
+        <translation type="vanished">放大</translation>
     </message>
     <message>
         <source>Zoom &amp;In</source>
-        <translation>放大(&amp;I)</translation>
+        <translation type="vanished">放大(&amp;I)</translation>
     </message>
     <message>
         <source>Alt++</source>
-        <translation>Alt++</translation>
+        <translation type="vanished">Alt++</translation>
     </message>
     <message>
         <source>Zooms in the board</source>
-        <translation>放大於棋盤</translation>
+        <translation type="vanished">放大於棋盤</translation>
     </message>
     <message>
         <source>Zoom In
 
 Zooms in the board.</source>
-        <translation>放大
+        <translation type="vanished">放大
 
 放大棋盤.</translation>
     </message>
     <message>
         <source>Zoom Out</source>
-        <translation>縮小</translation>
+        <translation type="vanished">縮小</translation>
     </message>
     <message>
         <source>Zoom &amp;Out</source>
-        <translation>縮小(&amp;O)</translation>
+        <translation type="vanished">縮小(&amp;O)</translation>
     </message>
     <message>
         <source>Alt+-</source>
-        <translation>Alt+-</translation>
+        <translation type="vanished">Alt+-</translation>
     </message>
     <message>
         <source>Zooms out the board</source>
-        <translation>縮小棋盤</translation>
+        <translation type="vanished">縮小棋盤</translation>
     </message>
     <message>
         <source>Zoom Out
 
 Zooms out the board.</source>
-        <translation>縮小
+        <translation type="vanished">縮小
 
 縮小棋盤.</translation>
     </message>
     <message>
         <source>Save size</source>
-        <translation>儲存大小</translation>
+        <translation type="vanished">儲存大小</translation>
     </message>
     <message>
         <source>Save si&amp;ze</source>
-        <translation>儲存大小(&amp;Z)</translation>
+        <translation type="vanished">儲存大小(&amp;Z)</translation>
     </message>
     <message>
         <source>Save the current window size</source>
-        <translation>儲存現在的視窗大小</translation>
+        <translation type="vanished">儲存現在的視窗大小</translation>
     </message>
     <message>
         <source>Save size
@@ -3074,7 +4579,7 @@ Restore with CTRL + &lt;number key&gt;
 
 &lt;0&gt; is default value at program start.
 &lt;9&gt; is default for edit window.</source>
-        <translation>儲存大小
+        <translation type="vanished">儲存大小
 
 儲存目前視窗大小及在下次啟動程式時套用
 
@@ -3086,139 +4591,139 @@ Restore with CTRL + &lt;number key&gt;
     </message>
     <message>
         <source>Fullscreen</source>
-        <translation>全螢幕</translation>
+        <translation type="vanished">全螢幕</translation>
     </message>
     <message>
         <source>&amp;Fullscreen</source>
-        <translation>全螢幕(&amp;F)</translation>
+        <translation type="vanished">全螢幕(&amp;F)</translation>
     </message>
     <message>
         <source>F11</source>
-        <translation>F11</translation>
+        <translation type="vanished">F11</translation>
     </message>
     <message>
         <source>Enable/disable fullscreen mode</source>
-        <translation>允許或停用 全螢幕模式</translation>
+        <translation type="vanished">允許或停用 全螢幕模式</translation>
     </message>
     <message>
         <source>Fullscreen
 
 Enable/disable fullscreen mode.</source>
-        <translation>全螢幕
+        <translation type="vanished">全螢幕
 
 允許或停用 全螢幕模式.</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>使用手冊</translation>
+        <translation type="vanished">使用手冊</translation>
     </message>
     <message>
         <source>&amp;Manual</source>
-        <translation>使用手冊 (&amp;M)</translation>
+        <translation type="vanished">使用手冊 (&amp;M)</translation>
     </message>
     <message>
         <source>F1</source>
-        <translation>F1</translation>
+        <translation type="vanished">F1</translation>
     </message>
     <message>
         <source>Opens the manual</source>
-        <translation>開啟使用手冊</translation>
+        <translation type="vanished">開啟使用手冊</translation>
     </message>
     <message>
         <source>Help
 
 Opens the manual of the application.</source>
-        <translation>協助
+        <translation type="vanished">協助
 
 開啟程式使用手冊.</translation>
     </message>
     <message>
         <source>Sound Info</source>
-        <translation>音效資訊</translation>
+        <translation type="vanished">音效資訊</translation>
     </message>
     <message>
         <source>&amp;Sound</source>
-        <translation>音效(&amp;S)</translation>
+        <translation type="vanished">音效(&amp;S)</translation>
     </message>
     <message>
         <source>Short info on sound availability</source>
-        <translation>短資訊於音效可用</translation>
+        <translation type="vanished">短資訊於音效可用</translation>
     </message>
     <message>
         <source>Sound Info
 
 Views a message box with a short comment about sound.</source>
-        <translation>音效資訊
+        <translation type="vanished">音效資訊
 
 檢視訊息框有關於音效短註解.</translation>
     </message>
     <message>
         <source>About</source>
-        <translation>關於</translation>
+        <translation type="vanished">關於</translation>
     </message>
     <message>
         <source>&amp;About...</source>
-        <translation>關於(&amp;A)...</translation>
+        <translation type="vanished">關於(&amp;A)...</translation>
     </message>
     <message>
         <source>About the application</source>
-        <translation>關於此程式</translation>
+        <translation type="vanished">關於此程式</translation>
     </message>
     <message>
         <source>About
 
 About the application.</source>
-        <translation>觀於
+        <translation type="vanished">觀於
 
 觀於程式.</translation>
     </message>
     <message>
         <source>About Qt</source>
-        <translation>關於 QT</translation>
+        <translation type="vanished">關於 QT</translation>
     </message>
     <message>
         <source>About &amp;Qt...</source>
-        <translation>關於 &amp;QT</translation>
+        <translation type="vanished">關於 &amp;QT</translation>
     </message>
     <message>
         <source>About Qt
 
 About Qt.</source>
-        <translation>關於 QT
+        <translation type="vanished">關於 QT
 
 關於 QT</translation>
     </message>
     <message>
         <source>&amp;Import/Export</source>
-        <translation>匯入/匯出(&amp;I)</translation>
+        <translation type="vanished">匯入/匯出(&amp;I)</translation>
     </message>
     <message>
         <source>What&apos;s &amp;This?</source>
-        <translation>這是什麼?(&amp;T)</translation>
+        <translation type="vanished">這是什麼?(&amp;T)</translation>
     </message>
     <message>
         <source>&amp;File</source>
-        <translation>檔案(&amp;F)</translation>
+        <translation type="vanished">檔案(&amp;F)</translation>
     </message>
     <message>
         <source>&amp;Edit</source>
-        <translation>編輯(&amp;E)</translation>
+        <translation type="vanished">編輯(&amp;E)</translation>
     </message>
     <message>
         <source>&amp;Navigation</source>
-        <translation>巡覽(&amp;N)</translation>
+        <translation type="vanished">巡覽(&amp;N)</translation>
     </message>
     <message>
         <source>&amp;Settings</source>
-        <translation>設定(&amp;S)</translation>
+        <translation type="vanished">設定(&amp;S)</translation>
     </message>
     <message>
         <source>&amp;View</source>
-        <translation>檢視(&amp;V)</translation>
+        <translation type="vanished">檢視(&amp;V)</translation>
     </message>
     <message>
         <source>&amp;Help</source>
-        <translation>協助(&amp;H)</translation>
+        <translation type="vanished">協助(&amp;H)</translation>
     </message>
     <message>
         <source>Ready.</source>
@@ -3256,17 +4761,17 @@ Shows the current mode. &apos;N&apos; for normal mode, &apos;E&apos; for edit mo
     </message>
     <message>
         <source>Current edit mark</source>
-        <translation>同步編輯標示</translation>
+        <translation type="vanished">同步編輯標示</translation>
     </message>
     <message>
         <source>Mark
 Shows the current edit mark. &apos;-&apos; in normal mode.</source>
-        <translation>標記
+        <translation type="vanished">標記
 顯示正在編輯標記. &apos;-&apos; 於一般模式.</translation>
     </message>
     <message>
         <source>newgame</source>
-        <translation>新對局</translation>
+        <translation type="vanished">新對局</translation>
     </message>
     <message>
         <source>New board prepared.</source>
@@ -3282,7 +4787,7 @@ Shows the current edit mark. &apos;-&apos; in normal mode.</source>
     </message>
     <message>
         <source>loaded.</source>
-        <translation>已讀取.</translation>
+        <translation type="vanished">已讀取.</translation>
     </message>
     <message>
         <source>SGF Files (*.sgf);;All Files (*)</source>
@@ -3290,19 +4795,19 @@ Shows the current edit mark. &apos;-&apos; in normal mode.</source>
     </message>
     <message>
         <source>This file already exists. Do you want to overwrite it?</source>
-        <translation>此檔案已經存在. 你要取代他嗎?</translation>
+        <translation type="vanished">此檔案已經存在. 你要取代他嗎?</translation>
     </message>
     <message>
         <source>Yes</source>
-        <translation>是</translation>
+        <translation type="vanished">是</translation>
     </message>
     <message>
         <source>No</source>
-        <translation>否</translation>
+        <translation type="vanished">否</translation>
     </message>
     <message>
         <source>Cannot save SGF file.</source>
-        <translation>存取 SGF檔案</translation>
+        <translation type="vanished">存取 SGF檔案</translation>
     </message>
     <message>
         <source>saved.</source>
@@ -3310,11 +4815,11 @@ Shows the current edit mark. &apos;-&apos; in normal mode.</source>
     </message>
     <message>
         <source>Update</source>
-        <translation>更新</translation>
+        <translation type="vanished">更新</translation>
     </message>
     <message>
         <source>Cannot load from clipboard. Is it empty?</source>
-        <translation>無法讀取剪貼簿. 可能為空白?</translation>
+        <translation type="vanished">無法讀取剪貼簿. 可能為空白?</translation>
     </message>
     <message>
         <source>SGF imported.</source>
@@ -3322,7 +4827,7 @@ Shows the current edit mark. &apos;-&apos; in normal mode.</source>
     </message>
     <message>
         <source>Failed to export SGF to clipboard.</source>
-        <translation>匯出SGF棋譜到剪貼簿失敗.</translation>
+        <translation type="vanished">匯出SGF棋譜到剪貼簿失敗.</translation>
     </message>
     <message>
         <source>SGF exported.</source>
@@ -3330,15 +4835,15 @@ Shows the current edit mark. &apos;-&apos; in normal mode.</source>
     </message>
     <message>
         <source>Text Files (*.txt);;All Files (*)</source>
-        <translation>文字檔 (*.txt);;所有檔案(*)</translation>
+        <translation type="vanished">文字檔 (*.txt);;所有檔案(*)</translation>
     </message>
     <message>
         <source>ASCII imported.</source>
-        <translation>ASCII 匯入</translation>
+        <translation type="vanished">ASCII 匯入</translation>
     </message>
     <message>
         <source>Importing ASCII failed. Clipboard empty?</source>
-        <translation>匯入 ASCII 失敗. Clipboar empty?</translation>
+        <translation type="vanished">匯入 ASCII 失敗. Clipboar empty?</translation>
     </message>
     <message>
         <source>Export image as</source>
@@ -3346,7 +4851,7 @@ Shows the current edit mark. &apos;-&apos; in normal mode.</source>
     </message>
     <message>
         <source>entermove</source>
-        <translation>輸入手數</translation>
+        <translation type="vanished">輸入手數</translation>
     </message>
     <message>
         <source>Autoplay stopped.</source>
@@ -3358,7 +4863,7 @@ Shows the current edit mark. &apos;-&apos; in normal mode.</source>
     </message>
     <message>
         <source>Variation duplicated.</source>
-        <translation>變化已重製.</translation>
+        <translation type="vanished">變化已重製.</translation>
     </message>
     <message>
         <source>Variations swapped.</source>
@@ -3370,7 +4875,7 @@ Shows the current edit mark. &apos;-&apos; in normal mode.</source>
     </message>
     <message>
         <source>preferences</source>
-        <translation>偏好設定</translation>
+        <translation type="vanished">偏好設定</translation>
     </message>
     <message>
         <source>Window size saved.</source>
@@ -3388,53 +4893,240 @@ Do you want to save your changes?</source>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>取消</translation>
+        <translation type="vanished">取消</translation>
     </message>
     <message>
         <source>Update from online game</source>
-        <translation>更新線上對局</translation>
+        <translation type="vanished">更新線上對局</translation>
     </message>
     <message>
         <source>Update from online game to local board and supersede own changes.</source>
-        <translation>由線上對局改變取代本機棋盤</translation>
+        <translation type="vanished">由線上對局改變取代本機棋盤</translation>
     </message>
     <message>
         <source>Next comment
 
 Move to the next move that has a comment</source>
-        <translation>下一個註解
+        <translation type="vanished">下一個註解
 
 移動到下一個有註解的落子</translation>
     </message>
     <message>
         <source>Rk</source>
-        <translation>棋力</translation>
+        <translation type="vanished">棋力</translation>
     </message>
     <message>
         <source>Mute stones sound</source>
-        <translation>落子無聲</translation>
+        <translation type="vanished">落子無聲</translation>
     </message>
     <message>
         <source>&amp;Mute stones sound</source>
-        <translation>落子無聲(&amp;M)</translation>
+        <translation type="vanished">落子無聲(&amp;M)</translation>
     </message>
     <message>
         <source>Toggle stones sound on/off</source>
-        <translation>切換落子音效 開啟/關閉</translation>
+        <translation type="vanished">切換落子音效 開啟/關閉</translation>
     </message>
     <message>
         <source>Stones sound
 
 Toggle stones sound on/off
 this toggles only the stones sounds</source>
-        <translation>落子音效
+        <translation type="vanished">落子音效
 
 切換落子音效 開啟/關閉
 這項切換只用於落子的音效</translation>
     </message>
     <message>
-        <source>SGF Files (*.sgf *.SGF);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)</source>
+        <source>Choose variation display</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The SGF file that is being opened uses a different style
+of variation display.  Use the style found in the file?
+
+You can customize this behaviour (and disable this dialog)
+in the preferences.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Analysis in progress: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Off-line copy: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>vs.</source>
+        <translation type="unfinished">對</translation>
+    </message>
+    <message>
+        <source>This file had errors during loading and may be corrupt.
+Do you still want to save it?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save SGF file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot open SGF file for saving.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to save SGF file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to save image!</source>
+        <translation type="unfinished">儲存圖像失敗！</translation>
+    </message>
+    <message>
+        <source>Diag. comments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Comments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>remaining time / stones</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>click to pause/unpause the game</source>
+        <translation type="unfinished">暫停 / 取消暫停對局</translation>
+    </message>
+    <message>
+        <source>click to add 1 minute to your opponent&apos;s clock</source>
+        <translation type="unfinished">替你的對手加時一分鐘</translation>
+    </message>
+    <message>
+        <source>Time remaining for this move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> (Scoring)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>White</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Black</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Black wins with %1</source>
+        <translation type="unfinished">黑棋贏 %1</translation>
+    </message>
+    <message>
+        <source>White wins with %1</source>
+        <translation type="unfinished">白棋贏 %1</translation>
+    </message>
+    <message>
+        <source>Jigo</source>
+        <translation type="unfinished">Jigo</translation>
+    </message>
+    <message>
+        <source>Game result differs from the one stored.
+Overwrite stored game result?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>B Win %</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>W Win %</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MainWindow_GTP</name>
+    <message>
+        <source>Game end</source>
+        <translation type="unfinished">對局結束</translation>
+    </message>
+    <message>
+        <source>The computer has resigned the game.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>NewAIGameDlg</name>
+    <message>
+        <source>Error</source>
+        <translation type="unfinished">錯誤</translation>
+    </message>
+    <message>
+        <source>You entered an invalid Handicap (1 is not legal)</source>
+        <translation type="unfinished">你輸入的授子數不正確 (1並不合理)</translation>
+    </message>
+    <message>
+        <source>Choose an SGF file to load</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SGF Files (*.sgf);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>NewAIGameDlgGui</name>
+    <message>
+        <source>Computer Game</source>
+        <translation type="unfinished">電腦圍棋</translation>
+    </message>
+    <message>
+        <source>Load game</source>
+        <translation type="unfinished">讀取對局</translation>
+    </message>
+    <message>
+        <source>&amp;OK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Cancel</source>
+        <translation type="unfinished">取消(&amp;C)</translation>
+    </message>
+    <message>
+        <source>Players</source>
+        <translation type="unfinished">棋友</translation>
+    </message>
+    <message>
+        <source>Human:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Engine:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Computer plays:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Komi:</source>
+        <translation type="unfinished">讓子:</translation>
+    </message>
+    <message>
+        <source>Board size:</source>
+        <translation type="unfinished">棋盤大小:</translation>
+    </message>
+    <message>
+        <source>Handicap:</source>
+        <translation type="unfinished">授子:</translation>
     </message>
 </context>
 <context>
@@ -3632,14 +5324,77 @@ this toggles only the stones sounds</source>
     </message>
 </context>
 <context>
+    <name>NewVariantGameDialog</name>
+    <message>
+        <source>New Variant Game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Players</source>
+        <translation type="unfinished">棋友</translation>
+    </message>
+    <message>
+        <source>Black</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name:</source>
+        <translation type="unfinished">名稱:</translation>
+    </message>
+    <message>
+        <source>White</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rank:</source>
+        <translation type="unfinished">棋力:</translation>
+    </message>
+    <message>
+        <source>Board shape</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Komi:</source>
+        <translation type="unfinished">讓子:</translation>
+    </message>
+    <message>
+        <source>Board size:</source>
+        <translation type="unfinished">棋盤大小:</translation>
+    </message>
+    <message>
+        <source>x</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toroidal Go</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Horizontally</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Vertically</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Ok</source>
+        <translation type="unfinished">確認(&amp;O)</translation>
+    </message>
+    <message>
+        <source>&amp;Cancel</source>
+        <translation type="unfinished">取消(&amp;C)</translation>
+    </message>
+</context>
+<context>
     <name>NodeResultsGUI</name>
     <message>
         <source>Results</source>
-        <translation>結果</translation>
+        <translation type="vanished">結果</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation>關閉</translation>
+        <translation type="vanished">關閉</translation>
     </message>
 </context>
 <context>
@@ -3654,11 +5409,11 @@ this toggles only the stones sounds</source>
     </message>
     <message>
         <source>00:00</source>
-        <translation>00:00</translation>
+        <translation type="vanished">00:00</translation>
     </message>
     <message>
         <source>remaining time / stones</source>
-        <translation>剩餘時間 / 手數</translation>
+        <translation type="vanished">剩餘時間 / 手數</translation>
     </message>
     <message>
         <source>Clock
@@ -3668,7 +5423,7 @@ shows remaining time or byoyomi time / remaining stones.
 Click on
 - your own clock for pause request (NNGS) or
 - the opponent&apos;s clock to give him additional time of one minute.</source>
-        <translation>計時器
+        <translation type="vanished">計時器
 
 顯示「剩餘時間」或「讀秒 / 剩餘落子數」
 
@@ -3776,6 +5531,38 @@ use &quot;free&quot; command to make game rated or unrated (free)</source>
 
 使用&quot;free&quot;命令讓對局計分或不計分</translation>
     </message>
+    <message>
+        <source>Analysis</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Primary move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Coords:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>B Win%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Visits:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Highlighted move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>B Win%:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>NthMoveDialog</name>
@@ -3801,6 +5588,57 @@ use &quot;free&quot; command to make game rated or unrated (free)</source>
     <message>
         <source>msg*</source>
         <translation>訊息*</translation>
+    </message>
+</context>
+<context>
+    <name>PlayerTable</name>
+    <message>
+        <source>Stat</source>
+        <translation type="unfinished">狀態</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">名稱</translation>
+    </message>
+    <message>
+        <source>Rk</source>
+        <translation type="unfinished">棋力</translation>
+    </message>
+    <message>
+        <source>pl</source>
+        <translation type="unfinished">對局</translation>
+    </message>
+    <message>
+        <source>ob</source>
+        <translation type="unfinished">觀局</translation>
+    </message>
+    <message>
+        <source>Idle</source>
+        <translation type="unfinished">閒置</translation>
+    </message>
+    <message>
+        <source>X</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Info</source>
+        <translation type="unfinished">資訊</translation>
+    </message>
+    <message>
+        <source>Won</source>
+        <translation type="unfinished">勝</translation>
+    </message>
+    <message>
+        <source>Lost</source>
+        <translation type="unfinished">負</translation>
+    </message>
+    <message>
+        <source>Country</source>
+        <translation type="unfinished">國家</translation>
+    </message>
+    <message>
+        <source>Match prefs</source>
+        <translation type="unfinished">對局偏好</translation>
     </message>
 </context>
 <context>
@@ -3867,11 +5705,72 @@ use &quot;free&quot; command to make game rated or unrated (free)</source>
     </message>
     <message>
         <source>Images (*.png *.jpg *.xpm *.ico)</source>
-        <translation>圖像 (*.png *.jpg *.xpm *.ico)</translation>
+        <translation type="vanished">圖像 (*.png *.jpg *.xpm *.ico)</translation>
     </message>
     <message>
         <source>Images (*.png *.xpm *.jpg)</source>
         <translation>圖像 (*.png *.xpm *.jpg)</translation>
+    </message>
+    <message>
+        <source>Select white stone base color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select black stone base color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unsaved data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The engine input fields contain
+potentially unsaved data.
+Really close the preferences?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The host input fields contain
+potentially unsaved data.
+Really close the preferences?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid komi entered</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please enter a valid komi before adding the engine.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Missing board size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Analysis engines require a board size to be specified.
+If your engine allows multiple board sizes, you need to configure them in separate entires.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid board size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Only a range of 5 to 25 is allowed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose GTP engine path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select a goban wood image</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select a table background image</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3890,12 +5789,12 @@ use &quot;free&quot; command to make game rated or unrated (free)</source>
     </message>
     <message>
         <source>remember that point for fast return</source>
-        <translation>記錄快速返回點</translation>
+        <translation type="vanished">記錄快速返回點</translation>
     </message>
     <message>
         <source>push button at starting point to enable remembering.
 After placing and/or undo release button for returning to starting point automatically.</source>
-        <translation>於啟始點按下按鈕開始記憶
+        <translation type="vanished">於啟始點按下按鈕開始記憶
 之後放置且或回手釋放返回按鈕到自動開始點</translation>
     </message>
     <message>
@@ -3904,14 +5803,14 @@ After placing and/or undo release button for returning to starting point automat
     </message>
     <message>
         <source>hand over controls to opponent</source>
-        <translation>結束控制對手落子讓對方能夠落子或回手等</translation>
+        <translation type="vanished">結束控制對手落子讓對方能夠落子或回手等</translation>
     </message>
     <message>
         <source>hand over controls to opponent to allow him placing black and white stones, undo etc.
 
 Only teacher can give control,
 both teacher and pupil can release control.</source>
-        <translation>結束控制對手落子讓對方能夠落子或回手等.
+        <translation type="vanished">結束控制對手落子讓對方能夠落子或回手等.
 
 僅教學者能夠給予控制, 教學者及學生都能釋出控制.</translation>
     </message>
@@ -3970,17 +5869,17 @@ If activated, stones on the board will be drawn slightly smaller and the underla
     </message>
     <message>
         <source>Coordinates</source>
-        <translation>坐標</translation>
+        <translation type="vanished">坐標</translation>
     </message>
     <message>
         <source>Show board coordinates</source>
-        <translation>顯示坐標</translation>
+        <translation type="vanished">顯示坐標</translation>
     </message>
     <message>
         <source>Show board coordinates
 
 Toggles if the board coordinates are shown.</source>
-        <translation>顯示棋盤座標
+        <translation type="vanished">顯示棋盤座標
 
 切換假如棋盤座標已經顯示</translation>
     </message>
@@ -4002,7 +5901,7 @@ Toggles the slider on the bottom of the board on or off.</source>
     </message>
     <message>
         <source>Cursor</source>
-        <translation>游標</translation>
+        <translation type="vanished">游標</translation>
     </message>
     <message>
         <source>Show a ghost stone at mouse pointer</source>
@@ -4018,34 +5917,34 @@ Have a ghost stone showing the current position of the mouse pointer on the boar
     </message>
     <message>
         <source>ToolTip coords</source>
-        <translation>工具提示座標</translation>
+        <translation type="vanished">工具提示座標</translation>
     </message>
     <message>
         <source>Show coordinates as ToolTip</source>
-        <translation>顯示座標於工具提示</translation>
+        <translation type="vanished">顯示座標於工具提示</translation>
     </message>
     <message>
         <source>Show coordinates as ToolTip
 
 When the mouse hovers over a point on the board, show a tooltip with the current coordinate.</source>
-        <translation>顯示座標於工具提示
+        <translation type="vanished">顯示座標於工具提示
 
 當滑鼠移到棋盤上的點時, 於工具列顯示目前座標.
 </translation>
     </message>
     <message>
         <source>Variable mark font</source>
-        <translation>變化標示字型</translation>
+        <translation type="vanished">變化標示字型</translation>
     </message>
     <message>
         <source>Variable font size for marks</source>
-        <translation>變化標示字型大小</translation>
+        <translation type="vanished">變化標示字型大小</translation>
     </message>
     <message>
         <source>Variable font size for marks 
 
 Ignore the size of the chosen font for marks and set size to about stone dimension.</source>
-        <translation>變化標示字型
+        <translation type="vanished">變化標示字型
 
 忽略選擇標示的文字字型大小並設定為相對於棋石大小</translation>
     </message>
@@ -4067,27 +5966,27 @@ Globally disables all tool tips that would show up if the mouse hovers over a GU
     </message>
     <message>
         <source>Smaller marks</source>
-        <translation>小標記</translation>
+        <translation type="vanished">小標記</translation>
     </message>
     <message>
         <source>Draw marks slightly smaller</source>
-        <translation>繪製更小的標記</translation>
+        <translation type="vanished">繪製更小的標記</translation>
     </message>
     <message>
         <source>Draw marks slightly smaller
 
 If activated, all types of marks on the board will be drawn slightly smaller.</source>
-        <translation>繪製更小的標記
+        <translation type="vanished">繪製更小的標記
 
 假如允許, 所有棋盤上的標籤將會繪製成更小的標記</translation>
     </message>
     <message>
         <source>Adjust font size</source>
-        <translation>調整字形大小</translation>
+        <translation type="vanished">調整字形大小</translation>
     </message>
     <message>
         <source>Adjust font size for text and number labels</source>
-        <translation>調整標籤文字及數字字形大小</translation>
+        <translation type="vanished">調整標籤文字及數字字形大小</translation>
     </message>
     <message>
         <source>Adjust font size for text and number labels
@@ -4101,49 +6000,49 @@ When editing only single digit marks, it might be convinient to switch this off.
     </message>
     <message>
         <source>Bold marks</source>
-        <translation>粗體字</translation>
+        <translation type="vanished">粗體字</translation>
     </message>
     <message>
         <source>Draw marks bold</source>
-        <translation>繪製粗體標示</translation>
+        <translation type="vanished">繪製粗體標示</translation>
     </message>
     <message>
         <source>Draw marks bold
 
 If activated, all types of marks except characters and numbers on the board will be drawn bold.</source>
-        <translation>繪製粗體標示
+        <translation type="vanished">繪製粗體標示
 
 假如啟動, 所有於棋盤上的例外文字或數字將會標示為粗體</translation>
     </message>
     <message>
         <source>Sidebar</source>
-        <translation>邊側列</translation>
+        <translation type="vanished">邊側列</translation>
     </message>
     <message>
         <source>Show sidebar</source>
-        <translation>顯示邊側列</translation>
+        <translation type="vanished">顯示邊側列</translation>
     </message>
     <message>
         <source>Show sidebar
 
 Enables or disables the navigation and tool sidebar.</source>
-        <translation>顯示邊側列
+        <translation type="vanished">顯示邊側列
 
 允許或取消巡覽及邊側工具列</translation>
     </message>
     <message>
         <source>left</source>
-        <translation>左方</translation>
+        <translation type="vanished">左方</translation>
     </message>
     <message>
         <source>Show sidebar on the left</source>
-        <translation>顯示邊側列於左方</translation>
+        <translation type="vanished">顯示邊側列於左方</translation>
     </message>
     <message>
         <source>Show sidebar on the left
 
 Swaps sidebar and board, thus board is on the left and sidbar is on the right.</source>
-        <translation>顯示邊側列於左方
+        <translation type="vanished">顯示邊側列於左方
 
 交換邊側列與棋盤, 如此的話棋盤會在左邊而邊側列會在右邊</translation>
     </message>
@@ -4330,7 +6229,7 @@ If &apos;System default&apos; is selected, qGo will use the standard language of
 This change will take effect only after qGo has been restarted.
 
 If your language is not supported, you might consider translating qGo. Please check the qGo homepage at http://qgo.sourceforge.net</source>
-        <translation>設定程式語言
+        <translation type="vanished">設定程式語言
 
 選擇你要在qGo上使用的語言
 如果選擇「系統預設」， qGo 將會使用你的系統的標準語言. 於 Linux 此將會檢查LANG環境變數, 於 Windows 設定於你的偏好設定中
@@ -4345,11 +6244,11 @@ If your language is not supported, you might consider translating qGo. Please ch
     </message>
     <message>
         <source>Comment orientation</source>
-        <translation>註解方向</translation>
+        <translation type="vanished">註解方向</translation>
     </message>
     <message>
         <source>Horizontal or vertical comment orientation</source>
-        <translation>水平或垂直註解方向</translation>
+        <translation type="vanished">水平或垂直註解方向</translation>
     </message>
     <message>
         <source>Horizontal or vertical comment orientation
@@ -4359,7 +6258,7 @@ The comment field will either be displayed on the bottom of the board or on the 
 For more dynamic display, pin off the comment field in the View menu.
 
 If None is selected, the comment field is by default hidden.</source>
-        <translation>水平或垂直註解方向
+        <translation type="vanished">水平或垂直註解方向
 
 註解欄將會出現在棋盤的按鈕上或右邊
 
@@ -4369,30 +6268,30 @@ If None is selected, the comment field is by default hidden.</source>
     </message>
     <message>
         <source>as saved</source>
-        <translation>已儲存</translation>
+        <translation type="vanished">已儲存</translation>
     </message>
     <message>
         <source>horizontal</source>
-        <translation>水平</translation>
+        <translation type="vanished">水平</translation>
     </message>
     <message>
         <source>vertical</source>
-        <translation>垂直</translation>
+        <translation type="vanished">垂直</translation>
     </message>
     <message>
         <source>choose default comment orientation</source>
-        <translation>選擇預設註解方向</translation>
+        <translation type="vanished">選擇預設註解方向</translation>
     </message>
     <message>
         <source>default comment field orientation
 
-as saved<byte value="x9"/>use ALT+&lt;0..9&gt; to save position, size and comment orientation, 
-<byte value="x9"/><byte value="x9"/>restore with CTRL+&lt;0..9&gt;
-horizontal<byte value="x9"/>always show horizontal comment field
-vertical<byte value="x9"/><byte value="x9"/>always show vertical comment field
+as saved	use ALT+&lt;0..9&gt; to save position, size and comment orientation, 
+		restore with CTRL+&lt;0..9&gt;
+horizontal	always show horizontal comment field
+vertical		always show vertical comment field
 
 To use saved comment field orientation you must select &apos;as saved&apos;. By using ALT/CTRL+&lt;number&gt; while horizontal/vertical is chosen, the saved comment field orientation is ignored.</source>
-        <translation>使用 ALT+&lt;0-9&gt; 儲存位置,大小及註解方向, 
+        <translation type="vanished">使用 ALT+&lt;0-9&gt; 儲存位置,大小及註解方向, 
   回復使用 CTRL+&lt;0-9&gt;
 水平 顯示註解欄位為水平
 垂直 顯示註解欄位為垂直
@@ -4425,7 +6324,7 @@ Select how to display all brothers of the current move. Either not at all, or as
     </message>
     <message>
         <source>Small stones</source>
-        <translation>小棋子</translation>
+        <translation type="vanished">小棋子</translation>
     </message>
     <message>
         <source>Windows</source>
@@ -4569,7 +6468,7 @@ Select the font for the clocks.</source>
     </message>
     <message>
         <source>Color</source>
-        <translation>顏色</translation>
+        <translation type="vanished">顏色</translation>
     </message>
     <message>
         <source>color: Background</source>
@@ -4577,127 +6476,127 @@ Select the font for the clocks.</source>
     </message>
     <message>
         <source>Current background color</source>
-        <translation>現在的背景顏色</translation>
+        <translation type="vanished">現在的背景顏色</translation>
     </message>
     <message>
         <source>Select new color</source>
-        <translation>選擇新顏色</translation>
+        <translation type="vanished">選擇新顏色</translation>
     </message>
     <message>
         <source>Select new color
 
 Select the color for dialog background in the application.</source>
-        <translation>選擇新顏色
+        <translation type="vanished">選擇新顏色
 
 選擇程式對話方塊背景顏色</translation>
     </message>
     <message>
         <source>ASCII Characters</source>
-        <translation>ASCII 符號</translation>
+        <translation type="vanished">ASCII 符號</translation>
     </message>
     <message>
         <source>ASCII character for import/export</source>
-        <translation>ASCII符號匯入/匯出</translation>
+        <translation type="vanished">ASCII符號匯入/匯出</translation>
     </message>
     <message>
         <source>ASCII character for import
 
 When importing or exporting ASCII files, use these characters to indicate the given stone or point on the board.</source>
-        <translation>匯入ASCII符號
+        <translation type="vanished">匯入ASCII符號
 
 當匯入或匯出 ASCII 檔案時, 使用這些符號指示棋盤上的其實或點</translation>
     </message>
     <message>
         <source>Black stone:</source>
-        <translation>黑子棋石:</translation>
+        <translation type="vanished">黑子棋石:</translation>
     </message>
     <message>
         <source>#</source>
-        <translation>#</translation>
+        <translation type="vanished">#</translation>
     </message>
     <message>
         <source>White stone:</source>
-        <translation>白子棋石:</translation>
+        <translation type="vanished">白子棋石:</translation>
     </message>
     <message>
         <source>O</source>
-        <translation>O</translation>
+        <translation type="vanished">O</translation>
     </message>
     <message>
         <source>Star point:</source>
-        <translation>星位點:</translation>
+        <translation type="vanished">星位點:</translation>
     </message>
     <message>
         <source>,</source>
-        <translation>,</translation>
+        <translation type="vanished">,</translation>
     </message>
     <message>
         <source>Empty point:</source>
-        <translation>空白點:</translation>
+        <translation type="vanished">空白點:</translation>
     </message>
     <message>
         <source>.</source>
-        <translation>.</translation>
+        <translation type="vanished">.</translation>
     </message>
     <message>
         <source>Horizontal border:</source>
-        <translation>水平框架:</translation>
+        <translation type="vanished">水平框架:</translation>
     </message>
     <message>
         <source>|</source>
-        <translation>|</translation>
+        <translation type="vanished">|</translation>
     </message>
     <message>
         <source>Vertical border:</source>
-        <translation>垂直框架:</translation>
+        <translation type="vanished">垂直框架:</translation>
     </message>
     <message>
         <source>-</source>
-        <translation>-</translation>
+        <translation type="vanished">-</translation>
     </message>
     <message>
         <source>Add as brother</source>
-        <translation>加入為之前變化</translation>
+        <translation type="vanished">加入為之前變化</translation>
     </message>
     <message>
         <source>Add imported position as brother</source>
-        <translation>新增匯入部份為之前變化</translation>
+        <translation type="vanished">新增匯入部份為之前變化</translation>
     </message>
     <message>
         <source>Add imported position as brother
 
 If disabled, the imported position is added as son.</source>
-        <translation>新增匯入部份為之前變化
+        <translation type="vanished">新增匯入部份為之前變化
 
 假如停用, 匯入部份會新增到之後變化.</translation>
     </message>
     <message>
         <source>Square</source>
-        <translation>方形</translation>
+        <translation type="vanished">方形</translation>
     </message>
     <message>
         <source>Square
 
 Edit square marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation>方形
+        <translation type="vanished">方形
 
 編輯三角標示於棋盤. 左鍵設定標示, 右鍵移除.</translation>
     </message>
     <message>
         <source>Remember last directory</source>
-        <translation>記住最後的目錄</translation>
+        <translation type="vanished">記住最後的目錄</translation>
     </message>
     <message>
         <source>Remember last directory
 
 When toggled on, the last used directory when loading or saving sgf files will be remembered.</source>
-        <translation>記錄最後目錄
+        <translation type="vanished">記錄最後目錄
 
 在切換之後, 最後使用於讀取或儲存SGF棋譜檔的目錄將會被記錄</translation>
     </message>
     <message>
         <source>Text encoding for loading and saving</source>
-        <translation>讀取或儲存的文字編碼</translation>
+        <translation type="vanished">讀取或儲存的文字編碼</translation>
     </message>
     <message>
         <source>Text encoding for loading and saving
@@ -4705,7 +6604,7 @@ When toggled on, the last used directory when loading or saving sgf files will b
 This is used for loading and saving files containing asian letters.
 If &apos;None&apos; is selected, Latin1 encoding will be used, common in western world.
 &apos;None&apos; will speed up loading large files like Kogos Joseki dictionary significantly.</source>
-        <translation>讀取或儲存的文字編碼
+        <translation type="vanished">讀取或儲存的文字編碼
 
 此被正在使用於讀取或儲存檔案中包含亞洲文字
 假如選擇 &apos;None&apos; , 將會使用 Latin1 編碼, 通常使用於歐美世界.
@@ -4713,63 +6612,63 @@ If &apos;None&apos; is selected, Latin1 encoding will be used, common in western
     </message>
     <message>
         <source>Text encoding:</source>
-        <translation>文字編碼:</translation>
+        <translation type="vanished">文字編碼:</translation>
     </message>
     <message>
         <source>EUC-JP</source>
-        <translation>EUC-JP</translation>
+        <translation type="vanished">EUC-JP</translation>
     </message>
     <message>
         <source>JIS</source>
-        <translation>JIS</translation>
+        <translation type="vanished">JIS</translation>
     </message>
     <message>
         <source>Shift-JIS</source>
-        <translation>Shift-JIS</translation>
+        <translation type="vanished">Shift-JIS</translation>
     </message>
     <message>
         <source>EUC-KR</source>
-        <translation>EUC-KR</translation>
+        <translation type="vanished">EUC-KR</translation>
     </message>
     <message>
         <source>GBK</source>
-        <translation>GBK</translation>
+        <translation type="vanished">GBK</translation>
     </message>
     <message>
         <source>Tamil TSCII</source>
-        <translation>Tamil TSCII</translation>
+        <translation type="vanished">Tamil TSCII</translation>
     </message>
     <message>
         <source>Request adjournment</source>
-        <translation>要求打掛</translation>
+        <translation type="vanished">要求打掛</translation>
     </message>
     <message>
         <source>Adjourn.
 
 Send adjournment request to your opponent. If he accept it, the game will be adjourned and saved.</source>
-        <translation>打掛
+        <translation type="vanished">打掛
 
 送出打掛請求給對手. 假如對方同意, 此對局將會打掛並儲存</translation>
     </message>
     <message>
         <source>Fast loading (EXPERIMENTAL)</source>
-        <translation>快速讀取 (測試中)</translation>
+        <translation type="vanished">快速讀取 (測試中)</translation>
     </message>
     <message>
         <source>Enable fast loading</source>
-        <translation>允許快速讀取</translation>
+        <translation type="vanished">允許快速讀取</translation>
     </message>
     <message>
         <source>Enable fast loading
 
 Warning: This is experimental and does not work properly!</source>
-        <translation>允許快速讀取
+        <translation type="vanished">允許快速讀取
 
 警告: 此為試驗中並且無法作業特性!</translation>
     </message>
     <message>
         <source>Fast loading is experimental right now and does not work completely!</source>
-        <translation>快速讀取目前為試驗階段並且無法完整作業!</translation>
+        <translation type="vanished">快速讀取目前為試驗階段並且無法完整作業!</translation>
     </message>
     <message>
         <source>Special players</source>
@@ -4849,15 +6748,15 @@ On IGS only.</source>
     </message>
     <message>
         <source>Go Engine</source>
-        <translation>圍棋引擎</translation>
+        <translation type="vanished">圍棋引擎</translation>
     </message>
     <message>
         <source>Path to the Go program</source>
-        <translation>圍棋程式路徑</translation>
+        <translation type="vanished">圍棋程式路徑</translation>
     </message>
     <message>
         <source>Path to the Go playing program, e.g. GnuGo</source>
-        <translation>圍棋對局程式路徑, 例如 GnuGo</translation>
+        <translation type="vanished">圍棋對局程式路徑, 例如 GnuGo</translation>
     </message>
     <message>
         <source>Go Server</source>
@@ -4865,23 +6764,23 @@ On IGS only.</source>
     </message>
     <message>
         <source>Title</source>
-        <translation>標題</translation>
+        <translation type="vanished">標題</translation>
     </message>
     <message>
         <source>Host</source>
-        <translation>主機</translation>
+        <translation type="vanished">主機</translation>
     </message>
     <message>
         <source>Port</source>
-        <translation>通訊埠</translation>
+        <translation type="vanished">通訊埠</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>名稱</translation>
+        <translation type="vanished">名稱</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation>密碼</translation>
+        <translation type="vanished">密碼</translation>
     </message>
     <message>
         <source>Host Entries
@@ -5017,8 +6916,8 @@ Registered users:
 use your login name and password provided by the go server operator after registration
 
 New users: depends on server
-NNGS, CWS:<byte value="x9"/>use a unique name like &apos;hotdog17&apos;
-others:<byte value="x9"/><byte value="x9"/>guest</source>
+NNGS, CWS:	use a unique name like &apos;hotdog17&apos;
+others:		guest</source>
         <translation>名稱
 
 已註冊使用者: 
@@ -5080,7 +6979,7 @@ Click to get a new, editable offline window.</source>
     </message>
     <message>
         <source>clear form</source>
-        <translation>清除表單</translation>
+        <translation type="vanished">清除表單</translation>
     </message>
     <message>
         <source>New
@@ -5096,7 +6995,7 @@ clear form; doesn&apos;t make any changes to the entries</source>
     </message>
     <message>
         <source>add/change current entry</source>
-        <translation>新增/變更 目前項目</translation>
+        <translation type="vanished">新增/變更 目前項目</translation>
     </message>
     <message>
         <source>Add or Change
@@ -5116,7 +7015,7 @@ Label &apos;Add&apos; is default. The given entries will be saved under the give
     </message>
     <message>
         <source>delete current entry</source>
-        <translation>刪除目前項目</translation>
+        <translation type="vanished">刪除目前項目</translation>
     </message>
     <message>
         <source>Delete
@@ -5198,19 +7097,19 @@ You can set the warning time besides</source>
     </message>
     <message>
         <source>Default for White</source>
-        <translation>預設白棋</translation>
+        <translation type="vanished">預設白棋</translation>
     </message>
     <message>
         <source>Computer</source>
-        <translation>電腦</translation>
+        <translation type="vanished">電腦</translation>
     </message>
     <message>
         <source>Human</source>
-        <translation>玩家</translation>
+        <translation type="vanished">玩家</translation>
     </message>
     <message>
         <source>Default for Black</source>
-        <translation>預設黑棋</translation>
+        <translation type="vanished">預設黑棋</translation>
     </message>
     <message>
         <source>board size</source>
@@ -5254,7 +7153,7 @@ Be careful: it may be annoying if opponent does not want to accept your defaults
     </message>
     <message>
         <source>User buttons toolbar</source>
-        <translation>使用者按鈕工具列</translation>
+        <translation type="vanished">使用者按鈕工具列</translation>
     </message>
     <message>
         <source>Delete
@@ -5262,7 +7161,7 @@ Be careful: it may be annoying if opponent does not want to accept your defaults
 Deletes the saved entries with same label
 
 Note: &apos;Delete&apos; concerns saved records.</source>
-        <translation>刪除
+        <translation type="vanished">刪除
 
 刪除已儲存的相同標籤項目
 
@@ -5270,91 +7169,91 @@ Note: &apos;Delete&apos; concerns saved records.</source>
     </message>
     <message>
         <source>Help text:</source>
-        <translation>協助文字:</translation>
+        <translation type="vanished">協助文字:</translation>
     </message>
     <message>
         <source>Help text, displayed as tooltip</source>
-        <translation>協助文字, 顯示為工具提示</translation>
+        <translation type="vanished">協助文字, 顯示為工具提示</translation>
     </message>
     <message>
         <source>help text
 
 This text is displayed as tooltip of the created button</source>
-        <translation>協助文字
+        <translation type="vanished">協助文字
 
 此文字顯示類似工具提示於建立的按鈕</translation>
     </message>
     <message>
         <source>Command:</source>
-        <translation>指令:</translation>
+        <translation type="vanished">指令:</translation>
     </message>
     <message>
         <source>command passed to the server</source>
-        <translation>指令已傳送到伺服器</translation>
+        <translation type="vanished">指令已傳送到伺服器</translation>
     </message>
     <message>
         <source>command
 
 the command is passed to the server</source>
-        <translation>指令
+        <translation type="vanished">指令
 
 指令已傳送到伺服器</translation>
     </message>
     <message>
         <source>Pixmap file:</source>
-        <translation>圖示檔:</translation>
+        <translation type="vanished">圖示檔:</translation>
     </message>
     <message>
         <source>file path to the button pixmap</source>
-        <translation>按鈕圖像檔案路徑</translation>
+        <translation type="vanished">按鈕圖像檔案路徑</translation>
     </message>
     <message>
         <source>file path to the button pixmap
 
 Set it with the file chooser</source>
-        <translation>按鈕圖像檔案路徑
+        <translation type="vanished">按鈕圖像檔案路徑
 
 於選擇檔案中設定</translation>
     </message>
     <message>
         <source>pixmap file chooser</source>
-        <translation>選擇圖示檔</translation>
+        <translation type="vanished">選擇圖示檔</translation>
     </message>
     <message>
         <source>Label:</source>
-        <translation>標籤:</translation>
+        <translation type="vanished">標籤:</translation>
     </message>
     <message>
         <source>Button label</source>
-        <translation>按鈕標籤</translation>
+        <translation type="vanished">按鈕標籤</translation>
     </message>
     <message>
         <source>unique label, 
 
 The label is displayed as button text.</source>
-        <translation>唯一頁籤
+        <translation type="vanished">唯一頁籤
 
 標籤顯示於按鈕文字</translation>
     </message>
     <message>
         <source>Pixmap</source>
-        <translation>圖示</translation>
+        <translation type="vanished">圖示</translation>
     </message>
     <message>
         <source>Label</source>
-        <translation>標籤</translation>
+        <translation type="vanished">標籤</translation>
     </message>
     <message>
         <source>Command</source>
-        <translation>命令</translation>
+        <translation type="vanished">命令</translation>
     </message>
     <message>
         <source>Help Text</source>
-        <translation>協助文字</translation>
+        <translation type="vanished">協助文字</translation>
     </message>
     <message>
         <source>User defined button list</source>
-        <translation>自訂按鈕列表</translation>
+        <translation type="vanished">自訂按鈕列表</translation>
     </message>
     <message>
         <source>Button Entries
@@ -5363,7 +7262,7 @@ Select &apos;New&apos; to clear input fields. After filling in at least label an
 
 Select an entry to edit, change (label keeps unchanged) or delete a line.
 </source>
-        <translation>按鈕欄
+        <translation type="vanished">按鈕欄
 
 選擇 &apos;新增&apos; 清除輸入欄位. 填入之後使用新增或修改標籤及命令
 
@@ -5384,11 +7283,11 @@ Select an entry to edit, change (label keeps unchanged) or delete a line.
     </message>
     <message>
         <source>Import / Export</source>
-        <translation>匯入/匯出</translation>
+        <translation type="vanished">匯入/匯出</translation>
     </message>
     <message>
         <source>Imported game position</source>
-        <translation>已匯入對局部份</translation>
+        <translation type="vanished">已匯入對局部份</translation>
     </message>
     <message>
         <source>Handicap :</source>
@@ -5396,7 +7295,7 @@ Select an entry to edit, change (label keeps unchanged) or delete a line.
     </message>
     <message>
         <source>Big5</source>
-        <translation>Big5</translation>
+        <translation type="vanished">Big5</translation>
     </message>
     <message>
         <source>Alt+A</source>
@@ -5408,17 +7307,17 @@ Select an entry to edit, change (label keeps unchanged) or delete a line.
     </message>
     <message>
         <source>SGF Style</source>
-        <translation>SGF 格式</translation>
+        <translation type="vanished">SGF 格式</translation>
     </message>
     <message>
         <source>Show SGF board coordinates</source>
-        <translation>顯示 SGF 棋盤座標</translation>
+        <translation type="vanished">顯示 SGF 棋盤座標</translation>
     </message>
     <message>
         <source>Show SGF board coordinates
-<byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/>
+										
 Toggles if SGF style board coordinates are shown.</source>
-        <translation>顯示 SGF 棋盤座標
+        <translation type="vanished">顯示 SGF 棋盤座標
 
 切換顯示  SGF 格是棋盤座標。</translation>
     </message>
@@ -5427,14 +7326,14 @@ Toggles if SGF style board coordinates are shown.</source>
 
 This is useful when numbering all moves of a game, so the font size of all one, two or three digits numbers is equal.
 When editing only single digit marks, it might be convenient to switch this off.</source>
-        <translation>調整自行大小及數字標籤
+        <translation type="vanished">調整自行大小及數字標籤
 
 這是有用於編號中的落子在對局當中，因此字型大小於所有一、二或三位數字都相等。
 檔編輯中只有單一標示，他可能會轉換切換成關閉。</translation>
     </message>
     <message>
         <source>On line games</source>
-        <translation>線上對局</translation>
+        <translation type="vanished">線上對局</translation>
     </message>
     <message>
         <source>Anti clicko (1/4 second click latency)</source>
@@ -5524,7 +7423,7 @@ If checked then when an observed game completes, it is automatically saved in th
     </message>
     <message>
         <source>Board picture</source>
-        <translation>棋盤圖檔</translation>
+        <translation type="vanished">棋盤圖檔</translation>
     </message>
     <message>
         <source>observed games</source>
@@ -5548,11 +7447,11 @@ If checked then when a game you played completes, it is automatically saved in t
     </message>
     <message>
         <source>Background</source>
-        <translation>背景</translation>
+        <translation type="vanished">背景</translation>
     </message>
     <message>
         <source>Alternate (lists)</source>
-        <translation>替代 (列表)</translation>
+        <translation type="vanished">替代 (列表)</translation>
     </message>
     <message>
         <source>Path to the goban picture</source>
@@ -5616,7 +7515,7 @@ When both players use this protocol, they can set handicap before playing, have 
     </message>
     <message>
         <source>Ugly 2D</source>
-        <translation>醜醜的 2D</translation>
+        <translation type="vanished">醜醜的 2D</translation>
     </message>
     <message>
         <source>flat circled ... ugly but asked for ...</source>
@@ -5632,7 +7531,7 @@ This will display back and white circles</source>
     </message>
     <message>
         <source>Plain 3D</source>
-        <translation>純3D</translation>
+        <translation type="vanished">純3D</translation>
     </message>
     <message>
         <source>plain 3D (no shadow, no stripes)</source>
@@ -5648,7 +7547,7 @@ this will display simple 3D stones, with no shadow and neither stripes on white 
     </message>
     <message>
         <source>Realistic</source>
-        <translation>逼真的</translation>
+        <translation type="vanished">逼真的</translation>
     </message>
     <message>
         <source>Realistic 3D stones with stripes and shadow</source>
@@ -5722,6 +7621,396 @@ up to :</source>
         <translation>授子
 提升到 :</translation>
     </message>
+    <message>
+        <source>Accept changes and close dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>cancel changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alt+C</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Graphics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sound defaults by game type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Local editing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Observed games</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Computer games</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>On-line matches</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File selectors:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Qt selector with SGF preview</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cursor stone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Standard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SGF style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Side bar:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hidden</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation type="unfinished">左方向鍵</translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation type="unfinished">右鍵</translation>
+    </message>
+    <message>
+        <source>Coordinates:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Online games</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation type="unfinished">否</translation>
+    </message>
+    <message>
+        <source>Yes</source>
+        <translation type="unfinished">是</translation>
+    </message>
+    <message>
+        <source>Ask</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show which:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Letters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show as:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Siblings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Children</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Allow SGF files to override
+child/sibling setting:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ignore diagrams</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Diagrams</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If checked, the diagram display will revert to an empty board whenever no diagrams are available, rather than retaining the previously shown diagram (which might be confusing).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear diagram display
+when navigating away</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open windows with
+diagram pane shown:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This option controls the layout of the board window. You can choose whether to show the diagram/evaluation graph pane, with an option to do so only if the opened file contains diagrams.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Never</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If diagrams found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Always</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game tree</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Adjust the visual size of the nodes in the game tree display.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Display size:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Annotated games can potentially have very many figures. This option stops them from being displayed in the game tree. Instead, an icon is shown for any move that has diagrams as children.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hide child diagrams in game tree</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Plain 2D</source>
+        <translation type="unfinished">純3D {2D?}</translation>
+    </message>
+    <message>
+        <source>Old 3D look</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shaded 3D</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>White stone appearance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Specular hardness:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Thickness:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Specular ratio:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select base color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flattened:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Black stone appearance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Simulate clamshell appearance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ambient light:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wood filename:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default 2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default 3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default 4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default 5</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wood image:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scale line widths</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Widen outside lines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Computer color:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default human player name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go Engines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear the engine form.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add or change the current entry.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete the current entry.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Executable:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The path to the GTP engine&apos;s executable.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The name of the engine by which it is selected in the new computer game dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use for analysis (LZ or compatible)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fixed komi:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Arguments:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Any command line arguments that should be passed at startup.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Analysis</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show variations as:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Percentage difference</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Absolute percentage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Winning percentages shown for:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Side to move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Max. variation depth:
+(0 is unlimited)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Max. moves shown:
+(0 is unlimited)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Override variation display settings
+(show child moves as circles when analysing)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hide other moves when showing
+a variation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Don&apos;t display moves with few visits</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear the server form.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Variants</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Duplicates shown either side of toroidal boards:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set application language
+
+Choose your language for qGo.
+If &apos;System default&apos; is selected, qGo will use the standard language of your system. On Linux this will check the environment variable LANG, on Windows simply the language you have set in your preferences.
+
+This change will take effect only after qGo has been restarted.
+
+If your language is not supported, you might consider translating q5go. Please visit https://github.com/bernds/q5go</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QApplication</name>
@@ -5742,78 +8031,78 @@ up to :</source>
     <name>QNewGameDlg</name>
     <message>
         <source>Human</source>
-        <translation>玩家</translation>
+        <translation type="vanished">玩家</translation>
     </message>
     <message>
         <source>Computer</source>
-        <translation>電腦</translation>
+        <translation type="vanished">電腦</translation>
     </message>
     <message>
         <source>SGF Files (*.sgf);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)</source>
-        <translation>SGF (*.sgf);;MGT (*.mgt);;XML (*.xml);;所有檔案 (*)</translation>
+        <translation type="vanished">SGF (*.sgf);;MGT (*.mgt);;XML (*.xml);;所有檔案 (*)</translation>
     </message>
     <message>
         <source>Error</source>
-        <translation>錯誤</translation>
+        <translation type="vanished">錯誤</translation>
     </message>
     <message>
         <source>You entered an invalid Handicap (1 is not legal)</source>
-        <translation>你輸入的授子數不正確 (1並不合理)</translation>
+        <translation type="vanished">你輸入的授子數不正確 (1並不合理)</translation>
     </message>
 </context>
 <context>
     <name>QNewGameDlgGui</name>
     <message>
         <source>Computer Game</source>
-        <translation>電腦圍棋</translation>
+        <translation type="vanished">電腦圍棋</translation>
     </message>
     <message>
         <source>White Player</source>
-        <translation>持白棋者</translation>
+        <translation type="vanished">持白棋者</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>名稱</translation>
+        <translation type="vanished">名稱</translation>
     </message>
     <message>
         <source>Computer Level</source>
-        <translation>電腦等級</translation>
+        <translation type="vanished">電腦等級</translation>
     </message>
     <message>
         <source>Black Player</source>
-        <translation>持黑棋者</translation>
+        <translation type="vanished">持黑棋者</translation>
     </message>
     <message>
         <source>Load game</source>
-        <translation>讀取對局</translation>
+        <translation type="vanished">讀取對局</translation>
     </message>
     <message>
         <source>&amp;OK</source>
-        <translation>確認(&amp;O)</translation>
+        <translation type="vanished">確認(&amp;O)</translation>
     </message>
     <message>
         <source>&amp;Cancel</source>
-        <translation>取消(&amp;C)</translation>
+        <translation type="vanished">取消(&amp;C)</translation>
     </message>
     <message>
         <source>New Game</source>
-        <translation>新對局</translation>
+        <translation type="vanished">新對局</translation>
     </message>
     <message>
         <source>Board size:</source>
-        <translation>棋盤大小:</translation>
+        <translation type="vanished">棋盤大小:</translation>
     </message>
     <message>
         <source>Komi:</source>
-        <translation>讓子:</translation>
+        <translation type="vanished">讓子:</translation>
     </message>
     <message>
         <source>Handicap:</source>
-        <translation>授子:</translation>
+        <translation type="vanished">授子:</translation>
     </message>
     <message>
         <source>One Color Go</source>
-        <translation>一色棋</translation>
+        <translation type="vanished">一色棋</translation>
     </message>
 </context>
 <context>
@@ -5829,92 +8118,92 @@ up to :</source>
     <message>
         <source>Id</source>
         <comment>GamesTable Id number</comment>
-        <translation>棋桌</translation>
+        <translation type="vanished">棋桌</translation>
     </message>
     <message>
         <source>White</source>
         <comment>GamesTable White name</comment>
-        <translation>白棋</translation>
+        <translation type="vanished">白棋</translation>
     </message>
     <message>
         <source>WR</source>
         <comment>GamesTable White Rank</comment>
-        <translation>棋力</translation>
+        <translation type="vanished">棋力</translation>
     </message>
     <message>
         <source>Black</source>
         <comment>GamesTable Black name</comment>
-        <translation>黑棋</translation>
+        <translation type="vanished">黑棋</translation>
     </message>
     <message>
         <source>BR</source>
         <comment>GamesTable Black Rank</comment>
-        <translation>棋力</translation>
+        <translation type="vanished">棋力</translation>
     </message>
     <message>
         <source>Mv</source>
         <comment>GamesTable Move</comment>
-        <translation>手數</translation>
+        <translation type="vanished">手數</translation>
     </message>
     <message>
         <source>Sz</source>
         <comment>GamesTable Size</comment>
-        <translation>路數</translation>
+        <translation type="vanished">路數</translation>
     </message>
     <message>
         <source>H</source>
         <comment>GamesTable Handicap</comment>
-        <translation>授子</translation>
+        <translation type="vanished">授子</translation>
     </message>
     <message>
         <source>K</source>
         <comment>GamesTable Komi</comment>
-        <translation>讓子</translation>
+        <translation type="vanished">讓子</translation>
     </message>
     <message>
         <source>By</source>
         <comment>GamesTable Byoyomi time</comment>
-        <translation>讀秒</translation>
+        <translation type="vanished">讀秒</translation>
     </message>
     <message>
         <source>FR</source>
         <comment>GamesTable Free/Rated type of game</comment>
-        <translation>類</translation>
+        <translation type="vanished">類</translation>
     </message>
     <message>
         <source>Ob</source>
         <comment>GamesTable number of Observers</comment>
-        <translation>觀局</translation>
+        <translation type="vanished">觀局</translation>
     </message>
     <message>
         <source>Stat</source>
         <comment>PlayerTable: status [X!SQ]</comment>
-        <translation>狀態</translation>
+        <translation type="vanished">狀態</translation>
     </message>
     <message>
         <source>Name</source>
         <comment>PlayerTable: player&apos;s name</comment>
-        <translation>名稱</translation>
+        <translation type="vanished">名稱</translation>
     </message>
     <message>
         <source>Rk</source>
         <comment>PlayerTable: rank</comment>
-        <translation>棋力</translation>
+        <translation type="vanished">棋力</translation>
     </message>
     <message>
         <source>pl</source>
         <comment>PlayerTable: playing in game</comment>
-        <translation>對局</translation>
+        <translation type="vanished">對局</translation>
     </message>
     <message>
         <source>ob</source>
         <comment>PlayerTable: observing game</comment>
-        <translation>觀局</translation>
+        <translation type="vanished">觀局</translation>
     </message>
     <message>
         <source>Idle</source>
         <comment>PlayerTable: idle time</comment>
-        <translation>閒置</translation>
+        <translation type="vanished">閒置</translation>
     </message>
     <message>
         <source>Refresh</source>
@@ -5924,7 +8213,7 @@ up to :</source>
     <message>
         <source>Score</source>
         <comment>button label</comment>
-        <translation>計地</translation>
+        <translation type="vanished">計地</translation>
     </message>
     <message>
         <source>N</source>
@@ -5939,7 +8228,7 @@ up to :</source>
     <message>
         <source>Edit</source>
         <comment>button label</comment>
-        <translation>編輯</translation>
+        <translation type="vanished">編輯</translation>
     </message>
     <message>
         <source>O</source>
@@ -5949,7 +8238,7 @@ up to :</source>
     <message>
         <source>Pass</source>
         <comment>button label</comment>
-        <translation>虛手</translation>
+        <translation type="vanished">虛手</translation>
     </message>
     <message>
         <source>P</source>
@@ -5992,23 +8281,23 @@ up to :</source>
     </message>
     <message>
         <source>brother</source>
-        <translation>之前變化型</translation>
+        <translation type="vanished">之前變化型</translation>
     </message>
     <message>
         <source>brothers</source>
-        <translation>之前變化型</translation>
+        <translation type="vanished">之前變化型</translation>
     </message>
     <message>
         <source>son</source>
-        <translation>之後變化型</translation>
+        <translation type="vanished">之後變化型</translation>
     </message>
     <message>
         <source>sons</source>
-        <translation>之後變化型</translation>
+        <translation type="vanished">之後變化型</translation>
     </message>
     <message>
         <source>textedit</source>
-        <translation>文字編輯</translation>
+        <translation type="vanished">文字編輯</translation>
     </message>
     <message>
         <source>Error</source>
@@ -6016,21 +8305,271 @@ up to :</source>
     </message>
     <message>
         <source>Error opening program: %1</source>
-        <translation>開啟程式錯誤?: %1</translation>
+        <translation type="vanished">開啟程式錯誤?: %1</translation>
+    </message>
+    <message>
+        <source>GTP process exited unexpectedly.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit diagram options...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export &amp;ASCII...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export S&amp;VG...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Clear selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Hide unselected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Make all &amp;visible</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>C&amp;lear visibility state, inherit from parent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Expand subtree</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Expand one level of child nodes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Collapse subtree</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear diagram status for this node</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set this move to be the start of a diagram</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Navigate to this node</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The file did not quite have the correct structure of an SGF file, but could otherwise be understood.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The SGF file contained an invalid move that was played on top of another stone. Variations have been truncated at that point.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>One or more comments have been dropped since they contained invalid characters.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The SGF contained an empty value for komi. Assuming zero.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The SGF contained an empty value for the handicap. Assuming zero.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The SGF contained an invalid value in a property related to display.  Things like move numbers might not show up correctly.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The SGF contained evaluation data that could not be understood.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unsupported board size in SGF file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Errors found in SGF file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error while trying to load SGF file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open SGF file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SGF Files (*.sgf *.SGF);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show the Go server client window (default if no other arguments)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start up with a board window (ignored if files are loaded).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start up with the computer analysis dialog to analyze &lt;file&gt;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Display debug messages in a window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Specify text &lt;encoding&gt; of SGF files passed by command line.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load &lt;file&gt; and display it in a board window.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A</source>
+        <comment>Board status line: batch analysis</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>
+Variation </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> of </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>child position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>child positions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>GTP code originally from Goliath, thanks to: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not load custom board image,
+reverting to default.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unable to save settings to </source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>QPushButton</name>
     <message>
         <source>Move</source>
-        <translation>手數</translation>
+        <translation type="vanished">手數</translation>
+    </message>
+</context>
+<context>
+    <name>SGFPreview</name>
+    <message>
+        <source>Override character set for text in SGF file:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>UTF-8</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>GB18030</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>EUC-KR</source>
+        <translation type="unfinished">EUC-KR</translation>
+    </message>
+    <message>
+        <source>EUC-JP</source>
+        <translation type="unfinished">EUC-JP</translation>
+    </message>
+    <message>
+        <source>ISO-2022-JP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shift-JIS</source>
+        <translation type="unfinished">Shift-JIS</translation>
+    </message>
+    <message>
+        <source>Big5</source>
+        <translation type="unfinished">Big5</translation>
+    </message>
+    <message>
+        <source>Handicap:</source>
+        <translation type="unfinished">授子:</translation>
+    </message>
+    <message>
+        <source>Date:</source>
+        <translation type="unfinished">日期:</translation>
+    </message>
+    <message>
+        <source>Size:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>6.5</source>
+        <translation type="unfinished">6.5</translation>
+    </message>
+    <message>
+        <source>Result:</source>
+        <translation type="unfinished">結果:</translation>
+    </message>
+    <message>
+        <source>19</source>
+        <translation type="unfinished">19</translation>
+    </message>
+    <message>
+        <source>Komi:</source>
+        <translation type="unfinished">讓子:</translation>
+    </message>
+    <message>
+        <source>Black</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>White</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SGF files (*.sgf *.SGF)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All files (*)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>ScoreTools</name>
     <message>
         <source>ScoreTools</source>
-        <translation>計地工具</translation>
+        <translation type="vanished">計地工具</translation>
     </message>
     <message>
         <source>White</source>
@@ -6059,6 +8598,80 @@ up to :</source>
     <message>
         <source>Black</source>
         <translation>黑棋</translation>
+    </message>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Result</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>TextLabel</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SvgView</name>
+    <message>
+        <source>Export to SVG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save SVG export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Svg Files (*.txt);;All Files (*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to write to file </source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SvgViewGUI</name>
+    <message>
+        <source>SVG export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move numbering</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Coordinates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy position to clipboard</source>
+        <translation type="unfinished">複製選取範圍到剪貼簿</translation>
+    </message>
+    <message>
+        <source>&amp;To clipboard (as text)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save position to file</source>
+        <translation type="unfinished">儲存選取範圍到檔案</translation>
+    </message>
+    <message>
+        <source>&amp;Save</source>
+        <translation type="unfinished">儲存(&amp;S)</translation>
+    </message>
+    <message>
+        <source>Close this window</source>
+        <translation type="unfinished">關閉本視窗</translation>
+    </message>
+    <message>
+        <source>&amp;Close</source>
+        <translation type="unfinished">關閉(&amp;C)</translation>
     </message>
 </context>
 <context>
@@ -6198,19 +8811,35 @@ closes the tab (and dialog)</source>
     </message>
     <message>
         <source>This file already exists. Do you want to overwrite it?</source>
-        <translation>此檔案己存在.是否覆蓋?</translation>
+        <translation type="vanished">此檔案己存在.是否覆蓋?</translation>
     </message>
     <message>
         <source>Yes</source>
-        <translation>是</translation>
+        <translation type="vanished">是</translation>
     </message>
     <message>
         <source>No</source>
-        <translation>否</translation>
+        <translation type="vanished">否</translation>
     </message>
     <message>
         <source>Failed to write to file</source>
-        <translation>寫入檔案失敗</translation>
+        <translation type="vanished">寫入檔案失敗</translation>
+    </message>
+    <message>
+        <source>GTP program startup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export to ASCII</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save ASCII export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to write to file </source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -6243,6 +8872,26 @@ closes the tab (and dialog)</source>
         <source>Close this window</source>
         <translation>關閉本視窗</translation>
     </message>
+    <message>
+        <source>Move numbering</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Coordinates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Abort program startup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Abort</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>qGo</name>
@@ -6264,11 +8913,11 @@ Exit anyways?</source>
     </message>
     <message>
         <source>No sound available.</source>
-        <translation>無法使用音效</translation>
+        <translation type="vanished">無法使用音效</translation>
     </message>
     <message>
         <source>No sound available. Qt on Mac uses QuickTime sound.</source>
-        <translation>無法使用音效. Qt 於 Mac 使用 QuickTime 音效</translation>
+        <translation type="vanished">無法使用音效. Qt 於 Mac 使用 QuickTime 音效</translation>
     </message>
     <message>
         <source>You are not running the Network Audio sytem.
@@ -6292,50 +8941,50 @@ ftp.x.org:/contrib/audio/nas
     </message>
     <message>
         <source>Sound available.</source>
-        <translation>音效可用</translation>
+        <translation type="vanished">音效可用</translation>
     </message>
     <message>
         <source>Sound files not found.</source>
-        <translation>找不到音效檔</translation>
+        <translation type="vanished">找不到音效檔</translation>
     </message>
     <message>
         <source>Please check for the directories</source>
-        <translation>請檢查資料夾</translation>
+        <translation type="vanished">請檢查資料夾</translation>
     </message>
     <message>
         <source>or</source>
-        <translation>或</translation>
+        <translation type="vanished">或</translation>
     </message>
     <message>
         <source>depending on your installation.</source>
-        <translation>相依於你的安裝過程</translation>
+        <translation type="vanished">相依於你的安裝過程</translation>
     </message>
     <message>
         <source>You can navigate to the main qGo directory (for example:</source>
-        <translation>你能夠巡覽qGo主資料夾 (例如:</translation>
+        <translation type="vanished">你能夠巡覽qGo主資料夾 (例如:</translation>
     </message>
     <message>
         <source>If the directory was given correctly, this data will be saved and you won&apos;tbe asked
 anymore except you install qGo again into a different directory.
 To abort this procedure, click &apos;Cancel&apos; in the following dialog.</source>
-        <translation>假如資料夾正確, 此資料將會被儲存並且你不詢問任何人除非你再次安裝 qGo 於不同的目錄
+        <translation type="vanished">假如資料夾正確, 此資料將會被儲存並且你不詢問任何人除非你再次安裝 qGo 於不同的目錄
 中止此程序, 點選 &apos;取消&apos; 於之後的對話方塊</translation>
     </message>
     <message>
         <source>qGo directory</source>
-        <translation>qGo 資料夾</translation>
+        <translation type="vanished">qGo 資料夾</translation>
     </message>
     <message>
         <source>No valid directory was given. Sound is not available.</source>
-        <translation>沒有給予合法資料夾. 無法使用音效</translation>
+        <translation type="vanished">沒有給予合法資料夾. 無法使用音效</translation>
     </message>
     <message>
         <source>About...</source>
-        <translation>關於...</translation>
+        <translation type="vanished">關於...</translation>
     </message>
     <message>
         <source>GTP code from Goliath, thanks to:</source>
-        <translation>GTP 碼源於 Goliath, 感謝:</translation>
+        <translation type="vanished">GTP 碼源於 Goliath, 感謝:</translation>
     </message>
     <message>
         <source>English translation by:
@@ -6343,14 +8992,14 @@ Peter Strempel
 Johannes Mesa
 Emmanuel Beranger</source>
         <comment>Please set your own language and your name! Use your own language!</comment>
-        <translation>正體中文翻譯:
+        <translation type="vanished">正體中文翻譯:
 wex
 CHI KWOK yEUNG</translation>
     </message>
     <message>
         <source>No sound files in bundle, strange.
 </source>
-        <translation>沒有音效檔案於包裝, 別處.</translation>
+        <translation type="vanished">沒有音效檔案於包裝, 別處.</translation>
     </message>
     <message>
         <source>At least one board is modified.
@@ -6370,7 +9019,7 @@ ftp.x.org:/contrib/audio/nas
 Release 1.2 of NAS is also included with the X11R6 contrib distribution. After installing NAS, you will then need to reconfigure Qt with NAS sound support.
 
 Nevertheless, if you have oss, sound should be working and directed to /dev/dsp</source>
-        <translation>你目前沒有執行 Network Audio system
+        <translation type="vanished">你目前沒有執行 Network Audio system
 如果你有使用 `au&apos; 指令，在開啟這個程式之前於背景執行它。最後釋出的Network Audio System能夠獲得於:
 
 ftp.ncd.com:/pub/ncd/technology/src/nas
@@ -6385,11 +9034,11 @@ ftp.x.org:/contrib/audio/nas
     <name>qGoBoard</name>
     <message>
         <source>free</source>
-        <translation>不計分</translation>
+        <translation type="vanished">不計分</translation>
     </message>
     <message>
         <source>rated</source>
-        <translation>計分棋</translation>
+        <translation type="vanished">計分棋</translation>
     </message>
     <message>
         <source>opponent:</source>
@@ -6402,35 +9051,51 @@ ftp.x.org:/contrib/audio/nas
     <message>
         <source>Failed to play the stone within program 
 </source>
-        <translation>程式播放棋子失敗</translation>
+        <translation type="vanished">程式播放棋子失敗</translation>
     </message>
     <message>
         <source>Failed to pass within program 
 </source>
-        <translation>程式虛手失敗</translation>
+        <translation type="vanished">程式虛手失敗</translation>
     </message>
     <message>
         <source>Failed to have the program play its stone
 </source>
-        <translation>程式播放棋子失敗</translation>
+        <translation type="vanished">程式播放棋子失敗</translation>
     </message>
     <message>
         <source>remaining time / stones</source>
-        <translation>剩時 / 落子</translation>
+        <translation type="vanished">剩時 / 落子</translation>
     </message>
     <message>
         <source>click to pause/unpause the game</source>
-        <translation>暫停 / 取消暫停對局</translation>
+        <translation type="vanished">暫停 / 取消暫停對局</translation>
     </message>
     <message>
         <source>click to add 1 minute to your opponent&apos;s clock</source>
-        <translation>替你的對手加時一分鐘</translation>
+        <translation type="vanished">替你的對手加時一分鐘</translation>
     </message>
     <message>
         <source>Failed to undo within program 
 </source>
-        <translation>程式回手失敗
+        <translation type="vanished">程式回手失敗
 </translation>
+    </message>
+    <message>
+        <source>GAME MODE: place stones...</source>
+        <translation type="unfinished">對局模式: 落子區域...</translation>
+    </message>
+    <message>
+        <source>SCORE MODE: click on a stone to mark as dead...</source>
+        <translation type="unfinished">計地模式: 點選棋石標示為死子...</translation>
+    </message>
+    <message>
+        <source>GAME MODE: click to play stones...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game #</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -6465,7 +9130,7 @@ ftp.x.org:/contrib/audio/nas
     </message>
     <message>
         <source>*** Both players are Human ! ***</source>
-        <translation>*** 雙方都為玩家 ***</translation>
+        <translation type="vanished">*** 雙方都為玩家 ***</translation>
     </message>
     <message>
         <source>komi </source>
@@ -6497,31 +9162,31 @@ CANCEL = %4</source>
     </message>
     <message>
         <source>Done</source>
-        <translation>完成</translation>
+        <translation type="vanished">完成</translation>
     </message>
     <message>
         <source>SCORE MODE: RESET - click on a stone to mark as dead...</source>
-        <translation>計地模式: 重置 - 點選棋石標示為死子...</translation>
+        <translation type="vanished">計地模式: 重置 - 點選棋石標示為死子...</translation>
     </message>
     <message>
         <source>SCORE MODE: click on a stone to mark as dead...</source>
-        <translation>計地模式: 點選棋石標示為死子...</translation>
+        <translation type="vanished">計地模式: 點選棋石標示為死子...</translation>
     </message>
     <message>
         <source>GAME MODE: place stones...</source>
-        <translation>對局模式: 落子區域...</translation>
+        <translation type="vanished">對局模式: 落子區域...</translation>
     </message>
     <message>
         <source>Game Status: W:</source>
-        <translation>對局狀態: 白:</translation>
+        <translation type="vanished">對局狀態: 白:</translation>
     </message>
     <message>
         <source>B:</source>
-        <translation>黑:</translation>
+        <translation type="vanished">黑:</translation>
     </message>
     <message>
-        <source>Game n&#xb0; </source>
-        <translation>對局 n° </translation>
+        <source>Game n° </source>
+        <translation type="vanished">對局 n° </translation>
     </message>
     <message>
         <source>%1 wants to %2
