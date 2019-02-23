@@ -508,8 +508,7 @@ int main(int argc, char **argv)
 #endif
 
 	// get application path
-	QFileInfo program(argv[0]);
-	program_dir = program.absolutePath ();
+	program_dir = QApplication::applicationDirPath();
 	qDebug() << "main:qt->PROGRAM.DIRPATH = " << program_dir;
 
 	setting = new Setting();
