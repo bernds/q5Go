@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>666</width>
+    <width>664</width>
     <height>776</height>
    </rect>
   </property>
@@ -183,7 +183,7 @@
       <string/>
      </property>
      <property name="currentIndex">
-      <number>4</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="InterfaceTabWidget">
       <attribute name="title">
@@ -192,6 +192,12 @@
       <layout class="QGridLayout">
        <item row="0" column="1">
         <widget class="QGroupBox" name="ButtonGroup3">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="title">
           <string>Font</string>
          </property>
@@ -621,10 +627,16 @@ Select the font for the server console (fixed font preferably).</string>
        </item>
        <item row="0" column="0">
         <widget class="QGroupBox" name="soundButtonGroups">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="title">
           <string>Play sound for</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout_4">
+         <layout class="QFormLayout" name="formLayout_3">
           <item row="0" column="0">
            <widget class="QCheckBox" name="stoneSoundCheckBox">
             <property name="toolTip">
@@ -643,7 +655,7 @@ Enable this box when you want to listen a clicking sound when playing a stone on
             </attribute>
            </widget>
           </item>
-          <item row="0" column="1" colspan="2">
+          <item row="0" column="1">
            <widget class="QCheckBox" name="passSoundCheckBox">
             <property name="toolTip">
              <string>Play sound for pass move</string>
@@ -674,7 +686,7 @@ Play a sound when a stone is placed in autoplay mode.</string>
             </attribute>
            </widget>
           </item>
-          <item row="1" column="1" colspan="2">
+          <item row="1" column="1">
            <widget class="QCheckBox" name="gameEndSoundCheckBox">
             <property name="toolTip">
              <string>Play sound when played or observed game has ended</string>
@@ -700,7 +712,7 @@ Play a sound when a stone is placed in autoplay mode.</string>
             </attribute>
            </widget>
           </item>
-          <item row="2" column="1" colspan="2">
+          <item row="2" column="1">
            <widget class="QCheckBox" name="talkSoundCheckBox">
             <property name="toolTip">
              <string>Play sound for incoming talk message</string>
@@ -726,7 +738,7 @@ Play a sound when a stone is placed in autoplay mode.</string>
             </attribute>
            </widget>
           </item>
-          <item row="3" column="1" colspan="2">
+          <item row="3" column="1">
            <widget class="QCheckBox" name="leaveSoundCheckBox">
             <property name="toolTip">
              <string>Play sound when a watched player leaves the room</string>
@@ -752,7 +764,7 @@ Play a sound when a stone is placed in autoplay mode.</string>
             </attribute>
            </widget>
           </item>
-          <item row="4" column="1" colspan="2">
+          <item row="4" column="1">
            <widget class="QCheckBox" name="connectSoundCheckBox">
             <property name="toolTip">
              <string>Play sound when connected to server</string>
@@ -765,7 +777,7 @@ Play a sound when a stone is placed in autoplay mode.</string>
             </attribute>
            </widget>
           </item>
-          <item row="5" column="0" colspan="3">
+          <item row="5" column="0">
            <widget class="QCheckBox" name="matchSoundCheckBox">
             <property name="toolTip">
              <string>Play sound for incoming match request</string>
@@ -778,7 +790,7 @@ Play a sound when a stone is placed in autoplay mode.</string>
             </attribute>
            </widget>
           </item>
-          <item row="6" column="0" colspan="2">
+          <item row="6" column="0">
            <widget class="QCheckBox" name="timeSoundCheckBox">
             <property name="toolTip">
              <string>Play sound for remaining seconds of own time</string>
@@ -795,7 +807,7 @@ You can set the warning time besides</string>
             </attribute>
            </widget>
           </item>
-          <item row="6" column="2">
+          <item row="6" column="1">
            <widget class="QSpinBox" name="BYTimeSpin">
             <property name="maximumSize">
              <size>
@@ -1084,6 +1096,12 @@ If not available then interval time is used.</string>
        </item>
        <item row="0" column="2">
         <widget class="QGroupBox" name="boardButtonGroup">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="title">
           <string>Board</string>
          </property>
@@ -1270,6 +1288,12 @@ If you press to enter a move on the board, the move will not be acknowledged if 
        </item>
        <item row="0" column="0">
         <widget class="QGroupBox" name="GroupBox7">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="toolTip">
           <string>Display variations</string>
          </property>
@@ -1584,274 +1608,6 @@ diagram pane shown:</string>
        <string>Stones</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_11">
-       <item row="0" column="0" colspan="2">
-        <widget class="QGroupBox" name="buttonGroup6">
-         <property name="title">
-          <string>Stones</string>
-         </property>
-         <layout class="QHBoxLayout" name="_24">
-          <property name="leftMargin">
-           <number>6</number>
-          </property>
-          <property name="topMargin">
-           <number>6</number>
-          </property>
-          <property name="rightMargin">
-           <number>6</number>
-          </property>
-          <property name="bottomMargin">
-           <number>6</number>
-          </property>
-          <item>
-           <widget class="QRadioButton" name="radioButtonStones_2D">
-            <property name="toolTip">
-             <string>flat circled ... ugly but asked for ...</string>
-            </property>
-            <property name="whatsThis">
-             <string>Stone appearance
-
-This will display back and white circles</string>
-            </property>
-            <property name="text">
-             <string>Plain 2D</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="radioButtonStones_3D">
-            <property name="toolTip">
-             <string>plain 3D (no shadow, no stripes)</string>
-            </property>
-            <property name="whatsThis">
-             <string>Stone appearance
-
-this will display simple 3D stones, with no shadow and neither stripes on white stones</string>
-            </property>
-            <property name="text">
-             <string>Old 3D look</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="radioButtonStone_real">
-            <property name="toolTip">
-             <string>Realistic 3D stones with stripes and shadow</string>
-            </property>
-            <property name="whatsThis">
-             <string>Stone appearance
-
-This will display realistic 3D stones with stripes and shadow</string>
-            </property>
-            <property name="text">
-             <string>Shaded 3D</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QGroupBox" name="whiteGroupBox">
-         <property name="title">
-          <string>White stone appearance</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_9">
-          <property name="leftMargin">
-           <number>6</number>
-          </property>
-          <property name="topMargin">
-           <number>6</number>
-          </property>
-          <property name="rightMargin">
-           <number>6</number>
-          </property>
-          <property name="bottomMargin">
-           <number>6</number>
-          </property>
-          <item row="1" column="1">
-           <widget class="QSlider" name="whiteHardSlider">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QSlider" name="whiteRoundSlider">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_12">
-            <property name="text">
-             <string>Specular hardness:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QSlider" name="whiteSpecSlider">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_9">
-            <property name="text">
-             <string>Thickness:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_8">
-            <property name="text">
-             <string>Specular ratio:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0">
-           <widget class="QToolButton" name="whiteColorButton">
-            <property name="text">
-             <string>Select base color</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="label_10">
-            <property name="text">
-             <string>Flattened:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QSlider" name="whiteFlatSlider">
-            <property name="maximum">
-             <number>5</number>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QGroupBox" name="blackGroupBox">
-         <property name="title">
-          <string>Black stone appearance</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_10">
-          <property name="leftMargin">
-           <number>6</number>
-          </property>
-          <property name="topMargin">
-           <number>6</number>
-          </property>
-          <property name="rightMargin">
-           <number>6</number>
-          </property>
-          <property name="bottomMargin">
-           <number>6</number>
-          </property>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_13">
-            <property name="text">
-             <string>Specular hardness:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QSlider" name="blackSpecSlider">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_14">
-            <property name="text">
-             <string>Thickness:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_16">
-            <property name="text">
-             <string>Specular ratio:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QSlider" name="blackHardSlider">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QSlider" name="blackRoundSlider">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0">
-           <widget class="QToolButton" name="blackColorButton">
-            <property name="text">
-             <string>Select base color</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QSlider" name="blackFlatSlider">
-            <property name="maximum">
-             <number>5</number>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="label_11">
-            <property name="text">
-             <string>Flattened:</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QCheckBox" name="stripesCheckBox">
-         <property name="text">
-          <string>Simulate clamshell appearance</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <layout class="QHBoxLayout" name="horizontalLayout_6">
-         <item>
-          <widget class="QLabel" name="label_15">
-           <property name="text">
-            <string>Ambient light:</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSlider" name="ambientSlider">
-           <property name="maximum">
-            <number>100</number>
-           </property>
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
        <item row="4" column="0" colspan="3">
         <widget class="QGroupBox" name="GoEnginegroup_box_2">
          <property name="title">
@@ -1992,12 +1748,6 @@ If the picture is not set, or unvalid, a default goban is used by qgo</string>
           </item>
           <item row="4" column="0" colspan="2">
            <layout class="QHBoxLayout" name="horizontalLayout_14">
-            <property name="topMargin">
-             <number>8</number>
-            </property>
-            <property name="rightMargin">
-             <number>8</number>
-            </property>
             <item>
              <widget class="QCheckBox" name="lineScaleCheckBox">
               <property name="text">
@@ -2030,18 +1780,92 @@ If the picture is not set, or unvalid, a default goban is used by qgo</string>
          </layout>
         </widget>
        </item>
-       <item row="5" column="1">
-        <spacer name="verticalSpacer_15">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
+       <item row="2" column="1">
+        <layout class="QHBoxLayout" name="horizontalLayout_6">
+         <item>
+          <widget class="QLabel" name="label_15">
+           <property name="text">
+            <string>Ambient light:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSlider" name="ambientSlider">
+           <property name="maximum">
+            <number>100</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="0" column="0" colspan="2">
+        <widget class="QGroupBox" name="buttonGroup6">
+         <property name="title">
+          <string>Stones</string>
          </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>0</height>
-          </size>
-         </property>
-        </spacer>
+         <layout class="QHBoxLayout" name="_24">
+          <property name="leftMargin">
+           <number>6</number>
+          </property>
+          <property name="topMargin">
+           <number>6</number>
+          </property>
+          <property name="rightMargin">
+           <number>6</number>
+          </property>
+          <property name="bottomMargin">
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="QRadioButton" name="radioButtonStones_2D">
+            <property name="toolTip">
+             <string>flat circled ... ugly but asked for ...</string>
+            </property>
+            <property name="whatsThis">
+             <string>Stone appearance
+
+This will display back and white circles</string>
+            </property>
+            <property name="text">
+             <string>Plain 2D</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="radioButtonStones_3D">
+            <property name="toolTip">
+             <string>plain 3D (no shadow, no stripes)</string>
+            </property>
+            <property name="whatsThis">
+             <string>Stone appearance
+
+this will display simple 3D stones, with no shadow and neither stripes on white stones</string>
+            </property>
+            <property name="text">
+             <string>Old 3D look</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="radioButtonStone_real">
+            <property name="toolTip">
+             <string>Realistic 3D stones with stripes and shadow</string>
+            </property>
+            <property name="whatsThis">
+             <string>Stone appearance
+
+This will display realistic 3D stones with stripes and shadow</string>
+            </property>
+            <property name="text">
+             <string>Shaded 3D</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </item>
        <item row="3" column="0" colspan="3">
         <widget class="SizeGraphicsView" name="stoneView">
@@ -2051,6 +1875,187 @@ If the picture is not set, or unvalid, a default goban is used by qgo</string>
          <property name="horizontalScrollBarPolicy">
           <enum>Qt::ScrollBarAlwaysOff</enum>
          </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QCheckBox" name="stripesCheckBox">
+         <property name="text">
+          <string>Simulate clamshell appearance</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QGroupBox" name="blackGroupBox">
+         <property name="title">
+          <string>Black stone appearance</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_10">
+          <property name="leftMargin">
+           <number>6</number>
+          </property>
+          <property name="topMargin">
+           <number>6</number>
+          </property>
+          <property name="rightMargin">
+           <number>6</number>
+          </property>
+          <property name="bottomMargin">
+           <number>6</number>
+          </property>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_13">
+            <property name="text">
+             <string>Specular hardness:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QSlider" name="blackSpecSlider">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_14">
+            <property name="text">
+             <string>Thickness:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_16">
+            <property name="text">
+             <string>Specular ratio:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QSlider" name="blackHardSlider">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QSlider" name="blackRoundSlider">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QToolButton" name="blackColorButton">
+            <property name="text">
+             <string>Select base color</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QSlider" name="blackFlatSlider">
+            <property name="maximum">
+             <number>5</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_11">
+            <property name="text">
+             <string>Flattened:</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QGroupBox" name="whiteGroupBox">
+         <property name="title">
+          <string>White stone appearance</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_9">
+          <property name="leftMargin">
+           <number>6</number>
+          </property>
+          <property name="topMargin">
+           <number>6</number>
+          </property>
+          <property name="rightMargin">
+           <number>6</number>
+          </property>
+          <property name="bottomMargin">
+           <number>6</number>
+          </property>
+          <item row="1" column="1">
+           <widget class="QSlider" name="whiteHardSlider">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QSlider" name="whiteRoundSlider">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_12">
+            <property name="text">
+             <string>Specular hardness:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QSlider" name="whiteSpecSlider">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_9">
+            <property name="text">
+             <string>Thickness:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_8">
+            <property name="text">
+             <string>Specular ratio:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QToolButton" name="whiteColorButton">
+            <property name="text">
+             <string>Select base color</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_10">
+            <property name="text">
+             <string>Flattened:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QSlider" name="whiteFlatSlider">
+            <property name="maximum">
+             <number>5</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
       </layout>
@@ -2179,7 +2184,7 @@ If the picture is not set, or unvalid, a default goban is used by qgo</string>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
-                <width>40</width>
+                <width>1</width>
                 <height>20</height>
                </size>
               </property>
@@ -2908,6 +2913,9 @@ New users: leave blank!</string>
            </property>
            <property name="editable">
             <bool>true</bool>
+           </property>
+           <property name="sizeAdjustPolicy">
+            <enum>QComboBox::AdjustToMinimumContentsLength</enum>
            </property>
            <property name="duplicatesEnabled">
             <bool>false</bool>
@@ -4384,8 +4392,8 @@ Click to get a new, editable offline window.</string>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>0</width>
-              <height>53</height>
+              <width>1</width>
+              <height>1</height>
              </size>
             </property>
            </spacer>
