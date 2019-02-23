@@ -739,7 +739,7 @@ void MainWindow::slotFileImportSgfClipB(bool)
 	QByteArray bytes = sgfString.toUtf8 ();
 	QBuffer buf (&bytes);
 	buf.open (QBuffer::ReadOnly);
-	std::shared_ptr<game_record> gr = record_from_stream (buf);
+	std::shared_ptr<game_record> gr = record_from_stream (buf, nullptr);
 	if (gr == nullptr)
 		/* Assume alerts were shown in record_from_stream.  */
 		return;

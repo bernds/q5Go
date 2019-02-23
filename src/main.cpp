@@ -115,11 +115,11 @@ static void warn_errors (std::shared_ptr<game_record> gr)
 
 /* A wrapper around sgf2record to handle exceptions with message boxes.  */
 
-std::shared_ptr<game_record> record_from_stream (QIODevice &isgf)
+std::shared_ptr<game_record> record_from_stream (QIODevice &isgf, QTextCodec* codec)
 {
 	try {
 		sgf *sgf = load_sgf (isgf);
-		std::shared_ptr<game_record> gr = sgf2record (*sgf, nullptr);
+		std::shared_ptr<game_record> gr = sgf2record (*sgf, codec);
 		warn_errors (gr);
 		return gr;
 	} catch (invalid_boardsize &) {
@@ -132,20 +132,20 @@ std::shared_ptr<game_record> record_from_stream (QIODevice &isgf)
 	return nullptr;
 }
 
-std::shared_ptr<game_record> record_from_file (const QString &filename)
+std::shared_ptr<game_record> record_from_file (const QString &filename, QTextCodec* codec)
 {
 	QFile f (filename);
 	f.open (QIODevice::ReadOnly);
 
-	std::shared_ptr<game_record> gr = record_from_stream (f);
+	std::shared_ptr<game_record> gr = record_from_stream (f, codec);
 	if (gr != nullptr)
 		gr->set_filename (filename.toStdString ());
 	return gr;
 }
 
-bool open_window_from_file (const QString &filename)
+bool open_window_from_file (const QString &filename, QTextCodec* codec)
 {
-	std::shared_ptr<game_record> gr = record_from_file (filename);
+	std::shared_ptr<game_record> gr = record_from_file (filename, codec);
 	if (gr == nullptr)
 		return false;
 
@@ -193,7 +193,7 @@ std::shared_ptr<game_record> open_file_dialog (QWidget *parent)
 	QFileInfo fi (fileName);
 	if (fi.exists ())
 		setting->writeEntry ("LAST_DIR", fi.dir ().absolutePath ());
-	return record_from_file (fileName);
+	return record_from_file (fileName, nullptr);
 }
 
 QString open_filename_dialog (QWidget *parent)
@@ -485,6 +485,7 @@ int main(int argc, char **argv)
 	QCommandLineOption clo_board { { "b", "board" }, QObject::tr ("Start up with a board window (ignored if files are loaded).") };
 	QCommandLineOption clo_analysis { { "a", "analyze" }, QObject::tr ("Start up with the computer analysis dialog to analyze <file>."), QObject::tr ("file") };
 	QCommandLineOption clo_debug { { "d", "debug" }, QObject::tr ("Display debug messages in a window") };
+	QCommandLineOption clo_encoding { { "e", "encoding "}, QObject::tr ("Specify text <encoding> of SGF files passed by command line."), "encoding"};
 
 	cmdp.addOption (clo_client);
 	cmdp.addOption (clo_board);
@@ -492,6 +493,7 @@ int main(int argc, char **argv)
 #ifdef OWN_DEBUG_MODE
 	cmdp.addOption (clo_debug);
 #endif
+	cmdp.addOption (clo_encoding);
 	cmdp.addHelpOption ();
 	cmdp.addPositionalArgument ("file", QObject::tr ("Load <file> and display it in a board window."));
 
@@ -552,8 +554,14 @@ int main(int argc, char **argv)
 	client_window->setVisible (show_client);
 
 	bool windows_open = false;
+	QTextCodec* codec = nullptr;
+	if (cmdp.isSet(clo_encoding)) {
+		QString encoding = cmdp.value(clo_encoding);
+		codec = QTextCodec::codecForName(encoding.toUtf8());
+	}
 	for (auto arg: args) {
-		windows_open |= open_window_from_file (arg);
+		if (QFile::exists(arg) && arg.endsWith(".sgf", Qt::CaseInsensitive))
+			windows_open |= open_window_from_file (arg, codec);
 	}
 	if (cmdp.isSet (clo_board) && !windows_open) {
 		open_local_board (client_window, game_dialog_type::none);

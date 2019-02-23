@@ -368,7 +368,7 @@ static void add_to_game_state (game_state *gs, sgf::node *n, bool force, QTextCo
 #endif
 }
 
-std::string translated_prop_str (const std::string *val, QTextCodec *codec)
+std::string translated_prop_str (const std::string *val, const QTextCodec *codec)
 {
 	if (!val)
 		return "";

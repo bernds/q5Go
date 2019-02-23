@@ -428,7 +428,7 @@ void AnalyzeDialog::start_engine ()
 void AnalyzeDialog::start_job ()
 {
 	QString f = filenameEdit->text ();
-	std::shared_ptr<game_record> gr = record_from_file (f);
+	std::shared_ptr<game_record> gr = record_from_file (f, nullptr);
 	if (gr == nullptr)
 		return;
 
