@@ -402,7 +402,7 @@ void GameTree::update (std::shared_ptr<game_record> gr, game_state *active, bool
 	if (found) {
 		m_sel->setPos (acx * m_size, acy * m_size);
 		if (active_changed)
-			ensureVisible (m_sel);
+			ensureVisible (m_sel, m_size / 2, m_size / 2);
 	} else
 		m_sel->hide ();
 	m_scene->update ();
