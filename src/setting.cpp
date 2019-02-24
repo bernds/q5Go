@@ -7,16 +7,17 @@
 #include <QMessageBox>
 #include <QPixmap>
 #include <QTextCodec>
-
-#include "setting.h"
-#include "config.h"
-#include "defines.h"
-#include "icons.h"
 #include <qfile.h>
 #include <qdir.h>
 #include <qfont.h>
 #include <qstringlist.h>
 #include <qstring.h>
+
+#include "qgo.h"
+#include "setting.h"
+#include "config.h"
+#include "defines.h"
+#include "icons.h"
 
 //#ifdef USE_XPM
 #include ICON_APPICON

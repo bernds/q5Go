@@ -78,8 +78,6 @@ public:
 	void saveSettings();
 	QString fontToString(QFont);
 
-	QString program_dir;
-
 	QFont fontStandard, fontMarks, fontComments, fontLists, fontClocks, fontConsole;
 	QString language;
 	setting_vals values;
