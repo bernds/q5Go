@@ -2,16 +2,17 @@
  * settings.cpp
  */
 
+#include <QApplication>
 #include <QTextStream>
 #include <QStandardPaths>
 #include <QMessageBox>
 #include <QPixmap>
 #include <QTextCodec>
-#include <qfile.h>
-#include <qdir.h>
-#include <qfont.h>
-#include <qstringlist.h>
-#include <qstring.h>
+#include <QFile>
+#include <QDir>
+#include <QFont>
+#include <QStringList>
+#include <QString>
 
 #include "qgo.h"
 #include "setting.h"
@@ -407,16 +408,8 @@ QString Setting::getTranslationsDirectory()
 	qDebug("Checking for translations directory...");
 
 	QStringList list;
-
-#ifdef Q_OS_WIN
-	list << program_dir + "/translations"
-		<< "C:/Program Files/q4Go/translations"
-		<< "D:/Program Files/q4Go/translations"
-		<< "E:/Program Files/q4Go/translations"
-		<< "C:/Programme/q4Go/translations"
-		<< "D:/Programme/q4Go/translations"
-		<< "E:/Programme/q4Go/translations"
-		<< "./translations";
+#if defined(Q_OS_WIN)
+	list << QApplication::applicationDirPath() + "/translations";
 #elif defined(Q_OS_MACX)
 	//get the bundle path and find our resources
 	CFURLRef bundleRef = CFBundleCopyBundleURL(CFBundleGetMainBundle());
@@ -425,7 +418,7 @@ QString Setting::getTranslationsDirectory()
 		+ "/Contents/Resources";
 #else
 	list	<< DATADIR "/translations"
-		<< program_dir + "/translations"
+		<< QApplication::applicationDirPath() + "/translations"
 		<< "./share/" PACKAGE "/translations"
 		<< "/usr/share/" PACKAGE "/translations"
 		<< "/usr/local/share/" PACKAGE "/translations"

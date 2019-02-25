@@ -32,8 +32,6 @@ QApplication *qgo_app;
 // global
 Setting *setting = 0;
 
-QString program_dir;
-
 Debug_Dialog *debug_dialog;
 #ifdef OWN_DEBUG_MODE
 QTextEdit *debug_view;
@@ -510,8 +508,7 @@ int main(int argc, char **argv)
 #endif
 
 	// get application path
-	program_dir = QApplication::applicationDirPath();
-	qDebug() << "main:qt->PROGRAM.DIRPATH = " << program_dir;
+	qDebug() << "main:qt->PROGRAM.DIRPATH = " << QApplication::applicationDirPath();
 
 	setting = new Setting();
 	setting->loadSettings();

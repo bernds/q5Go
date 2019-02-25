@@ -48,7 +48,6 @@ private:
 class QApplication;
 
 extern qGo *qgo;
-extern QString program_dir;
 extern QApplication *qgo_app;
 
 #endif
