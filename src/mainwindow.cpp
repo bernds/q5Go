@@ -360,9 +360,14 @@ void MainWindow::initActions ()
 		 [this] (bool)
 		 {
 			 AutoDiagsDialog dlg (m_game, this);
-			 dlg.exec ();
-			 update_game_tree ();
-			 update_figures ();
+			 if (dlg.exec ()) {
+				 if (!diagsDock->isVisible ()) {
+					 diagsDock->setVisible (true);
+					 restoreWindowLayout (false);
+				 }
+				 update_game_tree ();
+				 update_figures ();
+			 }
 		 });
 
 	/* Navigation menu.  */
@@ -861,9 +866,13 @@ void MainWindow::slotEditGroup (bool)
 void MainWindow::slotEditFigure (bool on)
 {
 	game_state *st = gfx_board->displayed ();
-	if (on)
+	if (on) {
 		st->set_figure (256, "");
-	else
+		if (!diagsDock->isVisible ()) {
+			diagsDock->setVisible (true);
+			restoreWindowLayout (false);
+		}
+	} else
 		st->clear_figure ();
 	update_figures ();
 	update_game_tree ();
