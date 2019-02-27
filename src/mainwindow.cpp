@@ -138,10 +138,10 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 	normalTools->show();
 	scoreTools->hide();
 
-	showSlider = true;
-	toggleSlider(setting->readBoolEntry("SLIDER"));
-	slider->setMaximum(SLIDER_INIT);
-	sliderRightLabel->setText(QString::number(SLIDER_INIT));
+	showSlider = setting->readBoolEntry ("SLIDER");
+	sliderWidget->setVisible (showSlider);
+	slider->setMaximum (SLIDER_INIT);
+	sliderRightLabel->setText (QString::number (SLIDER_INIT));
 	sliderSignalToggle = true;
 
 	int w = evalView->width ();
@@ -489,9 +489,12 @@ void MainWindow::initMenuBar (GameMode mode)
 
 void MainWindow::initToolBar()
 {
-	miscBar->addSeparator();
-	miscBar->addAction (soundToggle);
-	miscBar->addAction (viewCoords);
+	QToolButton *menu_button = new QToolButton (this);
+	menu_button->setPopupMode(QToolButton::InstantPopup);
+	menu_button->setIcon (QIcon (":/BoardWindow/images/boardwindow/eye.png"));
+	menu_button->setMenu (viewMenu);
+	menu_button->setToolTip ("View menu");
+	miscBar->addWidget (menu_button);
 
 	miscBar->addSeparator();
 	miscBar->addAction (whatsThis);
@@ -998,8 +1001,6 @@ void MainWindow::hide_panes_for_mode ()
 
 void MainWindow::updateBoard()
 {
-	viewSlider->setChecked (setting->readBoolEntry ("SLIDER"));
-	viewSidebar->setChecked (setting->readBoolEntry ("SIDEBAR"));
 	viewCoords->setChecked (setting->readBoolEntry ("BOARD_COORDS"));
 	gfx_board->set_sgf_coords (setting->readBoolEntry ("SGF_BOARD_COORDS"));
 	gfx_board->set_antiClicko (setting->readBoolEntry ("ANTICLICKO"));
@@ -1121,14 +1122,11 @@ void MainWindow::slotViewDiagComments(bool toggle)
 	statusBar()->showMessage(tr("Ready."));
 }
 
-void MainWindow::slotViewSlider(bool toggle)
+void MainWindow::slotViewSlider (bool toggle)
 {
-	if (!toggle)
-		toggleSlider(false);
-	else
-		toggleSlider(true);
+	sliderWidget->setVisible (toggle);
 
-	statusBar()->showMessage(tr("Ready."));
+	statusBar ()->showMessage (tr ("Ready."));
 }
 
 // set sidbar left or right
@@ -1323,7 +1321,13 @@ void MainWindow::saveWindowLayout (bool dflt)
 	setting->writeEntry("BOARDLAYOUT1_" + strKey, QString::fromLatin1 (v1));
 	setting->writeEntry("BOARDLAYOUT2_" + strKey, QString::fromLatin1 (v2));
 
-	statusBar()->showMessage(tr("Window size saved.") + " (" + strKey + ")");
+	QString v3 = viewStatusBar->isChecked () ? "1" : "0";
+	v3 += viewMenuBar->isChecked () ? "1" : "0";
+	v3 += viewSlider->isChecked () ? "1" : "0";
+	v3 += viewSidebar->isChecked () ? "1" : "0";
+	setting->writeEntry("BOARDLAYOUT3_" + strKey, v3);
+
+	statusBar ()->showMessage(tr("Window size saved.") + " (" + strKey + ")");
 }
 
 bool MainWindow::restoreWindowLayout (bool dflt)
@@ -1337,6 +1341,7 @@ bool MainWindow::restoreWindowLayout (bool dflt)
 	// restore board window
 	QString s1 = setting->readEntry("BOARDLAYOUT1_" + strKey);
 	QString s2 = setting->readEntry("BOARDLAYOUT2_" + strKey);
+	QString s3 = setting->readEntry("BOARDLAYOUT3_" + strKey);
 	if (s1.isEmpty () || s2.isEmpty ())
 		return false;
 	QRegExp verify ("^[0-9A-Fa-f]*$");
@@ -1353,11 +1358,23 @@ bool MainWindow::restoreWindowLayout (bool dflt)
 		restore_visibility_from_key (panesKey);
 	hide_panes_for_mode ();
 
+	if (s3.length () >= 4) {
+		statusBar ()->setVisible (s3[0] != '0');
+		menuBar ()->setVisible (s3[1] != '0');
+		sliderWidget->setVisible (s3[2] != '0');
+		toolsFrame->setVisible (s3[3] != '0');
+	}
+	viewSlider->setChecked (sliderWidget->isVisibleTo (this));
+	viewMenuBar->setChecked (menuBar ()->isVisibleTo (this));
+	viewStatusBar->setChecked (statusBar ()->isVisibleTo (this));
+	viewSidebar->setChecked (toolsFrame->isVisibleTo (this));
+
 	// ok, resize
 	gfx_board->lockResize = false;
 	gfx_board->changeSize();
 
-	statusBar()->showMessage(tr("Window size restored.") + " (" + strKey + ")");
+	QString extra = menuBar ()->isVisibleTo (this) ? "" : tr (" - Press F7 to show menu bar");
+	statusBar()->showMessage(tr("Window size restored.") + " (" + strKey + ")" + extra);
 
 	return true;
 }
@@ -1404,6 +1421,35 @@ void MainWindow::defaultLandscapeLayout ()
 	restore_visibility_from_key (panesKey);
 	hide_panes_for_mode ();
 	setFocus ();
+}
+
+void MainWindow::keyPressEvent (QKeyEvent *e)
+{
+	switch (e->key ())
+	{
+		case Qt::Key_Alt:
+			menuBar ()->show ();
+			break;
+
+		default:
+			break;
+	}
+	QMainWindow::keyPressEvent (e);
+}
+
+void MainWindow::keyReleaseEvent (QKeyEvent *e)
+{
+	switch (e->key ())
+	{
+		case Qt::Key_Alt:
+			if (!viewMenuBar->isChecked ())
+				menuBar ()->hide ();
+			break;
+
+		default:
+			break;
+	}
+	QMainWindow::keyPressEvent (e);
 }
 
 void MainWindow::closeEvent (QCloseEvent *e)
@@ -2291,27 +2337,6 @@ void MainWindow::sliderChanged(int n)
 {
 	if (sliderSignalToggle)
 		gfx_board->goto_nth_move_in_var (n);
-}
-
-void MainWindow::toggleSlider(bool b)
-{
-	if (showSlider == b)
-		return;
-
-	showSlider = b;
-
-	if (b)
-	{
-		slider->show();
-		sliderLeftLabel->show();
-		sliderRightLabel->show();
-	}
-	else
-	{
-		slider->hide();
-		sliderLeftLabel->hide();
-		sliderRightLabel->hide();
-	}
 }
 
 void MainWindow::toggleSidebar(bool toggle)

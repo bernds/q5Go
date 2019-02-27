@@ -46,8 +46,6 @@ class MainWindow : public QMainWindow, public Ui::BoardWindow
 	QGraphicsTextItem *m_w_time, *m_b_time;
 	double m_eval;
 
-	void toggleSlider (bool);
-	bool getSlider() { return showSlider; }
 	void toggleSliderSignal(bool b) { sliderSignalToggle = b; }
 
 	void setToolsTabWidget(enum tabType=tabNormalScore, enum tabState=tabSet);
@@ -115,7 +113,10 @@ protected:
 	void initMenuBar(GameMode);
 	void initToolBar();
 	void initStatusBar();
-	void closeEvent(QCloseEvent *e);
+
+	virtual void closeEvent (QCloseEvent *e) override;
+	virtual void keyPressEvent (QKeyEvent*) override;
+	virtual void keyReleaseEvent (QKeyEvent*) override;
 
 signals:
 	void signal_sendcomment(const QString&);

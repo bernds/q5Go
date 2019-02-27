@@ -206,10 +206,7 @@ void PreferencesDialog::init_from_settings ()
 	timerComboBox->setCurrentIndex(setting->readIntEntry("TIMER_INTERVAL"));
 	BYTimeSpin->setValue(setting->readIntEntry("BY_TIMER"));
 	sgfTimeTagsCheckBox->setChecked(setting->readBoolEntry("SGF_TIME_TAGS"));
-	sliderCheckBox->setChecked(setting->readBoolEntry("SLIDER"));
-	int sidebar = (setting->readBoolEntry("SIDEBAR")
-		       ? (setting->readBoolEntry("SIDEBAR_LEFT") ? 1 : 2)
-		       : 0);
+	int sidebar = setting->readBoolEntry("SIDEBAR_LEFT") ? 0 : 1;
 	sidebarComboBox->setCurrentIndex(sidebar);
 	antiClickoCheckBox->setChecked(setting->readBoolEntry("ANTICLICKO"));
 
@@ -435,9 +432,7 @@ void PreferencesDialog::slot_apply()
 	int sidebar = sidebarComboBox->currentIndex();
 	setting->writeBoolEntry("BOARD_COORDS", coords > 0);
 	setting->writeBoolEntry("SGF_BOARD_COORDS", coords == 2);
-	setting->writeBoolEntry("SLIDER", sliderCheckBox->isChecked());
-	setting->writeBoolEntry("SIDEBAR", sidebar > 0);
-	setting->writeBoolEntry("SIDEBAR_LEFT", sidebar == 1);
+	setting->writeBoolEntry("SIDEBAR_LEFT", sidebar == 0);
 	setting->writeBoolEntry("CURSOR", cursorCheckBox->isChecked());
 	//setting->writeBoolEntry("SMALL_STONES", smallerStonesCheckBox->isChecked());
 	setting->writeBoolEntry("TOOLTIPS", !(tooltipsCheckBox->isChecked()));

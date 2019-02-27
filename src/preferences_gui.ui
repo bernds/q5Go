@@ -183,7 +183,7 @@
       <string/>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="InterfaceTabWidget">
       <attribute name="title">
@@ -1119,21 +1119,6 @@ If not available then interval time is used.</string>
            <number>6</number>
           </property>
           <item row="2" column="0">
-           <widget class="QCheckBox" name="sliderCheckBox">
-            <property name="toolTip">
-             <string>Show slider</string>
-            </property>
-            <property name="whatsThis">
-             <string>Show slider
-
-Toggles the slider on the bottom of the board on or off.</string>
-            </property>
-            <property name="text">
-             <string>Slider</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
            <widget class="QCheckBox" name="cursorCheckBox">
             <property name="toolTip">
              <string>Show a ghost stone at mouse pointer</string>
@@ -1148,7 +1133,7 @@ Have a ghost stone showing the current position of the mouse pointer on the boar
             </property>
            </widget>
           </item>
-          <item row="4" column="0">
+          <item row="3" column="0">
            <widget class="QCheckBox" name="tooltipsCheckBox">
             <property name="toolTip">
              <string>Disable Tool Tips</string>
@@ -1196,11 +1181,6 @@ Globally disables all tool tips that would show up if the mouse hovers over a GU
            <widget class="QComboBox" name="sidebarComboBox">
             <item>
              <property name="text">
-              <string>Hidden</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
               <string>Left</string>
              </property>
             </item>
@@ -1220,6 +1200,22 @@ Globally disables all tool tips that would show up if the mouse hovers over a GU
              <cstring>coordsComboBox</cstring>
             </property>
            </widget>
+          </item>
+          <item row="4" column="0">
+           <spacer name="verticalSpacer_15">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Preferred</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>1</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </widget>
@@ -4611,7 +4607,6 @@ Note: 'Delete' concerns saved records.</string>
   <tabstop>varDiagsCheckBox</tabstop>
   <tabstop>coordsComboBox</tabstop>
   <tabstop>sidebarComboBox</tabstop>
-  <tabstop>sliderCheckBox</tabstop>
   <tabstop>cursorCheckBox</tabstop>
   <tabstop>tooltipsCheckBox</tabstop>
   <tabstop>antiClickoCheckBox</tabstop>
