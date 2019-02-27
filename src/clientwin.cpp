@@ -104,13 +104,6 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 
 	connect(whoOpenCheck, &QCheckBox::toggled, this, &ClientWindow::slot_whoopen);
 
-	// restore last setting
-	if (!setting)
-	{
-		setting = new Setting();
-		setting->loadSettings();
-	}
-
 	initStatusBar(this);
 	initActions();
 
