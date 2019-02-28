@@ -109,6 +109,13 @@ PreferencesDialog::PreferencesDialog(QWidget* parent)
 	connect (dbDirsButton, &QPushButton::clicked, this, &PreferencesDialog::slot_dbdir);
 	connect (dbCfgButton, &QPushButton::clicked, this, &PreferencesDialog::slot_dbcfg);
 	connect (dbRemButton, &QPushButton::clicked, this, &PreferencesDialog::slot_dbrem);
+
+	connect (fontStandardButton, &QPushButton::clicked, [this] () { selectFont (fontStandardButton, setting->fontStandard); });
+	connect (fontMarksButton, &QPushButton::clicked, [this] () { selectFont (fontMarksButton, setting->fontMarks); });
+	connect (fontCommentsButton, &QPushButton::clicked, [this] () { selectFont (fontCommentsButton, setting->fontComments); });
+	connect (fontListsButton, &QPushButton::clicked, [this] () { selectFont (fontListsButton, setting->fontLists); });
+	connect (fontClocksButton, &QPushButton::clicked, [this] () { selectFont (fontClocksButton, setting->fontClocks); });
+	connect (fontConsoleButton, &QPushButton::clicked, [this] () { selectFont (fontConsoleButton, setting->fontConsole); });
 }
 
 void PreferencesDialog::update_dbpaths (const QStringList &l)
@@ -619,75 +626,15 @@ void PreferencesDialog::startHelpMode()
 	QWhatsThis::enterWhatsThisMode();
 }
 
-void PreferencesDialog::selectFont(int selector)
+void PreferencesDialog::selectFont (QPushButton *button, QFont &font)
 {
 	// Open a font dialog to select a new font
 	bool ok;
-	QFont f;
-	switch (selector)
-	{
-	case 0:
-		f = QFontDialog::getFont(&ok, setting->fontStandard, this);
-		if (ok)  // Accepted
-		{
-			setting->fontStandard = f;
-			fontStandardButton->setText(setting->fontToString(f));
-			fontStandardButton->setFont(f);
-		}
-		break;
-
-	case 1:
-		f = QFontDialog::getFont(&ok, setting->fontMarks, this);
-		if (ok)  // Accepted
-		{
-			setting->fontMarks = f;
-			fontMarksButton->setText(setting->fontToString(f));
-			fontMarksButton->setFont(f);
-		}
-		break;
-
-	case 2:
-		f = QFontDialog::getFont(&ok, setting->fontComments, this);
-		if (ok)  // Accepted
-		{
-			setting->fontComments = f;
-			fontCommentsButton->setText(setting->fontToString(f));
-			fontCommentsButton->setFont(f);
-		}
-		break;
-
-	case 3:
-		f = QFontDialog::getFont(&ok, setting->fontLists, this);
-		if (ok)  // Accepted
-		{
-			setting->fontLists = f;
-			fontListsButton->setText(setting->fontToString(f));
-			fontListsButton->setFont(f);
-		}
-		break;
-
-	case 4:
-		f = QFontDialog::getFont(&ok, setting->fontClocks, this);
-		if (ok)  // Accepted
-		{
-			setting->fontClocks = f;
-			fontClocksButton->setText(setting->fontToString(f));
-			fontClocksButton->setFont(f);
-		}
-		break;
-
-	case 5:
-		f = QFontDialog::getFont(&ok, setting->fontConsole, this);
-		if (ok)  // Accepted
-		{
-			setting->fontConsole = f;
-			fontConsoleButton->setText(setting->fontToString(f));
-			fontConsoleButton->setFont(f);
-		}
-		break;
-
-	default:
-		break;
+	QFont f = QFontDialog::getFont(&ok, font, this);
+	if (ok) {
+		font = f;
+		button->setText (setting->fontToString (f));
+		button->setFont(f);
 	}
 }
 

@@ -59,34 +59,28 @@ signals:
 
 
 public slots:
-	void on_soundButtonGroup_buttonClicked(QAbstractButton *);
-	virtual void slot_cbtitle(const QString&);
-	virtual void slot_new_server();
-	virtual void slot_add_server();
-	virtual void slot_delete_server();
-	virtual void slot_new_engine();
-	virtual void slot_add_engine();
-	virtual void slot_delete_engine();
-	virtual void slot_apply();
-	virtual void startHelpMode();
-	virtual void selectFont(int);
-	virtual void selectStandardFont() { selectFont (0); }
-	virtual void selectMarksFont() { selectFont (1); }
-	virtual void selectCommentsFont() { selectFont (2); }
-	virtual void selectListsFont() { selectFont (3); }
-	virtual void selectClocksFont() { selectFont (4); }
-	virtual void selectConsoleFont() { selectFont (5); }
-	virtual void slot_accept();
-	virtual void slot_reject();
-	virtual void slot_serverChanged (const QString &);
-	virtual void slot_engineChanged (const QString &);
-	virtual void slot_getComputerPath();
-	virtual void slot_getGobanPicturePath();
-	virtual void slot_getTablePicturePath();
-	virtual void slot_main_time_changed(int);
-	virtual void slot_BY_time_changed(int);
-	virtual void slot_clickedHostList(QListWidgetItem *);
-	virtual void slot_clickedEngines(QListWidgetItem *);
+	void on_soundButtonGroup_buttonClicked (QAbstractButton *);
+	void slot_cbtitle (const QString&);
+	void slot_new_server ();
+	void slot_add_server ();
+	void slot_delete_server ();
+	void slot_new_engine ();
+	void slot_add_engine ();
+	void slot_delete_engine ();
+	void slot_apply ();
+	void startHelpMode ();
+	void selectFont (QPushButton *, QFont &);
+	void slot_accept ();
+	void slot_reject ();
+	void slot_serverChanged (const QString &);
+	void slot_engineChanged (const QString &);
+	void slot_getComputerPath ();
+	void slot_getGobanPicturePath ();
+	void slot_getTablePicturePath ();
+	void slot_main_time_changed (int);
+	void slot_BY_time_changed (int);
+	void slot_clickedHostList (QListWidgetItem *);
+	void slot_clickedEngines (QListWidgetItem *);
 	void select_white_color (bool);
 	void select_black_color (bool);
 	void select_stone_look (bool);
