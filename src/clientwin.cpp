@@ -2041,7 +2041,7 @@ void ClientWindow::slot_talk(const QString &name, const QString &text, bool ispl
 		}
 	}
 	// check if it was a channel message
-	autoAnswer &= (isplayer && autoAwayMessage && !name.contains('*') && (!text.isEmpty () && text[0] == '>'));
+	autoAnswer &= isplayer && autoAwayMessage && !name.contains('*') && text.startsWith ('>');
 	if (autoAnswer)
 	{
 		// send when qGo is NOT the active application - TO DO
@@ -2049,7 +2049,7 @@ void ClientWindow::slot_talk(const QString &name, const QString &text, bool ispl
 	}
 
 	// play a sound - not for shouts
-	if ((!text.isEmpty() && text[0] == '>' && bonus || !dlg->get_le()->hasFocus()) && !name.contains('*'))
+	if (((text.startsWith ('>') && bonus) || !dlg->get_le()->hasFocus()) && !name.contains('*'))
 	{
 		qgo->playTalkSound();
 
