@@ -62,38 +62,26 @@ class Talk : public QDialog, public Ui::TalkGui
 {
 	Q_OBJECT
 
-private:
-	QString        name;
-//	QTextEdit      *MultiLineEdit1;     //eb16
-//	QLineEdit      *LineEdit1;
-//	QGridLayout    *TalkDialogWidgetLayout;
-//	QPushButton    *pb_releaseTalkTab;
-//	QWidget        *widget;
-//	QBoxLayout     *buttonLayout;
-	static int     counter;
+	QString m_name;
 
 public:
-	Talk(const QString&, QWidget*, bool isplayer = true);
-	~Talk();
-	QTextEdit      *get_mle() const { return MultiLineEdit1; } //eb16
-	QLineEdit      *get_le() const {return LineEdit1; }
-	QWidget        *get_tabWidget()  { return this; }
-//	QPushButton    *get_pb() const { return pb_releaseTalkTab; }
-	QString        get_name() const { return name; }
-	void           set_name(QString &n) { name = n; }
-	void           write(const QString &text = QString()) const;
-	bool           pageActive;
-	void           setTalkWindowColor(QPalette pal);
+	Talk (const QString&, QWidget*, bool isplayer = true);
+
+	QString get_name () const { return m_name; }
+	void set_name (QString &n) { m_name = n; }
+	void write (const QString &text) const;
+
+	bool lineedit_has_focus ();
+	void append_to_mle (const QString &);
 
 public slots:
-	void slot_returnPressed();
-	void slot_pbRelTab();
-  void slot_match();
+	void slot_returnPressed ();
+	void slot_match ();
 
 signals:
 	void signal_talkto(QString&, QString&);
 	void signal_pbRelOneTab(QWidget*);
-  void signal_matchrequest(const QString&,bool);
+	void signal_matchrequest(const QString&,bool);
 };
 
 //-----------

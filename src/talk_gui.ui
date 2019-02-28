@@ -525,38 +525,4 @@ in this box you see the conversation with the player whose name appears on the t
  <resources>
   <include location="q4go.qrc"/>
  </resources>
- <connections>
-  <connection>
-   <sender>pb_releaseTalkTab</sender>
-   <signal>pressed()</signal>
-   <receiver>TalkGui</receiver>
-   <slot>slot_pbRelTab()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pb_match</sender>
-   <signal>pressed()</signal>
-   <receiver>TalkGui</receiver>
-   <slot>slot_match()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
 </ui>

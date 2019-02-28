@@ -769,57 +769,57 @@ Host::Host(const QString &title, const QString &host, const unsigned int port, c
  *   Talk - Class to handle  Talk Dialog Windows
  */
 
-int Talk::counter = 0;
-
-Talk::Talk(const QString &playername, QWidget *parent, bool isplayer)
-  : QDialog (parent)
+Talk::Talk (const QString &playername, QWidget *parent, bool isplayer)
+	: QDialog (parent)
 {
-	setupUi(this);
+	setupUi (this);
 	setWindowTitle (playername);
-	name = playername;
+	m_name = playername;
 
 	// create a new tab
 	MultiLineEdit1->setCurrentFont(setting->fontComments);
 	LineEdit1->setFont(setting->fontComments);
 
 	// do not add a button for shouts* or channels tab
-	if (name.indexOf('*') != -1 || !isplayer)
+	if (m_name.indexOf ('*') != -1 || !isplayer)
 	{
 		delete pb_releaseTalkTab;
 		delete pb_match;
 		delete stats_layout;
+	} else {
+		connect (pb_releaseTalkTab, &QPushButton::pressed, [this] () { emit signal_pbRelOneTab (this); });
+		connect (pb_match, &QPushButton::pressed, this, &Talk::slot_match);
 	}
+	connect (LineEdit1, &QLineEdit::returnPressed, this, &Talk::slot_returnPressed);
 }
 
-Talk::~Talk()
+bool Talk::lineedit_has_focus ()
 {
+	return LineEdit1->hasFocus ();
 }
 
-// release current Tab
-void Talk::slot_pbRelTab()
+void Talk::append_to_mle (const QString &s)
 {
-	emit signal_pbRelOneTab(this);	
+	MultiLineEdit1->append (s);
 }
 
-void Talk::slot_returnPressed()
+void Talk::slot_returnPressed ()
 {
 	// read tab
-	QString txt = LineEdit1->text();
-	emit signal_talkto(name, txt);
-	LineEdit1->clear();
+	QString txt = LineEdit1->text ();
+	emit signal_talkto (m_name, txt);
+	LineEdit1->clear ();
 }
 
-void Talk::slot_match()
+void Talk::slot_match ()
 {
-	QString txt= name+ " " + stats_rating->text();
-	emit signal_matchrequest(txt,true);
+	QString txt = m_name + " " + stats_rating->text ();
+	emit signal_matchrequest (txt, true);
 }
-
-
 
 // write to txt field in dialog
 // if null string -> check edit field
-void Talk::write(const QString &text) const
+void Talk::write (const QString &text) const
 {
 	QString txt;
 
@@ -836,11 +836,5 @@ void Talk::write(const QString &text) const
 	}
 
 	// Scroll at bottom of text, set cursor to end of line
-	MultiLineEdit1->append(txt); //eb16
-}
-
-void Talk::setTalkWindowColor(QPalette pal)
-{
-	MultiLineEdit1->setPalette(pal);
-	LineEdit1->setPalette(pal);
+	MultiLineEdit1->append (txt); //eb16
 }

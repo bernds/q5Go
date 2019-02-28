@@ -1955,27 +1955,22 @@ void ClientWindow::slot_mouse_players(int button, QTreeWidgetItem *lv)
 }
 
 // release Talk Tabs
-void ClientWindow::slot_pbRelTabs()
+void ClientWindow::slot_pbRelTabs ()
 {
 	// seek dialog
 	for (auto dlg: talklist) {
-		if (dlg->get_name().indexOf('*') == -1)
-		{
-			TabWidget_mini_2->removeTab (TabWidget_mini_2->indexOf (dlg->get_tabWidget ()));
-			dlg->pageActive = false;
-		}
+		if (dlg->get_name ().indexOf ('*') == -1)
+			TabWidget_mini_2->removeTab (TabWidget_mini_2->indexOf (dlg));
 	}
 }
 
 // release Talk Tabs
-void ClientWindow::slot_pbRelOneTab(QWidget *w)
+void ClientWindow::slot_pbRelOneTab (QWidget *w)
 {
 	// seek dialog
 	for (auto dlg: talklist) {
-		if (dlg->get_tabWidget() == w)
-		{
+		if (dlg == w) {
 			TabWidget_mini_2->removeTab (TabWidget_mini_2->indexOf (w));
-			dlg->pageActive = false;
 			return;
 		}
 	}
@@ -2013,15 +2008,13 @@ void ClientWindow::slot_talk(const QString &name, const QString &text, bool ispl
 
 	if (!dlg && !name.isEmpty () && name != tr ("msg*")) {
 		// not found -> create new dialog
-		dlg = new Talk(name, 0, isplayer);
+		dlg = new Talk (name, 0, isplayer);
 		talklist.append (dlg);
 
-		connect(dlg, SIGNAL(signal_talkto(QString&, QString&)), this, SLOT(slot_talkto(QString&, QString&)));
-		connect(dlg, SIGNAL(signal_matchrequest(const QString&,bool)), this, SLOT(slot_matchrequest(const QString&,bool)));
-		connect(dlg->get_le(), SIGNAL(returnPressed()), dlg, SLOT(slot_returnPressed()));
-		connect(dlg, SIGNAL(signal_pbRelOneTab(QWidget*)), this, SLOT(slot_pbRelOneTab(QWidget*)));
+		connect(dlg, &Talk::signal_talkto, this, &ClientWindow::slot_talkto);
+		connect(dlg, &Talk::signal_matchrequest, this, &ClientWindow::slot_matchrequest);
+		connect(dlg, &Talk::signal_pbRelOneTab, this, &ClientWindow::slot_pbRelOneTab);
 
-		dlg->pageActive = false;
 		if (!name.isEmpty() && isplayer)
 			slot_sendcommand("stats " + name, false);    // automatically request stats
 
@@ -2031,13 +2024,11 @@ void ClientWindow::slot_talk(const QString &name, const QString &text, bool ispl
 	}
 	if (dlg) {
 		dlg->write(txt);
-		QWidget *w = dlg->get_tabWidget ();
-		if (!dlg->pageActive)
+		if (dlg->parentWidget () != TabWidget_mini_2)
 		{
-			TabWidget_mini_2->addTab(w, dlg->get_name());
-			dlg->pageActive = true;
+			TabWidget_mini_2->addTab (dlg, dlg->get_name());
 			if (name != tr("Shouts*"))
-				TabWidget_mini_2->setCurrentIndex(TabWidget_mini_2->indexOf (w));
+				TabWidget_mini_2->setCurrentIndex (TabWidget_mini_2->indexOf (dlg));
 		}
 	}
 	// check if it was a channel message
@@ -2049,14 +2040,10 @@ void ClientWindow::slot_talk(const QString &name, const QString &text, bool ispl
 	}
 
 	// play a sound - not for shouts
-	if (((text.startsWith ('>') && bonus) || !dlg->get_le()->hasFocus()) && !name.contains('*'))
+	if (((text.startsWith ('>') && bonus) || !dlg->lineedit_has_focus()) && !name.contains('*'))
 	{
 		qgo->playTalkSound();
-
-		// set cursor to last line
-		//dlg->get_mle()->setCursorPosition(dlg->get_mle()->lines(), 999); //eb16
-		dlg->get_mle()->append("");                                        //eb16
-		//dlg->get_mle()->removeParagraph(dlg->get_mle()->paragraphs()-2);   //eb16
+		dlg->append_to_mle ("");
 
 		// write time stamp
 		MultiLineEdit3->append(statusOnlineTime->text() + " " + name + (autoAnswer ? " (A)" : ""));
@@ -2064,11 +2051,7 @@ void ClientWindow::slot_talk(const QString &name, const QString &text, bool ispl
 	else if (name == tr("msg*"))
 	{
 		qgo->playTalkSound();
-
-		// set cursor to last line
-//		dlg->get_mle()->setCursorPosition(dlg->get_mle()->numLines(), 999); //eb16
-		dlg->get_mle()->append(""); //eb16
-//		dlg->get_mle()->removeParagraph(dlg->get_mle()->paragraphs()-2);   //eb16
+		dlg->append_to_mle ("");
 
 		// write time stamp
 		MultiLineEdit3->append(tr("Message") + ": " + text);
