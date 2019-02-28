@@ -186,7 +186,6 @@ private:
 	// telnet ready
 	bool               tn_ready;
 	bool               tn_wait_for_tn_ready;
-	//	bool               tn_active;
 
 	ChannelList channellist;
 	QList<Talk *> talklist;

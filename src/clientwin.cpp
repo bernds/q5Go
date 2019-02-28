@@ -66,7 +66,6 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	cmd_valid = false;
 	tn_ready = false;
 	tn_wait_for_tn_ready = false;
-//	tn_active = false;
 	extUserInfo = false;
 	youhavemsg = false;
 	playerListEmpty = true;
@@ -365,7 +364,7 @@ void ClientWindow::timerEvent(QTimerEvent* e)
 //	static int statusCnt = 0;
 	static QString statusTxt = QString();
 	static int imagecounter = 0;
-	
+
 	//qDebug( "timer event, id %d", e->timerId() );
 
 	if (e->timerId() == seekButtonTimer)
@@ -390,25 +389,7 @@ void ClientWindow::timerEvent(QTimerEvent* e)
 		holdTheLine = true;
 		autoAwayMessage = false;
 	}
-/*	else if (!tn_active)
-	{
-		qDebug("---> sending forced!!!");
-		// case: not ready to send, waiting too long -> force sending
-		tnwait = 0;
-		set_tn_ready();
-	}
-	else
-		qDebug("---> not forced because of tn_active");
-*/
-	// show status bar text for 5 seconds
-/*	if (statusTxt != statusMessage->text())
-	{
-		statusTxt = statusMessage->text();
-		statusCnt = 5;
-	}
-	if (statusCnt-- == 0)
-		statusMessage->setText("");
-*/
+
 	if (counter % 300 == 0)
 	{
 		// 5 mins away -> set auto answering
@@ -675,10 +656,6 @@ void ClientWindow::sendTextToApp (const QString &txt)
 	// some statistics
 	setBytesIn (txt.length ()+2);
 
-//	if (it_ != READY)
-	// a input is being parsed -> wait until tn_active == false before sending new cmd
-//		tn_active = true;
-
 	// GAME7_END emulation:
 	if (player7active && it_ != GAME7)
 	{
@@ -692,8 +669,6 @@ void ClientWindow::sendTextToApp (const QString &txt)
 	switch (it_)
 	{
 	case READY:
-		// ok, telnet is ready to receive commands
-//			tn_active = false;
 		if (!tn_wait_for_tn_ready && !tn_ready)
 		{
 			QTimer::singleShot (200, this, SLOT (set_tn_ready ()));
@@ -743,15 +718,13 @@ void ClientWindow::sendTextToApp (const QString &txt)
 		{
 			// IGS - check if client mode
 			bool ok;
-			/*int cmd_nr =*/ txt.section (' ', 0, 0).toInt (&ok);
+			txt.section (' ', 0, 0).toInt (&ok);
 			if (!ok)
 				set_sessionparameter ("client", true);
 
 			// set quiet true; refresh players, games
 			//if (myAccount->get_status () == Status::guest)
 			set_sessionparameter ("quiet", true);
-			//else
-			// set id - only available if registerd; who knows why...
 			sendcommand ("id " PACKAGE " " VERSION, true);
 			sendcommand ("toggle newrating");
 
@@ -795,7 +768,6 @@ void ClientWindow::sendTextToApp (const QString &txt)
 		gamesListSteadyUpdate = ! setQuietMode->isChecked ();
 		playerListSteadyUpdate = ! setQuietMode->isChecked ();
 
-
 		// enable extended user info features
 		setColumnsForExtUserInfo ();
 
@@ -824,7 +796,7 @@ void ClientWindow::sendTextToApp (const QString &txt)
 		if (store_sort_col != -1)
 			ListView_players->sortItems (store_sort_col, Qt::AscendingOrder);
 
-		if (myAccount->get_gsname ()==IGS)
+		if (myAccount->get_gsname () == IGS)
 			ListView_players->showOpen (whoOpenCheck->isChecked ());
 		playerListEmpty = false;
 		break;
@@ -857,20 +829,16 @@ void ClientWindow::sendTextToApp (const QString &txt)
 		parser->set_myname (myAccount->acc_name);
 		break;
 
-
 	case STATS:
 		// we just received a players name as first line of stats -> create the dialog tab
-
-		// if (!talklist.current ())
-		slot_talk (parser->get_statsPlayer ()->name, QString::null,true);
-
-		//else if (parser->get_statsPlayer ()->name != talklist.current ()->get_name ())
-		//    slot_talk (parser->get_statsPlayer ()->name,0,true);
+		slot_talk (parser->get_statsPlayer ()->name, QString::null, true);
 
 		break;
 
 	case BEEP:
-//			QApplication::beep ();
+#if 0
+		QApplication::beep ();
+#endif
 		break;
 
 	default:
@@ -2577,7 +2545,6 @@ void ClientWindow::slot_SeekList(const QString& player, const QString& condition
 */
 void ClientWindow::send_nmatch_range_parameters()
 {
-	
 	if (myAccount->get_gsname() != IGS || myAccount->get_status() == Status::offline)
 		return;
 
@@ -2598,7 +2565,7 @@ void ClientWindow::send_nmatch_range_parameters()
 	c.append("-");
 	c.append(QString::number(setting->readIntEntry("NMATCH_BYO_TIME")*60));
 	c.append(" 25-25 0 0 0-0");
-	
+
 	sendcommand(c, true);
 }
 
