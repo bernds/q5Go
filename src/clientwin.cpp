@@ -292,12 +292,6 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	connect(parser, &Parser::signal_timeAdded, qgoif, &qGoIF::slot_timeAdded);
 	//connect(parser, &Parser::signal_undoRequest, qgoif, &qGoIF::slot_undoRequest);
 
-#if 0
-	//gamestable
-//	connect(ListView_players, SIGNAL(contentsMoving(int, int)), this, SLOT(slot_playerContentsMoving(int, int)));
-	connect(ListView_games, SIGNAL(contentsMoving(int, int)), this, SLOT(slot_gamesContentsMoving(int, int)));
-#endif
-
 	slot_updateFont();
 
 	// install an event filter
@@ -1031,15 +1025,6 @@ void ClientWindow::sendcommand(const QString &cmd, bool localecho)
 void ClientWindow::slot_sendcommand(const QString &cmd, bool localecho)
 {
 	sendcommand(cmd, localecho);
-}
-
-void ClientWindow::slot_toolbaractivated(const QString &cmd)
-{
-	// do some cmd lind checks for toolbar too
-	bool valid_marker = cmd_valid;
-	cmd_valid = true;
-	slot_cmdactivated(cmd);
-	cmd_valid = valid_marker;
 }
 
 // return pressed in edit line -> command to send
@@ -2208,26 +2193,6 @@ void ClientWindow::slot_preferences(bool)
 {
 	dlgSetPreferences ();
 }
-
-/*
-// set Cursor to last position
-void ClientWindow::slot_tabWidgetMainChanged(QWidget *w)
-{
-	if (w->child("MultiLineEdit_messages"))
-	{
-		MultiLineEdit_messages->setCursorPosition(MultiLineEdit_messages->numLines(), 999);
-		MultiLineEdit_messages->insertLine("");
-		MultiLineEdit_messages->removeLine(MultiLineEdit_messages->numLines()-2);
-		return;
-	}
-	if (w->child("MultiLineEdit2"))
-	{
-		MultiLineEdit2->setCursorPosition(MultiLineEdit2->numLines(), 999);
-		MultiLineEdit2->insertLine("");
-		MultiLineEdit2->removeLine(MultiLineEdit2->numLines()-2);
-	}
-}
-*/
 
 void ClientWindow::initActions()
 {

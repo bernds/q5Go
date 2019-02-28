@@ -577,24 +577,6 @@ void ClientWindow::slot_channelinfo(int nr, const QString &txt)
 	statusChannel->setToolTip (tipstring);
 }
 
-// user buttons
-void ClientWindow::slot_pbuser1()
-{
-	slot_toolbaractivated(setting->readEntry("USER1_2"));
-}
-void ClientWindow::slot_pbuser2()
-{
-	slot_toolbaractivated(setting->readEntry("USER2_2"));
-}
-void ClientWindow::slot_pbuser3()
-{
-	slot_toolbaractivated(setting->readEntry("USER3_2"));
-}
-void ClientWindow::slot_pbuser4()
-{
-	slot_toolbaractivated(setting->readEntry("USER4_2"));
-}
-
 // tell, say, kibitz...
 void ClientWindow::colored_message(QString txt, QColor c)
 {
@@ -650,36 +632,6 @@ void ClientWindow::slot_status(Status s)
 {
 	myAccount->set_status(s);
 	myAccount->set_caption();
-}
-
-// correct viewport
-void ClientWindow::slot_playerContentsMoving(int /*x*/, int /*y*/)
-{
-/*	QPoint p(0,0);
-	QListViewItem *i = ListView_players->itemAt(p);
-
-	if (i)
-	{
-		ListView_players->clearSelection();
-		ListView_players->setSelected(i, true);
-		ListView_players->clearSelection();
-	}                         */
-}
-
-// correct viewport
-void ClientWindow::slot_gamesContentsMoving(int /*x*/, int /*y*/)
-{
-#if 0
-	QPoint p(0,0);
-	QTreeWidgetItem *i = ListView_games->itemAt(p);
-
-	if (i)
-	{
-		ListView_games->clearSelection();
-		ListView_games->setSelected(i, true);
-		ListView_games->clearSelection();
-	}
-#endif
 }
 
 /*
