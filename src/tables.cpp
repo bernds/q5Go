@@ -677,26 +677,13 @@ void Account::set_gsname(GSName gs)
 	// now we know which server
 	switch (gsName)
 	{
-		case IGS: svname.sprintf("IGS");
-			break;
-
-		case NNGS: svname.sprintf("NNGS");
-			break;
-
-		case LGS: svname.sprintf("LGS");
-			break;
-
-		case WING: svname.sprintf("WING");
-			break;
-
-		case CTN: svname.sprintf("CTN");
-			break;
-
-		case CWS: svname.sprintf("CWS");
-			break;
-
-		default: svname.sprintf("unknown Server");
-			break;
+	case IGS: svname = "IGS"; break;
+	case NNGS: svname = "NNGS"; break;
+	case LGS: svname = "LGS"; break;
+	case WING: svname = "WING"; break;
+	case CTN: svname = "CTN"; break;
+	case CWS: svname = "CWS"; break;
+	default: svname = "unknown Server"; break;
 	}
 
 	// set account name
