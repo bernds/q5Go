@@ -84,24 +84,20 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 
  	escapeFocus = new QAction(this);
 	escapeFocus->setShortcut(Qt::Key_Escape);
-	connect(escapeFocus, &QAction::triggered, [=] () { setFocus (); });
+	connect (escapeFocus, &QAction::triggered, [=] () { setFocus (); });
 	cb_cmdLine->addAction (escapeFocus);
 
 	// create instance of telnetConnection
 	telnetConnection = new TelnetConnection(this, ListView_players, ListView_games);
 
 	// doubleclick
-	connect(ListView_games, SIGNAL(signal_doubleClicked(QTreeWidgetItem*)), this,
-		SLOT(slot_click_games(QTreeWidgetItem*)));
-	connect(ListView_players, SIGNAL(signal_doubleClicked(QTreeWidgetItem *)), this,
-		SLOT(slot_click_players(QTreeWidgetItem*)));
+	connect (ListView_games, &GamesTable::signal_doubleClicked, this, &ClientWindow::slot_click_games);
+	connect (ListView_players, &PlayerTable::signal_doubleClicked, this, &ClientWindow::slot_click_players);
 
-	connect(ListView_players, SIGNAL(customContextMenuRequested(const QPoint&)),
-		this, SLOT(slot_menu_players(const QPoint&)));
-	connect(ListView_games, SIGNAL(customContextMenuRequested(const QPoint&)),
-		this, SLOT(slot_menu_games(const QPoint&)));
+	connect (ListView_players, &PlayerTable::customContextMenuRequested, this, &ClientWindow::slot_menu_players);
+	connect (ListView_games, &GamesTable::customContextMenuRequested, this, &ClientWindow::slot_menu_games);
 
-	connect(whoOpenCheck, &QCheckBox::toggled, this, &ClientWindow::slot_whoopen);
+	connect (whoOpenCheck, &QCheckBox::toggled, this, &ClientWindow::slot_whoopen);
 
 	initStatusBar(this);
 	initActions();
@@ -671,7 +667,7 @@ void ClientWindow::sendTextToApp (const QString &txt)
 	case READY:
 		if (!tn_wait_for_tn_ready && !tn_ready)
 		{
-			QTimer::singleShot (200, this, SLOT (set_tn_ready ()));
+			QTimer::singleShot (200, this, &ClientWindow::set_tn_ready);
 			tn_wait_for_tn_ready = true;
 		}
 		sendTextFromApp (nullptr);
@@ -1489,50 +1485,19 @@ void ClientWindow::slot_matchrequest(const QString &line, bool myrequest)
 		if (myAccount->get_gsname() == NNGS || myAccount->get_gsname() == LGS)
 		{
 			// now connect suggest signal
-			connect(parser,
-				SIGNAL(signal_suggest(const QString&, const QString&, const QString&, const QString&, int)),
-				dlg,
-				SLOT(slot_suggest(const QString&, const QString&, const QString&, const QString&, int)));
+			connect (parser, &Parser::signal_suggest, dlg, &GameDialog::slot_suggest);
 		}
 
-		connect(dlg,SIGNAL(signal_removeDialog(dlg)), this, SLOT(slot_removeDialog(dlg)));
+		connect (dlg, &GameDialog::signal_sendcommand, this, &ClientWindow::slot_sendcommand);
+		connect (dlg, &GameDialog::signal_removeDialog, this, &ClientWindow::slot_removeMatchDialog);
 
-		connect(dlg,
-			SIGNAL(signal_sendcommand(const QString&, bool)),
-			this,
-			SLOT(slot_sendcommand(const QString&, bool)));
+		connect (parser, &Parser::signal_matchcreate, dlg, &GameDialog::slot_matchcreate);
+		connect (parser, &Parser::signal_notopen, dlg, &GameDialog::slot_notopen);
+		connect (parser, &Parser::signal_komirequest, dlg, &GameDialog::slot_komirequest);
+		connect (parser, &Parser::signal_opponentopen, dlg, &GameDialog::slot_opponentopen);
+		connect (parser, &Parser::signal_dispute, dlg, &GameDialog::slot_dispute);
 
-		connect(dlg,
-			SIGNAL(signal_removeDialog(const QString&)),
-			this,
-			SLOT(slot_removeMatchDialog(const QString&)));
-
-
-		connect(parser,
-			SIGNAL(signal_matchcreate(const QString&, const QString&)),
-			dlg,
-			SLOT(slot_matchcreate(const QString&, const QString&)));
-		connect(parser,
-			SIGNAL(signal_notopen(const QString&)),
-			dlg,
-			SLOT(slot_notopen(const QString&)));
-		connect(parser,
-			SIGNAL(signal_komirequest(const QString&, int, float, bool)),
-			dlg,
-			SLOT(slot_komirequest(const QString&, int, float, bool)));
-		connect(parser,
-			SIGNAL(signal_opponentopen(const QString&)),
-			dlg,
-			SLOT(slot_opponentopen(const QString&)));
-		connect(parser,
-			SIGNAL(signal_dispute(const QString&, const QString&)),
-			dlg,
-			SLOT(slot_dispute(const QString&, const QString&)));
-
-		connect(dlg,
-			SIGNAL(signal_matchsettings(const QString&, const QString&, const QString&, assessType)),
-			qgoif,
-			SLOT(slot_matchsettings(const QString&, const QString&, const QString&, assessType)));
+		connect (dlg, &GameDialog::signal_matchsettings, qgoif, &qGoIF::slot_matchsettings);
 	}
 
 	if (myrequest)
@@ -2011,9 +1976,9 @@ void ClientWindow::slot_talk(const QString &name, const QString &text, bool ispl
 		dlg = new Talk (name, 0, isplayer);
 		talklist.append (dlg);
 
-		connect(dlg, &Talk::signal_talkto, this, &ClientWindow::slot_talkto);
-		connect(dlg, &Talk::signal_matchrequest, this, &ClientWindow::slot_matchrequest);
-		connect(dlg, &Talk::signal_pbRelOneTab, this, &ClientWindow::slot_pbRelOneTab);
+		connect (dlg, &Talk::signal_talkto, this, &ClientWindow::slot_talkto);
+		connect (dlg, &Talk::signal_matchrequest, this, &ClientWindow::slot_matchrequest);
+		connect (dlg, &Talk::signal_pbRelOneTab, this, &ClientWindow::slot_pbRelOneTab);
 
 		if (!name.isEmpty() && isplayer)
 			slot_sendcommand("stats " + name, false);    // automatically request stats
@@ -2125,10 +2090,10 @@ void ClientWindow::slot_preferences(bool)
 
 void ClientWindow::initActions()
 {
-
-// signals and slots connections
-	connect( cb_cmdLine, SIGNAL( activated(int) ), this, SLOT( slot_cmdactivated_int(int) ) );
-	connect( cb_cmdLine, SIGNAL( activated(const QString&) ), this, SLOT( slot_cmdactivated(const QString&) ) );
+	void (QComboBox::*cact1) (int) = &QComboBox::activated;
+	void (QComboBox::*cact2) (const QString &) = &QComboBox::activated;
+	connect (cb_cmdLine, cact1, this, &ClientWindow::slot_cmdactivated_int);
+	connect (cb_cmdLine, cact2, this, &ClientWindow::slot_cmdactivated);
 
 	ListView_games->setWhatsThis (tr("Table of games\n\n"
 		"right click to observe\n\n"
@@ -2212,10 +2177,10 @@ void ClientWindow::initActions()
 	/*
 	* Menu View
 	*/
-	connect(viewToolBar, SIGNAL(toggled(bool)), this, SLOT(slotViewToolBar(bool)));
-	connect(viewMenuBar, SIGNAL(toggled(bool)), this, SLOT(slotViewMenuBar(bool)));
+	connect(viewToolBar, &QAction::toggled, this, &ClientWindow::slotViewToolBar);
+	connect(viewMenuBar, &QAction::toggled, this, &ClientWindow::slotViewMenuBar);
 	viewStatusBar->setWhatsThis(tr("Statusbar\n\nEnables/disables the statusbar."));
-	connect(viewStatusBar, SIGNAL(toggled(bool)), this, SLOT(slotViewStatusBar(bool)));
+	connect(viewStatusBar, &QAction::toggled, this, &ClientWindow::slotViewStatusBar);
 
 	/*
 	* Menu Help
