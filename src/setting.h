@@ -5,23 +5,15 @@
 #ifndef SETTING_H
 #define SETTING_H
 
-#include "defines.h"
-#include "misc.h"
-#include <stdlib.h>
-#include <qstring.h>
-#include <qfont.h>
+#include <QMap>
+#include <QString>
+#include <QFont>
 
 // delimiters for variables in settings file
 // however, this character must not be used in parameters, e.g. host
 #define DELIMITER ':'
 #define SETTING_VERSION 1
 
-
-class Setting;
-extern Setting *setting;
-class qGo;
-class ClientWindow;
-class ImageHandler;
 class QTextStream;
 
 /* A few settings which are used frequently enough that we don't want
@@ -48,12 +40,25 @@ class Setting
 	const QPixmap *m_table_image {};
 	QString settingHomeDir;
 
+	QMap<QString, QString> params;
+
 	void extract_lists ();
 	void write_lists (QTextStream &);
+
+	void updateFont (QFont&, QString);
 
 public:
 	Setting();
 	~Setting();
+
+	QFont fontStandard, fontMarks, fontComments, fontLists, fontClocks, fontConsole;
+	QString language;
+	setting_vals values;
+
+	bool nmatch_settings_modified;
+	bool dbpaths_changed;
+
+	QStringList m_dbpaths;
 
 	void clearEntry(const QString &s) { writeEntry (s, QString ()); }
 	void writeEntry(const QString&, const QString&);
@@ -81,10 +86,6 @@ public:
 	void saveSettings();
 	QString fontToString(QFont);
 
-	QFont fontStandard, fontMarks, fontComments, fontLists, fontClocks, fontConsole;
-	QString language;
-	setting_vals values;
-
 	void extract_frequent_settings ();
 	QString getLanguage();
 	const QStringList getAvailableLanguages();
@@ -96,18 +97,8 @@ public:
 	void obtain_skin_images ();
 	const QPixmap *wood_image () { return m_wood_image; }
 	const QPixmap *table_image () { return m_table_image; }
-
-	bool nmatch_settings_modified;
-	bool dbpaths_changed;
-
-	QStringList m_dbpaths;
-
-protected:
-	QMap<QString, QString> params;
-
-private:
-	void updateFont(QFont&, QString);
 };
 
-#endif
+extern Setting *setting;
 
+#endif
