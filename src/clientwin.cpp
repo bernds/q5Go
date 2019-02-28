@@ -752,7 +752,7 @@ void ClientWindow::sendTextToApp (const QString &txt)
 			set_sessionparameter ("quiet", true);
 			//else
 			// set id - only available if registerd; who knows why...
-			sendcommand ("id qGo " + QString (VERSION), true);
+			sendcommand ("id " PACKAGE " " VERSION, true);
 			sendcommand ("toggle newrating");
 
 			// we wanted to allow user to disable 'nmatch', but IGS disables 'seek' with nmatch
