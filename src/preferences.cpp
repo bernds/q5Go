@@ -117,6 +117,8 @@ void PreferencesDialog::update_dbpaths (const QStringList &l)
 	m_dbpath_model.clear ();
 	for (auto &it: m_dbpaths) {
 		QStandardItem *item = new QStandardItem (it);
+		item->setEditable (false);
+		item->setDropEnabled (false);
 		m_dbpath_model.appendRow (item);
 	}
 }
