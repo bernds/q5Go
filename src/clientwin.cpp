@@ -212,21 +212,6 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 		view_s = QSize();
 	}
 
-	// restore size of menu window
-	s = setting->readEntry("MENUWINDOW");
-	if (s.length() > 5)
-	{
-		menu_p.setX(s.section(DELIMITER, 0, 0).toInt());
-		menu_p.setY(s.section(DELIMITER, 1, 1).toInt());
-		menu_s.setWidth(s.section(DELIMITER, 2, 2).toInt());
-		menu_s.setHeight(s.section(DELIMITER, 3, 3).toInt());
-	}
-	else
-	{
-		menu_p = QPoint();
-		menu_s = QSize();
-	}
-
 	// restore size of preferences window
 	s = setting->readEntry("PREFWINDOW");
 	if (s.length() > 5)
@@ -645,13 +630,6 @@ void ClientWindow::saveSettings()
 			QString::number(debug_dialog->pos().y()) + DELIMITER +
 			QString::number(debug_dialog->size().width()) + DELIMITER +
 			QString::number(debug_dialog->size().height()));
-
-	if (menu_s.width() > 0)
-		setting->writeEntry("MENUWINDOW",
-			QString::number(menu_p.x()) + DELIMITER +
-			QString::number(menu_p.y()) + DELIMITER +
-			QString::number(menu_s.width()) + DELIMITER +
-			QString::number(menu_s.height()));
 
 	if (pref_s.width() > 0)
 		setting->writeEntry("PREFWINDOW",

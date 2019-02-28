@@ -50,10 +50,7 @@ public:
 
 	QString getPlayerRk(QString);
 	QString getPlayerExcludeListEntry(QString);
-	void saveMenuFrame(QPoint p, QSize s) { menu_p = p; menu_s = s; }
 	void savePrefFrame(QPoint p, QSize s) { pref_p = p; pref_s = s; }
-	QPoint getMenuPos() { return menu_p; }
-	QSize getMenuSize() { return menu_s; }
 	QPoint getViewPos() { return view_p; }
 	QSize getViewSize() { return view_s; }
 	QPoint getPrefPos() { return pref_p; }
@@ -219,8 +216,6 @@ private:
 	QString		exclude;
 
 	// frame sizes
-	QPoint		menu_p;
-	QSize		menu_s;
 	QPoint		view_p;
 	QSize		view_s;
 	QPoint		pref_p;
