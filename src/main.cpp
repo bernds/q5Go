@@ -18,6 +18,7 @@
 #include "variantgamedlg.h"
 #include "analyzedlg.h"
 #include "sgfpreview.h"
+#include "dbdialog.h"
 
 #include <qtranslator.h>
 #include <qtextcodec.h>
@@ -29,8 +30,9 @@
 qGo *qgo;
 QApplication *qgo_app;
 
-// global
 Setting *setting = 0;
+
+DBDialog *db_dialog;
 
 Debug_Dialog *debug_dialog;
 #ifdef OWN_DEBUG_MODE
@@ -192,6 +194,32 @@ std::shared_ptr<game_record> open_file_dialog (QWidget *parent)
 	if (fi.exists ())
 		setting->writeEntry ("LAST_DIR", fi.dir ().absolutePath ());
 	return record_from_file (fileName, nullptr);
+}
+
+std::shared_ptr<game_record> open_db_dialog (QWidget *parent)
+{
+	QString fileName;
+	QString geokey = "DBDIALOG_GEOM_" + screen_key (parent);
+	if (db_dialog == nullptr) {
+		db_dialog = new DBDialog (nullptr);
+
+		QString saved = setting->readEntry (geokey);
+		if (!saved.isEmpty ()) {
+			QByteArray geometry = QByteArray::fromHex (saved.toLatin1 ());
+			db_dialog->restoreGeometry (geometry);
+		}
+	}
+	int result = db_dialog->exec ();
+	setting->writeEntry (geokey, QString::fromLatin1 (db_dialog->saveGeometry ().toHex ()));
+	if (result == QDialog::Accepted) {
+		std::shared_ptr<game_record> gr = db_dialog->selected_record ();
+		if (gr != nullptr) {
+			warn_errors (gr);
+			return gr;
+		}
+	}
+
+	return nullptr;
 }
 
 QString open_filename_dialog (QWidget *parent)

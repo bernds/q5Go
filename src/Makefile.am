@@ -6,10 +6,10 @@ q5go_METASOURCES = AUTO
 
 KDE_OPTIONS = qtonly
 
-DISTHEADERS_MOC = analyzedlg.h audio.h autodiagsdlg.h bitarray.h board.h clockview.h evalgraph.h \
-	figuredlg.h gamedialog.h gamestable.h gametree.h helpviewer.h icons.h igsconnection.h \
-	mainwindow.h clientwin.h miscdialogs.h msg_handler.h normaltools.h scoretools.h parser.h \
-	playertable.h preferences.h qgo.h qgo_interface.h qgtp.h newaigamedlg.h sizegraphicsview.h \
+DISTHEADERS_MOC = analyzedlg.h audio.h autodiagsdlg.h bitarray.h board.h clickableviews.h \
+	clockview.h dbdialog.h evalgraph.h figuredlg.h gamedialog.h gamestable.h gametree.h helpviewer.h icons.h \
+	igsconnection.h mainwindow.h clientwin.h miscdialogs.h msg_handler.h normaltools.h scoretools.h \
+	parser.h playertable.h preferences.h qgo.h qgo_interface.h qgtp.h newaigamedlg.h sizegraphicsview.h \
 	sgfpreview.h tables.h telnet.h textview.h variantgamedlg.h
 
 DISTHEADERS_NOMOC = goboard.h config.h defines.h grid.h goboard.h gogame.h gs_globals.h \
@@ -17,7 +17,7 @@ DISTHEADERS_NOMOC = goboard.h config.h defines.h grid.h goboard.h gogame.h gs_gl
 	misc.h setting.h sgf.h sgfparser.h \
 	svgbuilder.h ui_helpers.h
 
-DISTSOURCES = analyzedlg.cpp audio.cpp autodiagsdlg.cpp board.cpp clockview.cpp evalgraph.cpp \
+DISTSOURCES = analyzedlg.cpp audio.cpp autodiagsdlg.cpp board.cpp clockview.cpp dbdialog.cpp evalgraph.cpp \
 		figuredlg.cpp goboard.cc gogame.cc gamedialog.cpp gamestable.cpp gametree.cpp grid.cpp \
 		helpviewer.cpp igsconnection.cpp imagehandler.cpp main.cpp \
 		clientwin.cpp mainwindow.cpp \
@@ -26,7 +26,7 @@ DISTSOURCES = analyzedlg.cpp audio.cpp autodiagsdlg.cpp board.cpp clockview.cpp 
 		newaigamedlg.cpp setting.cpp  sgfload.cc sgf2board.cc sgfpreview.cpp \
 		svgbuilder.cpp tables.cpp telnet.cpp textview.cpp variantgamedlg.cpp
 
-FORMS = analyze_gui.ui autodiags_gui.ui boardwindow_gui.ui clientwindow_gui.ui figuredlg_gui.ui \
+FORMS = analyze_gui.ui autodiags_gui.ui boardwindow_gui.ui clientwindow_gui.ui dbdialog_gui.ui figuredlg_gui.ui \
 	gameinfo_gui.ui gui_dialog.ui newgame_gui.ui newlocalgame_gui.ui newvariantgame_gui.ui \
 	normaltools_gui.ui nthmove_gui.ui preferences_gui.ui newaigamedlg_gui.ui scoretools_gui.ui \
 	svgview_gui.ui sgfpreview.ui talk_gui.ui textedit_gui.ui textview_gui.ui

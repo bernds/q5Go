@@ -23,6 +23,7 @@ extern Setting *setting;
 class qGo;
 class ClientWindow;
 class ImageHandler;
+class QTextStream;
 
 /* A few settings which are used frequently enough that we don't want
    to spend a lookup each time.  The alternative is caching them locally
@@ -47,6 +48,9 @@ class Setting
 	const QPixmap *m_wood_image {};
 	const QPixmap *m_table_image {};
 	QString settingHomeDir;
+
+	void extract_lists ();
+	void write_lists (QTextStream &);
 
 public:
 	Setting();
@@ -93,7 +97,9 @@ public:
 	void obtain_skin_images ();
 	const QPixmap *wood_image () { return m_wood_image; }
 	const QPixmap *table_image () { return m_table_image; }
+
 	bool nmatch_settings_modified;
+	bool dbpaths_changed;
 
 	// help to destroy static elements of qGo()
 	qGo *qgo;
@@ -101,6 +107,8 @@ public:
 
 	// application icon
 	QPixmap image0;
+
+	QStringList m_dbpaths;
 
 protected:
 	QMap<QString, QString> params;

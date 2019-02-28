@@ -318,6 +318,7 @@ void MainWindow::initActions ()
 	connect(fileNew, &QAction::triggered, this, &MainWindow::slotFileNewGame);
 	connect(fileNewVariant, &QAction::triggered, this, &MainWindow::slotFileNewVariantGame);
 	connect(fileOpen, &QAction::triggered, this, &MainWindow::slotFileOpen);
+	connect(fileOpenDB, &QAction::triggered, this, &MainWindow::slotFileOpenDB);
 	connect(fileSave, &QAction::triggered, this, &MainWindow::slotFileSave);
 	connect(fileSaveAs, &QAction::triggered, this, &MainWindow::slotFileSaveAs);
 	connect(fileClose, &QAction::triggered, this, &MainWindow::slotFileClose);
@@ -637,6 +638,19 @@ void MainWindow::slotFileOpen (bool)
 		return;
 
 	std::shared_ptr<game_record> gr = open_file_dialog (this);
+	if (gr == nullptr)
+		return;
+
+	init_game_record (gr);
+	setGameMode (modeNormal);
+}
+
+void MainWindow::slotFileOpenDB (bool)
+{
+	if (!checkModified())
+		return;
+
+	std::shared_ptr<game_record> gr = open_db_dialog (this);
 	if (gr == nullptr)
 		return;
 

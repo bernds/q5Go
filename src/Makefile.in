@@ -69,22 +69,24 @@ am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am__objects_1 = analyzedlg.$(OBJEXT) audio.$(OBJEXT) \
 	autodiagsdlg.$(OBJEXT) board.$(OBJEXT) clockview.$(OBJEXT) \
-	evalgraph.$(OBJEXT) figuredlg.$(OBJEXT) goboard.$(OBJEXT) \
-	gogame.$(OBJEXT) gamedialog.$(OBJEXT) gamestable.$(OBJEXT) \
-	gametree.$(OBJEXT) grid.$(OBJEXT) helpviewer.$(OBJEXT) \
-	igsconnection.$(OBJEXT) imagehandler.$(OBJEXT) main.$(OBJEXT) \
-	clientwin.$(OBJEXT) mainwindow.$(OBJEXT) misc.$(OBJEXT) \
-	msg_handler.$(OBJEXT) parser.$(OBJEXT) playertable.$(OBJEXT) \
-	preferences.$(OBJEXT) qgo.$(OBJEXT) qgo_interface.$(OBJEXT) \
-	qgtp.$(OBJEXT) newaigamedlg.$(OBJEXT) setting.$(OBJEXT) \
-	sgfload.$(OBJEXT) sgf2board.$(OBJEXT) sgfpreview.$(OBJEXT) \
-	svgbuilder.$(OBJEXT) tables.$(OBJEXT) telnet.$(OBJEXT) \
-	textview.$(OBJEXT) variantgamedlg.$(OBJEXT)
+	dbdialog.$(OBJEXT) evalgraph.$(OBJEXT) figuredlg.$(OBJEXT) \
+	goboard.$(OBJEXT) gogame.$(OBJEXT) gamedialog.$(OBJEXT) \
+	gamestable.$(OBJEXT) gametree.$(OBJEXT) grid.$(OBJEXT) \
+	helpviewer.$(OBJEXT) igsconnection.$(OBJEXT) \
+	imagehandler.$(OBJEXT) main.$(OBJEXT) clientwin.$(OBJEXT) \
+	mainwindow.$(OBJEXT) misc.$(OBJEXT) msg_handler.$(OBJEXT) \
+	parser.$(OBJEXT) playertable.$(OBJEXT) preferences.$(OBJEXT) \
+	qgo.$(OBJEXT) qgo_interface.$(OBJEXT) qgtp.$(OBJEXT) \
+	newaigamedlg.$(OBJEXT) setting.$(OBJEXT) sgfload.$(OBJEXT) \
+	sgf2board.$(OBJEXT) sgfpreview.$(OBJEXT) svgbuilder.$(OBJEXT) \
+	tables.$(OBJEXT) telnet.$(OBJEXT) textview.$(OBJEXT) \
+	variantgamedlg.$(OBJEXT)
 am__objects_2 =
 am_q5go_OBJECTS = $(am__objects_1) $(am__objects_2)
 am__objects_3 = analyzedlg.moc.$(OBJEXT) audio.moc.$(OBJEXT) \
 	autodiagsdlg.moc.$(OBJEXT) bitarray.moc.$(OBJEXT) \
-	board.moc.$(OBJEXT) clockview.moc.$(OBJEXT) \
+	board.moc.$(OBJEXT) clickableviews.moc.$(OBJEXT) \
+	clockview.moc.$(OBJEXT) dbdialog.moc.$(OBJEXT) \
 	evalgraph.moc.$(OBJEXT) figuredlg.moc.$(OBJEXT) \
 	gamedialog.moc.$(OBJEXT) gamestable.moc.$(OBJEXT) \
 	gametree.moc.$(OBJEXT) helpviewer.moc.$(OBJEXT) \
@@ -278,10 +280,10 @@ top_srcdir = @top_srcdir@
 INCLUDES = $(all_includes)
 q5go_METASOURCES = AUTO
 KDE_OPTIONS = qtonly
-DISTHEADERS_MOC = analyzedlg.h audio.h autodiagsdlg.h bitarray.h board.h clockview.h evalgraph.h \
-	figuredlg.h gamedialog.h gamestable.h gametree.h helpviewer.h icons.h igsconnection.h \
-	mainwindow.h clientwin.h miscdialogs.h msg_handler.h normaltools.h scoretools.h parser.h \
-	playertable.h preferences.h qgo.h qgo_interface.h qgtp.h newaigamedlg.h sizegraphicsview.h \
+DISTHEADERS_MOC = analyzedlg.h audio.h autodiagsdlg.h bitarray.h board.h clickableviews.h \
+	clockview.h dbdialog.h evalgraph.h figuredlg.h gamedialog.h gamestable.h gametree.h helpviewer.h icons.h \
+	igsconnection.h mainwindow.h clientwin.h miscdialogs.h msg_handler.h normaltools.h scoretools.h \
+	parser.h playertable.h preferences.h qgo.h qgo_interface.h qgtp.h newaigamedlg.h sizegraphicsview.h \
 	sgfpreview.h tables.h telnet.h textview.h variantgamedlg.h
 
 DISTHEADERS_NOMOC = goboard.h config.h defines.h grid.h goboard.h gogame.h gs_globals.h \
@@ -289,7 +291,7 @@ DISTHEADERS_NOMOC = goboard.h config.h defines.h grid.h goboard.h gogame.h gs_gl
 	misc.h setting.h sgf.h sgfparser.h \
 	svgbuilder.h ui_helpers.h
 
-DISTSOURCES = analyzedlg.cpp audio.cpp autodiagsdlg.cpp board.cpp clockview.cpp evalgraph.cpp \
+DISTSOURCES = analyzedlg.cpp audio.cpp autodiagsdlg.cpp board.cpp clockview.cpp dbdialog.cpp evalgraph.cpp \
 		figuredlg.cpp goboard.cc gogame.cc gamedialog.cpp gamestable.cpp gametree.cpp grid.cpp \
 		helpviewer.cpp igsconnection.cpp imagehandler.cpp main.cpp \
 		clientwin.cpp mainwindow.cpp \
@@ -298,7 +300,7 @@ DISTSOURCES = analyzedlg.cpp audio.cpp autodiagsdlg.cpp board.cpp clockview.cpp 
 		newaigamedlg.cpp setting.cpp  sgfload.cc sgf2board.cc sgfpreview.cpp \
 		svgbuilder.cpp tables.cpp telnet.cpp textview.cpp variantgamedlg.cpp
 
-FORMS = analyze_gui.ui autodiags_gui.ui boardwindow_gui.ui clientwindow_gui.ui figuredlg_gui.ui \
+FORMS = analyze_gui.ui autodiags_gui.ui boardwindow_gui.ui clientwindow_gui.ui dbdialog_gui.ui figuredlg_gui.ui \
 	gameinfo_gui.ui gui_dialog.ui newgame_gui.ui newlocalgame_gui.ui newvariantgame_gui.ui \
 	normaltools_gui.ui nthmove_gui.ui preferences_gui.ui newaigamedlg_gui.ui scoretools_gui.ui \
 	svgview_gui.ui sgfpreview.ui talk_gui.ui textedit_gui.ui textview_gui.ui
@@ -411,10 +413,13 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/bitarray.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/board.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/board.moc.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/clickableviews.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/clientwin.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/clientwin.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/clockview.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/clockview.moc.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dbdialog.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dbdialog.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/evalgraph.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/evalgraph.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/figuredlg.Po@am__quote@

@@ -4,7 +4,8 @@ FORMS	      = gui_dialog.ui \
 		analyze_gui.ui \
 		autodiags_gui.ui \
 		boardwindow_gui.ui \
-		clientwindow_gui.ui \
+                clientwindow_gui.ui \
+                dbdialog_gui.ui \
 		figuredlg_gui.ui \
 		gameinfo_gui.ui \
 		newgame_gui.ui \
@@ -23,8 +24,10 @@ FORMS	      = gui_dialog.ui \
 
 HEADERS		      = analyzedlg.h \
 		        autodiagsdlg.h \
-			config.h \
-			clockview.h \
+                        config.h \
+                        clickableviews.h \
+                        clockview.h \
+                        dbdialog.h \
 			evalgraph.h \
                         figuredlg.h \
                         gamedialog.h \
@@ -71,7 +74,8 @@ HEADERS		      = analyzedlg.h \
 SOURCES		      = analyzedlg.cpp \
 			autodiagsdlg.cpp \
 			clientwin.cpp \
-			clockview.cpp \
+                        clockview.cpp \
+                        dbdialog.cpp \
 			evalgraph.cpp \
 			figuredlg.cpp \
 			gamedialog.cpp \
@@ -181,7 +185,7 @@ target.path           = $$PREFIX/bin
 INSTALLS += target
 }
 
-QT += widgets gui xml network multimedia svg
+QT += widgets gui xml network multimedia svg sql
 
 RESOURCES += \
     q4go.qrc

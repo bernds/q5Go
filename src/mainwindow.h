@@ -135,6 +135,7 @@ public slots:
 	void slotFileNewGame(bool);
 	void slotFileNewVariantGame(bool);
 	void slotFileOpen(bool);
+	void slotFileOpenDB(bool);
 	bool slotFileSave(bool = false);
 	void slotFileClose(bool);
 	bool slotFileSaveAs(bool);

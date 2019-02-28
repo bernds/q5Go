@@ -2504,6 +2504,7 @@ After placing and/or undo release button for returning to starting point automat
     <addaction name="fileNew"/>
     <addaction name="fileNewVariant"/>
     <addaction name="fileOpen"/>
+    <addaction name="fileOpenDB"/>
     <addaction name="fileSave"/>
     <addaction name="fileSaveAs"/>
     <addaction name="fileClose"/>
@@ -3836,8 +3837,18 @@ Open the batch analysis dialog which allows you to add SGF files to a queue to b
     <string>A&amp;utomatic diagrams...</string>
    </property>
   </action>
+  <action name="fileOpenDB">
+   <property name="text">
+    <string>Open from &amp;database...</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>FigureView</class>
+   <extends>QGraphicsView</extends>
+   <header>board.h</header>
+  </customwidget>
   <customwidget>
    <class>SizeGraphicsView</class>
    <extends>QGraphicsView</extends>
@@ -3868,11 +3879,6 @@ Open the batch analysis dialog which allows you to add SGF files to a queue to b
    <class>EvalGraph</class>
    <extends>QGraphicsView</extends>
    <header>evalgraph.h</header>
-  </customwidget>
-  <customwidget>
-   <class>FigureView</class>
-   <extends>QGraphicsView</extends>
-   <header>board.h</header>
   </customwidget>
  </customwidgets>
  <resources>

@@ -23,6 +23,7 @@
 #include "newaigamedlg.h"
 #include "ui_helpers.h"
 #include "msg_handler.h"
+#include "dbdialog.h"
 
 #include <qaction.h>
 #include <qcombobox.h>
@@ -2297,6 +2298,7 @@ void ClientWindow::initActions()
 	connect(fileNewVariant, &QAction::triggered, [=] (bool) { open_local_board (this, game_dialog_type::variant); });
 	connect(fileNew, &QAction::triggered, [=] (bool) { open_local_board (this, game_dialog_type::normal); });
 	connect(fileOpen, &QAction::triggered, this, &ClientWindow::slotFileOpen);
+	connect(fileOpenDB, &QAction::triggered, this, &ClientWindow::slotFileOpenDB);
 	connect(fileBatchAnalysis, &QAction::triggered, this, [] (bool) { show_batch_analysis (); });
 	connect(computerPlay, &QAction::triggered, this, &ClientWindow::slotComputerPlay);
 	connect(fileQuit, &QAction::triggered, this, &ClientWindow::quit);
@@ -2353,9 +2355,19 @@ void ClientWindow::initToolBar()
 
 // SLOTS
 
-void ClientWindow::slotFileOpen(bool)
+void ClientWindow::slotFileOpen (bool)
 {
 	std::shared_ptr<game_record> gr = open_file_dialog (this);
+	if (gr == nullptr)
+		return;
+
+	MainWindow *win = new MainWindow (0, gr);
+	win->show ();
+}
+
+void ClientWindow::slotFileOpenDB (bool)
+{
+	std::shared_ptr<game_record> gr = open_db_dialog (this);
 	if (gr == nullptr)
 		return;
 
@@ -2669,6 +2681,8 @@ bool ClientWindow::preferencesAccept()
 	// Update all boards with settings
 	setting->qgo->updateAllBoardSettings();
 	setting->qgo->updateFont();
+	if (db_dialog != nullptr)
+		db_dialog->update_prefs ();
 
 	if (setting->nmatch_settings_modified)
 	{

@@ -850,6 +850,7 @@
 	<addaction name="fileNew"/>
 	<addaction name="fileNewVariant"/>
 	<addaction name="fileOpen"/>
+	<addaction name="fileOpenDB"/>
 	<addaction name="separator"/>
 	<addaction name="computerPlay"/>
 	<addaction name="fileBatchAnalysis"/>
@@ -1451,6 +1452,11 @@
 	<string>Batch analysis
 	Open the batch analysis dialog which allows you to add SGF files to a queue to be analysed by an engine.
 	</string>
+      </property>
+    </action>
+    <action name="fileOpenDB">
+      <property name="text">
+	<string>Open from &amp;database...</string>
       </property>
     </action>
   </widget>

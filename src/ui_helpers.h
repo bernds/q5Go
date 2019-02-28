@@ -5,6 +5,7 @@ extern QString screen_key (QWidget *);
 
 enum class game_dialog_type { none, normal, variant };
 extern std::shared_ptr<game_record> open_file_dialog (QWidget *);
+extern std::shared_ptr<game_record> open_db_dialog (QWidget *);
 extern QString open_filename_dialog (QWidget *);
 extern std::shared_ptr<game_record> new_game_dialog (QWidget *);
 extern std::shared_ptr<game_record> new_variant_game_dialog (QWidget *);

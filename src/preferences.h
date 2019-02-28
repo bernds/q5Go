@@ -7,6 +7,8 @@
 
 #include "ui_preferences_gui.h"
 
+#include <QStandardItemModel>
+
 class QIntValidator;
 class MainWindow;
 class ClientWindow;
@@ -26,6 +28,11 @@ class PreferencesDialog : public QDialog, public Ui::PreferencesDialogGui
 	QGraphicsScene *m_stone_canvas;
 	int m_stone_size;
 
+	QStandardItemModel m_dbpath_model;
+	QStringList m_dbpaths;
+	bool m_dbpaths_changed = false;
+	QString m_last_added_dbdir;
+
 	void init_from_settings ();
 
 	bool avoid_losing_data ();
@@ -35,6 +42,9 @@ class PreferencesDialog : public QDialog, public Ui::PreferencesDialogGui
 	void update_w_stones ();
 	void update_b_stones ();
 	void update_stone_params ();
+
+	void update_db_selection ();
+	void update_dbpaths (const QStringList &);
 public:
 	PreferencesDialog(QWidget* parent = 0);
 	~PreferencesDialog();
@@ -80,6 +90,10 @@ public slots:
 	void select_white_color (bool);
 	void select_black_color (bool);
 	void select_stone_look (bool);
+
+	void slot_dbdir (bool);
+	void slot_dbcfg (bool);
+	void slot_dbrem (bool);
 private:
 	void          saveSizes();
 	ClientWindow  *parent_cw;

@@ -184,6 +184,30 @@ void Setting::obtain_skin_images ()
 	m_table_image = p;
 }
 
+void Setting::extract_lists ()
+{
+	int i = 0;
+	m_dbpaths.clear ();
+	for (;;) {
+		QString key = "DBPATH_" + QString::number (i);
+		QString v = readEntry (key);
+		if (v.isNull ())
+			break;
+		clearEntry (key);
+		m_dbpaths.append (v);
+		i++;
+	}
+}
+
+void Setting::write_lists (QTextStream &file)
+{
+	int i = 0;
+	for (auto &it: m_dbpaths) {
+		file << "DBPATH_" + QString::number (i) << " [" << it << "]" << endl;
+		i++;
+	}
+}
+
 void Setting::loadSettings()
 {
         QString configfile = QStandardPaths::locate (QStandardPaths::AppConfigLocation, PACKAGE "rc", QStandardPaths::LocateFile);
@@ -216,6 +240,7 @@ void Setting::loadSettings()
 
 	file.close();
 
+	extract_lists ();
 	extract_frequent_settings ();
 
 	// Read obsolete font entries first, and then try to replace them with more current ones.
@@ -336,6 +361,8 @@ void Setting::saveSettings()
 				txtfile << i.key() << " [" << i.value() << "]" << endl;
 			++i;
 		}
+
+		write_lists (txtfile);
 
 		file.close();
         } else {

@@ -104,6 +104,115 @@ PreferencesDialog::PreferencesDialog(QWidget* parent)
 
 	connect (GobanPicturePathButton, &QToolButton::clicked, this, &PreferencesDialog::slot_getGobanPicturePath);
 	connect (TablePicturePathButton, &QToolButton::clicked, this, &PreferencesDialog::slot_getTablePicturePath);
+
+	update_dbpaths (setting->m_dbpaths);
+	dbPathsListView->setModel (&m_dbpath_model);
+	connect (dbPathsListView->selectionModel (), &QItemSelectionModel::selectionChanged,
+		 [this] (const QItemSelection &, const QItemSelection &) { update_db_selection (); });
+	connect (dbDirsButton, &QPushButton::clicked, this, &PreferencesDialog::slot_dbdir);
+	connect (dbCfgButton, &QPushButton::clicked, this, &PreferencesDialog::slot_dbcfg);
+	connect (dbRemButton, &QPushButton::clicked, this, &PreferencesDialog::slot_dbrem);
+}
+
+void PreferencesDialog::update_dbpaths (const QStringList &l)
+{
+	m_dbpaths = l;
+	m_dbpath_model.clear ();
+	for (auto &it: m_dbpaths) {
+		QStandardItem *item = new QStandardItem (it);
+		m_dbpath_model.appendRow (item);
+	}
+}
+
+void PreferencesDialog::update_db_selection ()
+{
+	QItemSelectionModel *sel = dbPathsListView->selectionModel ();
+	const QModelIndexList &selected = sel->selectedRows ();
+	bool selection = selected.length () != 0;
+
+	dbRemButton->setEnabled (selection);
+}
+
+void PreferencesDialog::slot_dbdir (bool)
+{
+	QString dir;
+	if (!m_last_added_dbdir.isEmpty ()) {
+		QDir d (m_last_added_dbdir);
+		d.cdUp ();
+		dir = d.absolutePath ();
+	}
+	QString dirname = QFileDialog::getExistingDirectory (this, QObject::tr ("Add a database directory"),
+							     dir);
+	if (dirname.isEmpty ())
+		return;
+	QDir d (dirname);
+	QFile path (d.filePath ("kombilo.db"));
+	if (!path.exists ()) {
+		QMessageBox::warning (this, tr ("Directory contains no database"),
+				      tr ("The directory could not be added because no kombilo.db file could be found."));
+		return;
+	}
+	for (auto &it: m_dbpaths) {
+		QDir d2 (it);
+		if (d == d2) {
+			QMessageBox::warning (this, tr ("Directory already in the list"),
+					      tr ("The directory could not be added because it already exists in the list."));
+			return;
+		}
+	}
+	m_last_added_dbdir = dirname;
+	m_dbpaths.append (dirname);
+	m_dbpath_model.appendRow (new QStandardItem (dirname));
+	m_dbpaths_changed = true;
+}
+
+void PreferencesDialog::slot_dbcfg (bool)
+{
+	if (m_dbpath_model.rowCount () != 0) {
+		QMessageBox mb (QMessageBox::Question, tr ("Overwrite database paths"),
+				tr ("This operation replaces existing database paths.\nDo you still want to import from kombilo.cfg?"),
+				QMessageBox::Yes | QMessageBox::No);
+		if (mb.exec () != QMessageBox::Yes)
+			return;
+	}
+	QString filename = QFileDialog::getOpenFileName (this, QObject::tr ("Open kombilo.cfg"),
+							 setting->readEntry ("LAST_DIR"),
+							 QObject::tr ("CFG Files (*.cfg);;All Files (*)"));
+	if (filename.isEmpty ())
+		return;
+
+	QSettings cfg (filename, QSettings::IniFormat);
+
+	QStringList l;
+	int i = 0;
+	for (;;) {
+		QVariant v = cfg.value ("databases/d" + QString::number (i));
+		if (v.isNull ())
+			break;
+		QStringList vl = v.toStringList ();
+		qDebug () << vl.length () << vl;
+		if (vl.length () == 3 && vl[2] == "kombilo")
+			l << vl[1];
+		i++;
+	}
+	update_dbpaths (l);
+	m_dbpaths_changed = true;
+}
+
+void PreferencesDialog::slot_dbrem (bool)
+{
+	QItemSelectionModel *sel = dbPathsListView->selectionModel ();
+	const QModelIndexList &selected = sel->selectedRows ();
+	bool selection = selected.length () != 0;
+
+	if (!selection)
+		return;
+
+	QModelIndex i = selected.first ();
+	int r = i.row ();
+	m_dbpath_model.removeRows (r, 1);
+	m_dbpaths.removeAt (r);
+	m_dbpaths_changed = true;
 }
 
 void PreferencesDialog::update_board_image ()
@@ -496,6 +605,11 @@ void PreferencesDialog::slot_apply()
 
 	setting->writeIntEntry("TOROID_DUPS", toroidDupsSpin->text().toInt());
 
+	if (m_dbpaths_changed) {
+		setting->m_dbpaths = m_dbpaths;
+		setting->dbpaths_changed = true;
+		m_dbpaths_changed = false;
+	}
 	setting->extract_frequent_settings ();
 
 	client_window->preferencesAccept();

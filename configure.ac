@@ -42,7 +42,7 @@ AC_SUBST(all_includes)
 AC_SUBST(all_libraries)
 
 dnl Look for Qt4 libs
-PKG_CHECK_MODULES([QT5], ["Qt5Core Qt5Widgets Qt5Gui Qt5Xml Qt5Multimedia Qt5Svg"], [], [
+PKG_CHECK_MODULES([QT5], ["Qt5Core Qt5Widgets Qt5Gui Qt5Xml Qt5Multimedia Qt5Svg Qt5Sql"], [], [
 	AC_MSG_ERROR([Qt5 libs not found])])
 dnl Look for moc, either on $PATH or in $QTDIR/bin
 AC_PATH_PROG(MOC, moc, , $PATH:$QTDIR/bin)
@@ -77,7 +77,6 @@ AC_CONFIG_FILES([ Makefile ])
 dnl AC_CONFIG_FILES([ po/Makefile ])
 AC_CONFIG_FILES([ src/Makefile ])
 AC_CONFIG_FILES([ src/pics/Makefile ])
-AC_CONFIG_FILES([ src/sounds/Makefile ])
 AC_CONFIG_FILES([ src/translations/Makefile ])
 AC_CONFIG_FILES([ templates/Makefile ])
 

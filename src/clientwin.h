@@ -162,6 +162,7 @@ public slots:
 	void slot_sendcommand(const QString&, bool);
 	//menus
 	void slotFileOpen(bool);
+	void slotFileOpenDB(bool);
 	void slotComputerPlay(bool);
 
 	void slotMenuConnect(bool);
