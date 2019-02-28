@@ -663,20 +663,20 @@ void ClientWindow::slot_last_window_closed ()
 }
 
 // distribute text from telnet session and local commands to tables
-void ClientWindow::sendTextToApp(const QString &txt)
+void ClientWindow::sendTextToApp (const QString &txt)
 {
 	static int store_sort_col = -1;
 	static int store_games_sort_col = -1;
 	static bool player7active = false;
 
 	// put text to parser
- 	InfoType it_ = parser->put_line(txt);
+ 	InfoType it_ = parser->put_line (txt);
 
 	// some statistics
-	setBytesIn(txt.length()+2);
+	setBytesIn (txt.length ()+2);
 
 //	if (it_ != READY)
-		// a input is being parsed -> wait until tn_active == false before sending new cmd
+	// a input is being parsed -> wait until tn_active == false before sending new cmd
 //		tn_active = true;
 
 	// GAME7_END emulation:
@@ -691,192 +691,192 @@ void ClientWindow::sendTextToApp(const QString &txt)
 
 	switch (it_)
 	{
-		case READY:
-			// ok, telnet is ready to receive commands
+	case READY:
+		// ok, telnet is ready to receive commands
 //			tn_active = false;
-			if (!tn_wait_for_tn_ready && !tn_ready)
-			{
-				QTimer::singleShot(200, this, SLOT(set_tn_ready()));
-				tn_wait_for_tn_ready = true;
-			}
-			sendTextFromApp (nullptr);
-		case WS:
-			// ready or white space -> return
-			return;
+		if (!tn_wait_for_tn_ready && !tn_ready)
+		{
+			QTimer::singleShot (200, this, SLOT (set_tn_ready ()));
+			tn_wait_for_tn_ready = true;
+		}
+		sendTextFromApp (nullptr);
+	case WS:
+		// ready or white space -> return
+		return;
 
 		// echo entered command
 		// echo server enter line
-		case CMD:
-			slot_message(txt);
-			break;
+	case CMD:
+		slot_message (txt);
+		break;
 
 		// set client mode
-		case NOCLIENTMODE:
-			set_sessionparameter("client", true);
-			break;
+	case NOCLIENTMODE:
+		set_sessionparameter ("client", true);
+		break;
 
-		case YOUHAVEMSG:
-			// normally no connection -> wait until logged in
-	        	youhavemsg = true;
-			break;
+	case YOUHAVEMSG:
+		// normally no connection -> wait until logged in
+		youhavemsg = true;
+		break;
 
-		case SERVERNAME:
-			slot_message(txt);
-			// clear send buffer
-			do
-			{
-				// enable sending
-				set_tn_ready();
-			} while (sendTextFromApp (nullptr) != 0);
+	case SERVERNAME:
+		slot_message (txt);
+		// clear send buffer
+		do
+		{
+			// enable sending
+			set_tn_ready ();
+		} while (sendTextFromApp (nullptr) != 0);
 
-			// check if tables are sorted
+		// check if tables are sorted
 #if 0 && (QT_VERSION > 0x030006)
-			if (ListView_players->sortColumn() == -1)
-				ListView_players->setSorting(2);
-			if (ListView_games->sortColumn() == -1)
-				ListView_games->setSorting(2);
+		if (ListView_players->sortColumn () == -1)
+			ListView_players->setSorting (2);
+		if (ListView_games->sortColumn () == -1)
+			ListView_games->setSorting (2);
 #endif
 
-			switch(myAccount->get_gsname())
+		switch (myAccount->get_gsname ())
+		{
+		case IGS:
+		{
+			// IGS - check if client mode
+			bool ok;
+			/*int cmd_nr =*/ txt.section (' ', 0, 0).toInt (&ok);
+			if (!ok)
+				set_sessionparameter ("client", true);
+
+			// set quiet true; refresh players, games
+			//if (myAccount->get_status () == Status::guest)
+			set_sessionparameter ("quiet", true);
+			//else
+			// set id - only available if registerd; who knows why...
+			sendcommand ("id qGo " + QString (VERSION), true);
+			sendcommand ("toggle newrating");
+
+			// we wanted to allow user to disable 'nmatch', but IGS disables 'seek' with nmatch
+			if (1 || setting->readBoolEntry ("USE_NMATCH"))
 			{
-				case IGS:
-				{
-					// IGS - check if client mode
-					bool ok;
-					/*int cmd_nr =*/ txt.section(' ', 0, 0).toInt(&ok);
-					if (!ok)
-						set_sessionparameter("client", true);
-
-					// set quiet true; refresh players, games
-					//if (myAccount->get_status() == Status::guest)
-					set_sessionparameter("quiet", true);
-					//else
-					// set id - only available if registerd; who knows why...
-					sendcommand("id qGo " + QString(VERSION), true);
-					sendcommand("toggle newrating");
-//					if (setting->readBoolEntry("USE_NMATCH"))
-//					{
-// we wanted to allow user to disable 'nmatch', but IGS disables 'seek' with nmatch
-					set_sessionparameter("nmatch",true);
-
-						//temporaary settings to prevent use of Koryo BY on IGS (as opposed to canadian)
-						//sendcommand("nmatchrange BWN 0-9 19-19 60-60 60-3600 25-25 0 0 0-0",false);
-					send_nmatch_range_parameters();
-//					}
-					sendcommand("toggle newundo");
-					sendcommand("toggle seek");
-					sendcommand("seek config_list ");
-					sendcommand("room");
-						
-					slot_refresh(11);
-					slot_refresh(10);
-					break;
-				}
-					
-				default:
-					set_sessionparameter("client", true);
-					// set quiet false; refresh players, games
-					//if (myAccount->get_status() == Status::guest)
-					set_sessionparameter("quiet", false);
-					slot_refresh(11);
-					if (myAccount->get_gsname() != CWS)
-						slot_refresh(10);
-					break;
+				set_sessionparameter ("nmatch",true);
+				// temporaary settings to prevent use of Koryo BY on IGS (as opposed to canadian)
+				// sendcommand("nmatchrange BWN 0-9 19-19 60-60 60-3600 25-25 0 0 0-0",false);
+				send_nmatch_range_parameters ();
 			}
 
-			// set menu
-			Connect->setEnabled(false);
-			Disconnect->setEnabled(true);
-			toolConnect->setChecked(true);
-			toolConnect->setToolTip (tr("Disconnect from") + " " + cb_connect->currentText());
+			sendcommand ("toggle newundo");
+			sendcommand ("toggle seek");
+			sendcommand ("seek config_list ");
+			sendcommand ("room");
 
-			// quiet mode? if yes do clear table before refresh
-			gamesListSteadyUpdate = ! setQuietMode->isChecked();
-			playerListSteadyUpdate = ! setQuietMode->isChecked();
-
-
-			// enable extended user info features
-			setColumnsForExtUserInfo();
-
-			// check for messages
-			if (youhavemsg)
-				sendcommand("message", false);
-
-			// let qgo know which server
-			qgoif->set_gsName(myAccount->get_gsname());
-			// show current Server name in status bar
-			statusServer->setText(" " + myAccount->svname + " ");
-
-			// start timer: event every second
-			onlineCount = 0;
-			oneSecondTimer = startTimer(1000);
-			// init shouts
-			slot_talk("Shouts*", QString::null, false);
-			
-			qgo->playConnectSound();
+			slot_refresh (11);
+			slot_refresh (10);
 			break;
+		}
+
+		default:
+			set_sessionparameter ("client", true);
+			// set quiet false; refresh players, games
+			//if (myAccount->get_status() == Status::guest)
+			set_sessionparameter ("quiet", false);
+			slot_refresh (11);
+			if (myAccount->get_gsname () != CWS)
+				slot_refresh (10);
+			break;
+		}
+
+		// set menu
+		Connect->setEnabled (false);
+		Disconnect->setEnabled (true);
+		toolConnect->setChecked (true);
+		toolConnect->setToolTip (tr ("Disconnect from") + " " + cb_connect->currentText ());
+
+		// quiet mode? if yes do clear table before refresh
+		gamesListSteadyUpdate = ! setQuietMode->isChecked ();
+		playerListSteadyUpdate = ! setQuietMode->isChecked ();
+
+
+		// enable extended user info features
+		setColumnsForExtUserInfo ();
+
+		// check for messages
+		if (youhavemsg)
+			sendcommand ("message", false);
+
+		// let qgo know which server
+		qgoif->set_gsName (myAccount->get_gsname ());
+		// show current Server name in status bar
+		statusServer->setText (" " + myAccount->svname + " ");
+
+		// start timer: event every second
+		onlineCount = 0;
+		oneSecondTimer = startTimer (1000);
+		// init shouts
+		slot_talk ("Shouts*", QString::null, false);
+
+		qgo->playConnectSound ();
+		break;
 
 		// end of 'who'/'user' cmd
-		case PLAYER42_END:
-		case PLAYER27_END:
-			ListView_players->setSortingEnabled (true);
-			if (store_sort_col != -1)
-				ListView_players->sortItems (store_sort_col, Qt::AscendingOrder);
+	case PLAYER42_END:
+	case PLAYER27_END:
+		ListView_players->setSortingEnabled (true);
+		if (store_sort_col != -1)
+			ListView_players->sortItems (store_sort_col, Qt::AscendingOrder);
 
-			if (myAccount->get_gsname()==IGS)
-				ListView_players->showOpen(whoOpenCheck->isChecked());
-			playerListEmpty = false;
-			break;
+		if (myAccount->get_gsname ()==IGS)
+			ListView_players->showOpen (whoOpenCheck->isChecked ());
+		playerListEmpty = false;
+		break;
 
 		// skip table if initial table is to be loaded
-		case PLAYER27_START:
-		case PLAYER42_START:
-			store_sort_col = ListView_players->sortColumn ();
-			ListView_players->setSortingEnabled (false);
+	case PLAYER27_START:
+	case PLAYER42_START:
+		store_sort_col = ListView_players->sortColumn ();
+		ListView_players->setSortingEnabled (false);
 
-			if (playerListEmpty)
-				prepare_tables(WHO);
-			break;
+		if (playerListEmpty)
+			prepare_tables (WHO);
+		break;
 
-		case GAME7_START:
-			// "emulate" GAME7_END
-			player7active = true;
-			// disable sorting for fast operation; store sort column index
-			// unfortunately there is not GAME7_END cmd, thus, it's emulated
-			if (playerListEmpty)
-			{
-				// only if playerListEmpty, else PLAYERXX_END would not arise
-				store_games_sort_col = ListView_games->sortColumn ();
-				ListView_games->setSortingEnabled (false);
-			}
-			break;
+	case GAME7_START:
+		// "emulate" GAME7_END
+		player7active = true;
+		// disable sorting for fast operation; store sort column index
+		// unfortunately there is not GAME7_END cmd, thus, it's emulated
+		if (playerListEmpty) {
+			// only if playerListEmpty, else PLAYERXX_END would not arise
+			store_games_sort_col = ListView_games->sortColumn ();
+			ListView_games->setSortingEnabled (false);
+		}
+		break;
 
-		case ACCOUNT:
-			// let qgo and parser know which account in case of setting something for own games
-			qgoif->set_myName(myAccount->acc_name);
-			parser->set_myname(myAccount->acc_name);
-			break;
+	case ACCOUNT:
+		// let qgo and parser know which account in case of setting something for own games
+		qgoif->set_myName (myAccount->acc_name);
+		parser->set_myname (myAccount->acc_name);
+		break;
 
 
 	case STATS:
-	  // we just received a players name as first line of stats -> create the dialog tab
+		// we just received a players name as first line of stats -> create the dialog tab
 
-       // if (!talklist.current())
-	slot_talk( parser->get_statsPlayer()->name, QString::null,true);
-        
-        //else if (parser->get_statsPlayer()->name != talklist.current()->get_name())
-        //    slot_talk( parser->get_statsPlayer()->name,0,true);
+		// if (!talklist.current ())
+		slot_talk (parser->get_statsPlayer ()->name, QString::null,true);
 
-      break;
-      
-		case BEEP:
-//			QApplication::beep();
-			break;
+		//else if (parser->get_statsPlayer ()->name != talklist.current ()->get_name ())
+		//    slot_talk (parser->get_statsPlayer ()->name,0,true);
 
-		default:
-			break;
+		break;
+
+	case BEEP:
+//			QApplication::beep ();
+		break;
+
+	default:
+		break;
 	}
-	qDebug() << txt;
+	qDebug () << txt;
 }
 
 // used for singleShot actions
