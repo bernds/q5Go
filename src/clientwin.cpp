@@ -57,7 +57,6 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 
 	// init
 
-	setting->cw = this;
 	setWindowIcon (QIcon (":/ClientWindowGui/images/clientwindow/qgo.png"));
 	myAccount = new Account(this);
 
@@ -2679,15 +2678,15 @@ void ClientWindow::dlgSetPreferences(int tab)
 bool ClientWindow::preferencesAccept()
 {
 	// Update all boards with settings
-	setting->qgo->updateAllBoardSettings();
-	setting->qgo->updateFont();
+	qgo->updateAllBoardSettings();
+	qgo->updateFont();
 	if (db_dialog != nullptr)
 		db_dialog->update_prefs ();
 
 	if (setting->nmatch_settings_modified)
 	{
-		setting->cw->send_nmatch_range_parameters();
-		setting->nmatch_settings_modified = false ;
+		send_nmatch_range_parameters();
+		setting->nmatch_settings_modified = false;
 	}
 
 	return true;//result;

@@ -141,10 +141,6 @@ Setting::Setting()
 	fontClocks.setPointSize (fontClocks.pointSize () * 1.5);
   	fontConsole = QFont("Fixed");
 
-	// init
-	qgo = 0;
-	cw = 0;
-
 	nmatch_settings_modified = false;
 
 	extract_frequent_settings ();

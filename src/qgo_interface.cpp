@@ -85,7 +85,6 @@ qGoIF::qGoIF(QWidget *p) : QObject()
 
 	ASSERT(qgo);
 
-	setting->qgo = qgo;
 	parent = p;
 	qgobrd = 0;
 	gsName = GS_UNKNOWN;

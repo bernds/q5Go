@@ -101,10 +101,6 @@ public:
 	bool nmatch_settings_modified;
 	bool dbpaths_changed;
 
-	// help to destroy static elements of qGo()
-	qGo *qgo;
-	ClientWindow *cw;
-
 	// application icon
 	QPixmap image0;
 

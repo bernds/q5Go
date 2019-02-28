@@ -96,7 +96,6 @@ public slots:
 	void slot_dbrem (bool);
 private:
 	void          saveSizes();
-	ClientWindow  *parent_cw;
 	void          insertStandardHosts();
 };
 
