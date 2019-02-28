@@ -19,8 +19,8 @@ HelpViewer::HelpViewer(QWidget* parent)
 {
 	resize(600, 480);
 
-	setWindowTitle(PACKAGE " " VERSION " Manual");
-	setWindowIcon(setting->image0);
+	setWindowTitle (PACKAGE " " VERSION " Manual");
+	setWindowIcon (QIcon (":/ClientWindow/images/clientwindow/qgo.png"));
 
 	browser = new QTextBrowser(this);
 

@@ -19,6 +19,10 @@
     <property name="windowTitle">
       <string>qGo Client V2</string>
     </property>
+    <property name="windowIcon">
+      <iconset resource="q4go.qrc">
+      <normaloff>:/ClientWindowGui/images/clientwindow/qgo.png</normaloff>:/ClientWindowGui/images/clientwindow/qgo.png</iconset>
+    </property>
     <widget class="QWidget" name="widget">
       <layout class="QGridLayout">
 	<property name="leftMargin">

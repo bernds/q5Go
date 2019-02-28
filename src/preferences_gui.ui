@@ -19,6 +19,10 @@
   <property name="windowTitle">
    <string>Preferences</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="q4go.qrc">
+    <normaloff>:/ClientWindowGui/images/clientwindow/prefs.png</normaloff>:/ClientWindowGui/images/clientwindow/prefs.png</iconset>
+  </property>
   <layout class="QGridLayout">
    <property name="leftMargin">
     <number>2</number>
@@ -4764,6 +4768,102 @@ Note: 'Delete' concerns saved records.</string>
     <hint type="sourcelabel">
      <x>568</x>
      <y>654</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fontStandardButton</sender>
+   <signal>clicked ()</signal>
+   <receiver>PreferencesDialogGui</receiver>
+   <slot>selectStandardFont ()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fontMarksButton</sender>
+   <signal>clicked ()</signal>
+   <receiver>PreferencesDialogGui</receiver>
+   <slot>selectMarksFont ()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fontCommentsButton</sender>
+   <signal>clicked ()</signal>
+   <receiver>PreferencesDialogGui</receiver>
+   <slot>selectCommentsFont ()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fontListsButton</sender>
+   <signal>clicked ()</signal>
+   <receiver>PreferencesDialogGui</receiver>
+   <slot>selectListsFont ()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fontClocksButton</sender>
+   <signal>clicked ()</signal>
+   <receiver>PreferencesDialogGui</receiver>
+   <slot>selectClocksFont ()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fontConsoleButton</sender>
+   <signal>clicked ()</signal>
+   <receiver>PreferencesDialogGui</receiver>
+   <slot>selectConsoleFont ()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
     </hint>
     <hint type="destinationlabel">
      <x>20</x>

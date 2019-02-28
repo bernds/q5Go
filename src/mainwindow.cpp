@@ -68,14 +68,11 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 	   uninitialized reads).  */
 	m_gamemode = mode;
 
-	setProperty("icon", setting->image0);
 	setAttribute (Qt::WA_DeleteOnClose);
 	setDockNestingEnabled (true);
 
 	isFullScreen = 0;
 	setFocusPolicy(Qt::StrongFocus);
-
-	setWindowIcon (setting->image0);
 
 	if (!gr->filename ().empty ()) {
 		QFileInfo fi (QString::fromStdString (gr->filename ()));

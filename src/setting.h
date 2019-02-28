@@ -10,7 +10,6 @@
 #include <stdlib.h>
 #include <qstring.h>
 #include <qfont.h>
-#include <qpixmap.h>
 
 // delimiters for variables in settings file
 // however, this character must not be used in parameters, e.g. host
@@ -100,9 +99,6 @@ public:
 
 	bool nmatch_settings_modified;
 	bool dbpaths_changed;
-
-	// application icon
-	QPixmap image0;
 
 	QStringList m_dbpaths;
 

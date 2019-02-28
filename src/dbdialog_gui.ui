@@ -19,6 +19,10 @@
   <property name="windowTitle">
    <string>Open database file</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="q4go.qrc">
+    <normaloff>:/ClientWindowGui/images/clientwindow/qgo.png</normaloff>:/ClientWindowGui/images/clientwindow/qgo.png</iconset>
+  </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0" rowspan="4">
     <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0">

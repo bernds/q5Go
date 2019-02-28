@@ -50,7 +50,6 @@ HEADERS		      = analyzedlg.h \
 			goboard.h \
 			gogame.h \
 			helpviewer.h \
-			icons.h \
 			imagehandler.h \
 			komispinbox.h \
                         mainwindow.h \

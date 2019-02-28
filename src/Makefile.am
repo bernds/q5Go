@@ -7,7 +7,7 @@ q5go_METASOURCES = AUTO
 KDE_OPTIONS = qtonly
 
 DISTHEADERS_MOC = analyzedlg.h audio.h autodiagsdlg.h bitarray.h board.h clickableviews.h \
-	clockview.h dbdialog.h evalgraph.h figuredlg.h gamedialog.h gamestable.h gametree.h helpviewer.h icons.h \
+	clockview.h dbdialog.h evalgraph.h figuredlg.h gamedialog.h gamestable.h gametree.h helpviewer.h \
 	igsconnection.h mainwindow.h clientwin.h miscdialogs.h msg_handler.h normaltools.h scoretools.h \
 	parser.h playertable.h preferences.h qgo.h qgo_interface.h qgtp.h newaigamedlg.h sizegraphicsview.h \
 	sgfpreview.h tables.h telnet.h textview.h variantgamedlg.h
