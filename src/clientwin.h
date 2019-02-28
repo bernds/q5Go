@@ -61,7 +61,7 @@ public:
 	void saveSettings();
 
 	bool preferencesAccept();
-	void dlgSetPreferences(int tab=-1);
+	void dlgSetPreferences(int tab = 0);
 
 	Engine *analysis_engine (int boardsize);
 	QList<Engine> analysis_engines (int boardsize);
