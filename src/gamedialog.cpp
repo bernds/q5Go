@@ -140,8 +140,10 @@ void GameDialog::slot_suggest(const QString &pw, const QString&pb, const QString
 	// check if names are ok
 	if ((playerOpponentEdit->text() == pb || pb == "you") && (myName == pw || pw == "you"))
 	{
-		// names are exchanged
-		swap_colors ();
+		if (pb == "you")
+			play_black_button->setChecked (true);
+		else
+			play_white_button->setChecked (true);
 	}
 	else if ((playerOpponentEdit->text() != pw && pw != "you") || (myName != pw && pb != "you"))
 	{
