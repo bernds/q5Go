@@ -2209,7 +2209,7 @@ void MainWindow_GTP::gtp_played_resign ()
 	}
 
 	QMessageBox mb(QMessageBox::Information, tr("Game end"),
-		       QString(tr("The computer has resigned the game.")),
+		       tr("The computer has resigned the game."),
 		       QMessageBox::Ok | QMessageBox::Default);
 	mb.exec ();
 

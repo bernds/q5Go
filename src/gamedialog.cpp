@@ -143,14 +143,14 @@ qDebug("#### GameDialog::slot_suggest()");
 	}
 
 	// check if names are ok
-	if ((playerOpponentEdit->text() == pblack || pblack == QString(tr("you"))) &&
-	    (myName == pwhite || pwhite == QString(tr("you"))))
+	if ((playerOpponentEdit->text() == pblack || pblack == tr("you")) &&
+	    (myName == pwhite || pwhite == tr("you")))
 	{
 		// names are exchanged
 		slot_swapcolors();
 	}
-	else if (playerOpponentEdit->text() != pwhite && pwhite != QString(tr("you")) ||
-		 myName != pwhite && pblack != QString(tr("you")))
+	else if (playerOpponentEdit->text() != pwhite && pwhite != tr("you") ||
+		 myName != pwhite && pblack != tr("you"))
 	{
 		// wrong suggest info
 		emit signal_sendcommand("suggest " + playerOpponentEdit->text(), false);
@@ -196,7 +196,7 @@ void GameDialog::slot_opponentopen(const QString &opp)
 	QString send = "tell " + opponent + " CLIENT: <qGo " + VERSION + "> match " +
 		me + " wants handicap " + handicapSpin->text() + ", komi " +
 		komiSpin->text();
-	if (ComboBox_free->currentText() == QString(tr("yes")))
+	if (ComboBox_free->currentText() == tr("yes"))
 		send += ", free";
 
 	emit signal_sendcommand(send, false);
@@ -354,7 +354,7 @@ void GameDialog::slot_matchcreate(const QString &nr, const QString &opponent)
 		// check if komi has been requested
 		if (myRk != "NR" && oppRk != "NR")
 		{
-			if (ComboBox_free->currentText() == QString(tr("yes")))
+			if (ComboBox_free->currentText() == tr("yes"))
 				kt = FREE;
 			else
 				kt = RATED;

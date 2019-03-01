@@ -804,7 +804,7 @@ void qGoIF::slot_requestDialog(const QString &yes, const QString &no, const QStr
 	if (no.isEmpty())
 	{
 		QMessageBox mb(tr("Request of Opponent"),
-			QString(tr("%1 wants to %2\nYES = %3\nCANCEL = %4")).arg(opp).arg(yes).arg(yes).arg(tr("ignore request")),
+			tr("%1 wants to %2\nYES = %3\nCANCEL = %4").arg(opp).arg(yes).arg(yes).arg(tr("ignore request")),
 			QMessageBox::NoIcon,
 			QMessageBox::Yes | QMessageBox::Default,
 			QMessageBox::Cancel | QMessageBox::Escape,
@@ -822,8 +822,8 @@ void qGoIF::slot_requestDialog(const QString &yes, const QString &no, const QStr
 	else
 	{
 		QMessageBox mb(tr("Request of Opponent"),
-			//QString(tr("%1 wants to %2\nYES = %3\nCANCEL = %4")).arg(opp).arg(yes).arg(yes).arg(no),
-			QString(tr("%1 wants to %2\n\nDo you accept ? \n")).arg(opp).arg(yes),
+			//tr("%1 wants to %2\nYES = %3\nCANCEL = %4").arg(opp).arg(yes).arg(yes).arg(no),
+			tr("%1 wants to %2\n\nDo you accept ? \n").arg(opp).arg(yes),
 			QMessageBox::Question,
 			QMessageBox::Yes | QMessageBox::Default,
 			QMessageBox::No | QMessageBox::Escape,
