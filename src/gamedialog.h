@@ -48,8 +48,6 @@ public slots:
 
 private:
 	bool have_suggestdata;
-	QString pwhite;
-	QString pblack;
 	QString h19, h13, h9;
 	QString k19, k13, k9;
 	GSName  gsname;

@@ -116,9 +116,7 @@ void GameDialog::slot_pbsuggest()
 // from parser
 void GameDialog::slot_suggest(const QString &pw, const QString&pb, const QString &handicap, const QString &komi, int size)
 {
-qDebug("#### GameDialog::slot_suggest()");
-	pwhite = pw;
-	pblack = pb;
+	qDebug("#### GameDialog::slot_suggest()");
 
 	switch (size)
 	{
@@ -140,12 +138,12 @@ qDebug("#### GameDialog::slot_suggest()");
 	}
 
 	// check if names are ok
-	if ((playerOpponentEdit->text() == pblack || pblack == "you") && (myName == pwhite || pwhite == "you"))
+	if ((playerOpponentEdit->text() == pb || pb == "you") && (myName == pw || pw == "you"))
 	{
 		// names are exchanged
 		swap_colors ();
 	}
-	else if ((playerOpponentEdit->text() != pwhite && pwhite != "you") || (myName != pwhite && pblack != "you"))
+	else if ((playerOpponentEdit->text() != pw && pw != "you") || (myName != pw && pb != "you"))
 	{
 		// wrong suggest info
 		emit signal_sendcommand("suggest " + playerOpponentEdit->text(), false);
