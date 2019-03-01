@@ -525,6 +525,11 @@ void ClientWindow::slot_connclosed()
 
 	qgo->playConnectSound();
 
+	auto saved_list = matchlist;
+	matchlist.clear ();
+	for (auto it: saved_list)
+		delete it;
+
 	// show current Server name in status bar
 	statusServer->setText(" OFFLINE ");
 
