@@ -33,7 +33,9 @@ class go_board
 	{
 		friend class go_board;
 		bit_array m_stones;
-		int m_n_liberties;
+		short m_n_liberties;
+		/* Used during Benson's algorithm.  */
+		short m_n_vital;
 		/* Default true, toggled by the user during scoring.  */
 		bool m_alive, m_seki;
 		/* Markers used during scoring.  */
@@ -61,6 +63,23 @@ class go_board
 		}
 	};
 
+	/* An anclosed area for a color C1 is obtained by a flood fill through empty spaces and stones
+	   of the opposite color C2.  We also obtain the border of the area, by expanding once in each
+	   direction and then removing the actual area (note that the border can contain stones in the
+	   interior).  Finally, before storing the area, stones of C2 are removed from the bit set.  */
+	struct enclosed_area
+	{
+		bit_array area;
+		bit_array border;
+		enclosed_area (const bit_array &a, const bit_array &b) : area (a), border (b) { }
+		enclosed_area (bit_array &&a, bit_array &&b) : area (a), border (b) { }
+		enclosed_area &operator= (enclosed_area other)
+		{
+			std::swap (other.area, area);
+			std::swap (other.border, border);
+			return *this;
+		}
+	};
 	int m_sz_x, m_sz_y;
 	bool m_torus_h = false, m_torus_v = false;
 	const bit_array *m_masked_left, *m_masked_right, *m_column_left, *m_column_right, *m_row_top, *m_row_bottom;
@@ -357,9 +376,14 @@ private:
 	void recalc_liberties ();
 	void find_territory_units (const bit_array &w_stones, const bit_array &b_stones);
 	void flood_step (bit_array &next, const bit_array &fill);
+	void flood_fill (bit_array &fill, const bit_array &boundary);
 	void finish_scoring_markers (const bit_array *do_not_count);
 	void scoring_flood_fill (bit_array &fill, const bit_array &w_stones, const bit_array &b_stones,
 				 bool &neighbours_w, bool &neighbours_b);
+	/* Two functions implementing Benson's algorithm.  */
+	std::vector<enclosed_area> find_eas (const bit_array &stones, const bit_array &other_stones);
+	void benson (std::vector<stone_unit> &units, const bit_array &other_stones);
+
 	void init_marks (bool clear)
 	{
 		if (m_marks.size () == 0) {

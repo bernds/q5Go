@@ -13,6 +13,19 @@ void bit_array::debug () const
 	putchar ('\n');
 }
 
+void bit_array::debug (int linesz) const
+{
+	int linecnt = 0;
+	for (unsigned bit = 0; bit < m_n_bits; bit++) {
+		uint64_t val = m_bits[bit / 64];
+		printf ("%d", (int)((val >> (bit % 64)) & 1));
+		if (++linecnt == linesz)
+			linecnt = 0, putchar ('\n');
+	}
+	if (m_n_bits % linesz != 0)
+		putchar ('\n');
+}
+
 
 /* Keep some precomputed bit arrays, one for each board size, which
    have the left and right columns masked out.  These can be used in
@@ -167,6 +180,18 @@ void go_board::flood_step (bit_array &next, const bit_array &fill)
 	}
 }
 
+void go_board::flood_fill (bit_array &fill, const bit_array &boundary)
+{
+	bit_array next (fill);
+	for (;;) {
+		flood_step (next, fill);
+		next.andnot (boundary);
+		if (next == fill)
+			break;
+		fill = next;
+	}
+}
+
 int go_board::count_liberties (const bit_array &stones)
 {
 	bit_array liberties (bitsize ());
@@ -289,16 +314,8 @@ void go_board::toggle_alive (int x, int y, bool flood)
 	const bit_array &other_stones = col == black ? *m_stones_w : *m_stones_b;
 	bit_array fill (bitsize ());
 	fill.set_bit (bp);
-	if (flood) {
-		bit_array next (fill);
-		for (;;) {
-			flood_step (next, fill);
-			next.andnot (other_stones);
-			if (next == fill)
-				break;
-			fill = next;
-		}
-	}
+	if (flood)
+		flood_fill (fill, other_stones);
 
 	for (auto &it: m_units_w)
 		if (it.m_stones.intersect_p (fill)) {
@@ -406,11 +423,112 @@ void go_board::find_territory_units (const bit_array &w_stones, const bit_array 
 	}
 }
 
+/* Enclosed areas, as per Benson's algorithm.  Flood fill through any area not containing stones of
+   a given color, then remove intersections occupied by a stone of the opposite color.  We return
+   a pair of values: the area and the surrounding stones.  */
+std::vector<go_board::enclosed_area> go_board::find_eas (const bit_array &stones, const bit_array &other_stones)
+{
+	std::vector<enclosed_area> ea;
+	bit_array handled (bitsize ());
+	for (int i = 0; i < bitsize (); i++) {
+		if (handled.test_bit (i))
+			continue;
+
+		if (stones.test_bit (i))
+			continue;
+
+		bit_array fill (bitsize ());
+		fill.set_bit (i);
+		flood_fill (fill, stones);
+		bit_array border (fill);
+		flood_step (border, fill);
+		border.andnot (fill);
+		fill.andnot (other_stones);
+
+		handled.ior (fill);
+
+		ea.emplace_back (std::move (fill), std::move (border));
+	}
+	return ea;
+}
+
+/* Benson's algorithm to find pass-alive stones.  Sets m_n_vital in all units so that if it is >= 2,
+   the unit is alive.  */
+void go_board::benson (std::vector<stone_unit> &units, const bit_array &other_stones)
+{
+	std::vector<bit_array> unit_liberties;
+	std::vector<size_t> tentative;
+	tentative.reserve (units.size ());
+	unit_liberties.reserve (units.size ());
+	/* Calculate liberties bitsets for all units, and create the tentative array
+	   holding the index of each unit - this will be reduced over time during the
+	   algorithm's loop.  */
+	for (auto &it: units) {
+		unit_liberties.emplace_back (bitsize ());
+		bit_array &liberties = unit_liberties.back ();
+		flood_step (liberties, it.m_stones);
+		liberties.andnot (*m_stones_w);
+		liberties.andnot (*m_stones_b);
+		tentative.push_back (tentative.size ());
+	}
+	bit_array stones (bitsize ());
+	for (auto it: tentative)
+		stones.ior (units[it].m_stones);
+	auto eas = find_eas (stones, other_stones);
+
+	for (;;) {
+		bool changed = false;
+		for (auto it: tentative)
+			units[it].m_n_vital = 0;
+		for (auto &ea: eas) {
+			for (auto idx: tentative) {
+				if (ea.area.subset_of (unit_liberties[idx]))
+					units[idx].m_n_vital++;
+			}
+		}
+		tentative.erase (std::remove_if (std::begin (tentative), std::end (tentative),
+						 [&] (size_t idx)
+						 {
+							 bool remove = units[idx].m_n_vital < 2;
+							 changed |= remove;
+							 return remove;
+						 }),
+				 std::end (tentative));
+		stones.clear ();
+		for (auto it: tentative)
+			stones.ior (units[it].m_stones);
+
+		eas.erase (std::remove_if (std::begin (eas), std::end (eas),
+					   [&] (enclosed_area &ea)
+					   {
+						   bool remove = !ea.border.subset_of (stones);
+						   changed |= remove;
+						   return remove;
+					   }),
+				 std::end (eas));
+
+		if (!changed)
+			break;
+	}
+}
+
 /* The final step for calculating scores, shared by the simple and complex variants.  */
 void go_board::finish_scoring_markers (const bit_array *do_not_count)
 {
 	bit_array terr_w (bitsize ());
 	bit_array terr_b (bitsize ());
+	bit_array pass_alive (bitsize ());
+
+#if 0 /* Useful for visualizing the algorithm's result, but should not be shown in a
+	 normal scoring mode.  */
+	for (auto &it: m_units_b)
+		if (it.m_n_vital >= 2)
+			pass_alive.ior (it.m_stones);
+	for (auto &it: m_units_w)
+		if (it.m_n_vital >= 2)
+			pass_alive.ior (it.m_stones);
+#endif
+
 	for (auto &t: m_units_t) {
 		bool counted = true;
 		if (do_not_count && t.m_terr.intersect_p (*do_not_count))
@@ -433,6 +551,9 @@ void go_board::finish_scoring_markers (const bit_array *do_not_count)
 		if (terr_b.test_bit (i)) {
 			m_marks[i] = mark::terr;
 			m_mark_extra[i] = 1;
+		}
+		if (pass_alive.test_bit (i)) {
+			m_marks[i] = mark::square;
 		}
 	}
 }
@@ -495,6 +616,11 @@ void go_board::calc_scoring_markers_complex ()
 			dead_stones.ior (it.m_stones);
 	}
 	find_territory_units (w_stones, b_stones);
+
+#if 0
+	benson (m_units_w, *m_stones_b);
+	benson (m_units_b, *m_stones_w);
+#endif
 
 	bit_array cand_territory (bitsize ());
 	for (auto &t: m_units_t)

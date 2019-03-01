@@ -79,6 +79,7 @@ public:
 		delete[] new_bits;
 	}
 	void debug () const;
+	void debug (int linesz) const;
 	void clear ()
 	{
 		for (int i = 0; i < m_n_elts; i++)
@@ -224,6 +225,19 @@ public:
 				return true;
 		}
 		return false;
+	}
+	bool subset_of (const bit_array &other) const
+	{
+		int limit = std::min (m_n_elts, other.m_n_elts);
+		int i;
+		for (i = 0; i < limit; i++) {
+			if (m_bits[i] & ~other.m_bits[i])
+				return false;
+		}
+		for (; i < m_n_elts; i++)
+			if (m_bits[i] != 0)
+				return false;
+		return true;
 	}
 	/* Check for intersections, but shift other left (or right, if negative).  */
 	bool intersect_p (const bit_array &other, int shift) const;
