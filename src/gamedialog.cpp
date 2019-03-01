@@ -56,19 +56,19 @@ void GameDialog::slot_pbsuggest()
 	qDebug("#### GameDialog::slot_pbsuggest()");
 	switch (gsname)
 	{
-		case NNGS:
-		case CWS:
-			// already suggested?
-			if (!have_suggestdata)
-			{
-				// no suggestdata -> send suggest cmd
-				emit signal_sendcommand("suggest " + playerOpponentEdit->text(), false);
-			}
-			break;
+	case NNGS:
+	case CWS:
+		// already suggested?
+		if (!have_suggestdata)
+		{
+			// no suggestdata -> send suggest cmd
+			emit signal_sendcommand("suggest " + playerOpponentEdit->text(), false);
+		}
+		break;
 
-		default:
-			// IGS etc. don't know about suggest command
-			break;
+	default:
+		// IGS etc. don't know about suggest command
+		break;
 	}
 
 	// two cases: suggest command unknown / suggest command doesn't work - you are not rated
@@ -120,21 +120,21 @@ void GameDialog::slot_suggest(const QString &pw, const QString&pb, const QString
 
 	switch (size)
 	{
-		case 19:
-			h19 = handicap;
-			k19 = komi;
-			break;
+	case 19:
+		h19 = handicap;
+		k19 = komi;
+		break;
 
-		case 13:
-			h13 = handicap;
-			k13 = komi;
-			break;
+	case 13:
+		h13 = handicap;
+		k13 = komi;
+		break;
 
-		case 9:
-			h9 = handicap;
-			k9 = komi;
-			//have_suggestdata = true;
-			break;
+	case 9:
+		h9 = handicap;
+		k9 = komi;
+		//have_suggestdata = true;
+		break;
 	}
 
 	// check if names are ok
@@ -154,23 +154,23 @@ void GameDialog::slot_suggest(const QString &pw, const QString&pb, const QString
 	// check if size is ok
 	switch (boardSizeSpin->text().toInt())
 	{
-		case 19:
-			handicapSpin->setValue(h19.toInt());
-			komiSpin->setValue(k19.toInt());
-			break;
+	case 19:
+		handicapSpin->setValue(h19.toInt());
+		komiSpin->setValue(k19.toInt());
+		break;
 
-		case 13:
-			handicapSpin->setValue(h13.toInt());
-			komiSpin->setValue(k13.toInt());
-			break;
+	case 13:
+		handicapSpin->setValue(h13.toInt());
+		komiSpin->setValue(k13.toInt());
+		break;
 
-		case 9:
-			handicapSpin->setValue(h13.toInt());
-			komiSpin->setValue(k13.toInt());
-			break;
+	case 9:
+		handicapSpin->setValue(h13.toInt());
+		komiSpin->setValue(k13.toInt());
+		break;
 
-		default:
-			break;
+	default:
+		break;
 	}
 }
 
@@ -224,51 +224,33 @@ qDebug("#### GameDialog::slot_offer()");
 		color = " W ";
 	else if (play_nigiri_button->isChecked() && is_nmatch)
 		color = " N ";
-	//{
-		// ok, I am white
-		if (is_nmatch)
-			//<nmatch yfh2test W 3 19 60 600 25 0 0 0>
-			emit signal_sendcommand("nmatch " + 
-						playerOpponentEdit->text() + 
-						color + //" W " + 
-						handicapSpin->text() + " " +
-						boardSizeSpin->text() + " " + 
-						QString::number(timeSpin->value() * 60) + " " +
-						QString::number(byoTimeSpin->value() * 60) + 
-						" 25 0 0 0", true); // carefull : 25 stones hard coded : bad
-		else 
-			emit signal_sendcommand("match " + playerOpponentEdit->text() + color + boardSizeSpin->text() + " " + timeSpin->text() + " " + byoTimeSpin->text(), false);
-/*	}
+
+	if (is_nmatch)
+		//<nmatch yfh2test W 3 19 60 600 25 0 0 0>
+		emit signal_sendcommand("nmatch " +
+					playerOpponentEdit->text() +
+					color + //" W " +
+					handicapSpin->text() + " " +
+					boardSizeSpin->text() + " " +
+					QString::number(timeSpin->value() * 60) + " " +
+					QString::number(byoTimeSpin->value() * 60) +
+					" 25 0 0 0", true); // carefull : 25 stones hard coded : bad
 	else
-	{
-		// ok, I am black
-		if (is_nmatch)
-			//<nmatch yfh2test W 3 19 60 600 25 0 0 0>
-			emit signal_sendcommand("nmatch " + 
-						playerWhiteEdit->text() + 
-						" B " + 
-						handicapSpin->text() + " " +
-						boardSizeSpin->text() + " " + 
-						QString::number(timeSpin->value() * 60) + " " +
-						QString::number(byoTimeSpin->value() * 60) + 
-						" 25 0 0 0", true); // carefull : 25 stones hard coded : bad
-		else 
-			emit signal_sendcommand("match " + playerWhiteEdit->text() + " B " + boardSizeSpin->text() + " " + timeSpin->text() + " " + byoTimeSpin->text(), false);
-	}
-*/
+		emit signal_sendcommand("match " + playerOpponentEdit->text() + color + boardSizeSpin->text() + " " + timeSpin->text() + " " + byoTimeSpin->text(), false);
+
 	switch (gsname)
 	{
-		case NNGS:
-		case CWS:
-			buttonDecline->setEnabled(true);
-			buttonCancel->setDisabled(true);
-			break;
+	case NNGS:
+	case CWS:
+		buttonDecline->setEnabled(true);
+		buttonCancel->setDisabled(true);
+		break;
 
-		default:
-			// IGS etc. don't support a withdraw command
-			buttonDecline->setDisabled(true);
-			buttonCancel->setEnabled(true);
-			break;
+	default:
+		// IGS etc. don't support a withdraw command
+		buttonDecline->setDisabled(true);
+		buttonCancel->setEnabled(true);
+		break;
 	}
 }
 
@@ -293,7 +275,6 @@ void GameDialog::slot_decline()
 
 void GameDialog::slot_cancel()
 {
-
 	if (is_nmatch)
 		emit signal_sendcommand("nmatch _cancel", false);
 
