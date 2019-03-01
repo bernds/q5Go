@@ -143,14 +143,12 @@ qDebug("#### GameDialog::slot_suggest()");
 	}
 
 	// check if names are ok
-	if ((playerOpponentEdit->text() == pblack || pblack == "you") &&
-	    (myName == pwhite || pwhite == "you"))
+	if ((playerOpponentEdit->text() == pblack || pblack == "you") && (myName == pwhite || pwhite == "you"))
 	{
 		// names are exchanged
 		slot_swapcolors();
 	}
-	else if (playerOpponentEdit->text() != pwhite && pwhite != "you" ||
-		 myName != pwhite && pblack != "you")
+	else if ((playerOpponentEdit->text() != pwhite && pwhite != "you") || (myName != pwhite && pblack != "you"))
 	{
 		// wrong suggest info
 		emit signal_sendcommand("suggest " + playerOpponentEdit->text(), false);
