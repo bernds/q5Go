@@ -7,9 +7,14 @@
 #include <QWhatsThis>
 #include <QMessageBox>
 #include <QTimerEvent>
-#include <QKeyEvent>
 #include <QMenu>
 #include <QAction>
+#include <QComboBox>
+#include <QCheckBox>
+#include <QLabel>
+#include <QStatusBar>
+#include <QToolButton>
+#include <QIcon>
 
 #include "clientwin.h"
 #include "defines.h"
@@ -24,18 +29,6 @@
 #include "ui_helpers.h"
 #include "msg_handler.h"
 #include "dbdialog.h"
-
-#include <qaction.h>
-#include <qcombobox.h>
-#include <qcheckbox.h>
-#include <qtabwidget.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qevent.h>
-#include <qstatusbar.h>
-#include <qtooltip.h>
-#include <qtoolbutton.h>
-#include <qicon.h>
 
 ClientWindow *client_window;
 
