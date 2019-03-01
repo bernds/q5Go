@@ -145,6 +145,9 @@
           <height>32767</height>
          </size>
         </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item row="2" column="0" colspan="4">
@@ -206,6 +209,9 @@
        <widget class="QLineEdit" name="playerOpponentEdit">
         <property name="text">
          <string>Opponent</string>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
