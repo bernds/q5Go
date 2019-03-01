@@ -8,14 +8,12 @@
 #include "komispinbox.h"
 #include "gamedialog.h"
 
-GameDialog::GameDialog(QWidget* parent, const QString &name)
-	: QDialog(parent), buttongroup (this)
+GameDialog::GameDialog(QWidget* parent, GSName gs, const QString &name)
+	: QDialog(parent), gsname (gs), myName (name), buttongroup (this)
 {
 	setupUi(this);
 	setModal (true);
-	setWindowTitle (name);
 	have_suggestdata = false;
-	gsname = GS_UNKNOWN;
 //	komiSpin->setValue(55);
 //	buttonOffer->setFocus();
 	komi_request = false;
@@ -40,23 +38,22 @@ GameDialog::~GameDialog()
 void GameDialog::slot_stats_opponent()
 {
 	emit signal_sendcommand("stats " + playerOpponentEdit->text(), false);
-
-
 }
-void GameDialog::slot_swapcolors()
+
+void GameDialog::swap_colors()
 {
-	qDebug("#### GameDialog::slot_swapcolors()");
-	if(play_white_button->isChecked())
-		play_black_button->setChecked(true);
+	qDebug("#### GameDialog::swap_colors()");
+	if (play_white_button->isChecked ())
+		play_black_button->setChecked (true);
 	else
-		play_white_button->setChecked(true);
+		play_white_button->setChecked (true);
 
 }
 
 // button "suggest"
 void GameDialog::slot_pbsuggest()
 {
-qDebug("#### GameDialog::slot_pbsuggest()");
+	qDebug("#### GameDialog::slot_pbsuggest()");
 	switch (gsname)
 	{
 		case NNGS:
@@ -96,7 +93,7 @@ qDebug("#### GameDialog::slot_pbsuggest()");
 
 		// white is weaker than black? -> exchange
 		if (rkw < rkb)
-			slot_swapcolors();
+			swap_colors();
 
 		// calc handi & komi
 		int diff = abs(rkw - rkb) / 100;
@@ -146,7 +143,7 @@ qDebug("#### GameDialog::slot_suggest()");
 	if ((playerOpponentEdit->text() == pblack || pblack == "you") && (myName == pwhite || pwhite == "you"))
 	{
 		// names are exchanged
-		slot_swapcolors();
+		swap_colors ();
 	}
 	else if ((playerOpponentEdit->text() != pwhite && pwhite != "you") || (myName != pwhite && pblack != "you"))
 	{

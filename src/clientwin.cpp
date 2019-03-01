@@ -1470,12 +1470,13 @@ void ClientWindow::slot_matchrequest(const QString &line, bool myrequest)
 			break;
 		}
 
+	GSName gs = myAccount->get_gsname ();
 	if (!dlg)
 	{
-		dlg = new GameDialog(0, tr("New Game"));
+		dlg = new GameDialog (0, gs, myAccount->acc_name);
 		matchlist.append (dlg);
 
-		if (myAccount->get_gsname() == NNGS || myAccount->get_gsname() == LGS)
+		if (gs == NNGS || gs == LGS)
 		{
 			// now connect suggest signal
 			connect (parser, &Parser::signal_suggest, dlg, &GameDialog::slot_suggest);
@@ -1500,7 +1501,6 @@ void ClientWindow::slot_matchrequest(const QString &line, bool myrequest)
 		// set values
 		dlg->playerOpponentEdit->setText(opponent);
 		dlg->playerOpponentEdit->setReadOnly(true);
-		dlg->set_myName( myAccount->acc_name);
 
 		// set my and opponent's rank for suggestion
 		dlg->set_oppRk(rk);
@@ -1508,7 +1508,6 @@ void ClientWindow::slot_matchrequest(const QString &line, bool myrequest)
 		rk = myAccount->get_rank();
 		dlg->set_myRk(rk);
 		//dlg->playerWhiteRkEdit->setText(rk);
-		dlg->set_gsName(myAccount->get_gsname());
 		dlg->handicapSpin->setEnabled(false);
 
 		dlg->buttonDecline->setDisabled(true);
@@ -1614,7 +1613,6 @@ void ClientWindow::slot_matchrequest(const QString &line, bool myrequest)
 		dlg->playerOpponentEdit->setText(opponent);
 		dlg->playerOpponentEdit->setReadOnly(true);
 		dlg->playerOpponentRkEdit->setText(rk);
-		dlg->set_myName(myAccount->acc_name);
 
 		if (opp_plays_white)
 			dlg->play_black_button->setChecked (true);

@@ -15,13 +15,13 @@ class GameDialog : public QDialog, public Ui::NewGameDialog
 {
 	Q_OBJECT
 
+	void swap_colors ();
+
 public:
-	GameDialog(QWidget* parent, const QString &);
+	GameDialog(QWidget* parent, GSName, const QString &);
 	~GameDialog();
-	void set_gsName(GSName g) { gsname = g; }
 	void set_oppRk(QString &rk) { oppRk = rk; qDebug() << "oppRk: " << rk; }
 	void set_myRk(QString &rk) { myRk = rk; qDebug() << "myRk: " << rk; }
-	void set_myName(QString &name) { myName = name; }
 	void set_is_nmatch (bool b) { is_nmatch = b; }
 
 signals:
@@ -31,13 +31,13 @@ signals:
 
 public slots:
 	// pushbuttons
-	virtual void slot_stats_opponent();
-	virtual void slot_swapcolors();
-	virtual void slot_pbsuggest();
-	virtual void slot_offer(bool);
-	virtual void slot_decline();
-	virtual void slot_changed();
-	virtual void slot_cancel();
+	void slot_stats_opponent ();
+	void slot_pbsuggest ();
+	void slot_offer (bool);
+	void slot_decline ();
+	void slot_changed ();
+	void slot_cancel ();
+
 	// parser
 	void slot_suggest(const QString&, const QString&, const QString&, const QString&, int);
 	void slot_matchcreate(const QString&, const QString&);
