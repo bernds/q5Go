@@ -1498,11 +1498,6 @@ void ClientWindow::slot_matchrequest(const QString &line, bool myrequest)
 		QString rk = line.section(' ', 1, 1);
 
 		// set values
-		/*dlg->playerWhiteEdit->setText(myAccount->acc_name);
-		dlg->playerWhiteEdit->setReadOnly(true);
-		dlg->playerBlackEdit->setText(opponent);
-		dlg->playerBlackEdit->setReadOnly(false);
-		*/
 		dlg->playerOpponentEdit->setText(opponent);
 		dlg->playerOpponentEdit->setReadOnly(true);
 		dlg->set_myName( myAccount->acc_name);
@@ -1619,39 +1614,18 @@ void ClientWindow::slot_matchrequest(const QString &line, bool myrequest)
 		dlg->playerOpponentEdit->setText(opponent);
 		dlg->playerOpponentEdit->setReadOnly(true);
 		dlg->playerOpponentRkEdit->setText(rk);
-		dlg->set_myName( myAccount->acc_name);
+		dlg->set_myName(myAccount->acc_name);
 
 		if (opp_plays_white)
-		{
-/*			dlg->playerBlackEdit->setText(myAccount->acc_name);
-			dlg->playerBlackEdit->setReadOnly(true);
-			dlg->playerBlackRkEdit->setText(myAccount->get_rank());
-			dlg->playerWhiteEdit->setText(opponent);
-			dlg->playerWhiteEdit->setReadOnly(false);
-			dlg->playerWhiteRkEdit->setText(rk);
-*/
-			dlg->play_black_button->setChecked(true);
-
-
-		}
+			dlg->play_black_button->setChecked (true);
 		else if (opp_plays_nigiri)
-		{
-/*			dlg->playerWhiteEdit->setText(myAccount->acc_name);
-			dlg->playerWhiteEdit->setReadOnly(true);
-			dlg->playerWhiteRkEdit->setText(myAccount->get_rank());
-			dlg->playerBlackEdit->setText(opponent);
-			dlg->playerBlackEdit->setReadOnly(false);
-			dlg->playerBlackRkEdit->setText(rk);
-*/
-			dlg->play_nigiri_button->setChecked(true);
-		}
+			dlg->play_nigiri_button->setChecked (true);
 		else
-			dlg->play_white_button->setChecked(true);
+			dlg->play_white_button->setChecked (true);
 
 		dlg->buttonDecline->setEnabled(true);
 		dlg->buttonOffer->setText(tr("Accept"));
 		dlg->buttonCancel->setDisabled(true);
-
 	}
 
 	dlg->slot_changed();

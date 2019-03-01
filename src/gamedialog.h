@@ -10,10 +10,9 @@
 #include "ui_newgame_gui.h"
 #include "gs_globals.h"
 #include "defines.h"
-#include "misc.h"
 
 class GameDialog : public QDialog, public Ui::NewGameDialog
-{ 
+{
 	Q_OBJECT
 
 public:

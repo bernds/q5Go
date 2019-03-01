@@ -2,11 +2,11 @@
  *   gamedialog.cpp
  */
 //#include "setting.h"
-#include "gamedialog.h"
 #include "config.h"
 #include "misc.h"
 #include "defines.h"
 #include "komispinbox.h"
+#include "gamedialog.h"
 
 GameDialog::GameDialog(QWidget* parent, const QString &name)
 	: QDialog(parent), buttongroup (this)
@@ -39,44 +39,13 @@ GameDialog::~GameDialog()
 
 void GameDialog::slot_stats_opponent()
 {
-/* 	if (playerWhiteEdit->isReadOnly())
-	{
-		// ok, I am white
-		emit signal_sendcommand("stats " + playerBlackEdit->text(), false);
-	}
-	else
-	{
-		// ok, I am black
-		emit signal_sendcommand("stats " + playerWhiteEdit->text(), false);
-	}
-*/
 	emit signal_sendcommand("stats " + playerOpponentEdit->text(), false);
 
 
 }
 void GameDialog::slot_swapcolors()
 {
-qDebug("#### GameDialog::slot_swapcolors()");
-/*	QString save = playerWhiteEdit->text();
-	playerWhiteEdit->setText(playerBlackEdit->text());
-	playerBlackEdit->setText(save);
-
-	save = playerWhiteRkEdit->text();
-	playerWhiteRkEdit->setText(playerBlackRkEdit->text());
-	playerBlackRkEdit->setText(save);
-
-	// swap ReadOnly field
-	if (playerWhiteEdit->isReadOnly())
-	{
-		playerBlackEdit->setReadOnly(true);
-		playerWhiteEdit->setReadOnly(false);
-	}
-	else
-	{
-		playerBlackEdit->setReadOnly(false);
-		playerWhiteEdit->setReadOnly(true);
-	}
-*/
+	qDebug("#### GameDialog::slot_swapcolors()");
 	if(play_white_button->isChecked())
 		play_black_button->setChecked(true);
 	else
@@ -96,13 +65,7 @@ qDebug("#### GameDialog::slot_pbsuggest()");
 			if (!have_suggestdata)
 			{
 				// no suggestdata -> send suggest cmd
-/*				if (playerWhiteEdit->isReadOnly())
-					emit signal_sendcommand("suggest " + playerBlackEdit->text(), false);
-				else
-					emit signal_sendcommand("suggest " + playerWhiteEdit->text(), false);
-*/
 				emit signal_sendcommand("suggest " + playerOpponentEdit->text(), false);
-				
 			}
 			break;
 
@@ -129,12 +92,12 @@ qDebug("#### GameDialog::slot_pbsuggest()");
 		if (oppRk.contains("NR") || myRk.contains("NR"))
 			rkb = rkw;
 		else
-			rkb = rkToKey(myRk,true).toInt();//playerBlackRkEdit->text(), true).toInt();
-		
+			rkb = rkToKey(myRk, true).toInt();
+
 		// white is weaker than black? -> exchange
 		if (rkw < rkb)
 			slot_swapcolors();
-		
+
 		// calc handi & komi
 		int diff = abs(rkw - rkb) / 100;
 		if (diff > 9)
@@ -190,10 +153,6 @@ qDebug("#### GameDialog::slot_suggest()");
 		 myName != pwhite && pblack != QString(tr("you")))
 	{
 		// wrong suggest info
-		/*if (playerWhiteEdit->isReadOnly())
-			emit signal_sendcommand("suggest " + playerBlackEdit->text(), false);
-		else
-			emit signal_sendcommand("suggest " + playerWhiteEdit->text(), false);*/
 		emit signal_sendcommand("suggest " + playerOpponentEdit->text(), false);
 	}
 
@@ -214,42 +173,24 @@ qDebug("#### GameDialog::slot_suggest()");
 			handicapSpin->setValue(h13.toInt());
 			komiSpin->setValue(k13.toInt());
 			break;
-		
+
 		default:
 			break;
 	}
-/*
-	// check if button pressed -> set values immediatly
-	if (have_suggestdata)
-	{
-		slot_pbsuggest();
-		//pb_suggest->toggle();
-	}//*/
 }
 
 void GameDialog::slot_opponentopen(const QString &opp)
 {
-qDebug("#### GameDialog::slot_opponentopen()");
-	if (playerOpponentEdit->text() != opp)//(playerWhiteEdit->isReadOnly() && playerBlackEdit->text() != opp ||	    playerBlackEdit->isReadOnly() && playerWhiteEdit->text() != opp)
+	qDebug("#### GameDialog::slot_opponentopen()");
+	if (playerOpponentEdit->text() != opp)
 	    // not for me
 	    return;
 
 	QString me;
 	QString opponent = playerOpponentEdit->text();;
+
 	// send match command, send tell:
-	/*if (playerWhiteEdit->isReadOnly())
-	{
-		// ok, I am white
-		opponent = playerBlackEdit->text();
-		me = playerWhiteEdit->text();
-	}
-	else
-	{
-		// ok, I am black
-		opponent = playerWhiteEdit->text();
-		me = playerBlackEdit->text();
-	}
-	*/
+
 	// 24 *xxxx*: CLIENT: <qGo 1.9.12> match xxxx wants handicap 0, komi 0.5[, free]
 	// this command is not part of server preferences "use Komi" and "auto negotiation"
 	QString send = "tell " + opponent + " CLIENT: <qGo " + VERSION + "> match " +
@@ -340,7 +281,7 @@ void GameDialog::slot_decline()
 {
 	qDebug("#### GameDialog::slot_decline()");
 
-	QString opponent = playerOpponentEdit->text();//(playerWhiteEdit->isReadOnly() ? playerBlackEdit->text():playerWhiteEdit->text());
+	QString opponent = playerOpponentEdit->text();
 
 	if (buttonOffer->isChecked())
 	{
@@ -350,23 +291,6 @@ void GameDialog::slot_decline()
 		buttonOffer->setChecked(false);
 		buttonOffer->setText(tr("Offer"));
 	}
-/*	else if (playerWhiteEdit->isReadOnly())
-	{
-		// ok, I am white
-		emit signal_sendcommand("decline " + playerBlackEdit->text(), false);
-	}
-	else
-	{
-		// ok, I am black
-		emit signal_sendcommand("decline " + playerWhiteEdit->text(), false);
-	}
-
-	//buttonDecline->setDisabled(true);
-	//buttonOffer->setText(tr("Offer"));
-	//buttonCancel->setEnabled(true);
-
-  	//reject();
-*/
 	emit signal_sendcommand("decline " + opponent, false);
 	emit signal_removeDialog(opponent);
 
@@ -378,15 +302,15 @@ void GameDialog::slot_cancel()
 	if (is_nmatch)
 		emit signal_sendcommand("nmatch _cancel", false);
 
-	QString opponent = playerOpponentEdit->text();//(playerWhiteEdit->isReadOnly() ? playerBlackEdit->text():playerWhiteEdit->text());
+	QString opponent = playerOpponentEdit->text();
 
 	emit signal_removeDialog(opponent);
 }
 
 void GameDialog::slot_changed()
 {
-qDebug("#### GameDialog::slot_changed()");
-	if (playerOpponentEdit->text() == myName)// playerBlackEdit->text())
+	qDebug("#### GameDialog::slot_changed()");
+	if (playerOpponentEdit->text() == myName)
 	{
 		buttonOffer->setText(tr("Teaching"));
 		ComboBox_free->setEnabled(false);
@@ -422,8 +346,8 @@ qDebug("#### GameDialog::slot_changed()");
 
 void GameDialog::slot_matchcreate(const QString &nr, const QString &opponent)
 {
-qDebug("#### GameDialog::slot_matchcreate()");
-	if (playerOpponentEdit->text() == opponent)//(playerWhiteEdit->isReadOnly() && playerBlackEdit->text() == opponent ||	    playerBlackEdit->isReadOnly() && playerWhiteEdit->text() == opponent)
+	qDebug("#### GameDialog::slot_matchcreate()");
+	if (playerOpponentEdit->text() == opponent)
 	{
 		// current match has been created -> send settings
 		assessType kt;
@@ -451,11 +375,11 @@ qDebug("#### GameDialog::slot_matchcreate()");
 
 void GameDialog::slot_notopen(const QString &opponent)
 {
-qDebug("#### GameDialog::slot_notopen()");
+	qDebug("#### GameDialog::slot_notopen()");
 	if (opponent.isNull())
 	{
 		// IGS: no player named -> check if offering && focus set
-		if (buttonOffer->isChecked())// && QWidget::hasFocus())
+		if (buttonOffer->isChecked())
 		{
 			buttonOffer->setChecked(false);
 			buttonOffer->setText(tr("Offer"));
@@ -463,7 +387,7 @@ qDebug("#### GameDialog::slot_notopen()");
 			buttonCancel->setEnabled(true);
 		}
 	}
-	else if (playerOpponentEdit->text() == opponent)//(playerWhiteEdit->isReadOnly() && playerBlackEdit->text() == opponent ||	         playerBlackEdit->isReadOnly() && playerWhiteEdit->text() == opponent)
+	else if (playerOpponentEdit->text() == opponent)
 	{
 		buttonOffer->setChecked(false);
 		buttonOffer->setText(tr("Offer"));
@@ -476,8 +400,8 @@ qDebug("#### GameDialog::slot_notopen()");
 // if opponent has requestet for handicap, komi and/or free game
 void GameDialog::slot_komirequest(const QString &opponent, int h, float k, bool free)
 {
-qDebug("#### GameDialog::slot_komirequest()");
-	if (playerOpponentEdit->text() == opponent)//(playerWhiteEdit->isReadOnly() && playerBlackEdit->text() == opponent ||	    playerBlackEdit->isReadOnly() && playerWhiteEdit->text() == opponent)
+	qDebug("#### GameDialog::slot_komirequest()");
+	if (playerOpponentEdit->text() == opponent)
 	{
 //		cb_handicap->setChecked(true);
 		handicapSpin->setValue(h);
@@ -503,7 +427,7 @@ void GameDialog::slot_dispute(const QString &opponent, const QString &line)
 {
 	QString val;
 
-	if (playerOpponentEdit->text() == opponent)//(playerWhiteEdit->isReadOnly() && playerBlackEdit->text() == opponent ||	    playerBlackEdit->isReadOnly() && playerWhiteEdit->text() == opponent)
+	if (playerOpponentEdit->text() == opponent)
 
 	{
 		val = line.section(' ', 1, 1);
