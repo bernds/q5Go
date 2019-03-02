@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>406</height>
+    <height>414</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -79,7 +79,7 @@
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>20</height>
+       <height>1</height>
       </size>
      </property>
     </spacer>
@@ -118,31 +118,9 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="_OkPushButton">
-       <property name="text">
-        <string>&amp;OK</string>
-       </property>
-       <property name="shortcut">
-        <string/>
-       </property>
-       <property name="autoDefault">
-        <bool>true</bool>
-       </property>
-       <property name="default">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="_CancelPushButton">
-       <property name="text">
-        <string>&amp;Cancel</string>
-       </property>
-       <property name="shortcut">
-        <string/>
-       </property>
-       <property name="autoDefault">
-        <bool>true</bool>
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
        </property>
       </widget>
      </item>
@@ -230,66 +208,11 @@
      <property name="title">
       <string>Game parameters</string>
      </property>
-     <layout class="QGridLayout">
-      <item row="1" column="1">
-       <widget class="KomiSpinBox" name="komiSpin" native="true">
-        <property name="minimumSize">
-         <size>
-          <width>20</width>
-          <height>20</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>60</width>
-          <height>32767</height>
-         </size>
-        </property>
-        <property name="focusPolicy">
-         <enum>Qt::StrongFocus</enum>
-        </property>
-        <property name="acceptDrops">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="TextLabel4">
-        <property name="text">
-         <string>Komi:</string>
-        </property>
-        <property name="wordWrap">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QSpinBox" name="handicapSpinBox">
-        <property name="maximumSize">
-         <size>
-          <width>60</width>
-          <height>32767</height>
-         </size>
-        </property>
-        <property name="maximum">
-         <number>13</number>
-        </property>
-       </widget>
-      </item>
+     <layout class="QFormLayout" name="formLayout_2">
       <item row="0" column="0">
        <widget class="QLabel" name="TextLabel3">
         <property name="text">
          <string>Board size:</string>
-        </property>
-        <property name="wordWrap">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="TextLabel5">
-        <property name="text">
-         <string>Handicap:</string>
         </property>
         <property name="wordWrap">
          <bool>false</bool>
@@ -315,18 +238,57 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="2">
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
+      <item row="1" column="0">
+       <widget class="QLabel" name="TextLabel4">
+        <property name="text">
+         <string>Komi:</string>
         </property>
-        <property name="sizeHint" stdset="0">
+        <property name="wordWrap">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="KomiSpinBox" name="komiSpin">
+        <property name="maximumSize">
          <size>
-          <width>40</width>
-          <height>20</height>
+          <width>60</width>
+          <height>32767</height>
          </size>
         </property>
-       </spacer>
+        <property name="focusPolicy">
+         <enum>Qt::StrongFocus</enum>
+        </property>
+        <property name="acceptDrops">
+         <bool>true</bool>
+        </property>
+        <property name="decimals">
+         <number>1</number>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="TextLabel5">
+        <property name="text">
+         <string>Handicap:</string>
+        </property>
+        <property name="wordWrap">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QSpinBox" name="handicapSpinBox">
+        <property name="maximumSize">
+         <size>
+          <width>60</width>
+          <height>32767</height>
+         </size>
+        </property>
+        <property name="maximum">
+         <number>13</number>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -337,14 +299,12 @@
  <customwidgets>
   <customwidget>
    <class>KomiSpinBox</class>
-   <extends>QWidget</extends>
-   <header location="global">komispinbox.h</header>
+   <extends>QDoubleSpinBox</extends>
+   <header>komispinbox.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>gameToLoad</tabstop>
-  <tabstop>_OkPushButton</tabstop>
-  <tabstop>_CancelPushButton</tabstop>
  </tabstops>
  <includes>
   <include location="local">komispinbox.h</include>
@@ -353,38 +313,6 @@
   <include location="q4go.qrc"/>
  </resources>
  <connections>
-  <connection>
-   <sender>_OkPushButton</sender>
-   <signal>clicked()</signal>
-   <receiver>NewAIGameDlgGui</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>_CancelPushButton</sender>
-   <signal>clicked()</signal>
-   <receiver>NewAIGameDlgGui</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>_FilePathButton</sender>
    <signal>clicked()</signal>

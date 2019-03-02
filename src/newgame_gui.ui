@@ -366,6 +366,9 @@
           <height>32767</height>
          </size>
         </property>
+        <property name="decimals">
+         <number>1</number>
+        </property>
        </widget>
       </item>
       <item row="2" column="0">
@@ -562,7 +565,7 @@
  <customwidgets>
   <customwidget>
    <class>KomiSpinBox</class>
-   <extends>QSpinBox</extends>
+   <extends>QDoubleSpinBox</extends>
    <header>komispinbox.h</header>
   </customwidget>
  </customwidgets>

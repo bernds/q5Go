@@ -8,6 +8,10 @@ NewVariantGameDialog::NewVariantGameDialog (QWidget* parent)
 {
 	setupUi (this);
 	setModal (true);
+
+	connect (buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+	connect (buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+
 	void (QSpinBox::*changed) (int) = &QSpinBox::valueChanged;
 	connect (xSizeSpin, changed, [=] (int) { update_grid (); });
 	connect (ySizeSpin, changed, [=] (int) { update_grid (); });

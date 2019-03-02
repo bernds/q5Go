@@ -14,6 +14,9 @@ NewAIGameDlg::NewAIGameDlg( QWidget* parent, const QList<Engine *> engines)
 	setupUi(this);
 	setModal (true);
 
+	connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+	connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+
 	for (auto e: engines)
 		engineComboBox->addItem (e->title ());
 

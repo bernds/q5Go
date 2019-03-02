@@ -1,9 +1,11 @@
 /*
- * debugdialog.h
+ * miscdialogs.h
  */
 
-#ifndef DEBUGDIALOG_H
-#define DEBUGDIALOG_H
+#ifndef MISCDIALOGS_H
+#define MISCDIALOGS_H
+
+#include <QDialogButtonBox>
 
 #include "ui_gameinfo_gui.h"
 class GameInfoDialog : public QDialog, public Ui::GameInfoDialog
@@ -16,6 +18,9 @@ public:
 	{
 		setupUi (this);
 		setModal (true);
+
+		connect (buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+		connect (buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 	}
 };
 
@@ -46,6 +51,8 @@ public:
 	{
 		setupUi (this);
 		setModal (true);
+		connect (buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+		connect (buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 	}
 };
 
@@ -79,4 +86,4 @@ public:
 	}
 };
 
-#endif // DEBUGDIALOG_H
+#endif // MISCDIALOGS_H

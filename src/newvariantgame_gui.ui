@@ -7,39 +7,15 @@
     <x>0</x>
     <y>0</y>
     <width>579</width>
-    <height>384</height>
+    <height>390</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>New Variant Game</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
-    <number>0</number>
-   </property>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,1">
-     <property name="leftMargin">
-      <number>8</number>
-     </property>
-     <property name="topMargin">
-      <number>8</number>
-     </property>
-     <property name="rightMargin">
-      <number>8</number>
-     </property>
-     <property name="bottomMargin">
-      <number>8</number>
-     </property>
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
@@ -195,13 +171,7 @@
              </widget>
             </item>
             <item>
-             <widget class="KomiSpinBox" name="komiSpin" native="true">
-              <property name="minimumSize">
-               <size>
-                <width>20</width>
-                <height>20</height>
-               </size>
-              </property>
+             <widget class="KomiSpinBox" name="komiSpin">
               <property name="maximumSize">
                <size>
                 <width>60</width>
@@ -213,6 +183,9 @@
               </property>
               <property name="acceptDrops">
                <bool>true</bool>
+              </property>
+              <property name="decimals">
+               <number>1</number>
               </property>
              </widget>
             </item>
@@ -378,18 +351,6 @@
      <property name="spacing">
       <number>6</number>
      </property>
-     <property name="leftMargin">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
-     <property name="bottomMargin">
-      <number>0</number>
-     </property>
      <item>
       <spacer name="Horizontal Spacing2">
        <property name="orientation">
@@ -400,23 +361,16 @@
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>20</width>
+         <width>1</width>
          <height>20</height>
         </size>
        </property>
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="buttonOk">
-       <property name="text">
-        <string>&amp;Ok</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="buttonCancel">
-       <property name="text">
-        <string>&amp;Cancel</string>
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
        </property>
       </widget>
      </item>
@@ -426,14 +380,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KomiSpinBox</class>
-   <extends>QWidget</extends>
-   <header location="global">komispinbox.h</header>
-  </customwidget>
-  <customwidget>
    <class>SizeGraphicsView</class>
    <extends>QGraphicsView</extends>
    <header>sizegraphicsview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KomiSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>komispinbox.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
@@ -442,44 +396,9 @@
   <tabstop>xSizeSpin</tabstop>
   <tabstop>ySizeSpin</tabstop>
   <tabstop>komiSpin</tabstop>
-  <tabstop>buttonOk</tabstop>
-  <tabstop>buttonCancel</tabstop>
  </tabstops>
  <resources>
   <include location="q4go.qrc"/>
  </resources>
- <connections>
-  <connection>
-   <sender>buttonCancel</sender>
-   <signal>clicked()</signal>
-   <receiver>NewVariantGameDialog</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonOk</sender>
-   <signal>clicked()</signal>
-   <receiver>NewVariantGameDialog</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>
