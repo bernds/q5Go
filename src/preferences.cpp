@@ -222,6 +222,7 @@ PreferencesDialog::PreferencesDialog (int tab, QWidget* parent)
 	connect (ui->whiteSpecSlider, &QSlider::valueChanged, [=] (int) { update_w_stones (); });
 	connect (ui->whiteFlatSlider, &QSlider::valueChanged, [=] (int) { update_w_stones (); });
 	connect (ui->ambientSlider, &QSlider::valueChanged, [=] (int) { update_w_stones (); update_b_stones (); });
+	connect (ui->shadowSlider, &QSlider::valueChanged, [=] (int) { update_w_stones (); update_b_stones (); });
 	connect (ui->stripesCheckBox, &QCheckBox::toggled, [=] (int) { update_w_stones (); });
 
 	void (QComboBox::*cic) (int) = &QComboBox::currentIndexChanged;
@@ -436,6 +437,7 @@ void PreferencesDialog::init_from_settings ()
 	ui->whiteFlatSlider->setValue (setting->readIntEntry("STONES_WFLAT"));
 	ui->blackFlatSlider->setValue (setting->readIntEntry("STONES_BFLAT"));
 	ui->ambientSlider->setValue (setting->readIntEntry("STONES_AMBIENT"));
+	ui->shadowSlider->setValue (setting->readIntEntry("STONES_SHADOWVAL"));
 	ui->shadersComboBox->setCurrentIndex (setting->readIntEntry("STONES_PRESET"));
 
 	ui->lineScaleCheckBox->setChecked (setting->readBoolEntry("BOARD_LINESCALE"));
@@ -569,9 +571,9 @@ void PreferencesDialog::update_stone_params ()
 		auto vals = std::make_tuple (std::make_tuple (ui->blackRoundSlider->value (), ui->blackSpecSlider->value (), ui->blackFlatSlider->value (), ui->blackHardSlider->value ()),
 					     std::make_tuple (ui->whiteRoundSlider->value (), ui->whiteSpecSlider->value (), ui->whiteFlatSlider->value (), ui->whiteHardSlider->value ()),
 					     ui->ambientSlider->value (), ui->stripesCheckBox->isChecked ());
-		m_ih->set_stone_params (vals);
+		m_ih->set_stone_params (vals, ui->shadowSlider->value ());
 	} else
-		m_ih->set_stone_params (shader_idx - 1);
+		m_ih->set_stone_params (shader_idx - 1, ui->shadowSlider->value ());
 
 	int look = 3;
 	if (ui->radioButtonStones_2D->isChecked ())
@@ -694,6 +696,7 @@ void PreferencesDialog::slot_apply()
 	setting->writeIntEntry ("STONES_WFLAT", ui->whiteFlatSlider->value ());
 	setting->writeIntEntry ("STONES_BFLAT", ui->blackFlatSlider->value ());
 	setting->writeIntEntry ("STONES_AMBIENT", ui->ambientSlider->value ());
+	setting->writeIntEntry ("STONES_SHADOWVAL", ui->shadowSlider->value ());
 	setting->writeIntEntry ("STONES_PRESET", ui->shadersComboBox->currentIndex ());
 	setting->writeEntry ("STONES_BCOL", black_color ().name ());
 	setting->writeEntry ("STONES_WCOL", white_color ().name ());

@@ -109,6 +109,7 @@ Setting::Setting()
 	writeIntEntry("STONES_WHARD", 7);
 	writeIntEntry("STONES_WSPEC", 80);
 	writeIntEntry("STONES_AMBIENT", 15);
+	writeIntEntry("STONES_SHADOWVAL", 100);
 
 	writeEntry("STONES_BCOL", "#101010");
 	writeEntry("STONES_WCOL", "#FFFFFF");

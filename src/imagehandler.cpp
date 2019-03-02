@@ -117,9 +117,10 @@ void ImageHandler::paint_shadow_stone (QImage &si, int d)
 		for (j=0; j<d; j++) {
 			di=i-d2; dj=j-d2;
 			hh=r-sqrt(di*di+dj*dj);
-			if (hh>=0) {
-				hh=2*hh/r ;
-				if (hh> 1)  hh=1;
+			if (hh >= 0) {
+				hh = 2 * hh / r;
+				hh *= m_shadow;
+				if (hh > 1) hh = 1;
 
 				pw[k]=((int)(255*hh)<<24)|(1<<16)|(1<<8)|(1);
 			}
@@ -653,7 +654,7 @@ static std::vector<std::tuple<ImageHandler::t_params, ImageHandler::t_params, in
   { { 84, 90, 0, 29 }, { 84, 89, 0, 91 }, 75, true },
   { { 8, 90, 0, 41 }, { 8, 61, 0, 27 }, 58, true } };
 
-void ImageHandler::set_stone_params (const std::tuple<t_params, t_params, int, bool> &used_vals)
+void ImageHandler::set_stone_params (const std::tuple<t_params, t_params, int, bool> &used_vals, int shadow)
 {
 	ImageHandler::t_params bvals, wvals;
 	int ambv;
@@ -671,11 +672,12 @@ void ImageHandler::set_stone_params (const std::tuple<t_params, t_params, int, b
 	m_b_hard = 1 + bhv / 10.0;
 	m_w_hard = 1 + whv / 10.0;
 	m_ambient = ambv / 100.0;
+	m_shadow = shadow / 100.0;
 }
 
-void ImageHandler::set_stone_params (int preset)
+void ImageHandler::set_stone_params (int preset, int shadow)
 {
-	set_stone_params (presets[preset]);
+	set_stone_params (presets[preset], shadow);
 }
 
 void ImageHandler::stone_params_from_settings ()
@@ -692,9 +694,9 @@ void ImageHandler::stone_params_from_settings ()
 							      setting->readIntEntry ("STONES_WHARD")),
 					     setting->readIntEntry ("STONES_AMBIENT"),
 					     setting->readBoolEntry ("STONES_STRIPES"));
-		set_stone_params (vals);
+		set_stone_params (vals, setting->readIntEntry ("STONES_SHADOWVAL"));
 	} else
-		set_stone_params (preset - 1);
+		set_stone_params (preset - 1, setting->readIntEntry ("STONES_SHADOWVAL"));
 
 	m_look = setting->readIntEntry ("STONES_LOOK");
 

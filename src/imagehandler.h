@@ -22,6 +22,7 @@ class ImageHandler
 	QColor m_w_col {255, 255, 255, 255};
 	QColor m_b_col {60, 60, 60, 255};
 	double m_ambient { 0.2 };
+	double m_shadow { 1 };
 	bool m_clamshell;
 	int m_look;
 
@@ -39,8 +40,8 @@ public:
 
 	typedef std::tuple<int, int, int, int> t_params;
 
-	void set_stone_params (const std::tuple<t_params, t_params, int, bool> &);
-	void set_stone_params (int preset);
+	void set_stone_params (const std::tuple<t_params, t_params, int, bool> &, int);
+	void set_stone_params (int preset, int shadow);
 	void set_stone_look (int l) { m_look = l; }
 	void paint_one_stone (QImage &, bool white, int size, int idx = 0);
 	void paint_shadow_stone (QImage &si, int d);
