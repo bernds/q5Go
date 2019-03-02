@@ -1231,6 +1231,9 @@
       <property name="name" stdset="0">
 	<cstring>fileQuit</cstring>
       </property>
+      <property name="menuRole">
+       <enum>QAction::QuitRole</enum>
+      </property>
     </action>
     <action name="fileNewBoard">
       <property name="icon">

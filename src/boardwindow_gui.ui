@@ -3559,6 +3559,9 @@ Enable diagram display in the View menu to view and edit diagrams.</string>
    <property name="shortcut">
     <string>Ctrl+Q</string>
    </property>
+   <property name="menuRole">
+    <enum>QAction::QuitRole</enum>
+   </property>
   </action>
   <action name="fileExportASCII">
    <property name="text">
