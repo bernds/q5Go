@@ -432,7 +432,7 @@ QString Setting::getTranslationsDirectory()
 	CFURLRef bundleRef = CFBundleCopyBundleURL(CFBundleGetMainBundle());
 	CFStringRef bundlePath = CFURLCopyFileSystemPath(bundleRef, kCFURLPOSIXPathStyle);
 	list << (QString)CFStringGetCStringPtr(bundlePath, CFStringGetSystemEncoding())
-		+ "/Contents/Resources";
+        + "/Contents/Resources/translations";
 #else
 	list	<< DATADIR "/translations"
 		<< QApplication::applicationDirPath() + "/translations"
