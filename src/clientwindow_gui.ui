@@ -971,6 +971,9 @@
       <property name="name" stdset="0">
 	<cstring>helpAboutApp</cstring>
       </property>
+      <property name="menuRole">
+       <enum>QAction::AboutRole</enum>
+      </property>
     </action>
     <action name="Disconnect">
       <property name="checkable">
@@ -1199,6 +1202,9 @@
       <property name="name" stdset="0">
 	<cstring>setPreferences</cstring>
       </property>
+      <property name="menuRole">
+       <enum>QAction::PreferencesRole</enum>
+      </property>
     </action>
     <action name="fileQuit">
       <property name="icon">
@@ -1353,6 +1359,9 @@
       </property>
       <property name="name" stdset="0">
 	<cstring>helpAboutQt</cstring>
+      </property>
+      <property name="menuRole">
+       <enum>QAction::AboutQtRole</enum>
       </property>
     </action>
     <action name="fileNew">
