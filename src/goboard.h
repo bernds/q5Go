@@ -375,6 +375,7 @@ public:
 private:
 	void recalc_liberties ();
 	void find_territory_units (const bit_array &w_stones, const bit_array &b_stones);
+	bit_array init_fill (int, const bit_array &, bool);
 	void flood_step (bit_array &next, const bit_array &fill);
 	void flood_fill (bit_array &fill, const bit_array &boundary);
 	void finish_scoring_markers (const bit_array *do_not_count);

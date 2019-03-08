@@ -255,6 +255,42 @@ public:
 		}
 		return cnt;
 	}
+	unsigned ffs (int test = 0) const
+	{
+		int elt = test / 64;
+		int bitpos = test % 64;
+		uint64_t mask = (uint64_t)1 << bitpos;
+		while (elt < m_n_elts) {
+			uint64_t v = m_bits[elt];
+			while (mask != 0) {
+				if (v & mask)
+					return test;
+				mask <<= 1;
+				test++;
+			}
+			mask = 1;
+			elt++;
+		}
+		return m_n_bits;
+	}
+	unsigned ffz (int test = 0) const
+	{
+		int elt = test / 64;
+		int bitpos = test % 64;
+		uint64_t mask = (uint64_t)1 << bitpos;
+		while (elt < m_n_elts) {
+			uint64_t v = m_bits[elt];
+			while (mask != 0) {
+				if ((v & mask) == 0)
+					return test;
+				mask <<= 1;
+				test++;
+			}
+			mask = 1;
+			elt++;
+		}
+		return m_n_bits;
+	}
 };
 
 #endif

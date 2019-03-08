@@ -121,6 +121,7 @@ public:
 	}
 };
 
+#ifndef TEST
 /* There is pain around trying to support Unicode characters in file names
    across multiple platforms.
    QFile in Qt4 did not support them correctly on either Windows or Linux.
@@ -147,5 +148,6 @@ public:
 };
 
 extern sgf *load_sgf (const IODeviceAdapter &);
+#endif
 
 #endif

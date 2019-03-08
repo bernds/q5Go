@@ -163,6 +163,25 @@ bool bit_array::intersect_p (const bit_array &other, int shift) const
 	return false;
 }
 
+/* Try to reduce number of flood fill steps by initializing with a reasonable default:
+   look down and to the right from the first position we found and initialize bits
+   that are in/out of bounds as appropriate.  */
+bit_array go_board::init_fill (int bp, const bit_array &bounds, bool in)
+{
+	bit_array fill (bitsize ());
+	int rem_len = m_sz_x - bp % m_sz_x;
+	for (int y = bp; y < bitsize (); y += m_sz_x)  {
+		if (bounds.test_bit (y) != in)
+			break;
+		for (int i = 0; i < rem_len; i++) {
+			if (bounds.test_bit (y + i) != in)
+				break;
+			fill.set_bit (y + i);
+		}
+	}
+	return fill;
+}
+
 /* Extend a bit mask in all directions.  */
 void go_board::flood_step (bit_array &next, const bit_array &fill)
 {
@@ -238,7 +257,7 @@ void go_board::identify_units ()
 	m_units_b.clear ();
 
 	bit_array handled (bitsize ());
-#ifdef DEBUG
+#ifdef CHECKING
 	unsigned found_w = 0;
 	unsigned found_b = 0;
 #endif
@@ -258,21 +277,7 @@ void go_board::identify_units ()
 			} else
 				continue;
 			std::vector<stone_unit> &units = col == black ? m_units_b : m_units_w;
-			bit_array unit (bitsize ());
-			unit.set_bit (i);
-			/* Extend vertically and horizontally as far
-			   as possible, to try to reduce the number of
-			   flood fill operations needed.  */
-			for (int x0 = x + 1; x0 < m_sz_x; x0++)
-				if (stones->test_bit (bitpos (x0, y)))
-					unit.set_bit (bitpos (x0, y));
-				else
-					break;
-			for (int y0 = y + 1; y0 < m_sz_y; y0++)
-				if (stones->test_bit (bitpos (x, y0)))
-					unit.set_bit (bitpos (x, y0));
-				else
-					break;
+			bit_array unit = init_fill (i, *stones, true);
 
 			bit_array next (unit);
 			for (;;) {
@@ -282,7 +287,7 @@ void go_board::identify_units ()
 					break;
 				unit = next;
 			}
-#ifdef DEBUG
+#ifdef CHECKING
 			if (handled.intersect_p (unit))
 				throw std::logic_error ("overlapping groups");
 			if (col == white)
@@ -295,11 +300,12 @@ void go_board::identify_units ()
 			units.emplace_back (next, n_liberties);
 		}
 	}
-#ifdef DEBUG
+#ifdef CHECKING
 	if (found_w != m_stones_w->popcnt () || found_b != m_stones_b->popcnt ())
 		throw std::logic_error ("unit search didn't find all stones.");
 #endif
 }
+
 void go_board::toggle_alive (int x, int y, bool flood)
 {
 	int bp = bitpos (x, y);
@@ -398,18 +404,21 @@ void go_board::find_territory_units (const bit_array &w_stones, const bit_array 
 {
 	m_units_t.clear ();
 	m_units_st.clear ();
-	bit_array handled (bitsize ());
+	bit_array handled (w_stones);
+	handled.ior (b_stones);
 	bit_array dead_stones = *m_stones_w;
 	dead_stones.ior (*m_stones_b);
 	dead_stones.andnot (w_stones);
 	dead_stones.andnot (b_stones);
+
 	for (int i = 0; i < bitsize (); i++) {
-		if (handled.test_bit (i))
-			continue;
-
-		if (w_stones.test_bit (i) || b_stones.test_bit (i))
-			continue;
-
+		i = handled.ffz (i);
+		if (i == bitsize ())
+			break;
+#ifdef CHECKING
+		if (i > bitsize () || handled.test_bit (i))
+			throw std::logic_error ("ffz didn't work");
+#endif
 		bit_array fill (bitsize ());
 		fill.set_bit (i);
 		bool neighbours_b = false, neighbours_w = false;
@@ -421,6 +430,10 @@ void go_board::find_territory_units (const bit_array &w_stones, const bit_array 
 			m_units_st.emplace_back (fill, neighbours_w, neighbours_b, false);
 		handled.ior (fill);
 	}
+#ifdef CHECKING
+	if (handled.popcnt () != bitsize ())
+		throw std::logic_error ("didn't find all territory");
+#endif
 }
 
 /* Enclosed areas, as per Benson's algorithm.  Flood fill through any area not containing stones of
@@ -429,17 +442,15 @@ void go_board::find_territory_units (const bit_array &w_stones, const bit_array 
 std::vector<go_board::enclosed_area> go_board::find_eas (const bit_array &stones, const bit_array &other_stones)
 {
 	std::vector<enclosed_area> ea;
-	bit_array handled (bitsize ());
+	bit_array handled = stones;
 	for (int i = 0; i < bitsize (); i++) {
-		if (handled.test_bit (i))
-			continue;
+		i = handled.ffz (i);
+		if (i == bitsize ())
+			break;
 
-		if (stones.test_bit (i))
-			continue;
-
-		bit_array fill (bitsize ());
-		fill.set_bit (i);
+		bit_array fill = init_fill (i, stones, false);
 		flood_fill (fill, stones);
+
 		bit_array border (fill);
 		flood_step (border, fill);
 		border.andnot (fill);
@@ -898,6 +909,10 @@ void go_board::add_stone (int x, int y, stone_color col, bool process_captures)
 		recalc_liberties ();
 	}
 	verify_invariants ();
+#if 0 && defined CHECKING
+	identify_units ();
+	verify_invariants ();
+#endif
 }
 
 bool go_board::valid_move_p (int x, int y, stone_color col)
@@ -986,61 +1001,39 @@ void go_board::verify_invariants ()
 }
 
 #ifdef TEST
+#include <stdlib.h>
+
 int main ()
 {
-	bit_array nomask (0);
-	{
-		bit_array low (65);
-		low.set_bit (0);
-		bit_array high (65);
-		high.set_bit (64);
-		bit_array t1 (65), t2 (65);
-		t1.ior (low, 64, nomask);
-		t2.ior (high, -64, nomask);
-		t1.debug ();
-		t2.debug ();
+	for (int round = 0; round < 100; round++) {
+		int sz = rand () % 200 + 100;
+		bit_array arr (sz);
+		int *vals = new int[sz] ();
+		int count = 0;
+		for (int i = 0; i < sz; i++)
+			if (rand () % 2) {
+				vals[count++] = i;
+				arr.set_bit (i);
+			}
+		int verify;
+		int pos = 0;
+		for (verify = 0; verify < sz; verify++) {
+			verify = arr.ffs (verify);
+			if (verify > sz)
+				abort ();
+			if (verify == sz)
+				break;
+			if (pos >= count)
+				abort ();
+			if (verify != vals[pos])
+				abort ();
+			pos++;
+		}
+		if (pos != count)
+			abort ();
+		delete[] vals;
 	}
-	{
-		bit_array low (66);
-		low.set_bit (0);
-		bit_array high (66);
-		high.set_bit (65);
-		bit_array t1 (66), t2 (66);
-		t1.ior (low, 65, nomask);
-		t2.ior (high, -65, nomask);
-		t1.debug ();
-		t2.debug ();
-	}
-	{
-		bit_array low (66);
-		low.set_bit (0);
-		low.set_bit (1);
-		low.set_bit (2);
-		bit_array high (66);
-		high.set_bit (65);
-		high.set_bit (64);
-		high.set_bit (63);
-		bit_array t1 (66), t2 (66);
-		t1.ior (low, 63, nomask);
-		t2.ior (high, -63, nomask);
-		t1.debug ();
-		t2.debug ();
-	}
-
-	bit_array a (20);
-	bit_array b (20, true);
-	bit_array c (20), d (20);
-	a.set_bit (19);
-	a.set_bit (6);
-	b.clear_bit (5);
-	b.clear_bit (2);
-	b.clear_bit (1);
-	c.ior (b, -1, nomask);
-	d.ior (a, 4, nomask);
-	a.debug ();
-	b.debug ();
-	c.debug ();
-	d.debug ();
-
+	printf ("Tests OK.\n");
+	return 0;
 }
 #endif
