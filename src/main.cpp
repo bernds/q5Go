@@ -111,6 +111,9 @@ static void warn_errors (std::shared_ptr<game_record> gr)
 	if (errs.malformed_eval) {
 		QMessageBox::warning (0, PACKAGE, QObject::tr ("The SGF contained evaluation data that could not be understood."));
 	}
+	if (errs.move_outside_board) {
+		QMessageBox::warning (0, PACKAGE, QObject::tr ("The SGF contained moves outside of the board area.  They were converted to passes."));
+	}
 }
 
 /* A wrapper around sgf2record to handle exceptions with message boxes.  */

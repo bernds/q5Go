@@ -295,6 +295,13 @@ static void add_to_game_state (game_state *gs, sgf::node *n, bool force, QTextCo
 
 					move_x = coord_from_letter (v[0]);
 					move_y = coord_from_letter (v[1]);
+					if (move_x < 0 || move_y < 0 || move_x >= new_board.size_x () || move_y >= new_board.size_y ()) {
+						is_pass = true;
+						/* [tt] is a backwards compatibility synonym for pass.   */
+						if (move_x != 19 || move_y != 19)
+							errs.move_outside_board = true;
+						continue;
+					}
 					if (new_board.stone_at (move_x, move_y) != none) {
 						/* We'd like to throw, but Kogo's Joseki Dictionary has
 						   such errors.  */
