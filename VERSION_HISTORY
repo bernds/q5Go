@@ -1,3 +1,16 @@
+q5Go 0.7
+
+These are major user-visible changes in 0.7:
+ * Old SGFs and a few new ones use a move at 20:20 to signal pass which
+   caused problems when loading such SGFs.
+ * q5go can now read kombilo databases.  There is a new file open dialog
+   to select a game from the database; it has preview functionality to
+   display game information and allow browsing through the game moves.
+ * Visibility of menu, status bar, side bar and slider in the board
+   window are now saved as part of the layout.  Whatever preferences
+   option there were have been removed, except for the one to choose
+   whether to place the side bar to the left or the right.
+
 q5Go 0.6
 
 Version 0.6 adds no major new features, but adds a number of smaller fixes

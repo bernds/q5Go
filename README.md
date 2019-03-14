@@ -1,4 +1,4 @@
-## q5Go 0.6
+## q5Go 0.7
 
 This is a tool for Go players which performs the following functions:
 - SGF editor
@@ -18,23 +18,16 @@ and modernized.
 
 ![screenshot](screens/screenshot.png)
 
-Version 0.6 adds no major new features, but adds a number of smaller fixes
-and refinements:
- * Better support for various character sets
- * Better support for various broken SGF files that occur in the wild
- * An "auto-collapse" mode for the game tree, which shows only the
-   current variation and the ones following it and collapses everything
-   else
- * A tooltip preview for the game tree
- * A file open dialog with an SGF preview
- * An improved version of the batch analysis dialog, with a list view
-   for finished jobs and an engine selector
- * Better stone sounds
- * An "automatic diagrams" dialog which can create figures and diagrams
-   for an entire file
- * Image export functionality for the evaluation graph
- * Better game tree headers on Windows, working around a Qt problem
- * An updated Chinese translation
+These are major user-visible changes in 0.7:
+ * Old SGFs and a few new ones use a move at 20:20 to signal pass which
+   caused problems when loading such SGFs.
+ * q5go can now read kombilo databases.  There is a new file open dialog
+   to select a game from the database; it has preview functionality to
+   display game information and allow browsing through the game moves.
+ * Visibility of menu, status bar, side bar and slider in the board
+   window are now saved as part of the layout.  Whatever preferences
+   option there were have been removed, except for the one to choose
+   whether to place the side bar to the left or the right.
 
 See VERSION_HISTORY for a history of changes.
 
@@ -99,6 +92,14 @@ they want.  These layouts can be saved and restored, and the program
 tries to restore the correct layout whenever a new window is opened.
 
 ![screenshot](screens/docks.png)
+
+### Database support
+
+q5go can access a Kombilo database and search it by player name or
+game event or date. This functions as an alternative file open dialog
+with preview functionality.
+
+![screenshot](screens/database.png)
 
 ### Go variants
 
