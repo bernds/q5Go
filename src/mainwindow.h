@@ -10,6 +10,7 @@
 #include <QLabel>
 #include <QAction>
 #include <QMainWindow>
+#include <QAbstractItemModel>
 
 #include "qgo.h"
 #include "preferences.h"
@@ -25,6 +26,30 @@ class QSplitter;
 class QToolBar;
 class Engine;
 class GameTree;
+
+/* This keeps track of analyzer_ids, which are combinations of engine name and
+   komi.  The evaluation graph shows one line per id.  */
+class an_id_model : public QAbstractItemModel {
+	std::vector<analyzer_id> m_entries;
+public:
+	an_id_model ()
+	{
+	}
+	void populate_list (std::shared_ptr<game_record>);
+
+	const std::vector<analyzer_id> &entries () const { return m_entries; }
+	void notice_analyzer_id (const analyzer_id &);
+
+	virtual QVariant data (const QModelIndex &index, int role = Qt::DisplayRole) const override;
+	QModelIndex index (int row, int col, const QModelIndex &parent = QModelIndex()) const override;
+	QModelIndex parent (const QModelIndex &index ) const override;
+	int rowCount (const QModelIndex &parent = QModelIndex()) const override;
+	int columnCount (const QModelIndex &parent = QModelIndex()) const override;
+	QVariant headerData (int section, Qt::Orientation orientation,
+			     int role = Qt::DisplayRole) const override;
+
+	// Qt::ItemFlags flags(const QModelIndex &index) const override;
+};
 
 class MainWindow : public QMainWindow, public Ui::BoardWindow
 {
@@ -45,6 +70,8 @@ class MainWindow : public QMainWindow, public Ui::BoardWindow
 	QGraphicsRectItem *m_eval_bar;
 	QGraphicsTextItem *m_w_time, *m_b_time;
 	double m_eval;
+
+	an_id_model m_an_id_model;
 
 	void toggleSliderSignal(bool b) { sliderSignalToggle = b; }
 

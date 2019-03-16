@@ -14,20 +14,20 @@
 class game_state;
 class game_record;
 class MainWindow;
+class an_id_model;
 
 class EvalGraph : public QGraphicsView
 {
 	Q_OBJECT
 
 	MainWindow *m_win {};
+	const an_id_model *m_model {};
 
 	std::shared_ptr<game_record> m_game {};
 	game_state *m_active {};
 	QGraphicsScene *m_scene;
 	QBrush *m_brush;
 	double m_step;
-
-	std::vector<analyzer_id> m_ids;
 
 protected:
 	virtual void mousePressEvent (QMouseEvent *e) override;
@@ -39,9 +39,8 @@ public slots:
 public:
 	EvalGraph (QWidget *parent);
 	~EvalGraph () { delete m_brush; delete m_scene; }
-	void set_board_win (MainWindow *win) { m_win = win; }
+	void set_board_win (MainWindow *win, const an_id_model *m) { m_win = win; m_model = m; }
 	void update (std::shared_ptr<game_record> gr, game_state *);
-	void notice_analyzer_id (const analyzer_id &);
 
 	void update_prefs ();
 

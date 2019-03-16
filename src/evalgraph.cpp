@@ -99,20 +99,6 @@ void EvalGraph::export_file (bool)
 		QMessageBox::warning (this, PACKAGE, tr("Failed to save image!"));
 }
 
-/* Called from the board window to notify us that an evaluation from NEW_ID came in.  */
-void EvalGraph::notice_analyzer_id (const analyzer_id &new_id)
-{
-	bool found = false;
-	for (auto id: m_ids)
-		if (id == new_id) {
-			found = true;
-			break;
-		}
-	if (!found)
-		m_ids.push_back (new_id);
-	update (m_game, m_active);
-}
-
 void EvalGraph::update (std::shared_ptr<game_record> gr, game_state *active)
 {
 	int w = width ();
@@ -130,15 +116,6 @@ void EvalGraph::update (std::shared_ptr<game_record> gr, game_state *active)
 
 	game_state *r = gr->get_root ();
 
-	if (m_game != gr) {
-		m_ids.clear ();
-		std::function<bool (game_state *)> f = [this] (game_state *st) -> bool
-			{
-				st->collect_analyzers (m_ids);
-				return true;
-			};
-		r->walk_tree (f);
-	}
 	m_game = gr;
 	m_active = active;
 
@@ -152,8 +129,8 @@ void EvalGraph::update (std::shared_ptr<game_record> gr, game_state *active)
 
 	m_step = (double)w / count;
 
-	int idcnt = 0;
-	for (auto &id: m_ids) {
+	for (int idnr = 0; idnr < m_model->rowCount (); idnr++) {
+		auto id = m_model->entries ()[idnr];
 		QPainterPath path;
 		bool on_path = false;
 		game_state *st = r;
@@ -186,11 +163,10 @@ void EvalGraph::update (std::shared_ptr<game_record> gr, game_state *active)
 
 		QPen pen;
 		pen.setWidth (2);
-		Qt::GlobalColor colors[] = { Qt::blue, Qt::red, Qt::green, Qt::cyan, Qt::yellow, Qt::darkBlue, Qt::darkRed, Qt::darkGreen };
-		pen.setColor (colors[idcnt % 8]);
+		QVariant v = m_model->data (m_model->index (idnr, 0), Qt::DecorationRole);
+		pen.setColor (v.value<QColor> ());
 		QGraphicsPathItem *p = m_scene->addPath (path, pen);
 		p->setZValue (3);
-		idcnt++;
 	}
 	QGraphicsRectItem *sel = m_scene->addRect (GRADIENT_WIDTH + (int)(active_point * m_step), 0, round (m_step), h,
 						   Qt::NoPen, QBrush (Qt::gray));
