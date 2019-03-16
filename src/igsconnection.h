@@ -11,13 +11,12 @@
 #include <QTcpSocket>
 #include <QString>
 
-#include "igsinterface.h"
-
 class QTextCodec;
+class Host;
 
 #define MAX_LINESIZE 512
 
-class IGSConnection : public QObject, public IGSInterface
+class IGSConnection : public QObject
 {
 	Q_OBJECT
 
@@ -26,26 +25,22 @@ public:
 	IGSConnection(QWidget *, QWidget *);
 	virtual ~IGSConnection();
 
-	// Implementation of IGSInterface virtual functions
-	virtual bool isConnected();
-	virtual bool openConnection(const QString &host, unsigned port, const QString &user, const QString &pass);
-
-	virtual bool closeConnection();
-	virtual void sendTextToHost(QString txt, bool ignoreCodec=false);
-
-	virtual void setTextCodec(QString codec);
-
+	bool isConnected();
+	bool openConnection(const Host &);
+	bool closeConnection();
+	void sendTextToHost(QString txt, bool ignoreCodec=false);
 
 signals:
 	// for statistics reason
 	void signal_setBytesIn(int);
 	void signal_setBytesOut(int);
+	void signal_text_to_app(const QString &);
 
 protected:
 	virtual bool checkPrompt(const QString &);
 //	void convertBlockToLines();
-	
-	void sendTextToApp(QString txt);
+
+	void sendTextToApp (const QString &);
 
 private slots:
 	void OnHostFound();

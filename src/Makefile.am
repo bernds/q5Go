@@ -13,8 +13,7 @@ DISTHEADERS_MOC = analyzedlg.h audio.h autodiagsdlg.h bitarray.h board.h clickab
 	sgfpreview.h tables.h telnet.h textview.h variantgamedlg.h
 
 DISTHEADERS_NOMOC = goboard.h config.h defines.h grid.h goboard.h gogame.h gs_globals.h \
-	igsinterface.h imagehandler.h komispinbox.h mark.h \
-	misc.h setting.h sgf.h sgfparser.h \
+	imagehandler.h komispinbox.h mark.h misc.h setting.h sgf.h sgfparser.h \
 	svgbuilder.h ui_helpers.h
 
 DISTSOURCES = analyzedlg.cpp audio.cpp autodiagsdlg.cpp board.cpp clockview.cpp dbdialog.cpp evalgraph.cpp \

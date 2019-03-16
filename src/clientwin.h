@@ -11,7 +11,6 @@
 #include "tables.h"
 #include "config.h"
 #include "telnet.h"
-#include "igsinterface.h"
 #include "parser.h"
 #include "gs_globals.h"
 #include "gamestable.h"

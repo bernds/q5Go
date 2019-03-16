@@ -7,22 +7,9 @@
 
 #include <QObject>
 
-class IGSInterface;
-
-//-----------
-
-class TelnetInterface : public QObject
-{
-	Q_OBJECT
-
-public:
-	TelnetInterface();
-	~TelnetInterface();
-	static void callback(QString);
-
-signals:
-	void textRecieved(const QString&);
-};
+class IGSConnection;
+class ClientWindow;
+class Host;
 
 //-----------
 
@@ -30,23 +17,18 @@ class TelnetConnection : public QObject
 {
 	Q_OBJECT
 
-public:
-	TelnetConnection(QWidget* parent, QWidget *, QWidget *);
-	~TelnetConnection();
+	IGSConnection *igsInterface;
 
-	void sendTextFromApp(const QString&);
-	void setHost(const QString, const QString, const QString, unsigned int, const QString);
+public:
+	TelnetConnection (ClientWindow *parent, QWidget *, QWidget *);
+	~TelnetConnection ();
+
+	void sendTextFromApp (const QString&);
+	void connect_host (const Host &);
 
 public slots:
-	void slotHostConnect();
 	void slotHostDisconnect();
 	void slotHostQuit();
-
-private:
-	QString host, loginName, password, codec;
-	unsigned int port;
-
-	IGSInterface *igsInterface;
 };
  
 #endif

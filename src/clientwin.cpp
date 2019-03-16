@@ -81,7 +81,7 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	cb_cmdLine->addAction (escapeFocus);
 
 	// create instance of telnetConnection
-	telnetConnection = new TelnetConnection(this, ListView_players, ListView_games);
+	telnetConnection = new TelnetConnection (this, ListView_players, ListView_games);
 
 	// doubleclick
 	connect (ListView_games, &GamesTable::signal_doubleClicked, this, &ClientWindow::slot_click_games);
@@ -474,20 +474,21 @@ void ClientWindow::timerEvent(QTimerEvent* e)
 }
 
 // slot_connect: emitted when connect button has toggled
-void ClientWindow::slot_connect(bool b)
+void ClientWindow::slot_connect (bool b)
 {
-qDebug() << "connect " << (int)b;
-	if (b)
-	{
+	if (b) {
+		int idx = cb_connect->currentIndex ();
+		if (idx == -1)
+			return;
+		Host *h = hostlist[idx];
+
 		// create instance of telnetConnection
 		if (!telnetConnection)
 			qFatal("No telnetConnection!");
 
 		// connect to selected host
-		telnetConnection->slotHostConnect();
-	}
-	else
-	{
+		telnetConnection->connect_host (*h);
+	} else {
 		// disconnect
 		telnetConnection->slotHostQuit();
 	}
@@ -1041,7 +1042,7 @@ void ClientWindow::set_sessionparameter(QString par, bool val)
 		case IGS:
 			sendcommand("toggle " + par + value);
 			break;
-			
+
 		default:
 			sendcommand("set " + par + value);
 			break;
@@ -1093,10 +1094,6 @@ void ClientWindow::slot_cbconnect(const QString &txt)
 	// view selected host
 	cb_connect->setCurrentIndex(i);
 
-	// inform telnet about selected host
-	QString lg = h->loginName();
-	QString pw = h->password();
-	telnetConnection->setHost(h->host(), lg, pw, h->port(), h->codec());
 	if (toolConnect)
 	{
 		toolConnect->setToolTip (tr("Connect with") + " " + cb_connect->currentText());

@@ -35,7 +35,6 @@ HEADERS		      = analyzedlg.h \
 			gametree.h \
 			gs_globals.h \
 			igsconnection.h \
-			igsinterface.h \
 			clientwin.h \
 			misc.h \
 			msg_handler.h \

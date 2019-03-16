@@ -14,6 +14,7 @@
 #include <QWidget>
 #include <QHostAddress>
 #include "defines.h"
+#include "tables.h"
 #include "igsconnection.h"
 
 IGSConnection::IGSConnection(QWidget *lvp, QWidget *lvg) : m_lv_p (lvp), m_lv_g (lvg)
@@ -46,12 +47,9 @@ IGSConnection::~IGSConnection()
 	delete qsocket;
 }
 
-// maybe callback should be callback(void)...,
-// any data can be transferred after signalling with normal functions
-void IGSConnection::sendTextToApp(QString txt)
+void IGSConnection::sendTextToApp(const QString &txt)
 {
-	if (callbackFP != nullptr)
-		(*callbackFP)(txt);
+	emit signal_text_to_app (txt);
 }
 
 // check for 'Login:' (and Password)
@@ -295,37 +293,28 @@ void IGSConnection::sendTextToHost(QString txt, bool ignoreCodec)
 	}
 }
 
-
-void IGSConnection::setTextCodec(QString codec)
-{
-	textCodec = QTextCodec::codecForName(codec.toLatin1 ());
-	if(!textCodec)
-		textCodec = QTextCodec::codecForLocale();
-	CHECK_PTR(textCodec);
-}
-
-
-
-bool IGSConnection::openConnection(const QString &host, unsigned int port, const QString &user, const QString &pass)
+bool IGSConnection::openConnection(const Host &host)
 {
 	if (qsocket->state() != QAbstractSocket::UnconnectedState) {
 		qDebug("Called IGSConnection::openConnection while in state %d", qsocket->state());
 		return false;
 	}
 
-	//textCodec = QTextCodec::codecForName(codec);
-	//if(!textCodec)
-	//	textCodec = QTextCodec::codecForLocale();
-	//CHECK_PTR(textCodec);
+	username = host.loginName ();
+	password = host.password ();
 
-	username = user;
-	password = pass;
+	QString hostnm = host.host ();
+	int port = host.port ();
 
-	qDebug() << "Connecting to " << host << " " << port << " as [" << username << "], ["
+	textCodec = QTextCodec::codecForName(host.codec ().toLatin1 ());
+	if (!textCodec)
+		textCodec = QTextCodec::codecForLocale();
+
+	qDebug() << "Connecting to " << hostnm << " " << port << " as [" << username << "], ["
 		 << (password.isNull () ? NULL : "***") << "]...\n";
-	sendTextToApp(tr("Trying to connect to %1 %2").arg(host).arg(port));
+	sendTextToApp (tr("Trying to connect to %1 %2").arg (hostnm).arg (port));
 
-	qsocket->connectToHost(host, port);
+	qsocket->connectToHost (hostnm, port);
 	return qsocket->state() != QAbstractSocket::UnconnectedState;
 }
 
