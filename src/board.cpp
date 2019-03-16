@@ -1054,7 +1054,7 @@ game_state *Board::analysis_at (int x, int y, int &num, double &primary)
 	num = 0;
 	primary = 0;
 	for (auto it: c) {
-		eval ev = it->best_eval ();
+		eval ev = m_eval_state != nullptr ? it->best_eval () : it->eval_from (m_an_id, true);
 		if (it->has_figure () && ev.visits > 0 && it->was_move_p ()) {
 			if (num == 0)
 				primary = ev.wr_black;
@@ -1378,6 +1378,14 @@ void Board::set_displayed (game_state *st)
 void Board::observed_changed ()
 {
 	BoardView::set_displayed (m_state);
+}
+
+void Board::set_analyzer_id (analyzer_id id)
+{
+	bool changed = m_an_id != id;
+	m_an_id = id;
+	if (changed)
+		sync_appearance (true);
 }
 
 void Board::deleteNode()

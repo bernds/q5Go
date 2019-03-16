@@ -336,6 +336,15 @@ eval game_state::best_eval ()
 	return best;
 }
 
+eval game_state::eval_from (const analyzer_id &id, bool require)
+{
+	for (auto &it: m_evals) {
+		if (it.id == id)
+			return it;
+	}
+	return require ? eval () : best_eval ();
+}
+
 void game_state::collect_analyzers (std::vector<analyzer_id> &ids)
 {
 	for (auto &it: m_evals) {

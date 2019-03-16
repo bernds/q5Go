@@ -2882,7 +2882,7 @@ After placing and/or undo release button for returning to starting point automat
          </brush>
         </property>
        </widget>
-       <widget class="QListView" name="anIdListView">
+       <widget class="ClickableListView" name="anIdListView">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
           <horstretch>0</horstretch>
@@ -3911,6 +3911,11 @@ Open the batch analysis dialog which allows you to add SGF files to a queue to b
    <class>EvalGraph</class>
    <extends>QGraphicsView</extends>
    <header>evalgraph.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ClickableListView</class>
+   <extends>QListView</extends>
+   <header>clickableviews.h</header>
   </customwidget>
  </customwidgets>
  <resources>

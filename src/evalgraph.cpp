@@ -59,7 +59,7 @@ void EvalGraph::mousePressEvent (QMouseEvent *e)
 
 void EvalGraph::resizeEvent (QResizeEvent*)
 {
-	update (m_game, m_active);
+	update (m_game, m_active, m_id_idx);
 }
 
 QSize EvalGraph::sizeHint () const
@@ -99,7 +99,7 @@ void EvalGraph::export_file (bool)
 		QMessageBox::warning (this, PACKAGE, tr("Failed to save image!"));
 }
 
-void EvalGraph::update (std::shared_ptr<game_record> gr, game_state *active)
+void EvalGraph::update (std::shared_ptr<game_record> gr, game_state *active, int sel_idx)
 {
 	int w = width ();
 	int h = height ();
@@ -118,6 +118,7 @@ void EvalGraph::update (std::shared_ptr<game_record> gr, game_state *active)
 
 	m_game = gr;
 	m_active = active;
+	m_id_idx = sel_idx;
 
 	size_t count = 0;
 	int active_point = -1;
@@ -142,7 +143,7 @@ void EvalGraph::update (std::shared_ptr<game_record> gr, game_state *active)
 				if (on_path) {
 					path.lineTo (GRADIENT_WIDTH + x * m_step, h * wr);
 					double chg = wr - prev;
-					if (chg != 0 && st->was_move_p ()) {
+					if (chg != 0 && st->was_move_p () && idnr == sel_idx) {
 						QBrush br (st->get_move_color () == black ? Qt::black : Qt::white);
 						/* One idea was to offset this by half the width of a step, so as to
 						   make the change appear between moves, but I found that confusing.  */

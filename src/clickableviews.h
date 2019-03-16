@@ -10,10 +10,17 @@ class ClickableListView: public QListView
 
 signals:
 	void doubleclicked ();
+	void current_changed ();
+
 protected:
 	virtual void mouseDoubleClickEvent (QMouseEvent *) override
 	{
 		emit doubleclicked ();
+	}
+	virtual void currentChanged(const QModelIndex &current, const QModelIndex &previous) override
+	{
+		QListView::currentChanged (current, previous);
+		emit current_changed ();
 	}
 public:
 	ClickableListView (QWidget *parent) : QListView (parent)

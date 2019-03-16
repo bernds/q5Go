@@ -9,6 +9,10 @@ struct analyzer_id {
 	{
 		return engine == other.engine && komi_set == other.komi_set && (!komi_set || komi == other.komi);
 	}
+	bool operator!= (const analyzer_id &other) const
+	{
+		return !(*this == other);
+	}
 };
 
 struct eval {

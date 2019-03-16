@@ -649,6 +649,8 @@ public:
 	void update_eval (const eval &);
 	void update_eval (const game_state &other);
 	eval best_eval ();
+	eval eval_from (const analyzer_id &id, bool require);
+
 	void collect_analyzers (std::vector<analyzer_id> &ids);
 	void set_eval_data (int visits, double winrate_black, analyzer_id id)
 	{

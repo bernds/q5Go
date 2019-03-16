@@ -235,6 +235,7 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 
 	m_eval = 0.5;
 	connect (evalView, &SizeGraphicsView::resized, this, [=] () { set_eval (m_eval); });
+	connect (anIdListView, &ClickableListView::current_changed, [this] () { update_game_tree (); });
 
 	connect(passButton, &QPushButton::clicked, this, &MainWindow::doPass);
         connect(undoButton, &QPushButton::clicked, this, &MainWindow::doUndo);
@@ -340,6 +341,8 @@ void MainWindow::init_game_record (std::shared_ptr<game_record> gr)
 	diagView->reset_game (gr);
 	gfx_board->reset_game (gr);
 	m_an_id_model.populate_list (gr);
+	if (m_an_id_model.rowCount () > 0)
+		anIdListView->setCurrentIndex (m_an_id_model.index (0, 0));
 	anIdListView->setVisible (m_an_id_model.rowCount () > 1);
 
 	updateCaption ();
@@ -679,7 +682,11 @@ void MainWindow::update_game_tree ()
 {
 	game_state *st = gfx_board->displayed ();
 	gameTreeView->update (m_game, st);
-	evalGraph->update (m_game, st);
+	QModelIndex idx = anIdListView->currentIndex ();
+	if (idx.isValid ()) {
+		gfx_board->set_analyzer_id (m_an_id_model.entries ()[idx.row ()]);
+	}
+	evalGraph->update (m_game, st, idx.isValid () ? idx.row () : 0);
 }
 
 void MainWindow::slotFileNewBoard (bool)
@@ -2499,7 +2506,8 @@ void MainWindow::setTimes(const QString &btime, const QString &bstones, const QS
 void MainWindow::update_analyzer_ids (const analyzer_id &new_id)
 {
 	m_an_id_model.notice_analyzer_id (new_id);
-	evalGraph->update (m_game, gfx_board->displayed ());
+	QModelIndex idx = anIdListView->currentIndex ();
+	evalGraph->update (m_game, gfx_board->displayed (), idx.isValid () ? idx.row () : 0);
 }
 
 void MainWindow::set_eval (double eval)

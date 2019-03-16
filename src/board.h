@@ -218,6 +218,10 @@ class Board : public BoardView, public navigable_observer, public GTP_Eval_Contr
 	bool m_mark_rect = false;
 	bool m_request_mark_rect = false;
 
+	/* Given to us by the main window, indicates the analyzer selected in the eval graph
+	   list view.  */
+	analyzer_id m_an_id;
+
 	bool show_cursor_p ();
 	void update_shift (int x, int y);
 
@@ -231,6 +235,7 @@ public:
 	virtual void reset_game (std::shared_ptr<game_record>) override;
 	virtual void set_displayed (game_state *) override;
 
+	void set_analyzer_id (analyzer_id id);
 	void setModified (bool m=true);
 	void external_move (game_state *st) { move_state (st); }
 	void mark_dead_external (int x, int y);
