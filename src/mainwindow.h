@@ -91,6 +91,7 @@ public:
 	void update_analysis (analyzer);
 	void update_game_tree ();
 	void update_figures ();
+	void update_analyzer_ids (const analyzer_id &);
 
 	void coords_changed (const QString &, const QString &);
 

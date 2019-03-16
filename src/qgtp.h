@@ -4,6 +4,8 @@
 #include <QProcess>
 
 #include "goboard.h"
+#include "goeval.h"
+
 #include "textview.h"
 
 class game_state;
@@ -46,6 +48,8 @@ class GTP_Controller
 	QWidget *m_parent;
 
 protected:
+	analyzer_id m_id;
+
 	GTP_Controller (QWidget *p) : m_parent (p) { }
 	GTP_Process *create_gtp (const Engine &engine, int size, double komi, int hc, bool show_dialog = true);
 public:

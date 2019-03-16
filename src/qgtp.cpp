@@ -7,15 +7,20 @@
 
 GTP_Process *GTP_Controller::create_gtp (const Engine &engine, int size, double komi, int hc, bool show_dialog)
 {
+	m_id.engine = engine.title ().toStdString ();
+	QString ekstr = engine.komi ();
+	bool ok;
+	double ekomi = ekstr.toFloat (&ok);
+	m_id.komi_set = !ekstr.isEmpty () && ok;
+	if (m_id.komi_set) {
+		m_id.komi = ekomi;
+	} else
+		m_id.komi = komi;
+
 	GTP_Process *g = new GTP_Process (m_parent, this, engine, size, komi, hc, show_dialog);
 	return g;
 }
 
-/* Function:  open a session
-* Arguments: name and path of go program
-* Fails:     never
-* Returns:   nothing
-*/
 GTP_Process::GTP_Process(QWidget *parent, GTP_Controller *c, const Engine &engine,
 			 int size, float komi, int hc, bool show_dialog)
 	: m_dlg (parent, TextView::type::gtp), m_controller (c), m_size (size), m_komi (komi), m_hc (hc)
@@ -459,8 +464,7 @@ void GTP_Eval_Controller::gtp_eval (const QString &s)
 			primary_move = move;
 			m_primary_eval = wr;
 			primary_visits = visits;
-			m_eval_state->set_eval_data (visits, to_move == white ? 1 - wr : wr,
-						     m_analyzer_komi, false);
+			m_eval_state->set_eval_data (visits, to_move == white ? 1 - wr : wr, m_id);
 		}
 		qDebug () << move << " PV: " << pv;
 
@@ -485,8 +489,7 @@ void GTP_Eval_Controller::gtp_eval (const QString &s)
 						break;
 					if (pv_first) {
 						cur->set_mark (i, j, mark::letter, count);
-						next->set_eval_data (visits, to_move == white ? 1 - wr : wr,
-								     m_analyzer_komi, false);
+						next->set_eval_data (visits, to_move == white ? 1 - wr : wr, m_id);
 						/* Leave it to a higher level to add a title if it wants
 						   to place these variations into the actual file.  */
 						next->set_figure (257, "");

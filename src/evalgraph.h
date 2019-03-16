@@ -9,6 +9,7 @@
 #include <memory>
 #include "defines.h"
 #include "setting.h"
+#include "goeval.h"
 
 class game_state;
 class game_record;
@@ -26,6 +27,8 @@ class EvalGraph : public QGraphicsView
 	QBrush *m_brush;
 	double m_step;
 
+	std::vector<analyzer_id> m_ids;
+
 protected:
 	virtual void mousePressEvent (QMouseEvent *e) override;
 	virtual void resizeEvent (QResizeEvent*) override;
@@ -38,6 +41,7 @@ public:
 	~EvalGraph () { delete m_brush; delete m_scene; }
 	void set_board_win (MainWindow *win) { m_win = win; }
 	void update (std::shared_ptr<game_record> gr, game_state *);
+	void notice_analyzer_id (const analyzer_id &);
 
 	void update_prefs ();
 

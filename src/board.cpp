@@ -1041,7 +1041,7 @@ bool Board::have_analysis ()
 	for (auto it: c) {
 		if (it == c[0])
 			continue;
-		if (it->has_figure () && it->eval_visits () > 0)
+		if (it->has_figure () && it->best_eval ().visits > 0)
 			return true;
 	}
 	return false;
@@ -1054,10 +1054,10 @@ game_state *Board::analysis_at (int x, int y, int &num, double &primary)
 	num = 0;
 	primary = 0;
 	for (auto it: c) {
-		int ev = it->eval_visits ();
-		if (it->has_figure () && ev > 0 && it->was_move_p ()) {
+		eval ev = it->best_eval ();
+		if (it->has_figure () && ev.visits > 0 && it->was_move_p ()) {
 			if (num == 0)
-				primary = it->eval_wr_black ();
+				primary = ev.wr_black;
 			if (it->get_move_x () == x && it->get_move_y () == y)
 				return it;
 			num++;
@@ -1082,8 +1082,9 @@ int Board::extract_analysis (go_board &b)
 		int x = pv->get_move_x ();
 		int y = pv->get_move_y ();
 		stone_color to_move = m_displayed->to_move ();
-		double wr = pv->eval_wr_black ();
-		int visits = pv->eval_visits ();
+		eval ev = pv->best_eval ();
+		double wr = ev.wr_black;
+		int visits = ev.visits;
 		if (to_move == white)
 			wr = 1 - wr;
 		if (x > 7)
@@ -1125,7 +1126,8 @@ Board::ram_result Board::render_analysis_marks (svg_builder &svg, double svg_fac
 	stone_color wr_swap_col = winrate_for == 0 ? white : winrate_for == 1 ? black : none;
 
 	stone_color to_move = m_displayed->to_move ();
-	double wr = pv->eval_wr_black ();
+	eval ev = pv->best_eval ();
+	double wr = ev.wr_black;
 	double wrdiff = wr - primary;
 	if (to_move == white)
 		wr = 1 - wr, wrdiff = -wrdiff;
@@ -1768,16 +1770,17 @@ void Board::mousePressEvent(QMouseEvent *e)
 	    && ((e->modifiers () == Qt::ShiftModifier && e->button () == Qt::LeftButton)
 		|| e->button () == Qt::MiddleButton))
 	{
-		game_state *eval = m_eval_state->find_child_move (x, y);
-		if (eval != nullptr) {
+		game_state *evchild = m_eval_state->find_child_move (x, y);
+		if (evchild != nullptr) {
+			eval ev = evchild->best_eval ();
 			game_state *st = m_displayed;
-			game_state *dup = new game_state (*eval, st);
+			game_state *dup = new game_state (*evchild, st);
 			QString comment = tr ("Live evaluation: W %1%2 B %3%4 at %5 visits");
-			double bwr = eval->eval_wr_black ();
+			double bwr = ev.wr_black;
 			double wwr = 1 - bwr;
 			comment = (comment.arg (QString::number (100 * wwr, 'f', 1)).arg ('%')
 				   .arg (QString::number (100 * bwr, 'f', 1)).arg ('%')
-				   .arg (QString::number (eval->eval_visits ())));
+				   .arg (QString::number (ev.visits)));
 			dup->set_figure (256, comment.toStdString ());
 			st->add_child_tree (dup);
 
@@ -2182,7 +2185,8 @@ void Board::gtp_exited ()
 
 void Board::eval_received (const QString &move, int visits)
 {
-	m_displayed->set_eval_data (*m_eval_state, false);
+	m_board_win->update_analyzer_ids (m_id);
+	m_displayed->update_eval (*m_eval_state);
 	m_board_win->set_eval (move, m_primary_eval, m_displayed->to_move (), visits);
 	sync_appearance ();
 }

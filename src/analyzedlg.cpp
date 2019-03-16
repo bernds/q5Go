@@ -128,7 +128,15 @@ AnalyzeDialog::job::job (AnalyzeDialog *dlg, QString &title, std::shared_ptr<gam
 	: m_dlg (dlg), m_title (title), m_game (gr), m_n_seconds (n_seconds), m_n_lines (n_lines),
 	  m_side (col), m_analyze_all (all)
 {
-	collect_positions (m_game->get_root ());
+	std::function<bool (game_state *)> f = [this] (game_state *st) -> bool
+		{
+			eval ev = st->best_eval ();
+			if (st->has_figure () && ev.visits > 0)
+				return false;
+			m_queue.push_back (st);
+			return true;
+		};
+	m_game->get_root ()->walk_tree (f);
 	m_initial_size = m_queue.size ();
 }
 
@@ -136,13 +144,6 @@ AnalyzeDialog::job::~job ()
 {
 	if (m_win)
 		disconnect (m_connection);
-}
-
-void AnalyzeDialog::job::collect_positions (game_state *st)
-{
-	for (auto it: st->children ())
-		collect_positions (it);
-	m_queue.push_back (st);
 }
 
 game_state *AnalyzeDialog::job::select_request (bool pop)
@@ -297,15 +298,18 @@ void AnalyzeDialog::eval_received (const QString &, int)
 		insert_job (m_done, doneView, j);
 		update_progress ();
 	} else {
-		st->set_eval_data (*m_eval_state, false);
+		if (j->m_win != nullptr)
+			j->m_win->update_analyzer_ids (m_id);
+		st->update_eval (*m_eval_state);
 		auto variations = m_eval_state->take_children ();
 		int count = 0;
 		for (auto it: variations) {
-			double wr = it->eval_wr_black ();
+			eval ev = it->best_eval ();
+			double wr = ev.wr_black;
 			QString cnt = QString::number (count + 1);
 			QString wrb = QString::number (wr * 100);
 			QString wrw = QString::number ((1 - wr) * 100);
-			QString vis = QString::number (it->eval_visits ());
+			QString vis = QString::number (ev.visits);
 			QString title = tr ("PV ") + cnt + ": " + tr ("W Win ") + wrw + "%, " + tr ("B Win ") + wrb + "% " + tr ("at ") + vis + tr (" visits.");
 			it->set_figure (257, title.toStdString ());
 			st->add_child_tree (it);

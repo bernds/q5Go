@@ -63,8 +63,6 @@ class AnalyzeDialog : public QMainWindow, public Ui::AnalyzeDialog, public GTP_E
 		~job ();
 		game_state *select_request (bool pop);
 		void show_window (bool done);
-	private:
-		void collect_positions (game_state *);
 	};
 
 	job *m_requester;

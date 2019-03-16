@@ -220,23 +220,22 @@ static bool add_eval (game_state *gs, sgf::node *n)
 		}
 		int visits;
 		double winrate;
-		double komi = 0;
+		analyzer_id id;
 		try {
 			visits = stoi (vals[0]);
 			winrate = stod (vals[1]);
-			if (sz >= 3)
-				komi = stod (vals[2]);
+			if (sz >= 3) {
+				id.komi_set = vals[2].length () > 0;
+				if (id.komi_set)
+					id.komi = stod (vals[2]);
+			}
+			if (sz >= 4)
+				id.engine = vals[3];
 		} catch (...) {
 			retval = false;
 			continue;
 		}
-		if (sz == 2) {
-			gs->set_eval_data (visits, winrate, false);
-		} else {
-			/* Ignore everything beyond value 3.  Those will hold things
-			   like engine name and version in the future.  */
-			gs->set_eval_data (visits, winrate, komi, false);
-		}
+		gs->set_eval_data (visits, winrate, id);
 	}
 	return retval;
 }
@@ -795,12 +794,22 @@ void game_state::append_to_sgf (std::string &s) const
 			s += "MN[" + std::to_string (gs->m_sgf_movenum) + "]";
 
 		write_visible (s, gs);
-		if (gs->m_eval_visits > 0) {
-			s += "QLZV[" + std::to_string (gs->m_eval_visits) + ":" + std::to_string (gs->m_eval_wr_black);
-			if (gs->m_eval_komi_set)
-				s += ":" + std::to_string (gs->m_eval_komi);
-			s += "]";
-			linecount++;
+		bool first = true;
+		for (auto &it: gs->m_evals) {
+			if (it.visits > 0) {
+				if (first)
+					s += "QLZV";
+				first = false;
+				s += "[" + std::to_string (it.visits) + ":" + std::to_string (it.wr_black);
+				if (it.id.komi_set) {
+					s += ":" + std::to_string (it.id.komi);
+					if (it.id.engine.length () > 0)
+						s += ":" + it.id.engine;
+				} else if (it.id.engine.length () > 0)
+					s += "::" + it.id.engine;
+				s += "]";
+				linecount++;
+			}
 		}
 		for (auto p: gs->m_unrecognized_props) {
 			s += p->ident;

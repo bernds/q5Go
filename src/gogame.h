@@ -2,7 +2,10 @@
 #define GOGAME_H
 
 #include "goboard.h"
+#include "goeval.h"
+
 #include <functional>
+
 class visual_tree
 {
 public:
@@ -128,11 +131,9 @@ private:
 	/* The SGF PM property, or -1 if it wasn't set.  */
 	int m_print_numbering = -1;
 	sgf_figure m_figure;
-	/* Win rate information.  Zero visits means it is unset.  */
-	int m_eval_visits = 0;
-	double m_eval_wr_black = 0.5;
-	double m_eval_komi = 0;
-	bool m_eval_komi_set = false;
+
+	std::vector<eval> m_evals;
+	eval m_live_eval;
 
 	/* Support for SGF VW.  */
 	bit_array *m_visible {};
@@ -222,10 +223,7 @@ public:
 		m_active = other.m_active;
 		m_figure = other.m_figure;
 		m_print_numbering = other.m_print_numbering;
-		m_eval_visits = other.m_eval_visits;
-		m_eval_wr_black = other.m_eval_wr_black;
-		m_eval_komi = other.m_eval_komi;
-		m_eval_komi_set = other.m_eval_komi_set;
+		m_evals = other.m_evals;
 	}
 	void disconnect ()
 	{
@@ -648,50 +646,26 @@ public:
 	{
 		return m_comment;
 	}
-	void set_eval_data (int visits, double winrate_black, double komi, bool force_replace)
+	void update_eval (const eval &);
+	void update_eval (const game_state &other);
+	eval best_eval ();
+	void collect_analyzers (std::vector<analyzer_id> &ids);
+	void set_eval_data (int visits, double winrate_black, analyzer_id id)
 	{
-		if (m_eval_visits > visits && m_eval_komi_set && m_eval_komi == komi && !force_replace)
-			return;
-		m_eval_visits = visits;
-		m_eval_wr_black = winrate_black;
-		m_eval_komi = komi;
-		m_eval_komi_set = true;
+		eval ev;
+		ev.visits = visits;
+		ev.wr_black = winrate_black;
+		ev.id = id;
+		update_eval (ev);
 	}
-	void set_eval_data (int visits, double winrate_black, bool force_replace)
+	bool find_eval (const analyzer_id &id, eval &ev)
 	{
-		if ((m_eval_visits > visits || m_eval_komi_set) && !force_replace)
-			return;
-		m_eval_visits = visits;
-		m_eval_wr_black = winrate_black;
-		m_eval_komi_set = false;
-	}
-	void set_eval_data (const game_state &other, bool force_replace)
-	{
-		if (!force_replace
-		    && m_eval_visits > other.m_eval_visits
-		    && ((m_eval_komi_set && other.m_eval_komi_set && m_eval_komi == other.m_eval_komi)
-			|| !other.m_eval_komi_set))
-			return;
-		m_eval_visits = other.m_eval_visits;
-		m_eval_wr_black = other.m_eval_wr_black;
-		m_eval_komi = other.m_eval_komi;
-		m_eval_komi_set = other.m_eval_komi_set;
-	}
-	int eval_visits ()
-	{
-		return m_eval_visits;
-	}
-	double eval_wr_black ()
-	{
-		return m_eval_wr_black;
-	}
-	bool eval_komi_set ()
-	{
-		return m_eval_komi_set;
-	}
-	double eval_komi ()
-	{
-		return m_eval_komi;
+		for (auto &e: m_evals)
+			if (e.id == id) {
+				ev = e;
+				return true;
+			}
+		return false;
 	}
 	void append_to_sgf (std::string &) const;
 
@@ -788,6 +762,8 @@ public:
 	   Does nothing if already expanded, and returns false iff that is
 	   the case.  */
 	bool vis_expand_one ();
+
+	void walk_tree (std::function<bool (game_state *)> &);
 };
 
 class sgf;

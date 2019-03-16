@@ -308,6 +308,63 @@ bool game_state::has_figure_recursive () const
 	return false;
 }
 
+void game_state::update_eval (const eval &ev)
+{
+	for (auto &ours: m_evals) {
+		if (ev.id == ours.id) {
+			if (ev.visits > ours.visits)
+				ours = ev;
+			return;
+		}
+	}
+	m_evals.push_back (ev);
+}
+
+void game_state::update_eval (const game_state &other)
+{
+	for (auto &it: other.m_evals)
+		update_eval (it);
+}
+
+eval game_state::best_eval ()
+{
+	eval best;
+	for (auto &it: m_evals) {
+		if ((it.id.komi_set && !best.id.komi_set) || it.visits > best.visits)
+			best = it;
+	}
+	return best;
+}
+
+void game_state::collect_analyzers (std::vector<analyzer_id> &ids)
+{
+	for (auto &it: m_evals) {
+		bool found = false;
+		for (auto id: ids)
+			if (id == it.id) {
+				found = true;
+				break;
+			}
+		if (!found)
+			ids.push_back (it.id);
+	}
+}
+
+void game_state::walk_tree (std::function<bool (game_state *)> &func)
+{
+	game_state *st = this;
+	for (;;) {
+		if (!func (st))
+			return;
+		for (auto &it: st->m_children)
+			if (it != st->m_children[0])
+				it->walk_tree (func);
+		if (st->n_children () == 0)
+			break;
+		st = st->m_children[0];
+	}
+}
+
 void navigable_observer::next_move ()
 {
 	game_state *next = m_state->next_move ();

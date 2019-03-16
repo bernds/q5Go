@@ -2407,6 +2407,12 @@ void MainWindow::setTimes(const QString &btime, const QString &bstones, const QS
 	}
 }
 
+/* Called whenever a new evaluation comes in from NEW_ID.  We update the evaluation graph.  */
+void MainWindow::update_analyzer_ids (const analyzer_id &new_id)
+{
+	evalGraph->notice_analyzer_id (new_id);
+}
+
 void MainWindow::set_eval (double eval)
 {
 	m_eval = eval;
