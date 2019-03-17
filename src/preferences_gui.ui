@@ -4629,12 +4629,6 @@ Note: 'Delete' concerns saved records.</string>
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>LineEdit_pass</tabstop>
-  <tabstop>ComboBox_codec</tabstop>
-  <tabstop>pb_server_new</tabstop>
-  <tabstop>pb_server_add</tabstop>
-  <tabstop>pb_server_delete</tabstop>
-  <tabstop>ListView_hosts</tabstop>
   <tabstop>BYSpin_Nmatch</tabstop>
   <tabstop>timeSpin</tabstop>
   <tabstop>buttonCancel</tabstop>
@@ -4644,7 +4638,6 @@ Note: 'Delete' concerns saved records.</string>
   <tabstop>stoneView</tabstop>
   <tabstop>buttonApply</tabstop>
   <tabstop>buttonHelp</tabstop>
-  <tabstop>ListView_engines</tabstop>
   <tabstop>checkBox_Nmatch_Black</tabstop>
   <tabstop>BYSpin</tabstop>
   <tabstop>timeSpin_Nmatch</tabstop>
@@ -4699,6 +4692,7 @@ Note: 'Delete' concerns saved records.</string>
   <tabstop>pb_engine_new</tabstop>
   <tabstop>pb_engine_add</tabstop>
   <tabstop>pb_engine_delete</tabstop>
+  <tabstop>ListView_engines</tabstop>
   <tabstop>computerSizeSpin</tabstop>
   <tabstop>computerHandicapSpin</tabstop>
   <tabstop>computerWhiteButton</tabstop>
@@ -4710,6 +4704,16 @@ Note: 'Delete' concerns saved records.</string>
   <tabstop>anHideCheckBox</tabstop>
   <tabstop>anChildMovesCheckBox</tabstop>
   <tabstop>anPruneCheckBox</tabstop>
+  <tabstop>LineEdit_title</tabstop>
+  <tabstop>LineEdit_host</tabstop>
+  <tabstop>LineEdit_port</tabstop>
+  <tabstop>LineEdit_login</tabstop>
+  <tabstop>LineEdit_pass</tabstop>
+  <tabstop>ComboBox_codec</tabstop>
+  <tabstop>pb_server_new</tabstop>
+  <tabstop>pb_server_add</tabstop>
+  <tabstop>pb_server_delete</tabstop>
+  <tabstop>ListView_hosts</tabstop>
   <tabstop>LineEdit_watch</tabstop>
   <tabstop>LineEdit_exclude</tabstop>
   <tabstop>radioButtonStones_2D</tabstop>
@@ -4734,10 +4738,6 @@ Note: 'Delete' concerns saved records.</string>
   <tabstop>TablePicturePathButton</tabstop>
   <tabstop>lineScaleCheckBox</tabstop>
   <tabstop>lineWidenCheckBox</tabstop>
-  <tabstop>LineEdit_title</tabstop>
-  <tabstop>LineEdit_host</tabstop>
-  <tabstop>LineEdit_port</tabstop>
-  <tabstop>LineEdit_login</tabstop>
  </tabstops>
  <resources>
   <include location="q4go.qrc"/>
