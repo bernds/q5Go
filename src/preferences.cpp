@@ -847,13 +847,8 @@ void PreferencesDialog::clear_host ()
 void PreferencesDialog::insertStandardHosts()
 {
 	// standard hosts
-	new QListWidgetItem("-- Aurora --", ListView_hosts);
-	new QListWidgetItem("-- CTN --", ListView_hosts);
-	new QListWidgetItem("-- CWS --", ListView_hosts);
-	new QListWidgetItem("-- EGF --", ListView_hosts);
 	new QListWidgetItem("-- IGS --", ListView_hosts);
 	new QListWidgetItem("-- LGS --", ListView_hosts);
-	new QListWidgetItem("-- NNGS --", ListView_hosts);
 	new QListWidgetItem("-- WING --", ListView_hosts);
 }
 
@@ -946,41 +941,14 @@ void PreferencesDialog::slot_cbtitle(const QString &txt)
 	if (txt.isEmpty() || txt.isNull())
 		clear_host ();
 	// fix coding: standard servers
-	else if (txt == QString("-- Aurora --"))
-	{
-		LineEdit_title->clear();
-		LineEdit_host->setText("aurora.go.art.pl");
-		LineEdit_port->setText("9696");
-		LineEdit_login->setText("guest");
-		// What codec does this use?
-		ComboBox_codec->setCurrentText("");
-	}
-	else if (txt == QString("-- CTN --"))
-	{
-		LineEdit_title->clear();
-		LineEdit_host->setText("weiqi.online.sh.cn");
-		LineEdit_port->setText("8888");
-		LineEdit_login->setText("guest");
-		// What codec does this use?
-		ComboBox_codec->setCurrentText("");
-	}
-	else if (txt == QString("-- CWS --"))
-	{
-		LineEdit_title->clear();
-		LineEdit_host->setText("cws.weiqi.net");
-		LineEdit_port->setText("9696");
-		LineEdit_login->setText("qGo" + QString::number(rand() % 10000));
-		// What codec does this use?
-		ComboBox_codec->setCurrentText("");
-	}
 	else if (txt == QString("-- LGS --"))
 	{
 		LineEdit_title->clear();
 		LineEdit_host->setText("lgs.taiwango.net");
 		LineEdit_port->setText("9696");
 		LineEdit_login->setText("guest");
-		// What codec does this use?
-		ComboBox_codec->setCurrentText("");
+		// Codec is guessed and seems to produce Chinese characters rather than character garbage
+		ComboBox_codec->setCurrentText("Big5");
 	}
 	else if (txt == QString("-- WING --"))
 	{
@@ -998,24 +966,6 @@ void PreferencesDialog::slot_cbtitle(const QString &txt)
 		LineEdit_port->setText("7777");
 		LineEdit_login->setText("guest");
 		ComboBox_codec->setCurrentText("SJIS");
-	}
-	else if (txt == QString("-- NNGS --"))
-	{
-		LineEdit_title->clear();
-		LineEdit_host->setText("nngs.cosmic.org");
-		LineEdit_port->setText("9696");
-		LineEdit_login->setText("qGo" + QString::number(rand() % 10000));
-		// A guess
-		ComboBox_codec->setCurrentText("iso-8859-1");
-	}
-	else if (txt == QString("-- EGF --"))
-	{
-		LineEdit_title->clear();
-		LineEdit_host->setText("server.european-go.org");
-		LineEdit_port->setText("6969");
-		LineEdit_login->setText("qGo" + QString::number(rand() % 10000));
-		// A guess
-		ComboBox_codec->setCurrentText("iso-8859-15");
 	}
 	else
 	{
