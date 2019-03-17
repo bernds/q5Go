@@ -12,7 +12,7 @@
 #include <QString>
 
 class QTextCodec;
-class Host;
+struct Host;
 
 #define MAX_LINESIZE 512
 

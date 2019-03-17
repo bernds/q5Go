@@ -187,7 +187,7 @@
       <string/>
      </property>
      <property name="currentIndex">
-      <number>6</number>
+      <number>4</number>
      </property>
      <widget class="QWidget" name="InterfaceTabWidget">
       <attribute name="title">
@@ -2451,16 +2451,6 @@ Note: 'Delete' concerns saved records.</string>
             </item>
            </layout>
           </item>
-          <item row="0" column="1" rowspan="8">
-           <widget class="QListWidget" name="ListView_engines">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-           </widget>
-          </item>
           <item row="5" column="0">
            <widget class="QCheckBox" name="engineAnalysis">
             <property name="text">
@@ -2522,6 +2512,16 @@ Note: 'Delete' concerns saved records.</string>
              <widget class="QLineEdit" name="engineSize"/>
             </item>
            </layout>
+          </item>
+          <item row="0" column="1" rowspan="8">
+           <widget class="ClickableListView" name="ListView_engines">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -2699,22 +2699,6 @@ Note: don't use a default server name, i.e. '-- Aurora --' etc.</string>
           </widget>
          </item>
         </layout>
-       </item>
-       <item row="0" column="1" rowspan="9">
-        <widget class="QListWidget" name="ListView_hosts">
-         <property name="whatsThis">
-          <string>Host Entries
-
-Select 'New' to clear input fields. After filling in at least Title and Host use Add/Change.
-
-Select an entry to edit, change (Title keeps unchanged) or delete a line.
-
-Select one of the predefined hosts -- xxx -- and add a title to use it.</string>
-         </property>
-         <property name="allColumnsShowFocus" stdset="0">
-          <bool>true</bool>
-         </property>
-        </widget>
        </item>
        <item row="1" column="0">
         <layout class="QHBoxLayout">
@@ -4507,6 +4491,19 @@ Note: 'Delete' concerns saved records.</string>
          </property>
         </spacer>
        </item>
+       <item row="0" column="1" rowspan="9">
+        <widget class="ClickableListView" name="ListView_hosts">
+         <property name="whatsThis">
+          <string>Host Entries
+
+Select 'New' to clear input fields. After filling in at least Title and Host use Add/Change.
+
+Select an entry to edit, change (Title keeps unchanged) or delete a line.
+
+Select one of the predefined hosts -- xxx -- and add a title to use it.</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="variantsTabWidget">
@@ -4626,6 +4623,11 @@ Note: 'Delete' concerns saved records.</string>
    <class>SizeGraphicsView</class>
    <extends>QGraphicsView</extends>
    <header>sizegraphicsview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ClickableListView</class>
+   <extends>QListView</extends>
+   <header>clickableviews.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
@@ -4856,22 +4858,6 @@ Note: 'Delete' concerns saved records.</string>
    </hints>
   </connection>
   <connection>
-   <sender>ListView_engines</sender>
-   <signal>itemClicked(QListWidgetItem*)</signal>
-   <receiver>PreferencesDialogGui</receiver>
-   <slot>slot_clickedEngines(QListWidgetItem *)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>engineName</sender>
    <signal>textChanged(QString)</signal>
    <receiver>PreferencesDialogGui</receiver>
@@ -4924,22 +4910,6 @@ Note: 'Delete' concerns saved records.</string>
    <signal>clicked()</signal>
    <receiver>PreferencesDialogGui</receiver>
    <slot>slot_add_server()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>ListView_hosts</sender>
-   <signal>itemClicked(QListWidgetItem*)</signal>
-   <receiver>PreferencesDialogGui</receiver>
-   <slot>slot_clickedHostList(QListWidgetItem *)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>20</x>

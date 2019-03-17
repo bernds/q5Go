@@ -310,13 +310,13 @@ bool IGSConnection::openConnection(const Host &host)
 		return false;
 	}
 
-	username = host.loginName ();
-	password = host.password ();
+	username = host.login_name;
+	password = host.password;
 
-	QString hostnm = host.host ();
-	int port = host.port ();
+	QString hostnm = host.host;
+	int port = host.port;
 
-	textCodec = QTextCodec::codecForName(host.codec ().toLatin1 ());
+	textCodec = QTextCodec::codecForName(host.codec.toLatin1 ());
 	if (!textCodec)
 		textCodec = QTextCodec::codecForLocale();
 

@@ -187,6 +187,63 @@ void Setting::extract_lists ()
 		m_dbpaths.append (v);
 		i++;
 	}
+
+	// restore: hostlist
+	i = 0;
+	for (;;)
+	{
+		QString prefix = "HOST" + QString::number(++i);
+		QString s = setting->readEntry (prefix + "a");
+		if (s.isNull ())
+			break;
+		m_hosts.emplace_back (setting->readEntry (prefix + "a"),
+				      setting->readEntry (prefix + "b"),
+				      setting->readIntEntry (prefix + "c"),
+				      setting->readEntry (prefix + "d"),
+				      setting->readEntry (prefix + "e"),
+				      setting->readEntry (prefix + "f"));
+		clearEntry (prefix + "a");
+		clearEntry (prefix + "b");
+		clearEntry (prefix + "c");
+		clearEntry (prefix + "d");
+		clearEntry (prefix + "e");
+		clearEntry (prefix + "f");
+	}
+	std::sort (m_hosts.begin (), m_hosts.end (),
+		   [] (const Host &a, const Host &b) { return a.title < b.title; });
+
+	i = 0;
+	for (;;)
+	{
+		QString prefix = "ENGINE" + QString::number(++i);
+		QString s = setting->readEntry (prefix + "a");
+		if (s.isNull ())
+			break;
+		m_engines.emplace_back (s, setting->readEntry (prefix + "b"),
+					setting->readEntry (prefix + "c"),
+					setting->readEntry (prefix + "d"),
+					setting->readBoolEntry (prefix + "e"),
+					setting->readEntry (prefix + "f"));
+		clearEntry (prefix + "a");
+		clearEntry (prefix + "b");
+		clearEntry (prefix + "c");
+		clearEntry (prefix + "d");
+		clearEntry (prefix + "e");
+		clearEntry (prefix + "f");
+	}
+	std::sort (m_engines.begin (), m_engines.end (),
+		   [] (const Engine &a, const Engine &b) { return a.title < b.title; });
+
+	bool updated = false;
+	for (auto &it: m_engines)
+		if (it.analysis && it.boardsize.isEmpty ()) {
+			updated = true;
+			it.boardsize = "19";
+		}
+	if (updated)
+		QMessageBox::information (nullptr, PACKAGE,
+					  QObject::tr("Engine configuration updated\n"
+						      "Analysis engines now require a board size to be set, assuming 19 for existing entries."));
 }
 
 void Setting::write_lists (QTextStream &file)
@@ -196,6 +253,33 @@ void Setting::write_lists (QTextStream &file)
 		file << "DBPATH_" + QString::number (i) << " [" << it << "]" << endl;
 		i++;
 	}
+
+	i = 0;
+	for (auto &h: m_hosts) {
+		QString prefix = "HOST" + QString::number(++i);
+		file << prefix << "a [" << h.title << "]" << endl;
+		file << prefix << "b [" << h.host << "]" << endl;
+		file << prefix << "c [" << h.port << "]" << endl;
+		file << prefix << "d [" << h.login_name << "]" << endl;
+		file << prefix << "e [" << h.password << "]" << endl;
+		file << prefix << "f [" << h.codec << "]" << endl;
+	}
+
+	i = 0;
+	for (auto &e: m_engines)
+	{
+		QString prefix = "ENGINE" + QString::number(++i);
+		file << prefix << "a [" << e.title << "]" << endl;
+		file << prefix << "b [" << e.path << "]" << endl;
+		file << prefix << "c [" << e.args << "]" << endl;
+		file << prefix << "d [" << e.komi << "]" << endl;
+		file << prefix << "e [" << (e.analysis ? "1" : "0") << "]" << endl;
+		file << prefix << "f [" << e.boardsize << "]" << endl;
+	}
+}
+
+void Setting::lists_to_entries ()
+{
 }
 
 void Setting::loadSettings()
@@ -342,6 +426,8 @@ void Setting::saveSettings()
 
 	if (file.open(QIODevice::WriteOnly))
 	{
+		lists_to_entries ();
+
 		QTextStream txtfile(&file);
 		txtfile.setCodec(QTextCodec::codecForName("UTF-8"));
 		// write list to file: KEY [TXT]

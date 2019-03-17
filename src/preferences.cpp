@@ -18,8 +18,137 @@
 #include <CoreFoundation/CFBundle.h>
 #endif //Q_OS_MACX
 
+template<class T>
+QVariant pref_vec_model<T>::data (const QModelIndex &index, int role) const
+{
+	int row = index.row ();
+	int col = index.column ();
+
+	if (row < 0 || col != 0)
+		return QVariant ();
+
+	size_t r = row;
+	if (r >= m_entries.size ()) {
+		r -= m_entries.size ();
+		if (r >= m_extra.size ())
+			return QVariant ();
+		if (role == Qt::BackgroundRole)
+			return QBrush (Qt::lightGray);
+		if (role != Qt::DisplayRole)
+			return QVariant ();
+		return m_extra[r].title;
+	}
+	if (role != Qt::DisplayRole)
+		return QVariant ();
+	const T &e = m_entries[r];
+	return e.title;
+}
+
+template<class T>
+const T *pref_vec_model<T>::find (const QModelIndex &index) const
+{
+	int row = index.row ();
+	if (row < 0)
+		return nullptr;
+
+	size_t r = row;
+	if (r >= m_entries.size ()) {
+		r -= m_entries.size ();
+		if (r >= m_extra.size ())
+			return nullptr;
+		return &m_extra[r];
+	}
+	return &m_entries[r];
+}
+
+template<class T>
+bool pref_vec_model<T>::removeRows (int row, int count, const QModelIndex &parent)
+{
+	if (row < 0 || count < 1 || (size_t) (row + count) > m_entries.size ())
+		return false;
+	beginRemoveRows (parent, row, row + count - 1);
+	m_entries.erase (m_entries.begin () + row, m_entries.begin () + (row + count));
+	endRemoveRows ();
+	return true;
+}
+
+template<class T>
+void pref_vec_model<T>::add_or_replace (T x)
+{
+	for (size_t i = 0; i < m_entries.size (); i++) {
+		T &e = m_entries[i];
+		if (e.title == x.title) {
+			e = x;
+			emit dataChanged (index (i, 0), index (i, 0));
+			return;
+		}
+	}
+	beginInsertRows (QModelIndex (), m_entries.size (), m_entries.size ());
+	m_entries.push_back (x);
+	endInsertRows ();
+}
+
+template<class T>
+QModelIndex pref_vec_model<T>::index (int row, int col, const QModelIndex &) const
+{
+	return createIndex (row, col);
+}
+
+template<class T>
+QModelIndex pref_vec_model<T>::parent (const QModelIndex &) const
+{
+	return QModelIndex ();
+}
+
+template<class T>
+int pref_vec_model<T>::rowCount (const QModelIndex &) const
+{
+	return m_entries.size () + m_extra.size ();
+}
+
+template<class T>
+int pref_vec_model<T>::columnCount (const QModelIndex &) const
+{
+	return 1;
+}
+
+#if 0
+template<class T>
+bool pref_vec_model<T>::remove (const QString &title)
+{
+	for (size_t i = 0; i < m_entries.size (); i++)
+		if (m_entries[i].title == title) {
+			beginRemoveRows (QModelIndex (), i, i);
+			m_entries.erase (m_entries.begin () + i);
+			endRemoveRows ();
+			break;
+		}
+}
+#endif
+
+template<class T>
+QVariant pref_vec_model<T>::headerData (int section, Qt::Orientation ot, int role) const
+{
+	if (role == Qt::TextAlignmentRole) {
+		return Qt::AlignLeft;
+	}
+
+	if (role != Qt::DisplayRole || ot != Qt::Horizontal)
+		return QVariant ();
+	switch (section) {
+	case 0:
+		return tr ("Name");
+	}
+	return QVariant ();
+}
+
+std::vector<Host> standard_servers {
+	{ "-- IGS --", "igs.joyjoy.net", 7777, "guest", "", "SJIS" },
+	{ "-- LGS --", "lgs.taiwango.net", 9696, "guest", "", "Big5" },
+	{ "-- WING --", "wing.gr.jp", 1515, "guest", "", "" } };
+
 PreferencesDialog::PreferencesDialog(QWidget* parent)
-	: QDialog (parent)
+	: QDialog (parent), m_hosts_model (setting->m_hosts, standard_servers), m_engines_model (setting->m_engines)
 {
 	setupUi (this);
 	setModal (true);
@@ -51,8 +180,6 @@ PreferencesDialog::PreferencesDialog(QWidget* parent)
 	LineEdit_title->clear();
 
 	init_from_settings ();
-
-	insertStandardHosts();
 
 	// Default codec
 	ComboBox_codec->addItem("");
@@ -109,6 +236,11 @@ PreferencesDialog::PreferencesDialog(QWidget* parent)
 	connect (dbDirsButton, &QPushButton::clicked, this, &PreferencesDialog::slot_dbdir);
 	connect (dbCfgButton, &QPushButton::clicked, this, &PreferencesDialog::slot_dbcfg);
 	connect (dbRemButton, &QPushButton::clicked, this, &PreferencesDialog::slot_dbrem);
+
+	ListView_engines->setModel (&m_engines_model);
+	connect (ListView_engines, &ClickableListView::current_changed, [this] () { update_current_engine (); });
+	ListView_hosts->setModel (&m_hosts_model);
+	connect (ListView_hosts, &ClickableListView::current_changed, [this] () { update_current_host (); });
 
 	connect (fontStandardButton, &QPushButton::clicked, [this] () { selectFont (fontStandardButton, setting->fontStandard); });
 	connect (fontMarksButton, &QPushButton::clicked, [this] () { selectFont (fontMarksButton, setting->fontMarks); });
@@ -255,11 +387,6 @@ void PreferencesDialog::update_board_image ()
 
 void PreferencesDialog::init_from_settings ()
 {
-	for (auto h: client_window->hostlist)
-		new QListWidgetItem (h->title(), ListView_hosts);
-	for (auto h: client_window->m_engines)
-		new QListWidgetItem (h->title(), ListView_engines);
-
 	int idx = setting->readIntEntry("SKIN_INDEX");
 	GobanPicturePathButton->setEnabled (idx == 0);
 	LineEdit_goban->setEnabled (idx == 0);
@@ -616,6 +743,16 @@ void PreferencesDialog::slot_apply()
 		setting->dbpaths_changed = true;
 		m_dbpaths_changed = false;
 	}
+	if (m_engines_changed) {
+		setting->m_engines = m_engines_model.entries ();
+		setting->engines_changed = true;
+		m_engines_changed = false;
+	}
+	if (m_hosts_changed) {
+		setting->m_hosts = m_hosts_model.entries ();
+		setting->hosts_changed = true;
+		m_hosts_changed = false;
+	}
 	setting->extract_frequent_settings ();
 
 	client_window->preferencesAccept();
@@ -691,9 +828,6 @@ void PreferencesDialog::saveSizes()
 {
 	// save size and position of window
 	client_window->savePrefFrame(pos(), size());
-
-	// update hosts
-	client_window->slot_cbconnect(QString());
 }
 
 void PreferencesDialog::slot_add_engine()
@@ -728,34 +862,10 @@ void PreferencesDialog::slot_add_engine()
 	// check if at least title and path are set
 	if (!name.isEmpty() && !enginePath->text().isEmpty())
 	{
-		// check if title already exists
-		bool found = false;
-
-		for (auto h: client_window->m_engines)
-			if (h->title() == name)
-			{
-				found = true;
-				// if found, insert at current pos, and remove old item
-				client_window->m_engines.removeOne (h);
-				break;
-			}
-
-		client_window->m_engines.append (new Engine (engineName->text (),
-							 enginePath->text (), engineArgs->text (),
-							 engineKomi->text (),
-							 engineAnalysis->isChecked (),
-							 engineSize->text ()));
-		std::sort (client_window->m_engines.begin (), client_window->m_engines.end (),
-			   [] (Engine *a, Engine *b) { return *a < *b; });
-
-		// create entry in listview
-		if (!found)
-			new QListWidgetItem(name, ListView_engines);
-		else
-		{
-			ListView_engines->currentItem()->setText(name);
-		}
-		ListView_engines->repaint();
+		Engine new_e (engineName->text (), enginePath->text (), engineArgs->text (),
+			      engineKomi->text (), engineAnalysis->isChecked (), engineSize->text ());
+		m_engines_model.add_or_replace (new_e);
+		m_engines_changed = true;
 	}
 
 	clear_engine ();
@@ -772,61 +882,52 @@ void PreferencesDialog::clear_engine ()
 	m_changing_engine = false;
 }
 
-void PreferencesDialog::slot_delete_engine()
+void PreferencesDialog::slot_delete_engine ()
 {
-	for (auto h: client_window->m_engines) {
-		if (h->title() == engineName->text())
-		{
-			// if found, delete current entry
-			client_window->m_engines.removeOne(h);
-			delete h;
-			break;
-		}
-	}
-
-	clear_engine ();
-
-	// set connection titles to listview
-	ListView_engines->clear ();
-
-	for (auto h: client_window->m_engines)
-		new QListWidgetItem(h->title(), ListView_engines);
-}
-
-void PreferencesDialog::slot_new_engine()
-{
-	clear_engine ();
-}
-
-void PreferencesDialog::slot_clickedEngines (QListWidgetItem *lvi)
-{
-	if (!lvi)
+	QModelIndex idx = ListView_engines->currentIndex ();
+	if (!idx.isValid ())
 		return;
 
-	// fill host info of selected title
-	for (auto h: client_window->m_engines) {
-		if (h->title() == lvi->text ()) {
-			engineName->setText (h->title ());
-			enginePath->setText (h->path ());
-			engineArgs->setText (h->args ());
-			engineKomi->setText (h->komi ());
-			engineAnalysis->setChecked (h->analysis ());
-			engineSize->setText (h->boardsize ());
-			break;
-		}
-	}
+	if ((size_t)idx.row () >= m_engines_model.entries ().size ())
+		return;
+
+	m_engines_model.removeRows (idx.row (), 1);
+	m_engines_changed = true;
+	clear_engine ();
 }
 
-void PreferencesDialog::slot_engineChanged(const QString &title)
+void PreferencesDialog::slot_new_engine ()
 {
-	for (auto h: client_window->m_engines)
-	{
-		if (h->title() == title) {
+	clear_engine ();
+}
+
+void PreferencesDialog::update_current_engine ()
+{
+	QModelIndex idx = ListView_engines->currentIndex ();
+	bool valid = idx.isValid ();
+
+	pb_engine_delete->setEnabled (valid);
+
+	if (!valid)
+		return;
+
+	const Engine *e = m_engines_model.find (idx);
+	engineName->setText (e->title);
+	enginePath->setText (e->path);
+	engineArgs->setText (e->args);
+	engineKomi->setText (e->komi);
+	engineAnalysis->setChecked (e->analysis);
+	engineSize->setText (e->boardsize);
+}
+
+void PreferencesDialog::slot_engineChanged (const QString &title)
+{
+	for (auto &e: m_engines_model.entries ())
+		if (e.title == title) {
 			m_changing_engine = true;
-			pb_engine_add->setText(tr("Change"));
+			pb_engine_add->setText (tr("Change"));
 			return;
 		}
-	}
 
 	m_changing_engine = false;
 	pb_engine_add->setText(tr("Add"));
@@ -844,21 +945,12 @@ void PreferencesDialog::clear_host ()
 	m_changing_host = false;
 }
 
-void PreferencesDialog::insertStandardHosts()
-{
-	// standard hosts
-	new QListWidgetItem("-- IGS --", ListView_hosts);
-	new QListWidgetItem("-- LGS --", ListView_hosts);
-	new QListWidgetItem("-- WING --", ListView_hosts);
-}
-
 void PreferencesDialog::slot_add_server()
 {
 	// check if at least title and host inserted
 	if (!LineEdit_title->text().isEmpty() && !LineEdit_host->text().isEmpty())
 	{
 		// check if title already exists
-		bool found = false;
 		bool check;
 		unsigned int tmp = LineEdit_port->text().toUInt(&check);
 		if (!check)
@@ -867,57 +959,25 @@ void PreferencesDialog::slot_add_server()
 			qWarning("Failed to convert port to integer!");
 		}
 
-		for (auto h: client_window->hostlist)
-			if (h->title() == LineEdit_title->text())
-			{
-				found = true;
-				// if found, insert at current pos, and remove old item
-				client_window->hostlist.removeOne (h);
-				break;
-			}
-
-		// insert host at its sorted position
-		client_window->hostlist.append(new Host(LineEdit_title->text(),
-						    LineEdit_host->text(),
-						    tmp,
-						    LineEdit_login->text(),
-						    LineEdit_pass->text(),
-						    ComboBox_codec->currentText()));
-		std::sort (client_window->hostlist.begin (), client_window->hostlist.end (),
-			   [] (Host *a, Host *b) { return *a < *b; });
-
-		// create entry in listview
-		if (!found)
-			new QListWidgetItem(LineEdit_title->text(), ListView_hosts);
-		else
-		{
-			ListView_hosts->currentItem()->setText(LineEdit_title->text());
-		}
-		ListView_hosts->repaint();
-//			cb_title->insertItem(LineEdit_title->text(), 0);
+		Host new_h (LineEdit_title->text (), LineEdit_host->text (), tmp,
+			    LineEdit_login->text (), LineEdit_pass->text (), ComboBox_codec->currentText ());
+		m_hosts_model.add_or_replace (new_h);
+		m_hosts_changed = true;
 	}
 
-	// init insertion fields
-	slot_cbtitle(QString());
+	clear_host ();
 }
 
 void PreferencesDialog::slot_delete_server()
 {
-	for (auto h: client_window->hostlist) {
-		if (h->title() == LineEdit_title->text())
-		{
-			// if found, delete current entry
-			client_window->hostlist.removeOne(h);
-			delete h;
-			break;
-		}
-	}
+	QModelIndex idx = ListView_hosts->currentIndex ();
+	if (!idx.isValid ())
+		return;
+	if ((size_t)idx.row () >= m_hosts_model.entries ().size ())
+		return;
 
-	// set connection titles to listview
-	ListView_hosts->clear ();
-	for (auto h: client_window->hostlist)
-		new QListWidgetItem(h->title(), ListView_hosts);
-	insertStandardHosts();
+	m_hosts_model.removeRows (idx.row (), 1);
+	m_hosts_changed = true;
 	clear_host ();
 }
 
@@ -926,77 +986,36 @@ void PreferencesDialog::slot_new_server()
 	clear_host ();
 }
 
-void PreferencesDialog::slot_clickedHostList(QListWidgetItem *lvi)
+void PreferencesDialog::update_current_host ()
 {
-	if (!lvi) {
+	QModelIndex idx = ListView_hosts->currentIndex ();
+	bool valid = idx.isValid ();
+	bool standard_host = valid && (size_t)idx.row () >= m_hosts_model.entries ().size ();
+
+	pb_server_delete->setEnabled (valid && !standard_host);
+
+	if (!valid)
 		return;
-	}
 
-	slot_cbtitle (lvi->text());
-}
-
-void PreferencesDialog::slot_cbtitle(const QString &txt)
-{
-	LineEdit_pass->clear();
-	if (txt.isEmpty() || txt.isNull())
-		clear_host ();
-	// fix coding: standard servers
-	else if (txt == QString("-- LGS --"))
-	{
-		LineEdit_title->clear();
-		LineEdit_host->setText("lgs.taiwango.net");
-		LineEdit_port->setText("9696");
-		LineEdit_login->setText("guest");
-		// Codec is guessed and seems to produce Chinese characters rather than character garbage
-		ComboBox_codec->setCurrentText("Big5");
-	}
-	else if (txt == QString("-- WING --"))
-	{
-		LineEdit_title->clear();
-		LineEdit_host->setText("wing.gr.jp");
-		LineEdit_port->setText("1515");
-		LineEdit_login->setText("guest");
-		// What codec does this use?
-		ComboBox_codec->setCurrentText("");
-	}
-	else if (txt == QString("-- IGS --"))
-	{
-		LineEdit_title->clear();
-		LineEdit_host->setText("igs.joyjoy.net");
-		LineEdit_port->setText("7777");
-		LineEdit_login->setText("guest");
-		ComboBox_codec->setCurrentText("SJIS");
-	}
-	else
-	{
-		// fill host info of selected title
-		for (auto h: client_window->hostlist) {
-			if (h->title() == txt)
-			{
-				LineEdit_title->setText(h->title());
-				LineEdit_host->setText(h->host());
-				LineEdit_port->setText(QString::number(h->port()));
-				LineEdit_login->setText(h->loginName());
-				LineEdit_pass->setText(h->password());
-				ComboBox_codec->setCurrentText(h->codec());
-				break;
-			}
-		}
-	}
+	const Host *h = m_hosts_model.find (idx);
+	LineEdit_title->setText (standard_host ? "" : h->title);
+	LineEdit_host->setText (h->host);
+	LineEdit_port->setText (QString::number (h->port));
+	LineEdit_login->setText (h->login_name);
+	LineEdit_pass->setText (h->password);
+	ComboBox_codec->setCurrentText (h->codec);
 }
 
 void PreferencesDialog::slot_serverChanged(const QString &title)
 {
-	for (auto h: client_window->hostlist)
-	{
-		if (h->title() == title) {
+	for (auto &h: m_hosts_model.entries ())
+		if (h.title == title) {
 			m_changing_host = true;
-			pb_server_add->setText(tr("Change"));
+			pb_server_add->setText (tr("Change"));
 			return;
 		}
-	}
 
-	m_changing_host = true;
+	m_changing_host = false;
 	pb_server_add->setText(tr("Add"));
 }
 

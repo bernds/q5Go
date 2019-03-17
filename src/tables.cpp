@@ -737,21 +737,6 @@ GSName Account::get_gsname()
 	return gsName;
 }
 
-
-/*
- *   Host - Class to save Host info
- */
-
-Host::Host(const QString &title, const QString &host, const unsigned int port, const QString &login, const QString &pass, const QString &cod)
-{
-	t = title;
-	h = host;
-	pt = port;
-	lg = login;
-	pw = pass;
-	cdc = cod;
-}
-
 /*
  *   Talk - Class to handle  Talk Dialog Windows
  */

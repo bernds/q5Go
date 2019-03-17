@@ -16,14 +16,14 @@
 #include "goboard.h"
 #include "gogame.h"
 
-class Engine;
+struct Engine;
 
 class NewAIGameDlg : public QDialog, public Ui::NewAIGameDlgGui
 {
 	Q_OBJECT
 
 public:
-	NewAIGameDlg (QWidget* parent, const QList<Engine *> engines);
+	NewAIGameDlg (QWidget* parent, const std::vector<Engine> &);
 
 	game_info create_game_info ();
 	int board_size ();

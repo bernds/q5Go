@@ -24,7 +24,7 @@
 class Board;
 class QSplitter;
 class QToolBar;
-class Engine;
+struct Engine;
 class GameTree;
 
 /* This keeps track of analyzer_ids, which are combinations of engine name and

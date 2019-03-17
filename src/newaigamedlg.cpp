@@ -8,7 +8,7 @@
 #include "komispinbox.h"
 #include "qgtp.h"
 
-NewAIGameDlg::NewAIGameDlg( QWidget* parent, const QList<Engine *> engines)
+NewAIGameDlg::NewAIGameDlg( QWidget* parent, const std::vector<Engine> &engines)
 	: QDialog (parent)
 {
 	setupUi(this);
@@ -17,8 +17,8 @@ NewAIGameDlg::NewAIGameDlg( QWidget* parent, const QList<Engine *> engines)
 	connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
 	connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
-	for (auto e: engines)
-		engineComboBox->addItem (e->title ());
+	for (auto &e: engines)
+		engineComboBox->addItem (e.title);
 
 	int sz = setting->readIntEntry("COMPUTER_SIZE");
 	if (sz > 3 && sz < 26)

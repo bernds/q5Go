@@ -100,61 +100,14 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	// Sets toolbar
 	initToolBar();                              //end add eb 5
 
-	int i;
-	QString s;
-
-	// restore: hostlist
-	i = 0;
-	for (;;)
-	{
-		QString s = setting->readEntry("HOST" + QString::number(++i) + "a");
-		if (s.isNull ())
-			break;
-		hostlist.append (new Host(setting->readEntry("HOST" + QString::number(i) + "a"),
-					  setting->readEntry("HOST" + QString::number(i) + "b"),
-					  setting->readIntEntry("HOST" + QString::number(i) + "c"),
-					  setting->readEntry("HOST" + QString::number(i) + "d"),
-					  setting->readEntry("HOST" + QString::number(i) + "e"),
-					  setting->readEntry("HOST" + QString::number(i) + "f")));
-	}
-	std::sort (hostlist.begin (), hostlist.end (), [] (Host *a, Host *b) { return *a < *b; });
-
-	i = 0;
-	for (;;)
-	{
-		QString s = setting->readEntry("ENGINE" + QString::number(++i) + "a");
-		if (s.isNull ())
-			break;
-		m_engines.append (new Engine(s, setting->readEntry("ENGINE" + QString::number(i) + "b"),
-					     setting->readEntry("ENGINE" + QString::number(i) + "c"),
-					     setting->readEntry("ENGINE" + QString::number(i) + "d"),
-					     setting->readBoolEntry("ENGINE" + QString::number(i) + "e"),
-					     setting->readEntry("ENGINE" + QString::number(i) + "f")));
-		bool updated = false;
-		for (auto it: m_engines)
-			if (it->analysis () && it->boardsize ().isEmpty ()) {
-				updated = true;
-				it->set_boardsize ("19");
-			}
-		if (updated)
-			QMessageBox::information (this, PACKAGE,
-						  tr("Engine configuration updated\n"
-						     "Analysis engines now require a board size to be set, assuming 19 for existing entries."));
-	}
-	std::sort (hostlist.begin (), hostlist.end (), [] (Host *a, Host *b) { return *a < *b; });
-
-	// run slot command to initialize combobox and set host
-	QString w = setting->readEntry("ACTIVEHOST");
-	// int cb_connect
-	slot_cbconnect(QString());
-	if (!w.isNull ())
-		// set host if available
-		slot_cbconnect(w);
+	populate_cbconnect (setting->readEntry("ACTIVEHOST"));
 
 	//restore players list filters
 	whoBox1->setCurrentIndex(setting->readIntEntry("WHO_1"));
 	whoBox2->setCurrentIndex(setting->readIntEntry("WHO_2"));
 	whoOpenCheck->setChecked(setting->readIntEntry("WHO_CB"));
+
+	QString s;
 
 	// restore size of client window
 	QString scrkey = screen_key (this);
@@ -480,14 +433,14 @@ void ClientWindow::slot_connect (bool b)
 		int idx = cb_connect->currentIndex ();
 		if (idx == -1)
 			return;
-		Host *h = hostlist[idx];
+		const Host &h = setting->m_hosts[idx];
 
 		// create instance of telnetConnection
 		if (!telnetConnection)
 			qFatal("No telnetConnection!");
 
 		// connect to selected host
-		telnetConnection->connect_host (*h);
+		telnetConnection->connect_host (h);
 	} else {
 		// disconnect
 		telnetConnection->slotHostQuit();
@@ -544,47 +497,9 @@ void ClientWindow::slot_connclosed()
 // close application
 void ClientWindow::saveSettings()
 {
-	// save setting
-	int i = 0;
-	for (auto h: hostlist)
-	{
-		i++;
-		setting->writeEntry("HOST" + QString::number(i) + "a", h->title());
-		setting->writeEntry("HOST" + QString::number(i) + "b", h->host());
-		setting->writeIntEntry("HOST" + QString::number(i) + "c", h->port());
-		setting->writeEntry("HOST" + QString::number(i) + "d", h->loginName());
-		setting->writeEntry("HOST" + QString::number(i) + "e", h->password());
-		setting->writeEntry("HOST" + QString::number(i) + "f", h->codec());
-	}
-	for (;;)
-	{
-		QString s = setting->readEntry("HOST" + QString::number(++i) + "a");
-		if (s.isNull ())
-			break;
-		// delete unused entries
-		setting->writeEntry("HOST" + QString::number(i) + "a", QString());
-		setting->writeEntry("HOST" + QString::number(i) + "b", QString());
-		setting->writeEntry("HOST" + QString::number(i) + "c", QString());
-		setting->writeEntry("HOST" + QString::number(i) + "d", QString());
-		setting->writeEntry("HOST" + QString::number(i) + "e", QString());
-		setting->writeEntry("HOST" + QString::number(i) + "f", QString());
-	}
-
-	i = 0;
-	for (auto h: m_engines)
-	{
-		i++;
-		setting->writeEntry("ENGINE" + QString::number(i) + "a", h->title());
-		setting->writeEntry("ENGINE" + QString::number(i) + "b", h->path());
-		setting->writeEntry("ENGINE" + QString::number(i) + "c", h->args());
-		setting->writeEntry("ENGINE" + QString::number(i) + "d", h->komi());
-		setting->writeBoolEntry("ENGINE" + QString::number(i) + "e", h->analysis());
-		setting->writeEntry("ENGINE" + QString::number(i) + "f", h->boardsize());
-	}
-
 	// save current connection if at least one host exists
-	if (!hostlist.isEmpty())
-		setting->writeEntry("ACTIVEHOST",cb_connect->currentText());
+	if (setting->m_hosts.size () > 0)
+		setting->writeEntry ("ACTIVEHOST", cb_connect->currentText ());
 
 	QString scrkey = screen_key (this);
 	setting->writeEntry("CLIENTWINDOW_" + scrkey,
@@ -1049,55 +964,29 @@ void ClientWindow::set_sessionparameter(QString par, bool val)
 	}
 }
 
-// select connection or create new one - combobox connection
-void ClientWindow::slot_cbconnect(const QString &txt)
+/* Update the connection combobox when the server table has changed.  */
+void ClientWindow::populate_cbconnect (const QString &prev_text)
 {
-	QString text = txt;
-	Host *h = nullptr;
-	int i=1;
-
-	if (text.isNull())
-	{
-		// txt empty: update combobox - server table has been edited...
-		// keep current host
-		text = cb_connect->currentText();
-
-		// refill combobox
-		cb_connect->clear();
-		for (auto h_: hostlist)
-		{
-			cb_connect->addItem (h_->title());
-			if (h_->title() == text)
-			{
-				i = cb_connect->count() - 1;
-				h = h_;
-			}
+	// refill combobox
+	cb_connect->clear ();
+	for (auto &h: setting->m_hosts) {
+		cb_connect->addItem (h.title);
+		if (h.title == prev_text) {
+			cb_connect->setCurrentIndex (cb_connect->count() - 1);
+			slot_cbconnect (prev_text);
 		}
 	}
-	else
-	{
-		for (auto h_: hostlist)
-			if (h_->title() == text) {
-				h = h_;
-				i = hostlist.indexOf (h_);
-				break;
-			}
+	if (setting->m_hosts.size () > 0 && cb_connect->currentIndex () == -1) {
+		cb_connect->setCurrentIndex (0);
+		slot_cbconnect (cb_connect->currentText ());
 	}
+}
 
-	if (!h && hostlist.length () > 0) {
-		h = hostlist.first ();
-		i = 0;
-	}
-	if (!h)
-		return;
-
-	// view selected host
-	cb_connect->setCurrentIndex(i);
-
+// Select connection
+void ClientWindow::slot_cbconnect (const QString &txt)
+{
 	if (toolConnect)
-	{
-		toolConnect->setToolTip (tr("Connect with") + " " + cb_connect->currentText());
-	}
+		toolConnect->setToolTip (tr("Connect with") + " " + txt);
 }
 
 // set checkbox status because of server info or because menu / checkbok toggled
@@ -2202,9 +2091,9 @@ void ClientWindow::slotFileOpenDB (bool)
 
 Engine *ClientWindow::analysis_engine (int boardsize)
 {
-	for (auto e: m_engines) {
-		if (e->analysis () && e->boardsize ().toInt () == boardsize)
-			return e;
+	for (auto &e: setting->m_engines) {
+		if (e.analysis && e.boardsize.toInt () == boardsize)
+			return &e;
 	}
 	return nullptr;
 }
@@ -2212,28 +2101,28 @@ Engine *ClientWindow::analysis_engine (int boardsize)
 QList<Engine> ClientWindow::analysis_engines (int boardsize)
 {
 	QList<Engine> l;
-	for (auto e: m_engines) {
-		if (e->analysis () && e->boardsize ().toInt () == boardsize)
-			l.append (*e);
+	for (auto &e: setting->m_engines) {
+		if (e.analysis && e.boardsize.toInt () == boardsize)
+			l.append (e);
 	}
 	return l;
 }
 
 void ClientWindow::slotComputerPlay(bool)
 {
-	if (m_engines.isEmpty ())
+	if (setting->m_engines.size () == 0)
 	{
 		QMessageBox::warning(this, PACKAGE, tr("You did not configure any engines!"));
 		dlgSetPreferences (3);
 		return;
 	}
 
-	NewAIGameDlg dlg (this, m_engines);
+	NewAIGameDlg dlg (this, setting->m_engines);
 	if (dlg.exec() != QDialog::Accepted)
 		return;
 
 	int eidx = dlg.engine_index ();
-	const Engine *engine = m_engines[eidx];
+	const Engine &engine = setting->m_engines[eidx];
 	int hc = dlg.handicap ();
 	game_info info = dlg.create_game_info ();
 	go_board starting_pos = new_handicap_board (dlg.board_size (), dlg.handicap ());
@@ -2243,7 +2132,7 @@ void ClientWindow::slotComputerPlay(bool)
 	if (gr == nullptr)
 		return;
 	bool computer_white = dlg.computer_white_p ();
-	new MainWindow_GTP (0, gr, *engine, !computer_white, computer_white);
+	new MainWindow_GTP (0, gr, engine, !computer_white, computer_white);
 }
 
 
@@ -2497,11 +2386,11 @@ void ClientWindow::dlgSetPreferences(int tab)
 	}
 }
 
-bool ClientWindow::preferencesAccept()
+bool ClientWindow::preferencesAccept ()
 {
 	// Update all boards with settings
-	qgo->updateAllBoardSettings();
-	qgo->updateFont();
+	qgo->updateAllBoardSettings ();
+	qgo->updateFont ();
 	if (db_dialog != nullptr)
 		db_dialog->update_prefs ();
 
@@ -2510,6 +2399,9 @@ bool ClientWindow::preferencesAccept()
 		send_nmatch_range_parameters();
 		setting->nmatch_settings_modified = false;
 	}
-
+	if (setting->hosts_changed) {
+		populate_cbconnect (cb_connect->currentText ());
+		setting->hosts_changed = false;
+	}
 	return true;//result;
 }

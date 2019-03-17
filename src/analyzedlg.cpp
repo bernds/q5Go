@@ -375,7 +375,7 @@ void AnalyzeDialog::update_engines ()
 	auto new_list = client_window->analysis_engines (boardsizeSpinBox->value ());
 	engineComboBox->clear ();
 	for (auto &it: new_list) {
-		engineComboBox->addItem (it.title ());
+		engineComboBox->addItem (it.title);
 	}
 	m_engines = new_list;
 }
@@ -426,7 +426,7 @@ void AnalyzeDialog::start_engine ()
 	boardsizeSpinBox->setEnabled (false);
 
 	const Engine &e = m_engines.at (idx);
-	start_analyzer (e, e.boardsize ().toInt (), 7.5, 0, false);
+	start_analyzer (e, e.boardsize.toInt (), 7.5, 0, false);
 }
 
 void AnalyzeDialog::start_job ()

@@ -86,36 +86,6 @@ signals:
 
 //-----------
 
-class Host
-{
-public:
-	Host(const QString&, const QString&, const unsigned int, const QString&, const QString&, const QString&);
-	~Host() {};
-	QString title() const { return t; };
-	QString host() const { return h; };
-	unsigned int port() const { return pt; };
-	QString loginName() const { return lg; };
-	QString password() const { return pw; };
-	QString codec() const { return cdc; };
-	// operators <, ==
-	int operator== (Host h)
-		{ return (this->t == h.t); };
-	bool operator< (Host h)
-		{ return (this->t < h.t); };
-
-private:
-	QString t;
-	QString h;
-	QString lg;
-	QString pw;
-	unsigned int pt;
-	QString cdc;
-};
-
-typedef QList<Host *> HostList;
-
-//-----------
-
 class Account
 {
 public:

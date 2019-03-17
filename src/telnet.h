@@ -9,7 +9,7 @@
 
 class IGSConnection;
 class ClientWindow;
-class Host;
+struct Host;
 
 //-----------
 

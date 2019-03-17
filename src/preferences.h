@@ -5,9 +5,11 @@
 #ifndef PREFERENCESDIALOG_H
 #define PREFERENCESDIALOG_H
 
+#include "setting.h"
 #include "ui_preferences_gui.h"
 
 #include <QStandardItemModel>
+#include <QAbstractItemModel>
 
 class QIntValidator;
 class MainWindow;
@@ -15,6 +17,34 @@ class ClientWindow;
 class ImageHandler;
 class QGraphicsScene;
 class QGraphicsPixmapItem;
+
+template<class T>
+class pref_vec_model : public QAbstractItemModel
+{
+	std::vector<T> m_entries;
+	std::vector<T> m_extra;
+public:
+	pref_vec_model (std::vector<T> init)
+		: m_entries (init)
+	{
+	}
+	pref_vec_model (std::vector<T> init, const std::vector<T> &extra)
+		: m_entries (init), m_extra (extra)
+	{
+	}
+
+	void add_or_replace (T);
+	const T *find (const QModelIndex &) const;
+	const std::vector<T> &entries () const { return m_entries; }
+	virtual QVariant data (const QModelIndex &index, int role = Qt::DisplayRole) const override;
+	QModelIndex index (int row, int col, const QModelIndex &parent = QModelIndex()) const override;
+	QModelIndex parent (const QModelIndex &index ) const override;
+	int rowCount (const QModelIndex &parent = QModelIndex()) const override;
+	int columnCount (const QModelIndex &parent = QModelIndex()) const override;
+	bool removeRows (int row, int count, const QModelIndex &parent = QModelIndex()) override;
+	QVariant headerData (int section, Qt::Orientation orientation,
+			     int role = Qt::DisplayRole) const override;
+};
 
 class PreferencesDialog : public QDialog, public Ui::PreferencesDialogGui
 {
@@ -33,6 +63,12 @@ class PreferencesDialog : public QDialog, public Ui::PreferencesDialogGui
 	bool m_dbpaths_changed = false;
 	QString m_last_added_dbdir;
 
+	pref_vec_model<Host> m_hosts_model;
+	pref_vec_model<Engine> m_engines_model;
+
+	bool m_engines_changed = false;
+	bool m_hosts_changed = false;
+
 	void init_from_settings ();
 
 	bool avoid_losing_data ();
@@ -42,6 +78,9 @@ class PreferencesDialog : public QDialog, public Ui::PreferencesDialogGui
 	void update_w_stones ();
 	void update_b_stones ();
 	void update_stone_params ();
+
+	void update_current_host ();
+	void update_current_engine ();
 
 	void update_db_selection ();
 	void update_dbpaths (const QStringList &);
@@ -60,7 +99,6 @@ signals:
 
 public slots:
 	void on_soundButtonGroup_buttonClicked (QAbstractButton *);
-	void slot_cbtitle (const QString&);
 	void slot_new_server ();
 	void slot_add_server ();
 	void slot_delete_server ();
@@ -79,8 +117,6 @@ public slots:
 	void slot_getTablePicturePath ();
 	void slot_main_time_changed (int);
 	void slot_BY_time_changed (int);
-	void slot_clickedHostList (QListWidgetItem *);
-	void slot_clickedEngines (QListWidgetItem *);
 	void select_white_color (bool);
 	void select_black_color (bool);
 	void select_stone_look (bool);
@@ -90,7 +126,6 @@ public slots:
 	void slot_dbrem (bool);
 private:
 	void          saveSizes();
-	void          insertStandardHosts();
 };
 
 #endif

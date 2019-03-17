@@ -7,8 +7,8 @@
 
 GTP_Process *GTP_Controller::create_gtp (const Engine &engine, int size, double komi, int hc, bool show_dialog)
 {
-	m_id.engine = engine.title ().toStdString ();
-	QString ekstr = engine.komi ();
+	m_id.engine = engine.title.toStdString ();
+	QString ekstr = engine.komi;
 	bool ok;
 	double ekomi = ekstr.toFloat (&ok);
 	m_id.komi_set = !ekstr.isEmpty () && ok;
@@ -25,8 +25,8 @@ GTP_Process::GTP_Process(QWidget *parent, GTP_Controller *c, const Engine &engin
 			 int size, float komi, int hc, bool show_dialog)
 	: m_dlg (parent, TextView::type::gtp), m_controller (c), m_size (size), m_komi (komi), m_hc (hc)
 {
-	const QString &prog = engine.path ();
-	const QString &args = engine.args ();
+	const QString &prog = engine.path;
+	const QString &args = engine.args;
 	req_cnt = 1;
 
 	if (show_dialog) {

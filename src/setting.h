@@ -16,6 +16,47 @@
 
 class QTextStream;
 
+struct Engine
+{
+	QString title;
+	QString path;
+	QString args;
+	QString komi;
+	bool analysis;
+	QString boardsize;
+
+	Engine (const QString &t, const QString &p, const QString &a, const QString &k, bool an,
+		const QString &size)
+		: title (t), path (p), args (a), komi (k), analysis (an), boardsize (size)
+	{
+	}
+	Engine (const Engine &) = default;
+	Engine (Engine &&) = default;
+	Engine &operator= (Engine &&) = default;
+	Engine &operator= (const Engine &) = default;
+};
+
+struct Host
+{
+	QString title;
+	QString host;
+	QString login_name;
+	QString password;
+	QString codec;
+	unsigned int port;
+
+	Host (const QString &t, const QString &h, const unsigned int p,
+	      const QString &l, const QString &pw, const QString &c)
+		: title (t), host (h), login_name (l), password (pw), codec (c), port (p)
+	{
+	}
+	Host (const Host &) = default;
+	Host (Host &&) = default;
+	Host &operator= (Host &&) = default;
+	Host &operator= (const Host &) = default;
+};
+
+
 /* A few settings which are used frequently enough that we don't want
    to spend a lookup each time.  The alternative is caching them locally
    in the classes that use them, or passing them around through arguments,
@@ -44,6 +85,7 @@ class Setting
 
 	void extract_lists ();
 	void write_lists (QTextStream &);
+	void lists_to_entries ();
 
 	void updateFont (QFont&, QString);
 
@@ -55,10 +97,14 @@ public:
 	QString language;
 	setting_vals values;
 
-	bool nmatch_settings_modified;
-	bool dbpaths_changed;
+	bool nmatch_settings_modified = false;
+	bool dbpaths_changed = false;
+	bool engines_changed = false;
+	bool hosts_changed = false;
 
 	QStringList m_dbpaths;
+	std::vector<Engine> m_engines;
+	std::vector<Host> m_hosts;
 
 	void clearEntry(const QString &s) { writeEntry (s, QString ()); }
 	void writeEntry(const QString&, const QString&);
