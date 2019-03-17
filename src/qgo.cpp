@@ -73,6 +73,7 @@ void qGo::updateAllBoardSettings()
 {
 	for (auto it: main_window_list)
 		it->update_settings ();
+	setting->engines_changed = false;
 }
 
 void qGo::playClick()

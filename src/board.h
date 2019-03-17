@@ -30,6 +30,7 @@ class QNewGameDlg;
 class MainWindow;
 class svg_builder;
 class QFontInfo;
+struct Engine;
 
 /* We split the Board view into two classes: a BoardView, dealing only with display, and
    Board, which also interacts with the board window.
@@ -248,7 +249,7 @@ public:
 	void navIntersection();
 	void set_rect_select (int on) { m_request_mark_rect = on; }
 
-	void start_analysis ();
+	void start_analysis (const Engine &);
 	void stop_analysis ();
 	void pause_analysis (bool);
 

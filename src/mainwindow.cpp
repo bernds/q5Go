@@ -259,7 +259,7 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 	connect(diagComboBox, cact, this, &MainWindow::slotDiagChosen);
 
 	connect(normalTools->anStartButton, &QToolButton::clicked,
-		[=] (bool on) { if (on) gfx_board->start_analysis (); else gfx_board->stop_analysis (); });
+		[=] (bool on) { if (on) start_analysis (); else gfx_board->stop_analysis (); });
 	connect(normalTools->anPauseButton, &QToolButton::clicked,
 		[=] (bool on) { gfx_board->pause_analysis (on); });
 
@@ -376,6 +376,9 @@ MainWindow::~MainWindow()
 {
 	main_window_list.remove (this);
 
+	for (auto it: engine_actions)
+		delete it;
+
 	delete m_empty_state;
 
 	delete timer;
@@ -441,6 +444,8 @@ void MainWindow::initActions ()
 	editGroup->addAction (editNumber);
 	editGroup->addAction (editLetter);
 	editStone->setChecked (true);
+
+	engineGroup = new QActionGroup (this);
 
 	connect (editFigure, &QAction::triggered, this, &MainWindow::slotEditFigure);
 	connect (editRectSelect, &QAction::toggled, this, &MainWindow::slotEditRectSelect);
@@ -513,7 +518,7 @@ void MainWindow::initActions ()
 	connect(viewDiagComments, &QAction::toggled, this, &MainWindow::slotViewDiagComments);
 
 	/* Analyze menu.  */
-	connect(anConnect, &QAction::triggered, this, [=] () { gfx_board->start_analysis (); });
+	connect(anConnect, &QAction::triggered, this, [=] () { start_analysis (); });
 	connect(anPause, &QAction::toggled, this, [=] (bool on) { if (on) { grey_eval_bar (); } gfx_board->pause_analysis (on); });
 	connect(anDisconnect, &QAction::triggered, this, [=] () { gfx_board->stop_analysis (); });
 	connect(anBatch, &QAction::triggered, [] (bool) { show_batch_analysis (); });
@@ -575,6 +580,8 @@ void MainWindow::initMenuBar (GameMode mode)
 	helpMenu->addAction (whatsThis);
 
 	anMenu->setVisible (mode == modeNormal || mode == modeObserve);
+
+	populate_engines_menu ();
 }
 
 void MainWindow::initToolBar()
@@ -1106,6 +1113,64 @@ void MainWindow::hide_panes_for_mode ()
 	}
 }
 
+void MainWindow::slotEngineGroup (bool)
+{
+	QAction *checked_engine = engineGroup->checkedAction ();
+	anConnect->setEnabled (!anDisconnect->isEnabled () && checked_engine != nullptr);
+	normalTools->anStartButton->setEnabled (normalTools->anStartButton->isChecked () || checked_engine != nullptr);
+}
+
+void MainWindow::start_analysis ()
+{
+	QAction *checked = engineGroup->checkedAction ();
+	if (checked == nullptr) {
+		/* We should not get here - the actions/buttons should be disabled.  */
+		QMessageBox::warning (this, PACKAGE, tr ("You did not configure any analysis engine for this boardsize!"));
+		return;
+	}
+	auto it = engine_map.find (checked);
+	if (it == engine_map.end ()) {
+		/* Should not get here either.  */
+		QMessageBox::warning (this, PACKAGE, tr ("Internal error - engine not found."));
+		return;
+	}
+	gfx_board->start_analysis (it.value ());
+}
+
+void MainWindow::populate_engines_menu ()
+{
+	QAction *old_checked = engineGroup->checkedAction ();
+	QString old_title;
+	if (old_checked)
+		old_title = old_checked->text ();
+	for (auto it: engine_actions)
+		delete it;
+	engine_actions.clear ();
+	engine_map.clear ();
+
+	const go_board &b = m_game->get_root ()->get_board ();
+	if (b.size_x () != b.size_y ())
+		return;
+
+	qDebug () << "finding engines: " << b.size_x ();
+
+	QList<Engine> available = client_window->analysis_engines (b.size_x ());
+	for (auto &it: available) {
+		qDebug () << "Engine: " << it.title;
+		QAction *a = new QAction (it.title);
+		engine_map.insert (a, it);
+		connect (a, &QAction::triggered, this, &MainWindow::slotEngineGroup);
+		engine_actions.append (a);
+		engineGroup->addAction (a);
+		a->setCheckable (true);
+		if (it.title == old_title)
+			a->setChecked (true);
+	}
+	if (engineGroup->checkedAction () == nullptr && engine_actions.length () > 0)
+		engine_actions.first ()->setChecked (true);
+	anChooseMenu->addActions (engine_actions);
+}
+
 void MainWindow::update_settings ()
 {
 	update_font ();
@@ -1151,6 +1216,9 @@ void MainWindow::update_settings ()
 	editRectSelect->setEnabled (!disable_rect);
 
 	gameTreeView->update_prefs ();
+
+	if (setting->engines_changed)
+		populate_engines_menu ();
 }
 
 void MainWindow::slotSetGameInfo(bool)
@@ -2389,10 +2457,15 @@ void MainWindow_GTP::doResign ()
 void MainWindow::update_analysis (analyzer state)
 {
 	evalView->setVisible (state == analyzer::running || state == analyzer::paused);
-	anConnect->setEnabled (state == analyzer::disconnected);
+
+	QAction *checked_engine = engineGroup->checkedAction ();
+
+	anConnect->setEnabled (state == analyzer::disconnected && checked_engine != nullptr);
 	anConnect->setChecked (state != analyzer::disconnected);
 	anDisconnect->setEnabled (state != analyzer::disconnected);
+	anChooseMenu->setEnabled (!anDisconnect->isEnabled ());
 	normalTools->anStartButton->setChecked (state != analyzer::disconnected);
+	normalTools->anStartButton->setEnabled (normalTools->anStartButton->isChecked () || checked_engine != nullptr);
 	if (state == analyzer::disconnected)
 		normalTools->anStartButton->setIcon (QIcon (":/images/exit.png"));
 	else if (state == analyzer::starting)
@@ -2508,7 +2581,10 @@ void MainWindow::setTimes(const QString &btime, const QString &bstones, const QS
 /* Called whenever a new evaluation comes in from NEW_ID.  We update the evaluation graph.  */
 void MainWindow::update_analyzer_ids (const analyzer_id &new_id)
 {
+	int old_cnt = m_an_id_model.rowCount ();
 	m_an_id_model.notice_analyzer_id (new_id);
+	if (m_an_id_model.rowCount () > old_cnt && old_cnt == 1)
+		anIdListView->setVisible (true);
 	QModelIndex idx = anIdListView->currentIndex ();
 	evalGraph->update (m_game, gfx_board->displayed (), idx.isValid () ? idx.row () : 0);
 }

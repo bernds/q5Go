@@ -2608,6 +2608,12 @@ After placing and/or undo release button for returning to starting point automat
     <property name="title">
      <string>&amp;Analysis</string>
     </property>
+    <widget class="QMenu" name="anChooseMenu">
+     <property name="title">
+      <string>Choose analysis engine</string>
+     </property>
+    </widget>
+    <addaction name="anChooseMenu"/>
     <addaction name="anConnect"/>
     <addaction name="anDisconnect"/>
     <addaction name="anPause"/>
@@ -3872,6 +3878,11 @@ Open the batch analysis dialog which allows you to add SGF files to a queue to b
   <action name="fileOpenDB">
    <property name="text">
     <string>Open from &amp;database...</string>
+   </property>
+  </action>
+  <action name="actionNone">
+   <property name="text">
+    <string>None</string>
    </property>
   </action>
  </widget>

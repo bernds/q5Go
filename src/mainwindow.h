@@ -80,6 +80,8 @@ class MainWindow : public QMainWindow, public Ui::BoardWindow
 	void setSliderMax(int n);
 	void updateCaption ();
 	void update_font ();
+	void populate_engines_menu ();
+	void start_analysis ();
 
 public:
 	MainWindow(QWidget* parent, std::shared_ptr<game_record>, GameMode mode = modeNormal);
@@ -209,6 +211,8 @@ public slots:
 	void slotDiagSVG (bool);
 	void slotDiagChosen (int);
 
+	void slotEngineGroup(bool);
+
 	virtual void doPass ();
 	virtual void doCountDone ();
 	virtual void doUndo ();
@@ -231,7 +235,9 @@ protected:
 
 	QAction *escapeFocus, *whatsThis;
 	QAction *navAutoplay, *navSwapVariations;
-	QActionGroup *editGroup;
+	QActionGroup *editGroup, *engineGroup;
+	QList<QAction *> engine_actions;
+	QMap<QAction *, Engine> engine_map;
 	QTimer *timer;
 
 	float timerIntervals[6];
