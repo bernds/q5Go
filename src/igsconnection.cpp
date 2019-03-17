@@ -173,6 +173,16 @@ void IGSConnection::OnReadyRead()
 					saved_data = 0;
 					len_saved_data = 0;
 				}
+			} else if (authState == PASSWORD && len_saved_data == 10) {
+				qDebug("looking for 'Password:'");
+				QString y = QString::fromLatin1 (saved_data, len_saved_data);
+
+				qDebug() << "Collected: " << y;
+				if (checkPrompt(y)) {
+					delete[] saved_data;
+					saved_data = 0;
+					len_saved_data = 0;
+				}
 			}
 		}
 		while (qsocket->canReadLine())
