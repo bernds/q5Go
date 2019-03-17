@@ -889,7 +889,7 @@ void ClientWindow::slot_cmdactivated(const QString &cmd)
 	if (cmd.isNull ())
 		return;
 
-qDebug("cmd_valid: %i", (int)cmd_valid);
+	qDebug("cmd_valid: %i", (int)cmd_valid);
 	// check if valid cmd -> cmd number risen
 	if (cmd_valid)
 	{
@@ -1132,8 +1132,7 @@ void ClientWindow::update_font ()
 // refresh button clicked
 void ClientWindow::slot_refresh(int i)
 {
-
-  QString wparam = "" ;
+	QString wparam = "" ;
 	// refresh depends on selected page
 	switch (i)
 	{
@@ -1142,23 +1141,23 @@ void ClientWindow::slot_refresh(int i)
 		case 0:
 			// send "WHO" command
       			//set the params of "who command"
-			if ((whoBox1->currentIndex() >1)  || (whoBox2->currentIndex() >1))
+			if (whoBox1->currentIndex() > 1 || whoBox2->currentIndex() > 1)
         		{
-				wparam.append(whoBox1->currentIndex()==1 ? "9p" : whoBox1->currentText());
-				if ((whoBox1->currentIndex())  && (whoBox2->currentIndex()))
+				wparam.append(whoBox1->currentIndex() == 1 ? "9p" : whoBox1->currentText());
+				if (whoBox1->currentIndex() && whoBox2->currentIndex())
 					wparam.append("-");
 
-				wparam.append(whoBox2->currentIndex()==1 ? "9p" : whoBox2->currentText());
+				wparam.append(whoBox2->currentIndex() == 1 ? "9p" : whoBox2->currentText());
          		}
 			else if ((whoBox1->currentIndex())  || (whoBox2->currentIndex()))
         			wparam.append("1p-9p");
 			else
-				wparam.append(((myAccount->get_gsname() == IGS) ? "9p-BC" : " "));
+				wparam.append(myAccount->get_gsname() == IGS ? "9p-BC" : " ");
 
 			if (whoOpenCheck->isChecked())
-				wparam.append(((myAccount->get_gsname() == WING) ? "O" : "o"));//wparam.append(" o");
+				wparam.append(myAccount->get_gsname() == WING ? "O" : "o");
 
-			if (myAccount->get_gsname() == IGS )//&& extUserInfo)
+			if (myAccount->get_gsname() == IGS)
 				sendcommand(wparam.prepend("userlist "));
 			else
 				sendcommand(wparam.prepend("who "));
@@ -1180,7 +1179,6 @@ void ClientWindow::slot_refresh(int i)
 		default:
 			break;
 	}
-
 }
 
 void ClientWindow::slot_whoopen (bool checked)
