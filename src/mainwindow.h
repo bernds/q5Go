@@ -79,13 +79,16 @@ class MainWindow : public QMainWindow, public Ui::BoardWindow
 	void toggleSidebar (bool);
 	void setSliderMax(int n);
 	void updateCaption ();
+	void update_font ();
 
 public:
 	MainWindow(QWidget* parent, std::shared_ptr<game_record>, GameMode mode = modeNormal);
 	virtual ~MainWindow();
 	Board* getBoard() const { return gfx_board; }
 	int checkModified(bool interactive=true);
-	void updateFont();
+
+	void update_settings ();
+
 	static QString getFileExtension(const QString &fileName, bool defaultExt=true);
 	void hide_panes_for_mode ();
 	QString visible_panes_key ();
@@ -94,7 +97,6 @@ public:
 	bool restoreWindowLayout (bool);
 	void defaultPortraitLayout ();
 	void defaultLandscapeLayout ();
-	void updateBoard ();
 
 	void set_observer_model (QStandardItemModel *m);
 	bool doSave(QString fileName, bool force=false);

@@ -74,7 +74,6 @@ public slots:
 	void slot_setBytesIn (int i) { setBytesIn (i); }
 	void slot_setBytesOut (int i) { setBytesOut (i); }
 
-	void slot_updateFont ();
 	void slot_refresh (int);
 	void slot_playerPopup (int);
 	void slot_gamesPopup (int);
@@ -202,6 +201,7 @@ private:
 	//void initmenus(QWidget*);
 	void initToolBar();
 	void initActions();
+	void update_font ();
 
 	int toggle_player_state (const char *list, const QString &symbol);
 

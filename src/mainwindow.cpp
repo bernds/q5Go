@@ -284,7 +284,6 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 	timerIntervals[5] = 5.0;
 
 	toolBar->setFocus();
-	updateFont();
 
 	init_game_record (gr);
 
@@ -314,7 +313,9 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 	if (mode == modeMatch || mode == modeTeach || mode == modeObserve)
 		observersDock->setVisible (true);
 	setGameMode (mode);
-	updateBoard();
+
+	update_settings ();
+
 	restoreWindowLayout (false);
 
 	connect(commentEdit, &QTextEdit::textChanged, this, &MainWindow::slotUpdateComment);
@@ -1105,8 +1106,10 @@ void MainWindow::hide_panes_for_mode ()
 	}
 }
 
-void MainWindow::updateBoard()
+void MainWindow::update_settings ()
 {
+	update_font ();
+
 	viewCoords->setChecked (setting->readBoolEntry ("BOARD_COORDS"));
 	gfx_board->set_sgf_coords (setting->readBoolEntry ("SGF_BOARD_COORDS"));
 	gfx_board->set_antiClicko (setting->readBoolEntry ("ANTICLICKO"));
@@ -1631,7 +1634,7 @@ void MainWindow::slotUpdateComment2()
 	emit signal_sendcomment (text);
 }
 
-void MainWindow::updateFont()
+void MainWindow::update_font ()
 {
 	// editable fields
 	setFont (setting->fontComments);

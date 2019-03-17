@@ -214,11 +214,11 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	connect(this, &ClientWindow::signal_move, qgoif, &qGoIF::slot_gamemove);
 	connect(qgoif, &qGoIF::signal_sendcommand, this, &ClientWindow::slot_sendcommand);
 	connect(qgoif, &qGoIF::signal_addToObservationList, this, &ClientWindow::slot_addToObservationList);
-	connect(qgo, &qGo::signal_updateFont, this, &ClientWindow::slot_updateFont);
+
 	connect(parser, &Parser::signal_timeAdded, qgoif, &qGoIF::slot_timeAdded);
 	//connect(parser, &Parser::signal_undoRequest, qgoif, &qGoIF::slot_undoRequest);
 
-	slot_updateFont();
+	update_font ();
 
 	// install an event filter
 	qApp->installEventFilter(this);
@@ -1097,7 +1097,7 @@ void ClientWindow::slot_cbExtUserInfo()
 	setColumnsForExtUserInfo();
 }
 
-void ClientWindow::slot_updateFont()
+void ClientWindow::update_font ()
 {
 	// lists
 	ListView_players->setFont(setting->fontLists);
@@ -2390,7 +2390,8 @@ bool ClientWindow::preferencesAccept ()
 {
 	// Update all boards with settings
 	qgo->updateAllBoardSettings ();
-	qgo->updateFont ();
+	update_font ();
+
 	if (db_dialog != nullptr)
 		db_dialog->update_prefs ();
 
