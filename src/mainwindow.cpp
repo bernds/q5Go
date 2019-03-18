@@ -1684,7 +1684,10 @@ void MainWindow::append_comment(const QString &t)
 {
 	bool old = m_allow_text_update_signal;
 	m_allow_text_update_signal = false;
-	commentEdit->append (t);
+	/* The append method inserts paragraphs, which means we get an extra unwanted newline.  */
+	commentEdit->moveCursor (QTextCursor::End);
+	commentEdit->insertPlainText (t);
+	commentEdit->moveCursor (QTextCursor::End);
 	m_allow_text_update_signal = old;
 }
 
