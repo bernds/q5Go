@@ -75,6 +75,16 @@ public:
 			active = nullptr;
 			m_end_children = &m_children;
 		}
+		~node ()
+		{
+			while (m_children != nullptr) {
+				node *t = m_children;
+				m_children = t->m_siblings;
+				delete t;
+			}
+			for (auto i: props)
+				delete i;
+		}
 		void set_active (node *c)
 		{
 			active = c;
@@ -120,6 +130,10 @@ public:
 
 	sgf (node *n, const sgf_errors &e) : nodes (n), errs (e)
 	{
+	}
+	~sgf ()
+	{
+		delete nodes;
 	}
 };
 
