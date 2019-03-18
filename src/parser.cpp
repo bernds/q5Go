@@ -32,6 +32,7 @@ Parser::~Parser()
 	delete aGameInfo;
 	delete aGame;
 	delete aPlayer;
+	delete statsPlayer;
 }
 
 // put a line from host to parser
