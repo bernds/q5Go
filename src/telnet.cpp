@@ -20,6 +20,7 @@ TelnetConnection::TelnetConnection(ClientWindow *parent, QWidget *lv_p, QWidget 
 
 TelnetConnection::~TelnetConnection ()
 {
+	slotHostQuit ();
 	// qDebug("bfor deleting igsinterface addres: %x",igsInterface );
 	// CHECK_PTR(igsInterface);
 	delete igsInterface;

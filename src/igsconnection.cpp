@@ -44,6 +44,7 @@ IGSConnection::IGSConnection(QWidget *lvp, QWidget *lvg) : m_lv_p (lvp), m_lv_g 
 
 IGSConnection::~IGSConnection()
 {
+	qsocket->close ();
 	delete qsocket;
 }
 
