@@ -124,20 +124,24 @@ void AnalyzeDialog::analyzer_state_changed ()
 }
 
 AnalyzeDialog::job::job (AnalyzeDialog *dlg, QString &title, std::shared_ptr<game_record> gr, int n_seconds, int n_lines,
-			 stone_color col, bool all)
-	: m_dlg (dlg), m_title (title), m_game (gr), m_n_seconds (n_seconds), m_n_lines (n_lines),
-	  m_side (col), m_analyze_all (all)
+			 engine_komi k)
+	: m_dlg (dlg), m_title (title), m_game (gr), m_n_seconds (n_seconds), m_n_lines (n_lines), m_komi_type (k)
 {
-	std::function<bool (game_state *)> f = [this] (game_state *st) -> bool
+	std::vector<game_state *> *q = &m_queue;
+	std::function<bool (game_state *)> f = [this, &q] (game_state *st) -> bool
 		{
 			eval ev = st->best_eval ();
 			if (st->has_figure () && ev.visits > 0)
 				return false;
-			m_queue.push_back (st);
+			q->push_back (st);
 			return true;
 		};
 	m_game->get_root ()->walk_tree (f);
-	m_initial_size = m_queue.size ();
+	if (k == engine_komi::both) {
+		q = &m_queue_flipped;
+		m_game->get_root ()->walk_tree (f);
+	}
+	m_initial_size = m_queue.size () + m_queue_flipped.size ();
 }
 
 AnalyzeDialog::job::~job ()
@@ -148,8 +152,19 @@ AnalyzeDialog::job::~job ()
 
 game_state *AnalyzeDialog::job::select_request (bool pop)
 {
-	if (m_queue.size () == 0)
-		return nullptr;
+	if (m_queue_flipped.size () > 0 && m_dlg->m_current_komi.isEmpty ()) {
+		m_initial_size -= m_queue_flipped.size ();
+		m_queue_flipped.clear ();
+	}
+	if (m_queue.size () == 0) {
+		m_komi_type = engine_komi::do_swap;
+		if (m_queue_flipped.size () == 0)
+			return nullptr;
+		game_state *st = m_queue_flipped.back ();
+		if (pop)
+			m_queue_flipped.pop_back ();
+		return st;
+	}
 
 	game_state *st = m_queue.back ();
 	if (pop)
@@ -273,12 +288,28 @@ void AnalyzeDialog::queue_next ()
 			m_requester = j;
 			if (analyzer_state () == analyzer::paused)
 				pause_analyzer (false, st);
-			else
-				request_analysis (st);
+			else {
+				bool flip = j->m_komi_type == engine_komi::do_swap;
+				if (j->m_komi_type == engine_komi::maybe_swap && !m_current_komi.isEmpty ()) {
+					bool ok;
+					double k = m_current_komi.toFloat (&ok);
+					double gm_k = j->m_game->komi ();
+					if (ok && std::abs (k - gm_k) > std::abs (k + gm_k))
+						flip = true;
+				}
+				request_analysis (st, flip);
+			}
 			return;
 		}
 	}
 	pause_analyzer (true, nullptr);
+}
+
+void AnalyzeDialog::notice_analyzer_id (const analyzer_id &id)
+{
+	job *j = m_requester;
+	if (j->m_win != nullptr)
+		j->m_win->update_analyzer_ids (id);
 }
 
 void AnalyzeDialog::eval_received (const QString &, int)
@@ -290,8 +321,6 @@ void AnalyzeDialog::eval_received (const QString &, int)
 	update_progress ();
 
 	game_state *st = j->select_request (true);
-	if (j->m_win != nullptr)
-		j->m_win->update_analyzer_ids (m_id);
 	st->update_eval (*m_eval_state);
 	auto variations = m_eval_state->take_children ();
 	int count = 0;
@@ -316,7 +345,7 @@ void AnalyzeDialog::eval_received (const QString &, int)
 			break;
 	}
 
-	if (j->m_queue.size () == 0) {
+	if (j->select_request (false) == nullptr) {
 		if (j->m_win != nullptr)
 			j->m_win->setGameMode (modeNormal);
 
@@ -427,6 +456,7 @@ void AnalyzeDialog::start_engine ()
 	boardsizeSpinBox->setEnabled (false);
 
 	const Engine &e = m_engines.at (idx);
+	m_current_komi = e.komi;
 	start_analyzer (e, e.boardsize.toInt (), 7.5, 0, false);
 }
 
@@ -452,13 +482,15 @@ void AnalyzeDialog::start_job ()
 		return;
 	}
 	filenameEdit->setText ("");
-	m_all_jobs.emplace_front (this, f, gr, secondsEdit->text ().toInt (), maxlinesEdit->text ().toInt (),
-				  none, true);
+	int komi_val = komiComboBox->currentIndex ();
+
+	engine_komi k = komi_val == 2 ? engine_komi::both : komi_val == 1 ? engine_komi::maybe_swap : engine_komi::dflt;
+	m_all_jobs.emplace_front (this, f, gr, secondsEdit->text ().toInt (), maxlinesEdit->text ().toInt (), k);
 	job *j = &m_all_jobs.front ();
 	insert_job (m_jobs, jobView, j);
+
 	update_progress ();
 	if (analyzer_state () == analyzer::paused) {
 		queue_next ();
 	}
 }
-

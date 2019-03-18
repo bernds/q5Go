@@ -41,6 +41,8 @@ class GTP_Eval_Controller : public GTP_Controller
 {
 	game_state *m_eval_pos {};
 
+	bool m_last_request_flipped {};
+
 protected:
 	using GTP_Controller::GTP_Controller;
 	~GTP_Eval_Controller();
@@ -68,9 +70,10 @@ protected:
 	void pause_eval_updates (bool on) { m_pause_updates = on; }
 	bool pause_analyzer (bool on, game_state *);
 	void initiate_switch ();
-	void request_analysis (game_state *);
+	void request_analysis (game_state *, bool flip = false);
 	virtual void eval_received (const QString &, int) = 0;
 	virtual void analyzer_state_changed () { }
+	virtual void notice_analyzer_id (const analyzer_id &) { }
 public:
 	analyzer analyzer_state ();
 

@@ -39,19 +39,24 @@ class AnalyzeDialog : public QMainWindow, public Ui::AnalyzeDialog, public GTP_E
 
 	int m_job_count = 0;
 
+	QString m_current_komi;
+	enum class engine_komi { dflt, maybe_swap, do_swap, both };
+
 	struct job
 	{
 		AnalyzeDialog *m_dlg;
 		QString m_title;
 		std::shared_ptr<game_record> m_game;
 		MainWindow *m_win {};
+		/* We connect to the window's close event, and keep this connection
+		   around so we can delete it on close.  */
 		QMetaObject::Connection m_connection;
 		int m_n_seconds;
 		int m_n_lines;
-		stone_color m_side;
-		bool m_analyze_all;
+		engine_komi m_komi_type;
 
 		std::vector<game_state *> m_queue;
+		std::vector<game_state *> m_queue_flipped;
 		size_t m_initial_size;
 		size_t m_done = 0;
 
@@ -59,7 +64,7 @@ class AnalyzeDialog : public QMainWindow, public Ui::AnalyzeDialog, public GTP_E
 		int m_idx;
 
 		job (AnalyzeDialog *dlg, QString &title, std::shared_ptr<game_record> gr, int n_seconds, int n_lines,
-		     stone_color col, bool all);
+		     engine_komi);
 		~job ();
 		game_state *select_request (bool pop);
 		void show_window (bool done);
@@ -92,6 +97,7 @@ class AnalyzeDialog : public QMainWindow, public Ui::AnalyzeDialog, public GTP_E
 	/* Virtuals from Gtp_Controller.  */
 	virtual void eval_received (const QString &, int) override;
 	virtual void analyzer_state_changed () override;
+	virtual void notice_analyzer_id (const analyzer_id &) override;
 
 	virtual void closeEvent (QCloseEvent *) override;
 public:

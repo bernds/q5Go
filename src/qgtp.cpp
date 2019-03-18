@@ -335,7 +335,7 @@ analyzer GTP_Eval_Controller::analyzer_state ()
 	return analyzer::running;
 }
 
-void GTP_Eval_Controller::request_analysis (game_state *st)
+void GTP_Eval_Controller::request_analysis (game_state *st, bool flip)
 {
 	if (analyzer_state () != analyzer::running)
 		return;
@@ -353,19 +353,26 @@ void GTP_Eval_Controller::request_analysis (game_state *st)
 	for (int i = 0; i < b.size_x (); i++)
 		for (int j = 0; j < b.size_y (); j++) {
 			stone_color c = b.stone_at (i, j);
+			if (flip)
+				c = flip_color (c);
 			if (c != none)
 				m_analyzer->played_move (c, i, j);
 		}
 	while (!moves.empty ()) {
 		st = moves.back ();
 		moves.pop_back ();
-		m_analyzer->played_move (st->get_move_color (),
-					 st->get_move_x (),
-					 st->get_move_y ());
+		stone_color c = st->get_move_color ();
+		if (flip)
+			c = flip_color (c);
+		m_analyzer->played_move (c, st->get_move_x (), st->get_move_y ());
 	}
 	clear_eval_data ();
 
 	stone_color to_move = st->to_move ();
+	if (flip)
+		to_move = flip_color (to_move);
+
+	m_last_request_flipped = flip;
 	m_analyzer->analyze (to_move, 100);
 }
 
@@ -439,6 +446,7 @@ void GTP_Eval_Controller::gtp_eval (const QString &s)
 		return;
 
 	const go_board &b = m_eval_pos->get_board ();
+	/* This doesn't need flipping - it's the actual side to move.  */
 	stone_color to_move = m_eval_pos->to_move ();
 	delete m_eval_state;
 	m_eval_state = new game_state (b, to_move);
@@ -448,6 +456,13 @@ void GTP_Eval_Controller::gtp_eval (const QString &s)
 	m_primary_eval = 0.5;
 	QString primary_move;
 	int primary_visits = 0;
+
+	bool flip = m_last_request_flipped;
+
+	analyzer_id id = m_id;
+	if (flip)
+		id.komi = -id.komi;
+	notice_analyzer_id (id);
 
 	for (auto &e: moves) {
 //		m_board_win->append_comment (e);
@@ -459,12 +474,14 @@ void GTP_Eval_Controller::gtp_eval (const QString &s)
 		int winrate = re.cap (3).toInt ();
 		QString pv = re.cap (6);
 		double wr = winrate / 10000.;
-
+		/* The winrate also does not need flipping, it is given for the side to move,
+		   and since we flip both the stones and the side to move, it comes out correct
+		   in both cases.  */
 		if (count == 0) {
 			primary_move = move;
 			m_primary_eval = wr;
 			primary_visits = visits;
-			m_eval_state->set_eval_data (visits, to_move == white ? 1 - wr : wr, m_id);
+			m_eval_state->set_eval_data (visits, to_move == white ? 1 - wr : wr, id);
 		}
 		qDebug () << move << " PV: " << pv;
 
@@ -489,7 +506,7 @@ void GTP_Eval_Controller::gtp_eval (const QString &s)
 						break;
 					if (pv_first) {
 						cur->set_mark (i, j, mark::letter, count);
-						next->set_eval_data (visits, to_move == white ? 1 - wr : wr, m_id);
+						next->set_eval_data (visits, to_move == white ? 1 - wr : wr, id);
 						/* Leave it to a higher level to add a title if it wants
 						   to place these variations into the actual file.  */
 						next->set_figure (257, "");

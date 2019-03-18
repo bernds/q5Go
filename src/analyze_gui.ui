@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>657</width>
-    <height>511</height>
+    <height>528</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -63,6 +63,39 @@
           <string>5</string>
          </property>
         </widget>
+       </item>
+       <item row="2" column="0" colspan="2">
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="QLabel" name="label_6">
+           <property name="text">
+            <string>If fixed engine komi:</string>
+           </property>
+           <property name="buddy">
+            <cstring>komiComboBox</cstring>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="komiComboBox">
+           <item>
+            <property name="text">
+             <string>Use default</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Swap if better</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Analyze both</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>
