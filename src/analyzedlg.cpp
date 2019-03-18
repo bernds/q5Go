@@ -31,6 +31,10 @@ AnalyzeDialog::AnalyzeDialog (QWidget *parent, const QString &filename)
 
 	openButton->setEnabled (false);
 
+	/* "Swap komi if better" seems like a reasonable default.  It only affects games with negative
+	   komi.  */
+	komiComboBox->setCurrentIndex (1);
+
 	connect (enqueueButton, &QPushButton::clicked, [=] (bool) { start_job (); });
 	connect (fileselButton, &QPushButton::clicked, [=] (bool) { select_file (); });
 	connect (openButton, &QPushButton::clicked, [=] (bool) { open_in_progress_window (false); });
