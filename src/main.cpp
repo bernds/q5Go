@@ -257,7 +257,7 @@ QString open_filename_dialog (QWidget *parent)
 	return fileName;
 }
 
-void open_local_board (QWidget *parent, game_dialog_type type)
+void open_local_board (QWidget *parent, game_dialog_type type, const QString &scrkey)
 {
 	std::shared_ptr<game_record> gr;
 	switch (type) {
@@ -280,7 +280,7 @@ void open_local_board (QWidget *parent, game_dialog_type type)
 		break;
 	}
 	}
-	MainWindow *win = new MainWindow (0, gr);
+	MainWindow *win = new MainWindow (0, gr, scrkey);
 	win->show ();
 }
 
@@ -592,7 +592,7 @@ int main(int argc, char **argv)
 			windows_open |= open_window_from_file (arg, codec);
 	}
 	if (cmdp.isSet (clo_board) && !windows_open) {
-		open_local_board (client_window, game_dialog_type::none);
+		open_local_board (client_window, game_dialog_type::none, QString ());
 		windows_open = true;
 	}
 	windows_open |= show_client;

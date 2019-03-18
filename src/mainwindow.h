@@ -84,7 +84,8 @@ class MainWindow : public QMainWindow, public Ui::BoardWindow
 	void start_analysis ();
 
 public:
-	MainWindow(QWidget* parent, std::shared_ptr<game_record>, GameMode mode = modeNormal);
+	MainWindow(QWidget* parent, std::shared_ptr<game_record>, const QString opener_scrkey = QString (),
+		   GameMode mode = modeNormal);
 	virtual ~MainWindow();
 	Board* getBoard() const { return gfx_board; }
 	int checkModified(bool interactive=true);
@@ -96,7 +97,7 @@ public:
 	QString visible_panes_key ();
 	void restore_visibility_from_key (const QString &);
 	void saveWindowLayout (bool);
-	bool restoreWindowLayout (bool);
+	bool restoreWindowLayout (bool, const QString &scrkey = QString ());
 	void defaultPortraitLayout ();
 	void defaultLandscapeLayout ();
 
@@ -255,8 +256,8 @@ class MainWindow_GTP : public MainWindow, public GTP_Controller
 {
 	GTP_Process *m_gtp;
 public:
-	MainWindow_GTP (QWidget *parent, std::shared_ptr<game_record>, const Engine &program,
-			bool b_comp, bool w_comp);
+	MainWindow_GTP (QWidget *parent, std::shared_ptr<game_record>, QString opener_scrkey,
+			const Engine &program, bool b_comp, bool w_comp);
 	~MainWindow_GTP ();
 
 	/* Virtuals from MainWindow.  */

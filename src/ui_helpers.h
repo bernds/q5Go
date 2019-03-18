@@ -12,7 +12,7 @@ extern std::shared_ptr<game_record> new_variant_game_dialog (QWidget *);
 extern std::shared_ptr<game_record> record_from_stream (QIODevice &isgf, QTextCodec *codec);
 extern std::shared_ptr<game_record> record_from_file (const QString &filename, QTextCodec *codec);
 extern bool open_window_from_file (const QString &filename);
-extern void open_local_board (QWidget *, game_dialog_type);
+extern void open_local_board (QWidget *, game_dialog_type, const QString &);
 extern go_board new_handicap_board (int, int);
 extern QString get_candidate_filename (const QString &dir, const game_info &);
 extern bit_array calculate_hoshis (const go_board &);

@@ -46,8 +46,9 @@ QString screen_key (QWidget *w)
 	QWindow *win = w->windowHandle ();
 	if (win != nullptr)
 		scr = win->screen ();
-	if (scr == nullptr)
+	if (scr == nullptr) {
 		scr = QApplication::primaryScreen ();
+	}
 	QSize sz = scr->size ();
 	return QString::number (sz.width ()) + "x" + QString::number (sz.height ());
 }
@@ -136,7 +137,7 @@ QVariant an_id_model::headerData (int section, Qt::Orientation ot, int role) con
 	return QVariant ();
 }
 
-MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMode mode)
+MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, const QString opener_scrkey, GameMode mode)
 	: QMainWindow(parent), m_game (gr), m_ascii_dlg (this), m_svg_dlg (this)
 {
 	setupUi (this);
@@ -303,7 +304,7 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 	   Then, choose visibility defaults for the docks.
 	   Then, do a proper setGameMode, to hide all panes that should not be visible.
 	   Finally, restore the specific layout if one was saved.  */
-	restoreWindowLayout (true);
+	restoreWindowLayout (true, opener_scrkey);
 
 	int figuremode = setting->readIntEntry ("BOARD_DIAGMODE");
 	if (figuremode == 1 && m_game->get_root ()->has_figure_recursive ())
@@ -316,7 +317,7 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, GameMod
 
 	update_settings ();
 
-	restoreWindowLayout (false);
+	restoreWindowLayout (false, opener_scrkey);
 
 	connect(commentEdit, &QTextEdit::textChanged, this, &MainWindow::slotUpdateComment);
 	connect(commentEdit2, &QLineEdit::returnPressed, this, &MainWindow::slotUpdateComment2);
@@ -699,7 +700,7 @@ void MainWindow::update_game_tree ()
 
 void MainWindow::slotFileNewBoard (bool)
 {
-	open_local_board (client_window, game_dialog_type::none);
+	open_local_board (client_window, game_dialog_type::none, screen_key (this));
 }
 
 void MainWindow::slotFileNewGame (bool)
@@ -1507,9 +1508,9 @@ void MainWindow::saveWindowLayout (bool dflt)
 	statusBar ()->showMessage(tr("Window size saved.") + " (" + strKey + ")");
 }
 
-bool MainWindow::restoreWindowLayout (bool dflt)
+bool MainWindow::restoreWindowLayout (bool dflt, const QString &scrkey)
 {
-	QString strKey = screen_key (this);
+	QString strKey = scrkey.isEmpty () ? screen_key (this) : scrkey;
 	QString panesKey = visible_panes_key ();
 
 	if (!dflt)
@@ -2324,9 +2325,9 @@ void MainWindow::set_observer_model (QStandardItemModel *m)
 	ListView_observers->header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
 }
 
-MainWindow_GTP::MainWindow_GTP (QWidget *parent, std::shared_ptr<game_record> gr, const Engine &program,
+MainWindow_GTP::MainWindow_GTP (QWidget *parent, std::shared_ptr<game_record> gr, QString opener_scrkey, const Engine &program,
 				bool b_is_comp, bool w_is_comp)
-	: MainWindow (parent, gr, modeComputer), GTP_Controller (this)
+	: MainWindow (parent, gr, opener_scrkey, modeComputer), GTP_Controller (this)
 {
 	gfx_board->set_player_colors (!w_is_comp, !b_is_comp);
 	m_gtp = create_gtp (program, m_game->boardsize (), m_game->komi (), m_game->handicap ());

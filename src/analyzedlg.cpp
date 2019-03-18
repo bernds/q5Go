@@ -160,7 +160,7 @@ game_state *AnalyzeDialog::job::select_request (bool pop)
 void AnalyzeDialog::job::show_window (bool done)
 {
 	if (m_win == nullptr) {
-		m_win = new MainWindow (nullptr, m_game, done ? modeNormal : modeBatch);
+		m_win = new MainWindow (nullptr, m_game, screen_key (m_dlg), done ? modeNormal : modeBatch);
 		m_connection = connect (m_win, &MainWindow::signal_closeevent,
 					[this] ()
 					{

@@ -2006,9 +2006,9 @@ void ClientWindow::initActions()
 	/*
 	* Menu File
 	*/
-	connect(fileNewBoard, &QAction::triggered, [=] (bool) { open_local_board (this, game_dialog_type::none); });
-	connect(fileNewVariant, &QAction::triggered, [=] (bool) { open_local_board (this, game_dialog_type::variant); });
-	connect(fileNew, &QAction::triggered, [=] (bool) { open_local_board (this, game_dialog_type::normal); });
+	connect(fileNewBoard, &QAction::triggered, [=] (bool) { open_local_board (this, game_dialog_type::none, screen_key (this)); });
+	connect(fileNewVariant, &QAction::triggered, [=] (bool) { open_local_board (this, game_dialog_type::variant, screen_key (this)); });
+	connect(fileNew, &QAction::triggered, [=] (bool) { open_local_board (this, game_dialog_type::normal, screen_key (this)); });
 	connect(fileOpen, &QAction::triggered, this, &ClientWindow::slotFileOpen);
 	connect(fileOpenDB, &QAction::triggered, this, &ClientWindow::slotFileOpenDB);
 	connect(fileBatchAnalysis, &QAction::triggered, this, [] (bool) { show_batch_analysis (); });
@@ -2130,7 +2130,7 @@ void ClientWindow::slotComputerPlay(bool)
 	if (gr == nullptr)
 		return;
 	bool computer_white = dlg.computer_white_p ();
-	new MainWindow_GTP (0, gr, engine, !computer_white, computer_white);
+	new MainWindow_GTP (0, gr, screen_key (this), engine, !computer_white, computer_white);
 }
 
 
