@@ -2584,9 +2584,15 @@ void MainWindow::update_analyzer_ids (const analyzer_id &new_id)
 {
 	int old_cnt = m_an_id_model.rowCount ();
 	m_an_id_model.notice_analyzer_id (new_id);
-	if (m_an_id_model.rowCount () > old_cnt && old_cnt == 1)
-		anIdListView->setVisible (true);
+	if (m_an_id_model.rowCount () > old_cnt) {
+		if (old_cnt == 1)
+			anIdListView->setVisible (true);
+	}
 	QModelIndex idx = anIdListView->currentIndex ();
+	if (!idx.isValid () && m_an_id_model.rowCount () > 0) {
+		anIdListView->setCurrentIndex (m_an_id_model.index (0, 0));
+		idx = anIdListView->currentIndex ();
+	}
 	evalGraph->update (m_game, gfx_board->displayed (), idx.isValid () ? idx.row () : 0);
 }
 
