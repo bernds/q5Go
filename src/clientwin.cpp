@@ -226,13 +226,10 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 
 ClientWindow::~ClientWindow()
 {
-/*	delete qgoif;
-	delete setting;
 	delete telnetConnection;
+	delete qgoif;
 	delete parser;
-	delete statusUsers;
-	delete statusBar;
-*/
+	delete myAccount;
 }
 
 void ClientWindow::initStatusBar(QWidget* /*parent*/)
