@@ -2,6 +2,7 @@
 *   msg_handler.cpp
 */
 #include <QApplication>
+#include <QTextStream>
 
 #include "msg_handler.h"
 #include "qgo.h"
@@ -9,6 +10,9 @@
 #ifdef OWN_DEBUG_MODE
 void myMessageHandler(QtMsgType type, const QMessageLogContext &, const QString &msg)
 {
+	if (debug_stream != nullptr)
+		*debug_stream << msg << "\n";
+
 	if (debug_view == nullptr || qgo_app->startingUp () || qgo_app->closingDown ())
 		return;
 

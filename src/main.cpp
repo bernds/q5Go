@@ -36,6 +36,8 @@ DBDialog *db_dialog;
 
 Debug_Dialog *debug_dialog;
 #ifdef OWN_DEBUG_MODE
+static QFile *debug_file {};
+QTextStream *debug_stream {};
 QTextEdit *debug_view;
 #endif
 
@@ -514,6 +516,7 @@ int main(int argc, char **argv)
 	QCommandLineOption clo_board { { "b", "board" }, QObject::tr ("Start up with a board window (ignored if files are loaded).") };
 	QCommandLineOption clo_analysis { { "a", "analyze" }, QObject::tr ("Start up with the computer analysis dialog to analyze <file>."), QObject::tr ("file") };
 	QCommandLineOption clo_debug { { "d", "debug" }, QObject::tr ("Display debug messages in a window") };
+	QCommandLineOption clo_debug_file { { "D", "debug-file" }, QObject::tr ("Send debug messages to <file>."), QObject::tr ("file") };
 	QCommandLineOption clo_encoding { { "e", "encoding "}, QObject::tr ("Specify text <encoding> of SGF files passed by command line."), "encoding"};
 
 	cmdp.addOption (clo_client);
@@ -521,6 +524,7 @@ int main(int argc, char **argv)
 	cmdp.addOption (clo_analysis);
 #ifdef OWN_DEBUG_MODE
 	cmdp.addOption (clo_debug);
+	cmdp.addOption (clo_debug_file);
 #endif
 	cmdp.addOption (clo_encoding);
 	cmdp.addHelpOption ();
@@ -536,6 +540,11 @@ int main(int argc, char **argv)
 	debug_dialog = new Debug_Dialog ();
 	debug_dialog->setVisible (cmdp.isSet (clo_debug));
 	debug_view = debug_dialog->TextView1;
+	if (cmdp.isSet (clo_debug_file)) {
+		debug_file = new QFile (cmdp.value (clo_debug_file));
+		debug_file->open (QIODevice::WriteOnly);
+		debug_stream = new QTextStream (debug_file);
+	}
 #endif
 
 	// get application path
@@ -623,6 +632,15 @@ int main(int argc, char **argv)
 	if (setting->getNewVersionWarning())
 		help_new_version ();
 
-	return myapp.exec();
+	auto retval = myapp.exec ();
+
+	if (debug_stream != nullptr) {
+		delete debug_stream;
+		delete debug_file;
+		debug_stream = nullptr;
+		debug_file = nullptr;
+	}
+
+	return retval;
 }
 

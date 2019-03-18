@@ -25,6 +25,7 @@ public:
 
 void myMessageHandler(QtMsgType, const QMessageLogContext&, const QString&);
 
+extern QTextStream *debug_stream;
 extern QTextEdit *debug_view;
 extern Debug_Dialog *debug_dialog;
 
