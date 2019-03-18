@@ -38,7 +38,7 @@ public slots:
 	void unused_quit();
 
 private:
-	HelpViewer *helpViewer;
+	HelpViewer *helpViewer {};
 };
 
 class QApplication;
