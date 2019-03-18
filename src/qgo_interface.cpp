@@ -1619,7 +1619,7 @@ void qGoBoard::set_move(stone_color sc, QString pt, QString mv_nr)
 			j = m_game->boardsize () + 1 - pt[1].digitValue();
 
 		game_state *st = m_state;
-		game_state *st_new = st->add_child_move (i - 1, j - 1, sc);
+		game_state *st_new = st->add_child_move (i - 1, j - 1, sc, game_state::add_mode::set_main);
 		if (st_new != nullptr) {
 			st->transfer_observers (st_new);
 			if (win != nullptr)

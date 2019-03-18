@@ -322,11 +322,11 @@ static void add_to_game_state (game_state *gs, sgf::node *n, bool force, QTextCo
 			new_board.identify_units ();
 			if (terr)
 				new_board.territory_from_markers ();
-			gs = gs->add_child_edit_nochecks (new_board, to_move, terr, false);
+			gs = gs->add_child_edit_nochecks (new_board, to_move, terr, game_state::add_mode::keep_active);
 		} else if (is_pass) {
-			gs = gs->add_child_pass_nochecks (new_board, false);
+			gs = gs->add_child_pass_nochecks (new_board, game_state::add_mode::keep_active);
 		} else
-			gs = gs->add_child_move_nochecks (new_board, to_move, move_x, move_y, false);
+			gs = gs->add_child_move_nochecks (new_board, to_move, move_x, move_y, game_state::add_mode::keep_active);
 
 		const std::string *pm = n->find_property_val ("PM");
 		if (pm) {

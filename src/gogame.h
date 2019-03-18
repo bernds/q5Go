@@ -415,45 +415,58 @@ public:
 		}
 	}
 
-	game_state *add_child_edit_nochecks (const go_board &new_board, stone_color to_move, bool scored, bool set_active)
+	/* Determines how to add a new move.  set_active and keep_active add it to the end of the list,
+	   either making it active or leaving the current active move.  set_main is used in situations
+	   like online games where a new move must be made the main branch.  */
+	enum class add_mode { set_active, keep_active, set_main };
+
+private:
+	game_state *insert_child (game_state *tmp, add_mode am)
+	{
+		if (am == add_mode::set_main) {
+			m_children.insert (std::begin (m_children), tmp);
+			m_active = 0;
+		} else
+			m_children.push_back (tmp);
+		if (am == add_mode::set_active)
+			m_active = m_children.size() - 1;
+		return tmp;
+	}
+
+public:
+	game_state *add_child_edit_nochecks (const go_board &new_board, stone_color to_move, bool scored, add_mode am)
 	{
 		m_visual_ok = false;
 		int code = scored ? -3 : -2;
 		game_state *tmp = new game_state (new_board, m_move_number + 1, m_sgf_movenum + 1,
 						  this, to_move, code, code, none);
-		m_children.push_back (tmp);
-		if (set_active)
-			m_active = m_children.size() - 1;
-		return tmp;
+		return insert_child (tmp, am);
 	}
-	game_state *add_child_edit (const go_board &new_board, stone_color to_move, bool scored = false, bool set_active = true)
+	game_state *add_child_edit (const go_board &new_board, stone_color to_move, bool scored = false, add_mode am = add_mode::set_active)
 	{
 		for (auto &it: m_children)
 			if (it->m_board == new_board && it->m_to_move == to_move)
 				return it;
-		return add_child_edit_nochecks (new_board, to_move, scored, set_active);
+		return add_child_edit_nochecks (new_board, to_move, scored, am);
 	}
 
-	game_state *add_child_move_nochecks (const go_board &new_board, stone_color to_move, int x, int y, bool set_active)
+	game_state *add_child_move_nochecks (const go_board &new_board, stone_color to_move, int x, int y, add_mode am)
 	{
 		stone_color next_to_move = to_move == black ? white : black;
 		m_visual_ok = false;
 		game_state *tmp = new game_state (new_board, m_move_number + 1, m_sgf_movenum + 1,
 						  this, next_to_move, x, y, to_move);
-		m_children.push_back (tmp);
-		if (set_active)
-			m_active = m_children.size() - 1;
-		return tmp;
+		return insert_child (tmp, am);
 	}
 
-	game_state *add_child_move (const go_board &new_board, stone_color to_move, int x, int y, bool set_active = true)
+	game_state *add_child_move (const go_board &new_board, stone_color to_move, int x, int y, add_mode am = add_mode::set_active)
 	{
 		for (auto &it: m_children)
 			if (it->was_move_p () && it->m_board == new_board)
 				return it;
-		return add_child_move_nochecks (new_board, to_move, x, y, set_active);
+		return add_child_move_nochecks (new_board, to_move, x, y, am);
 	}
-	game_state *add_child_move (int x, int y, stone_color to_move, bool set_active = true)
+	game_state *add_child_move (int x, int y, stone_color to_move, add_mode am = add_mode::set_active)
 	{
 		if (!valid_move_p (x, y, to_move))
 			return nullptr;
@@ -465,37 +478,35 @@ public:
 			if (m_parent->m_board.position_equal_p (new_board))
 				return nullptr;
 		}
-		for (auto &it: m_children)
-			if (it->was_move_p () && it->m_board.position_equal_p (new_board))
-				return it;
+		if (am != add_mode::set_main)
+			for (auto &it: m_children)
+				if (it->was_move_p () && it->m_board.position_equal_p (new_board))
+					return it;
 
-		return add_child_move_nochecks (new_board, m_to_move, x, y, set_active);
+		return add_child_move_nochecks (new_board, m_to_move, x, y, am);
 	}
 	game_state *add_child_move (int x, int y)
 	{
 		return add_child_move (x, y, m_to_move);
 	}
-	game_state *add_child_pass_nochecks (const go_board &new_board, bool set_active)
+	game_state *add_child_pass_nochecks (const go_board &new_board, add_mode am)
 	{
 		m_visual_ok = false;
 		game_state *tmp = new game_state (new_board, m_move_number + 1, m_sgf_movenum + 1,
 						  this, m_to_move == black ? white : black);
 		tmp->m_move_color = m_to_move;
-		m_children.push_back (tmp);
-		if (set_active)
-			m_active = m_children.size() - 1;
-		return tmp;
+		return insert_child (tmp, am);
 	}
-	game_state *add_child_pass (const go_board &new_board, bool set_active = true)
+	game_state *add_child_pass (const go_board &new_board, add_mode am = add_mode::set_active)
 	{
 		for (auto &it: m_children)
 			if (it->m_board == new_board && it->was_pass_p ())
 				return it;
-		return add_child_pass_nochecks (new_board, set_active);
+		return add_child_pass_nochecks (new_board, am);
 	}
-	game_state *add_child_pass (bool set_active = true)
+	game_state *add_child_pass (add_mode am = add_mode::set_active)
 	{
-		return add_child_pass (m_board, set_active);
+		return add_child_pass (m_board, am);
 	}
 	void add_child_tree (game_state *other)
 	{
