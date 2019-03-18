@@ -641,6 +641,13 @@ int main(int argc, char **argv)
 		debug_file = nullptr;
 	}
 
+	delete client_window;
+	delete analyze_dialog;
+#ifdef OWN_DEBUG_MODE
+	delete debug_dialog;
+#endif
+	delete setting;
+
 	return retval;
 }
 
