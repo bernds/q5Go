@@ -191,7 +191,7 @@ void IGSConnection::OnReadyRead()
 			char *c = new char[size + len_saved_data];
 			if (len_saved_data)
 				memcpy (c, saved_data, len_saved_data);
-			int bytes = qsocket->readLine(c + len_saved_data, size);
+			qsocket->readLine(c + len_saved_data, size);
 			QString x = textCodec->toUnicode(c);
 			delete[] c;
 			len_saved_data = 0;
