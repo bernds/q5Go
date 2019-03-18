@@ -252,6 +252,8 @@ void AnalyzeDialog::discard_job (bool done)
 	   Checking for nullptr is ultra-paranoid.  */
 	if (j->m_display == nullptr)
 		return;
+	if (j == m_requester)
+		m_requester = nullptr;
 	remove_job (*j->m_display, j);
 	update_progress ();
 }
@@ -308,6 +310,8 @@ void AnalyzeDialog::queue_next ()
 void AnalyzeDialog::notice_analyzer_id (const analyzer_id &id)
 {
 	job *j = m_requester;
+	if (j == nullptr)
+		return;
 	if (j->m_win != nullptr)
 		j->m_win->update_analyzer_ids (id);
 }
@@ -315,6 +319,11 @@ void AnalyzeDialog::notice_analyzer_id (const analyzer_id &id)
 void AnalyzeDialog::eval_received (const QString &, int)
 {
 	job *j = m_requester;
+	if (j == nullptr) {
+		/* This occurs when the currently processed job is manually deleted by the user.  */
+		queue_next ();
+		return;
+	}
 	if (++m_seconds_count < j->m_n_seconds)
 		return;
 	j->m_done++;

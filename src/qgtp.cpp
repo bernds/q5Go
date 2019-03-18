@@ -342,17 +342,21 @@ void GTP_Eval_Controller::request_analysis (game_state *st, bool flip)
 
 	initiate_switch ();
 
-	m_eval_pos = st;
+	const go_board &b = st->get_board ();
+	stone_color to_move = st->to_move ();
+	delete m_eval_state;
+	m_eval_state = new game_state (b, to_move);
+
 	std::vector<game_state *> moves;
 	while (st->was_move_p () && !st->root_node_p ()) {
 		moves.push_back (st);
 		st = st->prev_move ();
 	}
-	const go_board &b = st->get_board ();
+	const go_board &startpos = st->get_board ();
 	m_analyzer->clear_board ();
 	for (int i = 0; i < b.size_x (); i++)
 		for (int j = 0; j < b.size_y (); j++) {
-			stone_color c = b.stone_at (i, j);
+			stone_color c = startpos.stone_at (i, j);
 			if (flip)
 				c = flip_color (c);
 			if (c != none)
@@ -366,9 +370,7 @@ void GTP_Eval_Controller::request_analysis (game_state *st, bool flip)
 			c = flip_color (c);
 		m_analyzer->played_move (c, st->get_move_x (), st->get_move_y ());
 	}
-	clear_eval_data ();
 
-	stone_color to_move = st->to_move ();
 	if (flip)
 		to_move = flip_color (to_move);
 
@@ -445,11 +447,7 @@ void GTP_Eval_Controller::gtp_eval (const QString &s)
 	if (moves.isEmpty ())
 		return;
 
-	const go_board &b = m_eval_pos->get_board ();
-	/* This doesn't need flipping - it's the actual side to move.  */
-	stone_color to_move = m_eval_pos->to_move ();
-	delete m_eval_state;
-	m_eval_state = new game_state (b, to_move);
+	stone_color to_move = m_eval_state->to_move ();
 
 	int an_maxmoves = setting->readIntEntry ("ANALYSIS_MAXMOVES");
 	int count = 0;
@@ -495,8 +493,8 @@ void GTP_Eval_Controller::gtp_eval (const QString &s)
 				int i = sx.toLatin1 () - 'A';
 				if (i > 7)
 					i--;
-				int szx = m_eval_pos->get_board ().size_x ();
-				int szy = m_eval_pos->get_board ().size_y ();
+				int szx = m_eval_state->get_board ().size_x ();
+				int szy = m_eval_state->get_board ().size_y ();
 				int j = szy - pm.mid (1).toInt ();
 				if (i >= 0 && i < szx && j >= 0 && j < szy) {
 					game_state *next = cur->add_child_move (i, j);

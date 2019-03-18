@@ -39,8 +39,6 @@ enum class analyzer { disconnected, starting, running, paused };
 
 class GTP_Eval_Controller : public GTP_Controller
 {
-	game_state *m_eval_pos {};
-
 	bool m_last_request_flipped {};
 
 protected:
