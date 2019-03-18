@@ -290,6 +290,32 @@ void AnalyzeDialog::eval_received (const QString &, int)
 	update_progress ();
 
 	game_state *st = j->select_request (true);
+	if (j->m_win != nullptr)
+		j->m_win->update_analyzer_ids (m_id);
+	st->update_eval (*m_eval_state);
+	auto variations = m_eval_state->take_children ();
+	int count = 0;
+	for (auto it: variations) {
+		eval ev = it->best_eval ();
+		double wr = ev.wr_black;
+		QString cnt = QString::number (count + 1);
+		QString wrb = QString::number (wr * 100);
+		QString wrw = QString::number ((1 - wr) * 100);
+		QString vis = QString::number (ev.visits);
+		QString title = tr ("PV ") + cnt + ": " + tr ("W Win ") + wrw + "%, " + tr ("B Win ") + wrb + "% " + tr ("at ") + vis + tr (" visits.");
+		it->set_figure (257, title.toStdString ());
+		st->add_child_tree (it);
+		j->m_game->set_modified ();
+		if (j->m_win) {
+			j->m_win->update_game_tree ();
+			j->m_win->update_figures ();
+			j->m_win->update_game_record ();
+		}
+		count++;
+		if (count >= j->m_n_lines)
+			break;
+	}
+
 	if (j->m_queue.size () == 0) {
 		if (j->m_win != nullptr)
 			j->m_win->setGameMode (modeNormal);
@@ -297,33 +323,8 @@ void AnalyzeDialog::eval_received (const QString &, int)
 		remove_job (m_jobs, j);
 		insert_job (m_done, doneView, j);
 		update_progress ();
-	} else {
-		if (j->m_win != nullptr)
-			j->m_win->update_analyzer_ids (m_id);
-		st->update_eval (*m_eval_state);
-		auto variations = m_eval_state->take_children ();
-		int count = 0;
-		for (auto it: variations) {
-			eval ev = it->best_eval ();
-			double wr = ev.wr_black;
-			QString cnt = QString::number (count + 1);
-			QString wrb = QString::number (wr * 100);
-			QString wrw = QString::number ((1 - wr) * 100);
-			QString vis = QString::number (ev.visits);
-			QString title = tr ("PV ") + cnt + ": " + tr ("W Win ") + wrw + "%, " + tr ("B Win ") + wrb + "% " + tr ("at ") + vis + tr (" visits.");
-			it->set_figure (257, title.toStdString ());
-			st->add_child_tree (it);
-			j->m_game->set_modified ();
-			if (j->m_win) {
-				j->m_win->update_game_tree ();
-				j->m_win->update_figures ();
-				j->m_win->update_game_record ();
-			}
-			count++;
-			if (count >= j->m_n_lines)
-				break;
-		}
 	}
+
 	queue_next ();
 }
 
