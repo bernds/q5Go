@@ -302,7 +302,7 @@ InfoType Parser::cmd1(const QString &line)
 	if (memory_str.contains("File") || memory_str.contains("STATS"))
 		// if ready this cannont be a help message
 		memory_str = QString::null;
-	emit signal_message("\n");  
+	emit signal_message("\n");
 	return READY;
 }
 
@@ -339,7 +339,7 @@ InfoType Parser::cmd5(const QString &line)
 		emit signal_notopen(0);
 	}
 
-	else if (line.contains("You cannot undo") || line.contains("client does not support undoplease")) 
+	else if (line.contains("You cannot undo") || line.contains("client does not support undoplease"))
 	{
 		// not the cleanest way : we should send this to a messagez box
 		emit signal_kibitz(0, 0, line);
@@ -355,10 +355,10 @@ InfoType Parser::cmd5(const QString &line)
 		QString p = line.section(' ', 0, 0);
 		if (p == myname)
 		{
-			memory_str = line ;
+			memory_str = line;
 			return MESSAGE;
 		}
-				
+
 		if (memory_str.contains(myname + " request"))
 		{
 			memory_str = QString::null;
@@ -366,7 +366,7 @@ InfoType Parser::cmd5(const QString &line)
 		}
 
 		QString nmatch_dispute = line.section(' ', -1, -1);
-				
+
 		emit signal_dispute(p, nmatch_dispute);
 		return MESSAGE;
 	}
@@ -426,7 +426,7 @@ InfoType Parser::cmd7(const QString &line)
 
 	// indicate game to be running
 	aGame->running = true;
-	aGame->oneColorGo = false ;
+	aGame->oneColorGo = false;
 
 	emit signal_game(aGame);
 	emit signal_gamemove(aGame);
@@ -541,7 +541,7 @@ InfoType Parser::cmd9(QString &line)
 		bool val = (line.indexOf("False") == -1);
 		emit signal_checkbox(2, val);
 	}
-	else if (line.indexOf("Channel") == 0) 
+	else if (line.indexOf("Channel") == 0)
 	{
 		// channel messages
 		QString e1 = line.section(' ', 1, 1);
@@ -758,10 +758,9 @@ InfoType Parser::cmd9(QString &line)
 		QString nr = re.cap(1);
 		QString opp = re.cap(2);
 		emit signal_matchcreate(nr, opp);
-        
 	}
 	// 9 frosla withdraws the match offer.
-	// 9 guest17 declines your request for a match.	
+	// 9 guest17 declines your request for a match.
 	else if (line.contains("declines your request for a match") ||
 		 line.contains("withdraws the match offer"))
 	{
@@ -775,11 +774,11 @@ InfoType Parser::cmd9(QString &line)
 		emit signal_kibitz(0, line.section(' ', 0, 0), line);
 		return KIBITZ;
 	}
-		
+
 	//9 yfh2test left this room
 	//9 yfh2test entered this room
 	else if (line.contains("this room"))
-		emit signal_refresh(10);				
+		emit signal_refresh(10);
 
 	//9 Requesting match in 10 min with frosla as Black.
 	else if (line.contains("Requesting match in"))
@@ -947,7 +946,7 @@ InfoType Parser::cmd9(QString &line)
 		return YOUHAVEMSG;
 	}
 	// 9 Observing game  2 (chmeng vs. myao) :
-	// 9        shanghai  9k*           henry 15k  
+	// 9        shanghai  9k*           henry 15k
 	// 9 Found 2 observers.
 	else if (line.contains("Observing game ", Qt::CaseSensitive))
 	{
@@ -1050,96 +1049,93 @@ InfoType Parser::cmd9(QString &line)
 		// not sure it is the best way : above code seem to make use of "signal"
 		// but we don't need this apparently for handling stats
 		memory_str = "STATS";
-		return STATS ;
+		return STATS;
 	}
 
 	else if (line.contains("Address:"))
 	{
 		statsPlayer->address = line.section(':', 1).trimmed();
 		emit signal_statsPlayer(statsPlayer);
-		return IT_OTHER ;
+		return IT_OTHER;
 	}
 	else if (line.contains("Last Access"))
 	{
 		statsPlayer->idle = line.section(':', 1).trimmed();
 		emit signal_statsPlayer(statsPlayer);
-		return IT_OTHER ;
+		return IT_OTHER;
 	}
-	
-	
 	else if (line.contains("Rating:"))
 	{
 		statsPlayer->rank = line.section(':', 1).trimmed();
 		emit signal_statsPlayer(statsPlayer);
-		return IT_OTHER ;
+		return IT_OTHER;
 	}
 
 	else if (line.contains("Wins:"))
 	{
 		statsPlayer->won = line.section(':', 1).trimmed();
 		emit signal_statsPlayer(statsPlayer);
-		return IT_OTHER ;         
+		return IT_OTHER;
 	}
-        
 	else if (line.contains("Losses:"))
 	{
 		statsPlayer->lost = line.section(':', 1).trimmed();
 		emit signal_statsPlayer(statsPlayer);
-		return IT_OTHER ;  
+		return IT_OTHER;
 	}
-	else if ((line.contains("Country:"))||(line.contains("From:")))   //IGS || LGS
+	else if (line.contains("Country:") || line.contains("From:"))   //IGS || LGS
 	{
 		statsPlayer->country = line.section(':', 1).trimmed();
 		emit signal_statsPlayer(statsPlayer);
-		return IT_OTHER ; 
+		return IT_OTHER;
 	}
 
 	else if (line.contains("Defaults"))    //IGS
 	{
 		statsPlayer->extInfo = line.section(':', 1).trimmed();
 		emit signal_statsPlayer(statsPlayer);
-		return IT_OTHER ; 
+		return IT_OTHER;
 	}
 	else if (line.contains("Experience on WING"))  //WING
 	{
-		statsPlayer->extInfo = line ;
+		statsPlayer->extInfo = line;
 		emit signal_statsPlayer(statsPlayer);
-		return IT_OTHER ;
+		return IT_OTHER;
 	}
 	else if (line.contains("User Level:")) //LGS
 	{
-		statsPlayer->extInfo = line ;
+		statsPlayer->extInfo = line;
 		emit signal_statsPlayer(statsPlayer);
-		return IT_OTHER ;
+		return IT_OTHER;
 	}
 
-	else if ((line.contains("Info:"))&& !(line.contains("Rank Info:")))
+	else if (line.contains("Info:") && !line.contains("Rank Info:"))
 	{
 		if (! statsPlayer->info.isEmpty())
 			statsPlayer->info.append("\n");
 		statsPlayer->info.append(line);
 		emit signal_statsPlayer(statsPlayer);
-		return IT_OTHER ;
+		return IT_OTHER;
 	}
 
 	else if (line.contains("Playing in game:"))       //IGS and LGS
 	{
 		statsPlayer->play_str = line.section(':', 1).trimmed();
 		emit signal_statsPlayer(statsPlayer);
-		return IT_OTHER ;
+		return IT_OTHER;
 	}
 	else if (line.contains("(playing game"))       //WING
 	{
 		statsPlayer->play_str = line.section(':', 1).trimmed();
 		emit signal_statsPlayer(statsPlayer);
-		return IT_OTHER ;
+		return IT_OTHER;
 	}
 
 	else if (line.contains("Rated Games:"))
 	{
 		statsPlayer->rated = line.section(':', 1).trimmed();
 		emit signal_statsPlayer(statsPlayer);
-		return IT_OTHER ;
+		return IT_OTHER;
 	}
 
 	else if (line.contains("Games Rated:"))    //WING syntax
@@ -1150,34 +1146,33 @@ InfoType Parser::cmd9(QString &line)
 		statsPlayer->lost = element(line, 6, " ");
 		emit signal_statsPlayer(statsPlayer);
 #endif
-		return IT_OTHER ;
+		return IT_OTHER;
 	}
 
-        
 	else if (line.contains("Idle Time:"))
 	{
 		if (gsName == WING)
 			statsPlayer->idle = line.section(':', 1).trimmed();
 		else
 			statsPlayer->idle = line.section(')', 1).trimmed();
-	      
+
 		emit signal_statsPlayer(statsPlayer);
-		return IT_OTHER ;
+		return IT_OTHER;
 	}
 
 	else if (line.contains("Last Access"))
 	{
 		statsPlayer->idle = "not on";
 		emit signal_statsPlayer(statsPlayer);
-		return IT_OTHER ;
+		return IT_OTHER;
 	}
-        
+
 	else if (line.left(5) == "19x19")     //LGS syntax
 	{
 		statsPlayer->rank = line.section(' ', 4, 4);
 		statsPlayer->rated = line.section(' ', 7, 7);
 		emit signal_statsPlayer(statsPlayer);
-		return IT_OTHER ;
+		return IT_OTHER;
 	}
 
 	else if (line.contains("Wins/Losses"))     //LGS syntax
@@ -1185,7 +1180,7 @@ InfoType Parser::cmd9(QString &line)
 		statsPlayer->won = line.section(' ', 2, 2);
 		statsPlayer->lost = line.section(' ', 4, 4);
 		emit signal_statsPlayer(statsPlayer);
-		return IT_OTHER ;
+		return IT_OTHER;
 	}
 
 	//9 ROOM 01: FREE GAME ROOM;PSMNYACF;Ž©—R‘Î‹ÇŽº;19;1;10;1,19,60,600,30,25,10,60,0
@@ -1198,13 +1193,13 @@ InfoType Parser::cmd9(QString &line)
 
 		//(element(line, 0,";")=="X") || (element(line, 0,";")=="P");
 		emit signal_room(t1.section(' ', 1), t2 == "X" || t2 == "P");
-		return IT_OTHER ;
+		return IT_OTHER;
 	}
 #if 0
 	else if (line.contains("Idle"))
 	{
 		statsPlayer->extInfo = line.section(' ', 4);
-		return STATS ;
+		return STATS;
 	}
 #endif
 #if 0
@@ -1295,7 +1290,7 @@ InfoType Parser::cmd15(const QString &line)
 
 		if (memory_str == QString("rmv@"))
 		{
-			// contiue removing
+			// continue removing
 			emit signal_removestones(0, aGameInfo->nr);
 			memory_str = QString::null;
 		}
@@ -1332,18 +1327,18 @@ InfoType Parser::cmd15(const QString &line)
 		QString time1 = timere.cap (4);
 		QString time2 = timere.cap (6);
 		QString stones = timere.cap (8);
-	
+
 		if (line.contains("(W)"))
 		{
 			aGameInfo->wname = timere.cap (2);
 			aGameInfo->wtime = (time1.toInt()==0 ? time2 : time1);
-			aGameInfo->wstones = (time1.toInt()==0 ?stones: "-1") ;
+			aGameInfo->wstones = (time1.toInt()==0 ?stones: "-1");
 		}
 		else if (line.contains("(B)"))
 		{
 			aGameInfo->bname = timere.cap (2);
 			aGameInfo->btime = (time1.toInt()==0 ? time2 : time1);
-			aGameInfo->bstones = (time1.toInt()==0 ? stones: "-1") ;
+			aGameInfo->bstones = (time1.toInt()==0 ? stones: "-1");
 		}
 		else //never know with IGS ...
 			return IT_OTHER;
@@ -1615,7 +1610,7 @@ InfoType Parser::cmd24(const QString &line)
 		// it's tell, but don't open a window for that kind of message...
 		return TELL;
 	}
-      
+
 	//check for cancelled game offer
 	if (line.contains("*SYSTEM*"))
 	{
@@ -1628,9 +1623,9 @@ InfoType Parser::cmd24(const QString &line)
 		if  (line.contains("requests undo"))
 			emit signal_requestDialog("undo","noundo",0,opp);
 
-		return IT_OTHER ;
+		return IT_OTHER;
 	}
-      
+
 	// check for NNGS type of msg
 	QString e1,e2;
 	if ((pos = line.indexOf("-->")) != -1 && pos < 3)
@@ -1796,7 +1791,7 @@ InfoType Parser::cmd27(const QString &txt)
 				else
 					aPlayer->rank = txt.mid(33,4);
 			}
-					
+
 			// check if line ok, true -> cmd "players" preceded
 			emit signal_player(aPlayer, true);
 		}
@@ -1844,7 +1839,7 @@ InfoType Parser::cmd27(const QString &txt)
 // 15 Game 7 I: frosla (0 5363 -1) vs guest17 (0 5393 -1)
 // 15   2(B): F17
 // IGS:
-// 28 Undo in game 64: MyMaster vs MyMaster:  N15 
+// 28 Undo in game 64: MyMaster vs MyMaster:  N15
 InfoType Parser::cmd28(const QString &line)
 {
 	if (line.contains("undid the last move"))
@@ -1882,7 +1877,7 @@ InfoType Parser::cmd28(const QString &line)
 // 1 5
 // -->  channels
 // 9 #1 Title: Professional Channel -- Open
-// 
+//
 // 9 #20 Title: Untitled -- Open
 // 9 #20     frosla
 // #> 23 till: hello all  <-- this is what the members in channel 23 see:
@@ -1891,9 +1886,9 @@ InfoType Parser::cmd28(const QString &line)
 // NNGS:
 // channel talk: "49:xxxx: hi"
 InfoType Parser::cmd32(const QString &line)
-{		
+{
 	QString e1,e2;
-			
+
 	if (line.contains("Changing into channel"))
 	{
 		e1 = line.section(' ', -1).remove('.');
@@ -1901,7 +1896,7 @@ InfoType Parser::cmd32(const QString &line)
 		emit signal_channelinfo(nr, QString("*on*"));
 		emit signal_talk(e1, "", false);
 		//emit signal_message(line);
-				
+
 		return IT_OTHER;
 	}
 	else if (line.contains("Welcome to cyberspace"))
@@ -1923,7 +1918,7 @@ InfoType Parser::cmd32(const QString &line)
 	}
 
 	// emit (channel number, player + message , false =channel )
-			
+
 	switch (gsName)
 	{
 	case IGS:
@@ -2001,7 +1996,7 @@ InfoType Parser::cmd42(const QString &txt)
 	//                    9               10                   11    12
 	//                    Idle            Flags
 			     "([A-Za-z0-9]+) +([^ ]{,2}) +default  ([TF])(.*)?");
-	if(re.indexIn(txt) < 0)
+	if (re.indexIn(txt) < 0)
 	{
 		qDebug() << txt.toUtf8().data();
 		qDebug() << "No match";
@@ -2012,7 +2007,7 @@ InfoType Parser::cmd42(const QString &txt)
 	aPlayer->name = re.cap(1).trimmed();
 	aPlayer->extInfo = re.cap(2);
 	aPlayer->country = re.cap(3).trimmed();
-	if(aPlayer->country == "--")
+	if (aPlayer->country == "--")
 		aPlayer->country = "";
 	aPlayer->rank = re.cap(4).trimmed();
 	aPlayer->won = re.cap(5).trimmed();
@@ -2046,8 +2041,8 @@ InfoType Parser::cmd42(const QString &txt)
 			QString t1min = QString::number(aPlayer->nmatch_timeMin / 60);
 			QString t1max = QString::number(aPlayer->nmatch_timeMax / 60);
 			if (t1min != t1max)
-				t1min.append(" to ").append(t1max) ;
-					
+				t1min.append(" to ").append(t1max);
+
 			QString t2min = elt4.section('-', 0);
 			QString t2max = elt4.section('-', 1);
 			aPlayer->nmatch_BYMin = t2min.toInt();
@@ -2057,23 +2052,23 @@ InfoType Parser::cmd42(const QString &txt)
 			QString t3max = QString::number(t2max.toInt() / 60);
 
 			if (t2min != t2max)
-				t2min.append(" to ").append(t2max) ;
+				t2min.append(" to ").append(t2max);
 
 			if (t3min != t3max)
-				t3min.append(" to ").append(t3max) ;
+				t3min.append(" to ").append(t3max);
 
 			QString s1 = elt5.section('-', 0);
 			QString s2 = elt5.section('-', 1);
 			aPlayer->nmatch_stonesMin = s1.toInt();
 			aPlayer->nmatch_stonesMax = s2.toInt();
-					
+
 			if (s1 != s2)
-				s1.append("-").append(s2) ;
-					
-			if (s1 == "1") 
+				s1.append("-").append(s2);
+
+			if (s1 == "1")
 				aPlayer->nmatch_settings = "Jap. BY : " +
 					t1min + " min. + " +
-					t2min + " secs./st. " ;
+					t2min + " secs./st. ";
 			else
 				aPlayer->nmatch_settings = "Can. BY : " +
 					t1min + " min. + " +
@@ -2085,17 +2080,17 @@ InfoType Parser::cmd42(const QString &txt)
 			aPlayer->nmatch_handicapMin = h1.toInt();
 			aPlayer->nmatch_handicapMax = h2.toInt();
 			if (h1 != h2)
-				h1.append("-").append(h2) ;
-					
-			aPlayer->nmatch_settings.append("(h " + h1 + ")") ;
+				h1.append("-").append(h2);
+
+			aPlayer->nmatch_settings.append("(h " + h1 + ")");
 		}
-		else 
+		else
 			aPlayer->nmatch_settings = "No match conditions";
 	}
 
 	// indicate player to be online
 	aPlayer->online = true;
-			
+
 	// check if line ok, true -> cmd 'players' or 'users' preceded
 	emit signal_player(aPlayer, true);
 
@@ -2177,34 +2172,34 @@ InfoType Parser::cmd63(const QString &line)
 	}
 
 	else if (line.contains("CONFIG_LIST_START"))
-	{	
+	{
 		emit signal_clearSeekCondition();
 		return IT_OTHER;
 	}
 
-	else if ((line.contains("OPPONENT_FOUND")) ||(line.contains("ENTRY_CANCEL")))
-	{	
+	else if (line.contains("OPPONENT_FOUND") || line.contains("ENTRY_CANCEL"))
+	{
 		emit signal_cancelSeek();
 		return IT_OTHER;
 	}
 
-	else if ((line.contains("ERROR")) )
-	{	
+	else if (line.contains("ERROR"))
+	{
 		emit signal_cancelSeek();
 		emit signal_message(line);
 		return IT_OTHER;
 	}
 
-	else if ((line.contains("ENTRY_LIST_START")) )
-	{	
+	else if (line.contains("ENTRY_LIST_START"))
+	{
 		//emit signal_clearSeekList();
 		return IT_OTHER;
 	}
 
-	else if ((line.contains("ENTRY_LIST ")) )
-	{	
+	else if (line.contains("ENTRY_LIST "))
+	{
 		QString player = line.section(' ', 1, 1);
-		QString condition = 
+		QString condition =
 			line.section(' ', 7, 7)+"x"+line.section(' ', 7, 7)+" - " +
 			QString::number(int(line.section(' ', 2, 2).toInt()/60))+
 			" +" +
