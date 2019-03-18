@@ -587,9 +587,12 @@ int main(int argc, char **argv)
 		QString encoding = cmdp.value(clo_encoding);
 		codec = QTextCodec::codecForName(encoding.toUtf8());
 	}
+	QStringList not_found;
 	for (auto arg: args) {
 		if (QFile::exists(arg) && arg.endsWith(".sgf", Qt::CaseInsensitive))
 			windows_open |= open_window_from_file (arg, codec);
+		else
+			not_found << arg;
 	}
 	if (cmdp.isSet (clo_board) && !windows_open) {
 		open_local_board (client_window, game_dialog_type::none, QString ());
@@ -597,6 +600,17 @@ int main(int argc, char **argv)
 	}
 	windows_open |= show_client;
 	windows_open |= cmdp.isSet (clo_analysis);
+	if (!not_found.isEmpty ()) {
+		QString err = QObject::tr ("The following files could not be found:") + "\n";
+		for (auto &it: not_found)
+			err += "  " + it + "\n";
+		if (windows_open)
+			QMessageBox::warning (0, PACKAGE, err);
+		else {
+			QTextStream str (stderr);
+			str << err;
+		}
+	}
 	if (!windows_open)
 		return 1;
 
