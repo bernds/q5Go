@@ -180,3 +180,14 @@ void EvalGraph::update (std::shared_ptr<game_record> gr, game_state *active, int
 
 	m_scene->update ();
 }
+
+void EvalGraph::changeEvent (QEvent *e)
+{
+	QGraphicsView::changeEvent (e);
+	if (e->type () != QEvent::EnabledChange)
+		return;
+	if (isEnabled ())
+		setForegroundBrush (QBrush (Qt::transparent));
+	else
+		setForegroundBrush (QBrush (Qt::lightGray, Qt::Dense6Pattern));
+}

@@ -53,6 +53,7 @@ class GameTree : public QGraphicsView
 protected:
 	virtual void contextMenuEvent (QContextMenuEvent *e) override;
 	virtual void resizeEvent(QResizeEvent*) override;
+	virtual void changeEvent (QEvent *) override;
 	virtual bool event (QEvent *e) override;
 
 public:
