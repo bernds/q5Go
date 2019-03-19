@@ -31,6 +31,7 @@ class EvalGraph : public QGraphicsView
 	double m_step;
 
 protected:
+	virtual void mouseMoveEvent (QMouseEvent *e) override;
 	virtual void mousePressEvent (QMouseEvent *e) override;
 	virtual void resizeEvent (QResizeEvent*) override;
 	virtual void contextMenuEvent (QContextMenuEvent *e) override;

@@ -41,7 +41,7 @@ void EvalGraph::update_prefs ()
 
 void EvalGraph::mousePressEvent (QMouseEvent *e)
 {
-	if (m_game == nullptr || e->button () != Qt::LeftButton)
+	if (m_game == nullptr || e->buttons () != Qt::LeftButton)
 		return;
 
 	game_state *st = m_game->get_root ();
@@ -55,6 +55,11 @@ void EvalGraph::mousePressEvent (QMouseEvent *e)
 	}
 	if (st && m_active != st)
 		m_win->set_game_position (st);
+}
+
+void EvalGraph::mouseMoveEvent (QMouseEvent *e)
+{
+	mousePressEvent (e);
 }
 
 void EvalGraph::resizeEvent (QResizeEvent*)
