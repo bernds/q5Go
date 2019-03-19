@@ -33,6 +33,12 @@ DBDialog::DBDialog (QWidget *parent)
 		 [this] (bool) { m_model.reset_filters (); gameNumLabel->setText (m_model.status_string ()); });
 	connect (clearButton, &QPushButton::clicked, this, &DBDialog::clear_filters);
 	connect (applyButton, &QPushButton::clicked, this, &DBDialog::apply_filters);
+
+	connect (buttonBox->button (QDialogButtonBox::Cancel), &QPushButton::clicked, this, &DBDialog::reject);
+	QAbstractButton *open = buttonBox->button (QDialogButtonBox::Open);
+	connect (open, &QPushButton::clicked, this, &DBDialog::accept);
+	open->setEnabled (false);
+
 	applyButton->setShortcut (Qt::Key_Return);
 	boardView->reset_game (m_game);
 	boardView->set_show_coords (false);
