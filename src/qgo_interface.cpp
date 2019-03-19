@@ -1788,13 +1788,13 @@ void qGoBoard::slot_sendcomment(const QString &comment)
 	{
 		// kibitz
 		emit signal_sendcommand("kibitz " + QString::number(id) + " " + comment, false);
-		send_kibitz("-> " + comment);
+		send_kibitz("-> " + comment + "\n");
 	}
 	else
 	{
 		// say
 		emit signal_sendcommand("say " + comment, false);
-		send_kibitz("-> " + comment);
+		send_kibitz("-> " + comment + "\n");
 	}
 }
 
