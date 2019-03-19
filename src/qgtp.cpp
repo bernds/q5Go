@@ -462,6 +462,10 @@ void GTP_Eval_Controller::gtp_eval (const QString &s)
 		id.komi = -id.komi;
 	notice_analyzer_id (id);
 
+	std::vector<game_state *> old_children = m_eval_state->take_children ();
+	for (auto &old: old_children)
+		delete old;
+
 	for (auto &e: moves) {
 //		m_board_win->append_comment (e);
 		QRegExp re ("(\\S+)\\s+visits\\s+(\\d+)\\s+winrate\\s+(\\d+)\\s+prior\\s+(\\d+)\\s+order\\s+(\\d+)\\s+pv\\s+(.*)$");
