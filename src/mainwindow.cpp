@@ -233,8 +233,11 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, const Q
 	m_eval_canvas = new QGraphicsScene (0, 0, w, h, evalView);
 	evalView->setScene (m_eval_canvas);
 	m_eval_bar = m_eval_canvas->addRect (QRectF (0, 0, w, h / 2), Qt::NoPen, QBrush (Qt::black));
+	m_eval_mid = m_eval_canvas->addRect (QRectF (0, (h - 1) / 2, w, 2), Qt::NoPen, QBrush (Qt::red));
+	m_eval_mid->setZValue (10);
 
 	m_eval = 0.5;
+
 	connect (evalView, &SizeGraphicsView::resized, this, [=] () { set_eval (m_eval); });
 	connect (anIdListView, &ClickableListView::current_changed, [this] () { update_game_tree (); });
 
@@ -2607,6 +2610,7 @@ void MainWindow::set_eval (double eval)
 	m_eval_canvas->setSceneRect (0, 0, w, h);
 	m_eval_bar->setRect (0, 0, w, h * eval);
 	m_eval_bar->setPos (0, 0);
+	m_eval_mid->setRect (0, (h - 1) / 2, w, 2);
 	m_eval_canvas->update ();
 }
 

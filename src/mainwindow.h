@@ -67,7 +67,7 @@ class MainWindow : public QMainWindow, public Ui::BoardWindow
 	GameMode m_remember_mode;
 	int m_remember_tab;
 	QGraphicsScene *m_eval_canvas;
-	QGraphicsRectItem *m_eval_bar;
+	QGraphicsRectItem *m_eval_bar, *m_eval_mid;
 	QGraphicsTextItem *m_w_time, *m_b_time;
 	double m_eval;
 
