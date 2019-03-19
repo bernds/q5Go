@@ -1841,6 +1841,10 @@ void MainWindow::setGameMode(GameMode mode)
 	normalTools->anStartButton->setVisible (mode == modeNormal || mode == modeObserve);
 	normalTools->anPauseButton->setVisible (mode == modeNormal || mode == modeObserve);
 
+	/* Don't allow navigation through these back doors when in edit or score mode.  */
+	evalGraph->setEnabled (mode != modeEdit && mode != modeScore && mode != modeScoreRemote);
+	gameTreeView->setEnabled (mode != modeEdit && mode != modeScore && mode != modeScoreRemote);
+
 	bool enable_nav = mode == modeNormal; /* @@@ teach perhaps? */
 
 	navPrevVar->setEnabled (enable_nav);
