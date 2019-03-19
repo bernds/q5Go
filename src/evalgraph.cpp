@@ -146,7 +146,7 @@ void EvalGraph::update (std::shared_ptr<game_record> gr, game_state *active, int
 			if (st != nullptr && st->find_eval (id, ev)) {
 				double wr = ev.wr_black;
 				if (on_path) {
-					path.lineTo (GRADIENT_WIDTH + x * m_step, h * wr);
+					path.lineTo (GRADIENT_WIDTH + x * m_step, (h - 2) * wr);
 					double chg = wr - prev;
 					if (chg != 0 && st->was_move_p () && idnr == sel_idx) {
 						QBrush br (st->get_move_color () == black ? Qt::black : Qt::white);
@@ -156,7 +156,7 @@ void EvalGraph::update (std::shared_ptr<game_record> gr, game_state *active, int
 								  Qt::NoPen, br);
 					}
 				} else
-					path.moveTo (GRADIENT_WIDTH + x * m_step, h * wr);
+					path.moveTo (GRADIENT_WIDTH + x * m_step, (h - 2) * wr);
 				prev = wr;
 				on_path = true;
 			} else
