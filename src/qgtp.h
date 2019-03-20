@@ -9,6 +9,7 @@
 #include "textview.h"
 
 class game_state;
+class game_record;
 
 class GTP_Process;
 
@@ -66,9 +67,9 @@ protected:
 	void start_analyzer (const Engine &engine, int size, double komi, int hc, bool show_dialog = true);
 	void stop_analyzer ();
 	void pause_eval_updates (bool on) { m_pause_updates = on; }
-	bool pause_analyzer (bool on, game_state *);
+	bool pause_analyzer (bool on, std::shared_ptr<game_record>, game_state *);
 	void initiate_switch ();
-	void request_analysis (game_state *, bool flip = false);
+	void request_analysis (std::shared_ptr<game_record>, game_state *, bool flip = false);
 	virtual void eval_received (const QString &, int) = 0;
 	virtual void analyzer_state_changed () { }
 	virtual void notice_analyzer_id (const analyzer_id &) { }
@@ -92,6 +93,8 @@ class GTP_Process : public QProcess
 	GTP_Controller *m_controller;
 
 	int m_size;
+	/* The komi we've requested with the "komi" command.  The engine may have
+	   ignored it.  */
 	double m_komi;
 	int m_hc;
 	bool m_started = false;
@@ -133,6 +136,7 @@ public:
 	void clear_board () { send_request ("clear_board"); }
 	void request_move (stone_color col);
 	void played_move (stone_color col, int x, int y);
+	void komi (double);
 	void played_move_pass (stone_color col);
 	void played_move_resign (stone_color col);
 	void analyze (stone_color col, int interval);

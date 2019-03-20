@@ -293,7 +293,7 @@ void AnalyzeDialog::queue_next ()
 			m_seconds_count = 0;
 			m_requester = j;
 			if (analyzer_state () == analyzer::paused)
-				pause_analyzer (false, st);
+				pause_analyzer (false, j->m_game, st);
 			else {
 				bool flip = j->m_komi_type == engine_komi::do_swap;
 				if (j->m_komi_type == engine_komi::maybe_swap && !m_current_komi.isEmpty ()) {
@@ -303,12 +303,12 @@ void AnalyzeDialog::queue_next ()
 					if (ok && std::abs (k - gm_k) > std::abs (k + gm_k))
 						flip = true;
 				}
-				request_analysis (st, flip);
+				request_analysis (j->m_game, st, flip);
 			}
 			return;
 		}
 	}
-	pause_analyzer (true, nullptr);
+	pause_analyzer (true, nullptr, nullptr);
 }
 
 void AnalyzeDialog::notice_analyzer_id (const analyzer_id &id)

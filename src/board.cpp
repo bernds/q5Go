@@ -2165,7 +2165,7 @@ void Board::navIntersection()
 
 void Board::setup_analyzer_position ()
 {
-	request_analysis (m_displayed);
+	request_analysis (m_game, m_displayed);
 }
 
 void Board::gtp_startup_success ()
@@ -2218,7 +2218,7 @@ void Board::stop_analysis ()
 
 void Board::pause_analysis (bool on)
 {
-	if (pause_analyzer (on, m_displayed))
+	if (pause_analyzer (on, m_game, m_displayed))
 		m_board_win->update_analysis (analyzer_state ());
 }
 
