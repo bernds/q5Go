@@ -1011,12 +1011,6 @@ void qGoBoard::leave_scoring_mode ()
 	send_kibitz (tr ("GAME MODE: click to play stones..."));
 }
 
-void qGoBoard::player_toggle_dead (int x, int y)
-{
-	/* @@@ Is that really it?  */
-	move_played (x, y);
-}
-
 void qGoBoard::mark_dead_stone (int x, int y)
 {
 	win->mark_dead_external (x, y);
@@ -1482,6 +1476,8 @@ void qGoBoard::setTimerInfo(const QString &btime, const QString &bstones, const 
 	bt = secToTime(bt_i);
 	wt = secToTime(wt_i);
 
+	if (m_game != nullptr)
+		update_time_info (m_state);
 #if 0
 	// set initial timer until game is initialized
 	if (!have_gameData)
@@ -1509,6 +1505,18 @@ void qGoBoard::addtime_w(int m)
 void qGoBoard::set_Mode_real(GameMode mode)
 {
 	gameMode = mode;
+}
+
+void qGoBoard::update_time_info (game_state *st)
+{
+	if (!st->was_move_p ())
+		return;
+	stone_color sc = st->get_move_color ();
+	qDebug () << "updating time for " << (sc == black ? "black" : "white");
+	st->set_time_left (sc, std::to_string (sc == white ? wt_i : bt_i));
+	QString &whichstones = sc == white ? w_stones : b_stones;
+	if (whichstones != "-1")
+		st->set_stones_left (sc, whichstones.toStdString ());
 }
 
 void qGoBoard::set_move(stone_color sc, QString pt, QString mv_nr)
@@ -1628,12 +1636,8 @@ void qGoBoard::set_move(stone_color sc, QString pt, QString mv_nr)
 			/* @@@ do something sensible.  */
 		}
 
-		if (st_new != nullptr && stated_mv_count <= mv_counter && wt_i >= 0 && bt_i >= 0) {
-			st_new->set_time_left (sc, std::to_string (sc == white ? wt_i : bt_i));
-			QString &whichstones = sc == white ? w_stones : b_stones;
-			if (whichstones != "-1")
-				st_new->set_stones_left (sc, whichstones.toStdString ());
-		}
+		if (st_new != nullptr && stated_mv_count <= mv_counter && wt_i >= 0 && bt_i >= 0)
+			update_time_info (st_new);
 	}
 	qDebug () << "found move " << mv_counter << " of " << stated_mv_count << "\n";
 	if (mv_counter + 1 == stated_mv_count && win == nullptr)
@@ -1798,7 +1802,7 @@ void qGoBoard::slot_sendcomment(const QString &comment)
 	}
 }
 
-void qGoBoard::move_played (int x, int y)
+void qGoBoard::send_coords (int x, int y)
 {
 	if (id < 0)
 		return;
@@ -1812,6 +1816,17 @@ void qGoBoard::move_played (int x, int y)
 		emit signal_sendcommand("kibitz " + QString::number(id) + " " + QString(c1) + QString::number(c2), false);
 	else
 		emit signal_sendcommand(QString(c1) + QString::number(c2) + " " + QString::number(id), false);
+}
+
+void qGoBoard::player_toggle_dead (int x, int y)
+{
+	send_coords (x, y);
+}
+
+void qGoBoard::move_played (int x, int y)
+{
+	update_time_info (m_state);
+	send_coords (x, y);
 }
 
 void qGoBoard::game_result (const QString &rs, const QString &extended_rs)

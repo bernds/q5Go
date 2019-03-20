@@ -75,6 +75,8 @@ class qGoBoard : public QObject, public game_state::observer
 	QStandardItemModel m_observers;
 
 	virtual void observed_changed () override { }
+	void send_coords (int x, int y);
+	void update_time_info (game_state *);
 
 public:
 	qGoBoard(qGoIF *, int game_id);
@@ -105,6 +107,7 @@ public:
 	void enter_scoring_mode (bool may_be_reentry);
 	void leave_scoring_mode (void);
 	void player_toggle_dead (int x, int y);
+	void move_played (int, int);
 
 	void send_kibitz(const QString&);
 	MainWindow_IGS *get_win() { return win; }
@@ -159,7 +162,6 @@ public slots:
 	void slot_sendcomment(const QString&);
 
 	// Board
-	void move_played (int, int);
 	void slot_doPass();
 	void slot_doResign();
 	void slot_doUndo();
