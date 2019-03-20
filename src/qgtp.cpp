@@ -451,7 +451,7 @@ bool GTP_Eval_Controller::pause_analyzer (bool on, std::shared_ptr<game_record> 
 
 void GTP_Eval_Controller::gtp_eval (const QString &s)
 {
-	if (m_pause_updates || m_switch_pending)
+	if (m_pause_updates || m_pause_eval || m_switch_pending)
 		return;
 
 	bool prune = setting->readBoolEntry("ANALYSIS_PRUNE");
