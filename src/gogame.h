@@ -224,6 +224,11 @@ public:
 		m_figure = other.m_figure;
 		m_print_numbering = other.m_print_numbering;
 		m_evals = other.m_evals;
+
+		m_timeleft_w = other.m_timeleft_w;
+		m_timeleft_b = other.m_timeleft_b;
+		m_stonesleft_w = other.m_stonesleft_w;
+		m_stonesleft_b = other.m_stonesleft_b;
 	}
 	void disconnect ()
 	{
