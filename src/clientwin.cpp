@@ -29,6 +29,7 @@
 #include "ui_helpers.h"
 #include "msg_handler.h"
 #include "dbdialog.h"
+#include "analyzedlg.h"
 
 ClientWindow *client_window;
 
@@ -2383,6 +2384,10 @@ void ClientWindow::dlgSetPreferences(int tab)
 
 bool ClientWindow::preferencesAccept ()
 {
+	if (setting->engines_changed) {
+		analyze_dialog->update_engines ();
+	}
+
 	// Update all boards with settings
 	qgo->updateAllBoardSettings ();
 	update_font ();

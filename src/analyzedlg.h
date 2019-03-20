@@ -87,7 +87,6 @@ class AnalyzeDialog : public QMainWindow, public Ui::AnalyzeDialog, public GTP_E
 	void insert_job (display &, QListView *, job *);
 	void remove_job (display &, job *);
 
-	void update_engines ();
 	void update_progress ();
 	void update_buttons (display &, QListView *, QProgressBar *, QToolButton *, QToolButton *);
 	job *selected_job (bool done);
@@ -103,6 +102,9 @@ class AnalyzeDialog : public QMainWindow, public Ui::AnalyzeDialog, public GTP_E
 public:
 	AnalyzeDialog (QWidget *parent, const QString &filename);
 	~AnalyzeDialog();
+
+	/* Used internally, and also called when the settings change.  */
+	void update_engines ();
 
 	/* Virtuals from Gtp_Controller.  */
 	virtual void gtp_startup_success () override;
