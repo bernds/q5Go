@@ -203,6 +203,9 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, const Q
 	initToolBar();
 	initStatusBar();
 
+	/* Only ever shown if this is opened through slot_editBoardInNewWindow.  */
+	refreshButton->setVisible (false);
+
 	viewStatusBar->setChecked (setting->readBoolEntry("STATUSBAR"));
 	viewMenuBar->setChecked (setting->readBoolEntry("MENUBAR"));
 
@@ -1929,7 +1932,7 @@ void MainWindow::setGameMode(GameMode mode)
 	adjournButton->setVisible (mode == modeMatch || mode == modeTeach || mode == modeScoreRemote);
 	resignButton->setVisible (mode == modeMatch || mode == modeComputer || mode == modeTeach || mode == modeScoreRemote);
 	resignButton->setEnabled (mode != modeScoreRemote);
-	refreshButton->setVisible (false);
+	refreshButton->setEnabled (mode == modeNormal);
 	editButton->setVisible (mode == modeObserve);
 	editPosButton->setVisible (mode == modeNormal || mode == modeEdit || mode == modeScore);
 	editPosButton->setEnabled (mode == modeNormal || mode == modeEdit);
