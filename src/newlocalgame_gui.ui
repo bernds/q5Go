@@ -486,10 +486,14 @@
  </customwidgets>
  <tabstops>
   <tabstop>playerWhiteEdit</tabstop>
+  <tabstop>playerWhiteRkEdit</tabstop>
   <tabstop>playerBlackEdit</tabstop>
+  <tabstop>playerBlackRkEdit</tabstop>
   <tabstop>boardSizeSpin</tabstop>
   <tabstop>komiSpin</tabstop>
   <tabstop>handicapSpin</tabstop>
+  <tabstop>timeSpin</tabstop>
+  <tabstop>byoTimeSpin</tabstop>
  </tabstops>
  <resources/>
  <connections/>

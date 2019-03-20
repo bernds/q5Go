@@ -392,10 +392,15 @@
  </customwidgets>
  <tabstops>
   <tabstop>playerWhiteEdit</tabstop>
+  <tabstop>playerWhiteRkEdit</tabstop>
   <tabstop>playerBlackEdit</tabstop>
+  <tabstop>playerBlackRkEdit</tabstop>
   <tabstop>xSizeSpin</tabstop>
   <tabstop>ySizeSpin</tabstop>
   <tabstop>komiSpin</tabstop>
+  <tabstop>hTorusCheckBox</tabstop>
+  <tabstop>vTorusCheckBox</tabstop>
+  <tabstop>graphicsView</tabstop>
  </tabstops>
  <resources>
   <include location="q4go.qrc"/>

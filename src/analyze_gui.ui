@@ -497,6 +497,26 @@
    </layout>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>secondsEdit</tabstop>
+  <tabstop>maxlinesEdit</tabstop>
+  <tabstop>komiComboBox</tabstop>
+  <tabstop>filenameEdit</tabstop>
+  <tabstop>fileselButton</tabstop>
+  <tabstop>enqueueButton</tabstop>
+  <tabstop>boardsizeSpinBox</tabstop>
+  <tabstop>engineComboBox</tabstop>
+  <tabstop>configureButton</tabstop>
+  <tabstop>engineStartButton</tabstop>
+  <tabstop>engineLogButton</tabstop>
+  <tabstop>jobView</tabstop>
+  <tabstop>trashButton</tabstop>
+  <tabstop>openButton</tabstop>
+  <tabstop>doneView</tabstop>
+  <tabstop>trashDoneButton</tabstop>
+  <tabstop>openDoneButton</tabstop>
+  <tabstop>closeButton</tabstop>
+ </tabstops>
  <resources>
   <include location="q4go.qrc"/>
  </resources>
