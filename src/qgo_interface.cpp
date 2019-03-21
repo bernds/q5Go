@@ -984,7 +984,7 @@ void qGoBoard::remote_undo (const QString &)
 
 	// back to matchMode
 	leave_scoring_mode ();
-	win->getBoard()->setMode(modeMatch);
+	win->setGameMode (modeMatch);
 	win->getBoard()->previous_move();
 	dec_mv_counter();
 	send_kibitz(tr("GAME MODE: place stones..."));
