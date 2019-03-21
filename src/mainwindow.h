@@ -73,6 +73,10 @@ class MainWindow : public QMainWindow, public Ui::BoardWindow
 
 	an_id_model m_an_id_model;
 
+	go_score m_score;
+	double m_result {};
+	QString m_result_text;
+
 	void toggleSliderSignal(bool b) { sliderSignalToggle = b; }
 
 	void setToolsTabWidget(enum tabType=tabNormalScore, enum tabState=tabSet);
@@ -82,6 +86,7 @@ class MainWindow : public QMainWindow, public Ui::BoardWindow
 	void update_font ();
 	void populate_engines_menu ();
 	void start_analysis ();
+	void update_score_type ();
 
 public:
 	MainWindow(QWidget* parent, std::shared_ptr<game_record>, const QString opener_scrkey = QString (),
@@ -237,6 +242,7 @@ protected:
 	QAction *escapeFocus, *whatsThis;
 	QAction *navAutoplay, *navSwapVariations;
 	QActionGroup *editGroup, *engineGroup;
+	QButtonGroup *scoreGroup;
 	QList<QAction *> engine_actions;
 	QMap<QAction *, Engine> engine_map;
 	QTimer *timer;

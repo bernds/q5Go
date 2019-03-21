@@ -259,6 +259,12 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, const Q
 	prevCommentButton->setDefaultAction (navPrevComment);
 	nextCommentButton->setDefaultAction (navNextComment);
 
+	scoreGroup = new QButtonGroup (this);
+	scoreGroup->addButton (scoreTools->scoreAreaButton);
+	scoreGroup->addButton (scoreTools->scoreTerrButton);
+	connect (scoreTools->scoreAreaButton, &QRadioButton::toggled, [this] (bool) { update_score_type (); });
+	connect (scoreTools->scoreTerrButton, &QRadioButton::toggled, [this] (bool) { update_score_type (); });
+
 	connect(diagEditButton, &QToolButton::clicked, this, &MainWindow::slotDiagEdit);
 	connect(diagASCIIButton, &QToolButton::clicked, this, &MainWindow::slotDiagASCII);
 	connect(diagSVGButton, &QToolButton::clicked, this, &MainWindow::slotDiagSVG);
@@ -387,8 +393,8 @@ MainWindow::~MainWindow()
 		delete it;
 
 	delete m_empty_state;
-
 	delete timer;
+	delete scoreGroup;
 
 	// status bar
 	delete statusMode;
@@ -1839,6 +1845,12 @@ void MainWindow::setGameMode(GameMode mode)
 		editGroup->setEnabled (false);
 	}
 
+	scoreTools->scoreTypeLine->setVisible (mode == modeScore);
+	scoreTools->scoreTerrButton->setVisible (mode == modeScore);
+	scoreTools->scoreAreaButton->setVisible (mode == modeScore);
+	if (mode == modeScoreRemote)
+		scoreTools->scoreTerrButton->setChecked (true);
+
 	normalTools->anGroup->setVisible (mode == modeNormal || mode == modeObserve);
 	normalTools->anStartButton->setVisible (mode == modeNormal || mode == modeObserve);
 	normalTools->anPauseButton->setVisible (mode == modeNormal || mode == modeObserve);
@@ -2271,32 +2283,15 @@ void MainWindow::doCountDone()
 		return;
 	}
 
-	double komi = m_game->komi ();
-	int capW = scoreTools->capturesWhite->text().toInt();
-	int capB = scoreTools->capturesBlack->text().toInt();
-	int terrW = scoreTools->terrWhite->text().toInt();
-	int terrB = scoreTools->terrBlack->text().toInt();
+	QString rs = scoreTools->result->text ();
+	QString s = m_result_text;
 
-	double totalWhite = capW + terrW + komi;
-	int totalBlack = capB + terrB;
-	double result = 0;
-	QString rs;
-
-	QString s;
-	QTextStream (&s) << tr("White") << "\n" << terrW << " + " << capW << " + " << komi << " = " << totalWhite << "\n";
-	QTextStream (&s) << tr("Black") << "\n" << terrB << " + " << capB << " = " << totalBlack << "\n\n";
-
-	if (totalBlack > totalWhite) {
-		result = totalBlack - totalWhite;
-		s.append(tr("Black wins with %1").arg(result));
-		rs = "B+" + QString::number(result);
-	} else if (totalWhite > totalBlack) {
-		result = totalWhite - totalBlack;
-		s.append(tr("White wins with %1").arg(result));
-		rs = "W+" + QString::number(result);
+	if (m_result < 0) {
+		s.append (tr ("Black wins with %1").arg (-m_result));
+	} else if (m_result > 0) {
+		s.append (tr ("White wins with %1").arg (m_result));
 	} else {
-		rs = tr("Jigo");
-		s.append(rs);
+		s.append (rs);
 	}
 
 	std::string old_result = m_game->result ();
@@ -2311,7 +2306,7 @@ void MainWindow::doCountDone()
 	}
 	//if (QMessageBox::information(this, PACKAGE " - " + tr("Game Over"), s, tr("Ok"), tr("Update gameinfo")) == 1)
 
-	gfx_board->doCountDone();
+	gfx_board->doCountDone ();
 	doRealScore (false);
 }
 
@@ -2502,28 +2497,55 @@ void MainWindow::update_analysis (analyzer state)
 	}
 }
 
-void MainWindow::recalc_scores(const go_board &b)
+/* After m_score has been set, calculate a result based on the state of the area/territory radio buttons.
+   The result we calculate is used later in doCountDone.  */
+void MainWindow::update_score_type ()
 {
-	int caps_b, caps_w, score_b, score_w;
-	b.get_scores (caps_b, caps_w, score_b, score_w);
+	bool terr = scoreTools->scoreTerrButton->isChecked ();
+	scoreTools->capturesWhiteLabel->setEnabled (terr);
+	scoreTools->capturesBlackLabel->setEnabled (terr);
+	scoreTools->capturesWhite->setEnabled (terr);
+	scoreTools->capturesBlack->setEnabled (terr);
+	scoreTools->stonesWhiteLabel->setEnabled (!terr);
+	scoreTools->stonesBlackLabel->setEnabled (!terr);
+	scoreTools->stonesWhite->setEnabled (!terr);
+	scoreTools->stonesBlack->setEnabled (!terr);
+	double extra_w = terr ? m_score.caps_w : m_score.stones_w;
+	double extra_b = terr ? m_score.caps_b : m_score.stones_b;
+	double total_w = m_score.score_w + extra_w + m_game->komi ();
+	double total_b = m_score.score_b + extra_b;
 
-	scoreTools->capturesWhite->setText(QString::number(caps_w));
-	scoreTools->capturesBlack->setText(QString::number(caps_b));
-	normalTools->capturesWhite->setText(QString::number(caps_w));
-	normalTools->capturesBlack->setText(QString::number(caps_b));
-
-	scoreTools->terrWhite->setText(QString::number(score_w));
-	scoreTools->totalWhite->setText(QString::number(score_w + caps_w + m_game->komi ()));
-	scoreTools->terrBlack->setText(QString::number(score_b));
-	scoreTools->totalBlack->setText(QString::number(score_b + caps_b));
-
-	double res = score_w + caps_w + m_game->komi () - score_b - caps_b;
-	if (res < 0)
-		scoreTools->result->setText ("B+" + QString::number (-res));
-	else if (res == 0)
+	scoreTools->totalWhite->setText (QString::number (total_w));
+	scoreTools->totalBlack->setText (QString::number (total_b));
+	m_result = m_score.score_w + extra_w + m_game->komi () - m_score.score_b - extra_b;
+	if (m_result < 0)
+		scoreTools->result->setText ("B+" + QString::number (-m_result));
+	else if (m_result == 0)
 		scoreTools->result->setText ("Jigo");
 	else
-		scoreTools->result->setText ("W+" + QString::number (res));
+		scoreTools->result->setText ("W+" + QString::number (m_result));
+
+	m_result_text = "";
+	QTextStream ts (&m_result_text);
+	ts << tr("White") << "\n" << m_score.score_w << " + " << extra_w << " + " << m_game->komi () << " = " << total_w << "\n";
+	ts << tr("Black") << "\n" << m_score.score_b << " + " << extra_b << " = " << total_b << "\n\n";
+}
+
+void MainWindow::recalc_scores (const go_board &b)
+{
+	m_score = b.get_scores ();
+
+	scoreTools->capturesWhite->setText (QString::number (m_score.caps_w));
+	scoreTools->capturesBlack->setText (QString::number (m_score.caps_b));
+	scoreTools->stonesWhite->setText (QString::number (m_score.stones_w));
+	scoreTools->stonesBlack->setText (QString::number (m_score.stones_b));
+	normalTools->capturesWhite->setText (QString::number (m_score.caps_w));
+	normalTools->capturesBlack->setText (QString::number (m_score.caps_b));
+
+	scoreTools->terrWhite->setText (QString::number (m_score.score_w));
+	scoreTools->terrBlack->setText (QString::number (m_score.score_b));
+
+	update_score_type ();
 }
 
 void MainWindow::setSliderMax(int n)

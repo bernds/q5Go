@@ -33,6 +33,13 @@ enum class stone_type { live, seki, dead, var };
 enum class mark { none = 0, move, triangle, circle, square, plus, cross, text, num, letter, dead, seki, terr, falseeye };
 typedef unsigned short mextra;
 
+struct go_score
+{
+	int caps_b = 0, caps_w = 0;
+	int score_b = 0, score_w = 0;
+	int stones_b = 0, stones_w = 0;
+};
+
 class go_board
 {
 	/* In everyday conversation, we might call these "strings of stones".  That
@@ -371,13 +378,7 @@ public:
 	{
 		return *m_stones_w;
 	}
-	void get_scores (int &caps_b, int &caps_w, int &score_b, int &score_w) const
-	{
-		caps_b = m_caps_b + m_dead_w;
-		caps_w = m_caps_w + m_dead_b;
-		score_b = m_score_b;
-		score_w = m_score_w;
-	}
+	go_score get_scores () const;
 	void territory_from_markers ();
 	void append_marks_sgf (std::string &) const;
 

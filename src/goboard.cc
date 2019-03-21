@@ -357,6 +357,23 @@ void go_board::toggle_seki (int x, int y)
 		}
 }
 
+go_score go_board::get_scores () const
+{
+	go_score sc;
+	sc.caps_b = m_caps_b + m_dead_w;
+	sc.caps_w = m_caps_w + m_dead_b;
+	sc.score_b = m_score_b;
+	sc.score_w = m_score_w;
+	sc.stones_b = sc.stones_w = 0;
+	for (auto &it: m_units_w)
+		if (it.m_alive)
+			sc.stones_w += it.m_stones.popcnt ();
+	for (auto &it: m_units_b)
+		if (it.m_alive)
+			sc.stones_b += it.m_stones.popcnt ();
+	return sc;
+}
+
 /* Called when loading an SGF and encountering a position with territory markers.
    Update our captures and territory so that the correct result can be shown.  */
 void go_board::territory_from_markers ()
