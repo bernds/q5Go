@@ -681,7 +681,7 @@ QByteArray BoardView::render_svg (bool do_number, bool coords)
    This should really be part of game_state, but there is the added complication
    of the m_edit_board.  */
 
-QString BoardView::render_ascii (bool do_number, bool coords)
+QString BoardView::render_ascii (bool do_number, bool coords, bool go_tags)
 {
 	const go_board &db = m_displayed->get_board ();
 	bool have_figure = m_figure_view && m_edit_board == nullptr && m_displayed->has_figure ();
@@ -743,7 +743,9 @@ QString BoardView::render_ascii (bool do_number, bool coords)
 		}
 		if (first_col == none)
 			first_col = startpos->to_move ();
-		result += "[go]$$";
+		if (go_tags)
+			result += "[go]";
+		result +="$$";
 		result += first_col == black ? "B" : "W";
 		if (coords) {
 			result += "c" + QString::number (std::max (szx, szy));
@@ -812,7 +814,9 @@ QString BoardView::render_ascii (bool do_number, bool coords)
 				result += "-+";
 			result += "\n";
 		}
-		result += "[/go]\n";
+		if (go_tags)
+			result += "[/go]";
+		result += "\n";
 
 		for (int i = 0; i < n_mv; i++) {
 			int x = startpos->get_move_x ();

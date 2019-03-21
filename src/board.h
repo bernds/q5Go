@@ -141,7 +141,7 @@ public:
 
 	QPixmap grabPicture();
 	QPixmap draw_position (int);
-	QString render_ascii (bool, bool);
+	QString render_ascii (bool, bool, bool);
 	QByteArray render_svg (bool, bool);
 
 	void clear_selection ();

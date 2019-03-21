@@ -278,6 +278,7 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, const Q
 
 	connect(m_ascii_dlg.cb_coords, &QCheckBox::toggled, [=] (bool) { update_ascii_dialog (); });
 	connect(m_ascii_dlg.cb_numbering, &QCheckBox::toggled, [=] (bool) { update_ascii_dialog (); });
+	connect(m_ascii_dlg.targetComboBox, cact, [=] (int) { update_ascii_dialog (); });
 	connect(m_svg_dlg.cb_coords, &QCheckBox::toggled, [=] (bool) { update_svg_dialog (); });
 	connect(m_svg_dlg.cb_numbering, &QCheckBox::toggled, [=] (bool) { update_svg_dialog (); });
 	/* These don't do anything that toggling the checkboxes wouldn't also do, but it's slightly more
@@ -895,7 +896,8 @@ void MainWindow::slotFileExportSgfClipB(bool)
 void MainWindow::update_ascii_dialog ()
 {
 	QString s = m_ascii_update_source->render_ascii (m_ascii_dlg.cb_numbering->isChecked (),
-							 m_ascii_dlg.cb_coords->isChecked ());
+							 m_ascii_dlg.cb_coords->isChecked (),
+							 m_ascii_dlg.targetComboBox->currentIndex () == 0);
 	m_ascii_dlg.textEdit->setText (s);
 }
 
