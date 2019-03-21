@@ -685,7 +685,7 @@ QString BoardView::render_ascii (bool do_number, bool coords)
 {
 	const go_board &db = m_displayed->get_board ();
 	bool have_figure = m_figure_view && m_edit_board == nullptr && m_displayed->has_figure ();
-	int bitsz = db.bitsize ();
+	unsigned bitsz = db.bitsize ();
 	int szx = db.size_x ();
 	int szy = db.size_y ();
 	QString result;

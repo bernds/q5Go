@@ -223,7 +223,7 @@ public:
 	{
 		return m_torus_v;
 	}
-	int bitsize () const
+	unsigned bitsize () const
 	{
 		return m_sz_x * m_sz_y;
 	}
@@ -317,7 +317,7 @@ public:
 	{
 		if (m_marks.size () == 0)
 			return;
-		for (int i = 0; i < bitsize (); i++) {
+		for (unsigned i = 0; i < bitsize (); i++) {
 			m_marks[i] = mark::none;
 			m_mark_extra[i] = 0;
 		}
@@ -352,7 +352,7 @@ public:
 		if (*m_stones_w != *other.m_stones_w)
 			return false;
 		if (m_marks.size () != 0 || other.m_marks.size () != 0) {
-			for (int i = 0; i < bitsize (); i++) {
+			for (unsigned i = 0; i < bitsize (); i++) {
 				mark m1 = m_marks.size () == 0 ? mark::none : m_marks[i];
 				mark m2 = other.m_marks.size () == 0 ? mark::none : other.m_marks[i];
 				if (m1 != m2)
@@ -408,7 +408,7 @@ private:
 	bit_array collect_marks (mark t) const
 	{
 		bit_array tmp (bitsize ());
-		for (int i = 0; i < bitsize (); i++)
+		for (unsigned i = 0; i < bitsize (); i++)
 			if (m_marks[i] == t)
 				tmp.set_bit (i);
 		return tmp;
@@ -416,7 +416,7 @@ private:
 	bit_array collect_marks (mark t, mextra me) const
 	{
 		bit_array tmp (bitsize ());
-		for (int i = 0; i < bitsize (); i++)
+		for (unsigned i = 0; i < bitsize (); i++)
 			if (m_marks[i] == t && m_mark_extra[i] == me)
 				tmp.set_bit (i);
 		return tmp;
