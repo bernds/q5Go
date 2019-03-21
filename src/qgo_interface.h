@@ -69,8 +69,6 @@ class qGoBoard : public QObject, public game_state::observer
 
 	/* State used while receiving a game result.  */
 	go_board *m_scoring_board = nullptr;
-	int m_terr_w, m_terr_b;
-	int m_caps_w, m_caps_b;
 
 	QStandardItemModel m_observers;
 

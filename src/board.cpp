@@ -312,7 +312,10 @@ void Board::setMode (GameMode mode)
 		m_edit_changed = false;
 		m_edit_to_move = m_displayed->to_move ();
 		if (mode == modeScore || mode == modeScoreRemote) {
-			m_edit_board->calc_scoring_markers_complex ();
+			if (mode == modeScore && m_displayed->was_score_p ())
+				m_edit_board->territory_from_markers ();
+			else
+				m_edit_board->calc_scoring_markers_complex ();
 		}
 	} else if (old_mode == modeScore || old_mode == modeScoreRemote) {
 		/* The only way the scored board is added to the game tree is through

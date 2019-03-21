@@ -1153,8 +1153,6 @@ void qGoBoard::observer_list_end ()
 void qGoBoard::receive_score_begin ()
 {
 	m_scoring_board = new go_board (m_state->get_board ());
-	m_terr_w = m_terr_b = 0;
-	m_caps_w = m_caps_b = 0;
 }
 
 void qGoBoard::receive_score_end ()
@@ -1180,16 +1178,9 @@ void qGoBoard::receive_score_line (int n, const QString &line)
 	for (int y = 0; y < line.length (); y++)
 		switch (line[y].digitValue ()) {
 		case 4:
-			m_terr_w++;
-			if (m_scoring_board->stone_at (n, y) == black)
-				m_caps_w++;
-
 			m_scoring_board->set_mark (n, y, mark::terr, 0);
 			break;
 		case 5:
-			m_terr_b++;
-			if (m_scoring_board->stone_at (n, y) == white)
-				m_caps_b++;
 			m_scoring_board->set_mark (n, y, mark::terr, 1);
 			break;
 		default:
