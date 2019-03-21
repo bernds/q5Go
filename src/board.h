@@ -174,8 +174,8 @@ protected:
 	void draw_background ();
 	void draw_grid (QPainter &, bit_array &, int);
 
-	int coord_vis_to_board_x (int);
-	int coord_vis_to_board_y (int);
+	int coord_vis_to_board_x (int, bool = false);
+	int coord_vis_to_board_y (int, bool = false);
 
 	void updateCovers ();
 
@@ -268,8 +268,6 @@ public:
 	void set_player_colors (bool w, bool b) { m_player_is_w = w; m_player_is_b = b; }
 	bool player_is (stone_color c) { return c == black ? m_player_is_b : m_player_is_w; }
 
-	void set_antiClicko(bool b) { antiClicko = b; }
-
 	virtual void observed_changed () override;
 
 	/* Virtuals from Gtp_Controller.  */
@@ -302,7 +300,6 @@ private:
 	Qt::MouseButtons mouseState = Qt::NoButton;
 
 	bool navIntersectionStatus = false;
-	bool antiClicko;
 	short curX, curY;
 };
 

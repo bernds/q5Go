@@ -451,6 +451,7 @@ void PreferencesDialog::init_from_settings ()
 	int sidebar = setting->readBoolEntry("SIDEBAR_LEFT") ? 0 : 1;
 	sidebarComboBox->setCurrentIndex(sidebar);
 	antiClickoCheckBox->setChecked(setting->readBoolEntry("ANTICLICKO"));
+	hitboxCheckBox->setChecked(setting->readBoolEntry("ANTICLICKO_HITBOX"));
 
 	gameTreeSizeSlider->setValue(setting->readIntEntry("GAMETREE_SIZE"));
 	diagShowComboBox->setCurrentIndex(setting->readIntEntry("BOARD_DIAGMODE"));
@@ -682,6 +683,7 @@ void PreferencesDialog::slot_apply()
 	setting->writeIntEntry("TIMER_INTERVAL", timerComboBox->currentIndex());
 	setting->writeBoolEntry("SGF_TIME_TAGS", sgfTimeTagsCheckBox->isChecked());
 	setting->writeBoolEntry("ANTICLICKO", antiClickoCheckBox->isChecked());
+	setting->writeBoolEntry("ANTICLICKO_HITBOX", hitboxCheckBox->isChecked());
 
 	// Client Window Tab
 	setting->writeEntry("WATCH", LineEdit_watch->text());

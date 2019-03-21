@@ -1184,7 +1184,6 @@ void MainWindow::update_settings ()
 
 	viewCoords->setChecked (setting->readBoolEntry ("BOARD_COORDS"));
 	gfx_board->set_sgf_coords (setting->readBoolEntry ("SGF_BOARD_COORDS"));
-	gfx_board->set_antiClicko (setting->readBoolEntry ("ANTICLICKO"));
 
 	int ghosts = setting->readIntEntry ("VAR_GHOSTS");
 	bool children = setting->readBoolEntry ("VAR_CHILDREN");

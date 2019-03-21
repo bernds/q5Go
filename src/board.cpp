@@ -91,8 +91,6 @@ Board::Board (QWidget *parent)
 	viewport()->setMouseTracking(true);
 	curX = curY = -1;
 
-	antiClicko = setting->readBoolEntry ("ANTICLICKO");
-
 	navIntersectionStatus = false;
 }
 
@@ -1408,11 +1406,17 @@ void Board::leaveEvent(QEvent*)
 	sync_appearance (true);
 }
 
-int BoardView::coord_vis_to_board_x (int p)
+int BoardView::coord_vis_to_board_x (int p, bool small_hitbox)
 {
 	p -= m_board_rect.x () - square_size / 2;
 	if (p < 0)
 		return -1;
+	if (small_hitbox) {
+		int off = p - (int)(p / square_size) * square_size;
+		off = off * 100. / square_size;
+		if (off < 15 || off > 85)
+			return -1;
+	}
 	p /= square_size;
 	p -= n_dups_h ();
 	if (p < 0)
@@ -1424,11 +1428,17 @@ int BoardView::coord_vis_to_board_x (int p)
 	return p;
 }
 
-int BoardView::coord_vis_to_board_y (int p)
+int BoardView::coord_vis_to_board_y (int p, bool small_hitbox)
 {
 	p -= m_board_rect.y () - square_size / 2;
 	if (p < 0)
 		return -1;
+	if (small_hitbox) {
+		int off = p - (int)(p / square_size) * square_size;
+		off = off * 100. / square_size;
+		if (off < 15 || off > 85)
+			return -1;
+	}
 	p /= square_size;
 	p -= n_dups_v ();
 	if (p < 0)
@@ -1564,8 +1574,8 @@ void Board::mouseMoveEvent(QMouseEvent *e)
 		return;
 	}
 
-	int x = coord_vis_to_board_x (e->x ());
-	int y = coord_vis_to_board_y (e->y ());
+	int x = coord_vis_to_board_x (e->x (), setting->values.clicko_hitbox && m_game_mode == modeMatch);
+	int y = coord_vis_to_board_y (e->y (), setting->values.clicko_hitbox && m_game_mode == modeMatch);
 
 	// Outside the valid board?
 	if (!m_dims.contained (x, y))
@@ -1760,8 +1770,8 @@ void Board::mousePressEvent(QMouseEvent *e)
 
 	m_down_x = m_down_y = -1;
 
-	int x = coord_vis_to_board_x (e->x ());
-	int y = coord_vis_to_board_y (e->y ());
+	int x = coord_vis_to_board_x (e->x (), setting->values.clicko_hitbox && m_game_mode == modeMatch);
+	int y = coord_vis_to_board_y (e->y (), setting->values.clicko_hitbox && m_game_mode == modeMatch);
 	if (!m_dims.contained (x, y))
 		return;
 
@@ -1893,10 +1903,10 @@ void Board::mousePressEvent(QMouseEvent *e)
 
 	case modeMatch:
 		// Delay of 250 msecs to avoid clickos
-    		wheelTime = QTime::currentTime();
+		wheelTime = QTime::currentTime ();
     		//qDebug("Mouse pressed at time %d,%03d", wheelTime.second(),wheelTime.msec());
-		if (antiClicko)
-			wheelTime = wheelTime.addMSecs(250);
+		if (setting->values.clicko_delay)
+			wheelTime = wheelTime.addMSecs (250);
 		break;
 
 	default:

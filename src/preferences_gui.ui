@@ -187,7 +187,7 @@
       <string/>
      </property>
      <property name="currentIndex">
-      <number>4</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="InterfaceTabWidget">
       <attribute name="title">
@@ -1232,6 +1232,9 @@ Globally disables all tool tips that would show up if the mouse hovers over a GU
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="toolTip">
+          <string>Options for preventing misclicks in online games</string>
+         </property>
          <property name="title">
           <string>Online games</string>
          </property>
@@ -1254,7 +1257,7 @@ Globally disables all tool tips that would show up if the mouse hovers over a GU
           <item>
            <widget class="QCheckBox" name="antiClickoCheckBox">
             <property name="toolTip">
-             <string>Check for setting an anti cliko delay for on line games</string>
+             <string>If set, moves are only played if the mouse button is held down for a brief period</string>
             </property>
             <property name="whatsThis">
              <string>Anti Clicko
@@ -1268,20 +1271,14 @@ If you press to enter a move on the board, the move will not be acknowledged if 
            </widget>
           </item>
           <item>
-           <spacer name="verticalSpacer_13">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
+           <widget class="QCheckBox" name="hitboxCheckBox">
+            <property name="toolTip">
+             <string>If set, moves are only played when the click is not too close to an edge between positions</string>
             </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Preferred</enum>
+            <property name="text">
+             <string>Anti clicko (smaller hitbox)</string>
             </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>0</height>
-             </size>
-            </property>
-           </spacer>
+           </widget>
           </item>
          </layout>
         </widget>

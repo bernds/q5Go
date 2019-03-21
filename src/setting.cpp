@@ -469,6 +469,9 @@ void Setting::extract_frequent_settings ()
 	values.gametree_size = readIntEntry ("GAMETREE_SIZE");
 
 	values.toroid_dups = readIntEntry ("TOROID_DUPS");
+
+	values.clicko_delay = readBoolEntry ("ANTICLICKO");
+	values.clicko_hitbox = readBoolEntry ("ANTICLICKO_HITBOX");
 }
 
 static std::array<const char *, NUMBER_OF_AVAILABLE_LANGUAGES> language_codes LANGUAGE_CODES;

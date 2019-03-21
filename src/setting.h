@@ -73,6 +73,9 @@ struct setting_vals
 	int gametree_size;
 
 	int toroid_dups;
+
+	bool clicko_delay;
+	bool clicko_hitbox;
 };
 
 class Setting
