@@ -116,7 +116,7 @@ QPixmap svg_builder::to_pixmap (int w, int h)
 {
 	QSvgRenderer renderer (*this);
 	QPixmap img (w, h);
-	img.fill (QColor (0, 0, 0, 0));
+	img.fill (Qt::transparent);
 	QPainter painter;
 	painter.begin (&img);
 	renderer.render (&painter);

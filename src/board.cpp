@@ -1294,7 +1294,7 @@ QPixmap BoardView::draw_position (int default_vars_type)
 
 	/* Now we're ready to draw the grid.  */
 	QPixmap image (m_wood_rect.size ());
-	image.fill (QColor (0, 0, 0, 0));
+	image.fill (Qt::transparent);
 	QPainter painter;
 	painter.begin (&image);
 

@@ -179,7 +179,7 @@ void GameTree::update_prefs ()
 
 	QSvgRenderer renderer (box_svg);
 	m_pm_box = QPixmap (ssize, ssize);
-	m_pm_box.fill (QColor (0, 0, 0, 0));
+	m_pm_box.fill (Qt::transparent);
 	QPainter painter;
 	painter.begin (&m_pm_box);
 	renderer.render (&painter);

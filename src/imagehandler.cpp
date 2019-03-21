@@ -479,7 +479,7 @@ static void paint_white_stone_svg (QImage &img)
 	double border = 1;
 	svg.circle_at (size/2, size/2, size * 0.48 - border * 0.5, "white", "black", QString::number (border));
 	QSvgRenderer renderer (svg);
-	img.fill (QColor(0, 0, 0, 0));
+	img.fill (Qt::transparent);
 	QPainter painter;
 	painter.begin (&img);
 	renderer.render (&painter);
@@ -493,7 +493,7 @@ static void paint_black_stone_svg (QImage &img)
 	svg_builder svg (size, size);
 	svg.circle_at (size/2, size/2, size * 0.48, "black", "none");
 	QSvgRenderer renderer (svg);
-	img.fill (QColor(0, 0, 0, 0));
+	img.fill (Qt::transparent);
 	QPainter painter;
 	painter.begin (&img);
 	renderer.render (&painter);

@@ -560,7 +560,7 @@ void PreferencesDialog::update_w_stones ()
 		real_size = m_stone_size * 9. / 8;
 
 	QPixmap pm (real_size, real_size);
-	pm.fill (QColor(0, 0, 0, 0));
+	pm.fill (Qt::transparent);
 	QPainter painter;
 	painter.begin (&pm);
 	QImage img (m_stone_size, m_stone_size, QImage::Format_ARGB32);
@@ -583,7 +583,7 @@ void PreferencesDialog::update_b_stones ()
 		real_size = m_stone_size * 9. / 8;
 
 	QPixmap pm (real_size, real_size);
-	pm.fill (QColor(0, 0, 0, 0));
+	pm.fill (Qt::transparent);
 	QPainter painter;
 	painter.begin (&pm);
 	QImage img (m_stone_size, m_stone_size, QImage::Format_ARGB32);
