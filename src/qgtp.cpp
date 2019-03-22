@@ -223,6 +223,11 @@ void GTP_Process::slot_receive_stdout ()
 {
 	m_buffer += readAllStandardOutput ();
 
+	if (m_stopped) {
+		m_buffer.clear ();
+		return;
+	}
+
 	for (;;) {
 		/* Clear empty lines at the front of the buffer.  */
 		int last_lf = -1;
@@ -263,12 +268,14 @@ void GTP_Process::slot_receive_stdout ()
 			n_digits++;
 		while (n_digits < len && output[n_digits].isSpace ())
 			n_digits++;
+		if (n_digits == 0)
+			err = true;
 		int cmd_nr = output.left (n_digits).toInt ();
 		auto &rcv_map = err ? m_err_receivers : m_receivers;
 		QMap<int, t_receiver>::const_iterator map_iter = rcv_map.constFind (cmd_nr);
-		if (map_iter == m_receivers.constEnd ()) {
-			m_controller->gtp_failure (tr ("Invalid response from GTP engine"));
+		if (err || map_iter == rcv_map.constEnd ()) {
 			quit ();
+			m_controller->gtp_failure (tr ("Invalid response from GTP engine"));
 			return;
 		}
 		t_receiver rcv = *map_iter;
