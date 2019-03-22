@@ -250,15 +250,14 @@ void GTP_Process::slot_receive_stdout ()
 		m_dlg.append (output);
 		m_dlg.textEdit->setTextColor (Qt::black);
 
+		m_buffer = m_buffer.mid (idx + 1);
 		if (output.length () >= 10 && output.left (10) == "info move ") {
-			m_buffer = m_buffer.mid (idx + 1);
 			m_controller->gtp_eval (output);
-			return;
+			continue;
 		}
 
 		if (m_receivers.isEmpty ())
-			return;
-		m_buffer = m_buffer.mid (idx + 1);
+			continue;
 
 		bool err = output[0] != '=';
 		output.remove (0, 1);
