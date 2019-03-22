@@ -137,6 +137,10 @@ AnalyzeDialog::job::job (AnalyzeDialog *dlg, QString &title, std::shared_ptr<gam
 			eval ev = st->best_eval ();
 			if (st->has_figure () && ev.visits > 0)
 				return false;
+			/* Ignore score and pass nodes on the grounds that they should be identical to the
+			   preceding one.  */
+			if (st->was_score_p () || st->was_pass_p ())
+				return true;
 			q->push_back (st);
 			return true;
 		};
