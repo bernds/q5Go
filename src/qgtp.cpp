@@ -375,6 +375,9 @@ void GTP_Eval_Controller::request_analysis (std::shared_ptr<game_record> gr, gam
 
 	for (int i = 0; i < b.size_x (); i++)
 		for (int j = 0; j < b.size_y (); j++) {
+			/* This gives better behavior if the GTP process dies or misbehaves.  */
+			if (m_analyzer->stopped ())
+				return;
 			stone_color c = startpos.stone_at (i, j);
 			if (flip)
 				c = flip_color (c);
