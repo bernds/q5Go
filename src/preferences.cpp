@@ -443,6 +443,7 @@ void PreferencesDialog::init_from_settings ()
 		      ? (setting->readBoolEntry("SGF_BOARD_COORDS") ? 2 : 1)
 		      : 0);
 	coordsComboBox->setCurrentIndex(coords);
+	coordSizeSlider->setValue(setting->readIntEntry("COORDS_SIZE"));
 	cursorCheckBox->setChecked(setting->readBoolEntry("CURSOR"));
 	tooltipsCheckBox->setChecked(!(setting->readBoolEntry("TOOLTIPS")));
 	timerComboBox->setCurrentIndex(setting->readIntEntry("TIMER_INTERVAL"));
@@ -675,6 +676,7 @@ void PreferencesDialog::slot_apply()
 	int sidebar = sidebarComboBox->currentIndex();
 	setting->writeBoolEntry("BOARD_COORDS", coords > 0);
 	setting->writeBoolEntry("SGF_BOARD_COORDS", coords == 2);
+	setting->writeIntEntry("COORDS_SIZE", coordSizeSlider->value());
 	setting->writeBoolEntry("SIDEBAR_LEFT", sidebar == 0);
 	setting->writeBoolEntry("CURSOR", cursorCheckBox->isChecked());
 	//setting->writeBoolEntry("SMALL_STONES", smallerStonesCheckBox->isChecked());

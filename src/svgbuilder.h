@@ -20,7 +20,8 @@ public:
 		      const QString &txt, const QString &fill, const QFontInfo &fi,
 		      const QString &stroke = QString ());
 	void fixed_height_text_at (double cx, double cy, double sidelen,
-				   const QString &txt, const QString &fill, const QFontInfo &fi);
+				   const QString &txt, const QString &fill, const QFontInfo &fi,
+				   bool vcenter);
 	void circle_at (double cx, double cy, double r,
 			const QString &fill, const QString &stroke, const QString &width = QString ());
 	void square_at (double cx, double cy, double sidelen,

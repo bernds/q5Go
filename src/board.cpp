@@ -115,23 +115,13 @@ void BoardView::calculateSize()
 	int table_size_x = w - 2 * margin;
 	int table_size_y = h - 2 * margin;
 
-	QGraphicsSimpleTextItem coordV (QString::number(m_dims.height ()));
-	QGraphicsSimpleTextItem coordH ("A");
-	canvas->addItem (&coordV);
-	canvas->addItem (&coordH);
-	int coord_width = (int)coordV.boundingRect().width();
-	int coord_height = (int)coordH.boundingRect().height();
-
-	// space for coodinates if shown
-	coord_offset = coord_width < coord_height ? coord_height : coord_width;
-
-	//we need 1 more virtual 'square' for the stones on 1st and last line getting off the grid
-	int cmargin = m_show_coords ? 2 * (coord_offset + coord_margin * 2) : 0;
-	int square_size_w = table_size_x - cmargin;
-	int square_size_h = table_size_y - cmargin;
+	double cmargin = m_show_coords ? 4 * coord_margin : 0;
 	int shown_size_x = m_crop.width () + 2 * n_dups_h ();
 	int shown_size_y = m_crop.height () + 2 * n_dups_v ();
-	square_size = std::min ((double)square_size_w / shown_size_x, (double)square_size_h / shown_size_y);
+	double coord_factor = m_show_coords ? setting->readIntEntry ("COORDS_SIZE") / 100.0 : 0;
+	double square_size_w = (table_size_x - cmargin) / (shown_size_x + 2 * coord_factor);
+	double square_size_h = (table_size_y - cmargin) / (shown_size_y + 2 * coord_factor);
+	square_size = std::min (square_size_w, square_size_h);
 
 	// Should not happen, but safe is safe.
 	if (square_size == 0)
@@ -142,8 +132,8 @@ void BoardView::calculateSize()
 	int board_pixel_size_x = square_size * (shown_size_x - 1);
 	int board_pixel_size_y = square_size * (shown_size_y - 1);
 
-	int real_tx = std::min (table_size_x, board_pixel_size_x + (int)floor (square_size) + cmargin);
-	int real_ty = std::min (table_size_y, board_pixel_size_y + (int)floor (square_size) + cmargin);
+	int real_tx = std::min ((double)table_size_x, round (square_size * (shown_size_x + 2 * coord_factor) + cmargin));
+	int real_ty = std::min ((double)table_size_y, round (square_size * (shown_size_y + 2 * coord_factor) + cmargin));
 #if 1
 	if (table_size_x - real_tx < table_size_y - real_ty)
 		real_tx = table_size_x;
@@ -249,10 +239,41 @@ void BoardView::draw_background()
 	if (m_show_coords && m_displayed != nullptr) {
 		const go_board &b = m_displayed->get_board ();
 
+		double coord_factor = setting->readIntEntry ("COORDS_SIZE") / 100.0;
+		double coord_size = std::max (1.0, square_size * coord_factor);
 		// centres the coordinates text within the remaining space at table edge
-		const int center = coord_offset / 2 + coord_margin;
+		const int center = coord_size / 2 + coord_margin;
 
-		QFontMetrics fm (painter.font ());
+		QFont f = setting->fontMarks;
+		/* Throughout, we use the "double bounding rect" trick to obtain correct results.
+		   Experience shows that a single boundingRect call produces too narrow a rectangle,
+		   and googling shows that this is in fact a known problem.  */
+		QFontMetrics fm (f);
+		QRect max_rect;
+		for (int tx = m_crop.x1; tx <= m_crop.x2; tx++) {
+			auto name = b.coords_name (tx, 0, m_sgf_coords);
+			QString nm = QString::fromStdString (name.first);
+			QRect brect = fm.boundingRect (nm);
+			brect = fm.boundingRect (brect, Qt::AlignCenter, nm);
+			brect.moveTopLeft (max_rect.topLeft ());
+			max_rect = max_rect.united (brect);
+		}
+		for (int ty = m_crop.y1; ty <= m_crop.y2; ty++) {
+			auto name = b.coords_name (0, ty, m_sgf_coords);
+			QString nm = QString::fromStdString (name.second);
+			QRect brect = fm.boundingRect (nm);
+			brect = fm.boundingRect (brect, Qt::AlignCenter, nm);
+			brect.moveTopLeft (max_rect.topLeft ());
+			max_rect = max_rect.united (brect);
+		}
+		double fac_x = max_rect.width () / coord_size;
+		double fac_y = max_rect.height () / coord_size;
+		double fac = std::max (fac_x, fac_y);
+		if (fac != 0)
+			f.setPointSize (f.pointSize () / fac);
+		painter.setFont (f);
+		QFontMetrics fm2 (f);
+
 		int hdups = n_dups_h ();
 		int vdups = n_dups_v ();
 		painter.setPen (Qt::black);
@@ -264,25 +285,27 @@ void BoardView::draw_background()
 			int x = (tx + shiftx) % m_dims.width ();
 			auto name = b.coords_name (x, 0, m_sgf_coords);
 			QString nm = QString::fromStdString (name.first);
-			QRect brect = fm.boundingRect (nm);
+			QRect brect = fm2.boundingRect (nm);
+			brect = fm2.boundingRect (brect, Qt::AlignCenter, nm);
 			brect.moveCenter (QPoint (m_board_rect.x () + square_size * (hdups + tx),
 						  m_wood_rect.y () + center));
-			painter.drawText (brect, Qt::AlignLeft | Qt::AlignTop, nm);
+			painter.drawText (brect, Qt::AlignCenter, nm);
 			brect.moveCenter (QPoint (m_board_rect.x () + square_size * (hdups + tx),
-						  m_wood_rect.y () + m_wood_rect.height () - center));
-			painter.drawText (brect, Qt::AlignLeft | Qt::AlignTop, nm);
+						  m_wood_rect.bottom () - center));
+			painter.drawText (brect, Qt::AlignCenter, nm);
 		}
 		for (int ty = m_crop.y1; ty <= m_crop.y2; ty++) {
 			int y = (ty + shifty) % m_dims.height ();
 			auto name = b.coords_name (0, y, m_sgf_coords);
 			QString nm = QString::fromStdString (name.second);
-			QRect brect = fm.boundingRect (nm);
+			QRect brect = fm2.boundingRect (nm);
+			brect = fm2.boundingRect (brect, Qt::AlignCenter, nm);
 			brect.moveCenter (QPoint (m_wood_rect.x () + center,
 						  m_board_rect.y () + square_size * (vdups + ty)));
-			painter.drawText (brect, Qt::AlignLeft | Qt::AlignTop, nm);
-			brect.moveCenter (QPoint (m_wood_rect.x () + m_wood_rect.width () - center,
+			painter.drawText (brect, Qt::AlignCenter, nm);
+			brect.moveCenter (QPoint (m_wood_rect.right () - center,
 						  m_board_rect.y () + square_size * (vdups + ty)));
-			painter.drawText (brect, Qt::AlignLeft | Qt::AlignTop, nm);
+			painter.drawText (brect, Qt::AlignCenter, nm);
 		}
 	}
 
@@ -550,21 +573,23 @@ QByteArray BoardView::render_svg (bool do_number, bool coords)
 
 	double factor = 30;
 	double margin = 10;
+	double coord_margin = 4;
 	double offset_x = margin + factor / 2;
 	double offset_y = margin + factor / 2;
 	int cols = m_sel.width ();
 	int rows = m_sel.height ();
 	int w = factor * cols + 2 * margin;
 	int h = factor * rows + 2 * margin;
+	double coord_factor = setting->readIntEntry ("COORDS_SIZE") / 100.0;
 	if (coords) {
 		if (m_sel.aligned_left (m_dims))
-			offset_x += factor, w += factor;
+			offset_x += factor * coord_factor + 2 * coord_margin, w += factor * coord_factor + 2 * coord_margin;
 		if (m_sel.aligned_top (m_dims))
-			offset_y += factor, h += factor;
+			offset_y += factor * coord_factor + 2 * coord_margin, h += factor * coord_factor + 2 * coord_margin;
 		if (m_sel.aligned_right (m_dims))
-			w += factor;
+			w += factor * coord_factor + 2 * coord_margin;
 		if (m_sel.aligned_bottom (m_dims))
-			h += factor;
+			h += factor * coord_factor + 2 * coord_margin;
 	}
 
 	QFontInfo fi (setting->fontMarks);
@@ -590,22 +615,22 @@ QByteArray BoardView::render_svg (bool do_number, bool coords)
 
 	if ((fig_flags & 2) == 0 && !fig_title.isEmpty ()) {
 		int fh = factor * 0.75;
-		svg.fixed_height_text_at (w / 2, full_h, fh, fig_title, "black", fi);
+		svg.fixed_height_text_at (w / 2, full_h, fh, fig_title, "black", fi, false);
 	}
 
 	if (coords) {
-		double dist = margin + factor / 2;
+		double dist = margin + factor * coord_factor / 2 + coord_margin;
 		for (int y = 0; y < rows; y++) {
 			int ry = y + m_sel.y1;
 			double center_y = offset_y + y * factor;
 			if (m_sel.aligned_left (m_dims))
-				svg.text_at (dist, center_y, factor,
-					     m_dims.height () < 10 ? 1 : 2, QString::number (m_dims.height () - ry),
-					     "black", fi);
+				svg.fixed_height_text_at (dist, center_y, factor * coord_factor,
+							  QString::number (m_dims.height () - ry),
+							  "black", fi, true);
 			if (m_sel.aligned_right (m_dims))
-				svg.text_at (w - dist , center_y, factor,
-					     m_dims.height () < 10 ? 1 : 2, QString::number (m_dims.height () - ry),
-					     "black", fi);
+				svg.fixed_height_text_at (w - dist, center_y, factor * coord_factor,
+							  QString::number (m_dims.height () - ry),
+							  "black", fi, true);
 		}
 		for (int x = 0; x < cols; x++) {
 			int rx = x + m_sel.x1;
@@ -616,11 +641,11 @@ QByteArray BoardView::render_svg (bool do_number, bool coords)
 			else
 				label = QChar ('A' + rx + 1);
 			if (m_sel.aligned_top (m_dims))
-				svg.text_at (center_x, dist, factor,
-					     m_dims.width () < 10 ? 1 : 2, label, "black", fi);
+				svg.fixed_height_text_at (center_x, dist, factor * coord_factor,
+							  label, "black", fi, true);
 			if (m_sel.aligned_bottom (m_dims))
-				svg.text_at (center_x, h - dist, factor,
-					     m_dims.width () < 10 ? 1 : 2, label, "black", fi);
+				svg.fixed_height_text_at (center_x, h - dist, factor * coord_factor,
+							  label, "black", fi, true);
 		}
 	}
 

@@ -28,13 +28,19 @@ void svg_builder::text_at (double cx, double cy, double sidelen, int len,
 }
 
 void svg_builder::fixed_height_text_at (double cx, double cy, double sidelen,
-					const QString &txt, const QString &fill, const QFontInfo &fi)
+					const QString &txt, const QString &fill, const QFontInfo &fi,
+					bool vcenter)
 {
 	int font_h = sidelen;
 
 	const QString family = fi.family() + ",sans-serif";
 	const QString str = "none";
 	m_elts += "<text x=\"" + QString::number (cx);
+	if (vcenter) {
+		int font_h = sidelen;
+		int font_yoff = -font_h * 0.17;
+		cy += font_h / 2 + font_yoff;
+	}
 	m_elts += "\" y=\"" + QString::number (cy);
 	m_elts += "\" style=\"stroke:" + str + "; font-family:" + family + "; text-anchor: middle; fill: " + fill;
 	if (fi.bold ())

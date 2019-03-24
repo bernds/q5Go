@@ -45,6 +45,7 @@ Setting::Setting()
 
 	writeBoolEntry("SIDEBAR", true);
 	writeBoolEntry("BOARD_COORDS", true);
+	writeIntEntry("COORDS_SIZE", 65);
 	writeBoolEntry("SGF_BOARD_COORDS", false);
 	writeBoolEntry("CURSOR", true);
 	writeBoolEntry("SLIDER", true);
