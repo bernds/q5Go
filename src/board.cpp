@@ -99,21 +99,18 @@ Board::~Board ()
 	stop_observing ();
 }
 
-// distance from table edge to wooden board edge
-const int BoardView::margin = 2;
-
 // distance from coords to surrounding elements
 const int BoardView::coord_margin = 4;
 
-void BoardView::calculateSize()
+void BoardView::calculateSize ()
 {
 	// Calculate the size values
 
 	int w = canvas->width ();
 	int h = canvas->height ();
 
-	int table_size_x = w - 2 * margin;
-	int table_size_y = h - 2 * margin;
+	int table_size_x = w - 2 * m_margin;
+	int table_size_y = h - 2 * m_margin;
 
 	double cmargin = m_show_coords ? 4 * coord_margin : 0;
 	int shown_size_x = m_crop.width () + 2 * n_dups_h ();
@@ -1946,12 +1943,20 @@ void Board::mousePressEvent(QMouseEvent *e)
     }
 }
 
-void BoardView::changeSize()
+void BoardView::changeSize ()
 {
 #ifdef Q_OS_WIN
 	resizeDelayFlag = false;
 #endif
 	resizeBoard (width (), height ());
+}
+
+void BoardView::set_margin (int m)
+{
+	if (m_margin == m)
+		return;
+	m_margin = m;
+	changeSize ();
 }
 
 void BoardView::clear_selection ()

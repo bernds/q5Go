@@ -92,8 +92,12 @@ protected:
 	   the entire area drawn with a wooden background texture.  */
 	QRect m_wood_rect;
 	QRect m_board_rect;
-	static const int margin, coord_margin;
-	int coord_offset;
+
+	/* Distance from table edge to wooden board edge.  */
+	int m_margin = 2;
+	/* Margins around coordinates, on all four sides.  */
+	static const int coord_margin;
+
 	double square_size;
 
 	/* Graphical elements on the board canvas.  */
@@ -139,7 +143,8 @@ public:
 
 	stone_color to_move () { return m_displayed->to_move (); }
 
-	QPixmap grabPicture();
+	void set_margin (int);
+	QPixmap grabPicture ();
 	QPixmap draw_position (int);
 	QString render_ascii (bool, bool, bool);
 	QByteArray render_svg (bool, bool);
