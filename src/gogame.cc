@@ -361,16 +361,21 @@ void game_state::collect_analyzers (std::vector<analyzer_id> &ids)
 
 void game_state::walk_tree (std::function<bool (game_state *)> &func)
 {
+	/* This function is slightly convoluted, in order to both
+	   traverse the main branch first, and avoid recursion while
+	   doing so.  */
+	game_state *last = this;
+	while (last != nullptr) {
+		if (!func (last))
+			break;
+		last = last->next_primary_move ();
+	}
 	game_state *st = this;
-	for (;;) {
-		if (!func (st))
-			return;
+	while (st != last) {
 		for (auto &it: st->m_children)
 			if (it != st->m_children[0])
 				it->walk_tree (func);
-		if (st->n_children () == 0)
-			break;
-		st = st->m_children[0];
+		st = st->next_primary_move ();
 	}
 }
 
