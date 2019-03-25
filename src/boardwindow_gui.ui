@@ -2493,7 +2493,7 @@ After placing and/or undo release button for returning to starting point automat
     </property>
     <widget class="QMenu" name="menu_Import_Export">
      <property name="title">
-      <string>&amp;Import/Export</string>
+      <string>Import/E&amp;xport</string>
      </property>
      <addaction name="fileExportASCII"/>
      <addaction name="fileExportSVG"/>
@@ -3616,7 +3616,7 @@ Export the current board to an SVG vector graphics file</string>
   </action>
   <action name="fileImportSgfClipB">
    <property name="text">
-    <string>Import SGF from clipboard</string>
+    <string>Import SGF &amp;from clipboard</string>
    </property>
    <property name="toolTip">
     <string>Import SGF from clipboard
