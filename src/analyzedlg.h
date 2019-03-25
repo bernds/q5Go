@@ -54,6 +54,7 @@ class AnalyzeDialog : public QMainWindow, public Ui::AnalyzeDialog, public GTP_E
 		int m_n_seconds;
 		int m_n_lines;
 		engine_komi m_komi_type;
+		bool m_comments;
 
 		std::vector<game_state *> m_queue;
 		std::vector<game_state *> m_queue_flipped;
@@ -64,7 +65,7 @@ class AnalyzeDialog : public QMainWindow, public Ui::AnalyzeDialog, public GTP_E
 		int m_idx;
 
 		job (AnalyzeDialog *dlg, QString &title, std::shared_ptr<game_record> gr, int n_seconds, int n_lines,
-		     engine_komi);
+		     engine_komi, bool comments);
 		~job ();
 		game_state *select_request (bool pop);
 		void show_window (bool done);

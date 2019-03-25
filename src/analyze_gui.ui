@@ -21,13 +21,6 @@
        <string>Analysis parameters</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_4">
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_4">
-         <property name="text">
-          <string>Maximum number of lines to add:</string>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="0">
         <widget class="QLabel" name="label_2">
          <property name="text">
@@ -48,19 +41,6 @@
          </property>
          <property name="text">
           <string>10</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLineEdit" name="secondsEdit">
-         <property name="maximumSize">
-          <size>
-           <width>50</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>5</string>
          </property>
         </widget>
        </item>
@@ -96,6 +76,36 @@
           </widget>
          </item>
         </layout>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>Maximum number of lines to add:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="secondsEdit">
+         <property name="maximumSize">
+          <size>
+           <width>50</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>5</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="2">
+        <widget class="QCheckBox" name="commentsCheckBox">
+         <property name="text">
+          <string>Add evaluation info to comments</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -501,6 +511,7 @@
   <tabstop>secondsEdit</tabstop>
   <tabstop>maxlinesEdit</tabstop>
   <tabstop>komiComboBox</tabstop>
+  <tabstop>commentsCheckBox</tabstop>
   <tabstop>filenameEdit</tabstop>
   <tabstop>fileselButton</tabstop>
   <tabstop>enqueueButton</tabstop>

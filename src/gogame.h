@@ -6,6 +6,17 @@
 
 #include <functional>
 
+inline std::string komi_str (double k)
+{
+	std::string s = std::to_string (k);
+	size_t dot = s.find_last_of ('.');
+	if (dot != std::string::npos) {
+		size_t last = s.find_last_not_of ('0');
+		s.resize (last + 1);
+	}
+	return s;
+}
+
 class visual_tree
 {
 public:

@@ -128,8 +128,9 @@ void AnalyzeDialog::analyzer_state_changed ()
 }
 
 AnalyzeDialog::job::job (AnalyzeDialog *dlg, QString &title, std::shared_ptr<game_record> gr, int n_seconds, int n_lines,
-			 engine_komi k)
-	: m_dlg (dlg), m_title (title), m_game (gr), m_n_seconds (n_seconds), m_n_lines (n_lines), m_komi_type (k)
+			 engine_komi k, bool comments)
+	: m_dlg (dlg), m_title (title), m_game (gr), m_n_seconds (n_seconds), m_n_lines (n_lines), m_komi_type (k),
+	  m_comments (comments)
 {
 	std::vector<game_state *> *q = &m_queue;
 	std::function<bool (game_state *)> f = [this, &q] (game_state *st) -> bool
@@ -144,6 +145,8 @@ AnalyzeDialog::job::job (AnalyzeDialog *dlg, QString &title, std::shared_ptr<gam
 			q->push_back (st);
 			return true;
 		};
+	/* This produces the nodes in the reverse order of the game.  We rely on this
+	   when calculating win rate changes.  */
 	m_game->get_root ()->walk_tree (f);
 	if (k == engine_komi::both) {
 		q = &m_queue_flipped;
@@ -324,6 +327,11 @@ void AnalyzeDialog::notice_analyzer_id (const analyzer_id &id)
 		j->m_win->update_analyzer_ids (id);
 }
 
+inline std::string s_tr (const char *s)
+{
+	return QObject::tr (s).toStdString ();
+}
+
 void AnalyzeDialog::eval_received (const QString &, int)
 {
 	job *j = m_requester;
@@ -340,6 +348,53 @@ void AnalyzeDialog::eval_received (const QString &, int)
 	game_state *st = j->select_request (true);
 	st->update_eval (*m_eval_state);
 	auto variations = m_eval_state->take_children ();
+	if (j->m_comments && variations.size () > 0) {
+		game_state *best = variations[0];
+		eval e = best->best_eval ();
+		if (e.visits > 0) {
+			std::string comm = st->comment ();
+			if (comm.length () > 0) {
+				if (comm.back () != '\n')
+					comm.push_back ('\n');
+				comm += "----------------\n";
+			}
+			comm += s_tr ("Analysis: ") + e.id.engine;
+			if (e.id.komi_set)
+				comm += s_tr (" @") + komi_str (e.id.komi) + s_tr (" komi");
+			comm += "\n";
+			auto cname = st->get_board ().coords_name (best->get_move_x (), best->get_move_y (), false);
+			comm += s_tr ("Engine top choice: ") + cname.first + cname.second;
+			comm += s_tr (", ") + std::to_string (e.visits) + s_tr (" visits") + s_tr (", winrate B: ") + komi_str (e.wr_black * 100) + "%\n";
+			game_state *next = st->next_primary_move ();
+			if (next && next->was_move_p ()) {
+				auto nextcname = st->get_board ().coords_name (next->get_move_x (), next->get_move_y (), false);
+				comm += s_tr ("Game move: ") + nextcname.first + nextcname.second;
+				if (cname != nextcname) {
+					comm += s_tr (", ");
+					for (size_t cnt = 1; cnt < variations.size (); cnt++) {
+						if (variations[cnt]->get_move_x () == next->get_move_x ()
+						    && variations[cnt]->get_move_y () == next->get_move_y ()) {
+							comm += s_tr ("choice #") + std::to_string (cnt + 1);
+							goto found;
+						}
+					}
+					comm += "not considered";
+					found:
+
+					eval e2 = next->eval_from (e.id, true);
+					if (e2.visits > 0) {
+						double diff = e2.wr_black - e.wr_black;
+						std::string diffstr = komi_str (diff * 100);
+						if (diff > 0)
+							diffstr = "+" + diffstr;
+						comm += s_tr (", winrate B: ") + komi_str (e2.wr_black) + "% (" + diffstr + ")";
+					}
+				}
+				comm += "\n";
+			}
+			st->set_comment (comm);
+		}
+	}
 	int count = 0;
 	for (auto it: variations) {
 		eval ev = it->best_eval ();
@@ -502,7 +557,8 @@ void AnalyzeDialog::start_job ()
 	int komi_val = komiComboBox->currentIndex ();
 
 	engine_komi k = komi_val == 2 ? engine_komi::both : komi_val == 1 ? engine_komi::maybe_swap : engine_komi::dflt;
-	m_all_jobs.emplace_front (this, f, gr, secondsEdit->text ().toInt (), maxlinesEdit->text ().toInt (), k);
+	m_all_jobs.emplace_front (this, f, gr, secondsEdit->text ().toInt (), maxlinesEdit->text ().toInt (), k,
+				  commentsCheckBox->isChecked ());
 	job *j = &m_all_jobs.front ();
 	insert_job (m_jobs, jobView, j);
 
