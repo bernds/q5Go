@@ -27,25 +27,11 @@ public slots:
 
 #include "ui_svgview_gui.h"
 
-class SvgWidget: public QSvgWidget
-{
-	QWidget *m_container;
-public:
-	SvgWidget (QWidget *container) : m_container (container)
-	{
-	}
-	void fix_aspect ();
-	virtual void resizeEvent (QResizeEvent *)
-	{
-		fix_aspect ();
-	}
-};
-
 class SvgView : public QDialog, public Ui::SvgViewGUI
 {
 	Q_OBJECT
 	QString m_svg;
-	SvgWidget *m_view {};
+	QSvgWidget *m_view {};
 public:
 	SvgView(QWidget* parent = 0);
 	~SvgView();

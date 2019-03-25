@@ -82,31 +82,13 @@ void TextView::toClipboard()
 	QApplication::clipboard()->setText(textEdit->toPlainText());
 }
 
-void SvgWidget::fix_aspect ()
-{
-	QSize hint = sizeHint ();
-	double a1 = (double)hint.width () / hint.height ();
-	QSize actual = m_container->size ();
-	double a2 = (double)actual.width () / actual.height ();
-	if (a1 > a2)
-		resize (QSize (actual.width (), actual.width () / a1));
-	else
-		resize (QSize (actual.height () * a1, actual.height ()));
-}
-
 SvgView::SvgView(QWidget* parent)
 	: QDialog (parent)
 {
 	setupUi(this);
 
-	QLayout *layout = new QHBoxLayout (gfxWidget);
-	layout->setContentsMargins (0, 0, 0, 0);
-	m_view = new SvgWidget (gfxWidget);
-#if 1
-	QSizePolicy p (QSizePolicy::Expanding, QSizePolicy::Expanding);
-	m_view->setSizePolicy (p);
-#endif
-	layout->addWidget (m_view);
+	m_view = new QSvgWidget (aspectWidget);
+	aspectWidget->set_child (m_view);
 	cb_coords->setChecked (true);
 	cb_numbering->setChecked (true);
 	setWindowTitle (tr ("Export to SVG"));
@@ -124,9 +106,8 @@ void SvgView::set (const QByteArray &qba)
 {
 	m_svg = QString::fromUtf8 (qba);
 	m_view->load (qba);
-	m_view->fix_aspect ();
-	updateGeometry ();
-//	gfxWidget->updateGeometry ();
+	QSize sz = m_view->sizeHint ();
+	aspectWidget->set_aspect (sz.width () / std::max (1, sz.height ()));
 }
 
 /*
