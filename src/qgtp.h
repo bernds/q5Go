@@ -101,6 +101,11 @@ class GTP_Process : public QProcess
 	/* The komi we've requested with the "komi" command.  The engine may have
 	   ignored it.  */
 	double m_komi;
+
+	/* A tree in which we keep track of what the move history, in sync with the GTP engine.  */
+	game_state *m_moves {};
+	game_state *m_last_move {};
+
 	bool m_started = false;
 	bool m_stopped = false;
 
@@ -144,6 +149,7 @@ public:
 	void setup_initial_position (game_state *);
 	void request_move (stone_color col);
 	void played_move (stone_color col, int x, int y);
+	void undo_move ();
 	void komi (double);
 	void played_move_pass (stone_color col);
 	void played_move_resign (stone_color col);

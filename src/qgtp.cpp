@@ -160,6 +160,8 @@ void GTP_Process::receive_move (const QString &move)
 
 void GTP_Process::played_move (stone_color col, int x, int y)
 {
+	if (m_last_move != nullptr)
+		m_last_move = m_last_move->add_child_move (x, y, col);
 	if (x >= 8)
 		x++;
 	char req[20];
@@ -197,6 +199,16 @@ void GTP_Process::request_move (stone_color col)
 		send_request ("genmove white", &GTP_Process::receive_move);
 }
 
+void GTP_Process::undo_move ()
+{
+	send_request ("undo");
+	game_state *st = m_last_move;
+	if (st != nullptr) {
+		m_last_move = st->prev_move ();
+		delete st;
+	}
+}
+
 static stone_color maybe_flip (stone_color col, bool flip)
 {
 	if (!flip)
@@ -213,6 +225,26 @@ void GTP_Process::dup_move (game_state *from, bool flip)
 void GTP_Process::setup_board (game_state *st, double km, bool flip)
 {
 	const go_board &b = st->get_board ();
+
+	/* Check for shortcuts.
+	   @@@ Should handle flip as well, but need to do something about position_equal_p.  */
+	if (m_last_move != nullptr && !flip) {
+		game_state *st_parent = st->prev_move ();
+		if (st->was_move_p () && st_parent->get_board ().position_equal_p (m_last_move->get_board ())) {
+			dup_move (st, flip);
+			return;
+		}
+		game_state *our_parent = m_last_move->prev_move ();
+		if (our_parent != nullptr && our_parent->get_board ().position_equal_p (st->get_board ())) {
+			undo_move ();
+			return;
+		}
+	}
+
+	/* Must clear this before doing played_move calls for the initial setup.  */
+	delete m_moves;
+	m_moves = nullptr;
+	m_last_move = nullptr;
 
 	std::vector<game_state *> moves;
 	while (st->was_move_p () && !st->root_node_p ()) {
@@ -233,6 +265,11 @@ void GTP_Process::setup_board (game_state *st, double km, bool flip)
 			if (c != none)
 				played_move (c, i, j);
 		}
+
+	/* Allocate this here so that m_last_move is nullptr during previous calls to
+	   played_move and they don't try to track the position.  */
+	m_moves = new game_state (startpos, maybe_flip (st->to_move (), flip));
+	m_last_move = m_moves;
 
 	while (!moves.empty ()) {
 		st = moves.back ();
@@ -403,6 +440,7 @@ GTP_Process::~GTP_Process ()
 	disconnect (this, &QProcess::errorOccurred, nullptr, nullptr);
 	void (QProcess::*fini)(int, QProcess::ExitStatus) = &QProcess::finished;
 	disconnect (this, fini, nullptr, nullptr);
+	delete m_moves;
 }
 
 GTP_Eval_Controller::~GTP_Eval_Controller ()
