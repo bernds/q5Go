@@ -1,33 +1,55 @@
-## q5Go 0.7
+## q5Go 0.8
 
 This is a tool for Go players which performs the following functions:
 - SGF editor
 - Analysis frontend for Leela Zero (or compatible engines)
 - GTP interface
 - IGS client
+- Export to a variety of formats
 
 The basic goal for this program is to provide an everyday SGF editor
 that is fast, easy and convenient to use and does everything you could
 want out of such a tool.  Some of the more unusual features include a
 Go diagram exporting function for sites like lifein19x19.com or
-Sensei's library, as well as SVG vector graphics export.  q5go also supports
-some non-standard Go variants.
+Sensei's library, as well as SVG vector graphics or slide export.
+q5go also supports some non-standard Go variants.
 
 This program is based on the old Qt3 version of qGo, but ported to Qt5
 and modernized.
 
 ![screenshot](screens/screenshot.png)
 
-These are major user-visible changes in 0.7:
- * Old SGFs and a few new ones use a move at 20:20 to signal pass which
-   caused problems when loading such SGFs.
- * q5go can now read kombilo databases.  There is a new file open dialog
-   to select a game from the database; it has preview functionality to
-   display game information and allow browsing through the game moves.
- * Visibility of menu, status bar, side bar and slider in the board
-   window are now saved as part of the layout.  Whatever preferences
-   option there were have been removed, except for the one to choose
-   whether to place the side bar to the left or the right.
+These are the major user-visible changes in 0.8:
+ * Analyzing games with multiple engines now produces sensible results.
+   q5go remembers winrates for each engine name and komi combination and
+   displays multiple winrate graphs.
+ * For engines with fixed komi, batch analysis can now flip the position
+   to effectively analyze with reverse komi.
+ * For live analysis, it is now possible to choose the analysis engine.
+ * There is a new slide export feature which combines the board and
+   comments into a single image for use in slide shows or videos.
+   File name sequences can be generated automatically.
+ * It is now possible to choose between area and territory scoring in
+   off-line games.
+
+Minor fixes and improvements include:
+ * The board coordinates now scales with the size of the display, their
+   size relative to the stones is configurable in the preferences.
+ * It is now possible to choose whether to tile or scale the wood
+   background image used for the board.
+ * The evaluation graph is automatically displayed when a game obtains
+   an evaluation for the first time.
+ * In online match games, remaining time is now saved to the SGF for both
+   player and opponent.
+ * It is now possible to hold down LMB and drag in the evaluation graph
+   to move to a different position.
+ * In the database dialog, "Open" and "Cancel" now work (previously
+   only double clicks opened the game).
+ * In off-line mode, scoring a scored position again now keeps liveness
+   and seki status.
+ * A bug was fixed that caused the "Update" button to disappear when
+   scoring or editing an off-line copy of an observed game.
+ * Loading an SGF file for a game against an engine is now implemented.
 
 See VERSION_HISTORY for a history of changes.
 
@@ -43,13 +65,19 @@ be added to the game record.
 
 ![screenshot](screens/analysis.png)
 
-There is also a batch analysis mode, where the use can queue a number of
+There is also a batch analysis mode, where the user can queue a number of
 SGF files for analysis. Evaluations and variations are added automatically,
 the variations are presented as diagrams.  The file can be observed
 during analysis.
 
 ![screenshot](screens/batch.png)
 ![screenshot](screens/new-analysis.png)
+
+It is possible to run analysis with multiple engines, or with different
+komi values.  q5go keeps track of these separately and displays multiple
+evaluation graphs.
+
+![screenshot](screens/multieval.png)
 
 ### Export
 q5Go allows the user to export board positions as ASCII diagrams suitable
@@ -60,6 +88,14 @@ and it is possible to set a position as the start of move numbering, so
 that sequences of moves can be shown in the exported diagram.
 
 ![screenshot](screens/export.png)
+
+Another option is slide export; this produces images of a fixed size
+containing both the board and the comments.  The user can specify a
+filename template, saving diagrams can then be automated: at each step,
+the pattern "%n" in the template is replaced with an incrementing
+diagram number.
+
+![screenshot](screens/slideexport.png)
 
 ### SGF diagrams
 

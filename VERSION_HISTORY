@@ -1,3 +1,37 @@
+q5Go 0.8
+
+These are the major user-visible changes in 0.8:
+ * Analyzing games with multiple engines now produces sensible results.
+   q5go remembers winrates for each engine name and komi combination and
+   displays multiple winrate graphs.
+ * For engines with fixed komi, batch analysis can now flip the position
+   to effectively analyze with reverse komi.
+ * For live analysis, it is now possible to choose the analysis engine.
+ * There is a new slide export feature which combines the board and
+   comments into a single image for use in slide shows or videos.
+   File name sequences can be generated automatically.
+ * It is now possible to choose between area and territory scoring in
+   off-line games.
+
+Minor fixes and improvements include:
+ * The board coordinates now scales with the size of the display, their
+   size relative to the stones is configurable in the preferences.
+ * It is now possible to choose whether to tile or scale the wood
+   background image used for the board.
+ * The evaluation graph is automatically displayed when a game obtains
+   an evaluation for the first time.
+ * In online match games, remaining time is now saved to the SGF for both
+   player and opponent.
+ * It is now possible to hold down LMB and drag in the evaluation graph
+   to move to a different position.
+ * In the database dialog, "Open" and "Cancel" now work (previously
+   only double clicks opened the game).
+ * In off-line mode, scoring a scored position again now keeps liveness
+   and seki status.
+ * A bug was fixed that caused the "Update" button to disappear when
+   scoring or editing an off-line copy of an observed game.
+ * Loading an SGF file for a game against an engine is now implemented.
+
 q5Go 0.7
 
 These are major user-visible changes in 0.7:
