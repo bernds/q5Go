@@ -358,10 +358,6 @@ void AnalyzeDialog::eval_received (const QString &, int)
 					comm.push_back ('\n');
 				comm += "----------------\n";
 			}
-			comm += s_tr ("Analysis: ") + e.id.engine;
-			if (e.id.komi_set)
-				comm += s_tr (" @") + komi_str (e.id.komi) + s_tr (" komi");
-			comm += "\n";
 			auto cname = st->get_board ().coords_name (best->get_move_x (), best->get_move_y (), false);
 			comm += s_tr ("Engine top choice: ") + cname.first + cname.second;
 			comm += s_tr (", ") + std::to_string (e.visits) + s_tr (" visits") + s_tr (", winrate B: ") + komi_str (e.wr_black * 100) + "%\n";
@@ -392,6 +388,10 @@ void AnalyzeDialog::eval_received (const QString &, int)
 				}
 				comm += "\n";
 			}
+			comm += s_tr ("Analysis: ") + e.id.engine;
+			if (e.id.komi_set)
+				comm += s_tr (" @") + komi_str (e.id.komi) + s_tr (" komi");
+			comm += "\n";
 			st->set_comment (comm);
 		}
 	}
