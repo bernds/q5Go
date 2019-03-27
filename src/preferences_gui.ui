@@ -187,7 +187,7 @@
       <string/>
      </property>
      <property name="currentIndex">
-      <number>6</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="InterfaceTabWidget">
       <attribute name="title">
@@ -1684,7 +1684,7 @@ diagram pane shown:</string>
             </property>
             <property name="icon">
              <iconset resource="q4go.qrc">
-              <normaloff>:/PreferencesDialogGui/images/preferences/image1.png</normaloff>:/PreferencesDialogGui/images/preferences/image1.png</iconset>
+              <normaloff>:/ClientWindowGui/images/clientwindow/fileopen.png</normaloff>:/ClientWindowGui/images/clientwindow/fileopen.png</iconset>
             </property>
            </widget>
           </item>
@@ -1695,7 +1695,7 @@ diagram pane shown:</string>
             </property>
             <property name="icon">
              <iconset resource="q4go.qrc">
-              <normaloff>:/PreferencesDialogGui/images/preferences/image1.png</normaloff>:/PreferencesDialogGui/images/preferences/image1.png</iconset>
+              <normaloff>:/ClientWindowGui/images/clientwindow/fileopen.png</normaloff>:/ClientWindowGui/images/clientwindow/fileopen.png</iconset>
             </property>
            </widget>
           </item>
@@ -2462,7 +2462,7 @@ Note: 'Delete' concerns saved records.</string>
               </property>
               <property name="icon">
                <iconset resource="q4go.qrc">
-                <normaloff>:/PreferencesDialogGui/images/preferences/image1.png</normaloff>:/PreferencesDialogGui/images/preferences/image1.png</iconset>
+                <normaloff>:/ClientWindowGui/images/clientwindow/fileopen.png</normaloff>:/ClientWindowGui/images/clientwindow/fileopen.png</iconset>
               </property>
              </widget>
             </item>

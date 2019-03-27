@@ -61,7 +61,7 @@
         </property>
         <property name="icon">
          <iconset resource="q4go.qrc">
-          <normaloff>:/NewAIGameDlgGui/images/newaigamedlg/image0.png</normaloff>:/NewAIGameDlgGui/images/newaigamedlg/image0.png</iconset>
+          <normaloff>:/ClientWindowGui/images/clientwindow/fileopen.png</normaloff>:/ClientWindowGui/images/clientwindow/fileopen.png</iconset>
         </property>
        </widget>
       </item>

@@ -86,16 +86,12 @@
     <file>sounds/talk.wav</file>
     <file>sounds/tictoc.wav</file>
   </qresource>
-  <qresource prefix="/NewAIGameDlgGui">
-    <file>images/newaigamedlg/image0.png</file>
-  </qresource>
   <qresource prefix="/TalkGui">
     <file>images/talk/image0.png</file>
     <file>images/talk/image1.png</file>
   </qresource>
   <qresource prefix="/PreferencesDialogGui">
     <file>images/preferences/image0.png</file>
-    <file>images/preferences/image1.png</file>
   </qresource>
   <qresource prefix="/ClientWindowGui">
     <file>images/clientwindow/Bowl.png</file>
