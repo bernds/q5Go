@@ -22,12 +22,13 @@ protected:
 	analyzer_id m_id;
 
 	GTP_Controller (QWidget *p) : m_parent (p) { }
-	GTP_Process *create_gtp (const Engine &engine, int size, double komi, int hc, bool show_dialog = true);
+	GTP_Process *create_gtp (const Engine &engine, int size, double komi, bool show_dialog = true);
 public:
 	virtual void gtp_played_move (int x, int y) = 0;
 	virtual void gtp_played_pass () = 0;
 	virtual void gtp_played_resign () = 0;
 	virtual void gtp_startup_success () = 0;
+	virtual void gtp_setup_success () = 0;
 	virtual void gtp_exited () = 0;
 	virtual void gtp_failure (const QString &) = 0;
 	virtual void gtp_eval (const QString &)
@@ -64,7 +65,7 @@ protected:
 
 	void clear_eval_data ();
 
-	void start_analyzer (const Engine &engine, int size, double komi, int hc, bool show_dialog = true);
+	void start_analyzer (const Engine &engine, int size, double komi, bool show_dialog = true);
 	void stop_analyzer ();
 	void pause_eval_updates (bool on) { m_pause_updates = on; }
 	bool pause_analyzer (bool on, std::shared_ptr<game_record>, game_state *);
@@ -79,6 +80,7 @@ public:
 	virtual void gtp_played_move (int, int) override { /* Should not happen.  */ }
 	virtual void gtp_played_resign () override { /* Should not happen.  */ }
 	virtual void gtp_played_pass () override { /* Should not happen.  */ }
+	virtual void gtp_setup_success () override { /* Should not happen.  */ }
 	virtual void gtp_eval (const QString &) override;
 	virtual void gtp_switch_ready () override;
 };
@@ -96,7 +98,6 @@ class GTP_Process : public QProcess
 	/* The komi we've requested with the "komi" command.  The engine may have
 	   ignored it.  */
 	double m_komi;
-	int m_hc;
 	bool m_started = false;
 	bool m_stopped = false;
 
@@ -112,11 +113,12 @@ class GTP_Process : public QProcess
 	void startup_part3 (const QString &);
 	void startup_part4 (const QString &);
 	void startup_part5 (const QString &);
-	void startup_part6 (const QString &);
+	void setup_success (const QString &);
 	void receive_move (const QString &);
 	void pause_callback (const QString &);
 	void internal_quit ();
 	void default_err_receiver (const QString &);
+	void dup_move (game_state *, bool);
 
 public slots:
 	void slot_started ();
@@ -128,12 +130,14 @@ public slots:
 
 public:
 	GTP_Process (QWidget *parent, GTP_Controller *c, const Engine &engine,
-		     int size, float komi, int hc, bool show_dialog = true);
+		     int size, float komi, bool show_dialog = true);
 	~GTP_Process ();
 	bool started () { return m_started; }
 	bool stopped () { return m_stopped; }
 
 	void clear_board () { send_request ("clear_board"); }
+	void setup_board (game_state *, double, bool);
+	void setup_initial_position (game_state *);
 	void request_move (stone_color col);
 	void played_move (stone_color col, int x, int y);
 	void komi (double);

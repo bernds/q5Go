@@ -529,7 +529,7 @@ void AnalyzeDialog::start_engine ()
 
 	const Engine &e = m_engines.at (idx);
 	m_current_komi = e.komi;
-	start_analyzer (e, e.boardsize.toInt (), 7.5, 0, false);
+	start_analyzer (e, e.boardsize.toInt (), 7.5, false);
 }
 
 void AnalyzeDialog::start_job ()

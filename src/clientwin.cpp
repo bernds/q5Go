@@ -2122,8 +2122,14 @@ void ClientWindow::slotComputerPlay(bool)
 	int hc = dlg.handicap ();
 	game_info info = dlg.create_game_info ();
 	go_board starting_pos = new_handicap_board (dlg.board_size (), dlg.handicap ());
+	std::shared_ptr<game_record> gr;
 
-	std::shared_ptr<game_record> gr = std::make_shared<game_record> (starting_pos, hc > 1 ? white : black, info);
+	QString filename = dlg.gameToLoad->text ();
+	if (filename.isEmpty ()) {
+		gr = std::make_shared<game_record> (starting_pos, hc > 1 ? white : black, info);
+	} else {
+		gr = record_from_file (filename, nullptr);
+	}
 
 	if (gr == nullptr)
 		return;

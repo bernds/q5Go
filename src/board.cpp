@@ -2257,7 +2257,7 @@ void Board::start_analysis (const Engine &e)
 		return;
 	}
 
-	start_analyzer (e, m_dims.width (), 7.5, 0);
+	start_analyzer (e, m_dims.width (), 7.5);
 	m_board_win->update_analysis (analyzer::starting);
 }
 

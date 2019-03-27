@@ -280,6 +280,7 @@ public:
 	virtual void gtp_played_resign () override;
 	virtual void gtp_played_pass () override;
 	virtual void gtp_startup_success () override;
+	virtual void gtp_setup_success () override;
 	virtual void gtp_exited () override;
 	virtual void gtp_failure (const QString &) override;
 };

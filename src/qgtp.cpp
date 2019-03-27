@@ -5,7 +5,7 @@
 #include "qgtp.h"
 #include "gogame.h"
 
-GTP_Process *GTP_Controller::create_gtp (const Engine &engine, int size, double komi, int hc, bool show_dialog)
+GTP_Process *GTP_Controller::create_gtp (const Engine &engine, int size, double komi, bool show_dialog)
 {
 	m_id.engine = engine.title.toStdString ();
 	QString ekstr = engine.komi;
@@ -17,13 +17,13 @@ GTP_Process *GTP_Controller::create_gtp (const Engine &engine, int size, double 
 	} else
 		m_id.komi = komi;
 
-	GTP_Process *g = new GTP_Process (m_parent, this, engine, size, komi, hc, show_dialog);
+	GTP_Process *g = new GTP_Process (m_parent, this, engine, size, komi, show_dialog);
 	return g;
 }
 
 GTP_Process::GTP_Process(QWidget *parent, GTP_Controller *c, const Engine &engine,
-			 int size, float komi, int hc, bool show_dialog)
-	: m_dlg (parent, TextView::type::gtp), m_controller (c), m_size (size), m_komi (komi), m_hc (hc)
+			 int size, float komi, bool show_dialog)
+	: m_dlg (parent, TextView::type::gtp), m_controller (c), m_size (size), m_komi (komi)
 {
 	const QString &prog = engine.path;
 	const QString &args = engine.args;
@@ -101,18 +101,11 @@ void GTP_Process::startup_part4 (const QString &)
 {
 	char komi[20];
 	sprintf (komi, "komi %.2f", m_komi);
-	t_receiver rcv = &GTP_Process::startup_part6;
-	if (m_hc > 2)
-		rcv = &GTP_Process::startup_part5;
+	t_receiver rcv = &GTP_Process::startup_part5;
 	send_request (komi, rcv);
 }
 
 void GTP_Process::startup_part5 (const QString &)
-{
-	send_request (QString ("fixed_handicap ") + QString::number (m_hc), &GTP_Process::startup_part6);
-}
-
-void GTP_Process::startup_part6 (const QString &)
 {
 	/* Set this before calling startup success, as the callee may want to examine it.  */
 	m_started = true;
@@ -174,6 +167,61 @@ void GTP_Process::request_move (stone_color col)
 		send_request ("genmove black", &GTP_Process::receive_move);
 	else
 		send_request ("genmove white", &GTP_Process::receive_move);
+}
+
+static stone_color maybe_flip (stone_color col, bool flip)
+{
+	if (!flip)
+		return col;
+	return flip_color (col);
+}
+
+void GTP_Process::dup_move (game_state *from, bool flip)
+{
+	stone_color c = maybe_flip (from->get_move_color (), flip);
+	played_move (c, from->get_move_x (), from->get_move_y ());
+}
+
+void GTP_Process::setup_board (game_state *st, double km, bool flip)
+{
+	const go_board &b = st->get_board ();
+
+	std::vector<game_state *> moves;
+	while (st->was_move_p () && !st->root_node_p ()) {
+		moves.push_back (st);
+		st = st->prev_move ();
+	}
+	const go_board &startpos = st->get_board ();
+
+	clear_board ();
+	komi (km);
+
+	for (int i = 0; i < b.size_x (); i++)
+		for (int j = 0; j < b.size_y (); j++) {
+			/* This gives better behavior if the GTP process dies or misbehaves.  */
+			if (stopped ())
+				return;
+			stone_color c = maybe_flip (startpos.stone_at (i, j), flip);
+			if (c != none)
+				played_move (c, i, j);
+		}
+
+	while (!moves.empty ()) {
+		st = moves.back ();
+		moves.pop_back ();
+		dup_move (st, flip);
+	}
+}
+
+void GTP_Process::setup_success (const QString &)
+{
+	m_controller->gtp_setup_success ();
+}
+
+void GTP_Process::setup_initial_position (game_state *st)
+{
+	setup_board (st, m_komi, false);
+	send_request ("known_command known_command", &GTP_Process::setup_success);
 }
 
 void GTP_Process::analyze (stone_color col, int interval)
@@ -364,34 +412,7 @@ void GTP_Eval_Controller::request_analysis (std::shared_ptr<game_record> gr, gam
 	delete m_eval_state;
 	m_eval_state = new game_state (b, to_move);
 
-	std::vector<game_state *> moves;
-	while (st->was_move_p () && !st->root_node_p ()) {
-		moves.push_back (st);
-		st = st->prev_move ();
-	}
-	const go_board &startpos = st->get_board ();
-	m_analyzer->clear_board ();
-	m_analyzer->komi (gr->komi ());
-
-	for (int i = 0; i < b.size_x (); i++)
-		for (int j = 0; j < b.size_y (); j++) {
-			/* This gives better behavior if the GTP process dies or misbehaves.  */
-			if (m_analyzer->stopped ())
-				return;
-			stone_color c = startpos.stone_at (i, j);
-			if (flip)
-				c = flip_color (c);
-			if (c != none)
-				m_analyzer->played_move (c, i, j);
-		}
-	while (!moves.empty ()) {
-		st = moves.back ();
-		moves.pop_back ();
-		stone_color c = st->get_move_color ();
-		if (flip)
-			c = flip_color (c);
-		m_analyzer->played_move (c, st->get_move_x (), st->get_move_y ());
-	}
+	m_analyzer->setup_board (st, gr->komi (), flip);
 
 	if (flip)
 		to_move = flip_color (to_move);
@@ -417,7 +438,7 @@ void GTP_Eval_Controller::gtp_switch_ready ()
 	m_switch_pending = false;
 }
 
-void GTP_Eval_Controller::start_analyzer (const Engine &engine, int size, double komi, int hc, bool show_dialog)
+void GTP_Eval_Controller::start_analyzer (const Engine &engine, int size, double komi, bool show_dialog)
 {
 	if (m_analyzer != nullptr) {
 		m_analyzer->quit ();
@@ -425,7 +446,7 @@ void GTP_Eval_Controller::start_analyzer (const Engine &engine, int size, double
 		m_analyzer = nullptr;
 	}
 	m_analyzer_komi = komi;
-	m_analyzer = create_gtp (engine, size, komi, hc, show_dialog);
+	m_analyzer = create_gtp (engine, size, komi, show_dialog);
 	analyzer_state_changed ();
 }
 
