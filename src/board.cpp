@@ -199,7 +199,11 @@ QImage BoardView::background_image ()
 	int board_x1 = board_x0 + m_wood_rect.width () - 1;
 	int board_y1 = board_y0 + m_wood_rect.height () - 1;
 	painter.drawTiledPixmap (0, 0, w, h, m_table);
-	painter.drawTiledPixmap (m_wood_rect, m_wood);
+	painter.setRenderHint (QPainter::SmoothPixmapTransform);
+	if (setting->readBoolEntry ("SKIN_SCALE_WOOD"))
+		painter.drawPixmap (m_wood_rect, m_wood);
+	else
+		painter.drawTiledPixmap (m_wood_rect, m_wood);
 
 	// Modify the edges of the board so they appear slightly three-dimensional.
 	int width = 3;

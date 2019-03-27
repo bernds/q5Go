@@ -187,7 +187,7 @@
       <string/>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="InterfaceTabWidget">
       <attribute name="title">
@@ -1728,6 +1728,9 @@ If the picture is not set, or unvalid, a default picture is used by qgo</string>
           </item>
           <item row="0" column="1">
            <widget class="QComboBox" name="woodComboBox">
+            <property name="toolTip">
+             <string>Choose a preset, or set to &quot;Custom File&quot; to use your own image file as the wood image for the board.</string>
+            </property>
             <item>
              <property name="text">
               <string>Custom file</string>
@@ -1787,7 +1790,20 @@ If the picture is not set, or unvalid, a default goban is used by qgo</string>
           <item row="4" column="0" colspan="2">
            <layout class="QHBoxLayout" name="horizontalLayout_14">
             <item>
+             <widget class="QCheckBox" name="scaleWoodCheckBox">
+              <property name="toolTip">
+               <string>Determines whether the wood image is scaled or tiled</string>
+              </property>
+              <property name="text">
+               <string>Scale wood image</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <widget class="QCheckBox" name="lineScaleCheckBox">
+              <property name="toolTip">
+               <string>Determines if the lines are scaled up with the board or always remain one pixel thin</string>
+              </property>
               <property name="text">
                <string>Scale line widths</string>
               </property>
@@ -1795,6 +1811,9 @@ If the picture is not set, or unvalid, a default goban is used by qgo</string>
             </item>
             <item>
              <widget class="QCheckBox" name="lineWidenCheckBox">
+              <property name="toolTip">
+               <string>Determines if the board boundaries are drawn slightly thicker. Useful especially for torus boards.</string>
+              </property>
               <property name="text">
                <string>Widen outside lines</string>
               </property>
@@ -1860,12 +1879,7 @@ If the picture is not set, or unvalid, a default goban is used by qgo</string>
           <item>
            <widget class="QRadioButton" name="radioButtonStones_2D">
             <property name="toolTip">
-             <string>flat circled ... ugly but asked for ...</string>
-            </property>
-            <property name="whatsThis">
-             <string>Stone appearance
-
-This will display back and white circles</string>
+             <string>This shows plain and simple 2D stones</string>
             </property>
             <property name="text">
              <string>Plain 2D</string>
@@ -1875,12 +1889,7 @@ This will display back and white circles</string>
           <item>
            <widget class="QRadioButton" name="radioButtonStones_3D">
             <property name="toolTip">
-             <string>plain 3D (no shadow, no stripes)</string>
-            </property>
-            <property name="whatsThis">
-             <string>Stone appearance
-
-this will display simple 3D stones, with no shadow and neither stripes on white stones</string>
+             <string>This is the 3D style used in earlier versions of the program. Kept mainly for compatibility.</string>
             </property>
             <property name="text">
              <string>Old 3D look</string>
@@ -1890,12 +1899,7 @@ this will display simple 3D stones, with no shadow and neither stripes on white 
           <item>
            <widget class="QRadioButton" name="radioButtonStone_real">
             <property name="toolTip">
-             <string>Realistic 3D stones with stripes and shadow</string>
-            </property>
-            <property name="whatsThis">
-             <string>Stone appearance
-
-This will display realistic 3D stones with stripes and shadow</string>
+             <string>Realistically shaded 3D stones, configurable with the other settings on this page.</string>
             </property>
             <property name="text">
              <string>Shaded 3D</string>

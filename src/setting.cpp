@@ -288,7 +288,7 @@ void Setting::lists_to_entries ()
 {
 }
 
-void Setting::loadSettings()
+void Setting::loadSettings ()
 {
         QString configfile = QStandardPaths::locate (QStandardPaths::AppConfigLocation, PACKAGE "rc", QStandardPaths::LocateFile);
         QFile file (configfile);
@@ -322,6 +322,12 @@ void Setting::loadSettings()
 
 	extract_lists ();
 	extract_frequent_settings ();
+
+	/* Can't write this as a default in the constructor: existing preferences may
+	   have a wood image for which scaling would be inappropriate.  So check here if
+	   we still have the default SKIN_INDEX and no SKIN_SCALE_WOOD after loading.  */
+	if (!params.contains ("SKIN_SCALE_WOOD"))
+		writeBoolEntry ("SKIN_SCALE_WOOD", readIntEntry ("SKIN_INDEX") == 1);
 
 	// Read obsolete font entries first, and then try to replace them with more current ones.
 	updateFont(fontStandard, "FONT_MAIN");
