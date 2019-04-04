@@ -1,4 +1,4 @@
-## q5Go 0.8
+## q5Go 0.8.1
 
 This is a tool for Go players which performs the following functions:
 - SGF editor
@@ -19,7 +19,8 @@ and modernized.
 
 ![screenshot](screens/screenshot.png)
 
-These are the major user-visible changes in 0.8:
+Version 0.8.1 is just a compatibility fix for the Leela Zero "next" branch
+that will become 0.17.  These are the major user-visible changes in 0.8:
  * Analyzing games with multiple engines now produces sensible results.
    q5go remembers winrates for each engine name and komi combination and
    displays multiple winrate graphs.

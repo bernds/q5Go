@@ -6,9 +6,9 @@
 #define PACKAGE1 "q5goClient"
 
 /* Version number of package */
-#define VERSION "0.8"
+#define VERSION "0.8.1"
 
-#define NEWVERSIONWARNING "<p>Welcome to version 0.8 of q5go.</p>\n" \
+#define NEWVERSIONWARNING "<p>Welcome to version " VERSION " of q5go.</p>\n" \
   "<p>This version adds two major features: multi-engine analysis and slide export, as well as many small enhancements.</p>" \
   "<p>For a full list of changes, please refer to the README.</p>" \
   "<p>This message will not be shown anymore on startup.</p>"

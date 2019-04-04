@@ -1,3 +1,6 @@
+q5Go 0.8.1
+ * Adjusted analysis mode to work with the upcoming Leela Zero 0.17.
+
 q5Go 0.8
 
 These are the major user-visible changes in 0.8:
