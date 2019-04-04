@@ -510,14 +510,27 @@ void GTP_Eval_Controller::gtp_eval (const QString &s)
 		delete old;
 
 	for (auto &e: moves) {
-//		m_board_win->append_comment (e);
-		QRegExp re ("(\\S+)\\s+visits\\s+(\\d+)\\s+winrate\\s+(\\d+)\\s+prior\\s+(\\d+)\\s+order\\s+(\\d+)\\s+pv\\s+(.*)$");
-		if (re.indexIn (e) == -1)
+		QRegularExpression mvre ("^(\\S+)\\s+");
+		auto mv = mvre.match (e);
+		if (!mv.hasMatch ())
 			continue;
-		QString move = re.cap (1);
-		int visits = re.cap (2).toInt ();
-		int winrate = re.cap (3).toInt ();
-		QString pv = re.cap (6);
+		QRegularExpression visre ("\\s+visits\\s+(\\d+)\\s+");
+		auto vism = visre.match (e);
+		if (!vism.hasMatch ())
+			continue;
+		QRegularExpression wrre ("\\s+winrate\\s+(\\d+)\\s+");
+		auto wrm = wrre.match (e);
+		if (!wrm.hasMatch ())
+			continue;
+		QRegularExpression pvre ("\\s+pv\\s+(.*)$");
+		auto pvm = pvre.match (e);
+		if (!pvm.hasMatch ())
+			continue;
+
+		QString move = mv.captured (1);
+		int visits = vism.captured (1).toInt ();
+		int winrate = wrm.captured (1).toInt ();
+		QString pv = pvm.captured (1);
 		double wr = winrate / 10000.;
 		/* The winrate also does not need flipping, it is given for the side to move,
 		   and since we flip both the stones and the side to move, it comes out correct
@@ -528,7 +541,7 @@ void GTP_Eval_Controller::gtp_eval (const QString &s)
 			primary_visits = visits;
 			m_eval_state->set_eval_data (visits, to_move == white ? 1 - wr : wr, id);
 		}
-		qDebug () << move << " PV: " << pv;
+		qDebug () << move << " wr " << winrate << " visits " << visits << " PV: " << pv;
 
 		QStringList pvmoves = pv.split (" ", QString::SkipEmptyParts);
 		if (count < 52 && (!prune || pvmoves.length () > 1 || visits >= 2)) {
