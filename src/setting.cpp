@@ -2,6 +2,7 @@
  * settings.cpp
  */
 
+#include <array>
 #include <QApplication>
 #include <QTextStream>
 #include <QStandardPaths>
