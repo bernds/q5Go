@@ -4,6 +4,7 @@
 #include "ui_slideview_gui.h"
 
 class game_record;
+typedef std::shared_ptr<game_record> go_game_ptr;
 class game_state;
 class BoardView;
 class FigureView;
@@ -16,7 +17,7 @@ class SlideView: public QDialog, public Ui::SlideViewDialog
 	Q_OBJECT
 
 	FigureView *m_board_exporter;
-	std::shared_ptr<game_record> m_game;
+	go_game_ptr m_game;
 	QFont m_font;
 	double m_aspect;
 	QSize m_displayed_sz;
@@ -42,7 +43,7 @@ public slots:
 public:
 	SlideView (QWidget *parent);
 	~SlideView ();
-	void set_game (std::shared_ptr<game_record> gr);
+	void set_game (go_game_ptr gr);
 	void set_active (game_state *st);
 
 	void update_prefs ();

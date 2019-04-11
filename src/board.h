@@ -46,7 +46,7 @@ class BoardView : public QGraphicsView
 	   ends up with two game pointers.  That's a little unfortunate.
 	   But we want a reference to the game record of the displayed position to
 	   ensure that it isn't deleted before a BoardView is.  */
-	std::shared_ptr<game_record> m_displayed_game;
+	go_game_ptr m_displayed_game;
 
 	void update_rect_select (int, int);
 	/* Used by mouse event handlers during rectangle selection.  */
@@ -137,7 +137,7 @@ public:
 	~BoardView ();
 	/* Should be part of the constructor, but Qt doesn't seem to allow such a construction with the .ui files.  */
 	void set_board_win (MainWindow *w) { m_board_win = w; }
-	virtual void reset_game (std::shared_ptr<game_record>);
+	virtual void reset_game (go_game_ptr);
 	virtual void set_displayed (game_state *);
 	game_state *displayed () { return m_displayed; }
 
@@ -240,7 +240,7 @@ public:
 	Board (QWidget *parent = nullptr);
 	~Board ();
 
-	virtual void reset_game (std::shared_ptr<game_record>) override;
+	virtual void reset_game (go_game_ptr) override;
 	virtual void set_displayed (game_state *) override;
 
 	void set_analyzer_id (analyzer_id id);

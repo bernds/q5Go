@@ -10,6 +10,7 @@
 
 class game_state;
 class game_record;
+typedef std::shared_ptr<game_record> go_game_ptr;
 
 class GTP_Process;
 
@@ -68,9 +69,9 @@ protected:
 	void start_analyzer (const Engine &engine, int size, double komi, bool show_dialog = true);
 	void stop_analyzer ();
 	void pause_eval_updates (bool on) { m_pause_updates = on; }
-	bool pause_analyzer (bool on, std::shared_ptr<game_record>, game_state *);
+	bool pause_analyzer (bool on, go_game_ptr, game_state *);
 	void initiate_switch ();
-	void request_analysis (std::shared_ptr<game_record>, game_state *, bool flip = false);
+	void request_analysis (go_game_ptr, game_state *, bool flip = false);
 	virtual void eval_received (const QString &, int) = 0;
 	virtual void analyzer_state_changed () { }
 	virtual void notice_analyzer_id (const analyzer_id &) { }

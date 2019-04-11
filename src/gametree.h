@@ -13,6 +13,7 @@
 class ImageHandler;
 class game_state;
 class game_record;
+typedef std::shared_ptr<game_record> go_game_ptr;
 class MainWindow;
 class FigureView;
 
@@ -34,7 +35,7 @@ class GameTree : public QGraphicsView
 	FigureView *m_previewer {};
 
 	int m_size = 30;
-	std::shared_ptr<game_record> m_game {};
+	go_game_ptr m_game {};
 	game_state *m_active {};
 	QGraphicsScene *m_scene;
 	QGraphicsScene *m_header_scene;
@@ -59,7 +60,7 @@ protected:
 public:
 	GameTree(QWidget *parent);
 	void set_board_win (MainWindow *win, QGraphicsView *header);
-	void update (std::shared_ptr<game_record> gr, game_state *, bool force = false);
+	void update (go_game_ptr gr, game_state *, bool force = false);
 	void show_menu (int x, int y, const QPoint &pos);
 	void item_clicked (int x, int y);
 	void toggle_collapse (int x, int y, bool);

@@ -400,7 +400,7 @@ analyzer GTP_Eval_Controller::analyzer_state ()
 	return analyzer::running;
 }
 
-void GTP_Eval_Controller::request_analysis (std::shared_ptr<game_record> gr, game_state *st, bool flip)
+void GTP_Eval_Controller::request_analysis (go_game_ptr gr, game_state *st, bool flip)
 {
 	if (analyzer_state () != analyzer::running)
 		return;
@@ -462,7 +462,7 @@ void GTP_Eval_Controller::stop_analyzer ()
 }
 
 /* Return true iff the state changed.  */
-bool GTP_Eval_Controller::pause_analyzer (bool on, std::shared_ptr<game_record> gr, game_state *st)
+bool GTP_Eval_Controller::pause_analyzer (bool on, go_game_ptr gr, game_state *st)
 {
 	if (m_analyzer == nullptr || !m_analyzer->started () || m_analyzer->stopped ())
 		return false;

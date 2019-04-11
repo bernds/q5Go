@@ -223,7 +223,7 @@ void SlideView::inputs_changed ()
 	redraw ();
 }
 
-void SlideView::set_game (std::shared_ptr<game_record> gr)
+void SlideView::set_game (go_game_ptr gr)
 {
 	m_game = gr;
 	m_board_exporter->reset_game (gr);

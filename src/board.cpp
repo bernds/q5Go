@@ -2005,7 +2005,7 @@ void BoardView::alloc_graphics_elts (bool reset)
 	calculateSize ();
 }
 
-void BoardView::reset_game (std::shared_ptr<game_record> gr)
+void BoardView::reset_game (go_game_ptr gr)
 {
 	clear_graphics_elts ();
 
@@ -2047,7 +2047,7 @@ void BoardView::set_displayed (game_state *st)
 	sync_appearance (false);
 }
 
-void Board::reset_game (std::shared_ptr<game_record> gr)
+void Board::reset_game (go_game_ptr gr)
 {
 	stop_observing ();
 

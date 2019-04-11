@@ -13,6 +13,7 @@
 
 class game_state;
 class game_record;
+typedef std::shared_ptr<game_record> go_game_ptr;
 class MainWindow;
 class an_id_model;
 
@@ -23,7 +24,7 @@ class EvalGraph : public QGraphicsView
 	MainWindow *m_win {};
 	const an_id_model *m_model {};
 
-	std::shared_ptr<game_record> m_game {};
+	go_game_ptr m_game {};
 	game_state *m_active {};
 	int m_id_idx = 0;
 	QGraphicsScene *m_scene;
@@ -44,7 +45,7 @@ public:
 	EvalGraph (QWidget *parent);
 	~EvalGraph () { delete m_brush; delete m_scene; }
 	void set_board_win (MainWindow *win, const an_id_model *m) { m_win = win; m_model = m; }
-	void update (std::shared_ptr<game_record> gr, game_state *, int id_idx);
+	void update (go_game_ptr gr, game_state *, int id_idx);
 
 	void update_prefs ();
 

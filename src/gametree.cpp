@@ -256,7 +256,7 @@ void GameTree::show_menu (int x, int y, const QPoint &pos)
 	menu.exec (pos);
 }
 
-void GameTree::update (std::shared_ptr<game_record> gr, game_state *active, bool force)
+void GameTree::update (go_game_ptr gr, game_state *active, bool force)
 {
 	game_state *r = gr->get_root ();
 	bool changed = gr != m_game;

@@ -104,7 +104,7 @@ void EvalGraph::export_file (bool)
 		QMessageBox::warning (this, PACKAGE, tr("Failed to save image!"));
 }
 
-void EvalGraph::update (std::shared_ptr<game_record> gr, game_state *active, int sel_idx)
+void EvalGraph::update (go_game_ptr gr, game_state *active, int sel_idx)
 {
 	int w = width ();
 	int h = height ();

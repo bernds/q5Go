@@ -10,8 +10,8 @@ class DBDialog : public QDialog, public Ui::DBDialog
 {
 	Q_OBJECT
 
-	std::shared_ptr<game_record> m_empty_game;
-	std::shared_ptr<game_record> m_game;
+	go_game_ptr m_empty_game;
+	go_game_ptr m_game;
 	game_state *m_last_move;
 
 	class db_model;
@@ -73,7 +73,7 @@ public:
 
 	virtual void accept () override;
 
-	std::shared_ptr<game_record> selected_record () { return m_game; }
+	go_game_ptr selected_record () { return m_game; }
 };
 
 extern DBDialog *db_dialog;

@@ -127,7 +127,7 @@ void AnalyzeDialog::analyzer_state_changed ()
 	boardsizeSpinBox->setEnabled (!any_jobs && s == analyzer::disconnected);
 }
 
-AnalyzeDialog::job::job (AnalyzeDialog *dlg, QString &title, std::shared_ptr<game_record> gr, int n_seconds, int n_lines,
+AnalyzeDialog::job::job (AnalyzeDialog *dlg, QString &title, go_game_ptr gr, int n_seconds, int n_lines,
 			 engine_komi k, bool comments)
 	: m_dlg (dlg), m_title (title), m_game (gr), m_n_seconds (n_seconds), m_n_lines (n_lines), m_komi_type (k),
 	  m_comments (comments)
@@ -535,7 +535,7 @@ void AnalyzeDialog::start_engine ()
 void AnalyzeDialog::start_job ()
 {
 	QString f = filenameEdit->text ();
-	std::shared_ptr<game_record> gr = record_from_file (f, nullptr);
+	go_game_ptr gr = record_from_file (f, nullptr);
 	if (gr == nullptr)
 		return;
 

@@ -46,7 +46,7 @@ class AnalyzeDialog : public QMainWindow, public Ui::AnalyzeDialog, public GTP_E
 	{
 		AnalyzeDialog *m_dlg;
 		QString m_title;
-		std::shared_ptr<game_record> m_game;
+		go_game_ptr m_game;
 		MainWindow *m_win {};
 		/* We connect to the window's close event, and keep this connection
 		   around so we can delete it on close.  */
@@ -64,7 +64,7 @@ class AnalyzeDialog : public QMainWindow, public Ui::AnalyzeDialog, public GTP_E
 		display *m_display;
 		int m_idx;
 
-		job (AnalyzeDialog *dlg, QString &title, std::shared_ptr<game_record> gr, int n_seconds, int n_lines,
+		job (AnalyzeDialog *dlg, QString &title, go_game_ptr gr, int n_seconds, int n_lines,
 		     engine_komi, bool comments);
 		~job ();
 		game_state *select_request (bool pop);

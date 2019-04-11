@@ -36,7 +36,7 @@ public:
 	an_id_model ()
 	{
 	}
-	void populate_list (std::shared_ptr<game_record>);
+	void populate_list (go_game_ptr);
 
 	const std::vector<analyzer_id> &entries () const { return m_entries; }
 	void notice_analyzer_id (const analyzer_id &);
@@ -90,7 +90,7 @@ class MainWindow : public QMainWindow, public Ui::BoardWindow
 	void update_score_type ();
 
 public:
-	MainWindow(QWidget* parent, std::shared_ptr<game_record>, const QString opener_scrkey = QString (),
+	MainWindow(QWidget* parent, go_game_ptr, const QString opener_scrkey = QString (),
 		   GameMode mode = modeNormal);
 	virtual ~MainWindow();
 	Board* getBoard() const { return gfx_board; }
@@ -113,7 +113,7 @@ public:
 
 	void setMoveData(game_state &, const go_board &, GameMode);
 	void mark_dead_external (int x, int y) { gfx_board->mark_dead_external (x, y); }
-	void init_game_record (std::shared_ptr<game_record>);
+	void init_game_record (go_game_ptr);
 	/* Called when the record was changed by some external source (say, a Go server
 	   providing a title string).  */
 	void update_game_record ();
@@ -232,7 +232,7 @@ public slots:
 	void sliderChanged (int);
 
 protected:
-	std::shared_ptr<game_record> m_game;
+	go_game_ptr m_game;
 	game_state *m_empty_state {};
 	TextView m_ascii_dlg;
 	SvgView m_svg_dlg;
@@ -265,7 +265,7 @@ class MainWindow_GTP : public MainWindow, public GTP_Controller
 {
 	GTP_Process *m_gtp;
 public:
-	MainWindow_GTP (QWidget *parent, std::shared_ptr<game_record>, QString opener_scrkey,
+	MainWindow_GTP (QWidget *parent, go_game_ptr, QString opener_scrkey,
 			const Engine &program, bool b_comp, bool w_comp);
 	~MainWindow_GTP ();
 

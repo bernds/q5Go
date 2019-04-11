@@ -55,7 +55,7 @@ QString screen_key (QWidget *w)
 	return QString::number (sz.width ()) + "x" + QString::number (sz.height ());
 }
 
-void an_id_model::populate_list (std::shared_ptr<game_record> game)
+void an_id_model::populate_list (go_game_ptr game)
 {
 	beginResetModel ();
 	m_entries.clear ();
@@ -139,7 +139,7 @@ QVariant an_id_model::headerData (int section, Qt::Orientation ot, int role) con
 	return QVariant ();
 }
 
-MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, const QString opener_scrkey, GameMode mode)
+MainWindow::MainWindow(QWidget* parent, go_game_ptr gr, const QString opener_scrkey, GameMode mode)
 	: QMainWindow(parent), m_game (gr), m_ascii_dlg (this), m_svg_dlg (this)
 {
 	setupUi (this);
@@ -340,7 +340,7 @@ MainWindow::MainWindow(QWidget* parent, std::shared_ptr<game_record> gr, const Q
 	main_window_list.push_back (this);
 }
 
-void MainWindow::init_game_record (std::shared_ptr<game_record> gr)
+void MainWindow::init_game_record (go_game_ptr gr)
 {
 	m_svg_dlg.hide ();
 	m_ascii_dlg.hide ();
@@ -736,7 +736,7 @@ void MainWindow::slotFileNewGame (bool)
 	if (!checkModified())
 		return;
 
-	std::shared_ptr<game_record> gr = new_game_dialog (this);
+	go_game_ptr gr = new_game_dialog (this);
 	if (gr == nullptr)
 		return;
 
@@ -751,7 +751,7 @@ void MainWindow::slotFileNewVariantGame (bool)
 	if (!checkModified())
 		return;
 
-	std::shared_ptr<game_record> gr = new_variant_game_dialog (this);
+	go_game_ptr gr = new_variant_game_dialog (this);
 	if (gr == nullptr)
 		return;
 
@@ -766,7 +766,7 @@ void MainWindow::slotFileOpen (bool)
 	if (!checkModified())
 		return;
 
-	std::shared_ptr<game_record> gr = open_file_dialog (this);
+	go_game_ptr gr = open_file_dialog (this);
 	if (gr == nullptr)
 		return;
 
@@ -779,7 +779,7 @@ void MainWindow::slotFileOpenDB (bool)
 	if (!checkModified())
 		return;
 
-	std::shared_ptr<game_record> gr = open_db_dialog (this);
+	go_game_ptr gr = open_db_dialog (this);
 	if (gr == nullptr)
 		return;
 
@@ -890,7 +890,7 @@ void MainWindow::slotFileImportSgfClipB(bool)
 	QByteArray bytes = sgfString.toUtf8 ();
 	QBuffer buf (&bytes);
 	buf.open (QBuffer::ReadOnly);
-	std::shared_ptr<game_record> gr = record_from_stream (buf, nullptr);
+	go_game_ptr gr = record_from_stream (buf, nullptr);
 	if (gr == nullptr)
 		/* Assume alerts were shown in record_from_stream.  */
 		return;
@@ -1794,7 +1794,7 @@ void MainWindow::update_font ()
 
 void MainWindow::slot_editBoardInNewWindow(bool)
 {
-	std::shared_ptr<game_record> newgr = std::make_shared<game_record> (*m_game);
+	go_game_ptr newgr = std::make_shared<game_record> (*m_game);
 	// online mode -> don't score, open new Window instead
 	MainWindow *w = new MainWindow (nullptr, newgr);
 
@@ -2353,7 +2353,7 @@ void MainWindow::set_observer_model (QStandardItemModel *m)
 	ListView_observers->header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
 }
 
-MainWindow_GTP::MainWindow_GTP (QWidget *parent, std::shared_ptr<game_record> gr, QString opener_scrkey, const Engine &program,
+MainWindow_GTP::MainWindow_GTP (QWidget *parent, go_game_ptr gr, QString opener_scrkey, const Engine &program,
 				bool b_is_comp, bool w_is_comp)
 	: MainWindow (parent, gr, opener_scrkey, modeComputer), GTP_Controller (this)
 {

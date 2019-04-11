@@ -4,13 +4,13 @@
 extern QString screen_key (QWidget *);
 
 enum class game_dialog_type { none, normal, variant };
-extern std::shared_ptr<game_record> open_file_dialog (QWidget *);
-extern std::shared_ptr<game_record> open_db_dialog (QWidget *);
+extern go_game_ptr open_file_dialog (QWidget *);
+extern go_game_ptr open_db_dialog (QWidget *);
 extern QString open_filename_dialog (QWidget *);
-extern std::shared_ptr<game_record> new_game_dialog (QWidget *);
-extern std::shared_ptr<game_record> new_variant_game_dialog (QWidget *);
-extern std::shared_ptr<game_record> record_from_stream (QIODevice &isgf, QTextCodec *codec);
-extern std::shared_ptr<game_record> record_from_file (const QString &filename, QTextCodec *codec);
+extern go_game_ptr new_game_dialog (QWidget *);
+extern go_game_ptr new_variant_game_dialog (QWidget *);
+extern go_game_ptr record_from_stream (QIODevice &isgf, QTextCodec *codec);
+extern go_game_ptr record_from_file (const QString &filename, QTextCodec *codec);
 extern bool open_window_from_file (const QString &filename);
 extern void open_local_board (QWidget *, game_dialog_type, const QString &);
 extern go_board new_handicap_board (int, int);

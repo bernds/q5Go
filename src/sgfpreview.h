@@ -13,8 +13,8 @@ class SGFPreview : public QDialog, public Ui::SGFPreview
 
 	QFileDialog *fileDialog;
 	game_state m_empty_board;
-	std::shared_ptr<game_record> m_empty_game;
-	std::shared_ptr<game_record> m_game;
+	go_game_ptr m_empty_game;
+	go_game_ptr m_game;
 
 	void setPath (QString path);
 	void reloadPreview ();
@@ -26,7 +26,7 @@ public:
 	virtual void accept () override;
 	QStringList selected ();
 
-	std::shared_ptr<game_record> selected_record () { return m_game; }
+	go_game_ptr selected_record () { return m_game; }
 };
 
 #endif
