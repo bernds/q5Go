@@ -2,7 +2,7 @@
 #define SGF_H
 
 #include <string>
-#include <list>
+#include <vector>
 #include <exception>
 #include <memory>
 
@@ -67,7 +67,7 @@ public:
 			{
 			}
 		};
-		typedef std::list<property *>proplist;
+		typedef std::vector<property> proplist;
 		proplist props;
 
 		node ()
@@ -82,8 +82,6 @@ public:
 				m_children = t->m_siblings;
 				delete t;
 			}
-			for (auto i: props)
-				delete i;
 		}
 		void set_active (node *c)
 		{
@@ -100,18 +98,18 @@ public:
 			if (! active)
 				active = c;
 		}
-		property *find_property (const char *id, bool require_value = true) const
+		property *find_property (const char *id, bool require_value = true)
 		{
-			for (auto i: props)
-				if (i->ident == id) {
-					if (require_value && i->values.empty ())
+			for (auto &i: props)
+				if (i.ident == id) {
+					if (require_value && i.values.empty ())
 						throw broken_sgf ();
-					i->handled = true;
-					return i;
+					i.handled = true;
+					return &i;
 				}
 			return nullptr;
 		}
-		const std::string *find_property_val (const char *id) const
+		const std::string *find_property_val (const char *id)
 		{
 			property *p = find_property (id);
 			if (p == nullptr)

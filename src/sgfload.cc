@@ -54,8 +54,8 @@ sgf::node *parse_gametree (const IODeviceAdapter &in, sgf_errors &errs)
 	    if (nextch != '[')
 	      throw broken_sgf ();
 
-	    sgf::node::property *p = new sgf::node::property (idstr);
-	    this_node->props.push_back (p);
+	    this_node->props.emplace_back (idstr);
+	    auto &p = this_node->props.back ();
 	    while (nextch == '[') {
 		std::string valstr = "";
 		int escaped = 0;
@@ -68,7 +68,7 @@ sgf::node *parse_gametree (const IODeviceAdapter &in, sgf_errors &errs)
 		    if (! escaped)
 			valstr += nextch;
 		}
-		p->values.push_back (valstr);
+		p.values.push_back (valstr);
 		nextch = skip_whitespace (in);
 	    }
 	}

@@ -275,9 +275,6 @@ public:
 	}
 	~game_state ()
 	{
-		for (sgf::node::property *it: m_unrecognized_props)
-			delete it;
-
 		while (m_children.size () > 0) {
 			game_state *c = m_children.back ();
 			delete c;
