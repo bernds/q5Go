@@ -5,25 +5,11 @@
   <property name="enabled">
    <bool>true</bool>
   </property>
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>400</width>
-    <height>414</height>
-   </rect>
-  </property>
   <property name="sizePolicy">
    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
-  </property>
-  <property name="minimumSize">
-   <size>
-    <width>400</width>
-    <height>375</height>
-   </size>
   </property>
   <property name="windowTitle">
    <string>Computer Game</string>
@@ -36,7 +22,7 @@
   </property>
   <layout class="QGridLayout">
    <item row="7" column="0" colspan="2">
-    <widget class="QGroupBox" name="IGSgroup_box_2">
+    <widget class="QGroupBox" name="loadBox">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
        <horstretch>0</horstretch>
@@ -198,7 +184,7 @@
     </widget>
    </item>
    <item row="6" column="0" colspan="2">
-    <widget class="QGroupBox" name="groupBox4">
+    <widget class="QGroupBox" name="gameParamsBox">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
        <horstretch>0</horstretch>

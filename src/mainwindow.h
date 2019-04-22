@@ -213,6 +213,8 @@ public slots:
 	void slotEditRectSelect(bool);
 	void slotEditClearSelect(bool);
 
+	void slotPlayFromHere (bool);
+
 	void slotDiagEdit (bool);
 	void slotDiagASCII (bool);
 	void slotDiagSVG (bool);
@@ -264,8 +266,11 @@ public:
 class MainWindow_GTP : public MainWindow, public GTP_Controller
 {
 	GTP_Process *m_gtp;
+	game_state *m_first_pos;
 public:
 	MainWindow_GTP (QWidget *parent, go_game_ptr, QString opener_scrkey,
+			const Engine &program, bool b_comp, bool w_comp);
+	MainWindow_GTP (QWidget *parent, go_game_ptr, game_state *, QString opener_scrkey,
 			const Engine &program, bool b_comp, bool w_comp);
 	~MainWindow_GTP ();
 

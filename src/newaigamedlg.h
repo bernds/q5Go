@@ -23,7 +23,7 @@ class NewAIGameDlg : public QDialog, public Ui::NewAIGameDlgGui
 	Q_OBJECT
 
 public:
-	NewAIGameDlg (QWidget* parent, const std::vector<Engine> &);
+	NewAIGameDlg (QWidget* parent, const std::vector<Engine> &, bool from_position = false);
 
 	game_info create_game_info ();
 	int board_size ();

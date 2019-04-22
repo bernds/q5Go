@@ -8,7 +8,7 @@
 #include "komispinbox.h"
 #include "qgtp.h"
 
-NewAIGameDlg::NewAIGameDlg( QWidget* parent, const std::vector<Engine> &engines)
+NewAIGameDlg::NewAIGameDlg( QWidget* parent, const std::vector<Engine> &engines, bool from_position)
 	: QDialog (parent)
 {
 	setupUi(this);
@@ -28,6 +28,11 @@ NewAIGameDlg::NewAIGameDlg( QWidget* parent, const std::vector<Engine> &engines)
 	handicapSpinBox->setValue (hc);
 	engineColorButton->setChecked (setting->readBoolEntry ("COMPUTER_WHITE"));
 	humanPlayerLineEdit->setText (setting->readEntry ("HUMAN_NAME"));
+	if (from_position) {
+		gameParamsBox->hide ();
+		loadBox->hide ();
+		setWindowTitle (tr ("Play engine from current position"));
+	}
 }
 
 void NewAIGameDlg::slotCancel()
