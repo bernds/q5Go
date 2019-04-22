@@ -57,6 +57,25 @@ public:
 	// Qt::ItemFlags flags(const QModelIndex &index) const override;
 };
 
+class undo_entry
+{
+protected:
+	QString m_op;
+public:
+	undo_entry (const QString &op) : m_op (op)
+	{
+	}
+	virtual ~undo_entry ()
+	{
+	}
+	QString op_str ()
+	{
+		return m_op;
+	}
+	virtual game_state *apply_undo () = 0;
+	virtual game_state *apply_redo () = 0;
+};
+
 class MainWindow : public QMainWindow, public Ui::BoardWindow
 {
 	Q_OBJECT
@@ -90,6 +109,23 @@ protected:
 	std::string m_tstr_white, m_tstr_black;
 
 private:
+	std::vector<std::unique_ptr<undo_entry>> m_undo_stack;
+	size_t m_undo_stack_pos = 0;
+
+	template<class T> T *top_undo_entry ()
+	{
+		if (m_undo_stack.empty ())
+			return nullptr;
+		m_undo_stack.erase (std::begin (m_undo_stack) + m_undo_stack_pos, std::end (m_undo_stack));
+		return dynamic_cast<T *>(m_undo_stack.back ().get ());
+	}
+
+	void init_game_record (go_game_ptr);
+
+	void update_undo_menus ();
+	void perform_undo ();
+	void perform_redo ();
+
 	void toggleSliderSignal(bool b) { sliderSignalToggle = b; }
 
 	void setToolsTabWidget(enum tabType=tabNormalScore, enum tabState=tabSet);
@@ -104,6 +140,8 @@ private:
 	void leave_edit_append ();
 	void leave_edit_prepend ();
 	void leave_edit_modify ();
+
+	void push_undo (std::unique_ptr<undo_entry>);
 
 public:
 	MainWindow(QWidget* parent, go_game_ptr, const QString opener_scrkey = QString (),
@@ -129,7 +167,6 @@ public:
 
 	void setMoveData (game_state &, const go_board &);
 	void mark_dead_external (int x, int y) { gfx_board->mark_dead_external (x, y); }
-	void init_game_record (go_game_ptr);
 	/* Called when the record was changed by some external source (say, a Go server
 	   providing a title string).  */
 	void update_game_record ();
@@ -146,8 +183,10 @@ public:
 	{
 		slotEditDelete (false);
 	}
+	void notice_mark_change (const go_board &new_board);
 	typedef std::pair<game_state *, bool> move_result;
 	move_result make_move (game_state *, int x, int y);
+	void add_engine_pv (game_state *, game_state *);
 	void update_analysis (analyzer);
 	void update_game_tree ();
 	void update_figures ();

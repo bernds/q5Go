@@ -2574,6 +2574,9 @@ After placing and/or undo release button for returning to starting point automat
     <property name="title">
      <string>&amp;Edit</string>
     </property>
+    <addaction name="editUndo"/>
+    <addaction name="editRedo"/>
+    <addaction name="separator"/>
     <addaction name="setGameInfo"/>
     <addaction name="separator"/>
     <addaction name="editDelete"/>
@@ -3949,6 +3952,25 @@ Open the batch analysis dialog which allows you to add SGF files to a queue to b
    </property>
    <property name="toolTip">
     <string>Start a game against an engine from the current position</string>
+   </property>
+  </action>
+  <action name="editUndo">
+   <property name="text">
+    <string>&amp;Undo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="editRedo">
+   <property name="text">
+    <string>Redo</string>
+   </property>
+   <property name="toolTip">
+    <string>R&amp;edo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Y</string>
    </property>
   </action>
  </widget>

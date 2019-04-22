@@ -155,6 +155,223 @@ QVariant an_id_model::headerData (int section, Qt::Orientation ot, int role) con
 	return QVariant ();
 }
 
+class undo_move_entry : public undo_entry
+{
+	game_state *m_parent;
+	game_state *m_move;
+	size_t m_idx;
+
+public:
+	undo_move_entry (const QString &op, game_state *parent, game_state *move, size_t idx)
+		: undo_entry (op), m_parent (parent), m_move (move), m_idx (idx)
+	{
+	}
+	virtual game_state *apply_undo () override;
+	virtual game_state *apply_redo () override;
+};
+
+class undo_insert_entry : public undo_entry
+{
+	game_state *m_parent;
+	game_state *m_move;
+	size_t m_idx;
+
+public:
+	undo_insert_entry (const QString &op, game_state *parent, game_state *move, size_t idx)
+		: undo_entry (op), m_parent (parent), m_move (move), m_idx (idx)
+	{
+	}
+	virtual game_state *apply_undo () override;
+	virtual game_state *apply_redo () override;
+};
+
+class undo_delete_entry : public undo_entry
+{
+	game_state *m_parent;
+	game_state *m_move;
+	size_t m_idx;
+
+public:
+	undo_delete_entry (const QString &op, game_state *parent, game_state *move, size_t idx)
+		: undo_entry (op), m_parent (parent), m_move (move), m_idx (idx)
+	{
+	}
+	virtual game_state *apply_undo () override;
+	virtual game_state *apply_redo () override;
+};
+
+class undo_info_entry : public undo_entry
+{
+	go_game_ptr m_game;
+	game_info m_before, m_after;
+
+public:
+	undo_info_entry (const QString &op, go_game_ptr game, game_info oldi, game_info newi)
+		: undo_entry (op), m_game (game), m_before (std::move (oldi)), m_after (std::move (newi))
+	{
+	}
+	virtual game_state *apply_undo () override;
+	virtual game_state *apply_redo () override;
+};
+
+class undo_comment_entry : public undo_entry
+{
+	game_state *m_move;
+	std::string m_before, m_after;
+
+public:
+	undo_comment_entry (const QString &op, game_state *move, std::string oldc, std::string newc)
+		: undo_entry (op), m_move (move), m_before (std::move (oldc)), m_after (std::move (newc))
+	{
+	}
+	void update (std::string new_newc)
+	{
+		m_after = std::move (new_newc);
+	}
+	virtual game_state *apply_undo () override;
+	virtual game_state *apply_redo () override;
+};
+
+class undo_edit_entry : public undo_entry
+{
+	game_state *m_move;
+	go_board m_before, m_after;
+	stone_color m_before_to_move, m_after_to_move;
+	/* True if this edit was applied through the sidebar "Modify" button,
+	   as opposed to smaller edits which just place marks.  */
+	bool m_was_edit_mode;
+
+public:
+	undo_edit_entry (const QString &op, game_state *move,
+			 go_board oldb, stone_color oldc, go_board newb, stone_color newc,
+			 bool was_edit_mode)
+		: undo_entry (op), m_move (move), m_before (std::move (oldb)), m_after (std::move (newb)),
+		  m_before_to_move (oldc), m_after_to_move (newc), m_was_edit_mode (was_edit_mode)
+	{
+	}
+	void update (go_board new_newb)
+	{
+		m_after = std::move (new_newb);
+	}
+	bool was_edit_mode () { return m_was_edit_mode; }
+	virtual game_state *apply_undo () override;
+	virtual game_state *apply_redo () override;
+};
+
+class undo_tomove_entry : public undo_entry
+{
+	game_state *m_move;
+	stone_color m_before_to_move, m_after_to_move;
+
+public:
+	undo_tomove_entry (const QString &op, game_state *move, stone_color oldc, stone_color newc)
+		: undo_entry (op), m_move (move), m_before_to_move (oldc), m_after_to_move (newc)
+	{
+	}
+	virtual game_state *apply_undo () override;
+	virtual game_state *apply_redo () override;
+};
+
+game_state *undo_tomove_entry::apply_undo ()
+{
+	m_move->set_to_move (m_before_to_move);
+	return m_move;
+}
+
+game_state *undo_tomove_entry::apply_redo ()
+{
+	m_move->set_to_move (m_after_to_move);
+	return m_move;
+}
+
+game_state *undo_move_entry::apply_undo ()
+{
+	m_move->disconnect ();
+	return m_parent;
+}
+
+game_state *undo_move_entry::apply_redo ()
+{
+	m_parent->add_child_tree_at (m_move, m_idx);
+	return m_move;
+}
+
+game_state *undo_insert_entry::apply_undo ()
+{
+#ifdef CHECKING
+	assert (m_move->n_children () == 1);
+#endif
+	game_state *old_child = m_move->children ()[0];
+	old_child->disconnect ();
+	size_t idx = m_move->disconnect ();
+#ifdef CHECKING
+	assert (idx == m_idx);
+#endif
+	m_parent->add_child_tree_at (old_child, idx);
+	return m_parent;
+}
+
+game_state *undo_insert_entry::apply_redo ()
+{
+	game_state *curr_at_pos = m_parent->children ()[m_idx];
+	curr_at_pos->disconnect ();
+	m_move->add_child_tree (curr_at_pos);
+#ifdef CHECKING
+	/* The inserted position should not be present in the game tree at this point.  */
+	assert (m_move->prev_move () == nullptr);
+#endif
+	m_parent->add_child_tree_at (m_move, m_idx);
+	return m_move;
+}
+
+game_state *undo_delete_entry::apply_undo ()
+{
+	m_parent->add_child_tree_at (m_move, m_idx);
+	return m_move;
+}
+
+game_state *undo_delete_entry::apply_redo ()
+{
+	m_move->disconnect ();
+	return m_parent;
+}
+
+game_state *undo_info_entry::apply_undo ()
+{
+	m_game->set_info (m_before);
+	return nullptr;
+}
+
+game_state *undo_info_entry::apply_redo ()
+{
+	m_game->set_info (m_after);
+	return nullptr;
+}
+
+game_state *undo_comment_entry::apply_undo ()
+{
+	m_move->set_comment (m_before);
+	return m_move;
+}
+
+game_state *undo_comment_entry::apply_redo ()
+{
+	m_move->set_comment (m_after);
+	return m_move;
+}
+
+game_state *undo_edit_entry::apply_undo ()
+{
+	m_move->replace (m_before, m_before_to_move);
+	return m_move;
+}
+
+game_state *undo_edit_entry::apply_redo ()
+{
+	m_move->replace (m_after, m_after_to_move);
+	return m_move;
+}
+
 MainWindow::MainWindow (QWidget* parent, go_game_ptr gr, const QString opener_scrkey, GameMode mode, time_settings ts)
 	: QMainWindow (parent), m_timer_white (ts), m_timer_black (ts), m_game (gr), m_ascii_dlg (this), m_svg_dlg (this)
 {
@@ -361,6 +578,10 @@ MainWindow::MainWindow (QWidget* parent, go_game_ptr gr, const QString opener_sc
 
 void MainWindow::init_game_record (go_game_ptr gr)
 {
+	m_undo_stack.clear ();
+	m_undo_stack_pos = 0;
+	update_undo_menus ();
+
 	m_svg_dlg.hide ();
 	m_ascii_dlg.hide ();
 
@@ -685,6 +906,8 @@ void MainWindow::initActions ()
 
 	engineGroup = new QActionGroup (this);
 
+	connect (editUndo, &QAction::triggered, [=] () { perform_undo (); });
+	connect (editRedo, &QAction::triggered, [=] () { perform_redo (); });
 	connect (editFigure, &QAction::triggered, this, &MainWindow::slotEditFigure);
 	connect (editRectSelect, &QAction::toggled, this, &MainWindow::slotEditRectSelect);
 	connect (editClearSelect, &QAction::triggered, this, &MainWindow::slotEditClearSelect);
@@ -1179,9 +1402,11 @@ void MainWindow::slotEditDelete (bool)
 	game_state *st = gfx_board->displayed ();
 	if (st->root_node_p ())
 		return;
+
 	game_state *parent = st->prev_move ();
 	st->walk_tree ([this, parent] (game_state *s)->bool { gfx_board->transfer_displayed (s, parent); return true; });
-	m_game->release_game_state (st);
+	int idx = st->disconnect ();
+	push_undo (std::make_unique<undo_delete_entry> ("Delete move", parent, st, idx));
 	update_game_tree ();
 	const go_board &b = parent->get_board ();
 	setMoveData (*parent, b);
@@ -1493,6 +1718,7 @@ void MainWindow::slotSetGameInfo (bool)
 		newi.event = dlg.eventEdit->text().toStdString ();
 		newi.round = dlg.roundEdit->text().toStdString ();
 		newi.copyright = dlg.copyrightEdit->text().toStdString ();
+		push_undo (std::make_unique<undo_info_entry> ("Edit game information", m_game, i, newi));
 		m_game->set_info (newi);
 		m_game->set_modified (true);
 		update_game_record ();
@@ -1822,7 +2048,16 @@ void MainWindow::slotUpdateComment ()
 {
 	if (!m_allow_text_update_signal)
 		return;
-	gfx_board->update_comment (commentEdit->toPlainText ());
+	undo_comment_entry *uce = top_undo_entry<undo_comment_entry> ();
+	game_state *st = gfx_board->displayed ();
+	std::string s = commentEdit->toPlainText ().toStdString ();
+	if (uce)
+		uce->update (s);
+	else {
+		push_undo (std::make_unique<undo_comment_entry> ("Edit comment", st, st->comment (), s));
+	}
+	st->set_comment (s);
+	gfx_board->setModified ();
 }
 
 /* Called from an external source to append to the comments window.  */
@@ -2439,8 +2674,13 @@ void MainWindow::setMoveData (game_state &gs, const go_board &b)
 
 void MainWindow::on_colorButton_clicked (bool)
 {
-	stone_color col = gfx_board->swap_edit_to_move ();
+	game_state *st = gfx_board->displayed ();
+	stone_color col = st->to_move ();
+	stone_color newcol = col == black ? white : black;
+	push_undo (std::make_unique<undo_tomove_entry> ("Switch side to move", st, col, newcol));
+	st->set_to_move (newcol);
 	colorButton->setChecked (col == white);
+	setMoveData (*st, st->get_board ());
 }
 
 /* The "Edit Position" button: Switch to edit mode.  */
@@ -2481,6 +2721,12 @@ MainWindow::move_result MainWindow::make_move (game_state *from, int x, int y)
 
 	gfx_board->setModified ();
 	game_state *st_new = from->add_child_move (new_board, col, x, y);
+	if (m_gamemode == modeNormal) {
+		auto name = new_board.coords_name (x, y, gfx_board->sgf_coords ());
+		QString qn = QString::fromStdString (name.first) + QString::fromStdString (name.second);
+		push_undo (std::make_unique<undo_move_entry> ("Play " + qn, from, st_new,
+							      from->find_child_idx (st_new)));
+	}
 	gfx_board->transfer_displayed (from, st_new);
 	return std::make_pair (st_new, true);
 }
@@ -2562,10 +2808,27 @@ void MainWindow::doCountDone ()
 	doRealScore (false);
 }
 
+/* Called when setting marks outside of edit/score mode.  */
+void MainWindow::notice_mark_change (const go_board &newpos)
+{
+	undo_edit_entry *uce = top_undo_entry<undo_edit_entry> ();
+	if (uce != nullptr && !uce->was_edit_mode ()) {
+		uce->update (newpos);
+		return;
+	}
+	game_state *st = gfx_board->displayed ();
+	const go_board &b = st->get_board ();
+	push_undo (std::make_unique<undo_edit_entry> ("Edit marks", st, b, st->to_move (),
+						      newpos, st->to_move (), false));
+}
+
 void MainWindow::leave_edit_modify ()
 {
 	game_state *st = gfx_board->displayed ();
 	const go_board &b = st->get_board ();
+	push_undo (std::make_unique<undo_edit_entry> ("Edit position", m_pos_before_edit,
+						      m_pos_before_edit->get_board (), m_pos_before_edit->to_move (),
+						      b, st->to_move (), true));
 	m_pos_before_edit->replace (b, st->to_move ());
 	gfx_board->set_displayed (m_pos_before_edit);
 	m_pos_before_edit = nullptr;
@@ -2578,6 +2841,8 @@ void MainWindow::leave_edit_append ()
 	game_state *st = gfx_board->displayed ();
 	const go_board &b = st->get_board ();
 	game_state *new_st = m_pos_before_edit->add_child_edit (b, st->to_move ());
+	push_undo (std::make_unique<undo_move_entry> ("Append edited position", m_pos_before_edit,
+						      new_st, m_pos_before_edit->find_child_idx (new_st)));
 	gfx_board->set_displayed (new_st);
 	m_pos_before_edit = nullptr;
 	gfx_board->setModified ();
@@ -2591,9 +2856,23 @@ void MainWindow::leave_edit_prepend ()
 	if (parent == nullptr)
 		return;
 	game_state *new_st = parent->replace_child_edit (m_pos_before_edit, b, st->to_move ());
+	push_undo (std::make_unique<undo_insert_entry> ("Insert edited position", parent,
+							new_st, parent->find_child_idx (new_st)));
 	gfx_board->set_displayed (new_st);
 	m_pos_before_edit = nullptr;
 	gfx_board->setModified ();
+}
+
+void MainWindow::add_engine_pv (game_state *st, game_state *pv)
+{
+	st->add_child_tree (pv);
+
+	push_undo (std::make_unique<undo_move_entry> ("Append engine PV", st,
+						      pv, st->find_child_idx (pv)));
+
+	gfx_board->setModified ();
+	update_game_tree ();
+	update_figures ();
 }
 
 void MainWindow::set_observer_model (QStandardItemModel *m)
@@ -3194,6 +3473,64 @@ void MainWindow::setTimes(const QString &btime, const QString &bstones, const QS
 		normalTools->btimeView->flash (false);
 		normalTools->wtimeView->flash (false);
 	}
+}
+
+void MainWindow::update_undo_menus ()
+{
+	editRedo->setEnabled (m_undo_stack.size () > m_undo_stack_pos);
+	editUndo->setEnabled (m_undo_stack_pos > 0);
+	if (m_undo_stack_pos > 0) {
+		editUndo->setText (tr ("&Undo %1").arg (m_undo_stack[m_undo_stack_pos - 1]->op_str ()));
+	} else
+		editUndo->setText (tr ("&Undo"));
+	if (m_undo_stack_pos < m_undo_stack.size ()) {
+		editRedo->setText (tr ("&Redo %1").arg (m_undo_stack[m_undo_stack_pos]->op_str ()));
+	} else
+		editRedo->setText (tr ("R&edo"));
+}
+
+void MainWindow::push_undo (std::unique_ptr<undo_entry> e)
+{
+	m_undo_stack.erase (std::begin (m_undo_stack) + m_undo_stack_pos, std::end (m_undo_stack));
+	m_undo_stack.emplace_back (std::move (e));
+	m_undo_stack_pos = m_undo_stack.size ();
+	update_undo_menus ();
+}
+
+void MainWindow::perform_undo ()
+{
+	if (m_undo_stack_pos == 0)
+		return;
+	int pos = m_undo_stack_pos;
+#if 0
+	if (pos == m_undo_stack.size ()) {
+		/* We need to save the current position for redo, if it isn't in the undo stack yet.  */
+		push_undo ("Position before undos", false);
+	}
+#endif
+	m_undo_stack_pos = pos - 1;
+	auto &ur = m_undo_stack[m_undo_stack_pos];
+	game_state *st = ur->apply_undo ();
+	if (st != nullptr)
+		gfx_board->set_displayed (st);
+
+	update_game_record ();
+	update_game_tree ();
+	update_undo_menus ();
+}
+
+void MainWindow::perform_redo ()
+{
+	if (m_undo_stack_pos == m_undo_stack.size ())
+		return;
+	auto &ur = m_undo_stack[m_undo_stack_pos++];
+	game_state *st = ur->apply_redo ();
+	if (st != nullptr)
+		gfx_board->set_displayed (st);
+
+	update_game_record ();
+	update_game_tree ();
+	update_undo_menus ();
 }
 
 /* Called whenever a new evaluation comes in from NEW_ID.  We update the evaluation graph.  */

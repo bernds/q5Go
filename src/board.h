@@ -157,6 +157,7 @@ public:
 	void set_show_figure_caps (bool);
 	void set_show_coords (bool);
 	void set_sgf_coords (bool);
+	bool sgf_coords () { return m_sgf_coords; }
 	void set_vardisplay (bool children, int type);
 
 	void update_prefs ();
@@ -240,7 +241,6 @@ public:
 	void set_analyzer_id (analyzer_id id);
 	void setModified (bool m=true);
 	void mark_dead_external (int x, int y);
-	void update_comment(const QString &);
 
 	void setMode(GameMode mode);
 	GameMode getGameMode () { return m_game_mode; }
@@ -258,8 +258,6 @@ public:
 	{
 		return !m_displayed->was_score_p () && (m_displayed->to_move () == black ? m_player_is_b : m_player_is_w);
 	}
-
-	stone_color swap_edit_to_move ();
 
 	void set_player_colors (bool w, bool b) { m_player_is_w = w; m_player_is_b = b; }
 	bool player_is (stone_color c) { return c == black ? m_player_is_b : m_player_is_w; }

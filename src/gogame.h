@@ -408,6 +408,21 @@ private:
 	}
 
 public:
+	void add_child_tree_at (game_state *c, size_t idx)
+	{
+		m_visual_ok = false;
+		c->disconnect ();
+		m_children.insert (std::begin (m_children) + idx, c);
+		c->m_parent = this;
+	}
+	size_t find_child_idx (game_state *c)
+	{
+		size_t n = m_children.size ();
+		for (size_t i = 0; i < n; i++)
+			if (m_children[i] == c)
+				return i;
+		return n;
+	}
 	game_state *add_child_edit_nochecks (const go_board &new_board, stone_color to_move, bool scored, add_mode am)
 	{
 		m_visual_ok = false;

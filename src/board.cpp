@@ -1668,19 +1668,22 @@ void Board::click_add_mark (QMouseEvent *e, int x, int y)
 	if (e->button () == Qt::RightButton)
 		mark_to_set = mark::none;
 
+	go_board b = m_displayed->get_board ();
+
 	if (mark_to_set == mark::letter && e->modifiers () == Qt::ShiftModifier) {
 		TextEditDialog dlg (m_board_win);
 		dlg.textLineEdit->setFocus();
-		const go_board &b = m_displayed->get_board ();
 
 		if (b.mark_at (x, y) == mark::text)
 			dlg.textLineEdit->setText (QString::fromStdString (b.mark_text_at (x, y)));
 
 		if (dlg.exec() == QDialog::Accepted) {
-			/* This is all a bit clunky; it's the price to pay for having game_state's get_board
-			   return a const go_board.  */
-			m_displayed->set_text_mark (x, y, dlg.textLineEdit->text().toStdString ());
-			setModified ();
+			b.set_text_mark (x, y, dlg.textLineEdit->text().toStdString ());
+			if (m_game_mode != modeEdit) {
+				m_board_win->notice_mark_change (b);
+				setModified ();
+			}
+			m_displayed->replace (b, m_displayed->to_move ());
 			sync_appearance (true);
 		}
 
@@ -1704,9 +1707,13 @@ void Board::click_add_mark (QMouseEvent *e, int x, int y)
 		mark_extra = i;
 	}
 
-	bool changed = m_displayed->set_mark (x, y, mark_to_set, mark_extra);
+	bool changed = b.set_mark (x, y, mark_to_set, mark_extra);
 	if (changed) {
-		setModified ();
+		if (m_game_mode != modeEdit) {
+			m_board_win->notice_mark_change (b);
+			setModified ();
+		}
+		m_displayed->replace (b, m_displayed->to_move ());
 		sync_appearance (true);
 	}
 }
@@ -1773,12 +1780,9 @@ void Board::mousePressEvent(QMouseEvent *e)
 			if (ev.id.engine.length () > 0)
 				comment += QString (" (%1)").arg (QString::fromStdString (ev.id.engine));
 			dup->set_figure (256, comment.toStdString ());
-			st->add_child_tree (dup);
+			m_board_win->add_engine_pv (st, dup);
 
-			setModified ();
 			sync_appearance ();
-			m_board_win->update_game_tree ();
-			m_board_win->update_figures ();
 			return;
 		}
 	}
@@ -2086,27 +2090,12 @@ void Board::mark_dead_external (int x, int y)
 	sync_appearance ();
 }
 
-stone_color Board::swap_edit_to_move ()
-{
-	stone_color newcol = m_displayed->to_move () == black ? white : black;
-	m_displayed->set_to_move (newcol);
-	m_board_win->setMoveData (*m_displayed, m_displayed->get_board ());
-	return newcol;
-}
-
 void BoardView::set_vardisplay (bool children, int type)
 {
 	m_vars_children = children;
 	m_vars_type = type;
 
 	sync_appearance (true);
-}
-
-void Board::update_comment (const QString &qs)
-{
-	std::string s = qs.toStdString ();
-	m_displayed->set_comment (s);
-	setModified (true);
 }
 
 void Board::setModified (bool m)
