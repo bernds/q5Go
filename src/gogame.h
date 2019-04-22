@@ -653,6 +653,9 @@ public:
 			return go_board (m_board.size_x (), m_board.size_y ());
 		return p->child_moves (this, exclude_figs);
 	}
+	std::vector<int> path_from_root ();
+	game_state *follow_path (const std::vector<int> &);
+
 	/* Set a mark on the current board, and return true if that made a change.  */
 	bool set_mark (int x, int y, mark m, mextra extra)
 	{

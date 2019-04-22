@@ -379,6 +379,49 @@ void game_state::walk_tree (std::function<bool (game_state *)> &func)
 	}
 }
 
+std::vector<int> game_state::path_from_root ()
+{
+	std::vector<int> v;
+	game_state *st = this;
+	while (st->m_parent != nullptr) {
+		game_state *p = st->m_parent;
+		if (p->m_children.size () == 1) {
+			int len = 0;
+			while (p != nullptr && p->m_children.size () == 1) {
+				len++;
+				st = p;
+				p = p->m_parent;
+			}
+			v.push_back (len);
+			continue;
+		}
+		for (size_t i = 0; i < p->m_children.size (); i++)
+			if (p->m_children[i] == st) {
+				v.push_back (i);
+				break;
+			}
+		st = p;
+	}
+	return v;
+}
+
+game_state *game_state::follow_path (const std::vector<int> &path)
+{
+	game_state *st = this;
+	for (size_t i = path.size (); i-- > 0;) {
+		int idx = path[i];
+		if (st->m_children.size () == 1) {
+			for (int j = 0; j < idx; j++)
+				st = st->m_children[0];
+			continue;
+		}
+		if (idx >= st->m_children.size ())
+			return nullptr;
+		st = st->m_children[idx];
+	}
+	return st;
+}
+
 void navigable_observer::next_move ()
 {
 	game_state *next = m_state->next_move ();
