@@ -1,43 +1,47 @@
 #include "goboard.h"
+#include "gogame.h"
 #include "sizegraphicsview.h"
 #include "variantgamedlg.h"
 #include "grid.h"
 
+#include "ui_newvariantgame_gui.h"
+
 NewVariantGameDialog::NewVariantGameDialog (QWidget* parent)
-	: QDialog (parent)
+	: QDialog (parent), ui (new Ui::NewVariantGameDialog)
 {
-	setupUi (this);
+	ui->setupUi (this);
 	setModal (true);
 
-	connect (buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-	connect (buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+	connect (ui->buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+	connect (ui->buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
 	void (QSpinBox::*changed) (int) = &QSpinBox::valueChanged;
-	connect (xSizeSpin, changed, [=] (int) { update_grid (); });
-	connect (ySizeSpin, changed, [=] (int) { update_grid (); });
-	connect (hTorusCheckBox, &QCheckBox::stateChanged, [=] (int) { update_grid (); });
-	connect (vTorusCheckBox, &QCheckBox::stateChanged, [=] (int) { update_grid (); });
-	connect (graphicsView, &SizeGraphicsView::resized, [=] () { resize_grid (); });
-	int h = graphicsView->height ();
-	graphicsView->resize (h, h);
+	connect (ui->xSizeSpin, changed, [=] (int) { update_grid (); });
+	connect (ui->ySizeSpin, changed, [=] (int) { update_grid (); });
+	connect (ui->hTorusCheckBox, &QCheckBox::stateChanged, [=] (int) { update_grid (); });
+	connect (ui->vTorusCheckBox, &QCheckBox::stateChanged, [=] (int) { update_grid (); });
+	connect (ui->graphicsView, &SizeGraphicsView::resized, [=] () { resize_grid (); });
+	int h = ui->graphicsView->height ();
+	ui->graphicsView->resize (h, h);
 	m_canvas.setSceneRect (0, 0, h, h);
-	graphicsView->setScene (&m_canvas);
+	ui->graphicsView->setScene (&m_canvas);
 	update_grid ();
 }
 
 NewVariantGameDialog::~NewVariantGameDialog ()
 {
 	delete m_grid;
+	delete ui;
 }
 
 void NewVariantGameDialog::resize_grid ()
 {
 	if (m_grid == nullptr)
 		return;
-	double w = graphicsView->width ();
-	double h = graphicsView->height ();
-	int sz_x = xSizeSpin->value();
-	int sz_y = ySizeSpin->value();
+	double w = ui->graphicsView->width ();
+	double h = ui->graphicsView->height ();
+	int sz_x = ui->xSizeSpin->value();
+	int sz_y = ui->ySizeSpin->value();
 	double sqx = w * 0.95 / sz_x;
 	double sqy = h * 0.95 / sz_y;
 	double len = std::min (sqx, sqy);
@@ -49,10 +53,10 @@ void NewVariantGameDialog::resize_grid ()
 
 void NewVariantGameDialog::update_grid ()
 {
-	int sz_x = xSizeSpin->value();
-	int sz_y = ySizeSpin->value();
-	bool torus_h = hTorusCheckBox->isChecked ();
-	bool torus_v = vTorusCheckBox->isChecked ();
+	int sz_x = ui->xSizeSpin->value();
+	int sz_y = ui->ySizeSpin->value();
+	bool torus_h = ui->hTorusCheckBox->isChecked ();
+	bool torus_v = ui->vTorusCheckBox->isChecked ();
 
 	delete m_grid;
 	m_grid = nullptr;
@@ -63,4 +67,23 @@ void NewVariantGameDialog::update_grid ()
 	bit_array no_hoshis (b.bitsize ());
 	m_grid = new Grid (&m_canvas, b, 0, 0, no_hoshis);
 	resize_grid ();
+}
+
+go_game_ptr NewVariantGameDialog::create_game_record ()
+{
+	int sz_x = ui->xSizeSpin->value();
+	int sz_y = ui->ySizeSpin->value();
+	bool torus_h = ui->hTorusCheckBox->isChecked ();
+	bool torus_v = ui->vTorusCheckBox->isChecked ();
+	go_board starting_pos (sz_x, sz_y, torus_h, torus_v);
+	game_info info ("",
+			ui->playerWhiteEdit->text().toStdString (),
+			ui->playerBlackEdit->text().toStdString (),
+			ui->playerWhiteRkEdit->text().toStdString (),
+			ui->playerBlackRkEdit->text().toStdString (),
+			"", ui->komiSpin->value(), 0,
+			ranked::free,
+			"", "", "", "", "", "", "", "", -1);
+	go_game_ptr gr = std::make_shared<game_record> (starting_pos, black, info);
+	return gr;
 }

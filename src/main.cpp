@@ -71,20 +71,7 @@ go_game_ptr new_variant_game_dialog (QWidget *parent)
 	if (dlg.exec() != QDialog::Accepted)
 		return nullptr;
 
-	int sz_x = dlg.xSizeSpin->value();
-	int sz_y = dlg.ySizeSpin->value();
-	bool torus_h = dlg.hTorusCheckBox->isChecked ();
-	bool torus_v = dlg.vTorusCheckBox->isChecked ();
-	go_board starting_pos (sz_x, sz_y, torus_h, torus_v);
-	game_info info ("",
-			dlg.playerWhiteEdit->text().toStdString (),
-			dlg.playerBlackEdit->text().toStdString (),
-			dlg.playerWhiteRkEdit->text().toStdString (),
-			dlg.playerBlackRkEdit->text().toStdString (),
-			"", dlg.komiSpin->value(), 0,
-			ranked::free,
-			"", "", "", "", "", "", "", "", -1);
-	go_game_ptr gr = std::make_shared<game_record> (starting_pos, black, info);
+	go_game_ptr gr = dlg.create_game_record ();
 
 	return gr;
 }
