@@ -78,8 +78,20 @@ void GTP_Process::slot_abort_request (bool)
 
 void GTP_Process::slot_startup_messages ()
 {
-	QString output = readAllStandardError ();
-	m_dlg.append (output);
+	m_stderr_buffer += readAllStandardError ();
+	if (m_stopped) {
+		m_stderr_buffer.clear ();
+		return;
+	}
+	for (;;) {
+		int idx = m_stderr_buffer.indexOf ("\n");
+		if (idx < 0)
+			return;
+
+		QString output = m_stderr_buffer.left (idx).trimmed ();
+		append_text (output, Qt::black);
+		m_stderr_buffer = m_stderr_buffer.mid (idx + 1);
+	}
 }
 
 void GTP_Process::startup_part2 (const QString &response)
@@ -109,8 +121,24 @@ void GTP_Process::startup_part5 (const QString &)
 {
 	/* Set this before calling startup success, as the callee may want to examine it.  */
 	m_started = true;
+	m_dlg.textEdit->setTextColor (Qt::darkGray);
+	m_dlg.append ("[...]\n");
+	m_dlg.textEdit->setTextColor (Qt::black);
 	m_dlg.hide ();
+	m_dlg.remember_cursor ();
 	m_controller->gtp_startup_success ();
+}
+
+void GTP_Process::append_text (const QString &txt, const QColor &col)
+{
+	/* If we let the text grow without bounds, eventually Qt will
+	   hang after a few hours of analysis.  */
+	if (m_dlg_lines == 200) {
+		m_dlg.delete_cursor_line ();
+	} else
+		m_dlg_lines++;
+	m_dlg.textEdit->setTextColor (col);
+	m_dlg.append (txt);
 }
 
 void GTP_Process::receive_move (const QString &move)
@@ -294,9 +322,7 @@ void GTP_Process::slot_receive_stdout ()
 
 		QString output = m_buffer.left (idx).trimmed ();
 
-		m_dlg.textEdit->setTextColor (Qt::red);
-		m_dlg.append (output);
-		m_dlg.textEdit->setTextColor (Qt::black);
+		append_text (output, Qt::red);
 
 		m_buffer = m_buffer.mid (idx + 1);
 		if (output.length () >= 10 && output.left (10) == "info move ") {
@@ -346,9 +372,7 @@ void GTP_Process::send_request(const QString &s, t_receiver rcv, t_receiver err_
 	m_receivers[req_cnt] = rcv;
 	m_err_receivers[req_cnt] = err_rcv;
 #if 1
-	m_dlg.textEdit->setTextColor (Qt::blue);
-	m_dlg.append (s);
-	m_dlg.textEdit->setTextColor (Qt::black);
+	append_text (s, Qt::blue);
 #endif
 	QString req = QString::number (req_cnt) + " " + s + "\n";
 	write (req.toLatin1 ());
@@ -541,8 +565,9 @@ void GTP_Eval_Controller::gtp_eval (const QString &s)
 			primary_visits = visits;
 			m_eval_state->set_eval_data (visits, to_move == white ? 1 - wr : wr, id);
 		}
+#if 0
 		qDebug () << move << " wr " << winrate << " visits " << visits << " PV: " << pv;
-
+#endif
 		QStringList pvmoves = pv.split (" ", QString::SkipEmptyParts);
 		if (count < 52 && (!prune || pvmoves.length () > 1 || visits >= 2)) {
 			game_state *cur = m_eval_state;

@@ -13,13 +13,15 @@ class TextView : public QDialog, public Ui::TextViewGUI
 {
 	Q_OBJECT
 
+	int m_cursor_pos {};
 public:
 	enum class type { exprt, gtp };
 	TextView(QWidget* parent = 0, type m = type::exprt);
 	~TextView();
 	void append (const QString &);
 	void set (const QString &);
-
+	void remember_cursor ();
+	void delete_cursor_line ();
 public slots:
 	void toClipboard();
 	void saveMe();

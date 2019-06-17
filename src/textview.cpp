@@ -47,6 +47,21 @@ TextView::~TextView()
 	// no need to delete child widgets, Qt does it all for us
 }
 
+void TextView::remember_cursor ()
+{
+	m_cursor_pos = textEdit->textCursor ().position ();
+}
+
+void TextView::delete_cursor_line ()
+{
+	QTextCursor c = textEdit->textCursor ();
+	c.setPosition (m_cursor_pos);
+	c.movePosition (QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+	c.movePosition (QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+	c.removeSelectedText ();
+	textEdit->moveCursor (QTextCursor::End);
+}
+
 /*
  * public slot
  */

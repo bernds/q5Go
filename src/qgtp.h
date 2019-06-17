@@ -91,10 +91,12 @@ class GTP_Process : public QProcess
 	Q_OBJECT
 
 	QString m_buffer;
+	QString m_stderr_buffer;
 
 	TextView m_dlg;
 	GTP_Controller *m_controller;
 
+	int m_dlg_lines = 0;
 	int m_size;
 	/* The komi we've requested with the "komi" command.  The engine may have
 	   ignored it.  */
@@ -120,6 +122,7 @@ class GTP_Process : public QProcess
 	void internal_quit ();
 	void default_err_receiver (const QString &);
 	void dup_move (game_state *, bool);
+	void append_text (const QString &, const QColor &col);
 
 public slots:
 	void slot_started ();
