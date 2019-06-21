@@ -393,7 +393,7 @@ void AnalyzeDialog::eval_received (const QString &, int, bool have_score)
 						std::string diffstr = komi_str (diff * 100);
 						if (diff > 0)
 							diffstr = "+" + diffstr;
-						comm += s_tr (", winrate B: ") + komi_str (e2.wr_black) + "% (" + diffstr + ")";
+						comm += s_tr (", winrate B: ") + komi_str (e2.wr_black * 100) + "% (" + diffstr + ")";
 					}
 				}
 				comm += "\n";
