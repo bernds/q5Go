@@ -198,13 +198,10 @@ static void add_visible (game_state *gs, sgf::node *n)
 	gs->set_visible (a);
 }
 
-static bool add_eval (game_state *gs, sgf::node *n)
+static bool add_eval_1 (game_state *gs, sgf::node::property *vals, bool kata)
 {
-	sgf::node::property *qlzv = n->find_property ("QLZV");
-	if (qlzv == nullptr)
-		return true;
 	bool retval = true;
-	for (auto &v: qlzv->values) {
+	for (auto &v: vals->values) {
 		std::stringstream ss (v);
 		std::vector<std::string> vals;
 		for (;;) {
@@ -214,30 +211,48 @@ static bool add_eval (game_state *gs, sgf::node *n)
 			vals.push_back (elt);
 		}
 		size_t sz = vals.size ();
-		if (sz < 2) {
+		if (sz < (kata ? 5 : 2)) {
 			retval = false;
 			continue;
 		}
 		int visits;
-		double winrate;
+		double winrate, scorem = 0, scored = 0;
 		analyzer_id id;
+		int komi_idx = kata ? 4 : 2;
 		try {
 			visits = stoi (vals[0]);
 			winrate = stod (vals[1]);
-			if (sz >= 3) {
-				id.komi_set = vals[2].length () > 0;
-				if (id.komi_set)
-					id.komi = stod (vals[2]);
+			if (kata) {
+				scorem = stod (vals[2]);
+				scored = stod (vals[3]);
 			}
-			if (sz >= 4)
-				id.engine = vals[3];
+			if (sz >= komi_idx + 1) {
+				id.komi_set = vals[komi_idx].length () > 0;
+				if (id.komi_set)
+					id.komi = stod (vals[komi_idx]);
+			}
+			if (sz >= komi_idx + 2)
+				id.engine = vals[komi_idx + 1];
 		} catch (...) {
 			retval = false;
 			continue;
 		}
-		gs->set_eval_data (visits, winrate, id);
+		gs->set_eval_data (visits, winrate, scorem, scored, id);
 	}
 	return retval;
+}
+
+static bool add_eval (game_state *gs, sgf::node *n)
+{
+	sgf::node::property *qlzv = n->find_property ("QLZV");
+	if (qlzv != nullptr)
+		if (!add_eval_1 (gs, qlzv, false))
+			return false;
+	sgf::node::property *qkgv = n->find_property ("QKGV");
+	if (qkgv != nullptr)
+		if (!add_eval_1 (gs, qkgv, true))
+			return false;
+	return true;
 }
 
 static void add_to_game_state (game_state *gs, sgf::node *n, bool force, QTextCodec *codec, sgf_errors &errs)
@@ -795,12 +810,18 @@ void game_state::append_to_sgf (std::string &s) const
 
 		write_visible (s, gs);
 		bool first = true;
+		bool have_scores = false;
+		for (auto &it: gs->m_evals)
+			if (it.score_stddev != 0)
+				have_scores = true;
 		for (auto &it: gs->m_evals) {
 			if (it.visits > 0) {
 				if (first)
-					s += "QLZV";
+					s += have_scores ? "QKGV" : "QLZV";
 				first = false;
 				s += "[" + std::to_string (it.visits) + ":" + std::to_string (it.wr_black);
+				if (have_scores)
+					s += ":" + std::to_string (it.score_mean) + ":" + std::to_string (it.score_stddev);
 				if (it.id.komi_set) {
 					s += ":" + std::to_string (it.id.komi);
 					if (it.id.engine.length () > 0)

@@ -95,9 +95,9 @@ class AnalyzeDialog : public QMainWindow, public Ui::AnalyzeDialog, public GTP_E
 	void discard_job (bool done);
 
 	/* Virtuals from Gtp_Controller.  */
-	virtual void eval_received (const QString &, int) override;
+	virtual void eval_received (const QString &, int, bool) override;
 	virtual void analyzer_state_changed () override;
-	virtual void notice_analyzer_id (const analyzer_id &) override;
+	virtual void notice_analyzer_id (const analyzer_id &, bool) override;
 
 	virtual void closeEvent (QCloseEvent *) override;
 public:

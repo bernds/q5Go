@@ -345,20 +345,6 @@ eval game_state::eval_from (const analyzer_id &id, bool require)
 	return require ? eval () : best_eval ();
 }
 
-void game_state::collect_analyzers (std::vector<analyzer_id> &ids)
-{
-	for (auto &it: m_evals) {
-		bool found = false;
-		for (auto id: ids)
-			if (id == it.id) {
-				found = true;
-				break;
-			}
-		if (!found)
-			ids.push_back (it.id);
-	}
-}
-
 void game_state::walk_tree (std::function<bool (game_state *)> &func)
 {
 	/* This function is slightly convoluted, in order to both

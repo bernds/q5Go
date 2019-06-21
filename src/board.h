@@ -298,7 +298,7 @@ protected:
 	virtual void sync_appearance (bool board_only = true) override;
 
 	virtual int extract_analysis (go_board &) override;
-	virtual void eval_received (const QString &, int) override;
+	virtual void eval_received (const QString &, int, bool) override;
 
 private:
 	void click_add_mark (QMouseEvent *, int, int);

@@ -32,7 +32,7 @@ public:
 	virtual void gtp_setup_success () = 0;
 	virtual void gtp_exited () = 0;
 	virtual void gtp_failure (const QString &) = 0;
-	virtual void gtp_eval (const QString &)
+	virtual void gtp_eval (const QString &, bool)
 	{
 	}
 	virtual void gtp_switch_ready () { }
@@ -72,9 +72,9 @@ protected:
 	bool pause_analyzer (bool on, go_game_ptr, game_state *);
 	void initiate_switch ();
 	void request_analysis (go_game_ptr, game_state *, bool flip = false);
-	virtual void eval_received (const QString &, int) = 0;
+	virtual void eval_received (const QString &, int, bool) = 0;
 	virtual void analyzer_state_changed () { }
-	virtual void notice_analyzer_id (const analyzer_id &) { }
+	virtual void notice_analyzer_id (const analyzer_id &, bool) { }
 public:
 	analyzer analyzer_state ();
 
@@ -82,7 +82,7 @@ public:
 	virtual void gtp_played_resign () override { /* Should not happen.  */ }
 	virtual void gtp_played_pass () override { /* Should not happen.  */ }
 	virtual void gtp_setup_success () override { /* Should not happen.  */ }
-	virtual void gtp_eval (const QString &) override;
+	virtual void gtp_eval (const QString &, bool) override;
 	virtual void gtp_switch_ready () override;
 };
 
@@ -109,6 +109,9 @@ class GTP_Process : public QProcess
 	bool m_started = false;
 	bool m_stopped = false;
 
+	bool m_analyze_lz = false;
+	bool m_analyze_kata = false;
+
 	typedef void (GTP_Process::*t_receiver) (const QString &);
 	QMap <int, t_receiver> m_receivers;
 	QMap <int, t_receiver> m_err_receivers;
@@ -121,6 +124,8 @@ class GTP_Process : public QProcess
 	void startup_part3 (const QString &);
 	void startup_part4 (const QString &);
 	void startup_part5 (const QString &);
+	void startup_part6 (const QString &);
+	void startup_part7 (const QString &);
 	void setup_success (const QString &);
 	void receive_move (const QString &);
 	void pause_callback (const QString &);

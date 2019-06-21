@@ -61,9 +61,21 @@ void an_id_model::populate_list (go_game_ptr game)
 {
 	beginResetModel ();
 	m_entries.clear ();
-	std::function<bool (game_state *)> f = [this] (game_state *st) -> bool
+	std::function<void (const analyzer_id &, bool)> f2 = [this] (const analyzer_id &id, bool score) -> void
 		{
-			st->collect_analyzers (m_entries);
+			bool found = false;
+			for (auto &e: m_entries)
+				if (e.first == id) {
+					found = true;
+					e.second |= score;
+					break;
+				}
+			if (!found)
+				m_entries.emplace_back (id, score);
+		};
+	std::function<bool (game_state *)> f = [this, &f2] (game_state *st) -> bool
+		{
+			st->collect_analyzers (f2);
 			return true;
 		};
 	game_state *r = game->get_root ();
@@ -72,17 +84,19 @@ void an_id_model::populate_list (go_game_ptr game)
 }
 
 /* This is called to notify us that an evaluation from NEW_ID came in.  */
-void an_id_model::notice_analyzer_id (const analyzer_id &new_id)
+void an_id_model::notice_analyzer_id (const analyzer_id &new_id, bool have_score)
 {
 	bool found = false;
-	for (auto id: m_entries)
-		if (id == new_id) {
+	for (auto &e: m_entries) {
+		if (e.first == new_id) {
 			found = true;
+			e.second |= have_score;
 			break;
 		}
+	}
 	if (!found) {
 		beginInsertRows (QModelIndex (), m_entries.size (), m_entries.size ());
-		m_entries.push_back (new_id);
+		m_entries.emplace_back (new_id, have_score);
 		endInsertRows ();
 	}
 }
@@ -100,7 +114,7 @@ QVariant an_id_model::data (const QModelIndex &index, int role) const
 	if (role != Qt::DisplayRole)
 		return QVariant ();
 
-	const analyzer_id &id = m_entries[row];
+	const analyzer_id &id = m_entries[row].first;
 	if (!id.komi_set)
 		return QString::fromStdString (id.engine);
 	return QString::fromStdString (id.engine) + " @ " + QString::number (id.komi);
@@ -724,7 +738,7 @@ void MainWindow::update_game_tree ()
 		slideView->set_active (st);
 	QModelIndex idx = anIdListView->currentIndex ();
 	if (idx.isValid ()) {
-		gfx_board->set_analyzer_id (m_an_id_model.entries ()[idx.row ()]);
+		gfx_board->set_analyzer_id (m_an_id_model.entries ()[idx.row ()].first);
 	}
 	evalGraph->update (m_game, st, idx.isValid () ? idx.row () : 0);
 }
@@ -2679,10 +2693,10 @@ void MainWindow::setTimes(const QString &btime, const QString &bstones, const QS
 }
 
 /* Called whenever a new evaluation comes in from NEW_ID.  We update the evaluation graph.  */
-void MainWindow::update_analyzer_ids (const analyzer_id &new_id)
+void MainWindow::update_analyzer_ids (const analyzer_id &new_id, bool have_score)
 {
 	int old_cnt = m_an_id_model.rowCount ();
-	m_an_id_model.notice_analyzer_id (new_id);
+	m_an_id_model.notice_analyzer_id (new_id, have_score);
 	if (m_an_id_model.rowCount () > old_cnt) {
 		if (old_cnt == 1)
 			anIdListView->setVisible (true);

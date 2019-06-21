@@ -2246,9 +2246,9 @@ void Board::gtp_exited ()
 	QMessageBox::warning (this, PACKAGE, QObject::tr ("GTP process exited unexpectedly."));
 }
 
-void Board::eval_received (const QString &move, int visits)
+void Board::eval_received (const QString &move, int visits, bool have_score)
 {
-	m_board_win->update_analyzer_ids (m_id);
+	m_board_win->update_analyzer_ids (m_id, have_score);
 	m_displayed->update_eval (*m_eval_state);
 	m_board_win->set_eval (move, m_primary_eval, m_displayed->to_move (), visits);
 	sync_appearance ();

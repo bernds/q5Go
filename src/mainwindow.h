@@ -31,15 +31,16 @@ class SlideView;
 /* This keeps track of analyzer_ids, which are combinations of engine name and
    komi.  The evaluation graph shows one line per id.  */
 class an_id_model : public QAbstractItemModel {
-	std::vector<analyzer_id> m_entries;
+	typedef std::pair<analyzer_id, bool> entry;
+	std::vector<entry> m_entries;
 public:
 	an_id_model ()
 	{
 	}
 	void populate_list (go_game_ptr);
 
-	const std::vector<analyzer_id> &entries () const { return m_entries; }
-	void notice_analyzer_id (const analyzer_id &);
+	const std::vector<entry> &entries () const { return m_entries; }
+	void notice_analyzer_id (const analyzer_id &, bool);
 
 	virtual QVariant data (const QModelIndex &index, int role = Qt::DisplayRole) const override;
 	QModelIndex index (int row, int col, const QModelIndex &parent = QModelIndex()) const override;
@@ -129,7 +130,7 @@ public:
 	void update_analysis (analyzer);
 	void update_game_tree ();
 	void update_figures ();
-	void update_analyzer_ids (const analyzer_id &);
+	void update_analyzer_ids (const analyzer_id &, bool);
 
 	void coords_changed (const QString &, const QString &);
 

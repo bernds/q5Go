@@ -318,13 +318,13 @@ void AnalyzeDialog::queue_next ()
 	pause_analyzer (true, nullptr, nullptr);
 }
 
-void AnalyzeDialog::notice_analyzer_id (const analyzer_id &id)
+void AnalyzeDialog::notice_analyzer_id (const analyzer_id &id, bool have_score)
 {
 	job *j = m_requester;
 	if (j == nullptr)
 		return;
 	if (j->m_win != nullptr)
-		j->m_win->update_analyzer_ids (id);
+		j->m_win->update_analyzer_ids (id, have_score);
 }
 
 inline std::string s_tr (const char *s)
@@ -332,7 +332,7 @@ inline std::string s_tr (const char *s)
 	return QObject::tr (s).toStdString ();
 }
 
-void AnalyzeDialog::eval_received (const QString &, int)
+void AnalyzeDialog::eval_received (const QString &, int, bool have_score)
 {
 	job *j = m_requester;
 	if (j == nullptr) {
@@ -360,7 +360,17 @@ void AnalyzeDialog::eval_received (const QString &, int)
 			}
 			auto cname = st->get_board ().coords_name (best->get_move_x (), best->get_move_y (), false);
 			comm += s_tr ("Engine top choice: ") + cname.first + cname.second;
-			comm += s_tr (", ") + std::to_string (e.visits) + s_tr (" visits") + s_tr (", winrate B: ") + komi_str (e.wr_black * 100) + "%\n";
+			comm += s_tr (", ") + std::to_string (e.visits) + s_tr (" visits") + s_tr (", winrate B: ") + komi_str (e.wr_black * 100) + "%";
+			if (have_score) {
+				double sval = e.score_mean;
+				if (sval < 0)
+					sval = -sval, comm += s_tr ("\nScore: W+");
+				else
+					comm += s_tr ("\nScore: B+");
+				comm += komi_str ((long)(sval * 100) / 100.);
+				comm += s_tr (" (stddev ") + komi_str ((long)(e.score_stddev * 100) / 100.) + s_tr (")");
+			}
+			comm += "\n";
 			game_state *next = st->next_primary_move ();
 			if (next && next->was_move_p ()) {
 				auto nextcname = st->get_board ().coords_name (next->get_move_x (), next->get_move_y (), false);

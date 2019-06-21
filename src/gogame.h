@@ -677,14 +677,27 @@ public:
 	void update_eval (const game_state &other);
 	eval best_eval ();
 	eval eval_from (const analyzer_id &id, bool require);
-
-	void collect_analyzers (std::vector<analyzer_id> &ids);
+	void collect_analyzers (std::function<void (const analyzer_id &, bool)> &callback)
+	{
+		for (auto &it: m_evals)
+			callback (it.id, it.score_stddev != 0);
+	}
 	void set_eval_data (int visits, double winrate_black, analyzer_id id)
 	{
 		eval ev;
 		ev.visits = visits;
 		ev.wr_black = winrate_black;
 		ev.id = id;
+		update_eval (ev);
+	}
+	void set_eval_data (int visits, double winrate_black, double scorem, double scored, analyzer_id id)
+	{
+		eval ev;
+		ev.visits = visits;
+		ev.wr_black = winrate_black;
+		ev.id = id;
+		ev.score_mean = scorem;
+		ev.score_stddev = scored;
 		update_eval (ev);
 	}
 	bool find_eval (const analyzer_id &id, eval &ev)

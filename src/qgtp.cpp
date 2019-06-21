@@ -113,12 +113,27 @@ void GTP_Process::startup_part4 (const QString &)
 {
 	char komi[20];
 	sprintf (komi, "komi %.2f", m_komi);
-	t_receiver rcv = &GTP_Process::startup_part5;
-	send_request (komi, rcv);
+	send_request (komi, &GTP_Process::startup_part5);
 }
 
 void GTP_Process::startup_part5 (const QString &)
 {
+	send_request ("known_command lz-analyze", &GTP_Process::startup_part6);
+}
+
+void GTP_Process::startup_part6 (const QString &response)
+{
+	if (response == "true")
+		m_analyze_lz = true;
+
+	send_request ("known_command kata-analyze", &GTP_Process::startup_part7);
+}
+
+void GTP_Process::startup_part7 (const QString &response)
+{
+	if (response == "true")
+		m_analyze_kata = true;
+
 	/* Set this before calling startup success, as the callee may want to examine it.  */
 	m_started = true;
 	m_dlg.textEdit->setTextColor (Qt::darkGray);
@@ -291,10 +306,11 @@ void GTP_Process::setup_initial_position (game_state *st)
 
 void GTP_Process::analyze (stone_color col, int interval)
 {
+	QString cmd = m_analyze_kata ? "kata-analyze " : "lz-analyze ";
 	if (col == black)
-		send_request ("lz-analyze black " + QString::number (interval));
+		send_request (cmd + "black " + QString::number (interval));
 	else
-		send_request ("lz-analyze white " + QString::number (interval));
+		send_request (cmd + "white " + QString::number (interval));
 }
 
 void GTP_Process::pause_analysis ()
@@ -363,7 +379,7 @@ void GTP_Process::slot_receive_stdout ()
 
 		m_buffer = m_buffer.mid (idx + 1);
 		if (output.length () >= 10 && output.left (10) == "info move ") {
-			m_controller->gtp_eval (output);
+			m_controller->gtp_eval (output, m_analyze_kata);
 			continue;
 		}
 
@@ -541,7 +557,7 @@ bool GTP_Eval_Controller::pause_analyzer (bool on, go_game_ptr gr, game_state *s
 	return true;
 }
 
-void GTP_Eval_Controller::gtp_eval (const QString &s)
+void GTP_Eval_Controller::gtp_eval (const QString &s, bool kata_format)
 {
 	if (m_pause_updates || m_pause_eval || m_switch_pending)
 		return;
@@ -565,12 +581,12 @@ void GTP_Eval_Controller::gtp_eval (const QString &s)
 	analyzer_id id = m_id;
 	if (flip)
 		id.komi = -id.komi;
-	notice_analyzer_id (id);
 
 	std::vector<game_state *> old_children = m_eval_state->take_children ();
 	for (auto &old: old_children)
 		delete old;
 
+	bool found_score = false;
 	for (auto &e: moves) {
 		QRegularExpression mvre ("^(\\S+)\\s+");
 		auto mv = mvre.match (e);
@@ -580,7 +596,7 @@ void GTP_Eval_Controller::gtp_eval (const QString &s)
 		auto vism = visre.match (e);
 		if (!vism.hasMatch ())
 			continue;
-		QRegularExpression wrre ("\\s+winrate\\s+(\\d+)\\s+");
+		QRegularExpression wrre ("\\s+winrate\\s+([^\\s]+)\\s+");
 		auto wrm = wrre.match (e);
 		if (!wrm.hasMatch ())
 			continue;
@@ -588,12 +604,22 @@ void GTP_Eval_Controller::gtp_eval (const QString &s)
 		auto pvm = pvre.match (e);
 		if (!pvm.hasMatch ())
 			continue;
+		QRegularExpression scoremre ("\\s+scoreMean\\s+([^\\s]+)\\s+");
+		auto scoremm = scoremre.match (e);
+		QRegularExpression scoredre ("\\s+scoreStdev\\s+([^\\s]+)\\s+");
+		auto scoredm = scoredre.match (e);
+		bool have_score = scoremm.hasMatch () && scoredm.hasMatch ();
 
 		QString move = mv.captured (1);
 		int visits = vism.captured (1).toInt ();
-		int winrate = wrm.captured (1).toInt ();
+		double wr = kata_format ? wrm.captured (1).toFloat () : wrm.captured (1).toInt () / 10000.;
 		QString pv = pvm.captured (1);
-		double wr = winrate / 10000.;
+		double scorem = have_score ? scoremm.captured (1).toFloat () : 0;
+		double scored = have_score ? scoredm.captured (1).toFloat () : 0;
+		if (have_score && to_move == white)
+			scorem = -scorem;
+		found_score |= have_score;
+
 		/* The winrate also does not need flipping, it is given for the side to move,
 		   and since we flip both the stones and the side to move, it comes out correct
 		   in both cases.  */
@@ -601,10 +627,11 @@ void GTP_Eval_Controller::gtp_eval (const QString &s)
 			primary_move = move;
 			m_primary_eval = wr;
 			primary_visits = visits;
-			m_eval_state->set_eval_data (visits, to_move == white ? 1 - wr : wr, id);
+			m_eval_state->set_eval_data (visits, to_move == white ? 1 - wr : wr,
+						     scorem, scored, id);
 		}
 #if 0
-		qDebug () << move << " wr " << winrate << " visits " << visits << " PV: " << pv;
+		qDebug () << move << " wr " << wr << " visits " << visits << " PV: " << pv;
 #endif
 		QStringList pvmoves = pv.split (" ", QString::SkipEmptyParts);
 		if (count < 52 && (!prune || pvmoves.length () > 1 || visits >= 2)) {
@@ -627,7 +654,8 @@ void GTP_Eval_Controller::gtp_eval (const QString &s)
 						break;
 					if (pv_first) {
 						cur->set_mark (i, j, mark::letter, count);
-						next->set_eval_data (visits, to_move == white ? 1 - wr : wr, id);
+						next->set_eval_data (visits, to_move == white ? 1 - wr : wr,
+								     scorem, scored, id);
 						/* Leave it to a higher level to add a title if it wants
 						   to place these variations into the actual file.  */
 						next->set_figure (257, "");
@@ -644,6 +672,8 @@ void GTP_Eval_Controller::gtp_eval (const QString &s)
 		if (an_maxmoves > 0 && count == an_maxmoves)
 			break;
 	}
+	notice_analyzer_id (id, found_score);
+
 	if (!primary_move.isNull ())
-		eval_received (primary_move, primary_visits);
+		eval_received (primary_move, primary_visits, found_score);
 }

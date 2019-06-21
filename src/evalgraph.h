@@ -30,6 +30,7 @@ class EvalGraph : public QGraphicsView
 	QGraphicsScene *m_scene;
 	QBrush *m_brush;
 	double m_step;
+	bool m_show_scores = false;
 
 protected:
 	virtual void mouseMoveEvent (QMouseEvent *e) override;
@@ -41,6 +42,9 @@ protected:
 public slots:
 	void export_clipboard (bool);
 	void export_file (bool);
+
+	void show_scores (bool);
+	void show_winrates (bool);
 public:
 	EvalGraph (QWidget *parent);
 	~EvalGraph () { delete m_brush; delete m_scene; }
