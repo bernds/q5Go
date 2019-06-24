@@ -2438,19 +2438,24 @@ void MainWindow_GTP::gtp_played_move (GTP_Process *, int x, int y)
 	gfx_board->play_external_move (x, y);
 }
 
+void MainWindow_GTP::enter_scoring ()
+{
+	m_gtp->quit ();
+	/* As of now, we're disconnected, and the scoring function should
+	   remember normal mode.  */
+	setGameMode (modeNormal);
+	gfx_board->set_player_colors (true, true);
+	doRealScore (true);
+}
+
 void MainWindow_GTP::gtp_played_pass (GTP_Process *)
 {
 	if (local_stone_sound)
 		qgo->playPassSound();
 	const game_state *st = gfx_board->displayed ();
 	gfx_board->play_external_pass ();
-	if (st->was_pass_p ()) {
-		m_gtp->quit ();
-		/* As of now, we're disconnected, and the scoring function should
-		   remember normal mode.  */
-		setGameMode (modeNormal);
-		doRealScore (true);
-	}
+	if (st->was_pass_p ())
+		enter_scoring ();
 }
 
 void MainWindow_GTP::gtp_played_resign (GTP_Process *)
@@ -2519,13 +2524,9 @@ void MainWindow_GTP::doPass ()
 	stone_color col = gfx_board->to_move ();
 	MainWindow::doPass ();
 	m_gtp->played_move_pass (col);
-	if (st->was_pass_p ()) {
-		m_gtp->quit ();
-		/* As of now, we're disconnected, and the scoring function should
-		   remember normal mode.  */
-		setGameMode (modeNormal);
-		doRealScore (true);
-	} else
+	if (st->was_pass_p ())
+		enter_scoring ();
+	else
 		m_gtp->request_move (col == black ? white : black);
 }
 

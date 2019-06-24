@@ -268,6 +268,8 @@ class MainWindow_GTP : public MainWindow, public GTP_Controller
 {
 	GTP_Process *m_gtp;
 	game_state *m_first_pos;
+
+	void enter_scoring ();
 public:
 	MainWindow_GTP (QWidget *parent, go_game_ptr, QString opener_scrkey,
 			const Engine &program, bool b_comp, bool w_comp);
