@@ -65,7 +65,7 @@ void GTP_Process::slot_error (QProcess::ProcessError)
 	m_stopped = true;
 	m_receivers.clear ();
 	m_dlg.hide ();
-	m_controller->gtp_exited ();
+	m_controller->gtp_exited (this);
 }
 
 void GTP_Process::slot_abort_request (bool)
@@ -73,7 +73,7 @@ void GTP_Process::slot_abort_request (bool)
 	m_receivers.clear ();
 	quit ();
 	m_dlg.hide ();
-	m_controller->gtp_exited ();
+	m_controller->gtp_exited (this);
 }
 
 void GTP_Process::slot_startup_messages ()
@@ -97,7 +97,7 @@ void GTP_Process::slot_startup_messages ()
 void GTP_Process::startup_part2 (const QString &response)
 {
 	if (response != "2") {
-		m_controller->gtp_failure (tr ("GTP engine reported unsupported protocol version"));
+		m_controller->gtp_failure (this, tr ("GTP engine reported unsupported protocol version"));
 		quit ();
 		return;
 	}
@@ -141,7 +141,7 @@ void GTP_Process::startup_part7 (const QString &response)
 	m_dlg.textEdit->setTextColor (Qt::black);
 	m_dlg.hide ();
 	m_dlg.remember_cursor ();
-	m_controller->gtp_startup_success ();
+	m_controller->gtp_startup_success (this);
 }
 
 void GTP_Process::append_text (const QString &txt, const QColor &col)
@@ -159,9 +159,9 @@ void GTP_Process::append_text (const QString &txt, const QColor &col)
 void GTP_Process::receive_move (const QString &move)
 {
 	if (move.toLower () == "resign") {
-		m_controller->gtp_played_resign ();
+		m_controller->gtp_played_resign (this);
 	} else if (move.toLower () == "pass") {
-		m_controller->gtp_played_pass ();
+		m_controller->gtp_played_pass (this);
 	} else {
 		QChar sx = move[0];
 
@@ -169,7 +169,7 @@ void GTP_Process::receive_move (const QString &move)
 		if (i > 7)
 			i--;
 		int j = move.mid (1).toInt();
-		m_controller->gtp_played_move (i, m_size - j);
+		m_controller->gtp_played_move (this, i, m_size - j);
 	}
 }
 
@@ -295,7 +295,7 @@ void GTP_Process::setup_board (game_state *st, double km, bool flip)
 
 void GTP_Process::setup_success (const QString &)
 {
-	m_controller->gtp_setup_success ();
+	m_controller->gtp_setup_success (this);
 }
 
 void GTP_Process::setup_initial_position (game_state *st)
@@ -340,7 +340,7 @@ void GTP_Process::slot_finished (int exitcode, QProcess::ExitStatus status)
 {
 	m_stopped = true;
 	qDebug() << req_cnt << " quit";
-	m_controller->gtp_exited ();
+	m_controller->gtp_exited (this);
 }
 
 
@@ -401,7 +401,7 @@ void GTP_Process::slot_receive_stdout ()
 		QMap<int, t_receiver>::const_iterator map_iter = rcv_map.constFind (cmd_nr);
 		if (err || map_iter == rcv_map.constEnd ()) {
 			quit ();
-			m_controller->gtp_failure (tr ("Invalid response from GTP engine"));
+			m_controller->gtp_failure (this, tr ("Invalid response from GTP engine"));
 			return;
 		}
 		t_receiver rcv = *map_iter;
@@ -415,7 +415,7 @@ void GTP_Process::slot_receive_stdout ()
 
 void GTP_Process::default_err_receiver (const QString &)
 {
-	m_controller->gtp_failure (tr ("Invalid response from GTP engine"));
+	m_controller->gtp_failure (this, tr ("Invalid response from GTP engine"));
 	quit ();
 }
 

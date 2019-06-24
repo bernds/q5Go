@@ -505,13 +505,13 @@ void AnalyzeDialog::update_progress ()
 		m_all_jobs.clear ();
 }
 
-void AnalyzeDialog::gtp_startup_success ()
+void AnalyzeDialog::gtp_startup_success (GTP_Process *)
 {
 	analyzer_state_changed ();
 	queue_next ();
 }
 
-void AnalyzeDialog::gtp_failure (const QString &err)
+void AnalyzeDialog::gtp_failure (GTP_Process *, const QString &err)
 {
 	clear_eval_data ();
 	QMessageBox msg(QString (QObject::tr("Error")), err,
@@ -520,7 +520,7 @@ void AnalyzeDialog::gtp_failure (const QString &err)
 	msg.exec();
 }
 
-void AnalyzeDialog::gtp_exited ()
+void AnalyzeDialog::gtp_exited (GTP_Process *)
 {
 	clear_eval_data ();
 	QMessageBox::warning (this, PACKAGE, QObject::tr ("GTP process exited unexpectedly."));

@@ -278,9 +278,9 @@ public:
 	virtual void observed_changed () override;
 
 	/* Virtuals from Gtp_Controller.  */
-	virtual void gtp_startup_success () override;
-	virtual void gtp_exited () override;
-	virtual void gtp_failure (const QString &) override;
+	virtual void gtp_startup_success (GTP_Process *) override;
+	virtual void gtp_exited (GTP_Process *) override;
+	virtual void gtp_failure (GTP_Process *, const QString &) override;
 
 protected:
 	virtual void mousePressEvent(QMouseEvent *e) override;

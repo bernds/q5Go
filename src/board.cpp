@@ -2223,13 +2223,13 @@ void Board::setup_analyzer_position ()
 	request_analysis (m_game, m_displayed);
 }
 
-void Board::gtp_startup_success ()
+void Board::gtp_startup_success (GTP_Process *)
 {
 	m_board_win->update_analysis (analyzer::running);
 	setup_analyzer_position ();
 }
 
-void Board::gtp_failure (const QString &err)
+void Board::gtp_failure (GTP_Process *, const QString &err)
 {
 	clear_eval_data ();
 	m_board_win->update_analysis (analyzer::disconnected);
@@ -2239,7 +2239,7 @@ void Board::gtp_failure (const QString &err)
 	msg.exec();
 }
 
-void Board::gtp_exited ()
+void Board::gtp_exited (GTP_Process *)
 {
 	clear_eval_data ();
 	m_board_win->update_analysis (analyzer::disconnected);

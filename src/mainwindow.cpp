@@ -2413,14 +2413,14 @@ MainWindow_GTP::~MainWindow_GTP ()
 	delete m_gtp;
 }
 
-void MainWindow_GTP::gtp_setup_success ()
+void MainWindow_GTP::gtp_setup_success (GTP_Process *)
 {
 	show ();
 	if (!gfx_board->player_to_move_p ())
 		m_gtp->request_move (gfx_board->to_move ());
 }
 
-void MainWindow_GTP::gtp_startup_success ()
+void MainWindow_GTP::gtp_startup_success (GTP_Process *p)
 {
 	game_state *r = m_game->get_root ();
 	game_state *st = m_first_pos;
@@ -2428,17 +2428,17 @@ void MainWindow_GTP::gtp_startup_success ()
 		gfx_board->set_displayed (st);
 		m_gtp->setup_initial_position (st);
 	} else
-		gtp_setup_success ();
+		gtp_setup_success (p);
 }
 
-void MainWindow_GTP::gtp_played_move (int x, int y)
+void MainWindow_GTP::gtp_played_move (GTP_Process *, int x, int y)
 {
 	if (local_stone_sound)
 		qgo->playStoneSound();
 	gfx_board->play_external_move (x, y);
 }
 
-void MainWindow_GTP::gtp_played_pass ()
+void MainWindow_GTP::gtp_played_pass (GTP_Process *)
 {
 	if (local_stone_sound)
 		qgo->playPassSound();
@@ -2453,7 +2453,7 @@ void MainWindow_GTP::gtp_played_pass ()
 	}
 }
 
-void MainWindow_GTP::gtp_played_resign ()
+void MainWindow_GTP::gtp_played_resign (GTP_Process *)
 {
 	if (gfx_board->player_is (black)) {
 		m_game->set_result ("B+R");
@@ -2471,7 +2471,7 @@ void MainWindow_GTP::gtp_played_resign ()
 	gfx_board->set_player_colors (true, true);
 }
 
-void MainWindow_GTP::gtp_failure (const QString &err)
+void MainWindow_GTP::gtp_failure (GTP_Process *, const QString &err)
 {
 	if (gfx_board->getGameMode () != modeComputer)
 		return;
@@ -2486,7 +2486,7 @@ void MainWindow_GTP::gtp_failure (const QString &err)
 	msg.exec();
 }
 
-void MainWindow_GTP::gtp_exited ()
+void MainWindow_GTP::gtp_exited (GTP_Process *)
 {
 	if (gfx_board->getGameMode () == modeComputer) {
 		setGameMode (modeNormal);

@@ -25,13 +25,13 @@ protected:
 	GTP_Controller (QWidget *p) : m_parent (p) { }
 	GTP_Process *create_gtp (const Engine &engine, int size, double komi, bool show_dialog = true);
 public:
-	virtual void gtp_played_move (int x, int y) = 0;
-	virtual void gtp_played_pass () = 0;
-	virtual void gtp_played_resign () = 0;
-	virtual void gtp_startup_success () = 0;
-	virtual void gtp_setup_success () = 0;
-	virtual void gtp_exited () = 0;
-	virtual void gtp_failure (const QString &) = 0;
+	virtual void gtp_played_move (GTP_Process *p, int x, int y) = 0;
+	virtual void gtp_played_pass (GTP_Process *p) = 0;
+	virtual void gtp_played_resign (GTP_Process *p) = 0;
+	virtual void gtp_startup_success (GTP_Process *p) = 0;
+	virtual void gtp_setup_success (GTP_Process *p) = 0;
+	virtual void gtp_exited (GTP_Process *p) = 0;
+	virtual void gtp_failure (GTP_Process *p, const QString &) = 0;
 	virtual void gtp_eval (const QString &, bool)
 	{
 	}
@@ -78,10 +78,10 @@ protected:
 public:
 	analyzer analyzer_state ();
 
-	virtual void gtp_played_move (int, int) override { /* Should not happen.  */ }
-	virtual void gtp_played_resign () override { /* Should not happen.  */ }
-	virtual void gtp_played_pass () override { /* Should not happen.  */ }
-	virtual void gtp_setup_success () override { /* Should not happen.  */ }
+	virtual void gtp_played_move (GTP_Process *, int, int) override { /* Should not happen.  */ }
+	virtual void gtp_played_resign (GTP_Process *) override { /* Should not happen.  */ }
+	virtual void gtp_played_pass (GTP_Process *) override { /* Should not happen.  */ }
+	virtual void gtp_setup_success (GTP_Process *) override { /* Should not happen.  */ }
 	virtual void gtp_eval (const QString &, bool) override;
 	virtual void gtp_switch_ready () override;
 };

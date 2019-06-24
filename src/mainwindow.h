@@ -282,13 +282,13 @@ public:
 	virtual void doResign() override;
 
 	/* Virtuals from Gtp_Controller.  */
-	virtual void gtp_played_move (int x, int y) override;
-	virtual void gtp_played_resign () override;
-	virtual void gtp_played_pass () override;
-	virtual void gtp_startup_success () override;
-	virtual void gtp_setup_success () override;
-	virtual void gtp_exited () override;
-	virtual void gtp_failure (const QString &) override;
+	virtual void gtp_played_move (GTP_Process *p, int x, int y) override;
+	virtual void gtp_played_resign (GTP_Process *p) override;
+	virtual void gtp_played_pass (GTP_Process *p) override;
+	virtual void gtp_startup_success (GTP_Process *p) override;
+	virtual void gtp_setup_success (GTP_Process *p) override;
+	virtual void gtp_exited (GTP_Process *p) override;
+	virtual void gtp_failure (GTP_Process *p, const QString &) override;
 };
 
 extern std::list<MainWindow *> main_window_list;
