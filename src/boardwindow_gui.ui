@@ -1636,6 +1636,13 @@ The update button refreshes the game in this window, adding any moves that were 
                   </widget>
                  </item>
                  <item>
+                  <widget class="QPushButton" name="followButton">
+                   <property name="text">
+                    <string>Follow</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
                   <widget class="QPushButton" name="passButton">
                    <property name="focusPolicy">
                     <enum>Qt::NoFocus</enum>

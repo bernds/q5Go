@@ -15,6 +15,7 @@ FORMS	      = gui_dialog.ui \
 		normaltools_gui.ui \
 		preferences_gui.ui \
 		newaigamedlg_gui.ui \
+		twoaigamedlg_gui.ui \
 		sgfpreview.ui \
 		talk_gui.ui \
 		textedit_gui.ui \

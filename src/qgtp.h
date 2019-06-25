@@ -28,6 +28,7 @@ public:
 	virtual void gtp_played_move (GTP_Process *p, int x, int y) = 0;
 	virtual void gtp_played_pass (GTP_Process *p) = 0;
 	virtual void gtp_played_resign (GTP_Process *p) = 0;
+	virtual void gtp_report_score (GTP_Process *p, const QString &) = 0;
 	virtual void gtp_startup_success (GTP_Process *p) = 0;
 	virtual void gtp_setup_success (GTP_Process *p) = 0;
 	virtual void gtp_exited (GTP_Process *p) = 0;
@@ -82,6 +83,7 @@ public:
 	virtual void gtp_played_resign (GTP_Process *) override { /* Should not happen.  */ }
 	virtual void gtp_played_pass (GTP_Process *) override { /* Should not happen.  */ }
 	virtual void gtp_setup_success (GTP_Process *) override { /* Should not happen.  */ }
+	virtual void gtp_report_score (GTP_Process *, const QString &) override { /* Should not happen.  */ }
 	virtual void gtp_eval (const QString &, bool) override;
 	virtual void gtp_switch_ready () override;
 };
@@ -129,6 +131,8 @@ class GTP_Process : public QProcess
 	void setup_success (const QString &);
 	void receive_move (const QString &);
 	void pause_callback (const QString &);
+	void score_callback_1 (const QString &);
+	void score_callback_2 (const QString &);
 	void internal_quit ();
 	void default_err_receiver (const QString &);
 	void dup_move (game_state *, bool);
@@ -153,6 +157,7 @@ public:
 	void setup_board (game_state *, double, bool);
 	void setup_initial_position (game_state *);
 	void request_move (stone_color col);
+	void request_score ();
 	void played_move (stone_color col, int x, int y);
 	void undo_move ();
 	void komi (double);

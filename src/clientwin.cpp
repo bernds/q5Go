@@ -2011,6 +2011,7 @@ void ClientWindow::initActions()
 	connect(fileOpenDB, &QAction::triggered, this, &ClientWindow::slotFileOpenDB);
 	connect(fileBatchAnalysis, &QAction::triggered, this, [] (bool) { show_batch_analysis (); });
 	connect(computerPlay, &QAction::triggered, this, &ClientWindow::slotComputerPlay);
+	connect(twoEnginePlay, &QAction::triggered, this, &ClientWindow::slotTwoEnginePlay);
 	connect(fileQuit, &QAction::triggered, this, &ClientWindow::quit);
 
 	/*
@@ -2113,7 +2114,7 @@ void ClientWindow::slotComputerPlay(bool)
 		return;
 	}
 
-	NewAIGameDlg dlg (this, setting->m_engines);
+	NewAIGameDlg dlg (this);
 	if (dlg.exec() != QDialog::Accepted)
 		return;
 
@@ -2121,11 +2122,11 @@ void ClientWindow::slotComputerPlay(bool)
 	const Engine &engine = setting->m_engines[eidx];
 	int hc = dlg.handicap ();
 	game_info info = dlg.create_game_info ();
-	go_board starting_pos = new_handicap_board (dlg.board_size (), dlg.handicap ());
 	std::shared_ptr<game_record> gr;
 
-	QString filename = dlg.gameToLoad->text ();
+	QString filename = dlg.game_to_load ();
 	if (filename.isEmpty ()) {
+		go_board starting_pos = new_handicap_board (dlg.board_size (), dlg.handicap ());
 		gr = std::make_shared<game_record> (starting_pos, hc > 1 ? white : black, info);
 	} else {
 		gr = record_from_file (filename, nullptr);
@@ -2135,6 +2136,40 @@ void ClientWindow::slotComputerPlay(bool)
 		return;
 	bool computer_white = dlg.computer_white_p ();
 	new MainWindow_GTP (0, gr, screen_key (this), engine, !computer_white, computer_white);
+}
+
+void ClientWindow::slotTwoEnginePlay (bool)
+{
+	if (setting->m_engines.size () == 0)
+	{
+		QMessageBox::warning(this, PACKAGE, tr("You did not configure any engines!"));
+		dlgSetPreferences (3);
+		return;
+	}
+
+	TwoAIGameDlg dlg (this);
+	if (dlg.exec() != QDialog::Accepted)
+		return;
+
+	int w_eidx = dlg.engine_index (white);
+	int b_eidx = dlg.engine_index (black);
+	const Engine &engine_w = setting->m_engines[w_eidx];
+	const Engine &engine_b = setting->m_engines[b_eidx];
+	int hc = dlg.handicap ();
+	game_info info = dlg.create_game_info ();
+	std::shared_ptr<game_record> gr;
+
+	QString filename = dlg.game_to_load ();
+	if (filename.isEmpty ()) {
+		go_board starting_pos = new_handicap_board (dlg.board_size (), dlg.handicap ());
+		gr = std::make_shared<game_record> (starting_pos, hc > 1 ? white : black, info);
+	} else {
+		gr = record_from_file (filename, nullptr);
+	}
+
+	if (gr == nullptr)
+		return;
+	new MainWindow_GTP (0, gr, screen_key (this), engine_w, engine_b, dlg.num_games (), dlg.opening_book ());
 }
 
 

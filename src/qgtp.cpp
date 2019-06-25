@@ -214,6 +214,25 @@ void GTP_Process::request_move (stone_color col)
 		send_request ("genmove white", &GTP_Process::receive_move);
 }
 
+void GTP_Process::request_score ()
+{
+	send_request ("known_command final_score", &GTP_Process::score_callback_1);
+}
+
+void GTP_Process::score_callback_1 (const QString &s)
+{
+	if (s != "true") {
+		m_controller->gtp_report_score (this, "");
+		return;
+	}
+	send_request ("final_score", &GTP_Process::score_callback_2);
+}
+
+void GTP_Process::score_callback_2 (const QString &s)
+{
+	m_controller->gtp_report_score (this, s);
+}
+
 void GTP_Process::undo_move ()
 {
 	send_request ("undo");

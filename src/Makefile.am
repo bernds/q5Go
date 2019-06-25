@@ -9,11 +9,11 @@ KDE_OPTIONS = qtonly
 DISTHEADERS_MOC = analyzedlg.h audio.h autodiagsdlg.h bitarray.h board.h clickableviews.h \
 	clockview.h dbdialog.h evalgraph.h figuredlg.h gamedialog.h gamestable.h gametree.h helpviewer.h \
 	igsconnection.h mainwindow.h clientwin.h miscdialogs.h msg_handler.h normaltools.h scoretools.h \
-	parser.h playertable.h preferences.h qgo.h qgo_interface.h qgtp.h newaigamedlg.h sizegraphicsview.h \
+	parser.h playertable.h preferences.h qgo.h qgo_interface.h qgtp.h sizegraphicsview.h \
 	slideview.h sgfpreview.h tables.h telnet.h textview.h variantgamedlg.h
 
 DISTHEADERS_NOMOC = goboard.h config.h defines.h grid.h goboard.h gogame.h gs_globals.h \
-	imagehandler.h komispinbox.h mark.h misc.h setting.h sgf.h sgfparser.h \
+	imagehandler.h komispinbox.hm isc.h newaigamedlg.h setting.h sgf.h sgfparser.h \
 	svgbuilder.h ui_helpers.h
 
 DISTSOURCES = analyzedlg.cpp audio.cpp autodiagsdlg.cpp board.cpp clockview.cpp dbdialog.cpp evalgraph.cpp \
@@ -28,7 +28,8 @@ DISTSOURCES = analyzedlg.cpp audio.cpp autodiagsdlg.cpp board.cpp clockview.cpp 
 FORMS = analyze_gui.ui autodiags_gui.ui boardwindow_gui.ui clientwindow_gui.ui dbdialog_gui.ui figuredlg_gui.ui \
 	gameinfo_gui.ui gui_dialog.ui newgame_gui.ui newlocalgame_gui.ui newvariantgame_gui.ui \
 	normaltools_gui.ui nthmove_gui.ui preferences_gui.ui newaigamedlg_gui.ui scoretools_gui.ui \
-	slideview_gui.ui svgview_gui.ui sgfpreview.ui talk_gui.ui textedit_gui.ui textview_gui.ui
+	slideview_gui.ui svgview_gui.ui sgfpreview.ui talk_gui.ui textedit_gui.ui twoaigamedlg_gui.ui \
+	textview_gui.ui
 
 RESOURCES = q4go.qrc
 

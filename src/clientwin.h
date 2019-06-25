@@ -145,6 +145,7 @@ public slots:
 	void slotFileOpen (bool);
 	void slotFileOpenDB (bool);
 	void slotComputerPlay (bool);
+	void slotTwoEnginePlay (bool);
 
 	void slotMenuConnect (bool);
 	void slotMenuDisconnect (bool);

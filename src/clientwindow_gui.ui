@@ -857,6 +857,7 @@
 	<addaction name="fileOpenDB"/>
 	<addaction name="separator"/>
 	<addaction name="computerPlay"/>
+	<addaction name="twoEnginePlay"/>
 	<addaction name="fileBatchAnalysis"/>
 	<addaction name="separator"/>
 	<addaction name="fileQuit"/>
@@ -1075,6 +1076,29 @@
       </property>
       <property name="name" stdset="0">
 	<cstring>computerPlay</cstring>
+      </property>
+    </action>
+    <action name="twoEnginePlay">
+      <property name="text">
+	<string>&amp;Automatic computer vs. computer play</string>
+      </property>
+      <property name="iconText">
+	<string>Automatic computer vs. computer play</string>
+      </property>
+      <property name="statusTip">
+	<string>Select two engines and let them play one or more games</string>
+      </property>
+      <property name="whatsThis">
+	<string>Brings up a dialog to set up play between two engines.
+
+	You can set up one game or a multi-game match, optionally starting from
+	a single position, or from multiple positions found in a loaded game file.</string>
+      </property>
+      <property name="shortcut">
+	<string>Ctrl+T</string>
+      </property>
+      <property name="name" stdset="0">
+	<cstring>twoEnginePlay</cstring>
       </property>
     </action>
     <action name="refreshPlayers">

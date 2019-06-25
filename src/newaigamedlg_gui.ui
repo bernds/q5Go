@@ -5,6 +5,14 @@
   <property name="enabled">
    <bool>true</bool>
   </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>416</width>
+    <height>412</height>
+   </rect>
+  </property>
   <property name="sizePolicy">
    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
     <horstretch>0</horstretch>
@@ -41,7 +49,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QToolButton" name="_FilePathButton">
+       <widget class="QToolButton" name="filePathButton">
         <property name="text">
          <string/>
         </property>
@@ -300,7 +308,7 @@
  </resources>
  <connections>
   <connection>
-   <sender>_FilePathButton</sender>
+   <sender>filePathButton</sender>
    <signal>clicked()</signal>
    <receiver>NewAIGameDlgGui</receiver>
    <slot>slotGetFileName()</slot>

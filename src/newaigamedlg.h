@@ -11,29 +11,61 @@
 #define NEWAIGAMEDLG_H
 
 #include <qdialog.h>
-#include "ui_newaigamedlg_gui.h"
 
 #include "goboard.h"
 #include "gogame.h"
 
 struct Engine;
 
-class NewAIGameDlg : public QDialog, public Ui::NewAIGameDlgGui
+namespace Ui {
+	class NewAIGameDlgGui;
+	class TwoAIGameDlgGui;
+};
+
+template<class UI>
+class AIGameDlg : public QDialog
 {
-	Q_OBJECT
+	void get_file_name ();
+
+protected:
+	UI *ui;
 
 public:
-	NewAIGameDlg (QWidget* parent, const std::vector<Engine> &, bool from_position = false);
-
-	game_info create_game_info ();
+	AIGameDlg (QWidget *parent);
+	~AIGameDlg ();
 	int board_size ();
 	int handicap ();
+	QString game_to_load ();
+};
+
+class NewAIGameDlg : public AIGameDlg<Ui::NewAIGameDlgGui>
+{
+public:
+	NewAIGameDlg (QWidget* parent, bool from_position = false);
+
+	game_info create_game_info ();
 	int engine_index ();
 	QString fileName ();
 	bool computer_white_p ();
 
 public slots:
-	void slotGetFileName ();
+	void slotCancel ();
+	void slotOk ();
+};
+
+class TwoAIGameDlg : public AIGameDlg<Ui::TwoAIGameDlgGui>
+{
+public:
+	TwoAIGameDlg (QWidget* parent);
+
+	game_info create_game_info ();
+	int engine_index (stone_color);
+	QString fileName ();
+	int num_games ();
+	bool opening_book ();
+
+	virtual void accept () override;
+public slots:
 	void slotCancel ();
 	void slotOk ();
 };

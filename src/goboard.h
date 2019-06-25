@@ -17,7 +17,7 @@
 
 enum stone_color
 {
-	none, black, white
+	none, black, white, unknown
 };
 
 inline stone_color flip_color (stone_color c)

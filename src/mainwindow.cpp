@@ -184,7 +184,7 @@ MainWindow::MainWindow(QWidget* parent, go_game_ptr gr, const QString opener_scr
 	}
 
 	local_stone_sound = setting->readBoolEntry(mode == modeMatch ? "SOUND_MATCH_BOARD"
-						   : mode == modeObserve ? "SOUND_OBSERVE"
+						   : mode == modeObserve || mode == modeObserveGTP ? "SOUND_OBSERVE"
 						   : mode == modeComputer ? "SOUND_COMPUTER"
 						   : "SOUND_NORMAL");
 
@@ -1044,7 +1044,7 @@ void MainWindow::slotEditFigure (bool on)
 
 void MainWindow::slotPlayFromHere (bool)
 {
-	NewAIGameDlg dlg (this, setting->m_engines, true);
+	NewAIGameDlg dlg (this, true);
 	if (dlg.exec () != QDialog::Accepted)
 		return;
 
@@ -1736,7 +1736,7 @@ int MainWindow::checkModified (bool interactive)
 	}
 }
 
-void MainWindow::slotUpdateComment()
+void MainWindow::slotUpdateComment ()
 {
 	if (!m_allow_text_update_signal)
 		return;
@@ -1744,7 +1744,7 @@ void MainWindow::slotUpdateComment()
 }
 
 /* Called from an external source to append to the comments window.  */
-void MainWindow::append_comment(const QString &t)
+void MainWindow::append_comment (const QString &t)
 {
 	bool old = m_allow_text_update_signal;
 	m_allow_text_update_signal = false;
@@ -1755,7 +1755,22 @@ void MainWindow::append_comment(const QString &t)
 	m_allow_text_update_signal = old;
 }
 
-void MainWindow::slotUpdateComment2()
+/* Called if something may have changed the comment text in the game record.  */
+void MainWindow::refresh_comment ()
+{
+	bool old = m_allow_text_update_signal;
+	m_allow_text_update_signal = false;
+	game_state *gs = gfx_board->displayed ();
+	std::string c = gs->comment ();
+	if (c.size () == 0)
+		commentEdit->clear ();
+	else
+		commentEdit->setText (QString::fromStdString (c));
+
+	m_allow_text_update_signal = old;
+}
+
+void MainWindow::slotUpdateComment2 ()
 {
 	QString text = commentEdit2->text();
 
@@ -1890,7 +1905,7 @@ void MainWindow::setToolsTabWidget(enum tabType p, enum tabState s)
 void MainWindow::setGameMode(GameMode mode)
 {
 	m_gamemode = mode;
-	if (mode == modeEdit || mode == modeNormal || mode == modeObserve) {
+	if (mode == modeEdit || mode == modeNormal || mode == modeObserve || mode == modeObserveGTP) {
 		editGroup->setEnabled (true);
 	} else {
 		editStone->setChecked (true);
@@ -1934,7 +1949,7 @@ void MainWindow::setGameMode(GameMode mode)
 
 	anPlay->setEnabled (mode == modeNormal || mode == modeObserve);
 
-	bool editable_comments = mode == modeNormal || mode == modeEdit || mode == modeScore || mode == modeComputer || mode == modeBatch;
+	bool editable_comments = mode == modeNormal || mode == modeEdit || mode == modeScore || mode == modeComputer || mode == modeObserveGTP || mode == modeBatch;
 	commentEdit->setReadOnly (!editable_comments || mode == modeEdit);
 	// commentEdit->setDisabled (editable_comments);
 	commentEdit2->setEnabled (!editable_comments);
@@ -1959,6 +1974,10 @@ void MainWindow::setGameMode(GameMode mode)
 
 	case modeObserve:
 		statusMode->setText(" " + QObject::tr("O", "Board status line: observe mode") + " ");
+		break;
+
+	case modeObserveGTP:
+		statusMode->setText(" " + QObject::tr("O", "Board status line: observe GTP mode") + " ");
 		break;
 
 	case modeMatch:
@@ -1991,7 +2010,8 @@ void MainWindow::setGameMode(GameMode mode)
 	if (mode != modeTeach && mode != modeScoreRemote && mode != modeScore && tab_tg->parent () != nullptr)
 		tab_tg->setParent (nullptr);
 
-	passButton->setVisible (mode != modeObserve);
+	followButton->setVisible (mode == modeObserveGTP);
+	passButton->setVisible (mode != modeObserve && mode != modeObserveGTP);
 	doneButton->setVisible (mode == modeScore || mode == modeScoreRemote);
 	scoreButton->setVisible (mode == modeNormal || mode == modeEdit || mode == modeScore);
 	undoButton->setVisible (mode == modeScoreRemote || mode == modeMatch || mode == modeComputer || mode == modeTeach);
@@ -2004,7 +2024,7 @@ void MainWindow::setGameMode(GameMode mode)
 	editPosButton->setEnabled (mode == modeNormal || mode == modeEdit);
 	colorButton->setEnabled (mode == modeEdit || mode == modeNormal);
 
-	slider->setEnabled (mode == modeNormal || mode == modeObserve || mode == modeBatch);
+	slider->setEnabled (mode == modeNormal || mode == modeObserve || mode == modeObserveGTP || mode == modeBatch);
 
 	passButton->setEnabled (mode != modeScore && mode != modeScoreRemote);
 	editButton->setEnabled (mode != modeScore);
@@ -2137,7 +2157,7 @@ void MainWindow::setMoveData (game_state &gs, const go_board &b, GameMode mode)
 	int move_nr = gs.move_number ();
 	int var_nr = gs.var_number ();
 
-	bool good_mode = mode == modeNormal || mode == modeObserve || mode == modeBatch;
+	bool good_mode = mode == modeNormal || mode == modeObserve || mode == modeObserveGTP || mode == modeBatch;
 
 	navBackward->setEnabled (good_mode && !is_root_node);
 	navForward->setEnabled (good_mode && sons > 0);
@@ -2164,6 +2184,7 @@ void MainWindow::setMoveData (game_state &gs, const go_board &b, GameMode mode)
 
 		/* fall through */
 	case modeObserve:
+	case modeObserveGTP:
 		break;
 
 	case modeScore:
@@ -2181,17 +2202,8 @@ void MainWindow::setMoveData (game_state &gs, const go_board &b, GameMode mode)
 
 	/* Refresh comment from move unless we are in a game mode that just keeps
 	   appending to the comment.  */
-	if (!commentEdit->isReadOnly ()) {
-		bool old = m_allow_text_update_signal;
-		m_allow_text_update_signal = false;
-		std::string c = gs.comment ();
-		if (c.size () == 0)
-			commentEdit->clear();
-		else
-			commentEdit->setText(QString::fromStdString (c));
-
-		m_allow_text_update_signal = old;
-	}
+	if (!commentEdit->isReadOnly ())
+		refresh_comment ();
 
 	update_figures ();
 
@@ -2393,92 +2405,283 @@ MainWindow_GTP::MainWindow_GTP (QWidget *parent, go_game_ptr gr, QString opener_
 	: MainWindow (parent, gr, opener_scrkey, modeComputer), GTP_Controller (this)
 {
 	game_state *st = gr->get_root ();
+	m_game_position = st;
 	while (st->n_children () > 0)
 		st = st->next_primary_move ();
-	m_first_pos = st;
+	m_start_positions.push_back (st);
+
 	gfx_board->set_player_colors (!w_is_comp, !b_is_comp);
-	m_gtp = create_gtp (program, m_game->boardsize (), m_game->komi ());
+	m_starting_up = 1;
+	auto g = create_gtp (program, m_game->boardsize (), m_game->komi ());
+	if (b_is_comp)
+		m_gtp_b = g;
+	else
+		m_gtp_w = g;
 }
 
 MainWindow_GTP::MainWindow_GTP (QWidget *parent, go_game_ptr gr, game_state *st, QString opener_scrkey, const Engine &program,
 				bool b_is_comp, bool w_is_comp)
-	: MainWindow (parent, gr, opener_scrkey, modeComputer), GTP_Controller (this), m_first_pos (st)
+	: MainWindow (parent, gr, opener_scrkey, modeComputer), GTP_Controller (this)
 {
+	m_start_positions.push_back (st);
+	m_game_position = gr->get_root ();
+
 	gfx_board->set_player_colors (!w_is_comp, !b_is_comp);
-	m_gtp = create_gtp (program, m_game->boardsize (), m_game->komi ());
+	m_starting_up = 1;
+	auto g = create_gtp (program, m_game->boardsize (), m_game->komi ());
+	if (b_is_comp)
+		m_gtp_b = g;
+	else
+		m_gtp_w = g;
+}
+
+MainWindow_GTP::MainWindow_GTP (QWidget *parent, go_game_ptr gr, QString opener_scrkey,
+				const Engine &program_w, const Engine &program_b, int n_games, bool book)
+	: MainWindow (parent, gr, opener_scrkey, modeObserveGTP), GTP_Controller (this)
+{
+	game_state *primary = gr->get_root ();
+	while (primary->n_children () > 0)
+		primary = primary->next_primary_move ();
+
+	m_game_position = gr->get_root ();
+	for (int i = 0; i < n_games; i++)
+		if (book) {
+			std::function<bool (game_state *)> f = [this] (game_state *st) -> bool
+				{
+					if (st->n_children () == 0)
+						m_start_positions.push_back (st);
+					return true;
+				};
+			gr->get_root ()->walk_tree (f);
+		} else
+			m_start_positions.push_back (primary);
+
+	gfx_board->set_player_colors (false, false);
+	m_starting_up = 2;
+	m_gtp_w = create_gtp (program_w, m_game->boardsize (), m_game->komi ());
+	m_gtp_b = create_gtp (program_b, m_game->boardsize (), m_game->komi ());
+#if 0
+	/* Normally shown in modeComputer; we override that default here for two-engine play.  */
+	passButton->setVisible (false);
+	undoButton->setVisible (false);
+	resignButton->setVisible (false);
+	followButton->setVisible (true);
+#endif
+	connect (followButton, &QPushButton::clicked, [this] (bool) { gfx_board->set_displayed (m_game_position); });
 }
 
 MainWindow_GTP::~MainWindow_GTP ()
 {
-	delete m_gtp;
+	delete m_gtp_w;
+	delete m_gtp_b;
+}
+
+void MainWindow_GTP::request_next_move ()
+{
+	stone_color c = m_game_position->to_move ();
+	GTP_Process *p = c == white ? m_gtp_w : m_gtp_b;
+	if (p != nullptr)
+		p->request_move (c);
 }
 
 void MainWindow_GTP::gtp_setup_success (GTP_Process *)
 {
+	if (--m_setting_up > 0)
+		return;
 	show ();
-	if (!gfx_board->player_to_move_p ())
-		m_gtp->request_move (gfx_board->to_move ());
+	request_next_move ();
 }
 
-void MainWindow_GTP::gtp_startup_success (GTP_Process *p)
+void MainWindow_GTP::setup_game ()
 {
-	game_state *r = m_game->get_root ();
-	game_state *st = m_first_pos;
-	if (st != r || !st->get_board ().position_empty_p ()) {
-		gfx_board->set_displayed (st);
-		m_gtp->setup_initial_position (st);
-	} else
-		gtp_setup_success (p);
+	game_state *st = m_start_positions.back ();
+	if (m_game_position != st)
+		m_game_position->transfer_observers (st);
+	m_game_position = st;
+	m_setting_up = 0;
+	if (m_gtp_w) {
+		m_setting_up++;
+		m_gtp_w->setup_initial_position (st);
+	}
+	if (m_gtp_b) {
+		m_setting_up++;
+		m_gtp_b->setup_initial_position (st);
+	}
 }
 
-void MainWindow_GTP::gtp_played_move (GTP_Process *, int x, int y)
+void MainWindow_GTP::gtp_startup_success (GTP_Process *)
+{
+	if (--m_starting_up > 0)
+		return;
+	setup_game ();
+}
+
+void MainWindow_GTP::gtp_played_move (GTP_Process *p, int x, int y)
 {
 	if (local_stone_sound)
-		qgo->playStoneSound();
-	gfx_board->play_external_move (x, y);
+		qgo->playStoneSound ();
+	stone_color col = m_game_position->to_move ();
+	game_state *st = m_game_position;
+	game_state *st_new = st->add_child_move (x, y);
+	if (st_new == nullptr) {
+		QMessageBox mb (QMessageBox::Information, tr ("Invalid move by the engine"),
+				tr ("An invalid move was played by the engine, game terminated."),
+				QMessageBox::Ok | QMessageBox::Default);
+		if (m_gtp_w)
+			m_gtp_w->quit ();
+		if (m_gtp_b)
+			m_gtp_b->quit ();
+		setGameMode (modeNormal);
+		gfx_board->set_player_colors (true, true);
+		return;
+	}
+	gfx_board->setModified ();
+	st->transfer_observers (st_new);
+	m_game_position = st_new;
+	update_game_tree ();
+
+	if (two_engines ()) {
+		GTP_Process *other = m_gtp_w == p ? m_gtp_b : m_gtp_w;
+		other->played_move (col, x, y);
+		other->request_move (col == black ? white : black);
+	}
+}
+
+void MainWindow_GTP::gtp_report_score (GTP_Process *p, const QString &s)
+{
+	QString txt;
+	if (p == m_gtp_w) {
+		if (!s.isEmpty ()) {
+			m_score_report = tr ("Reported score by White: ") + s + "\n";
+			m_winner_1 = s[0] == 'B' ? black : s[0] == 'W' ? white : none;
+		}
+		m_gtp_b->request_score ();
+	} else {
+		if (!s.isEmpty ()) {
+			m_score_report += tr ("Reported score by Black: ") + s + "\n";
+			m_winner_2 = s[0] == 'B' ? black : s[0] == 'W' ? white : none;
+		}
+		stone_color winner = unknown;
+		if (m_winner_1 != unknown && m_winner_2 != unknown && m_winner_1 != m_winner_2)
+			m_disagreements++;
+		else if (m_winner_1 != unknown)
+			winner = m_winner_1;
+		else if (m_winner_2 != unknown)
+			winner = m_winner_2;
+		if (m_score_report.isEmpty ())
+			m_score_report = tr ("Neither program reported a score.\n");
+		game_end (m_score_report, winner);
+	}
+}
+
+static void append_result (game_state *st, const QString &result)
+{
+	const std::string &c = st->comment ();
+	bool ends_in_nl = c.length () == 0 || c.back () == '\n';
+	st->set_comment (c + (!ends_in_nl ? "\n" : "") + result.toStdString ());
+}
+
+void MainWindow_GTP::game_end (const QString &result, stone_color winner)
+{
+	if (winner == white)
+		m_wins_w++;
+	else if (winner == black)
+		m_wins_b++;
+	else if (winner == none)
+		m_jigo++;
+	game_state *st = m_start_positions.back ();
+	m_n_games++;
+	QString res = tr ("Game #%1:\n").arg (m_n_games) + result;
+	append_result (st, res);
+	game_state *r = m_game->get_root ();
+	if (r != st)
+		append_result (r, res);
+
+	refresh_comment ();
+	gfx_board->setModified ();
+	m_start_positions.pop_back ();
+
+	if (m_start_positions.size () == 0) {
+		QString stats = tr ("Wins for White/Black: %1/%2").arg (m_wins_w).arg (m_wins_b);
+		if (m_jigo > 0)
+			stats += tr (" Jigo: %1").arg (m_jigo);
+		if (m_disagreements > 0)
+			stats += tr (" Disagreements: %1").arg (m_disagreements);
+		stats += "\n";
+		append_result (r, stats);
+		QMessageBox mb (QMessageBox::Information, tr ("Game end"),
+				tr ("Engine play has completed."),
+				QMessageBox::Ok | QMessageBox::Default);
+		mb.exec ();
+		setGameMode (modeNormal);
+		gfx_board->set_player_colors (true, true);
+		return;
+	}
+	setup_game ();
 }
 
 void MainWindow_GTP::enter_scoring ()
 {
-	m_gtp->quit ();
-	/* As of now, we're disconnected, and the scoring function should
-	   remember normal mode.  */
-	setGameMode (modeNormal);
-	gfx_board->set_player_colors (true, true);
-	doRealScore (true);
+	if (two_engines ()) {
+		m_winner_1 = m_winner_2 = unknown;
+		m_gtp_w->request_score ();
+	} else {
+		auto *gtp = single_engine ();
+		gtp->quit ();
+		/* As of now, we're disconnected, and the scoring function should
+		   remember normal mode.  */
+		setGameMode (modeNormal);
+		gfx_board->set_player_colors (true, true);
+		doRealScore (true);
+	}
 }
 
-void MainWindow_GTP::gtp_played_pass (GTP_Process *)
+void MainWindow_GTP::gtp_played_pass (GTP_Process *p)
 {
 	if (local_stone_sound)
 		qgo->playPassSound();
-	const game_state *st = gfx_board->displayed ();
-	gfx_board->play_external_pass ();
+	game_state *st = m_game_position;
+	stone_color col = st->to_move ();
+	game_state *st_new = st->add_child_pass ();
+	st->transfer_observers (st_new);
+	m_game_position = st_new;
+	update_game_tree ();
+
 	if (st->was_pass_p ())
 		enter_scoring ();
+	else if (two_engines ()) {
+		GTP_Process *other = m_gtp_w == p ? m_gtp_b : m_gtp_w;
+		other->played_move_pass (col);
+		other->request_move (col == black ? white : black);
+	}
 }
 
-void MainWindow_GTP::gtp_played_resign (GTP_Process *)
+void MainWindow_GTP::gtp_played_resign (GTP_Process *p)
 {
-	if (gfx_board->player_is (black)) {
-		m_game->set_result ("B+R");
-	} else {
-		m_game->set_result ("W+R");
-	}
+	QString result = p == m_gtp_w ? tr ("B+R") : tr ("W+R");
 
-	QMessageBox mb(QMessageBox::Information, tr("Game end"),
-		       tr("The computer has resigned the game."),
+	if (two_engines ()) {
+		game_end (tr ("Game result: ") + result + "\n", p == m_gtp_w ? black : white);
+		return;
+	}
+	m_game->set_result (result.toStdString ());
+
+	QMessageBox mb (QMessageBox::Information, tr ("Game end"),
+		       tr ("The computer has resigned the game."),
 		       QMessageBox::Ok | QMessageBox::Default);
 	mb.exec ();
 
 	setGameMode (modeNormal);
-	m_gtp->quit();
+	if (m_gtp_w)
+		m_gtp_w->quit ();
+	if (m_gtp_b)
+		m_gtp_b->quit ();
 	gfx_board->set_player_colors (true, true);
 }
 
 void MainWindow_GTP::gtp_failure (GTP_Process *, const QString &err)
 {
-	if (gfx_board->getGameMode () != modeComputer)
+	if (game_mode () != modeComputer && game_mode () != modeObserveGTP)
 		return;
 	show ();
 	setGameMode (modeNormal);
@@ -2493,7 +2696,7 @@ void MainWindow_GTP::gtp_failure (GTP_Process *, const QString &err)
 
 void MainWindow_GTP::gtp_exited (GTP_Process *)
 {
-	if (gfx_board->getGameMode () == modeComputer) {
+	if (game_mode () == modeComputer || game_mode () == modeObserveGTP) {
 		setGameMode (modeNormal);
 		gfx_board->set_player_colors (true, true);
 		show ();
@@ -2505,37 +2708,46 @@ void MainWindow_GTP::player_move (stone_color col, int x, int y)
 {
 	MainWindow::player_move (col, x, y);
 
-	if (gfx_board->getGameMode () != modeComputer)
+	if (game_mode () != modeComputer)
 		return;
-	m_gtp->played_move (col, x, y);
-	m_gtp->request_move (col == black ? white : black);
+
+	m_game_position = gfx_board->displayed ();
+	auto *gtp = single_engine ();
+	gtp->played_move (col, x, y);
+	gtp->request_move (col == black ? white : black);
 }
 
 
 void MainWindow_GTP::doPass ()
 {
-	if (gfx_board->getGameMode () != modeComputer) {
-		MainWindow::doPass ();
-		return;
-	}
-	if (!gfx_board->player_to_move_p ())
-		return;
 	const game_state *st = gfx_board->displayed ();
 	stone_color col = gfx_board->to_move ();
+	if (!gfx_board->player_to_move_p ())
+		return;
 	MainWindow::doPass ();
-	m_gtp->played_move_pass (col);
+	if (game_mode () != modeComputer)
+		return;
+
+	auto *gtp = single_engine ();
+	m_game_position = gfx_board->displayed ();
+
+	gtp->played_move_pass (col);
 	if (st->was_pass_p ())
 		enter_scoring ();
 	else
-		m_gtp->request_move (col == black ? white : black);
+		gtp->request_move (col == black ? white : black);
 }
 
 void MainWindow_GTP::doResign ()
 {
-	MainWindow::doResign();
+	MainWindow::doResign ();
+	if (game_mode () != modeComputer)
+		return;
+
 	setGameMode (modeNormal);
 	gfx_board->set_player_colors (true, true);
-	m_gtp->quit();
+	auto *gtp = single_engine ();
+	gtp->quit();
 	if (gfx_board->player_is (black))
 		m_game->set_result ("W+R");
 	else

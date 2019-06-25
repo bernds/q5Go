@@ -126,6 +126,7 @@ public:
 
 	/* Called from external source.  */
 	void append_comment (const QString &);
+	void refresh_comment ();
 
 	void update_analysis (analyzer);
 	void update_game_tree ();
@@ -149,10 +150,12 @@ public:
 		      bool warn_b, bool warn_w, int);
 
 protected:
-	void initActions();
-	void initMenuBar(GameMode);
-	void initToolBar();
-	void initStatusBar();
+	void initActions ();
+	void initMenuBar (GameMode);
+	void initToolBar ();
+	void initStatusBar ();
+
+	GameMode game_mode () { return m_gamemode; };
 
 	virtual void closeEvent (QCloseEvent *e) override;
 	virtual void keyPressEvent (QKeyEvent*) override;
@@ -266,15 +269,44 @@ public:
 
 class MainWindow_GTP : public MainWindow, public GTP_Controller
 {
-	GTP_Process *m_gtp;
-	game_state *m_first_pos;
+	GTP_Process *m_gtp_w {};
+	GTP_Process *m_gtp_b {};
+	std::vector<game_state *> m_start_positions;
+	game_state *m_game_position;
+	QString m_score_report;
 
+	int m_starting_up = 0;
+	int m_setting_up = 0;
+
+	/* Track scores.  The two m_winner_ fields hold the winner reported by each
+	   of the two engines, so we can track disagreements.  */
+	stone_color m_winner_1, m_winner_2;
+	int m_wins_w = 0;
+	int m_wins_b = 0;
+	int m_jigo = 0;
+	int m_disagreements = 0;
+	int m_n_games = 0;
+
+	GTP_Process *single_engine ()
+	{
+		return m_gtp_w == nullptr ? m_gtp_b : m_gtp_w;
+	}
 	void enter_scoring ();
+	void setup_game ();
+	void game_end (const QString &, stone_color);
+	bool two_engines ()
+	{
+		return m_gtp_w != nullptr && m_gtp_b != nullptr;
+	}
+	void request_next_move ();
+
 public:
 	MainWindow_GTP (QWidget *parent, go_game_ptr, QString opener_scrkey,
 			const Engine &program, bool b_comp, bool w_comp);
 	MainWindow_GTP (QWidget *parent, go_game_ptr, game_state *, QString opener_scrkey,
 			const Engine &program, bool b_comp, bool w_comp);
+	MainWindow_GTP (QWidget *parent, go_game_ptr, QString opener_scrkey,
+			const Engine &program_w, const Engine &program_b, int num_games, bool book);
 	~MainWindow_GTP ();
 
 	/* Virtuals from MainWindow.  */
@@ -291,6 +323,7 @@ public:
 	virtual void gtp_setup_success (GTP_Process *p) override;
 	virtual void gtp_exited (GTP_Process *p) override;
 	virtual void gtp_failure (GTP_Process *p, const QString &) override;
+	virtual void gtp_report_score (GTP_Process *p, const QString &) override;
 };
 
 extern std::list<MainWindow *> main_window_list;

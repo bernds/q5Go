@@ -62,10 +62,8 @@
 	"tr"}
 
 
-/*
-* Enum definitions
-*/
-enum GameMode { modeNormal, modeEdit, modeScore, modeScoreRemote, modeObserve, modeMatch, modeTeach, modeComputer, modeBatch };
+enum GameMode { modeNormal, modeEdit, modeScore, modeScoreRemote, modeObserve, modeObserveGTP,
+		modeMatch, modeTeach, modeComputer, modeBatch };
 enum assessType { noREQ, FREE, RATED, TEACHING };
 enum tabType {tabNormalScore=0, tabTeachGameTree };
 enum tabState {tabSet, tabEnable, tabDisable };
