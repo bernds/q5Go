@@ -2608,7 +2608,7 @@ void MainWindow_GTP::game_end (const QString &result, stone_color winner)
 		if (m_disagreements > 0)
 			stats += tr (" Disagreements: %1").arg (m_disagreements);
 		stats += "\n";
-		append_result (r, stats);
+		append_result (r, "======================\n" + stats);
 		QMessageBox mb (QMessageBox::Information, tr ("Game end"),
 				tr ("Engine play has completed."),
 				QMessageBox::Ok | QMessageBox::Default);
