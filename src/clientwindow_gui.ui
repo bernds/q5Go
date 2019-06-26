@@ -1080,7 +1080,7 @@
     </action>
     <action name="twoEnginePlay">
       <property name="text">
-	<string>&amp;Automatic computer vs. computer play</string>
+	<string>&amp;Computer vs. computer play</string>
       </property>
       <property name="iconText">
 	<string>Automatic computer vs. computer play</string>
