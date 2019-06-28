@@ -526,6 +526,24 @@ use &quot;free&quot; command to make game rated or unrated (free)</string>
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QToolButton" name="anHideButton">
+          <property name="toolTip">
+           <string>Click to hide/show evaluation marks on the board.</string>
+          </property>
+          <property name="text">
+           <string>...</string>
+          </property>
+          <property name="icon">
+           <iconset resource="q4go.qrc">
+            <normaloff>:/BoardWindow/images/boardwindow/eye.png</normaloff>
+            <normalon>:/BoardWindow/images/boardwindow/noeye.png</normalon>:/BoardWindow/images/boardwindow/eye.png</iconset>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
       <item>

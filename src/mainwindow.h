@@ -224,7 +224,9 @@ public slots:
 	void slotDiagSVG (bool);
 	void slotDiagChosen (int);
 
-	void slotEngineGroup(bool);
+	void slotEngineGroup (bool);
+
+	void slotToggleHideAnalysis (bool);
 
 	virtual void doPass ();
 	virtual void doCountDone ();

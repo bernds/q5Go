@@ -41,6 +41,7 @@
     <file>images/boardwindow/portrait.png</file>
     <file>images/boardwindow/fullscreen.png</file>
     <file>images/boardwindow/eye.png</file>
+    <file>images/boardwindow/noeye.png</file>
     <file>images/board/wood2.png</file>
     <file>images/board/wood1.png</file>
     <file>images/board/wood3.png</file>
@@ -63,7 +64,6 @@
     <file>images/exit.png</file>
     <file>images/pause.png</file>
     <file>images/trash.png</file>
-
     <file>sounds/click.wav</file>
     <file>sounds/connect.wav</file>
     <file>sounds/enter.wav</file>

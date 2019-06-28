@@ -291,6 +291,7 @@ MainWindow::MainWindow(QWidget* parent, go_game_ptr gr, const QString opener_scr
 		[=] (bool on) { if (on) start_analysis (); else gfx_board->stop_analysis (); });
 	connect(normalTools->anPauseButton, &QToolButton::clicked,
 		[=] (bool on) { gfx_board->pause_analysis (on); });
+	connect(normalTools->anHideButton, &QToolButton::toggled, this, &MainWindow::slotToggleHideAnalysis);
 
 	connect(m_ascii_dlg.cb_coords, &QCheckBox::toggled, [=] (bool) { update_ascii_dialog (); });
 	connect(m_ascii_dlg.cb_numbering, &QCheckBox::toggled, [=] (bool) { update_ascii_dialog (); });
@@ -1181,6 +1182,15 @@ void MainWindow::slotEngineGroup (bool)
 	QAction *checked_engine = engineGroup->checkedAction ();
 	anConnect->setEnabled (!anDisconnect->isEnabled () && checked_engine != nullptr);
 	normalTools->anStartButton->setEnabled (normalTools->anStartButton->isChecked () || checked_engine != nullptr);
+}
+
+void MainWindow::slotToggleHideAnalysis (bool on)
+{
+	gfx_board->set_hide_analysis (on);
+	if (on)
+		normalTools->anHideButton->setStatusTip (tr ("Evaluations are not shown on the board."));
+	else
+		normalTools->anHideButton->setStatusTip (tr ("Evaluations are shown on the board."));
 }
 
 void MainWindow::start_analysis ()

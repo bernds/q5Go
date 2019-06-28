@@ -1069,6 +1069,9 @@ std::pair<stone_color, stone_type> BoardView::stone_to_display (const go_board &
 
 bool Board::have_analysis ()
 {
+	if (m_hide_analysis)
+		return false;
+
 	if (m_eval_state != nullptr)
 		return !m_pause_eval;
 
@@ -1408,6 +1411,14 @@ void Board::sync_appearance (bool board_only)
 void Board::set_displayed (game_state *st)
 {
 	move_state (st);
+}
+
+void Board::set_hide_analysis (bool on)
+{
+	if (m_hide_analysis == on)
+		return;
+	m_hide_analysis = on;
+	sync_appearance (true);
 }
 
 void Board::observed_changed ()

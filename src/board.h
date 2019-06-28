@@ -230,6 +230,8 @@ class Board : public BoardView, public navigable_observer, public GTP_Eval_Contr
 	   list view.  */
 	analyzer_id m_an_id;
 
+	bool m_hide_analysis = false;
+
 	bool show_cursor_p ();
 	void update_shift (int x, int y);
 
@@ -259,6 +261,7 @@ public:
 	void start_analysis (const Engine &);
 	void stop_analysis ();
 	void pause_analysis (bool);
+	void set_hide_analysis (bool);
 
 	bool player_to_move_p ()
 	{
