@@ -1850,6 +1850,7 @@ void Board::mousePressEvent(QMouseEvent *e)
 			dup->set_figure (256, comment.toStdString ());
 			st->add_child_tree (dup);
 
+			setModified ();
 			sync_appearance ();
 			m_board_win->update_game_tree ();
 			m_board_win->update_figures ();
