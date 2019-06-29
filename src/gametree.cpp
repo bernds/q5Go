@@ -28,7 +28,7 @@ static QByteArray box_svg =
 	"     d=\"M 80,50 80,150 0,125 0,25 Z\" />"
 	"  <path"
 	"     style=\"fill:#FFFF00;fill-rule:evenodd;stroke:none\""
-	"     d=\"M 35.2,14 44.8,11 124.8,36 115.2,35 Z\" />"
+	"     d=\"M 35.2,14 44.8,11 124.8,36 115.2,39 Z\" />"
 	"</svg>";
 
 class ClickablePixmap : public QGraphicsPixmapItem
