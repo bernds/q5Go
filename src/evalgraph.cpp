@@ -142,6 +142,7 @@ void EvalGraph::update (go_game_ptr gr, game_state *active, int sel_idx)
 	if (gr == nullptr)
 		return;
 
+	int w1 = w;
 	w -= GRADIENT_WIDTH;
 
 	game_state *r = gr->get_root ();
@@ -171,6 +172,34 @@ void EvalGraph::update (go_game_ptr gr, game_state *active, int sel_idx)
 		auto id = e.first;
 		QPainterPath path;
 		bool on_path = false;
+		double score_max = 15;
+		double score_span = 30;
+		if (m_show_scores) {
+			for (game_state *s = r; s != nullptr; s = s->next_primary_move ()) {
+				eval ev;
+				if (s->find_eval (id, ev))
+					score_max = std::max (score_max, fabs (ev.score_mean));
+			}
+			if (score_max == 0)
+				continue;
+			score_max = std::min (40.0, score_max);
+			score_span = 2 * score_max;
+			int steps = (int)(score_max - 0.8) / 5;
+			for (int i = -steps; i <= steps; i++) {
+				if (i == 0 || (steps > 3 && i % 2 != 0))
+					continue;
+				double val = (i * 5 + score_max) / score_span;
+				QGraphicsLineItem *l;
+				l = m_scene->addLine (GRADIENT_WIDTH, val * h, w1, val * h, QPen (i % 2 == 0 ? Qt::DashLine : Qt::DotLine));
+				l->setZValue (2);
+			}
+		} else {
+			QGraphicsLineItem *l;
+			l = m_scene->addLine (GRADIENT_WIDTH, h * 0.25, w1, h * 0.25, Qt::DashLine);
+			l->setZValue (2);
+			l = m_scene->addLine (GRADIENT_WIDTH, h * 0.75, w1, h * 0.75, Qt::DashLine);
+			l->setZValue (2);
+		}
 		game_state *st = r;
 		double prev = 0;
 
@@ -191,9 +220,9 @@ void EvalGraph::update (go_game_ptr gr, game_state *active, int sel_idx)
 					on_path = false;
 					continue;
 				}
-				val = (ev.score_mean + 15.) / 30;
-				double vmin = val - ev.score_stddev / 30.;
-				double vmax = val + ev.score_stddev / 30.;
+				val = (ev.score_mean + score_max) / score_span;
+				double vmin = val - ev.score_stddev / score_span;
+				double vmax = val + ev.score_stddev / score_span;
 				val = std::min (1.0, std::max (val, 0.0));
 				double vminb = std::min (1.0, std::max (vmin, 0.0));
 				double vmaxb = std::min (1.0, std::max (vmax, 0.0));
