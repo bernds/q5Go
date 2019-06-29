@@ -1807,13 +1807,17 @@ void Board::mousePressEvent(QMouseEvent *e)
 		m_request_mark_rect = false;
 		return;
 	}
+
 	if (e->button () == Qt::MiddleButton) {
-		m_down_x = e->x ();
-		m_down_y = e->y ();
-		m_dragging = true;
-		m_drag_begin_x = m_shift_x;
-		m_drag_begin_y = m_shift_y;
-		return;
+		const go_board &b = m_game->get_root ()->get_board ();
+		if (b.torus_h () || b.torus_v ()) {
+			m_down_x = e->x ();
+			m_down_y = e->y ();
+			m_dragging = true;
+			m_drag_begin_x = m_shift_x;
+			m_drag_begin_y = m_shift_y;
+			return;
+		}
 	}
 
 	m_down_x = m_down_y = -1;
