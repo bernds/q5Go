@@ -267,8 +267,6 @@ public:
 	{
 		return !m_displayed->was_score_p () && (m_displayed->to_move () == black ? m_player_is_b : m_player_is_w);
 	}
-	void play_external_move (int x, int y);
-	void play_external_pass ();
 
 	stone_color swap_edit_to_move ();
 	void deleteNode();

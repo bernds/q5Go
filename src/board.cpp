@@ -2140,16 +2140,6 @@ void BoardView::set_sgf_coords (bool b)
 	draw_background ();
 }
 
-void Board::play_external_move (int x, int y)
-{
-	game_state *st = m_displayed;
-
-	setModified ();
-
-	game_state *st_new = st->add_child_move (x, y);
-	st->transfer_observers (st_new);
-}
-
 void Board::mark_dead_external (int x, int y)
 {
 	m_edit_board->toggle_alive (x, y, false);
@@ -2222,12 +2212,6 @@ void Board::doPass()
 		game_state *st = m_displayed->add_child_pass ();
 		m_displayed->transfer_observers (st);
 	}
-}
-
-void Board::play_external_pass ()
-{
-	game_state *st = m_displayed->add_child_pass ();
-	m_displayed->transfer_observers (st);
 }
 
 void Board::navIntersection()
