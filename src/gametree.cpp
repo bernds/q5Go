@@ -463,8 +463,17 @@ void GameTree::contextMenuEvent (QContextMenuEvent *e)
 	autoAction.setChecked (m_autocollapse);
 	connect (&autoAction, &QAction::triggered,
 		 [this] (bool on) { m_autocollapse = on; do_autocollapse (); update (m_game, m_active); });
+	QAction expandAction (tr ("Expand &all"));
+	connect (&expandAction, &QAction::triggered,
+		 [this] (bool)
+		 {
+			 m_autocollapse = false;
+			 m_game->get_root ()->expand_all ();
+			 update (m_game, m_active);
+		 });
 
 	menu.addAction (&autoAction);
+	menu.addAction (&expandAction);
 	menu.exec (e->globalPos ());
 }
 
