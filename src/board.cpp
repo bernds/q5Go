@@ -1847,6 +1847,8 @@ void Board::mousePressEvent(QMouseEvent *e)
 			comment = (comment.arg (QString::number (100 * wwr, 'f', 1)).arg ('%')
 				   .arg (QString::number (100 * bwr, 'f', 1)).arg ('%')
 				   .arg (QString::number (ev.visits)));
+			if (ev.id.engine.length () > 0)
+				comment += QString (" (%1)").arg (QString::fromStdString (ev.id.engine));
 			dup->set_figure (256, comment.toStdString ());
 			st->add_child_tree (dup);
 

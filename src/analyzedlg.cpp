@@ -413,7 +413,8 @@ void AnalyzeDialog::eval_received (const QString &, int, bool have_score)
 		QString wrb = QString::number (wr * 100);
 		QString wrw = QString::number ((1 - wr) * 100);
 		QString vis = QString::number (ev.visits);
-		QString title = tr ("PV ") + cnt + ": " + tr ("W Win ") + wrw + "%, " + tr ("B Win ") + wrb + "% " + tr ("at ") + vis + tr (" visits.");
+		QString title = tr ("PV ") + cnt + ": " + tr ("W Win ") + wrw + "%, " + tr ("B Win ") + wrb + "% " + tr ("at ") + vis + tr (" visits");
+		title += QString (" (%1)").arg (QString::fromStdString (ev.id.engine));
 		it->set_figure (257, title.toStdString ());
 		st->add_child_tree (it);
 		j->m_game->set_modified ();
