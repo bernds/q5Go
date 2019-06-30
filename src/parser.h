@@ -53,7 +53,6 @@ signals:
 	void signal_result(const QString&, const QString&, bool, const QString&);
 	void signal_requestDialog(const QString&, const QString&, const QString&, const QString&);
 	void signal_undo(const QString&, const QString&);
-	void signal_addToObservationList(int);
 	void signal_shout(const QString&, const QString&);
 	void signal_timeAdded(int, bool);
 	void signal_room(const QString&, bool );

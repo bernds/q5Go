@@ -213,6 +213,8 @@ class qGoIF : public QObject
 {
 	Q_OBJECT
 
+	int n_observed = 0;
+
 	void game_end (qGoBoard *, const QString &txt);
 
 public:

@@ -226,8 +226,8 @@ void qGoIF::game_end (qGoBoard *qb, const QString &txt)
 		qb->disconnected (true);
 	}
 
-	// decrease number of observed games
-	emit signal_addToObservationList(-1);
+	n_observed--;
+	client_window->update_observed_games (n_observed);
 }
 
 void qGoIF::game_end (const QString &id, const QString &txt)
@@ -321,8 +321,8 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 						// renew refresh button
 						qb->get_win()->refreshButton->setText(QObject::tr("Refresh", "button label"));
 
-						// increase number of observed games
-						emit signal_addToObservationList(-2);
+						n_observed++;
+						client_window->update_observed_games (n_observed);
 
 						return true;
 					}
@@ -444,8 +444,8 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 			else
 				qgobrd->set_Mode_real (mode);
 
-			// increase number of observed games
-			emit signal_addToObservationList(-2);
+			n_observed++;
+			client_window->update_observed_games (n_observed);
 
 			return true;
 		}
@@ -581,8 +581,8 @@ void qGoIF::set_initIF()
 	}
 	boardlist.clear ();
 
-	// set number of observed games to 0
-	emit signal_addToObservationList(0);
+	n_observed = 0;
+	client_window->update_observed_games (n_observed);
 }
 
 // a match is created
@@ -734,20 +734,20 @@ void qGoIF::window_closing (qGoBoard *qb)
 				else
 					emit signal_sendcommand("observe " + QString::number(-id), false);
 
-				// decrease number of observed games
-				emit signal_addToObservationList(-1);
+				n_observed--;
+				client_window->update_observed_games (n_observed);
 				break;
 
 			case modeMatch:
-				// decrease number of observed games
-				emit signal_addToObservationList(-1);
+				n_observed--;
+				client_window->update_observed_games (n_observed);
 				break;
 
 			case modeTeach:
 				emit signal_sendcommand("adjourn", false);
 
-				// decrease number of observed games
-				emit signal_addToObservationList(-1);
+				n_observed--;
+				client_window->update_observed_games (n_observed);
 				break;
 
 			default:

@@ -187,7 +187,6 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	connect(parser, &Parser::signal_connclosed, this, &ClientWindow::slot_connclosed);
 	connect(parser, &Parser::signal_talk, this, &ClientWindow::slot_talk);
 	connect(parser, &Parser::signal_checkbox, this, &ClientWindow::slot_checkbox);
-	connect(parser, &Parser::signal_addToObservationList, this, &ClientWindow::slot_addToObservationList);
 	connect(parser, &Parser::signal_channelinfo, this, &ClientWindow::slot_channelinfo);
 	connect(parser, &Parser::signal_matchrequest, this, &ClientWindow::slot_matchrequest);
 	connect(parser, &Parser::signal_matchCanceled, this, &ClientWindow::slot_removeMatchDialog);
@@ -212,7 +211,6 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	connect(parser, &Parser::signal_result, qgoif, &qGoIF::slot_result);
 	connect(parser, &Parser::signal_requestDialog, qgoif, &qGoIF::slot_requestDialog);
 	connect(qgoif, &qGoIF::signal_sendcommand, this, &ClientWindow::slot_sendcommand);
-	connect(qgoif, &qGoIF::signal_addToObservationList, this, &ClientWindow::slot_addToObservationList);
 
 	connect(parser, &Parser::signal_timeAdded, qgoif, &qGoIF::slot_timeAdded);
 	//connect(parser, &Parser::signal_undoRequest, qgoif, &qGoIF::slot_undoRequest);

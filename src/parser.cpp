@@ -849,8 +849,6 @@ InfoType Parser::cmd9(const QString &line)
 	// 9 Removing game 30 from observation list.
 	else if (line.contains("from observation list"))
 	{
-		// is done from qGoIF
-		// emit signal_addToObservationList(-1);
 		aGame->nr = line.section(' ', 2, 2);
 		aGame->Sz = "-";
 		aGame->running = false;
@@ -861,13 +859,14 @@ InfoType Parser::cmd9(const QString &line)
 	// 9 Adding game to observation list.
 	else if (line.contains("to observation list"))
 	{
-		// is done from qGoIF
-		// emit signal_addToObservationList(-2);
 		return IT_OTHER;
 	}
 	// 9 Games currently being observed:  31, 36, 45.
 	else if (line.contains("Games currently being observed"))
 	{
+		 /* Tracking observed games is done in qgoIF; messing with the numbers from here
+		    would only confuse things.  */
+#if 0
 		if (line.contains("None"))
 		{
 			emit signal_addToObservationList(0);
@@ -877,8 +876,8 @@ InfoType Parser::cmd9(const QString &line)
 			// don't work correct at IGS!!!
 			int i = line.count(',');
 			qDebug() << QString("observing %1 games").arg(i+1);
-//			emit signal_addToObservationList(i+1);
 		}
+#endif
 
 //		return IT_OTHER;
 	}

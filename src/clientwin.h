@@ -69,6 +69,8 @@ public:
 	void server_add_game (Game*);
 	void server_remove_game (Game*);
 
+	void update_observed_games (int);
+
 public slots:
 	void slot_setBytesIn (int i) { setBytesIn (i); }
 	void slot_setBytesOut (int i) { setBytesOut (i); }
@@ -111,7 +113,6 @@ public slots:
 	void slot_connclosed ();
 	void slot_talk (const QString&, const QString&, bool);
 	void slot_checkbox (int, bool);
-	void slot_addToObservationList (int);
 	void slot_channelinfo (int, const QString&);
 	void slot_matchrequest (const QString&, bool);
   	void slot_removeMatchDialog (const QString&);

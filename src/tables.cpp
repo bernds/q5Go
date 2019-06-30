@@ -461,21 +461,9 @@ void ClientWindow::slot_player(Player *p, bool cmdplayers)
 #endif
 }
 
-
-
-void ClientWindow::slot_addToObservationList(int flag)
+void ClientWindow::update_observed_games (int count)
 {
-	if (flag == -1)
-	{
-		if (myAccount->num_observedgames != 0)
-			myAccount->num_observedgames--;
-	}
-	else if (flag == -2)
-		myAccount->num_observedgames++;
-	else
-		myAccount->num_observedgames = flag;
-
-	// update status bar
+	myAccount->num_observedgames = count;
 	statusGames->setText(" G: " + QString::number(myAccount->num_games) + " / " + QString::number(myAccount->num_observedgames) + " ");
 }
 
