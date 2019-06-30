@@ -385,8 +385,18 @@ void PreferencesDialog::update_board_image ()
 	m_stone_canvas->setSceneRect (0, 0, w, h);
 	m_stone_canvas->setBackgroundBrush (QBrush (image));
 
+	update_stone_positions ();
+}
+
+void PreferencesDialog::update_stone_positions ()
+{
+	int w = stoneView->width ();
+	int h = stoneView->height ();
+
 	m_stone_size = std::min (w / 2, h);
-	int real_width = m_stone_size * 9. / 8;
+	int real_width = m_stone_size;
+	if (!radioButtonStones_2D->isChecked ())
+		real_width *= 9. / 8;
 	int w_diff = real_width - m_stone_size;
 	m_w_stone->setPos (w / 2 - real_width, 0);
 	m_b_stone->setPos (w / 2 - w_diff, 0);
@@ -528,6 +538,7 @@ void PreferencesDialog::select_stone_look (bool)
 {
 	update_w_stones ();
 	update_b_stones ();
+	update_stone_positions ();
 }
 
 void PreferencesDialog::select_white_color (bool)

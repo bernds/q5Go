@@ -78,6 +78,7 @@ class PreferencesDialog : public QDialog, public Ui::PreferencesDialogGui
 	void update_w_stones ();
 	void update_b_stones ();
 	void update_stone_params ();
+	void update_stone_positions ();
 
 	void update_current_host ();
 	void update_current_engine ();
