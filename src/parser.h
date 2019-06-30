@@ -78,7 +78,6 @@ public:
 	GSName     get_gsname();
 	void       set_myname(const QString &n) { myname = n; }
 	QString    get_buffer();
-	InfoType   cmdsent(const QString&);
 
 private:
 	InfoType   cmd1(const QString&);

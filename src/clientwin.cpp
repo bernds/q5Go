@@ -211,7 +211,6 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	connect(parser, &Parser::signal_undo, qgoif, &qGoIF::slot_undo);
 	connect(parser, &Parser::signal_result, qgoif, &qGoIF::slot_result);
 	connect(parser, &Parser::signal_requestDialog, qgoif, &qGoIF::slot_requestDialog);
-	connect(this, &ClientWindow::signal_move, qgoif, &qGoIF::slot_gamemove);
 	connect(qgoif, &qGoIF::signal_sendcommand, this, &ClientWindow::slot_sendcommand);
 	connect(qgoif, &qGoIF::signal_addToObservationList, this, &ClientWindow::slot_addToObservationList);
 

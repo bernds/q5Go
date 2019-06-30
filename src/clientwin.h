@@ -69,11 +69,6 @@ public:
 	void server_add_game (Game*);
 	void server_remove_game (Game*);
 
-signals:
-	void signal_cmdsent (const QString&);
-	void signal_move (Game*);
-	void signal_computer_game (QNewGameDlg*);       //SL added eb 12
-
 public slots:
 	void slot_setBytesIn (int i) { setBytesIn (i); }
 	void slot_setBytesOut (int i) { setBytesOut (i); }
