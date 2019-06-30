@@ -652,7 +652,7 @@ Select the font for the server console (fixed font preferably).</string>
 Enable this box when you want to listen a clicking sound when playing a stone on the board.</string>
             </property>
             <property name="text">
-             <string>Graphics</string>
+             <string>Stone played</string>
             </property>
             <attribute name="buttonGroup">
              <string notr="true">soundButtonGroup</string>

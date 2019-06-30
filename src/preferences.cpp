@@ -1063,32 +1063,32 @@ void PreferencesDialog::slot_serverChanged(const QString &title)
 }
 
 // play the sound if check box has been clicked
-void PreferencesDialog::on_soundButtonGroup_buttonClicked(QAbstractButton *cb)
+void PreferencesDialog::on_soundButtonGroup_buttonClicked (QAbstractButton *cb)
 {
 	qDebug() << "button text = " << cb->text();
 
-	if (cb->text() == tr("Stones"))
-		qgo->playClick();
-	else if (cb->text() == tr("Pass"))
-		qgo->playPassSound();
-	else if (cb->text().startsWith(tr("Time"), Qt::CaseInsensitive))
-		qgo->playTimeSound();
-	else if (cb->text() == tr("Talk"))
-		qgo->playTalkSound();
-	else if (cb->text() == tr("Say"))
-		qgo->playSaySound();
-	else if (cb->text() == tr("Match"))
-		qgo->playMatchSound();
-	else if (cb->text() == tr("Enter"))
-		qgo->playEnterSound();
-	else if (cb->text() == tr("Game end"))
-		qgo->playGameEndSound();
-	else if (cb->text() == tr("Leave"))
-		qgo->playLeaveSound();
-	else if (cb->text() == tr("Disconnect"))
-		qgo->playDisConnectSound();
-	else if (cb->text() == tr("Connect"))
-		qgo->playConnectSound();
+	if (cb == stoneSoundCheckBox)
+		qgo->playStoneSound (true);
+	else if (cb == passSoundCheckBox)
+		qgo->playPassSound (true);
+	else if (cb == timeSoundCheckBox)
+		qgo->playTimeSound (true);
+	else if (cb == talkSoundCheckBox)
+		qgo->playTalkSound (true);
+	else if (cb == saySoundCheckBox)
+		qgo->playSaySound (true);
+	else if (cb == matchSoundCheckBox)
+		qgo->playMatchSound (true);
+	else if (cb == enterSoundCheckBox)
+		qgo->playEnterSound (true);
+	else if (cb == gameEndSoundCheckBox)
+		qgo->playGameEndSound (true);
+	else if (cb == leaveSoundCheckBox)
+		qgo->playLeaveSound (true);
+	else if (cb == disConnectSoundCheckBox)
+		qgo->playDisConnectSound (true);
+	else if (cb == connectSoundCheckBox)
+		qgo->playConnectSound (true);
 }
 
 void PreferencesDialog::slot_getComputerPath()

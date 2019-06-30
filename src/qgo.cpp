@@ -76,14 +76,12 @@ void qGo::updateAllBoardSettings()
 	setting->engines_changed = false;
 }
 
-void qGo::playClick()
-{
-	QSound::play (":/sounds/click.wav");
-}
-
-void qGo::playStoneSound()
+void qGo::playStoneSound (bool force)
 {
 	static int idx = 0;
+
+	if (!force && !setting->readBoolEntry ("SOUND_STONE"))
+		return;
 
 	switch (idx % 11) {
 	default:
@@ -123,84 +121,64 @@ void qGo::playStoneSound()
 	idx += 1 + rand () % 4;
 }
 
-void qGo::playTalkSound()
+void qGo::playTalkSound (bool force)
 {
-	if (setting->readBoolEntry("SOUND_TALK"))
-	{
+	if (force || setting->readBoolEntry ("SOUND_TALK"))
 		QSound::play (":/sounds/talk.wav");
-	}
 }
 
-void qGo::playMatchSound()
+void qGo::playMatchSound (bool force)
 {
-	if (setting->readBoolEntry("SOUND_MATCH"))
-	{
+	if (force || setting->readBoolEntry ("SOUND_MATCH"))
 		QSound::play (":/sounds/match.wav");
-	}
 }
 
-void qGo::playPassSound()
+void qGo::playPassSound (bool force)
 {
-        if (setting->readBoolEntry("SOUND_PASS"))
-	{
+        if (force || setting->readBoolEntry ("SOUND_PASS"))
 		QSound::play (":/sounds/pass.wav");
-	}
 }
 
-void qGo::playGameEndSound()
+void qGo::playGameEndSound (bool force)
 {
-        if (setting->readBoolEntry("SOUND_GAMEEND"))
-	{
+        if (force || setting->readBoolEntry ("SOUND_GAMEEND"))
 		QSound::play (":/sounds/gameend.wav");
-	}
 }
 
-void qGo::playTimeSound()
+void qGo::playTimeSound (bool force)
 {
-	if (setting->readBoolEntry("SOUND_TIME"))
-	{
+	if (force || setting->readBoolEntry ("SOUND_TIME"))
 		QSound::play (":/sounds/tictoc.wav");
-	}
 }
 
-void qGo::playSaySound()
+void qGo::playSaySound (bool force)
 {
-	if (setting->readBoolEntry("SOUND_SAY"))
-	{
+	if (force || setting->readBoolEntry ("SOUND_SAY"))
 		QSound::play (":/sounds/say.wav");
-	}
 }
 
-void qGo::playEnterSound()
+void qGo::playEnterSound (bool force)
 {
-	if (setting->readBoolEntry("SOUND_ENTER"))
-	{
+	if (force || setting->readBoolEntry ("SOUND_ENTER"))
 		QSound::play (":/sounds/enter.wav");
-	}
 }
 
-void qGo::playLeaveSound()
+void qGo::playLeaveSound (bool force)
 {
-	if (setting->readBoolEntry("SOUND_LEAVE"))
-	{
+	if (force || setting->readBoolEntry ("SOUND_LEAVE"))
 		QSound::play (":/sounds/leave.wav");
-	}
 }
 
-void qGo::playConnectSound()
+void qGo::playConnectSound (bool force)
 {
-	if (setting->readBoolEntry("SOUND_CONNECT"))
-	{
+	if (force || setting->readBoolEntry ("SOUND_CONNECT"))
 		QSound::play (":/sounds/connect.wav");
-	}
 }
 
-void qGo::playDisConnectSound()
+void qGo::playDisConnectSound (bool force)
 {
-	if (setting->readBoolEntry("SOUND_DISCONNECT"))
-	{
+	if (force || setting->readBoolEntry ("SOUND_DISCONNECT"))
 		QSound::play (":/sounds/connect.wav");
-	}
 }
 
 void help_about ()

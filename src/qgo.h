@@ -17,21 +17,20 @@ public:
 
 	qGo();
 	~qGo();
-	void openManual(const QUrl &);
-	int checkModified();
-	void updateAllBoardSettings();
-	void playClick();
-	void playTalkSound();
-	void playMatchSound();
-	void playGameEndSound();
-	void playPassSound();
-	void playTimeSound();
-	void playSaySound();
-	void playEnterSound();
-	void playStoneSound();
-	void playLeaveSound();
-	void playDisConnectSound();
-	void playConnectSound();
+	void openManual (const QUrl &);
+	int checkModified ();
+	void updateAllBoardSettings ();
+	void playTalkSound (bool = false);
+	void playMatchSound (bool = false);
+	void playGameEndSound (bool = false);
+	void playPassSound (bool = false);
+	void playTimeSound (bool = false);
+	void playSaySound (bool = false);
+	void playEnterSound (bool = false);
+	void playStoneSound (bool = false);
+	void playLeaveSound (bool = false);
+	void playDisConnectSound (bool = false);
+	void playConnectSound (bool = false);
 
 public slots:
 	void unused_quit();
