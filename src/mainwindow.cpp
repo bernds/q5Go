@@ -73,7 +73,7 @@ void an_id_model::populate_list (go_game_ptr game)
 			if (!found)
 				m_entries.emplace_back (id, score);
 		};
-	std::function<bool (game_state *)> f = [this, &f2] (game_state *st) -> bool
+	std::function<bool (game_state *)> f = [&f2] (game_state *st) -> bool
 		{
 			st->collect_analyzers (f2);
 			return true;

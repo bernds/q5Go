@@ -133,7 +133,7 @@ AnalyzeDialog::job::job (AnalyzeDialog *dlg, QString &title, go_game_ptr gr, int
 	  m_comments (comments)
 {
 	std::vector<game_state *> *q = &m_queue;
-	std::function<bool (game_state *)> f = [this, &q] (game_state *st) -> bool
+	std::function<bool (game_state *)> f = [&q] (game_state *st) -> bool
 		{
 			eval ev = st->best_eval ();
 			if (st->has_figure () && ev.visits > 0)

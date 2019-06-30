@@ -52,7 +52,7 @@ DBDialog::DBDialog (QWidget *parent)
 	connect (goPrevButton, &QPushButton::clicked,
 		 [this] (bool) { boardView->set_displayed (boardView->displayed ()->prev_move ()); update_buttons (); });
 
-	connect (dbConfButton, &QPushButton::clicked, [this] (bool) { client_window->dlgSetPreferences (6); });
+	connect (dbConfButton, &QPushButton::clicked, [] (bool) { client_window->dlgSetPreferences (6); });
 }
 
 DBDialog::~DBDialog ()

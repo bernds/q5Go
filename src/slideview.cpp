@@ -307,7 +307,7 @@ void SlideView::save_all (bool only_comments)
 	game_state *r = m_game->get_root ();
 	std::vector<game_state *> collection;
 	std::function<bool (game_state *)> fn
-		= [this, only_comments, &collection] (game_state *st) -> bool
+		= [only_comments, &collection] (game_state *st) -> bool
 		{
 			if (!only_comments || st->comment ().length () > 0)
 				collection.push_back (st);
