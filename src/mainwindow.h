@@ -200,7 +200,6 @@ public slots:
 	void slotEditFigure(bool);
 
 	void slotNavIntersection(bool);
-	void slotNavAutoplay(bool toggle);
 	void slotNavNthMove(bool);
 	void slotNavSwapVariations(bool);
 
@@ -258,7 +257,7 @@ protected:
 	QLabel *statusCoords, *statusMode, *statusTurn, *statusNav;
 
 	QAction *escapeFocus, *whatsThis;
-	QAction *navAutoplay, *navSwapVariations;
+	QAction *navSwapVariations;
 	QActionGroup *editGroup, *engineGroup;
 	QButtonGroup *scoreGroup;
 	QList<QAction *> engine_actions;

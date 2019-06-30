@@ -425,7 +425,6 @@ void PreferencesDialog::init_from_settings ()
 	lineWidenCheckBox->setChecked (setting->readBoolEntry("BOARD_LINEWIDEN"));
 
 	stoneSoundCheckBox->setChecked(setting->readBoolEntry("SOUND_STONE"));
-	autoplaySoundCheckBox->setChecked(setting->readBoolEntry("SOUND_AUTOPLAY"));
 	talkSoundCheckBox->setChecked(setting->readBoolEntry("SOUND_TALK"));
 	matchSoundCheckBox->setChecked(setting->readBoolEntry("SOUND_MATCH"));
 	passSoundCheckBox->setChecked(setting->readBoolEntry("SOUND_PASS"));
@@ -454,9 +453,7 @@ void PreferencesDialog::init_from_settings ()
 	coordSizeSlider->setValue(setting->readIntEntry("COORDS_SIZE"));
 	cursorCheckBox->setChecked(setting->readBoolEntry("CURSOR"));
 	tooltipsCheckBox->setChecked(!(setting->readBoolEntry("TOOLTIPS")));
-	timerComboBox->setCurrentIndex(setting->readIntEntry("TIMER_INTERVAL"));
 	BYTimeSpin->setValue(setting->readIntEntry("BY_TIMER"));
-	sgfTimeTagsCheckBox->setChecked(setting->readBoolEntry("SGF_TIME_TAGS"));
 	int sidebar = setting->readBoolEntry("SIDEBAR_LEFT") ? 0 : 1;
 	sidebarComboBox->setCurrentIndex(sidebar);
 	antiClickoCheckBox->setChecked(setting->readBoolEntry("ANTICLICKO"));
@@ -695,7 +692,6 @@ void PreferencesDialog::slot_apply()
 	setting->writeBoolEntry("BOARD_LINEWIDEN", lineWidenCheckBox->isChecked ());
 
 	setting->writeBoolEntry("SOUND_STONE", stoneSoundCheckBox->isChecked());
-	setting->writeBoolEntry("SOUND_AUTOPLAY", autoplaySoundCheckBox->isChecked());
 	setting->writeBoolEntry("SOUND_TALK", talkSoundCheckBox->isChecked());
 	setting->writeBoolEntry("SOUND_MATCH", matchSoundCheckBox->isChecked());
 	setting->writeBoolEntry("SOUND_GAMEEND", passSoundCheckBox->isChecked());
@@ -727,8 +723,6 @@ void PreferencesDialog::slot_apply()
 	//setting->writeBoolEntry("SMALL_STONES", smallerStonesCheckBox->isChecked());
 	setting->writeBoolEntry("TOOLTIPS", !(tooltipsCheckBox->isChecked()));
 	setting->writeIntEntry("BY_TIMER", BYTimeSpin->text().toInt());
-	setting->writeIntEntry("TIMER_INTERVAL", timerComboBox->currentIndex());
-	setting->writeBoolEntry("SGF_TIME_TAGS", sgfTimeTagsCheckBox->isChecked());
 	setting->writeBoolEntry("ANTICLICKO", antiClickoCheckBox->isChecked());
 	setting->writeBoolEntry("ANTICLICKO_HITBOX", hitboxCheckBox->isChecked());
 
@@ -1077,8 +1071,6 @@ void PreferencesDialog::on_soundButtonGroup_buttonClicked(QAbstractButton *cb)
 		qgo->playClick();
 	else if (cb->text() == tr("Pass"))
 		qgo->playPassSound();
-	else if (cb->text() == tr("Autoplay"))
-		qgo->playAutoPlayClick();
 	else if (cb->text().startsWith(tr("Time"), Qt::CaseInsensitive))
 		qgo->playTimeSound();
 	else if (cb->text() == tr("Talk"))

@@ -187,7 +187,7 @@
       <string/>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="InterfaceTabWidget">
       <attribute name="title">
@@ -673,17 +673,12 @@ Enable this box when you want to listen a clicking sound when playing a stone on
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QCheckBox" name="autoplaySoundCheckBox">
+           <widget class="QCheckBox" name="matchSoundCheckBox">
             <property name="toolTip">
-             <string>Play sound in autoplay mode</string>
-            </property>
-            <property name="whatsThis">
-             <string>Play sound in autoplay mode
-
-Play a sound when a stone is placed in autoplay mode.</string>
+             <string>Play sound for incoming match request</string>
             </property>
             <property name="text">
-             <string>Autoplay</string>
+             <string>Match</string>
             </property>
             <attribute name="buttonGroup">
              <string notr="true">soundButtonGroup</string>
@@ -756,19 +751,6 @@ Play a sound when a stone is placed in autoplay mode.</string>
            </widget>
           </item>
           <item row="4" column="0">
-           <widget class="QCheckBox" name="disConnectSoundCheckBox">
-            <property name="toolTip">
-             <string>Play sound when disconnected from server</string>
-            </property>
-            <property name="text">
-             <string>Disconnect</string>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">soundButtonGroup</string>
-            </attribute>
-           </widget>
-          </item>
-          <item row="4" column="1">
            <widget class="QCheckBox" name="connectSoundCheckBox">
             <property name="toolTip">
              <string>Play sound when connected to server</string>
@@ -781,20 +763,20 @@ Play a sound when a stone is placed in autoplay mode.</string>
             </attribute>
            </widget>
           </item>
-          <item row="5" column="0">
-           <widget class="QCheckBox" name="matchSoundCheckBox">
+          <item row="4" column="1">
+           <widget class="QCheckBox" name="disConnectSoundCheckBox">
             <property name="toolTip">
-             <string>Play sound for incoming match request</string>
+             <string>Play sound when disconnected from server</string>
             </property>
             <property name="text">
-             <string>Match</string>
+             <string>Disconnect</string>
             </property>
             <attribute name="buttonGroup">
              <string notr="true">soundButtonGroup</string>
             </attribute>
            </widget>
           </item>
-          <item row="6" column="0">
+          <item row="5" column="0">
            <widget class="QCheckBox" name="timeSoundCheckBox">
             <property name="toolTip">
              <string>Play sound for remaining seconds of own time</string>
@@ -811,7 +793,7 @@ You can set the warning time besides</string>
             </attribute>
            </widget>
           </item>
-          <item row="6" column="1">
+          <item row="5" column="1">
            <widget class="QSpinBox" name="BYTimeSpin">
             <property name="maximumSize">
              <size>
@@ -979,125 +961,6 @@ If your language is not supported, you might consider translating q5go. Please v
        <string>Board Window</string>
       </attribute>
       <layout class="QGridLayout">
-       <item row="1" column="2">
-        <widget class="QGroupBox" name="autoplayGroup">
-         <property name="title">
-          <string>Autoplay</string>
-         </property>
-         <layout class="QVBoxLayout">
-          <property name="spacing">
-           <number>0</number>
-          </property>
-          <property name="leftMargin">
-           <number>6</number>
-          </property>
-          <property name="topMargin">
-           <number>6</number>
-          </property>
-          <property name="rightMargin">
-           <number>6</number>
-          </property>
-          <property name="bottomMargin">
-           <number>6</number>
-          </property>
-          <item>
-           <layout class="QHBoxLayout">
-            <property name="spacing">
-             <number>6</number>
-            </property>
-            <property name="leftMargin">
-             <number>0</number>
-            </property>
-            <property name="topMargin">
-             <number>0</number>
-            </property>
-            <property name="rightMargin">
-             <number>0</number>
-            </property>
-            <property name="bottomMargin">
-             <number>0</number>
-            </property>
-            <item>
-             <widget class="QLabel" name="TextLabel2">
-              <property name="text">
-               <string>Interval:</string>
-              </property>
-              <property name="wordWrap">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QComboBox" name="timerComboBox">
-              <property name="focusPolicy">
-               <enum>Qt::TabFocus</enum>
-              </property>
-              <property name="toolTip">
-               <string>Time interval for autoplay</string>
-              </property>
-              <property name="whatsThis">
-               <string>Time interval for autoplay
-
-Delay between the moves in autoplay mode in seconds.</string>
-              </property>
-              <item>
-               <property name="text">
-                <string>0.1</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>0.5</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>1</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>2.5</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>5</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>7.5</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>10</string>
-               </property>
-              </item>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="sgfTimeTagsCheckBox">
-            <property name="toolTip">
-             <string>use time info of input file</string>
-            </property>
-            <property name="whatsThis">
-             <string>sgf time tags
-
-Use time info of input file. The autoplay speed is same as recorded.
-If not available then interval time is used.</string>
-            </property>
-            <property name="text">
-             <string>sgf time tags</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
        <item row="0" column="2">
         <widget class="QGroupBox" name="boardButtonGroup">
          <property name="sizePolicy">
@@ -1259,65 +1122,6 @@ Globally disables all tool tips that would show up if the mouse hovers over a GU
             </property>
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QGroupBox" name="antiClickoGroup">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string>Options for preventing misclicks in online games</string>
-         </property>
-         <property name="title">
-          <string>Online games</string>
-         </property>
-         <layout class="QVBoxLayout">
-          <property name="spacing">
-           <number>0</number>
-          </property>
-          <property name="leftMargin">
-           <number>6</number>
-          </property>
-          <property name="topMargin">
-           <number>6</number>
-          </property>
-          <property name="rightMargin">
-           <number>6</number>
-          </property>
-          <property name="bottomMargin">
-           <number>6</number>
-          </property>
-          <item>
-           <widget class="QCheckBox" name="antiClickoCheckBox">
-            <property name="toolTip">
-             <string>If set, moves are only played if the mouse button is held down for a brief period</string>
-            </property>
-            <property name="whatsThis">
-             <string>Anti Clicko
-
-Check the box for setting an anti clicko delay (1/4 second) for on line games.
-If you press to enter a move on the board, the move will not be acknowledged if the mouse is released too early.</string>
-            </property>
-            <property name="text">
-             <string>Anti clicko (1/4 second click latency)</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="hitboxCheckBox">
-            <property name="toolTip">
-             <string>If set, moves are only played when the click is not too close to an edge between positions</string>
-            </property>
-            <property name="text">
-             <string>Anti clicko (smaller hitbox)</string>
             </property>
            </widget>
           </item>
@@ -1635,6 +1439,65 @@ diagram pane shown:</string>
              </size>
             </property>
            </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QGroupBox" name="antiClickoGroup">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Options for preventing misclicks in online games</string>
+         </property>
+         <property name="title">
+          <string>Online games</string>
+         </property>
+         <layout class="QVBoxLayout">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>6</number>
+          </property>
+          <property name="topMargin">
+           <number>6</number>
+          </property>
+          <property name="rightMargin">
+           <number>6</number>
+          </property>
+          <property name="bottomMargin">
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="QCheckBox" name="antiClickoCheckBox">
+            <property name="toolTip">
+             <string>If set, moves are only played if the mouse button is held down for a brief period</string>
+            </property>
+            <property name="whatsThis">
+             <string>Anti Clicko
+
+Check the box for setting an anti clicko delay (1/4 second) for on line games.
+If you press to enter a move on the board, the move will not be acknowledged if the mouse is released too early.</string>
+            </property>
+            <property name="text">
+             <string>Anti clicko (1/4 second click latency)</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="hitboxCheckBox">
+            <property name="toolTip">
+             <string>If set, moves are only played when the click is not too close to an edge between positions</string>
+            </property>
+            <property name="text">
+             <string>Anti clicko (smaller hitbox)</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -4068,6 +3931,15 @@ up to :</string>
                 </color>
                </brush>
               </colorrole>
+              <colorrole role="PlaceholderText">
+               <brush brushstyle="NoBrush">
+                <color alpha="128">
+                 <red>0</red>
+                 <green>0</green>
+                 <blue>0</blue>
+                </color>
+               </brush>
+              </colorrole>
              </active>
              <inactive>
               <colorrole role="WindowText">
@@ -4214,6 +4086,15 @@ up to :</string>
                 </color>
                </brush>
               </colorrole>
+              <colorrole role="PlaceholderText">
+               <brush brushstyle="NoBrush">
+                <color alpha="128">
+                 <red>0</red>
+                 <green>0</green>
+                 <blue>0</blue>
+                </color>
+               </brush>
+              </colorrole>
              </inactive>
              <disabled>
               <colorrole role="WindowText">
@@ -4354,6 +4235,15 @@ up to :</string>
               <colorrole role="LinkVisited">
                <brush brushstyle="SolidPattern">
                 <color alpha="255">
+                 <red>0</red>
+                 <green>0</green>
+                 <blue>0</blue>
+                </color>
+               </brush>
+              </colorrole>
+              <colorrole role="PlaceholderText">
+               <brush brushstyle="NoBrush">
+                <color alpha="128">
                  <red>0</red>
                  <green>0</green>
                  <blue>0</blue>
@@ -4886,18 +4776,17 @@ Select one of the predefined hosts -- xxx -- and add a title to use it.</string>
   <tabstop>timeSpin_Nmatch</tabstop>
   <tabstop>automaticNegotiationCheckBox</tabstop>
   <tabstop>stoneSoundCheckBox</tabstop>
-  <tabstop>autoplaySoundCheckBox</tabstop>
-  <tabstop>saySoundCheckBox</tabstop>
-  <tabstop>enterSoundCheckBox</tabstop>
-  <tabstop>disConnectSoundCheckBox</tabstop>
-  <tabstop>matchSoundCheckBox</tabstop>
-  <tabstop>timeSoundCheckBox</tabstop>
-  <tabstop>BYTimeSpin</tabstop>
   <tabstop>passSoundCheckBox</tabstop>
+  <tabstop>matchSoundCheckBox</tabstop>
   <tabstop>gameEndSoundCheckBox</tabstop>
+  <tabstop>saySoundCheckBox</tabstop>
   <tabstop>talkSoundCheckBox</tabstop>
+  <tabstop>enterSoundCheckBox</tabstop>
   <tabstop>leaveSoundCheckBox</tabstop>
   <tabstop>connectSoundCheckBox</tabstop>
+  <tabstop>disConnectSoundCheckBox</tabstop>
+  <tabstop>timeSoundCheckBox</tabstop>
+  <tabstop>BYTimeSpin</tabstop>
   <tabstop>soundNormalCheckBox</tabstop>
   <tabstop>soundObserveCheckBox</tabstop>
   <tabstop>soundMatchCheckBox</tabstop>
@@ -4915,12 +4804,16 @@ Select one of the predefined hosts -- xxx -- and add a title to use it.</string>
   <tabstop>varSGFStyleComboBox</tabstop>
   <tabstop>varDiagsCheckBox</tabstop>
   <tabstop>coordsComboBox</tabstop>
+  <tabstop>coordSizeSlider</tabstop>
   <tabstop>sidebarComboBox</tabstop>
   <tabstop>cursorCheckBox</tabstop>
   <tabstop>tooltipsCheckBox</tabstop>
+  <tabstop>diagClearCheckBox</tabstop>
+  <tabstop>diagShowComboBox</tabstop>
+  <tabstop>gameTreeSizeSlider</tabstop>
+  <tabstop>diagHideCheckBox</tabstop>
   <tabstop>antiClickoCheckBox</tabstop>
-  <tabstop>timerComboBox</tabstop>
-  <tabstop>sgfTimeTagsCheckBox</tabstop>
+  <tabstop>hitboxCheckBox</tabstop>
   <tabstop>checkBox_Nmatch_White</tabstop>
   <tabstop>checkBox_Nmatch_Nigiri</tabstop>
   <tabstop>HandicapSpin_Nmatch</tabstop>

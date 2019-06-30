@@ -123,14 +123,6 @@ void qGo::playStoneSound()
 	idx += 1 + rand () % 4;
 }
 
-void qGo::playAutoPlayClick()
-{
-	if (setting->readBoolEntry("SOUND_AUTOPLAY"))
-	{
-		QSound::play (":/sounds/click.wav");
-	}
-}
-
 void qGo::playTalkSound()
 {
 	if (setting->readBoolEntry("SOUND_TALK"))

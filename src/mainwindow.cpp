@@ -427,7 +427,6 @@ MainWindow::~MainWindow()
 	// Actions
 	delete escapeFocus;
 	delete editGroup;
-	delete navAutoplay;
 	delete navSwapVariations;
 
 	delete whatsThis;
@@ -526,14 +525,6 @@ void MainWindow::initActions ()
 
 	connect (navNthMove, &QAction::triggered, this, &MainWindow::slotNavNthMove);
 	connect (navIntersection, &QAction::triggered, this, &MainWindow::slotNavIntersection);
-
-	navAutoplay = new QAction(tr("&Autoplay"), this);
-	navAutoplay->setCheckable (true);
-	navAutoplay->setShortcut (QKeySequence (Qt::CTRL + Qt::Key_A));
-	navAutoplay->setChecked(false);
-	navAutoplay->setStatusTip(tr("Start/Stop autoplaying current game"));
-	navAutoplay->setWhatsThis(tr("Autoplay\n\nStart/Stop autoplaying current game."));
-	connect(navAutoplay, &QAction::toggled, this, &MainWindow::slotNavAutoplay);
 
 	navSwapVariations = new QAction(tr("S&wap variations"), this);
 	navSwapVariations->setStatusTip(tr("Swap current move with previous variation"));
@@ -1127,32 +1118,6 @@ void MainWindow::slotNavNthMove(bool)
 #endif
 }
 
-void MainWindow::slotNavAutoplay(bool toggle)
-{
-#if 0
-	if (!toggle)
-	{
-		timer->stop();
-		statusBar()->showMessage(tr("Autoplay stopped."));
-	}
-	else
-	{
-		if (setting->readIntEntry("TIMER_INTERVAL") < 0)
-			setting->writeIntEntry("TIMER_INTERVAL", 0);
-		else if (setting->readIntEntry("TIMER_INTERVAL") > 10)
-			setting->writeIntEntry("TIMER_INTERVAL", 10);
-		// check if time info available from sgf file
-		if (setting->readBoolEntry("SGF_TIME_TAGS") && gfx_board->getGameData()->timeSystem != time_none)
-			// set time to 1 sec
-			timer->start(1000);
-		else
-			// set time interval as selected
-			timer->start(int(timerIntervals[setting->readIntEntry("TIMER_INTERVAL")] * 1000));
-		statusBar()->showMessage(tr("Autoplay started."));
-	}
-#endif
-}
-
 void MainWindow::slotNavSwapVariations(bool)
 {
 #if 0
@@ -1283,13 +1248,6 @@ void MainWindow::update_settings ()
 
 #if 0 // @@@
 	QToolTip::setEnabled(setting->readBoolEntry("TOOLTIPS"));
-	if (timer->isActive())
-	{
-		if (setting->readBoolEntry("SGF_TIME_TAGS") && gfx_board->getGameData()->timeSystem != time_none)
-			timer->changeInterval(1000);
-		else
-			timer->changeInterval(int(timerIntervals[setting->readIntEntry("TIMER_INVERVAL")] * 1000));
-	}
 #endif
 
 	gfx_board->update_prefs ();
@@ -1431,116 +1389,6 @@ void MainWindow::slotViewFullscreen(bool toggle)
 
 void MainWindow::slotTimerForward()
 {
-#if 0
-	static int eventCounter = 0;
-	static int moveHasTimeInfo = 0;
-	if (timer->isActive() && setting->readBoolEntry("SGF_TIME_TAGS") && gfx_board->getGameData()->timeSystem != time_none)
-	{
-		bool isBlacksTurn = gfx_board->to_move () == black;
-
-		// decrease time info
-		QString tmp;
-		int seconds;
-
-		if (isBlacksTurn)
-			tmp = normalTools->pb_timeBlack->text();
-		else
-			tmp = normalTools->pb_timeWhite->text();
-
-		int pos1 = 0;
-		int pos2;
-		seconds = 0;
-		switch (tmp.count(":"))
-		{
-			case 2:
-				// case: 0:23:56
-				pos1 = tmp.indexOf(":") ;
-				seconds += tmp.left(pos1).toInt()*3600;
-				pos1++;
-			case 1:
-				pos2 = tmp.lastIndexOf(":", -1);
-				seconds += tmp.mid(pos1, pos2-pos1).toInt()*60;
-				seconds += tmp.mid(pos2+1, 2).toInt();
-				break;
-		}
-		if (tmp.contains("-"))
-			seconds = -seconds;
-		seconds--;
-
-		int openMoves = ((pos1 = tmp.indexOf("/")) != -1 ? tmp.right(tmp.length() - pos1 - 1).toInt() : -1);
-
-#if 0 /* @@@ */
-		// set stones using sgf's time info
-		Move *m = gfx_board->getBoardHandler()->getTree()->getCurrent();
-
-		interfaceHandler->setTimes(isBlacksTurn, seconds, openMoves);
-
-		if (m->getMoveNumber() == 0) {
-			gfx_board->nextMove();
-			if (setting->readBoolEntry("SOUND_AUTOPLAY"))
-				setting->qgo->playAutoPlayClick();
-		} else if (m->son == 0)
-		{
-			timer->stop();
-			navAutoplay->setChecked(false);
-			statusBar()->showMessage(tr("Autoplay stopped."));
-		}
-		else if (!m->son->getTimeinfo())
-		{
-			// no time info at this node; use settings
-			int time = int(timerIntervals[setting->readIntEntry("TIMER_INTERVAL")]);
-			if (time > 1 && (++eventCounter%time == 0) || time <= 1) {
-				gfx_board->nextMove();
-				if (setting->readBoolEntry("SOUND_AUTOPLAY"))
-					setting->qgo->playAutoPlayClick();
-				/* @@@ if end reached.  */
-				{
-					timer->stop();
-					navAutoplay->setChecked(false);
-					statusBar()->showMessage(tr("Autoplay stopped."));
-				}
-			}
-
-			// indicate move to have time Info
-			moveHasTimeInfo = 2;
-		}
-		else if (m->son->getTimeLeft() >= seconds || moveHasTimeInfo > 0)
-		{
-			// check if byoyomi period changed
-			if (gfx_board->getGameData()->timeSystem == canadian &&
-				m->son->getOpenMoves() > openMoves+1 && moveHasTimeInfo == 0)
-			{
-				if (seconds > (m->son->getTimeLeft() - gfx_board->getGameData()->byoTime))
-					return;
-			}
-			gfx_board->nextMove();
-			if (setting->readBoolEntry("SOUND_AUTOPLAY"))
-				setting->qgo->playAutoPlayClick();
-
-			/* @@@ if end reached.  */
-			{
-				timer->stop();
-				navAutoplay->setChecked(false);
-				statusBar()->showMessage(tr("Autoplay stopped."));
-			}
-
-			if (moveHasTimeInfo > 0)
-				moveHasTimeInfo--;
-		}
-#endif
-	}
-	else if (!isActiveWindow() && timer->isActive())
-	{
-		timer->stop();
-		navAutoplay->setChecked(false);
-		statusBar()->showMessage(tr("Autoplay stopped."));
-	} else {
-		/* Autoplay here? @@@ */
-		gfx_board->nextMove();
-		if (setting->readBoolEntry("SOUND_AUTOPLAY"))
-			setting->qgo->playAutoPlayClick();
-	}
-#endif
 }
 
 void MainWindow::coords_changed (const QString &t1, const QString &t2)

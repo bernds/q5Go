@@ -90,8 +90,6 @@ Setting::Setting()
 	writeBoolEntry("SOUND_MATCH_BOARD", true);
 	writeBoolEntry("SOUND_COMPUTER", true);
 
-	writeIntEntry("TIMER_INTERVAL", 1);
-	writeBoolEntry("SGF_TIME_TAGS", true);
 	writeIntEntry("DEFAULT_SIZE", 19);
 	writeIntEntry("DEFAULT_TIME", 10);
 	writeIntEntry("DEFAULT_BY", 10);

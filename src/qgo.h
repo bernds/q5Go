@@ -21,7 +21,6 @@ public:
 	int checkModified();
 	void updateAllBoardSettings();
 	void playClick();
-	void playAutoPlayClick();
 	void playTalkSound();
 	void playMatchSound();
 	void playGameEndSound();
