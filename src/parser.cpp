@@ -521,7 +521,7 @@ InfoType Parser::cmd8(const QString &line)
 //	9     -- -- kou         6k*   0   0 23s  NR                                    
 //	9 SQ! -- -- GnuGo      11k*   0   0  5m  Estimation based on NNGS rating early 
 //	9   X -- -- Maurice     3k*   0   0 24s  2d at Hamilton Go Club, Canada; 3d in 
-InfoType Parser::cmd9(QString &line)
+InfoType Parser::cmd9(const QString &line)
 {
 	// status messages
 	if (line.contains("Set open to be"))
