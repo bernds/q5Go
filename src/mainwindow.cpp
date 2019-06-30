@@ -1001,7 +1001,7 @@ void MainWindow::slotEditDelete (bool)
 		throw std::logic_error ("should have updated to parent");
 #endif
 	const go_board &b = parent->get_board ();
-	setMoveData (*parent, b, m_gamemode);
+	setMoveData (*parent, b);
 	gfx_board->setModified ();
 }
 
@@ -2170,7 +2170,7 @@ void MainWindow::set_game_position (game_state *gs)
 	gfx_board->move_state (gs);
 }
 
-void MainWindow::setMoveData (game_state &gs, const go_board &b, GameMode mode)
+void MainWindow::setMoveData (game_state &gs, const go_board &b)
 {
 	bool is_root_node = gs.root_node_p ();
 	size_t brothers = gs.n_siblings ();
@@ -2179,6 +2179,7 @@ void MainWindow::setMoveData (game_state &gs, const go_board &b, GameMode mode)
 	int move_nr = gs.move_number ();
 	int var_nr = gs.var_number ();
 
+	GameMode mode = m_gamemode;
 	bool good_mode = mode == modeNormal || mode == modeObserve || mode == modeObserveGTP || mode == modeBatch;
 
 	navBackward->setEnabled (good_mode && !is_root_node);

@@ -1403,7 +1403,7 @@ void Board::sync_appearance (bool board_only)
 	const go_board &b = m_edit_board == nullptr ? m_displayed->get_board () : *m_edit_board;
 	m_board_win->recalc_scores (b);
 	if (!board_only) {
-		m_board_win->setMoveData (*m_displayed, b, m_game_mode);
+		m_board_win->setMoveData (*m_displayed, b);
 		m_board_win->update_game_tree ();
 	}
 }
@@ -2135,7 +2135,7 @@ stone_color Board::swap_edit_to_move ()
 		return m_edit_to_move = m_edit_to_move == black ? white : black;
 	stone_color newcol = m_displayed->to_move () == black ? white : black;
 	m_displayed->set_to_move (newcol);
-	m_board_win->setMoveData (*m_displayed, m_displayed->get_board (), m_game_mode);
+	m_board_win->setMoveData (*m_displayed, m_displayed->get_board ());
 	return newcol;
 }
 

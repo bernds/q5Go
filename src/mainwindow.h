@@ -111,10 +111,10 @@ public:
 	void defaultLandscapeLayout ();
 
 	void set_observer_model (QStandardItemModel *m);
-	bool doSave(QString fileName, bool force=false);
+	bool doSave (QString fileName, bool force=false);
 	void setGameMode (GameMode);
 
-	void setMoveData(game_state &, const go_board &, GameMode);
+	void setMoveData (game_state &, const go_board &);
 	void mark_dead_external (int x, int y) { gfx_board->mark_dead_external (x, y); }
 	void init_game_record (go_game_ptr);
 	/* Called when the record was changed by some external source (say, a Go server
