@@ -429,7 +429,7 @@ InfoType Parser::cmd7(const QString &line)
 	aGame->running = true;
 	aGame->oneColorGo = false;
 
-	emit signal_game(aGame);
+	client_window->server_add_game (aGame);
 	emit signal_gamemove(aGame);
 
 	return GAME7;
@@ -831,7 +831,7 @@ InfoType Parser::cmd9(QString &line)
 		aGame->nr = "@";
 		aGame->running = false;
 
-		emit signal_game(aGame);
+		client_window->server_remove_game (aGame);
 	}
 	// 9 Game 22: frosla vs frosla has adjourned.
 	else if (line.contains("has adjourned"))
@@ -843,7 +843,7 @@ InfoType Parser::cmd9(QString &line)
 		// for information
 		aGame->Sz = "has adjourned.";
 
-		emit signal_game(aGame);
+		client_window->server_remove_game (aGame);
 		m_qgoif->game_end (aGame->nr, "has adjourned.");
 	}
 	// 9 Removing game 30 from observation list.
@@ -1446,7 +1446,7 @@ InfoType Parser::cmd21(const QString &line)
 			aGame->H = QString::null;
 			aGame->running = true;
 
-			emit signal_game(aGame);
+			client_window->server_add_game (aGame);
 			emit signal_gamemove(aGame);
 			return GAME;
 		}
@@ -1476,7 +1476,7 @@ InfoType Parser::cmd21(const QString &line)
 			else if (aGame->Sz.indexOf(":") != -1)
 				aGame->Sz.remove(0,2);
 
-			emit signal_game(aGame);
+			client_window->server_remove_game (aGame);
 			m_qgoif->game_end (aGame->nr, aGame->Sz);
 			return GAME;
 		}
@@ -1518,7 +1518,7 @@ InfoType Parser::cmd21(const QString &line)
 			// WING doesn't send 'create match' msg in case of teaching game
 			emit signal_matchcreate(aGame->nr, aGame->bname);
 
-		emit signal_game(aGame);
+		client_window->server_add_game (aGame);
 		return GAME;
 	}
 	// !xxxx!: a game anyone ?

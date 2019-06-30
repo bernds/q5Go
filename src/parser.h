@@ -28,7 +28,6 @@ signals:
 	// emit if info is found
 	void signal_player(Player*, bool);
   	void signal_statsPlayer(Player*);
-	void signal_game(Game*);
 	void signal_gamemove(Game*);
 	void signal_move(GameInfo*);
 	void signal_message(QString);

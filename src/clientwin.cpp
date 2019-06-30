@@ -180,7 +180,6 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	parser = new Parser(this, qgoif);
 	connect(parser, &Parser::signal_player, this, &ClientWindow::slot_player);
 	connect(parser, &Parser::signal_statsPlayer, this, &ClientWindow::slot_statsPlayer);
-	connect(parser, &Parser::signal_game, this, &ClientWindow::slot_game);
 	connect(parser, &Parser::signal_message, this, &ClientWindow::slot_message);
 	connect(parser, &Parser::signal_svname, this, &ClientWindow::slot_svname);
 	connect(parser, &Parser::signal_accname, this, &ClientWindow::slot_accname);

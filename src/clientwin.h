@@ -65,6 +65,10 @@ public:
 	Engine *analysis_engine (int boardsize);
 	QList<Engine> analysis_engines (int boardsize);
 
+	/* Called from parser.cpp.  */
+	void server_add_game (Game*);
+	void server_remove_game (Game*);
+
 signals:
 	void signal_cmdsent (const QString&);
 	void signal_move (Game*);
@@ -105,7 +109,6 @@ public slots:
 	void sendTextToApp (const QString&);
 	// parser:
 	void slot_player (Player*, bool);
-	void slot_game (Game*);
   	void slot_message (QString);
 	void slot_svname (GSName&);
 	void slot_accname (QString&);

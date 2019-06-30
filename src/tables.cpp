@@ -98,181 +98,182 @@ QString ClientWindow::getPlayerExcludeListEntry(QString player)
 	return QString::null;
 }
 
-// take a new game from parser
-void ClientWindow::slot_game(Game* g)
+void ClientWindow::server_add_game (Game* g)
 {
 	// insert into ListView
-	QTreeWidgetItemIterator lv(ListView_games);
+	QTreeWidgetItemIterator lv (ListView_games);
 
-	if (g->running)
+	bool found = false;
+	GamesTableItem *lvi_mem = nullptr;
+
+	// check if game already exists
+	if (!playerListEmpty)
 	{
-		bool found = false;
-		GamesTableItem *lvi_mem = nullptr;
-
-		// check if game already exists
-		if (!playerListEmpty)
+		QTreeWidgetItemIterator lvii = lv;
+		for (GamesTableItem *lvi; (lvi = static_cast<GamesTableItem*>(*lvii)) && !found;)
 		{
-			QTreeWidgetItemIterator lvii = lv;
-			for (GamesTableItem *lvi; (lvi = static_cast<GamesTableItem*>(*lvii)) && !found;)
+			lvii++;
+			// compare game id
+			if (lvi->text(0) == g->nr)
 			{
-				lvii++;
-				// compare game id
-				if (lvi->text(0) == g->nr)
+				found = true;
+				lvi_mem = lvi;
+			}
+		}
+	}
+	else if (g->H.isEmpty() && !myAccount->num_games)
+	{
+		// skip games until initial table has loaded
+		qDebug() << "game skipped because no init table";
+		return;
+	}
+
+	QString excludeMark = "";
+	QString myMark = "B";
+
+	// check if exclude entry is done later
+	if (!g->H.isEmpty()) //g->status.length() > 1)
+	{
+		QString emw;
+		QString emb;
+
+		// no: do it now
+		emw = getPlayerExcludeListEntry(g->wname);
+		emb = getPlayerExcludeListEntry(g->bname);
+
+		// ensure that my game is listed first
+		if (emw == "M" || emb == "M")
+		{
+			myMark = "A";
+			excludeMark = "M";
+
+			// I'm playing, thus I'm open, except teaching games
+			if (emw != "M" || emb != "M")
+			{
+				// checkbox open
+				slot_checkbox(0, true);
+			}
+		}
+		else if (emw == "W" || emb == "W")
+		{
+			excludeMark = "W";
+		}
+	}
+
+	// update player info if this is not a 'who'-result or if it's me
+	if (g->H.isEmpty() || myMark == "A") //g->status.length() < 2)
+	{
+		QTreeWidgetItemIterator lvp(ListView_players);
+		PlayerTableItem *lvpi;
+		int pl_found = 0;
+
+		// look for players in playerlist
+		for (; (lvpi = static_cast<PlayerTableItem *>(*lvp)) && pl_found < 2;) {
+			// check if names are identical
+			if (lvpi->text(1) == g->wname || lvpi->text(1) == g->bname) {
+				pl_found++;
+				Player pl = lvpi->get_player ();
+				pl.play_str = g->nr;
+				lvpi->update_player (pl);
+
+				// check if players has a rank
+				if (g->wrank == "??" || g->brank == "??")
 				{
-					found = true;
-					lvi_mem = lvi;
+					// no rank given in case of continued game -> set rank in games table
+					if (lvpi->text(1) == g->wname)
+						g->wrank = lvpi->text(2);
+
+					// no else case! bplayer could be identical to wplayer!
+					if (lvpi->text(1) == g->bname)
+						g->brank = lvpi->text(2);
 				}
 			}
+
+			lvp++;
 		}
-		else if (g->H.isEmpty() && !myAccount->num_games)
-		{
-			// skip games until initial table has loaded
-			qDebug() << "game skipped because no init table";
-			return;
-		}
-
-		QString excludeMark = "";
-		QString myMark = "B";
-
-		// check if exclude entry is done later
-		if (!g->H.isEmpty()) //g->status.length() > 1)
-		{
-			QString emw;
-			QString emb;
-
-			// no: do it now
-			emw = getPlayerExcludeListEntry(g->wname);
-			emb = getPlayerExcludeListEntry(g->bname);
-
-			// ensure that my game is listed first
-			if (emw == "M" || emb == "M")
-			{
-				myMark = "A";
-				excludeMark = "M";
-
-				// I'm playing, thus I'm open, except teaching games
-				if (emw != "M" || emb != "M")
-				{
-					// checkbox open
-					slot_checkbox(0, true);
-				}
-			}
-			else if (emw == "W" || emb == "W")
-			{
-				excludeMark = "W";
-			}
-		}
-
-		// update player info if this is not a 'who'-result or if it's me
-		if (g->H.isEmpty() || myMark == "A") //g->status.length() < 2)
-		{
-			QTreeWidgetItemIterator lvp(ListView_players);
-			PlayerTableItem *lvpi;
-			int pl_found = 0;
-
-			// look for players in playerlist
-			for (; (lvpi = static_cast<PlayerTableItem *>(*lvp)) && pl_found < 2;) {
-				// check if names are identical
-				if (lvpi->text(1) == g->wname || lvpi->text(1) == g->bname) {
-					pl_found++;
-					Player pl = lvpi->get_player ();
-					pl.play_str = g->nr;
-					lvpi->update_player (pl);
-
-					// check if players has a rank
-					if (g->wrank == "??" || g->brank == "??")
-					{
-						// no rank given in case of continued game -> set rank in games table
-						if (lvpi->text(1) == g->wname)
-							g->wrank = lvpi->text(2);
-
-						// no else case! bplayer could be identical to wplayer!
-						if (lvpi->text(1) == g->bname)
-							g->brank = lvpi->text(2);
-					}
-				}
-
-				lvp++;
-			}
 
 //			ListView_games->sortItems (3, Qt::AscendingOrder);
-		}
-		QString rkw = myMark + rkToKey(g->wrank) + g->wname.toLower() + ":" + excludeMark;
-		QString rkb = myMark + rkToKey(g->brank) + g->bname.toLower() + ":" + excludeMark;
-		g->sort_rk_w = rkw;
-		g->sort_rk_b = rkb;
-		if (found) {
-			lvi_mem->update_game (*g);
-		} else {
-			// from GAMES command or game info{...}
-			new GamesTableItem(ListView_games, *g);
-
-			// increase number of games
-			myAccount->num_games++;
-			statusGames->setText(" G: " + QString::number(myAccount->num_games) + " / " + QString::number(myAccount->num_observedgames) + " ");
-		}
-
+	}
+	QString rkw = myMark + rkToKey(g->wrank) + g->wname.toLower() + ":" + excludeMark;
+	QString rkb = myMark + rkToKey(g->brank) + g->bname.toLower() + ":" + excludeMark;
+	g->sort_rk_w = rkw;
+	g->sort_rk_b = rkb;
+	if (found) {
+		lvi_mem->update_game (*g);
 	} else {
-		// from game info {...}
-		bool found = false;
-		QString game_id;
+		// from GAMES command or game info{...}
+		new GamesTableItem(ListView_games, *g);
 
-		if (g->nr != "@") {
-			for (QTreeWidgetItem *lvi; (lvi = *lv) && !found;)
+		// increase number of games
+		myAccount->num_games++;
+		statusGames->setText(" G: " + QString::number(myAccount->num_games) + " / " + QString::number(myAccount->num_observedgames) + " ");
+	}
+}
+
+
+void ClientWindow::server_remove_game (Game* g)
+{
+	QTreeWidgetItemIterator lv (ListView_games);
+
+	// from game info {...}
+	bool found = false;
+	QString game_id;
+
+	if (g->nr != "@") {
+		for (QTreeWidgetItem *lvi; (lvi = *lv) && !found;)
+		{
+			lv++;
+			// compare game id
+			if (lvi->text(0) == g->nr)
 			{
 				lv++;
-				// compare game id
-				if (lvi->text(0) == g->nr)
-				{
-					lv++;
-					delete lvi;
-					found = true;
-				}
-			}
-
-			// used for player update below
-			game_id = g->nr;
-		} else {
-			for (QTreeWidgetItem *lvi; (lvi = *lv) && !found;) {
-				lv++;
-				// look for name
-				if (lvi->text(1) == myAccount->acc_name ||
-				    lvi->text(3) == myAccount->acc_name)
-				{
-					// used for player update below
-					game_id = lvi->text(0);
-
-					lv++;
-					delete lvi;
-					found = true;
-				}
+				delete lvi;
+				found = true;
 			}
 		}
 
-		if (!found)
-			qWarning("game not found");
-		else
-		{
-			// decrease number of games
-			myAccount->num_games--;
-			statusGames->setText(" G: " + QString::number(myAccount->num_games) + " / " + QString::number(myAccount->num_observedgames) + " ");
+		// used for player update below
+		game_id = g->nr;
+	} else {
+		for (QTreeWidgetItem *lvi; (lvi = *lv) && !found;) {
+			lv++;
+			// look for name
+			if (lvi->text(1) == myAccount->acc_name ||
+			    lvi->text(3) == myAccount->acc_name)
+			{
+				// used for player update below
+				game_id = lvi->text(0);
 
-			QTreeWidgetItemIterator lvp(ListView_players);
-			PlayerTableItem *lvpi;
-			int pl_found = 0;
-
-			// look for players in playerlist
-			for (; (lvpi = static_cast<PlayerTableItem *>(*lvp)) && pl_found < 2;) {
-				// check if numbers are identical
-				if (lvpi->text(3) == game_id) {
-					pl_found++;
-					Player pl = lvpi->get_player ();
-					pl.play_str = "-";
-					lvpi->update_player (pl);
-				}
-
-				lvp++;
+				lv++;
+				delete lvi;
+				found = true;
 			}
+		}
+	}
+
+	if (!found)
+		qWarning("game not found");
+	else
+	{
+		// decrease number of games
+		myAccount->num_games--;
+		statusGames->setText(" G: " + QString::number(myAccount->num_games) + " / " + QString::number(myAccount->num_observedgames) + " ");
+
+		QTreeWidgetItemIterator lvp(ListView_players);
+		PlayerTableItem *lvpi;
+		int pl_found = 0;
+
+		// look for players in playerlist
+		for (; (lvpi = static_cast<PlayerTableItem *>(*lvp)) && pl_found < 2;) {
+			// check if numbers are identical
+			if (lvpi->text(3) == game_id) {
+				pl_found++;
+				Player pl = lvpi->get_player ();
+				pl.play_str = "-";
+				lvpi->update_player (pl);
+			}
+
+			lvp++;
 		}
 	}
 }
