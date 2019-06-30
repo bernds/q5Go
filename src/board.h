@@ -269,7 +269,7 @@ public:
 	}
 
 	stone_color swap_edit_to_move ();
-	void deleteNode();
+
 	void doPass();
 	bool doCountDone();
 

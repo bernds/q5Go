@@ -981,7 +981,7 @@ void qGoBoard::remote_undo (const QString &)
 	if (!m_scoring)
 	{
 		dec_mv_counter();
-		win->getBoard ()->deleteNode ();
+		win->delete_last_move ();
 		return;
 	}
 

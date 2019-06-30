@@ -1434,20 +1434,6 @@ void Board::set_analyzer_id (analyzer_id id)
 		sync_appearance (true);
 }
 
-void Board::deleteNode()
-{
-	game_state *st = m_displayed;
-	if (st->root_node_p ())
-		return;
-	game_state *parent = st->prev_move ();
-	delete st;
-	if (m_displayed != parent)
-		throw std::logic_error ("should have updated to parent");
-	const go_board &b = m_displayed->get_board ();
-	m_board_win->setMoveData (*m_displayed, b, m_game_mode);
-	setModified ();
-}
-
 void Board::leaveEvent(QEvent*)
 {
 	curX = curY = -1;

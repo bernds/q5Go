@@ -988,9 +988,21 @@ void MainWindow::slotFileExportPicClipB(bool)
 	QApplication::clipboard()->setPixmap (gfx_board->grabPicture ());
 }
 
-void MainWindow::slotEditDelete(bool)
+void MainWindow::slotEditDelete (bool)
 {
-	gfx_board->deleteNode();
+	game_state *st = gfx_board->displayed ();
+	if (st->root_node_p ())
+		return;
+	game_state *parent = st->prev_move ();
+	delete st;
+#if 1
+	game_state *new_st = gfx_board->displayed ();
+	if (new_st != parent)
+		throw std::logic_error ("should have updated to parent");
+#endif
+	const go_board &b = parent->get_board ();
+	setMoveData (*parent, b, m_gamemode);
+	gfx_board->setModified ();
 }
 
 void MainWindow::slotEditRectSelect(bool on)
