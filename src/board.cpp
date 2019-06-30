@@ -2180,17 +2180,6 @@ QPixmap BoardView::grabPicture()
 	return grab (QRect (minx, miny, maxx - minx, maxy - miny));
 }
 
-// button "Pass" clicked
-void Board::doPass()
-{
-	if (!player_to_move_p ())
-		return;
-	if (m_game_mode == modeNormal || m_game_mode == modeComputer) {
-		game_state *st = m_displayed->add_child_pass ();
-		m_displayed->transfer_observers (st);
-	}
-}
-
 void Board::navIntersection()
 {
 	setCursor(Qt::PointingHandCursor);

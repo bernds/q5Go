@@ -2369,10 +2369,15 @@ game_state *MainWindow::player_move (int x, int y)
 	return st;
 }
 
-void MainWindow::doPass()
+void MainWindow::doPass ()
 {
-	gfx_board->doPass();
-	emit signal_pass();
+	if (!gfx_board->player_to_move_p ())
+		return;
+	if (m_gamemode == modeNormal || m_gamemode == modeComputer) {
+		game_state *st = gfx_board->displayed ();
+		game_state *st_new = st->add_child_pass ();
+		st->transfer_observers (st_new);
+	}
 }
 
 void MainWindow::doRealScore (bool toggle)

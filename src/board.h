@@ -270,7 +270,6 @@ public:
 
 	stone_color swap_edit_to_move ();
 
-	void doPass();
 	bool doCountDone();
 
 	void set_player_colors (bool w, bool b) { m_player_is_w = w; m_player_is_b = b; }
