@@ -5,6 +5,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <utility>
+
 #include <qlayout.h>
 #include <QGridLayout>
 #include <QLabel>
@@ -128,6 +130,8 @@ public:
 	void append_comment (const QString &);
 	void refresh_comment ();
 
+	typedef std::pair<game_state *, bool> move_result;
+	move_result make_move (game_state *, int x, int y);
 	void update_analysis (analyzer);
 	void update_game_tree ();
 	void update_figures ();
@@ -262,10 +266,11 @@ protected:
 	bool isFullScreen;
 
 public:
-	/* Called when the user performed a board action.  Just plays an
-	   (optional) sound, but is used in derived classes to send a GTP
-	   command or a message to the server.  */
-	virtual void player_move (stone_color, int, int);
+	/* Called when the user performed a board action.  player_move is
+	   responsible for actually adding the move to the game.  Derived
+	   classes override it to also send a GTP command or a message to
+	   the server.  */
+	virtual game_state *player_move (int, int);
 	virtual void player_toggle_dead (int, int) { }
 };
 
@@ -312,7 +317,7 @@ public:
 	~MainWindow_GTP ();
 
 	/* Virtuals from MainWindow.  */
-	virtual void player_move (stone_color, int x, int y) override;
+	virtual game_state *player_move (int x, int y) override;
 	virtual void doPass() override;
 	// virtual void doUndo();
 	virtual void doResign() override;

@@ -479,6 +479,7 @@ public:
 				return it;
 		return add_child_move_nochecks (new_board, to_move, x, y, am);
 	}
+
 	game_state *add_child_move (int x, int y, stone_color to_move, add_mode am = add_mode::set_active)
 	{
 		if (!valid_move_p (x, y, to_move))
@@ -486,11 +487,6 @@ public:
 
 		go_board new_board (m_board, mark::none);
 		new_board.add_stone (x, y, to_move);
-		/* Check for ko.  */
-		if (m_parent != nullptr) {
-			if (m_parent->m_board.position_equal_p (new_board))
-				return nullptr;
-		}
 		if (am != add_mode::set_main)
 			for (auto &it: m_children)
 				if (it->was_move_p () && it->m_board.position_equal_p (new_board))
@@ -502,6 +498,7 @@ public:
 	{
 		return add_child_move (x, y, m_to_move);
 	}
+
 	game_state *add_child_pass_nochecks (const go_board &new_board, add_mode am)
 	{
 		m_visual_ok = false;

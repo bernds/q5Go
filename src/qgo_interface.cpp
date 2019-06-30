@@ -34,21 +34,24 @@ public:
 			qGoBoard *connector, bool playing_w, bool playing_b, GameMode mode);
 	~MainWindow_IGS ();
 
-	virtual void player_move (stone_color col, int x, int y)
+	virtual game_state *player_move (int x, int y) override
 	{
-		MainWindow::player_move (col, x, y);
+		game_state *st = MainWindow::player_move (x, y);
+		if (st == nullptr)
+			return st;
 		m_connector->move_played (x, y);
+		return st;
 	}
-	virtual void player_toggle_dead (int x, int y)
+	virtual void player_toggle_dead (int x, int y) override
 	{
 		m_connector->player_toggle_dead (x, y);
 	}
-	virtual void doPass()
+	virtual void doPass () override
 	{
 		if (gfx_board->player_to_move_p ())
 			m_connector->slot_doPass ();
 	}
-	virtual void doResign()
+	virtual void doResign () override
 	{
 		m_connector->slot_doResign ();
 	}

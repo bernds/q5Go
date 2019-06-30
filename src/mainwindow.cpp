@@ -2318,10 +2318,43 @@ void MainWindow::doEdit()
 	slot_editBoardInNewWindow(false);
 }
 
-void MainWindow::player_move (stone_color, int, int)
+/* Try to make a move and return status: the game state for the position after the
+   move, and a boolean to indicate if the position was added (true) or if it existed
+   before (false).  */
+MainWindow::move_result MainWindow::make_move (game_state *from, int x, int y)
 {
+	stone_color col = from->to_move ();
+	if (!from->valid_move_p (x, y, col))
+		return std::make_pair (nullptr, false);
+	for (game_state *c: from->children ())
+		if (c->was_move_p () && c->get_move_x () == x && c->get_move_y () == y) {
+			from->transfer_observers (c);
+			return std::make_pair (c, false);
+		}
+
+	/* Construct the new position and check for ko.  */
+	go_board new_board (from->get_board (), mark::none);
+	new_board.add_stone (x, y, col);
+	game_state *from_parent = from->prev_move ();
+	if (from_parent != nullptr && from_parent->get_board ().position_equal_p (new_board))
+		return std::make_pair (nullptr, false);
+
+	gfx_board->setModified ();
+	game_state *st_new = from->add_child_move (new_board, col, x, y);
+	from->transfer_observers (st_new);
+	return std::make_pair (st_new, true);
+}
+
+game_state *MainWindow::player_move (int x, int y)
+{
+	game_state *st = gfx_board->displayed ();
+	bool existed;
+	std::tie (st, existed) = make_move (st, x, y);
+	if (st == nullptr)
+		return st;
 	if (local_stone_sound)
 		qgo->playStoneSound ();
+	return st;
 }
 
 void MainWindow::doPass()
@@ -2532,7 +2565,9 @@ void MainWindow_GTP::gtp_played_move (GTP_Process *p, int x, int y)
 		qgo->playStoneSound ();
 	stone_color col = m_game_position->to_move ();
 	game_state *st = m_game_position;
-	game_state *st_new = st->add_child_move (x, y);
+	game_state *st_new;
+	bool existed;
+	std::tie (st_new, existed) = make_move (st, x, y);
 	if (st_new == nullptr) {
 		QMessageBox mb (QMessageBox::Information, tr ("Invalid move by the engine"),
 				tr ("An invalid move was played by the engine, game terminated."),
@@ -2714,17 +2749,22 @@ void MainWindow_GTP::gtp_exited (GTP_Process *)
 	}
 }
 
-void MainWindow_GTP::player_move (stone_color col, int x, int y)
+game_state *MainWindow_GTP::player_move (int x, int y)
 {
-	MainWindow::player_move (col, x, y);
+	game_state *new_st = MainWindow::player_move (x, y);
+	if (new_st == nullptr)
+		return new_st;
 
 	if (game_mode () != modeComputer)
-		return;
+		return new_st;
 
-	m_game_position = gfx_board->displayed ();
+	m_game_position = new_st;
+	stone_color col = new_st->get_move_color ();
+
 	auto *gtp = single_engine ();
 	gtp->played_move (col, x, y);
 	gtp->request_move (col == black ? white : black);
+	return new_st;
 }
 
 

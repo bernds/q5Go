@@ -1688,16 +1688,7 @@ void Board::play_one_move (int x, int y)
 	if (!player_to_move_p ())
 		return;
 
-	game_state *st = m_displayed;
-	stone_color col = st->to_move ();
-
-	game_state *st_new = st->add_child_move (x, y);
-	if (st_new == nullptr)
-		/* Invalid move.  */
-		return;
-	setModified();
-	st->transfer_observers (st_new);
-	m_board_win->player_move (col, x, y);
+	m_board_win->player_move (x, y);
 }
 
 void Board::mouseReleaseEvent(QMouseEvent* e)
