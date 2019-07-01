@@ -210,7 +210,6 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	connect(parser, &Parser::signal_undo, qgoif, &qGoIF::slot_undo);
 	connect(parser, &Parser::signal_result, qgoif, &qGoIF::slot_result);
 	connect(parser, &Parser::signal_requestDialog, qgoif, &qGoIF::slot_requestDialog);
-	connect(qgoif, &qGoIF::signal_sendcommand, this, &ClientWindow::slot_sendcommand);
 
 	connect(parser, &Parser::signal_timeAdded, qgoif, &qGoIF::slot_timeAdded);
 	//connect(parser, &Parser::signal_undoRequest, qgoif, &qGoIF::slot_undoRequest);
@@ -828,8 +827,8 @@ int ClientWindow::sendTextFromApp(const QString &txt, bool localecho)
 }
 
 // show command, send it, and tell parser
-void ClientWindow::sendcommand(const QString &cmd, bool localecho)
- {
+void ClientWindow::sendcommand (const QString &cmd, bool localecho)
+{
 	QString testcmd = cmd;
 
 	// for testing
@@ -1365,7 +1364,6 @@ void ClientWindow::slot_matchrequest(const QString &line, bool myrequest)
 			connect (parser, &Parser::signal_suggest, dlg, &GameDialog::slot_suggest);
 		}
 
-		connect (dlg, &GameDialog::signal_sendcommand, this, &ClientWindow::slot_sendcommand);
 		connect (dlg, &GameDialog::signal_removeDialog, this, &ClientWindow::slot_removeMatchDialog);
 
 		connect (parser, &Parser::signal_matchcreate, dlg, &GameDialog::slot_matchcreate);

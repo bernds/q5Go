@@ -6,6 +6,7 @@
 #include "misc.h"
 #include "defines.h"
 #include "komispinbox.h"
+#include "clientwin.h"
 #include "gamedialog.h"
 
 GameDialog::GameDialog(QWidget* parent, GSName gs, const QString &name)
@@ -37,7 +38,7 @@ GameDialog::~GameDialog()
 
 void GameDialog::slot_stats_opponent()
 {
-	emit signal_sendcommand("stats " + playerOpponentEdit->text(), false);
+	client_window->sendcommand ("stats " + playerOpponentEdit->text(), false);
 }
 
 void GameDialog::swap_colors()
@@ -62,7 +63,7 @@ void GameDialog::slot_pbsuggest()
 		if (!have_suggestdata)
 		{
 			// no suggestdata -> send suggest cmd
-			emit signal_sendcommand("suggest " + playerOpponentEdit->text(), false);
+			client_window->sendcommand ("suggest " + playerOpponentEdit->text(), false);
 		}
 		break;
 
@@ -148,7 +149,7 @@ void GameDialog::slot_suggest(const QString &pw, const QString&pb, const QString
 	else if ((playerOpponentEdit->text() != pw && pw != "you") || (myName != pw && pb != "you"))
 	{
 		// wrong suggest info
-		emit signal_sendcommand("suggest " + playerOpponentEdit->text(), false);
+		client_window->sendcommand ("suggest " + playerOpponentEdit->text(), false);
 	}
 
 	// check if size is ok
@@ -194,7 +195,7 @@ void GameDialog::slot_opponentopen(const QString &opp)
 	if (ComboBox_free->currentText() == tr("yes"))
 		send += ", free";
 
-	emit signal_sendcommand(send, false);
+	client_window->sendcommand (send, false);
 }
 
 void GameDialog::slot_offer(bool active)
@@ -207,7 +208,7 @@ qDebug("#### GameDialog::slot_offer()");
 	// if both names are identical -> teaching game
 	if (playerOpponentEdit->text() == myName)
 	{
-		emit signal_sendcommand("teach " + boardSizeSpin->text(), false);
+		client_window->sendcommand ("teach " + boardSizeSpin->text(), false);
 		// prepare for future use...
 		buttonOffer->setChecked(false);
 		buttonDecline->setDisabled(true);
@@ -227,7 +228,7 @@ qDebug("#### GameDialog::slot_offer()");
 
 	if (is_nmatch)
 		//<nmatch yfh2test W 3 19 60 600 25 0 0 0>
-		emit signal_sendcommand("nmatch " +
+		client_window->sendcommand ("nmatch " +
 					playerOpponentEdit->text() +
 					color + //" W " +
 					handicapSpin->text() + " " +
@@ -236,7 +237,7 @@ qDebug("#### GameDialog::slot_offer()");
 					QString::number(byoTimeSpin->value() * 60) +
 					" 25 0 0 0", true); // carefull : 25 stones hard coded : bad
 	else
-		emit signal_sendcommand("match " + playerOpponentEdit->text() + color + boardSizeSpin->text() + " " + timeSpin->text() + " " + byoTimeSpin->text(), false);
+		client_window->sendcommand ("match " + playerOpponentEdit->text() + color + boardSizeSpin->text() + " " + timeSpin->text() + " " + byoTimeSpin->text(), false);
 
 	switch (gsname)
 	{
@@ -264,11 +265,11 @@ void GameDialog::slot_decline()
 	{
 		// match has been offered
 		// !! there seem to be not "setChecked" in the code (apart init, but this should not reach this code)
-		emit signal_sendcommand("withdraw", false);
+		client_window->sendcommand ("withdraw", false);
 		buttonOffer->setChecked(false);
 		buttonOffer->setText(tr("Offer"));
 	}
-	emit signal_sendcommand("decline " + opponent, false);
+	client_window->sendcommand ("decline " + opponent, false);
 	emit signal_removeDialog(opponent);
 
 }
@@ -276,7 +277,7 @@ void GameDialog::slot_decline()
 void GameDialog::slot_cancel()
 {
 	if (is_nmatch)
-		emit signal_sendcommand("nmatch _cancel", false);
+		client_window->sendcommand ("nmatch _cancel", false);
 
 	QString opponent = playerOpponentEdit->text();
 

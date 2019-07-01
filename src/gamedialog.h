@@ -25,7 +25,6 @@ public:
 	void set_is_nmatch (bool b) { is_nmatch = b; }
 
 signals:
-	void signal_sendcommand(const QString &cmd, bool localecho);
 	void signal_matchsettings(const QString&, const QString&, const QString&, assessType);
 	void signal_removeDialog(const QString&);
 

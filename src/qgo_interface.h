@@ -149,11 +149,6 @@ public:
 	int         mark_counter;
 	assessType  m_freegame;
 
-signals:
-	// to qGoIF
-//	void signal_closeevent(int);
-	void signal_sendcommand(const QString&, bool);
-
 public slots:
 	// MainWindow
 	void slot_closeevent();
@@ -240,10 +235,6 @@ public:
 	void game_end (const QString &id, const QString &txt);
 	void game_end (const QString &player1, const QString &player2, const QString &txt);
 
-signals:
-	void signal_sendcommand(const QString&, bool);
-	void signal_addToObservationList(int);
-
 public slots:
 	// parser/mainwindow
 	void slot_move(GameInfo*);
@@ -263,7 +254,6 @@ public slots:
 
 	// qGoBoard
 //	void slot_closeevent(int) {};
-	void slot_sendcommand(const QString&, bool);
 	void set_observe(const QString&);
 
 protected:

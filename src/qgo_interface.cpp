@@ -296,10 +296,10 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 						qDebug("ok, adjourned game found ...");
 						if (g->bname != myName && g->wname != myName)
 							// observe if I'm not playing
-							emit signal_sendcommand("observe " + g->nr, false);
+							client_window->sendcommand ("observe " + g->nr, false);
 						else
 							// ensure that my game is correct stated
-							emit signal_sendcommand("games " + g->nr, false);
+							client_window->sendcommand ("games " + g->nr, false);
 						qb->set_sentmovescmd(true);
 						qb->set_id(g->nr.toInt());
 #if 0
@@ -311,8 +311,8 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 //						qb->get_win()->toggleMode();
 						qb->set_runTimer();
 						qb->set_sentmovescmd(true);
-						emit signal_sendcommand("moves " + g->nr, false);
-						emit signal_sendcommand("all " + g->nr, false);
+						client_window->sendcommand ("moves " + g->nr, false);
+						client_window->sendcommand ("all " + g->nr, false);
 
 						qb->send_kibitz(tr("Game continued as Game number %1").arg(g->nr));
 						// show new game number;
@@ -408,9 +408,9 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 			if (mode == modeObserve) // (src == 2)
 			{
 				qgobrd->set_sentmovescmd(true);
-				emit signal_sendcommand("games " + txt, false);
-				emit signal_sendcommand("moves " + txt, false);
-				emit signal_sendcommand("all " + txt, false);
+				client_window->sendcommand ("games " + txt, false);
+				client_window->sendcommand ("moves " + txt, false);
+				client_window->sendcommand ("all " + txt, false);
 			}
 
 			// for own games send "games" cmd to get full info
@@ -420,12 +420,12 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 				{
 					// src changed from 1 to 3/4
 					qgobrd->set_sentmovescmd(true);
-					emit signal_sendcommand("games " + g->nr, false);
-					emit signal_sendcommand("moves " + g->nr, false);
-					emit signal_sendcommand("all " + g->nr, false);
+					client_window->sendcommand ("games " + g->nr, false);
+					client_window->sendcommand ("moves " + g->nr, false);
+					client_window->sendcommand ("all " + g->nr, false);
 				}
 				else
-					emit signal_sendcommand("games " + txt, false);
+					client_window->sendcommand ("games " + txt, false);
 
 				if (mode == modeTeach)
 				{
@@ -482,8 +482,8 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 					if (qgobrd->get_Mode() == modeObserve && !qgobrd->get_sentmovescmd())
 					{
 						qgobrd->set_sentmovescmd(true);
-						emit signal_sendcommand("moves " + gi->nr, false);
-						emit signal_sendcommand("all " + gi->nr, false);
+						client_window->sendcommand ("moves " + gi->nr, false);
+						client_window->sendcommand ("all " + gi->nr, false);
 					}
 					else
 					{
@@ -653,7 +653,7 @@ void qGoIF::slot_komi(const QString &nr, const QString &komi, bool isrequest)
 				if (qb->get_currentKomi() != komi)
 				{
 					qDebug("GoIF::slot_komi() : emit komi");
-					emit signal_sendcommand("komi " + komi, true);
+					client_window->sendcommand ("komi " + komi, true);
 				}
 			}
 			else
@@ -730,9 +730,9 @@ void qGoIF::window_closing (qGoBoard *qb)
 			case modeObserve:
 				// unobserve
 				if (gsName == IGS)
-					emit signal_sendcommand("unobserve " + QString::number(-id), false);
+					client_window->sendcommand ("unobserve " + QString::number(-id), false);
 				else
-					emit signal_sendcommand("observe " + QString::number(-id), false);
+					client_window->sendcommand ("observe " + QString::number(-id), false);
 
 				n_observed--;
 				client_window->update_observed_games (n_observed);
@@ -744,7 +744,7 @@ void qGoIF::window_closing (qGoBoard *qb)
 				break;
 
 			case modeTeach:
-				emit signal_sendcommand("adjourn", false);
+				client_window->sendcommand ("adjourn", false);
 
 				n_observed--;
 				client_window->update_observed_games (n_observed);
@@ -821,7 +821,7 @@ void qGoIF::slot_requestDialog(const QString &yes, const QString &no, const QStr
 		if (mb.exec() == QMessageBox::Yes)
 		{
 			qDebug() << QString("qGoIF::slot_requestDialog(): emit %1").arg(yes);
-			emit signal_sendcommand(yes, false);
+			client_window->sendcommand (yes, false);
 		}
 	}
 	else
@@ -840,19 +840,14 @@ void qGoIF::slot_requestDialog(const QString &yes, const QString &no, const QStr
 		if (mb.exec() == QMessageBox::Yes)
 		{
 			qDebug() << QString("qGoIF::slot_requestDialog(): emit %1").arg(yes);
-			emit signal_sendcommand(yes, false);
+			client_window->sendcommand (yes, false);
 		}
 		else
 		{
 			qDebug() << QString("qGoIF::slot_requestDialog(): emit %1").arg(no);
-			emit signal_sendcommand(no, false);
+			client_window->sendcommand (no, false);
 		}
 	}
-}
-
-void qGoIF::slot_sendcommand(const QString &text, bool show)
-{
-	emit signal_sendcommand(text, show);
 }
 
 void qGoIF::slot_removestones(const QString &pt, const QString &game_id)
@@ -1213,7 +1208,6 @@ void qGoBoard::game_startup ()
 	//  board -> to kibitz or say
 	connect(win, SIGNAL(signal_sendcomment(const QString&)), this, SLOT(slot_sendcomment(const QString&)));
 
-	connect(this, SIGNAL(signal_sendcommand(const QString&, bool)), m_qgoif, SLOT(slot_sendcommand(const QString&, bool)));
 	// board -> commands
 	connect(win, SIGNAL(signal_adjourn()), this, SLOT(slot_doAdjourn()));
 	connect(win, SIGNAL(signal_undo()), this, SLOT(slot_doUndo()));
@@ -1743,9 +1737,9 @@ void qGoBoard::send_kibitz(const QString &msg)
 				// ok, could be a real pt
 				// now teacher has to send it: pupil -> teacher -> server
 				if (gsName == IGS)
-					emit signal_sendcommand(s + " " + QString::number(id), false);
+					client_window->sendcommand (s + " " + QString::number(id), false);
 				else
-					emit signal_sendcommand(s, false);
+					client_window->sendcommand (s, false);
 				return;
 			}
 		}
@@ -1778,20 +1772,20 @@ void qGoBoard::slot_sendcomment(const QString &comment)
 		qDebug("detected (#) -> send command");
 		QString testcmd = comment;
 		testcmd = testcmd.remove(0, 1).trimmed();
-		emit signal_sendcommand(testcmd, true);
+		client_window->sendcommand (testcmd, true);
 		return;
 	}
 
 	if (gameMode == modeObserve || gameMode == modeTeach || gameMode == modeMatch && ExtendedTeachingGame)
 	{
 		// kibitz
-		emit signal_sendcommand("kibitz " + QString::number(id) + " " + comment, false);
+		client_window->sendcommand ("kibitz " + QString::number(id) + " " + comment, false);
 		send_kibitz("-> " + comment + "\n");
 	}
 	else
 	{
 		// say
-		emit signal_sendcommand("say " + comment, false);
+		client_window->sendcommand ("say " + comment, false);
 		send_kibitz("-> " + comment + "\n");
 	}
 }
@@ -1807,9 +1801,9 @@ void qGoBoard::send_coords (int x, int y)
 	int c2 = m_game->boardsize () - y;
 
 	if (ExtendedTeachingGame && IamPupil)
-		emit signal_sendcommand("kibitz " + QString::number(id) + " " + QString(c1) + QString::number(c2), false);
+		client_window->sendcommand ("kibitz " + QString::number(id) + " " + QString(c1) + QString::number(c2), false);
 	else
-		emit signal_sendcommand(QString(c1) + QString::number(c2) + " " + QString::number(id), false);
+		client_window->sendcommand (QString(c1) + QString::number(c2) + " " + QString::number(id), false);
 }
 
 void qGoBoard::player_toggle_dead (int x, int y)
@@ -1851,22 +1845,22 @@ void qGoBoard::game_result (const QString &rs, const QString &extended_rs)
 void qGoBoard::slot_doPass()
 {
 	if (id > 0)
-		emit signal_sendcommand("pass", false);
+		client_window->sendcommand ("pass", false);
 }
 
 void qGoBoard::slot_doResign()
 {
 	if (id > 0)
-		emit signal_sendcommand("resign", false);
+		client_window->sendcommand ("resign", false);
 }
 
 void qGoBoard::slot_doUndo()
 {
 	if (id > 0) {
 		if (gsName ==IGS)
-			emit signal_sendcommand("undoplease", false);
+			client_window->sendcommand ("undoplease", false);
 		else
-			emit signal_sendcommand("undo", false);
+			client_window->sendcommand ("undo", false);
 	}
 }
 
@@ -1874,13 +1868,13 @@ void qGoBoard::slot_doAdjourn()
 {
 	qDebug("button: adjourn");
 	if (id > 0)
-		emit signal_sendcommand("adjourn", false);
+		client_window->sendcommand ("adjourn", false);
 }
 
 void qGoBoard::slot_doDone()
 {
 	if (id > 0)
-		emit signal_sendcommand("done", false);
+		client_window->sendcommand ("done", false);
 }
 
 void qGoBoard::set_requests(const QString &handicap, const QString &komi, assessType kt)
@@ -1903,7 +1897,7 @@ void qGoBoard::check_requests()
 
 	if (m_game->handicap () != req_handicap.toInt())
 	{
-		emit signal_sendcommand("handicap " + req_handicap, false);
+		client_window->sendcommand ("handicap " + req_handicap, false);
 		qDebug() << "Requested handicap: " << req_handicap;
 	}
 	else
@@ -1912,7 +1906,7 @@ void qGoBoard::check_requests()
 	if (m_game->komi () != req_komi.toFloat())
 	{
 		qDebug("qGoBoard::check_requests() : emit komi");
-		emit signal_sendcommand("komi " + req_komi, false);
+		client_window->sendcommand ("komi " + req_komi, false);
 	}
 
 	// if size != 19 don't care, it's a free game
@@ -1928,14 +1922,14 @@ void qGoBoard::check_requests()
 		{
 			case NNGS:
 				if (m_freegame == FREE)
-					emit signal_sendcommand("unfree", false);
+					client_window->sendcommand ("unfree", false);
 				else
-					emit signal_sendcommand("free", false);
+					client_window->sendcommand ("free", false);
 				break;
 
 			// default: toggle
 			default:
-				emit signal_sendcommand("free", false);
+				client_window->sendcommand ("free", false);
 				break;
 		}
 	}
@@ -1955,14 +1949,14 @@ void qGoBoard::slot_addtimePauseB()
 
 			default:
 				if (game_paused)
-					emit signal_sendcommand("unpause", false);
+					client_window->sendcommand ("unpause", false);
 				else
-					emit signal_sendcommand("pause", false);
+					client_window->sendcommand ("pause", false);
 				break;
 		}
 	}
 	else
-		emit signal_sendcommand("addtime 1", false);
+		client_window->sendcommand ("addtime 1", false);
 }
 
 // click on time field
@@ -1977,14 +1971,14 @@ void qGoBoard::slot_addtimePauseW()
 
 			default:
 				if (game_paused)
-					emit signal_sendcommand("unpause", false);
+					client_window->sendcommand ("unpause", false);
 				else
-					emit signal_sendcommand("pause", false);
+					client_window->sendcommand ("pause", false);
 				break;
 		}
 	}
 	else
-		emit signal_sendcommand("addtime 1", false);
+		client_window->sendcommand ("addtime 1", false);
 }
 
 // for several reasons: let me know which is my color
@@ -2012,9 +2006,9 @@ void qGoBoard::slot_ttOpponentSelected(const QString &opponent)
 	if (IamTeacher)
 	{
 		if (opponent == tr("-- none --"))
-			emit signal_sendcommand("kibitz " + QString::number(id) + " #OP:0", false);
+			client_window->sendcommand ("kibitz " + QString::number(id) + " #OP:0", false);
 		else
-			emit signal_sendcommand("kibitz " + QString::number(id) + " #OP:" + opponent, false);
+			client_window->sendcommand ("kibitz " + QString::number(id) + " #OP:" + opponent, false);
 		// set teacher's color -> but: teacher can play both colors anyway
 		set_myColorIsBlack(mv_counter % 2 + 1);
 	}
@@ -2075,9 +2069,9 @@ void qGoBoard::slot_ttControls(bool on)
 		else
 		{
 			if (on)
-				emit signal_sendcommand("kibitz " + QString::number(id) + " #TC:ON", false);
+				client_window->sendcommand ("kibitz " + QString::number(id) + " #TC:ON", false);
 			else
-				emit signal_sendcommand("kibitz " + QString::number(id) + " #TC:OFF", false);
+				client_window->sendcommand ("kibitz " + QString::number(id) + " #TC:OFF", false);
 
 			haveControls = !on;
 		}
@@ -2101,7 +2095,7 @@ void qGoBoard::slot_ttControls(bool on)
 			// toggled by command
 			return;
 
-		emit signal_sendcommand("kibitz " + QString::number(id) + " #OC:OFF", false);
+		client_window->sendcommand ("kibitz " + QString::number(id) + " #OC:OFF", false);
 		win->pb_controls->setDisabled(true);
 		haveControls = false;
 	}
@@ -2115,9 +2109,9 @@ void qGoBoard::slot_ttMark(bool on)
 		case IGS:
 			// simple 'mark' cmd
 			if (on)
-				emit signal_sendcommand("mark", false);
+				client_window->sendcommand ("mark", false);
 			else
-				emit signal_sendcommand("undo", false);
+				client_window->sendcommand ("undo", false);
 			break;
 
 		case LGS:
@@ -2132,7 +2126,7 @@ void qGoBoard::slot_ttMark(bool on)
 			{
 				mark_set = false;
 				for (; mark_counter <= mv_counter; mark_counter++);
-					emit signal_sendcommand("undo", false);
+					client_window->sendcommand ("undo", false);
 				mark_counter = 0;
 			}
 			break;
@@ -2147,7 +2141,7 @@ void qGoBoard::slot_ttMark(bool on)
 			else
 			{
 				mark_set = false;
-				emit signal_sendcommand("undo " + QString::number(mv_counter - mark_counter + 1), false);
+				client_window->sendcommand ("undo " + QString::number(mv_counter - mark_counter + 1), false);
 				mark_counter = 0;
 			}
 			break;
