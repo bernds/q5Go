@@ -2406,10 +2406,7 @@ void ClientWindow::send_nmatch_range_parameters()
 
 void ClientWindow::dlgSetPreferences(int tab)
 {
-	PreferencesDialog dlg;
-
-	if (tab >= 0 && tab < dlg.tabWidget->count())
-		dlg.tabWidget->setCurrentIndex (tab);
+	PreferencesDialog dlg (tab);
 
 	if (dlg.exec() == QDialog::Accepted)
 	{

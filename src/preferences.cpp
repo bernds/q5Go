@@ -13,6 +13,8 @@
 #include "clientwin.h"
 #include "imagehandler.h"
 
+#include "ui_preferences_gui.h"
+
 #ifdef Q_OS_MACX
 #include <CoreFoundation/CFString.h>
 #include <CoreFoundation/CFBundle.h>
@@ -147,109 +149,112 @@ std::vector<Host> standard_servers {
 	{ "-- LGS --", "lgs.taiwango.net", 9696, "guest", "", "Big5" },
 	{ "-- WING --", "wing.gr.jp", 1515, "guest", "", "" } };
 
-PreferencesDialog::PreferencesDialog(QWidget* parent)
-	: QDialog (parent), m_hosts_model (setting->m_hosts, standard_servers), m_engines_model (setting->m_engines)
+PreferencesDialog::PreferencesDialog (int tab, QWidget* parent)
+	: QDialog (parent), ui (new Ui::PreferencesDialogGui), m_hosts_model (setting->m_hosts, standard_servers), m_engines_model (setting->m_engines)
 {
-	setupUi (this);
+	ui->setupUi (this);
 	setModal (true);
+
+	if (tab >= 0 && tab < ui->tabWidget->count())
+		ui->tabWidget->setCurrentIndex (tab);
 
 	if (client_window->getPrefSize().width() > 0)
 	{
 		resize(client_window->getPrefSize());
 		move(client_window->getPrefPos());
 	}
-	int engine_w = enginelabel_1->width ();
-	engine_w = std::max (engine_w, enginelabel_2->width ());
-	engine_w = std::max (engine_w, enginelabel_3->width ());
-	engine_w = std::max (engine_w, enginelabel_4->width ());
-	engine_w = std::max (engine_w, enginelabel_5->width ());
-	enginelabel_1->setMinimumWidth (engine_w);
-	enginelabel_2->setMinimumWidth (engine_w);
-	enginelabel_3->setMinimumWidth (engine_w);
-	enginelabel_4->setMinimumWidth (engine_w);
-	enginelabel_5->setMinimumWidth (engine_w);
+	int engine_w = ui->enginelabel_1->width ();
+	engine_w = std::max (engine_w, ui->enginelabel_2->width ());
+	engine_w = std::max (engine_w, ui->enginelabel_3->width ());
+	engine_w = std::max (engine_w, ui->enginelabel_4->width ());
+	engine_w = std::max (engine_w, ui->enginelabel_5->width ());
+	ui->enginelabel_1->setMinimumWidth (engine_w);
+	ui->enginelabel_2->setMinimumWidth (engine_w);
+	ui->enginelabel_3->setMinimumWidth (engine_w);
+	ui->enginelabel_4->setMinimumWidth (engine_w);
+	ui->enginelabel_5->setMinimumWidth (engine_w);
 
 	// init random-number generator
 	srand ((unsigned)time (nullptr));
 
-	LineEdit_port->setValidator (new QIntValidator (0, 9999, this));
-	anMaxMovesEdit->setValidator (new QIntValidator (0, 999, this));
-	anDepthEdit->setValidator (new QIntValidator (0, 999, this));
-	slideXEdit->setValidator (new QIntValidator (100, 9999, this));
-	slideYEdit->setValidator (new QIntValidator (100, 9999, this));
+	ui->LineEdit_port->setValidator (new QIntValidator (0, 9999, this));
+	ui->anMaxMovesEdit->setValidator (new QIntValidator (0, 999, this));
+	ui->anDepthEdit->setValidator (new QIntValidator (0, 999, this));
+	ui->slideXEdit->setValidator (new QIntValidator (100, 9999, this));
+	ui->slideYEdit->setValidator (new QIntValidator (100, 9999, this));
 
 	// clear edit field
-	LineEdit_title->clear();
+	ui->LineEdit_title->clear();
 
 	init_from_settings ();
 
 	// Default codec
-	ComboBox_codec->addItem("");
+	ui->ComboBox_codec->addItem ("");
 	auto codecs = QTextCodec::availableCodecs ();
 	for(auto it: codecs)
-		ComboBox_codec->addItem(it);
+		ui->ComboBox_codec->addItem (it);
 
 	m_ih = new ImageHandler;
 
-	int w = stoneView->width ();
-	int h = stoneView->height ();
+	int w = ui->stoneView->width ();
+	int h = ui->stoneView->height ();
 	m_stone_size = std::min (w / 2, h);
 	m_ih->init (5);
-	m_stone_canvas = new QGraphicsScene(0, 0, w, h, stoneView);
-	stoneView->setScene (m_stone_canvas);
+	m_stone_canvas = new QGraphicsScene(0, 0, w, h, ui->stoneView);
+	ui->stoneView->setScene (m_stone_canvas);
 	m_b_stone = new QGraphicsPixmapItem;
 	m_w_stone = new QGraphicsPixmapItem;
 	m_stone_canvas->addItem (m_w_stone);
 	m_stone_canvas->addItem (m_b_stone);
 	m_w_stone->setZValue (1);
 
-	connect (radioButtonStones_2D, &QRadioButton::toggled, this, &PreferencesDialog::select_stone_look);
-	connect (radioButtonStones_3D, &QRadioButton::toggled, this, &PreferencesDialog::select_stone_look);
+	connect (ui->radioButtonStones_2D, &QRadioButton::toggled, this, &PreferencesDialog::select_stone_look);
+	connect (ui->radioButtonStones_3D, &QRadioButton::toggled, this, &PreferencesDialog::select_stone_look);
 
-	connect (whiteColorButton, &QToolButton::clicked, this, &PreferencesDialog::select_white_color);
-	connect (blackColorButton, &QToolButton::clicked, this, &PreferencesDialog::select_black_color);
-	connect (blackRoundSlider, &QSlider::valueChanged, [=] (int) { update_b_stones (); });
-	connect (blackHardSlider, &QSlider::valueChanged, [=] (int) { update_b_stones (); });
-	connect (blackSpecSlider, &QSlider::valueChanged, [=] (int) { update_b_stones (); });
-	connect (blackFlatSlider, &QSlider::valueChanged, [=] (int) { update_b_stones (); });
-	connect (whiteRoundSlider, &QSlider::valueChanged, [=] (int) { update_w_stones (); });
-	connect (whiteHardSlider, &QSlider::valueChanged, [=] (int) { update_w_stones (); });
-	connect (whiteSpecSlider, &QSlider::valueChanged, [=] (int) { update_w_stones (); });
-	connect (whiteFlatSlider, &QSlider::valueChanged, [=] (int) { update_w_stones (); });
-	connect (ambientSlider, &QSlider::valueChanged, [=] (int) { update_w_stones (); update_b_stones (); });
-	connect (stripesCheckBox, &QCheckBox::toggled, [=] (int) { update_w_stones (); });
+	connect (ui->whiteColorButton, &QToolButton::clicked, this, &PreferencesDialog::select_white_color);
+	connect (ui->blackColorButton, &QToolButton::clicked, this, &PreferencesDialog::select_black_color);
+	connect (ui->blackRoundSlider, &QSlider::valueChanged, [=] (int) { update_b_stones (); });
+	connect (ui->blackHardSlider, &QSlider::valueChanged, [=] (int) { update_b_stones (); });
+	connect (ui->blackSpecSlider, &QSlider::valueChanged, [=] (int) { update_b_stones (); });
+	connect (ui->blackFlatSlider, &QSlider::valueChanged, [=] (int) { update_b_stones (); });
+	connect (ui->whiteRoundSlider, &QSlider::valueChanged, [=] (int) { update_w_stones (); });
+	connect (ui->whiteHardSlider, &QSlider::valueChanged, [=] (int) { update_w_stones (); });
+	connect (ui->whiteSpecSlider, &QSlider::valueChanged, [=] (int) { update_w_stones (); });
+	connect (ui->whiteFlatSlider, &QSlider::valueChanged, [=] (int) { update_w_stones (); });
+	connect (ui->ambientSlider, &QSlider::valueChanged, [=] (int) { update_w_stones (); update_b_stones (); });
+	connect (ui->stripesCheckBox, &QCheckBox::toggled, [=] (int) { update_w_stones (); });
 
 	void (QComboBox::*cic) (int) = &QComboBox::currentIndexChanged;
-	connect (woodComboBox, cic, [=] (int i) { GobanPicturePathButton->setEnabled (i == 0); LineEdit_goban->setEnabled (i == 0); update_board_image (); });
-	connect (LineEdit_goban, &QLineEdit::editingFinished, [=] () { update_board_image (); });
+	connect (ui->woodComboBox, cic, [=] (int i) { ui->GobanPicturePathButton->setEnabled (i == 0); ui->LineEdit_goban->setEnabled (i == 0); update_board_image (); });
+	connect (ui->LineEdit_goban, &QLineEdit::editingFinished, [=] () { update_board_image (); });
 
 	update_board_image ();
 	update_w_stones ();
 	update_b_stones ();
-	connect (stoneView, &SizeGraphicsView::resized, [=] () { update_board_image (); update_w_stones (); update_b_stones (); });
+	connect (ui->stoneView, &SizeGraphicsView::resized, [=] () { update_board_image (); update_w_stones (); update_b_stones (); });
 
-	connect (GobanPicturePathButton, &QToolButton::clicked, this, &PreferencesDialog::slot_getGobanPicturePath);
-	connect (TablePicturePathButton, &QToolButton::clicked, this, &PreferencesDialog::slot_getTablePicturePath);
+	connect (ui->GobanPicturePathButton, &QToolButton::clicked, this, &PreferencesDialog::slot_getGobanPicturePath);
+	connect (ui->TablePicturePathButton, &QToolButton::clicked, this, &PreferencesDialog::slot_getTablePicturePath);
 
 	update_dbpaths (setting->m_dbpaths);
-	dbPathsListView->setModel (&m_dbpath_model);
-	connect (dbPathsListView->selectionModel (), &QItemSelectionModel::selectionChanged,
+	ui->dbPathsListView->setModel (&m_dbpath_model);
+	connect (ui->dbPathsListView->selectionModel (), &QItemSelectionModel::selectionChanged,
 		 [this] (const QItemSelection &, const QItemSelection &) { update_db_selection (); });
-	connect (dbDirsButton, &QPushButton::clicked, this, &PreferencesDialog::slot_dbdir);
-	connect (dbCfgButton, &QPushButton::clicked, this, &PreferencesDialog::slot_dbcfg);
-	connect (dbRemButton, &QPushButton::clicked, this, &PreferencesDialog::slot_dbrem);
+	connect (ui->dbDirsButton, &QPushButton::clicked, this, &PreferencesDialog::slot_dbdir);
+	connect (ui->dbCfgButton, &QPushButton::clicked, this, &PreferencesDialog::slot_dbcfg);
+	connect (ui->dbRemButton, &QPushButton::clicked, this, &PreferencesDialog::slot_dbrem);
 
-	ListView_engines->setModel (&m_engines_model);
-	connect (ListView_engines, &ClickableListView::current_changed, [this] () { update_current_engine (); });
-	ListView_hosts->setModel (&m_hosts_model);
-	connect (ListView_hosts, &ClickableListView::current_changed, [this] () { update_current_host (); });
+	ui->ListView_engines->setModel (&m_engines_model);
+	connect (ui->ListView_engines, &ClickableListView::current_changed, [this] () { update_current_engine (); });
+	ui->ListView_hosts->setModel (&m_hosts_model);
+	connect (ui->ListView_hosts, &ClickableListView::current_changed, [this] () { update_current_host (); });
 
-	connect (fontStandardButton, &QPushButton::clicked, [this] () { selectFont (fontStandardButton, setting->fontStandard); });
-	connect (fontMarksButton, &QPushButton::clicked, [this] () { selectFont (fontMarksButton, setting->fontMarks); });
-	connect (fontCommentsButton, &QPushButton::clicked, [this] () { selectFont (fontCommentsButton, setting->fontComments); });
-	connect (fontListsButton, &QPushButton::clicked, [this] () { selectFont (fontListsButton, setting->fontLists); });
-	connect (fontClocksButton, &QPushButton::clicked, [this] () { selectFont (fontClocksButton, setting->fontClocks); });
-	connect (fontConsoleButton, &QPushButton::clicked, [this] () { selectFont (fontConsoleButton, setting->fontConsole); });
+	connect (ui->fontStandardButton, &QPushButton::clicked, [this] () { selectFont (ui->fontStandardButton, setting->fontStandard); });
+	connect (ui->fontMarksButton, &QPushButton::clicked, [this] () { selectFont (ui->fontMarksButton, setting->fontMarks); });
+	connect (ui->fontCommentsButton, &QPushButton::clicked, [this] () { selectFont (ui->fontCommentsButton, setting->fontComments); });
+	connect (ui->fontListsButton, &QPushButton::clicked, [this] () { selectFont (ui->fontListsButton, setting->fontLists); });
+	connect (ui->fontClocksButton, &QPushButton::clicked, [this] () { selectFont (ui->fontClocksButton, setting->fontClocks); });
+	connect (ui->fontConsoleButton, &QPushButton::clicked, [this] () { selectFont (ui->fontConsoleButton, setting->fontConsole); });
 }
 
 void PreferencesDialog::update_dbpaths (const QStringList &l)
@@ -266,11 +271,11 @@ void PreferencesDialog::update_dbpaths (const QStringList &l)
 
 void PreferencesDialog::update_db_selection ()
 {
-	QItemSelectionModel *sel = dbPathsListView->selectionModel ();
+	QItemSelectionModel *sel = ui->dbPathsListView->selectionModel ();
 	const QModelIndexList &selected = sel->selectedRows ();
 	bool selection = selected.length () != 0;
 
-	dbRemButton->setEnabled (selection);
+	ui->dbRemButton->setEnabled (selection);
 }
 
 void PreferencesDialog::slot_dbdir (bool)
@@ -341,7 +346,7 @@ void PreferencesDialog::slot_dbcfg (bool)
 
 void PreferencesDialog::slot_dbrem (bool)
 {
-	QItemSelectionModel *sel = dbPathsListView->selectionModel ();
+	QItemSelectionModel *sel = ui->dbPathsListView->selectionModel ();
 	const QModelIndexList &selected = sel->selectedRows ();
 	bool selection = selected.length () != 0;
 
@@ -357,12 +362,12 @@ void PreferencesDialog::slot_dbrem (bool)
 
 void PreferencesDialog::update_board_image ()
 {
-	int w = stoneView->width ();
-	int h = stoneView->height ();
+	int w = ui->stoneView->width ();
+	int h = ui->stoneView->height ();
 	QImage image(w, h, QImage::Format_RGB32);
 	QPixmap pm;
-	QString filename = LineEdit_goban->text();
-	int idx = woodComboBox->currentIndex ();
+	QString filename = ui->LineEdit_goban->text();
+	int idx = ui->woodComboBox->currentIndex ();
 	if (idx > 0)
 		filename = QString (":/BoardWindow/images/board/wood%1.png").arg (idx);
 	QPixmap p (filename);
@@ -377,7 +382,7 @@ void PreferencesDialog::update_board_image ()
 
 	/* @@@ Scaling to the narrow strip of wood in the preferences dialog won't look the
 	   same as on the real board.  It's unclear what best to do here.  */
-	if (0 && scaleWoodCheckBox->isChecked ())
+	if (0 && ui->scaleWoodCheckBox->isChecked ())
 		painter.drawPixmap (0, 0, w, h, p);
 	else
 		painter.drawTiledPixmap (0, 0, w, h, p);
@@ -390,12 +395,12 @@ void PreferencesDialog::update_board_image ()
 
 void PreferencesDialog::update_stone_positions ()
 {
-	int w = stoneView->width ();
-	int h = stoneView->height ();
+	int w = ui->stoneView->width ();
+	int h = ui->stoneView->height ();
 
 	m_stone_size = std::min (w / 2, h);
 	int real_width = m_stone_size;
-	if (!radioButtonStones_2D->isChecked ())
+	if (!ui->radioButtonStones_2D->isChecked ())
 		real_width *= 9. / 8;
 	int w_diff = real_width - m_stone_size;
 	m_w_stone->setPos (w / 2 - real_width, 0);
@@ -405,133 +410,133 @@ void PreferencesDialog::update_stone_positions ()
 void PreferencesDialog::init_from_settings ()
 {
 	int idx = setting->readIntEntry("SKIN_INDEX");
-	GobanPicturePathButton->setEnabled (idx == 0);
-	LineEdit_goban->setEnabled (idx == 0);
-	woodComboBox->setCurrentIndex (idx);
+	ui->GobanPicturePathButton->setEnabled (idx == 0);
+	ui->LineEdit_goban->setEnabled (idx == 0);
+	ui->woodComboBox->setCurrentIndex (idx);
 
-	LineEdit_goban->setText(setting->readEntry("SKIN"));
-	LineEdit_Table->setText(setting->readEntry("SKIN_TABLE"));
-	scaleWoodCheckBox->setChecked (setting->readBoolEntry("SKIN_SCALE_WOOD"));
-	languageComboBox->insertItems(1, setting->getAvailableLanguages());
-	languageComboBox->setCurrentIndex(setting->convertLanguageCodeToNumber());
+	ui->LineEdit_goban->setText (setting->readEntry("SKIN"));
+	ui->LineEdit_Table->setText (setting->readEntry("SKIN_TABLE"));
+	ui->scaleWoodCheckBox->setChecked (setting->readBoolEntry("SKIN_SCALE_WOOD"));
+	ui->languageComboBox->insertItems (1, setting->getAvailableLanguages());
+	ui->languageComboBox->setCurrentIndex (setting->convertLanguageCodeToNumber());
 
-	fileSelComboBox->setCurrentIndex(setting->readIntEntry("FILESEL"));
+	ui->fileSelComboBox->setCurrentIndex (setting->readIntEntry("FILESEL"));
 
-	radioButtonStones_2D->setChecked((setting->readIntEntry("STONES_LOOK")==1));
-	radioButtonStones_3D->setChecked((setting->readIntEntry("STONES_LOOK")==2));
-	radioButtonStone_real->setChecked((setting->readIntEntry("STONES_LOOK")==3));
-	stripesCheckBox->setChecked (setting->readBoolEntry("STONES_STRIPES"));
-	whiteSpecSlider->setValue (setting->readIntEntry("STONES_WSPEC"));
-	blackSpecSlider->setValue (setting->readIntEntry("STONES_BSPEC"));
-	whiteHardSlider->setValue(setting->readIntEntry("STONES_WHARD"));
-	blackHardSlider->setValue(setting->readIntEntry("STONES_BHARD"));
-	whiteRoundSlider->setValue(setting->readIntEntry("STONES_WROUND"));
-	blackRoundSlider->setValue(setting->readIntEntry("STONES_BROUND"));
-	whiteFlatSlider->setValue(setting->readIntEntry("STONES_WFLAT"));
-	blackFlatSlider->setValue(setting->readIntEntry("STONES_BFLAT"));
-	ambientSlider->setValue (setting->readIntEntry("STONES_AMBIENT"));
+	ui->radioButtonStones_2D->setChecked ((setting->readIntEntry("STONES_LOOK")==1));
+	ui->radioButtonStones_3D->setChecked ((setting->readIntEntry("STONES_LOOK")==2));
+	ui->radioButtonStone_real->setChecked ((setting->readIntEntry("STONES_LOOK")==3));
+	ui->stripesCheckBox->setChecked (setting->readBoolEntry("STONES_STRIPES"));
+	ui->whiteSpecSlider->setValue (setting->readIntEntry("STONES_WSPEC"));
+	ui->blackSpecSlider->setValue (setting->readIntEntry("STONES_BSPEC"));
+	ui->whiteHardSlider->setValue (setting->readIntEntry("STONES_WHARD"));
+	ui->blackHardSlider->setValue (setting->readIntEntry("STONES_BHARD"));
+	ui->whiteRoundSlider->setValue (setting->readIntEntry("STONES_WROUND"));
+	ui->blackRoundSlider->setValue (setting->readIntEntry("STONES_BROUND"));
+	ui->whiteFlatSlider->setValue (setting->readIntEntry("STONES_WFLAT"));
+	ui->blackFlatSlider->setValue (setting->readIntEntry("STONES_BFLAT"));
+	ui->ambientSlider->setValue (setting->readIntEntry("STONES_AMBIENT"));
 
-	lineScaleCheckBox->setChecked (setting->readBoolEntry("BOARD_LINESCALE"));
-	lineWidenCheckBox->setChecked (setting->readBoolEntry("BOARD_LINEWIDEN"));
+	ui->lineScaleCheckBox->setChecked (setting->readBoolEntry("BOARD_LINESCALE"));
+	ui->lineWidenCheckBox->setChecked (setting->readBoolEntry("BOARD_LINEWIDEN"));
 
-	stoneSoundCheckBox->setChecked(setting->readBoolEntry("SOUND_STONE"));
-	talkSoundCheckBox->setChecked(setting->readBoolEntry("SOUND_TALK"));
-	matchSoundCheckBox->setChecked(setting->readBoolEntry("SOUND_MATCH"));
-	passSoundCheckBox->setChecked(setting->readBoolEntry("SOUND_PASS"));
-	gameEndSoundCheckBox->setChecked(setting->readBoolEntry("SOUND_GAMEEND"));
-	timeSoundCheckBox->setChecked(setting->readBoolEntry("SOUND_TIME"));
-	saySoundCheckBox->setChecked(setting->readBoolEntry("SOUND_SAY"));
-	enterSoundCheckBox->setChecked(setting->readBoolEntry("SOUND_ENTER"));
-	leaveSoundCheckBox->setChecked(setting->readBoolEntry("SOUND_LEAVE"));
-	disConnectSoundCheckBox->setChecked(setting->readBoolEntry("SOUND_DISCONNECT"));
-	connectSoundCheckBox->setChecked(setting->readBoolEntry("SOUND_CONNECT"));
+	ui->stoneSoundCheckBox->setChecked (setting->readBoolEntry("SOUND_STONE"));
+	ui->talkSoundCheckBox->setChecked (setting->readBoolEntry("SOUND_TALK"));
+	ui->matchSoundCheckBox->setChecked (setting->readBoolEntry("SOUND_MATCH"));
+	ui->passSoundCheckBox->setChecked (setting->readBoolEntry("SOUND_PASS"));
+	ui->gameEndSoundCheckBox->setChecked (setting->readBoolEntry("SOUND_GAMEEND"));
+	ui->timeSoundCheckBox->setChecked (setting->readBoolEntry("SOUND_TIME"));
+	ui->saySoundCheckBox->setChecked (setting->readBoolEntry("SOUND_SAY"));
+	ui->enterSoundCheckBox->setChecked (setting->readBoolEntry("SOUND_ENTER"));
+	ui->leaveSoundCheckBox->setChecked (setting->readBoolEntry("SOUND_LEAVE"));
+	ui->disConnectSoundCheckBox->setChecked (setting->readBoolEntry("SOUND_DISCONNECT"));
+	ui->connectSoundCheckBox->setChecked (setting->readBoolEntry("SOUND_CONNECT"));
 
-	soundMatchCheckBox->setChecked(setting->readBoolEntry("SOUND_MATCH_BOARD"));
-	soundObserveCheckBox->setChecked(setting->readBoolEntry("SOUND_OBSERVE"));
-	soundNormalCheckBox->setChecked(setting->readBoolEntry("SOUND_NORMAL"));
-	soundComputerCheckBox->setChecked(setting->readBoolEntry("SOUND_COMPUTER"));
+	ui->soundMatchCheckBox->setChecked (setting->readBoolEntry("SOUND_MATCH_BOARD"));
+	ui->soundObserveCheckBox->setChecked (setting->readBoolEntry("SOUND_OBSERVE"));
+	ui->soundNormalCheckBox->setChecked (setting->readBoolEntry("SOUND_NORMAL"));
+	ui->soundComputerCheckBox->setChecked (setting->readBoolEntry("SOUND_COMPUTER"));
 
-	variationComboBox->setCurrentIndex(setting->readIntEntry("VAR_GHOSTS"));
-	varChildrenComboBox->setCurrentIndex(setting->readBoolEntry("VAR_CHILDREN") != 0);
-	varSGFStyleComboBox->setCurrentIndex(setting->readIntEntry("VAR_SGF_STYLE"));
-	varDiagsCheckBox->setChecked(setting->readBoolEntry("VAR_IGNORE_DIAGS"));
+	ui->variationComboBox->setCurrentIndex (setting->readIntEntry("VAR_GHOSTS"));
+	ui->varChildrenComboBox->setCurrentIndex (setting->readBoolEntry("VAR_CHILDREN") != 0);
+	ui->varSGFStyleComboBox->setCurrentIndex (setting->readIntEntry("VAR_SGF_STYLE"));
+	ui->varDiagsCheckBox->setChecked (setting->readBoolEntry("VAR_IGNORE_DIAGS"));
 
 	int coords = (setting->readBoolEntry("BOARD_COORDS")
 		      ? (setting->readBoolEntry("SGF_BOARD_COORDS") ? 2 : 1)
 		      : 0);
-	coordsComboBox->setCurrentIndex(coords);
-	coordSizeSlider->setValue(setting->readIntEntry("COORDS_SIZE"));
-	cursorCheckBox->setChecked(setting->readBoolEntry("CURSOR"));
-	tooltipsCheckBox->setChecked(!(setting->readBoolEntry("TOOLTIPS")));
-	BYTimeSpin->setValue(setting->readIntEntry("BY_TIMER"));
+	ui->coordsComboBox->setCurrentIndex (coords);
+	ui->coordSizeSlider->setValue (setting->readIntEntry("COORDS_SIZE"));
+	ui->cursorCheckBox->setChecked (setting->readBoolEntry("CURSOR"));
+	ui->tooltipsCheckBox->setChecked (!(setting->readBoolEntry("TOOLTIPS")));
+	ui->BYTimeSpin->setValue (setting->readIntEntry("BY_TIMER"));
 	int sidebar = setting->readBoolEntry("SIDEBAR_LEFT") ? 0 : 1;
-	sidebarComboBox->setCurrentIndex(sidebar);
-	antiClickoCheckBox->setChecked(setting->readBoolEntry("ANTICLICKO"));
-	hitboxCheckBox->setChecked(setting->readBoolEntry("ANTICLICKO_HITBOX"));
+	ui->sidebarComboBox->setCurrentIndex (sidebar);
+	ui->antiClickoCheckBox->setChecked (setting->readBoolEntry("ANTICLICKO"));
+	ui->hitboxCheckBox->setChecked (setting->readBoolEntry("ANTICLICKO_HITBOX"));
 
-	gameTreeSizeSlider->setValue(setting->readIntEntry("GAMETREE_SIZE"));
-	diagShowComboBox->setCurrentIndex(setting->readIntEntry("BOARD_DIAGMODE"));
-	diagClearCheckBox->setChecked(setting->readBoolEntry("BOARD_DIAGCLEAR"));
-	diagHideCheckBox->setChecked(setting->readBoolEntry("GAMETREE_DIAGHIDE"));
+	ui->gameTreeSizeSlider->setValue (setting->readIntEntry("GAMETREE_SIZE"));
+	ui->diagShowComboBox->setCurrentIndex (setting->readIntEntry("BOARD_DIAGMODE"));
+	ui->diagClearCheckBox->setChecked (setting->readBoolEntry("BOARD_DIAGCLEAR"));
+	ui->diagHideCheckBox->setChecked (setting->readBoolEntry("GAMETREE_DIAGHIDE"));
 
 	// Client Window tab
-	LineEdit_watch->setText(setting->readEntry("WATCH"));
-	LineEdit_exclude->setText(setting->readEntry("EXCLUDE"));
-	CheckBox_extUserInfo->setChecked(setting->readBoolEntry("EXTUSERINFO"));
-//	CheckBox_useNmatch->setChecked(setting->readBoolEntry("USE_NMATCH"));
-	checkBox_Nmatch_Black->setChecked(setting->readBoolEntry("NMATCH_BLACK"));
-	checkBox_Nmatch_White->setChecked(setting->readBoolEntry("NMATCH_WHITE"));
-	checkBox_Nmatch_Nigiri->setChecked(setting->readBoolEntry("NMATCH_NIGIRI"));
-	HandicapSpin_Nmatch->setValue(setting->readIntEntry("NMATCH_HANDICAP"));
-	timeSpin_Nmatch->setValue(setting->readIntEntry("NMATCH_MAIN_TIME"));
-	BYSpin_Nmatch->setValue(setting->readIntEntry("NMATCH_BYO_TIME"));
+	ui->LineEdit_watch->setText (setting->readEntry("WATCH"));
+	ui->LineEdit_exclude->setText (setting->readEntry("EXCLUDE"));
+	ui->CheckBox_extUserInfo->setChecked (setting->readBoolEntry("EXTUSERINFO"));
+//	ui->CheckBox_useNmatch->setChecked (setting->readBoolEntry("USE_NMATCH"));
+	ui->checkBox_Nmatch_Black->setChecked (setting->readBoolEntry("NMATCH_BLACK"));
+	ui->checkBox_Nmatch_White->setChecked (setting->readBoolEntry("NMATCH_WHITE"));
+	ui->checkBox_Nmatch_Nigiri->setChecked (setting->readBoolEntry("NMATCH_NIGIRI"));
+	ui->HandicapSpin_Nmatch->setValue (setting->readIntEntry("NMATCH_HANDICAP"));
+	ui->timeSpin_Nmatch->setValue (setting->readIntEntry("NMATCH_MAIN_TIME"));
+	ui->BYSpin_Nmatch->setValue (setting->readIntEntry("NMATCH_BYO_TIME"));
 
-	computerWhiteButton->setChecked(setting->readBoolEntry("COMPUTER_WHITE"));
-	computerSizeSpin->setValue(setting->readIntEntry("COMPUTER_SIZE"));
-	computerHandicapSpin->setValue(setting->readIntEntry("COMPUTER_HANDICAP"));
-	humanName->setText(setting->readEntry("HUMAN_NAME"));
+	ui->computerWhiteButton->setChecked (setting->readBoolEntry("COMPUTER_WHITE"));
+	ui->computerSizeSpin->setValue (setting->readIntEntry("COMPUTER_SIZE"));
+	ui->computerHandicapSpin->setValue (setting->readIntEntry("COMPUTER_HANDICAP"));
+	ui->humanName->setText (setting->readEntry("HUMAN_NAME"));
 
-	anChildMovesCheckBox->setChecked (setting->readBoolEntry ("ANALYSIS_CHILDREN"));
-	anPruneCheckBox->setChecked (setting->readBoolEntry ("ANALYSIS_PRUNE"));
-	anHideCheckBox->setChecked (setting->readBoolEntry ("ANALYSIS_HIDEOTHER"));
-	anVarComboBox->setCurrentIndex (setting->readIntEntry ("ANALYSIS_VARTYPE"));
-	winrateComboBox->setCurrentIndex (setting->readIntEntry ("ANALYSIS_WINRATE"));
-	anDepthEdit->setText (QString::number (setting->readIntEntry ("ANALYSIS_DEPTH")));
-	anMaxMovesEdit->setText (QString::number (setting->readIntEntry ("ANALYSIS_MAXMOVES")));
+	ui->anChildMovesCheckBox->setChecked (setting->readBoolEntry ("ANALYSIS_CHILDREN"));
+	ui->anPruneCheckBox->setChecked (setting->readBoolEntry ("ANALYSIS_PRUNE"));
+	ui->anHideCheckBox->setChecked (setting->readBoolEntry ("ANALYSIS_HIDEOTHER"));
+	ui->anVarComboBox->setCurrentIndex (setting->readIntEntry ("ANALYSIS_VARTYPE"));
+	ui->winrateComboBox->setCurrentIndex (setting->readIntEntry ("ANALYSIS_WINRATE"));
+	ui->anDepthEdit->setText (QString::number (setting->readIntEntry ("ANALYSIS_DEPTH")));
+	ui->anMaxMovesEdit->setText (QString::number (setting->readIntEntry ("ANALYSIS_MAXMOVES")));
 
 	// Go Server tab
-	boardSizeSpin->setValue(setting->readIntEntry("DEFAULT_SIZE"));
-	timeSpin->setValue(setting->readIntEntry("DEFAULT_TIME"));
-	BYSpin->setValue(setting->readIntEntry("DEFAULT_BY"));
-	komiSpinDefault->setValue(setting->readIntEntry("DEFAULT_KOMI"));
-	automaticNegotiationCheckBox->setChecked(setting->readBoolEntry("DEFAULT_AUTONEGO"));
-	CheckBox_autoSave->setChecked(setting->readBoolEntry("AUTOSAVE"));
-	CheckBox_autoSave_Played->setChecked(setting->readBoolEntry("AUTOSAVE_PLAYED"));
+	ui->boardSizeSpin->setValue (setting->readIntEntry("DEFAULT_SIZE"));
+	ui->timeSpin->setValue (setting->readIntEntry("DEFAULT_TIME"));
+	ui->BYSpin->setValue (setting->readIntEntry("DEFAULT_BY"));
+	ui->komiSpinDefault->setValue (setting->readIntEntry("DEFAULT_KOMI"));
+	ui->automaticNegotiationCheckBox->setChecked (setting->readBoolEntry("DEFAULT_AUTONEGO"));
+	ui->CheckBox_autoSave->setChecked (setting->readBoolEntry("AUTOSAVE"));
+	ui->CheckBox_autoSave_Played->setChecked (setting->readBoolEntry("AUTOSAVE_PLAYED"));
 
-	toroidDupsSpin->setValue (setting->readIntEntry("TOROID_DUPS"));
+	ui->toroidDupsSpin->setValue (setting->readIntEntry("TOROID_DUPS"));
 
-	slideLinesSpinBox->setValue (setting->readIntEntry ("SLIDE_LINES"));
-	slideMarginSpinBox->setValue (setting->readIntEntry ("SLIDE_MARGIN"));
-	slideXEdit->setText (QString::number (setting->readIntEntry ("SLIDE_X")));
-	slideYEdit->setText (QString::number (setting->readIntEntry ("SLIDE_Y")));
-	slideItalicCheckBox->setChecked (setting->readBoolEntry ("SLIDE_ITALIC"));
-	slideBoldCheckBox->setChecked (setting->readBoolEntry ("SLIDE_BOLD"));
-	slideWBCheckBox->setChecked (setting->readBoolEntry ("SLIDE_WB"));
-	slideCoordsCheckBox->setChecked (setting->readBoolEntry ("SLIDE_COORDS"));
+	ui->slideLinesSpinBox->setValue (setting->readIntEntry ("SLIDE_LINES"));
+	ui->slideMarginSpinBox->setValue (setting->readIntEntry ("SLIDE_MARGIN"));
+	ui->slideXEdit->setText (QString::number (setting->readIntEntry ("SLIDE_X")));
+	ui->slideYEdit->setText (QString::number (setting->readIntEntry ("SLIDE_Y")));
+	ui->slideItalicCheckBox->setChecked (setting->readBoolEntry ("SLIDE_ITALIC"));
+	ui->slideBoldCheckBox->setChecked (setting->readBoolEntry ("SLIDE_BOLD"));
+	ui->slideWBCheckBox->setChecked (setting->readBoolEntry ("SLIDE_WB"));
+	ui->slideCoordsCheckBox->setChecked (setting->readBoolEntry ("SLIDE_COORDS"));
 
-	fontStandardButton->setText(setting->fontToString(setting->fontStandard));
-	fontMarksButton->setText(setting->fontToString(setting->fontMarks));
-	fontCommentsButton->setText(setting->fontToString(setting->fontComments));
-	fontListsButton->setText(setting->fontToString(setting->fontLists));
-	fontClocksButton->setText(setting->fontToString(setting->fontClocks));
-	fontConsoleButton->setText(setting->fontToString(setting->fontConsole));
+	ui->fontStandardButton->setText (setting->fontToString(setting->fontStandard));
+	ui->fontMarksButton->setText (setting->fontToString(setting->fontMarks));
+	ui->fontCommentsButton->setText (setting->fontToString(setting->fontComments));
+	ui->fontListsButton->setText (setting->fontToString(setting->fontLists));
+	ui->fontClocksButton->setText (setting->fontToString(setting->fontClocks));
+	ui->fontConsoleButton->setText (setting->fontToString(setting->fontConsole));
 
-	fontStandardButton->setFont(setting->fontStandard);
-	fontMarksButton->setFont(setting->fontMarks);
-	fontCommentsButton->setFont(setting->fontComments);
-	fontListsButton->setFont(setting->fontLists);
-	fontClocksButton->setFont(setting->fontClocks);
-	fontConsoleButton->setFont(setting->fontConsole);
+	ui->fontStandardButton->setFont(setting->fontStandard);
+	ui->fontMarksButton->setFont(setting->fontMarks);
+	ui->fontCommentsButton->setFont(setting->fontComments);
+	ui->fontListsButton->setFont(setting->fontLists);
+	ui->fontClocksButton->setFont(setting->fontClocks);
+	ui->fontConsoleButton->setFont(setting->fontConsole);
 }
 
 void PreferencesDialog::select_stone_look (bool)
@@ -557,23 +562,23 @@ void PreferencesDialog::select_black_color (bool)
 
 void PreferencesDialog::update_stone_params ()
 {
-	double br = 2.05 + (100 - blackRoundSlider->value ()) / 30.0;
-	double wr = 2.05 + (100 - whiteRoundSlider->value ()) / 30.0;
-	double bs = blackSpecSlider->value () / 100.0;
-	double ws = whiteSpecSlider->value () / 100.0;
-	double bf = blackFlatSlider->value ();
-	double wf = whiteFlatSlider->value ();
-	double bh = 1 + blackHardSlider->value () / 10.0;
-	double wh = 1 + whiteHardSlider->value () / 10.0;
-	double ambient = ambientSlider->value () / 100.0;
-	bool clamshell = stripesCheckBox->isChecked ();
+	double br = 2.05 + (100 - ui->blackRoundSlider->value ()) / 30.0;
+	double wr = 2.05 + (100 - ui->whiteRoundSlider->value ()) / 30.0;
+	double bs = ui->blackSpecSlider->value () / 100.0;
+	double ws = ui->whiteSpecSlider->value () / 100.0;
+	double bf = ui->blackFlatSlider->value ();
+	double wf = ui->whiteFlatSlider->value ();
+	double bh = 1 + ui->blackHardSlider->value () / 10.0;
+	double wh = 1 + ui->whiteHardSlider->value () / 10.0;
+	double ambient = ui->ambientSlider->value () / 100.0;
+	bool clamshell = ui->stripesCheckBox->isChecked ();
 	int look = 3;
-	if (radioButtonStones_2D->isChecked ())
+	if (ui->radioButtonStones_2D->isChecked ())
 		look = 1;
-	else if (radioButtonStones_3D->isChecked ())
+	else if (ui->radioButtonStones_3D->isChecked ())
 		look = 2;
-	blackGroupBox->setEnabled (look == 3);
-	whiteGroupBox->setEnabled (look == 3);
+	ui->blackGroupBox->setEnabled (look == 3);
+	ui->whiteGroupBox->setEnabled (look == 3);
 	m_ih->set_stone_params (wh, bh, ws, bs, wr, br, wf, bf, ambient, look, clamshell);
 }
 
@@ -582,7 +587,7 @@ void PreferencesDialog::update_w_stones ()
 	update_stone_params ();
 
 	int real_size = m_stone_size;
-	if (!radioButtonStones_2D->isChecked ())
+	if (!ui->radioButtonStones_2D->isChecked ())
 		real_size = m_stone_size * 9. / 8;
 
 	QPixmap pm (real_size, real_size);
@@ -590,7 +595,7 @@ void PreferencesDialog::update_w_stones ()
 	QPainter painter;
 	painter.begin (&pm);
 	QImage img (m_stone_size, m_stone_size, QImage::Format_ARGB32);
-	if (!radioButtonStones_2D->isChecked ()) {
+	if (!ui->radioButtonStones_2D->isChecked ()) {
 		m_ih->paint_shadow_stone (img, m_stone_size);
 		painter.drawImage (0, real_size - m_stone_size, img);
 	}
@@ -605,7 +610,7 @@ void PreferencesDialog::update_b_stones ()
 	update_stone_params ();
 
 	int real_size = m_stone_size;
-	if (!radioButtonStones_2D->isChecked ())
+	if (!ui->radioButtonStones_2D->isChecked ())
 		real_size = m_stone_size * 9. / 8;
 
 	QPixmap pm (real_size, real_size);
@@ -613,7 +618,7 @@ void PreferencesDialog::update_b_stones ()
 	QPainter painter;
 	painter.begin (&pm);
 	QImage img (m_stone_size, m_stone_size, QImage::Format_ARGB32);
-	if (!radioButtonStones_2D->isChecked ()) {
+	if (!ui->radioButtonStones_2D->isChecked ()) {
 		m_ih->paint_shadow_stone (img, m_stone_size);
 		painter.drawImage (0, real_size - m_stone_size, img);
 	}
@@ -623,34 +628,23 @@ void PreferencesDialog::update_b_stones ()
 	m_b_stone->setPixmap (pm);
 }
 
-
-/*  
-*  Destroys the object and frees any allocated resources
-*/
 PreferencesDialog::~PreferencesDialog()
 {
-	// no need to delete child widgets, Qt does it all for us
+	delete ui;
 }
-
-
-/*****************************************************************
-*
-*               Overwritten own implementations
-*
-*****************************************************************/
 
 void PreferencesDialog::slot_apply()
 {
 	qDebug() << "onApply";
 
 	bool ok;
-	int slide_x = slideXEdit->text ().toInt(&ok);
+	int slide_x = ui->slideXEdit->text ().toInt (&ok);
 	if (!ok || slide_x < 100 || slide_x > 10000) {
 		QMessageBox::warning (this, tr ("Invalid slide width"),
 				      tr ("Please enter valid dimensions for slide export (100x100 or larger)."));
 		return;
 	}
-	int slide_y = slideYEdit->text ().toInt (&ok);
+	int slide_y = ui->slideYEdit->text ().toInt (&ok);
 	if (!ok || slide_y < 100 || slide_y > 10000) {
 		QMessageBox::warning (this, tr ("Invalid slide height"),
 				      tr ("Please enter valid dimensions for slide export (100x100 or larger)."));
@@ -663,134 +657,134 @@ void PreferencesDialog::slot_apply()
 	}
 	setting->writeIntEntry ("SLIDE_X", slide_x);
 	setting->writeIntEntry ("SLIDE_Y", slide_y);
-	setting->writeIntEntry ("SLIDE_LINES", slideLinesSpinBox->value ());
-	setting->writeIntEntry ("SLIDE_MARGIN", slideMarginSpinBox->value ());
-	setting->writeBoolEntry ("SLIDE_ITALIC", slideItalicCheckBox->isChecked ());
-	setting->writeBoolEntry ("SLIDE_BOLD", slideBoldCheckBox->isChecked ());
-	setting->writeBoolEntry ("SLIDE_WB", slideWBCheckBox->isChecked ());
-	setting->writeBoolEntry ("SLIDE_COORDS", slideCoordsCheckBox->isChecked ());
+	setting->writeIntEntry ("SLIDE_LINES", ui->slideLinesSpinBox->value ());
+	setting->writeIntEntry ("SLIDE_MARGIN", ui->slideMarginSpinBox->value ());
+	setting->writeBoolEntry ("SLIDE_ITALIC", ui->slideItalicCheckBox->isChecked ());
+	setting->writeBoolEntry ("SLIDE_BOLD", ui->slideBoldCheckBox->isChecked ());
+	setting->writeBoolEntry ("SLIDE_WB", ui->slideWBCheckBox->isChecked ());
+	setting->writeBoolEntry ("SLIDE_COORDS", ui->slideCoordsCheckBox->isChecked ());
 
-	setting->writeIntEntry("SKIN_INDEX", woodComboBox->currentIndex ());
-	setting->writeEntry("SKIN", LineEdit_goban->text ());
-	setting->writeEntry("SKIN_TABLE", LineEdit_Table->text ());
-	setting->writeBoolEntry("SKIN_SCALE_WOOD", scaleWoodCheckBox->isChecked ());
+	setting->writeIntEntry ("SKIN_INDEX", ui->woodComboBox->currentIndex ());
+	setting->writeEntry ("SKIN", ui->LineEdit_goban->text ());
+	setting->writeEntry ("SKIN_TABLE", ui->LineEdit_Table->text ());
+	setting->writeBoolEntry ("SKIN_SCALE_WOOD", ui->scaleWoodCheckBox->isChecked ());
 	setting->obtain_skin_images ();
 
-	setting->writeEntry("LANG", setting->convertNumberToLanguage(languageComboBox->currentIndex()));
-	setting->writeIntEntry("FILESEL", fileSelComboBox->currentIndex());
-//	setting->writeBoolEntry("STONES_SHADOW", stonesShadowCheckBox->isChecked());
-//	setting->writeBoolEntry("STONES_SHELLS", stonesShellsCheckBox->isChecked());
+	setting->writeEntry ("LANG", setting->convertNumberToLanguage(ui->languageComboBox->currentIndex ()));
+	setting->writeIntEntry ("FILESEL", ui->fileSelComboBox->currentIndex ());
+//	setting->writeBoolEntry ("STONES_SHADOW", ui->stonesShadowCheckBox->isChecked ());
+//	setting->writeBoolEntry ("STONES_SHELLS", ui->stonesShellsCheckBox->isChecked ());
 	int i = 3;
-	if ( radioButtonStones_2D->isChecked())
-		i=1;
-	else if ( radioButtonStones_3D->isChecked())
-		i=2;
-	setting->writeBoolEntry("STONES_STRIPES", stripesCheckBox->isChecked());
-	setting->writeIntEntry("STONES_LOOK", i);
-	setting->writeIntEntry("STONES_WSPEC", whiteSpecSlider->value());
-	setting->writeIntEntry("STONES_BSPEC", blackSpecSlider->value());
-	setting->writeIntEntry("STONES_WHARD", whiteHardSlider->value());
-	setting->writeIntEntry("STONES_BHARD", blackHardSlider->value());
-	setting->writeIntEntry("STONES_WROUND", whiteRoundSlider->value());
-	setting->writeIntEntry("STONES_BROUND", blackRoundSlider->value());
-	setting->writeIntEntry("STONES_WFLAT", whiteFlatSlider->value());
-	setting->writeIntEntry("STONES_BFLAT", blackFlatSlider->value());
-	setting->writeIntEntry("STONES_AMBIENT", ambientSlider->value());
-	setting->writeEntry("STONES_BCOL", black_color().name());
-	setting->writeEntry("STONES_WCOL", white_color().name());
+	if (ui->radioButtonStones_2D->isChecked ())
+		i = 1;
+	else if (ui->radioButtonStones_3D->isChecked ())
+		i = 2;
+	setting->writeBoolEntry ("STONES_STRIPES", ui->stripesCheckBox->isChecked ());
+	setting->writeIntEntry ("STONES_LOOK", i);
+	setting->writeIntEntry ("STONES_WSPEC", ui->whiteSpecSlider->value ());
+	setting->writeIntEntry ("STONES_BSPEC", ui->blackSpecSlider->value ());
+	setting->writeIntEntry ("STONES_WHARD", ui->whiteHardSlider->value ());
+	setting->writeIntEntry ("STONES_BHARD", ui->blackHardSlider->value ());
+	setting->writeIntEntry ("STONES_WROUND", ui->whiteRoundSlider->value ());
+	setting->writeIntEntry ("STONES_BROUND", ui->blackRoundSlider->value ());
+	setting->writeIntEntry ("STONES_WFLAT", ui->whiteFlatSlider->value ());
+	setting->writeIntEntry ("STONES_BFLAT", ui->blackFlatSlider->value ());
+	setting->writeIntEntry ("STONES_AMBIENT", ui->ambientSlider->value ());
+	setting->writeEntry ("STONES_BCOL", black_color ().name ());
+	setting->writeEntry ("STONES_WCOL", white_color ().name ());
 
-	setting->writeBoolEntry("BOARD_LINESCALE", lineScaleCheckBox->isChecked ());
-	setting->writeBoolEntry("BOARD_LINEWIDEN", lineWidenCheckBox->isChecked ());
+	setting->writeBoolEntry ("BOARD_LINESCALE", ui->lineScaleCheckBox->isChecked ());
+	setting->writeBoolEntry ("BOARD_LINEWIDEN", ui->lineWidenCheckBox->isChecked ());
 
-	setting->writeBoolEntry("SOUND_STONE", stoneSoundCheckBox->isChecked());
-	setting->writeBoolEntry("SOUND_TALK", talkSoundCheckBox->isChecked());
-	setting->writeBoolEntry("SOUND_MATCH", matchSoundCheckBox->isChecked());
-	setting->writeBoolEntry("SOUND_GAMEEND", passSoundCheckBox->isChecked());
-	setting->writeBoolEntry("SOUND_PASS", gameEndSoundCheckBox->isChecked());
-	setting->writeBoolEntry("SOUND_TIME", timeSoundCheckBox->isChecked());
-	setting->writeBoolEntry("SOUND_SAY", saySoundCheckBox->isChecked());
-	setting->writeBoolEntry("SOUND_ENTER", enterSoundCheckBox->isChecked());
-	setting->writeBoolEntry("SOUND_LEAVE", leaveSoundCheckBox->isChecked());
-	setting->writeBoolEntry("SOUND_DISCONNECT", disConnectSoundCheckBox->isChecked());
-	setting->writeBoolEntry("SOUND_CONNECT", connectSoundCheckBox->isChecked());
+	setting->writeBoolEntry ("SOUND_STONE", ui->stoneSoundCheckBox->isChecked ());
+	setting->writeBoolEntry ("SOUND_TALK", ui->talkSoundCheckBox->isChecked ());
+	setting->writeBoolEntry ("SOUND_MATCH", ui->matchSoundCheckBox->isChecked ());
+	setting->writeBoolEntry ("SOUND_GAMEEND", ui->passSoundCheckBox->isChecked ());
+	setting->writeBoolEntry ("SOUND_PASS", ui->gameEndSoundCheckBox->isChecked ());
+	setting->writeBoolEntry ("SOUND_TIME", ui->timeSoundCheckBox->isChecked ());
+	setting->writeBoolEntry ("SOUND_SAY", ui->saySoundCheckBox->isChecked ());
+	setting->writeBoolEntry ("SOUND_ENTER", ui->enterSoundCheckBox->isChecked ());
+	setting->writeBoolEntry ("SOUND_LEAVE", ui->leaveSoundCheckBox->isChecked ());
+	setting->writeBoolEntry ("SOUND_DISCONNECT", ui->disConnectSoundCheckBox->isChecked ());
+	setting->writeBoolEntry ("SOUND_CONNECT", ui->connectSoundCheckBox->isChecked ());
 
-	setting->writeBoolEntry("SOUND_MATCH_BOARD", soundMatchCheckBox->isChecked());
-	setting->writeBoolEntry("SOUND_OBSERVE", soundObserveCheckBox->isChecked());
-	setting->writeBoolEntry("SOUND_NORMAL", soundNormalCheckBox->isChecked());
-	setting->writeBoolEntry("SOUND_COMPUTER", soundComputerCheckBox->isChecked());
+	setting->writeBoolEntry ("SOUND_MATCH_BOARD", ui->soundMatchCheckBox->isChecked ());
+	setting->writeBoolEntry ("SOUND_OBSERVE", ui->soundObserveCheckBox->isChecked ());
+	setting->writeBoolEntry ("SOUND_NORMAL", ui->soundNormalCheckBox->isChecked ());
+	setting->writeBoolEntry ("SOUND_COMPUTER", ui->soundComputerCheckBox->isChecked ());
 
-	setting->writeIntEntry("VAR_GHOSTS", variationComboBox->currentIndex());
-	setting->writeBoolEntry("VAR_CHILDREN", varChildrenComboBox->currentIndex() == 1);
-	setting->writeIntEntry("VAR_SGF_STYLE", varSGFStyleComboBox->currentIndex());
-	setting->writeBoolEntry("VAR_IGNORE_DIAGS", varDiagsCheckBox->isChecked());
+	setting->writeIntEntry ("VAR_GHOSTS", ui->variationComboBox->currentIndex ());
+	setting->writeBoolEntry ("VAR_CHILDREN", ui->varChildrenComboBox->currentIndex () == 1);
+	setting->writeIntEntry ("VAR_SGF_STYLE", ui->varSGFStyleComboBox->currentIndex ());
+	setting->writeBoolEntry ("VAR_IGNORE_DIAGS", ui->varDiagsCheckBox->isChecked ());
 
-	int coords = coordsComboBox->currentIndex();
-	int sidebar = sidebarComboBox->currentIndex();
-	setting->writeBoolEntry("BOARD_COORDS", coords > 0);
-	setting->writeBoolEntry("SGF_BOARD_COORDS", coords == 2);
-	setting->writeIntEntry("COORDS_SIZE", coordSizeSlider->value());
-	setting->writeBoolEntry("SIDEBAR_LEFT", sidebar == 0);
-	setting->writeBoolEntry("CURSOR", cursorCheckBox->isChecked());
-	//setting->writeBoolEntry("SMALL_STONES", smallerStonesCheckBox->isChecked());
-	setting->writeBoolEntry("TOOLTIPS", !(tooltipsCheckBox->isChecked()));
-	setting->writeIntEntry("BY_TIMER", BYTimeSpin->text().toInt());
-	setting->writeBoolEntry("ANTICLICKO", antiClickoCheckBox->isChecked());
-	setting->writeBoolEntry("ANTICLICKO_HITBOX", hitboxCheckBox->isChecked());
+	int coords = ui->coordsComboBox->currentIndex ();
+	int sidebar = ui->sidebarComboBox->currentIndex ();
+	setting->writeBoolEntry ("BOARD_COORDS", coords > 0);
+	setting->writeBoolEntry ("SGF_BOARD_COORDS", coords == 2);
+	setting->writeIntEntry ("COORDS_SIZE", ui->coordSizeSlider->value ());
+	setting->writeBoolEntry ("SIDEBAR_LEFT", sidebar == 0);
+	setting->writeBoolEntry ("CURSOR", ui->cursorCheckBox->isChecked ());
+	//setting->writeBoolEntry ("SMALL_STONES", ui->smallerStonesCheckBox->isChecked ());
+	setting->writeBoolEntry ("TOOLTIPS", !(ui->tooltipsCheckBox->isChecked ()));
+	setting->writeIntEntry ("BY_TIMER", ui->BYTimeSpin->text ().toInt ());
+	setting->writeBoolEntry ("ANTICLICKO", ui->antiClickoCheckBox->isChecked ());
+	setting->writeBoolEntry ("ANTICLICKO_HITBOX", ui->hitboxCheckBox->isChecked ());
 
 	// Client Window Tab
-	setting->writeEntry("WATCH", LineEdit_watch->text());
-	setting->writeEntry("EXCLUDE", LineEdit_exclude->text());
-	setting->writeBoolEntry("EXTUSERINFO", CheckBox_extUserInfo->isChecked());
-//	setting->writeBoolEntry("USE_NMATCH", CheckBox_useNmatch->isChecked());
+	setting->writeEntry ("WATCH", ui->LineEdit_watch->text ());
+	setting->writeEntry ("EXCLUDE", ui->LineEdit_exclude->text ());
+	setting->writeBoolEntry ("EXTUSERINFO", ui->CheckBox_extUserInfo->isChecked ());
+//	setting->writeBoolEntry ("USE_NMATCH", ui->CheckBox_useNmatch->isChecked ());
 
 	//Checks wether the nmatch parameters have been modified, in order to send a new nmatchrange command
-	if( 	(setting->readBoolEntry("NMATCH_BLACK") != checkBox_Nmatch_Black->isChecked()) ||
-		(setting->readBoolEntry("NMATCH_WHITE") != checkBox_Nmatch_White->isChecked()) ||
-		(setting->readBoolEntry("NMATCH_NIGIRI") != checkBox_Nmatch_Nigiri->isChecked()) ||
-		(setting->readIntEntry("NMATCH_MAIN_TIME") != timeSpin_Nmatch->text().toInt()) ||
-		(setting->readIntEntry("NMATCH_BYO_TIME") != BYSpin_Nmatch->text().toInt()) ||
-		(setting->readIntEntry("NMATCH_HANDICAP") != HandicapSpin_Nmatch->text().toInt()) ||
-		(setting->readIntEntry("DEFAULT_SIZE") != boardSizeSpin->text().toInt()) ||
-		(setting->readIntEntry("DEFAULT_TIME") != timeSpin->text().toInt()) ||
-		(setting->readIntEntry("DEFAULT_BY") != BYSpin->text().toInt()) )
+	if( 	(setting->readBoolEntry ("NMATCH_BLACK") != ui->checkBox_Nmatch_Black->isChecked ()) ||
+		(setting->readBoolEntry ("NMATCH_WHITE") != ui->checkBox_Nmatch_White->isChecked ()) ||
+		(setting->readBoolEntry ("NMATCH_NIGIRI") != ui->checkBox_Nmatch_Nigiri->isChecked ()) ||
+		(setting->readIntEntry ("NMATCH_MAIN_TIME") != ui->timeSpin_Nmatch->text ().toInt ()) ||
+		(setting->readIntEntry ("NMATCH_BYO_TIME") != ui->BYSpin_Nmatch->text ().toInt ()) ||
+		(setting->readIntEntry ("NMATCH_HANDICAP") != ui->HandicapSpin_Nmatch->text ().toInt ()) ||
+		(setting->readIntEntry ("DEFAULT_SIZE") != ui->boardSizeSpin->text ().toInt ()) ||
+		(setting->readIntEntry ("DEFAULT_TIME") != ui->timeSpin->text ().toInt ()) ||
+		(setting->readIntEntry ("DEFAULT_BY") != ui->BYSpin->text ().toInt ()) )
 			setting->nmatch_settings_modified = true;
 
-	setting->writeBoolEntry("NMATCH_BLACK", checkBox_Nmatch_Black->isChecked());
-	setting->writeBoolEntry("NMATCH_WHITE", checkBox_Nmatch_White->isChecked());
-	setting->writeBoolEntry("NMATCH_NIGIRI", checkBox_Nmatch_Nigiri->isChecked());
-	setting->writeIntEntry("NMATCH_MAIN_TIME", timeSpin_Nmatch->text().toInt());
-	setting->writeIntEntry("NMATCH_BYO_TIME", BYSpin_Nmatch->text().toInt());
-	setting->writeIntEntry("NMATCH_HANDICAP", HandicapSpin_Nmatch->text().toInt());
+	setting->writeBoolEntry ("NMATCH_BLACK", ui->checkBox_Nmatch_Black->isChecked ());
+	setting->writeBoolEntry ("NMATCH_WHITE", ui->checkBox_Nmatch_White->isChecked ());
+	setting->writeBoolEntry ("NMATCH_NIGIRI", ui->checkBox_Nmatch_Nigiri->isChecked ());
+	setting->writeIntEntry ("NMATCH_MAIN_TIME", ui->timeSpin_Nmatch->text ().toInt ());
+	setting->writeIntEntry ("NMATCH_BYO_TIME", ui->BYSpin_Nmatch->text ().toInt ());
+	setting->writeIntEntry ("NMATCH_HANDICAP", ui->HandicapSpin_Nmatch->text ().toInt ());
 
-	setting->writeIntEntry("DEFAULT_SIZE", boardSizeSpin->text().toInt());
-	setting->writeIntEntry("DEFAULT_TIME", timeSpin->text().toInt());
-	setting->writeIntEntry("DEFAULT_BY", BYSpin->text().toInt());
-	setting->writeIntEntry("DEFAULT_KOMI", komiSpinDefault->text().toFloat());
-	setting->writeBoolEntry("DEFAULT_AUTONEGO", automaticNegotiationCheckBox->isChecked());
-	setting->writeBoolEntry("AUTOSAVE", CheckBox_autoSave->isChecked());
-	setting->writeBoolEntry("AUTOSAVE_PLAYED", CheckBox_autoSave_Played->isChecked());
+	setting->writeIntEntry ("DEFAULT_SIZE", ui->boardSizeSpin->text ().toInt ());
+	setting->writeIntEntry ("DEFAULT_TIME", ui->timeSpin->text ().toInt ());
+	setting->writeIntEntry ("DEFAULT_BY", ui->BYSpin->text ().toInt ());
+	setting->writeIntEntry ("DEFAULT_KOMI", ui->komiSpinDefault->text ().toFloat());
+	setting->writeBoolEntry ("DEFAULT_AUTONEGO", ui->automaticNegotiationCheckBox->isChecked ());
+	setting->writeBoolEntry ("AUTOSAVE", ui->CheckBox_autoSave->isChecked ());
+	setting->writeBoolEntry ("AUTOSAVE_PLAYED", ui->CheckBox_autoSave_Played->isChecked ());
 
 	// Computer Tab
-	setting->writeBoolEntry("COMPUTER_WHITE", computerWhiteButton->isChecked());
-	setting->writeIntEntry("COMPUTER_SIZE", computerSizeSpin->text().toInt());
-	setting->writeIntEntry("COMPUTER_HANDICAP", computerHandicapSpin->text().toInt());
-	setting->writeEntry("HUMAN_NAME", humanName->text());
+	setting->writeBoolEntry ("COMPUTER_WHITE", ui->computerWhiteButton->isChecked ());
+	setting->writeIntEntry ("COMPUTER_SIZE", ui->computerSizeSpin->text ().toInt ());
+	setting->writeIntEntry ("COMPUTER_HANDICAP", ui->computerHandicapSpin->text ().toInt ());
+	setting->writeEntry ("HUMAN_NAME", ui->humanName->text ());
 
-	setting->writeBoolEntry ("ANALYSIS_CHILDREN", anChildMovesCheckBox->isChecked ());
-	setting->writeBoolEntry ("ANALYSIS_PRUNE", anPruneCheckBox->isChecked ());
-	setting->writeBoolEntry ("ANALYSIS_HIDEOTHER", anHideCheckBox->isChecked ());
-	setting->writeIntEntry ("ANALYSIS_VARTYPE", anVarComboBox->currentIndex ());
-	setting->writeIntEntry ("ANALYSIS_WINRATE", winrateComboBox->currentIndex ());
+	setting->writeBoolEntry ("ANALYSIS_CHILDREN", ui->anChildMovesCheckBox->isChecked ());
+	setting->writeBoolEntry ("ANALYSIS_PRUNE", ui->anPruneCheckBox->isChecked ());
+	setting->writeBoolEntry ("ANALYSIS_HIDEOTHER", ui->anHideCheckBox->isChecked ());
+	setting->writeIntEntry ("ANALYSIS_VARTYPE", ui->anVarComboBox->currentIndex ());
+	setting->writeIntEntry ("ANALYSIS_WINRATE", ui->winrateComboBox->currentIndex ());
 
-	setting->writeIntEntry ("ANALYSIS_DEPTH", anDepthEdit->text().toInt());
-	setting->writeIntEntry ("ANALYSIS_MAXMOVES", anMaxMovesEdit->text().toInt());
+	setting->writeIntEntry ("ANALYSIS_DEPTH", ui->anDepthEdit->text ().toInt ());
+	setting->writeIntEntry ("ANALYSIS_MAXMOVES", ui->anMaxMovesEdit->text ().toInt ());
 
-	setting->writeIntEntry("GAMETREE_SIZE", gameTreeSizeSlider->value());
-	setting->writeIntEntry("BOARD_DIAGMODE", diagShowComboBox->currentIndex());
-	setting->writeBoolEntry("BOARD_DIAGCLEAR", diagClearCheckBox->isChecked());
-	setting->writeBoolEntry("GAMETREE_DIAGHIDE", diagHideCheckBox->isChecked());
+	setting->writeIntEntry ("GAMETREE_SIZE", ui->gameTreeSizeSlider->value ());
+	setting->writeIntEntry ("BOARD_DIAGMODE", ui->diagShowComboBox->currentIndex ());
+	setting->writeBoolEntry ("BOARD_DIAGCLEAR", ui->diagClearCheckBox->isChecked ());
+	setting->writeBoolEntry ("GAMETREE_DIAGHIDE", ui->diagHideCheckBox->isChecked ());
 
-	setting->writeIntEntry("TOROID_DUPS", toroidDupsSpin->text().toInt());
+	setting->writeIntEntry ("TOROID_DUPS", ui->toroidDupsSpin->text ().toInt ());
 
 	if (m_dbpaths_changed) {
 		setting->m_dbpaths = m_dbpaths;
@@ -832,8 +826,8 @@ void PreferencesDialog::selectFont (QPushButton *button, QFont &font)
 bool PreferencesDialog::avoid_losing_data ()
 {
 	if (m_changing_engine) {
-		if (!enginePath->text ().isEmpty () || !engineArgs->text ().isEmpty ()
-		    || !engineKomi->text ().isEmpty ())
+		if (!ui->enginePath->text ().isEmpty () || !ui->engineArgs->text ().isEmpty ()
+		    || !ui->engineKomi->text ().isEmpty ())
 		{
 			QMessageBox mb(QMessageBox::Question, tr("Unsaved data"),
 				       QString(tr("The engine input fields contain\n"
@@ -844,9 +838,9 @@ bool PreferencesDialog::avoid_losing_data ()
 		}
 	}
 	if (m_changing_host) {
-		if (!LineEdit_host->text ().isEmpty ()
-		    || !LineEdit_port->text ().isEmpty ()
-		    || !LineEdit_login->text ().isEmpty ())
+		if (!ui->LineEdit_host->text ().isEmpty ()
+		    || !ui->LineEdit_port->text ().isEmpty ()
+		    || !ui->LineEdit_login->text ().isEmpty ())
 		{
 			QMessageBox mb(QMessageBox::Question, tr("Unsaved data"),
 				       QString(tr("The host input fields contain\n"
@@ -886,7 +880,7 @@ void PreferencesDialog::saveSizes()
 
 void PreferencesDialog::slot_add_engine()
 {
-	QString komi = engineKomi->text ();
+	QString komi = ui->engineKomi->text ();
 	if (!komi.isEmpty ()) {
 		QDoubleValidator kv;
 		kv.setDecimals (2);
@@ -897,27 +891,27 @@ void PreferencesDialog::slot_add_engine()
 			return;
 		}
 	}
-	if (engineSize->text ().isEmpty ()) {
-		if (engineAnalysis->isChecked ()) {
+	if (ui->engineSize->text ().isEmpty ()) {
+		if (ui->engineAnalysis->isChecked ()) {
 			QMessageBox::warning (this, tr ("Missing board size"),
 					      tr ("Analysis engines require a board size to be specified.\n"
 						  "If your engine allows multiple board sizes, you need to configure them in separate entires."));
 			return;
 		}
 	} else {
-		int sz = engineSize->text ().toInt ();
+		int sz = ui->engineSize->text ().toInt ();
 		if (sz < 5 || sz > 25) {
 			QMessageBox::warning (this, tr ("Invalid board size"),
 					      tr ("Only a range of 5 to 25 is allowed."));
 			return;
 		}
 	}
-	const QString name = engineName->text();
+	const QString name = ui->engineName->text ();
 	// check if at least title and path are set
-	if (!name.isEmpty() && !enginePath->text().isEmpty())
+	if (!name.isEmpty() && !ui->enginePath->text ().isEmpty())
 	{
-		Engine new_e (engineName->text (), enginePath->text (), engineArgs->text (),
-			      engineKomi->text (), engineAnalysis->isChecked (), engineSize->text ());
+		Engine new_e (ui->engineName->text (), ui->enginePath->text (), ui->engineArgs->text (),
+			      ui->engineKomi->text (), ui->engineAnalysis->isChecked (), ui->engineSize->text ());
 		m_engines_model.add_or_replace (new_e);
 		m_engines_changed = true;
 	}
@@ -927,18 +921,18 @@ void PreferencesDialog::slot_add_engine()
 
 void PreferencesDialog::clear_engine ()
 {
-	engineName->clear ();
-	enginePath->clear ();
-	engineArgs->clear ();
-	engineKomi->clear ();
-	engineAnalysis->setChecked (false);
-	engineSize->clear ();
+	ui->engineName->clear ();
+	ui->enginePath->clear ();
+	ui->engineArgs->clear ();
+	ui->engineKomi->clear ();
+	ui->engineAnalysis->setChecked (false);
+	ui->engineSize->clear ();
 	m_changing_engine = false;
 }
 
 void PreferencesDialog::slot_delete_engine ()
 {
-	QModelIndex idx = ListView_engines->currentIndex ();
+	QModelIndex idx = ui->ListView_engines->currentIndex ();
 	if (!idx.isValid ())
 		return;
 
@@ -957,21 +951,21 @@ void PreferencesDialog::slot_new_engine ()
 
 void PreferencesDialog::update_current_engine ()
 {
-	QModelIndex idx = ListView_engines->currentIndex ();
+	QModelIndex idx = ui->ListView_engines->currentIndex ();
 	bool valid = idx.isValid ();
 
-	pb_engine_delete->setEnabled (valid);
+	ui->pb_engine_delete->setEnabled (valid);
 
 	if (!valid)
 		return;
 
 	const Engine *e = m_engines_model.find (idx);
-	engineName->setText (e->title);
-	enginePath->setText (e->path);
-	engineArgs->setText (e->args);
-	engineKomi->setText (e->komi);
-	engineAnalysis->setChecked (e->analysis);
-	engineSize->setText (e->boardsize);
+	ui->engineName->setText (e->title);
+	ui->enginePath->setText (e->path);
+	ui->engineArgs->setText (e->args);
+	ui->engineKomi->setText (e->komi);
+	ui->engineAnalysis->setChecked (e->analysis);
+	ui->engineSize->setText (e->boardsize);
 }
 
 void PreferencesDialog::slot_engineChanged (const QString &title)
@@ -979,22 +973,22 @@ void PreferencesDialog::slot_engineChanged (const QString &title)
 	for (auto &e: m_engines_model.entries ())
 		if (e.title == title) {
 			m_changing_engine = true;
-			pb_engine_add->setText (tr("Change"));
+			ui->pb_engine_add->setText (tr("Change"));
 			return;
 		}
 
 	m_changing_engine = false;
-	pb_engine_add->setText(tr("Add"));
+	ui->pb_engine_add->setText (tr("Add"));
 }
 
 
 void PreferencesDialog::clear_host ()
 {
-	LineEdit_title->clear();
-	LineEdit_host->clear();
-	LineEdit_port->clear();
-	LineEdit_login->clear();
-	ComboBox_codec->setCurrentText("");
+	ui->LineEdit_title->clear();
+	ui->LineEdit_host->clear();
+	ui->LineEdit_port->clear();
+	ui->LineEdit_login->clear();
+	ui->ComboBox_codec->setCurrentText("");
 
 	m_changing_host = false;
 }
@@ -1002,19 +996,19 @@ void PreferencesDialog::clear_host ()
 void PreferencesDialog::slot_add_server()
 {
 	// check if at least title and host inserted
-	if (!LineEdit_title->text().isEmpty() && !LineEdit_host->text().isEmpty())
+	if (!ui->LineEdit_title->text ().isEmpty() && !ui->LineEdit_host->text ().isEmpty())
 	{
 		// check if title already exists
 		bool check;
-		unsigned int tmp = LineEdit_port->text().toUInt(&check);
+		unsigned int tmp = ui->LineEdit_port->text ().toUInt(&check);
 		if (!check)
 		{
 			tmp = 0;
 			qWarning("Failed to convert port to integer!");
 		}
 
-		Host new_h (LineEdit_title->text (), LineEdit_host->text (), tmp,
-			    LineEdit_login->text (), LineEdit_pass->text (), ComboBox_codec->currentText ());
+		Host new_h (ui->LineEdit_title->text (), ui->LineEdit_host->text (), tmp,
+			    ui->LineEdit_login->text (), ui->LineEdit_pass->text (), ui->ComboBox_codec->currentText ());
 		m_hosts_model.add_or_replace (new_h);
 		m_hosts_changed = true;
 	}
@@ -1024,7 +1018,7 @@ void PreferencesDialog::slot_add_server()
 
 void PreferencesDialog::slot_delete_server()
 {
-	QModelIndex idx = ListView_hosts->currentIndex ();
+	QModelIndex idx = ui->ListView_hosts->currentIndex ();
 	if (!idx.isValid ())
 		return;
 	if ((size_t)idx.row () >= m_hosts_model.entries ().size ())
@@ -1042,22 +1036,22 @@ void PreferencesDialog::slot_new_server()
 
 void PreferencesDialog::update_current_host ()
 {
-	QModelIndex idx = ListView_hosts->currentIndex ();
+	QModelIndex idx = ui->ListView_hosts->currentIndex ();
 	bool valid = idx.isValid ();
 	bool standard_host = valid && (size_t)idx.row () >= m_hosts_model.entries ().size ();
 
-	pb_server_delete->setEnabled (valid && !standard_host);
+	ui->pb_server_delete->setEnabled (valid && !standard_host);
 
 	if (!valid)
 		return;
 
 	const Host *h = m_hosts_model.find (idx);
-	LineEdit_title->setText (standard_host ? "" : h->title);
-	LineEdit_host->setText (h->host);
-	LineEdit_port->setText (QString::number (h->port));
-	LineEdit_login->setText (h->login_name);
-	LineEdit_pass->setText (h->password);
-	ComboBox_codec->setCurrentText (h->codec);
+	ui->LineEdit_title->setText (standard_host ? "" : h->title);
+	ui->LineEdit_host->setText (h->host);
+	ui->LineEdit_port->setText (QString::number (h->port));
+	ui->LineEdit_login->setText (h->login_name);
+	ui->LineEdit_pass->setText (h->password);
+	ui->ComboBox_codec->setCurrentText (h->codec);
 }
 
 void PreferencesDialog::slot_serverChanged(const QString &title)
@@ -1065,51 +1059,51 @@ void PreferencesDialog::slot_serverChanged(const QString &title)
 	for (auto &h: m_hosts_model.entries ())
 		if (h.title == title) {
 			m_changing_host = true;
-			pb_server_add->setText (tr("Change"));
+			ui->pb_server_add->setText (tr("Change"));
 			return;
 		}
 
 	m_changing_host = false;
-	pb_server_add->setText(tr("Add"));
+	ui->pb_server_add->setText (tr("Add"));
 }
 
 // play the sound if check box has been clicked
 void PreferencesDialog::on_soundButtonGroup_buttonClicked (QAbstractButton *cb)
 {
-	qDebug() << "button text = " << cb->text();
+	qDebug() << "button text = " << cb->text ();
 
-	if (cb == stoneSoundCheckBox)
+	if (cb == ui->stoneSoundCheckBox)
 		qgo->playStoneSound (true);
-	else if (cb == passSoundCheckBox)
+	else if (cb == ui->passSoundCheckBox)
 		qgo->playPassSound (true);
-	else if (cb == timeSoundCheckBox)
+	else if (cb == ui->timeSoundCheckBox)
 		qgo->playTimeSound (true);
-	else if (cb == talkSoundCheckBox)
+	else if (cb == ui->talkSoundCheckBox)
 		qgo->playTalkSound (true);
-	else if (cb == saySoundCheckBox)
+	else if (cb == ui->saySoundCheckBox)
 		qgo->playSaySound (true);
-	else if (cb == matchSoundCheckBox)
+	else if (cb == ui->matchSoundCheckBox)
 		qgo->playMatchSound (true);
-	else if (cb == enterSoundCheckBox)
+	else if (cb == ui->enterSoundCheckBox)
 		qgo->playEnterSound (true);
-	else if (cb == gameEndSoundCheckBox)
+	else if (cb == ui->gameEndSoundCheckBox)
 		qgo->playGameEndSound (true);
-	else if (cb == leaveSoundCheckBox)
+	else if (cb == ui->leaveSoundCheckBox)
 		qgo->playLeaveSound (true);
-	else if (cb == disConnectSoundCheckBox)
+	else if (cb == ui->disConnectSoundCheckBox)
 		qgo->playDisConnectSound (true);
-	else if (cb == connectSoundCheckBox)
+	else if (cb == ui->connectSoundCheckBox)
 		qgo->playConnectSound (true);
 }
 
 void PreferencesDialog::slot_getComputerPath()
 {
-	QString fileName(QFileDialog::getOpenFileName(this, tr ("Choose GTP engine path"), setting->readEntry("LAST_DIR"),
+	QString fileName(QFileDialog::getOpenFileName(this, tr ("Choose GTP engine path"), setting->readEntry ("LAST_DIR"),
 						      tr("All Files (*)")));
 	if (fileName.isEmpty())
 		return;
 
-  	enginePath->setText(fileName);
+	ui->enginePath->setText (fileName);
 }
 
 void PreferencesDialog::slot_getGobanPicturePath()
@@ -1123,9 +1117,9 @@ void PreferencesDialog::slot_getGobanPicturePath()
 	QString path = (QString)CFStringGetCStringPtr(bundlePath, CFStringGetSystemEncoding())
 		+ "/Contents/Resources/Backgrounds";
 #else
-	QString path = setting->readEntry("LAST_DIR");
+	QString path = setting->readEntry ("LAST_DIR");
 #endif
-	QString old_name = LineEdit_goban->text ();
+	QString old_name = ui->LineEdit_goban->text ();
 	if (!old_name.isEmpty ()) {
 		QFileInfo info (old_name);
 		if (info.exists ()) {
@@ -1137,7 +1131,7 @@ void PreferencesDialog::slot_getGobanPicturePath()
 	if (fileName.isEmpty())
 		return;
 
-  	LineEdit_goban->setText(fileName);
+	ui->LineEdit_goban->setText (fileName);
 	update_board_image ();
 }
 
@@ -1152,9 +1146,9 @@ void PreferencesDialog::slot_getTablePicturePath()
 	QString path = (QString)CFStringGetCStringPtr(bundlePath, CFStringGetSystemEncoding())
 		+ "/Contents/Resources/Backgrounds";
 #else
-	QString path = setting->readEntry("LAST_DIR");
+	QString path = setting->readEntry ("LAST_DIR");
 #endif
-	QString old_name = LineEdit_Table->text ();
+	QString old_name = ui->LineEdit_Table->text ();
 	if (!old_name.isEmpty ()) {
 		QFileInfo info (old_name);
 		if (info.exists ()) {
@@ -1166,18 +1160,18 @@ void PreferencesDialog::slot_getTablePicturePath()
 	if (fileName.isEmpty())
 		return;
 
-  	LineEdit_Table->setText(fileName);
+	ui->LineEdit_Table->setText (fileName);
 }
 
 void PreferencesDialog::slot_main_time_changed(int n)
 {
-	timeSpin_Nmatch->setMinimum(n);
+	ui->timeSpin_Nmatch->setMinimum(n);
 }
 
 
 void PreferencesDialog::slot_BY_time_changed(int n)
 {
-	BYSpin_Nmatch->setMinimum(n);
+	ui->BYSpin_Nmatch->setMinimum(n);
 }
 
 QColor PreferencesDialog::white_color ()

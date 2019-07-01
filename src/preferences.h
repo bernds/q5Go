@@ -6,10 +6,11 @@
 #define PREFERENCESDIALOG_H
 
 #include "setting.h"
-#include "ui_preferences_gui.h"
 
 #include <QStandardItemModel>
 #include <QAbstractItemModel>
+#include <QDialog>
+#include <QAbstractButton>
 
 class QIntValidator;
 class MainWindow;
@@ -17,6 +18,11 @@ class ClientWindow;
 class ImageHandler;
 class QGraphicsScene;
 class QGraphicsPixmapItem;
+
+namespace Ui
+{
+	class PreferencesDialogGui;
+};
 
 template<class T>
 class pref_vec_model : public QAbstractItemModel
@@ -46,9 +52,11 @@ public:
 			     int role = Qt::DisplayRole) const override;
 };
 
-class PreferencesDialog : public QDialog, public Ui::PreferencesDialogGui
+class PreferencesDialog : public QDialog
 {
 	Q_OBJECT
+
+	Ui::PreferencesDialogGui *ui;
 
 	bool m_changing_engine = false;
 	bool m_changing_host = false;
@@ -86,8 +94,8 @@ class PreferencesDialog : public QDialog, public Ui::PreferencesDialogGui
 	void update_db_selection ();
 	void update_dbpaths (const QStringList &);
 public:
-	PreferencesDialog(QWidget* parent = 0);
-	~PreferencesDialog();
+	PreferencesDialog (int tab, QWidget* parent = 0);
+	~PreferencesDialog ();
 
 //	static QString fontToString(QFont f);
 	QColor white_color ();
