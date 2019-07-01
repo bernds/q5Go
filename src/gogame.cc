@@ -345,7 +345,7 @@ eval game_state::eval_from (const analyzer_id &id, bool require)
 	return require ? eval () : best_eval ();
 }
 
-void game_state::walk_tree (std::function<bool (game_state *)> &func)
+void game_state::walk_tree (const std::function<bool (game_state *)> &func)
 {
 	/* This function is slightly convoluted, in order to both
 	   traverse the main branch first, and avoid recursion while

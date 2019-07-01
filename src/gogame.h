@@ -521,7 +521,11 @@ public:
 	void add_child_tree (game_state *other)
 	{
 		m_children.push_back (other);
+		auto callback = [] (game_state *st) -> bool {
+			st->m_move_number = st->m_parent->m_move_number + 1; return true;
+		};
 		other->m_parent = this;
+		other->walk_tree (callback);
 		m_visual_ok = false;
 	}
 	bool valid_move_p (int x, int y, stone_color);
@@ -802,7 +806,7 @@ public:
 	   the case.  */
 	bool vis_expand_one ();
 
-	void walk_tree (std::function<bool (game_state *)> &);
+	void walk_tree (const std::function<bool (game_state *)> &);
 };
 
 class sgf;
