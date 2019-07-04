@@ -287,6 +287,9 @@ and play the selected number of games per line</string>
      <property name="title">
       <string>Time</string>
      </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
      <layout class="QGridLayout" name="gridLayout_3">
       <item row="0" column="0">
        <widget class="QLabel" name="label">
@@ -303,6 +306,9 @@ and play the selected number of games per line</string>
           <height>16777215</height>
          </size>
         </property>
+        <property name="text">
+         <string>60</string>
+        </property>
        </widget>
       </item>
       <item row="1" column="0" colspan="2">
@@ -313,6 +319,9 @@ and play the selected number of games per line</string>
         <property name="checkable">
          <bool>true</bool>
         </property>
+        <property name="checked">
+         <bool>false</bool>
+        </property>
         <layout class="QGridLayout" name="gridLayout_2">
          <item row="0" column="1">
           <widget class="QLineEdit" name="overPeriodEdit">
@@ -321,6 +330,9 @@ and play the selected number of games per line</string>
              <width>60</width>
              <height>16777215</height>
             </size>
+           </property>
+           <property name="text">
+            <string>10</string>
            </property>
           </widget>
          </item>
@@ -339,7 +351,11 @@ and play the selected number of games per line</string>
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="QSpinBox" name="overStonesSpinBox"/>
+          <widget class="QSpinBox" name="overStonesSpinBox">
+           <property name="value">
+            <number>5</number>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>

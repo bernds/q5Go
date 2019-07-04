@@ -14,7 +14,7 @@ DISTHEADERS_MOC = analyzedlg.h audio.h autodiagsdlg.h bitarray.h board.h clickab
 
 DISTHEADERS_NOMOC = goboard.h config.h defines.h grid.h goboard.h gogame.h gs_globals.h \
 	imagehandler.h komispinbox.hm isc.h newaigamedlg.h setting.h sgf.h sgfparser.h \
-	svgbuilder.h ui_helpers.h
+	svgbuilder.h timing.h ui_helpers.h
 
 DISTSOURCES = analyzedlg.cpp audio.cpp autodiagsdlg.cpp board.cpp clockview.cpp dbdialog.cpp evalgraph.cpp \
 		figuredlg.cpp goboard.cc gogame.cc gamedialog.cpp gamestable.cpp gametree.cpp grid.cpp \
@@ -23,7 +23,7 @@ DISTSOURCES = analyzedlg.cpp audio.cpp autodiagsdlg.cpp board.cpp clockview.cpp 
 		misc.cpp msg_handler.cpp parser.cpp \
 		playertable.cpp preferences.cpp qgo.cpp qgo_interface.cpp qgtp.cpp \
 		newaigamedlg.cpp setting.cpp  sgfload.cc sgf2board.cc sgfpreview.cpp \
-		slideview.cpp svgbuilder.cpp tables.cpp telnet.cpp textview.cpp variantgamedlg.cpp
+		slideview.cpp svgbuilder.cpp tables.cpp telnet.cpp textview.cpp timing.cpp variantgamedlg.cpp
 
 FORMS = analyze_gui.ui autodiags_gui.ui boardwindow_gui.ui clientwindow_gui.ui dbdialog_gui.ui figuredlg_gui.ui \
 	gameinfo_gui.ui gui_dialog.ui newgame_gui.ui newlocalgame_gui.ui newvariantgame_gui.ui \

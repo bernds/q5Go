@@ -2128,8 +2128,10 @@ void ClientWindow::slotComputerPlay(bool)
 
 	if (gr == nullptr)
 		return;
+
 	bool computer_white = dlg.computer_white_p ();
-	new MainWindow_GTP (0, gr, screen_key (this), engine, !computer_white, computer_white);
+	time_settings ts = dlg.timing ();
+	new MainWindow_GTP (0, gr, screen_key (this), engine, ts, !computer_white, computer_white);
 }
 
 void ClientWindow::slotTwoEnginePlay (bool)
@@ -2149,6 +2151,9 @@ void ClientWindow::slotTwoEnginePlay (bool)
 	int b_eidx = dlg.engine_index (black);
 	const Engine &engine_w = setting->m_engines[w_eidx];
 	const Engine &engine_b = setting->m_engines[b_eidx];
+
+	time_settings ts = dlg.timing ();
+
 	int hc = dlg.handicap ();
 	game_info info = dlg.create_game_info ();
 	std::shared_ptr<game_record> gr;
@@ -2163,7 +2168,7 @@ void ClientWindow::slotTwoEnginePlay (bool)
 
 	if (gr == nullptr)
 		return;
-	new MainWindow_GTP (0, gr, screen_key (this), engine_w, engine_b, dlg.num_games (), dlg.opening_book ());
+	new MainWindow_GTP (0, gr, screen_key (this), engine_w, engine_b, ts, dlg.num_games (), dlg.opening_book ());
 }
 
 

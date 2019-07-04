@@ -64,6 +64,26 @@ void AIGameDlg<UI>::get_file_name ()
 	ui->gameToLoad->setText (getFileName);
 }
 
+template<class UI>
+time_settings AIGameDlg<UI>::timing ()
+{
+	time_settings t;
+	if (ui->timeBox->isChecked ()) {
+		QString mt = ui->mainTimeEdit->text ();
+		int mti = mt.toInt ();
+		t.main_time = std::chrono::minutes (mti);
+		if (ui->overtimeGroupBox->isChecked ()) {
+			t.system = time_system::canadian;
+			t.canadian_stones = ui->overStonesSpinBox->value ();
+			t.period_time = std::chrono::minutes (ui->overPeriodEdit->text ().toInt ());
+		} else {
+			if (mti > 0)
+				t.system = time_system::absolute;
+		}
+	}
+	return t;
+}
+
 NewAIGameDlg::NewAIGameDlg( QWidget* parent, bool from_position)
 	: AIGameDlg (parent)
 {
@@ -114,10 +134,10 @@ TwoAIGameDlg::TwoAIGameDlg( QWidget* parent)
 		ui->engineBComboBox->addItem (e.title);
 	}
 	ui->numGamesEdit->setValidator (new QIntValidator (1, 9999, this));
+	ui->mainTimeEdit->setValidator (new QIntValidator (0, 9999, this));
+	ui->overPeriodEdit->setValidator (new QIntValidator (1, 9999, this));
 
 	ui->handicapSpinBox->setValue (0);
-	// Not implemented yet
-	ui->timeBox->setVisible (false);
 }
 
 game_info TwoAIGameDlg::create_game_info ()

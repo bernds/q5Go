@@ -21,6 +21,8 @@
 #include "textview.h"
 #include "figuredlg.h"
 #include "qgtp.h"
+#include "timing.h"
+
 #include "ui_boardwindow_gui.h"
 
 class Board;
@@ -81,6 +83,11 @@ class MainWindow : public QMainWindow, public Ui::BoardWindow
 	double m_result {};
 	QString m_result_text;
 
+protected:
+	move_timer m_timer_white, m_timer_black;
+	std::string m_tstr_white, m_tstr_black;
+
+private:
 	void toggleSliderSignal(bool b) { sliderSignalToggle = b; }
 
 	void setToolsTabWidget(enum tabType=tabNormalScore, enum tabState=tabSet);
@@ -94,7 +101,7 @@ class MainWindow : public QMainWindow, public Ui::BoardWindow
 
 public:
 	MainWindow(QWidget* parent, go_game_ptr, const QString opener_scrkey = QString (),
-		   GameMode mode = modeNormal);
+		   GameMode mode = modeNormal, time_settings ts = time_settings());
 	virtual ~MainWindow();
 	Board* getBoard() const { return gfx_board; }
 	int checkModified(bool interactive=true);
@@ -168,6 +175,8 @@ protected:
 	virtual void keyPressEvent (QKeyEvent*) override;
 	virtual void keyReleaseEvent (QKeyEvent*) override;
 
+	virtual void time_loss (stone_color);
+
 signals:
 	void signal_sendcomment(const QString&);
 	void signal_closeevent();
@@ -239,6 +248,7 @@ public slots:
 	virtual void doUndo ();
 	virtual void doAdjourn ();
 	virtual void doResign ();
+
 	void on_colorButton_clicked (bool);
 	void doRealScore (bool);
 	void doEdit ();
@@ -264,7 +274,6 @@ protected:
 	QMap<QAction *, Engine> engine_map;
 	QTimer *timer;
 
-	float timerIntervals[6];
 	bool isFullScreen;
 
 public:
@@ -309,13 +318,16 @@ class MainWindow_GTP : public MainWindow, public GTP_Controller
 	}
 	void request_next_move ();
 
+	virtual void time_loss (stone_color) override;
+	bool stop_move_timer ();
+
 public:
 	MainWindow_GTP (QWidget *parent, go_game_ptr, QString opener_scrkey,
-			const Engine &program, bool b_comp, bool w_comp);
+			const Engine &program, const time_settings &, bool b_comp, bool w_comp);
 	MainWindow_GTP (QWidget *parent, go_game_ptr, game_state *, QString opener_scrkey,
-			const Engine &program, bool b_comp, bool w_comp);
+			const Engine &program, const time_settings &, bool b_comp, bool w_comp);
 	MainWindow_GTP (QWidget *parent, go_game_ptr, QString opener_scrkey,
-			const Engine &program_w, const Engine &program_b, int num_games, bool book);
+			const Engine &program_w, const Engine &program_b, const time_settings &, int num_games, bool book);
 	~MainWindow_GTP ();
 
 	/* Virtuals from MainWindow.  */

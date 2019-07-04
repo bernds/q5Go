@@ -155,8 +155,8 @@ QVariant an_id_model::headerData (int section, Qt::Orientation ot, int role) con
 	return QVariant ();
 }
 
-MainWindow::MainWindow(QWidget* parent, go_game_ptr gr, const QString opener_scrkey, GameMode mode)
-	: QMainWindow(parent), m_game (gr), m_ascii_dlg (this), m_svg_dlg (this)
+MainWindow::MainWindow (QWidget* parent, go_game_ptr gr, const QString opener_scrkey, GameMode mode, time_settings ts)
+	: QMainWindow (parent), m_timer_white (ts), m_timer_black (ts), m_game (gr), m_ascii_dlg (this), m_svg_dlg (this)
 {
 	setupUi (this);
 
@@ -303,18 +303,12 @@ MainWindow::MainWindow(QWidget* parent, go_game_ptr gr, const QString opener_scr
 	connect(m_ascii_dlg.buttonRefresh, &QPushButton::clicked, [=] (bool) { update_ascii_dialog (); });
 	connect(m_svg_dlg.buttonRefresh, &QPushButton::clicked, [=] (bool) { update_svg_dialog (); });
 
-	// Create a timer instance
-	// timerInterval = 2;  // 1000 msec
-	timer = new QTimer(this);
-	connect(timer, &QTimer::timeout, this, &MainWindow::slotTimerForward);
-	timerIntervals[0] = (float) 0.1;
-	timerIntervals[1] = 0.5;
-	timerIntervals[2] = 1.0;
-	timerIntervals[3] = 2.0;
-	timerIntervals[4] = 3.0;
-	timerIntervals[5] = 5.0;
+	timer = new QTimer (this);
+	connect (timer, &QTimer::timeout, this, &MainWindow::slotTimerForward);
+	if (ts.system != time_system::none)
+		timer->start (100);
 
-	toolBar->setFocus();
+	toolBar->setFocus ();
 
 	init_game_record (gr);
 
@@ -1059,7 +1053,8 @@ void MainWindow::slotPlayFromHere (bool)
 	game_state *st = gr->get_root ()->follow_path (curr_pos->path_from_root ());
 
 	bool computer_white = dlg.computer_white_p ();
-	new MainWindow_GTP (0, gr, st, screen_key (this), engine, !computer_white, computer_white);
+	time_settings ts = dlg.timing ();
+	new MainWindow_GTP (0, gr, st, screen_key (this), engine, ts, !computer_white, computer_white);
 }
 
 void MainWindow::slotDiagChosen (int idx)
@@ -1387,8 +1382,26 @@ void MainWindow::slotViewFullscreen(bool toggle)
 	isFullScreen = toggle;
 }
 
-void MainWindow::slotTimerForward()
+void MainWindow::time_loss (stone_color)
 {
+}
+
+void MainWindow::slotTimerForward ()
+{
+	auto f = [this] (move_timer &t, stone_color col, ClockView *clock, std::string &last)
+		{
+			if (!t.update (false))
+				time_loss (col);
+			else {
+				std::string r = t.report ();
+				if (r != last) {
+					clock->set_text (QString::fromStdString (r));
+					last = r;
+				}
+			}
+		};
+	f (m_timer_white, white, normalTools->wtimeView, m_tstr_white);
+	f (m_timer_black, black, normalTools->btimeView, m_tstr_black);
 }
 
 void MainWindow::coords_changed (const QString &t1, const QString &t2)
@@ -1772,9 +1785,13 @@ void MainWindow::setToolsTabWidget(enum tabType p, enum tabState s)
 	}
 }
 
-void MainWindow::setGameMode(GameMode mode)
+void MainWindow::setGameMode (GameMode mode)
 {
 	m_gamemode = mode;
+	if (mode == modeNormal) {
+		m_timer_white.stop (false);
+		m_timer_black.stop (false);
+	}
 	if (mode == modeEdit || mode == modeNormal || mode == modeObserve || mode == modeObserveGTP) {
 		editGroup->setEnabled (true);
 	} else {
@@ -2310,8 +2327,8 @@ void MainWindow::set_observer_model (QStandardItemModel *m)
 }
 
 MainWindow_GTP::MainWindow_GTP (QWidget *parent, go_game_ptr gr, QString opener_scrkey, const Engine &program,
-				bool b_is_comp, bool w_is_comp)
-	: MainWindow (parent, gr, opener_scrkey, modeComputer), GTP_Controller (this)
+				const time_settings &ts, bool b_is_comp, bool w_is_comp)
+	: MainWindow (parent, gr, opener_scrkey, modeComputer, ts), GTP_Controller (this)
 {
 	game_state *st = gr->get_root ();
 	m_game_position = st;
@@ -2329,8 +2346,8 @@ MainWindow_GTP::MainWindow_GTP (QWidget *parent, go_game_ptr gr, QString opener_
 }
 
 MainWindow_GTP::MainWindow_GTP (QWidget *parent, go_game_ptr gr, game_state *st, QString opener_scrkey, const Engine &program,
-				bool b_is_comp, bool w_is_comp)
-	: MainWindow (parent, gr, opener_scrkey, modeComputer), GTP_Controller (this)
+				const time_settings &ts, bool b_is_comp, bool w_is_comp)
+	: MainWindow (parent, gr, opener_scrkey, modeComputer, ts), GTP_Controller (this)
 {
 	m_start_positions.push_back (st);
 	m_game_position = gr->get_root ();
@@ -2345,8 +2362,9 @@ MainWindow_GTP::MainWindow_GTP (QWidget *parent, go_game_ptr gr, game_state *st,
 }
 
 MainWindow_GTP::MainWindow_GTP (QWidget *parent, go_game_ptr gr, QString opener_scrkey,
-				const Engine &program_w, const Engine &program_b, int n_games, bool book)
-	: MainWindow (parent, gr, opener_scrkey, modeObserveGTP), GTP_Controller (this)
+				const Engine &program_w, const Engine &program_b,
+				const time_settings &ts, int n_games, bool book)
+	: MainWindow (parent, gr, opener_scrkey, modeObserveGTP, ts), GTP_Controller (this)
 {
 	game_state *primary = gr->get_root ();
 	while (primary->n_children () > 0)
@@ -2369,13 +2387,6 @@ MainWindow_GTP::MainWindow_GTP (QWidget *parent, go_game_ptr gr, QString opener_
 	m_starting_up = 2;
 	m_gtp_w = create_gtp (program_w, m_game->boardsize (), m_game->komi ());
 	m_gtp_b = create_gtp (program_b, m_game->boardsize (), m_game->komi ());
-#if 0
-	/* Normally shown in modeComputer; we override that default here for two-engine play.  */
-	passButton->setVisible (false);
-	undoButton->setVisible (false);
-	resignButton->setVisible (false);
-	followButton->setVisible (true);
-#endif
 	connect (followButton, &QPushButton::clicked, [this] (bool) { gfx_board->set_displayed (m_game_position); });
 }
 
@@ -2387,10 +2398,19 @@ MainWindow_GTP::~MainWindow_GTP ()
 
 void MainWindow_GTP::request_next_move ()
 {
+	if (m_game_position->was_move_p ()) {
+		stone_color prev_c = m_game_position->get_move_color ();
+		move_timer *mt = prev_c == white ? &m_timer_white : &m_timer_black;
+		mt->report (m_game_position, prev_c);
+	}
 	stone_color c = m_game_position->to_move ();
 	GTP_Process *p = c == white ? m_gtp_w : m_gtp_b;
-	if (p != nullptr)
+	if (p != nullptr) {
+		move_timer *mt = c == white ? &m_timer_white : &m_timer_black;
+		p->send_remaining_time (c, QString::fromStdString (mt->report_gtp ()));
 		p->request_move (c);
+		mt->start ();
+	}
 }
 
 void MainWindow_GTP::gtp_setup_success (GTP_Process *)
@@ -2398,6 +2418,8 @@ void MainWindow_GTP::gtp_setup_success (GTP_Process *)
 	if (--m_setting_up > 0)
 		return;
 	show ();
+	m_timer_white.reset ();
+	m_timer_black.reset ();
 	request_next_move ();
 }
 
@@ -2418,18 +2440,65 @@ void MainWindow_GTP::setup_game ()
 	}
 }
 
-void MainWindow_GTP::gtp_startup_success (GTP_Process *)
+void MainWindow_GTP::gtp_startup_success (GTP_Process *p)
 {
+	p->setup_timing (m_timer_white.settings ());
 	if (--m_starting_up > 0)
 		return;
 	setup_game ();
 }
 
+void MainWindow_GTP::time_loss (stone_color col)
+{
+	QString result = col == white ? "B+T" : "W+T";
+	if (two_engines ()) {
+		if (col == white)
+			game_end (result, black);
+		else
+			game_end (result, white);
+		return;
+	}
+
+	QString report;
+	if (col == white) {
+		report = tr ("Black wins on time.");
+	} else {
+		report = tr ("White wins on time.");
+	}
+
+	m_game->set_result (result.toStdString ());
+	setGameMode (modeNormal);
+	gfx_board->set_player_colors (true, true);
+	QMessageBox mb (QMessageBox::Information, tr ("Clock has run out"), report,
+			QMessageBox::Ok | QMessageBox::Default);
+	mb.exec ();
+}
+
+/* Return true if the game should continue.  */
+bool MainWindow_GTP::stop_move_timer ()
+{
+	if (game_mode () != modeComputer && game_mode () != modeObserveGTP)
+		return false;
+
+	stone_color col = m_game_position->to_move ();
+	move_timer *mt = col == white ? &m_timer_white : &m_timer_black;
+	bool has_time = mt->stop (true);
+	if (!has_time) {
+		time_loss (col);
+		return false;
+	}
+	return true;
+}
+
 void MainWindow_GTP::gtp_played_move (GTP_Process *p, int x, int y)
 {
+	if (!stop_move_timer ())
+		return;
+
 	if (local_stone_sound)
 		qgo->playStoneSound ();
 	stone_color col = m_game_position->to_move ();
+
 	game_state *st = m_game_position;
 	game_state *st_new;
 	bool existed;
@@ -2438,6 +2507,7 @@ void MainWindow_GTP::gtp_played_move (GTP_Process *p, int x, int y)
 		QMessageBox mb (QMessageBox::Information, tr ("Invalid move by the engine"),
 				tr ("An invalid move was played by the engine, game terminated."),
 				QMessageBox::Ok | QMessageBox::Default);
+		mb.exec ();
 		if (m_gtp_w)
 			m_gtp_w->quit ();
 		if (m_gtp_b)
@@ -2454,7 +2524,10 @@ void MainWindow_GTP::gtp_played_move (GTP_Process *p, int x, int y)
 	if (two_engines ()) {
 		GTP_Process *other = m_gtp_w == p ? m_gtp_b : m_gtp_w;
 		other->played_move (col, x, y);
-		other->request_move (col == black ? white : black);
+		request_next_move ();
+	} else {
+		move_timer *mt = m_gtp_b == p ? &m_timer_white : &m_timer_black;
+		mt->start ();
 	}
 }
 
@@ -2549,10 +2622,14 @@ void MainWindow_GTP::enter_scoring ()
 
 void MainWindow_GTP::gtp_played_pass (GTP_Process *p)
 {
+	if (!stop_move_timer ())
+		return;
+
 	if (local_stone_sound)
 		qgo->playPassSound();
 	game_state *st = m_game_position;
 	stone_color col = st->to_move ();
+
 	game_state *st_new = st->add_child_pass ();
 	st->transfer_observers (st_new);
 	m_game_position = st_new;
@@ -2563,7 +2640,10 @@ void MainWindow_GTP::gtp_played_pass (GTP_Process *p)
 	else if (two_engines ()) {
 		GTP_Process *other = m_gtp_w == p ? m_gtp_b : m_gtp_w;
 		other->played_move_pass (col);
-		other->request_move (col == black ? white : black);
+		request_next_move ();
+	} else {
+		move_timer *mt = m_gtp_b == p ? &m_timer_white : &m_timer_black;
+		mt->start ();
 	}
 }
 
@@ -2576,13 +2656,13 @@ void MainWindow_GTP::gtp_played_resign (GTP_Process *p)
 		return;
 	}
 	m_game->set_result (result.toStdString ());
+	setGameMode (modeNormal);
 
 	QMessageBox mb (QMessageBox::Information, tr ("Game end"),
 		       tr ("The computer has resigned the game."),
 		       QMessageBox::Ok | QMessageBox::Default);
 	mb.exec ();
 
-	setGameMode (modeNormal);
 	if (m_gtp_w)
 		m_gtp_w->quit ();
 	if (m_gtp_b)
@@ -2617,6 +2697,9 @@ void MainWindow_GTP::gtp_exited (GTP_Process *)
 
 game_state *MainWindow_GTP::player_move (int x, int y)
 {
+	if (game_mode () == modeComputer)
+		stop_move_timer ();
+
 	game_state *new_st = MainWindow::player_move (x, y);
 	if (new_st == nullptr)
 		return new_st;
@@ -2629,13 +2712,16 @@ game_state *MainWindow_GTP::player_move (int x, int y)
 
 	auto *gtp = single_engine ();
 	gtp->played_move (col, x, y);
-	gtp->request_move (col == black ? white : black);
+	request_next_move ();
 	return new_st;
 }
 
 
 void MainWindow_GTP::doPass ()
 {
+	if (game_mode () == modeComputer)
+		stop_move_timer ();
+
 	const game_state *st = gfx_board->displayed ();
 	stone_color col = gfx_board->to_move ();
 	if (!gfx_board->player_to_move_p ())
@@ -2651,7 +2737,7 @@ void MainWindow_GTP::doPass ()
 	if (st->was_pass_p ())
 		enter_scoring ();
 	else
-		gtp->request_move (col == black ? white : black);
+		request_next_move ();
 }
 
 void MainWindow_GTP::doResign ()

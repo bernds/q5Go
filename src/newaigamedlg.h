@@ -14,6 +14,7 @@
 
 #include "goboard.h"
 #include "gogame.h"
+#include "timing.h"
 
 struct Engine;
 
@@ -36,6 +37,7 @@ public:
 	int board_size ();
 	int handicap ();
 	QString game_to_load ();
+	time_settings timing ();
 };
 
 class NewAIGameDlg : public AIGameDlg<Ui::NewAIGameDlgGui>

@@ -8,6 +8,7 @@
 #include "setting.h"
 #include "textview.h"
 
+struct time_settings;
 class game_state;
 class game_record;
 typedef std::shared_ptr<game_record> go_game_ptr;
@@ -155,6 +156,8 @@ public:
 
 	void clear_board () { send_request ("clear_board"); }
 	void setup_board (game_state *, double, bool);
+	bool setup_timing (const time_settings &);
+	void send_remaining_time (stone_color col, const QString &);
 	void setup_initial_position (game_state *);
 	void request_move (stone_color col);
 	void request_score ();

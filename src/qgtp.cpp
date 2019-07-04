@@ -4,6 +4,7 @@
 #include "setting.h"
 #include "qgtp.h"
 #include "gogame.h"
+#include "timing.h"
 
 GTP_Process *GTP_Controller::create_gtp (const Engine &engine, int size, double komi, bool show_dialog)
 {
@@ -154,6 +155,24 @@ void GTP_Process::append_text (const QString &txt, const QColor &col)
 		m_dlg_lines++;
 	m_dlg.textEdit->setTextColor (col);
 	m_dlg.append (txt);
+}
+
+bool GTP_Process::setup_timing (const time_settings &t)
+{
+	if (t.system == time_system::none) {
+		send_request ("time_settings 1 1 0");
+	} else if (t.system == time_system::absolute) {
+		send_request (QString ("time_settings %1 0 0").arg (t.main_time.count ()));
+	} else if (t.system == time_system::canadian) {
+		send_request (QString ("time_settings %1 %2 %3").arg (t.main_time.count ()).arg (t.period_time.count ()).arg (t.canadian_stones));
+	} else
+		return false;
+	return true;
+}
+
+void GTP_Process::send_remaining_time (stone_color col, const QString &gtp_time)
+{
+	send_request (QString ("time_left ") + (col == white ? "white " : "black ") + gtp_time);
 }
 
 void GTP_Process::receive_move (const QString &move)
@@ -405,6 +424,7 @@ void GTP_Process::slot_receive_stdout ()
 		if (m_receivers.isEmpty ())
 			continue;
 
+		qDebug () << output;
 		bool err = output[0] != '=';
 		output.remove (0, 1);
 		int len = output.length ();

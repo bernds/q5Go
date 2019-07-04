@@ -65,7 +65,8 @@ HEADERS		      = analyzedlg.h \
                         sizegraphicsview.h \
                         slideview.h \
                         svgbuilder.h \
-			textview.h \
+                        textview.h \
+                        timing.h \
                         ui_helpers.h \
                         grid.h \
                         miscdialogs.h \
@@ -107,7 +108,8 @@ SOURCES		      = analyzedlg.cpp \
                         sgfpreview.cpp \
                         slideview.cpp \
 			svgbuilder.cpp \
-			textview.cpp \
+                        textview.cpp \
+                        timing.cpp \
                         grid.cpp \
                         variantgamedlg.cpp \
                         audio.cpp
