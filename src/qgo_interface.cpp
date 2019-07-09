@@ -930,7 +930,7 @@ qDebug("slot_removestones(): game_id");
 
 	// mark dead stone
 	qb->mark_dead_stone (i - 1, j - 1);
-	qb->send_kibitz("removing @ " + pt);
+	qb->send_kibitz("removing @ " + pt + "\n");
 }
 
 // game status received
@@ -997,7 +997,7 @@ void qGoBoard::enter_scoring_mode (bool may_reenter)
 	}
 	if (m_scoring)
 		return;
-	send_kibitz (tr ("SCORE MODE: click on a stone to mark as dead..."));
+	send_kibitz (tr ("SCORE MODE: click on a stone to mark as dead...") + "\n");
 	m_scoring = true;
 	win->setGameMode (modeScoreRemote);
 }
@@ -1006,7 +1006,7 @@ void qGoBoard::leave_scoring_mode ()
 {
 	win->setGameMode (gameMode);
 	m_scoring = false;
-	send_kibitz (tr ("GAME MODE: click to play stones..."));
+	send_kibitz (tr ("GAME MODE: click to play stones...") + "\n");
 }
 
 void qGoBoard::mark_dead_stone (int x, int y)
