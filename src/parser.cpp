@@ -1385,13 +1385,17 @@ InfoType Parser::cmd20(const QString &line)
 	aGame->nr = "@";
 	aGame->running = false;
 
-	QString player1 = line.section(' ', 2, 2);
-	QString player2 = line.section(' ', 6, 6);
-	if ( line.indexOf("W:") < line.indexOf("B:"))
-		aGame->Sz = "W " + player1 + " B " + player2;
+	QString player1 = line.section(' ', 0, 0);
+	QString score1 = line.section(' ', 2, 2);
+	QString player2 = line.section(' ', 4, 4);
+	QString score2 = line.section(' ', 6, 6);
+	QString first_col = line.section (' ', 1, 1);
+	if (first_col.contains ("W:"))
+		aGame->Sz = "W " + score1 + " B " + score2;
 	else
-		aGame->Sz = "B " + player1 + " W " + player2;
+		aGame->Sz = "B " + score1 + " W " + score2;
 
+	qDebug () << "handling 20: " << player1 << "::" << player2 << " :: " << aGame->Sz;
 	m_qgoif->game_end (player1, player2, aGame->Sz);
 	return IT_OTHER;
 }
