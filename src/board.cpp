@@ -535,6 +535,8 @@ static bool add_mark_svg (svg_builder &svg, double cx, double cy, double factor,
 			     QString::fromStdString (mstr),
 			     mark_col, fi);
 		break;
+	case mark::dead:
+		return false;
 
 	default:
 		break;
@@ -1056,7 +1058,7 @@ std::pair<stone_color, stone_type> BoardView::stone_to_display (const go_board &
 		sc = cursor_color (x, y, to_move);
 		if (sc != none)
 			type = stone_type::var;
-	} else if (mark_at_pos == mark::terr || mark_at_pos == mark::falseeye)
+	} else if (mark_at_pos == mark::terr || mark_at_pos == mark::falseeye || mark_at_pos == mark::dead)
 		type = stone_type::var;
 
 	if (sc == none && var_type == 1) {
@@ -1286,11 +1288,16 @@ QPixmap BoardView::draw_position (int default_vars_type)
 				grid_hidden.set_bit (tx + ty * bm_linewidth);
 				continue;
 			}
-			auto stone_display = stone_to_display (mn_board, visible, to_move, x, y, vars, var_type);
-			stone_color sc = stone_display.first;
 			mark mark_at_pos = b.mark_at (x, y);
 			mextra extra = b.mark_extra_at (x, y);
 			bool was_last_move = false;
+
+			/* Transfer dead marks to the mn_board which was initialized without marks.  */
+			if (mark_at_pos == mark::dead)
+				mn_board.set_mark (x, y, mark_at_pos, 0);
+
+			auto stone_display = stone_to_display (mn_board, visible, to_move, x, y, vars, var_type);
+			stone_color sc = stone_display.first;
 
 			if (m_edit_board == nullptr && !have_figure && m_displayed->was_move_p ()) {
 				int last_x = m_displayed->get_move_x ();
