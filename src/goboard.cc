@@ -461,6 +461,14 @@ void go_board::find_territory_units (const bit_array &w_stones, const bit_array 
 			m_units_st.emplace_back (fill, neighbours_w, neighbours_b, false);
 		handled.ior (fill);
 	}
+	init_marks (false);
+
+	for (unsigned i = 0; i < bitsize (); i++) {
+		i = dead_stones.ffs (i);
+		if (i == bitsize ())
+			break;
+		m_marks[i] = mark::dead;
+	}
 #ifdef CHECKING
 	if (handled.popcnt () != bitsize ())
 		throw std::logic_error ("didn't find all territory");
