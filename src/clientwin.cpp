@@ -485,6 +485,8 @@ void ClientWindow::slot_connclosed()
 	Disconnect->setEnabled(false);
 	toolConnect->setChecked(false);
 	toolConnect->setToolTip (tr("Connect with") + " " + cb_connect->currentText());
+
+	sendBuffer.clear ();
 }
 
 // close application
