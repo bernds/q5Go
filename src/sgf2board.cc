@@ -414,7 +414,7 @@ std::shared_ptr<game_record> sgf2record (const sgf &s, QTextCodec *codec)
 	if (ff != nullptr && *ff != "4" && *ff != "3")
 		throw broken_sgf ();
 	if (gm != nullptr) {
-		if (*gm == "q5go-1")
+		if (*gm == "q5go-1" || *gm == "q5go-2")
 			our_extensions = true;
 		else if (*gm != "1") {
 			throw broken_sgf ();
@@ -486,6 +486,8 @@ std::shared_ptr<game_record> sgf2record (const sgf &s, QTextCodec *codec)
 
 	const std::string *st = s.nodes->find_property_val ("ST");
 
+	sgf::node::property *mask = s.nodes->find_property ("MASK");
+
 	/* Ignored, but ensure it doesn't go on the list of unrecognized properties to
 	   write out later.  */
 	s.nodes->find_property_val ("AP");
@@ -522,6 +524,14 @@ std::shared_ptr<game_record> sgf2record (const sgf &s, QTextCodec *codec)
 			translated_prop_str (tm, codec), translated_prop_str (ot, codec),
 			style);
 	go_board initpos (size_x, size_y, torus_h, torus_v);
+	std::shared_ptr<bit_array> mask_array;
+	if (mask != nullptr && (mask->values.size () > 1 || mask->values.begin ()->length () > 0)) {
+		mask_array = std::make_shared<bit_array> (initpos.bitsize ());
+		put_stones (*mask, size_x, size_y,
+			    [&] (int x, int y) { mask_array->set_bit (initpos.bitpos (x, y)); });
+	}
+	if (mask_array != nullptr)
+		initpos.set_mask (mask_array);
 	for (auto &n: s.nodes->props)
 		if (n.ident == "AB") {
 			n.handled = true;
@@ -537,7 +547,7 @@ std::shared_ptr<game_record> sgf2record (const sgf &s, QTextCodec *codec)
 
 	const std::string *pl = s.nodes->find_property_val ("PL");
 	stone_color to_play = pl && *pl == "W" ? white : black;
-	std::shared_ptr<game_record> game = std::make_shared<game_record> (initpos, to_play, info);
+	std::shared_ptr<game_record> game = std::make_shared<game_record> (initpos, to_play, info, mask_array);
 
 	errs.charset_error |= !add_comment (&game->m_root, s.nodes, codec);
 	errs.charset_error |= !add_figure (&game->m_root, s.nodes, codec);
@@ -665,7 +675,7 @@ static void encode_string (std::string &s, const char *id, std::string src, bool
 	}
 }
 
-static void write_visible (std::string &s, const game_state *gs)
+static void write_array (const bit_array *bitmap, const char *name, std::string &s, const game_state *gs)
 {
 	/* Note that the SGF standard is slightly defective here.  Points
 	   in VW properties are visible, while VW[] defines the whole
@@ -673,11 +683,10 @@ static void write_visible (std::string &s, const game_state *gs)
 	   entirely-invisible board.  However, given that it is impossible
 	   to read one and our user interface makes it impossible to set one,
 	   that should not be an issue in practice.  */
-	const bit_array *vis_orig = gs->visible ();
-	if (vis_orig == nullptr || vis_orig->popcnt () == 0)
+	if (bitmap == nullptr || bitmap->popcnt () == 0)
 		return;
-	s += "VW";
-	bit_array vis = *vis_orig;
+	s += name;
+	bit_array vis = *bitmap;
 	const go_board &b = gs->get_board ();
 	int szx = b.size_x ();
 	int szy = b.size_y ();
@@ -808,7 +817,7 @@ void game_state::append_to_sgf (std::string &s) const
 		if (gs->m_sgf_movenum != prev_nr + 1)
 			s += "MN[" + std::to_string (gs->m_sgf_movenum) + "]";
 
-		write_visible (s, gs);
+		write_array (gs->visible (), "VW", s, gs);
 		bool first = true;
 		bool have_scores = false;
 		for (auto &it: gs->m_evals)
@@ -864,11 +873,14 @@ std::string game_record::to_sgf () const
 	const go_board &rootb = m_root.get_board ();
 	std::string gm = "1";
 	int torus = (rootb.torus_h () ? 1 : 0) | (rootb.torus_v () ? 2 : 0);
+	bool masked = m_mask != nullptr;
 
 	/* There does not appear to be a standard for how to save variant Go in SGF.
 	   So we intentionally pick something that other software won't accept and
 	   misinterpret.  */
-	if (torus != 0)
+	if (masked)
+		gm = "q5go-2";
+	else if (torus != 0)
 		gm = "q5go-1";
 	/* UTF-8 encoding should be guaranteed, since we convert other charsets
 	   when loading, and Qt uses Unicode internally and toStdString conversions
@@ -879,6 +891,9 @@ std::string game_record::to_sgf () const
 	encode_string (s, "SZ", szx == szy ? szx : szx + ":" + szy);
 	if (torus)
 		encode_string (s, "TO", std::to_string (torus));
+	if (masked)
+		write_array (m_mask.get (), "MASK", s, &m_root);
+
 	encode_string (s, "GN", m_title);
 	encode_string (s, "PW", m_name_w);
 	encode_string (s, "PB", m_name_b);
