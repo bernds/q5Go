@@ -55,8 +55,6 @@ public:
 	QPoint getPrefPos() { return pref_p; }
 	QSize getPrefSize() { return pref_s; }
 	void setColumnsForExtUserInfo();
-	void setBytesIn(int i) { if (i == -1) bytesIn = 0; else bytesIn += i; }
-	void setBytesOut(int i) { if (i == -1) bytesOut = 0; else bytesOut += i; }
 	void saveSettings();
 
 	bool preferencesAccept();
@@ -72,9 +70,6 @@ public:
 	void update_observed_games (int);
 
 public slots:
-	void slot_setBytesIn (int i) { setBytesIn (i); }
-	void slot_setBytesOut (int i) { setBytesOut (i); }
-
 	void slot_refresh (int);
 	void slot_playerPopup (int);
 	void slot_gamesPopup (int);

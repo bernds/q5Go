@@ -559,7 +559,7 @@ void ClientWindow::sendTextToApp (const QString &txt)
  	InfoType it_ = parser->put_line (txt);
 
 	// some statistics
-	setBytesIn (txt.length ()+2);
+	bytesIn += txt.length () + 2;
 
 	// GAME7_END emulation:
 	if (player7active && it_ != GAME7)
@@ -768,7 +768,7 @@ int ClientWindow::sendTextFromApp(const QString &txt, bool localecho)
 
 	// some statistics
 	if (valid)
-		setBytesOut(valid+2);
+		bytesOut += valid + 2;
 
 	if (myAccount->get_status() == Status::offline)
 	{

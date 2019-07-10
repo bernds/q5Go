@@ -31,14 +31,10 @@ public:
 	void sendTextToHost(QString txt, bool ignoreCodec=false);
 
 signals:
-	// for statistics reason
-	void signal_setBytesIn(int);
-	void signal_setBytesOut(int);
 	void signal_text_to_app(const QString &);
 
 protected:
 	virtual bool checkPrompt(const QString &);
-//	void convertBlockToLines();
 
 	void sendTextToApp (const QString &);
 
@@ -65,7 +61,7 @@ private:
 		LOGIN,	// parse will search for login prompt
 		PASSWORD,	// parse will search for password prompt
 		SESSION,	// logged in
-		AUTH_FAILED	// wrong user/pass  
+		AUTH_FAILED	// wrong user/pass
 	} authState;
 };
 

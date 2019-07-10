@@ -206,9 +206,6 @@ void IGSConnection::OnReadyRead()
 				return;
 			}
 
-			// some statistics
-//		emit signal_setBytesIn(x.length());
-
 			x.truncate(x.length()-2);
 
 			sendTextToApp(x);
