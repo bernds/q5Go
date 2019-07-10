@@ -171,10 +171,10 @@ bit_array go_board::init_fill (int bp, const bit_array &bounds, bool in)
 	bit_array fill (bitsize ());
 	int rem_len = m_sz_x - bp % m_sz_x;
 	for (unsigned y = bp; y < bitsize (); y += m_sz_x)  {
-		if (bounds.test_bit (y) != in)
+		if (bounds.test_bit (y) != in || (m_mask != nullptr && m_mask->test_bit (y)))
 			break;
 		for (int i = 0; i < rem_len; i++) {
-			if (bounds.test_bit (y + i) != in)
+			if (bounds.test_bit (y + i) != in || (m_mask != nullptr && m_mask->test_bit (y + i)))
 				break;
 			fill.set_bit (y + i);
 		}
@@ -197,6 +197,8 @@ void go_board::flood_step (bit_array &next, const bit_array &fill)
 		next.ior (fill, m_sz_x * (m_sz_y - 1));
 		next.ior (fill, -m_sz_x * (m_sz_y - 1));
 	}
+	if (m_mask)
+		next.andnot (*m_mask);
 }
 
 void go_board::flood_fill (bit_array &fill, const bit_array &boundary)

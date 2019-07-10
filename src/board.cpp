@@ -1295,6 +1295,7 @@ QPixmap BoardView::draw_position (int default_vars_type)
 	/* Every grid point is connected to up to four line segments.  Create bitmaps
 	   to indicate whether these should be drawn, one for horizontal lines and one
 	   for vertical lines, each holding two bits for every point.  */
+	std::shared_ptr<const bit_array> board_mask = m_displayed_game->get_board_mask ();
 	bit_array vgrid (szx * szy * 2, true);
 	bit_array hgrid (szx * szy * 2, true);
 
@@ -1307,6 +1308,17 @@ QPixmap BoardView::draw_position (int default_vars_type)
 			int bpv_above = x + ((y + szy - 1) % szy) * szx * 2;
 			int bpv_below = x + ((y + 1) % szy) * szx * 2;
 			int bp = b.bitpos (x, y);
+			if (board_mask != nullptr && board_mask->test_bit (bp)) {
+				vgrid.clear_bit (bpv);
+				vgrid.clear_bit (bpv + szx);
+				vgrid.clear_bit (bpv_below);
+				vgrid.clear_bit (bpv_above + szx);
+				hgrid.clear_bit (bph);
+				hgrid.clear_bit (bph + 1);
+				hgrid.clear_bit (bph_left + 1);
+				hgrid.clear_bit (bph_right);
+				continue;
+			}
 
 			if ((visible != nullptr && !visible->test_bit (bp)) || grid_hidden.test_bit (bp)) {
 				vgrid.clear_bit (bpv);
@@ -1608,7 +1620,9 @@ void Board::mouseMoveEvent(QMouseEvent *e)
 	int y = coord_vis_to_board_y (e->y (), setting->values.clicko_hitbox && m_game_mode == modeMatch);
 
 	// Outside the valid board?
-	if (!m_dims.contained (x, y))
+	std::shared_ptr<const bit_array> board_mask = m_game->get_board_mask ();
+	const go_board &b = m_game->get_root ()->get_board ();
+	if (!m_dims.contained (x, y) || (board_mask != nullptr && board_mask->test_bit (b.bitpos (x, y))))
 	{
 		x = -1;
 		y = -1;
@@ -1621,7 +1635,6 @@ void Board::mouseMoveEvent(QMouseEvent *e)
 
 	// Update the statusbar coords tip
 	if (x != -1) {
-		const go_board &b = m_game->get_root ()->get_board ();
 		auto name = b.coords_name (curX, curY, m_sgf_coords);
 		m_board_win->coords_changed (QString::fromStdString (name.first), QString::fromStdString (name.second));
 	} else
@@ -1797,7 +1810,9 @@ void Board::mousePressEvent(QMouseEvent *e)
 
 	int x = coord_vis_to_board_x (e->x (), setting->values.clicko_hitbox && m_game_mode == modeMatch);
 	int y = coord_vis_to_board_y (e->y (), setting->values.clicko_hitbox && m_game_mode == modeMatch);
-	if (!m_dims.contained (x, y))
+	std::shared_ptr<const bit_array> board_mask = m_game->get_board_mask ();
+	const go_board &b = m_game->get_root ()->get_board ();
+	if (!m_dims.contained (x, y) || (board_mask != nullptr && board_mask->test_bit (b.bitpos (x, y))))
 		return;
 
 	m_down_x = x;
@@ -2005,7 +2020,11 @@ void BoardView::reset_game (go_game_ptr gr)
 	m_displayed = root;
 	const go_board &b = root->get_board ();
 	m_dims = board_rect (b);
-	m_hoshis = calculate_hoshis (b);
+	/* Add hoshis unless we have masked off intersections from the board.  */
+	if (gr->get_board_mask () == nullptr)
+		m_hoshis = calculate_hoshis (b);
+	else
+		m_hoshis = bit_array (b.bitsize ());
 	/* Precompute outline bitmaps for use in draw_grid.  */
 	int szx = b.size_x ();
 	int szy = b.size_y ();

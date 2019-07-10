@@ -99,6 +99,9 @@ class go_board
 	int m_sz_x, m_sz_y;
 	bool m_torus_h = false, m_torus_v = false;
 	const bit_array *m_masked_left, *m_masked_right, *m_column_left, *m_column_right, *m_row_top, *m_row_bottom;
+	/* A mask for the board's intersections.  Null for non-variant games.
+	   Owned by the game_record corresponding to this board.  */
+	std::shared_ptr<const bit_array> m_mask {};
 	/* The total score that has been calculated.  */
 	int m_score_b = 0;
 	int m_score_w = 0;
@@ -134,6 +137,7 @@ public:
 		m_masked_left (other.m_masked_left), m_masked_right (other.m_masked_right),
 		m_column_left (other.m_column_left), m_column_right (other.m_column_right),
 		m_row_top (other.m_row_top), m_row_bottom (other.m_row_bottom),
+		m_mask (other.m_mask),
 		m_score_b (other.m_score_b), m_score_w (other.m_score_w),
 		m_caps_b (other.m_caps_b), m_caps_w (other.m_caps_w),
 		m_dead_b (other.m_dead_b), m_dead_w (other.m_dead_w),
@@ -153,6 +157,7 @@ public:
 		m_masked_left (other.m_masked_left), m_masked_right (other.m_masked_right),
 		m_column_left (other.m_column_left), m_column_right (other.m_column_right),
 		m_row_top (other.m_row_top), m_row_bottom (other.m_row_bottom),
+		m_mask (other.m_mask),
 		m_score_b (other.m_score_b), m_score_w (other.m_score_w),
 		m_caps_b (other.m_caps_b), m_caps_w (other.m_caps_w),
 		m_dead_b (0), m_dead_w (0),
@@ -169,6 +174,7 @@ public:
 		m_masked_left (other.m_masked_left), m_masked_right (other.m_masked_right),
 		m_column_left (other.m_column_left), m_column_right (other.m_column_right),
 		m_row_top (other.m_row_top), m_row_bottom (other.m_row_bottom),
+		m_mask (other.m_mask),
 		m_stones_b (new bit_array (other.bitsize ())), m_stones_w (new bit_array (other.bitsize ()))
 	{
 	}
@@ -185,6 +191,8 @@ public:
 		m_column_right = other.m_column_right;
 		m_row_top = other.m_row_top;
 		m_row_bottom = other.m_row_bottom;
+
+		m_mask = other.m_mask;
 
 		m_score_b = other.m_score_b;
 		m_score_w = other.m_score_w;
@@ -230,6 +238,10 @@ public:
 	int bitpos (int x, int y) const
 	{
 		return x + y * m_sz_x;
+	}
+	void set_mask (std::shared_ptr<const bit_array> m)
+	{
+		m_mask = m;
 	}
 	void identify_units ();
 	int count_liberties (const bit_array &);

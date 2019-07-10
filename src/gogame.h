@@ -921,20 +921,23 @@ class game_record : public game_info
 	game_state m_root;
 	bool m_modified = false;
 	sgf_errors m_errors;
+	std::shared_ptr<const bit_array> m_mask {};
 
 public:
 	game_record (int size, const game_info &info)
 		: game_info (info), m_root (size)
 	{
-
 	}
 	game_record (const go_board &b, stone_color to_move, const game_info &info)
 		: game_info (info), m_root (b, to_move)
 	{
-
+	}
+	game_record (const go_board &b, stone_color to_move, const game_info &info, const std::shared_ptr<const bit_array> &m)
+		: game_info (info), m_root (b, to_move), m_mask (m)
+	{
 	}
 	game_record (const game_record &other) : game_info (other), m_root (other.m_root, nullptr),
-		m_modified (other.m_modified), m_errors (other.m_errors)
+		m_modified (other.m_modified), m_errors (other.m_errors), m_mask (other.m_mask)
 	{
 	}
 
@@ -951,6 +954,10 @@ public:
 	{
 		const go_board &b = m_root.get_board ();
 		return std::max (b.size_x (), b.size_y ());
+	}
+	std::shared_ptr<const bit_array> get_board_mask ()
+	{
+		return m_mask;
 	}
 	void set_modified (bool on = true)
 	{
