@@ -31,7 +31,7 @@
 #include "ui_helpers.h"
 
 BoardView::BoardView(QWidget *parent)
-	: QGraphicsView(parent), m_dims (0, 0, DEFAULT_BOARD_SIZE, DEFAULT_BOARD_SIZE), m_hoshis (361)
+	: QGraphicsView(parent), m_vgrid_outline (1), m_hgrid_outline (1), m_dims (0, 0, DEFAULT_BOARD_SIZE, DEFAULT_BOARD_SIZE), m_hoshis (1)
 {
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -861,7 +861,7 @@ QString BoardView::render_ascii (bool do_number, bool coords, bool go_tags)
 	return result;
 }
 
-void BoardView::draw_grid (QPainter &painter, bit_array &grid_hidden, int bm_linewidth)
+void BoardView::draw_grid (QPainter &painter, bit_array hgrid, bit_array vgrid, const bit_array &hidden)
 {
 	int szx = m_dims.width ();
 	int szy = m_dims.height ();
@@ -872,8 +872,6 @@ void BoardView::draw_grid (QPainter &painter, bit_array &grid_hidden, int bm_lin
 	int dups_x = n_dups_h ();
 	int dups_y = n_dups_v ();
 	const go_board &b = m_displayed->get_board();
-	bool torus_h = b.torus_h ();
-	bool torus_v = b.torus_v ();
 
 	int scaled_w = setting->readBoolEntry ("BOARD_LINESCALE") ? (int)square_size / 40 + 1 : 1;
 	QPen pen (Qt::black);
@@ -888,119 +886,80 @@ void BoardView::draw_grid (QPainter &painter, bit_array &grid_hidden, int bm_lin
 
 	int line_offx = m_board_rect.left () - m_wood_rect.left ();
 	int line_offy = m_board_rect.top () - m_wood_rect.top ();
-	/* Draw vertical lines.  */
+
+	auto draw_vertical = [&] (int tx, bool center = false) {
+		int real_x = (tx + shiftx + (szx - dups_x)) % szx;
+		int begin_y = center ? dups_y : 0;
+		int end_y = begin_y + visy + (center ? 0 : 2 * dups_y);
+		int first = -2;
+		int last;
+		for (int ty = begin_y * 2; ty < end_y * 2; ty++) {
+			int real_y = (ty / 2 + shifty + (szy - dups_y)) % szy;
+			int off = ty % 2;
+			int bp = real_x + (real_y * 2 + off) * szx;
+			if (vgrid.test_bit (bp)) {
+				if (first == -2)
+					first = ty - 1;
+				last = ty;
+			} else if (first != -2) {
+				painter.drawLine (line_offx + tx * square_size, line_offy + first * square_size / 2,
+						  line_offx + tx * square_size, line_offy + last * square_size / 2);
+				first = -2;
+			}
+		}
+		if (first != -2)
+			painter.drawLine (line_offx + tx * square_size, line_offy + first * square_size / 2,
+					  line_offx + tx * square_size, line_offy + last * square_size / 2);
+
+	};
+	auto draw_horizontal = [&] (int ty, bool center = false) {
+		int real_y = (ty + shifty + (szy - dups_y)) % szy;
+		int begin_x = center ? dups_x : 0;
+		int end_x = begin_x + visx + (center ? 0 : 2 * dups_x);
+		int first = -2;
+		int last;
+		for (int tx = begin_x * 2; tx < end_x * 2; tx++) {
+			int real_x = (tx / 2 + shiftx + (szx - dups_x)) % szx;
+			int off = tx % 2;
+			int bp = real_x * 2 + off + real_y * szx * 2;
+			if (hgrid.test_bit (bp)) {
+				if (first == -2)
+					first = tx - 1;
+				last = tx;
+			} else if (first != -2) {
+				painter.drawLine (line_offx + first * square_size / 2, line_offy + ty * square_size,
+						  line_offx + last * square_size / 2, line_offy + ty * square_size);
+				first = -2;
+			}
+		}
+		if (first != -2)
+			painter.drawLine (line_offx + first * square_size / 2, line_offy + ty * square_size,
+					  line_offx + last * square_size / 2, line_offy + ty * square_size);
+
+	};
 	for (int tx = 0; tx < visx + 2 * dups_x; tx++) {
-		int first = -2;
-		for (int ty = 0; ty < visy + 2 * dups_y + 1; ty++) {
-			int bp = tx + ty * bm_linewidth;
-			if (ty == visy + 2 * dups_y || grid_hidden.test_bit (bp)) {
-				if (first != -2) {
-					int last = ty * 2 - 1;
-					if (m_crop.aligned_bottom (m_dims) && ty == visy + 2 * dups_y && !torus_v)
-						last--;
-					painter.drawLine (line_offx + tx * square_size, line_offy + first * square_size / 2,
-							  line_offx + tx * square_size, line_offy + last * square_size / 2);
-				}
-				first = -2;
-			} else if (first == -2)
-				first = m_crop.aligned_top (m_dims) && ty == 0 && !torus_v ? 0 : ty * 2 - 1;
-		}
+		draw_vertical (tx);
 	}
-	/* Draw horizontal lines.  */
 	for (int ty = 0; ty < visy + 2 * dups_y; ty++) {
-		int first = -2;
-		for (int tx = 0; tx < visx + 2 * dups_x  + 1; tx++) {
-			int bp = tx + ty * bm_linewidth;
-			if (tx == visx + 2 * dups_x || grid_hidden.test_bit (bp)) {
-				if (first != -2) {
-					int last = tx * 2 - 1;
-					if (m_crop.aligned_right (m_dims) && tx == visx + 2 * dups_x && !torus_h)
-						last--;
-					painter.drawLine (line_offx + first * square_size / 2, line_offy + ty * square_size,
-							  line_offx + last * square_size / 2, line_offy + ty * square_size);
-				}
-				first = -2;
-			} else if (first == -2)
-				first = m_crop.aligned_left (m_dims) && tx == 0 && !torus_h ? 0 : tx * 2 - 1;
-		}
+		draw_horizontal (ty);
 	}
-	if (setting->readBoolEntry ("BOARD_LINEWIDEN"))
+	if (setting->readBoolEntry ("BOARD_LINEWIDEN")) {
+		/* Adjust the grids to hold only the outline by removing lines from the
+		   previous grids.  */
+		vgrid.and1 (m_vgrid_outline);
+		hgrid.and1 (m_hgrid_outline);
 		pen.setWidth (scaled_w * 2);
-	painter.setPen (pen);
+		painter.setPen (pen);
+		int tx1 = dups_x + (szx - shiftx) % szx;
+		int tx2 = dups_x + (szx - shiftx - 1) % szx;
+		int ty1 = dups_y + (szy - shifty) % szy;
+		int ty2 = dups_y + (szy - shifty - 1) % szy;
 
-	/* Draw the top and bottom bounding lines.  */
-	int ty1 = dups_y + (szy - shifty) % szy;
-	int ty2 = dups_y + (szy - shifty - 1) % szy;
-	int yfirst1 = -2;
-	int yfirst2 = -2;
-	for (int tx = 0; tx < visx + 1; tx++) {
-		int x = (tx + shiftx) % szx;
-		int bp1 = tx + dups_x + ty1 * bm_linewidth;
-		int bp2 = tx + dups_x + ty2 * bm_linewidth;
-		if (m_crop.aligned_top (m_dims) && (tx == visx || x == 0 || grid_hidden.test_bit (bp1))) {
-			if (yfirst1 != -2) {
-				int last = tx * 2 - 1 + 2 * dups_x;
-				if (x == 0)
-					last--;
-				painter.drawLine (line_offx + yfirst1 * square_size / 2, line_offy + ty1 * square_size,
-						  line_offx + last * square_size / 2, line_offy + ty1 * square_size);
-			}
-			yfirst1 = -2;
-		}
-		if (m_crop.aligned_bottom (m_dims) && (tx == visx || x == 0 || grid_hidden.test_bit (bp2))) {
-			if (yfirst2 != -2) {
-				int last = tx * 2 - 1 + 2 * dups_x;
-				if (x == 0)
-					last--;
-				painter.drawLine (line_offx + yfirst2 * square_size / 2, line_offy + ty2 * square_size,
-						  line_offx + last * square_size / 2, line_offy + ty2 * square_size);
-			}
-			yfirst2 = -2;
-		}
-		if (tx == visx)
-			break;
-		if (!grid_hidden.test_bit (bp1) && (x == 0 || yfirst1 == -2))
-			yfirst1 = (x == 0 ? tx * 2 : tx * 2 - 1) + 2 * dups_x;
-		if (!grid_hidden.test_bit (bp2) && (x == 0 || yfirst2 == -2))
-			yfirst2 = (x == 0 ? tx * 2 : tx * 2 - 1) + 2 * dups_x;
+		draw_vertical (tx1, true);
+		draw_vertical (tx2, true);
+		draw_horizontal (ty1, true);
+		draw_horizontal (ty2, true);
 	}
-	/* Draw the left and right bounding lines.  */
-	int tx1 = dups_x + (szx - shiftx) % szx;
-	int tx2 = dups_x + (szx - shiftx - 1) % szx;
-	int xfirst1 = -2;
-	int xfirst2 = -2;
-	for (int ty = 0; ty < visy + 1; ty++) {
-		int y = (ty + shifty) % szy;
-		int bp1 = tx1 + (ty + dups_y) * bm_linewidth;
-		int bp2 = tx2 + (ty + dups_y) * bm_linewidth;
-		if (m_crop.aligned_left (m_dims) && (ty == visy || y == 0 || grid_hidden.test_bit (bp1))) {
-			if (xfirst1 != -2) {
-				int last = ty * 2 - 1 + 2 * dups_y;
-				if (y == 0)
-					last--;
-				painter.drawLine (line_offx + tx1 * square_size, line_offy + xfirst1 * square_size / 2,
-						  line_offx + tx1 * square_size, line_offy + last * square_size / 2);
-			}
-			xfirst1 = -2;
-		}
-		if (m_crop.aligned_right (m_dims) && (ty == visy || y == 0 || grid_hidden.test_bit (bp2))) {
-			if (xfirst2 != -2) {
-				int last = ty * 2 - 1 + 2 * dups_y;
-				if (y == 0)
-					last--;
-				painter.drawLine (line_offx + tx2 * square_size, line_offy + xfirst2 * square_size / 2,
-						  line_offx + tx2 * square_size, line_offy + last * square_size / 2);
-			}
-			xfirst2 = -2;
-		}
-		if (ty == visy)
-			break;
-		if (!grid_hidden.test_bit (bp1) && (y == 0 || xfirst1 == -2))
-			xfirst1 = (y == 0 ? ty * 2 : ty * 2 - 1) + 2 * dups_y;
-		if (!grid_hidden.test_bit (bp2) && (y == 0 || xfirst2 == -2))
-			xfirst2 = (y == 0 ? ty * 2 : ty * 2 - 1) + 2 * dups_y;
-	}
-
 	if (!m_show_hoshis)
 		return;
 	/* Now draw the hoshi points.  */
@@ -1009,10 +968,10 @@ void BoardView::draw_grid (QPainter &painter, bit_array &grid_hidden, int bm_lin
 	painter.setBrush (QBrush (Qt::black));
 	for (int tx = 0; tx < visx; tx++)
 		for (int ty = 0; ty < visy; ty++) {
-			int gbp = tx + dups_x + (ty + dups_y) * bm_linewidth;
 			int x = (tx + shiftx) % szx;
 			int y = (ty + shifty) % szy;
-			if (m_hoshis.test_bit (b.bitpos (x, y)) && !grid_hidden.test_bit (gbp)) {
+			int bp = b.bitpos (x, y);
+			if (m_hoshis.test_bit (bp) && !hidden.test_bit (bp)) {
 				painter.drawEllipse (QPoint (line_offx + (tx + dups_x) * square_size,
 							     line_offy + (ty + dups_y) * square_size),
 						     hoshi_size, hoshi_size);
@@ -1272,22 +1231,19 @@ QPixmap BoardView::draw_position (int default_vars_type)
 	int shifty = m_shift_y + m_crop.y1;
 	int dups_x = n_dups_h ();
 	int dups_y = n_dups_v ();
-	int bm_linewidth = visx + 2 * dups_x;
+
 	/* The factor is the size of a square in svg, it gets scaled later.  It should have
 	   an optically pleasant relation with the stroke width (2 for marks).  */
 	double svg_factor = 30;
 	QFontInfo fi (setting->fontMarks);
 	svg_builder svg (svg_factor * (visx + 2 * dups_x), svg_factor * (visy + 2 * dups_y));
 
-	bit_array grid_hidden (bm_linewidth * (visy + 2 * dups_y));
+	bit_array grid_hidden (b.bitsize ());
+
 	for (int tx = 0; tx < visx + 2 * dups_x; tx++)
 		for (int ty = 0; ty < visy + 2 * dups_y; ty++) {
 			int x = (tx + shiftx + (szx - dups_x)) % szx;
 			int y = (ty + shifty + (szy - dups_y)) % szy;
-			if (visible != nullptr && !visible->test_bit (b.bitpos (x, y))) {
-				grid_hidden.set_bit (tx + ty * bm_linewidth);
-				continue;
-			}
 			mark mark_at_pos = b.mark_at (x, y);
 			mextra extra = b.mark_extra_at (x, y);
 			bool was_last_move = false;
@@ -1333,7 +1289,40 @@ QPixmap BoardView::draw_position (int default_vars_type)
 				added = rs == ram_result::hide;
 
 			if (added)
-				grid_hidden.set_bit (tx + ty * bm_linewidth);
+				grid_hidden.set_bit (b.bitpos (x, y));
+		}
+
+	/* Every grid point is connected to up to four line segments.  Create bitmaps
+	   to indicate whether these should be drawn, one for horizontal lines and one
+	   for vertical lines, each holding two bits for every point.  */
+	bit_array vgrid (szx * szy * 2, true);
+	bit_array hgrid (szx * szy * 2, true);
+
+	for (int x = 0; x < szx; x++)
+		for (int y = 0; y < szy; y++) {
+			int bph = x * 2 + y * szx * 2;
+			int bph_left = (x + szx - 1) % szx * 2 + y * szx * 2;
+			int bph_right = (x + 1) % szx * 2 + y * szx * 2;
+			int bpv = x + y * szx * 2;
+			int bpv_above = x + ((y + szy - 1) % szy) * szx * 2;
+			int bpv_below = x + ((y + 1) % szy) * szx * 2;
+			int bp = b.bitpos (x, y);
+
+			if ((visible != nullptr && !visible->test_bit (bp)) || grid_hidden.test_bit (bp)) {
+				vgrid.clear_bit (bpv);
+				vgrid.clear_bit (bpv + szx);
+				hgrid.clear_bit (bph);
+				hgrid.clear_bit (bph + 1);
+				continue;
+			}
+			if (x == 0 && !b.torus_h ())
+				hgrid.clear_bit (bph);
+			if (x + 1 == szx && !b.torus_h ())
+				hgrid.clear_bit (bph + 1);
+			if (y == 0 && !b.torus_v ())
+				vgrid.clear_bit (bpv);
+			if (y + 1 == szy && !b.torus_v ())
+				vgrid.clear_bit (bpv + szx);
 		}
 
 	/* Now we're ready to draw the grid.  */
@@ -1342,7 +1331,7 @@ QPixmap BoardView::draw_position (int default_vars_type)
 	QPainter painter;
 	painter.begin (&image);
 
-	draw_grid (painter, grid_hidden, bm_linewidth);
+	draw_grid (painter, std::move (hgrid), std::move (vgrid), grid_hidden);
 
 	/* Now, draw stones.  Do this in two passes, with shadows first.  */
 	painter.setPen (Qt::NoPen);
@@ -2014,8 +2003,22 @@ void BoardView::reset_game (go_game_ptr gr)
 	m_displayed_game = gr;
 	game_state *root = gr->get_root ();
 	m_displayed = root;
-	m_dims = board_rect (root->get_board ());
-	m_hoshis = calculate_hoshis (root->get_board ());
+	const go_board &b = root->get_board ();
+	m_dims = board_rect (b);
+	m_hoshis = calculate_hoshis (b);
+	/* Precompute outline bitmaps for use in draw_grid.  */
+	int szx = b.size_x ();
+	int szy = b.size_y ();
+	m_vgrid_outline = bit_array (b.bitsize () * 2);
+	m_hgrid_outline = bit_array (b.bitsize () * 2);
+	for (int y = 1; y < szy * 2 - 1; y++) {
+		m_vgrid_outline.set_bit (y * szx);
+		m_vgrid_outline.set_bit (szx - 1 + y * szx);
+	}
+	for (int x = 1; x < szx * 2 - 1; x++) {
+		m_hgrid_outline.set_bit (x);
+		m_hgrid_outline.set_bit (x + (szy - 1) * szx * 2);
+	}
 
 	alloc_graphics_elts (true);
 

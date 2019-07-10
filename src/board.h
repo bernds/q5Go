@@ -52,6 +52,9 @@ class BoardView : public QGraphicsView
 	/* Used by mouse event handlers during rectangle selection.  */
 	int m_rect_down_x = -1, m_rect_down_y = -1;
 
+	/* Used in draw_grid for widened board outlines.  */
+	bit_array m_vgrid_outline, m_hgrid_outline;
+
 protected:
 	MainWindow *m_board_win {};
 
@@ -179,7 +182,7 @@ protected:
 
 	void calculateSize ();
 	void draw_background ();
-	void draw_grid (QPainter &, bit_array &, int);
+	void draw_grid (QPainter &, bit_array, bit_array, const bit_array &);
 
 	int coord_vis_to_board_x (int, bool = false);
 	int coord_vis_to_board_y (int, bool = false);
