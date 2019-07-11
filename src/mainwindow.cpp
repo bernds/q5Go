@@ -1623,7 +1623,7 @@ void MainWindow::slotUpdateComment ()
 {
 	if (!m_allow_text_update_signal)
 		return;
-	gfx_board->update_comment (commentEdit->toPlainText());
+	gfx_board->update_comment (commentEdit->toPlainText ());
 }
 
 /* Called from an external source to append to the comments window.  */
@@ -1685,6 +1685,9 @@ void MainWindow::update_font ()
 	normalTools->wtimeView->update_font (setting->fontClocks);
 	normalTools->btimeView->update_font (setting->fontClocks);
 
+	bool old = m_allow_text_update_signal;
+	m_allow_text_update_signal = false;
+
 	QTextCursor c = commentEdit->textCursor ();
 	commentEdit->selectAll ();
 	commentEdit->setCurrentFont (setting->fontComments);
@@ -1692,6 +1695,8 @@ void MainWindow::update_font ()
 	commentEdit->setCurrentFont (setting->fontComments);
 
 	commentEdit2->setFont (setting->fontComments);
+
+	m_allow_text_update_signal = old;
 
 	QFontMetrics fm (setting->fontStandard);
 	QRect r = fm.boundingRect ("Variation 12 of 15");
