@@ -163,6 +163,24 @@ public:
 		      const QString &wtime, const QString &wstones,
 		      bool warn_b, bool warn_w, int);
 
+	/* Navigation.  */
+	void nav_next_move ();
+	void nav_previous_move ();
+	void nav_next_figure ();
+	void nav_previous_figure ();
+	void nav_next_variation ();
+	void nav_previous_variation ();
+	void nav_next_comment ();
+	void nav_previous_comment ();
+	void nav_goto_first_move ();
+	void nav_goto_last_move ();
+	void nav_goto_main_branch ();
+	void nav_goto_var_start ();
+	void nav_goto_next_branch ();
+	void nav_goto_nth_move (int n);
+	void nav_goto_nth_move_in_var (int n);
+	void nav_find_move (int x, int y);
+
 protected:
 	void initActions ();
 	void initMenuBar (GameMode);

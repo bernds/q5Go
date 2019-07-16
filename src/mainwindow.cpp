@@ -429,6 +429,200 @@ MainWindow::~MainWindow()
 	delete whatsThis;
 }
 
+void MainWindow::nav_next_move ()
+{
+	game_state *st = gfx_board->displayed ();
+	game_state *next = st->next_move ();
+	if (next == nullptr)
+		return;
+	gfx_board->set_displayed (next);
+}
+
+void MainWindow::nav_previous_move ()
+{
+	game_state *st = gfx_board->displayed ();
+	game_state *next = st->prev_move ();
+	if (next == nullptr)
+		return;
+	gfx_board->set_displayed (next);
+}
+
+void MainWindow::nav_previous_comment ()
+{
+	game_state *st = gfx_board->displayed ();
+	while (st != nullptr) {
+		st = st->prev_move ();
+		if (st != nullptr && st->comment () != "") {
+			gfx_board->set_displayed (st);
+			break;
+		}
+	}
+}
+
+void MainWindow::nav_next_comment ()
+{
+	game_state *st = gfx_board->displayed ();
+	while (st != nullptr) {
+		st = st->next_move ();
+		if (st != nullptr && st->comment () != "") {
+			gfx_board->set_displayed (st);
+			break;
+		}
+	}
+}
+
+void MainWindow::nav_previous_figure ()
+{
+	game_state *st = gfx_board->displayed ();
+	while (st != nullptr) {
+		st = st->prev_move ();
+		if (st != nullptr && st->has_figure ()) {
+			gfx_board->set_displayed (st);
+			break;
+		}
+	}
+}
+
+void MainWindow::nav_next_figure ()
+{
+	game_state *st = gfx_board->displayed ();
+	while (st != nullptr) {
+		st = st->next_move ();
+		if (st != nullptr && st->has_figure ()) {
+			gfx_board->set_displayed (st);
+			break;
+		}
+	}
+}
+
+void MainWindow::nav_next_variation ()
+{
+	game_state *st = gfx_board->displayed ();
+	game_state *next = st->next_sibling (true);
+	if (next == nullptr)
+		return;
+	if (next != st)
+		gfx_board->set_displayed (next);
+}
+
+void MainWindow::nav_previous_variation ()
+{
+	game_state *st = gfx_board->displayed ();
+	game_state *next = st->prev_sibling (true);
+	if (next == nullptr)
+		return;
+	if (next != st)
+		gfx_board->set_displayed (next);
+}
+
+void MainWindow::nav_goto_first_move ()
+{
+	gfx_board->set_displayed (m_game->get_root ());
+}
+
+void MainWindow::nav_goto_last_move ()
+{
+	game_state *st_orig = gfx_board->displayed ();
+	game_state *st = st_orig;
+	for (;;) {
+		game_state *next = st->next_move ();
+		if (next == nullptr) {
+			if (st != st_orig)
+				gfx_board->set_displayed (st);
+			break;
+		}
+		st = next;
+	}
+}
+
+void MainWindow::nav_find_move (int x, int y)
+{
+	game_state *st = gfx_board->displayed ();
+	if (!st->was_move_p () || st->get_move_x () != x || st->get_move_y () != y)
+		st = m_game->get_root ();
+
+	for (;;) {
+		st = st->next_move ();
+		if (st == nullptr)
+			return;
+		if (st->was_move_p () && st->get_move_x () == x && st->get_move_y () == y)
+			break;
+	}
+	gfx_board->set_displayed (st);
+}
+
+void MainWindow::nav_goto_nth_move (int n)
+{
+	game_state *st = m_game->get_root ();
+	while (st->move_number () < n && st->n_children () > 0) {
+		st = st->next_move (true);
+	}
+	gfx_board->set_displayed (st);
+}
+
+void MainWindow::nav_goto_nth_move_in_var (int n)
+{
+	game_state *st = gfx_board->displayed ();
+
+	while (st->move_number () != n) {
+		game_state *next = st->move_number () < n ? st->next_move () : st->prev_move ();
+		/* Some added safety... this should not happen.  */
+		if (next == nullptr)
+			break;
+		st = next;
+	}
+	gfx_board->set_displayed (st);
+}
+
+void MainWindow::nav_goto_main_branch ()
+{
+	game_state *st = gfx_board->displayed ();
+	game_state *go_to = st;
+	while (st != nullptr) {
+		while (st->has_prev_sibling ())
+			st = go_to = st->prev_sibling (true);
+		st = st->prev_move ();
+	}
+	if (go_to != st)
+		gfx_board->set_displayed (go_to);
+}
+
+void MainWindow::nav_goto_var_start ()
+{
+	game_state *st = gfx_board->displayed ();
+	st = st->prev_move ();
+	if (st == nullptr)
+		return;
+
+	/* Walk back, ending either at the root or at a node which has
+	   more than one sibling.  */
+	for (;;) {
+		if (st->n_siblings () > 0)
+			break;
+		game_state *prev = st->prev_move ();
+		if (prev == nullptr)
+			break;
+		st = prev;
+	}
+	gfx_board->set_displayed (st);
+}
+
+void MainWindow::nav_goto_next_branch ()
+{
+	game_state *st_orig = gfx_board->displayed ();
+	game_state *st = st_orig;
+	for (;;) {
+		if (st->n_siblings () > 0)
+			break;
+		game_state *next = st->next_move ();
+		if (next == nullptr)
+			break;
+		st = next;
+	}
+	if (st != st_orig)
+		gfx_board->set_displayed (st);
+}
+
 void MainWindow::initActions ()
 {
 	// Escape focus: Escape key to get the focus from comment field to main window.
@@ -506,19 +700,19 @@ void MainWindow::initActions ()
 		 });
 
 	/* Navigation menu.  */
-	connect (navBackward, &QAction::triggered, [=] () { gfx_board->previous_move (); });
-	connect (navForward, &QAction::triggered, [=] () { gfx_board->next_move (); });
-	connect (navFirst, &QAction::triggered, [=] () { gfx_board->goto_first_move (); });
-	connect (navLast, &QAction::triggered, [=] () { gfx_board->goto_last_move (); });
-	connect (navPrevVar, &QAction::triggered, [=] () { gfx_board->previous_variation (); });
-	connect (navNextVar, &QAction::triggered, [=] () { gfx_board->next_variation (); });
-	connect (navMainBranch, &QAction::triggered, [=] () { gfx_board->goto_main_branch (); });
-	connect (navStartVar, &QAction::triggered, [=] () { gfx_board->goto_var_start (); });
-	connect (navNextBranch, &QAction::triggered, [=] () { gfx_board->goto_next_branch (); });
-	connect (navPrevComment, &QAction::triggered, [=] () { gfx_board->previous_comment (); });
-	connect (navNextComment, &QAction::triggered, [=] () { gfx_board->next_comment (); });
-	connect (navPrevFigure, &QAction::triggered, [=] () { gfx_board->previous_figure (); });
-	connect (navNextFigure, &QAction::triggered, [=] () { gfx_board->next_figure (); });
+	connect (navBackward, &QAction::triggered, [=] () { nav_previous_move (); });
+	connect (navForward, &QAction::triggered, [=] () { nav_next_move (); });
+	connect (navFirst, &QAction::triggered, [=] () { nav_goto_first_move (); });
+	connect (navLast, &QAction::triggered, [=] () { nav_goto_last_move (); });
+	connect (navPrevVar, &QAction::triggered, [=] () { nav_previous_variation (); });
+	connect (navNextVar, &QAction::triggered, [=] () { nav_next_variation (); });
+	connect (navMainBranch, &QAction::triggered, [=] () { nav_goto_main_branch (); });
+	connect (navStartVar, &QAction::triggered, [=] () { nav_goto_var_start (); });
+	connect (navNextBranch, &QAction::triggered, [=] () { nav_goto_next_branch (); });
+	connect (navPrevComment, &QAction::triggered, [=] () { nav_previous_comment (); });
+	connect (navNextComment, &QAction::triggered, [=] () { nav_next_comment (); });
+	connect (navPrevFigure, &QAction::triggered, [=] () { nav_previous_figure (); });
+	connect (navNextFigure, &QAction::triggered, [=] () { nav_next_figure (); });
 
 	connect (navNthMove, &QAction::triggered, this, &MainWindow::slotNavNthMove);
 	connect (navIntersection, &QAction::triggered, this, &MainWindow::slotNavIntersection);
@@ -982,12 +1176,9 @@ void MainWindow::slotEditDelete (bool)
 	if (st->root_node_p ())
 		return;
 	game_state *parent = st->prev_move ();
+	st->walk_tree ([this, parent] (game_state *s)->bool { gfx_board->transfer_displayed (s, parent); return true; });
 	delete st;
-#if 1
-	game_state *new_st = gfx_board->displayed ();
-	if (new_st != parent)
-		throw std::logic_error ("should have updated to parent");
-#endif
+	update_game_tree ();
 	const go_board &b = parent->get_board ();
 	setMoveData (*parent, b);
 	gfx_board->setModified ();
@@ -2051,9 +2242,9 @@ void MainWindow::update_figures ()
 void MainWindow::set_game_position (game_state *gs)
 {
 	/* Have to call this first so we trace the correct path in the game tree
-	   once move_state calls back into there.  */
+	   once set_displayed calls back into there.  */
 	gs->make_active ();
-	gfx_board->move_state (gs);
+	gfx_board->set_displayed (gs);
 }
 
 void MainWindow::setMoveData (game_state &gs, const go_board &b)
@@ -2225,7 +2416,7 @@ MainWindow::move_result MainWindow::make_move (game_state *from, int x, int y)
 		return std::make_pair (nullptr, false);
 	for (game_state *c: from->children ())
 		if (c->was_move_p () && c->get_move_x () == x && c->get_move_y () == y) {
-			from->transfer_observers (c);
+			gfx_board->transfer_displayed (from, c);
 			return std::make_pair (c, false);
 		}
 
@@ -2238,7 +2429,7 @@ MainWindow::move_result MainWindow::make_move (game_state *from, int x, int y)
 
 	gfx_board->setModified ();
 	game_state *st_new = from->add_child_move (new_board, col, x, y);
-	from->transfer_observers (st_new);
+	gfx_board->transfer_displayed (from, st_new);
 	return std::make_pair (st_new, true);
 }
 
@@ -2261,7 +2452,7 @@ void MainWindow::doPass ()
 	if (m_gamemode == modeNormal || m_gamemode == modeComputer) {
 		game_state *st = gfx_board->displayed ();
 		game_state *st_new = st->add_child_pass ();
-		st->transfer_observers (st_new);
+		gfx_board->transfer_displayed (st, st_new);
 	}
 }
 
@@ -2452,7 +2643,7 @@ void MainWindow_GTP::setup_game ()
 {
 	game_state *st = m_start_positions.back ();
 	if (m_game_position != st)
-		m_game_position->transfer_observers (st);
+		gfx_board->transfer_displayed (m_game_position, st);
 	m_game_position = st;
 	m_setting_up = 0;
 	if (m_gtp_w) {
@@ -2542,7 +2733,7 @@ void MainWindow_GTP::gtp_played_move (GTP_Process *p, int x, int y)
 		return;
 	}
 	gfx_board->setModified ();
-	st->transfer_observers (st_new);
+	gfx_board->transfer_displayed (st, st_new);
 	m_game_position = st_new;
 	update_game_tree ();
 
@@ -2656,7 +2847,7 @@ void MainWindow_GTP::gtp_played_pass (GTP_Process *p)
 	stone_color col = st->to_move ();
 
 	game_state *st_new = st->add_child_pass ();
-	st->transfer_observers (st_new);
+	gfx_board->transfer_displayed (st, st_new);
 	m_game_position = st_new;
 	update_game_tree ();
 
@@ -2867,19 +3058,19 @@ void MainWindow::recalc_scores (const go_board &b)
 	update_score_type ();
 }
 
-void MainWindow::setSliderMax(int n)
+void MainWindow::setSliderMax (int n)
 {
 	if (n < 0)
 		n = 0;
 
-	slider->setMaximum(n);
-	sliderRightLabel->setText(QString::number(n));
+	slider->setMaximum (n);
+	sliderRightLabel->setText (QString::number (n));
 }
 
-void MainWindow::sliderChanged(int n)
+void MainWindow::sliderChanged (int n)
 {
 	if (sliderSignalToggle)
-		gfx_board->goto_nth_move_in_var (n);
+		nav_goto_nth_move_in_var (n);
 }
 
 void MainWindow::toggleSidebar(bool toggle)

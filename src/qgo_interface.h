@@ -55,11 +55,12 @@ public:
 class MainWindow_IGS;
 class qGoIF;
 
-class qGoBoard : public QObject, public game_state::observer
+class qGoBoard : public QObject
 {
 	Q_OBJECT
 
-	std::shared_ptr<game_record> m_game = nullptr;
+	std::shared_ptr<game_record> m_game;
+	game_state *m_state {};
 	stone_color m_own_color = none;
 	qGoIF *m_qgoif;
 	QString *m_title = nullptr;
@@ -72,7 +73,6 @@ class qGoBoard : public QObject, public game_state::observer
 
 	QStandardItemModel m_observers;
 
-	virtual void observed_changed () override { }
 	void send_coords (int x, int y);
 	void update_time_info (game_state *);
 
@@ -105,7 +105,7 @@ public:
 	void enter_scoring_mode (bool may_be_reentry);
 	void leave_scoring_mode (void);
 	void player_toggle_dead (int x, int y);
-	void move_played (int, int);
+	void move_played (game_state *, int, int);
 
 	void send_kibitz(const QString&);
 	MainWindow_IGS *get_win() { return win; }

@@ -94,11 +94,6 @@ Board::Board (QWidget *parent)
 	navIntersectionStatus = false;
 }
 
-Board::~Board ()
-{
-	stop_observing ();
-}
-
 // distance from coords to surrounding elements
 const int BoardView::coord_margin = 4;
 
@@ -320,10 +315,10 @@ void BoardView::draw_background (void)
 }
 
 /* Handle a click on the Done button.  Return true if we should return to normal mode.  */
-bool Board::doCountDone()
+bool Board::doCountDone ()
 {
 	game_state *new_st = m_displayed->add_child_edit (*m_edit_board, m_edit_to_move, true);
-	m_displayed->transfer_observers (new_st);
+	set_displayed (new_st);
 
 	return true;
 }
@@ -339,7 +334,7 @@ void Board::leave_edit_append ()
 {
 	m_edit_board->identify_units ();
 	game_state *new_st = m_displayed->add_child_edit (*m_edit_board, m_edit_to_move);
-	m_displayed->transfer_observers (new_st);
+	set_displayed (new_st);
 	setModified ();
 }
 
@@ -351,14 +346,12 @@ void Board::leave_edit_prepend ()
 		return;
 	game_state *new_st = parent->replace_child_edit (m_displayed, *m_edit_board, m_edit_to_move);
 	if (new_st != nullptr)
-		m_displayed->transfer_observers (new_st);
+		set_displayed (new_st);
 	setModified ();
 }
 
 void Board::setMode (GameMode mode)
 {
-	game_state *new_st = m_displayed;
-
 	GameMode old_mode = m_game_mode;
 	m_game_mode = mode;
 
@@ -1306,7 +1299,7 @@ QPixmap BoardView::draw_position (int default_vars_type)
 	/* Every grid point is connected to up to four line segments.  Create bitmaps
 	   to indicate whether these should be drawn, one for horizontal lines and one
 	   for vertical lines, each holding two bits for every point.  */
-	std::shared_ptr<const bit_array> board_mask = m_displayed_game->get_board_mask ();
+	std::shared_ptr<const bit_array> board_mask = m_game->get_board_mask ();
 	bit_array vgrid (szx * szy * 2, true);
 	bit_array hgrid (szx * szy * 2, true);
 
@@ -1427,22 +1420,12 @@ void Board::sync_appearance (bool board_only)
 	}
 }
 
-void Board::set_displayed (game_state *st)
-{
-	move_state (st);
-}
-
 void Board::set_hide_analysis (bool on)
 {
 	if (m_hide_analysis == on)
 		return;
 	m_hide_analysis = on;
 	sync_appearance (true);
-}
-
-void Board::observed_changed ()
-{
-	BoardView::set_displayed (m_state);
 }
 
 void Board::set_analyzer_id (analyzer_id id)
@@ -1670,15 +1653,15 @@ void Board::wheelEvent(QWheelEvent *e)
 	if (m_cumulative_delta < -60) // wheel down to next
 	{
 		if (e->buttons () == Qt::RightButton || mouseState == Qt::RightButton)
-			next_variation ();
+			m_board_win->nav_next_variation ();
 		else
-			next_move ();
+			m_board_win->nav_next_move ();
 		m_cumulative_delta = 0;
 	} else if (m_cumulative_delta > 60) {
 		if (e->buttons () == Qt::RightButton || mouseState == Qt::RightButton)
-			previous_variation ();
+			m_board_win->nav_previous_variation ();
 		else
-			previous_move ();
+			m_board_win->nav_previous_move ();
 		m_cumulative_delta = 0;
 	}
 
@@ -1832,7 +1815,7 @@ void Board::mousePressEvent(QMouseEvent *e)
 	if (navIntersectionStatus) {
 		navIntersectionStatus = false;
 		unsetCursor ();
-		find_move (x, y);
+		m_board_win->nav_find_move (x, y);
 		return;
 	}
 	if (m_eval_state != nullptr
@@ -1866,7 +1849,7 @@ void Board::mousePressEvent(QMouseEvent *e)
 	    && (m_game_mode == modeNormal || m_game_mode == modeObserve))
 	{
 		/* @@@ Previous code made a distinction between left and right button.  */
-		find_move (x, y);
+		m_board_win->nav_find_move (x, y);
 		return;
 	}
 	/* All modes where marks are not allowed, including scoring, force the editStone
@@ -1939,12 +1922,12 @@ void Board::mousePressEvent(QMouseEvent *e)
 		case Qt::LeftButton:
 			m_edit_board->toggle_alive (x, y);
 			m_edit_board->calc_scoring_markers_complex ();
-			observed_changed ();
+			sync_appearance ();
 			break;
 		case Qt::RightButton:
 			m_edit_board->toggle_seki (x, y);
 			m_edit_board->calc_scoring_markers_complex ();
-			observed_changed ();
+			sync_appearance ();
 			break;
 		default:
 			break;
@@ -2026,7 +2009,7 @@ void BoardView::reset_game (go_game_ptr gr)
 {
 	clear_graphics_elts ();
 
-	m_displayed_game = gr;
+	m_game = gr;
 	game_state *root = gr->get_root ();
 	m_displayed = root;
 	const go_board &b = root->get_board ();
@@ -2082,15 +2065,15 @@ void BoardView::set_displayed (game_state *st)
 	sync_appearance (false);
 }
 
+void BoardView::transfer_displayed (game_state *from, game_state *to)
+{
+	if (m_displayed == from)
+		set_displayed (to);
+}
+
 void Board::reset_game (go_game_ptr gr)
 {
-	stop_observing ();
-
-	m_game = gr;
-
 	BoardView::reset_game (gr);
-
-	start_observing (gr->get_root ());
 
 	m_dragging = false;
 	m_request_mark_rect = false;
@@ -2166,7 +2149,7 @@ void Board::mark_dead_external (int x, int y)
 	   caclulate.
 	   See also the modeScoreRemote case in the mouse event handler.  */
 	m_edit_board->calc_scoring_markers_simple ();
-	observed_changed ();
+	sync_appearance ();
 }
 
 stone_color Board::swap_edit_to_move ()

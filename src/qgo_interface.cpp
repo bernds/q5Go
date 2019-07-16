@@ -39,7 +39,7 @@ public:
 		game_state *st = MainWindow::player_move (x, y);
 		if (st == nullptr)
 			return st;
-		m_connector->move_played (x, y);
+		m_connector->move_played (st, x, y);
 		return st;
 	}
 	virtual void player_toggle_dead (int x, int y) override
@@ -64,6 +64,10 @@ public:
 	{
 		if (local_stone_sound)
 			qgo->playStoneSound ();
+	}
+	void transfer_displayed (game_state *from, game_state *to)
+	{
+		gfx_board->transfer_displayed (from, to);
 	}
 };
 
@@ -976,6 +980,7 @@ void qGoBoard::remote_undo (const QString &)
 	if (!m_scoring)
 	{
 		dec_mv_counter();
+		m_state = m_state->prev_move ();
 		win->delete_last_move ();
 		return;
 	}
@@ -983,9 +988,9 @@ void qGoBoard::remote_undo (const QString &)
 	// back to matchMode
 	leave_scoring_mode ();
 	win->setGameMode (modeMatch);
-	win->getBoard()->previous_move();
-	dec_mv_counter();
-	send_kibitz(tr("GAME MODE: place stones..."));
+	win->nav_previous_move ();
+	dec_mv_counter ();
+	send_kibitz (tr ("GAME MODE: place stones..."));
 }
 
 void qGoBoard::enter_scoring_mode (bool may_reenter)
@@ -1158,7 +1163,9 @@ void qGoBoard::receive_score_end ()
 	game_state *st = m_state;
 	m_scoring_board->territory_from_markers ();
 	game_state *st_new = st->add_child_edit (*m_scoring_board, m_state->to_move (), true);
-	st->transfer_observers (st_new);
+	if (win != nullptr)
+		win->transfer_displayed (st, st_new);
+	m_state = st_new;
 	delete m_scoring_board;
 	m_scoring_board = nullptr;
 }
@@ -1197,7 +1204,7 @@ void qGoBoard::game_startup ()
 
 	game_state *root = m_game->get_root ();
 	if (root != m_state)
-		root->transfer_observers (m_state);
+		win->transfer_displayed (root, m_state);
 
 	// disable some Menu items
 //	win->setOnlineMenu(true);
@@ -1292,7 +1299,7 @@ void qGoBoard::set_game(Game *g, GameMode mode, stone_color own_color)
 			std::to_string (timelimit), overtime, -1);
 
 	m_game = std::make_shared<game_record> (startpos, handi >= 2 ? white : black, info);
-	start_observing (m_game->get_root ());
+	m_state = m_game->get_root ();
 	if (g->FR.contains("F"))
 		m_freegame = FREE;
 	else if (g->FR.contains("T"))
@@ -1578,20 +1585,18 @@ void qGoBoard::set_move(stone_color sc, QString pt, QString mv_nr)
 			m_game->set_handicap (h);
 			go_board new_root = new_handicap_board (m_game->boardsize (), h);
 			m_game->replace_root (new_root, h > 1 ? white : black);
-			qDebug("corrected Handicap");
+			qDebug ("corrected Handicap");
 		}
-	}
-	else if (pt.contains("Pass", Qt::CaseInsensitive))
-	{
+	} else if (pt.contains ("Pass", Qt::CaseInsensitive)) {
 		qDebug () << "pass found\n";
 		game_state *st = m_state;
-		game_state *new_st = m_state->add_child_pass ();
-		st->transfer_observers (new_st);
-		if (win != nullptr)
-			win->playPassSound();
-	}
-	else
-	{
+		game_state *st_new = m_state->add_child_pass ();
+		if (win != nullptr) {
+			win->transfer_displayed (st, st_new);
+			win->playPassSound ();
+		}
+		m_state = st_new;
+	} else {
 		if (gameMode == modeMatch && mv_counter < 2 && m_own_color == white)
 		{
 			// if black has not already done - maybe too late here???
@@ -1617,9 +1622,11 @@ void qGoBoard::set_move(stone_color sc, QString pt, QString mv_nr)
 		game_state *st = m_state;
 		game_state *st_new = st->add_child_move (i - 1, j - 1, sc, game_state::add_mode::set_main);
 		if (st_new != nullptr) {
-			st->transfer_observers (st_new);
-			if (win != nullptr)
+			if (win != nullptr) {
+				win->transfer_displayed (st, st_new);
 				win->playClick ();
+			}
+			m_state = st_new;
 		} else {
 			/* @@@ do something sensible.  */
 		}
@@ -1811,8 +1818,9 @@ void qGoBoard::player_toggle_dead (int x, int y)
 	send_coords (x, y);
 }
 
-void qGoBoard::move_played (int x, int y)
+void qGoBoard::move_played (game_state *st, int x, int y)
 {
+	m_state = st;
 	update_time_info (m_state);
 	send_coords (x, y);
 }

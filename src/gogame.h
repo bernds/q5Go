@@ -100,8 +100,6 @@ public:
 
 class game_state
 {
-public:
-	class observer;
 
 private:
 	go_board m_board;
@@ -114,7 +112,6 @@ private:
 	size_t m_active = 0;
 	game_state *m_parent;
 	stone_color m_to_move;
-	mutable std::list<observer *> m_observers;
 
 	int m_move_x = -1, m_move_y = -1;
 	/* It seems strange to keep both a to_move and move_color. There is redundancy, but we really
@@ -173,46 +170,6 @@ private:
 	}
 
 public:
-	class observer
-	{
-	protected:
-		observer () : m_state (nullptr) { }
-		~observer () { stop_observing (); }
-
-		void start_observing (game_state *st)
-		{
-			move_state (st);
-		}
-		void stop_observing ()
-		{
-			if (m_state != nullptr)
-				m_state->remove_observer (this);
-			m_state = nullptr;
-		}
-	public:
-		game_state *m_state = nullptr;
-		virtual void observed_changed () = 0;
-		void move_state (game_state *s, bool deleting_state = false)
-		{
-			if (s == m_state)
-				return;
-			/* Avoid removing items from a list we're iterating over
-			   in the game_state destructor.  */
-			if (m_state != nullptr && !deleting_state)
-				m_state->remove_observer (this);
-			if (s != nullptr)
-				s->m_observers.push_back (this);
-			m_state = s;
-			observed_changed ();
-		}
-		/* Called only when deleting a game record.  Does not need to update
-		   observer lists.  */
-		void set_state (game_state *s)
-		{
-			m_state = s;
-		}
-	};
-
 	game_state (int size) : m_board (size), m_move_number (0), m_sgf_movenum (0), m_parent (0), m_to_move (black)
 	{
 	}
@@ -220,7 +177,7 @@ public:
 		: m_board (b), m_move_number (0), m_sgf_movenum (0), m_parent (nullptr), m_to_move (to_move)
 	{
 	}
-	/* Deep copy.  Don't copy observers.  */
+	/* Deep copy.  */
 	game_state (const game_state &other, game_state *parent)
 		: game_state (other.m_board, other.m_move_number, other.m_sgf_movenum, parent, other.m_to_move,
 			      other.m_move_x, other.m_move_y, other.m_move_color, other.m_unrecognized_props,
@@ -268,10 +225,6 @@ public:
 #endif
 		}
 		m_parent = nullptr;
-		for (auto &it: m_observers) {
-			it->move_state (parent, true);
-		}
-
 	}
 	~game_state ()
 	{
@@ -391,25 +344,6 @@ public:
 			m_stonesleft_b = tm;
 	}
 
-	void remove_observer (const observer *o) const
-	{
-		for (auto it = m_observers.begin (); it != m_observers.end (); ++it) {
-			if (*it == o) {
-				m_observers.erase (it);
-				return;
-			}
-		}
-	}
-
-	void transfer_observers (game_state *other)
-	{
-		for (auto it: m_observers) {
-			it->m_state = other;
-			other->m_observers.push_back (it);
-			it->observed_changed ();
-		}
-		m_observers.clear ();
-	}
 	void make_active ()
 	{
 		game_state *p = m_parent;
@@ -733,8 +667,6 @@ public:
 	{
 		m_board = b;
 		m_to_move = to_move;
-		for (auto it: m_observers)
-			it->observed_changed ();
 	}
 
 	bool has_figure () const
@@ -999,30 +931,6 @@ public:
 	~game_record ()
 	{
 	}
-};
-
-class navigable_observer : public game_state::observer
-{
-protected:
-	go_game_ptr m_game = nullptr;
-
-public:
-	void next_move ();
-	void previous_move ();
-	void next_figure ();
-	void previous_figure ();
-	void next_variation ();
-	void previous_variation ();
-	void next_comment ();
-	void previous_comment ();
-	void goto_first_move ();
-	void goto_last_move ();
-	void goto_main_branch ();
-	void goto_var_start ();
-	void goto_next_branch ();
-	void goto_nth_move (int n);
-	void goto_nth_move_in_var (int n);
-	void find_move (int x, int y);
 };
 
 #endif

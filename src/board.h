@@ -42,12 +42,6 @@ class BoardView : public QGraphicsView
 {
 	Q_OBJECT
 
-	/* The navigable_observer defines m_game for navigation, so Board actually
-	   ends up with two game pointers.  That's a little unfortunate.
-	   But we want a reference to the game record of the displayed position to
-	   ensure that it isn't deleted before a BoardView is.  */
-	go_game_ptr m_displayed_game;
-
 	void update_rect_select (int, int);
 	/* Used by mouse event handlers during rectangle selection.  */
 	int m_rect_down_x = -1, m_rect_down_y = -1;
@@ -56,6 +50,7 @@ class BoardView : public QGraphicsView
 	bit_array m_vgrid_outline, m_hgrid_outline;
 
 protected:
+	go_game_ptr m_game;
 	MainWindow *m_board_win {};
 
 	/* Size of the (abstract) board.  */
@@ -141,7 +136,8 @@ public:
 	/* Should be part of the constructor, but Qt doesn't seem to allow such a construction with the .ui files.  */
 	void set_board_win (MainWindow *w) { m_board_win = w; }
 	virtual void reset_game (go_game_ptr);
-	virtual void set_displayed (game_state *);
+	void set_displayed (game_state *);
+	void transfer_displayed (game_state *, game_state *);
 	game_state *displayed () { return m_displayed; }
 
 	stone_color to_move () { return m_displayed->to_move (); }
@@ -203,7 +199,7 @@ protected:
 #endif
 };
 
-class Board : public BoardView, public navigable_observer, public GTP_Eval_Controller
+class Board : public BoardView, public GTP_Eval_Controller
 {
 	Q_OBJECT
 
@@ -243,14 +239,11 @@ class Board : public BoardView, public navigable_observer, public GTP_Eval_Contr
 
 public:
 	Board (QWidget *parent = nullptr);
-	~Board ();
 
 	virtual void reset_game (go_game_ptr) override;
-	virtual void set_displayed (game_state *) override;
 
 	void set_analyzer_id (analyzer_id id);
 	void setModified (bool m=true);
-	void external_move (game_state *st) { move_state (st); }
 	void mark_dead_external (int x, int y);
 	void update_comment(const QString &);
 
@@ -280,8 +273,6 @@ public:
 
 	void set_player_colors (bool w, bool b) { m_player_is_w = w; m_player_is_b = b; }
 	bool player_is (stone_color c) { return c == black ? m_player_is_b : m_player_is_w; }
-
-	virtual void observed_changed () override;
 
 	/* Virtuals from Gtp_Controller.  */
 	virtual void gtp_startup_success (GTP_Process *) override;
