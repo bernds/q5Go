@@ -58,6 +58,14 @@
          </item>
          <item>
           <widget class="QComboBox" name="komiComboBox">
+           <property name="toolTip">
+            <string>Controls how to behave if the engine only supports a fixed value for komi.
+If the analyzed game has negative komi, the game can be analyzed with reversed colors for better results.
+It is also possible to analyze with both normal and flipped komi, for example for zero-komi games.</string>
+           </property>
+           <property name="statusTip">
+            <string/>
+           </property>
            <item>
             <property name="text">
              <string>Use default</string>
