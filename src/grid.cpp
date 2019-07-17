@@ -156,7 +156,7 @@ bool Grid::apply_selection (const QRect &r1)
 bit_array Grid::selected_items ()
 {
 	bit_array result (m_ref_board.bitsize ());
-	for (int i = 0; i < m_ref_board.bitsize (); i++)
+	for (size_t i = 0; i < m_ref_board.bitsize (); i++)
 		if (m_covers[i].isVisible ())
 			result.set_bit (i);
 
@@ -165,7 +165,7 @@ bit_array Grid::selected_items ()
 
 void Grid::set_removed_points (const bit_array &mask)
 {
-	for (int i = 0; i < m_ref_board.bitsize (); i++) {
+	for (size_t i = 0; i < m_ref_board.bitsize (); i++) {
 		m_vgrid[i].setVisible (!mask.test_bit (i));
 		m_hgrid[i].setVisible (!mask.test_bit (i));
 	}

@@ -22,7 +22,7 @@ NewVariantGameDialog::NewVariantGameDialog (QWidget* parent)
 	connect (ui->vTorusCheckBox, &QCheckBox::stateChanged, [=] (int) { update_grid (); });
 	connect (ui->graphicsView, &SizeGraphicsView::resized, [=] () { resize_grid (); });
 	connect (ui->graphicsView, &QGraphicsView::rubberBandChanged,
-		 [this] (QRect r, QPointF a, QPointF b) { update_selection (r); });
+		 [this] (QRect r, QPointF, QPointF) { update_selection (r); });
 	connect (ui->addSelButton, &QPushButton::clicked, [this] (bool) { add_selection (); });
 	connect (ui->removeSelButton, &QPushButton::clicked, [this] (bool) { rem_selection (); });
 	connect (ui->clearSelButton, &QPushButton::clicked, [this] (bool) { clear_selection (); });
