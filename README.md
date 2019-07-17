@@ -1,4 +1,4 @@
-## q5Go 0.8.1
+## q5Go 0.9
 
 This is a tool for Go players which performs the following functions:
 - SGF editor
@@ -19,50 +19,36 @@ and modernized.
 
 ![screenshot](screens/screenshot.png)
 
-Version 0.8.1 is just a compatibility fix for the Leela Zero "next" branch
-that will become 0.17.  These are the major user-visible changes in 0.8:
- * Analyzing games with multiple engines now produces sensible results.
-   q5go remembers winrates for each engine name and komi combination and
-   displays multiple winrate graphs.
- * For engines with fixed komi, batch analysis can now flip the position
-   to effectively analyze with reverse komi.
- * For live analysis, it is now possible to choose the analysis engine.
- * There is a new slide export feature which combines the board and
-   comments into a single image for use in slide shows or videos.
-   File name sequences can be generated automatically.
- * It is now possible to choose between area and territory scoring in
-   off-line games.
-
-Minor fixes and improvements include:
- * The board coordinates now scales with the size of the display, their
-   size relative to the stones is configurable in the preferences.
- * It is now possible to choose whether to tile or scale the wood
-   background image used for the board.
- * The evaluation graph is automatically displayed when a game obtains
-   an evaluation for the first time.
- * In online match games, remaining time is now saved to the SGF for both
-   player and opponent.
- * It is now possible to hold down LMB and drag in the evaluation graph
-   to move to a different position.
- * In the database dialog, "Open" and "Cancel" now work (previously
-   only double clicks opened the game).
- * In off-line mode, scoring a scored position again now keeps liveness
-   and seki status.
- * A bug was fixed that caused the "Update" button to disappear when
-   scoring or editing an off-line copy of an observed game.
- * Loading an SGF file for a game against an engine is now implemented.
+These are the major user-visible changes in 0.9:
+ * Support for KataGo analysis.  The evaluation graph can be switched between
+   score and win rate.
+ * A new option to start a game against an engine game from the current
+   board position.
+ * A new AI vs AI play mode.  The number of games to be played is
+   configurable, and an opening book can be used.
+ * It is now possible to hide/show the analysis markup of the board rather
+   than having it displayed at all times.
+ * The variant game dialog now supports removing intersections from the board,
+   allowing new variations of the game.
+ * Several bug fixes related to scoring mode when playing games on IGS.
+ * There are now a few presets for the stone visual appearance to make it
+   quicker and easier to arrive at a nice look.  The darkness of the shadows
+   can now also be configured.
+ * Sounds should be a little more reliable, the samples used for stones were
+   too short to be played on some systems.
 
 See VERSION_HISTORY for a history of changes.
 
 ## Overview of features
 
 ### Analysis mode
+
 q5Go supports not only play against AI engines, but can also connect to
-Leela Zero to use it as an an analysis tool, displaying statistics such
-as win-rates and visit counts, and displaying variations.  This is
-available both for local SGF editing, and for observing on-line games.
-By middle-clicking or shift-clicking on a displayed variation, it can
-be added to the game record.
+KataGo or Leela Zero to use it as an an analysis tool, displaying statistics
+such as win-rates, scores (when using KataGo), and visit counts, and
+displaying variations.  This is available both for local SGF editing, and
+for observing on-line games.  By middle-clicking or shift-clicking on a
+displayed variation, it can be added to the game record.
 
 ![screenshot](screens/analysis.png)
 
@@ -147,7 +133,10 @@ to extend the board past its regular dimensions, duplicating parts of
 the position for a better overview.  Also, the board can be dragged
 with the middle mouse button.
 
-![screenshot](screens/variants.jpg)
+In addition to that, it is possible to set up a board with some of the
+intersections removed.
+
+![screenshot](screens/variants.png)
 
 The screenshot shows the variant game dialog and a (different) position
 with both axes set to be toroidal.

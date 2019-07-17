@@ -1,3 +1,23 @@
+q5Go 0.9
+
+These are the major user-visible changes in 0.9:
+ * Support for KataGo analysis.  The evaluation graph can be switched between
+   score and win rate.
+ * A new option to start a game against an engine game from the current
+   board position.
+ * A new AI vs AI play mode.  The number of games to be played is
+   configurable, and an opening book can be used.
+ * It is now possible to hide/show the analysis markup of the board rather
+   than having it displayed at all times.
+ * The variant game dialog now supports removing intersections from the board,
+   allowing new variations of the game.
+ * Several bug fixes related to scoring mode when playing games on IGS.
+ * There are now a few presets for the stone visual appearance to make it
+   quicker and easier to arrive at a nice look.  The darkness of the shadows
+   can now also be configured.
+ * Sounds should be a little more reliable, the samples used for stones were
+   too short to be played on some systems.
+
 q5Go 0.8.1
  * Adjusted analysis mode to work with the upcoming Leela Zero 0.17.
 
@@ -17,7 +37,7 @@ These are the major user-visible changes in 0.8:
    off-line games.
 
 Minor fixes and improvements include:
- * The board coordinates now scales with the size of the display, their
+ * The board coordinates now scale with the size of the display, their
    size relative to the stones is configurable in the preferences.
  * It is now possible to choose whether to tile or scale the wood
    background image used for the board.
