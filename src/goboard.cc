@@ -616,7 +616,6 @@ void go_board::calc_scoring_markers_simple ()
 {
 	init_marks (true);
 
-	m_dead_w = m_dead_b = 0;
 	m_score_b = m_score_w = 0;
 
 	bit_array w_stones (bitsize ());
