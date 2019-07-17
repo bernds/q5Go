@@ -62,8 +62,6 @@ Grid::Grid (QGraphicsScene *canvas, const go_board &ref, const bit_array &hoshis
 				m_hoshi_pos[n++] = { x, y };
 			}
 		}
-
-	showAll ();
 }
 
  /**
@@ -168,28 +166,9 @@ bit_array Grid::selected_items ()
 void Grid::set_removed_points (const bit_array &mask)
 {
 	for (int i = 0; i < m_ref_board.bitsize (); i++) {
-		QPen p = m_vgrid[i].pen ();
-		p.setColor (mask.test_bit (i) ? Qt::white : Qt::black);
-		m_vgrid[i].setPen (p);
-		m_vgrid[i].update ();
-		p = m_hgrid[i].pen ();
-		p.setColor (mask.test_bit (i) ? Qt::white : Qt::black);
-		m_hgrid[i].setPen (p);
-		m_hgrid[i].update ();
+		m_vgrid[i].setVisible (!mask.test_bit (i));
+		m_hgrid[i].setVisible (!mask.test_bit (i));
 	}
-}
-
- /**
-  * Resets all interctions and hoshis to be shown
-  **/
-void Grid::showAll ()
-{
-	for (auto &i: m_vgrid)
-		i.show ();
-	for (auto &i: m_hgrid)
-		i.show ();
-	for (auto &i: m_hoshis)
-		i.show ();
 }
 
  /**

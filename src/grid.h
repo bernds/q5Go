@@ -48,10 +48,7 @@ public:
 	void set_removed_points (const bit_array &);
 	void hide (int x, int y);
 	void resize (const QRect &r, int shift_x, int shift_y, double square_size);
-	void showAll ();
 	bool apply_selection (const QRect &r);
-
-private:
 };
 
 class CoordDisplay
