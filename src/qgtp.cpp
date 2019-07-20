@@ -399,7 +399,7 @@ void GTP_Process::slot_receive_stdout ()
 		return;
 	}
 
-	for (;;) {
+	while (!m_stopped) {
 		/* Clear empty lines at the front of the buffer.  */
 		int last_lf = -1;
 		int pos = 0;
