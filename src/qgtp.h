@@ -24,7 +24,11 @@ protected:
 	analyzer_id m_id;
 
 	GTP_Controller (QWidget *p) : m_parent (p) { }
-	GTP_Process *create_gtp (const Engine &engine, int size, double komi, bool show_dialog = true);
+	GTP_Process *create_gtp (const Engine &engine, int size_x, int size_y, double komi, bool show_dialog = true);
+	GTP_Process *create_gtp (const Engine &engine, int size, double komi, bool show_dialog = true)
+	{
+		return create_gtp (engine, size, size, komi, show_dialog);
+	}
 public:
 	virtual void gtp_played_move (GTP_Process *p, int x, int y) = 0;
 	virtual void gtp_played_pass (GTP_Process *p) = 0;
@@ -93,6 +97,8 @@ class GTP_Process : public QProcess
 {
 	Q_OBJECT
 
+	QString m_name;
+
 	QString m_buffer;
 	QString m_stderr_buffer;
 
@@ -100,7 +106,7 @@ class GTP_Process : public QProcess
 	GTP_Controller *m_controller;
 
 	int m_dlg_lines = 0;
-	int m_size;
+	int m_size_x, m_size_y;
 	/* The komi we've requested with the "komi" command.  The engine may have
 	   ignored it.  */
 	double m_komi;
@@ -136,6 +142,7 @@ class GTP_Process : public QProcess
 	void score_callback_2 (const QString &);
 	void internal_quit ();
 	void default_err_receiver (const QString &);
+	void rect_board_err_receiver (const QString &);
 	void dup_move (game_state *, bool);
 	void append_text (const QString &, const QColor &col);
 
@@ -149,7 +156,7 @@ public slots:
 
 public:
 	GTP_Process (QWidget *parent, GTP_Controller *c, const Engine &engine,
-		     int size, float komi, bool show_dialog = true);
+		     int size_x, int size_y, float komi, bool show_dialog = true);
 	~GTP_Process ();
 	bool started () { return m_started; }
 	bool stopped () { return m_stopped; }

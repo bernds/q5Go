@@ -11,6 +11,7 @@
 #define NEWAIGAMEDLG_H
 
 #include <qdialog.h>
+#include <utility>
 
 #include "goboard.h"
 #include "gogame.h"
@@ -34,10 +35,13 @@ protected:
 public:
 	AIGameDlg (QWidget *parent);
 	~AIGameDlg ();
-	int board_size ();
+	std::pair<int, int> board_size ();
 	int handicap ();
 	QString game_to_load ();
 	time_settings timing ();
+	go_game_ptr create_game_record ();
+	virtual game_info create_game_info () = 0;
+
 };
 
 class NewAIGameDlg : public AIGameDlg<Ui::NewAIGameDlgGui>
@@ -45,7 +49,7 @@ class NewAIGameDlg : public AIGameDlg<Ui::NewAIGameDlgGui>
 public:
 	NewAIGameDlg (QWidget* parent, bool from_position = false);
 
-	game_info create_game_info ();
+	virtual game_info create_game_info () override;
 	int engine_index ();
 	QString fileName ();
 	bool computer_white_p ();
@@ -60,7 +64,7 @@ class TwoAIGameDlg : public AIGameDlg<Ui::TwoAIGameDlgGui>
 public:
 	TwoAIGameDlg (QWidget* parent);
 
-	game_info create_game_info ();
+	virtual game_info create_game_info () override;
 	int engine_index (stone_color);
 	QString fileName ();
 	int num_games ();

@@ -2111,26 +2111,15 @@ void ClientWindow::slotComputerPlay(bool)
 	}
 
 	NewAIGameDlg dlg (this);
-	if (dlg.exec() != QDialog::Accepted)
+	if (dlg.exec () != QDialog::Accepted)
+		return;
+
+	go_game_ptr gr = dlg.create_game_record ();
+	if (gr == nullptr)
 		return;
 
 	int eidx = dlg.engine_index ();
 	const Engine &engine = setting->m_engines[eidx];
-	int hc = dlg.handicap ();
-	game_info info = dlg.create_game_info ();
-	std::shared_ptr<game_record> gr;
-
-	QString filename = dlg.game_to_load ();
-	if (filename.isEmpty ()) {
-		go_board starting_pos = new_handicap_board (dlg.board_size (), dlg.handicap ());
-		gr = std::make_shared<game_record> (starting_pos, hc > 1 ? white : black, info);
-	} else {
-		gr = record_from_file (filename, nullptr);
-	}
-
-	if (gr == nullptr)
-		return;
-
 	bool computer_white = dlg.computer_white_p ();
 	time_settings ts = dlg.timing ();
 	new MainWindow_GTP (0, gr, screen_key (this), engine, ts, !computer_white, computer_white);
@@ -2146,30 +2135,19 @@ void ClientWindow::slotTwoEnginePlay (bool)
 	}
 
 	TwoAIGameDlg dlg (this);
-	if (dlg.exec() != QDialog::Accepted)
+	if (dlg.exec () != QDialog::Accepted)
+		return;
+
+	go_game_ptr gr = dlg.create_game_record ();
+
+	if (gr == nullptr)
 		return;
 
 	int w_eidx = dlg.engine_index (white);
 	int b_eidx = dlg.engine_index (black);
 	const Engine &engine_w = setting->m_engines[w_eidx];
 	const Engine &engine_b = setting->m_engines[b_eidx];
-
 	time_settings ts = dlg.timing ();
-
-	int hc = dlg.handicap ();
-	game_info info = dlg.create_game_info ();
-	std::shared_ptr<game_record> gr;
-
-	QString filename = dlg.game_to_load ();
-	if (filename.isEmpty ()) {
-		go_board starting_pos = new_handicap_board (dlg.board_size (), dlg.handicap ());
-		gr = std::make_shared<game_record> (starting_pos, hc > 1 ? white : black, info);
-	} else {
-		gr = record_from_file (filename, nullptr);
-	}
-
-	if (gr == nullptr)
-		return;
 	new MainWindow_GTP (0, gr, screen_key (this), engine_w, engine_b, ts, dlg.num_games (), dlg.opening_book ());
 }
 

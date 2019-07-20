@@ -2335,15 +2335,17 @@ MainWindow_GTP::MainWindow_GTP (QWidget *parent, go_game_ptr gr, QString opener_
 				const time_settings &ts, bool b_is_comp, bool w_is_comp)
 	: MainWindow (parent, gr, opener_scrkey, modeComputer, ts), GTP_Controller (this)
 {
-	game_state *st = gr->get_root ();
-	m_game_position = st;
+	game_state *root = gr->get_root ();
+	game_state *st = root;
+	m_game_position = root;
 	while (st->n_children () > 0)
 		st = st->next_primary_move ();
 	m_start_positions.push_back (st);
 
 	gfx_board->set_player_colors (!w_is_comp, !b_is_comp);
 	m_starting_up = 1;
-	auto g = create_gtp (program, m_game->boardsize (), m_game->komi ());
+	const go_board &b = root->get_board ();
+	auto g = create_gtp (program, b.size_x (), b.size_y (), m_game->komi ());
 	if (b_is_comp)
 		m_gtp_b = g;
 	else
@@ -2354,12 +2356,14 @@ MainWindow_GTP::MainWindow_GTP (QWidget *parent, go_game_ptr gr, game_state *st,
 				const time_settings &ts, bool b_is_comp, bool w_is_comp)
 	: MainWindow (parent, gr, opener_scrkey, modeComputer, ts), GTP_Controller (this)
 {
+	game_state *root = gr->get_root ();
 	m_start_positions.push_back (st);
-	m_game_position = gr->get_root ();
+	m_game_position = root;
 
 	gfx_board->set_player_colors (!w_is_comp, !b_is_comp);
 	m_starting_up = 1;
-	auto g = create_gtp (program, m_game->boardsize (), m_game->komi ());
+	const go_board &b = root->get_board ();
+	auto g = create_gtp (program, b.size_x (), b.size_y (), m_game->komi ());
 	if (b_is_comp)
 		m_gtp_b = g;
 	else
@@ -2371,7 +2375,8 @@ MainWindow_GTP::MainWindow_GTP (QWidget *parent, go_game_ptr gr, QString opener_
 				const time_settings &ts, int n_games, bool book)
 	: MainWindow (parent, gr, opener_scrkey, modeObserveGTP, ts), GTP_Controller (this)
 {
-	game_state *primary = gr->get_root ();
+	game_state *root = gr->get_root ();
+	game_state *primary = root;
 	while (primary->n_children () > 0)
 		primary = primary->next_primary_move ();
 
@@ -2390,8 +2395,9 @@ MainWindow_GTP::MainWindow_GTP (QWidget *parent, go_game_ptr gr, QString opener_
 
 	gfx_board->set_player_colors (false, false);
 	m_starting_up = 2;
-	m_gtp_w = create_gtp (program_w, m_game->boardsize (), m_game->komi ());
-	m_gtp_b = create_gtp (program_b, m_game->boardsize (), m_game->komi ());
+	const go_board &b = root->get_board ();
+	m_gtp_w = create_gtp (program_w, b.size_x (), b.size_y (), m_game->komi ());
+	m_gtp_b = create_gtp (program_b, b.size_x (), b.size_y (), m_game->komi ());
 	connect (followButton, &QPushButton::clicked, [this] (bool) { gfx_board->set_displayed (m_game_position); });
 }
 

@@ -6,7 +6,7 @@
 #include "gogame.h"
 #include "timing.h"
 
-GTP_Process *GTP_Controller::create_gtp (const Engine &engine, int size, double komi, bool show_dialog)
+GTP_Process *GTP_Controller::create_gtp (const Engine &engine, int size_x, int size_y, double komi, bool show_dialog)
 {
 	m_id.engine = engine.title.toStdString ();
 	QString ekstr = engine.komi;
@@ -18,13 +18,13 @@ GTP_Process *GTP_Controller::create_gtp (const Engine &engine, int size, double 
 	} else
 		m_id.komi = komi;
 
-	GTP_Process *g = new GTP_Process (m_parent, this, engine, size, komi, show_dialog);
+	GTP_Process *g = new GTP_Process (m_parent, this, engine, size_x, size_y, komi, show_dialog);
 	return g;
 }
 
 GTP_Process::GTP_Process(QWidget *parent, GTP_Controller *c, const Engine &engine,
-			 int size, float komi, bool show_dialog)
-	: m_dlg (parent, TextView::type::gtp), m_controller (c), m_size (size), m_komi (komi)
+			 int size_x, int size_y, float komi, bool show_dialog)
+	: m_name (engine.title), m_dlg (parent, TextView::type::gtp), m_controller (c), m_size_x (size_x), m_size_y (size_y), m_komi (komi)
 {
 	const QString &prog = engine.path;
 	const QString &args = engine.args;
@@ -102,7 +102,11 @@ void GTP_Process::startup_part2 (const QString &response)
 		quit ();
 		return;
 	}
-	send_request (QString ("boardsize ") + QString::number (m_size), &GTP_Process::startup_part3);
+	if (m_size_x == m_size_y)
+		send_request (QString ("boardsize ") + QString::number (m_size_x), &GTP_Process::startup_part3);
+	else
+		send_request (QString ("rectangular_boardsize ") + QString::number (m_size_x) + " " + QString::number (m_size_y),
+			      &GTP_Process::startup_part3, &GTP_Process::rect_board_err_receiver);
 }
 
 void GTP_Process::startup_part3 (const QString &)
@@ -188,7 +192,7 @@ void GTP_Process::receive_move (const QString &move)
 		if (i > 7)
 			i--;
 		int j = move.mid (1).toInt();
-		m_controller->gtp_played_move (this, i, m_size - j);
+		m_controller->gtp_played_move (this, i, m_size_y - j);
 	}
 }
 
@@ -199,7 +203,7 @@ void GTP_Process::played_move (stone_color col, int x, int y)
 	if (x >= 8)
 		x++;
 	char req[20];
-	sprintf (req, "%c%d", 'A' + x, m_size - y);
+	sprintf (req, "%c%d", 'A' + x, m_size_y - y);
 	if (col == black)
 		send_request ("play black " + QString (req));
 	else
@@ -438,7 +442,7 @@ void GTP_Process::slot_receive_stdout ()
 		int cmd_nr = output.left (n_digits).toInt ();
 		auto &rcv_map = err ? m_err_receivers : m_receivers;
 		QMap<int, t_receiver>::const_iterator map_iter = rcv_map.constFind (cmd_nr);
-		if (err || map_iter == rcv_map.constEnd ()) {
+		if (map_iter == rcv_map.constEnd ()) {
 			quit ();
 			m_controller->gtp_failure (this, tr ("Invalid response from GTP engine"));
 			return;
@@ -455,6 +459,12 @@ void GTP_Process::slot_receive_stdout ()
 void GTP_Process::default_err_receiver (const QString &)
 {
 	m_controller->gtp_failure (this, tr ("Invalid response from GTP engine"));
+	quit ();
+}
+
+void GTP_Process::rect_board_err_receiver (const QString &)
+{
+	m_controller->gtp_failure (this, tr ("GTP engine '%1' does not support rectangular boards.").arg (m_name));
 	quit ();
 }
 

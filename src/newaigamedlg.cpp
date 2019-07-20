@@ -8,6 +8,7 @@
 #include "setting.h"
 #include "komispinbox.h"
 #include "qgtp.h"
+#include "ui_helpers.h"
 
 #include "ui_newaigamedlg_gui.h"
 #include "ui_twoaigamedlg_gui.h"
@@ -22,9 +23,27 @@ AIGameDlg<UI>::AIGameDlg (QWidget *parent) : QDialog (parent), ui (new UI)
 	connect (ui->buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
 	connect (ui->buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
+	void (QSpinBox::*changed) (int) = &QSpinBox::valueChanged;
+	void (QComboBox::*cic) (int) = &QComboBox::currentIndexChanged;
+	connect (ui->boardsizeSpinBox, changed,
+		 [this] (int v) {
+			 if (ui->boardTypeComboBox->currentIndex () == 0)
+				 ui->boardsizeYSpinBox->setValue (v);
+		 });
+	connect (ui->boardTypeComboBox, cic, [this] (int i) {
+			if (i == 0)
+				ui->boardsizeYSpinBox->setValue (ui->boardsizeSpinBox->value ());
+			else
+				ui->handicapSpinBox->setValue (0);
+			ui->handicapSpinBox->setEnabled (i == 0);
+			ui->boardsizeYSpinBox->setEnabled (i == 1);
+		});
+	ui->boardsizeYSpinBox->setEnabled (false);
 	int sz = setting->readIntEntry("COMPUTER_SIZE");
-	if (sz > 3 && sz < 26)
+	if (sz > 3 && sz < 26) {
 		ui->boardsizeSpinBox->setValue (sz);
+		ui->boardsizeYSpinBox->setValue (sz);
+	}
 	// ui->boardsizeSpinBox->setValidator (new QIntValidator (4, 25, this));
 }
 
@@ -41,9 +60,10 @@ QString AIGameDlg<UI>::game_to_load ()
 }
 
 template<class UI>
-int AIGameDlg<UI>::board_size ()
+std::pair<int, int> AIGameDlg<UI>::board_size ()
 {
-	return ui->boardsizeSpinBox->value ();
+	return std::make_pair (ui->boardsizeSpinBox->value (),
+			       ui->boardsizeYSpinBox->value ());
 }
 
 template<class UI>
@@ -82,6 +102,30 @@ time_settings AIGameDlg<UI>::timing ()
 		}
 	}
 	return t;
+}
+
+template<class UI>
+go_game_ptr AIGameDlg<UI>::create_game_record ()
+{
+	int hc = handicap ();
+	game_info info = create_game_info ();
+	std::shared_ptr<game_record> gr;
+
+	QString filename = game_to_load ();
+	if (filename.isEmpty ()) {
+		int szx, szy;
+		std::tie (szx, szy) = board_size ();
+		if (szx == szy) {
+			go_board starting_pos = new_handicap_board (szx, hc);
+			gr = std::make_shared<game_record> (starting_pos, hc > 1 ? white : black, info);
+		} else {
+			go_board starting_pos (szx, szy);
+			gr = std::make_shared<game_record> (starting_pos, black, info);
+		}
+	} else {
+		gr = record_from_file (filename, nullptr);
+	}
+	return gr;
 }
 
 NewAIGameDlg::NewAIGameDlg( QWidget* parent, bool from_position)
@@ -126,7 +170,7 @@ game_info NewAIGameDlg::create_game_info ()
 	return info;
 }
 
-TwoAIGameDlg::TwoAIGameDlg( QWidget* parent)
+TwoAIGameDlg::TwoAIGameDlg (QWidget* parent)
 	: AIGameDlg (parent)
 {
 	for (auto &e: setting->m_engines) {
