@@ -187,7 +187,7 @@
       <string/>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>6</number>
      </property>
      <widget class="QWidget" name="InterfaceTabWidget">
       <attribute name="title">
@@ -1325,6 +1325,9 @@ when navigating away</string>
                <string>Open windows with
 diagram pane shown:</string>
               </property>
+              <property name="buddy">
+               <cstring>diagShowComboBox</cstring>
+              </property>
              </widget>
             </item>
             <item>
@@ -1679,6 +1682,9 @@ If you press to enter a move on the board, the move will not be acknowledged if 
             <property name="text">
              <string>Specular hardness:</string>
             </property>
+            <property name="buddy">
+             <cstring>whiteHardSlider</cstring>
+            </property>
            </widget>
           </item>
           <item row="0" column="1">
@@ -1693,12 +1699,18 @@ If you press to enter a move on the board, the move will not be acknowledged if 
             <property name="text">
              <string>Thickness:</string>
             </property>
+            <property name="buddy">
+             <cstring>whiteRoundSlider</cstring>
+            </property>
            </widget>
           </item>
           <item row="0" column="0">
            <widget class="QLabel" name="label_8">
             <property name="text">
              <string>Specular ratio:</string>
+            </property>
+            <property name="buddy">
+             <cstring>whiteSpecSlider</cstring>
             </property>
            </widget>
           </item>
@@ -1713,6 +1725,9 @@ If you press to enter a move on the board, the move will not be acknowledged if 
            <widget class="QLabel" name="label_10">
             <property name="text">
              <string>Flattened:</string>
+            </property>
+            <property name="buddy">
+             <cstring>whiteFlatSlider</cstring>
             </property>
            </widget>
           </item>
@@ -1752,6 +1767,9 @@ If you press to enter a move on the board, the move will not be acknowledged if 
             <property name="text">
              <string>Specular hardness:</string>
             </property>
+            <property name="buddy">
+             <cstring>blackHardSlider</cstring>
+            </property>
            </widget>
           </item>
           <item row="0" column="1">
@@ -1766,12 +1784,18 @@ If you press to enter a move on the board, the move will not be acknowledged if 
             <property name="text">
              <string>Thickness:</string>
             </property>
+            <property name="buddy">
+             <cstring>blackRoundSlider</cstring>
+            </property>
            </widget>
           </item>
           <item row="0" column="0">
            <widget class="QLabel" name="label_16">
             <property name="text">
              <string>Specular ratio:</string>
+            </property>
+            <property name="buddy">
+             <cstring>blackSpecSlider</cstring>
             </property>
            </widget>
           </item>
@@ -1810,6 +1834,9 @@ If you press to enter a move on the board, the move will not be acknowledged if 
            <widget class="QLabel" name="label_11">
             <property name="text">
              <string>Flattened:</string>
+            </property>
+            <property name="buddy">
+             <cstring>blackFlatSlider</cstring>
             </property>
            </widget>
           </item>
@@ -1880,12 +1907,18 @@ If you press to enter a move on the board, the move will not be acknowledged if 
                <property name="text">
                 <string>Ambient light:</string>
                </property>
+               <property name="buddy">
+                <cstring>ambientSlider</cstring>
+               </property>
               </widget>
              </item>
              <item row="1" column="0">
               <widget class="QLabel" name="label_25">
                <property name="text">
                 <string>Shadow opacity:</string>
+               </property>
+               <property name="buddy">
+                <cstring>shadowSlider</cstring>
                </property>
               </widget>
              </item>
@@ -1944,6 +1977,9 @@ If you press to enter a move on the board, the move will not be acknowledged if 
             <property name="wordWrap">
              <bool>false</bool>
             </property>
+            <property name="buddy">
+             <cstring>LineEdit_goban</cstring>
+            </property>
            </widget>
           </item>
           <item row="1" column="2">
@@ -1992,6 +2028,9 @@ If the picture is not set, or unvalid, a default picture is used by qgo</string>
             </property>
             <property name="wordWrap">
              <bool>false</bool>
+            </property>
+            <property name="buddy">
+             <cstring>LineEdit_Table</cstring>
             </property>
            </widget>
           </item>
@@ -2054,6 +2093,9 @@ If the picture is not set, or unvalid, a default goban is used by qgo</string>
             <property name="text">
              <string>Wood image:</string>
             </property>
+            <property name="buddy">
+             <cstring>woodComboBox</cstring>
+            </property>
            </widget>
           </item>
           <item row="4" column="0" colspan="2">
@@ -2113,22 +2155,6 @@ If the picture is not set, or unvalid, a default goban is used by qgo</string>
        <string>Computer Go</string>
       </attribute>
       <layout class="QGridLayout">
-       <item row="4" column="0">
-        <spacer name="Spacer8">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Expanding</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>0</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
        <item row="2" column="0">
         <widget class="QGroupBox" name="groupBox25_3">
          <property name="title">
@@ -2167,6 +2193,9 @@ If the picture is not set, or unvalid, a default goban is used by qgo</string>
            <widget class="QLabel" name="label_7">
             <property name="text">
              <string>Computer color:</string>
+            </property>
+            <property name="buddy">
+             <cstring>computerWhiteButton</cstring>
             </property>
            </widget>
           </item>
@@ -2276,6 +2305,9 @@ If the picture is not set, or unvalid, a default goban is used by qgo</string>
             <property name="wordWrap">
              <bool>false</bool>
             </property>
+            <property name="buddy">
+             <cstring>humanName</cstring>
+            </property>
            </widget>
           </item>
           <item row="0" column="2" rowspan="2">
@@ -2288,291 +2320,21 @@ If the picture is not set, or unvalid, a default goban is used by qgo</string>
          </layout>
         </widget>
        </item>
-       <item row="0" column="0">
-        <widget class="QGroupBox" name="GoEnginegroup_box">
-         <property name="title">
-          <string>Go Engines</string>
+       <item row="4" column="0">
+        <spacer name="Spacer8">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
          </property>
-         <layout class="QGridLayout" name="gridLayout_7">
-          <property name="leftMargin">
-           <number>6</number>
-          </property>
-          <property name="topMargin">
-           <number>6</number>
-          </property>
-          <property name="rightMargin">
-           <number>6</number>
-          </property>
-          <property name="bottomMargin">
-           <number>6</number>
-          </property>
-          <item row="7" column="0">
-           <widget class="QWidget" name="widget_6" native="true">
-            <layout class="QGridLayout" name="gridLayout_6">
-             <property name="leftMargin">
-              <number>0</number>
-             </property>
-             <property name="topMargin">
-              <number>0</number>
-             </property>
-             <property name="rightMargin">
-              <number>0</number>
-             </property>
-             <property name="bottomMargin">
-              <number>0</number>
-             </property>
-             <property name="verticalSpacing">
-              <number>6</number>
-             </property>
-             <item row="0" column="0">
-              <spacer name="horizontalSpacer">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>0</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item row="0" column="1">
-              <layout class="QVBoxLayout" name="_21">
-               <property name="spacing">
-                <number>6</number>
-               </property>
-               <property name="leftMargin">
-                <number>0</number>
-               </property>
-               <property name="topMargin">
-                <number>0</number>
-               </property>
-               <property name="rightMargin">
-                <number>0</number>
-               </property>
-               <property name="bottomMargin">
-                <number>0</number>
-               </property>
-               <item>
-                <widget class="QPushButton" name="pb_engine_new">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="toolTip">
-                  <string>Clear the engine form.</string>
-                 </property>
-                 <property name="whatsThis">
-                  <string>New
-
-clear form; doesn't make any changes to the entries</string>
-                 </property>
-                 <property name="text">
-                  <string>New</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <layout class="QHBoxLayout" name="_22">
-                 <property name="spacing">
-                  <number>6</number>
-                 </property>
-                 <property name="leftMargin">
-                  <number>0</number>
-                 </property>
-                 <property name="topMargin">
-                  <number>0</number>
-                 </property>
-                 <property name="rightMargin">
-                  <number>0</number>
-                 </property>
-                 <property name="bottomMargin">
-                  <number>0</number>
-                 </property>
-                 <item>
-                  <widget class="QPushButton" name="pb_engine_add">
-                   <property name="toolTip">
-                    <string>Add or change the current entry.</string>
-                   </property>
-                   <property name="whatsThis">
-                    <string>Add or Change
-
-Label 'Change ' appears when title is not unique, i.e. the saved entries with that title will be superseded by the current entries.
-
-Label 'Add' is default. The given entries will be saved under the given title.</string>
-                   </property>
-                   <property name="text">
-                    <string>Add</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QPushButton" name="pb_engine_delete">
-                   <property name="toolTip">
-                    <string>Delete the current entry.</string>
-                   </property>
-                   <property name="whatsThis">
-                    <string>Delete
-
-Deletes the saved entries with same Title.
-
-Note: 'Delete' concerns saved records.</string>
-                   </property>
-                   <property name="text">
-                    <string>Delete</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-              </layout>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item row="6" column="0">
-           <spacer name="verticalSpacer_14">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>0</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="1" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout_9">
-            <item>
-             <widget class="QLabel" name="enginelabel_2">
-              <property name="text">
-               <string>Executable:</string>
-              </property>
-              <property name="buddy">
-               <cstring>enginePath</cstring>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="enginePath">
-              <property name="toolTip">
-               <string>The path to the GTP engine's executable.</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="enginePathButton">
-              <property name="text">
-               <string/>
-              </property>
-              <property name="icon">
-               <iconset resource="q4go.qrc">
-                <normaloff>:/ClientWindowGui/images/clientwindow/fileopen.png</normaloff>:/ClientWindowGui/images/clientwindow/fileopen.png</iconset>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="0" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout_8">
-            <item>
-             <widget class="QLabel" name="enginelabel_1">
-              <property name="text">
-               <string>Name:</string>
-              </property>
-              <property name="buddy">
-               <cstring>engineName</cstring>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="engineName">
-              <property name="toolTip">
-               <string>The name of the engine by which it is selected in the new computer game dialog</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="5" column="0">
-           <widget class="QCheckBox" name="engineAnalysis">
-            <property name="text">
-             <string>Use for analysis (LZ or compatible)</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout_7">
-            <item>
-             <widget class="QLabel" name="enginelabel_4">
-              <property name="text">
-               <string>Fixed komi:</string>
-              </property>
-              <property name="buddy">
-               <cstring>engineKomi</cstring>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="engineKomi"/>
-            </item>
-           </layout>
-          </item>
-          <item row="2" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout_10">
-            <item>
-             <widget class="QLabel" name="enginelabel_3">
-              <property name="text">
-               <string>Arguments:</string>
-              </property>
-              <property name="buddy">
-               <cstring>engineArgs</cstring>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="engineArgs">
-              <property name="toolTip">
-               <string>Any command line arguments that should be passed at startup.</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="4" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout_17">
-            <item>
-             <widget class="QLabel" name="enginelabel_5">
-              <property name="text">
-               <string>Board size:</string>
-              </property>
-              <property name="buddy">
-               <cstring>engineSize</cstring>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="engineSize"/>
-            </item>
-           </layout>
-          </item>
-          <item row="0" column="1" rowspan="8">
-           <widget class="ClickableListView" name="ListView_engines">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
+         <property name="sizeType">
+          <enum>QSizePolicy::Expanding</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>0</height>
+          </size>
+         </property>
+        </spacer>
        </item>
        <item row="3" column="0">
         <widget class="QGroupBox" name="groupBox_6">
@@ -2596,6 +2358,9 @@ Note: 'Delete' concerns saved records.</string>
            <widget class="QLabel" name="label_17">
             <property name="text">
              <string>Show variations as:</string>
+            </property>
+            <property name="buddy">
+             <cstring>anVarComboBox</cstring>
             </property>
            </widget>
           </item>
@@ -2622,6 +2387,9 @@ Note: 'Delete' concerns saved records.</string>
            <widget class="QLabel" name="label_18">
             <property name="text">
              <string>Winning percentages shown for:</string>
+            </property>
+            <property name="buddy">
+             <cstring>winrateComboBox</cstring>
             </property>
            </widget>
           </item>
@@ -2652,6 +2420,9 @@ Note: 'Delete' concerns saved records.</string>
                <string>Max. variation depth:
 (0 is unlimited)</string>
               </property>
+              <property name="buddy">
+               <cstring>anDepthEdit</cstring>
+              </property>
              </widget>
             </item>
             <item>
@@ -2666,6 +2437,9 @@ Note: 'Delete' concerns saved records.</string>
               <property name="text">
                <string>Max. moves shown:
 (0 is unlimited)</string>
+              </property>
+              <property name="buddy">
+               <cstring>anMaxMovesEdit</cstring>
               </property>
              </widget>
             </item>
@@ -2700,6 +2474,106 @@ a variation</string>
          </layout>
         </widget>
        </item>
+       <item row="0" column="0">
+        <widget class="QGroupBox" name="GoEnginegroup_box">
+         <property name="title">
+          <string>Go Engines</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_7">
+          <property name="leftMargin">
+           <number>6</number>
+          </property>
+          <property name="topMargin">
+           <number>6</number>
+          </property>
+          <property name="rightMargin">
+           <number>6</number>
+          </property>
+          <property name="bottomMargin">
+           <number>6</number>
+          </property>
+          <item row="0" column="1" rowspan="3">
+           <widget class="ClickableListView" name="ListView_engines">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QWidget" name="widget_3" native="true">
+            <layout class="QHBoxLayout" name="horizontalLayout_6">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QPushButton" name="pb_engine_new">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>Open a dialog to create a new engine configuration.</string>
+               </property>
+               <property name="whatsThis">
+                <string>New
+
+clear form; doesn't make any changes to the entries</string>
+               </property>
+               <property name="text">
+                <string>New...</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pb_engine_change">
+               <property name="toolTip">
+                <string>Open a dialog to change the currently selected engine.</string>
+               </property>
+               <property name="text">
+                <string>Edit...</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pb_engine_dup">
+               <property name="toolTip">
+                <string>Open a dialog to create a new engine configuration based on the currently selected one.</string>
+               </property>
+               <property name="text">
+                <string>Duplicate...</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pb_engine_delete">
+               <property name="toolTip">
+                <string>Delete the currently selected engine.</string>
+               </property>
+               <property name="text">
+                <string>Delete</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="goServerTabWidget">
@@ -2725,6 +2599,9 @@ a variation</string>
            </property>
            <property name="wordWrap">
             <bool>false</bool>
+           </property>
+           <property name="buddy">
+            <cstring>LineEdit_title</cstring>
            </property>
           </widget>
          </item>
@@ -2766,6 +2643,9 @@ Note: don't use a default server name, i.e. '-- Aurora --' etc.</string>
            </property>
            <property name="wordWrap">
             <bool>false</bool>
+           </property>
+           <property name="buddy">
+            <cstring>LineEdit_host</cstring>
            </property>
           </widget>
          </item>
@@ -2811,6 +2691,9 @@ Use a valid hostname or ip address. Instead of typing it one of the predefined h
            <property name="wordWrap">
             <bool>false</bool>
            </property>
+           <property name="buddy">
+            <cstring>LineEdit_port</cstring>
+           </property>
           </widget>
          </item>
          <item>
@@ -2848,6 +2731,9 @@ Port address is defined for each go server. It's a fixed number. See Host for pr
            </property>
            <property name="wordWrap">
             <bool>false</bool>
+           </property>
+           <property name="buddy">
+            <cstring>LineEdit_login</cstring>
            </property>
           </widget>
          </item>
@@ -2888,6 +2774,9 @@ others:		guest</string>
            </property>
            <property name="wordWrap">
             <bool>false</bool>
+           </property>
+           <property name="buddy">
+            <cstring>LineEdit_pass</cstring>
            </property>
           </widget>
          </item>
@@ -2932,6 +2821,9 @@ New users: leave blank!</string>
            </property>
            <property name="wordWrap">
             <bool>false</bool>
+           </property>
+           <property name="buddy">
+            <cstring>ComboBox_codec</cstring>
            </property>
           </widget>
          </item>
@@ -3116,6 +3008,9 @@ If checked then when a game you played completes, it is automatically saved in t
             <property name="wordWrap">
              <bool>false</bool>
             </property>
+            <property name="buddy">
+             <cstring>LineEdit_watch</cstring>
+            </property>
            </widget>
           </item>
           <item row="0" column="1">
@@ -3146,6 +3041,9 @@ Use semicolon &quot;;&quot; as delimiter (no spaces)</string>
             </property>
             <property name="wordWrap">
              <bool>false</bool>
+            </property>
+            <property name="buddy">
+             <cstring>LineEdit_exclude</cstring>
             </property>
            </widget>
           </item>
@@ -3225,6 +3123,9 @@ Use semicolon &quot;;&quot; as delimiter (no spaces)</string>
                        <property name="wordWrap">
                         <bool>false</bool>
                        </property>
+                       <property name="buddy">
+                        <cstring>boardSizeSpin</cstring>
+                       </property>
                       </widget>
                      </item>
                      <item>
@@ -3294,6 +3195,9 @@ Use semicolon &quot;;&quot; as delimiter (no spaces)</string>
                        </property>
                        <property name="wordWrap">
                         <bool>false</bool>
+                       </property>
+                       <property name="buddy">
+                        <cstring>komiSpinDefault</cstring>
                        </property>
                       </widget>
                      </item>
@@ -3404,6 +3308,9 @@ time :</string>
                        <property name="wordWrap">
                         <bool>false</bool>
                        </property>
+                       <property name="buddy">
+                        <cstring>timeSpin</cstring>
+                       </property>
                       </widget>
                      </item>
                      <item>
@@ -3494,6 +3401,9 @@ time:</string>
                        </property>
                        <property name="wordWrap">
                         <bool>false</bool>
+                       </property>
+                       <property name="buddy">
+                        <cstring>BYSpin</cstring>
                        </property>
                       </widget>
                      </item>
@@ -3611,6 +3521,9 @@ up to :</string>
                        <property name="wordWrap">
                         <bool>false</bool>
                        </property>
+                       <property name="buddy">
+                        <cstring>timeSpin_Nmatch</cstring>
+                       </property>
                       </widget>
                      </item>
                      <item>
@@ -3701,6 +3614,9 @@ up to :</string>
                        </property>
                        <property name="wordWrap">
                         <bool>false</bool>
+                       </property>
+                       <property name="buddy">
+                        <cstring>BYSpin_Nmatch</cstring>
                        </property>
                       </widget>
                      </item>
@@ -3842,6 +3758,9 @@ up to :</string>
                        </property>
                        <property name="wordWrap">
                         <bool>false</bool>
+                       </property>
+                       <property name="buddy">
+                        <cstring>HandicapSpin_Nmatch</cstring>
                        </property>
                       </widget>
                      </item>
@@ -4716,6 +4635,9 @@ Select one of the predefined hosts -- xxx -- and add a title to use it.</string>
                <property name="text">
                 <string>Exported size:</string>
                </property>
+               <property name="buddy">
+                <cstring>slideXEdit</cstring>
+               </property>
               </widget>
              </item>
              <item>
@@ -4786,6 +4708,9 @@ Select one of the predefined hosts -- xxx -- and add a title to use it.</string>
                <property name="text">
                 <string>Lines of comment text:</string>
                </property>
+               <property name="buddy">
+                <cstring>slideLinesSpinBox</cstring>
+               </property>
               </widget>
              </item>
              <item row="0" column="1">
@@ -4802,6 +4727,9 @@ Select one of the predefined hosts -- xxx -- and add a title to use it.</string>
               <widget class="QLabel" name="label_25">
                <property name="text">
                 <string>Comment margin:</string>
+               </property>
+               <property name="buddy">
+                <cstring>slideMarginSpinBox</cstring>
                </property>
               </widget>
              </item>
@@ -4933,17 +4861,11 @@ Select one of the predefined hosts -- xxx -- and add a title to use it.</string>
   <tabstop>checkBox_Nmatch_Nigiri</tabstop>
   <tabstop>HandicapSpin_Nmatch</tabstop>
   <tabstop>tabWidget</tabstop>
-  <tabstop>engineName</tabstop>
-  <tabstop>enginePath</tabstop>
-  <tabstop>enginePathButton</tabstop>
-  <tabstop>engineArgs</tabstop>
-  <tabstop>engineKomi</tabstop>
-  <tabstop>engineSize</tabstop>
-  <tabstop>engineAnalysis</tabstop>
-  <tabstop>pb_engine_new</tabstop>
-  <tabstop>pb_engine_add</tabstop>
-  <tabstop>pb_engine_delete</tabstop>
   <tabstop>ListView_engines</tabstop>
+  <tabstop>pb_engine_new</tabstop>
+  <tabstop>pb_engine_change</tabstop>
+  <tabstop>pb_engine_dup</tabstop>
+  <tabstop>pb_engine_delete</tabstop>
   <tabstop>computerSizeSpin</tabstop>
   <tabstop>computerHandicapSpin</tabstop>
   <tabstop>computerWhiteButton</tabstop>
@@ -5002,8 +4924,8 @@ Select one of the predefined hosts -- xxx -- and add a title to use it.</string>
    <slot>slot_apply()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>451</x>
-     <y>654</y>
+     <x>488</x>
+     <y>778</y>
     </hint>
     <hint type="destinationlabel">
      <x>20</x>
@@ -5018,8 +4940,8 @@ Select one of the predefined hosts -- xxx -- and add a title to use it.</string>
    <slot>slot_reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>568</x>
-     <y>654</y>
+     <x>660</x>
+     <y>778</y>
     </hint>
     <hint type="destinationlabel">
      <x>20</x>
@@ -5034,8 +4956,8 @@ Select one of the predefined hosts -- xxx -- and add a title to use it.</string>
    <slot>startHelpMode()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>23</x>
-     <y>654</y>
+     <x>26</x>
+     <y>777</y>
     </hint>
     <hint type="destinationlabel">
      <x>20</x>
@@ -5050,88 +4972,8 @@ Select one of the predefined hosts -- xxx -- and add a title to use it.</string>
    <slot>slot_accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>enginePathButton</sender>
-   <signal>clicked()</signal>
-   <receiver>PreferencesDialogGui</receiver>
-   <slot>slot_getComputerPath()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pb_engine_delete</sender>
-   <signal>clicked()</signal>
-   <receiver>PreferencesDialogGui</receiver>
-   <slot>slot_delete_engine()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pb_engine_add</sender>
-   <signal>clicked()</signal>
-   <receiver>PreferencesDialogGui</receiver>
-   <slot>slot_add_engine()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>engineName</sender>
-   <signal>textChanged(QString)</signal>
-   <receiver>PreferencesDialogGui</receiver>
-   <slot>slot_engineChanged(QString)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pb_engine_new</sender>
-   <signal>clicked()</signal>
-   <receiver>PreferencesDialogGui</receiver>
-   <slot>slot_new_engine()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
+     <x>515</x>
+     <y>773</y>
     </hint>
     <hint type="destinationlabel">
      <x>20</x>
@@ -5146,8 +4988,8 @@ Select one of the predefined hosts -- xxx -- and add a title to use it.</string>
    <slot>slot_delete_server()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
+     <x>258</x>
+     <y>279</y>
     </hint>
     <hint type="destinationlabel">
      <x>20</x>
@@ -5162,8 +5004,8 @@ Select one of the predefined hosts -- xxx -- and add a title to use it.</string>
    <slot>slot_add_server()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
+     <x>172</x>
+     <y>279</y>
     </hint>
     <hint type="destinationlabel">
      <x>20</x>
@@ -5178,8 +5020,8 @@ Select one of the predefined hosts -- xxx -- and add a title to use it.</string>
    <slot>slot_serverChanged(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
+     <x>101</x>
+     <y>53</y>
     </hint>
     <hint type="destinationlabel">
      <x>20</x>
@@ -5194,8 +5036,8 @@ Select one of the predefined hosts -- xxx -- and add a title to use it.</string>
    <slot>slot_new_server()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
+     <x>171</x>
+     <y>246</y>
     </hint>
     <hint type="destinationlabel">
      <x>20</x>

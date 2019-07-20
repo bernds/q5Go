@@ -7,10 +7,14 @@
 
 #include "setting.h"
 
+#include <memory>
+
 #include <QStandardItemModel>
 #include <QAbstractItemModel>
 #include <QDialog>
 #include <QAbstractButton>
+#include <QIntValidator>
+#include <QDoubleValidator>
 
 class QIntValidator;
 class MainWindow;
@@ -22,7 +26,30 @@ class QGraphicsPixmapItem;
 namespace Ui
 {
 	class PreferencesDialogGui;
+	class EngineDialog;
 };
+
+class EngineDialog : public QDialog {
+	Q_OBJECT
+	Ui::EngineDialog *ui;
+
+	QIntValidator m_size_vald { 3, 25 };
+	QDoubleValidator m_komi_vald;
+
+	void init ();
+
+public:
+	EngineDialog (QWidget *parent);
+	EngineDialog (QWidget *parent, const Engine &, bool dup);
+	~EngineDialog ();
+
+	Engine get_engine ();
+	virtual void accept () override;
+
+public slots:
+	void slot_get_path ();
+};
+
 
 template<class T>
 class pref_vec_model : public QAbstractItemModel
@@ -40,6 +67,7 @@ public:
 	}
 
 	void add_or_replace (T);
+	bool add_no_replace (T);
 	const T *find (const QModelIndex &) const;
 	const std::vector<T> &entries () const { return m_entries; }
 	virtual QVariant data (const QModelIndex &index, int role = Qt::DisplayRole) const override;
@@ -58,7 +86,6 @@ class PreferencesDialog : public QDialog
 
 	Ui::PreferencesDialogGui *ui;
 
-	bool m_changing_engine = false;
 	bool m_changing_host = false;
 
 	ImageHandler *m_ih;
@@ -112,7 +139,8 @@ public slots:
 	void slot_add_server ();
 	void slot_delete_server ();
 	void slot_new_engine ();
-	void slot_add_engine ();
+	void slot_dup_engine ();
+	void slot_change_engine ();
 	void slot_delete_engine ();
 	void slot_apply ();
 	void startHelpMode ();
@@ -120,8 +148,6 @@ public slots:
 	void slot_accept ();
 	void slot_reject ();
 	void slot_serverChanged (const QString &);
-	void slot_engineChanged (const QString &);
-	void slot_getComputerPath ();
 	void slot_getGobanPicturePath ();
 	void slot_getTablePicturePath ();
 	void slot_main_time_changed (int);

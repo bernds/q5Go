@@ -6,6 +6,7 @@ FORMS	      = gui_dialog.ui \
 		boardwindow_gui.ui \
                 clientwindow_gui.ui \
                 dbdialog_gui.ui \
+                enginedlg_gui.ui \
 		figuredlg_gui.ui \
 		gameinfo_gui.ui \
 		newgame_gui.ui \

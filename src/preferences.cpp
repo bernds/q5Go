@@ -2,6 +2,8 @@
 * preferences.cpp
 */
 
+#include <memory>
+
 #include <QFileDialog>
 #include <QFontDialog>
 #include <QColorDialog>
@@ -14,11 +16,105 @@
 #include "imagehandler.h"
 
 #include "ui_preferences_gui.h"
+#include "ui_enginedlg_gui.h"
 
 #ifdef Q_OS_MACX
 #include <CoreFoundation/CFString.h>
 #include <CoreFoundation/CFBundle.h>
 #endif //Q_OS_MACX
+
+void EngineDialog::init ()
+{
+	m_komi_vald.setDecimals (2);
+	ui->engineKomi->setValidator (&m_komi_vald);
+	ui->engineSize->setValidator (&m_size_vald);
+
+	connect (ui->enginePathButton, &QPushButton::clicked, this, &EngineDialog::slot_get_path);
+}
+
+/* Create engine.  */
+EngineDialog::EngineDialog (QWidget *parent)
+	: QDialog (parent), ui (new Ui::EngineDialog)
+{
+	ui->setupUi (this);
+	init ();
+}
+
+/* Duplicate or change engine.  */
+EngineDialog::EngineDialog (QWidget *parent, const Engine &e, bool dup)
+	: QDialog (parent), ui (new Ui::EngineDialog)
+{
+	ui->setupUi (this);
+	if (dup) {
+		setWindowTitle (tr ("Create a new engine configuration from an existing one"));
+	} else {
+		setWindowTitle (tr ("Change an engine configuration"));
+		ui->engineName->setReadOnly (true);
+	}
+	ui->engineName->setText (e.title);
+	ui->enginePath->setText (e.path);
+	ui->engineArgs->setText (e.args);
+	ui->engineKomi->setText (e.komi);
+	ui->engineAnalysis->setChecked (e.analysis);
+	ui->engineSize->setText (e.boardsize);
+	init ();
+}
+
+EngineDialog::~EngineDialog ()
+{
+	delete ui;
+}
+
+void EngineDialog::slot_get_path ()
+{
+	QString fileName (QFileDialog::getOpenFileName (this, tr ("Choose GTP engine path"),
+							setting->readEntry ("LAST_DIR"),
+							tr ("All Files (*)")));
+	if (!fileName.isEmpty ())
+		ui->enginePath->setText (fileName);
+}
+
+Engine EngineDialog::get_engine ()
+{
+	Engine e (ui->engineName->text (), ui->enginePath->text (), ui->engineArgs->text (),
+		  ui->engineKomi->text (), ui->engineAnalysis->isChecked (), ui->engineSize->text ());
+
+	return e;
+}
+
+void EngineDialog::accept ()
+{
+	if (ui->engineName->text ().isEmpty ()) {
+		QMessageBox::warning (this, tr ("No name set for the engine."),
+				      tr ("A name must be set for the engine.\nPlease enter all necessary fields before continuing"));
+		return;
+	}
+	if (ui->enginePath->text ().isEmpty ()) {
+		QMessageBox::warning (this, tr ("No path set for the engine."),
+				      tr ("A path must be set for the engine.\nPlease enter all necessary fields before continuing"));
+		return;
+	}
+	int p = 0;
+	QString size = ui->engineSize->text ();
+	if (!size.isEmpty () && m_size_vald.validate (size, p) != QValidator::Acceptable) {
+		QMessageBox::warning (this, tr ("Invalid size specified"),
+				      tr ("The value entered for the board size is invalid.\nPlease enter values between 3 and 25."));
+		return;
+	}
+	if (ui->engineAnalysis->isChecked () && size.isEmpty ()) {
+		QMessageBox::warning (this, tr ("No boardsize specified for analysis engine."),
+				      tr ("Currently any engine used for analysis must specify a board size."));
+		return;
+	}
+	QString komi = ui->engineKomi->text ();
+	if (!komi.isEmpty () && m_komi_vald.validate (komi, p) != QValidator::Acceptable) {
+		QMessageBox::warning (this, tr ("Invalid komi specified"),
+				      tr ("The value entered for komi is invalid."));
+		return;
+	}
+	QDialog::accept ();
+}
+
 
 template<class T>
 QVariant pref_vec_model<T>::data (const QModelIndex &index, int role) const
@@ -88,6 +184,20 @@ void pref_vec_model<T>::add_or_replace (T x)
 	beginInsertRows (QModelIndex (), m_entries.size (), m_entries.size ());
 	m_entries.push_back (x);
 	endInsertRows ();
+}
+
+template<class T>
+bool pref_vec_model<T>::add_no_replace (T x)
+{
+	for (size_t i = 0; i < m_entries.size (); i++) {
+		T &e = m_entries[i];
+		if (e.title == x.title)
+			return false;
+	}
+	beginInsertRows (QModelIndex (), m_entries.size (), m_entries.size ());
+	m_entries.push_back (x);
+	endInsertRows ();
+	return true;
 }
 
 template<class T>
@@ -163,16 +273,6 @@ PreferencesDialog::PreferencesDialog (int tab, QWidget* parent)
 		resize(client_window->getPrefSize());
 		move(client_window->getPrefPos());
 	}
-	int engine_w = ui->enginelabel_1->width ();
-	engine_w = std::max (engine_w, ui->enginelabel_2->width ());
-	engine_w = std::max (engine_w, ui->enginelabel_3->width ());
-	engine_w = std::max (engine_w, ui->enginelabel_4->width ());
-	engine_w = std::max (engine_w, ui->enginelabel_5->width ());
-	ui->enginelabel_1->setMinimumWidth (engine_w);
-	ui->enginelabel_2->setMinimumWidth (engine_w);
-	ui->enginelabel_3->setMinimumWidth (engine_w);
-	ui->enginelabel_4->setMinimumWidth (engine_w);
-	ui->enginelabel_5->setMinimumWidth (engine_w);
 
 	// init random-number generator
 	srand ((unsigned)time (nullptr));
@@ -257,6 +357,14 @@ PreferencesDialog::PreferencesDialog (int tab, QWidget* parent)
 	connect (ui->fontListsButton, &QPushButton::clicked, [this] () { selectFont (ui->fontListsButton, setting->fontLists); });
 	connect (ui->fontClocksButton, &QPushButton::clicked, [this] () { selectFont (ui->fontClocksButton, setting->fontClocks); });
 	connect (ui->fontConsoleButton, &QPushButton::clicked, [this] () { selectFont (ui->fontConsoleButton, setting->fontConsole); });
+
+	connect (ui->pb_engine_new, &QPushButton::clicked, this, &PreferencesDialog::slot_new_engine);
+	connect (ui->pb_engine_delete, &QPushButton::clicked, this, &PreferencesDialog::slot_delete_engine);
+	connect (ui->pb_engine_change, &QPushButton::clicked, this, &PreferencesDialog::slot_change_engine);
+	connect (ui->pb_engine_dup, &QPushButton::clicked, this, &PreferencesDialog::slot_dup_engine);
+
+	update_current_engine ();
+	update_current_host ();
 }
 
 void PreferencesDialog::update_dbpaths (const QStringList &l)
@@ -833,18 +941,6 @@ void PreferencesDialog::selectFont (QPushButton *button, QFont &font)
 
 bool PreferencesDialog::avoid_losing_data ()
 {
-	if (m_changing_engine) {
-		if (!ui->enginePath->text ().isEmpty () || !ui->engineArgs->text ().isEmpty ()
-		    || !ui->engineKomi->text ().isEmpty ())
-		{
-			QMessageBox mb(QMessageBox::Question, tr("Unsaved data"),
-				       QString(tr("The engine input fields contain\n"
-						  "potentially unsaved data.\n"
-						  "Really close the preferences?")),
-				       QMessageBox::Yes | QMessageBox::No);
-			return mb.exec() == QMessageBox::No;
-		}
-	}
 	if (m_changing_host) {
 		if (!ui->LineEdit_host->text ().isEmpty ()
 		    || !ui->LineEdit_port->text ().isEmpty ()
@@ -886,58 +982,6 @@ void PreferencesDialog::saveSizes()
 	client_window->savePrefFrame(pos(), size());
 }
 
-void PreferencesDialog::slot_add_engine()
-{
-	QString komi = ui->engineKomi->text ();
-	if (!komi.isEmpty ()) {
-		QDoubleValidator kv;
-		kv.setDecimals (2);
-		int pos = 0;
-		if (kv.validate (komi, pos) != QValidator::Acceptable) {
-			QMessageBox::warning (this, tr ("Invalid komi entered"),
-					      tr ("Please enter a valid komi before adding the engine."));
-			return;
-		}
-	}
-	if (ui->engineSize->text ().isEmpty ()) {
-		if (ui->engineAnalysis->isChecked ()) {
-			QMessageBox::warning (this, tr ("Missing board size"),
-					      tr ("Analysis engines require a board size to be specified.\n"
-						  "If your engine allows multiple board sizes, you need to configure them in separate entires."));
-			return;
-		}
-	} else {
-		int sz = ui->engineSize->text ().toInt ();
-		if (sz < 5 || sz > 25) {
-			QMessageBox::warning (this, tr ("Invalid board size"),
-					      tr ("Only a range of 5 to 25 is allowed."));
-			return;
-		}
-	}
-	const QString name = ui->engineName->text ();
-	// check if at least title and path are set
-	if (!name.isEmpty() && !ui->enginePath->text ().isEmpty())
-	{
-		Engine new_e (ui->engineName->text (), ui->enginePath->text (), ui->engineArgs->text (),
-			      ui->engineKomi->text (), ui->engineAnalysis->isChecked (), ui->engineSize->text ());
-		m_engines_model.add_or_replace (new_e);
-		m_engines_changed = true;
-	}
-
-	clear_engine ();
-}
-
-void PreferencesDialog::clear_engine ()
-{
-	ui->engineName->clear ();
-	ui->enginePath->clear ();
-	ui->engineArgs->clear ();
-	ui->engineKomi->clear ();
-	ui->engineAnalysis->setChecked (false);
-	ui->engineSize->clear ();
-	m_changing_engine = false;
-}
-
 void PreferencesDialog::slot_delete_engine ()
 {
 	QModelIndex idx = ui->ListView_engines->currentIndex ();
@@ -949,12 +993,6 @@ void PreferencesDialog::slot_delete_engine ()
 
 	m_engines_model.removeRows (idx.row (), 1);
 	m_engines_changed = true;
-	clear_engine ();
-}
-
-void PreferencesDialog::slot_new_engine ()
-{
-	clear_engine ();
 }
 
 void PreferencesDialog::update_current_engine ()
@@ -963,32 +1001,65 @@ void PreferencesDialog::update_current_engine ()
 	bool valid = idx.isValid ();
 
 	ui->pb_engine_delete->setEnabled (valid);
+	ui->pb_engine_change->setEnabled (valid);
+	ui->pb_engine_dup->setEnabled (valid);
+}
 
+void PreferencesDialog::slot_new_engine ()
+{
+	EngineDialog dlg (this);
+	for (;;) {
+		if (!dlg.exec ())
+			return;
+		Engine new_e = dlg.get_engine ();
+		bool added = m_engines_model.add_no_replace (new_e);
+		if (added) {
+			m_engines_changed = true;
+			return;
+		}
+		QMessageBox::warning (this, tr ("Engine name already exists"),
+				      tr ("An engine with this name already exists.\nPlease enter a new name that is not already taken."));
+	}
+}
+
+void PreferencesDialog::slot_change_engine ()
+{
+	QModelIndex idx = ui->ListView_engines->currentIndex ();
+	bool valid = idx.isValid ();
 	if (!valid)
 		return;
 
 	const Engine *e = m_engines_model.find (idx);
-	ui->engineName->setText (e->title);
-	ui->enginePath->setText (e->path);
-	ui->engineArgs->setText (e->args);
-	ui->engineKomi->setText (e->komi);
-	ui->engineAnalysis->setChecked (e->analysis);
-	ui->engineSize->setText (e->boardsize);
+	EngineDialog dlg (this, *e, false);
+	if (dlg.exec ()) {
+		Engine new_e = dlg.get_engine ();
+		m_engines_model.add_or_replace (new_e);
+		m_engines_changed = true;
+	}
 }
 
-void PreferencesDialog::slot_engineChanged (const QString &title)
+void PreferencesDialog::slot_dup_engine ()
 {
-	for (auto &e: m_engines_model.entries ())
-		if (e.title == title) {
-			m_changing_engine = true;
-			ui->pb_engine_add->setText (tr("Change"));
+	QModelIndex idx = ui->ListView_engines->currentIndex ();
+	bool valid = idx.isValid ();
+	if (!valid)
+		return;
+
+	const Engine *e = m_engines_model.find (idx);
+	EngineDialog dlg (this, *e, true);
+	for (;;) {
+		if (!dlg.exec ())
+			return;
+		Engine new_e = dlg.get_engine ();
+		bool added = m_engines_model.add_no_replace (new_e);
+		if (added) {
+			m_engines_changed = true;
 			return;
 		}
-
-	m_changing_engine = false;
-	ui->pb_engine_add->setText (tr("Add"));
+		QMessageBox::warning (this, tr ("Engine name already exists"),
+				      tr ("An engine with this name already exists.\nPlease enter a new name that is not already taken."));
+	}
 }
-
 
 void PreferencesDialog::clear_host ()
 {
@@ -1102,16 +1173,6 @@ void PreferencesDialog::on_soundButtonGroup_buttonClicked (QAbstractButton *cb)
 		qgo->playDisConnectSound (true);
 	else if (cb == ui->connectSoundCheckBox)
 		qgo->playConnectSound (true);
-}
-
-void PreferencesDialog::slot_getComputerPath()
-{
-	QString fileName(QFileDialog::getOpenFileName(this, tr ("Choose GTP engine path"), setting->readEntry ("LAST_DIR"),
-						      tr("All Files (*)")));
-	if (fileName.isEmpty())
-		return;
-
-	ui->enginePath->setText (fileName);
 }
 
 void PreferencesDialog::slot_getGobanPicturePath()

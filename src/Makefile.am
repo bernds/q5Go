@@ -25,8 +25,8 @@ DISTSOURCES = analyzedlg.cpp audio.cpp autodiagsdlg.cpp board.cpp clockview.cpp 
 		newaigamedlg.cpp setting.cpp  sgfload.cc sgf2board.cc sgfpreview.cpp \
 		slideview.cpp svgbuilder.cpp tables.cpp telnet.cpp textview.cpp timing.cpp variantgamedlg.cpp
 
-FORMS = analyze_gui.ui autodiags_gui.ui boardwindow_gui.ui clientwindow_gui.ui dbdialog_gui.ui figuredlg_gui.ui \
-	gameinfo_gui.ui gui_dialog.ui newgame_gui.ui newlocalgame_gui.ui newvariantgame_gui.ui \
+FORMS = analyze_gui.ui autodiags_gui.ui boardwindow_gui.ui clientwindow_gui.ui dbdialog_gui.ui enginedlg_gui.ui \
+	figuredlg_gui.ui gameinfo_gui.ui gui_dialog.ui newgame_gui.ui newlocalgame_gui.ui newvariantgame_gui.ui \
 	normaltools_gui.ui nthmove_gui.ui preferences_gui.ui newaigamedlg_gui.ui scoretools_gui.ui \
 	slideview_gui.ui svgview_gui.ui sgfpreview.ui talk_gui.ui textedit_gui.ui twoaigamedlg_gui.ui \
 	textview_gui.ui
