@@ -328,6 +328,33 @@ bool Board::doCountDone()
 	return true;
 }
 
+void Board::leave_edit_modify ()
+{
+	m_edit_board->identify_units ();
+	m_displayed->replace (*m_edit_board, m_edit_to_move);
+	setModified ();
+}
+
+void Board::leave_edit_append ()
+{
+	m_edit_board->identify_units ();
+	game_state *new_st = m_displayed->add_child_edit (*m_edit_board, m_edit_to_move);
+	m_displayed->transfer_observers (new_st);
+	setModified ();
+}
+
+void Board::leave_edit_prepend ()
+{
+	m_edit_board->identify_units ();
+	game_state *parent = m_displayed->prev_move ();
+	if (parent == nullptr)
+		return;
+	game_state *new_st = parent->replace_child_edit (m_displayed, *m_edit_board, m_edit_to_move);
+	if (new_st != nullptr)
+		m_displayed->transfer_observers (new_st);
+	setModified ();
+}
+
 void Board::setMode (GameMode mode)
 {
 	game_state *new_st = m_displayed;
@@ -345,29 +372,13 @@ void Board::setMode (GameMode mode)
 			else
 				m_edit_board->calc_scoring_markers_complex ();
 		}
-	} else if (old_mode == modeScore || old_mode == modeScoreRemote) {
-		/* The only way the scored board is added to the game tree is through
-		   doCountDone.  This may have happened at this point; in any case,
+	} else if (old_mode == modeScore || old_mode == modeScoreRemote || old_mode == modeEdit) {
+		/* The only way the scored or edited board is added to the game tree is through
+		   doCountDone and leave_edit.  This may have happened at this point; in any case,
 		   discard the board now.  */
 		delete m_edit_board;
 		m_edit_board = nullptr;
- 	} else if (mode == modeNormal && old_mode == modeEdit) {
-		m_edit_board->identify_units ();
-		/* Normally, we add an edited board as a new child.  However, when the original position
-		   was the root node, or an edit node, and has no children yet, just update it in-place.
-		   It can be debated whether this behaviour would be surprising to users, but it seems like
-		   the most useful way to handle the situation.  */
-		if (m_displayed->n_children () == 0
-		    && (m_displayed->root_node_p () || m_displayed->was_edit_p ()))
-		{
-			m_displayed->replace (*m_edit_board, m_edit_to_move);
-		} else if (m_displayed->to_move () != m_edit_to_move || m_displayed->get_board () != *m_edit_board)
-			new_st = m_displayed->add_child_edit (*m_edit_board, m_edit_to_move);
-		delete m_edit_board;
-		m_edit_board = nullptr;
 	}
-	if (new_st != m_displayed)
-		m_displayed->transfer_observers (new_st);
 
 	/* Always needed when changing modes to update toolbar buttons etc.  */
 	sync_appearance (false);

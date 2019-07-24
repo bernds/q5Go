@@ -273,7 +273,10 @@ public:
 
 	stone_color swap_edit_to_move ();
 
-	bool doCountDone();
+	bool doCountDone ();
+	void leave_edit_append ();
+	void leave_edit_prepend ();
+	void leave_edit_modify ();
 
 	void set_player_colors (bool w, bool b) { m_player_is_w = w; m_player_is_b = b; }
 	bool player_is (stone_color c) { return c == black ? m_player_is_b : m_player_is_w; }

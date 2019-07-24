@@ -260,11 +260,14 @@ MainWindow::MainWindow (QWidget* parent, go_game_ptr gr, const QString opener_sc
 	connect (evalView, &SizeGraphicsView::resized, this, [=] () { set_eval (m_eval); });
 	connect (anIdListView, &ClickableListView::current_changed, [this] () { update_game_tree (); });
 
-	connect(passButton, &QPushButton::clicked, this, &MainWindow::doPass);
-        connect(undoButton, &QPushButton::clicked, this, &MainWindow::doUndo);
-        connect(adjournButton, &QPushButton::clicked, this, &MainWindow::doAdjourn);
-        connect(resignButton, &QPushButton::clicked, this, &MainWindow::doResign);
-        connect(doneButton, &QPushButton::clicked, this, &MainWindow::doCountDone);
+	connect (passButton, &QPushButton::clicked, this, &MainWindow::doPass);
+	connect (undoButton, &QPushButton::clicked, this, &MainWindow::doUndo);
+	connect (adjournButton, &QPushButton::clicked, this, &MainWindow::doAdjourn);
+	connect (resignButton, &QPushButton::clicked, this, &MainWindow::doResign);
+	connect (doneButton, &QPushButton::clicked, this, &MainWindow::doCountDone);
+	connect (editAppendButton, &QPushButton::clicked, [this] (bool) { gfx_board->leave_edit_append (); setGameMode (modeNormal); });
+	connect (editReplaceButton, &QPushButton::clicked, [this] (bool) { gfx_board->leave_edit_modify (); setGameMode (modeNormal); });
+	connect (editInsertButton, &QPushButton::clicked, [this] (bool) { gfx_board->leave_edit_prepend (); setGameMode (modeNormal); });
 
 	goLastButton->setDefaultAction (navLast);
 	goFirstButton->setDefaultAction (navFirst);
@@ -1914,6 +1917,19 @@ void MainWindow::setGameMode (GameMode mode)
 	editButton->setVisible (mode == modeObserve);
 	editPosButton->setVisible (mode == modeNormal || mode == modeEdit || mode == modeScore);
 	editPosButton->setEnabled (mode == modeNormal || mode == modeEdit);
+	editAppendButton->setVisible (mode == modeEdit);
+	if (mode == modeEdit) {
+		game_state *st = gfx_board->displayed ();
+		bool vis = st->was_edit_p () || st->root_node_p ();
+		editReplaceButton->setVisible (vis);
+		/* We require ST to be an edit/score, because if we inserted an edit before a move, that move
+		   would probably no longer make sense in the edited board position.  */
+		editInsertButton->setVisible (!st->root_node_p () && !st->was_move_p ());
+	} else {
+		editPosButton->setChecked (false);
+		editReplaceButton->setVisible (false);
+		editInsertButton->setVisible (false);
+	}
 	colorButton->setEnabled (mode == modeEdit || mode == modeNormal);
 
 	slider->setEnabled (mode == modeNormal || mode == modeObserve || mode == modeObserveGTP || mode == modeBatch);
@@ -2187,7 +2203,6 @@ void MainWindow::on_colorButton_clicked (bool)
 /* The "Edit Position" button: Switch to edit mode.  */
 void MainWindow::doEditPos (bool toggle)
 {
-	qDebug("MainWindow::doEditPos()");
 	if (toggle)
 		setGameMode (modeEdit);
 	else
@@ -2195,10 +2210,9 @@ void MainWindow::doEditPos (bool toggle)
 }
 
 /* The "Edit Game" button: Open a new window to edit observed game.  */
-void MainWindow::doEdit()
+void MainWindow::doEdit ()
 {
-	qDebug("MainWindow::doEdit()");
-	slot_editBoardInNewWindow(false);
+	slot_editBoardInNewWindow (false);
 }
 
 /* Try to make a move and return status: the game state for the position after the

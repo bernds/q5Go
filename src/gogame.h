@@ -436,6 +436,7 @@ public:
 private:
 	game_state *insert_child (game_state *tmp, add_mode am)
 	{
+		m_visual_ok = false;
 		if (am == add_mode::set_main) {
 			m_children.insert (std::begin (m_children), tmp);
 			m_active = 0;
@@ -455,6 +456,21 @@ public:
 						  this, to_move, code, code, none);
 		return insert_child (tmp, am);
 	}
+	game_state *replace_child_edit (game_state *child, const go_board &new_board, stone_color to_move)
+	{
+		for (size_t i = 0; i < m_children.size (); i++)
+			if (m_children[i] == child) {
+				game_state *tmp = new game_state (new_board, m_move_number + 1, m_sgf_movenum + 1,
+								  this, to_move, -2, -2, none);
+				m_children[i] = tmp;
+				child->m_parent = tmp;
+				tmp->insert_child (child, add_mode::set_active);
+				m_visual_ok = false;
+				return tmp;
+			}
+		return nullptr;
+	}
+
 	game_state *add_child_edit (const go_board &new_board, stone_color to_move, bool scored = false, add_mode am = add_mode::set_active)
 	{
 		for (auto &it: m_children)

@@ -1753,7 +1753,10 @@ Send adjournment request to your opponent. If he accept it, the game will be adj
                     <enum>Qt::NoFocus</enum>
                    </property>
                    <property name="toolTip">
-                    <string>Enter and leave edit mode where stones can be placed freely.</string>
+                    <string>Enter and leave edit mode where stones can be placed freely.
+When you enter edit mode from any position, you always have the option to append your edits
+as a new position after the current one. Depending on circumstances, you may also have the
+option to replace an edited position, or to insert your edits before the current position.</string>
                    </property>
                    <property name="whatsThis">
                     <string>Freely edit the board position. Edited positions are added below the current one.</string>
@@ -1763,6 +1766,36 @@ Send adjournment request to your opponent. If he accept it, the game will be adj
                    </property>
                    <property name="checkable">
                     <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="editAppendButton">
+                   <property name="toolTip">
+                    <string>Append your edits as a successor to the current position.</string>
+                   </property>
+                   <property name="text">
+                    <string>Append</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="editInsertButton">
+                   <property name="toolTip">
+                    <string>Insert your edits before the current position.</string>
+                   </property>
+                   <property name="text">
+                    <string>Insert before</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="editReplaceButton">
+                   <property name="toolTip">
+                    <string>Replace the current position with your edits.</string>
+                   </property>
+                   <property name="text">
+                    <string>Replace</string>
                    </property>
                   </widget>
                  </item>
