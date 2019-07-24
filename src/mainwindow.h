@@ -181,6 +181,10 @@ public:
 	void nav_goto_nth_move_in_var (int n);
 	void nav_find_move (int x, int y);
 
+	/* Sidebar button actions.  */
+	void doPass ();
+	void doCountDone ();
+
 protected:
 	void initActions ();
 	void initMenuBar (GameMode);
@@ -201,11 +205,6 @@ signals:
 	void signal_sendcomment(const QString&);
 	void signal_closeevent();
 
-	void signal_undo();
-	void signal_adjourn();
-	void signal_resign();
-	void signal_pass();
-	void signal_done();
 	void signal_editBoardInNewWindow();
 
 public slots:
@@ -262,12 +261,6 @@ public slots:
 	void slotEngineGroup (bool);
 
 	void slotToggleHideAnalysis (bool);
-
-	virtual void doPass ();
-	virtual void doCountDone ();
-	virtual void doUndo ();
-	virtual void doAdjourn ();
-	virtual void doResign ();
 
 	void on_colorButton_clicked (bool);
 	void doRealScore (bool);
@@ -341,6 +334,9 @@ class MainWindow_GTP : public MainWindow, public GTP_Controller
 	virtual void time_loss (stone_color) override;
 	bool stop_move_timer ();
 
+	void player_pass ();
+	void player_resign ();
+
 public:
 	MainWindow_GTP (QWidget *parent, go_game_ptr, QString opener_scrkey,
 			const Engine &program, const time_settings &, bool b_comp, bool w_comp);
@@ -352,9 +348,6 @@ public:
 
 	/* Virtuals from MainWindow.  */
 	virtual game_state *player_move (int x, int y) override;
-	virtual void doPass() override;
-	// virtual void doUndo();
-	virtual void doResign() override;
 
 	/* Virtuals from Gtp_Controller.  */
 	virtual void gtp_played_move (GTP_Process *p, int x, int y) override;

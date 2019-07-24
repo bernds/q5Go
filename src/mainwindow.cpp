@@ -261,9 +261,6 @@ MainWindow::MainWindow (QWidget* parent, go_game_ptr gr, const QString opener_sc
 	connect (anIdListView, &ClickableListView::current_changed, [this] () { update_game_tree (); });
 
 	connect (passButton, &QPushButton::clicked, this, &MainWindow::doPass);
-	connect (undoButton, &QPushButton::clicked, this, &MainWindow::doUndo);
-	connect (adjournButton, &QPushButton::clicked, this, &MainWindow::doAdjourn);
-	connect (resignButton, &QPushButton::clicked, this, &MainWindow::doResign);
 	connect (doneButton, &QPushButton::clicked, this, &MainWindow::doCountDone);
 	connect (leaveMatchButton, &QPushButton::clicked,
 		 [this] (bool) {
@@ -2503,11 +2500,6 @@ void MainWindow::doRealScore (bool toggle)
 
 void MainWindow::doCountDone()
 {
-	if (gfx_board->getGameMode () == modeScoreRemote) {
-		emit signal_done ();
-		return;
-	}
-
 	QString rs = scoreTools->result->text ();
 	QString s = m_result_text;
 
@@ -2533,21 +2525,6 @@ void MainWindow::doCountDone()
 
 	gfx_board->doCountDone ();
 	doRealScore (false);
-}
-
-void MainWindow::doResign()
-{
-	emit signal_resign();
-}
-
-void MainWindow::doUndo()
-{
-	emit signal_undo();
-}
-
-void MainWindow::doAdjourn()
-{
-	emit signal_adjourn();
 }
 
 void MainWindow::set_observer_model (QStandardItemModel *m)
@@ -2576,6 +2553,9 @@ MainWindow_GTP::MainWindow_GTP (QWidget *parent, go_game_ptr gr, QString opener_
 		m_gtp_b = g;
 	else
 		m_gtp_w = g;
+	disconnect (passButton, &QPushButton::clicked, nullptr, nullptr);
+	connect (passButton, &QPushButton::clicked, this, &MainWindow_GTP::player_pass);
+	connect (resignButton, &QPushButton::clicked, this, &MainWindow_GTP::player_resign);
 }
 
 MainWindow_GTP::MainWindow_GTP (QWidget *parent, go_game_ptr gr, game_state *st, QString opener_scrkey, const Engine &program,
@@ -2594,6 +2574,9 @@ MainWindow_GTP::MainWindow_GTP (QWidget *parent, go_game_ptr gr, game_state *st,
 		m_gtp_b = g;
 	else
 		m_gtp_w = g;
+	disconnect (passButton, &QPushButton::clicked, nullptr, nullptr);
+	connect (passButton, &QPushButton::clicked, this, &MainWindow_GTP::player_pass);
+	connect (resignButton, &QPushButton::clicked, this, &MainWindow_GTP::player_resign);
 }
 
 MainWindow_GTP::MainWindow_GTP (QWidget *parent, go_game_ptr gr, QString opener_scrkey,
@@ -2954,7 +2937,7 @@ game_state *MainWindow_GTP::player_move (int x, int y)
 }
 
 
-void MainWindow_GTP::doPass ()
+void MainWindow_GTP::player_pass ()
 {
 	if (game_mode () == modeComputer)
 		stop_move_timer ();
@@ -2963,7 +2946,8 @@ void MainWindow_GTP::doPass ()
 	stone_color col = gfx_board->to_move ();
 	if (!gfx_board->player_to_move_p ())
 		return;
-	MainWindow::doPass ();
+
+	doPass ();
 	if (game_mode () != modeComputer)
 		return;
 
@@ -2977,9 +2961,8 @@ void MainWindow_GTP::doPass ()
 		request_next_move ();
 }
 
-void MainWindow_GTP::doResign ()
+void MainWindow_GTP::player_resign ()
 {
-	MainWindow::doResign ();
 	if (game_mode () != modeComputer)
 		return;
 

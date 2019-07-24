@@ -111,6 +111,13 @@ public:
 	void player_toggle_dead (int x, int y);
 	void move_played (game_state *, int, int);
 
+	// Sidebar button actions
+	void doPass();
+	void doResign();
+	void doUndo();
+	void doAdjourn();
+	void doDone();
+
 	void send_kibitz(const QString&);
 	void try_talk (const QString &pl, const QString &txt);
 	MainWindow_IGS *get_win() { return win; }
@@ -158,13 +165,6 @@ public slots:
 	// MainWindow
 	void slot_closeevent();
 	void slot_sendcomment(const QString&);
-
-	// Board
-	void slot_doPass();
-	void slot_doResign();
-	void slot_doUndo();
-	void slot_doAdjourn();
-	void slot_doDone();
 
 	// normaltools
 	void slot_addtimePauseW();

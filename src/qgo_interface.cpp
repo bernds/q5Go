@@ -29,6 +29,7 @@
 class MainWindow_IGS : public MainWindow
 {
 	qGoBoard *m_connector;
+
 public:
 	MainWindow_IGS (QWidget *parent, std::shared_ptr<game_record> gr, QString screen_key,
 			qGoBoard *connector, bool playing_w, bool playing_b, GameMode mode);
@@ -46,16 +47,6 @@ public:
 	{
 		if (m_connector != nullptr)
 			m_connector->player_toggle_dead (x, y);
-	}
-	virtual void doPass () override
-	{
-		if (m_connector != nullptr && gfx_board->player_to_move_p ())
-			m_connector->slot_doPass ();
-	}
-	virtual void doResign () override
-	{
-		if (m_connector != nullptr)
-			m_connector->slot_doResign ();
 	}
 	virtual void remove_connector () override;
 
@@ -82,6 +73,17 @@ MainWindow_IGS::MainWindow_IGS (QWidget *parent, std::shared_ptr<game_record> gr
 	gfx_board->set_player_colors (playing_w, playing_b);
 	/* Update clock tooltips after recording the player colors.  */
 	setGameMode (mode);
+
+	disconnect (passButton, &QPushButton::clicked, nullptr, nullptr);
+	connect (passButton, &QPushButton::clicked, [this] (bool) { if (m_connector) m_connector->doPass (); });
+	disconnect (undoButton, &QPushButton::clicked, nullptr, nullptr);
+	connect (undoButton, &QPushButton::clicked, [this] (bool) { if (m_connector) m_connector->doUndo (); });
+	disconnect (adjournButton, &QPushButton::clicked, nullptr, nullptr);
+	connect (adjournButton, &QPushButton::clicked, [this] (bool) { if (m_connector) m_connector->doAdjourn (); });
+	disconnect (resignButton, &QPushButton::clicked, nullptr, nullptr);
+	connect (resignButton, &QPushButton::clicked, [this] (bool) { if (m_connector) m_connector->doResign (); });
+	disconnect (doneButton, &QPushButton::clicked, nullptr, nullptr);
+	connect (doneButton, &QPushButton::clicked, [this] (bool) { if (m_connector) m_connector->doDone (); });
 }
 
 MainWindow_IGS::~MainWindow_IGS ()
@@ -1228,19 +1230,11 @@ void qGoBoard::game_startup ()
 	if (root != m_state)
 		win->transfer_displayed (root, m_state);
 
-	// disable some Menu items
-//	win->setOnlineMenu(true);
-
 	// connect with board (MainWindow::CloseEvent())
 	connect(win, SIGNAL(signal_closeevent()), this, SLOT(slot_closeevent()));
 	// connect with board (qGoBoard)
 	//  board -> to kibitz or say
 	connect(win, SIGNAL(signal_sendcomment(const QString&)), this, SLOT(slot_sendcomment(const QString&)));
-
-	// board -> commands
-	connect(win, SIGNAL(signal_adjourn()), this, SLOT(slot_doAdjourn()));
-	connect(win, SIGNAL(signal_undo()), this, SLOT(slot_doUndo()));
-	connect(win, SIGNAL(signal_done()), this, SLOT(slot_doDone()));
 
 	// teach tools
 	connect(win->cb_opponent, SIGNAL(activated(const QString&)), this, SLOT(slot_ttOpponentSelected(const QString&)));
@@ -1907,19 +1901,19 @@ void qGoBoard::game_result (const QString &rs, const QString &extended_rs)
 	qDebug() << "Result: " << rs;
 }
 
-void qGoBoard::slot_doPass()
+void qGoBoard::doPass()
 {
 	if (id > 0)
 		client_window->sendcommand ("pass", false);
 }
 
-void qGoBoard::slot_doResign()
+void qGoBoard::doResign()
 {
 	if (id > 0)
 		client_window->sendcommand ("resign", false);
 }
 
-void qGoBoard::slot_doUndo()
+void qGoBoard::doUndo()
 {
 	if (id > 0) {
 		if (gsName ==IGS)
@@ -1929,14 +1923,14 @@ void qGoBoard::slot_doUndo()
 	}
 }
 
-void qGoBoard::slot_doAdjourn()
+void qGoBoard::doAdjourn()
 {
 	qDebug("button: adjourn");
 	if (id > 0)
 		client_window->sendcommand ("adjourn", false);
 }
 
-void qGoBoard::slot_doDone()
+void qGoBoard::doDone()
 {
 	if (id > 0)
 		client_window->sendcommand ("done", false);
