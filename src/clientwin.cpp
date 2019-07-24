@@ -218,6 +218,8 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 
 	// install an event filter
 	qApp->installEventFilter(this);
+
+	enable_connection_buttons (false);
 }
 
 ClientWindow::~ClientWindow()
@@ -419,6 +421,17 @@ void ClientWindow::timerEvent(QTimerEvent* e)
 // DEBUG ONLY END ****
 }
 
+void ClientWindow::enable_connection_buttons (bool on)
+{
+	cb_connect->setEnabled (!on);
+	toolSeek->setEnabled (on);
+	setLookingMode->setEnabled (on);
+	setQuietMode->setEnabled (on);
+	setOpenMode->setEnabled (on);
+	refreshPlayers->setEnabled (on);
+	refreshGames->setEnabled (on);
+}
+
 // slot_connect: emitted when connect button has toggled
 void ClientWindow::slot_connect (bool b)
 {
@@ -428,16 +441,13 @@ void ClientWindow::slot_connect (bool b)
 			return;
 		const Host &h = setting->m_hosts[idx];
 
-		// create instance of telnetConnection
-		if (!telnetConnection)
-			qFatal("No telnetConnection!");
-
 		// connect to selected host
 		telnetConnection->connect_host (h);
 	} else {
 		// disconnect
-		telnetConnection->slotHostQuit();
+		telnetConnection->slotHostQuit ();
 	}
+	enable_connection_buttons (b);
 }
 
 // connection closed

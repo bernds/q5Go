@@ -203,6 +203,7 @@ private:
 	void colored_message (QString, QColor);
 
 	void populate_cbconnect (const QString &);
+	void enable_connection_buttons (bool);
 
 	QString		watch;
 	QString		exclude;
