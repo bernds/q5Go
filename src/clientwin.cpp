@@ -1918,28 +1918,6 @@ void ClientWindow::slot_talkto(QString &receiver, QString &txt)
 	}
 }
 
-// set players to be watched
-void ClientWindow::slot_watchplayer(const QString &txt)
-{
-	if (txt.length() > 0)
-	{
-		watch = ";" + txt + ";";
-	}
-	else
-		watch = QString();
-}
-
-// set players to be excluded
-void ClientWindow::slot_excludeplayer(const QString &txt)
-{
-	if (txt.length() > 0)
-	{
-		exclude = ";" + txt + ";";
-	}
-	else
-		exclude = QString();
-}
-
 // open a local board
 void ClientWindow::slot_preferences(bool)
 {

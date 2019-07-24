@@ -93,8 +93,6 @@ public slots:
 	void slot_pbrefreshplayers (bool);
 	void slot_cmdactivated (const QString&);
 	void slot_cmdactivated_int (int);
-	void slot_watchplayer (const QString&);
-	void slot_excludeplayer (const QString&);
 	void slot_preferences (bool = false);
 
 	// telnet:
