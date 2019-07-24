@@ -1636,6 +1636,17 @@ The update button refreshes the game in this window, adding any moves that were 
                   </widget>
                  </item>
                  <item>
+                  <widget class="QPushButton" name="leaveMatchButton">
+                   <property name="toolTip">
+                    <string>Turn this window into a normal SGF editing window.
+Currently, it is in a post-game state where you can still chat with the opponent.</string>
+                   </property>
+                   <property name="text">
+                    <string>Disconnect chat</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
                   <widget class="QPushButton" name="followButton">
                    <property name="text">
                     <string>Follow</string>

@@ -37,24 +37,28 @@ public:
 	virtual game_state *player_move (int x, int y) override
 	{
 		game_state *st = MainWindow::player_move (x, y);
-		if (st == nullptr)
+		if (st == nullptr || m_connector == nullptr)
 			return st;
 		m_connector->move_played (st, x, y);
 		return st;
 	}
 	virtual void player_toggle_dead (int x, int y) override
 	{
-		m_connector->player_toggle_dead (x, y);
+		if (m_connector != nullptr)
+			m_connector->player_toggle_dead (x, y);
 	}
 	virtual void doPass () override
 	{
-		if (gfx_board->player_to_move_p ())
+		if (m_connector != nullptr && gfx_board->player_to_move_p ())
 			m_connector->slot_doPass ();
 	}
 	virtual void doResign () override
 	{
-		m_connector->slot_doResign ();
+		if (m_connector != nullptr)
+			m_connector->slot_doResign ();
 	}
+	virtual void remove_connector () override;
+
 	void playPassSound ()
 	{
 		if (local_stone_sound)
@@ -82,6 +86,12 @@ MainWindow_IGS::MainWindow_IGS (QWidget *parent, std::shared_ptr<game_record> gr
 
 MainWindow_IGS::~MainWindow_IGS ()
 {
+}
+
+void MainWindow_IGS::remove_connector ()
+{
+	delete m_connector;
+	m_connector = nullptr;
 }
 
 /*
@@ -244,6 +254,12 @@ void qGoIF::game_end (const QString &pl1, const QString &pl2, const QString &txt
 	game_end (find_game_players (pl1, pl2), txt);
 }
 
+void qGoIF::handle_talk (const QString &pl, const QString &txt)
+{
+	for (auto qb: boardlist_disconnected)
+		qb->try_talk (pl, txt);
+}
+
 // handle move info and distribute to different boards
 bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 {
@@ -403,7 +419,7 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 			}
 
 			qgobrd = new qGoBoard (this, game_id);
-			boardlist.append(qgobrd);
+			boardlist.append (qgobrd);
 
 //			qgobrd->get_win()->setOnlineMenu(true);
 
@@ -578,7 +594,7 @@ void qGoIF::set_observe(const QString& gameno)
 }
 
 // remove all boards
-void qGoIF::set_initIF()
+void qGoIF::set_initIF ()
 {
 	for (auto b: boardlist) {
 		b->disconnected (false);
@@ -713,6 +729,12 @@ void qGoIF::slot_freegame(bool freegame)
 void qGoIF::remove_board (qGoBoard *qb)
 {
 	boardlist.removeOne (qb);
+	boardlist_disconnected.append (qb);
+}
+
+void qGoIF::remove_disconnected_board (qGoBoard *qb)
+{
+	boardlist_disconnected.removeOne (qb);
 }
 
 // board window closed...
@@ -760,7 +782,6 @@ void qGoIF::window_closing (qGoBoard *qb)
 	}
 
 	delete qb;
-//	delete win;
 }
 
 // kibitz strings
@@ -1111,7 +1132,8 @@ qGoBoard::~qGoBoard()
 	qDebug("~qGoBoard()");
 	if (m_connected)
 		m_qgoif->remove_board (this);
-	delete win;
+	m_qgoif->remove_disconnected_board (this);
+
 	delete m_title;
 	delete m_scoring_board;
 }
@@ -1270,6 +1292,9 @@ void qGoBoard::set_game(Game *g, GameMode mode, stone_color own_color)
 		if (byoTime != 0)
 			overtime = "25/" + std::to_string (byoTime) + " Canadian";
 	}
+	/* This needs to be saved, because it will be used in modePostMatch when the
+	   user may already edit the game information.  */
+	m_opp_name = own_color == white ? g->bname : g->wname;
 
 	std::string place = "";
 	switch (gsName)
@@ -1665,13 +1690,43 @@ void qGoBoard::disconnected (bool remove_from_list)
 	m_observers.clear ();
 
 	// set board editable...
-	set_Mode_real (modeNormal);
+	GameMode new_mode = gameMode == modeMatch ? modePostMatch : modeNormal;
+	set_Mode_real (new_mode);
 	if (win) {
-		win->setGameMode (modeNormal);
-		win->getBoard()->set_player_colors (true, true);
+		win->setGameMode (new_mode);
+		win->getBoard ()->set_player_colors (true, true);
 	}
 	/* @@@ Sometimes we get a game result without moves, if we started observing just
 	   as the game ended.  We should arrange for some way to delete this qGoBoard.  */
+}
+
+void qGoBoard::add_postgame_break ()
+{
+	if (gameMode != modePostMatch || m_postgame_chat || !win)
+		return;
+
+	m_postgame_chat = true;
+	QString to_add = "------------------------\n" + tr ("Post-game discussion:") + "\n";
+	win->append_comment (to_add);
+}
+
+void qGoBoard::try_talk (const QString &pl, const QString &txt)
+{
+	if (gameMode != modePostMatch || pl != m_opp_name)
+		return;
+
+	add_postgame_break ();
+	QString to_add = pl + ": " + txt + "\n";
+
+	if (m_state != nullptr) {
+		const std::string old_comment = m_state->comment ();
+		m_state->set_comment (old_comment + to_add.toStdString ());
+	}
+
+	if (win)
+		win->append_comment (to_add);
+	else
+		m_comments += to_add;
 }
 
 // write kibitz strings to comment window
@@ -1757,6 +1812,8 @@ void qGoBoard::send_kibitz(const QString &msg)
 //	if (msg.indexOf(myName) == 0)
 //		return;
 
+	add_postgame_break ();
+
 	// normal stuff...
 	QString to_add = msg;
 	if (!to_add.contains(QString::number(mv_counter + 1)))
@@ -1783,14 +1840,14 @@ void qGoBoard::slot_sendcomment(const QString &comment)
 		return;
 	}
 
-	if (gameMode == modeObserve || gameMode == modeTeach || gameMode == modeMatch && ExtendedTeachingGame)
-	{
+	if (gameMode == modePostMatch) {
+		client_window->sendcommand ("tell " + m_opp_name + " " + comment, false);
+		send_kibitz("-> " + comment + "\n");
+	} else if (gameMode == modeObserve || gameMode == modeTeach || gameMode == modeMatch && ExtendedTeachingGame) {
 		// kibitz
 		client_window->sendcommand ("kibitz " + QString::number(id) + " " + comment, false);
 		send_kibitz("-> " + comment + "\n");
-	}
-	else
-	{
+	} else {
 		// say
 		client_window->sendcommand ("say " + comment, false);
 		send_kibitz("-> " + comment + "\n");
@@ -1828,7 +1885,7 @@ void qGoBoard::move_played (game_state *st, int x, int y)
 void qGoBoard::game_result (const QString &rs, const QString &extended_rs)
 {
 	m_game->set_result (rs.toStdString ());
-	send_kibitz(rs);
+	send_kibitz (rs + "\n");
 	bool autosave = setting->readBoolEntry (gameMode == modeObserve ? "AUTOSAVE" : "AUTOSAVE_PLAYED");
 
 	/* Note that win can be null - observing a game just as it ends may cause the

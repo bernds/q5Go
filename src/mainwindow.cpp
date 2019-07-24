@@ -265,9 +265,16 @@ MainWindow::MainWindow (QWidget* parent, go_game_ptr gr, const QString opener_sc
 	connect (adjournButton, &QPushButton::clicked, this, &MainWindow::doAdjourn);
 	connect (resignButton, &QPushButton::clicked, this, &MainWindow::doResign);
 	connect (doneButton, &QPushButton::clicked, this, &MainWindow::doCountDone);
-	connect (editAppendButton, &QPushButton::clicked, [this] (bool) { gfx_board->leave_edit_append (); setGameMode (modeNormal); });
-	connect (editReplaceButton, &QPushButton::clicked, [this] (bool) { gfx_board->leave_edit_modify (); setGameMode (modeNormal); });
-	connect (editInsertButton, &QPushButton::clicked, [this] (bool) { gfx_board->leave_edit_prepend (); setGameMode (modeNormal); });
+	connect (leaveMatchButton, &QPushButton::clicked,
+		 [this] (bool) {
+			 m_remember_mode = modeNormal;
+			 if (m_gamemode == modePostMatch)
+				 setGameMode (modeNormal);
+			 remove_connector ();
+		 });
+	connect (editAppendButton, &QPushButton::clicked, [this] (bool) { gfx_board->leave_edit_append (); setGameMode (m_remember_mode); });
+	connect (editReplaceButton, &QPushButton::clicked, [this] (bool) { gfx_board->leave_edit_modify (); setGameMode (m_remember_mode); });
+	connect (editInsertButton, &QPushButton::clicked, [this] (bool) { gfx_board->leave_edit_prepend (); setGameMode (m_remember_mode); });
 
 	goLastButton->setDefaultAction (navLast);
 	goFirstButton->setDefaultAction (navFirst);
@@ -1987,11 +1994,22 @@ void MainWindow::setToolsTabWidget(enum tabType p, enum tabState s)
 void MainWindow::setGameMode (GameMode mode)
 {
 	m_gamemode = mode;
+	if (mode == modePostMatch || mode == modeNormal)
+		m_remember_mode = mode;
+
+	bool editable_comments = mode == modeNormal || m_remember_mode == modeNormal || mode == modeComputer || mode == modeObserveGTP || mode == modeBatch;
+	leaveMatchButton->setVisible (mode == modePostMatch);
+
+	/* For almost everything below this, modePostMatch behaves just like modeNormal.  */
+	GameMode mode_in = mode;
+	if (mode == modePostMatch)
+		mode = modeNormal;
+
 	if (mode == modeNormal) {
 		m_timer_white.stop (false);
 		m_timer_black.stop (false);
 	}
-	if (mode == modeEdit || mode == modeNormal || mode == modeObserve || mode == modeObserveGTP) {
+	if (mode == modeEdit || mode == modeNormal || mode == modePostMatch || mode == modeObserve || mode == modeObserveGTP) {
 		editGroup->setEnabled (true);
 	} else {
 		editStone->setChecked (true);
@@ -2028,14 +2046,13 @@ void MainWindow::setGameMode (GameMode mode)
 	navNextComment->setEnabled (enable_nav);
 	navIntersection->setEnabled (enable_nav);
 	navNthMove->setEnabled (enable_nav);
-	editDelete->setEnabled (enable_nav);
+	editDelete->setEnabled (enable_nav && mode_in != modePostMatch);
 	navSwapVariations->setEnabled (enable_nav);
 
 	fileImportSgfClipB->setEnabled (enable_nav);
 
 	anPlay->setEnabled (mode == modeNormal || mode == modeObserve);
 
-	bool editable_comments = mode == modeNormal || mode == modeEdit || mode == modeScore || mode == modeComputer || mode == modeObserveGTP || mode == modeBatch;
 	commentEdit->setReadOnly (!editable_comments || mode == modeEdit);
 	// commentEdit->setDisabled (editable_comments);
 	commentEdit2->setEnabled (!editable_comments);
@@ -2068,6 +2085,10 @@ void MainWindow::setGameMode (GameMode mode)
 
 	case modeMatch:
 		statusMode->setText(" " + QObject::tr("P", "Board status line: play mode") + " ");
+		break;
+
+	case modePostMatch:
+		statusMode->setText(" " + QObject::tr("N", "Board status line: post-match normal mode") + " ");
 		break;
 
 	case modeComputer:
@@ -2257,7 +2278,7 @@ void MainWindow::setMoveData (game_state &gs, const go_board &b)
 	int var_nr = gs.var_number ();
 
 	GameMode mode = m_gamemode;
-	bool good_mode = mode == modeNormal || mode == modeObserve || mode == modeObserveGTP || mode == modeBatch;
+	bool good_mode = mode == modeNormal || mode == modeObserve || mode == modeObserveGTP || mode == modeBatch || mode == modePostMatch;
 
 	navBackward->setEnabled (good_mode && !is_root_node);
 	navForward->setEnabled (good_mode && sons > 0);
@@ -2272,6 +2293,7 @@ void MainWindow::setMoveData (game_state &gs, const go_board &b)
 	switch (mode)
 	{
 	case modeNormal:
+	case modePostMatch:
 		navSwapVariations->setEnabled(!is_root_node);
 
 		/* fall through */
@@ -2397,7 +2419,7 @@ void MainWindow::doEditPos (bool toggle)
 	if (toggle)
 		setGameMode (modeEdit);
 	else
-		setGameMode (modeNormal);
+		setGameMode (m_remember_mode);
 }
 
 /* The "Edit Game" button: Open a new window to edit observed game.  */
@@ -2464,7 +2486,6 @@ void MainWindow::doRealScore (bool toggle)
 	scoreButton->setChecked (toggle);
 	if (toggle)
 	{
-		m_remember_mode = gfx_board->getGameMode();
 		m_remember_tab = toolsTabWidget->currentIndex();
 
 		setToolsTabWidget(tabTeachGameTree, tabDisable);

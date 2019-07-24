@@ -252,7 +252,7 @@ void ClientWindow::server_remove_game (Game* g)
 	}
 
 	if (!found)
-		qWarning("game not found");
+		qWarning () << "game not found " << g->nr;
 	else
 	{
 		// decrease number of games

@@ -65,8 +65,10 @@ class qGoBoard : public QObject
 	qGoIF *m_qgoif;
 	QString *m_title = nullptr;
 	QString m_comments;
+	QString m_opp_name;
 	bool m_scoring = false;
 	bool m_connected = true;
+	bool m_postgame_chat = false;
 
 	/* State used while receiving a game result.  */
 	go_board *m_scoring_board = nullptr;
@@ -75,11 +77,13 @@ class qGoBoard : public QObject
 
 	void send_coords (int x, int y);
 	void update_time_info (game_state *);
+	void add_postgame_break ();
 
 public:
 	qGoBoard(qGoIF *, int game_id);
 	~qGoBoard();
 
+	qGoIF *qgoIF () { return m_qgoif; }
 	void game_startup ();
 	void disconnected (bool remove_from_list);
 	int get_id() const { return id; }
@@ -108,6 +112,7 @@ public:
 	void move_played (game_state *, int, int);
 
 	void send_kibitz(const QString&);
+	void try_talk (const QString &pl, const QString &txt);
 	MainWindow_IGS *get_win() { return win; }
 	void setTimerInfo(const QString&, const QString&, const QString&, const QString&);
 	QString secToTime(int);
@@ -226,6 +231,7 @@ public:
 
 	void window_closing (qGoBoard *);
 	void remove_board (qGoBoard *);
+	void remove_disconnected_board (qGoBoard *);
 
 	/* Called by parser.cpp.  */
 	void observer_list_start (int);
@@ -234,6 +240,8 @@ public:
 
 	void game_end (const QString &id, const QString &txt);
 	void game_end (const QString &player1, const QString &player2, const QString &txt);
+
+	void handle_talk (const QString &pl, const QString &txt);
 
 public slots:
 	// parser/mainwindow
@@ -268,6 +276,7 @@ private:
 	qGoBoard *qgobrd;
 	QString  myName;
 	QList<qGoBoard *> boardlist;
+	QList<qGoBoard *> boardlist_disconnected;
 	GSName   gsName;
 	int      localBoardCounter;
 //	int      lockObserveCmd;

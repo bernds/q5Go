@@ -70,7 +70,7 @@ class MainWindow : public QMainWindow, public Ui::BoardWindow
 
 	bool showSlider, sliderSignalToggle;
 	GameMode m_gamemode;
-	GameMode m_remember_mode;
+	GameMode m_remember_mode = modeNormal;
 	int m_remember_tab;
 	QGraphicsScene *m_eval_canvas;
 	QGraphicsRectItem *m_eval_bar, *m_eval_mid;
@@ -194,7 +194,9 @@ protected:
 	virtual void keyReleaseEvent (QKeyEvent*) override;
 
 	virtual void time_loss (stone_color);
-
+	virtual void remove_connector ()
+	{
+	}
 signals:
 	void signal_sendcomment(const QString&);
 	void signal_closeevent();

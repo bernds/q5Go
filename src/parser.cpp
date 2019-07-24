@@ -1635,16 +1635,16 @@ InfoType Parser::cmd24(const QString &line)
 	if ((pos = line.indexOf("-->")) != -1 && pos < 3)
 	{
 		e1 = line.section(' ', 1, 1, QString::SectionSkipEmpty);
-		e2 = "> " + line.section(' ', 2).trimmed();
+		e2 = line.section(' ', 2).trimmed();
 	}
 	else
 	{
 		e1 = line.section('*', 1, 1);
-		e2 = "> " + line.section(':', 1).trimmed();
+		e2 = line.section(':', 1).trimmed();
 	}
 
-	// emit player + message + true (=player)
-	emit signal_talk(e1, e2, true);
+	m_qgoif->handle_talk (e1, e2);
+	emit signal_talk (e1, "> " + e2, true);
 
 	return TELL;
 }
