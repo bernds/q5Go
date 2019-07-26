@@ -2257,8 +2257,8 @@ void ClientWindow::slot_RoomListClicked(QListWidgetItem *qli)
 
 void ClientWindow::slot_addSeekCondition(const QString& a, const QString& b, const QString& c, const QString& d, const QString& )
 {
-	QString time_condition ;
-	
+	QString time_condition;
+
 	time_condition = QString::number(int(b.toInt() / 60)) + " min + " + QString::number(int(c.toInt() / 60)) + " min / " + d + " stones";
 
 	int a_int = a.toInt ();
@@ -2292,48 +2292,45 @@ void ClientWindow::slot_cancelSeek()
 	seekButtonTimer = 0;
 }
 
-void ClientWindow::slot_seek(int i)
+void ClientWindow::slot_seek (int i)
 {
 	toolSeek->setChecked (true);
 	toolSeek->setMenu (nullptr);
 
 	//seek entry 1 19 5 3 0
-	QString send_seek = 	"seek entry " + 
-				QString::number(i) + 
-				" 19 " ;
+	QString send_seek = "seek entry " + QString::number (i) + " 19 ";
 
 	//childish, but we want to have an animated icon there
-	seekButtonTimer = startTimer(200);
+	seekButtonTimer = startTimer (200);
 
-	switch (cb_seek_handicap->currentIndex())
+	switch (cb_seek_handicap->currentIndex ())
 	{
-		case 0 :
-			send_seek.append("1 1 0");
-			break ;
+		case 0:
+			send_seek.append ("1 1 0");
+			break;
 
-		case 1 :
-			send_seek.append("2 2 0");
-			break ;
-		
-		case 2 :
-			send_seek.append("5 5 0");
-			break ;
+		case 1:
+			send_seek.append ("2 2 0");
+			break;
 
-		case 3 :
-			send_seek.append("9 9 0");
-			break ;
+		case 2:
+			send_seek.append ("5 5 0");
+			break;
 
-		case 4 :
-			send_seek.append("0 9 0");
-			break ;	
+		case 3:
+			send_seek.append ("9 9 0");
+			break;
 
-		case 5 :
-			send_seek.append("9 0 0");
-			break ;
+		case 4:
+			send_seek.append ("0 9 0");
+			break;
+
+		case 5:
+			send_seek.append ("9 0 0");
+			break;
 	}
-	
-	sendcommand(send_seek,false);
 
+	sendcommand (send_seek, false);
 }
 
 void ClientWindow::slot_SeekList(const QString& player, const QString& condition)
