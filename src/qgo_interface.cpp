@@ -84,6 +84,27 @@ MainWindow_IGS::MainWindow_IGS (QWidget *parent, std::shared_ptr<game_record> gr
 	connect (resignButton, &QPushButton::clicked, [this] (bool) { if (m_connector) m_connector->doResign (); });
 	disconnect (doneButton, &QPushButton::clicked, nullptr, nullptr);
 	connect (doneButton, &QPushButton::clicked, [this] (bool) { if (m_connector) m_connector->doDone (); });
+
+	connect (this, &MainWindow::signal_closeevent, brd, &qGoBoard::slot_closeevent);
+	connect (this, &MainWindow::signal_sendcomment, brd, &qGoBoard::slot_sendcomment);
+
+	// teach tools
+	void (QComboBox::*cact) (const QString &) = &QComboBox::activated;
+	connect (cb_opponent, cact, brd, &qGoBoard::slot_ttOpponentSelected);
+	connect (pb_controls, &QPushButton::toggled, brd, &qGoBoard::slot_ttControls);
+	connect (pb_mark, &QPushButton::toggled, brd, &qGoBoard::slot_ttMark);
+
+	if (brd->ExtendedTeachingGame) {
+		// make teaching features visible while observing
+		cb_opponent->setDisabled (brd->IamTeacher);
+		pb_controls->setDisabled (brd->IamTeacher);
+		pb_mark->setDisabled (brd->IamTeacher);
+	}
+
+	if (mode == modeMatch || mode == modeTeach) {
+		connect (normalTools->btimeView, &ClockView::clicked, brd, &qGoBoard::slot_addtimePauseB);
+		connect (normalTools->wtimeView, &ClockView::clicked, brd, &qGoBoard::slot_addtimePauseW);
+	}
 }
 
 MainWindow_IGS::~MainWindow_IGS ()
@@ -1229,31 +1250,6 @@ void qGoBoard::game_startup ()
 	game_state *root = m_game->get_root ();
 	if (root != m_state)
 		win->transfer_displayed (root, m_state);
-
-	// connect with board (MainWindow::CloseEvent())
-	connect(win, SIGNAL(signal_closeevent()), this, SLOT(slot_closeevent()));
-	// connect with board (qGoBoard)
-	//  board -> to kibitz or say
-	connect(win, SIGNAL(signal_sendcomment(const QString&)), this, SLOT(slot_sendcomment(const QString&)));
-
-	// teach tools
-	connect(win->cb_opponent, SIGNAL(activated(const QString&)), this, SLOT(slot_ttOpponentSelected(const QString&)));
-	connect(win->pb_controls, SIGNAL(toggled(bool)), this, SLOT(slot_ttControls(bool)));
-	connect(win->pb_mark, SIGNAL(toggled(bool)), this, SLOT(slot_ttMark(bool)));
-
-	if (ExtendedTeachingGame) {
-		// make teaching features visible while observing
-		win->cb_opponent->setDisabled(IamTeacher);
-		win->pb_controls->setDisabled(IamTeacher);
-		win->pb_mark->setDisabled(IamTeacher);
-	}
-
-	if (gameMode == modeMatch || gameMode == modeTeach) {
-		connect (win->normalTools->btimeView,
-			 &ClockView::clicked, this, &qGoBoard::slot_addtimePauseB);
-		connect (win->normalTools->wtimeView,
-			 &ClockView::clicked, this, &qGoBoard::slot_addtimePauseW);
-	}
 
 	if (m_comments.length () > 0)
 		win->append_comment (m_comments);
