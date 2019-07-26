@@ -1298,9 +1298,6 @@ void qGoBoard::set_game(Game *g, GameMode mode, stone_color own_color)
 	case WING:
 		place = "WING";
 		break;
-	case CWS:
-		place = "CWS";
-		break;
 	default:
 		break;
 	}
@@ -2170,7 +2167,6 @@ void qGoBoard::slot_ttMark(bool on)
 			break;
 
 		case LGS:
-		case CTN:
 			// use undo cmd
 			if (on)
 			{

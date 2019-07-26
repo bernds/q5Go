@@ -113,21 +113,6 @@ InfoType Parser::put_line(const QString &txt)
 			return SERVERNAME;
 		}
 
-		if (line.indexOf("CTN #",0) != -1)
-		{
-			gsName = CTN;
-			emit signal_svname(gsName);
-			return SERVERNAME;
-		}
-
-		// adapted from NNGS, chinese characters
-		if (line.indexOf("CWS #",0) != -1 || line.indexOf("==CWS",0) != -1)
-		{
-			gsName = CWS;
-			emit signal_svname(gsName);
-			return SERVERNAME;
-		}
-
 		// critical: TO BE WATCHED....
 		if (line.indexOf("#>",0) != -1)
 		{

@@ -58,7 +58,6 @@ void GameDialog::slot_pbsuggest()
 	switch (gsname)
 	{
 	case NNGS:
-	case CWS:
 		// already suggested?
 		if (!have_suggestdata)
 		{
@@ -242,7 +241,6 @@ qDebug("#### GameDialog::slot_offer()");
 	switch (gsname)
 	{
 	case NNGS:
-	case CWS:
 		buttonDecline->setEnabled(true);
 		buttonCancel->setDisabled(true);
 		break;

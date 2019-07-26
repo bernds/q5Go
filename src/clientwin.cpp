@@ -668,8 +668,7 @@ void ClientWindow::sendTextToApp (const QString &txt)
 			//if (myAccount->get_status() == Status::guest)
 			set_sessionparameter ("quiet", false);
 			slot_refresh (11);
-			if (myAccount->get_gsname () != CWS)
-				slot_refresh (10);
+			slot_refresh (10);
 			break;
 		}
 

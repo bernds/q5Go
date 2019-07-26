@@ -670,8 +670,6 @@ void Account::set_gsname(GSName gs)
 	case NNGS: svname = "NNGS"; break;
 	case LGS: svname = "LGS"; break;
 	case WING: svname = "WING"; break;
-	case CTN: svname = "CTN"; break;
-	case CWS: svname = "CWS"; break;
 	default: svname = "unknown Server"; break;
 	}
 
@@ -682,7 +680,7 @@ void Account::set_gsname(GSName gs)
 		acc_name.sprintf("Lulu");
 		qWarning() << "set_gsname() - acc_name not found!";
 	}
-	
+
 	if (status == Status::offline)
 		status = Status::registered;
 }
