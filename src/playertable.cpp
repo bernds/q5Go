@@ -34,10 +34,8 @@ PlayerTable::PlayerTable(QWidget *parent)
 
 void PlayerTable::mouseDoubleClickEvent(QMouseEvent *e)
 {
-	printf ("doubleclick\n");
 	if (e->button () == Qt::LeftButton) {
 		QTreeWidgetItem *item = itemAt (e->pos ());
-		printf ("item %p\n", item);
 		if (item)
 			emit signal_doubleClicked (item);
 	}

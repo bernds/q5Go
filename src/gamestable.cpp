@@ -34,7 +34,6 @@ GamesTable::~GamesTable ()
 
 void GamesTable::mouseDoubleClickEvent (QMouseEvent *e)
 {
-	printf ("doubleclick\n");
 	if (e->button () == Qt::LeftButton) {
 		QTreeWidgetItem *item = itemAt (e->pos ());
 		printf ("item %p\n", item);
