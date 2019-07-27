@@ -829,6 +829,29 @@
           </property>
         </item>
       </widget>
+      <widget class="QToolButton" name="toolObserveMode">
+        <property name="text">
+          <string/>
+        </property>
+        <property name="checkable">
+          <bool>true</bool>
+        </property>
+        <property name="toolTip" stdset="0">
+          <string>Observe mode
+Choose between single window or multiple windows.</string>
+        </property>
+	<property name="icon">
+	  <iconset resource="q4go.qrc">
+	  <normaloff>:/ClientWindowGui/images/clientwindow/observe-multi.png</normaloff>
+	  <normalon>:/ClientWindowGui/images/clientwindow/observe-single.png</normalon>:/ClientWindowGui/images/clientwindow/observe-multi.png</iconset>
+	</property>
+        <property name="whatsThis" stdset="0">
+          <string>Observe mode
+
+Use this button to choose whether observed games will open in individual windows, or in a single
+window with a selection pane for choosing which game to observe.</string>
+        </property>
+      </widget>
       <addaction name="separator"/>
       <addaction name="setLookingMode"/>
       <addaction name="setQuietMode"/>

@@ -2,9 +2,16 @@
  *   qgo_interface.cpp - qGoClient's interface to qGo
  */
 
-#include "qgo.h"
-//Added by qt3to4:
 #include <QTimerEvent>
+#include <QString>
+#include <QTimer>
+#include <QMessageBox>
+#include <QComboBox>
+#include <QRegExp>
+#include <QGraphicsRectItem>
+
+#include "qgo.h"
+
 #include "mainwindow.h"
 #include "qgo_interface.h"
 #include "tables.h"
@@ -14,12 +21,7 @@
 #include "config.h"
 #include "clientwin.h"
 #include "ui_helpers.h"
-
-#include <qstring.h>
-#include <qtimer.h>
-#include <qmessagebox.h>
-#include <qcombobox.h>
-#include <qregexp.h>
+#include "sizegraphicsview.h"
 
 #ifdef Q_OS_MACX
 #include <CoreFoundation/CFString.h>
@@ -29,12 +31,41 @@
 class MainWindow_IGS : public MainWindow
 {
 	qGoBoard *m_connector;
+	QGraphicsScene *m_preview_scene {};
+	QGraphicsRectItem *m_cursor {};
+	int m_preview_w = 0;
+	int m_preview_h = 0;
+	struct preview {
+		go_game_ptr game;
+		qGoBoard *connector;
+		game_state *state;
+		ClickablePixmap *pixmap {};
+		int x = 0, y = 0;
+		bool active = true;
+	};
+	std::vector<preview> m_previews;
+	FigureView *m_previewer {};
+
+	void board_clicked (go_game_ptr game, qGoBoard *connector, game_state *st);
+	void board_menu (QGraphicsSceneContextMenuEvent *e, go_game_ptr game, qGoBoard *connector, game_state *st);
+	void unobserve_game (go_game_ptr);
+	void update_preview (go_game_ptr game, game_state *st);
+	void set_preview_cursor (const preview &);
+
+protected:
+	virtual void closeEvent (QCloseEvent *e) override;
+	virtual bool comments_from_game_p () override;
 
 public:
 	MainWindow_IGS (QWidget *parent, std::shared_ptr<game_record> gr, QString screen_key,
 			qGoBoard *connector, bool playing_w, bool playing_b, GameMode mode);
 	~MainWindow_IGS ();
 
+	void append_remote_comment (go_game_ptr game, const QString &s)
+	{
+		if (game == m_game)
+			append_comment (s);
+	}
 	virtual game_state *player_move (int x, int y) override
 	{
 		game_state *st = MainWindow::player_move (x, y);
@@ -60,11 +91,21 @@ public:
 		if (local_stone_sound)
 			qgo->playStoneSound ();
 	}
-	void transfer_displayed (game_state *from, game_state *to)
+	void transfer_displayed (go_game_ptr game, game_state *from, game_state *to)
 	{
 		gfx_board->transfer_displayed (from, to);
+		if (game_mode () == modeObserveMulti)
+			update_preview (game, to);
 	}
+	void add_game (go_game_ptr game, qGoBoard *connector, game_state *st);
+	void end_game (go_game_ptr game, qGoBoard *connector, GameMode new_mode);
+	const qGoBoard *active_board ();
+
+public slots:
+	void choices_resized ();
 };
+
+static MainWindow_IGS *multi_observer_win;
 
 MainWindow_IGS::MainWindow_IGS (QWidget *parent, std::shared_ptr<game_record> gr, QString screen_key,
 				qGoBoard *brd, bool playing_w, bool playing_b, GameMode mode)
@@ -85,7 +126,6 @@ MainWindow_IGS::MainWindow_IGS (QWidget *parent, std::shared_ptr<game_record> gr
 	disconnect (doneButton, &QPushButton::clicked, nullptr, nullptr);
 	connect (doneButton, &QPushButton::clicked, [this] (bool) { if (m_connector) m_connector->doDone (); });
 
-	connect (this, &MainWindow::signal_closeevent, brd, &qGoBoard::slot_closeevent);
 	connect (this, &MainWindow::signal_sendcomment, brd, &qGoBoard::slot_sendcomment);
 
 	// teach tools
@@ -105,10 +145,327 @@ MainWindow_IGS::MainWindow_IGS (QWidget *parent, std::shared_ptr<game_record> gr
 		connect (normalTools->btimeView, &ClockView::clicked, brd, &qGoBoard::slot_addtimePauseB);
 		connect (normalTools->wtimeView, &ClockView::clicked, brd, &qGoBoard::slot_addtimePauseW);
 	}
+	if (mode == modeObserveMulti) {
+		m_previewer = new FigureView;
+		multi_observer_win = this;
+		int w = gameChoiceView->width ();
+		int h = gameChoiceView->height ();
+		m_preview_scene = new QGraphicsScene (0, 0, w, h, gameChoiceView);
+		gameChoiceView->setScene (m_preview_scene);
+		connect (gameChoiceView, &SizeGraphicsView::resized, this, &MainWindow_IGS::choices_resized);
+
+		add_game (gr, brd, gr->get_root ());
+	}
 }
 
 MainWindow_IGS::~MainWindow_IGS ()
 {
+	if (game_mode () == modeObserveMulti) {
+		multi_observer_win = nullptr;
+		m_previews.clear ();
+	}
+	delete m_previewer;
+}
+
+void MainWindow_IGS::closeEvent (QCloseEvent *e)
+{
+	GameMode mode = game_mode ();
+	if (mode != modeObserve && mode != modeObserveMulti && !checkModified ()) {
+		e->ignore ();
+		return;
+	}
+
+	if (mode == modeObserveMulti) {
+		for (auto &p: m_previews) {
+			if (p.connector != nullptr)
+				p.connector->slot_closeevent ();
+		}
+	} else if (m_connector != nullptr)
+		m_connector->slot_closeevent ();
+	e->accept ();
+}
+
+bool MainWindow_IGS::comments_from_game_p ()
+{
+	if (game_mode () != modeObserveMulti)
+		return MainWindow::comments_from_game_p ();
+	/* In the multi-observer window, we want different behaviour depending on
+	   whether the game has finished or not.  */
+	for (const auto &p: m_previews)
+		if (p.game == m_game)
+			if (p.connector == nullptr)
+				return true;
+	return false;
+}
+
+void MainWindow_IGS::set_preview_cursor (const preview &p)
+{
+	delete m_cursor;
+	m_cursor = m_preview_scene->addRect (0, 0, m_preview_w, m_preview_h,
+					     Qt::NoPen, QBrush (Qt::blue));
+	m_cursor->setPos (p.x, p.y);
+	m_cursor->setZValue (-1);
+	gameChoiceView->ensureVisible (m_cursor);
+}
+
+void MainWindow_IGS::update_preview (go_game_ptr game, game_state *st)
+{
+	size_t i;
+	size_t len = m_previews.size ();
+	for (i = 0; i < len; i++) {
+		if (m_previews[i].game == game)
+			break;
+	}
+	if (i == len) {
+		qWarning () << "preview not found\n";
+		return;
+	}
+	QFontMetrics m (setting->fontStandard);
+	auto info = game->info ();
+
+	int margin = 6;
+	int img_size = m_preview_w - margin;
+	int img_size_y = img_size + 2 * m.height ();
+	auto &gmp = m_previews[i];
+	gmp.state = st;
+	m_previewer->reset_game (gmp.game);
+	m_previewer->resizeBoard (img_size, img_size);
+	m_previewer->set_show_coords (false);
+	m_previewer->set_displayed (gmp.state);
+	QPixmap board_pm = m_previewer->draw_position (0);
+	QPixmap pm (img_size, img_size_y);
+	if (gmp.active) {
+		pm.fill (Qt::transparent);
+	} else {
+		pm.fill (QColor (128, 128, 128, 127));
+	}
+	QPainter p;
+	p.begin (&pm);
+	if (!gmp.active)
+		p.setOpacity (0.5);
+	p.drawImage (QPoint (margin / 2, margin / 2 + m.height ()), m_previewer->background_image (), m_previewer->wood_rect ());
+	p.drawPixmap (margin / 2, margin / 2 + m.height (), board_pm);
+	QRect r1 (margin / 2, margin / 2, m_preview_w - margin, m.height ());
+	QPen p_w = QPen (Qt::white);
+	p.fillRect (r1, QBrush (Qt::black));
+	p.setPen (p_w);
+	p.drawText (r1, 0, QString::fromStdString (info.name_b + " " + info.rank_b));
+	QRect r2 (margin / 2, margin / 2 + img_size + m.height (), m_preview_w - margin, m.height ());
+	p.fillRect (r2, QBrush (Qt::white));
+	QPen p_b = QPen (Qt::black);
+	p.setPen (p_b);
+	p.drawText (r2, 0, QString::fromStdString (info.name_w + " " + info.rank_w));
+	p.end ();
+	delete gmp.pixmap;
+	auto connector = gmp.connector;
+	auto callback = [this, game, connector, st] () { board_clicked (game, connector, st); };
+	auto menu_callback = [this, game, connector, st] (QGraphicsSceneContextMenuEvent *e) -> bool
+		{
+			board_menu (e, game, connector, st);
+			return true;
+		};
+	if (!gmp.active) {
+		QPixmap tmp_pm (img_size, img_size_y);
+		tmp_pm.fill (Qt::transparent);
+		QPainter p1;
+		p1.begin (&tmp_pm);
+		p1.drawPixmap (0, 0, pm);
+		p1.end ();
+		gmp.pixmap = new ClickablePixmap (tmp_pm, callback, menu_callback);
+	} else
+		gmp.pixmap = new ClickablePixmap (pm, callback, menu_callback);
+	m_preview_scene->addItem (gmp.pixmap);
+	int szdiff_x = m_preview_w - img_size;
+	int szdiff_y = m_preview_h - img_size_y;
+	gmp.pixmap->setPos (gmp.x + szdiff_x / 2, gmp.y + szdiff_y / 2);
+	if (gmp.game == m_game)
+		set_preview_cursor (gmp);
+}
+
+void MainWindow_IGS::add_game (go_game_ptr game, qGoBoard *brd, game_state *st)
+{
+	struct preview p = { game, brd, st, nullptr };
+	m_previews.emplace_back (p);
+	choices_resized ();
+}
+
+void MainWindow_IGS::end_game (go_game_ptr game, qGoBoard *brd, GameMode new_mode)
+{
+	if (game_mode () != modeObserveMulti) {
+		setGameMode (new_mode);
+		return;
+	}
+	for (auto &p: m_previews)
+		if (p.game == game && p.connector == brd) {
+			p.active = false;
+			p.connector = nullptr;
+			update_preview (game, p.state);
+		}
+
+}
+
+const qGoBoard *MainWindow_IGS::active_board ()
+{
+	if (game_mode () != modeObserveMulti)
+		return m_connector;
+	for (auto &p: m_previews)
+		if (p.game == m_game)
+			return p.connector;
+	return nullptr;
+}
+
+void MainWindow_IGS::choices_resized ()
+{
+	int w = gameChoiceView->width ();
+	int h = gameChoiceView->height ();
+	int n_elts = m_previews.size ();
+
+	if (n_elts == 0)
+		return;
+
+	int sb_size = qApp->style()->pixelMetric(QStyle::PM_ScrollBarExtent);
+
+	QFontMetrics m (setting->fontStandard);
+	int min_size = 220;
+	int min_w = min_size;
+	int min_h = min_size;
+	min_h += 2 * m.height ();
+
+	int smaller = w < h ? w : h;
+	int smaller_min = w < h ? min_w : min_h;
+	int larger = w < h ? h : w;
+	int larger_min = w < h ? min_h : min_w;
+
+	/* Two attempts: try to fit everything without scrollbars first, then reduce the
+	   available area to account for the scroll bar.  */
+	for (int assume_sb = 0; assume_sb < 2; assume_sb++) {
+		/* The number of minimally-sized boards we can fit into the longer side.  */
+		int n_larger_max = std::max (1, larger / larger_min);
+		/* The number of minimally-sized boards we can fit on the smaller side.  */
+		int n_smaller_max = std::max (1, smaller / smaller_min);
+		/* The number of boards that need to fit on the smaller side to make sure that the
+		   above number is enough to fit all on screen.  */
+		int n_small_1 = std::max (1, (n_elts + n_larger_max - 1) / n_larger_max);
+		/* How many boards to actually fit on the smaller side: the minimum of the two
+		   previously calculated numbers (so ideally the number we want, but not exceeding
+		   the maximum).  */
+		int n_small = std::min (n_small_1, n_smaller_max);
+		int n_large = (n_elts + n_small - 1) / n_small;
+		/* Compute picture sizes for filling the area.  */
+		int ps1 = smaller / n_small;
+		int ps2 = larger / n_large;
+		// printf ("ps1 %d [%d %d] ps2 %d [%d %d] %% %d\n", ps1, smaller, n_small, ps2, larger, n_large, sb_size);
+		if (w < h)
+			ps2 -= 2 * m.height ();
+		else
+			ps1 -= 2 * m.height ();
+		int min_ps = ps1 < min_size ? ps1 : std::min (ps1, ps2);
+		if (min_ps >= min_size || (ps1 < min_size && (ps2 > ps1 || assume_sb))) {
+			/* Everything fits (or can't fit, if the window is too narrow).
+			   But try to find an even better layout.  */
+			while (n_small < n_elts) {
+				int n_small_new = n_small + 1;
+				int n_large_new = (n_elts + n_small_new - 1) / n_small_new;
+				int ps1b = smaller / n_small_new;
+				int ps2b = larger / n_large_new;
+				if (w < h)
+					ps2b -= 2 * m.height ();
+				else
+					ps1b -= 2 * m.height ();
+				int t = std::min (ps1b, ps2b);
+				if (t < min_ps)
+					break;
+				min_ps = t;
+				n_small++;
+			}
+			m_preview_w = min_ps;
+			m_preview_h = min_ps + 2 * m.height ();
+			break;
+		} else {
+			/* Use scrollbars and use the maximum width of the smaller side.  */
+			if (assume_sb == 0) {
+				smaller -= sb_size;
+				continue;
+			}
+			// ps1 = std::max (ps1, min_size);
+			m_preview_w = ps1;
+			m_preview_h = ps1 + 2 * m.height ();
+			break;
+		}
+	}
+
+	int row = 0;
+	int col = 0;
+	for (auto &p: m_previews) {
+		p.x = col;
+		p.y = row;
+		update_preview (p.game, p.state);
+		if (w < h) {
+			col += m_preview_w;
+			if (col + m_preview_w > w) {
+				col = 0;
+				row += m_preview_h;
+			}
+		} else {
+			row += m_preview_h;
+			if (row + m_preview_h > h) {
+				row = 0;
+				col += m_preview_w;
+			}
+		}
+	}
+	gameChoiceView->setSceneRect (m_preview_scene->itemsBoundingRect ());
+}
+
+void MainWindow_IGS::unobserve_game (go_game_ptr gr)
+{
+	using std::begin;
+	using std::end;
+	auto it = begin (m_previews);
+	auto it_end = end (m_previews);
+	bool choose_new = gr == m_game;
+	while (it != it_end) {
+		if (it->game == gr) {
+			if (it->connector != nullptr)
+				it->connector->slot_closeevent ();
+			delete it->pixmap;
+			m_previews.erase (it);
+			break;
+		}
+		++it;
+	}
+	if (choose_new && !m_previews.empty ()) {
+		board_clicked (m_previews[0].game, m_previews[0].connector, m_previews[0].state);
+	}
+	choices_resized ();
+	if (m_previews.empty ()) {
+		QMetaObject::invokeMethod (this, &QWidget::close, Qt::QueuedConnection);
+	}
+}
+
+void MainWindow_IGS::board_clicked (go_game_ptr gr, qGoBoard *connector, game_state *st)
+{
+	init_game_record (gr);
+	gfx_board->set_displayed (st);
+	disconnect (this, &MainWindow::signal_sendcomment, nullptr, nullptr);
+	if (connector != nullptr) {
+		connect (this, &MainWindow::signal_sendcomment, connector, &qGoBoard::slot_sendcomment);
+		set_comment (connector->comments ());
+	}
+	/* Ensure the cursor moves.  */
+	for (const auto &p: m_previews)
+		if (p.game == gr) {
+			set_preview_cursor (p);
+			break;
+		}
+}
+
+void MainWindow_IGS::board_menu (QGraphicsSceneContextMenuEvent *e,
+				 go_game_ptr gr, qGoBoard *connector, game_state *st)
+{
+	QMenu menu;
+	menu.addAction (tr ("Stop observing this game"), [=] () { unobserve_game (gr); });
+	menu.exec (e->screenPos ());
 }
 
 void MainWindow_IGS::remove_connector ()
@@ -906,7 +1263,10 @@ void qGoBoard::enter_scoring_mode (bool may_reenter)
 
 void qGoBoard::leave_scoring_mode ()
 {
-	win->setGameMode (gameMode);
+	/* ??? Maybe we don't even need to set the game mode here.  After all
+	   we should enter modeNormal or modePostMatch pretty soon after this.  */
+	if (gameMode == modeMatch || gameMode == modeTeach)
+		win->setGameMode (gameMode);
 	m_scoring = false;
 }
 
@@ -1062,8 +1422,9 @@ void qGoBoard::receive_score_end ()
 	game_state *st = m_state;
 	m_scoring_board->territory_from_markers ();
 	game_state *st_new = st->add_child_edit (*m_scoring_board, m_state->to_move (), true);
-	if (win != nullptr)
-		win->transfer_displayed (st, st_new);
+	if (win != nullptr) {
+		win->transfer_displayed (m_game, st, st_new);
+	}
 	m_state = st_new;
 	delete m_scoring_board;
 	m_scoring_board = nullptr;
@@ -1112,16 +1473,21 @@ void qGoBoard::game_startup ()
 	if (win == nullptr) {
 		bool am_black = m_own_color == black;
 		bool am_white = m_own_color == white;
-		win = new MainWindow_IGS (0, m_game, screen_key (client_window), this, am_white, am_black, gameMode);
+		GameMode win_mode = gameMode == modeObserve && !setting->readBoolEntry ("OBSERVE_SINGLE") ? modeObserveMulti : gameMode;
+		if (win_mode == modeObserveMulti && multi_observer_win != nullptr) {
+			win = multi_observer_win;
+			multi_observer_win->add_game (m_game, this, m_state);
+		} else
+			win = new MainWindow_IGS (0, m_game, screen_key (client_window), this, am_white, am_black, win_mode);
 		game_state *root = m_game->get_root ();
 		if (root != m_state)
-			win->transfer_displayed (root, m_state);
+			win->transfer_displayed (m_game, root, m_state);
 		win->show ();
 	}
 	win->set_observer_model (&m_observers);
 
 	if (m_comments.length () > 0)
-		win->append_comment (m_comments);
+		win->append_remote_comment (m_game, m_comments);
 
 	if (resumed)
 		send_kibitz (tr ("Game continued as game number %1\n").arg (id));
@@ -1247,7 +1613,7 @@ void qGoBoard::set_freegame(bool f)
 void qGoBoard::timerEvent(QTimerEvent*)
 {
 	// wait until first move
-	if (win == nullptr || mv_counter < 0 || id < 0 || game_paused)
+	if (win == nullptr || win->active_board () != this || mv_counter < 0 || id < 0 || game_paused)
 		return;
 
 	if (m_state->to_move () == black)
@@ -1401,7 +1767,7 @@ void qGoBoard::set_move(stone_color sc, QString pt, QString mv_nr)
 		game_state *st = m_state;
 		game_state *st_new = m_state->add_child_pass ();
 		if (win != nullptr) {
-			win->transfer_displayed (st, st_new);
+			win->transfer_displayed (m_game, st, st_new);
 			win->playPassSound ();
 		}
 		m_state = st_new;
@@ -1436,7 +1802,7 @@ void qGoBoard::set_move(stone_color sc, QString pt, QString mv_nr)
 		if (st_new != nullptr) {
 			st->make_child_primary (st_new);
 			if (win != nullptr) {
-				win->transfer_displayed (st, st_new);
+				win->transfer_displayed (m_game, st, st_new);
 				win->playClick ();
 			}
 			m_state = st_new;
@@ -1461,7 +1827,6 @@ void qGoBoard::slot_closeevent()
 	{
 		id = -id;
 		m_qgoif->window_closing (this);
-//		emit signal_closeevent(id);
 	}
 	else
 		qWarning("id < 0 ******************");
@@ -1481,7 +1846,7 @@ void qGoBoard::disconnected (bool remove_from_list)
 	GameMode new_mode = gameMode == modeMatch ? modePostMatch : modeNormal;
 	set_Mode_real (new_mode);
 	if (win)
-		win->setGameMode (new_mode);
+		win->end_game (m_game, this, new_mode);
 	/* @@@ Sometimes we get a game result without moves, if we started observing just
 	   as the game ended.  We should arrange for some way to delete this qGoBoard.  */
 }
@@ -1493,7 +1858,7 @@ void qGoBoard::add_postgame_break ()
 
 	m_postgame_chat = true;
 	QString to_add = "------------------------\n" + tr ("Post-game discussion:") + "\n";
-	win->append_comment (to_add);
+	win->append_remote_comment (m_game, to_add);
 }
 
 void qGoBoard::try_talk (const QString &pl, const QString &txt)
@@ -1509,10 +1874,9 @@ void qGoBoard::try_talk (const QString &pl, const QString &txt)
 		m_state->set_comment (old_comment + to_add.toStdString ());
 	}
 
+	m_comments += to_add;
 	if (win)
-		win->append_comment (to_add);
-	else
-		m_comments += to_add;
+		win->append_remote_comment (m_game, to_add);
 }
 
 // write kibitz strings to comment window
@@ -1608,10 +1972,9 @@ void qGoBoard::send_kibitz(const QString &msg)
 		const std::string old_comment = m_state->comment ();
 		m_state->set_comment (old_comment + to_add.toStdString ());
 	}
+	m_comments += to_add;
 	if (win)
-		win->append_comment (to_add);
-	else
-		m_comments += to_add;
+		win->append_remote_comment (m_game, to_add);
 }
 
 void qGoBoard::slot_sendcomment(const QString &comment)

@@ -137,5 +137,7 @@
     <file>images/clientwindow/image1.xpm</file>
     <file>images/clientwindow/refresh_games.png</file>
     <file>images/clientwindow/refresh_players.png</file>
+    <file>images/clientwindow/observe-single.png</file>
+    <file>images/clientwindow/observe-multi.png</file>
   </qresource>
 </RCC>

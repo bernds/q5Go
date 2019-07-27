@@ -91,6 +91,7 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	connect (ListView_games, &GamesTable::customContextMenuRequested, this, &ClientWindow::slot_menu_games);
 
 	connect (whoOpenCheck, &QCheckBox::toggled, this, &ClientWindow::slot_whoopen);
+	connect (toolObserveMode, &QToolButton::toggled, [this] (bool on) { setting->writeBoolEntry ("OBSERVE_SINGLE", on); });
 
 	initStatusBar(this);
 	initActions();
@@ -106,6 +107,8 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	whoBox1->setCurrentIndex(setting->readIntEntry("WHO_1"));
 	whoBox2->setCurrentIndex(setting->readIntEntry("WHO_2"));
 	whoOpenCheck->setChecked(setting->readIntEntry("WHO_CB"));
+
+	toolObserveMode->setChecked (setting->readBoolEntry ("OBSERVE_SINGLE"));
 
 	QString s;
 
@@ -2028,5 +2031,7 @@ bool ClientWindow::preferencesAccept ()
 		populate_cbconnect (cb_connect->currentText ());
 		setting->hosts_changed = false;
 	}
+	toolObserveMode->setChecked (setting->readBoolEntry ("OBSERVE_SINGLE"));
+
 	return true;//result;
 }

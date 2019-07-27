@@ -648,6 +648,7 @@ void PreferencesDialog::init_from_settings ()
 	ui->autosavePathCheckBox->setChecked (setting->readBoolEntry("AUTOSAVE_TO_PATH"));
 	ui->autosavePathEdit->setText (setting->readEntry("AUTOSAVE_PATH"));
 	ui->autosavePathWidget->setEnabled (ui->autosavePathCheckBox->isChecked ());
+	ui->observeSingleCheckBox->setChecked (setting->readBoolEntry("OBSERVE_SINGLE"));
 
 	ui->toroidDupsSpin->setValue (setting->readIntEntry("TOROID_DUPS"));
 
@@ -906,6 +907,7 @@ void PreferencesDialog::slot_apply()
 	setting->writeBoolEntry ("AUTOSAVE_PLAYED", ui->autosavePlayedCheckBox->isChecked ());
 	setting->writeBoolEntry ("AUTOSAVE_TO_PATH", ui->autosavePathCheckBox->isChecked ());
 	setting->writeEntry ("AUTOSAVE_PATH", ui->autosavePathEdit->text ());
+	setting->writeBoolEntry("OBSERVE_SINGLE", ui->observeSingleCheckBox->isChecked ());
 
 	// Computer Tab
 	setting->writeBoolEntry ("COMPUTER_WHITE", ui->computerWhiteButton->isChecked ());

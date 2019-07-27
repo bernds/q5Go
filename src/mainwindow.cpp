@@ -419,7 +419,7 @@ MainWindow::MainWindow (QWidget* parent, go_game_ptr gr, const QString opener_sc
 	}
 
 	local_stone_sound = setting->readBoolEntry(mode == modeMatch ? "SOUND_MATCH_BOARD"
-						   : mode == modeObserve || mode == modeObserveGTP ? "SOUND_OBSERVE"
+						   : mode == modeObserve || mode == modeObserveGTP || mode == modeObserveMulti ? "SOUND_OBSERVE"
 						   : mode == modeComputer ? "SOUND_COMPUTER"
 						   : "SOUND_NORMAL");
 
@@ -585,6 +585,7 @@ MainWindow::MainWindow (QWidget* parent, go_game_ptr gr, const QString opener_sc
 	graphDock->setVisible (figuremode == 2 || mode == modeBatch || mode == modeComputer || mode == modeObserveGTP);
 	if (mode == modeMatch || mode == modeTeach || mode == modeObserve)
 		observersDock->setVisible (true);
+	chooseDock->setVisible (mode == modeObserveMulti);
 	setGameMode (mode);
 
 	update_settings ();
@@ -1131,6 +1132,8 @@ void MainWindow::updateCaption ()
 		s += "* ";
 	if (m_gamemode == modeBatch)
 		s += tr ("Analysis in progress: ");
+	else if (m_gamemode == modeObserveMulti || m_gamemode == modeObserve)
+		s += tr ("Observe: ");
 	else if (refreshButton->isVisibleTo (this))
 		s += tr ("Off-line copy: ");
 
@@ -1596,7 +1599,8 @@ void MainWindow::slotNavSwapVariations(bool)
 
 void MainWindow::hide_panes_for_mode ()
 {
-	bool is_online = m_gamemode == modeMatch || m_gamemode == modeObserve || m_gamemode == modeTeach;
+	bool is_online = (m_gamemode == modeMatch || m_gamemode == modeObserve
+			  || m_gamemode == modeObserveMulti || m_gamemode == modeTeach);
 	if (is_online) {
 		treeDock->setVisible (false);
 		treeDock->toggleViewAction ()->setVisible (false);
@@ -1912,6 +1916,15 @@ void MainWindow::saveWindowLayout (bool dflt)
 	if (!dflt)
 		strKey += "_" + panesKey;
 
+	/* ObserveMulti has an extra pane, which we could encode in the panes key.
+	   Unfortunately there exist variants of q5go already which have additional
+	   panes (e.g. for games in a zip archive).  So there is a risk of incompatible
+	   config files.
+	   So maybe this method (using a unique identifier for a visible pane) is the
+	   model to go with for any future extension.  */
+	if (m_gamemode == modeObserveMulti && !dflt)
+		strKey += "_multi";
+
 	// store window size, format, comment format
 	setting->writeBoolEntry("BOARDFULLSCREEN_" + strKey, isFullScreen);
 
@@ -1936,6 +1949,9 @@ bool MainWindow::restoreWindowLayout (bool dflt, const QString &scrkey)
 
 	if (!dflt)
 		strKey += "_" + panesKey;
+
+	if (m_gamemode == modeObserveMulti && !dflt)
+		strKey += "_multi";
 
 	// restore board window
 	QString s1 = setting->readEntry("BOARDLAYOUT1_" + strKey);
@@ -2053,8 +2069,7 @@ void MainWindow::keyReleaseEvent (QKeyEvent *e)
 
 void MainWindow::closeEvent (QCloseEvent *e)
 {
-	// qDebug("MainWindow::closeEvent(QCloseEvent *e)");
-	if (m_gamemode == modeObserve || checkModified ())
+	if (checkModified ())
 	{
 		emit signal_closeevent();
 		e->accept();
@@ -2109,6 +2124,15 @@ void MainWindow::slotUpdateComment ()
 	gfx_board->setModified ();
 	if (slideView != nullptr)
 		slideView->set_active (st);
+}
+
+/* Used by the IGS observer window when switching between games.  */
+void MainWindow::set_comment (const QString &t)
+{
+	bool old = m_allow_text_update_signal;
+	m_allow_text_update_signal = false;
+	commentEdit->setText (t);
+	m_allow_text_update_signal = old;
 }
 
 /* Called from an external source to append to the comments window.  */
@@ -2283,6 +2307,11 @@ void MainWindow::update_pass_button ()
 void MainWindow::setGameMode (GameMode mode)
 {
 	GameMode old_mode = m_gamemode;
+#ifdef CHECKING
+	if (old_mode == modeObserveMulti && mode != modeObserveMulti) {
+		fprintf (stderr, "Serious issue with multi-observer mode\n");
+	}
+#endif
 	m_gamemode = mode;
 	if (mode == modePostMatch || mode == modeNormal) {
 		m_remember_mode = mode;
@@ -2298,7 +2327,8 @@ void MainWindow::setGameMode (GameMode mode)
 		gfx_board->set_game_position (nullptr);
 	}
 
-	bool editable_comments = mode != modeMatch && mode != modePostMatch && mode != modeObserve && mode != modeScoreRemote && m_remember_mode != modePostMatch;
+	bool editable_comments = (mode != modeMatch && mode != modePostMatch && mode != modeObserve && mode != modeObserveMulti
+				  && mode != modeScoreRemote && m_remember_mode != modePostMatch);
 	leaveMatchButton->setVisible (mode == modePostMatch);
 	viewConnections->setVisible (mode != modeMatch && mode != modeTeach && mode != modeComputer);
 
@@ -2306,12 +2336,13 @@ void MainWindow::setGameMode (GameMode mode)
 	GameMode mode_in = mode;
 	if (mode == modePostMatch)
 		mode = modeNormal;
+	bool is_observe = mode == modeObserve || mode == modeObserveMulti;
 
 	if (mode == modeNormal) {
 		m_timer_white.stop (false);
 		m_timer_black.stop (false);
 	}
-	if (mode == modeEdit || mode == modeNormal || mode == modePostMatch || mode == modeObserve || mode == modeObserveGTP) {
+	if (mode == modeEdit || mode == modeNormal || mode == modePostMatch || is_observe || mode == modeObserveGTP) {
 		editGroup->setEnabled (true);
 	} else {
 		editStone->setChecked (true);
@@ -2325,10 +2356,10 @@ void MainWindow::setGameMode (GameMode mode)
 	if (mode == modeScoreRemote)
 		scoreTools->scoreTerrButton->setChecked (true);
 
-	normalTools->anGroup->setVisible (mode == modeNormal || mode == modeObserve);
-	normalTools->anStartButton->setVisible (mode == modeNormal || mode == modeObserve);
-	normalTools->anPauseButton->setVisible (mode == modeNormal || mode == modeObserve);
-	normalTools->anHideButton->setVisible (mode == modeNormal || mode == modeObserve);
+	normalTools->anGroup->setVisible (mode == modeNormal || is_observe);
+	normalTools->anStartButton->setVisible (mode == modeNormal || is_observe);
+	normalTools->anPauseButton->setVisible (mode == modeNormal || is_observe);
+	normalTools->anHideButton->setVisible (mode == modeNormal || is_observe);
 
 	/* Don't allow navigation through these back doors when in edit or score mode.  */
 	evalGraph->setEnabled (mode != modeEdit && mode != modeScore && mode != modeScoreRemote);
@@ -2354,7 +2385,7 @@ void MainWindow::setGameMode (GameMode mode)
 
 	fileImportSgfClipB->setEnabled (enable_nav);
 
-	anPlay->setEnabled (mode == modeNormal || mode == modeObserve);
+	anPlay->setEnabled (mode == modeNormal || is_observe);
 
 	commentEdit->setReadOnly (!editable_comments || mode == modeEdit);
 	// commentEdit->setDisabled (editable_comments);
@@ -2379,6 +2410,7 @@ void MainWindow::setGameMode (GameMode mode)
 		break;
 
 	case modeObserve:
+	case modeObserveMulti:
 		statusMode->setText(" " + QObject::tr("O", "Board status line: observe mode") + " ");
 		break;
 
@@ -2429,7 +2461,7 @@ void MainWindow::setGameMode (GameMode mode)
 	resignButton->setVisible (mode == modeMatch || mode == modeComputer || mode == modeTeach || mode == modeScoreRemote);
 	resignButton->setEnabled (mode != modeScoreRemote);
 	refreshButton->setEnabled (mode == modeNormal);
-	editButton->setVisible (mode == modeObserve);
+	editButton->setVisible (is_observe);
 	editPosButton->setVisible (mode == modeNormal || mode == modeEdit || mode == modeScore);
 	editPosButton->setEnabled (mode == modeNormal || mode == modeEdit);
 	editAppendButton->setVisible (mode == modeEdit);
@@ -2455,7 +2487,7 @@ void MainWindow::setGameMode (GameMode mode)
 	}
 	colorButton->setEnabled (mode == modeEdit || mode == modeNormal);
 
-	slider->setEnabled (mode == modeNormal || mode == modeObserve || mode == modeObserveGTP || mode == modeBatch);
+	slider->setEnabled (mode == modeNormal || is_observe || mode == modeObserveGTP || mode == modeBatch);
 
 	editButton->setEnabled (mode != modeScore);
 	scoreButton->setEnabled (mode != modeEdit);
@@ -2629,6 +2661,15 @@ void MainWindow::set_game_position (game_state *gs)
 	gfx_board->set_displayed (gs);
 }
 
+/* Determine if we should update the comment edit field with the data from the game
+   record when navigating to a new move.  */
+bool MainWindow::comments_from_game_p ()
+{
+	/* In online matches, comments are only appended to.  When setting up the window,
+	   the main comment edit is set as readonly, and that's a good way to test.  */
+	return !commentEdit->isReadOnly ();
+}
+
 void MainWindow::setMoveData (const game_state *gs)
 {
 	const go_board &b = gs->get_board ();
@@ -2640,7 +2681,7 @@ void MainWindow::setMoveData (const game_state *gs)
 	int var_nr = gs->var_number ();
 
 	GameMode mode = m_gamemode;
-	bool good_mode = mode == modeNormal || mode == modeObserve || mode == modeObserveGTP || mode == modeBatch || mode == modePostMatch;
+	bool good_mode = mode == modeNormal || mode == modeObserve || mode == modeObserveMulti || mode == modeObserveGTP || mode == modeBatch || mode == modePostMatch;
 
 	navBackward->setEnabled (good_mode && !is_root_node);
 	navForward->setEnabled (good_mode && sons > 0);
@@ -2686,7 +2727,7 @@ void MainWindow::setMoveData (const game_state *gs)
 
 	/* Refresh comment from move unless we are in a game mode that just keeps
 	   appending to the comment.  */
-	if (!commentEdit->isReadOnly ())
+	if (comments_from_game_p ())
 		refresh_comment ();
 
 	update_figures ();

@@ -129,6 +129,8 @@ protected:
 
 	bool isFullScreen;
 
+	void set_comment (const QString &);
+
 private:
 	std::vector<std::unique_ptr<undo_entry>> m_undo_stack;
 	size_t m_undo_stack_pos = 0;
@@ -267,6 +269,7 @@ protected:
 	void initStatusBar ();
 
 	GameMode game_mode () { return m_gamemode; };
+	virtual bool comments_from_game_p ();
 
 	/* Sidebar button actions.  */
 	void doPass ();

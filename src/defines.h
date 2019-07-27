@@ -63,7 +63,7 @@
 
 
 enum GameMode { modeNormal, modeEdit, modeScore, modeScoreRemote, modeObserve, modeObserveGTP,
-		modeMatch, modePostMatch, modeTeach, modeComputer, modeBatch };
+		modeObserveMulti, modeMatch, modePostMatch, modeTeach, modeComputer, modeBatch };
 enum assessType { noREQ, FREE, RATED, TEACHING };
 enum tabType {tabNormalScore=0, tabTeachGameTree };
 enum tabState {tabSet, tabEnable, tabDisable };

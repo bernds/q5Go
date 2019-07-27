@@ -149,6 +149,8 @@ public:
 	void addtime_w(int m);
 	void set_myName(const QString &n) { myName = n; }
 
+	const QString &comments () { return m_comments; }
+
 	void observer_list_start ();
 	void observer_list_entry (const QString &, const QString &);
 	void observer_list_end ();
