@@ -279,178 +279,44 @@ void ClientWindow::server_remove_game (Game* g)
 }
 
 // take a new player from parser
-void ClientWindow::slot_player(Player *p, bool cmdplayers)
+void ClientWindow::server_remove_player (const QString &name)
 {
-	// insert into ListView
-
-  	QTreeWidgetItemIterator lv(ListView_players);
+  	QTreeWidgetItemIterator lv (ListView_players);
 #if 0
 	QPoint pp(0,0);
 	QTreeWidgetItem *topViewItem = ListView_players->itemAt(pp);
   	bool deleted_topViewItem = false;
 #endif
-	if (p->online)
+
+	bool found = false;
+	for (QTreeWidgetItem *lvi; (lvi = *lv) && !found;)
 	{
-		// check if it's an empty list, i.e. all items deleted before
-		if (cmdplayers && !playerListEmpty)
+		lv++;
+		// compare names
+		if (lvi->text(1) == name)
 		{
-			for (PlayerTableItem *lvi; (lvi = static_cast<PlayerTableItem*>(*lv));)
+			// check if it was a watched player
+			if (lvi->text(6) == "W")
 			{
-				lv++;
-				// compare names
-				if (lvi->text(1) == p->name)
-				{
-					// check if new player info is less than old
-					if (p->info != "??")
-					{
-						// new entry has more info
-						p->mark = lvi->text (6);
-						p->sort_rk = rkToKey(p->rank) + p->name.toLower();
-						lvi->update_player (*p);
-
-#if 0
-						lvi->set_nmatchSettings(p);
-						//lvi->nmatch = p->nmatch;
-
-						lvi->ownRepaint();
-#endif
-					}
-
-					if (p->name == myAccount->acc_name)
-					{
-						qDebug() << "updating my account info... (1)";
-						// checkbox open
-						bool b = (p->info.contains('X') == 0);
-						slot_checkbox(0, b);
-						// checkbox looking - don't set if closed
-						if (p->info.contains('!') != 0)
-							// "!" found
-							slot_checkbox(1, true);
-						else if (b)
-							// "!" not found && open
-							slot_checkbox(1, false);
-						// checkbox quiet
-						// NOT CORRECT REPORTED BY SERVER!
-						//b = (p->info.contains('Q') != 0);
-						//slot_checkbox(2, b);
-						// -> WORKAROUND
-						if (p->info.contains('Q') != 0)
-							slot_checkbox(2, true);
-
-						// get rank to calc handicap when matching
-						myAccount->set_rank(p->rank);
-					}
-
-					return;
-				}
-			}
-		}
-		else if (!cmdplayers && !myAccount->num_players)
-		{
-			qDebug() << "player skipped because no init table";
-			// skip players until initial table has loaded
-			return;
-		}
-
-
-		QString mark;
-
-		// check for watched players
-		if (watch.contains(";" + p->name + ";"))
-		{
-			mark = "W";
-
-			// sound for entering - no sound while "who" cmd is executing
-			if (!cmdplayers)
-				qgo->playEnterSound();
-			else if (p->name == myAccount->acc_name)
-				// it's me
-				// - only possible if 'who'/'user' cmd is executing
-				// - I am on the watchlist, however
-				// don't count!
+				qgo->playLeaveSound();
 				myAccount->num_watchedplayers--;
-
-			myAccount->num_watchedplayers++;
-		}
-		// check for excluded players
-		else if (exclude.contains(";" + p->name + ";"))
-		{
-			mark = "X";
-		}
-
-		// check for open/looking state
-		if (cmdplayers)
-		{
-			if (p->name == myAccount->acc_name)
-			{
-				qDebug() << "updating my account info...(2)";
-				// checkbox open
-				bool b = (p->info.contains('X') == 0);
-				slot_checkbox(0, b);
-				// checkbox looking
-				b = (p->info.contains('!') != 0);
-				slot_checkbox(1, b);
-				// checkbox quiet
-				// NOT CORRECT REPORTED BY SERVER!
-				//b = (p->info.contains('Q') != 0);
-				//slot_checkbox(2, b);
-				// -> WORKAROUND
-				if (p->info.contains('Q') != 0)
-					slot_checkbox(2, true);
-
-				// get rank to calc handicap when matching
-				myAccount->set_rank(p->rank);
-				mark = "M";
 			}
-		}
-		p->mark = mark;
-		p->sort_rk = rkToKey(p->rank) + p->name.toLower();
-		new PlayerTableItem(ListView_players, *p);
-#if 0
-		lv1->set_nmatchSettings(p);
-#endif
-		// increase number of players
-		myAccount->num_players++;
-		statusUsers->setText(" P: " + QString::number(myAccount->num_players) + " / " + QString::number(myAccount->num_watchedplayers) + " ");
 
-		//if (!cmdplayers)
-		//	ListView_players->sort() ;
-
-	}
-	else
-	{
-		// {... has disconnected}
-		bool found = false;
-		for (QTreeWidgetItem *lvi; (lvi = *lv) && !found;)
-		{
 			lv++;
-			// compare names
-			if (lvi->text(1) == p->name)
-			{
-				// check if it was a watched player
-				if (lvi->text(6) == "W")
-				{
-					qgo->playLeaveSound();
-					myAccount->num_watchedplayers--;
-				}
-
-				lv++;
 #if 0
-				if (lvi == topViewItem)     // are we trying to delete the 'anchor' of the list viewport ?
-					deleted_topViewItem = true  ;
+			if (lvi == topViewItem)     // are we trying to delete the 'anchor' of the list viewport ?
+				deleted_topViewItem = true;
 #endif
-				delete lvi;
-				found = true;;
+			delete lvi;
+			found = true;;
 
-				// decrease number of players
-				myAccount->num_players--;
-				statusUsers->setText(" P: " + QString::number(myAccount->num_players) + " / " + QString::number(myAccount->num_watchedplayers) + " ");
-			}
+			myAccount->num_players--;
+			statusUsers->setText(" P: " + QString::number(myAccount->num_players) + " / " + QString::number(myAccount->num_watchedplayers) + " ");
 		}
-
-		if (!found)
-			qWarning() << "disconnected player not found: " << p->name;
 	}
+
+	if (!found)
+		qWarning() << "disconnected player not found: " << name;
 
 #if 0
 	if (! deleted_topViewItem) //don't try to refer to a deleted element ...
@@ -459,6 +325,136 @@ void ClientWindow::slot_player(Player *p, bool cmdplayers)
 		ListView_players->setContentsPos(0,ip);
 	}
 #endif
+}
+
+// take a new player from parser
+void ClientWindow::server_add_player (Player *p, bool cmdplayers)
+{
+  	QTreeWidgetItemIterator lv(ListView_players);
+	// check if it's an empty list, i.e. all items deleted before
+	if (cmdplayers && !playerListEmpty)
+	{
+		for (PlayerTableItem *lvi; (lvi = static_cast<PlayerTableItem*>(*lv));)
+		{
+			lv++;
+			// compare names
+			if (lvi->text(1) == p->name)
+			{
+				// check if new player info is less than old
+				if (p->info != "??")
+				{
+					// new entry has more info
+					p->mark = lvi->text (6);
+					p->sort_rk = rkToKey(p->rank) + p->name.toLower();
+					lvi->update_player (*p);
+
+#if 0
+					lvi->set_nmatchSettings(p);
+					//lvi->nmatch = p->nmatch;
+
+					lvi->ownRepaint();
+#endif
+				}
+
+				if (p->name == myAccount->acc_name)
+				{
+					qDebug() << "updating my account info... (1)";
+					// checkbox open
+					bool b = (p->info.contains('X') == 0);
+					slot_checkbox(0, b);
+					// checkbox looking - don't set if closed
+					if (p->info.contains('!') != 0)
+						// "!" found
+						slot_checkbox(1, true);
+					else if (b)
+						// "!" not found && open
+						slot_checkbox(1, false);
+					// checkbox quiet
+					// NOT CORRECT REPORTED BY SERVER!
+					//b = (p->info.contains('Q') != 0);
+					//slot_checkbox(2, b);
+					// -> WORKAROUND
+					if (p->info.contains('Q') != 0)
+						slot_checkbox(2, true);
+
+					// get rank to calc handicap when matching
+					myAccount->set_rank(p->rank);
+				}
+
+				return;
+			}
+		}
+	}
+	else if (!cmdplayers && !myAccount->num_players)
+	{
+		qDebug() << "player skipped because no init table";
+		// skip players until initial table has loaded
+		return;
+	}
+
+
+	QString mark;
+
+	// check for watched players
+	if (watch.contains(";" + p->name + ";"))
+	{
+		mark = "W";
+
+		// sound for entering - no sound while "who" cmd is executing
+		if (!cmdplayers)
+			qgo->playEnterSound();
+		else if (p->name == myAccount->acc_name)
+			// it's me
+			// - only possible if 'who'/'user' cmd is executing
+			// - I am on the watchlist, however
+			// don't count!
+			myAccount->num_watchedplayers--;
+
+		myAccount->num_watchedplayers++;
+	}
+	// check for excluded players
+	else if (exclude.contains(";" + p->name + ";"))
+	{
+		mark = "X";
+	}
+
+	// check for open/looking state
+	if (cmdplayers)
+	{
+		if (p->name == myAccount->acc_name)
+		{
+			qDebug() << "updating my account info...(2)";
+			// checkbox open
+			bool b = (p->info.contains('X') == 0);
+			slot_checkbox(0, b);
+			// checkbox looking
+			b = (p->info.contains('!') != 0);
+			slot_checkbox(1, b);
+			// checkbox quiet
+			// NOT CORRECT REPORTED BY SERVER!
+			//b = (p->info.contains('Q') != 0);
+			//slot_checkbox(2, b);
+			// -> WORKAROUND
+			if (p->info.contains('Q') != 0)
+				slot_checkbox(2, true);
+
+			// get rank to calc handicap when matching
+			myAccount->set_rank(p->rank);
+			mark = "M";
+		}
+	}
+	p->mark = mark;
+	p->sort_rk = rkToKey(p->rank) + p->name.toLower();
+	new PlayerTableItem(ListView_players, *p);
+#if 0
+	lv1->set_nmatchSettings(p);
+#endif
+	// increase number of players
+	myAccount->num_players++;
+	statusUsers->setText(" P: " + QString::number(myAccount->num_players) + " / " + QString::number(myAccount->num_watchedplayers) + " ");
+
+	//if (!cmdplayers)
+	//	ListView_players->sort() ;
 }
 
 void ClientWindow::update_observed_games (int count)

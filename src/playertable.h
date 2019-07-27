@@ -64,7 +64,6 @@ public:
 	int     playing;
 	int     observing;
 	bool 	nmatch;
-	bool    online;
 	// BWN 0-9 19-19 60-60 600-600 25-25 0-0 0-0 0-0
 	bool nmatch_black, nmatch_white, nmatch_nigiri;
 	int 	nmatch_handicapMin, nmatch_handicapMax, 

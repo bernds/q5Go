@@ -67,6 +67,9 @@ public:
 	void server_add_game (Game*);
 	void server_remove_game (Game*);
 
+	void server_add_player (Player *, bool);
+	void server_remove_player (const QString &);
+
 	void update_observed_games (int);
 
 public slots:
@@ -98,7 +101,6 @@ public slots:
 	// telnet:
 	void sendTextToApp (const QString&);
 	// parser:
-	void slot_player (Player*, bool);
   	void slot_message (QString);
 	void slot_svname (GSName&);
 	void slot_accname (QString&);

@@ -178,7 +178,6 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 
 	// create parser and connect signals
 	parser = new Parser(this, qgoif);
-	connect(parser, &Parser::signal_player, this, &ClientWindow::slot_player);
 	connect(parser, &Parser::signal_statsPlayer, this, &ClientWindow::slot_statsPlayer);
 	connect(parser, &Parser::signal_message, this, &ClientWindow::slot_message);
 	connect(parser, &Parser::signal_svname, this, &ClientWindow::slot_svname);
@@ -1172,12 +1171,7 @@ void ClientWindow::slot_refresh(int i)
 		case 11:
 			prepare_tables(GAMES);
 		case 1:
-			// send "GAMES" command
-			sendcommand("games");
-//			prepare_tables(GAMES);
-			// which games are watched right now
-			// don't work correct at IGS !!!!
-//			sendcommand("watching");
+			sendcommand ("games");
 			break;
 
 		default:

@@ -1403,19 +1403,17 @@ InfoType Parser::cmd21(const QString &line)
 		aPlayer->play_str = "-";
 		aPlayer->obs_str = "-";
 		aPlayer->idle = "-";
-		aPlayer->online = true;
 
 		// false -> no "players" cmd preceded
-		emit signal_player(aPlayer, false);
+		client_window->server_add_player (aPlayer, false);
 		return PLAYER;
 	}
 	else if (line.contains("has disconnected"))
 	{
 		// {xxxx has disconnected}
-		aPlayer->name = line.section(' ', 0, 0).mid(1);
-		aPlayer->online = false;
+		QString name = line.section(' ', 0, 0).mid(1);
 
-		emit signal_player(aPlayer, false);
+		client_window->server_remove_player (name);
 		return PLAYER;
 	}
 	else if (line.contains("{Game"))
@@ -1683,9 +1681,6 @@ InfoType Parser::cmd27(const QString &txt)
 		return PLAYER27_END;
 	}
 
-	// indicate player to be online
-	aPlayer->online = true;
-
 	if (gsName == WING)
 	{
 		// shifts take care of too long integers
@@ -1718,7 +1713,7 @@ InfoType Parser::cmd27(const QString &txt)
 			}
 
 			// check if line ok, true -> cmd "players" preceded
-			emit signal_player(aPlayer, true);
+			client_window->server_add_player (aPlayer, true);
 		}
 		else
 			qDebug() << "WING - player27 dropped (1): " << txt;
@@ -1750,7 +1745,7 @@ InfoType Parser::cmd27(const QString &txt)
 			}
 
 			// true -> cmd "players" preceded
-			emit signal_player(aPlayer, true);
+			client_window->server_add_player (aPlayer, true);
 		}
 		else
 			qDebug() << "WING - player27 dropped (2): " << txt;
@@ -1782,7 +1777,7 @@ InfoType Parser::cmd27(const QString &txt)
 			}
 
 			// check if line ok, true -> cmd "players" preceded
-			emit signal_player(aPlayer, true);
+			client_window->server_add_player (aPlayer, true);
 		}
 		else
 			qDebug() << "player27 dropped (1): " << txt;
@@ -1815,7 +1810,7 @@ InfoType Parser::cmd27(const QString &txt)
 			}
 
 			// true -> cmd "players" preceded
-			emit signal_player(aPlayer, true);
+			client_window->server_add_player (aPlayer, true);
 		}
 		else
 			qDebug() << "player27 dropped (2): " << txt;
@@ -2077,11 +2072,8 @@ InfoType Parser::cmd42(const QString &txt)
 			aPlayer->nmatch_settings = "No match conditions";
 	}
 
-	// indicate player to be online
-	aPlayer->online = true;
-
 	// check if line ok, true -> cmd 'players' or 'users' preceded
-	emit signal_player(aPlayer, true);
+	client_window->server_add_player (aPlayer, true);
 
 	return PLAYER42;
 }
