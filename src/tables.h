@@ -116,6 +116,19 @@ private:
 	QWidget *parent;
 };
 
+class Update_Locker
+{
+	QWidget *m_w;
+public:
+	Update_Locker (QWidget *w) : m_w (w)
+	{
+		m_w->setUpdatesEnabled (false);
+	}
+	~Update_Locker ()
+	{
+		m_w->setUpdatesEnabled (true);
+	}
+};
 
 #endif
 

@@ -757,14 +757,14 @@ InfoType Parser::cmd9(const QString &line)
 	else if (line.contains("declines undo"))
 	{
 		// not the cleanest way : we should send this to a message box
-		emit signal_kibitz(0, line.section(' ', 0, 0), line);
+		emit signal_kibitz (0, line.section(' ', 0, 0), line);
 		return KIBITZ;
 	}
 
 	//9 yfh2test left this room
 	//9 yfh2test entered this room
 	else if (line.contains("this room"))
-		emit signal_refresh(10);
+		client_window->server_player_entered (line.section(' ', 0, 0));
 
 	//9 Requesting match in 10 min with frosla as Black.
 	else if (line.contains("Requesting match in"))

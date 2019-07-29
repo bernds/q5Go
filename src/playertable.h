@@ -72,6 +72,7 @@ public:
 		nmatch_stonesMin, nmatch_stonesMax,
 		nmatch_KoryoMin, nmatch_KoryoMax;
 
+	bool up_to_date;
 	bool has_nmatch_settings () { return nmatch_settings != "No match conditions"; }
 };
 
@@ -84,7 +85,21 @@ public:
 	PlayerTableItem(PlayerTable *parent, const Player &);
 	~PlayerTableItem();
 
-	void update_player (const Player &p) { m_p = p; ownRepaint (); emitDataChanged (); }
+	void update_player (const Player &p)
+	{
+		m_p = p;
+		ownRepaint ();
+		emitDataChanged ();
+		m_p.up_to_date = true;
+	}
+	bool is_up_to_date ()
+	{
+		return m_p.up_to_date;
+	}
+	void clear_up_to_date ()
+	{
+		m_p.up_to_date = false;
+	}
 	Player get_player () const { return m_p; }
 	void ownRepaint();
 	void replace() ;

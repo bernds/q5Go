@@ -9,60 +9,57 @@
 #include "gs_globals.h"
 #include <math.h>
 
-// prepare tables (clear, ...)
-void ClientWindow::prepare_tables(InfoType cmd)
+void ClientWindow::prepare_game_list ()
 {
-	switch (cmd)
-	{
-		case WHO: // delete player table
-		{
-			ListView_players->clear ();
-
-			// set number of players to 0
-			myAccount->num_players = 0;
-			myAccount->num_watchedplayers = 0;
-			// use this for fast filling
-			playerListEmpty = true;
-			statusUsers->setText(" P: 0 / 0 ");
-			break;
-		}
-
-		case GAMES: // delete games table
-		{
-			ListView_games->clear ();
-			QTreeWidgetItemIterator lv(ListView_games);
-			for (QTreeWidgetItem *lvi; (lvi = *lv);)
-			{
-				lv++;
-				delete lvi;
-			}
-
-			// set number of games to 0
-			myAccount->num_games = 0;
-			statusGames->setText(" G: 0 / 0 ");
-			break;
-		}
-
-		case CHANNELS:
-		{
-			// delete channel info
-			channellist.clear();
-			statusChannel->setText("");
-/*			QListViewItemIterator lv(ListView_ch);
-			for (QListViewItem *lvi; (lvi = *lv);)
-			{
-				lv++;
-				delete lvi;
-			}*/
-			statusChannel->setToolTip (tr("Current channels and users"));
-			break;
-		}
-
-		default: // unknown command???
-			qWarning("unknown Command in 'prepare_tables()'");
-			break;
-
+	QTreeWidgetItemIterator lvii (ListView_games);
+	for (GamesTableItem *lvi; (lvi = static_cast<GamesTableItem*>(*lvii));) {
+		lvii++;
+		lvi->clear_up_to_date ();
 	}
+}
+
+void ClientWindow::prepare_player_list ()
+{
+	QTreeWidgetItemIterator lvii (ListView_players);
+	for (PlayerTableItem *lvi; (lvi = static_cast<PlayerTableItem*>(*lvii));) {
+		lvii++;
+		lvi->clear_up_to_date ();
+	}
+}
+
+void ClientWindow::finish_game_list ()
+{
+	Update_Locker l (ListView_games);
+	QTreeWidgetItemIterator lvii (ListView_games);
+	for (GamesTableItem *lvi; (lvi = static_cast<GamesTableItem*>(*lvii));) {
+		lvii++;
+		if (!lvi->is_up_to_date ()) {
+			myAccount->num_games--;
+			delete lvi;
+		}
+	}
+	update_game_stats ();
+}
+
+void ClientWindow::finish_player_list ()
+{
+	Update_Locker l (ListView_players);
+	QTreeWidgetItemIterator lvii (ListView_players);
+	for (PlayerTableItem *lvi; (lvi = static_cast<PlayerTableItem*>(*lvii));) {
+		lvii++;
+		if (!lvi->is_up_to_date ()) {
+			myAccount->num_players--;
+			delete lvi;
+		}
+	}
+	update_player_stats ();
+}
+
+void ClientWindow::prepare_channels ()
+{
+	channellist.clear ();
+	statusChannel->setText ("");
+	statusChannel->setToolTip (tr ("Current channels and users"));
 }
 
 // return the rank of a given name
@@ -106,26 +103,24 @@ void ClientWindow::server_add_game (Game* g)
 	bool found = false;
 	GamesTableItem *lvi_mem = nullptr;
 
-	// check if game already exists
-	if (!playerListEmpty)
-	{
-		QTreeWidgetItemIterator lvii = lv;
-		for (GamesTableItem *lvi; (lvi = static_cast<GamesTableItem*>(*lvii)) && !found;)
-		{
-			lvii++;
-			// compare game id
-			if (lvi->text(0) == g->nr)
-			{
-				found = true;
-				lvi_mem = lvi;
-			}
-		}
-	}
-	else if (g->H.isEmpty() && !myAccount->num_games)
+	if (g->H.isEmpty() && !myAccount->num_games)
 	{
 		// skip games until initial table has loaded
 		qDebug() << "game skipped because no init table";
 		return;
+	}
+
+	// check if game already exists
+	QTreeWidgetItemIterator lvii = lv;
+	for (GamesTableItem *lvi; (lvi = static_cast<GamesTableItem*>(*lvii)) && !found;)
+	{
+		lvii++;
+		// compare game id
+		if (lvi->text(0) == g->nr)
+		{
+			found = true;
+			lvi_mem = lvi;
+		}
 	}
 
 	QString excludeMark = "";
@@ -206,7 +201,7 @@ void ClientWindow::server_add_game (Game* g)
 
 		// increase number of games
 		myAccount->num_games++;
-		statusGames->setText(" G: " + QString::number(myAccount->num_games) + " / " + QString::number(myAccount->num_observedgames) + " ");
+		update_game_stats ();
 	}
 }
 
@@ -257,7 +252,7 @@ void ClientWindow::server_remove_game (Game* g)
 	{
 		// decrease number of games
 		myAccount->num_games--;
-		statusGames->setText(" G: " + QString::number(myAccount->num_games) + " / " + QString::number(myAccount->num_observedgames) + " ");
+		update_game_stats ();
 
 		QTreeWidgetItemIterator lvp(ListView_players);
 		PlayerTableItem *lvpi;
@@ -276,6 +271,11 @@ void ClientWindow::server_remove_game (Game* g)
 			lvp++;
 		}
 	}
+}
+
+void ClientWindow::update_player_stats ()
+{
+	statusUsers->setText (" P: " + QString::number (myAccount->num_players) + " / " + QString::number (myAccount->num_watchedplayers) + " ");
 }
 
 // take a new player from parser
@@ -311,7 +311,7 @@ void ClientWindow::server_remove_player (const QString &name)
 			found = true;;
 
 			myAccount->num_players--;
-			statusUsers->setText(" P: " + QString::number(myAccount->num_players) + " / " + QString::number(myAccount->num_watchedplayers) + " ");
+			update_player_stats ();
 		}
 	}
 
@@ -331,8 +331,14 @@ void ClientWindow::server_remove_player (const QString &name)
 void ClientWindow::server_add_player (Player *p, bool cmdplayers)
 {
 	QTreeWidgetItemIterator lv(ListView_players);
-	// check if it's an empty list, i.e. all items deleted before
-	if (cmdplayers && !playerListEmpty)
+
+	if (!cmdplayers && !myAccount->num_players) {
+		qDebug() << "player skipped because no init table";
+		// skip players until initial table has loaded
+		return;
+	}
+
+	if (cmdplayers)
 	{
 		for (PlayerTableItem *lvi; (lvi = static_cast<PlayerTableItem*>(*lv));)
 		{
@@ -385,13 +391,6 @@ void ClientWindow::server_add_player (Player *p, bool cmdplayers)
 			}
 		}
 	}
-	else if (!cmdplayers && !myAccount->num_players)
-	{
-		qDebug() << "player skipped because no init table";
-		// skip players until initial table has loaded
-		return;
-	}
-
 
 	QString mark;
 
@@ -451,16 +450,21 @@ void ClientWindow::server_add_player (Player *p, bool cmdplayers)
 #endif
 	// increase number of players
 	myAccount->num_players++;
-	statusUsers->setText(" P: " + QString::number(myAccount->num_players) + " / " + QString::number(myAccount->num_watchedplayers) + " ");
+	update_player_stats ();
 
 	//if (!cmdplayers)
 	//	ListView_players->sort() ;
 }
 
+void ClientWindow::update_game_stats ()
+{
+	statusGames->setText(" G: " + QString::number(myAccount->num_games) + " / " + QString::number(myAccount->num_observedgames) + " ");
+}
+
 void ClientWindow::update_observed_games (int count)
 {
 	myAccount->num_observedgames = count;
-	statusGames->setText(" G: " + QString::number(myAccount->num_games) + " / " + QString::number(myAccount->num_observedgames) + " ");
+	update_game_stats ();
 }
 
 // get channelinfo: ch nr + people

@@ -58,19 +58,6 @@ void PlayerTable::showOpen(bool checked)
 /*
  *   PlayerTableItem
  */
-#if 0
-PlayerTableItem::PlayerTableItem(PlayerTable *parent, const char* name)
-	: QTreeWidgetItem(parent, name)
-{
-;
-}
-
-PlayerTableItem::PlayerTableItem(PlayerTableItem *parent, const char* name)
-	: QTreeWidgetItem(parent, name)
-{
-;
-}
-#endif
 
 PlayerTableItem::PlayerTableItem(PlayerTable *parent, const Player &p)
 	: QTreeWidgetItem(parent), m_p (p)
@@ -85,6 +72,7 @@ PlayerTableItem::PlayerTableItem(PlayerTable *parent, const Player &p)
 
 	ownRepaint ();
 	seeking = false;
+	m_p.up_to_date = true;
 }
 
 PlayerTableItem::~PlayerTableItem()

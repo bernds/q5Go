@@ -60,7 +60,6 @@ signals:
 	void signal_clearSeekCondition();
 	void signal_cancelSeek();
 	void signal_SeekList(const QString&, const QString&);
-	void signal_refresh(int);
 	void signal_dispute(const QString&, const QString&);
 	void signal_set_observe(const QString&);
 	//void signal_undoRequest(const QString&);

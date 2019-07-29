@@ -110,7 +110,6 @@ class ClientWindow : public QMainWindow, public Ui::ClientWindowGui
 
 	void set_tn_ready ();
 	int sendTextFromApp (const QString&, bool localecho=true);
-	void prepare_tables (InfoType);
 	void set_sessionparameter (QString, bool);
 	void send_nmatch_range_parameters ();
 
@@ -127,6 +126,19 @@ class ClientWindow : public QMainWindow, public Ui::ClientWindowGui
 	void saveSettings ();
 
 	QString menu_player_name ();
+
+	void prepare_channels ();
+	void prepare_game_list ();
+	void prepare_player_list ();
+	void finish_game_list ();
+	void finish_player_list ();
+
+	void update_player_stats ();
+	void update_game_stats ();
+
+	void refresh_players ();
+	void refresh_games ();
+
 public:
 	ClientWindow (QMainWindow* parent);
 	~ClientWindow ();
@@ -149,13 +161,13 @@ public:
 	void server_remove_game (Game*);
 
 	void server_add_player (Player *, bool);
+	void server_player_entered (const QString &);
 	void server_remove_player (const QString &);
 
 	void update_observed_games (int);
 	void handle_matchrequest (const QString&, bool, bool);
 
 public slots:
-	void slot_refresh (int);
 	void slot_pbRelTabs ();
 	void slot_pbRelOneTab (QWidget*);
 	void slot_statsPlayer (Player*);

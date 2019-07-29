@@ -31,6 +31,8 @@ public:
 	QString sort_rk_w, sort_rk_b;
 	bool running;
 	bool oneColorGo;
+
+	bool up_to_date;
 };
 
 class GamesTable : public QTreeWidget
@@ -70,7 +72,22 @@ public:
 	GamesTableItem(GamesTable *parent, const Game &g);
 	~GamesTableItem();
 	Game get_game () { return m_game; }
-	void update_game (const Game &g) { m_game = g; ownRepaint (); emitDataChanged (); }
+	void update_game (const Game &g)
+	{
+		m_game = g;
+		ownRepaint ();
+		emitDataChanged ();
+		m_game.up_to_date = true;
+	}
+	bool is_up_to_date ()
+	{
+		return m_game.up_to_date;
+	}
+	void clear_up_to_date ()
+	{
+		m_game.up_to_date = false;
+	}
+
 	void ownRepaint();
 	virtual bool operator< (const QTreeWidgetItem &other) const override;
 	virtual QVariant data (int column, int role) const override;

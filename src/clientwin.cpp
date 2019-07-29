@@ -62,9 +62,6 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	tn_wait_for_tn_ready = false;
 	extUserInfo = false;
 	youhavemsg = false;
-	playerListEmpty = true;
-	gamesListSteadyUpdate = false;
-	playerListSteadyUpdate = false;
 	autoAwayMessage = false;
 	watch = ";" + setting->readEntry("WATCH") + ";";
 	exclude = ";" + setting->readEntry("EXCLUDE") + ";";
@@ -195,7 +192,6 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	connect(parser, &Parser::signal_clearSeekCondition, this, &ClientWindow::slot_clearSeekCondition);
 	connect(parser, &Parser::signal_cancelSeek, this, &ClientWindow::slot_cancelSeek);
 	connect(parser, &Parser::signal_SeekList, this, &ClientWindow::slot_SeekList);
-	connect(parser, &Parser::signal_refresh, this, &ClientWindow::slot_refresh);
 
 	connect(parser, &Parser::signal_set_observe, qgoif, &qGoIF::set_observe);
 	connect(parser, &Parser::signal_move, qgoif, &qGoIF::slot_move);
@@ -471,7 +467,7 @@ void ClientWindow::slot_connclosed()
 	slot_cancelSeek();
 
 	// clear channel
-	prepare_tables(CHANNELS);
+	prepare_channels ();
 
 	// remove boards
 	qgoif->set_initIF();
@@ -573,6 +569,7 @@ void ClientWindow::sendTextToApp (const QString &txt)
 	// GAME7_END emulation:
 	if (player7active && it_ != GAME7)
 	{
+		finish_game_list ();
 		player7active = false;
 		ListView_games->setSortingEnabled (true);
 		if (store_games_sort_col != -1)
@@ -656,8 +653,6 @@ void ClientWindow::sendTextToApp (const QString &txt)
 			sendcommand ("seek config_list ");
 			sendcommand ("room");
 
-			slot_refresh (11);
-			slot_refresh (10);
 			break;
 		}
 
@@ -666,20 +661,17 @@ void ClientWindow::sendTextToApp (const QString &txt)
 			// set quiet false; refresh players, games
 			//if (myAccount->get_status() == Status::guest)
 			set_sessionparameter ("quiet", false);
-			slot_refresh (11);
-			slot_refresh (10);
 			break;
 		}
+
+		refresh_players ();
+		refresh_games ();
 
 		// set menu
 		Connect->setEnabled (false);
 		Disconnect->setEnabled (true);
 		toolConnect->setChecked (true);
 		toolConnect->setToolTip (tr ("Disconnect from") + " " + cb_connect->currentText ());
-
-		// quiet mode? if yes do clear table before refresh
-		gamesListSteadyUpdate = ! setQuietMode->isChecked ();
-		playerListSteadyUpdate = ! setQuietMode->isChecked ();
 
 		// enable extended user info features
 		setColumnsForExtUserInfo ();
@@ -705,35 +697,26 @@ void ClientWindow::sendTextToApp (const QString &txt)
 		// end of 'who'/'user' cmd
 	case PLAYER42_END:
 	case PLAYER27_END:
+		finish_player_list ();
 		ListView_players->setSortingEnabled (true);
 		if (store_sort_col != -1)
 			ListView_players->sortItems (store_sort_col, Qt::AscendingOrder);
 
 		if (myAccount->get_gsname () == IGS)
 			ListView_players->showOpen (whoOpenCheck->isChecked ());
-		playerListEmpty = false;
 		break;
 
-		// skip table if initial table is to be loaded
 	case PLAYER27_START:
 	case PLAYER42_START:
 		store_sort_col = ListView_players->sortColumn ();
 		ListView_players->setSortingEnabled (false);
-
-		if (playerListEmpty)
-			prepare_tables (WHO);
 		break;
 
 	case GAME7_START:
 		// "emulate" GAME7_END
 		player7active = true;
-		// disable sorting for fast operation; store sort column index
-		// unfortunately there is not GAME7_END cmd, thus, it's emulated
-		if (playerListEmpty) {
-			// only if playerListEmpty, else PLAYERXX_END would not arise
-			store_games_sort_col = ListView_games->sortColumn ();
-			ListView_games->setSortingEnabled (false);
-		}
+		store_games_sort_col = ListView_games->sortColumn ();
+		ListView_games->setSortingEnabled (false);
 		break;
 
 	case ACCOUNT:
@@ -915,14 +898,13 @@ void ClientWindow::slot_cmdactivated(const QString &cmd)
 		}
 		if (cmdLine.mid(0,3).contains("who"))
 		{
-			// clear table if manually entered
-			prepare_tables(WHO);
-			playerListSteadyUpdate = false;
+			// Manually entered who command, prepare table
+			prepare_player_list ();
 		}
 		if (cmdLine.mid(0,5).contains("; \\-1") && myAccount->get_gsname() == IGS)
 		{
 			// exit all channels
-			prepare_tables(CHANNELS);
+			prepare_channels ();
 		}
 	}
 }
@@ -1032,7 +1014,6 @@ void ClientWindow::slot_cblooking(bool)
 void ClientWindow::slot_cbopen(bool)
 {
 	bool val = setOpenMode->isChecked();
-//	setOpenMode->setChecked(val);
 	set_sessionparameter("open", val);
 	if (!val)
 		// if not open then set close
@@ -1043,16 +1024,7 @@ void ClientWindow::slot_cbopen(bool)
 void ClientWindow::slot_cbquiet(bool)
 {
 	bool val = setQuietMode->isChecked();
-	//setQuietMode->setChecked(val);
-  //qDebug("bouton %b",toolQuiet->isChecked());
 	set_sessionparameter("quiet", val);
-
-	if (val)
-	{
-		// if 'quiet' button is once set to true the list is not reliable any longer
-		gamesListSteadyUpdate = false;
-		playerListSteadyUpdate = false;
-	}
 }
 
 
@@ -1126,53 +1098,47 @@ void ClientWindow::update_font ()
 	setColumnsForExtUserInfo();
 }
 
-// refresh button clicked
-void ClientWindow::slot_refresh(int i)
+void ClientWindow::server_player_entered (const QString &)
 {
-	QString wparam = "" ;
-	// refresh depends on selected page
-	switch (i)
+	/* We have no information beyond the name.  Refreshing the entire player list
+	   is the historical behaviour the program has always had.  @@@ Rethink.  */
+	refresh_players ();
+}
+
+void ClientWindow::refresh_players ()
+{
+	prepare_player_list ();
+
+	QString wparam;
+
+	// send "WHO" command
+	//set the params of "who command"
+	if (whoBox1->currentIndex() > 1 || whoBox2->currentIndex() > 1)
 	{
-		case 10:
-			prepare_tables (WHO);
-			FALLTHRU
-		case 0:
-			// send "WHO" command
-      			//set the params of "who command"
-			if (whoBox1->currentIndex() > 1 || whoBox2->currentIndex() > 1)
-        		{
-				wparam.append(whoBox1->currentIndex() == 1 ? "9p" : whoBox1->currentText());
-				if (whoBox1->currentIndex() && whoBox2->currentIndex())
-					wparam.append("-");
+		wparam.append (whoBox1->currentIndex() == 1 ? "9p" : whoBox1->currentText ());
+		if (whoBox1->currentIndex() && whoBox2->currentIndex())
+			wparam.append("-");
 
-				wparam.append(whoBox2->currentIndex() == 1 ? "9p" : whoBox2->currentText());
-         		}
-			else if ((whoBox1->currentIndex())  || (whoBox2->currentIndex()))
-        			wparam.append("1p-9p");
-			else
-				wparam.append(myAccount->get_gsname() == IGS ? "9p-BC" : " ");
-
-			if (whoOpenCheck->isChecked())
-				wparam.append(myAccount->get_gsname() == WING ? "O" : "o");
-
-			if (myAccount->get_gsname() == IGS)
-				sendcommand(wparam.prepend("userlist "));
-			else
-				sendcommand(wparam.prepend("who "));
-
-      			prepare_tables(WHO);
-			break;
-
-		case 11:
-			prepare_tables (GAMES);
-			FALLTHRU
-		case 1:
-			sendcommand ("games");
-			break;
-
-		default:
-			break;
+		wparam.append(whoBox2->currentIndex() == 1 ? "9p" : whoBox2->currentText ());
 	}
+	else if (whoBox1->currentIndex()  || whoBox2->currentIndex())
+		wparam.append ("1p-9p");
+	else
+		wparam.append (myAccount->get_gsname() == IGS ? "9p-BC" : " ");
+
+	if (whoOpenCheck->isChecked())
+		wparam.append (myAccount->get_gsname() == WING ? "O" : "o");
+
+	if (myAccount->get_gsname() == IGS)
+		sendcommand (wparam.prepend ("userlist "));
+	else
+		sendcommand (wparam.prepend ("who "));
+}
+
+void ClientWindow::refresh_games ()
+{
+	prepare_game_list ();
+	sendcommand ("games");
 }
 
 void ClientWindow::slot_whoopen (bool checked)
@@ -1184,27 +1150,13 @@ void ClientWindow::slot_whoopen (bool checked)
 // refresh games
 void ClientWindow::slot_pbrefreshgames(bool)
 {
-	if (gamesListSteadyUpdate)
-		slot_refresh(1);
-	else
-	{
-		// clear table in case of quiet mode
-		slot_refresh(11);
-		gamesListSteadyUpdate = !setQuietMode->isChecked(); //!CheckBox_quiet->isChecked();
-	}
+	refresh_games ();
 }
 
 // refresh players
 void ClientWindow::slot_pbrefreshplayers(bool)
 {
-	if (playerListSteadyUpdate)
-		slot_refresh(0);
-	else
-	{
-		// clear table in case of quiet mode
-		slot_refresh(10);
-		playerListSteadyUpdate = !setQuietMode->isChecked(); //!CheckBox_quiet->isChecked();
-	}
+	refresh_players ();
 }
 
 // doubleclick actions...
@@ -1957,13 +1909,12 @@ void ClientWindow::slot_enterRoom(const QString& room)
 	else
 		statusBar()->showMessage(tr("Room ")+ room);
 
-	//refresh the players table
-	slot_refresh(0);
+	refresh_players ();
 }
 
-void ClientWindow::slot_leaveRoom()
+void ClientWindow::slot_leaveRoom ()
 {
-	slot_enterRoom("0");
+	slot_enterRoom ("0");
 }
 
 

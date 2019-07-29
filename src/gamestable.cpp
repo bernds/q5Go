@@ -50,6 +50,7 @@ GamesTableItem::GamesTableItem (GamesTable *parent, const Game &g)
 	: QTreeWidgetItem(parent), m_game (g)
 {
 	ownRepaint ();
+	m_game.up_to_date = true;
 }
 
 GamesTableItem::~GamesTableItem()
