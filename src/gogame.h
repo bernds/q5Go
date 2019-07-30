@@ -866,41 +866,47 @@ extern std::string record2sgf (const game_record &);
 class game_record : public game_info
 {
 	friend go_game_ptr sgf2record (const sgf &s, QTextCodec *codec);
-	game_state m_root;
+	game_state *m_root {};
 	bool m_modified = false;
 	sgf_errors m_errors;
+
+	/* For Go variant support, this is the mask of intersections that are not actually
+	   on the board.  */
 	std::shared_ptr<const bit_array> m_mask {};
 
 public:
 	game_record (int size, const game_info &info)
-		: game_info (info), m_root (size)
+		: game_info (info)
 	{
+		m_root = new game_state (size);
 	}
 	game_record (const go_board &b, stone_color to_move, const game_info &info)
-		: game_info (info), m_root (b, to_move)
+		: game_info (info)
 	{
+		m_root = new game_state (b, to_move);
 	}
 	game_record (const go_board &b, stone_color to_move, const game_info &info, const std::shared_ptr<const bit_array> &m)
-		: game_info (info), m_root (b, to_move), m_mask (m)
+		: game_info (info), m_mask (m)
 	{
+		m_root = new game_state (b, to_move);
 	}
-	game_record (const game_record &other) : game_info (other), m_root (other.m_root, nullptr),
+	game_record (const game_record &other) : game_info (other),
 		m_modified (other.m_modified), m_errors (other.m_errors), m_mask (other.m_mask)
 	{
+		m_root = new game_state (*other.m_root, nullptr);
 	}
-
-	game_state *get_root () { return &m_root; }
+	game_state *get_root () { return m_root; }
 	bool replace_root (const go_board &b, stone_color to_move)
 	{
-		if (m_root.n_children () > 0)
+		if (m_root->n_children () > 0)
 			return false;
-		m_root.replace (b, to_move);
+		m_root->replace (b, to_move);
 		return true;
 	}
 
 	int boardsize () const
 	{
-		const go_board &b = m_root.get_board ();
+		const go_board &b = m_root->get_board ();
 		return std::max (b.size_x (), b.size_y ());
 	}
 	std::shared_ptr<const bit_array> get_board_mask ()

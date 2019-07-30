@@ -549,19 +549,19 @@ std::shared_ptr<game_record> sgf2record (const sgf &s, QTextCodec *codec)
 	stone_color to_play = pl && *pl == "W" ? white : black;
 	std::shared_ptr<game_record> game = std::make_shared<game_record> (initpos, to_play, info, mask_array);
 
-	errs.charset_error |= !add_comment (&game->m_root, s.nodes, codec);
-	errs.charset_error |= !add_figure (&game->m_root, s.nodes, codec);
-	errs.malformed_eval |= !add_eval (&game->m_root, s.nodes);
-	add_visible (&game->m_root, s.nodes);
+	errs.charset_error |= !add_comment (game->m_root, s.nodes, codec);
+	errs.charset_error |= !add_figure (game->m_root, s.nodes, codec);
+	errs.malformed_eval |= !add_eval (game->m_root, s.nodes);
+	add_visible (game->m_root, s.nodes);
 
 	sgf::node::proplist unrecognized;
 	for (auto &p: s.nodes->props) {
 		if (!p.handled)
 			unrecognized.push_back (p);
 	}
-	game->m_root.set_unrecognized (unrecognized);
+	game->m_root->set_unrecognized (unrecognized);
 
-	add_to_game_state (&game->m_root, s.nodes->m_children, false, codec, errs);
+	add_to_game_state (game->m_root, s.nodes->m_children, false, codec, errs);
 	game->set_errors (errs);
 	if (errs.any_set ())
 		game->set_modified ();
@@ -569,10 +569,10 @@ std::shared_ptr<game_record> sgf2record (const sgf &s, QTextCodec *codec)
 	/* Fix up situations where we have a handicap game without a PL property.
 	   If it really looks like white to move, fix up the root node.  */
 	if (pl == nullptr && hc > 1
-	    && game->m_root.n_children () == 1
-	    && game->m_root.next_move ()->was_move_p ()
-	    && game->m_root.next_move ()->get_move_color () == white)
-		game->m_root.set_to_move (white);
+	    && game->m_root->n_children () == 1
+	    && game->m_root->next_move ()->was_move_p ()
+	    && game->m_root->next_move ()->get_move_color () == white)
+		game->m_root->set_to_move (white);
 
 	return game;
 }
@@ -870,7 +870,7 @@ void game_state::append_to_sgf (std::string &s) const
 
 std::string game_record::to_sgf () const
 {
-	const go_board &rootb = m_root.get_board ();
+	const go_board &rootb = m_root->get_board ();
 	std::string gm = "1";
 	int torus = (rootb.torus_h () ? 1 : 0) | (rootb.torus_v () ? 2 : 0);
 	bool masked = m_mask != nullptr;
@@ -892,7 +892,7 @@ std::string game_record::to_sgf () const
 	if (torus)
 		encode_string (s, "TO", std::to_string (torus));
 	if (masked)
-		write_array (m_mask.get (), "MASK", s, &m_root);
+		write_array (m_mask.get (), "MASK", s, m_root);
 
 	encode_string (s, "GN", m_title);
 	encode_string (s, "PW", m_name_w);
@@ -911,13 +911,13 @@ std::string game_record::to_sgf () const
 	if (m_handicap > 0)
 		encode_string (s, "HA", std::to_string (m_handicap));
 	encode_string (s, "RE", m_result);
-	if (m_root.to_move () == white)
+	if (m_root->to_move () == white)
 		s += "PL[W]";
 
 	/* @@@ Could think about writing a ST property, but I dislike the idea of
 	   a file telling me how I have to view it.  */
 
-	m_root.append_to_sgf (s);
+	m_root->append_to_sgf (s);
 	s += ")\n";
 	return s;
 }
