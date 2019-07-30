@@ -69,6 +69,8 @@ public:
 	{
 		if (sz < m_n_bits)
 			throw std::logic_error ("grow called with smaller size");
+		if (sz == m_n_bits)
+			return;
 		int new_nelts = (sz + 63) / 64;
 		uint64_t *new_bits = new uint64_t[new_nelts]();
 		memcpy (new_bits, m_bits, m_n_elts * sizeof (uint64_t));
