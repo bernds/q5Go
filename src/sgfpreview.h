@@ -12,7 +12,6 @@ class SGFPreview : public QDialog, public Ui::SGFPreview
 	Q_OBJECT
 
 	QFileDialog *fileDialog;
-	game_state m_empty_board;
 	go_game_ptr m_empty_game;
 	go_game_ptr m_game;
 

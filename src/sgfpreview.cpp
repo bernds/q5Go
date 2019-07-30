@@ -7,7 +7,7 @@
 #include "sgfpreview.h"
 
 SGFPreview::SGFPreview (QWidget *parent, const QString &dir)
-	: QDialog (parent), m_empty_board (go_board (19), black),
+	: QDialog (parent),
 	  m_empty_game (std::make_shared<game_record> (go_board (19), black, game_info ("White", "Black"))),
 	  m_game (m_empty_game)
 {
