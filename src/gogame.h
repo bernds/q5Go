@@ -98,10 +98,30 @@ public:
 	}
 };
 
+class game_state;
+
+/* A memory allocator for game_state structures.  One of these is associated with every
+   game_record, to make sure all game_states are deleted when the game is destroyed.  */
+class game_state_manager
+{
+	const unsigned m_n_per_chunk = 128;
+	std::vector<char *> m_game_states;
+	bit_array m_free = bit_array (m_n_per_chunk, false);
+
+public:
+	~game_state_manager ();
+
+	template<typename ... ARGS> game_state *create_game_state (ARGS &&... args);
+	void release_game_state (game_state *st);
+	void release_state_children (game_state *st);
+};
+
 class game_state
 {
-
 private:
+	game_state_manager *m_manager;
+	int m_id;
+
 	go_board m_board;
 	/* The move number within this game tree.  Unaffected by SGF MN properties.  */
 	int m_move_number;
@@ -146,45 +166,51 @@ private:
 	/* Support for SGF VW.  */
 	bit_array *m_visible {};
 
-	game_state (const go_board &b, int move, int sgf_move, game_state *parent, stone_color to_move)
-		: m_board (b), m_move_number (move), m_sgf_movenum (sgf_move), m_parent (parent), m_to_move (to_move)
+	/* Memory management for game_state is handled by game_state_manager.  These should never be
+	   directly deleted.  */
+	void operator delete (void *) { std::terminate (); }
+
+	friend class game_state_manager;
+	game_state (game_state_manager *gm, int id, const go_board &b, int move, int sgf_move, game_state *parent, stone_color to_move)
+		: m_manager (gm), m_id (id), m_board (b), m_move_number (move), m_sgf_movenum (sgf_move), m_parent (parent), m_to_move (to_move)
 	{
 	}
 
-	game_state (const go_board &b, int move, int sgf_move, game_state *parent, stone_color to_move, int x, int y, stone_color move_col)
-		: m_board (b), m_move_number (move), m_sgf_movenum (sgf_move), m_parent (parent), m_to_move (to_move), m_move_x (x), m_move_y (y), m_move_color (move_col)
+	game_state (game_state_manager *gm, int id, const go_board &b, int move, int sgf_move, game_state *parent, stone_color to_move, int x, int y, stone_color move_col)
+		: m_manager (gm), m_id (id), m_board (b), m_move_number (move), m_sgf_movenum (sgf_move), m_parent (parent), m_to_move (to_move), m_move_x (x), m_move_y (y), m_move_color (move_col)
 	{
 	}
 
 	/* This isn't used except for delegation when doing a deep copy.  Uncertain how
 	   much we should copy here vs there.  */
-	game_state (const go_board &b, int move, int sgf_move, game_state *parent,
+	game_state (game_state_manager *gm, int id, const go_board &b, int move, int sgf_move, game_state *parent,
 		    stone_color to_move, int x, int y, stone_color move_col,
 		    const sgf::node::proplist &unrecognized, const visual_tree &vt, bool vtok,
 		    bit_array *visible)
-		: m_board (b), m_move_number (move), m_sgf_movenum (sgf_move), m_parent (parent),
-		m_to_move (to_move), m_move_x (x), m_move_y (y), m_move_color (move_col),
+		: m_manager (gm), m_id (id), m_board (b), m_move_number (move), m_sgf_movenum (sgf_move),
+		m_parent (parent), m_to_move (to_move), m_move_x (x), m_move_y (y), m_move_color (move_col),
 		m_unrecognized_props (unrecognized), m_visualized (vt), m_visual_ok (vtok),
 		m_visible (visible == nullptr ? nullptr : new bit_array (*visible))
 	{
 	}
 
 public:
-	game_state (int size) : m_board (size), m_move_number (0), m_sgf_movenum (0), m_parent (0), m_to_move (black)
+	game_state (game_state_manager *gm, int id, int size)
+		: m_manager (gm), m_id (id), m_board (size), m_move_number (0), m_sgf_movenum (0), m_parent (0), m_to_move (black)
 	{
 	}
-	game_state (const go_board &b, stone_color to_move)
-		: m_board (b), m_move_number (0), m_sgf_movenum (0), m_parent (nullptr), m_to_move (to_move)
+	game_state (game_state_manager *gm, int id, const go_board &b, stone_color to_move)
+		: m_manager (gm), m_id (id), m_board (b), m_move_number (0), m_sgf_movenum (0), m_parent (nullptr), m_to_move (to_move)
 	{
 	}
 	/* Deep copy.  */
-	game_state (const game_state &other, game_state *parent)
-		: game_state (other.m_board, other.m_move_number, other.m_sgf_movenum, parent, other.m_to_move,
+	game_state (game_state_manager *gm, int id, const game_state &other, game_state *parent)
+		: game_state (gm, id, other.m_board, other.m_move_number, other.m_sgf_movenum, parent, other.m_to_move,
 			      other.m_move_x, other.m_move_y, other.m_move_color, other.m_unrecognized_props,
 			      other.m_visualized, other.m_visual_ok, other.m_visible)
 	{
 		for (auto c: other.m_children) {
-			game_state *new_c = new game_state (*c, this);
+			game_state *new_c = m_manager->create_game_state (*c, this);
 			m_children.push_back (new_c);
 		}
 		m_comment = other.m_comment;
@@ -197,6 +223,9 @@ public:
 		m_timeleft_b = other.m_timeleft_b;
 		m_stonesleft_w = other.m_stonesleft_w;
 		m_stonesleft_b = other.m_stonesleft_b;
+	}
+	void operator delete (void *, void *) throw ()
+	{
 	}
 	/* Returns the former position of the state in its parent's child vector.  */
 	int disconnect ()
@@ -227,13 +256,11 @@ public:
 	}
 	~game_state ()
 	{
-		while (m_children.size () > 0) {
-			game_state *c = m_children.back ();
-			delete c;
-		}
 		delete m_visible;
-
-		disconnect ();
+	}
+	game_state *duplicate (game_state *parent)
+	{
+		return m_manager->create_game_state (*this, parent);
 	}
 	void set_unrecognized (const sgf::node::proplist &list)
 	{
@@ -385,16 +412,16 @@ public:
 	{
 		m_visual_ok = false;
 		int code = scored ? -3 : -2;
-		game_state *tmp = new game_state (new_board, m_move_number + 1, m_sgf_movenum + 1,
-						  this, to_move, code, code, none);
+		game_state *tmp = m_manager->create_game_state (new_board, m_move_number + 1, m_sgf_movenum + 1,
+								this, to_move, code, code, none);
 		return insert_child (tmp, am);
 	}
 	game_state *replace_child_edit (game_state *child, const go_board &new_board, stone_color to_move)
 	{
 		for (size_t i = 0; i < m_children.size (); i++)
 			if (m_children[i] == child) {
-				game_state *tmp = new game_state (new_board, m_move_number + 1, m_sgf_movenum + 1,
-								  this, to_move, -2, -2, none);
+				game_state *tmp = m_manager->create_game_state (new_board, m_move_number + 1, m_sgf_movenum + 1,
+										this, to_move, -2, -2, none);
 				m_children[i] = tmp;
 				child->m_parent = tmp;
 				tmp->insert_child (child, add_mode::set_active);
@@ -416,8 +443,8 @@ public:
 	{
 		stone_color next_to_move = to_move == black ? white : black;
 		m_visual_ok = false;
-		game_state *tmp = new game_state (new_board, m_move_number + 1, m_sgf_movenum + 1,
-						  this, next_to_move, x, y, to_move);
+		game_state *tmp = m_manager->create_game_state (new_board, m_move_number + 1, m_sgf_movenum + 1,
+								this, next_to_move, x, y, to_move);
 		return insert_child (tmp, am);
 	}
 
@@ -451,8 +478,8 @@ public:
 	game_state *add_child_pass_nochecks (const go_board &new_board, add_mode am)
 	{
 		m_visual_ok = false;
-		game_state *tmp = new game_state (new_board, m_move_number + 1, m_sgf_movenum + 1,
-						  this, m_to_move == black ? white : black);
+		game_state *tmp = m_manager->create_game_state (new_board, m_move_number + 1, m_sgf_movenum + 1,
+								this, m_to_move == black ? white : black);
 		tmp->m_move_color = m_to_move;
 		return insert_child (tmp, am);
 	}
@@ -756,6 +783,28 @@ public:
 	void walk_tree (const std::function<bool (game_state *)> &);
 };
 
+template<typename ... ARGS>
+game_state *game_state_manager::create_game_state (ARGS &&... args)
+{
+	size_t n_elts = m_game_states.size () * m_n_per_chunk;
+	unsigned free_elt = m_free.ffz ();
+	char *arena;
+	// printf ("free elt: %u (max %u), within %u\n", free_elt, (unsigned)n_elts, free_elt % m_n_per_chunk);
+	if (free_elt == n_elts) {
+		arena = new char[sizeof (game_state) * m_n_per_chunk];
+		m_game_states.push_back (arena);
+		m_free.grow (n_elts + m_n_per_chunk);
+		// printf ("new arena %p\n", arena);
+	} else {
+		arena = m_game_states[free_elt / m_n_per_chunk];
+		// printf ("old arena %p\n", arena);
+	}
+	m_free.set_bit (free_elt);
+	char *ptr = arena + (free_elt % m_n_per_chunk) * sizeof (game_state);
+	game_state *gs = new (ptr) game_state (this, free_elt, std::forward<ARGS>(args)...);
+	return gs;
+}
+
 class sgf;
 class game_record;
 
@@ -796,7 +845,7 @@ extern game_state *sgf2board (sgf &);
 extern go_game_ptr sgf2record (const sgf &, QTextCodec *codec);
 extern std::string record2sgf (const game_record &);
 
-class game_record
+class game_record : public game_state_manager
 {
 	friend go_game_ptr sgf2record (const sgf &s, QTextCodec *codec);
 	game_info m_info;
@@ -812,22 +861,22 @@ public:
 	game_record (int size, const game_info &info)
 		: m_info (info)
 	{
-		m_root = new game_state (size);
+		m_root = create_game_state (size);
 	}
 	game_record (const go_board &b, stone_color to_move, const game_info &info)
 		: m_info (info)
 	{
-		m_root = new game_state (b, to_move);
+		m_root = create_game_state (b, to_move);
 	}
 	game_record (const go_board &b, stone_color to_move, const game_info &info, const std::shared_ptr<const bit_array> &m)
 		: m_info (info), m_mask (m)
 	{
-		m_root = new game_state (b, to_move);
+		m_root = create_game_state (b, to_move);
 	}
 	game_record (const game_record &other) : m_info (other.m_info),
 		m_modified (other.m_modified), m_errors (other.m_errors), m_mask (other.m_mask)
 	{
-		m_root = new game_state (*other.m_root, nullptr);
+		m_root = create_game_state (*other.m_root, nullptr);
 	}
 
 	const game_info &info () { return m_info; }

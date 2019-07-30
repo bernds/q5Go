@@ -262,7 +262,7 @@ void GTP_Process::undo_move ()
 	game_state *st = m_last_move;
 	if (st != nullptr) {
 		m_last_move = st->prev_move ();
-		delete st;
+		m_manager.release_game_state (st);
 	}
 }
 
@@ -299,7 +299,7 @@ void GTP_Process::setup_board (game_state *st, double km, bool flip)
 	}
 
 	/* Must clear this before doing played_move calls for the initial setup.  */
-	delete m_moves;
+	m_manager.release_game_state (m_moves);
 	m_moves = nullptr;
 	m_last_move = nullptr;
 
@@ -325,7 +325,7 @@ void GTP_Process::setup_board (game_state *st, double km, bool flip)
 
 	/* Allocate this here so that m_last_move is nullptr during previous calls to
 	   played_move and they don't try to track the position.  */
-	m_moves = new game_state (startpos, maybe_flip (st->to_move (), flip));
+	m_moves = m_manager.create_game_state (startpos, maybe_flip (st->to_move (), flip));
 	m_last_move = m_moves;
 
 	while (!moves.empty ()) {
@@ -505,7 +505,6 @@ GTP_Process::~GTP_Process ()
 	disconnect (this, &QProcess::errorOccurred, nullptr, nullptr);
 	void (QProcess::*fini)(int, QProcess::ExitStatus) = &QProcess::finished;
 	disconnect (this, fini, nullptr, nullptr);
-	delete m_moves;
 }
 
 GTP_Eval_Controller::~GTP_Eval_Controller ()
@@ -536,8 +535,10 @@ void GTP_Eval_Controller::request_analysis (go_game_ptr gr, game_state *st, bool
 
 	const go_board &b = st->get_board ();
 	stone_color to_move = st->to_move ();
-	delete m_eval_state;
-	m_eval_state = new game_state (b, to_move);
+	if (m_eval_game != nullptr)
+		m_eval_game->release_game_state (m_eval_state);
+	m_eval_game = gr;
+	m_eval_state = gr->create_game_state (b, to_move);
 
 	m_analyzer->setup_board (st, gr->info ().komi, flip);
 
@@ -550,7 +551,8 @@ void GTP_Eval_Controller::request_analysis (go_game_ptr gr, game_state *st, bool
 
 void GTP_Eval_Controller::clear_eval_data ()
 {
-	delete m_eval_state;
+	if (m_eval_game != nullptr)
+		m_eval_game->release_game_state (m_eval_state);
 	m_eval_state = nullptr;
 }
 
@@ -631,9 +633,7 @@ void GTP_Eval_Controller::gtp_eval (const QString &s, bool kata_format)
 	if (flip)
 		id.komi = -id.komi;
 
-	std::vector<game_state *> old_children = m_eval_state->take_children ();
-	for (auto &old: old_children)
-		delete old;
+	m_eval_game->release_state_children (m_eval_state);
 
 	bool found_score = false;
 	for (auto &e: moves) {

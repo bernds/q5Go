@@ -1763,7 +1763,7 @@ void Board::mousePressEvent(QMouseEvent *e)
 		if (evchild != nullptr) {
 			eval ev = evchild->best_eval ();
 			game_state *st = m_displayed;
-			game_state *dup = new game_state (*evchild, st);
+			game_state *dup = evchild->duplicate (st);
 			QString comment = tr ("Live evaluation: W %1%2 B %3%4 at %5 visits");
 			double bwr = ev.wr_black;
 			double wwr = 1 - bwr;

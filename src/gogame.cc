@@ -2,6 +2,57 @@
 #include "gogame.h"
 #include "svgbuilder.h"
 
+game_state_manager::~game_state_manager ()
+{
+	size_t b = 0;
+	size_t n_elts = m_game_states.size () * m_n_per_chunk;
+
+	for (;;) {
+		b = m_free.ffs (b);
+		if (b == n_elts)
+			break;
+		char *arena = m_game_states[b / m_n_per_chunk];
+
+		game_state *gs = (game_state *)(arena + (b % m_n_per_chunk) * sizeof (game_state));
+		gs->~game_state ();
+		b++;
+	}
+	for (auto p: m_game_states)
+		delete[] p;
+}
+
+void game_state_manager::release_game_state (game_state *st)
+{
+	if (st == nullptr)
+		return;
+	st->disconnect ();
+	while (st != nullptr) {
+		game_state *next = nullptr;
+		auto &cld = st->children ();
+		if (cld.size () > 0) {
+			for (auto c: cld)
+			{
+				if (c == cld[0])
+					continue;
+				release_game_state (c);
+			}
+			next = cld[0];
+		}
+		// printf ("freeing bit %u\n", st->m_id);
+		m_free.clear_bit (st->m_id);
+		st->~game_state();
+		st = next;
+	}
+}
+
+void game_state_manager::release_state_children (game_state *st)
+{
+	for (auto c: st->children ()) {
+		release_game_state (c);
+	}
+}
+
+
 bool game_state::valid_move_p (int x, int y, stone_color col)
 {
 	return m_board.valid_move_p (x, y, col);

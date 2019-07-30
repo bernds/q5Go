@@ -367,8 +367,7 @@ void MainWindow::init_game_record (go_game_ptr gr)
 	m_game = gr;
 	game_state *root = gr->get_root ();
 	const go_board b (root->get_board (), none);
-	delete m_empty_state;
-	m_empty_state = new game_state (b, black);
+	m_empty_state = gr->create_game_state (b, black);
 
 	/* The order actually matters here.  The gfx_board will call back into MainWindow
 	   to update figures, which means we need to have diagView set up.  */
@@ -417,7 +416,6 @@ MainWindow::~MainWindow()
 	for (auto it: engine_actions)
 		delete it;
 
-	delete m_empty_state;
 	delete timer;
 	delete scoreGroup;
 
@@ -1183,7 +1181,7 @@ void MainWindow::slotEditDelete (bool)
 		return;
 	game_state *parent = st->prev_move ();
 	st->walk_tree ([this, parent] (game_state *s)->bool { gfx_board->transfer_displayed (s, parent); return true; });
-	delete st;
+	m_game->release_game_state (st);
 	update_game_tree ();
 	const go_board &b = parent->get_board ();
 	setMoveData (*parent, b);
@@ -2168,7 +2166,7 @@ void MainWindow::setGameMode (GameMode mode)
 			else
 				b.calc_scoring_markers_complex ();
 		}
-		game_state *edit_st = new game_state (b, st->to_move ());
+		game_state *edit_st = m_game->create_game_state (b, st->to_move ());
 		gfx_board->set_displayed (edit_st);
 	} else if (old_mode == modeScore || old_mode == modeScoreRemote || old_mode == modeEdit) {
 		/* The only way the scored or edited board is added to the game tree is through
@@ -2177,7 +2175,7 @@ void MainWindow::setGameMode (GameMode mode)
 		if (m_pos_before_edit != nullptr) {
 			game_state *edit_st = gfx_board->displayed ();
 			gfx_board->set_displayed (m_pos_before_edit);
-			delete edit_st;
+			m_game->release_game_state (edit_st);
 			m_pos_before_edit = nullptr;
 		}
 	}
@@ -2571,7 +2569,7 @@ void MainWindow::leave_edit_modify ()
 	m_pos_before_edit->replace (b, st->to_move ());
 	gfx_board->set_displayed (m_pos_before_edit);
 	m_pos_before_edit = nullptr;
-	delete st;
+	m_game->release_game_state (st);
 	gfx_board->setModified ();
 }
 

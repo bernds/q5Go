@@ -4,14 +4,12 @@
 #include <QProcess>
 
 #include "goboard.h"
+#include "gogame.h"
 #include "goeval.h"
 #include "setting.h"
 #include "textview.h"
 
 struct time_settings;
-class game_state;
-class game_record;
-typedef std::shared_ptr<game_record> go_game_ptr;
 
 class GTP_Process;
 
@@ -49,6 +47,7 @@ enum class analyzer { disconnected, starting, running, paused };
 class GTP_Eval_Controller : public GTP_Controller
 {
 	bool m_last_request_flipped {};
+	go_game_ptr m_eval_game {};
 
 protected:
 	using GTP_Controller::GTP_Controller;
@@ -112,6 +111,7 @@ class GTP_Process : public QProcess
 	double m_komi;
 
 	/* A tree in which we keep track of what the move history, in sync with the GTP engine.  */
+	game_state_manager m_manager;
 	game_state *m_moves {};
 	game_state *m_last_move {};
 
