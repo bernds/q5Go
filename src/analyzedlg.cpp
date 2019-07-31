@@ -306,7 +306,7 @@ void AnalyzeDialog::queue_next ()
 				if (j->m_komi_type == engine_komi::maybe_swap && !m_current_komi.isEmpty ()) {
 					bool ok;
 					double k = m_current_komi.toFloat (&ok);
-					double gm_k = j->m_game->komi ();
+					double gm_k = j->m_game->info ().komi;
 					if (ok && std::abs (k - gm_k) > std::abs (k + gm_k))
 						flip = true;
 				}

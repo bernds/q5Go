@@ -539,7 +539,7 @@ void GTP_Eval_Controller::request_analysis (go_game_ptr gr, game_state *st, bool
 	delete m_eval_state;
 	m_eval_state = new game_state (b, to_move);
 
-	m_analyzer->setup_board (st, gr->komi (), flip);
+	m_analyzer->setup_board (st, gr->info ().komi, flip);
 
 	if (flip)
 		to_move = flip_color (to_move);

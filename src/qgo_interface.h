@@ -95,8 +95,8 @@ public:
 	bool get_sentmovescmd() { return sent_movescmd; }
 	void set_sentmovescmd(bool m) { sent_movescmd = m; }
 	bool get_adj() { return adjourned; }
-	QString get_bplayer() { return QString::fromStdString (m_game->name_black ()); }
-	QString get_wplayer() { return QString::fromStdString (m_game->name_white ()); }
+	QString get_bplayer() { return QString::fromStdString (m_game->info ().name_b); }
+	QString get_wplayer() { return QString::fromStdString (m_game->info ().name_w); }
 	void set_adj(bool a) { adjourned = a; }
 	void set_game(Game *g, GameMode mode, stone_color own_color);
 
@@ -133,7 +133,7 @@ public:
 	void set_requests(const QString &handicap, const QString &komi, assessType);
 	void check_requests();
 	QString get_reqKomi() { return req_komi; }
-	QString get_currentKomi() { return QString::number (m_game->komi ()); }
+	QString get_currentKomi() { return QString::number (m_game->info ().komi); }
 	void dec_mv_counter() { mv_counter--; }
 	int get_mv_counter() { return mv_counter; }
 	bool get_requests_set() { return requests_set; }

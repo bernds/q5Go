@@ -51,14 +51,14 @@ go_game_ptr new_game_dialog (QWidget *parent)
 	int sz = dlg.boardSizeSpin->value();
 	int hc = dlg.handicapSpin->value();
 	go_board starting_pos = new_handicap_board (sz, hc);
-	game_info info ("",
-			dlg.playerWhiteEdit->text().toStdString (),
-			dlg.playerBlackEdit->text().toStdString (),
-			dlg.playerWhiteRkEdit->text().toStdString (),
-			dlg.playerBlackRkEdit->text().toStdString (),
-			"", dlg.komiSpin->value(), hc,
-			ranked::free,
-			"", "", "", "", "", "", "", "", -1);
+	game_info info;
+	info.name_w = dlg.playerWhiteEdit->text().toStdString ();
+	info.name_b = dlg.playerBlackEdit->text().toStdString ();
+	info.rank_w = dlg.playerWhiteRkEdit->text().toStdString ();
+	info.rank_b = dlg.playerBlackRkEdit->text().toStdString ();
+	info.komi = dlg.komiSpin->value();
+	info.handicap = hc;
+	info.rated = ranked::free;
 	go_game_ptr gr = std::make_shared<game_record> (starting_pos, hc > 1 ? white : black, info);
 
 	return gr;
@@ -265,8 +265,10 @@ void open_local_board (QWidget *parent, game_dialog_type type, const QString &sc
 	case game_dialog_type::none:
 	{
 		go_board b (19);
-		gr = std::make_shared<game_record> (b, black, game_info (QObject::tr ("White").toStdString (),
-									 QObject::tr ("Black").toStdString ()));
+		game_info info;
+		info.name_w = QObject::tr ("White").toStdString ();
+		info.name_b = QObject::tr ("Black").toStdString ();
+		gr = std::make_shared<game_record> (b, black, info);
 		break;
 	}
 	}
@@ -470,16 +472,16 @@ board_rect find_crop (const game_state *gs)
 /* Generate a candidate for the filename for this game */
 QString get_candidate_filename (const QString &dir, const game_info &info)
 {
-	const QString pw = QString::fromStdString (info.name_white ());
-	const QString pb = QString::fromStdString (info.name_black ());
-	QString date = QDate::currentDate().toString("yyyy-MM-dd");
+	const QString pw = QString::fromStdString (info.name_w);
+	const QString pb = QString::fromStdString (info.name_b);
+	QString date = QDate::currentDate ().toString ("yyyy-MM-dd");
 	QString cand = date + "-" + pw + "-" + pb;
 	QString base = cand;
 	QDir d (dir);
 	int i = 1;
-	while (QFile (d.filePath (cand + ".sgf")).exists())
+	while (QFile (d.filePath (cand + ".sgf")).exists ())
 	{
-		cand = base + "-" + QString::number(i++);
+		cand = base + "-" + QString::number (i++);
 	}
 	return d.filePath (cand + ".sgf");
 }

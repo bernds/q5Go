@@ -164,9 +164,13 @@ game_info NewAIGameDlg::create_game_info ()
 	const QString &b = human_is_black ? human : computer;
 	double komi = ui->komiSpin->value ();
 	int hc = handicap ();
-	game_info info ("", w.toStdString (), b.toStdString (),
-			"", "",
-			"", komi, hc, ranked::free, "", "", "", "", "", "", "", "", -1);
+	game_info info;
+	info.name_w = w.toStdString ();
+	info.name_b = b.toStdString ();
+	info.komi = komi;
+	info.handicap = hc;
+	info.rated = ranked::free;
+
 	return info;
 }
 
@@ -190,9 +194,12 @@ game_info TwoAIGameDlg::create_game_info ()
 	QString b = ui->engineBComboBox->currentText ();
 	double komi = ui->komiSpin->value ();
 	int hc = handicap ();
-	game_info info ("", w.toStdString (), b.toStdString (),
-			"", "",
-			"", komi, hc, ranked::free, "", "", "", "", "", "", "", "", -1);
+	game_info info;
+	info.name_w = w.toStdString ();
+	info.name_b = b.toStdString ();
+	info.komi = komi;
+	info.handicap = hc;
+	info.rated = ranked::free;
 	return info;
 }
 

@@ -133,14 +133,14 @@ go_game_ptr NewVariantGameDialog::create_game_record ()
 	bool torus_h = ui->hTorusCheckBox->isChecked ();
 	bool torus_v = ui->vTorusCheckBox->isChecked ();
 	go_board starting_pos (sz_x, sz_y, torus_h, torus_v);
-	game_info info ("",
-			ui->playerWhiteEdit->text().toStdString (),
-			ui->playerBlackEdit->text().toStdString (),
-			ui->playerWhiteRkEdit->text().toStdString (),
-			ui->playerBlackRkEdit->text().toStdString (),
-			"", ui->komiSpin->value(), 0,
-			ranked::free,
-			"", "", "", "", "", "", "", "", -1);
+	game_info info;
+	info.name_w = ui->playerWhiteEdit->text().toStdString ();
+	info.name_b = ui->playerBlackEdit->text().toStdString ();
+	info.rank_w = ui->playerWhiteRkEdit->text().toStdString ();
+	info.rank_b = ui->playerBlackRkEdit->text().toStdString ();
+	info.komi = ui->komiSpin->value();
+	info.rated = ranked::free;
+
 	if (m_mask.popcnt () == 0)
 		return std::make_shared<game_record> (starting_pos, black, info);
 	else {

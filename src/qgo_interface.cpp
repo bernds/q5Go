@@ -1302,13 +1302,19 @@ void qGoBoard::set_game(Game *g, GameMode mode, stone_color own_color)
 		break;
 	}
 
-	game_info info (m_title ? m_title->toStdString () : "",
-			g->wname.toStdString (), g->bname.toStdString (),
-			g->wrank.toStdString (), g->brank.toStdString (),
-			"", g->K.toFloat(), handi, rt, "",
-			QDate::currentDate().toString("yyyy-MM-dd").toStdString (),
-			place, "", "", "",
-			std::to_string (timelimit), overtime, -1);
+	game_info info;
+	info.title = m_title ? m_title->toStdString () : "";
+	info.name_w = g->wname.toStdString ();
+	info.name_b = g->bname.toStdString ();
+	info.rank_w = g->wrank.toStdString ();
+	info.rank_b = g->brank.toStdString ();
+	info.komi = g->K.toFloat ();
+	info.handicap = handi;
+	info.rated = rt;
+	info.date = QDate::currentDate().toString("yyyy-MM-dd").toStdString ();
+	info.place = place;
+	info.time = std::to_string (timelimit);
+	info.overtime = overtime;
 
 	m_game = std::make_shared<game_record> (startpos, handi >= 2 ? white : black, info);
 	m_state = m_game->get_root ();
@@ -1561,7 +1567,7 @@ void qGoBoard::set_move(stone_color sc, QString pt, QString mv_nr)
 		}
 
 		// special case: undo handicap
-		if (mv_counter <= 0 && m_game->handicap () > 0)
+		if (mv_counter <= 0 && m_game->info ().handicap > 0)
 		{
 			go_board new_root = new_handicap_board (m_game->boardsize (), 0);
 			m_game->replace_root (new_root, black);
@@ -1592,7 +1598,7 @@ void qGoBoard::set_move(stone_color sc, QString pt, QString mv_nr)
 
 		// check if handicap is set with initGame() - game data from server do not
 		// contain correct handicap in early stage, because handicap is first move!
-		if (m_game->handicap () != h)
+		if (m_game->info ().handicap != h)
 		{
 			m_game->set_handicap (h);
 			go_board new_root = new_handicap_board (m_game->boardsize (), h);
@@ -1947,7 +1953,7 @@ void qGoBoard::check_requests()
 	if (req_handicap.isNull() || gameMode == modeTeach || setting->readBoolEntry("DEFAULT_AUTONEGO"))
 		return;
 
-	if (m_game->handicap () != req_handicap.toInt())
+	if (m_game->info ().handicap != req_handicap.toInt ())
 	{
 		client_window->sendcommand ("handicap " + req_handicap, false);
 		qDebug() << "Requested handicap: " << req_handicap;
@@ -1955,7 +1961,7 @@ void qGoBoard::check_requests()
 	else
 		qDebug("Handicap settings ok...");
 
-	if (m_game->komi () != req_komi.toFloat())
+	if (m_game->info ().komi != req_komi.toFloat ())
 	{
 		qDebug("qGoBoard::check_requests() : emit komi");
 		client_window->sendcommand ("komi " + req_komi, false);

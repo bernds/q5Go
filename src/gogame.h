@@ -762,99 +762,33 @@ class game_record;
 
 enum class ranked { unknown, free, ranked, teaching };
 
-class game_info
+struct game_info
 {
-protected:
-	std::string m_filename = "";
+	std::string filename;
 
-	std::string m_title = "";
-	std::string m_name_w, m_name_b;
-	std::string m_rank_w = "", m_rank_b = "";
+	std::string title;
+	std::string name_w, name_b;
+	std::string rank_w, rank_b;
 
-	std::string m_rules = "";
-	double m_komi = 0;
-	int m_handicap = 0;
+	std::string rules;
+	double komi = 0;
+	int handicap = 0;
 
-	std::string m_result = "";
+	std::string result;
 
-	std::string m_date = "";
-	std::string m_place = "";
-	std::string m_event = "";
-	std::string m_round = "";
-	ranked m_ranked = ranked::unknown;
+	std::string date;
+	std::string place;
+	std::string event;
+	std::string round;
+	ranked rated = ranked::unknown;
 
-	std::string m_time = "";
-	std::string m_overtime = "";
+	std::string time;
+	std::string overtime;
 
-	std::string m_copyright = "";
+	std::string copyright;
 
 	/* SGF variation display style, or -1 if unset by SGF file.  */
-	int m_style = -1;
-public:
-	ranked ranked_type () const { return m_ranked; }
-	double komi () const { return m_komi; }
-	int handicap () const { return m_handicap; }
-
-	void set_ranked_type (ranked r) { m_ranked = r; }
-	void set_komi (double k) { m_komi = k; }
-	void set_handicap (int h) { m_handicap = h; }
-
-	int style () const { return m_style; }
-	void set_style (int st) { m_style = st; }
-
-	const std::string &name_white () const { return m_name_w; }
-	const std::string &name_black () const { return m_name_b; }
-	const std::string &rank_white () const { return m_rank_w; }
-	const std::string &rank_black () const { return m_rank_b; }
-	const std::string &title () const { return m_title; }
-	const std::string &result () const { return m_result; }
-	const std::string &date () const { return m_date; }
-	const std::string &place () const { return m_place; }
-	const std::string &event () const { return m_event; }
-	const std::string &round () const { return m_round; }
-	const std::string &copyright () const { return m_copyright; }
-	const std::string &rules () const { return m_rules; }
-	const std::string &time () const { return m_time; }
-	const std::string &overtime () const { return m_overtime; }
-
-	const std::string &filename () const { return m_filename; }
-
-	void set_name_white (const std::string &s) { m_name_w = s; }
-	void set_name_black (const std::string &s) { m_name_b = s; }
-	void set_rank_white (const std::string &s) { m_rank_w = s; }
-	void set_rank_black (const std::string &s) { m_rank_b = s; }
-	void set_title (const std::string &s) { m_title = s; }
-	void set_result (const std::string &s) { m_result = s; }
-	void set_date (const std::string &s) { m_date = s; }
-	void set_place (const std::string &s) { m_place = s; }
-	void set_event (const std::string &s) { m_event = s; }
-	void set_round (const std::string &s) { m_round = s; }
-	void set_copyright (const std::string &s) { m_copyright = s; }
-	void set_rules (const std::string &s) { m_rules = s; }
-	void set_time (const std::string &s) { m_time = s; }
-	void set_overtime (const std::string &s) { m_overtime = s; }
-
-	void set_filename (const std::string &s) { m_filename = s; }
-
-	game_info (const std::string &w, const std::string &b)
-		: m_name_w (w), m_name_b (b)
-	{
-	}
-
-	game_info (const std::string title, const std::string &w, const std::string &b,
-		   const std::string &rw, const std::string &rb,
-		   const std::string &ru, double komi, int hc, ranked rt, const std::string &re,
-		   const std::string &dt, const std::string &pc,
-		   const std::string &ev, const std::string &ro,
-		   const std::string &cp,
-		   const std::string &tm, const std::string &ot, int style)
-		: m_title (title), m_name_w (w), m_name_b (b), m_rank_w (rw), m_rank_b (rb),
-		m_rules (ru), m_komi (komi), m_handicap (hc), m_result (re), m_date (dt), m_place (pc),
-		m_event (ev), m_round (ro),
-		m_ranked (rt), m_time (tm), m_overtime (ot),
-	  m_copyright (cp), m_style (style)
-	{
-	}
+	int style = -1;
 };
 
 class game_record;
@@ -863,9 +797,10 @@ extern game_state *sgf2board (sgf &);
 extern go_game_ptr sgf2record (const sgf &, QTextCodec *codec);
 extern std::string record2sgf (const game_record &);
 
-class game_record : public game_info
+class game_record
 {
 	friend go_game_ptr sgf2record (const sgf &s, QTextCodec *codec);
+	game_info m_info;
 	game_state *m_root {};
 	bool m_modified = false;
 	sgf_errors m_errors;
@@ -876,25 +811,35 @@ class game_record : public game_info
 
 public:
 	game_record (int size, const game_info &info)
-		: game_info (info)
+		: m_info (info)
 	{
 		m_root = new game_state (size);
 	}
 	game_record (const go_board &b, stone_color to_move, const game_info &info)
-		: game_info (info)
+		: m_info (info)
 	{
 		m_root = new game_state (b, to_move);
 	}
 	game_record (const go_board &b, stone_color to_move, const game_info &info, const std::shared_ptr<const bit_array> &m)
-		: game_info (info), m_mask (m)
+		: m_info (info), m_mask (m)
 	{
 		m_root = new game_state (b, to_move);
 	}
-	game_record (const game_record &other) : game_info (other),
+	game_record (const game_record &other) : m_info (other.m_info),
 		m_modified (other.m_modified), m_errors (other.m_errors), m_mask (other.m_mask)
 	{
 		m_root = new game_state (*other.m_root, nullptr);
 	}
+
+	const game_info &info () { return m_info; }
+	void set_info (game_info i) { m_info = std::move (i); }
+	/* A few convenience functions for when we need to update only a part of the info.  */
+	void set_result (const std::string s) { m_info.result = std::move (s); }
+	void set_title (const std::string s) { m_info.title = std::move (s); }
+	void set_filename (const std::string s) { m_info.filename = std::move (s); }
+	void set_handicap (int hc) { m_info.handicap = hc; }
+	void set_ranked_type (ranked r) { m_info.rated = r; }
+
 	game_state *get_root () { return m_root; }
 	bool replace_root (const go_board &b, stone_color to_move)
 	{
@@ -933,9 +878,6 @@ public:
 	const sgf_errors &errors ()
 	{
 		return m_errors;
-	}
-	~game_record ()
-	{
 	}
 };
 

@@ -178,8 +178,9 @@ MainWindow::MainWindow (QWidget* parent, go_game_ptr gr, const QString opener_sc
 	isFullScreen = 0;
 	setFocusPolicy(Qt::StrongFocus);
 
-	if (!gr->filename ().empty ()) {
-		QFileInfo fi (QString::fromStdString (gr->filename ()));
+	const std::string &f = gr->info ().filename;
+	if (!f.empty ()) {
+		QFileInfo fi (QString::fromStdString (f));
 		setting->writeEntry ("LAST_DIR", fi.dir ().absolutePath ());
 	}
 
@@ -188,7 +189,7 @@ MainWindow::MainWindow (QWidget* parent, go_game_ptr gr, const QString opener_sc
 						   : mode == modeComputer ? "SOUND_COMPUTER"
 						   : "SOUND_NORMAL");
 
-	int game_style = m_game->style ();
+	int game_style = m_game->info ().style;
 	m_sgf_var_style = false;
 	if (game_style != -1) {
 		int allow = setting->readIntEntry ("VAR_SGF_STYLE");
@@ -394,15 +395,16 @@ void MainWindow::init_game_record (go_game_ptr gr)
 
 void MainWindow::update_game_record ()
 {
-	if (m_game->ranked_type () == ranked::free)
-		normalTools->TextLabel_free->setText(QApplication::tr("free"));
-	else if (m_game->ranked_type () == ranked::ranked)
-		normalTools->TextLabel_free->setText(QApplication::tr("rated"));
+	ranked r = m_game->info ().rated;
+	if (r == ranked::free)
+		normalTools->TextLabel_free->setText (tr ("free"));
+	else if (r == ranked::ranked)
+		normalTools->TextLabel_free->setText (tr ("rated"));
 	else
-		normalTools->TextLabel_free->setText(QApplication::tr("teach"));
-	normalTools->komi->setText(QString::number(m_game->komi ()));
-	scoreTools->komi->setText(QString::number(m_game->komi ()));
-	normalTools->handicap->setText(QString::number(m_game->handicap ()));
+		normalTools->TextLabel_free->setText (tr ("teach"));
+	normalTools->komi->setText(QString::number (m_game->info ().komi));
+	scoreTools->komi->setText(QString::number (m_game->info ().komi));
+	normalTools->handicap->setText(QString::number (m_game->info ().handicap));
 	updateCaption ();
 }
 
@@ -880,11 +882,11 @@ void MainWindow::updateCaption ()
 
 	if (game_number != 0)
 		s += "(" + QString::number(game_number) + ") ";
-	QString title = QString::fromStdString (m_game->title ());
-	QString player_w = QString::fromStdString (m_game->name_white ());
-	QString player_b = QString::fromStdString (m_game->name_black ());
-	QString rank_w = QString::fromStdString (m_game->rank_white ());
-	QString rank_b = QString::fromStdString (m_game->rank_black ());
+	QString title = QString::fromStdString (m_game->info ().title);
+	QString player_w = QString::fromStdString (m_game->info ().name_w);
+	QString player_b = QString::fromStdString (m_game->info ().name_b);
+	QString rank_w = QString::fromStdString (m_game->info ().rank_w);
+	QString rank_b = QString::fromStdString (m_game->info ().rank_b);
 
 	if (title.length () > 0) {
 		s += title;
@@ -1012,7 +1014,7 @@ QString MainWindow::getFileExtension(const QString &fileName, bool defaultExt)
 
 bool MainWindow::slotFileSave (bool)
 {
-	QString fileName = QString::fromStdString (m_game->filename ());
+	QString fileName = QString::fromStdString (m_game->info ().filename);
 	if (fileName.isEmpty())
 	{
 		fileName = setting->readEntry("LAST_DIR");
@@ -1024,7 +1026,7 @@ bool MainWindow::slotFileSave (bool)
 
 bool MainWindow::slotFileSaveAs (bool)
 {
-	std::string saved_name = m_game->filename ();
+	std::string saved_name = m_game->info ().filename;
 	QString fileName = saved_name == "" ? QString () : QString::fromStdString (saved_name);
 	return doSave (fileName, false);
 }
@@ -1042,11 +1044,11 @@ bool MainWindow::doSave (QString fileName, bool force)
 	if (fileName.isNull () || fileName.isEmpty () || !force)
   	{
 		if (QDir(fileName).exists())
-			fileName = get_candidate_filename (fileName, *m_game);
+			fileName = get_candidate_filename (fileName, m_game->info ());
 		else if (fileName.isNull() || fileName.isEmpty()) {
 			QString dir = setting->readEntry("LAST_DIR");
 
-			fileName = get_candidate_filename (dir, *m_game);
+			fileName = get_candidate_filename (dir, m_game->info ());
 		}
 		if (!force)
 			fileName = QFileDialog::getSaveFileName(this, tr ("Save SGF file"),
@@ -1423,7 +1425,7 @@ void MainWindow::update_settings ()
 
 	int ghosts = setting->readIntEntry ("VAR_GHOSTS");
 	bool children = setting->readBoolEntry ("VAR_CHILDREN");
-	int style = m_game->style ();
+	int style = m_game->info ().style;
 
 	/* Should never have the first condition and not the second, but it doesn't
 	   hurt to be careful.  */
@@ -1459,40 +1461,41 @@ void MainWindow::update_settings ()
 		populate_engines_menu ();
 }
 
-void MainWindow::slotSetGameInfo(bool)
+void MainWindow::slotSetGameInfo (bool)
 {
-	GameInfoDialog dlg(this);
-
-	dlg.gameNameEdit->setText(QString::fromStdString (m_game->title ()));
-	dlg.playerWhiteEdit->setText(QString::fromStdString (m_game->name_white ()));
-	dlg.playerBlackEdit->setText(QString::fromStdString (m_game->name_black ()));
-	dlg.whiteRankEdit->setText(QString::fromStdString (m_game->rank_white ()));
-	dlg.blackRankEdit->setText(QString::fromStdString (m_game->rank_black ()));
-	dlg.resultEdit->setText(QString::fromStdString (m_game->result ()));
-	dlg.dateEdit->setText(QString::fromStdString (m_game->date ()));
-	dlg.placeEdit->setText(QString::fromStdString (m_game->place ()));
-	dlg.eventEdit->setText(QString::fromStdString (m_game->event ()));
-	dlg.roundEdit->setText(QString::fromStdString (m_game->round ()));
-	dlg.copyrightEdit->setText(QString::fromStdString (m_game->copyright ()));
- 	dlg.komiSpin->setValue(m_game->komi ());
-	dlg.handicapSpin->setValue(m_game->handicap ());
+	GameInfoDialog dlg (this);
+	const game_info &i = m_game->info ();
+	dlg.gameNameEdit->setText (QString::fromStdString (i.title));
+	dlg.playerWhiteEdit->setText (QString::fromStdString (i.name_w));
+	dlg.playerBlackEdit->setText (QString::fromStdString (i.name_b));
+	dlg.whiteRankEdit->setText (QString::fromStdString (i.rank_w));
+	dlg.blackRankEdit->setText (QString::fromStdString (i.rank_b));
+	dlg.resultEdit->setText (QString::fromStdString (i.result));
+	dlg.dateEdit->setText (QString::fromStdString (i.date));
+	dlg.placeEdit->setText (QString::fromStdString (i.place));
+	dlg.eventEdit->setText (QString::fromStdString (i.event));
+	dlg.roundEdit->setText (QString::fromStdString (i.round));
+	dlg.copyrightEdit->setText (QString::fromStdString (i.copyright));
+ 	dlg.komiSpin->setValue (i.komi);
+	dlg.handicapSpin->setValue (i.handicap);
 
 	if (dlg.exec() == QDialog::Accepted)
 	{
-		m_game->set_name_black (dlg.playerBlackEdit->text().toStdString ());
-		m_game->set_name_white (dlg.playerWhiteEdit->text().toStdString ());
-		m_game->set_rank_black (dlg.blackRankEdit->text().toStdString ());
-		m_game->set_rank_white (dlg.whiteRankEdit->text().toStdString ());
-		m_game->set_komi (dlg.komiSpin->value());
-		m_game->set_handicap (dlg.handicapSpin->value());
-		m_game->set_title (dlg.gameNameEdit->text().toStdString ());
-		m_game->set_result (dlg.resultEdit->text().toStdString ());
-		m_game->set_date (dlg.dateEdit->text().toStdString ());
-		m_game->set_place (dlg.placeEdit->text().toStdString ());
-		m_game->set_event (dlg.eventEdit->text().toStdString ());
-		m_game->set_round (dlg.roundEdit->text().toStdString ());
-		m_game->set_copyright (dlg.copyrightEdit->text().toStdString ());
-
+		game_info newi = i;
+		newi.name_b = dlg.playerBlackEdit->text().toStdString ();
+		newi.name_w = dlg.playerWhiteEdit->text().toStdString ();
+		newi.rank_b = dlg.blackRankEdit->text().toStdString ();
+		newi.rank_w = dlg.whiteRankEdit->text().toStdString ();
+		newi.komi = dlg.komiSpin->value();
+		newi.handicap = dlg.handicapSpin->value();
+		newi.title = dlg.gameNameEdit->text().toStdString ();
+		newi.result = dlg.resultEdit->text().toStdString ();
+		newi.date = dlg.dateEdit->text().toStdString ();
+		newi.place = dlg.placeEdit->text().toStdString ();
+		newi.event = dlg.eventEdit->text().toStdString ();
+		newi.round = dlg.roundEdit->text().toStdString ();
+		newi.copyright = dlg.copyrightEdit->text().toStdString ();
+		m_game->set_info (newi);
 		m_game->set_modified (true);
 		update_game_record ();
 	}
@@ -2511,7 +2514,7 @@ void MainWindow::doCountDone()
 		s.append (rs);
 	}
 
-	std::string old_result = m_game->result ();
+	std::string old_result = m_game->info ().result;
 	std::string new_result = rs.toStdString ();
 	if (old_result != "" && old_result != new_result) {
 		QMessageBox::StandardButton choice;
@@ -2548,7 +2551,7 @@ MainWindow_GTP::MainWindow_GTP (QWidget *parent, go_game_ptr gr, QString opener_
 	gfx_board->set_player_colors (!w_is_comp, !b_is_comp);
 	m_starting_up = 1;
 	const go_board &b = root->get_board ();
-	auto g = create_gtp (program, b.size_x (), b.size_y (), m_game->komi ());
+	auto g = create_gtp (program, b.size_x (), b.size_y (), m_game->info ().komi);
 	if (b_is_comp)
 		m_gtp_b = g;
 	else
@@ -2569,7 +2572,7 @@ MainWindow_GTP::MainWindow_GTP (QWidget *parent, go_game_ptr gr, game_state *st,
 	gfx_board->set_player_colors (!w_is_comp, !b_is_comp);
 	m_starting_up = 1;
 	const go_board &b = root->get_board ();
-	auto g = create_gtp (program, b.size_x (), b.size_y (), m_game->komi ());
+	auto g = create_gtp (program, b.size_x (), b.size_y (), m_game->info ().komi);
 	if (b_is_comp)
 		m_gtp_b = g;
 	else
@@ -2605,8 +2608,8 @@ MainWindow_GTP::MainWindow_GTP (QWidget *parent, go_game_ptr gr, QString opener_
 	gfx_board->set_player_colors (false, false);
 	m_starting_up = 2;
 	const go_board &b = root->get_board ();
-	m_gtp_w = create_gtp (program_w, b.size_x (), b.size_y (), m_game->komi ());
-	m_gtp_b = create_gtp (program_b, b.size_x (), b.size_y (), m_game->komi ());
+	m_gtp_w = create_gtp (program_w, b.size_x (), b.size_y (), m_game->info ().komi);
+	m_gtp_b = create_gtp (program_b, b.size_x (), b.size_y (), m_game->info ().komi);
 	connect (followButton, &QPushButton::clicked, [this] (bool) { gfx_board->set_displayed (m_game_position); });
 }
 
@@ -3026,12 +3029,12 @@ void MainWindow::update_score_type ()
 	scoreTools->stonesBlack->setEnabled (!terr);
 	double extra_w = terr ? m_score.caps_w : m_score.stones_w;
 	double extra_b = terr ? m_score.caps_b : m_score.stones_b;
-	double total_w = m_score.score_w + extra_w + m_game->komi ();
+	double total_w = m_score.score_w + extra_w + m_game->info ().komi;
 	double total_b = m_score.score_b + extra_b;
 
 	scoreTools->totalWhite->setText (QString::number (total_w));
 	scoreTools->totalBlack->setText (QString::number (total_b));
-	m_result = m_score.score_w + extra_w + m_game->komi () - m_score.score_b - extra_b;
+	m_result = m_score.score_w + extra_w + m_game->info ().komi - m_score.score_b - extra_b;
 	if (m_result < 0)
 		scoreTools->result->setText ("B+" + QString::number (-m_result));
 	else if (m_result == 0)
@@ -3041,7 +3044,7 @@ void MainWindow::update_score_type ()
 
 	m_result_text = "";
 	QTextStream ts (&m_result_text);
-	ts << tr("White") << "\n" << m_score.score_w << " + " << extra_w << " + " << m_game->komi () << " = " << total_w << "\n";
+	ts << tr("White") << "\n" << m_score.score_w << " + " << extra_w << " + " << m_game->info ().komi << " = " << total_w << "\n";
 	ts << tr("Black") << "\n" << m_score.score_b << " + " << extra_b << " = " << total_b << "\n\n";
 }
 

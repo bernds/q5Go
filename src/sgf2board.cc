@@ -513,16 +513,26 @@ std::shared_ptr<game_record> sgf2record (const sgf &s, QTextCodec *codec)
 	if (st && (st->find_first_not_of ("0123456789") != std::string::npos))
 		throw broken_sgf ();
 	int style = st ? stoi (*st) : -1;
-	game_info info (translated_prop_str (gn, codec),
-			translated_prop_str (pw, codec), translated_prop_str (pb, codec),
-			translated_prop_str (wr, codec), translated_prop_str (br, codec),
-			translated_prop_str (ru, codec), komi, hc, ranked::free,
-			translated_prop_str (re, codec),
-			translated_prop_str (dt, codec), translated_prop_str (pc, codec),
-			translated_prop_str (ev, codec), translated_prop_str (ro, codec),
-			translated_prop_str (cp, codec),
-			translated_prop_str (tm, codec), translated_prop_str (ot, codec),
-			style);
+	game_info info;
+	info.title = translated_prop_str (gn, codec);
+	info.name_w = translated_prop_str (pw, codec);
+	info.name_b = translated_prop_str (pb, codec);
+	info.rank_w = translated_prop_str (wr, codec);
+	info.rank_b = translated_prop_str (br, codec);
+	info.rules = translated_prop_str (ru, codec);
+	info.komi = komi;
+	info.handicap = hc;
+	info.rated = ranked::free;
+	info.result = translated_prop_str (re, codec);
+	info.date = translated_prop_str (dt, codec);
+	info.place = translated_prop_str (pc, codec);
+	info.event = translated_prop_str (ev, codec);
+	info.round = translated_prop_str (ro, codec);
+	info.copyright = translated_prop_str (cp, codec);
+	info.time = translated_prop_str (tm, codec);
+	info.overtime = translated_prop_str (ot, codec);
+	info.style = style;
+
 	go_board initpos (size_x, size_y, torus_h, torus_v);
 	std::shared_ptr<bit_array> mask_array;
 	if (mask != nullptr && (mask->values.size () > 1 || mask->values.begin ()->length () > 0)) {
@@ -894,23 +904,23 @@ std::string game_record::to_sgf () const
 	if (masked)
 		write_array (m_mask.get (), "MASK", s, m_root);
 
-	encode_string (s, "GN", m_title);
-	encode_string (s, "PW", m_name_w);
-	encode_string (s, "PB", m_name_b);
-	encode_string (s, "WR", m_rank_w);
-	encode_string (s, "BR", m_rank_b);
-	encode_string (s, "KM", std::to_string (m_komi));
-	encode_string (s, "PC", m_place);
-	encode_string (s, "DT", m_date);
-	encode_string (s, "RU", m_rules);
-	encode_string (s, "TM", m_time);
-	encode_string (s, "EV", m_event);
-	encode_string (s, "RO", m_round);
-	encode_string (s, "OT", m_overtime);
-	encode_string (s, "CP", m_copyright);
-	if (m_handicap > 0)
-		encode_string (s, "HA", std::to_string (m_handicap));
-	encode_string (s, "RE", m_result);
+	encode_string (s, "GN", m_info.title);
+	encode_string (s, "PW", m_info.name_w);
+	encode_string (s, "PB", m_info.name_b);
+	encode_string (s, "WR", m_info.rank_w);
+	encode_string (s, "BR", m_info.rank_b);
+	encode_string (s, "KM", std::to_string (m_info.komi));
+	encode_string (s, "PC", m_info.place);
+	encode_string (s, "DT", m_info.date);
+	encode_string (s, "RU", m_info.rules);
+	encode_string (s, "TM", m_info.time);
+	encode_string (s, "EV", m_info.event);
+	encode_string (s, "RO", m_info.round);
+	encode_string (s, "OT", m_info.overtime);
+	encode_string (s, "CP", m_info.copyright);
+	if (m_info.handicap > 0)
+		encode_string (s, "HA", std::to_string (m_info.handicap));
+	encode_string (s, "RE", m_info.result);
 	if (m_root->to_move () == white)
 		s += "PL[W]";
 

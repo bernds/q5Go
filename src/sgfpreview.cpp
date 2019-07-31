@@ -7,11 +7,15 @@
 #include "sgfpreview.h"
 
 SGFPreview::SGFPreview (QWidget *parent, const QString &dir)
-	: QDialog (parent),
-	  m_empty_game (std::make_shared<game_record> (go_board (19), black, game_info ("White", "Black"))),
-	  m_game (m_empty_game)
+	: QDialog (parent)
 {
 	setupUi (this);
+
+	game_info info;
+	info.name_w = tr ("White").toStdString ();
+	info.name_b = tr ("Black").toStdString ();
+	m_empty_game = std::make_shared<game_record> (go_board (19), black, info);
+	m_game = m_empty_game;
 
 	QVBoxLayout *l = new QVBoxLayout (dialogWidget);
 	fileDialog = new QFileDialog (dialogWidget, Qt::Widget);
@@ -83,15 +87,16 @@ void SGFPreview::setPath(QString path)
 			st = st->next_primary_move ();
 		boardView->set_displayed (st);
 
-		File_WhitePlayer->setText (QString::fromStdString (m_game->name_white ()));
-		File_BlackPlayer->setText (QString::fromStdString (m_game->name_black ()));
-		File_Date->setText (QString::fromStdString (m_game->date ()));
-		File_Handicap->setText (QString::number (m_game->handicap ()));
-		File_Result->setText (QString::fromStdString (m_game->result ()));
-		File_Komi->setText (QString::number (m_game->komi ()));
+		const game_info &info = m_game->info ();
+		File_WhitePlayer->setText (QString::fromStdString (info.name_w));
+		File_BlackPlayer->setText (QString::fromStdString (info.name_b));
+		File_Date->setText (QString::fromStdString (info.date));
+		File_Handicap->setText (QString::number (info.handicap));
+		File_Result->setText (QString::fromStdString (info.result));
+		File_Komi->setText (QString::number (info.komi));
 		File_Size->setText (QString::number (st->get_board ().size_x ()));
-		File_Event->setText(QString::fromStdString (m_game->event ()));
-		File_Round->setText(QString::fromStdString (m_game->round ()));
+		File_Event->setText (QString::fromStdString (info.event));
+		File_Round->setText (QString::fromStdString (info.round));
 	} catch (...) {
 	}
 }
