@@ -131,6 +131,7 @@ public:
 	go_board (int sz) : go_board (sz, sz)
 	{
 	}
+
 	go_board (const go_board &other)
 		: m_sz_x (other.m_sz_x), m_sz_y (other.m_sz_y),
 		m_torus_h (other.m_torus_h), m_torus_v (other.m_torus_v),

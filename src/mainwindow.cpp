@@ -270,9 +270,9 @@ MainWindow::MainWindow (QWidget* parent, go_game_ptr gr, const QString opener_sc
 				 setGameMode (modeNormal);
 			 remove_connector ();
 		 });
-	connect (editAppendButton, &QPushButton::clicked, [this] (bool) { gfx_board->leave_edit_append (); setGameMode (m_remember_mode); });
-	connect (editReplaceButton, &QPushButton::clicked, [this] (bool) { gfx_board->leave_edit_modify (); setGameMode (m_remember_mode); });
-	connect (editInsertButton, &QPushButton::clicked, [this] (bool) { gfx_board->leave_edit_prepend (); setGameMode (m_remember_mode); });
+	connect (editAppendButton, &QPushButton::clicked, [this] (bool) { leave_edit_append (); setGameMode (m_remember_mode); });
+	connect (editReplaceButton, &QPushButton::clicked, [this] (bool) { leave_edit_modify (); setGameMode (m_remember_mode); });
+	connect (editInsertButton, &QPushButton::clicked, [this] (bool) { leave_edit_prepend (); setGameMode (m_remember_mode); });
 
 	goLastButton->setDefaultAction (navLast);
 	goFirstButton->setDefaultAction (navFirst);
@@ -1993,6 +1993,7 @@ void MainWindow::setToolsTabWidget(enum tabType p, enum tabState s)
 
 void MainWindow::setGameMode (GameMode mode)
 {
+	GameMode old_mode = m_gamemode;
 	m_gamemode = mode;
 	if (mode == modePostMatch || mode == modeNormal)
 		m_remember_mode = mode;
@@ -2132,11 +2133,17 @@ void MainWindow::setGameMode (GameMode mode)
 	editAppendButton->setVisible (mode == modeEdit);
 	if (mode == modeEdit) {
 		game_state *st = gfx_board->displayed ();
-		bool vis = st->was_edit_p () || st->root_node_p ();
-		editReplaceButton->setVisible (vis);
 		/* We require ST to be an edit/score, because if we inserted an edit before a move, that move
 		   would probably no longer make sense in the edited board position.  */
 		editInsertButton->setVisible (!st->root_node_p () && !st->was_move_p ());
+		/* Likewise for modifying an edit node - it must not have any non-edit children.  */
+		bool vis = st->was_edit_p () || st->root_node_p ();
+		for (auto &c: st->children ())
+			if (!c->was_edit_p ()) {
+				vis = false;
+				break;
+			}
+		editReplaceButton->setVisible (vis);
 	} else {
 		editPosButton->setChecked (false);
 		editReplaceButton->setVisible (false);
@@ -2149,6 +2156,31 @@ void MainWindow::setGameMode (GameMode mode)
 	passButton->setEnabled (mode != modeScore && mode != modeScoreRemote);
 	editButton->setEnabled (mode != modeScore);
 	scoreButton->setEnabled (mode != modeEdit);
+
+	if (mode == modeScore || mode == modeScoreRemote || mode == modeEdit) {
+		game_state *st = gfx_board->displayed ();
+		m_pos_before_edit = st;
+
+		go_board b = st->get_board ();
+		if (mode == modeScore || mode == modeScoreRemote) {
+			if (mode == modeScore && st->was_score_p ())
+				b.territory_from_markers ();
+			else
+				b.calc_scoring_markers_complex ();
+		}
+		game_state *edit_st = new game_state (b, st->to_move ());
+		gfx_board->set_displayed (edit_st);
+	} else if (old_mode == modeScore || old_mode == modeScoreRemote || old_mode == modeEdit) {
+		/* The only way the scored or edited board is added to the game tree is through
+		   doCountDone and leave_edit.  These perform the necessary insertions and clear
+		   m_pos_before_edit.  */
+		if (m_pos_before_edit != nullptr) {
+			game_state *edit_st = gfx_board->displayed ();
+			gfx_board->set_displayed (m_pos_before_edit);
+			delete edit_st;
+			m_pos_before_edit = nullptr;
+		}
+	}
 
 	gfx_board->setMode (mode);
 
@@ -2501,7 +2533,7 @@ void MainWindow::doRealScore (bool toggle)
 	}
 }
 
-void MainWindow::doCountDone()
+void MainWindow::doCountDone ()
 {
 	QString rs = scoreTools->result->text ();
 	QString s = m_result_text;
@@ -2526,8 +2558,44 @@ void MainWindow::doCountDone()
 	}
 	//if (QMessageBox::information(this, PACKAGE " - " + tr("Game Over"), s, tr("Ok"), tr("Update gameinfo")) == 1)
 
-	gfx_board->doCountDone ();
+	game_state *st = gfx_board->displayed ();
+	m_pos_before_edit->add_child_tree (st);
+	m_pos_before_edit = nullptr;
 	doRealScore (false);
+}
+
+void MainWindow::leave_edit_modify ()
+{
+	game_state *st = gfx_board->displayed ();
+	const go_board &b = st->get_board ();
+	m_pos_before_edit->replace (b, st->to_move ());
+	gfx_board->set_displayed (m_pos_before_edit);
+	m_pos_before_edit = nullptr;
+	delete st;
+	gfx_board->setModified ();
+}
+
+void MainWindow::leave_edit_append ()
+{
+	game_state *st = gfx_board->displayed ();
+	const go_board &b = st->get_board ();
+	game_state *new_st = m_pos_before_edit->add_child_edit (b, st->to_move ());
+	gfx_board->set_displayed (new_st);
+	m_pos_before_edit = nullptr;
+	gfx_board->setModified ();
+}
+
+void MainWindow::leave_edit_prepend ()
+{
+	game_state *st = gfx_board->displayed ();
+	const go_board &b = st->get_board ();
+	game_state *parent = m_pos_before_edit->prev_move ();
+	if (parent == nullptr)
+		return;
+	game_state *new_st = parent->replace_child_edit (m_pos_before_edit, b, st->to_move ());
+	gfx_board->set_displayed (new_st);
+	m_pos_before_edit = nullptr;
+	gfx_board->setModified ();
 }
 
 void MainWindow::set_observer_model (QStandardItemModel *m)

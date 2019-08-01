@@ -59,10 +59,6 @@ protected:
 
 	game_state *m_displayed {};
 
-	/* A local copy of the board for when editing and scoring.  Null otherwise.  */
-	go_board *m_edit_board = nullptr;
-	stone_color m_edit_to_move;
-
 	/* Collected when syncing the abstract position to the screen, and used
 	   when placing marks.  */
 	bit_array m_used_numbers = bit_array (256, false);
@@ -209,8 +205,7 @@ class Board : public BoardView, public GTP_Eval_Controller
 	bool m_player_is_b = true;
 	bool m_player_is_w = true;
 
-	/* A local copy of the board for when editing and scoring.  Null otherwise.  */
-	bool m_edit_changed;
+	/* Controls what mouse clicks do in normal mode.  */
 	mark m_edit_mark = mark::none;
 
 	/* Anti-clicko, remember position on mouse button down.  */
@@ -265,11 +260,6 @@ public:
 	}
 
 	stone_color swap_edit_to_move ();
-
-	bool doCountDone ();
-	void leave_edit_append ();
-	void leave_edit_prepend ();
-	void leave_edit_modify ();
 
 	void set_player_colors (bool w, bool b) { m_player_is_w = w; m_player_is_b = b; }
 	bool player_is (stone_color c) { return c == black ? m_player_is_b : m_player_is_w; }

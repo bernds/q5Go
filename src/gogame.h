@@ -661,7 +661,7 @@ public:
 	}
 	void append_to_sgf (std::string &) const;
 
-	/* Should really only be used for setting handicap at the root node.  */
+	/* Used for edits: modifying an existing edit (or root) node, or applying marks.  */
 	void replace (const go_board &b, stone_color to_move)
 	{
 		m_board = b;

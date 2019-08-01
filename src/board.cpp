@@ -314,61 +314,9 @@ void BoardView::draw_background (void)
 	canvas->setBackgroundBrush (QBrush (background_image ()));
 }
 
-/* Handle a click on the Done button.  Return true if we should return to normal mode.  */
-bool Board::doCountDone ()
-{
-	game_state *new_st = m_displayed->add_child_edit (*m_edit_board, m_edit_to_move, true);
-	set_displayed (new_st);
-
-	return true;
-}
-
-void Board::leave_edit_modify ()
-{
-	m_displayed->replace (*m_edit_board, m_edit_to_move);
-	setModified ();
-}
-
-void Board::leave_edit_append ()
-{
-	game_state *new_st = m_displayed->add_child_edit (*m_edit_board, m_edit_to_move);
-	set_displayed (new_st);
-	setModified ();
-}
-
-void Board::leave_edit_prepend ()
-{
-	game_state *parent = m_displayed->prev_move ();
-	if (parent == nullptr)
-		return;
-	game_state *new_st = parent->replace_child_edit (m_displayed, *m_edit_board, m_edit_to_move);
-	if (new_st != nullptr)
-		set_displayed (new_st);
-	setModified ();
-}
-
 void Board::setMode (GameMode mode)
 {
-	GameMode old_mode = m_game_mode;
 	m_game_mode = mode;
-
-	if (mode == modeScore || mode == modeScoreRemote || mode == modeEdit) {
-		m_edit_board = new go_board (m_displayed->get_board ());
-		m_edit_changed = false;
-		m_edit_to_move = m_displayed->to_move ();
-		if (mode == modeScore || mode == modeScoreRemote) {
-			if (mode == modeScore && m_displayed->was_score_p ())
-				m_edit_board->territory_from_markers ();
-			else
-				m_edit_board->calc_scoring_markers_complex ();
-		}
-	} else if (old_mode == modeScore || old_mode == modeScoreRemote || old_mode == modeEdit) {
-		/* The only way the scored or edited board is added to the game tree is through
-		   doCountDone and leave_edit.  This may have happened at this point; in any case,
-		   discard the board now.  */
-		delete m_edit_board;
-		m_edit_board = nullptr;
-	}
 
 	/* Always needed when changing modes to update toolbar buttons etc.  */
 	sync_appearance (false);
@@ -547,9 +495,9 @@ static bool add_mark_svg (svg_builder &svg, double cx, double cy, double factor,
 
 QByteArray BoardView::render_svg (bool do_number, bool coords)
 {
-	const go_board &b = m_edit_board == nullptr ? m_displayed->get_board () : *m_edit_board;
+	const go_board &b = m_displayed->get_board ();
 	/* Look back through previous moves to see if we should do numbering.  */
-	bool numbering = do_number && m_edit_board == nullptr;
+	bool numbering = do_number;
 	bool have_figure = numbering && m_displayed->has_figure ();
 	int fig_flags = have_figure ? m_displayed->figure_flags () : 0;
 	QString fig_title = have_figure ? QString::fromStdString (m_displayed->figure_title ()) : QString ();
@@ -711,13 +659,12 @@ QByteArray BoardView::render_svg (bool do_number, bool coords)
    exceeded or a stone is placed on an intersection which previously
    held something else.
 
-   This should really be part of game_state, but there is the added complication
-   of the m_edit_board.  */
+   This should really be part of game_state.  */
 
 QString BoardView::render_ascii (bool do_number, bool coords, bool go_tags)
 {
 	const go_board &db = m_displayed->get_board ();
-	bool have_figure = m_figure_view && m_edit_board == nullptr && m_displayed->has_figure ();
+	bool have_figure = m_figure_view && m_displayed->has_figure ();
 	unsigned bitsz = db.bitsize ();
 	int szx = db.size_x ();
 	int szy = db.size_y ();
@@ -742,7 +689,7 @@ QString BoardView::render_ascii (bool do_number, bool coords, bool go_tags)
 		moves = startpos->sgf_move_number ();
 		game_state *real_start = startpos->was_move_p () ? startpos->prev_move () : startpos;
 		initial_board = go_board (real_start->get_board (), mark::none);
-	} else if (do_number && m_edit_board == nullptr && !m_displayed->has_figure ()) {
+	} else if (do_number && !m_displayed->has_figure ()) {
 		game_state *prev = startpos;
 		while (prev && prev->was_move_p () && !startpos->has_figure ())
 			startpos = prev, prev = prev->prev_move ();
@@ -1169,8 +1116,8 @@ Board::ram_result Board::render_analysis_marks (svg_builder &svg, double svg_fac
 /* The central function for synchronizing visual appearance with the abstract board data.  */
 QPixmap BoardView::draw_position (int default_vars_type)
 {
-	bool numbering = !have_analysis () && m_edit_board == nullptr && m_move_numbers;
-	bool have_figure = m_figure_view && !have_analysis () && m_edit_board == nullptr && m_displayed->has_figure ();
+	bool numbering = !have_analysis () && m_move_numbers;
+	bool have_figure = m_figure_view && !have_analysis () && m_displayed->has_figure ();
 	int print_num = m_displayed->print_numbering_inherited ();
 
 	bool analysis_children = setting->values.analysis_children;
@@ -1181,8 +1128,8 @@ QPixmap BoardView::draw_position (int default_vars_type)
 	const go_board sibling_vars = m_displayed->sibling_moves (exclude_diag);
 	const go_board &vars = m_vars_children ? child_vars : sibling_vars;
 
-	const go_board &b = m_edit_board == nullptr ? m_displayed->get_board () : *m_edit_board;
-	stone_color to_move = m_edit_board == nullptr ? m_displayed->to_move () : m_edit_to_move;
+	const go_board &b = m_displayed->get_board ();
+	stone_color to_move = m_displayed->to_move ();
 	const bit_array *visible = m_figure_view ? m_displayed->visible_inherited () : nullptr;
 
 	/* There are several ways we can get move numbering: showing a PV line from analysis, or
@@ -1256,7 +1203,7 @@ QPixmap BoardView::draw_position (int default_vars_type)
 			auto stone_display = stone_to_display (mn_board, visible, to_move, x, y, vars, var_type);
 			stone_color sc = stone_display.first;
 
-			if (m_edit_board == nullptr && !have_figure && m_displayed->was_move_p ()) {
+			if (!have_figure && m_displayed->was_move_p ()) {
 				int last_x = m_displayed->get_move_x ();
 				int last_y = m_displayed->get_move_y ();
 				if (last_x == x && last_y == y)
@@ -1409,7 +1356,7 @@ void Board::sync_appearance (bool board_only)
 		setup_analyzer_position ();
 	}
 	BoardView::sync_appearance (board_only);
-	const go_board &b = m_edit_board == nullptr ? m_displayed->get_board () : *m_edit_board;
+	const go_board &b = m_displayed->get_board ();
 	m_board_win->recalc_scores (b);
 	if (!board_only) {
 		m_board_win->setMoveData (*m_displayed, b);
@@ -1724,7 +1671,7 @@ void Board::click_add_mark (QMouseEvent *e, int x, int y)
 	if (mark_to_set == mark::letter && e->modifiers () == Qt::ShiftModifier) {
 		TextEditDialog dlg (m_board_win);
 		dlg.textLineEdit->setFocus();
-		const go_board &b = m_edit_board ? *m_edit_board : m_displayed->get_board ();
+		const go_board &b = m_displayed->get_board ();
 
 		if (b.mark_at (x, y) == mark::text)
 			dlg.textLineEdit->setText (QString::fromStdString (b.mark_text_at (x, y)));
@@ -1732,10 +1679,7 @@ void Board::click_add_mark (QMouseEvent *e, int x, int y)
 		if (dlg.exec() == QDialog::Accepted) {
 			/* This is all a bit clunky; it's the price to pay for having game_state's get_board
 			   return a const go_board.  */
-			if (m_edit_board)
-				m_edit_board->set_text_mark (x, y, dlg.textLineEdit->text().toStdString ());
-			else
-				m_displayed->set_text_mark (x, y, dlg.textLineEdit->text().toStdString ());
+			m_displayed->set_text_mark (x, y, dlg.textLineEdit->text().toStdString ());
 			setModified ();
 			sync_appearance (true);
 		}
@@ -1760,11 +1704,7 @@ void Board::click_add_mark (QMouseEvent *e, int x, int y)
 		mark_extra = i;
 	}
 
-	bool changed;
-	if (m_edit_board)
-		changed = m_edit_board->set_mark (x, y, mark_to_set, mark_extra);
-	else
-		changed = m_displayed->set_mark (x, y, mark_to_set, mark_extra);
+	bool changed = m_displayed->set_mark (x, y, mark_to_set, mark_extra);
 	if (changed) {
 		setModified ();
 		sync_appearance (true);
@@ -1851,49 +1791,53 @@ void Board::mousePressEvent(QMouseEvent *e)
 	}
 	/* All modes where marks are not allowed, including scoring, force the editStone
 	   button instead of the marks.  So this is a simple test.  */
-	if (m_edit_mark != mark::none)
-	{
+	if (m_edit_mark != mark::none) {
 		click_add_mark (e, x, y);
 		return;
 	}
+	if (m_game_mode == modeObserve)
+		return;
 
+	 /* See if this is a simple click that should add a stone.
+	    @@@ teaching mode is untested; best guess.  */
+	if (m_game_mode == modeNormal || m_game_mode == modeComputer || m_game_mode == modeTeach) {
+		if (e->button () == Qt::LeftButton)
+			play_one_move (x, y);
+		return;
+	}
+
+	if (m_game_mode == modeMatch) {
+		// Delay of 250 msecs to avoid clickos
+		wheelTime = QTime::currentTime ();
+		//qDebug("Mouse pressed at time %d,%03d", wheelTime.second(),wheelTime.msec());
+		if (setting->values.clicko_delay)
+			wheelTime = wheelTime.addMSecs (250);
+		return;
+	}
+
+	/* Deal with edit/score modes.  */
 	stone_color existing_stone;
-
-	// resume normal proceeding
+	go_board shown_b = m_displayed->get_board ();
 	switch (m_game_mode)
 	{
-	case modeNormal:
-	case modeTeach: /* @@@ teaching mode is untested; best guess.  */
-	case modeComputer:
-		switch (e->button())
-		{
-		case Qt::LeftButton:
-			play_one_move (x, y);
-			break;
-
-		default:
-			break;
-		}
-		break;
-
 	case modeEdit:
-		existing_stone = m_edit_board->stone_at (x, y);
+		existing_stone = shown_b.stone_at (x, y);
 		switch (e->button())
 		{
 		case Qt::LeftButton:
 			if (existing_stone == black)
-				m_edit_board->set_stone (x, y, none);
+				shown_b.set_stone (x, y, none);
 			else
-				m_edit_board->set_stone (x, y, black);
-			setModified();
+				shown_b.set_stone (x, y, black);
+			m_displayed->replace (shown_b, m_displayed->to_move ());
 			sync_appearance (true);
 			break;
 		case Qt::RightButton:
 			if (existing_stone == white)
-				m_edit_board->set_stone (x, y, none);
+				shown_b.set_stone (x, y, none);
 			else
-				m_edit_board->set_stone (x, y, white);
-			setModified ();
+				shown_b.set_stone (x, y, white);
+			m_displayed->replace (shown_b, m_displayed->to_move ());
 			sync_appearance (true);
 			break;
 
@@ -1905,10 +1849,11 @@ void Board::mousePressEvent(QMouseEvent *e)
 	case modeScoreRemote:
 		if (e->button () == Qt::LeftButton) {
 			m_board_win->player_toggle_dead (x, y);
-#if 0 /* We get our own toggle back from the server, at least in tests with NNGS.  */
-			m_edit_board->toggle_alive (x, y);
+#if 0 /* We get our own toggle back from the server.  No need to do anything like this here.  */
+			shown_b,toggle_alive (x, y);
 			/* See comment in mark_dead_external.  */
-			m_edit_board->calc_scoring_markers_simple ();
+			shown_b,calc_scoring_markers_simple ();
+			m_displayed->replace (shown_b, m_displayed->to_move ());
 			observed_changed ();
 #endif
 		}
@@ -1917,30 +1862,20 @@ void Board::mousePressEvent(QMouseEvent *e)
 		switch (e->button())
 		{
 		case Qt::LeftButton:
-			m_edit_board->toggle_alive (x, y);
-			m_edit_board->calc_scoring_markers_complex ();
+			shown_b.toggle_alive (x, y);
+			shown_b.calc_scoring_markers_complex ();
+			m_displayed->replace (shown_b, m_displayed->to_move ());
 			sync_appearance ();
 			break;
 		case Qt::RightButton:
-			m_edit_board->toggle_seki (x, y);
-			m_edit_board->calc_scoring_markers_complex ();
+			shown_b.toggle_seki (x, y);
+			shown_b.calc_scoring_markers_complex ();
+			m_displayed->replace (shown_b, m_displayed->to_move ());
 			sync_appearance ();
 			break;
 		default:
 			break;
 		}
-		break;
-
-	case modeObserve:
-		// do nothing but observe
-		break;
-
-	case modeMatch:
-		// Delay of 250 msecs to avoid clickos
-		wheelTime = QTime::currentTime ();
-    		//qDebug("Mouse pressed at time %d,%03d", wheelTime.second(),wheelTime.msec());
-		if (setting->values.clicko_delay)
-			wheelTime = wheelTime.addMSecs (250);
 		break;
 
 	default:
@@ -2139,20 +2074,20 @@ void BoardView::set_sgf_coords (bool b)
 
 void Board::mark_dead_external (int x, int y)
 {
-	m_edit_board->toggle_alive (x, y, false);
+	go_board b = m_displayed->get_board ();
+	b.toggle_alive (x, y, false);
 	/* There's evidence to suggest that the IGS algorithm at least has
 	   no fancy tricks to find false eyes and such, and we should at
 	   least try to match the final result that the server will
 	   caclulate.
 	   See also the modeScoreRemote case in the mouse event handler.  */
-	m_edit_board->calc_scoring_markers_simple ();
+	b.calc_scoring_markers_simple ();
+	m_displayed->replace (b, m_displayed->to_move ());
 	sync_appearance ();
 }
 
 stone_color Board::swap_edit_to_move ()
 {
-	if (m_edit_board != nullptr)
-		return m_edit_to_move = m_edit_to_move == black ? white : black;
 	stone_color newcol = m_displayed->to_move () == black ? white : black;
 	m_displayed->set_to_move (newcol);
 	m_board_win->setMoveData (*m_displayed, m_displayed->get_board ());

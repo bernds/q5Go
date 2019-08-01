@@ -83,6 +83,8 @@ class MainWindow : public QMainWindow, public Ui::BoardWindow
 	double m_result {};
 	QString m_result_text;
 
+	/* When switching to edit/score mode, we make a temporary duplicate of the position.  */
+	game_state *m_pos_before_edit;
 protected:
 	move_timer m_timer_white, m_timer_black;
 	std::string m_tstr_white, m_tstr_black;
@@ -98,6 +100,10 @@ private:
 	void populate_engines_menu ();
 	void start_analysis ();
 	void update_score_type ();
+
+	void leave_edit_append ();
+	void leave_edit_prepend ();
+	void leave_edit_modify ();
 
 public:
 	MainWindow(QWidget* parent, go_game_ptr, const QString opener_scrkey = QString (),
