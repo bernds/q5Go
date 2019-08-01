@@ -325,14 +325,12 @@ bool Board::doCountDone ()
 
 void Board::leave_edit_modify ()
 {
-	m_edit_board->identify_units ();
 	m_displayed->replace (*m_edit_board, m_edit_to_move);
 	setModified ();
 }
 
 void Board::leave_edit_append ()
 {
-	m_edit_board->identify_units ();
 	game_state *new_st = m_displayed->add_child_edit (*m_edit_board, m_edit_to_move);
 	set_displayed (new_st);
 	setModified ();
@@ -340,7 +338,6 @@ void Board::leave_edit_append ()
 
 void Board::leave_edit_prepend ()
 {
-	m_edit_board->identify_units ();
 	game_state *parent = m_displayed->prev_move ();
 	if (parent == nullptr)
 		return;

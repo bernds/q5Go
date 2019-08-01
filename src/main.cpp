@@ -329,13 +329,13 @@ go_board new_handicap_board (int size, int handicap)
 		switch (handicap)
 		{
 		case 13:
-			b.set_stone (16, 16, black);
+			b.set_stone_nounits (16, 16, black);
 		case 12:
-			b.set_stone (2, 2, black);
+			b.set_stone_nounits (2, 2, black);
 		case 11:
-			b.set_stone (2, 16, black);
+			b.set_stone_nounits (2, 16, black);
 		case 10:
-			b.set_stone (16, 2, black);
+			b.set_stone_nounits (16, 2, black);
 		default:
 			handicap = 9;
 			break;
@@ -348,32 +348,32 @@ go_board new_handicap_board (int size, int handicap)
 		switch (handicap)
 		{
 		case 9:
-			b.set_stone (middle, middle, black);
+			b.set_stone_nounits (middle, middle, black);
 		case 8:
 		case 7:
 			if (handicap >= 8)
 			{
-				b.set_stone (middle, low, black);
-				b.set_stone (middle, high, black);
+				b.set_stone_nounits (middle, low, black);
+				b.set_stone_nounits (middle, high, black);
 			}
 			else
-				b.set_stone (middle, middle, black);
+				b.set_stone_nounits (middle, middle, black);
 		case 6:
 		case 5:
 			if (handicap >= 6)
 			{
-				b.set_stone (low, middle, black);
-				b.set_stone (high, middle, black);
+				b.set_stone_nounits (low, middle, black);
+				b.set_stone_nounits (high, middle, black);
 			}
 			else
-				b.set_stone (middle, middle, black);
+				b.set_stone_nounits (middle, middle, black);
 		case 4:
-			b.set_stone (high, high, black);
+			b.set_stone_nounits (high, high, black);
 		case 3:
-			b.set_stone (low, low, black);
+			b.set_stone_nounits (low, low, black);
 		case 2:
-			b.set_stone (high, low, black);
-			b.set_stone (low, high, black);
+			b.set_stone_nounits (high, low, black);
+			b.set_stone_nounits (low, high, black);
 		case 1:
 			break;
 		default:
@@ -386,12 +386,12 @@ go_board new_handicap_board (int size, int handicap)
 		switch (handicap)
 		{
 		case 4:
-			b.set_stone (high, high, black);
+			b.set_stone_nounits (high, high, black);
 		case 3:
-			b.set_stone (low, low, black);
+			b.set_stone_nounits (low, low, black);
 		case 2:
-			b.set_stone (high, low, black);
-			b.set_stone (low, high, black);
+			b.set_stone_nounits (high, low, black);
+			b.set_stone_nounits (low, high, black);
 		case 1:
 			break;
 

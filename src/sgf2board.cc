@@ -326,7 +326,7 @@ static void add_to_game_state (game_state *gs, sgf::node *n, bool force, QTextCo
 					to_move = sc;
 				} else {
 					put_stones (p, new_board.size_x (), new_board.size_y (),
-						    [&] (int x, int y) { new_board.set_stone (x, y, sc); });
+						    [&] (int x, int y) { new_board.set_stone_nounits (x, y, sc); });
 				}
 			}
 		}
@@ -545,12 +545,12 @@ std::shared_ptr<game_record> sgf2record (const sgf &s, QTextCodec *codec)
 	for (auto &n: s.nodes->props)
 		if (n.ident == "AB") {
 			n.handled = true;
-			put_stones (n, size_x, size_y, [&] (int x, int y) { initpos.set_stone (x, y, black); });
+			put_stones (n, size_x, size_y, [&] (int x, int y) { initpos.set_stone_nounits (x, y, black); });
 		}
 	for (auto &n: s.nodes->props)
 		if (n.ident == "AW") {
 			n.handled = true;
-			put_stones (n, size_x, size_y, [&] (int x, int y) { initpos.set_stone (x, y, white); });
+			put_stones (n, size_x, size_y, [&] (int x, int y) { initpos.set_stone_nounits (x, y, white); });
 		}
 	initpos.identify_units ();
 	add_marks (initpos, s.nodes);

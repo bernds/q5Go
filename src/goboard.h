@@ -257,7 +257,7 @@ public:
 	bool valid_move_p (int x, int y, stone_color);
 	void add_stone (int x, int y, stone_color col, bool process_captures = true);
 	/* Must be followed by an identify_units call after setting all new stones.  */
-	void set_stone (int x, int y, stone_color col)
+	void set_stone_nounits (int x, int y, stone_color col)
 	{
 		int bp = bitpos (x, y);
 		if (col != white)
@@ -268,6 +268,11 @@ public:
 			m_stones_w->set_bit (bp);
 		else if (col == black)
 			m_stones_b->set_bit (bp);
+	}
+	void set_stone (int x, int y, stone_color col)
+	{
+		set_stone_nounits (x, y, col);
+		identify_units ();
 	}
 	stone_color stone_at (int x, int y) const
 	{
