@@ -198,33 +198,32 @@ public:
 		m_stonesleft_w = other.m_stonesleft_w;
 		m_stonesleft_b = other.m_stonesleft_b;
 	}
-	void disconnect ()
+	/* Returns the former position of the state in its parent's child vector.  */
+	int disconnect ()
 	{
 		game_state *parent = m_parent;
 
-		if (parent) {
-			game_state *last = parent->m_children.back ();
-			parent->m_children.pop_back ();
-			size_t n = parent->m_children.size ();
-			size_t i;
-			for (i = 0; i < n; i++) {
-				if (parent->m_children[i] == this) {
-					parent->m_children[i] = last;
-					break;
-				}
-			}
-			if (i == parent->m_active && i > 0)
-				parent->m_active--;
+		if (parent == nullptr)
+			return 0;
 
-			parent->m_visual_ok = false;
-			if (parent->m_children.size () == 0)
-				parent->m_visual_collapse = false;
+		size_t n = parent->m_children.size ();
+		size_t i;
+		for (i = 0; i < n; i++)
+			if (parent->m_children[i] == this)
+				break;
 #if 0
-			if (i == n && last != this)
-				throw std::logic_error ("delete node not found among parent's children");
+		if (i == n)
+			throw std::logic_error ("delete node not found among parent's children");
 #endif
-		}
+		parent->m_children.erase (parent->m_children.begin () + i);
+		if (i <= parent->m_active && parent->m_active > 0)
+			parent->m_active--;
+
+		parent->m_visual_ok = false;
+		if (parent->m_children.size () == 0)
+			parent->m_visual_collapse = false;
 		m_parent = nullptr;
+		return i;
 	}
 	~game_state ()
 	{
