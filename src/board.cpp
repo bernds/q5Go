@@ -1359,7 +1359,7 @@ void Board::sync_appearance (bool board_only)
 	const go_board &b = m_displayed->get_board ();
 	m_board_win->recalc_scores (b);
 	if (!board_only) {
-		m_board_win->setMoveData (*m_displayed, b);
+		m_board_win->setMoveData (m_displayed);
 		m_board_win->update_game_tree ();
 	}
 }

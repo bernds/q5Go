@@ -1408,8 +1408,7 @@ void MainWindow::slotEditDelete (bool)
 	int idx = st->disconnect ();
 	push_undo (std::make_unique<undo_delete_entry> ("Delete move", parent, st, idx));
 	update_game_tree ();
-	const go_board &b = parent->get_board ();
-	setMoveData (*parent, b);
+	setMoveData (parent);
 	gfx_board->setModified ();
 }
 
@@ -2533,14 +2532,15 @@ void MainWindow::set_game_position (game_state *gs)
 	gfx_board->set_displayed (gs);
 }
 
-void MainWindow::setMoveData (game_state &gs, const go_board &b)
+void MainWindow::setMoveData (const game_state *gs)
 {
-	bool is_root_node = gs.root_node_p ();
-	size_t brothers = gs.n_siblings ();
-	size_t sons = gs.n_children ();
-	stone_color to_move = gs.to_move ();
-	int move_nr = gs.move_number ();
-	int var_nr = gs.var_number ();
+	const go_board &b = gs->get_board ();
+	bool is_root_node = gs->root_node_p ();
+	size_t brothers = gs->n_siblings ();
+	size_t sons = gs->n_children ();
+	stone_color to_move = gs->to_move ();
+	int move_nr = gs->move_number ();
+	int var_nr = gs->var_number ();
 
 	GameMode mode = m_gamemode;
 	bool good_mode = mode == modeNormal || mode == modeObserve || mode == modeObserveGTP || mode == modeBatch || mode == modePostMatch;
@@ -2563,11 +2563,11 @@ void MainWindow::setMoveData (game_state &gs, const go_board &b)
 
 		/* fall through */
 	case modeBatch:
-		navPrevVar->setEnabled(gs.has_prev_sibling ());
-		navNextVar->setEnabled(gs.has_next_sibling ());
-		navStartVar->setEnabled(!is_root_node);
-		navMainBranch->setEnabled(!is_root_node);
-		navNextBranch->setEnabled(sons > 0);
+		navPrevVar->setEnabled (gs->has_prev_sibling ());
+		navNextVar->setEnabled (gs->has_next_sibling ());
+		navStartVar->setEnabled (!is_root_node);
+		navMainBranch->setEnabled (!is_root_node);
+		navNextBranch->setEnabled (sons > 0);
 
 		/* fall through */
 	case modeObserve:
@@ -2576,12 +2576,12 @@ void MainWindow::setMoveData (game_state &gs, const go_board &b)
 
 	case modeScore:
 	case modeEdit:
-		navPrevVar->setEnabled(false);
-		navNextVar->setEnabled(false);
-		navStartVar->setEnabled(false);
-		navMainBranch->setEnabled(false);
-		navNextBranch->setEnabled(false);
-		navSwapVariations->setEnabled(false);
+		navPrevVar->setEnabled (false);
+		navNextVar->setEnabled (false);
+		navStartVar->setEnabled (false);
+		navMainBranch->setEnabled (false);
+		navNextBranch->setEnabled (false);
+		navSwapVariations->setEnabled (false);
 		break;
 	default:
 		break;
@@ -2601,14 +2601,14 @@ void MainWindow::setMoveData (game_state &gs, const go_board &b)
 	s.append (QString::number (move_nr));
 	if (move_nr == 0) {
 		/* Nothing to add for the root.  */
-	} else if (gs.was_pass_p ()) {
+	} else if (gs->was_pass_p ()) {
 		s.append(" (" + (to_move == black ? w_str : b_str) + " ");
 		s.append(" " + QObject::tr("Pass") + ")");
-	} else if (gs.was_score_p ()) {
+	} else if (gs->was_score_p ()) {
 		s.append(tr (" (Scoring)"));
-	} else if (!gs.was_edit_p ()) {
-		int x = gs.get_move_x ();
-		int y = gs.get_move_y ();
+	} else if (!gs->was_edit_p ()) {
+		int x = gs->get_move_x ();
+		int y = gs->get_move_y ();
 		s.append(" (");
 		s.append((to_move == black ? w_str : b_str) + " ");
 		s.append(QString(QChar(static_cast<const char>('A' + (x < 9 ? x : x + 1)))));
@@ -2624,9 +2624,9 @@ void MainWindow::setMoveData (game_state &gs, const go_board &b)
 	moveNumLabel->setText(s);
 
 	bool warn = false;
-	if (gs.was_move_p () && gs.get_move_color () == to_move)
+	if (gs->was_move_p () && gs->get_move_color () == to_move)
 		warn = true;
-	if (gs.root_node_p ()) {
+	if (gs->root_node_p ()) {
 		bool empty = b.position_empty_p ();
 		bool b_to_move = to_move == black;
 		warn |= empty != b_to_move;
@@ -2656,17 +2656,17 @@ void MainWindow::setMoveData (game_state &gs, const go_board &b)
 	prevNumberButton->setIconSize (sz);
 	nextNumberButton->setIconSize (sz);
 
-	scoreTools->setVisible (mode == modeScore || mode == modeScoreRemote || gs.was_score_p ());
-	normalTools->setVisible (mode != modeScore && mode != modeScoreRemote && !gs.was_score_p ());
+	scoreTools->setVisible (mode == modeScore || mode == modeScoreRemote || gs->was_score_p ());
+	normalTools->setVisible (mode != modeScore && mode != modeScoreRemote && !gs->was_score_p ());
 
 	if (mode == modeNormal) {
-		normalTools->wtimeView->set_time (&gs, white);
-		normalTools->btimeView->set_time (&gs, black);
+		normalTools->wtimeView->set_time (gs, white);
+		normalTools->btimeView->set_time (gs, black);
 	}
 	// Update slider
 	toggleSliderSignal (false);
 
-	int mv = gs.active_var_max ();
+	int mv = gs->active_var_max ();
 	setSliderMax (mv);
 	slider->setValue (move_nr);
 	toggleSliderSignal (true);
@@ -2680,7 +2680,7 @@ void MainWindow::on_colorButton_clicked (bool)
 	push_undo (std::make_unique<undo_tomove_entry> ("Switch side to move", st, col, newcol));
 	st->set_to_move (newcol);
 	colorButton->setChecked (col == white);
-	setMoveData (*st, st->get_board ());
+	setMoveData (st);
 }
 
 /* The "Edit Position" button: Switch to edit mode.  */

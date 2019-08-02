@@ -24,7 +24,7 @@ public:
 	void update_pos ();
 	void set_text (const QString &s);
 	void flash (bool on);
-	void set_time (game_state *, stone_color);
+	void set_time (const game_state *, stone_color);
 };
 
 #endif

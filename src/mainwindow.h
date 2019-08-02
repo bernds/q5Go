@@ -165,7 +165,7 @@ public:
 	bool doSave (QString fileName, bool force=false);
 	void setGameMode (GameMode);
 
-	void setMoveData (game_state &, const go_board &);
+	void setMoveData (const game_state *);
 	void mark_dead_external (int x, int y) { gfx_board->mark_dead_external (x, y); }
 	/* Called when the record was changed by some external source (say, a Go server
 	   providing a title string).  */

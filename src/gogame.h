@@ -542,6 +542,10 @@ public:
 	{
 		return m_parent;
 	}
+	const game_state *prev_move () const
+	{
+		return m_parent;
+	}
 	bool has_next_sibling () const
 	{
 		if (m_parent == nullptr)

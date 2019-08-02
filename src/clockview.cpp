@@ -97,7 +97,7 @@ void ClockView::set_text (const QString &s)
 	update_pos ();
 }
 
-void ClockView::set_time (game_state *gs, stone_color col)
+void ClockView::set_time (const game_state *gs, stone_color col)
 {
 	QString tstr = time_string (gs->time_left (col), gs->stones_left (col));
 	if (tstr.isNull () && !gs->root_node_p ()) {
