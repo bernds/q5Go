@@ -218,7 +218,7 @@ static bool add_eval_1 (game_state *gs, sgf::node::property *vals, bool kata)
 		int visits;
 		double winrate, scorem = 0, scored = 0;
 		analyzer_id id;
-		int komi_idx = kata ? 4 : 2;
+		size_t komi_idx = kata ? 4 : 2;
 		try {
 			visits = stoi (vals[0]);
 			winrate = stod (vals[1]);
