@@ -345,6 +345,8 @@ public:
 	void calc_scoring_markers_simple ();
 	void calc_scoring_markers_complex ();
 
+	/* An equality comparison, but ignoring marks on the board and only comparing
+	   the stones.  */
 	bool position_equal_p (const go_board &other) const
 	{
 		if (m_sz_x != other.m_sz_x || m_sz_y != other.m_sz_y)
@@ -361,11 +363,7 @@ public:
 	}
 	bool operator== (const go_board &other) const
 	{
-		if (m_sz_x != other.m_sz_x || m_sz_y != other.m_sz_y)
-			return false;
-		if (m_stones_b != other.m_stones_b)
-			return false;
-		if (m_stones_w != other.m_stones_w)
+		if (!position_equal_p (other))
 			return false;
 		if (m_marks.size () != 0 || other.m_marks.size () != 0) {
 			for (unsigned i = 0; i < bitsize (); i++) {
