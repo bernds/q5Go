@@ -117,7 +117,7 @@ go_board::go_board (int w, int h, bool torus_h, bool torus_v)
 	  m_column_right (torus_h ? create_column_right (w, h) : nullptr),
 	  m_row_top (torus_v ? create_row_top (w, h) : nullptr),
 	  m_row_bottom (torus_v ? create_row_bottom (w, h) : nullptr),
-	  m_stones_b (new bit_array (w * h)), m_stones_w (new bit_array (w * h))
+	  m_stones_b (w * h), m_stones_w (w * h)
 {
 }
 
@@ -217,8 +217,8 @@ int go_board::count_liberties (const bit_array &stones)
 {
 	bit_array liberties (bitsize ());
 	flood_step (liberties, stones);
-	liberties.andnot (*m_stones_w);
-	liberties.andnot (*m_stones_b);
+	liberties.andnot (m_stones_w);
+	liberties.andnot (m_stones_b);
 	return liberties.popcnt ();
 }
 
@@ -228,9 +228,9 @@ void go_board::dump_ascii () const
 	for (int y = 0; y < m_sz_y; y++) {
 		for (int x = 0; x < m_sz_x; x++) {
 			int bp = bitpos (x, y);
-			if (m_stones_w->test_bit (bp))
+			if (m_stones_w.test_bit (bp))
 				putchar ('O');
-			else if (m_stones_b->test_bit (bp))
+			else if (m_stones_b.test_bit (bp))
 				putchar ('X');
 			else
 				putchar ('.');
@@ -268,14 +268,14 @@ void go_board::identify_units ()
 			int i = bitpos (x, y);
 			if (handled.test_bit (i))
 				continue;
-			bit_array *stones;
+			const bit_array *stones;
 			stone_color col = none;
-			if (m_stones_w->test_bit (i)) {
+			if (m_stones_w.test_bit (i)) {
 				col = white;
-				stones = m_stones_w;
-			} else if (m_stones_b->test_bit (i)) {
+				stones = &m_stones_w;
+			} else if (m_stones_b.test_bit (i)) {
 				col = black;
-				stones = m_stones_b;
+				stones = &m_stones_b;
 			} else
 				continue;
 			std::vector<stone_unit> &units = col == black ? m_units_b : m_units_w;
@@ -303,7 +303,7 @@ void go_board::identify_units ()
 		}
 	}
 #ifdef CHECKING
-	if (found_w != m_stones_w->popcnt () || found_b != m_stones_b->popcnt ())
+	if (found_w != m_stones_w.popcnt () || found_b != m_stones_b.popcnt ())
 		throw std::logic_error ("unit search didn't find all stones.");
 #endif
 }
@@ -312,14 +312,14 @@ void go_board::toggle_alive (int x, int y, bool flood)
 {
 	int bp = bitpos (x, y);
 	stone_color col = none;
-	if (m_stones_b->test_bit (bp))
+	if (m_stones_b.test_bit (bp))
 		col = black;
-	else if (m_stones_w->test_bit (bp))
+	else if (m_stones_w.test_bit (bp))
 		col = white;
 	else
 		return;
 
-	const bit_array &other_stones = col == black ? *m_stones_w : *m_stones_b;
+	const bit_array &other_stones = col == black ? m_stones_w : m_stones_b;
 	bit_array fill (bitsize ());
 	fill.set_bit (bp);
 	if (flood)
@@ -387,9 +387,9 @@ void go_board::territory_from_markers ()
 	for (unsigned i = 0; i < bitsize (); i++) {
 		if (m_marks[i] == mark::terr) {
 			terr.set_bit (i);
-			if (m_stones_w->test_bit (i))
+			if (m_stones_w.test_bit (i))
 				m_dead_w++;
-			else if (m_stones_b->test_bit (i))
+			else if (m_stones_b.test_bit (i))
 				m_dead_b++;
 			if (m_mark_extra[i] == 0)
 				m_score_w++;
@@ -439,8 +439,8 @@ void go_board::find_territory_units (const bit_array &w_stones, const bit_array 
 	m_units_st.clear ();
 	bit_array handled (w_stones);
 	handled.ior (b_stones);
-	bit_array dead_stones = *m_stones_w;
-	dead_stones.ior (*m_stones_b);
+	bit_array dead_stones = m_stones_w;
+	dead_stones.ior (m_stones_b);
 	dead_stones.andnot (w_stones);
 	dead_stones.andnot (b_stones);
 
@@ -519,8 +519,8 @@ void go_board::benson (std::vector<stone_unit> &units, const bit_array &other_st
 		unit_liberties.emplace_back (bitsize ());
 		bit_array &liberties = unit_liberties.back ();
 		flood_step (liberties, it.m_stones);
-		liberties.andnot (*m_stones_w);
-		liberties.andnot (*m_stones_b);
+		liberties.andnot (m_stones_w);
+		liberties.andnot (m_stones_b);
 		tentative.push_back (tentative.size ());
 	}
 	bit_array stones (bitsize ());
@@ -669,8 +669,8 @@ void go_board::calc_scoring_markers_complex ()
 	find_territory_units (w_stones, b_stones);
 
 #if 0
-	benson (m_units_w, *m_stones_b);
-	benson (m_units_b, *m_stones_w);
+	benson (m_units_w, m_stones_b);
+	benson (m_units_b, m_stones_w);
 #endif
 
 	bit_array cand_territory (bitsize ());
@@ -865,8 +865,8 @@ void go_board::add_stone (int x, int y, stone_color col, bool process_captures)
 #endif
 	std::vector<stone_unit> &opponent_units = col == black ? m_units_w : m_units_b;
 	std::vector<stone_unit> &player_units = col == black ? m_units_b : m_units_w;
-	bit_array *opponent_stones = col == black ? m_stones_w : m_stones_b;
-	bit_array *player_stones = col == black ? m_stones_b : m_stones_w;
+	bit_array *opponent_stones = col == black ? &m_stones_w : &m_stones_b;
+	bit_array *player_stones = col == black ? &m_stones_b : &m_stones_w;
 	player_stones->set_bit (bitpos (x, y));
 
 	bit_array pos (bitsize ());
@@ -996,9 +996,9 @@ bool go_board::valid_move_p (int x, int y, stone_color col)
 void go_board::verify_invariants ()
 {
 #ifdef CHECKING
-	if (m_stones_b->intersect_p (*m_stones_w))
+	if (m_stones_b.intersect_p (m_stones_w))
 		throw std::logic_error ("white stones and black stones overlap");
-	int wcnt = m_stones_w->popcnt ();
+	int wcnt = m_stones_w.popcnt ();
 	for (auto &it: m_units_w) {
 		if (it.m_n_liberties <= 0)
 			throw std::logic_error ("white group was not removed.");
@@ -1008,7 +1008,7 @@ void go_board::verify_invariants ()
 	}
 	if (wcnt != 0)
 		throw std::logic_error ("white stone count inconsistency");
-	int bcnt = m_stones_b->popcnt ();
+	int bcnt = m_stones_b.popcnt ();
 	for (auto &it: m_units_b) {
 		if (it.m_n_liberties <= 0)
 			throw std::logic_error ("group was not removed.");
@@ -1019,19 +1019,19 @@ void go_board::verify_invariants ()
 	if (bcnt != 0)
 		throw std::logic_error ("black stone count inconsistency");
 
-	bit_array stones = *m_stones_w;
-	stones.ior (*m_stones_b);
+	bit_array stones = m_stones_w;
+	stones.ior (m_stones_b);
 	for (auto &it: m_units_w) {
 		bit_array m = it.m_stones;
 		stones.andnot (m);
-		m.andnot (*m_stones_w);
+		m.andnot (m_stones_w);
 		if (m.popcnt () > 0)
 			throw std::logic_error ("white unit contains stones not on the board");
 	}
 	for (auto &it: m_units_b) {
 		bit_array m = it.m_stones;
 		stones.andnot (m);
-		m.andnot (*m_stones_b);
+		m.andnot (m_stones_b);
 		if (m.popcnt () > 0)
 			throw std::logic_error ("black unit contains stones not on the board");
 	}

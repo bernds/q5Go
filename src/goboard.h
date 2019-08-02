@@ -113,7 +113,7 @@ class go_board
 	   number of dead black stones.  */
 	int m_dead_b = 0;
 	int m_dead_w = 0;
-	bit_array *m_stones_b, *m_stones_w;
+	bit_array m_stones_b, m_stones_w;
 
 	std::vector<stone_unit> m_units_b;
 	std::vector<stone_unit> m_units_w;
@@ -142,7 +142,7 @@ public:
 		m_score_b (other.m_score_b), m_score_w (other.m_score_w),
 		m_caps_b (other.m_caps_b), m_caps_w (other.m_caps_w),
 		m_dead_b (other.m_dead_b), m_dead_w (other.m_dead_w),
-		m_stones_b (new bit_array (*other.m_stones_b)), m_stones_w (new bit_array (*other.m_stones_w)),
+		m_stones_b (other.m_stones_b), m_stones_w (other.m_stones_w),
 		m_units_b (other.m_units_b), m_units_w (other.m_units_w),
 		m_units_t (other.m_units_t), m_units_st (other.m_units_st),
 		m_marks (other.m_marks), m_mark_extra (other.m_mark_extra), m_mark_text (other.m_mark_text)
@@ -162,7 +162,7 @@ public:
 		m_score_b (other.m_score_b), m_score_w (other.m_score_w),
 		m_caps_b (other.m_caps_b), m_caps_w (other.m_caps_w),
 		m_dead_b (0), m_dead_w (0),
-		m_stones_b (new bit_array (*other.m_stones_b)), m_stones_w (new bit_array (*other.m_stones_w)),
+		m_stones_b (other.m_stones_b), m_stones_w (other.m_stones_w),
 		m_units_b (other.m_units_b), m_units_w (other.m_units_w),
 		m_units_t (other.m_units_t), m_units_st (other.m_units_st)
 	{
@@ -176,7 +176,7 @@ public:
 		m_column_left (other.m_column_left), m_column_right (other.m_column_right),
 		m_row_top (other.m_row_top), m_row_bottom (other.m_row_bottom),
 		m_mask (other.m_mask),
-		m_stones_b (new bit_array (other.bitsize ())), m_stones_w (new bit_array (other.bitsize ()))
+		m_stones_b (other.bitsize ()), m_stones_w (other.bitsize ())
 	{
 	}
 	go_board &operator= (go_board other)
@@ -213,8 +213,6 @@ public:
 	}
 	~go_board ()
 	{
-		delete m_stones_b;
-		delete m_stones_w;
 	}
 	int size_x () const
 	{
@@ -262,13 +260,13 @@ public:
 	{
 		int bp = bitpos (x, y);
 		if (col != white)
-			m_stones_w->clear_bit (bp);
+			m_stones_w.clear_bit (bp);
 		if (col != black)
-			m_stones_b->clear_bit (bp);
+			m_stones_b.clear_bit (bp);
 		if (col == white)
-			m_stones_w->set_bit (bp);
+			m_stones_w.set_bit (bp);
 		else if (col == black)
-			m_stones_b->set_bit (bp);
+			m_stones_b.set_bit (bp);
 	}
 	void set_stone (int x, int y, stone_color col)
 	{
@@ -278,9 +276,9 @@ public:
 	stone_color stone_at (int x, int y) const
 	{
 		int bp = bitpos (x, y);
-		if (m_stones_b->test_bit (bp))
+		if (m_stones_b.test_bit (bp))
 			return black;
-		else if (m_stones_w->test_bit (bp))
+		else if (m_stones_w.test_bit (bp))
 			return white;
 		return none;
 	}
@@ -351,23 +349,23 @@ public:
 	{
 		if (m_sz_x != other.m_sz_x || m_sz_y != other.m_sz_y)
 			return false;
-		if (*m_stones_b != *other.m_stones_b)
+		if (m_stones_b != other.m_stones_b)
 			return false;
-		if (*m_stones_w != *other.m_stones_w)
+		if (m_stones_w != other.m_stones_w)
 			return false;
 		return true;
 	}
 	bool position_empty_p () const
 	{
-		return m_stones_b->popcnt () == 0 && m_stones_w->popcnt () == 0;
+		return m_stones_b.popcnt () == 0 && m_stones_w.popcnt () == 0;
 	}
 	bool operator== (const go_board &other) const
 	{
 		if (m_sz_x != other.m_sz_x || m_sz_y != other.m_sz_y)
 			return false;
-		if (*m_stones_b != *other.m_stones_b)
+		if (m_stones_b != other.m_stones_b)
 			return false;
-		if (*m_stones_w != *other.m_stones_w)
+		if (m_stones_w != other.m_stones_w)
 			return false;
 		if (m_marks.size () != 0 || other.m_marks.size () != 0) {
 			for (unsigned i = 0; i < bitsize (); i++) {
@@ -390,11 +388,11 @@ public:
 
 	const bit_array &get_stones_b () const
 	{
-		return *m_stones_b;
+		return m_stones_b;
 	}
 	const bit_array &get_stones_w () const
 	{
-		return *m_stones_w;
+		return m_stones_w;
 	}
 	go_score get_scores () const;
 	void territory_from_markers ();
