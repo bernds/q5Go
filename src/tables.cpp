@@ -330,7 +330,7 @@ void ClientWindow::server_remove_player (const QString &name)
 // take a new player from parser
 void ClientWindow::server_add_player (Player *p, bool cmdplayers)
 {
-  	QTreeWidgetItemIterator lv(ListView_players);
+	QTreeWidgetItemIterator lv(ListView_players);
 	// check if it's an empty list, i.e. all items deleted before
 	if (cmdplayers && !playerListEmpty)
 	{

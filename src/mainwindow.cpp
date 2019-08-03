@@ -1698,7 +1698,7 @@ void MainWindow::slotSetGameInfo (bool)
 	dlg.eventEdit->setText (QString::fromStdString (i.event));
 	dlg.roundEdit->setText (QString::fromStdString (i.round));
 	dlg.copyrightEdit->setText (QString::fromStdString (i.copyright));
- 	dlg.komiSpin->setValue (i.komi);
+	dlg.komiSpin->setValue (i.komi);
 	dlg.handicapSpin->setValue (i.handicap);
 
 	if (dlg.exec() == QDialog::Accepted)
