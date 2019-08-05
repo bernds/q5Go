@@ -139,7 +139,6 @@ go_game_ptr NewVariantGameDialog::create_game_record ()
 	info.rank_w = ui->playerWhiteRkEdit->text().toStdString ();
 	info.rank_b = ui->playerBlackRkEdit->text().toStdString ();
 	info.komi = ui->komiSpin->value();
-	info.rated = ranked::free;
 
 	if (m_mask.popcnt () == 0)
 		return std::make_shared<game_record> (starting_pos, black, info);

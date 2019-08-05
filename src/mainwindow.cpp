@@ -616,15 +616,22 @@ void MainWindow::init_game_record (go_game_ptr gr)
 void MainWindow::update_game_record ()
 {
 	ranked r = m_game->info ().rated;
-	if (r == ranked::free)
-		normalTools->TextLabel_free->setText (tr ("free"));
-	else if (r == ranked::ranked)
-		normalTools->TextLabel_free->setText (tr ("rated"));
-	else
-		normalTools->TextLabel_free->setText (tr ("teach"));
-	normalTools->komi->setText(QString::number (m_game->info ().komi));
-	scoreTools->komi->setText(QString::number (m_game->info ().komi));
-	normalTools->handicap->setText(QString::number (m_game->info ().handicap));
+	if (r == ranked::unknown) {
+		normalTools->byoWidget->hide ();
+		normalTools->TextLabel_free->hide ();
+	} else {
+		normalTools->byoWidget->show ();
+		normalTools->TextLabel_free->show ();
+		if (r == ranked::free)
+			normalTools->TextLabel_free->setText (tr ("free"));
+		else if (r == ranked::ranked)
+			normalTools->TextLabel_free->setText (tr ("rated"));
+		else
+			normalTools->TextLabel_free->setText (tr ("teach"));
+	}
+	normalTools->komi->setText (QString::number (m_game->info ().komi));
+	scoreTools->komi->setText (QString::number (m_game->info ().komi));
+	normalTools->handicap->setText (QString::number (m_game->info ().handicap));
 	updateCaption ();
 }
 

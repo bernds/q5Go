@@ -265,6 +265,27 @@
    </item>
    <item>
     <layout class="QGridLayout">
+     <item row="1" column="2">
+      <widget class="QLabel" name="TextLabel_free">
+       <property name="toolTip">
+        <string>free/rated game</string>
+       </property>
+       <property name="whatsThis">
+        <string>free game:
+
+use &quot;free&quot; command to make game rated or unrated (free)</string>
+       </property>
+       <property name="text">
+        <string>free</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+       </property>
+       <property name="wordWrap">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
      <item row="0" column="2">
       <layout class="QHBoxLayout">
        <item>
@@ -336,7 +357,23 @@ Use &quot;komi x&quot; to request a komi of x (number).</string>
        </item>
       </layout>
      </item>
-     <item row="1" column="3">
+     <item row="0" column="0">
+      <spacer name="spacer6">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Expanding</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>1</width>
+         <height>1</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="0" column="3">
       <spacer name="spacer7">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -346,21 +383,34 @@ Use &quot;komi x&quot; to request a komi of x (number).</string>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>43</width>
-         <height>20</height>
+         <width>1</width>
+         <height>1</height>
         </size>
        </property>
       </spacer>
      </item>
      <item row="1" column="1">
-      <layout class="QHBoxLayout">
-       <item>
-        <widget class="QLabel" name="TextLabel_Byo">
-         <property name="toolTip">
-          <string>byoyomi time (minutes)</string>
-         </property>
-         <property name="whatsThis">
-          <string>Byoyomi time
+      <widget class="QWidget" name="byoWidget" native="true">
+       <layout class="QHBoxLayout" name="byoLayout">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="TextLabel_Byo">
+          <property name="toolTip">
+           <string>byoyomi time (minutes)</string>
+          </property>
+          <property name="whatsThis">
+           <string>Byoyomi time
 
 Additional time to place a number of stones.
 If time reaches zero before all stones are placed, the game ends immediately: &quot;... forfeits on time.&quot;
@@ -372,62 +422,26 @@ Absolute: Byo = 0, no additional time after main time is zero.
 Canadian: e.g. Byo = 6/25, 25 stones to place in 6 minutes; if all stones are placed. The byoyomi period is reset to this value and the same number of stones have to be placed until the game ends.
 
 byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 30 seconds, time is reset to 30 seconds, if not placed within 30 seconds, period will be decreased by one, a new period of 30 seconds starts; if period is zero and last time interval is over then game ends.</string>
-         </property>
-         <property name="text">
-          <string>Byo:</string>
-         </property>
-         <property name="wordWrap">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="byoyomi">
-         <property name="text">
-          <string>0</string>
-         </property>
-         <property name="wordWrap">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item row="1" column="0">
-      <spacer name="spacer6">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Expanding</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>44</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="1" column="2">
-      <widget class="QLabel" name="TextLabel_free">
-       <property name="toolTip">
-        <string>free/rated game</string>
-       </property>
-       <property name="whatsThis">
-        <string>free game:
-
-use &quot;free&quot; command to make game rated or unrated (free)</string>
-       </property>
-       <property name="text">
-        <string>free</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-       </property>
-       <property name="wordWrap">
-        <bool>false</bool>
-       </property>
+          </property>
+          <property name="text">
+           <string>Byo:</string>
+          </property>
+          <property name="wordWrap">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="byoyomi">
+          <property name="text">
+           <string>0</string>
+          </property>
+          <property name="wordWrap">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </item>
     </layout>
@@ -447,7 +461,7 @@ use &quot;free&quot; command to make game rated or unrated (free)</string>
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>40</height>
+       <height>1</height>
       </size>
      </property>
     </spacer>

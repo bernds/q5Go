@@ -169,7 +169,6 @@ game_info NewAIGameDlg::create_game_info ()
 	info.name_b = b.toStdString ();
 	info.komi = komi;
 	info.handicap = hc;
-	info.rated = ranked::free;
 
 	return info;
 }
@@ -199,7 +198,6 @@ game_info TwoAIGameDlg::create_game_info ()
 	info.name_b = b.toStdString ();
 	info.komi = komi;
 	info.handicap = hc;
-	info.rated = ranked::free;
 	return info;
 }
 

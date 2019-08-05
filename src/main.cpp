@@ -58,7 +58,6 @@ go_game_ptr new_game_dialog (QWidget *parent)
 	info.rank_b = dlg.playerBlackRkEdit->text().toStdString ();
 	info.komi = dlg.komiSpin->value();
 	info.handicap = hc;
-	info.rated = ranked::free;
 	go_game_ptr gr = std::make_shared<game_record> (starting_pos, hc > 1 ? white : black, info);
 
 	return gr;

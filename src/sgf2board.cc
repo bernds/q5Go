@@ -522,7 +522,6 @@ std::shared_ptr<game_record> sgf2record (const sgf &s, QTextCodec *codec)
 	info.rules = translated_prop_str (ru, codec);
 	info.komi = komi;
 	info.handicap = hc;
-	info.rated = ranked::free;
 	info.result = translated_prop_str (re, codec);
 	info.date = translated_prop_str (dt, codec);
 	info.place = translated_prop_str (pc, codec);
