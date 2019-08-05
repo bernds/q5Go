@@ -2150,12 +2150,15 @@ void MainWindow::update_font ()
 	int h = fm.height ();
 	QString wimg = ":/images/stone_w16.png";
 	QString bimg = ":/images/stone_b16.png";
+	QString timg = ":/images/warn-tri16.png";
 	if (h >= 32) {
 		 wimg = ":/images/stone_w32.png";
 		 bimg = ":/images/stone_b32.png";
+		 timg = ":/images/warn-tri32.png";
 	} else if (h >= 22) {
 		wimg = ":/images/stone_w22.png";
 		bimg = ":/images/stone_b22.png";
+		timg = ":/images/warn-tri22.png";
 	}
 	QIcon icon (bimg);
 	icon.addPixmap (wimg, QIcon::Normal, QIcon::On);
@@ -2166,6 +2169,7 @@ void MainWindow::update_font ()
 	normalTools->blackStoneLabel->setPixmap (QPixmap (bimg));
 	scoreTools->whiteStoneLabel->setPixmap (wimg);
 	scoreTools->blackStoneLabel->setPixmap (bimg);
+	turnWarning->setPixmap (timg);
 }
 
 void MainWindow::slot_editBoardInNewWindow(bool)

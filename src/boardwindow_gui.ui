@@ -1569,7 +1569,7 @@ Indicates whether it is black's or white's turn.</string>
                     <string/>
                    </property>
                    <property name="pixmap">
-                    <pixmap resource="q4go.qrc">:/BoardWindow/images/boardwindow/warning.png</pixmap>
+                    <pixmap resource="q4go.qrc">:/images/warn-tri16.png</pixmap>
                    </property>
                   </widget>
                  </item>

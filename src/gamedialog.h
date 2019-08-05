@@ -16,7 +16,7 @@ class GameDialog : public QDialog, public Ui::NewGameDialog
 	Q_OBJECT
 
 	void swap_colors ();
-
+	void clear_warnings ();
 public:
 	GameDialog(QWidget* parent, GSName, const QString &);
 	~GameDialog();

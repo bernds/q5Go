@@ -8,7 +8,6 @@
     <file>images/boardwindow/2rightarrow.png</file>
     <file>images/boardwindow/1leftcomment.png</file>
     <file>images/boardwindow/1rightcomment.png</file>
-    <file>images/boardwindow/warning.png</file>
     <file>images/boardwindow/audio-on.png</file>
     <file>images/boardwindow/audio-muted.png</file>
     <file>images/boardwindow/bluearrow-down.png</file>
@@ -59,6 +58,9 @@
     <file>images/stone_w22.png</file>
     <file>images/stone_b32.png</file>
     <file>images/stone_w32.png</file>
+    <file>images/warn-tri16.png</file>
+    <file>images/warn-tri22.png</file>
+    <file>images/warn-tri32.png</file>
     <file>images/power-standby.png</file>
     <file>images/power-on.png</file>
     <file>images/exit.png</file>

@@ -29,11 +29,24 @@ GameDialog::GameDialog(QWidget* parent, GSName gs, const QString &name)
 	buttongroup.addButton (play_black_button);
 	buttongroup.addButton (play_nigiri_button);
 	buttongroup.setExclusive (true);
+
+	clear_warnings ();
 }
 
 GameDialog::~GameDialog()
 {
 
+}
+
+void GameDialog::clear_warnings ()
+{
+	warn_komi->hide ();
+	warn_hc->hide ();
+	warn_size->hide ();
+	warn_rated->hide ();
+	warn_time->hide ();
+	warn_byo->hide ();
+	warn_side->hide ();
 }
 
 void GameDialog::slot_stats_opponent()
@@ -203,6 +216,8 @@ qDebug("#### GameDialog::slot_offer()");
 	// active serves for more in the future...
 	if (!active)
 		return;
+
+	clear_warnings ();
 
 	// if both names are identical -> teaching game
 	if (playerOpponentEdit->text() == myName)
@@ -400,100 +415,62 @@ void GameDialog::slot_komirequest(const QString &opponent, int h, float k, bool 
 
 void GameDialog::slot_dispute(const QString &opponent, const QString &line)
 {
+	if (playerOpponentEdit->text () != opponent)
+		return;
+
+	clear_warnings ();
+
 	QString val;
-
-	if (playerOpponentEdit->text() == opponent)
-
+	val = line.section(' ', 1, 1);
+	if (handicapSpin->value() != val.toInt ())
 	{
-		val = line.section(' ', 1, 1);
-		if (handicapSpin->value() != val.toInt())
-		{
-			handicapSpin->setValue(val.toInt());
-			// handicapSpin->setPaletteBackgroundColor(QColor("cyan"));
-		}
-#if 0
-		else
-			handicapSpin->unsetPalette();
-#endif
-
-		val = line.section(' ', 2, 2);
-		if (boardSizeSpin->value() != val.toInt())
-		{
-			boardSizeSpin->setValue(val.toInt());
-			// boardSizeSpin->setPaletteBackgroundColor(QColor("cyan"));
-		}
-#if 0
-		else
-			boardSizeSpin->unsetPalette();
-#endif
-
-		val = line.section(' ', 3, 3);
-		if (timeSpin->value() != val.toInt()/60)
-		{
-			timeSpin->setValue(val.toInt()/60);
-			// timeSpin->setPaletteBackgroundColor(QColor("cyan"));
-		}
-#if 0
-		else
-			timeSpin->unsetPalette();
-#endif
-
-		val = line.section(' ', 4, 4);
-		if (byoTimeSpin->value() != val.toInt()/60)
-		{
-			byoTimeSpin->setValue(val.toInt()/60);
-			// byoTimeSpin->setPaletteBackgroundColor(QColor("cyan"));
-		}
-#if 0
-		else
-			byoTimeSpin->unsetPalette();
-#endif
-
-		//val = line.section(' ', 5, 5);
-		//BY_label->setText(tr(" Byoyomi Time : (")+ val + tr(" stones)"));
-
-		val = line.section(' ', 0, 0);
-		if (!play_nigiri_button->isChecked() && val == "N")
-		{
-#if 0
-			play_nigiri_button->setPaletteBackgroundColor(QColor("cyan"));
-			play_white_button->setPaletteBackgroundColor(QColor("cyan"));
-			play_black_button->setPaletteBackgroundColor(QColor("cyan"));
-#endif
-			play_nigiri_button->setChecked(true);
-
-		}
-		else if (play_black_button->isChecked() && val == "B")
-		{
-#if 0
-			play_nigiri_button->setPaletteBackgroundColor(QColor("cyan"));
-			play_white_button->setPaletteBackgroundColor(QColor("cyan"));
-			play_black_button->setPaletteBackgroundColor(QColor("cyan"));
-#endif
-			play_white_button->setChecked(true);
-
-		}
-		else if (play_white_button->isChecked() && val == "W")
-		{
-#if 0
-			play_nigiri_button->setPaletteBackgroundColor(QColor("cyan"));
-			play_white_button->setPaletteBackgroundColor(QColor("cyan"));
-			play_black_button->setPaletteBackgroundColor(QColor("cyan"));
-#endif
-			play_black_button->setChecked(true);
-
-		}
-		else
-		{
-#if 0
-			play_nigiri_button->unsetPalette();
-			play_white_button->unsetPalette();
-			play_black_button->unsetPalette();
-#endif
-		}
-
-		buttonOffer->setText(tr("Accept"));
-		buttonOffer->setChecked(false);
-		buttonDecline->setEnabled(true);
+		handicapSpin->setValue(val.toInt ());
+		warn_hc->show ();
 	}
+
+	val = line.section(' ', 2, 2);
+	if (boardSizeSpin->value() != val.toInt ())
+	{
+		boardSizeSpin->setValue(val.toInt ());
+		warn_size->show ();
+	}
+
+	val = line.section(' ', 3, 3);
+	if (timeSpin->value() != val.toInt () / 60)
+	{
+		timeSpin->setValue(val.toInt () / 60);
+		warn_time->show ();
+	}
+
+	val = line.section(' ', 4, 4);
+	if (byoTimeSpin->value() != val.toInt () / 60)
+	{
+		byoTimeSpin->setValue(val.toInt () / 60);
+		warn_byo->show ();
+	}
+
+	//val = line.section(' ', 5, 5);
+	//BY_label->setText(tr(" Byoyomi Time : (")+ val + tr(" stones)"));
+
+	val = line.section(' ', 0, 0);
+	if (!play_nigiri_button->isChecked () && val == "N")
+	{
+		play_nigiri_button->setChecked (true);
+		warn_side->show ();
+	}
+	else if (play_black_button->isChecked () && val == "B")
+	{
+		play_white_button->setChecked (true);
+		warn_side->show ();
+	}
+	else if (play_white_button->isChecked () && val == "W")
+	{
+		play_black_button->setChecked (true);
+		warn_side->show ();
+
+	}
+
+	buttonOffer->setText(tr("Accept"));
+	buttonOffer->setChecked (false);
+	buttonDecline->setEnabled (true);
 }

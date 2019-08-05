@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>287</width>
-    <height>413</height>
+    <height>385</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -162,27 +162,46 @@
          <bool>false</bool>
         </property>
         <layout class="QGridLayout">
-         <item row="0" column="1">
-          <widget class="QRadioButton" name="play_white_button">
-           <property name="text">
-            <string>White</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="2">
+         <item row="0" column="3">
           <widget class="QRadioButton" name="play_nigiri_button">
            <property name="text">
             <string>Nigiri</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="0">
+         <item row="0" column="2">
+          <widget class="QRadioButton" name="play_white_button">
+           <property name="text">
+            <string>White</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
           <widget class="QRadioButton" name="play_black_button">
            <property name="text">
             <string>Black</string>
            </property>
            <property name="checked">
             <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="warn_side">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="pixmap">
+            <pixmap resource="q4go.qrc">:/images/warn-tri22.png</pixmap>
+           </property>
+           <property name="scaledContents">
+            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -271,7 +290,7 @@
          <string/>
         </property>
         <property name="pixmap">
-         <pixmap>pics/warning.png</pixmap>
+         <pixmap resource="q4go.qrc">:/images/warn-tri22.png</pixmap>
         </property>
        </widget>
       </item>
@@ -287,7 +306,7 @@
          <string/>
         </property>
         <property name="pixmap">
-         <pixmap>pics/warning.png</pixmap>
+         <pixmap resource="q4go.qrc">:/images/warn-tri22.png</pixmap>
         </property>
        </widget>
       </item>
@@ -354,7 +373,7 @@
          <string/>
         </property>
         <property name="pixmap">
-         <pixmap>pics/warning.png</pixmap>
+         <pixmap resource="q4go.qrc">:/images/warn-tri22.png</pixmap>
         </property>
        </widget>
       </item>
@@ -393,7 +412,7 @@
          <string/>
         </property>
         <property name="pixmap">
-         <pixmap>pics/warning.png</pixmap>
+         <pixmap resource="q4go.qrc">:/images/warn-tri22.png</pixmap>
         </property>
        </widget>
       </item>
@@ -438,7 +457,7 @@
          <string/>
         </property>
         <property name="pixmap">
-         <pixmap>pics/warning.png</pixmap>
+         <pixmap resource="q4go.qrc">:/images/warn-tri22.png</pixmap>
         </property>
        </widget>
       </item>
@@ -486,7 +505,7 @@
          <string/>
         </property>
         <property name="pixmap">
-         <pixmap>pics/warning.png</pixmap>
+         <pixmap resource="q4go.qrc">:/images/warn-tri22.png</pixmap>
         </property>
        </widget>
       </item>
@@ -590,7 +609,9 @@
  <includes>
   <include location="local">komispinbox.h</include>
  </includes>
- <resources/>
+ <resources>
+  <include location="q4go.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonCancel</sender>
