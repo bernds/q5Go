@@ -2015,20 +2015,22 @@ InfoType Parser::cmd42(const QString &txt)
 			aPlayer->nmatch_white = nmatchString.contains("W");
 			aPlayer->nmatch_nigiri = nmatchString.contains("N");
 
-			QString elt1 = nmatchString.section(' ', 1);
-			QString elt2 = nmatchString.section(' ', 2);
-			QString elt3 = nmatchString.section(' ', 3);
-			QString elt4 = nmatchString.section(' ', 4);
-			QString elt5 = nmatchString.section(' ', 4);
-			aPlayer->nmatch_timeMin = elt3.section('-', 0).toInt();
-			aPlayer->nmatch_timeMax = elt3.section('-', 1).toInt();
+			QString elt0 = nmatchString.section(' ', 0, 0);
+			QString elt1 = nmatchString.section(' ', 1, 1);
+			QString elt2 = nmatchString.section(' ', 2, 2);
+			QString elt3 = nmatchString.section(' ', 3, 3);
+			QString elt4 = nmatchString.section(' ', 4, 4);
+			QString elt5 = nmatchString.section(' ', 5, 5);
+			qDebug () << "nmatch elts: " << elt0 << " " << elt1 << " " << elt2 << " " << elt3 << " " << elt4 << " " << elt5;
+			aPlayer->nmatch_timeMin = elt3.section('-', 0, 0).toInt();
+			aPlayer->nmatch_timeMax = elt3.section('-', 1, 1).toInt();
 			QString t1min = QString::number(aPlayer->nmatch_timeMin / 60);
 			QString t1max = QString::number(aPlayer->nmatch_timeMax / 60);
 			if (t1min != t1max)
-				t1min.append(" to ").append(t1max);
+				t1min.append (" to ").append(t1max);
 
-			QString t2min = elt4.section('-', 0);
-			QString t2max = elt4.section('-', 1);
+			QString t2min = elt4.section('-', 0, 0);
+			QString t2max = elt4.section('-', 1, 1);
 			aPlayer->nmatch_BYMin = t2min.toInt();
 			aPlayer->nmatch_BYMax = t2max.toInt();
 
@@ -2041,8 +2043,8 @@ InfoType Parser::cmd42(const QString &txt)
 			if (t3min != t3max)
 				t3min.append(" to ").append(t3max);
 
-			QString s1 = elt5.section('-', 0);
-			QString s2 = elt5.section('-', 1);
+			QString s1 = elt5.section('-', 0, 0);
+			QString s2 = elt5.section('-', 1, 1);
 			aPlayer->nmatch_stonesMin = s1.toInt();
 			aPlayer->nmatch_stonesMax = s2.toInt();
 
@@ -2059,14 +2061,14 @@ InfoType Parser::cmd42(const QString &txt)
 					t3min + " min. /" +
 					s1 + " st. ";
 
-			QString h1 = elt1.section('-', 0);
-			QString h2 = elt1.section('-', 1);
-			aPlayer->nmatch_handicapMin = h1.toInt();
-			aPlayer->nmatch_handicapMax = h2.toInt();
+			QString h1 = elt1.section ('-', 0, 0);
+			QString h2 = elt1.section ('-', 1, 1);
+			aPlayer->nmatch_handicapMin = h1.toInt ();
+			aPlayer->nmatch_handicapMax = h2.toInt ();
 			if (h1 != h2)
-				h1.append("-").append(h2);
+				h1.append ("-").append (h2);
 
-			aPlayer->nmatch_settings.append("(h " + h1 + ")");
+			aPlayer->nmatch_settings.append ("(h " + h1 + ")");
 		}
 		else
 			aPlayer->nmatch_settings = "No match conditions";
