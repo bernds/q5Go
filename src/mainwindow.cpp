@@ -2230,7 +2230,7 @@ void MainWindow::setGameMode (GameMode mode)
 	if (mode == modePostMatch || mode == modeNormal)
 		m_remember_mode = mode;
 
-	bool editable_comments = mode == modeNormal || m_remember_mode == modeNormal || mode == modeComputer || mode == modeObserveGTP || mode == modeBatch;
+	bool editable_comments = mode != modeMatch && mode != modePostMatch && mode != modeObserve && m_remember_mode != modePostMatch;
 	leaveMatchButton->setVisible (mode == modePostMatch);
 
 	/* For almost everything below this, modePostMatch behaves just like modeNormal.  */
