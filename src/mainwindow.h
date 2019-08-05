@@ -108,6 +108,26 @@ protected:
 	move_timer m_timer_white, m_timer_black;
 	std::string m_tstr_white, m_tstr_black;
 
+	go_game_ptr m_game;
+	game_state *m_empty_state {};
+	TextView m_ascii_dlg;
+	SvgView m_svg_dlg;
+	bool local_stone_sound;
+
+	SlideView *slideView {};
+
+	QLabel *statusCoords, *statusMode, *statusTurn, *statusNav;
+
+	QAction *escapeFocus, *whatsThis;
+	QAction *navSwapVariations;
+	QActionGroup *editGroup, *engineGroup;
+	QButtonGroup *scoreGroup;
+	QList<QAction *> engine_actions;
+	QMap<QAction *, Engine> engine_map;
+	QTimer *timer;
+
+	bool isFullScreen;
+
 private:
 	std::vector<std::unique_ptr<undo_entry>> m_undo_stack;
 	size_t m_undo_stack_pos = 0;
@@ -143,16 +163,6 @@ private:
 
 	void push_undo (std::unique_ptr<undo_entry>);
 
-public:
-	MainWindow(QWidget* parent, go_game_ptr, const QString opener_scrkey = QString (),
-		   GameMode mode = modeNormal, time_settings ts = time_settings());
-	virtual ~MainWindow();
-	Board* getBoard() const { return gfx_board; }
-	int checkModified(bool interactive=true);
-
-	void update_settings ();
-
-	static QString getFileExtension(const QString &fileName, bool defaultExt=true);
 	void hide_panes_for_mode ();
 	QString visible_panes_key ();
 	void restore_visibility_from_key (const QString &);
@@ -161,6 +171,21 @@ public:
 	void defaultPortraitLayout ();
 	void defaultLandscapeLayout ();
 
+	void grey_eval_bar ();
+
+	void update_ascii_dialog ();
+	void update_svg_dialog ();
+
+	static QString getFileExtension(const QString &fileName, bool defaultExt=true);
+
+public:
+	MainWindow (QWidget* parent, go_game_ptr, const QString opener_scrkey = QString (),
+		    GameMode mode = modeNormal, time_settings ts = time_settings ());
+	virtual ~MainWindow ();
+	Board* getBoard () const { return gfx_board; }
+	int checkModified (bool interactive=true);
+
+	void update_settings ();
 	void set_observer_model (QStandardItemModel *m);
 	bool doSave (QString fileName, bool force=false);
 	void setGameMode (GameMode);
@@ -194,12 +219,8 @@ public:
 
 	void coords_changed (const QString &, const QString &);
 
-	void update_ascii_dialog ();
-	void update_svg_dialog ();
-
 	void recalc_scores (const go_board &);
 
-	void grey_eval_bar ();
 	void set_eval (double);
 	void set_eval (const QString &, double, stone_color, int);
 	void set_2nd_eval (const QString &, double, stone_color, int);
@@ -226,9 +247,12 @@ public:
 	void nav_goto_nth_move_in_var (int n);
 	void nav_find_move (int x, int y);
 
-	/* Sidebar button actions.  */
-	void doPass ();
-	void doCountDone ();
+	/* Called when the user performed a board action.  player_move is
+	   responsible for actually adding the move to the game.  Derived
+	   classes override it to also send a GTP command or a message to
+	   the server.  */
+	virtual game_state *player_move (int, int);
+	virtual void player_toggle_dead (int, int) { }
 
 protected:
 	void initActions ();
@@ -238,6 +262,10 @@ protected:
 
 	GameMode game_mode () { return m_gamemode; };
 
+	/* Sidebar button actions.  */
+	void doPass ();
+	void doCountDone ();
+
 	virtual void closeEvent (QCloseEvent *e) override;
 	virtual void keyPressEvent (QKeyEvent*) override;
 	virtual void keyReleaseEvent (QKeyEvent*) override;
@@ -245,7 +273,10 @@ protected:
 	virtual void time_loss (stone_color);
 	virtual void remove_connector ()
 	{
+		/* Called when the "Disconnect game" button is clicked.  Overridden in
+		   MainWindow_IGS.  */
 	}
+
 signals:
 	void signal_sendcomment(const QString&);
 	void signal_closeevent();
@@ -312,35 +343,6 @@ public slots:
 	void doEdit ();
 	void doEditPos (bool);
 	void sliderChanged (int);
-
-protected:
-	go_game_ptr m_game;
-	game_state *m_empty_state {};
-	TextView m_ascii_dlg;
-	SvgView m_svg_dlg;
-	bool local_stone_sound;
-
-	SlideView *slideView {};
-
-	QLabel *statusCoords, *statusMode, *statusTurn, *statusNav;
-
-	QAction *escapeFocus, *whatsThis;
-	QAction *navSwapVariations;
-	QActionGroup *editGroup, *engineGroup;
-	QButtonGroup *scoreGroup;
-	QList<QAction *> engine_actions;
-	QMap<QAction *, Engine> engine_map;
-	QTimer *timer;
-
-	bool isFullScreen;
-
-public:
-	/* Called when the user performed a board action.  player_move is
-	   responsible for actually adding the move to the game.  Derived
-	   classes override it to also send a GTP command or a message to
-	   the server.  */
-	virtual game_state *player_move (int, int);
-	virtual void player_toggle_dead (int, int) { }
 };
 
 class MainWindow_GTP : public MainWindow, public GTP_Controller
