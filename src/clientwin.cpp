@@ -1421,19 +1421,28 @@ void ClientWindow::slot_matchrequest(const QString &line, bool myrequest)
 			is_nmatch = p.nmatch && lv_popup_name == opponent;// && setting->readBoolEntry("USE_NMATCH");
 		}
 
+		qDebug () << (is_nmatch ? "dlg is nmatch" : "dlg is not nmatch") << " with " << opponent;
 		dlg->set_is_nmatch(is_nmatch);
 
 		if (is_nmatch && p.has_nmatch_settings ())
 		{
-			dlg->timeSpin->setRange((int)(p.nmatch_timeMin/60), (int)(p.nmatch_timeMax/60));
-			dlg->byoTimeSpin->setRange((int)(p.nmatch_BYMin/60), (int)(p.nmatch_BYMax/60));
-			dlg->handicapSpin->setRange(p.nmatch_handicapMin, p.nmatch_handicapMax);
+			int min_time = p.nmatch_timeMin / 60;
+			int max_time = p.nmatch_timeMax / 60;
+			if (max_time == 0 || max_time < min_time)
+				min_time = 0, max_time = 60;
+			dlg->timeSpin->setRange (min_time, max_time);
+			int bmin_time = p.nmatch_BYMin / 60;
+			int bmax_time = p.nmatch_BYMax / 60;
+			if (bmax_time == 0 || bmax_time < bmin_time)
+				bmin_time = 0, bmax_time = 60;
+			dlg->byoTimeSpin->setRange (bmin_time, bmax_time);
+			dlg->handicapSpin->setRange (p.nmatch_handicapMin, p.nmatch_handicapMax);
 		}
 		else
 		{
-			dlg->timeSpin->setRange(0,60);
-			dlg->byoTimeSpin->setRange(0,60);
-			dlg->handicapSpin->setRange(0,9);
+			dlg->timeSpin->setRange (0, 60);
+			dlg->byoTimeSpin->setRange (0, 60);
+			dlg->handicapSpin->setRange (0, 9);
 		}
 		//no handicap with usual game requests
 		dlg->handicapSpin->setEnabled(is_nmatch);
