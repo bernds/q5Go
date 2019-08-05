@@ -1055,7 +1055,6 @@ void qGoBoard::leave_scoring_mode ()
 {
 	win->setGameMode (gameMode);
 	m_scoring = false;
-	send_kibitz (tr ("GAME MODE: click to play stones...") + "\n");
 }
 
 void qGoBoard::mark_dead_stone (int x, int y)
