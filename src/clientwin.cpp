@@ -1521,7 +1521,7 @@ void ClientWindow::slot_matchrequest(const QString &line, bool myrequest)
 		dlg->buttonCancel->setDisabled(true);
 	}
 
-	dlg->slot_changed();
+	dlg->setting_changed();
 	dlg->show();
 	dlg->activateWindow();
 	dlg->raise();

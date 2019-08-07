@@ -30,6 +30,21 @@ GameDialog::GameDialog(QWidget* parent, GSName gs, const QString &name)
 	buttongroup.addButton (play_nigiri_button);
 	buttongroup.setExclusive (true);
 
+	void (QSpinBox::*changed_i) (int) = &QSpinBox::valueChanged;
+	void (QDoubleSpinBox::*changed_d) (double) = &QDoubleSpinBox::valueChanged;
+	connect (komiSpin, changed_d, [this] (double) { setting_changed (); });
+	connect (boardSizeSpin, changed_i, [this] (int) { setting_changed (); });
+	connect (handicapSpin, changed_i, [this] (int) { setting_changed (); });
+	connect (timeSpin, changed_i, [this] (int) { setting_changed (); });
+	connect (byoTimeSpin, changed_i, [this] (int) { setting_changed (); });
+
+	connect (pb_suggest, &QPushButton::clicked, this, &GameDialog::slot_pbsuggest);
+	connect (pb_stats, &QPushButton::clicked, this, &GameDialog::slot_stats_opponent);
+
+	connect (buttonOffer, &QPushButton::toggled, this, &GameDialog::slot_offer);
+	connect (buttonCancel, &QPushButton::clicked, this, &GameDialog::slot_cancel);
+	connect (buttonDecline, &QPushButton::clicked, this, &GameDialog::slot_decline);
+
 	clear_warnings ();
 }
 
@@ -49,7 +64,7 @@ void GameDialog::clear_warnings ()
 	warn_side->hide ();
 }
 
-void GameDialog::slot_stats_opponent()
+void GameDialog::slot_stats_opponent (bool)
 {
 	client_window->sendcommand ("stats " + playerOpponentEdit->text(), false);
 }
@@ -65,7 +80,7 @@ void GameDialog::swap_colors()
 }
 
 // button "suggest"
-void GameDialog::slot_pbsuggest()
+void GameDialog::slot_pbsuggest (bool)
 {
 	qDebug("#### GameDialog::slot_pbsuggest()");
 	switch (gsname)
@@ -210,7 +225,7 @@ void GameDialog::slot_opponentopen(const QString &opp)
 	client_window->sendcommand (send, false);
 }
 
-void GameDialog::slot_offer(bool active)
+void GameDialog::slot_offer (bool active)
 {
 qDebug("#### GameDialog::slot_offer()");
 	// active serves for more in the future...
@@ -268,7 +283,7 @@ qDebug("#### GameDialog::slot_offer()");
 	}
 }
 
-void GameDialog::slot_decline()
+void GameDialog::slot_decline (bool)
 {
 	qDebug("#### GameDialog::slot_decline()");
 
@@ -287,7 +302,7 @@ void GameDialog::slot_decline()
 
 }
 
-void GameDialog::slot_cancel()
+void GameDialog::slot_cancel (bool)
 {
 	if (is_nmatch)
 		client_window->sendcommand ("nmatch _cancel", false);
@@ -297,9 +312,9 @@ void GameDialog::slot_cancel()
 	emit signal_removeDialog(opponent);
 }
 
-void GameDialog::slot_changed()
+void GameDialog::setting_changed()
 {
-	qDebug("#### GameDialog::slot_changed()");
+	qDebug("#### GameDialog::setting_changed()");
 	if (playerOpponentEdit->text() == myName)
 	{
 		buttonOffer->setText(tr("Teaching"));
@@ -363,7 +378,7 @@ void GameDialog::slot_matchcreate(const QString &nr, const QString &opponent)
 	}
 }
 
-void GameDialog::slot_notopen(const QString &opponent)
+void GameDialog::slot_notopen (const QString &opponent)
 {
 	qDebug("#### GameDialog::slot_notopen()");
 	if (opponent.isNull())
@@ -413,7 +428,7 @@ void GameDialog::slot_komirequest(const QString &opponent, int h, float k, bool 
 }
 
 
-void GameDialog::slot_dispute(const QString &opponent, const QString &line)
+void GameDialog::slot_dispute (const QString &opponent, const QString &line)
 {
 	if (playerOpponentEdit->text () != opponent)
 		return;

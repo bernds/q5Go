@@ -17,6 +17,7 @@ class GameDialog : public QDialog, public Ui::NewGameDialog
 
 	void swap_colors ();
 	void clear_warnings ();
+
 public:
 	GameDialog(QWidget* parent, GSName, const QString &);
 	~GameDialog();
@@ -24,18 +25,19 @@ public:
 	void set_myRk(QString &rk) { myRk = rk; qDebug() << "myRk: " << rk; }
 	void set_is_nmatch (bool b) { is_nmatch = b; }
 
+	void setting_changed ();
+
 signals:
 	void signal_matchsettings(const QString&, const QString&, const QString&, assessType);
 	void signal_removeDialog(const QString&);
 
 public slots:
 	// pushbuttons
-	void slot_stats_opponent ();
-	void slot_pbsuggest ();
+	void slot_stats_opponent (bool);
+	void slot_pbsuggest (bool = false);
 	void slot_offer (bool);
-	void slot_decline ();
-	void slot_changed ();
-	void slot_cancel ();
+	void slot_decline (bool);
+	void slot_cancel (bool);
 
 	// parser
 	void slot_suggest(const QString&, const QString&, const QString&, const QString&, int);
