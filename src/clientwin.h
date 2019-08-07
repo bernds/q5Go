@@ -37,25 +37,105 @@ class ClientWindow : public QMainWindow, public Ui::ClientWindowGui
 {
 	Q_OBJECT
 
+	TelnetConnection *telnetConnection;
+	Parser *parser;
+	qGoIF *qgoif;
+	Account *myAccount;
+
+	// online time
+	int onlineCount;
+	bool youhavemsg;
+	bool playerListEmpty;
+	bool playerListSteadyUpdate;
+	bool gamesListSteadyUpdate;
+	bool autoAwayMessage;
+
+	// cmd_xx get current cmd number, and, if higher than last, cmd is valid,
+	//    else cmd is from history list
+	int cmd_count;
+	bool cmd_valid;
+
+	// telnet ready
+	bool tn_ready;
+	bool tn_wait_for_tn_ready;
+
+	ChannelList channellist;
+	QList<Talk *> talklist;
+	QList<GameDialog *> matchlist;
+	QList<sendBuf *> sendBuffer;
+
+	QLabel *statusUsers, *statusGames, *statusServer, *statusChannel;
+	QLabel *statusOnlineTime, *statusMessage;
+
+	QString watch;
+	QString exclude;
+
+	// frame sizes
+	QPoint view_p;
+	QSize view_s;
+	QPoint pref_p;
+	QSize pref_s;
+
+	// popup window save
+	PlayerTableItem	*lv_popupPlayer;
+	GamesTableItem	*lv_popupGames;
+
+	// extended user info
+	bool extUserInfo;
+
+	// statistics
+	int bytesIn, bytesOut;
+
+	// event filter
+	int seekButtonTimer;
+	int oneSecondTimer;
+
+	// menus
+	QIcon seekingIcon[4], NotSeekingIcon;
+	QMenu *seekMenu;
+
+	QAction *whatsThis, *escapeFocus;
+
+	// timing aids
+	int counter;
+
+	// reset internal counter (quarter hour) for timing functions of class ClientWindow
+	void resetCounter() { counter = 899; }
+	void timerEvent (QTimerEvent*);
+
+	void initStatusBar (QWidget*);
+	void initToolBar ();
+	void initActions ();
+	void update_font ();
+
+	void set_tn_ready ();
+	int sendTextFromApp (const QString&, bool localecho=true);
+	void prepare_tables (InfoType);
+	void set_sessionparameter (QString, bool);
+	void send_nmatch_range_parameters ();
+
+	int toggle_player_state (const char *list, const QString &symbol);
+	QString getPlayerRk (QString);
+	QString getPlayerExcludeListEntry (QString);
+
+	void colored_message (QString, QColor);
+
+	void populate_cbconnect (const QString &);
+	void enable_connection_buttons (bool);
+
+	void setColumnsForExtUserInfo ();
+	void saveSettings ();
+
 public:
-	ClientWindow(QMainWindow* parent);
-	~ClientWindow();
+	ClientWindow (QMainWindow* parent);
+	~ClientWindow ();
 
-	int sendTextFromApp(const QString&, bool localecho=true);
 	void sendcommand(const QString&, bool localecho=false);
-	void prepare_tables(InfoType);
-	void set_sessionparameter(QString, bool);
-	void send_nmatch_range_parameters();
-
-	QString getPlayerRk(QString);
-	QString getPlayerExcludeListEntry(QString);
 	void savePrefFrame(QPoint p, QSize s) { pref_p = p; pref_s = s; }
 	QPoint getViewPos() { return view_p; }
 	QSize getViewSize() { return view_s; }
 	QPoint getPrefPos() { return pref_p; }
 	QSize getPrefSize() { return pref_s; }
-	void setColumnsForExtUserInfo();
-	void saveSettings();
 
 	bool preferencesAccept();
 	void dlgSetPreferences(int tab = 0);
@@ -148,93 +228,6 @@ public slots:
 	void slotViewToolBar (bool toggle);
 	void slotViewStatusBar (bool toggle);
 	void slotViewMenuBar (bool toggle);
-
-	void set_tn_ready ();
-
-private:
-	TelnetConnection   *telnetConnection;
-	Parser             *parser;
-	qGoIF              *qgoif;
-	Account            *myAccount;
-//	QTextCodec         *textCodec;
-//	QTextStream        *textStream;
-//	QString            buffer;
-
-	// online time
-	int                onlineCount;
-	bool               youhavemsg;
-	bool               playerListEmpty;
-	bool               playerListSteadyUpdate;
-	bool               gamesListSteadyUpdate;
-//	bool               gamesListEmpty;
-	bool               autoAwayMessage;
-
-	// cmd_xx get current cmd number, and, if higher than last, cmd is valid,
-	//    else cmd is from history list
-	int                cmd_count;
-	bool               cmd_valid;
-	// telnet ready
-	bool               tn_ready;
-	bool               tn_wait_for_tn_ready;
-
-	ChannelList channellist;
-	QList<Talk *> talklist;
-	QList<GameDialog *> matchlist;
-	QList<sendBuf *> sendBuffer;
-
-	QLabel *statusUsers, *statusGames, *statusServer, *statusChannel;
-	QLabel *statusOnlineTime, *statusMessage;
-
-	// timing aids
-	void 		timerEvent(QTimerEvent*);
-	int		counter;
-
-	// reset internal counter (quarter hour) for timing functions of class ClientWindow
-	void		resetCounter() { counter = 899; }
-
-	void initStatusBar(QWidget*);
-	//void initmenus(QWidget*);
-	void initToolBar();
-	void initActions();
-	void update_font ();
-
-	int toggle_player_state (const char *list, const QString &symbol);
-
-	void colored_message (QString, QColor);
-
-	void populate_cbconnect (const QString &);
-	void enable_connection_buttons (bool);
-
-	QString		watch;
-	QString		exclude;
-
-	// frame sizes
-	QPoint		view_p;
-	QSize		view_s;
-	QPoint		pref_p;
-	QSize		pref_s;
-
-	// popup window save
-	PlayerTableItem	*lv_popupPlayer;
-	GamesTableItem	*lv_popupGames;
-
-	// extended user info
-	bool		extUserInfo;
-
-	// statistics
-	int		bytesIn, bytesOut;
-
-	// event filter
- 	int		seekButtonTimer ;
-	int oneSecondTimer;
-
-  	// menus
-	QIcon 	seekingIcon[4], NotSeekingIcon;
-
-	QMenu *seekMenu;
-	//QStringList 	*seekConditionList ;
-
-	QAction *whatsThis, *escapeFocus;
 };
 
 /* Constructed in main, potentially hidden but always present.  */
