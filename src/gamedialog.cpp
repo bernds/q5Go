@@ -220,7 +220,7 @@ void GameDialog::slot_opponentopen(const QString &opp)
 
 	// 24 *xxxx*: CLIENT: <qGo 1.9.12> match xxxx wants handicap 0, komi 0.5[, free]
 	// this command is not part of server preferences "use Komi" and "auto negotiation"
-	QString send = "tell " + opponent + " CLIENT: <qGo " + VERSION + "> match " +
+	QString send = "tell " + opponent + " CLIENT: <" + PACKAGE + " " + VERSION + "> match " +
 		me + " wants handicap " + handicapSpin->text() + ", komi " +
 		komiSpin->text();
 	if (ComboBox_free->currentText() == tr("yes"))
