@@ -19,11 +19,9 @@ class GameDialog : public QDialog, public Ui::NewGameDialog
 	void clear_warnings ();
 
 public:
-	GameDialog(QWidget* parent, GSName, const QString &);
+	GameDialog(QWidget* parent, GSName, const QString &, const QString &, const QString &, const QString &);
 	~GameDialog();
-	void set_oppRk(QString &rk) { oppRk = rk; qDebug() << "oppRk: " << rk; }
-	void set_myRk(QString &rk) { myRk = rk; qDebug() << "myRk: " << rk; }
-	void set_is_nmatch (bool b) { is_nmatch = b; }
+	void set_is_nmatch (bool b);
 
 	void setting_changed ();
 

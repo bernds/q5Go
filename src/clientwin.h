@@ -154,6 +154,7 @@ public:
 	void server_remove_player (const QString &);
 
 	void update_observed_games (int);
+	void handle_matchrequest (const QString&, bool, bool);
 
 public slots:
 	void slot_refresh (int);
@@ -189,7 +190,6 @@ public slots:
 	void slot_talk (const QString&, const QString&, bool);
 	void slot_checkbox (int, bool);
 	void slot_channelinfo (int, const QString&);
-	void slot_matchrequest (const QString&, bool);
   	void slot_removeMatchDialog (const QString&);
 	void slot_shout (const QString&, const QString&);
 	void slot_room (const QString&, bool);

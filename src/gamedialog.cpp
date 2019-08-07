@@ -9,17 +9,21 @@
 #include "clientwin.h"
 #include "gamedialog.h"
 
-GameDialog::GameDialog(QWidget* parent, GSName gs, const QString &name)
-	: QDialog(parent), gsname (gs), myName (name), buttongroup (this)
+GameDialog::GameDialog (QWidget* parent, GSName gs, const QString &name, const QString &rk,
+		       const QString &opponent, const QString &opp_rk)
+	: QDialog(parent), gsname (gs), myName (name), myRk (rk), oppRk (opp_rk), buttongroup (this)
 {
-	setupUi(this);
+	setupUi (this);
 	setModal (true);
 	have_suggestdata = false;
 //	komiSpin->setValue(55);
 //	buttonOffer->setFocus();
 	komi_request = false;
-	is_nmatch = false;
-  
+	set_is_nmatch (false);
+
+	playerOpponentEdit->setText (opponent);
+	playerOpponentRkEdit->setText (opp_rk);
+
 //  boardSizeSpin->setValue(setting->readIntEntry("DEFAULT_SIZE"));
 //  timeSpin->setValue(setting->readIntEntry("DEFAULT_TIME"));
 //  byoTimeSpin->setValue(setting->readIntEntry("DEFAULT_BY"));
@@ -488,4 +492,13 @@ void GameDialog::slot_dispute (const QString &opponent, const QString &line)
 	buttonOffer->setText(tr("Accept"));
 	buttonOffer->setChecked (false);
 	buttonDecline->setEnabled (true);
+}
+
+void GameDialog::set_is_nmatch (bool b)
+{
+	is_nmatch = b;
+
+	// Certain options are not available with normal game requests.
+	handicapSpin->setEnabled (is_nmatch);
+	play_nigiri_button->setEnabled (is_nmatch);
 }

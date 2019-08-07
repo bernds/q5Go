@@ -81,7 +81,6 @@ public slots:
 signals:
 	void signal_talkto(QString&, QString&);
 	void signal_pbRelOneTab(QWidget*);
-	void signal_matchrequest(const QString&,bool);
 };
 
 //-----------

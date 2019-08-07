@@ -187,7 +187,7 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	connect(parser, &Parser::signal_talk, this, &ClientWindow::slot_talk);
 	connect(parser, &Parser::signal_checkbox, this, &ClientWindow::slot_checkbox);
 	connect(parser, &Parser::signal_channelinfo, this, &ClientWindow::slot_channelinfo);
-	connect(parser, &Parser::signal_matchrequest, this, &ClientWindow::slot_matchrequest);
+	connect(parser, &Parser::signal_matchrequest, [this] (const QString &line) { handle_matchrequest (line, false, false); });
 	connect(parser, &Parser::signal_matchCanceled, this, &ClientWindow::slot_removeMatchDialog);
 	connect(parser, &Parser::signal_shout, this, &ClientWindow::slot_shout);
 	connect(parser, &Parser::signal_room, this, &ClientWindow::slot_room);
@@ -1258,28 +1258,30 @@ void ClientWindow::slot_removeMatchDialog(const QString &opponent)
 		}
 }
 
-
-void ClientWindow::slot_matchrequest(const QString &line, bool myrequest)
+void ClientWindow::handle_matchrequest (const QString &line, bool myrequest, bool from_talk_tab)
 {
 	// set up match dialog
 	// match_dialog()
 	GameDialog *dlg = nullptr;
 	QString opponent;
+	QString opp_rk;
 
 	// seek dialog
 	if (!myrequest)
 	{
 		// match xxxx B 19 1 10
-		opponent = line.section(' ', 1, 1);
-
+		opponent = line.section (' ', 1, 1);
+		opp_rk = getPlayerRk (opponent);
 		// play sound
-		qgo->playMatchSound();
+		qgo->playMatchSound ();
 	}
 	else
 	{
 		// xxxxx 4k*
-		opponent = line.section(' ', 0, 0);
+		opponent = line.section (' ', 0, 0);
+		opp_rk = line.section (' ', 1, 1);
 	}
+	QString myrk = myAccount->get_rank ();
 
 	// look for same opponent
 	for (auto it: matchlist)
@@ -1291,14 +1293,11 @@ void ClientWindow::slot_matchrequest(const QString &line, bool myrequest)
 	GSName gs = myAccount->get_gsname ();
 	if (!dlg)
 	{
-		dlg = new GameDialog (0, gs, myAccount->acc_name);
+		dlg = new GameDialog (0, gs, myAccount->acc_name, myrk, opponent, opp_rk);
 		matchlist.append (dlg);
 
 		if (gs == NNGS || gs == LGS)
-		{
-			// now connect suggest signal
 			connect (parser, &Parser::signal_suggest, dlg, &GameDialog::slot_suggest);
-		}
 
 		connect (dlg, &GameDialog::signal_removeDialog, this, &ClientWindow::slot_removeMatchDialog);
 
@@ -1313,50 +1312,24 @@ void ClientWindow::slot_matchrequest(const QString &line, bool myrequest)
 
 	if (myrequest)
 	{
-		QString rk = line.section(' ', 1, 1);
-
-		// set values
-		dlg->playerOpponentEdit->setText(opponent);
-		dlg->playerOpponentEdit->setReadOnly(true);
-
-		// set my and opponent's rank for suggestion
-		dlg->set_oppRk(rk);
-		dlg->playerOpponentRkEdit->setText(rk);
-		rk = myAccount->get_rank();
-		dlg->set_myRk(rk);
-		//dlg->playerWhiteRkEdit->setText(rk);
-		dlg->handicapSpin->setEnabled(false);
-
 		dlg->buttonDecline->setDisabled(true);
 
 		// my request: free/rated game is also requested
 		//dlg->cb_free->setChecked(true);
 
 		// teaching game:
-		if (dlg->playerOpponentEdit->text() == myAccount->acc_name)
+		if (opponent == myAccount->acc_name)
 			dlg->buttonOffer->setText(tr("Teaching"));
 
-		//nmatch settings from opponent
-		bool is_nmatch = false;
-
-		// we want to make sure the player is selected, because the match request may come from an other command (match button on the tab dialog)
-		QString lv_popup_name;
-
-		Player p;
-		if (lv_popupPlayer)
-		{
-			p = lv_popupPlayer->get_player ();
-			const QString txt1 = lv_popupPlayer->text(1);
-			lv_popup_name = (txt1.right(1) == "*" ? txt1.left(txt1.length() -1 ) : txt1);
-
-			is_nmatch = p.nmatch && lv_popup_name == opponent;// && setting->readBoolEntry("USE_NMATCH");
-		}
+		// If we came here through a context menu, we can check the player's nmatch setting.
+		bool is_nmatch = !from_talk_tab && m_menu_player.nmatch;
 
 		qDebug () << (is_nmatch ? "dlg is nmatch" : "dlg is not nmatch") << " with " << opponent;
 		dlg->set_is_nmatch(is_nmatch);
 
-		if (is_nmatch && p.has_nmatch_settings ())
+		if (is_nmatch && m_menu_player.has_nmatch_settings ())
 		{
+			const auto &p = m_menu_player;
 			int min_time = p.nmatch_timeMin / 60;
 			int max_time = p.nmatch_timeMax / 60;
 			if (max_time == 0 || max_time < min_time)
@@ -1375,9 +1348,6 @@ void ClientWindow::slot_matchrequest(const QString &line, bool myrequest)
 			dlg->byoTimeSpin->setRange (0, 60);
 			dlg->handicapSpin->setRange (0, 9);
 		}
-		//no handicap with usual game requests
-		dlg->handicapSpin->setEnabled(is_nmatch);
-		dlg->play_nigiri_button->setEnabled(is_nmatch);
 
 		//default settings
 		dlg->boardSizeSpin->setValue(setting->readIntEntry("DEFAULT_SIZE"));
@@ -1390,10 +1360,10 @@ void ClientWindow::slot_matchrequest(const QString &line, bool myrequest)
 	else
 	{
 		// match xxxx B 19 1 10 - using this line means: I am black!
-		bool opp_plays_white = (line.section(' ', 2, 2) == "B");//QString(tr("B")));
-		bool opp_plays_nigiri = (line.section(' ', 2, 2) == "N");
+		bool opp_plays_white = line.section(' ', 2, 2) == "B";
+		bool opp_plays_nigiri = line.section(' ', 2, 2) == "N";
 
-		QString handicap, size, time,byotime, byostones ;
+		QString handicap, size, time,byotime, byostones;
 
 		if (line.contains("nmatch"))
 		{
@@ -1425,20 +1395,9 @@ void ClientWindow::slot_matchrequest(const QString &line, bool myrequest)
 			dlg->timeSpin->setValue(time.toInt());
 			dlg->byoTimeSpin->setRange(0,100);
 			dlg->byoTimeSpin->setValue(byotime.toInt());
-			dlg->handicapSpin->setEnabled(false);
-			dlg->play_nigiri_button->setEnabled(false);
 			dlg->boardSizeSpin->setRange(1,19);
 			dlg->boardSizeSpin->setValue(size.toInt());
 		}
-
-		QString rk = getPlayerRk(opponent);
-		dlg->set_oppRk(rk);
-		QString myrk = myAccount->get_rank();
-		dlg->set_myRk(myrk);
-
-		dlg->playerOpponentEdit->setText(opponent);
-		dlg->playerOpponentEdit->setReadOnly(true);
-		dlg->playerOpponentRkEdit->setText(rk);
 
 		if (opp_plays_white)
 			dlg->play_black_button->setChecked (true);
@@ -1522,7 +1481,7 @@ void ClientWindow::slot_doubleclick_players (QTreeWidgetItem *lv)
 {
 	lv_popupPlayer = static_cast<PlayerTableItem*>(lv);
 	m_menu_player = lv_popupPlayer->get_player ();
-	slot_matchrequest (menu_player_name () + " " + m_menu_player.rank, true);
+	handle_matchrequest (menu_player_name () + " " + m_menu_player.rank, true, false);
 }
 
 void ClientWindow::slot_menu_players (const QPoint& pt)
@@ -1551,7 +1510,7 @@ void ClientWindow::slot_mouse_players (QTreeWidgetItem *lv)
 	{
 		puw = new QMenu (0, 0);
 		puw->addAction (tr ("match"),
-				[=] () { slot_matchrequest (menu_player_name () + " " + m_menu_player.rank, true); });
+				[=] () { handle_matchrequest (menu_player_name () + " " + m_menu_player.rank, true, false); });
 		puw->addAction (tr ("talk"),
 				[=] () { slot_talk (menu_player_name (), QString::null, true); });
 		// puw->insertSeparator();
@@ -1647,7 +1606,6 @@ void ClientWindow::slot_talk(const QString &name, const QString &text, bool ispl
 		talklist.append (dlg);
 
 		connect (dlg, &Talk::signal_talkto, this, &ClientWindow::slot_talkto);
-		connect (dlg, &Talk::signal_matchrequest, this, &ClientWindow::slot_matchrequest);
 		connect (dlg, &Talk::signal_pbRelOneTab, this, &ClientWindow::slot_pbRelOneTab);
 
 		if (!name.isEmpty() && isplayer)

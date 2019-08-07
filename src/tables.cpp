@@ -769,7 +769,7 @@ void Talk::slot_returnPressed ()
 void Talk::slot_match ()
 {
 	QString txt = m_name + " " + stats_rating->text ();
-	emit signal_matchrequest (txt, true);
+	client_window->handle_matchrequest (txt, true, true);
 }
 
 // write to txt field in dialog
