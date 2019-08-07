@@ -78,6 +78,7 @@ class ClientWindow : public QMainWindow, public Ui::ClientWindowGui
 
 	// popup window save
 	Player m_menu_player;
+	Game m_menu_game;
 	PlayerTableItem	*lv_popupPlayer;
 	GamesTableItem	*lv_popupGames;
 
@@ -127,6 +128,7 @@ class ClientWindow : public QMainWindow, public Ui::ClientWindowGui
 	void setColumnsForExtUserInfo ();
 	void saveSettings ();
 
+	QString menu_player_name ();
 public:
 	ClientWindow (QMainWindow* parent);
 	~ClientWindow ();
@@ -155,9 +157,6 @@ public:
 
 public slots:
 	void slot_refresh (int);
-	void slot_playerPopup (int);
-	void slot_gamesPopup (int);
-//	void slot_channelPopup (int);
 	void slot_pbRelTabs ();
 	void slot_pbRelOneTab (QWidget*);
 	void slot_statsPlayer (Player*);

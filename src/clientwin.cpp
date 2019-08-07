@@ -1211,49 +1211,11 @@ void ClientWindow::slot_pbrefreshplayers(bool)
 	}
 }
 
-void ClientWindow::slot_gamesPopup(int i)
-{
-	QString t1 = lv_popupGames->text(1);
-	QString t3 = lv_popupGames->text(3);
-	QString player_nameW = t1.right(1) == "*" ? t1.left (t1.length() - 1) : t1;
-	QString player_nameB = t3.right(1) == "*" ? t3.left( t3.length() -1 ) : t3;
-
-	switch (i) {
-	case 1:
-		// observe
-		if (lv_popupGames)
-		{
-			// set up game for observing
-			//if (qgoif->set_observe(lv_popupGames->text(0)))
-			{
-				QString gameID = lv_popupGames->text(0);
-				// if game is set up new -> get moves
-				//   set game to observe
-				sendcommand("observe " + gameID);
-			}
-		}
-		break;
-
-	case 2:
-		// stats
-		slot_sendcommand("stats " + player_nameW, false);
-		break;
-
-	case 3:
-		// stats
-		slot_sendcommand("stats " + player_nameB, false);
-		break;
-
-	default:
-		break;
-	}
-}
-
 // doubleclick actions...
 void ClientWindow::slot_doubleclick_games(QTreeWidgetItem *lv)
 {
 	lv_popupGames = static_cast<GamesTableItem*>(lv);
-	slot_gamesPopup (1);
+	sendcommand ("observe " + lv_popupGames->text (0));
 }
 
 void ClientWindow::slot_menu_games (const QPoint &pt)
@@ -1270,13 +1232,24 @@ void ClientWindow::slot_mouse_games (QTreeWidgetItem *lv)
 
 	if (!puw)
 	{
-		puw = new QMenu(0, 0);
-		puw->addAction(tr("observe"), this, [=] () { slot_gamesPopup(1); });
-		puw->addAction(tr("stats W"), this, [=] () { slot_gamesPopup(2); });
-		puw->addAction(tr("stats B"), this, [=] () { slot_gamesPopup(3); });
+		puw = new QMenu (0, 0);
+		puw->addAction (tr ("observe"), [=] () { sendcommand ("observe " + m_menu_game.nr); });
+		puw->addAction (tr ("stats W"),
+				[=] () {
+					const QString &t1 = m_menu_game.wname;
+					QString player_name = t1.right (1) == "*" ? t1.left (t1.length () - 1) : t1;
+					sendcommand ("stats " + player_name, false);
+				});
+		puw->addAction (tr ("stats B"),
+				[=] () {
+					const QString &t1 = m_menu_game.bname;
+					QString player_name = t1.right (1) == "*" ? t1.left (t1.length () - 1) : t1;
+					sendcommand ("stats " + player_name, false);
+				});
 	}
 
 	lv_popupGames = static_cast<GamesTableItem*>(lv);
+	m_menu_game = lv_popupGames->get_game ();
 	puw->popup (QCursor::pos ());
 }
 
@@ -1495,19 +1468,18 @@ int ClientWindow::toggle_player_state (const char *list, const QString &symbol)
 {
 	int change = 0;
 	// toggle watch list
-	QString cpy = setting->readEntry(list).simplified() + ";";
+	QString cpy = setting->readEntry (list).simplified () + ";";
 	QString line;
 	QString name;
 	bool found = false;
 	int cnt = cpy.count(';');
-	Player p = lv_popupPlayer->get_player ();
 
 	for (int i = 0; i < cnt; i++)
 	{
 		name = cpy.section(';', i, i);
 		if (!name.isEmpty())
 		{
-			if (name == p.name)
+			if (name == m_menu_player.name)
 				// skip player if found
 				found = true;
 			else
@@ -1519,10 +1491,10 @@ int ClientWindow::toggle_player_state (const char *list, const QString &symbol)
 		// not found -> add to list
 		line += lv_popupPlayer->text(1);
 		// update player list
-		if (p.mark != "M")
+		if (m_menu_player.mark != "M")
 		{
 			change = 1;
-			p.mark = symbol;
+			m_menu_player.mark = symbol;
 		}
 	}
 	else if (line.length() > 0)
@@ -1533,119 +1505,45 @@ int ClientWindow::toggle_player_state (const char *list, const QString &symbol)
 
 	if (found)
 	{
-		if (p.mark != "M")
+		if (m_menu_player.mark != "M")
 		{
 			change = -1;
-			p.mark = "";
+			m_menu_player.mark = "";
 		}
 	}
 
-	setting->writeEntry(list, line);
+	setting->writeEntry (list, line);
 
-	lv_popupPlayer->update_player (p);
+	QTreeWidgetItemIterator lv (ListView_players);
+	for (PlayerTableItem *lvi; (lvi = static_cast<PlayerTableItem*>(*lv)); lv++)
+		if (lvi->text(1) == m_menu_player.name) {
+			lvi->update_player (m_menu_player);
+			break;
+		}
+
 	return change;
 }
 
-// result of player popup
-void ClientWindow::slot_playerPopup(int i)
-{
-	if (!lv_popupPlayer)
-	{
-		qWarning("*** programming error - no item selected");
-		return;
-	}
-
-	// some invited players on IGS get a * after their name
-	const QString &txt1 = m_menu_player.name;
-	QString player_name = (txt1.right(1) == "*" ? txt1.left( txt1.length() -1 ) : txt1);
-
-	switch (i)
-	{
-		case 1 :
-		case 11 :
-			// match
-			slot_matchrequest(player_name + " " + m_menu_player.rank, true);
-			break;
-
-
-		case 2:
-    		case 3:
-			// talk and stats at the same time
-			slot_talk(player_name, QString::null, true);
-      			//slot_sendcommand("stats " + lv_popupPlayer->text(1), false);
-			break;
-
-		//case 3:
-			// stats
-			//slot_sendcommand("stats " + lv_popupPlayer->text(1), false);
-			//break;
-
-		case 4:
-			// stored games
-			slot_sendcommand("stored " + player_name, false);
-			break;
-
-		case 5:
-			// results
-			slot_sendcommand("result " + player_name, false);
-			break;
-
-		case 12:
-			// trail
-			slot_sendcommand("trail " + player_name, false);
-			break;
-
-		case 6:
-			myAccount->num_watchedplayers += toggle_player_state ("WATCH", "W");
-			statusUsers->setText(" P: " + QString::number(myAccount->num_players) + " / " + QString::number(myAccount->num_watchedplayers) + " ");
-			break;
-
-		case 7:
-			toggle_player_state ("EXCLUDE", "X");
-			break;
-
-		case 8:
-			// rating
-			if (myAccount->get_gsname() == IGS)
-				slot_sendcommand("prob " + player_name, false);
-			else
-				slot_sendcommand("rating " + player_name,false);
-			break;
-
-		case 9:
-			{
-			// observe game
-			QString game_id = lv_popupPlayer->text (3);
-			sendcommand("observe " + game_id, false);
-			}
-
-			break;
-
-		default:
-			break;
-	}
-}
-
-// doubleclick...
 void ClientWindow::slot_doubleclick_players (QTreeWidgetItem *lv)
 {
 	lv_popupPlayer = static_cast<PlayerTableItem*>(lv);
 	m_menu_player = lv_popupPlayer->get_player ();
-	slot_playerPopup (1);
+	slot_matchrequest (menu_player_name () + " " + m_menu_player.rank, true);
 }
 
-// move over ListView
-/*void ClientWindow::slot_moveOver_players()
-{
-	qDebug("move over player list...");
-} */
-// mouse menus
 void ClientWindow::slot_menu_players (const QPoint& pt)
 {
 	QTreeWidgetItem *item = ListView_players->itemAt (pt);
 	// emulate right button
 	if (item)
 		slot_mouse_players (item);
+}
+
+QString ClientWindow::menu_player_name ()
+{
+	// some invited players on IGS get a * after their name
+	const QString &txt1 = m_menu_player.name;
+	return txt1.right (1) == "*" ? txt1.left (txt1.length () - 1) : txt1;
 }
 
 // mouse click on ListView_players
@@ -1658,21 +1556,43 @@ void ClientWindow::slot_mouse_players (QTreeWidgetItem *lv)
 	// create popup window
 	if (!puw)
 	{
-		puw = new QMenu(0, 0);
-		puw->addAction(tr("match"), this, [=] () { slot_playerPopup(1); });
-		puw11 = puw->addAction(tr("match within his prefs"), this, [=] () { slot_playerPopup(11); });
-		puw->addAction(tr("talk"), this, [=] () { slot_playerPopup(2); });
+		puw = new QMenu (0, 0);
+		puw->addAction (tr ("match"),
+				[=] () { slot_matchrequest (menu_player_name () + " " + m_menu_player.rank, true); });
+		puw11 = puw->addAction (tr ("match within his prefs"),
+					[=] () { slot_matchrequest (menu_player_name () + " " + m_menu_player.rank, true); });
+		puw->addAction (tr ("talk"),
+				[=] () { slot_talk (menu_player_name (), QString::null, true); });
 		// puw->insertSeparator();
-		puw->addAction(tr("stats"), this, [=] () { slot_playerPopup(3); });
-		puw->addAction(tr("stored games"), this, [=] () { slot_playerPopup(4); });
-		puw->addAction(tr("results"), this, [=] () { slot_playerPopup(5); });
-		puw->addAction(tr("rating"), this, [=] () { slot_playerPopup(8); });
-		puw->addAction(tr("observe game"), this, [=] () { slot_playerPopup(9); });
-		puw->addAction(tr("trail"), this, [=] () { slot_playerPopup(12); });
+		puw->addAction (tr ("stats"),
+				[=] () { slot_talk (menu_player_name (), QString::null, true); });
+		puw->addAction (tr ("stored games"),
+				[=] () { sendcommand ("stored " + menu_player_name (), false); });
+		puw->addAction (tr ("results"),
+				[=] () { sendcommand ("result " + menu_player_name (), false); });
+		puw->addAction (tr ("rating"),
+				[=] () {
+					// rating
+					if (myAccount->get_gsname() == IGS)
+						sendcommand ("prob " + menu_player_name (), false);
+					else
+						sendcommand ("rating " + menu_player_name (), false);
+				});
+		puw->addAction (tr ("observe game"),
+				[=] () {
+					QString game_id = m_menu_player.play_str;
+					sendcommand ("observe " + game_id, false);
+				});
+		puw->addAction (tr ("trail"),
+				[=] () { sendcommand ("trail " + menu_player_name (), false); });
 		// puw->insertSeparator();
-		puw->addAction(tr("toggle watch list"), this, [=] () { slot_playerPopup(6); });
-		puw->addAction(tr("toggle exclude list"), this, [=] () { slot_playerPopup(7); });
-
+		puw->addAction (tr ("toggle watch list"),
+				[=] () {
+					myAccount->num_watchedplayers += toggle_player_state ("WATCH", "W");
+					statusUsers->setText (" P: " + QString::number (myAccount->num_players) + " / " + QString::number(myAccount->num_watchedplayers) + " ");
+				});
+		puw->addAction (tr ("toggle exclude list"),
+				[=] () { toggle_player_state ("EXCLUDE", "X"); });
 	}
 
 	puw11->setEnabled (m_menu_player.nmatch);
@@ -1741,7 +1661,7 @@ void ClientWindow::slot_talk(const QString &name, const QString &text, bool ispl
 		connect (dlg, &Talk::signal_pbRelOneTab, this, &ClientWindow::slot_pbRelOneTab);
 
 		if (!name.isEmpty() && isplayer)
-			slot_sendcommand("stats " + name, false);    // automatically request stats
+			sendcommand("stats " + name, false);    // automatically request stats
 
 		// play sound on new created dialog
 		bonus = true;
