@@ -109,7 +109,7 @@
     </message>
     <message>
         <source> visits.</source>
-        <translation>访问。</translation>
+        <translation type="vanished">访问。</translation>
     </message>
     <message>
         <source>Analysis is supported only for square boards!</source>
@@ -150,6 +150,36 @@
     <message>
         <source>File has a different boardsize than selected!</source>
         <translation>文件与选择的棋盘大小不一致！</translation>
+    </message>
+    <message>
+        <source>If fixed engine komi:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Controls how to behave if the engine only supports a fixed value for komi.
+If the analyzed game has negative komi, the game can be analyzed with reversed colors for better results.
+It is also possible to analyze with both normal and flipped komi, for example for zero-komi games.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Swap if better</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Analyze both</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add evaluation info to comments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> visits</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -231,7 +261,7 @@
     </message>
     <message>
         <source>You did not configure any analysis engine for this boardsize!</source>
-        <translation>没有为此棋盘大小配置分析引擎！</translation>
+        <translation type="vanished">没有为此棋盘大小配置分析引擎！</translation>
     </message>
 </context>
 <context>
@@ -480,7 +510,7 @@ Send adjournment request to your opponent. If he accept it, the game will be adj
     </message>
     <message>
         <source>Enter and leave edit mode where stones can be placed freely.</source>
-        <translation>在棋子可以放置的位置输入并离开编辑模式。</translation>
+        <translation type="vanished">在棋子可以放置的位置输入并离开编辑模式。</translation>
     </message>
     <message>
         <source>Freely edit the board position. Edited positions are added below the current one.</source>
@@ -581,7 +611,7 @@ After placing and/or undo release button for returning to starting point automat
     </message>
     <message>
         <source>&amp;Import/Export</source>
-        <translation>导入/导出(&amp;I)</translation>
+        <translation type="vanished">导入/导出(&amp;I)</translation>
     </message>
     <message>
         <source>&amp;Edit</source>
@@ -1028,7 +1058,7 @@ Export the current board to an SVG vector graphics file</source>
     </message>
     <message>
         <source>Import SGF from clipboard</source>
-        <translation>从剪贴板导入SGF</translation>
+        <translation type="vanished">从剪贴板导入SGF</translation>
     </message>
     <message>
         <source>Import SGF from clipboard
@@ -1218,6 +1248,102 @@ Open the batch analysis dialog which allows you to add SGF files to a queue to b
         <source>A&amp;utomatic diagrams...</source>
         <translation>自动图解(&amp;U)…</translation>
     </message>
+    <message>
+        <source>Turn this window into a normal SGF editing window.
+Currently, it is in a post-game state where you can still chat with the opponent.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Disconnect chat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Follow</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter and leave edit mode where stones can be placed freely.
+When you enter edit mode from any position, you always have the option to append your edits
+as a new position after the current one. Depending on circumstances, you may also have the
+option to replace an edited position, or to insert your edits before the current position.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Append your edits as a successor to the current position.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Append</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Insert your edits before the current position.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Insert before</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Replace the current position with your edits.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Replace</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Import/E&amp;xport</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose analysis engine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Import SGF &amp;from clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open from &amp;database...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>S&amp;lide export...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open the slide export dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play against engine from current position...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start a game against an engine from the current position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Undo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+Z</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Redo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>R&amp;edo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+Y</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ClientWindow</name>
@@ -1320,7 +1446,7 @@ The tooltip text contains the channels&apos; title and users&apos; names</source
     </message>
     <message>
         <source>New Game</source>
-        <translation>新建对局</translation>
+        <translation type="vanished">新建对局</translation>
     </message>
     <message>
         <source>Teaching</source>
@@ -1542,7 +1668,7 @@ Enables/disables the statusbar.</source>
     <message>
         <source>Engine configuration updated
 Analysis engines now require a board size to be set, assuming 19 for existing entries.</source>
-        <translation>引擎设置更新
+        <translation type="vanished">引擎设置更新
 分析引擎现在要求设置棋盘大小，已有的项目默认为19.</translation>
     </message>
     <message>
@@ -2263,12 +2389,305 @@ Analysis engines now require a board size to be set, assuming 19 for existing en
 	打开批量分析对话框，将SGF文件添加到队列中让引擎进行分析。
 	</translation>
     </message>
+    <message>
+        <source>&amp;Computer vs. computer play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Automatic computer vs. computer play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select two engines and let them play one or more games</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brings up a dialog to set up play between two engines.
+
+	You can set up one game or a multi-game match, optionally starting from
+	a single position, or from multiple positions found in a loaded game file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+T</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open from &amp;database...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DBDialog</name>
+    <message>
+        <source>Open database file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Filters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Player 2:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Event:</source>
+        <translation type="unfinished">比赛：</translation>
+    </message>
+    <message>
+        <source>From:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Player 1:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>To:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reset Games</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Configure database &amp;paths...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Override character set for text in SGF file:</source>
+        <translation type="unfinished">覆盖SGF文件中的文本编码设置：</translation>
+    </message>
+    <message>
+        <source>UTF-8</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>GB18030</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>EUC-KR</source>
+        <translation type="unfinished">EUC-KR</translation>
+    </message>
+    <message>
+        <source>EUC-JP</source>
+        <translation type="unfinished">EUC-JP</translation>
+    </message>
+    <message>
+        <source>ISO-2022-JP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shift-JIS</source>
+        <translation type="unfinished">Shift-JIS</translation>
+    </message>
+    <message>
+        <source>Big5</source>
+        <translation type="unfinished">Big5</translation>
+    </message>
+    <message>
+        <source>File properties</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>19</source>
+        <translation type="unfinished">19</translation>
+    </message>
+    <message>
+        <source>Komi:</source>
+        <translation type="unfinished">贴目:</translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation type="unfinished">日期</translation>
+    </message>
+    <message>
+        <source>Size:</source>
+        <translation type="unfinished">大小：</translation>
+    </message>
+    <message>
+        <source>Handicap:</source>
+        <translation type="unfinished">让子:</translation>
+    </message>
+    <message>
+        <source>Date:</source>
+        <translation type="unfinished">日期:</translation>
+    </message>
+    <message>
+        <source>6.5</source>
+        <translation type="unfinished">6.5</translation>
+    </message>
+    <message>
+        <source>Result:</source>
+        <translation type="unfinished">结果:</translation>
+    </message>
+    <message>
+        <source>Black</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>White</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Round:</source>
+        <translation type="unfinished">轮次：</translation>
+    </message>
+    <message>
+        <source>Go to first move.</source>
+        <translation type="unfinished">跳转到第一手。</translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to previous move.</source>
+        <translation type="unfinished">跳转到前一手。</translation>
+    </message>
+    <message>
+        <source>Go to next move.</source>
+        <translation type="unfinished">跳转到下一手。</translation>
+    </message>
+    <message>
+        <source>Go to last move.</source>
+        <translation type="unfinished">跳转到最后一手。</translation>
+    </message>
+    <message>
+        <source>Players</source>
+        <translation type="unfinished">棋友</translation>
+    </message>
+    <message>
+        <source>Res.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Debug_Dialog</name>
     <message>
         <source>Debug</source>
         <translation>调试</translation>
+    </message>
+</context>
+<context>
+    <name>EngineDialog</name>
+    <message>
+        <source>Create a new engine configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Arguments:</source>
+        <translation type="unfinished">参数：</translation>
+    </message>
+    <message>
+        <source>Name:</source>
+        <translation type="unfinished">用户名:</translation>
+    </message>
+    <message>
+        <source>Fixed komi:</source>
+        <translation type="unfinished">固定贴目：</translation>
+    </message>
+    <message>
+        <source>Executable:</source>
+        <translation type="unfinished">可执行文件：</translation>
+    </message>
+    <message>
+        <source>Set this to the komi value the engine expects, or leave empty if the engine allows arbitrary values for komi.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Board size:</source>
+        <translation type="unfinished">棋盘大小:</translation>
+    </message>
+    <message>
+        <source>Enter a board size if the engine supports only one board size.
+Analysis engines currently require a fixed board size to be set.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Any command line arguments that should be passed at startup.</source>
+        <translation type="unfinished">任何要传给程序启动的命令行参数</translation>
+    </message>
+    <message>
+        <source>The path to the GTP engine&apos;s executable.</source>
+        <translation type="unfinished">GTP引擎可执行文件路径。</translation>
+    </message>
+    <message>
+        <source>The name of the engine by which it is selected in the new computer game dialog</source>
+        <translation type="unfinished">引擎名称，当选中时会显示在新建计算机对局对话框中</translation>
+    </message>
+    <message>
+        <source>Use for analysis (KataGo, Leela Zero or compatible)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Create a new engine configuration from an existing one</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change an engine configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose GTP engine path</source>
+        <translation type="unfinished">选择GTP引擎路径</translation>
+    </message>
+    <message>
+        <source>All Files (*)</source>
+        <translation type="unfinished">所有文件 (*)</translation>
+    </message>
+    <message>
+        <source>No name set for the engine.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A name must be set for the engine.
+Please enter all necessary fields before continuing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No path set for the engine.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A path must be set for the engine.
+Please enter all necessary fields before continuing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid size specified</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The value entered for the board size is invalid.
+Please enter values between 3 and 25.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No boardsize specified for analysis engine.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Currently any engine used for analysis must specify a board size.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid komi specified</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The value entered for komi is invalid.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2294,6 +2713,22 @@ Displays evaluation data found in the game record.</source>
     <message>
         <source>Failed to save image!</source>
         <translation>保存图像失败!</translation>
+    </message>
+    <message>
+        <source>Show scores</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show winrates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Score</source>
+        <translation type="unfinished">点目</translation>
+    </message>
+    <message>
+        <source>Win rate</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2361,12 +2796,16 @@ Displays evaluation data found in the game record.</source>
         <source>Invalid response from GTP engine</source>
         <translation>GTP引擎返回无效的响应。</translation>
     </message>
+    <message>
+        <source>GTP engine &apos;%1&apos; does not support rectangular boards.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>GameDialog</name>
     <message>
         <source>you</source>
-        <translation>您</translation>
+        <translation type="vanished">您</translation>
     </message>
     <message>
         <source>yes</source>
@@ -2393,11 +2832,11 @@ Displays evaluation data found in the game record.</source>
     </message>
     <message>
         <source>&amp;OK</source>
-        <translation>确定(&amp;O)</translation>
+        <translation type="vanished">确定(&amp;O)</translation>
     </message>
     <message>
         <source>&amp;Cancel</source>
-        <translation>取消(&amp;C)</translation>
+        <translation type="vanished">取消(&amp;C)</translation>
     </message>
     <message>
         <source>Black</source>
@@ -2468,6 +2907,10 @@ Ctrl+点击合拢的节点可展开一级子结点。</translation>
         <source>&amp;Auto collapse on/off</source>
         <translation>自动合拢/展开</translation>
     </message>
+    <message>
+        <source>Expand &amp;all</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>GamesTable</name>
@@ -2535,17 +2978,17 @@ Ctrl+点击合拢的节点可展开一级子结点。</translation>
     <name>MainWindow</name>
     <message>
         <source>&amp;Autoplay</source>
-        <translation>自动打谱(&amp;A)</translation>
+        <translation type="vanished">自动打谱(&amp;A)</translation>
     </message>
     <message>
         <source>Start/Stop autoplaying current game</source>
-        <translation>开始/停止自动打谱</translation>
+        <translation type="vanished">开始/停止自动打谱</translation>
     </message>
     <message>
         <source>Autoplay
 
 Start/Stop autoplaying current game.</source>
-        <translation>自动打谱
+        <translation type="vanished">自动打谱
 
 开始/停止自动打谱</translation>
     </message>
@@ -2629,11 +3072,11 @@ Shows the current mode. &apos;N&apos; for normal mode, &apos;E&apos; for edit mo
     </message>
     <message>
         <source>Autoplay stopped.</source>
-        <translation>自动打谱已停止</translation>
+        <translation type="vanished">自动打谱已停止</translation>
     </message>
     <message>
         <source>Autoplay started.</source>
-        <translation>自动打谱已开始</translation>
+        <translation type="vanished">自动打谱已开始</translation>
     </message>
     <message>
         <source>Variations swapped.</source>
@@ -2751,7 +3194,7 @@ Do you still want to save it?</source>
     </message>
     <message>
         <source>Jigo</source>
-        <translation>和棋</translation>
+        <translation type="vanished">和棋</translation>
     </message>
     <message>
         <source>Game result differs from the one stored.
@@ -2767,6 +3210,54 @@ Overwrite stored game result?</source>
         <source>W Win %</source>
         <translation>白胜%</translation>
     </message>
+    <message>
+        <source>free</source>
+        <translation type="unfinished">不计分</translation>
+    </message>
+    <message>
+        <source>rated</source>
+        <translation type="unfinished">计分棋</translation>
+    </message>
+    <message>
+        <source>teach</source>
+        <translation type="unfinished">教学棋</translation>
+    </message>
+    <message>
+        <source>Evaluations are not shown on the board.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Evaluations are shown on the board.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You did not configure any analysis engine for this boardsize!</source>
+        <translation type="unfinished">没有为此棋盘大小配置分析引擎！</translation>
+    </message>
+    <message>
+        <source>Internal error - engine not found.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> - Press F7 to show menu bar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Undo %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Undo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Redo %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>R&amp;edo</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MainWindow_GTP</name>
@@ -2778,24 +3269,94 @@ Overwrite stored game result?</source>
         <source>The computer has resigned the game.</source>
         <translation>电脑已认输。</translation>
     </message>
+    <message>
+        <source>Black wins on time.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>White wins on time.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clock has run out</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid move by the engine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>An invalid move was played by the engine, game terminated.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reported score by White: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reported score by Black: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Neither program reported a score.
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game #%1:
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wins for White/Black: %1/%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> Jigo: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> Disagreements: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Engine play has completed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>B+R</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>W+R</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game result: </source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>NewAIGameDlg</name>
     <message>
         <source>Error</source>
-        <translation>错误</translation>
+        <translation type="vanished">错误</translation>
     </message>
     <message>
         <source>You entered an invalid Handicap (1 is not legal)</source>
-        <translation>您输入的让子数无效(1是无效的)</translation>
+        <translation type="vanished">您输入的让子数无效(1是无效的)</translation>
     </message>
     <message>
         <source>Choose an SGF file to load</source>
-        <translation>选择一个SGF文件打开</translation>
+        <translation type="vanished">选择一个SGF文件打开</translation>
     </message>
     <message>
         <source>SGF Files (*.sgf);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)</source>
-        <translation>SGF 文件 (*.sgf);;MGT 文件 (*.mgt);;XML 文件 (*.xml);;所有文件 (*)</translation>
+        <translation type="vanished">SGF 文件 (*.sgf);;MGT 文件 (*.mgt);;XML 文件 (*.xml);;所有文件 (*)</translation>
+    </message>
+    <message>
+        <source>Play engine from current position</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2810,11 +3371,11 @@ Overwrite stored game result?</source>
     </message>
     <message>
         <source>&amp;OK</source>
-        <translation>确定(&amp;O)</translation>
+        <translation type="vanished">确定(&amp;O)</translation>
     </message>
     <message>
         <source>&amp;Cancel</source>
-        <translation>取消(&amp;C)</translation>
+        <translation type="vanished">取消(&amp;C)</translation>
     </message>
     <message>
         <source>Players</source>
@@ -2851,6 +3412,46 @@ Overwrite stored game result?</source>
     <message>
         <source>Handicap:</source>
         <translation>让子:</translation>
+    </message>
+    <message>
+        <source>Square board size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rectangular board</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>x</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Time</source>
+        <translation type="unfinished">时间</translation>
+    </message>
+    <message>
+        <source>Main time (minutes):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>60</source>
+        <translation type="unfinished">60</translation>
+    </message>
+    <message>
+        <source>Overtime</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>10</source>
+        <translation type="unfinished">10</translation>
+    </message>
+    <message>
+        <source>Period (minutes):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stones per period:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2996,11 +3597,11 @@ Overwrite stored game result?</source>
     </message>
     <message>
         <source>&amp;Ok</source>
-        <translation>确定(&amp;O)</translation>
+        <translation type="vanished">确定(&amp;O)</translation>
     </message>
     <message>
         <source>&amp;Cancel</source>
-        <translation>取消(&amp;C)</translation>
+        <translation type="vanished">取消(&amp;C)</translation>
     </message>
     <message>
         <source>Board size:</source>
@@ -3087,11 +3688,43 @@ Overwrite stored game result?</source>
     </message>
     <message>
         <source>&amp;Ok</source>
-        <translation>确定(&amp;O)</translation>
+        <translation type="vanished">确定(&amp;O)</translation>
     </message>
     <message>
         <source>&amp;Cancel</source>
-        <translation>取消(&amp;C)</translation>
+        <translation type="vanished">取消(&amp;C)</translation>
+    </message>
+    <message>
+        <source>Restores the board to its original state, with no intersections removed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reset grid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clears the selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove the selected intersections from the board</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove selected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add the selected intersections to the board</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add selected</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3236,6 +3869,10 @@ use &quot;free&quot; command to make game rated or unrated (free)</source>
         <source>B Win%:</source>
         <translation>黑胜%</translation>
     </message>
+    <message>
+        <source>Click to hide/show evaluation marks on the board.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>NthMoveDialog</name>
@@ -3326,55 +3963,55 @@ use &quot;free&quot; command to make game rated or unrated (free)</source>
     </message>
     <message>
         <source>Stones</source>
-        <translation>落子</translation>
+        <translation type="vanished">落子</translation>
     </message>
     <message>
         <source>Pass</source>
-        <translation>虚手</translation>
+        <translation type="vanished">虚手</translation>
     </message>
     <message>
         <source>Autoplay</source>
-        <translation>自动打谱</translation>
+        <translation type="vanished">自动打谱</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>时间</translation>
+        <translation type="vanished">时间</translation>
     </message>
     <message>
         <source>Talk</source>
-        <translation>交谈</translation>
+        <translation type="vanished">交谈</translation>
     </message>
     <message>
         <source>Say</source>
-        <translation>局内交谈</translation>
+        <translation type="vanished">局内交谈</translation>
     </message>
     <message>
         <source>Match</source>
-        <translation>对局</translation>
+        <translation type="vanished">对局</translation>
     </message>
     <message>
         <source>Enter</source>
-        <translation>进入</translation>
+        <translation type="vanished">进入</translation>
     </message>
     <message>
         <source>Game end</source>
-        <translation>对局结束</translation>
+        <translation type="vanished">对局结束</translation>
     </message>
     <message>
         <source>Leave</source>
-        <translation>离开</translation>
+        <translation type="vanished">离开</translation>
     </message>
     <message>
         <source>Disconnect</source>
-        <translation>断开连接</translation>
+        <translation type="vanished">断开连接</translation>
     </message>
     <message>
         <source>Connect</source>
-        <translation>连接</translation>
+        <translation type="vanished">连接</translation>
     </message>
     <message>
         <source>All Files (*)</source>
-        <translation>所有文件 (*)</translation>
+        <translation type="vanished">所有文件 (*)</translation>
     </message>
     <message>
         <source>Images (*.png *.xpm *.jpg)</source>
@@ -3396,7 +4033,7 @@ use &quot;free&quot; command to make game rated or unrated (free)</source>
         <source>The engine input fields contain
 potentially unsaved data.
 Really close the preferences?</source>
-        <translation>引擎输入字段可能有未保存数据。确定要关闭首选项吗？</translation>
+        <translation type="vanished">引擎输入字段可能有未保存数据。确定要关闭首选项吗？</translation>
     </message>
     <message>
         <source>The host input fields contain
@@ -3406,33 +4043,33 @@ Really close the preferences?</source>
     </message>
     <message>
         <source>Invalid komi entered</source>
-        <translation>无效的贴目数</translation>
+        <translation type="vanished">无效的贴目数</translation>
     </message>
     <message>
         <source>Please enter a valid komi before adding the engine.</source>
-        <translation>在添加引擎前请输入有效的贴目数。</translation>
+        <translation type="vanished">在添加引擎前请输入有效的贴目数。</translation>
     </message>
     <message>
         <source>Missing board size</source>
-        <translation>缺少棋盘大小</translation>
+        <translation type="vanished">缺少棋盘大小</translation>
     </message>
     <message>
         <source>Analysis engines require a board size to be specified.
 If your engine allows multiple board sizes, you need to configure them in separate entires.</source>
-        <translation>分析引擎要求指定棋盘大小。
+        <translation type="vanished">分析引擎要求指定棋盘大小。
 如果引擎允许多种棋盘大小，则需要分别指定。</translation>
     </message>
     <message>
         <source>Invalid board size</source>
-        <translation>无效的棋盘大小</translation>
+        <translation type="vanished">无效的棋盘大小</translation>
     </message>
     <message>
         <source>Only a range of 5 to 25 is allowed.</source>
-        <translation>允许的范围是5~25。</translation>
+        <translation type="vanished">允许的范围是5~25。</translation>
     </message>
     <message>
         <source>Choose GTP engine path</source>
-        <translation>选择GTP引擎路径</translation>
+        <translation type="vanished">选择GTP引擎路径</translation>
     </message>
     <message>
         <source>Select a goban wood image</source>
@@ -3444,15 +4081,69 @@ If your engine allows multiple board sizes, you need to configure them in separa
     </message>
     <message>
         <source>Select a white stone image</source>
-        <translation>选择白棋子图像</translation>
+        <translation type="vanished">选择白棋子图像</translation>
     </message>
     <message>
         <source>Images (*.png *.xpm *.jpg *.svg)</source>
-        <translation>图像 (*.png *.xpm *.jpg *.svg)</translation>
+        <translation type="vanished">图像 (*.png *.xpm *.jpg *.svg)</translation>
     </message>
     <message>
         <source>Select a black stone image</source>
-        <translation>选择黑棋子图像</translation>
+        <translation type="vanished">选择黑棋子图像</translation>
+    </message>
+    <message>
+        <source>Directory contains no database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The directory could not be added because no kombilo.db file could be found.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Directory already in the list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The directory could not be added because it already exists in the list.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Overwrite database paths</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This operation replaces existing database paths.
+Do you still want to import from kombilo.cfg?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid slide width</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please enter valid dimensions for slide export (100x100 or larger).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid slide height</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid slide dimensions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Slide export dimensions must be wider than they are tall.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Engine name already exists</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>An engine with this name already exists.
+Please enter a new name that is not already taken.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3483,17 +4174,17 @@ If your engine allows multiple board sizes, you need to configure them in separa
     </message>
     <message>
         <source>Slider</source>
-        <translation>滑动条</translation>
+        <translation type="vanished">滑动条</translation>
     </message>
     <message>
         <source>Show slider</source>
-        <translation>显示滑动条</translation>
+        <translation type="vanished">显示滑动条</translation>
     </message>
     <message>
         <source>Show slider
 
 Toggles the slider on the bottom of the board on or off.</source>
-        <translation>显示滑动条
+        <translation type="vanished">显示滑动条
 
 在显示/不显示之间切换</translation>
     </message>
@@ -3549,17 +4240,17 @@ Enable this box when you want to listen a clicking sound when playing a stone on
     </message>
     <message>
         <source>Autoplay</source>
-        <translation>自动打谱</translation>
+        <translation type="vanished">自动打谱</translation>
     </message>
     <message>
         <source>Play sound in autoplay mode</source>
-        <translation>自动打谱模式启用音效</translation>
+        <translation type="vanished">自动打谱模式启用音效</translation>
     </message>
     <message>
         <source>Play sound in autoplay mode
 
 Play a sound when a stone is placed in autoplay mode.</source>
-        <translation>自动打谱模式启用音效
+        <translation type="vanished">自动打谱模式启用音效
 
 在自动打谱模式下也启用落子音效</translation>
     </message>
@@ -3629,50 +4320,50 @@ Play a sound when a stone is placed in autoplay mode.</source>
     </message>
     <message>
         <source>Interval:</source>
-        <translation>间隔:</translation>
+        <translation type="vanished">间隔:</translation>
     </message>
     <message>
         <source>0.1</source>
-        <translation>0.1</translation>
+        <translation type="vanished">0.1</translation>
     </message>
     <message>
         <source>0.5</source>
-        <translation>0.5</translation>
+        <translation type="vanished">0.5</translation>
     </message>
     <message>
         <source>1</source>
-        <translation>1</translation>
+        <translation type="vanished">1</translation>
     </message>
     <message>
         <source>5</source>
-        <translation>5</translation>
+        <translation type="vanished">5</translation>
     </message>
     <message>
         <source>Time interval for autoplay</source>
-        <translation>自动打谱的时间间隔</translation>
+        <translation type="vanished">自动打谱的时间间隔</translation>
     </message>
     <message>
         <source>Time interval for autoplay
 
 Delay between the moves in autoplay mode in seconds.</source>
-        <translation>自动打谱的时间间隔
+        <translation type="vanished">自动打谱的时间间隔
 
 自动打谱时相邻两手之间间隔的秒数</translation>
     </message>
     <message>
         <source>sgf time tags</source>
-        <translation>SGF时间标记</translation>
+        <translation type="vanished">SGF时间标记</translation>
     </message>
     <message>
         <source>use time info of input file</source>
-        <translation>使用输入文件中给出的时间间隔間資訊</translation>
+        <translation type="vanished">使用输入文件中给出的时间间隔間資訊</translation>
     </message>
     <message>
         <source>sgf time tags
 
 Use time info of input file. The autoplay speed is same as recorded.
 If not available then interval time is used.</source>
-        <translation>SGF时间标记
+        <translation type="vanished">SGF时间标记
 
 使用输入文件中给出的时间间隔.自动打谱的速度与棋谱文件中记录的时间吻合.
 如果文件中没有记录时间则使用选定的间隔.間</translation>
@@ -3694,7 +4385,7 @@ If &apos;System default&apos; is selected, qGo will use the standard language of
 This change will take effect only after qGo has been restarted.
 
 If your language is not supported, you might consider translating qGo. Please check the qGo homepage at http://qgo.sourceforge.net</source>
-        <translation>设置程序界面语言
+        <translation type="vanished">设置程序界面语言
 
 选择qGo程序界面的语言
 如果选择&quot;系统默认&quot;,qGo将使用您的系统的默认语言.在Linux中这是有环境变量LANG给定,在Windows中使用您在首选项中选择的语言.
@@ -4224,7 +4915,7 @@ On IGS only.</source>
     </message>
     <message>
         <source>Check for setting an anti cliko delay for on line games</source>
-        <translation>选中此项为网上对局启用&apos;防止误点击&apos;功能</translation>
+        <translation type="vanished">选中此项为网上对局启用&apos;防止误点击&apos;功能</translation>
     </message>
     <message>
         <source>Autosave</source>
@@ -4284,15 +4975,15 @@ If the picture is not set, or unvalid, a default picture is used by qgo</source>
     </message>
     <message>
         <source>2.5</source>
-        <translation>2.5</translation>
+        <translation type="vanished">2.5</translation>
     </message>
     <message>
         <source>7.5</source>
-        <translation>7.5</translation>
+        <translation type="vanished">7.5</translation>
     </message>
     <message>
         <source>10</source>
-        <translation>10</translation>
+        <translation type="vanished">10</translation>
     </message>
     <message>
         <source>Codec:</source>
@@ -4304,37 +4995,37 @@ If the picture is not set, or unvalid, a default picture is used by qgo</source>
     </message>
     <message>
         <source>flat circled ... ugly but asked for ...</source>
-        <translation>平面圆圈风格的棋子 ... 呆板但是有用户要求 ...</translation>
+        <translation type="vanished">平面圆圈风格的棋子 ... 呆板但是有用户要求 ...</translation>
     </message>
     <message>
         <source>Stone appearance
 
 This will display back and white circles</source>
-        <translation>棋子外观
+        <translation type="vanished">棋子外观
 
 这个是黑白圆圈的风格</translation>
     </message>
     <message>
         <source>plain 3D (no shadow, no stripes)</source>
-        <translation>普通3D风格(无阴影,无条纹)</translation>
+        <translation type="vanished">普通3D风格(无阴影,无条纹)</translation>
     </message>
     <message>
         <source>Stone appearance
 
 this will display simple 3D stones, with no shadow and neither stripes on white stones</source>
-        <translation>棋子外观
+        <translation type="vanished">棋子外观
 
 这个是普通3D效果的风格,没有阴影,白棋棋子上也没有条纹.</translation>
     </message>
     <message>
         <source>Realistic 3D stones with stripes and shadow</source>
-        <translation>逼真的3D棋子,有阴影和条纹</translation>
+        <translation type="vanished">逼真的3D棋子,有阴影和条纹</translation>
     </message>
     <message>
         <source>Stone appearance
 
 This will display realistic 3D stones with stripes and shadow</source>
-        <translation>棋子外观
+        <translation type="vanished">棋子外观
 
 这是逼真的3D风格,带有阴影和条纹</translation>
     </message>
@@ -4408,7 +5099,7 @@ up to :</source>
     </message>
     <message>
         <source>Graphics</source>
-        <translation>图表</translation>
+        <translation type="vanished">图表</translation>
     </message>
     <message>
         <source>Sound defaults by game type</source>
@@ -4456,7 +5147,7 @@ up to :</source>
     </message>
     <message>
         <source>Hidden</source>
-        <translation>隐藏</translation>
+        <translation type="vanished">隐藏</translation>
     </message>
     <message>
         <source>Left</source>
@@ -4583,7 +5274,7 @@ diagram pane shown:</source>
     </message>
     <message>
         <source>Picture</source>
-        <translation>图片</translation>
+        <translation type="vanished">图片</translation>
     </message>
     <message>
         <source>Black stone appearance</source>
@@ -4663,15 +5354,15 @@ diagram pane shown:</source>
     </message>
     <message>
         <source>Stone picture</source>
-        <translation>棋子图片</translation>
+        <translation type="vanished">棋子图片</translation>
     </message>
     <message>
         <source>White stone picture:</source>
-        <translation>白棋子图片：</translation>
+        <translation type="vanished">白棋子图片：</translation>
     </message>
     <message>
         <source>Black stone picture:</source>
-        <translation>黑棋子图片：</translation>
+        <translation type="vanished">黑棋子图片：</translation>
     </message>
     <message>
         <source>Computer color:</source>
@@ -4691,7 +5382,7 @@ diagram pane shown:</source>
     </message>
     <message>
         <source>Clear the engine form.</source>
-        <translation>清除引擎表单。</translation>
+        <translation type="vanished">清除引擎表单。</translation>
     </message>
     <message>
         <source>Add or change the current entry.</source>
@@ -4703,31 +5394,31 @@ diagram pane shown:</source>
     </message>
     <message>
         <source>Executable:</source>
-        <translation>可执行文件：</translation>
+        <translation type="vanished">可执行文件：</translation>
     </message>
     <message>
         <source>The path to the GTP engine&apos;s executable.</source>
-        <translation>GTP引擎可执行文件路径。</translation>
+        <translation type="vanished">GTP引擎可执行文件路径。</translation>
     </message>
     <message>
         <source>The name of the engine by which it is selected in the new computer game dialog</source>
-        <translation>引擎名称，当选中时会显示在新建计算机对局对话框中</translation>
+        <translation type="vanished">引擎名称，当选中时会显示在新建计算机对局对话框中</translation>
     </message>
     <message>
         <source>Use for analysis (LZ or compatible)</source>
-        <translation>用于分析（LZ或兼容的）</translation>
+        <translation type="vanished">用于分析（LZ或兼容的）</translation>
     </message>
     <message>
         <source>Fixed komi:</source>
-        <translation>固定贴目：</translation>
+        <translation type="vanished">固定贴目：</translation>
     </message>
     <message>
         <source>Arguments:</source>
-        <translation>参数：</translation>
+        <translation type="vanished">参数：</translation>
     </message>
     <message>
         <source>Any command line arguments that should be passed at startup.</source>
-        <translation>任何要传给程序启动的命令行参数</translation>
+        <translation type="vanished">任何要传给程序启动的命令行参数</translation>
     </message>
     <message>
         <source>Analysis</source>
@@ -4794,22 +5485,245 @@ a variation</source>
     </message>
     <message>
         <source>Size Percent(%):</source>
-        <translation>大小百分比（%）：</translation>
+        <translation type="vanished">大小百分比（%）：</translation>
+    </message>
+    <message>
+        <source>Stone played</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set application language
+
+Choose your language for qGo.
+If &apos;System default&apos; is selected, qGo will use the standard language of your system. On Linux this will check the environment variable LANG, on Windows simply the language you have set in your preferences.
+
+This change will take effect only after qGo has been restarted.
+
+If your language is not supported, you might consider translating q5go. Please visit https://github.com/bernds/q5go</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Coord size:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Options for preventing misclicks in online games</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If set, moves are only played if the mouse button is held down for a brief period</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If set, moves are only played when the click is not too close to an edge between positions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Anti clicko (smaller hitbox)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This shows plain and simple 2D stones</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This is the 3D style used in earlier versions of the program. Kept mainly for compatibility.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Realistically shaded 3D stones, configurable with the other settings on this page.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shader preset:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No preset, user configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recommended variant 1 (brighter)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recommended variant 2 (darker)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recommended variant 3 (high contrast)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Plain, high contrast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Plain, low contrast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flattened, high contrast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flattened, low contrast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flattened, striped</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shiny, round, striped</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Thin, striped</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shadow opacity:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose a preset, or set to &quot;Custom File&quot; to use your own image file as the wood image for the board.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Determines whether the wood image is scaled or tiled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scale wood image</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Determines if the lines are scaled up with the board or always remain one pixel thin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Determines if the board boundaries are drawn slightly thicker. Useful especially for torus boards.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open a dialog to create a new engine configuration.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open a dialog to change the currently selected engine.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open a dialog to create a new engine configuration based on the currently selected one.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Duplicate...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete the currently selected engine.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Import/Export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Kombilo database paths</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add directory...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Import from kombilo.cfg...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Slide export defaults</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Exported size:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The dimensions used when saving.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>x</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lines of comment text:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This controls the font size for the comments display</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Comment margin:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Determines how the first paragraph of the comments should be displayed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bold header</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose the color scheme for the comments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>White on black text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show board coordinates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Coordinates</source>
+        <translation type="unfinished">坐标</translation>
+    </message>
+    <message>
+        <source>Italic header</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>QApplication</name>
     <message>
         <source>free</source>
-        <translation>不计分</translation>
+        <translation type="vanished">不计分</translation>
     </message>
     <message>
         <source>rated</source>
-        <translation>计分棋</translation>
+        <translation type="vanished">计分棋</translation>
     </message>
     <message>
         <source>teach</source>
-        <translation>教学棋</translation>
+        <translation type="vanished">教学棋</translation>
     </message>
 </context>
 <context>
@@ -5048,6 +5962,50 @@ reverting to default.</source>
         <source>Unable to save settings to </source>
         <translation>无法保存设置到</translation>
     </message>
+    <message>
+        <source>The SGF contained moves outside of the board area.  They were converted to passes.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Send debug messages to &lt;file&gt;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Specify text &lt;encoding&gt; of SGF files passed by command line.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The following files could not be found:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>O</source>
+        <comment>Board status line: observe GTP mode</comment>
+        <translation type="unfinished">观局</translation>
+    </message>
+    <message>
+        <source>N</source>
+        <comment>Board status line: post-match normal mode</comment>
+        <translation type="unfinished">一般</translation>
+    </message>
+    <message>
+        <source>Add a database directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open kombilo.cfg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CFG Files (*.cfg);;All Files (*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Engine configuration updated
+Analysis engines now require a board size to be set, assuming 19 for existing entries.</source>
+        <translation type="unfinished">引擎设置更新
+分析引擎现在要求设置棋盘大小，已有的项目默认为19.</translation>
+    </message>
 </context>
 <context>
     <name>SGFPreview</name>
@@ -5131,6 +6089,14 @@ reverting to default.</source>
         <source>All files (*)</source>
         <translation>所有文件 (*)</translation>
     </message>
+    <message>
+        <source>Event:</source>
+        <translation type="unfinished">比赛：</translation>
+    </message>
+    <message>
+        <source>Round:</source>
+        <translation type="unfinished">轮次：</translation>
+    </message>
 </context>
 <context>
     <name>ScoreTools</name>
@@ -5173,6 +6139,205 @@ reverting to default.</source>
     <message>
         <source>TextLabel</source>
         <translation>文字标签</translation>
+    </message>
+    <message>
+        <source>Territory scoring</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Area scoring</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stones:</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SlideView</name>
+    <message>
+        <source>Export slide as</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Images (*.png *.xpm *.jpg);;All Files (*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error while saving</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>An error occurred while saving. The file could not be saved.
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Filename pattern not set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please enter a filename pattern which includes &quot;%n&quot; where the number should be substituted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File exists</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A filename matching the pattern and current number already exists.  Overwrite?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The file could not be saved.
+Please verify the filename pattern is correct.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose file name to serve as template for slides</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SlideViewDialog</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished">形式</translation>
+    </message>
+    <message>
+        <source>View settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Exported size:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The dimensions used when saving.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>x</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lines of comment text:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This controls the font size for the comments display</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Comment margin:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Determines how the first paragraph of the comments should be displayed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bold header</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose the color scheme for the comments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>White on black text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show board coordinates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Coordinates</source>
+        <translation type="unfinished">坐标</translation>
+    </message>
+    <message>
+        <source>Italic header</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Automatic file naming (numbered sequence)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Counts the number of the slide, incremented on every save.
+This is substituted into the filename template when choosing the Save button.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If checked, the Save button overwrites files without asking</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Force overwrite</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File name template
+This should be a filename, with &quot;%n&quot; somewhere to indicate where the current number should be substituted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose a file name template
+You will need to add &apos;%n&quot; somewhere in the template to indicate the position where the current number should be substituted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Current number:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save and increment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All positions on main branch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All commented positions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Commented positions on main branch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All positions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Current position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Filename pattern (%n for number):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export the current slide to the clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>To &amp;clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose a file name and save the current slide, without using the template.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save &amp;as...</source>
+        <translation type="unfinished">另存为(&amp;A)…</translation>
     </message>
 </context>
 <context>
@@ -5235,6 +6400,13 @@ reverting to default.</source>
     <message>
         <source>&amp;Close</source>
         <translation>关闭(&amp;C)</translation>
+    </message>
+</context>
+<context>
+    <name>T</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">姓名</translation>
     </message>
 </context>
 <context>
@@ -5432,6 +6604,147 @@ closes the tab (and dialog)</source>
         <source>&amp;Abort</source>
         <translation>关于(&amp;A)</translation>
     </message>
+    <message>
+        <source>Target:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Forum</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SL</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>TwoAIGameDlg</name>
+    <message>
+        <source>Error</source>
+        <translation type="unfinished">错误</translation>
+    </message>
+    <message>
+        <source>The number of games was not set.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Opening book was selected but no file name specified.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>TwoAIGameDlgGui</name>
+    <message>
+        <source>Computer Game</source>
+        <translation type="unfinished">计算机对弈</translation>
+    </message>
+    <message>
+        <source>Playing mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game file:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Number of games:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>1</source>
+        <translation type="unfinished">1</translation>
+    </message>
+    <message>
+        <source>Use game file as opening book
+and play the selected number of games per line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game parameters</source>
+        <translation type="unfinished">棋局参数</translation>
+    </message>
+    <message>
+        <source>x</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Board size:</source>
+        <translation type="unfinished">棋盘大小:</translation>
+    </message>
+    <message>
+        <source>Komi:</source>
+        <translation type="unfinished">贴目:</translation>
+    </message>
+    <message>
+        <source>Handicap:</source>
+        <translation type="unfinished">让子:</translation>
+    </message>
+    <message>
+        <source>Square board size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rectangular board</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Time</source>
+        <translation type="unfinished">时间</translation>
+    </message>
+    <message>
+        <source>Main time (minutes):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>60</source>
+        <translation type="unfinished">60</translation>
+    </message>
+    <message>
+        <source>Overtime</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>10</source>
+        <translation type="unfinished">10</translation>
+    </message>
+    <message>
+        <source>Period (minutes):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stones per period:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Players</source>
+        <translation type="unfinished">棋友</translation>
+    </message>
+    <message>
+        <source>Engine (white):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Engine (black):</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UI</name>
+    <message>
+        <source>Choose an SGF file to load</source>
+        <translation type="unfinished">选择一个SGF文件打开</translation>
+    </message>
+    <message>
+        <source>SGF Files (*.sgf);;All Files (*)</source>
+        <translation type="unfinished">SGF (*.sgf);;所有文件 (*)</translation>
+    </message>
+</context>
+<context>
+    <name>an_id_model</name>
+    <message>
+        <source>Engine</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>qGo</name>
@@ -5472,11 +6785,15 @@ Exit anyway?</source>
     </message>
     <message>
         <source>GAME MODE: click to play stones...</source>
-        <translation>对局模式：点击范…</translation>
+        <translation type="vanished">对局模式：点击范…</translation>
     </message>
     <message>
         <source>Game #</source>
         <translation>对局 #</translation>
+    </message>
+    <message>
+        <source>Post-game discussion:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

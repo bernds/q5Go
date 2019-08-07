@@ -140,15 +140,41 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source> visits.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Analysis is supported only for square boards!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>File has a different boardsize than selected!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If fixed engine komi:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Controls how to behave if the engine only supports a fixed value for komi.
+If the analyzed game has negative komi, the game can be analyzed with reversed colors for better results.
+It is also possible to analyze with both normal and flipped komi, for example for zero-komi games.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Swap if better</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Analyze both</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add evaluation info to comments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> visits</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -303,10 +329,6 @@
     </message>
     <message>
         <source>Analysis is supported only for square boards!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You did not configure any analysis engine for this boardsize!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -548,10 +570,6 @@ Send adjournment request to your opponent. If he accept it, the game will be adj
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Enter and leave edit mode where stones can be placed freely.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Freely edit the board position. Edited positions are added below the current one.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -645,7 +663,7 @@ After placing and/or undo release button for returning to starting point automat
     </message>
     <message>
         <source>&amp;Import/Export</source>
-        <translation type="unfinished">&amp;Сохранить/Загрузить</translation>
+        <translation type="obsolete">&amp;Сохранить/Загрузить</translation>
     </message>
     <message>
         <source>&amp;Edit</source>
@@ -1087,7 +1105,7 @@ Export the current board to an SVG vector graphics file</source>
     </message>
     <message>
         <source>Import SGF from clipboard</source>
-        <translation type="unfinished">Загрузить SGF файл из буфера</translation>
+        <translation type="obsolete">Загрузить SGF файл из буфера</translation>
     </message>
     <message>
         <source>Import SGF from clipboard
@@ -1271,6 +1289,102 @@ Open the batch analysis dialog which allows you to add SGF files to a queue to b
         <source>A&amp;utomatic diagrams...</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Turn this window into a normal SGF editing window.
+Currently, it is in a post-game state where you can still chat with the opponent.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Disconnect chat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Follow</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter and leave edit mode where stones can be placed freely.
+When you enter edit mode from any position, you always have the option to append your edits
+as a new position after the current one. Depending on circumstances, you may also have the
+option to replace an edited position, or to insert your edits before the current position.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Append your edits as a successor to the current position.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Append</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Insert your edits before the current position.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Insert before</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Replace the current position with your edits.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Replace</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Import/E&amp;xport</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose analysis engine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Import SGF &amp;from clipboard</source>
+        <translation type="unfinished">Загрузить SGF файл из &amp;буфера</translation>
+    </message>
+    <message>
+        <source>Open from &amp;database...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>S&amp;lide export...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open the slide export dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play against engine from current position...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start a game against an engine from the current position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Undo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+Z</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Redo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>R&amp;edo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+Y</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ClientWindow</name>
@@ -1379,7 +1493,7 @@ The tooltip text contains the channels&apos; title and users&apos; names</source
     </message>
     <message>
         <source>New Game</source>
-        <translation>Новая игра</translation>
+        <translation type="vanished">Новая игра</translation>
     </message>
     <message>
         <source>Teaching</source>
@@ -1610,11 +1724,6 @@ Enables/disables the statusbar.</source>
     <message>
         <source>trail</source>
         <translation>следить</translation>
-    </message>
-    <message>
-        <source>Engine configuration updated
-Analysis engines now require a board size to be set, assuming 19 for existing entries.</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>You did not configure any engines!</source>
@@ -2485,12 +2594,305 @@ displays the message box that appears at launch of a new version</source>
 	</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>&amp;Computer vs. computer play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Automatic computer vs. computer play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select two engines and let them play one or more games</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brings up a dialog to set up play between two engines.
+
+	You can set up one game or a multi-game match, optionally starting from
+	a single position, or from multiple positions found in a loaded game file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+T</source>
+        <translation type="unfinished">Ctrl+T</translation>
+    </message>
+    <message>
+        <source>Open from &amp;database...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DBDialog</name>
+    <message>
+        <source>Open database file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Filters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Player 2:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Event:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>From:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Player 1:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>To:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reset Games</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Configure database &amp;paths...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Override character set for text in SGF file:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>UTF-8</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>GB18030</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>EUC-KR</source>
+        <translation type="unfinished">EUC-KR</translation>
+    </message>
+    <message>
+        <source>EUC-JP</source>
+        <translation type="unfinished">EUC-JP</translation>
+    </message>
+    <message>
+        <source>ISO-2022-JP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shift-JIS</source>
+        <translation type="unfinished">Shift-JIS</translation>
+    </message>
+    <message>
+        <source>Big5</source>
+        <translation type="unfinished">Big5</translation>
+    </message>
+    <message>
+        <source>File properties</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>19</source>
+        <translation type="unfinished">19</translation>
+    </message>
+    <message>
+        <source>Komi:</source>
+        <translation type="unfinished">Коми:</translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Size:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Handicap:</source>
+        <translation type="unfinished">Фора:</translation>
+    </message>
+    <message>
+        <source>Date:</source>
+        <translation type="unfinished">Дата:</translation>
+    </message>
+    <message>
+        <source>6.5</source>
+        <translation type="unfinished">6.5</translation>
+    </message>
+    <message>
+        <source>Result:</source>
+        <translation type="unfinished">Результат:</translation>
+    </message>
+    <message>
+        <source>Black</source>
+        <translation type="unfinished">Черные</translation>
+    </message>
+    <message>
+        <source>White</source>
+        <translation type="unfinished">Белые</translation>
+    </message>
+    <message>
+        <source>Round:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to first move.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to previous move.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to next move.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to last move.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Players</source>
+        <translation type="unfinished">Игроки</translation>
+    </message>
+    <message>
+        <source>Res.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Debug_Dialog</name>
     <message>
         <source>Debug</source>
         <translation>Отладка</translation>
+    </message>
+</context>
+<context>
+    <name>EngineDialog</name>
+    <message>
+        <source>Create a new engine configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Arguments:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name:</source>
+        <translation type="unfinished">Имя:</translation>
+    </message>
+    <message>
+        <source>Fixed komi:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Executable:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set this to the komi value the engine expects, or leave empty if the engine allows arbitrary values for komi.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Board size:</source>
+        <translation type="unfinished">Размер доски:</translation>
+    </message>
+    <message>
+        <source>Enter a board size if the engine supports only one board size.
+Analysis engines currently require a fixed board size to be set.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Any command line arguments that should be passed at startup.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The path to the GTP engine&apos;s executable.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The name of the engine by which it is selected in the new computer game dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use for analysis (KataGo, Leela Zero or compatible)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Create a new engine configuration from an existing one</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change an engine configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose GTP engine path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All Files (*)</source>
+        <translation type="unfinished">Все файлы (*)</translation>
+    </message>
+    <message>
+        <source>No name set for the engine.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A name must be set for the engine.
+Please enter all necessary fields before continuing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No path set for the engine.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A path must be set for the engine.
+Please enter all necessary fields before continuing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid size specified</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The value entered for the board size is invalid.
+Please enter values between 3 and 25.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No boardsize specified for analysis engine.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Currently any engine used for analysis must specify a board size.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid komi specified</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The value entered for komi is invalid.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2515,6 +2917,22 @@ Displays evaluation data found in the game record.</source>
     <message>
         <source>Failed to save image!</source>
         <translation type="unfinished">Не могу сохранить изображение!</translation>
+    </message>
+    <message>
+        <source>Show scores</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show winrates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Score</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Win rate</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2582,12 +3000,16 @@ Displays evaluation data found in the game record.</source>
         <source>Invalid response from GTP engine</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>GTP engine &apos;%1&apos; does not support rectangular boards.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>GameDialog</name>
     <message>
         <source>you</source>
-        <translation>Вы</translation>
+        <translation type="vanished">Вы</translation>
     </message>
     <message>
         <source>yes</source>
@@ -2614,11 +3036,11 @@ Displays evaluation data found in the game record.</source>
     </message>
     <message>
         <source>&amp;OK</source>
-        <translation>&amp;Да</translation>
+        <translation type="vanished">&amp;Да</translation>
     </message>
     <message>
         <source>&amp;Cancel</source>
-        <translation>&amp;Отменить</translation>
+        <translation type="vanished">&amp;Отменить</translation>
     </message>
     <message>
         <source>Black</source>
@@ -2684,6 +3106,10 @@ Control-click a collapsed node to expand one level of its children.</source>
     </message>
     <message>
         <source>&amp;Auto collapse on/off</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Expand &amp;all</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3988,7 +4414,7 @@ Goto a move of main branch by number.</source>
     </message>
     <message>
         <source>&amp;Autoplay</source>
-        <translation>&amp;Автопрокрутка</translation>
+        <translation type="vanished">&amp;Автопрокрутка</translation>
     </message>
     <message>
         <source>Ctrl+A</source>
@@ -3996,13 +4422,13 @@ Goto a move of main branch by number.</source>
     </message>
     <message>
         <source>Start/Stop autoplaying current game</source>
-        <translation>Включить/Выключить автопрокрутку</translation>
+        <translation type="vanished">Включить/Выключить автопрокрутку</translation>
     </message>
     <message>
         <source>Autoplay
 
 Start/Stop autoplaying current game.</source>
-        <translation>Автопрокрутка
+        <translation type="vanished">Автопрокрутка
 
 Включает /Выключает автопрокрутку.</translation>
     </message>
@@ -4766,11 +5192,11 @@ Muestra la marca de edición actual. &apos;-&apos; en modo normal.</translation>
     </message>
     <message>
         <source>Autoplay stopped.</source>
-        <translation>Автопрокрутка выключена.</translation>
+        <translation type="vanished">Автопрокрутка выключена.</translation>
     </message>
     <message>
         <source>Autoplay started.</source>
-        <translation>Автопрокрутка включена.</translation>
+        <translation type="vanished">Автопрокрутка включена.</translation>
     </message>
     <message>
         <source>Variation duplicated.</source>
@@ -4926,7 +5352,7 @@ Do you still want to save it?</source>
     </message>
     <message>
         <source>Jigo</source>
-        <translation type="unfinished">Jigo</translation>
+        <translation type="obsolete">Jigo</translation>
     </message>
     <message>
         <source>Game result differs from the one stored.
@@ -4941,6 +5367,54 @@ Overwrite stored game result?</source>
         <source>W Win %</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>free</source>
+        <translation type="unfinished">Свободная</translation>
+    </message>
+    <message>
+        <source>rated</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>teach</source>
+        <translation type="unfinished">Учебная</translation>
+    </message>
+    <message>
+        <source>Evaluations are not shown on the board.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Evaluations are shown on the board.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You did not configure any analysis engine for this boardsize!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Internal error - engine not found.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> - Press F7 to show menu bar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Undo %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Undo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Redo %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>R&amp;edo</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MainWindow_GTP</name>
@@ -4952,23 +5426,85 @@ Overwrite stored game result?</source>
         <source>The computer has resigned the game.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Black wins on time.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>White wins on time.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clock has run out</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid move by the engine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>An invalid move was played by the engine, game terminated.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reported score by White: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reported score by Black: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Neither program reported a score.
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game #%1:
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wins for White/Black: %1/%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> Jigo: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> Disagreements: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Engine play has completed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>B+R</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>W+R</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game result: </source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>NewAIGameDlg</name>
     <message>
         <source>Error</source>
-        <translation type="unfinished">Ошибка</translation>
+        <translation type="obsolete">Ошибка</translation>
     </message>
     <message>
         <source>You entered an invalid Handicap (1 is not legal)</source>
-        <translation type="unfinished">Выбран неправильный размер форы (1 - не правильно)</translation>
+        <translation type="obsolete">Выбран неправильный размер форы (1 - не правильно)</translation>
     </message>
     <message>
-        <source>Choose an SGF file to load</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SGF Files (*.sgf);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)</source>
+        <source>Play engine from current position</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4981,14 +5517,6 @@ Overwrite stored game result?</source>
     <message>
         <source>Load game</source>
         <translation type="unfinished">Загрузить игру</translation>
-    </message>
-    <message>
-        <source>&amp;OK</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Cancel</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Players</source>
@@ -5025,6 +5553,46 @@ Overwrite stored game result?</source>
     <message>
         <source>Handicap:</source>
         <translation type="unfinished">Фора:</translation>
+    </message>
+    <message>
+        <source>Square board size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rectangular board</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>x</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Time</source>
+        <translation type="unfinished">Время</translation>
+    </message>
+    <message>
+        <source>Main time (minutes):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>60</source>
+        <translation type="unfinished">60</translation>
+    </message>
+    <message>
+        <source>Overtime</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>10</source>
+        <translation type="unfinished">10</translation>
+    </message>
+    <message>
+        <source>Period (minutes):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stones per period:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -5186,11 +5754,11 @@ Overwrite stored game result?</source>
     </message>
     <message>
         <source>&amp;Ok</source>
-        <translation>&amp;Хорошо</translation>
+        <translation type="vanished">&amp;Хорошо</translation>
     </message>
     <message>
         <source>&amp;Cancel</source>
-        <translation>&amp;Отмена</translation>
+        <translation type="vanished">&amp;Отмена</translation>
     </message>
     <message>
         <source>Board size:</source>
@@ -5277,10 +5845,38 @@ Overwrite stored game result?</source>
     </message>
     <message>
         <source>&amp;Ok</source>
-        <translation type="unfinished">&amp;Хорошо</translation>
+        <translation type="obsolete">&amp;Хорошо</translation>
     </message>
     <message>
-        <source>&amp;Cancel</source>
+        <source>Restores the board to its original state, with no intersections removed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reset grid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clears the selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove the selected intersections from the board</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove selected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add the selected intersections to the board</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add selected</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5462,6 +6058,10 @@ Número de piedras colocadas por negro en su primera jugada.</translation>
         <source>B Win%:</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Click to hide/show evaluation marks on the board.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>NthMoveDialog</name>
@@ -5552,55 +6152,55 @@ Número de piedras colocadas por negro en su primera jugada.</translation>
     </message>
     <message>
         <source>Stones</source>
-        <translation>Камни</translation>
+        <translation type="vanished">Камни</translation>
     </message>
     <message>
         <source>Pass</source>
-        <translation>Пас</translation>
+        <translation type="vanished">Пас</translation>
     </message>
     <message>
         <source>Autoplay</source>
-        <translation>Автопрокрутка</translation>
+        <translation type="vanished">Автопрокрутка</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Время</translation>
+        <translation type="vanished">Время</translation>
     </message>
     <message>
         <source>Talk</source>
-        <translation>Говорить</translation>
+        <translation type="vanished">Говорить</translation>
     </message>
     <message>
         <source>Say</source>
-        <translation>Сообщить</translation>
+        <translation type="vanished">Сообщить</translation>
     </message>
     <message>
         <source>Match</source>
-        <translation>Игра</translation>
+        <translation type="vanished">Игра</translation>
     </message>
     <message>
         <source>Enter</source>
-        <translation>Ввод</translation>
+        <translation type="vanished">Ввод</translation>
     </message>
     <message>
         <source>Game end</source>
-        <translation>Конец игры</translation>
+        <translation type="vanished">Конец игры</translation>
     </message>
     <message>
         <source>Leave</source>
-        <translation>Разрешить</translation>
+        <translation type="vanished">Разрешить</translation>
     </message>
     <message>
         <source>Disconnect</source>
-        <translation>Отсоедениться</translation>
+        <translation type="vanished">Отсоедениться</translation>
     </message>
     <message>
         <source>Connect</source>
-        <translation>Подключиться</translation>
+        <translation type="vanished">Подключиться</translation>
     </message>
     <message>
         <source>All Files (*)</source>
-        <translation>Все файлы (*)</translation>
+        <translation type="vanished">Все файлы (*)</translation>
     </message>
     <message>
         <source>Images (*.png *.jpg *.xpm *.ico)</source>
@@ -5623,44 +6223,9 @@ Número de piedras colocadas por negro en su primera jugada.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>The engine input fields contain
-potentially unsaved data.
-Really close the preferences?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>The host input fields contain
 potentially unsaved data.
 Really close the preferences?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid komi entered</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Please enter a valid komi before adding the engine.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Missing board size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Analysis engines require a board size to be specified.
-If your engine allows multiple board sizes, you need to configure them in separate entires.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid board size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Only a range of 5 to 25 is allowed.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Choose GTP engine path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5669,6 +6234,60 @@ If your engine allows multiple board sizes, you need to configure them in separa
     </message>
     <message>
         <source>Select a table background image</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Directory contains no database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The directory could not be added because no kombilo.db file could be found.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Directory already in the list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The directory could not be added because it already exists in the list.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Overwrite database paths</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This operation replaces existing database paths.
+Do you still want to import from kombilo.cfg?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid slide width</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please enter valid dimensions for slide export (100x100 or larger).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid slide height</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid slide dimensions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Slide export dimensions must be wider than they are tall.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Engine name already exists</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>An engine with this name already exists.
+Please enter a new name that is not already taken.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5897,17 +6516,17 @@ Select the color for dialog background in the application.</source>
     </message>
     <message>
         <source>Autoplay</source>
-        <translation>Автопрокрутка</translation>
+        <translation type="vanished">Автопрокрутка</translation>
     </message>
     <message>
         <source>Play sound in autoplay mode</source>
-        <translation>Звук для режима автопрокрутки</translation>
+        <translation type="vanished">Звук для режима автопрокрутки</translation>
     </message>
     <message>
         <source>Play sound in autoplay mode
 
 Play a sound when a stone is placed in autoplay mode.</source>
-        <translation>Звук для режима автопрокрутки
+        <translation type="vanished">Звук для режима автопрокрутки
 
 Проигрывает звук когда камень ставиться в режиме автопрокрутки.</translation>
     </message>
@@ -6296,11 +6915,11 @@ Selecciona un estilo de tablero.</translation>
     </message>
     <message>
         <source>Coordinates</source>
-        <translation type="vanished">Координаты</translation>
+        <translation>Координаты</translation>
     </message>
     <message>
         <source>Show board coordinates</source>
-        <translation type="vanished">Показать координаты доски</translation>
+        <translation>Показать координаты доски</translation>
     </message>
     <message>
         <source>Show board coordinates
@@ -6332,17 +6951,17 @@ Toggles if SGF style board coordinates are shown.</source>
     </message>
     <message>
         <source>Slider</source>
-        <translation>Ползунок</translation>
+        <translation type="vanished">Ползунок</translation>
     </message>
     <message>
         <source>Show slider</source>
-        <translation>Показать ползунок</translation>
+        <translation type="vanished">Показать ползунок</translation>
     </message>
     <message>
         <source>Show slider
 
 Toggles the slider on the bottom of the board on or off.</source>
-        <translation>Показать ползунок
+        <translation type="vanished">Показать ползунок
 
 Включает или выключает ползунок внизу доски .
 
@@ -6487,19 +7106,19 @@ Swaps sidebar and board, thus board is on the left and sidbar is on the right.</
     </message>
     <message>
         <source>Interval:</source>
-        <translation>Интервал:</translation>
+        <translation type="vanished">Интервал:</translation>
     </message>
     <message>
         <source>0.1</source>
-        <translation>0,1</translation>
+        <translation type="vanished">0,1</translation>
     </message>
     <message>
         <source>0.5</source>
-        <translation>0,5</translation>
+        <translation type="vanished">0,5</translation>
     </message>
     <message>
         <source>1</source>
-        <translation>1</translation>
+        <translation type="vanished">1</translation>
     </message>
     <message>
         <source>2</source>
@@ -6511,34 +7130,34 @@ Swaps sidebar and board, thus board is on the left and sidbar is on the right.</
     </message>
     <message>
         <source>5</source>
-        <translation>5</translation>
+        <translation type="vanished">5</translation>
     </message>
     <message>
         <source>Time interval for autoplay</source>
-        <translation>Времянной интервал для автопрокрутки</translation>
+        <translation type="vanished">Времянной интервал для автопрокрутки</translation>
     </message>
     <message>
         <source>Time interval for autoplay
 
 Delay between the moves in autoplay mode in seconds.</source>
-        <translation>Времянной интервал для автопрокрутки
+        <translation type="vanished">Времянной интервал для автопрокрутки
 
 Задержка между ходами в секундах.</translation>
     </message>
     <message>
         <source>sgf time tags</source>
-        <translation>Теги времени SGF</translation>
+        <translation type="vanished">Теги времени SGF</translation>
     </message>
     <message>
         <source>use time info of input file</source>
-        <translation>Использовать времянную информацию входного файла</translation>
+        <translation type="vanished">Использовать времянную информацию входного файла</translation>
     </message>
     <message>
         <source>sgf time tags
 
 Use time info of input file. The autoplay speed is same as recorded.
 If not available then interval time is used.</source>
-        <translation>Теги времени SGF
+        <translation type="vanished">Теги времени SGF
 
 Использует времянную информацию входного файла . Скорость автопрокрутки такая как была записана
 Недоступна если задан определенный времянной интервал.</translation>
@@ -7211,7 +7830,7 @@ When editing only single digit marks, it might be convenient to switch this off.
     </message>
     <message>
         <source>Check for setting an anti cliko delay for on line games</source>
-        <translation>Установите для задержки в онлайн играх</translation>
+        <translation type="vanished">Установите для задержки в онлайн играх</translation>
     </message>
     <message>
         <source>Anti Clicko
@@ -7312,15 +7931,15 @@ If checked then when a game you played completes, it is automatically saved in t
     </message>
     <message>
         <source>2.5</source>
-        <translation>2.5</translation>
+        <translation type="vanished">2.5</translation>
     </message>
     <message>
         <source>7.5</source>
-        <translation>7.5</translation>
+        <translation type="vanished">7.5</translation>
     </message>
     <message>
         <source>10</source>
-        <translation>10</translation>
+        <translation type="vanished">10</translation>
     </message>
     <message>
         <source>check for automatic saving for your games</source>
@@ -7386,13 +8005,13 @@ When both players use this protocol, they can set handicap before playing, have 
     </message>
     <message>
         <source>flat circled ... ugly but asked for ...</source>
-        <translation>округлая плоскость  ... неприятно но спрошу для ...</translation>
+        <translation type="vanished">округлая плоскость  ... неприятно но спрошу для ...</translation>
     </message>
     <message>
         <source>Stone appearance
 
 This will display back and white circles</source>
-        <translation>Отображение камня 
+        <translation type="vanished">Отображение камня 
 
 Будут отображаться черные и белые кружки</translation>
     </message>
@@ -7402,13 +8021,13 @@ This will display back and white circles</source>
     </message>
     <message>
         <source>plain 3D (no shadow, no stripes)</source>
-        <translation>Чистый 3D ( без полосок и без теней )</translation>
+        <translation type="vanished">Чистый 3D ( без полосок и без теней )</translation>
     </message>
     <message>
         <source>Stone appearance
 
 this will display simple 3D stones, with no shadow and neither stripes on white stones</source>
-        <translation>Отображение камня 
+        <translation type="vanished">Отображение камня 
 
 Будут отображаться простые 3D камни без теней и полосок на белых камнях</translation>
     </message>
@@ -7418,13 +8037,13 @@ this will display simple 3D stones, with no shadow and neither stripes on white 
     </message>
     <message>
         <source>Realistic 3D stones with stripes and shadow</source>
-        <translation>Будут отображаться реалистичные 3D камни с полосками и тенями</translation>
+        <translation type="vanished">Будут отображаться реалистичные 3D камни с полосками и тенями</translation>
     </message>
     <message>
         <source>Stone appearance
 
 This will display realistic 3D stones with stripes and shadow</source>
-        <translation>Отображение камня
+        <translation type="vanished">Отображение камня
 Будут отображаться реалистичные 3D камни с полосками и тенями</translation>
     </message>
     <message>
@@ -7498,10 +8117,6 @@ up to :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Graphics</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Sound defaults by game type</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7543,10 +8158,6 @@ up to :</source>
     </message>
     <message>
         <source>Side bar:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hidden</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7765,43 +8376,11 @@ diagram pane shown:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Clear the engine form.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Add or change the current entry.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Delete the current entry.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Executable:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The path to the GTP engine&apos;s executable.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The name of the engine by which it is selected in the new computer game dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Use for analysis (LZ or compatible)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fixed komi:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Arguments:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Any command line arguments that should be passed at startup.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7875,20 +8454,224 @@ This change will take effect only after qGo has been restarted.
 If your language is not supported, you might consider translating q5go. Please visit https://github.com/bernds/q5go</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Stone played</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Coord size:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Options for preventing misclicks in online games</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If set, moves are only played if the mouse button is held down for a brief period</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If set, moves are only played when the click is not too close to an edge between positions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Anti clicko (smaller hitbox)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This shows plain and simple 2D stones</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This is the 3D style used in earlier versions of the program. Kept mainly for compatibility.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Realistically shaded 3D stones, configurable with the other settings on this page.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shader preset:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No preset, user configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recommended variant 1 (brighter)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recommended variant 2 (darker)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recommended variant 3 (high contrast)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Plain, high contrast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Plain, low contrast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flattened, high contrast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flattened, low contrast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flattened, striped</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shiny, round, striped</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Thin, striped</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shadow opacity:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose a preset, or set to &quot;Custom File&quot; to use your own image file as the wood image for the board.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Determines whether the wood image is scaled or tiled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scale wood image</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Determines if the lines are scaled up with the board or always remain one pixel thin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Determines if the board boundaries are drawn slightly thicker. Useful especially for torus boards.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open a dialog to create a new engine configuration.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open a dialog to change the currently selected engine.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open a dialog to create a new engine configuration based on the currently selected one.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Duplicate...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete the currently selected engine.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Import/Export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Kombilo database paths</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add directory...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Import from kombilo.cfg...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Slide export defaults</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Exported size:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The dimensions used when saving.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>x</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lines of comment text:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This controls the font size for the comments display</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Comment margin:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Determines how the first paragraph of the comments should be displayed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bold header</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose the color scheme for the comments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>White on black text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Italic header</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QApplication</name>
     <message>
         <source>free</source>
-        <translation>Свободная</translation>
+        <translation type="vanished">Свободная</translation>
     </message>
     <message>
         <source>rated</source>
-        <translation>Рейтинговая</translation>
+        <translation type="vanished">Рейтинговая</translation>
     </message>
     <message>
         <source>teach</source>
-        <translation>Учебная</translation>
+        <translation type="vanished">Учебная</translation>
     </message>
 </context>
 <context>
@@ -8338,6 +9121,45 @@ reverting to default.</source>
         <source>Unable to save settings to </source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>The SGF contained moves outside of the board area.  They were converted to passes.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Send debug messages to &lt;file&gt;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The following files could not be found:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>O</source>
+        <comment>Board status line: observe GTP mode</comment>
+        <translation type="unfinished">O</translation>
+    </message>
+    <message>
+        <source>N</source>
+        <comment>Board status line: post-match normal mode</comment>
+        <translation type="unfinished">N</translation>
+    </message>
+    <message>
+        <source>Add a database directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open kombilo.cfg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CFG Files (*.cfg);;All Files (*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Engine configuration updated
+Analysis engines now require a board size to be set, assuming 19 for existing entries.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QPushButton</name>
@@ -8428,6 +9250,14 @@ reverting to default.</source>
         <source>All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Event:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Round:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ScoreTools</name>
@@ -8473,6 +9303,205 @@ reverting to default.</source>
     </message>
     <message>
         <source>TextLabel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Territory scoring</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Area scoring</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stones:</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SlideView</name>
+    <message>
+        <source>Export slide as</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Images (*.png *.xpm *.jpg);;All Files (*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error while saving</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>An error occurred while saving. The file could not be saved.
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Filename pattern not set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please enter a filename pattern which includes &quot;%n&quot; where the number should be substituted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File exists</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A filename matching the pattern and current number already exists.  Overwrite?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The file could not be saved.
+Please verify the filename pattern is correct.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose file name to serve as template for slides</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SlideViewDialog</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Exported size:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The dimensions used when saving.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>x</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lines of comment text:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This controls the font size for the comments display</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Comment margin:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Determines how the first paragraph of the comments should be displayed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bold header</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose the color scheme for the comments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>White on black text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show board coordinates</source>
+        <translation type="unfinished">Показать координаты доски</translation>
+    </message>
+    <message>
+        <source>Coordinates</source>
+        <translation type="unfinished">Координаты</translation>
+    </message>
+    <message>
+        <source>Italic header</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Automatic file naming (numbered sequence)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Counts the number of the slide, incremented on every save.
+This is substituted into the filename template when choosing the Save button.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If checked, the Save button overwrites files without asking</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Force overwrite</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File name template
+This should be a filename, with &quot;%n&quot; somewhere to indicate where the current number should be substituted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose a file name template
+You will need to add &apos;%n&quot; somewhere in the template to indicate the position where the current number should be substituted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Current number:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save and increment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All positions on main branch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All commented positions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Commented positions on main branch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All positions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Current position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Filename pattern (%n for number):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export the current slide to the clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>To &amp;clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose a file name and save the current slide, without using the template.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save &amp;as...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8536,6 +9565,13 @@ reverting to default.</source>
     <message>
         <source>&amp;Close</source>
         <translation type="unfinished">&amp;Закрыть</translation>
+    </message>
+</context>
+<context>
+    <name>T</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Имя</translation>
     </message>
 </context>
 <context>
@@ -8748,6 +9784,147 @@ closes the tab (and dialog)</source>
         <source>&amp;Abort</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Target:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Forum</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SL</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>TwoAIGameDlg</name>
+    <message>
+        <source>Error</source>
+        <translation type="unfinished">Ошибка</translation>
+    </message>
+    <message>
+        <source>The number of games was not set.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Opening book was selected but no file name specified.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>TwoAIGameDlgGui</name>
+    <message>
+        <source>Computer Game</source>
+        <translation type="unfinished">Компьютер играет</translation>
+    </message>
+    <message>
+        <source>Playing mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game file:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Number of games:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>1</source>
+        <translation type="unfinished">1</translation>
+    </message>
+    <message>
+        <source>Use game file as opening book
+and play the selected number of games per line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>x</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Board size:</source>
+        <translation type="unfinished">Размер доски:</translation>
+    </message>
+    <message>
+        <source>Komi:</source>
+        <translation type="unfinished">Коми:</translation>
+    </message>
+    <message>
+        <source>Handicap:</source>
+        <translation type="unfinished">Фора:</translation>
+    </message>
+    <message>
+        <source>Square board size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rectangular board</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Time</source>
+        <translation type="unfinished">Время</translation>
+    </message>
+    <message>
+        <source>Main time (minutes):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>60</source>
+        <translation type="unfinished">60</translation>
+    </message>
+    <message>
+        <source>Overtime</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>10</source>
+        <translation type="unfinished">10</translation>
+    </message>
+    <message>
+        <source>Period (minutes):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stones per period:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Players</source>
+        <translation type="unfinished">Игроки</translation>
+    </message>
+    <message>
+        <source>Engine (white):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Engine (black):</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UI</name>
+    <message>
+        <source>Choose an SGF file to load</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SGF Files (*.sgf);;All Files (*)</source>
+        <translation type="unfinished">Archivos SGF (*.sgf);;Todos los archivos (*)</translation>
+    </message>
+</context>
+<context>
+    <name>an_id_model</name>
+    <message>
+        <source>Engine</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>qGo</name>
@@ -8949,11 +10126,11 @@ ftp.x.org:/contrib/audio/nas
         <translation type="unfinished">MODO PUNTAJE: Haz click en una piedra para marcarla como muerta...</translation>
     </message>
     <message>
-        <source>GAME MODE: click to play stones...</source>
+        <source>Game #</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Game #</source>
+        <source>Post-game discussion:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
