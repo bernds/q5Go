@@ -213,8 +213,7 @@ public slots:
 
 	// gui_talkdialog:
 	void slot_talkto (QString&, QString&);
-	// gamedialog, qgoif
-	void slot_sendcommand (const QString&, bool);
+
 	//menus
 	void slotFileOpen (bool);
 	void slotFileOpenDB (bool);

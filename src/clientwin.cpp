@@ -880,12 +880,6 @@ void ClientWindow::sendcommand (const QString &cmd, bool localecho)
 	sendTextFromApp(cmd, localecho);
 }
 
-// howver, sendcommand is no slot...
-void ClientWindow::slot_sendcommand(const QString &cmd, bool localecho)
-{
-	sendcommand(cmd, localecho);
-}
-
 // return pressed in edit line -> command to send
 void ClientWindow::slot_cmdactivated(const QString &cmd)
 {
