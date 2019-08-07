@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1">
+<TS version="2.1" language="de">
 <context>
     <name>AnalyzeDialog</name>
     <message>
@@ -21,7 +21,7 @@
     </message>
     <message>
         <source>Limits the number of variations added for engine lines</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Begrenzt die Anzahl der hinzugefügten Variationen</translation>
     </message>
     <message>
         <source>10</source>
@@ -49,23 +49,23 @@
     </message>
     <message>
         <source>File to analyse</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zu analysierende Datei</translation>
     </message>
     <message>
         <source>Add to &amp;queue</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zur Schlange hin&amp;zufügen</translation>
     </message>
     <message>
         <source>Engine status</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Programm-Status</translation>
     </message>
     <message>
         <source>Start engine</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Programm starten</translation>
     </message>
     <message>
         <source>Show messages...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Meldungen anzeigen...</translation>
     </message>
     <message>
         <source>Board size:</source>
@@ -93,7 +93,8 @@
     </message>
     <message>
         <source>&amp;Close</source>
-        <translation type="unfinished">S&amp;chließen</translation>
+        <translation type="unfinished">S&amp;chließen
+</translation>
     </message>
     <message>
         <source>Jobs are still running.  Do you wish to terminate the engine and discard the jobs?</source>
@@ -105,19 +106,19 @@
     </message>
     <message>
         <source>not running</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">läuft nicht</translation>
     </message>
     <message>
         <source>starting up</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">läuft an</translation>
     </message>
     <message>
         <source>idle</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">inaktiv</translation>
     </message>
     <message>
         <source>working</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">läuft</translation>
     </message>
     <message>
         <source>Really discard selected job?</source>
@@ -433,31 +434,31 @@ Variation 1 of 20
     </message>
     <message>
         <source>Go to previous move.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zum vorherigen Zug</translation>
     </message>
     <message>
         <source>Go to next move.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zum nächsten Zug</translation>
     </message>
     <message>
         <source>Go to last move.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zum letzten Zug</translation>
     </message>
     <message>
         <source>Go to previous commented move.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Voriger &amp;kommentierter Zug</translation>
     </message>
     <message>
         <source>Go to next commented move.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nächster k&amp;ommentierter Zug</translation>
     </message>
     <message>
         <source>Go to previous figure.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zum vorigen Diagramm</translation>
     </message>
     <message>
         <source>Go to next figure.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zum nächsten Diagramm</translation>
     </message>
     <message>
         <source>next</source>
@@ -702,7 +703,7 @@ After placing and/or undo release button for returning to starting point automat
     </message>
     <message>
         <source>&amp;Analysis</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Analyse</translation>
     </message>
     <message>
         <source>&amp;Help</source>
@@ -758,7 +759,7 @@ After placing and/or undo release button for returning to starting point automat
     </message>
     <message>
         <source>Miscellaneous toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&quot;Verschiedenes&quot;-Leiste</translation>
     </message>
     <message>
         <source>&amp;Next move</source>
@@ -822,7 +823,7 @@ After placing and/or undo release button for returning to starting point automat
     </message>
     <message>
         <source>To start of variation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zum Anfang der Variation</translation>
     </message>
     <message>
         <source>PgUp</source>
@@ -834,7 +835,7 @@ After placing and/or undo release button for returning to starting point automat
     </message>
     <message>
         <source>Move to next branch starting a variation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zur nächsten Abzweigung einer Variation</translation>
     </message>
     <message>
         <source>PgDown</source>
@@ -1208,15 +1209,15 @@ Take a screen grab of the current board position and export it to the clipboard 
     </message>
     <message>
         <source>Default &amp;landscape arrangement</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Voreinstellung &quot;&amp;Querformat&quot;</translation>
     </message>
     <message>
         <source>Default &amp;portrait arrangement</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Voreinstellung &quot;&amp;Hochformat&quot;</translation>
     </message>
     <message>
         <source>Menu bar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Menübalken</translation>
     </message>
     <message>
         <source>F7</source>
@@ -1224,11 +1225,11 @@ Take a screen grab of the current board position and export it to the clipboard 
     </message>
     <message>
         <source>&amp;Preferences...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Einstellungen...</translation>
     </message>
     <message>
         <source>Bring up the preferences dialog</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Öffnet den Einstellungs-Dialog</translation>
     </message>
     <message>
         <source>Alt+P</source>
@@ -1248,36 +1249,37 @@ Take a screen grab of the current board position and export it to the clipboard 
     </message>
     <message>
         <source>&amp;About..</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ü&amp;ber...</translation>
     </message>
     <message>
         <source>About &amp;Qt...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Über &amp;Qt ...</translation>
     </message>
     <message>
         <source>&amp;Connect analysis engine</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Analyse-Programm &amp;starten</translation>
     </message>
     <message>
         <source>Connect analysis engine
 Try to find an engine configured as an analysis tool in the engine list and connect to it.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Analyse-Programm &amp;starten
+Startet das ausgewählte Programm zur Analyse der Position.</translation>
     </message>
     <message>
         <source>&amp;Disconnect analysis engine</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Analyse-Programm &amp;beenden</translation>
     </message>
     <message>
         <source>Pause analysis engine</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Analyse pausieren</translation>
     </message>
     <message>
         <source>Click to pause or unpause the analysis engine</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hier klicken, um das Analyse-Programm zu pausieren oder fortzusetzen</translation>
     </message>
     <message>
         <source>Dia&amp;gram comments</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kommentare zum Dia&amp;gramm</translation>
     </message>
     <message>
         <source>Alt+G</source>
@@ -1285,7 +1287,7 @@ Try to find an engine configured as an analysis tool in the engine list and conn
     </message>
     <message>
         <source>View &amp;README</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;README anzeigen</translation>
     </message>
     <message>
         <source>Batch analysis...</source>
@@ -1370,7 +1372,7 @@ option to replace an edited position, or to insert your edits before the current
     </message>
     <message>
         <source>Play against engine from current position...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Von hier gegen ein Programm spielen...</translation>
     </message>
     <message>
         <source>Start a game against an engine from the current position</source>
@@ -3092,7 +3094,7 @@ Zeigt beim Starten einen Hinweis auf eine neue Version an</translation>
     </message>
     <message>
         <source>New &amp;Variant Board</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Neues Brett, Go-&amp;Variante</translation>
     </message>
     <message>
         <source>New Variant Board</source>
@@ -3117,7 +3119,7 @@ Zeigt beim Starten einen Hinweis auf eine neue Version an</translation>
     </message>
     <message>
         <source>View &amp;README</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;README anzeigen</translation>
     </message>
     <message>
         <source>Batch analysis...</source>
@@ -3161,15 +3163,15 @@ Zeigt beim Starten einen Hinweis auf eine neue Version an</translation>
     <name>DBDialog</name>
     <message>
         <source>Open database file</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Datei aus Datenbank öffnen</translation>
     </message>
     <message>
         <source>Filters</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Filter</translation>
     </message>
     <message>
         <source>Player 2:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Spieler 2:</translation>
     </message>
     <message>
         <source>Event:</source>
@@ -3177,7 +3179,7 @@ Zeigt beim Starten einen Hinweis auf eine neue Version an</translation>
     </message>
     <message>
         <source>From:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Von:</translation>
     </message>
     <message>
         <source>Player 1:</source>
@@ -3185,11 +3187,11 @@ Zeigt beim Starten einen Hinweis auf eine neue Version an</translation>
     </message>
     <message>
         <source>To:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bis:</translation>
     </message>
     <message>
         <source>Reset Games</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Spiele zurücksetzen</translation>
     </message>
     <message>
         <source>Clear</source>
@@ -3249,11 +3251,11 @@ Zeigt beim Starten einen Hinweis auf eine neue Version an</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Datum</translation>
     </message>
     <message>
         <source>Size:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Größe:</translation>
     </message>
     <message>
         <source>Handicap:</source>
@@ -3281,11 +3283,11 @@ Zeigt beim Starten einen Hinweis auf eine neue Version an</translation>
     </message>
     <message>
         <source>Round:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Runde:</translation>
     </message>
     <message>
         <source>Go to first move.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zum ersten Zug</translation>
     </message>
     <message>
         <source>...</source>
@@ -3293,15 +3295,15 @@ Zeigt beim Starten einen Hinweis auf eine neue Version an</translation>
     </message>
     <message>
         <source>Go to previous move.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zum vorherigen Zug</translation>
     </message>
     <message>
         <source>Go to next move.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zum nächsten Zug</translation>
     </message>
     <message>
         <source>Go to last move.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zum letzten Zug</translation>
     </message>
     <message>
         <source>Players</source>
@@ -3309,7 +3311,7 @@ Zeigt beim Starten einen Hinweis auf eine neue Version an</translation>
     </message>
     <message>
         <source>Res.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ergebnis</translation>
     </message>
 </context>
 <context>
@@ -3434,7 +3436,7 @@ Kreisförmige Markierung editieren. Klick links setzt eine Markierung, Klick rec
     </message>
     <message>
         <source>Arguments:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kommandozeilenoptionen:</translation>
     </message>
     <message>
         <source>Name:</source>
@@ -3446,7 +3448,7 @@ Kreisförmige Markierung editieren. Klick links setzt eine Markierung, Klick rec
     </message>
     <message>
         <source>Executable:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Programmdatei:</translation>
     </message>
     <message>
         <source>Set this to the komi value the engine expects, or leave empty if the engine allows arbitrary values for komi.</source>
@@ -7408,7 +7410,8 @@ in the preferences.</source>
     <message>
         <source>This file had errors during loading and may be corrupt.
 Do you still want to save it?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Beim Laden dieser Datei wurden Fehler entdeckt und Änderungen vorgenommen.
+Soll die Datei trotzdem gespeichert werden?</translation>
     </message>
     <message>
         <source>Save SGF file</source>
@@ -7416,11 +7419,11 @@ Do you still want to save it?</source>
     </message>
     <message>
         <source>Cannot open SGF file for saving.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Die SGF-Datei kann nicht gespeichert werden.</translation>
     </message>
     <message>
         <source>Failed to save SGF file.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fehler beim Speichern der SGF-Datei.</translation>
     </message>
     <message>
         <source>Failed to save image!</source>
@@ -7428,11 +7431,11 @@ Do you still want to save it?</source>
     </message>
     <message>
         <source>Diag. comments</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Diagramm-Kommentare</translation>
     </message>
     <message>
         <source>Comments</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kommentare</translation>
     </message>
     <message>
         <source>remaining time / stones</source>
@@ -7448,11 +7451,11 @@ Do you still want to save it?</source>
     </message>
     <message>
         <source>Time remaining for this move</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">verbleibende Zeit für diesen Zug</translation>
     </message>
     <message>
         <source> (Scoring)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"> (Zählen)</translation>
     </message>
     <message>
         <source>White</source>
@@ -7477,11 +7480,12 @@ Do you still want to save it?</source>
     <message>
         <source>Game result differs from the one stored.
 Overwrite stored game result?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Das Ergebnis unterscheidet sich von dem gespeicherten.
+Soll das gespeicherte Ergebnis überschrieben werden?</translation>
     </message>
     <message>
         <source>B Win %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">S Win %</translation>
     </message>
     <message>
         <source>W Win %</source>
@@ -7501,11 +7505,11 @@ Overwrite stored game result?</source>
     </message>
     <message>
         <source>Evaluations are not shown on the board.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bewertungen werden auf dem Brett nicht angezeigt.</translation>
     </message>
     <message>
         <source>Evaluations are shown on the board.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bewertungen werden auf dem Brett angezeigt.</translation>
     </message>
     <message>
         <source>You did not configure any analysis engine for this boardsize!</source>
@@ -7540,44 +7544,44 @@ Overwrite stored game result?</source>
     <name>MainWindow_GTP</name>
     <message>
         <source>Game end</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Spielende</translation>
     </message>
     <message>
         <source>The computer has resigned the game.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Das Programm hat aufgegeben.</translation>
     </message>
     <message>
         <source>Black wins on time.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Weiß hat auf Zeit verloren.</translation>
     </message>
     <message>
         <source>White wins on time.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schwarz hat auf Zeit verloren.</translation>
     </message>
     <message>
         <source>Clock has run out</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uhr abgelaufen</translation>
     </message>
     <message>
         <source>Invalid move by the engine</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ungültiger Zug</translation>
     </message>
     <message>
         <source>An invalid move was played by the engine, game terminated.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Das Spiel wurde beendet, da das Programm einen ungültigen Zug gemacht hat.</translation>
     </message>
     <message>
         <source>Reported score by White: </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ergebnis laut Weiß: </translation>
     </message>
     <message>
         <source>Reported score by Black: </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ergebnis laut Schwarz: </translation>
     </message>
     <message>
         <source>Neither program reported a score.
 </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Keins der Programme hat ein Ergebnis errechnet.</translation>
     </message>
     <message>
         <source>Game #%1:
@@ -7590,11 +7594,11 @@ Overwrite stored game result?</source>
     </message>
     <message>
         <source> Jigo: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"> Jigo: %1</translation>
     </message>
     <message>
         <source> Disagreements: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"> Unstimmigkeiten: %1</translation>
     </message>
     <message>
         <source>Engine play has completed.</source>
@@ -7610,7 +7614,7 @@ Overwrite stored game result?</source>
     </message>
     <message>
         <source>Game result: </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ergebnis: </translation>
     </message>
 </context>
 <context>
@@ -8421,11 +8425,11 @@ Byoyomi: z.B. Byo: 7x30s; 7 Perioden zu je 30 Sekunden stehen zur Verfügung, wo
     </message>
     <message>
         <source>Select white stone base color</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Basisfarbe der weißen Steine auswählen</translation>
     </message>
     <message>
         <source>Select black stone base color</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Basisfarbe der schwarzen Steine auswählen</translation>
     </message>
     <message>
         <source>Unsaved data</source>
@@ -8439,27 +8443,28 @@ Really close the preferences?</source>
     </message>
     <message>
         <source>Select a goban wood image</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bild-Datei für die Holz-Textur auswählen</translation>
     </message>
     <message>
         <source>Select a table background image</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tisch-Hintergrundbild auswählen</translation>
     </message>
     <message>
         <source>Directory contains no database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Verzeichnis enthält keine Datenbank</translation>
     </message>
     <message>
         <source>The directory could not be added because no kombilo.db file could be found.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Das Verzeichnis konnte nicht hinzugefügt werden,
+da keine Datei kombilo.db darin gefunden wurde.</translation>
     </message>
     <message>
         <source>Directory already in the list</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Verzeichnis bereits in der Liste</translation>
     </message>
     <message>
         <source>The directory could not be added because it already exists in the list.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Das Verzeichnis konnte nicht hinzugefügt werden, da es bereits in der Liste existiert.</translation>
     </message>
     <message>
         <source>Overwrite database paths</source>
@@ -8492,12 +8497,13 @@ Do you still want to import from kombilo.cfg?</source>
     </message>
     <message>
         <source>Engine name already exists</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Programm-Name existiert bereits</translation>
     </message>
     <message>
         <source>An engine with this name already exists.
 Please enter a new name that is not already taken.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ein Programm mit diesem Namen existiert bereits.
+Bitte einen bisher unbenutzten Namen eingeben.</translation>
     </message>
 </context>
 <context>
@@ -10546,11 +10552,11 @@ bis zu:</translation>
     </message>
     <message>
         <source>Accept changes and close dialog</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Änderungen übernehmen und schließen</translation>
     </message>
     <message>
         <source>cancel changes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Änderungen verwerfen</translation>
     </message>
     <message>
         <source>Alt+C</source>
@@ -10562,43 +10568,43 @@ bis zu:</translation>
     </message>
     <message>
         <source>Local editing</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lokale Datei</translation>
     </message>
     <message>
         <source>Observed games</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Beobachtete Spiele</translation>
     </message>
     <message>
         <source>Computer games</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Computer-Spiele</translation>
     </message>
     <message>
         <source>On-line matches</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Eigene Online-Spiele</translation>
     </message>
     <message>
         <source>File selectors:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dateiauswahldialog:</translation>
     </message>
     <message>
         <source>Qt selector with SGF preview</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Im Qt-Stil, mit SGF-Vorschau</translation>
     </message>
     <message>
         <source>Cursor stone</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Cursor-Stein</translation>
     </message>
     <message>
         <source>Standard</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Standard</translation>
     </message>
     <message>
         <source>SGF style</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">SGF-Stil</translation>
     </message>
     <message>
         <source>Side bar:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Werkzeugleiste</translation>
     </message>
     <message>
         <source>Left</source>
@@ -10610,11 +10616,11 @@ bis zu:</translation>
     </message>
     <message>
         <source>Coordinates:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Koordinaten:</translation>
     </message>
     <message>
         <source>Online games</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Online-Spiele</translation>
     </message>
     <message>
         <source>No</source>
@@ -10626,106 +10632,113 @@ bis zu:</translation>
     </message>
     <message>
         <source>Ask</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fragen</translation>
     </message>
     <message>
         <source>Show which:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Welche zeigen:</translation>
     </message>
     <message>
         <source>Letters</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Buchstaben</translation>
     </message>
     <message>
         <source>Show as:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zeigen als:</translation>
     </message>
     <message>
         <source>Siblings</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nachbarn</translation>
     </message>
     <message>
         <source>Children</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nachfolger</translation>
     </message>
     <message>
         <source>Allow SGF files to override
 child/sibling setting:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">SGF-Dateien können Varianten-
+Anzeige kontrollieren:</translation>
     </message>
     <message>
         <source>Ignore diagrams</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Diagramme ignorieren</translation>
     </message>
     <message>
         <source>Diagrams</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Diagramme</translation>
     </message>
     <message>
         <source>If checked, the diagram display will revert to an empty board whenever no diagrams are available, rather than retaining the previously shown diagram (which might be confusing).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wenn diese Option gewählt ist, wird die Diagrammanzeige auf ein leeres Brett zurückgesetzt, wenn die Position keine Diagramme enthält.
+Andernfalls wird das vorige gezeigte Diagramm beibehalten, was verwirrend sein könnte.</translation>
     </message>
     <message>
         <source>Clear diagram display
 when navigating away</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Diagram löschen wenn
+fortbewegt</translation>
     </message>
     <message>
         <source>Open windows with
 diagram pane shown:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Diagramm-Anzeige
+in neuen Fenstern:</translation>
     </message>
     <message>
         <source>This option controls the layout of the board window. You can choose whether to show the diagram/evaluation graph pane, with an option to do so only if the opened file contains diagrams.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Diese Option beeinflusst, unter welchen Umständen ein Diagramm-Brett in neuen Fenstern angezeigt wird.
+Neben an/aus gibt es die Möglichkeit, das Diagramm-Brett nur dann zu zeigen, wenn die Datei Diagramme enthält.</translation>
     </message>
     <message>
         <source>Never</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nie</translation>
     </message>
     <message>
         <source>If diagrams found</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Falls Diagramme gefunden</translation>
     </message>
     <message>
         <source>Always</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Immer</translation>
     </message>
     <message>
         <source>Game tree</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Spielbaum</translation>
     </message>
     <message>
         <source>Adjust the visual size of the nodes in the game tree display.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Verändert die Größe der Knoten in der Spielbaum-Anzeige</translation>
     </message>
     <message>
         <source>Display size:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Größe:</translation>
     </message>
     <message>
         <source>Annotated games can potentially have very many figures. This option stops them from being displayed in the game tree. Instead, an icon is shown for any move that has diagrams as children.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">SGF-Dateien mit Analyse können sehr viele Diagramme enthalten.
+Mit dieser Option werden diese aus der Spielbaum-Anzeige ausgeblendet,
+stattdessen wird eine Markierung angezeigt, wenn Diagramme vorhanden sind.</translation>
     </message>
     <message>
         <source>Hide child diagrams in game tree</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Diagramme im Spielbaum ausblenden:</translation>
     </message>
     <message>
         <source>Plain 2D</source>
-        <translation type="unfinished">Schlichtes 3D {2D?}</translation>
+        <translation type="unfinished">Schlichtes 2D</translation>
     </message>
     <message>
         <source>Old 3D look</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">3D (alt)</translation>
     </message>
     <message>
         <source>Shaded 3D</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">3D (schattiert)</translation>
     </message>
     <message>
         <source>White stone appearance</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Weiße Steine</translation>
     </message>
     <message>
         <source>Specular hardness:</source>
@@ -10733,7 +10746,7 @@ diagram pane shown:</source>
     </message>
     <message>
         <source>Thickness:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dicke:</translation>
     </message>
     <message>
         <source>Specular ratio:</source>
@@ -10741,67 +10754,67 @@ diagram pane shown:</source>
     </message>
     <message>
         <source>Select base color</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Basisfarbe auswählen</translation>
     </message>
     <message>
         <source>Flattened:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Abgeflacht:</translation>
     </message>
     <message>
         <source>Black stone appearance</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schwarze Steine</translation>
     </message>
     <message>
         <source>Simulate clamshell appearance</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Muschel-Streifen simulieren</translation>
     </message>
     <message>
         <source>Ambient light:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Umgebungslicht:</translation>
     </message>
     <message>
         <source>Wood filename:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Holz-Datei:</translation>
     </message>
     <message>
         <source>Custom file</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ausgewählte Datei</translation>
     </message>
     <message>
         <source>Default 1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Voreinstellung 1</translation>
     </message>
     <message>
         <source>Default 2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Voreinstellung 2</translation>
     </message>
     <message>
         <source>Default 3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Voreinstellung 3</translation>
     </message>
     <message>
         <source>Default 4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Voreinstellung 4</translation>
     </message>
     <message>
         <source>Default 5</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Voreinstellung 5</translation>
     </message>
     <message>
         <source>Wood image:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Holz-Datei:</translation>
     </message>
     <message>
         <source>Scale line widths</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Linien skalieren</translation>
     </message>
     <message>
         <source>Widen outside lines</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dickere äußere Linien</translation>
     </message>
     <message>
         <source>Computer color:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Computer-Farbe:</translation>
     </message>
     <message>
         <source>...</source>
@@ -10809,53 +10822,55 @@ diagram pane shown:</source>
     </message>
     <message>
         <source>Default human player name:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Name des menschlichen Spielers:</translation>
     </message>
     <message>
         <source>Go Engines</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Go-Programme</translation>
     </message>
     <message>
         <source>Add or change the current entry.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Eintrag hinzufügen pder verändern</translation>
     </message>
     <message>
         <source>Delete the current entry.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Eintrag löschen</translation>
     </message>
     <message>
         <source>Analysis</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Analyse</translation>
     </message>
     <message>
         <source>Show variations as:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Variationen anzeigen als:</translation>
     </message>
     <message>
         <source>Percentage difference</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Veränderung in Prozent</translation>
     </message>
     <message>
         <source>Absolute percentage</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Absolute Prozentangabe</translation>
     </message>
     <message>
         <source>Winning percentages shown for:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gewinn-Prozentrate gilt für:</translation>
     </message>
     <message>
         <source>Side to move</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Spieler am Zug</translation>
     </message>
     <message>
         <source>Max. variation depth:
 (0 is unlimited)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Max. Variations-Tiefe:
+(0 ist unbegrenzt)</translation>
     </message>
     <message>
         <source>Max. moves shown:
 (0 is unlimited)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Max. angezeigte Züge:
+(0 ist unbegrenzt)</translation>
     </message>
     <message>
         <source>Override variation display settings
@@ -10865,11 +10880,12 @@ diagram pane shown:</source>
     <message>
         <source>Hide other moves when showing
 a variation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Andere Züge verbergen, wenn
+eine Variante gezeigt wird</translation>
     </message>
     <message>
         <source>Don&apos;t display moves with few visits</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Keine Züge mit wenig Daten anzeigen</translation>
     </message>
     <message>
         <source>Clear the server form.</source>
@@ -10916,107 +10932,110 @@ If your language is not supported, you might consider translating q5go. Please v
     </message>
     <message>
         <source>Anti clicko (smaller hitbox)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Anti-Clicko (kleineres Feld für Klicks)</translation>
     </message>
     <message>
         <source>This shows plain and simple 2D stones</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zeigt einfache 2D-Steine</translation>
     </message>
     <message>
         <source>This is the 3D style used in earlier versions of the program. Kept mainly for compatibility.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Der 3D-Stil aus alten Versionen dieses Programms.
+Nur noch aus Kompatibilitätsgründen enthalten.</translation>
     </message>
     <message>
         <source>Realistically shaded 3D stones, configurable with the other settings on this page.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Realistische 3D-Anzeige der Steine, mit den anderen Einstellungen auf dieser Seite konfigurierbar.</translation>
     </message>
     <message>
         <source>Shader preset:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Steinansicht-Voreinstellung:</translation>
     </message>
     <message>
         <source>No preset, user configuration</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Keine Voreinstellung, verwende Benutzereinstellungen</translation>
     </message>
     <message>
         <source>Recommended variant 1 (brighter)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Empfohlene Variante 1 (heller)</translation>
     </message>
     <message>
         <source>Recommended variant 2 (darker)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Empfohlene Variante 2 (dunkler)</translation>
     </message>
     <message>
         <source>Recommended variant 3 (high contrast)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Empfohlene Variante 3 (hoher Kontrast)</translation>
     </message>
     <message>
         <source>Plain, high contrast</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Einfach, hoher Kontrast</translation>
     </message>
     <message>
         <source>Plain, low contrast</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Einfach, niedriger Kontrast</translation>
     </message>
     <message>
         <source>Flattened, high contrast</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Abgeflacht, hoher Kontrast</translation>
     </message>
     <message>
         <source>Flattened, low contrast</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Abgeflacht, niedriger Kontrast</translation>
     </message>
     <message>
         <source>Flattened, striped</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Abgeflacht, Streifen</translation>
     </message>
     <message>
         <source>Shiny, round, striped</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Glänzend, rund, mit Streifen</translation>
     </message>
     <message>
         <source>Thin, striped</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dünne Steine, mit Streifen</translation>
     </message>
     <message>
         <source>Shadow opacity:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schattenstärke:</translation>
     </message>
     <message>
         <source>Choose a preset, or set to &quot;Custom File&quot; to use your own image file as the wood image for the board.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Erlaubt die Wahl einer Voreinstellung, oder einer eigenen Texturdatei für das Holz des Spielbretts.</translation>
     </message>
     <message>
         <source>Determines whether the wood image is scaled or tiled</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Diese Option kontrolliert, ob die Holz-Textur auf die Brettgröße skaliert wird,
+oder ob sie als Kachel verwendet wird.</translation>
     </message>
     <message>
         <source>Scale wood image</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Holz-Textur skalieren</translation>
     </message>
     <message>
         <source>Determines if the lines are scaled up with the board or always remain one pixel thin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Die Linien auf dem Brett können entweder mit dem Brett skalieren (empfohlen),
+oder fest ein Pixel breit angezeigt werden.</translation>
     </message>
     <message>
         <source>Determines if the board boundaries are drawn slightly thicker. Useful especially for torus boards.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Erlaubt, die äusseren Linien des Bretts etwas dicker zu zeichnen. Nützlich besonders auch für Torus-Varianten.</translation>
     </message>
     <message>
         <source>Open a dialog to create a new engine configuration.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Öffnet einen Dialog, mit dem eine neue Programmkonfiguration erstellt werden kann.</translation>
     </message>
     <message>
         <source>New...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Neu...</translation>
     </message>
     <message>
         <source>Open a dialog to change the currently selected engine.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Öffnet einen Dialog, mit dem die aktuelle Programmkonfiguration geändert werden kann.</translation>
     </message>
     <message>
         <source>Edit...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bearbeiten...</translation>
     </message>
     <message>
         <source>Open a dialog to create a new engine configuration based on the currently selected one.</source>
@@ -11024,31 +11043,31 @@ If your language is not supported, you might consider translating q5go. Please v
     </message>
     <message>
         <source>Duplicate...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Duplizieren...</translation>
     </message>
     <message>
         <source>Delete the currently selected engine.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Löscht die aktuelle Programmkonfiguration.</translation>
     </message>
     <message>
         <source>Import/Export</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Import/Export</translation>
     </message>
     <message>
         <source>Kombilo database paths</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pfade für die Kombilo-Datenbank</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Entfernen</translation>
     </message>
     <message>
         <source>Add directory...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Verzeichnis hinzufügen...</translation>
     </message>
     <message>
         <source>Import from kombilo.cfg...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aus kombilo.cfg importieren...</translation>
     </message>
     <message>
         <source>Slide export defaults</source>
@@ -11060,7 +11079,7 @@ If your language is not supported, you might consider translating q5go. Please v
     </message>
     <message>
         <source>The dimensions used when saving.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Die Dimensionen für gespeicherte Bilder.</translation>
     </message>
     <message>
         <source>x</source>
@@ -11076,15 +11095,15 @@ If your language is not supported, you might consider translating q5go. Please v
     </message>
     <message>
         <source>Comment margin:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kommentar-Rand:</translation>
     </message>
     <message>
         <source>Determines how the first paragraph of the comments should be displayed.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kontrolliert, wie der erste Absatz in den Kommentaren angezeigt wird.</translation>
     </message>
     <message>
         <source>Bold header</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fette Titelzeile</translation>
     </message>
     <message>
         <source>Choose the color scheme for the comments</source>
@@ -11092,11 +11111,11 @@ If your language is not supported, you might consider translating q5go. Please v
     </message>
     <message>
         <source>White on black text</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Weiß auf schwarzem Grund</translation>
     </message>
     <message>
         <source>Italic header</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kursive Titelzeile</translation>
     </message>
 </context>
 <context>
@@ -11801,7 +11820,7 @@ Analysis engines now require a board size to be set, assuming 19 for existing en
     </message>
     <message>
         <source>Stones:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Steine:</translation>
     </message>
 </context>
 <context>
@@ -12813,7 +12832,7 @@ Trotzdem: Falls OSS vorhanden ist, sollte Ton funktionieren und ist auf /dev/dsp
     </message>
     <message>
         <source>Game #</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Spiel #</translation>
     </message>
     <message>
         <source>Post-game discussion:</source>
