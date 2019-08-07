@@ -713,7 +713,7 @@
       </layout>
     </widget>
     <widget class="QToolBar" name="FileToolbar">
-      <property name="label" stdset="0">
+      <property name="windowTitle">
 	<string>File toolbar</string>
       </property>
       <attribute name="toolBarArea">
@@ -731,8 +731,8 @@
       <addaction name="computerPlay"/>
     </widget>
     <widget class="QToolBar" name="Toolbar">
-      <property name="label" stdset="0">
-	<string>main toolbar</string>
+      <property name="windowTitle">
+	<string>Main toolbar</string>
       </property>
       <attribute name="toolBarArea">
 	<enum>TopToolBarArea</enum>
