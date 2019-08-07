@@ -1206,10 +1206,9 @@ void ClientWindow::slot_pbrefreshplayers(bool)
 }
 
 // doubleclick actions...
-void ClientWindow::slot_doubleclick_games(QTreeWidgetItem *lv)
+void ClientWindow::slot_doubleclick_games (QTreeWidgetItem *lv)
 {
-	lv_popupGames = static_cast<GamesTableItem*>(lv);
-	sendcommand ("observe " + lv_popupGames->text (0));
+	sendcommand ("observe " + static_cast<GamesTableItem*>(lv)->text (0));
 }
 
 void ClientWindow::slot_menu_games (const QPoint &pt)
@@ -1242,8 +1241,7 @@ void ClientWindow::slot_mouse_games (QTreeWidgetItem *lv)
 				});
 	}
 
-	lv_popupGames = static_cast<GamesTableItem*>(lv);
-	m_menu_game = lv_popupGames->get_game ();
+	m_menu_game = static_cast<GamesTableItem*>(lv)->get_game ();
 	puw->popup (QCursor::pos ());
 }
 
@@ -1442,7 +1440,7 @@ int ClientWindow::toggle_player_state (const char *list, const QString &symbol)
 	if (!found)
 	{
 		// not found -> add to list
-		line += lv_popupPlayer->text(1);
+		line += m_menu_player.name;
 		// update player list
 		if (m_menu_player.mark != "M")
 		{
@@ -1479,8 +1477,7 @@ int ClientWindow::toggle_player_state (const char *list, const QString &symbol)
 
 void ClientWindow::slot_doubleclick_players (QTreeWidgetItem *lv)
 {
-	lv_popupPlayer = static_cast<PlayerTableItem*>(lv);
-	m_menu_player = lv_popupPlayer->get_player ();
+	m_menu_player = static_cast<PlayerTableItem*>(lv)->get_player ();
 	handle_matchrequest (menu_player_name () + " " + m_menu_player.rank, true, false);
 }
 
@@ -1503,9 +1500,7 @@ QString ClientWindow::menu_player_name ()
 void ClientWindow::slot_mouse_players (QTreeWidgetItem *lv)
 {
 	static QMenu *puw = nullptr;
-	lv_popupPlayer = static_cast<PlayerTableItem*>(lv);
-	m_menu_player = lv_popupPlayer->get_player ();
-	// create popup window
+
 	if (!puw)
 	{
 		puw = new QMenu (0, 0);
@@ -1545,6 +1540,7 @@ void ClientWindow::slot_mouse_players (QTreeWidgetItem *lv)
 				[=] () { toggle_player_state ("EXCLUDE", "X"); });
 	}
 
+	m_menu_player = static_cast<PlayerTableItem*>(lv)->get_player ();
 	puw->popup (QCursor::pos ());
 }
 

@@ -76,11 +76,9 @@ class ClientWindow : public QMainWindow, public Ui::ClientWindowGui
 	QPoint pref_p;
 	QSize pref_s;
 
-	// popup window save
+	// Entries corresponding to the currently shown context menu
 	Player m_menu_player;
 	Game m_menu_game;
-	PlayerTableItem	*lv_popupPlayer;
-	GamesTableItem	*lv_popupGames;
 
 	// extended user info
 	bool extUserInfo;
