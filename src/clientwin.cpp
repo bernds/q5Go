@@ -1550,7 +1550,6 @@ QString ClientWindow::menu_player_name ()
 void ClientWindow::slot_mouse_players (QTreeWidgetItem *lv)
 {
 	static QMenu *puw = nullptr;
-	static QAction *puw11 = nullptr;
 	lv_popupPlayer = static_cast<PlayerTableItem*>(lv);
 	m_menu_player = lv_popupPlayer->get_player ();
 	// create popup window
@@ -1559,8 +1558,6 @@ void ClientWindow::slot_mouse_players (QTreeWidgetItem *lv)
 		puw = new QMenu (0, 0);
 		puw->addAction (tr ("match"),
 				[=] () { slot_matchrequest (menu_player_name () + " " + m_menu_player.rank, true); });
-		puw11 = puw->addAction (tr ("match within his prefs"),
-					[=] () { slot_matchrequest (menu_player_name () + " " + m_menu_player.rank, true); });
 		puw->addAction (tr ("talk"),
 				[=] () { slot_talk (menu_player_name (), QString::null, true); });
 		// puw->insertSeparator();
@@ -1595,7 +1592,6 @@ void ClientWindow::slot_mouse_players (QTreeWidgetItem *lv)
 				[=] () { toggle_player_state ("EXCLUDE", "X"); });
 	}
 
-	puw11->setEnabled (m_menu_player.nmatch);
 	puw->popup (QCursor::pos ());
 }
 
