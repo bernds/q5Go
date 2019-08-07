@@ -77,6 +77,7 @@ class ClientWindow : public QMainWindow, public Ui::ClientWindowGui
 	QSize pref_s;
 
 	// popup window save
+	Player m_menu_player;
 	PlayerTableItem	*lv_popupPlayer;
 	GamesTableItem	*lv_popupGames;
 
@@ -204,10 +205,10 @@ public slots:
 	void slot_SeekList (const QString&, const QString&);
 
 	// gamestable/playertable:
-	void slot_mouse_games (int, QTreeWidgetItem*);
-	void slot_mouse_players (int, QTreeWidgetItem*);
-	void slot_click_games (QTreeWidgetItem*);
-	void slot_click_players (QTreeWidgetItem *);
+	void slot_mouse_games (QTreeWidgetItem*);
+	void slot_mouse_players (QTreeWidgetItem*);
+	void slot_doubleclick_games (QTreeWidgetItem*);
+	void slot_doubleclick_players (QTreeWidgetItem *);
 	void slot_menu_games (const QPoint&);
 	void slot_menu_players (const QPoint&);
 

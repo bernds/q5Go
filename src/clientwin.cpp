@@ -85,8 +85,8 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	telnetConnection = new TelnetConnection (this, ListView_players, ListView_games);
 
 	// doubleclick
-	connect (ListView_games, &GamesTable::signal_doubleClicked, this, &ClientWindow::slot_click_games);
-	connect (ListView_players, &PlayerTable::signal_doubleClicked, this, &ClientWindow::slot_click_players);
+	connect (ListView_games, &GamesTable::signal_doubleClicked, this, &ClientWindow::slot_doubleclick_games);
+	connect (ListView_players, &PlayerTable::signal_doubleClicked, this, &ClientWindow::slot_doubleclick_players);
 
 	connect (ListView_players, &PlayerTable::customContextMenuRequested, this, &ClientWindow::slot_menu_players);
 	connect (ListView_games, &GamesTable::customContextMenuRequested, this, &ClientWindow::slot_menu_games);
@@ -1250,28 +1250,24 @@ void ClientWindow::slot_gamesPopup(int i)
 }
 
 // doubleclick actions...
-void ClientWindow::slot_click_games(QTreeWidgetItem *lv)
+void ClientWindow::slot_doubleclick_games(QTreeWidgetItem *lv)
 {
-	// do actions if button clicked on item
-	slot_mouse_games(3, lv);
-	qDebug("games list double clicked");
+	lv_popupGames = static_cast<GamesTableItem*>(lv);
+	slot_gamesPopup (1);
 }
 
-void ClientWindow::slot_menu_games(const QPoint &pt)
+void ClientWindow::slot_menu_games (const QPoint &pt)
 {
 	QTreeWidgetItem *item = ListView_games->itemAt (pt);
-	// emulate right button
 	if (item)
-		slot_mouse_games(2, item);
-	qDebug("games list double clicked");
+		slot_mouse_games (item);
 }
 
 // mouse click on ListView_games
-void ClientWindow::slot_mouse_games(int button, QTreeWidgetItem *lv)
+void ClientWindow::slot_mouse_games (QTreeWidgetItem *lv)
 {
 	static QMenu *puw = nullptr;
 
-	// create popup window
 	if (!puw)
 	{
 		puw = new QMenu(0, 0);
@@ -1279,41 +1275,9 @@ void ClientWindow::slot_mouse_games(int button, QTreeWidgetItem *lv)
 		puw->addAction(tr("stats W"), this, [=] () { slot_gamesPopup(2); });
 		puw->addAction(tr("stats B"), this, [=] () { slot_gamesPopup(3); });
 	}
-	//puw->hide();
 
-	// do actions if button clicked on item
-	switch (button)
-	{
-		// left
-		case 1:
-			break;
-
-		// right
-		case 2:
-			if (lv)
-			{
-				//puw->move(pt);
-				//puw->show();
-        			puw->popup( QCursor::pos() );
-				// store selected lv
-				lv_popupGames = static_cast<GamesTableItem*>(lv);
-			}
-			break;
-
-		// first menue item if doubleclick
-		case 3:
-			if (lv)
-			{
-				// store selected lv
-				lv_popupGames = static_cast<GamesTableItem*>(lv);
-
-				slot_gamesPopup(1);
-			}
-			break;
-
-		default:
-			break;
-	}
+	lv_popupGames = static_cast<GamesTableItem*>(lv);
+	puw->popup (QCursor::pos ());
 }
 
 
@@ -1592,7 +1556,7 @@ void ClientWindow::slot_playerPopup(int i)
 	}
 
 	// some invited players on IGS get a * after their name
-	QString txt1 = lv_popupPlayer->text(1);
+	const QString &txt1 = m_menu_player.name;
 	QString player_name = (txt1.right(1) == "*" ? txt1.left( txt1.length() -1 ) : txt1);
 
 	switch (i)
@@ -1600,7 +1564,7 @@ void ClientWindow::slot_playerPopup(int i)
 		case 1 :
 		case 11 :
 			// match
-			slot_matchrequest(player_name + " " + lv_popupPlayer->text(2), true);
+			slot_matchrequest(player_name + " " + m_menu_player.rank, true);
 			break;
 
 
@@ -1649,42 +1613,13 @@ void ClientWindow::slot_playerPopup(int i)
 			break;
 
 		case 9:
-		{
+			{
 			// observe game
-
-			bool found = false;
-
-			// emulate mouse click
-			QTreeWidgetItemIterator lv(ListView_games);
-			for (QTreeWidgetItem *lvi; (lvi = *lv);)
-			{
-				// compare game ids
-				if (lv_popupPlayer->text(3) == lvi->text(0))
-				{
-					// emulate mouse button - doubleclick on games
-					slot_mouse_games(3, lvi);
-					found = true;
-					break;
-				}
-				lv++;
-			}
-
-			if (!found)
-			{
-				// if not found -> load new data
-				Game g;
-				g.nr = lv_popupPlayer->text(3);
-//				g.running = true;
-//				slot_game(&g);
-
-				// observe
-//				if (qgoif->set_observe(g.nr))
-					sendcommand("observe " + g.nr, false);
-//				sendcommand("games " + g.nr, false);
+			QString game_id = lv_popupPlayer->text (3);
+			sendcommand("observe " + game_id, false);
 			}
 
 			break;
-		}
 
 		default:
 			break;
@@ -1692,30 +1627,34 @@ void ClientWindow::slot_playerPopup(int i)
 }
 
 // doubleclick...
-void ClientWindow::slot_click_players(QTreeWidgetItem *lv)
+void ClientWindow::slot_doubleclick_players (QTreeWidgetItem *lv)
 {
-	// emulate right button
-	slot_mouse_players(3, lv);
+	lv_popupPlayer = static_cast<PlayerTableItem*>(lv);
+	m_menu_player = lv_popupPlayer->get_player ();
+	slot_playerPopup (1);
 }
+
 // move over ListView
 /*void ClientWindow::slot_moveOver_players()
 {
 	qDebug("move over player list...");
 } */
 // mouse menus
-void ClientWindow::slot_menu_players(const QPoint& pt)
+void ClientWindow::slot_menu_players (const QPoint& pt)
 {
 	QTreeWidgetItem *item = ListView_players->itemAt (pt);
 	// emulate right button
 	if (item)
-		slot_mouse_players(2, item);
+		slot_mouse_players (item);
 }
+
 // mouse click on ListView_players
-void ClientWindow::slot_mouse_players(int button, QTreeWidgetItem *lv)
+void ClientWindow::slot_mouse_players (QTreeWidgetItem *lv)
 {
 	static QMenu *puw = nullptr;
 	static QAction *puw11 = nullptr;
 	lv_popupPlayer = static_cast<PlayerTableItem*>(lv);
+	m_menu_player = lv_popupPlayer->get_player ();
 	// create popup window
 	if (!puw)
 	{
@@ -1736,47 +1675,8 @@ void ClientWindow::slot_mouse_players(int button, QTreeWidgetItem *lv)
 
 	}
 
-	puw11->setEnabled(lv_popupPlayer->get_player ().nmatch);
-//puw->hide();
-
-	// do actions if button clicked on item
-	switch (button)
-	{
-		// left button
-		case 1:
-			if (lv)
-			{
-			}
-			break;
-
-		// right button
-		case 2:
-			if (lv)
-			{
-				/*QRect r = ListView_players->geometry();
-				QPoint p = r.topLeft() + pt;
-				puw->move(p);
-				puw->show();*/
-        			puw->popup( QCursor::pos() );
-				// store selected lv
-				//lv_popupPlayer = static_cast<PlayerTableItem*>(lv);
-			}
-			break;
-
-		// first menu item if doubleclick
-		case 3:
-			if (lv)
-			{
-				// store selected lv
-				//lv_popupPlayer = static_cast<PlayerTableItem*>(lv);
-
-				slot_playerPopup(1);
-			}
-			break;
-
-		default:
-			break;
-	}
+	puw11->setEnabled (m_menu_player.nmatch);
+	puw->popup (QCursor::pos ());
 }
 
 // release Talk Tabs
