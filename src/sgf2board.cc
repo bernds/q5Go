@@ -24,7 +24,7 @@ static int coord_from_letter (char x)
 
 static void put_stones (const sgf::node::property &p, int maxx, int maxy, std::function<void (int, int)> func)
 {
-	for (auto &v: p.values)
+	for (const auto &v: p.values)
 	{
 #if 0
 		/* Empty value means pass.  @@@ but this is used for AB, AW and AE only.  */
@@ -74,7 +74,7 @@ static bool add_marks (go_board &b, sgf::node *n)
 		const std::string &id = p.ident;
 		if (recognized_mark (id)) {
 			p.handled = true;
-			for (auto &v: p.values) {
+			for (const auto &v: p.values) {
 				if (v.length () < 2)
 					continue;
 				int x1 = coord_from_letter (v[0]);
@@ -123,7 +123,7 @@ static bool add_comment (game_state *gs, sgf::node *n, QTextCodec *codec)
 	sgf::node::property *comment = n->find_property ("C");
 	if (comment) {
 		std::string cs;
-		for (auto c: comment->values) {
+		for (const auto &c: comment->values) {
 			cs += c;
 		}
 		if (codec != nullptr) {
@@ -201,7 +201,7 @@ static void add_visible (game_state *gs, sgf::node *n)
 static bool add_eval_1 (game_state *gs, sgf::node::property *vals, bool kata)
 {
 	bool retval = true;
-	for (auto &v: vals->values) {
+	for (const auto &v: vals->values) {
 		std::stringstream ss (v);
 		std::vector<std::string> vals;
 		for (;;) {
@@ -279,7 +279,7 @@ static void add_to_game_state (game_state *gs, sgf::node *n, bool force, QTextCo
 				for (int i = 0; i < gs->move_number (); i++)
 					std::cerr << " ";
 				std::cerr << id;
-				for (auto &v: p.values)
+				for (const auto &v: p.values)
 					std::cerr << " : " << v;
 				std::cerr << std::endl;
 #endif
@@ -375,7 +375,7 @@ static void add_to_game_state (game_state *gs, sgf::node *n, bool force, QTextCo
 		errs.charset_error |= !add_figure (gs, n, codec);
 		errs.malformed_eval |= !add_eval (gs, n);
 		add_visible (gs, n);
-		for (auto &p: n->props) {
+		for (const auto &p: n->props) {
 			if (!p.handled)
 				unrecognized.push_back (p);
 		}
@@ -564,7 +564,7 @@ std::shared_ptr<game_record> sgf2record (const sgf &s, QTextCodec *codec)
 	add_visible (game->m_root, s.nodes);
 
 	sgf::node::proplist unrecognized;
-	for (auto &p: s.nodes->props) {
+	for (const auto &p: s.nodes->props) {
 		if (!p.handled)
 			unrecognized.push_back (p);
 	}
@@ -829,10 +829,10 @@ void game_state::append_to_sgf (std::string &s) const
 		write_array (gs->visible (), "VW", s, gs);
 		bool first = true;
 		bool have_scores = false;
-		for (auto &it: gs->m_evals)
+		for (const auto &it: gs->m_evals)
 			if (it.score_stddev != 0)
 				have_scores = true;
-		for (auto &it: gs->m_evals) {
+		for (const auto &it: gs->m_evals) {
 			if (it.visits > 0) {
 				if (first)
 					s += have_scores ? "QKGV" : "QLZV";
@@ -850,9 +850,9 @@ void game_state::append_to_sgf (std::string &s) const
 				linecount++;
 			}
 		}
-		for (auto &p: gs->m_unrecognized_props) {
+		for (const auto &p: gs->m_unrecognized_props) {
 			s += p.ident;
-			for (auto v: p.values) {
+			for (const auto v: p.values) {
 				encode_string (s, nullptr, v, true);
 				linecount++;
 			}

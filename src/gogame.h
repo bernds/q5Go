@@ -448,7 +448,7 @@ public:
 
 	game_state *add_child_edit (const go_board &new_board, stone_color to_move, bool scored = false, add_mode am = add_mode::set_active)
 	{
-		for (auto &it: m_children)
+		for (const auto &it: m_children)
 			if (it->m_board == new_board && it->m_to_move == to_move)
 				return it;
 		return add_child_edit_nochecks (new_board, to_move, scored, am);
@@ -465,7 +465,7 @@ public:
 
 	game_state *add_child_move (const go_board &new_board, stone_color to_move, int x, int y, add_mode am = add_mode::set_active)
 	{
-		for (auto &it: m_children)
+		for (const auto &it: m_children)
 			if (it->was_move_p () && it->m_board == new_board)
 				return it;
 		return add_child_move_nochecks (new_board, to_move, x, y, am);
@@ -479,7 +479,7 @@ public:
 		go_board new_board (m_board, mark::none);
 		new_board.add_stone (x, y, to_move);
 		if (am != add_mode::set_main)
-			for (auto &it: m_children)
+			for (const auto &it: m_children)
 				if (it->was_move_p () && it->m_board.position_equal_p (new_board))
 					return it;
 
@@ -500,7 +500,7 @@ public:
 	}
 	game_state *add_child_pass (const go_board &new_board, add_mode am = add_mode::set_active)
 	{
-		for (auto &it: m_children)
+		for (const auto &it: m_children)
 			if (it->m_board == new_board && it->was_pass_p ())
 				return it;
 		return add_child_pass_nochecks (new_board, am);
@@ -629,7 +629,7 @@ public:
 	}
 	game_state *find_child_move (int x, int y)
 	{
-		for (auto &it: m_children)
+		for (const auto &it: m_children)
 			if (it->was_move_p () && it->m_move_x == x && it->m_move_y == y)
 				return it;
 		return nullptr;
@@ -675,7 +675,7 @@ public:
 	eval eval_from (const analyzer_id &id, bool require);
 	void collect_analyzers (std::function<void (const analyzer_id &, bool)> &callback)
 	{
-		for (auto &it: m_evals)
+		for (const auto &it: m_evals)
 			callback (it.id, it.score_stddev != 0);
 	}
 	void set_eval_data (int visits, double winrate_black, analyzer_id id)
@@ -698,7 +698,7 @@ public:
 	}
 	bool find_eval (const analyzer_id &id, eval &ev)
 	{
-		for (auto &e: m_evals)
+		for (const auto &e: m_evals)
 			if (e.id == id) {
 				ev = e;
 				return true;

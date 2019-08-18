@@ -367,10 +367,10 @@ go_score go_board::get_scores () const
 	sc.score_b = m_score_b;
 	sc.score_w = m_score_w;
 	sc.stones_b = sc.stones_w = 0;
-	for (auto &it: m_units_w)
+	for (const auto &it: m_units_w)
 		if (it.m_alive)
 			sc.stones_w += it.m_stones.popcnt ();
-	for (auto &it: m_units_b)
+	for (const auto &it: m_units_b)
 		if (it.m_alive)
 			sc.stones_b += it.m_stones.popcnt ();
 	return sc;
@@ -515,7 +515,7 @@ void go_board::benson (std::vector<stone_unit> &units, const bit_array &other_st
 	/* Calculate liberties bitsets for all units, and create the tentative array
 	   holding the index of each unit - this will be reduced over time during the
 	   algorithm's loop.  */
-	for (auto &it: units) {
+	for (const auto &it: units) {
 		unit_liberties.emplace_back (bitsize ());
 		bit_array &liberties = unit_liberties.back ();
 		flood_step (liberties, it.m_stones);
@@ -532,7 +532,7 @@ void go_board::benson (std::vector<stone_unit> &units, const bit_array &other_st
 		bool changed = false;
 		for (auto it: tentative)
 			units[it].m_n_vital = 0;
-		for (auto &ea: eas) {
+		for (const auto &ea: eas) {
 			for (auto idx: tentative) {
 				if (ea.area.subset_of (unit_liberties[idx]))
 					units[idx].m_n_vital++;
@@ -581,7 +581,7 @@ void go_board::finish_scoring_markers (const bit_array *do_not_count)
 			pass_alive.ior (it.m_stones);
 #endif
 
-	for (auto &t: m_units_t) {
+	for (const auto &t: m_units_t) {
 		bool counted = true;
 		if (do_not_count && t.m_terr.intersect_p (*do_not_count))
 			counted = false;
@@ -674,7 +674,7 @@ void go_board::calc_scoring_markers_complex ()
 #endif
 
 	bit_array cand_territory (bitsize ());
-	for (auto &t: m_units_t)
+	for (const auto &t: m_units_t)
 		cand_territory.ior (t.m_terr);
 	bit_array false_eyes (bitsize ());
 
@@ -686,7 +686,7 @@ void go_board::calc_scoring_markers_complex ()
 	   area of territory.  */
 	for (;;) {
 		bool changed = false;
-		for (auto it: live_units) {
+		for (const auto it: live_units) {
 			bit_array borders (bitsize ());
 			flood_step (borders, it->m_stones);
 			borders.and1 (cand_territory);
@@ -735,7 +735,7 @@ void go_board::calc_scoring_markers_complex ()
 	   them.
 	   Also discover units that do not border any territories: these are later
 	   used for identifying sekis .  */
-	for (auto &t: m_units_t) {
+	for (const auto &t: m_units_t) {
 		/* Could have been a false eye.  */
 		if (t.m_terr.popcnt () == 0)
 			continue;
@@ -813,7 +813,7 @@ void go_board::calc_scoring_markers_complex ()
 
 	   This is not a complete detection of seki situations, but handles a
 	   lot of cases.  */
-	for (auto &it: m_units_w) {
+	for (const auto &it: m_units_w) {
 		if (it.m_any_terr || !it.m_alive)
 			continue;
 		bit_array nb (bitsize ());
@@ -823,7 +823,7 @@ void go_board::calc_scoring_markers_complex ()
 				nit.m_seki_neighbour = true;
 		}
 	}
-	for (auto &it: m_units_b) {
+	for (const auto &it: m_units_b) {
 		if (it.m_any_terr || !it.m_alive)
 			continue;
 		bit_array nb (bitsize ());
@@ -835,12 +835,12 @@ void go_board::calc_scoring_markers_complex ()
 	}
 	/* Now identify empty intersections adjacent to strings that have a seki
 	   neighbour.  These points should not be counted for territory.  */
-	for (auto it: live_units) {
+	for (const auto it: live_units) {
 		if (it->m_seki_neighbour)
 			flood_step (seki_neighbours, it->m_stones);
 	}
 #else
-	for (auto it: live_units)
+	for (const auto it: live_units)
 		if (it->m_seki)
 			flood_step (seki_neighbours, it->m_stones);
 #endif
@@ -973,7 +973,7 @@ bool go_board::valid_move_p (int x, int y, stone_color col)
 
 	/* Extending a group of the same color?  */
 	std::vector<stone_unit> &player_units = col == black ? m_units_b : m_units_w;
-	for (auto &it: player_units) {
+	for (const auto &it: player_units) {
 		if (!it.m_stones.intersect_p (pos_neighbours))
 			continue;
 		if (it.m_n_liberties > 1)
@@ -982,7 +982,7 @@ bool go_board::valid_move_p (int x, int y, stone_color col)
 
 	/* A valid capture?  */
 	std::vector<stone_unit> &opponent_units = col == black ? m_units_w : m_units_b;
-	for (auto &it: opponent_units) {
+	for (const auto &it: opponent_units) {
 		if (!it.m_stones.intersect_p (pos_neighbours))
 			continue;
 		if (it.m_n_liberties == 1)
@@ -999,7 +999,7 @@ void go_board::verify_invariants ()
 	if (m_stones_b.intersect_p (m_stones_w))
 		throw std::logic_error ("white stones and black stones overlap");
 	int wcnt = m_stones_w.popcnt ();
-	for (auto &it: m_units_w) {
+	for (const auto &it: m_units_w) {
 		if (it.m_n_liberties <= 0)
 			throw std::logic_error ("white group was not removed.");
 		if (it.m_n_liberties != count_liberties (it.m_stones))
@@ -1009,7 +1009,7 @@ void go_board::verify_invariants ()
 	if (wcnt != 0)
 		throw std::logic_error ("white stone count inconsistency");
 	int bcnt = m_stones_b.popcnt ();
-	for (auto &it: m_units_b) {
+	for (const auto &it: m_units_b) {
 		if (it.m_n_liberties <= 0)
 			throw std::logic_error ("group was not removed.");
 		if (it.m_n_liberties != count_liberties (it.m_stones))
@@ -1021,14 +1021,14 @@ void go_board::verify_invariants ()
 
 	bit_array stones = m_stones_w;
 	stones.ior (m_stones_b);
-	for (auto &it: m_units_w) {
+	for (const auto &it: m_units_w) {
 		bit_array m = it.m_stones;
 		stones.andnot (m);
 		m.andnot (m_stones_w);
 		if (m.popcnt () > 0)
 			throw std::logic_error ("white unit contains stones not on the board");
 	}
-	for (auto &it: m_units_b) {
+	for (const auto &it: m_units_b) {
 		bit_array m = it.m_stones;
 		stones.andnot (m);
 		m.andnot (m_stones_b);

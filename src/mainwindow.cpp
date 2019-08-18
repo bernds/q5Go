@@ -1629,7 +1629,7 @@ void MainWindow::populate_engines_menu ()
 	qDebug () << "finding engines: " << b.size_x ();
 
 	QList<Engine> available = client_window->analysis_engines (b.size_x ());
-	for (auto &it: available) {
+	for (const auto &it: available) {
 		qDebug () << "Engine: " << it.title;
 		QAction *a = new QAction (it.title);
 		engine_map.insert (a, it);
@@ -2381,7 +2381,7 @@ void MainWindow::setGameMode (GameMode mode)
 		editInsertButton->setVisible (!st->root_node_p () && !st->was_move_p ());
 		/* Likewise for modifying an edit node - it must not have any non-edit children.  */
 		bool vis = st->was_edit_p () || st->root_node_p ();
-		for (auto &c: st->children ())
+		for (const auto &c: st->children ())
 			if (!c->was_edit_p ()) {
 				vis = false;
 				break;
@@ -2489,7 +2489,7 @@ void MainWindow::update_figures ()
 	}
 	int count = 1;
 	auto children = gs->children ();
-	for (auto it: children) {
+	for (const auto it: children) {
 		/* Skip the first child - it's the main variation, and should only appear
 		   in the list as "Current position", once it is reached.  */
 		if (it == children[0])

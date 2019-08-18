@@ -255,13 +255,13 @@ void Setting::extract_lists ()
 void Setting::write_lists (QTextStream &file)
 {
 	int i = 0;
-	for (auto &it: m_dbpaths) {
+	for (const auto &it: m_dbpaths) {
 		file << "DBPATH_" + QString::number (i) << " [" << it << "]" << endl;
 		i++;
 	}
 
 	i = 0;
-	for (auto &h: m_hosts) {
+	for (const auto &h: m_hosts) {
 		QString prefix = "HOST" + QString::number(++i);
 		file << prefix << "a [" << h.title << "]" << endl;
 		file << prefix << "b [" << h.host << "]" << endl;
@@ -272,7 +272,7 @@ void Setting::write_lists (QTextStream &file)
 	}
 
 	i = 0;
-	for (auto &e: m_engines)
+	for (const auto &e: m_engines)
 	{
 		QString prefix = "ENGINE" + QString::number(++i);
 		file << prefix << "a [" << e.title << "]" << endl;
@@ -495,7 +495,7 @@ const QStringList Setting::getAvailableLanguages()
 {
 	QStringList list;
 
-	for (auto it: available_languages)
+	for (const auto it: available_languages)
 		list << it;
 
 	return list;

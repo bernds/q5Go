@@ -63,7 +63,7 @@ const go_board game_state::child_moves (const game_state *excluding, bool exclud
 {
 	go_board b (m_board.size_x (), m_board.size_y ());
 	size_t n = 0;
-	for (auto &it: m_children) {
+	for (const auto &it: m_children) {
 		if (it == excluding || (it->has_figure () && exclude_figs))
 			continue;
 		/* It's unclear if letters should skip the current variation,
@@ -112,7 +112,7 @@ bool game_state::update_visualization (bool hide_figures)
 {
 	bool changes = false;
 	int max_width = 1;
-	for (auto &it: m_children) {
+	for (const auto &it: m_children) {
 		changes |= it->update_visualization (hide_figures);
 		bool show = it == m_children[0] || !it->has_figure () || !hide_figures;
 		changes |= show != it->m_visual_shown;
@@ -126,7 +126,7 @@ bool game_state::update_visualization (bool hide_figures)
 	if (m_children.size () == 0 || m_visual_collapse) {
 		m_visualized = visual_tree (m_children.size () > 0 && m_visual_collapse);
 	} else {
-		for (auto &it: m_children) {
+		for (const auto &it: m_children) {
 			if (it == m_children[0])
 				m_visualized = visual_tree (it->m_visualized, max_width);
 			else if (it->m_visual_shown)
@@ -169,7 +169,7 @@ void game_state::render_visualization (int cx, int cy, int size, const draw_line
 		if (last_idx > 0 && yoff > 0) {
 			line_fn (cx, cy + size * 0.45, cx, cy + size * yoff, false);
 		}
-		for (auto it: m_children) {
+		for (const auto it: m_children) {
 			if (!it->m_visual_shown)
 				continue;
 			int y0 = it->m_visualized.y_offset () * size;
@@ -181,7 +181,7 @@ void game_state::render_visualization (int cx, int cy, int size, const draw_line
 		}
 	}
 
-	for (auto &it: m_children) {
+	for (const auto &it: m_children) {
 		if (!it->m_visual_shown)
 			continue;
 		int yoff = it->m_visualized.y_offset ();
@@ -217,11 +217,11 @@ void game_state::extract_visualization (int x, int y,
 	}
 	if (has_figure ())
 		figures.set_bit (x, y);
-	for (auto &it: m_children) {
+	for (const auto &it: m_children) {
 		if (it != m_children[0] && !it->m_visual_shown)
 			hidden_figs.set_bit (x, y);
 	}
-	for (auto &it: m_children) {
+	for (const auto &it: m_children) {
 		if (!it->m_visual_shown)
 			continue;
 		int yoff = it->m_visualized.y_offset ();
@@ -259,7 +259,7 @@ bool game_state::locate_visual (int x, int y, const game_state *active, int &ax,
 		ay = y;
 		return true;
 	}
-	for (auto &it: m_children) {
+	for (const auto &it: m_children) {
 		if (!it->m_visual_shown)
 			continue;
 		int yoff = it->m_visualized.y_offset ();
@@ -283,7 +283,7 @@ game_state *game_state::locate_by_vis_coords (int x, int y, int off_x, int off_y
 		return nullptr;
 	if (x >= off_x + m_visualized.width () || y >= off_y + m_visualized.height ())
 		return nullptr;
-	for (auto &it: m_children) {
+	for (const auto &it: m_children) {
 		if (!it->m_visual_shown)
 			continue;
 		game_state *ret = it->locate_by_vis_coords (x, y, off_x + 1, off_y + it->m_visualized.y_offset ());
@@ -350,7 +350,7 @@ bool game_state::has_figure_recursive () const
 		if (st->m_children.size () == 0)
 			return false;
 		const game_state *next = st->m_children[0];
-		for (auto it: st->m_children)
+		for (const auto it: st->m_children)
 			if (it != next) {
 				if (it->has_figure_recursive ())
 					return true;
@@ -381,7 +381,7 @@ void game_state::update_eval (const game_state &other)
 eval game_state::best_eval ()
 {
 	eval best;
-	for (auto &it: m_evals) {
+	for (const auto &it: m_evals) {
 		if ((it.id.komi_set && !best.id.komi_set) || it.visits > best.visits)
 			best = it;
 	}
@@ -390,7 +390,7 @@ eval game_state::best_eval ()
 
 eval game_state::eval_from (const analyzer_id &id, bool require)
 {
-	for (auto &it: m_evals) {
+	for (const auto &it: m_evals) {
 		if (it.id == id)
 			return it;
 	}
