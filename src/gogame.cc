@@ -9,7 +9,8 @@ game_state_manager::~game_state_manager ()
 
 	for (;;) {
 		b = m_free.ffs (b);
-		if (b == n_elts)
+		/* b will be larger than n_elts if we never allocated anything.  */
+		if (b >= n_elts)
 			break;
 		char *arena = m_game_states[b / m_n_per_chunk];
 
