@@ -831,8 +831,6 @@ enum class ranked { unknown, free, ranked, teaching };
 
 struct game_info
 {
-	std::string filename;
-
 	std::string title;
 	std::string name_w, name_b;
 	std::string rank_w, rank_b;
@@ -869,6 +867,8 @@ class game_record : public game_state_manager
 	friend go_game_ptr sgf2record (const sgf &s, QTextCodec *codec);
 	game_info m_info;
 	game_state *m_root {};
+
+	std::string m_filename;
 	bool m_modified = false;
 	sgf_errors m_errors;
 
@@ -903,7 +903,8 @@ public:
 	/* A few convenience functions for when we need to update only a part of the info.  */
 	void set_result (const std::string s) { m_info.result = std::move (s); }
 	void set_title (const std::string s) { m_info.title = std::move (s); }
-	void set_filename (const std::string s) { m_info.filename = std::move (s); }
+	const std::string &filename () { return m_filename; }
+	void set_filename (const std::string s) { m_filename = std::move (s); }
 	void set_handicap (int hc) { m_info.handicap = hc; }
 	void set_ranked_type (ranked r) { m_info.rated = r; }
 

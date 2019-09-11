@@ -395,7 +395,7 @@ MainWindow::MainWindow (QWidget* parent, go_game_ptr gr, const QString opener_sc
 	isFullScreen = 0;
 	setFocusPolicy(Qt::StrongFocus);
 
-	const std::string &f = gr->info ().filename;
+	const std::string &f = gr->filename ();
 	if (!f.empty ()) {
 		QFileInfo fi (QString::fromStdString (f));
 		setting->writeEntry ("LAST_DIR", fi.dir ().absolutePath ());
@@ -1242,7 +1242,7 @@ QString MainWindow::getFileExtension(const QString &fileName, bool defaultExt)
 
 bool MainWindow::slotFileSave (bool)
 {
-	QString fileName = QString::fromStdString (m_game->info ().filename);
+	QString fileName = QString::fromStdString (m_game->filename ());
 	if (fileName.isEmpty())
 	{
 		fileName = setting->readEntry("LAST_DIR");
@@ -1254,7 +1254,7 @@ bool MainWindow::slotFileSave (bool)
 
 bool MainWindow::slotFileSaveAs (bool)
 {
-	std::string saved_name = m_game->info ().filename;
+	std::string saved_name = m_game->filename ();
 	QString fileName = saved_name == "" ? QString () : QString::fromStdString (saved_name);
 	return doSave (fileName, false);
 }
