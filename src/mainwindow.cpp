@@ -1306,6 +1306,7 @@ bool MainWindow::doSave (QString fileName, bool force)
 	statusBar()->showMessage (fileName + " " + tr("saved."));
 	m_game->set_modified (false);
 	m_game->clear_errors ();
+	m_game->set_filename (fileName.toStdString ());
 	update_game_record ();
 	return true;
 }
