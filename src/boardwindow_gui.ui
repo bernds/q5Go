@@ -2748,6 +2748,7 @@ After placing and/or undo release button for returning to starting point automat
    <addaction name="editTriangle"/>
    <addaction name="editCircle"/>
    <addaction name="editSquare"/>
+   <addaction name="editCross"/>
    <addaction name="editLetter"/>
    <addaction name="editNumber"/>
    <addaction name="separator"/>
