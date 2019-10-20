@@ -125,8 +125,12 @@ void GameTree::set_board_win (MainWindow *win, QGraphicsView *header)
 	QScrollBar *hscr = horizontalScrollBar ();
 	QScrollBar *hscr2 = m_header_view->horizontalScrollBar ();
 	connect (hscr, &QScrollBar::valueChanged, hscr2, &QAbstractSlider::setSliderPosition);
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 	connect (verticalScrollBar (), &QAbstractSlider::rangeChanged,
 		 [this] (int, int) { QMetaObject::invokeMethod (this, &GameTree::resize_header, Qt::QueuedConnection); });
+#else
+	header->hide ();
+#endif
 }
 
 void GameTree::update_prefs ()
