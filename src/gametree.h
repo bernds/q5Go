@@ -5,6 +5,7 @@
 #ifndef GAMETREE_H
 #define GAMETREE_H
 
+#include <memory>
 #include <QGraphicsView>
 #include "defines.h"
 #include "setting.h"
