@@ -25,7 +25,6 @@
 #include "komispinbox.h"
 #include "igsconnection.h"
 #include "mainwindow.h"
-#include "newaigamedlg.h"
 #include "ui_helpers.h"
 #include "msg_handler.h"
 #include "dbdialog.h"
@@ -1760,8 +1759,8 @@ void ClientWindow::initActions()
 	connect(fileOpen, &QAction::triggered, this, &ClientWindow::slotFileOpen);
 	connect(fileOpenDB, &QAction::triggered, this, &ClientWindow::slotFileOpenDB);
 	connect(fileBatchAnalysis, &QAction::triggered, this, [] (bool) { show_batch_analysis (); });
-	connect(computerPlay, &QAction::triggered, this, &ClientWindow::slotComputerPlay);
-	connect(twoEnginePlay, &QAction::triggered, this, &ClientWindow::slotTwoEnginePlay);
+	connect(computerPlay, &QAction::triggered, [this] (bool) { play_engine (this); });
+	connect(twoEnginePlay, &QAction::triggered, [this] (bool) { play_two_engines (this); });
 	connect(fileQuit, &QAction::triggered, this, &ClientWindow::quit);
 
 	/*
@@ -1854,57 +1853,6 @@ QList<Engine> ClientWindow::analysis_engines (int boardsize)
 	}
 	return l;
 }
-
-void ClientWindow::slotComputerPlay(bool)
-{
-	if (setting->m_engines.size () == 0)
-	{
-		QMessageBox::warning(this, PACKAGE, tr("You did not configure any engines!"));
-		dlgSetPreferences (3);
-		return;
-	}
-
-	NewAIGameDlg dlg (this);
-	if (dlg.exec () != QDialog::Accepted)
-		return;
-
-	go_game_ptr gr = dlg.create_game_record ();
-	if (gr == nullptr)
-		return;
-
-	int eidx = dlg.engine_index ();
-	const Engine &engine = setting->m_engines[eidx];
-	bool computer_white = dlg.computer_white_p ();
-	time_settings ts = dlg.timing ();
-	new MainWindow_GTP (0, gr, screen_key (this), engine, ts, !computer_white, computer_white);
-}
-
-void ClientWindow::slotTwoEnginePlay (bool)
-{
-	if (setting->m_engines.size () == 0)
-	{
-		QMessageBox::warning(this, PACKAGE, tr("You did not configure any engines!"));
-		dlgSetPreferences (3);
-		return;
-	}
-
-	TwoAIGameDlg dlg (this);
-	if (dlg.exec () != QDialog::Accepted)
-		return;
-
-	go_game_ptr gr = dlg.create_game_record ();
-
-	if (gr == nullptr)
-		return;
-
-	int w_eidx = dlg.engine_index (white);
-	int b_eidx = dlg.engine_index (black);
-	const Engine &engine_w = setting->m_engines[w_eidx];
-	const Engine &engine_b = setting->m_engines[b_eidx];
-	time_settings ts = dlg.timing ();
-	new MainWindow_GTP (0, gr, screen_key (this), engine_w, engine_b, ts, dlg.num_games (), dlg.opening_book ());
-}
-
 
 void ClientWindow::slotMenuConnect(bool)
 {

@@ -8,7 +8,8 @@ FORMS	      = gui_dialog.ui \
                 dbdialog_gui.ui \
                 enginedlg_gui.ui \
 		figuredlg_gui.ui \
-		gameinfo_gui.ui \
+                gameinfo_gui.ui \
+                greeterwindow_gui.ui \
 		newgame_gui.ui \
 		newlocalgame_gui.ui \
 		newvariantgame_gui.ui \
@@ -35,7 +36,8 @@ HEADERS		      = analyzedlg.h \
                         figuredlg.h \
                         gamedialog.h \
 			gamestable.h \
-			gametree.h \
+                        gametree.h \
+                        greeterwindow.h \
 			gs_globals.h \
 			igsconnection.h \
 			clientwin.h \
@@ -86,6 +88,7 @@ SOURCES		      = analyzedlg.cpp \
 			gametree.cpp \
                         goboard.cc \
                         gogame.cc \
+                        greeterwindow.cpp \
 			igsconnection.cpp \
 			main.cpp \
 			misc.cpp \

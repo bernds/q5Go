@@ -167,7 +167,7 @@ public slots:
 	void slot_cblooking (bool);
 	void slot_cbopen (bool);
 	void slot_cbquiet (bool);
-	void quit (bool);
+	void quit (bool = false);
 	void slot_last_window_closed ();
 	void slot_cbconnect (const QString&);
 	void slot_connect (bool);
@@ -215,8 +215,6 @@ public slots:
 	//menus
 	void slotFileOpen (bool);
 	void slotFileOpenDB (bool);
-	void slotComputerPlay (bool);
-	void slotTwoEnginePlay (bool);
 
 	void slotMenuConnect (bool);
 	void slotMenuDisconnect (bool);

@@ -12,13 +12,15 @@ extern go_game_ptr new_variant_game_dialog (QWidget *);
 extern go_game_ptr record_from_stream (QIODevice &isgf, QTextCodec *codec);
 extern go_game_ptr record_from_file (const QString &filename, QTextCodec *codec);
 extern bool open_window_from_file (const QString &filename);
-extern void open_local_board (QWidget *, game_dialog_type, const QString &);
+extern bool open_local_board (QWidget *, game_dialog_type, const QString &);
 extern go_board new_handicap_board (int, int);
 extern QString get_candidate_filename (const QString &dir, const game_info &);
 extern bit_array calculate_hoshis (const go_board &);
 extern board_rect find_crop (const game_state *gs);
 
 extern void show_batch_analysis ();
+extern bool play_engine (QWidget *);
+extern bool play_two_engines (QWidget *);
 
 extern void help_about ();
 extern void help_new_version ();

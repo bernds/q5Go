@@ -64,6 +64,7 @@
     <file>images/power-standby.png</file>
     <file>images/power-on.png</file>
     <file>images/exit.png</file>
+    <file>images/goboard-small.png</file>
     <file>images/pause.png</file>
     <file>images/trash.png</file>
     <file>sounds/click.wav</file>
@@ -98,6 +99,9 @@
   <qresource prefix="/ClientWindowGui">
     <file>images/clientwindow/Bowl.png</file>
     <file>images/clientwindow/computerplay.png</file>
+    <file>images/clientwindow/world.png</file>
+    <file>images/clientwindow/exit.png</file>
+    <file>images/clientwindow/human-robot.png</file>
     <file>images/clientwindow/gear.png</file>
     <file>images/clientwindow/connected.png</file>
     <file>images/clientwindow/disconnected.png</file>

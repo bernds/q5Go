@@ -19,6 +19,8 @@
 #include "analyzedlg.h"
 #include "sgfpreview.h"
 #include "dbdialog.h"
+#include "greeterwindow.h"
+#include "newaigamedlg.h"
 
 #include <qtranslator.h>
 #include <qtextcodec.h>
@@ -246,19 +248,19 @@ QString open_filename_dialog (QWidget *parent)
 	return fileName;
 }
 
-void open_local_board (QWidget *parent, game_dialog_type type, const QString &scrkey)
+bool open_local_board (QWidget *parent, game_dialog_type type, const QString &scrkey)
 {
 	go_game_ptr gr;
 	switch (type) {
 	case game_dialog_type::normal:
 		gr = new_game_dialog (parent);
 		if (gr == nullptr)
-			return;
+			return false;
 		break;
 	case game_dialog_type::variant:
 		gr = new_variant_game_dialog (parent);
 		if (gr == nullptr)
-			return;
+			return false;
 		break;
 
 	case game_dialog_type::none:
@@ -273,6 +275,59 @@ void open_local_board (QWidget *parent, game_dialog_type type, const QString &sc
 	}
 	MainWindow *win = new MainWindow (0, gr, scrkey);
 	win->show ();
+	return true;
+}
+
+bool play_engine (QWidget *parent)
+{
+	if (setting->m_engines.size () == 0)
+	{
+		QMessageBox::warning (parent, PACKAGE, QObject::tr ("You did not configure any engines!"));
+		client_window->dlgSetPreferences (3);
+		return false;
+	}
+
+	NewAIGameDlg dlg (parent);
+	if (dlg.exec () != QDialog::Accepted)
+		return false;
+
+	go_game_ptr gr = dlg.create_game_record ();
+	if (gr == nullptr)
+		return false;
+
+	int eidx = dlg.engine_index ();
+	const Engine &engine = setting->m_engines[eidx];
+	bool computer_white = dlg.computer_white_p ();
+	time_settings ts = dlg.timing ();
+	new MainWindow_GTP (0, gr, screen_key (parent), engine, ts, !computer_white, computer_white);
+	return true;
+}
+
+bool play_two_engines (QWidget *parent)
+{
+	if (setting->m_engines.size () == 0)
+	{
+		QMessageBox::warning (parent, PACKAGE, QObject::tr ("You did not configure any engines!"));
+		client_window->dlgSetPreferences (3);
+		return false;
+	}
+
+	TwoAIGameDlg dlg (parent);
+	if (dlg.exec () != QDialog::Accepted)
+		return false;
+
+	go_game_ptr gr = dlg.create_game_record ();
+
+	if (gr == nullptr)
+		return false;
+
+	int w_eidx = dlg.engine_index (white);
+	int b_eidx = dlg.engine_index (black);
+	const Engine &engine_w = setting->m_engines[w_eidx];
+	const Engine &engine_b = setting->m_engines[b_eidx];
+	time_settings ts = dlg.timing ();
+	new MainWindow_GTP (0, gr, screen_key (parent), engine_w, engine_b, ts, dlg.num_games (), dlg.opening_book ());
+	return true;
 }
 
 /* Create a bit array of hoshi points for a board shaped like REF.  */
@@ -522,7 +577,8 @@ int main(int argc, char **argv)
 	cmdp.process (myapp);
 	const QStringList args = cmdp.positionalArguments ();
 
-	bool show_client = cmdp.isSet (clo_client) || (args.isEmpty () && !cmdp.isSet (clo_board) && !cmdp.isSet (clo_analysis));
+	bool show_client = cmdp.isSet (clo_client);
+	bool show_greeter = !show_client && args.isEmpty () && !cmdp.isSet (clo_board) && !cmdp.isSet (clo_analysis);
 
 #ifdef OWN_DEBUG_MODE
 	qInstallMessageHandler (myMessageHandler);
@@ -609,9 +665,6 @@ int main(int argc, char **argv)
 			str << err;
 		}
 	}
-	if (!windows_open)
-		return 1;
-
 	if (cmdp.isSet (clo_analysis)) {
 		analyze_dialog = new AnalyzeDialog (nullptr, cmdp.value (clo_analysis));
 	} else
@@ -620,6 +673,12 @@ int main(int argc, char **argv)
 
 	if (setting->getNewVersionWarning())
 		help_new_version ();
+
+	GreeterWindow *greeter {};
+	if (!windows_open) {
+		greeter = new GreeterWindow (nullptr);
+		greeter->show ();
+	}
 
 	auto retval = myapp.exec ();
 
@@ -630,6 +689,7 @@ int main(int argc, char **argv)
 		debug_file = nullptr;
 	}
 
+	delete greeter;
 	delete client_window;
 	delete analyze_dialog;
 #ifdef OWN_DEBUG_MODE
