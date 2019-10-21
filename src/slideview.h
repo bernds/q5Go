@@ -1,7 +1,6 @@
 #include <memory>
 
 #include <QDialog>
-#include "ui_slideview_gui.h"
 
 class game_record;
 typedef std::shared_ptr<game_record> go_game_ptr;
@@ -11,11 +10,17 @@ class FigureView;
 class QTextEdit;
 class QGraphicsView;
 class QGraphicsScene;
+class QGraphicsPixmapItem;
 
-class SlideView: public QDialog, public Ui::SlideViewDialog
+namespace Ui {
+	class SlideViewDialog;
+};
+
+class SlideView: public QDialog
 {
 	Q_OBJECT
 
+	Ui::SlideViewDialog *ui;
 	FigureView *m_board_exporter;
 	go_game_ptr m_game;
 	QFont m_font;

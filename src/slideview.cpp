@@ -6,6 +6,8 @@
 #include "board.h"
 #include "slideview.h"
 
+#include "ui_slideview_gui.h"
+
 void AspectContainer::fix_aspect ()
 {
 	if (m_child == nullptr)
@@ -23,44 +25,45 @@ void AspectContainer::fix_aspect ()
 }
 
 
-SlideView::SlideView (QWidget *parent) : QDialog (parent), m_board_exporter (new FigureView)
+SlideView::SlideView (QWidget *parent)
+	: QDialog (parent), ui (new Ui::SlideViewDialog), m_board_exporter (new FigureView)
 {
-	setupUi (this);
+	ui->setupUi (this);
 
-	aspectWidget->set_child (slideView);
+	ui->aspectWidget->set_child (ui->slideView);
 	m_board_exporter->hide ();
 
 	m_scene = new QGraphicsScene (0, 0, 30, 30, this);
-	slideView->setScene (m_scene);
+	ui->slideView->setScene (m_scene);
 
 	update_prefs ();
 
-	slideXEdit->setValidator (new QIntValidator (100, 9999, this));
-	slideYEdit->setValidator (new QIntValidator (100, 9999, this));
+	ui->slideXEdit->setValidator (new QIntValidator (100, 9999, this));
+	ui->slideYEdit->setValidator (new QIntValidator (100, 9999, this));
 
-	connect (slideXEdit, &QLineEdit::textChanged, [this] () { inputs_changed (); });
-	connect (slideYEdit, &QLineEdit::textChanged, [this] () { inputs_changed (); });
+	connect (ui->slideXEdit, &QLineEdit::textChanged, [this] () { inputs_changed (); });
+	connect (ui->slideYEdit, &QLineEdit::textChanged, [this] () { inputs_changed (); });
 	void (QSpinBox::*changed) (int) = &QSpinBox::valueChanged;
-	connect (slideLinesSpinBox, changed, [this] (int) { inputs_changed (); });
-	connect (slideMarginSpinBox, changed, [this] (int) { inputs_changed (); });
-	connect (slideWBCheckBox, &QCheckBox::toggled, [this] (bool) { inputs_changed (); });
-	connect (slideItalicCheckBox, &QCheckBox::toggled, [this] (bool) { inputs_changed (); });
-	connect (slideBoldCheckBox, &QCheckBox::toggled, [this] (bool) { inputs_changed (); });
-	connect (slideCoordsCheckBox, &QCheckBox::toggled, [this] (bool) { inputs_changed (); });
+	connect (ui->slideLinesSpinBox, changed, [this] (int) { inputs_changed (); });
+	connect (ui->slideMarginSpinBox, changed, [this] (int) { inputs_changed (); });
+	connect (ui->slideWBCheckBox, &QCheckBox::toggled, [this] (bool) { inputs_changed (); });
+	connect (ui->slideItalicCheckBox, &QCheckBox::toggled, [this] (bool) { inputs_changed (); });
+	connect (ui->slideBoldCheckBox, &QCheckBox::toggled, [this] (bool) { inputs_changed (); });
+	connect (ui->slideCoordsCheckBox, &QCheckBox::toggled, [this] (bool) { inputs_changed (); });
 
-	connect (toClipButton, &QPushButton::clicked, [this] ()
+	connect (ui->toClipButton, &QPushButton::clicked, [this] ()
 		 {
 			 QPixmap pm = render_export ();
 			 QApplication::clipboard()->setPixmap (pm);
 		 });
-	connect (fileOpenButton, &QToolButton::clicked, this, &SlideView::choose_file);
-	connect (saveButton, &QPushButton::clicked, [this] () { save (); });
-	connect (saveAllButton, &QPushButton::clicked, [this] () { save_all (false); });
-	connect (saveAllMainButton, &QPushButton::clicked, [this] () { save_mainline (false); });
-	connect (saveComButton, &QPushButton::clicked, [this] () { save_all (true); });
-	connect (saveComMainButton, &QPushButton::clicked, [this] () { save_mainline (true); });
-	connect (saveAsButton, &QPushButton::clicked, this, &SlideView::save_as);
-	connect (slideView, &SizeGraphicsView::resized, this, &SlideView::view_resized);
+	connect (ui->fileOpenButton, &QToolButton::clicked, this, &SlideView::choose_file);
+	connect (ui->saveButton, &QPushButton::clicked, [this] () { save (); });
+	connect (ui->saveAllButton, &QPushButton::clicked, [this] () { save_all (false); });
+	connect (ui->saveAllMainButton, &QPushButton::clicked, [this] () { save_mainline (false); });
+	connect (ui->saveComButton, &QPushButton::clicked, [this] () { save_all (true); });
+	connect (ui->saveComMainButton, &QPushButton::clicked, [this] () { save_mainline (true); });
+	connect (ui->saveAsButton, &QPushButton::clicked, this, &SlideView::save_as);
+	connect (ui->slideView, &SizeGraphicsView::resized, this, &SlideView::view_resized);
 	show ();
 }
 
@@ -68,13 +71,14 @@ SlideView::~SlideView ()
 {
 	delete m_scene;
 	delete m_board_exporter;
+	delete ui;
 }
 
 QPixmap SlideView::render_text (int w, int h)
 {
-	int margin = slideMarginSpinBox->value ();
+	int margin = ui->slideMarginSpinBox->value ();
 	int margin_px = w * margin / 100.;
-	int n_lines = slideLinesSpinBox->value ();
+	int n_lines = ui->slideLinesSpinBox->value ();
 	QFontMetrics fm (m_font);
 	int fh = fm.height ();
 	double fh_chosen = (double)(h - 2 * margin_px) / n_lines;
@@ -82,9 +86,9 @@ QPixmap SlideView::render_text (int w, int h)
 	double f_factor = (double)fh_chosen / fh;
 	int new_ps = m_font.pointSize () * f_factor;
 	QFont title_font = m_font;
-	if (slideItalicCheckBox->isChecked ())
+	if (ui->slideItalicCheckBox->isChecked ())
 		title_font.setItalic (true);
-	if (slideBoldCheckBox->isChecked ())
+	if (ui->slideBoldCheckBox->isChecked ())
 		title_font.setBold (true);
 	QFont f1 = m_font;
 	f1.setPointSize (new_ps);
@@ -92,10 +96,10 @@ QPixmap SlideView::render_text (int w, int h)
 	f2.setPointSize (new_ps);
 
 	QPixmap pm (w, h);
-	pm.fill (slideWBCheckBox->isChecked () ? Qt::black : Qt::white);
+	pm.fill (ui->slideWBCheckBox->isChecked () ? Qt::black : Qt::white);
 	QPainter painter;
 	painter.begin (&pm);
-	painter.setPen (slideWBCheckBox->isChecked () ? Qt::white : Qt::black);
+	painter.setPen (ui->slideWBCheckBox->isChecked () ? Qt::white : Qt::black);
 	int lineno = 0;
 	QString comments = QString::fromStdString (m_board_exporter->displayed ()->comment ());
 	QStringList paras = comments.split ("\n");
@@ -153,12 +157,12 @@ void SlideView::update_text_font ()
 
 QPixmap SlideView::render_export ()
 {
-	int w = slideXEdit->text ().toInt ();
-	int h = slideYEdit->text ().toInt ();
+	int w = ui->slideXEdit->text ().toInt ();
+	int h = ui->slideYEdit->text ().toInt ();
 
 	QPixmap pm (w, h);
 	pm.fill (Qt::transparent);
-	m_board_exporter->set_show_coords (slideCoordsCheckBox->isChecked ());
+	m_board_exporter->set_show_coords (ui->slideCoordsCheckBox->isChecked ());
 	m_board_exporter->set_margin (0);
 	m_board_exporter->resizeBoard (h, h);
 	QPixmap board_pm = m_board_exporter->draw_position (0);
@@ -178,7 +182,7 @@ void SlideView::redraw ()
 		return;
 	update_text_font ();
 	int h = m_displayed_sz.height ();
-	m_board_exporter->set_show_coords (slideCoordsCheckBox->isChecked ());
+	m_board_exporter->set_show_coords (ui->slideCoordsCheckBox->isChecked ());
 	m_board_exporter->set_margin (0);
 	m_board_exporter->resizeBoard (h, h);
 	QPixmap board_pm = m_board_exporter->draw_position (0);
@@ -192,20 +196,20 @@ void SlideView::redraw ()
 
 void SlideView::view_resized ()
 {
-	m_displayed_sz = slideView->size ();
+	m_displayed_sz = ui->slideView->size ();
 	redraw ();
 }
 
 void SlideView::update_prefs ()
 {
-	slideLinesSpinBox->setValue (setting->readIntEntry( "SLIDE_LINES"));
-	slideMarginSpinBox->setValue (setting->readIntEntry( "SLIDE_MARGIN"));
-	slideXEdit->setText (QString::number (setting->readIntEntry ("SLIDE_X")));
-	slideYEdit->setText (QString::number (setting->readIntEntry ("SLIDE_Y")));
-	slideItalicCheckBox->setChecked (setting->readBoolEntry ("SLIDE_ITALIC"));
-	slideBoldCheckBox->setChecked (setting->readBoolEntry ("SLIDE_BOLD"));
-	slideCoordsCheckBox->setChecked (setting->readBoolEntry ("SLIDE_COORDS"));
-	slideWBCheckBox->setChecked (setting->readBoolEntry ("SLIDE_WB"));
+	ui->slideLinesSpinBox->setValue (setting->readIntEntry( "SLIDE_LINES"));
+	ui->slideMarginSpinBox->setValue (setting->readIntEntry( "SLIDE_MARGIN"));
+	ui->slideXEdit->setText (QString::number (setting->readIntEntry ("SLIDE_X")));
+	ui->slideYEdit->setText (QString::number (setting->readIntEntry ("SLIDE_Y")));
+	ui->slideItalicCheckBox->setChecked (setting->readBoolEntry ("SLIDE_ITALIC"));
+	ui->slideBoldCheckBox->setChecked (setting->readBoolEntry ("SLIDE_BOLD"));
+	ui->slideCoordsCheckBox->setChecked (setting->readBoolEntry ("SLIDE_COORDS"));
+	ui->slideWBCheckBox->setChecked (setting->readBoolEntry ("SLIDE_WB"));
 
 	m_font = setting->fontComments;
 
@@ -214,11 +218,11 @@ void SlideView::update_prefs ()
 
 void SlideView::inputs_changed ()
 {
-	int w = slideXEdit->text ().toInt ();
-	int h = slideYEdit->text ().toInt ();
+	int w = ui->slideXEdit->text ().toInt ();
+	int h = ui->slideYEdit->text ().toInt ();
 
 	m_aspect = w * 1.0 / std::max (1, h);
-	aspectWidget->set_aspect (m_aspect);
+	ui->aspectWidget->set_aspect (m_aspect);
 
 	redraw ();
 }
@@ -253,19 +257,19 @@ void SlideView::save_as ()
 
 bool SlideView::save ()
 {
-	QString pattern = fileTemplateEdit->text ();
+	QString pattern = ui->fileTemplateEdit->text ();
 	if (pattern.isEmpty () || !pattern.contains ("%n")) {
 		QMessageBox::warning (this, tr ("Filename pattern not set"),
 				      tr ("Please enter a filename pattern which includes \"%n\" where the number should be substituted."));
 		return false;
 	}
-	int v = fileNrSpinBox->value ();
+	int v = ui->fileNrSpinBox->value ();
 	QString v_str = QString::number (v);
 	while (v_str.length () < 4)
 		v_str = "0" + v_str;
 	QString filename = pattern.replace (QRegExp ("%n"), v_str);
 	QFile f (filename);
-	if (f.exists () && !overwriteCheckBox->isChecked ()) {
+	if (f.exists () && !ui->overwriteCheckBox->isChecked ()) {
 		QMessageBox::StandardButton choice;
 		choice = QMessageBox::warning(this, tr ("File exists"),
 					      tr ("A filename matching the pattern and current number already exists.  Overwrite?"),
@@ -279,7 +283,7 @@ bool SlideView::save ()
 				      tr ("The file could not be saved.\nPlease verify the filename pattern is correct."));
 		return false;
 	}
-	fileNrSpinBox->setValue (v + 1);
+	ui->fileNrSpinBox->setValue (v + 1);
 	return true;
 }
 
@@ -337,5 +341,5 @@ void SlideView::choose_file ()
 	if (filename.isEmpty ())
 		return;
 
-	fileTemplateEdit->setText (filename);
+	ui->fileTemplateEdit->setText (filename);
 }
