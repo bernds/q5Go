@@ -1,0 +1,401 @@
+(;FF[4]GM[1]CA[UTF-8]AP[q5go:0.9]
+SZ[19]
+PW[White]
+PB[Black]
+KM[6.500000]AW[dc][oc][qo]AB[cp][pe][pq][qd]
+C[Openings
+Welcome to this beginner-level tutorial on openings.
+As a complete novice, you should play on smaller boards like 9x9 for a while to get a basic grasp of the game's tactical possibilities.]
+;B[]
+C[Openings
+Once you are feeling more confident, you might want to tackle the 19x19 board.
+This tutorial will cover the basics of playing the opening on a large board. It is by no means exhaustive.]
+;AE[cp][dc][oc][pe][pq][qd][qo]LB[jd:2][jj:3][pd:1]
+C[Openings
+"Corners, then sides, then center" is a general guideline for how to proceed in the opening.
+It is easiest to make living groups and territory in the corners, followed by the sides.]
+;W[]LB[pc:A][pd:B][qd:A]
+C[Openings
+The most common opening moves are A and B: the 3-4 point, and the 4-4 point.]
+;W[]LB[oc:D][od:E][pc:A][pd:B][qc:C][qd:A]
+C[Openings
+But C, D and E area also played. All these moves are recognized as good, but you can play whereever you like.
+]
+;B[qd]
+C[Openings
+In a normal opening, players take up corner positions first.]
+;W[dd]
+C[Openings
+In a normal opening, players take up corner positions first.]
+;B[pq]
+C[Openings
+In a normal opening, players take up corner positions first.]
+;W[dp]
+C[Openings
+In a normal opening, players take up corner positions first.
+Black has chosen two 3-4 points, while White has played two star points.
+]
+;B[oc]LB[nc:A][nd:B][od:C]
+C[Openings
+Adding a second stone makes a corner enclosure. It's most common with 3-4 points, like the one Black has played.
+Any move at A, B or C would also be recognized as enclosure.
+]
+;W[qo]LB[po:A]
+C[Openings
+To prevent a corner enclosure, the opponent could make an approach move such as this.
+A play at A would also be a very common approach move.
+]
+;B[np]
+C[Openings
+Black might extend towards the other side to reinforce the corner stone.
+]
+;W[ql]
+C[Openings
+If White extends in the other direction, this is a peaceful way of playing.
+A two-space extension on the third line is generally a fairly stable setup.
+]
+;B[fq]
+C[Openings
+One can also play an approach move against the 4-4 star point stone.
+]
+;W[cn]
+C[Openings
+This is a similar idea as previously - when approached, extend in the other direction.
+]
+;B[dr]
+C[Openings
+Black could play this slide, which threatens to take the corner.
+(Full disclosure: strong players no longer play this, but it was considered good for a long time. Don't worry about it.)
+]
+;W[cq]
+C[Openings
+A normal choice for White is to protect the corner territory.
+]
+;B[iq]
+C[Openings
+And Black extends again, for stability.
+The sequence we have just seen is a joseki, which means a series of moves that occur often and are considered reasonable for both sides.]
+;AE[cq][iq]
+C[Openings
+You need to be aware that just because something is joseki, your opponent might not want to play that way.
+The peaceful continuation we have seen is not the only possible outcome.]
+;W[gq]
+C[Openings
+A move like this might come as a surprise. We will not go into the variations, but a contact play like this tends to start more complicated fights.
+A lot of things are possible on the Go board. Don't expect your opponent to follow your plans.
+]
+;AE[cn][dr][fq][gq]
+C[Openings
+Approach moves are not the only way to play. The 4-4 point in particular has a known weakness.
+
+]
+;B[cq]
+C[Openings
+The 3-3 invasion is a common idea, and it occurs frequently in modern play.
+Beginners might want to stay clear of it, since it can become quite difficult.
+]
+;W[dq]
+C[Openings
+Generally, White blocks on one side or the other.
+]
+;B[cp]TR[ap][aq][ar][bp][bq][br]
+C[Openings
+Black extends, laying claim to territory and eye space in the marked area.
+Many continuations are possible.
+]
+;W[co]
+C[Openings
+For many years, this was the primary continuation, and it is still instructive. White presses Black down.
+
+]
+;B[bo]
+C[Openings
+Black continues to surround the corner.
+]
+;W[cn]
+C[Openings
+Extending is one possible choice for White.
+]
+;B[bn]
+C[Openings
+Black strengthens the corner stone.
+]
+;W[cm]
+C[Openings
+There's more to say, but in a beginner tutorial let's stop it here. 
+We see that in this outcome, there has been a division of spoils, which is a common outcome in corner patterns.
+]
+;B[]TR[ap][aq][ar][bp][bq][br]
+C[Openings
+Black can expect to make life and some points in the corner.
+]
+;W[]SQ[cm][cn][co][dp][dq]
+C[Openings
+White has a wall facing the side and the center. This does not surround any territory just yet: White has to play to actively use it.
+]
+;W[jq]
+C[Openings
+For example, playing an extension from a wall is typical.
+The closer an extension is to a wall, the more secure it is, but it may be less efficient.
+(Yes, White just played two moves in a row. This is just for illustration.)]
+;AW[lq]AE[jq]TR[lq]
+C[Openings
+White could think about going closer to Black's other corner position. This combines extension with attack, at the expense of safety.
+]
+;AE[bn][bo][cm][cn][co][cp][cq][dq][lq][np][ql]TR[qo]
+C[Openings
+Let's go back and show another way of dealing with an approach move.
+]
+;B[qk]
+C[Openings
+Black could play a pincer, limiting White's ability to extend along the side for safety.
+These days, pincers are played less commonly, but they are still important.
+]
+;W[no]
+C[Openings
+If extending along the side is not possible, jumping into the center is another option.
+]
+;B[mq]
+C[Openings
+Black would extend on the side to avoid being encircled, and many continuations are possible here - outside the scope of a beginner tutorial.
+]
+;AB[pd][pp]AE[mq][no][oc][pq][qd][qk][qo]
+C[Openings
+Let's look at a different type of opening. Here, both players have made their moves on the four star points.
+]
+;B[pj]
+C[Openings
+Instead of an approach move, Black could try to set up a position on the right side.
+A common idea is to build a large framework, also called a moyo, which could become territory over time.
+]
+;W[nc]
+C[Openings
+White might approach to limit the scope of Black's area.
+Many responses to this have been seen over the years.
+]
+;B[lc]
+C[Openings
+To illustrate they moyo idea, let's have Black play this one-space pincer.
+]
+;W[qc]
+C[Openings
+White can dive into the corner. We saw that the 3-3 point is a weakness, and White has an extra stone already to support this invasion.
+]
+;B[qd]
+C[Openings
+Black wants to develop the right side and blocks to prevent White from entering it.]
+;W[pc]
+C[Openings
+White connects up, gaining a fair amount of territory.
+]
+;B[od]TR[oc]
+C[Openings
+Black extends again - this blocks White again, and also threatens to push in at the marked point.
+]
+;W[nb]
+C[Openings
+White protects the weak point.
+]
+;B[me]
+C[Openings
+Black loosely connects all of the stones in the area. This is another joseki sequence. White has taken the corner.
+
+]
+;W[]TR[oe][of][og][oh][oi][pe][pf][pg][ph][pi][qe][qf][qg][qh][qi][re][rf][rg][rh][ri][se][sf][sg][sh][si]
+C[Openings
+Black loosely connects all of the stones in the area. This is another joseki sequence. White has taken the corner.
+
+]
+;AW[nq][nr][pq][qq]AB[lq][mo][op][qp]
+C[Openings
+If the same joseki occurs again in the other corner, Black's moyo starts to look imposing.
+This position and similar ones have been played in professional games.
+]
+;AB[pq]AE[lc][lq][me][mo][nb][nc][nq][nr][od][op][pc][pd][pj][pp][qc][qp][qq]
+C[Openings
+Let's look at some more possibilities.
+]
+;B[fc]
+C[Openings
+Does an approach move need to be answered?
+]
+;W[qo]
+C[Openings
+White could just approach Black's corner in return.
+]
+;B[cf]
+C[Openings
+This gives Black the option to play a double approach.
+As always, you can play whatever you want, but it's rarely a good idea to ignore a double approach.
+]
+;W[np]
+C[Openings
+But let's say White chooses to continue attacking in the lower right.
+These kinds of double approach positions tend to lead to more complex fights rather than peaceful results.
+]
+;B[po]
+C[Openings
+Let's just show one sequence. The moves are not important, and too hard to understand for a beginner. But the end result is worth looking at.]
+;W[pp]
+C[Openings
+Let's just show one sequence. The moves are not important, and too hard to understand for a beginner. But the end result is worth looking at.]
+;B[op]
+C[Openings
+Let's just show one sequence. The moves are not important, and too hard to understand for a beginner. But the end result is worth looking at.]
+;W[qp]
+C[Openings
+Let's just show one sequence. The moves are not important, and too hard to understand for a beginner. But the end result is worth looking at.]
+;B[oq]
+C[Openings
+Let's just show one sequence. The moves are not important, and too hard to understand for a beginner. But the end result is worth looking at.]
+;W[oo]
+C[Openings
+Let's just show one sequence. The moves are not important, and too hard to understand for a beginner. But the end result is worth looking at.]
+;B[pn]
+C[Openings
+Let's just show one sequence. The moves are not important, and too hard to understand for a beginner. But the end result is worth looking at.]
+;W[qq]
+C[Openings
+Let's just show one sequence. The moves are not important, and too hard to understand for a beginner. But the end result is worth looking at.]
+;B[nq]
+C[Openings
+Let's just show one sequence. The moves are not important, and too hard to understand for a beginner. But the end result is worth looking at.]
+;W[no]
+C[Openings
+Let's just show one sequence. The moves are not important, and too hard to understand for a beginner. But the end result is worth looking at.]
+;B[lq]
+C[Openings
+Let's just show one sequence. The moves are not important, and too hard to understand for a beginner. But the end result is worth looking at.]
+;W[rm]
+C[Openings
+Let's just show one sequence. The moves are not important, and too hard to understand for a beginner. But the end result is worth looking at.]
+;B[pl]
+C[Openings
+This is where we'll stop looking at the moves. Let's see what just happened.
+]
+;W[]TR[lq][nq][op][oq][pq]SQ[pp][qo][qp][qq][rm]
+C[On the sides, we see a fairly equal division: both sides have made similar-looking shapes which surround side territory. These are solid positions.
+]
+;B[]TR[pl][pn][po]SQ[no][np][oo]
+C[Openings
+But there is also one white and black group each in the center. These stones have no eye space, and they surround no territory.
+These are weak groups.
+]
+;W[]TR[pl][pn][po]SQ[no][np][oo]
+C[Openings
+It is important to recognize weak groups, and it is often best to avoid creating them.
+Here, both players have one, and it should be a reasonably even fight. Don't be the only player with weak groups after the opening!
+]
+;W[fd]
+C[Openings
+Returning to the upper left corner, we can show another general principle.
+When outnumbered, attachments are often good to develop quickly.]
+;B[gd]
+C[Openings
+Black will want to respond, and the fight develops from there.
+]
+;W[ec]TR[fc]
+C[Openings
+White might block, trying to surround the corner and threatening one black stone.]
+;B[fe]
+C[Openings
+Black plays a forcing move.
+]
+;W[ed]
+C[Openings
+White needs to connect.
+]
+;B[ge]
+C[Openings
+Many continuations are possible. Black could connect to defend one of the cutting points.
+]
+;W[gc]
+C[Openings
+White captures and gets a secure position.
+(Please verify for yourself that the black stone is captured.)]
+;AW[cf]AE[ec][ed][fd][fe][gc][gd][ge][lq][no][np][nq][oo][op][oq][pl][pn][po][pp][qo][qp][qq][rm]LB[db:A]
+C[Openings
+Let's go back to a simpler position.
+After approach move and response, we already saw the slide at A as one possible continuation. The idea is to develop a stable position from the approach stone.
+
+
+]
+;B[ic]
+C[Openings
+A simple extension is also possible.
+]
+;W[ec]
+C[Openings
+This gives White the possibility of playing this kick. This surrounds more of the corner for White, and threatens Black's stone.
+]
+;B[fd]
+C[Openings
+An extension would be logical: this gains two liberties. Black now has a strong position, but it is a little cramped.
+Efficiency is important in the opening.
+]
+;AE[cf][ec][fc][fd][ic]
+C[Openings
+In fact, let's make this point more strongly, by showing the difference between efficient and inefficient play.]
+;B[od]
+C[Openings
+In this opening, White is going to play good moves, while Black will make a series of narrow and inefficient extensions.]
+;W[fc]
+C[Openings
+In this opening, White is going to play good moves, while Black will make a series of narrow and inefficient extensions.]
+;B[mc]
+C[Openings
+In this opening, White is going to play good moves, while Black will make a series of narrow and inefficient extensions.]
+;W[po]
+C[Openings
+In this opening, White is going to play good moves, while Black will make a series of narrow and inefficient extensions.]
+;B[nq]
+C[Openings
+In this opening, White is going to play good moves, while Black will make a series of narrow and inefficient extensions.]
+;W[qk]
+C[Openings
+In this opening, White is going to play good moves, while Black will make a series of narrow and inefficient extensions.]
+;B[lq]
+C[Openings
+In this opening, White is going to play good moves, while Black will make a series of narrow and inefficient extensions.]
+;W[qq]
+C[Openings
+In this opening, White is going to play good moves, while Black will make a series of narrow and inefficient extensions.]
+;B[qr]
+C[Openings
+In this opening, White is going to play good moves, while Black will make a series of narrow and inefficient extensions.]
+;W[pp]
+C[Openings
+In this opening, White is going to play good moves, while Black will make a series of narrow and inefficient extensions.]
+;B[rq]
+C[Openings
+In this opening, White is going to play good moves, while Black will make a series of narrow and inefficient extensions.]
+;W[qp]
+C[Openings
+In this opening, White is going to play good moves, while Black will make a series of narrow and inefficient extensions.]
+;B[pr]
+C[Openings
+In this opening, White is going to play good moves, while Black will make a series of narrow and inefficient extensions.]
+;W[fq]
+C[Openings
+In this opening, White is going to play good moves, while Black will make a series of narrow and inefficient extensions.]
+;B[jq]
+C[Openings
+In this opening, White is going to play good moves, while Black will make a series of narrow and inefficient extensions.]
+;W[qh]
+C[Openings
+In this opening, White is going to play good moves, while Black will make a series of narrow and inefficient extensions.]
+;B[qf]
+C[Openings
+In this opening, White is going to play good moves, while Black will make a series of narrow and inefficient extensions.]
+;W[cj]
+C[Openings
+In this opening, White is going to play good moves, while Black will make a series of narrow and inefficient extensions.]
+;B[kc]
+C[Openings
+In this opening, White is going to play good moves, while Black will make a series of narrow and inefficient extensions.]
+;W[ej]
+C[Openings
+Let's end the example here.
+Black has two secure territories, but they will not be able to grow very much.
+White has developed on a much larger scale, and even though it is less safe, it is a better position.
+])

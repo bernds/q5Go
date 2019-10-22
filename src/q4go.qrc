@@ -57,6 +57,7 @@
     <file>sgfs/tactics.sgf</file>
     <file>sgfs/connections.sgf</file>
     <file>sgfs/captures.sgf</file>
+    <file>sgfs/openings.sgf</file>
   </qresource>
   <qresource prefix="/">
     <file>images/stone_b16.png</file>
