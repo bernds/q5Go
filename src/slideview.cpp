@@ -124,10 +124,10 @@ QPixmap BaseSlideView<UI>::render_text (int w, int h)
 		if (!line.isEmpty ()) {
 			painter.drawStaticText (margin_px, margin_px + lineno * fh_chosen,
 						QStaticText (line));
-			lineno++;
-			if (lineno == m_n_lines)
-				break;
 		}
+		lineno++;
+		if (lineno == m_n_lines)
+			break;
 	}
 	painter.end ();
 	return pm;
