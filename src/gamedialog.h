@@ -50,9 +50,9 @@ private:
 	QString h19, h13, h9;
 	QString k19, k13, k9;
 	GSName  gsname;
-	QString oppRk;
-	QString myRk;
 	QString myName;
+	QString myRk;
+	QString oppRk;
 	bool komi_request;
 	bool is_nmatch;
 	QButtonGroup buttongroup;
