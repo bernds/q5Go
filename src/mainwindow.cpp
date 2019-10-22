@@ -2065,6 +2065,8 @@ void MainWindow::slotUpdateComment ()
 	}
 	st->set_comment (s);
 	gfx_board->setModified ();
+	if (slideView != nullptr)
+		slideView->set_active (st);
 }
 
 /* Called from an external source to append to the comments window.  */
