@@ -16,6 +16,7 @@
 #include <QToolButton>
 #include <QIcon>
 
+#include "config.h"
 #include "clientwin.h"
 #include "defines.h"
 #include "playertable.h"
@@ -1133,7 +1134,8 @@ void ClientWindow::slot_refresh(int i)
 	switch (i)
 	{
 		case 10:
-			prepare_tables(WHO);
+			prepare_tables (WHO);
+			FALLTHRU
 		case 0:
 			// send "WHO" command
       			//set the params of "who command"
@@ -1162,7 +1164,8 @@ void ClientWindow::slot_refresh(int i)
 			break;
 
 		case 11:
-			prepare_tables(GAMES);
+			prepare_tables (GAMES);
+			FALLTHRU
 		case 1:
 			sendcommand ("games");
 			break;

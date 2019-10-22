@@ -385,12 +385,16 @@ go_board new_handicap_board (int size, int handicap)
 		{
 		case 13:
 			b.set_stone_nounits (16, 16, black);
+			FALLTHRU
 		case 12:
 			b.set_stone_nounits (2, 2, black);
+			FALLTHRU
 		case 11:
 			b.set_stone_nounits (2, 16, black);
+			FALLTHRU
 		case 10:
 			b.set_stone_nounits (16, 2, black);
+			FALLTHRU
 		default:
 			handicap = 9;
 			break;
@@ -404,6 +408,7 @@ go_board new_handicap_board (int size, int handicap)
 		{
 		case 9:
 			b.set_stone_nounits (middle, middle, black);
+			FALLTHRU
 		case 8:
 		case 7:
 			if (handicap >= 8)
@@ -413,6 +418,7 @@ go_board new_handicap_board (int size, int handicap)
 			}
 			else
 				b.set_stone_nounits (middle, middle, black);
+			FALLTHRU
 		case 6:
 		case 5:
 			if (handicap >= 6)
@@ -422,13 +428,17 @@ go_board new_handicap_board (int size, int handicap)
 			}
 			else
 				b.set_stone_nounits (middle, middle, black);
+			FALLTHRU
 		case 4:
 			b.set_stone_nounits (high, high, black);
+			FALLTHRU
 		case 3:
 			b.set_stone_nounits (low, low, black);
+			FALLTHRU
 		case 2:
 			b.set_stone_nounits (high, low, black);
 			b.set_stone_nounits (low, high, black);
+			break;
 		case 1:
 			break;
 		default:
@@ -442,11 +452,14 @@ go_board new_handicap_board (int size, int handicap)
 		{
 		case 4:
 			b.set_stone_nounits (high, high, black);
+			FALLTHRU
 		case 3:
 			b.set_stone_nounits (low, low, black);
+			FALLTHRU
 		case 2:
 			b.set_stone_nounits (high, low, black);
 			b.set_stone_nounits (low, high, black);
+			break;
 		case 1:
 			break;
 
