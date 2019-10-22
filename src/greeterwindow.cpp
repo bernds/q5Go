@@ -4,6 +4,7 @@
 #include "setting.h"
 #include "ui_helpers.h"
 #include "clientwin.h"
+#include "tutorial.h"
 
 #include "ui_greeterwindow_gui.h"
 
@@ -34,6 +35,10 @@ GreeterWindow::GreeterWindow (QWidget *parent)
 
 	connect (ui->onlineButton, &QAbstractButton::clicked, [this] (bool) {
 			client_window->show ();
+			hide ();
+		});
+	connect (ui->learnButton, &QAbstractButton::clicked, [this] (bool) {
+			show_tutorials ();
 			hide ();
 		});
 	connect (ui->enginePlayButton, &QAbstractButton::clicked, [this] (bool) {

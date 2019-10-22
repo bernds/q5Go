@@ -1,0 +1,252 @@
+(;FF[4]GM[1]CA[UTF-8]AP[q5go:0.9]
+SZ[7]
+PW[White]
+PB[Black]
+KM[6.500000]LB[ac:W][bc:e][be:t][cc:l][ce:o][dc:c][dd:][ec:o][ee:G][fc:m][fe:o][gc:e]
+C[Rules of Go
+
+This is an introduction to the rules of Go. Use the cursor keys or the buttons to navigate.
+]
+;B[cc]LB[cc:1]
+C[Rules of Go
+The players take turns placing stones on intersections.
+
+Black goes first.
+]
+;W[ee]LB[cc:1][ee:2]
+C[Rules of Go
+The players take turns placing stones on intersections.
+
+Black goes first.
+
+Once placed, a stone never moves, but it can be captured.
+]
+;B[gc]LB[cc:1][ee:2][gc:3]
+C[Rules of Go
+The players take turns placing stones on intersections.
+
+Black goes first.
+
+Once placed, a stone never moves, but it can be captured.
+
+]
+;W[]CR[bc][cb][cd][dc][de][ed][ef][fc][fe][gb][gd]LB[cc:1][ee:2][gc:3]
+C[Rules of Go
+Intersections are connected by lines on the board.
+Empty spaces next to a stone are called liberties.
+]
+;AW[cb][cd][dc]AE[ee][gc]CR[bc]
+C[Rules of Go
+Stones need liberties to remain on the board.
+
+A stone with only one remaining liberty is said to be in atari.
+]
+;W[bc]
+C[Rules of Go
+Stones need liberties to remain on the board.
+
+Once the opponent removes the last liberty, the stone is captured.
+]
+;AW[bg][cf]AB[cg]AE[bc][cb][cd][dc]CR[dg]
+C[Rules of Go
+There are fewer liberties at the edge (or in the corners) of the board.
+
+]
+;W[dg]
+C[Rules of Go
+There are fewer liberties at the edge (or in the corners) of the board.
+Thus, fewer moves are necessary to capture a stone on the edge.
+]
+;AW[be][cd][df][ee]AB[ce][de]AE[bg][dg]CR[dd]
+C[Rules of Go
+Stones of the same colour are also connected by the lines.
+
+Connected stones form a unit that can only be captured as a whole, when all liberties are filled.
+]
+;W[dd]
+C[Rules of Go
+Stones of the same colour are also connected by the lines.
+
+Connected stones form a unit that can only be captured as a whole, when all liberties are filled.
+]
+;AB[bd][ce][de]AE[dd]CR[dd]
+C[Rules of Go
+Stones of the same colour are also connected by the lines.
+
+Diagonals do not form a connection.
+
+]
+;W[dd]
+C[Rules of Go
+Stones of the same colour are also connected by the lines.
+
+Diagonals do not form a connection.
+
+Different units can be captured separately.
+]
+;AB[ce][de]AE[bd][dd]CR[dd]
+C[Example
+
+What if the black stones try to escape capture?
+]
+;B[dd]
+C[Example
+
+What if the black stones try to escape capture?
+
+After this move, they have two liberties, one more than before.]
+;W[dc]
+C[Example
+
+What if the black stones try to escape capture?
+
+White reduces the number of liberties to one again.
+]
+;B[ed]
+C[Example
+
+This particular situation is called a ladder.
+]
+;W[fd]
+C[Example
+
+This particular situation is called a ladder.
+]
+;B[ec]
+C[Example
+
+This particular situation is called a ladder.
+]
+;W[eb]
+C[Example
+
+This particular situation is called a ladder.
+]
+;B[fc]
+C[Example
+
+This particular situation is called a ladder.
+
+Black cannot escape, since at the edge of the board, fewer liberties are available.
+]
+;W[fb]
+C[Example
+
+This particular situation is called a ladder.
+
+Black cannot escape, since at the edge of the board, fewer liberties are available.
+]
+;B[gc]
+C[Example
+
+This particular situation is called a ladder.
+
+Black cannot escape, since at the edge of the board, fewer liberties are available.
+]
+;W[gd]
+C[Example
+
+This particular situation is called a ladder.
+
+Black cannot escape, since at the edge of the board, fewer liberties are available.
+]
+;B[gb]
+C[Example
+
+This particular situation is called a ladder.
+
+Black cannot escape, since at the edge of the board, fewer liberties are available.
+]
+;W[ga]
+C[Example
+
+Although this is a disaster for Black, remember that in other situations stones are able to escape.
+
+We'll see more examples later.
+]
+;AW[bc][bd][cb][db][ef][fc][fe]AB[cc][cd][ce][dc][de][ec][ed][ee]AE[fb][ga][gd]TR[dd]
+C[Rules of Go
+Is White allowed to play at the triangled point?
+
+There are no empty spaces next to it, so - would the white stone have liberties?
+]
+;W[dd]
+C[Rules of Go
+Is White allowed to play at the triangled point?
+
+Yes, since by capturing all the black stones, the white stone gains liberties.
+]
+;AB[cc][cd][ce][dc][de][ec][ed][ee]AE[db][dd]TR[dd]
+C[Rules of Go
+This situation is different. Playing on the triangled point would not be a capture.
+White is not allowed to play there since his stone would not have liberties.
+]
+;AW[cd][dc][de]AB[dd][fd]AE[bc][bd][be][cb][cc][ce][cf][df][eb][ed][ef][fc][fe]
+C[Rules of Go
+A funny thing can happen with captures.
+]
+;W[ed]
+C[Rules of Go
+If White captures a stone, it looks like Black could just recapture.
+
+That would repeat the board position, and that is not allowed.
+
+This situation is called ko.
+]
+;B[bb]
+C[Rules of Go
+To avoid repeating the position, Black needs to play a move elsewhere first.
+
+Often, this will be a large ko threat which White needs to answer. (Here, we just play on random points for illustration.)
+]
+;W[ba]
+C[Rules of Go
+If White answers the ko threat, the board position has changed, and Black is allowed to recapture.
+]
+;B[dd]
+C[Rules of Go
+If White answers the ko threat, the board position has changed, and Black is allowed to recapture.
+
+Then, White needs to find a threat to continue fighting the ko.
+]
+;AW[af][be][bg][ce][dd][ed][fd][gc][gd]AB[ad][ae][bd][cd][dc][fb][fc][gb]AE[ba][bb][de][ee]
+C[Rules of Go
+Captures are worth a point at the end of the game.
+
+But surrounding empty intersections to make territory is also worth a point each.
+]
+;B[]TW[ag][bf][cf][cg][de][df][dg][ee][ef][eg][fe][ff][fg][ge][gf][gg]TB[aa][ab][ac][ba][bb][bc][ca][cb][cc][da][db][ea][eb][fa][ga]
+C[Rules of Go
+In this game, Black has surrounded 15 points of territory, while White has 16.
+
+White often also gets a bonus, called komi, to compensate for going second.]MN[0]
+;AW[ac][ae][bc][ca][cb][cc][cf][dc][df][dg][ea][eb][ec][fb][gb]AB[ab][ba][bb][bf][bg][dd][de][ed][ef][eg][fa][fe][gc]AE[af][fd][gd]
+C[Rules of Go
+Scoring a finished game can be difficult for beginners.
+This is especially true with the commonly used Japanese ruleset.
+The best advice is to not worry too much about it, just play to get experience.]
+;W[ga]
+C[Rules of Go
+For beginners, it is best to just continue playing out the game until territories are clear.
+These moves are an example of how to finish this position.]
+;B[cg]
+C[Rules of Go
+For beginners, it is best to just continue playing out the game until territories are clear.
+These moves are an example of how to finish this position.]
+;W[aa]
+C[Rules of Go
+For beginners, it is best to just continue playing out the game until territories are clear.
+These moves are an example of how to finish this position.]
+;B[af]
+C[Rules of Go
+In this position, all territories have become clear.
+Players pass when they see no  more useful moves, and if both players pass, the game ends and counting begins.
+]
+;AW[ae][be][ce][cf][df][dg]AB[ab][ba][bb][fa]AE[aa][af][cg][ga]
+C[Rules of Go
+Back to the original position. More experienced players would pass here to end the game.]
+;B[]TW[aa][ab][ba][bb][da][db][fa][ga]TB[ae][af][ag][be][ce][cf][cg][df][dg][ee][fd][ff][fg][gd][ge][gf][gg]
+C[Rules of Go
+This is the result of scoring the game: dead stones are simply marked as such and removed from the board as prisoners.
+But how to identify dead stones? This will be shown in the next tutorial.
+]MN[0])

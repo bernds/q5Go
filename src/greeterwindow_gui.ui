@@ -15,50 +15,27 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="4" column="0">
-     <spacer name="horizontalSpacer">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>40</width>
-        <height>1</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="2" column="1">
-     <widget class="QToolButton" name="enginePlayButton">
+    <item row="0" column="0" colspan="3">
+     <widget class="QLabel" name="label">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
       <property name="text">
-       <string>Play against the machine</string>
+       <string/>
       </property>
-      <property name="icon">
-       <iconset resource="q4go.qrc">
-        <normaloff>:/ClientWindowGui/images/clientwindow/human-robot.png</normaloff>:/ClientWindowGui/images/clientwindow/human-robot.png</iconset>
+      <property name="pixmap">
+       <pixmap resource="q4go.qrc">:/images/goboard-small.png</pixmap>
       </property>
-      <property name="iconSize">
-       <size>
-        <width>100</width>
-        <height>64</height>
-       </size>
-      </property>
-      <property name="toolButtonStyle">
-       <enum>Qt::ToolButtonTextUnderIcon</enum>
-      </property>
-      <property name="autoRaise">
-       <bool>false</bool>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
       </property>
      </widget>
     </item>
-    <item row="1" column="2">
-     <widget class="QToolButton" name="loadButton">
+    <item row="1" column="0">
+     <widget class="QToolButton" name="newButton">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -66,11 +43,11 @@
        </sizepolicy>
       </property>
       <property name="text">
-       <string>Load SGF file</string>
+       <string>Create a board</string>
       </property>
       <property name="icon">
        <iconset resource="q4go.qrc">
-        <normaloff>:/ClientWindowGui/images/clientwindow/fileopen.png</normaloff>:/ClientWindowGui/images/clientwindow/fileopen.png</iconset>
+        <normaloff>:/ClientWindowGui/images/clientwindow/new_board.png</normaloff>:/ClientWindowGui/images/clientwindow/new_board.png</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -115,8 +92,8 @@
       </property>
      </widget>
     </item>
-    <item row="3" column="1">
-     <widget class="QToolButton" name="quitButton">
+    <item row="1" column="2">
+     <widget class="QToolButton" name="loadButton">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -124,11 +101,11 @@
        </sizepolicy>
       </property>
       <property name="text">
-       <string>Quit</string>
+       <string>Load SGF file</string>
       </property>
       <property name="icon">
        <iconset resource="q4go.qrc">
-        <normaloff>:/ClientWindowGui/images/clientwindow/exit.png</normaloff>:/ClientWindowGui/images/clientwindow/exit.png</iconset>
+        <normaloff>:/ClientWindowGui/images/clientwindow/fileopen.png</normaloff>:/ClientWindowGui/images/clientwindow/fileopen.png</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -143,61 +120,6 @@
        <bool>false</bool>
       </property>
      </widget>
-    </item>
-    <item row="4" column="1">
-     <spacer name="horizontalSpacer_2">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>40</width>
-        <height>1</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="2" column="2">
-     <widget class="QToolButton" name="analyzeButton">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>Batch analysis</string>
-      </property>
-      <property name="icon">
-       <iconset resource="q4go.qrc">
-        <normaloff>:/ClientWindowGui/images/clientwindow/gear.png</normaloff>:/ClientWindowGui/images/clientwindow/gear.png</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>100</width>
-        <height>64</height>
-       </size>
-      </property>
-      <property name="toolButtonStyle">
-       <enum>Qt::ToolButtonTextUnderIcon</enum>
-      </property>
-      <property name="autoRaise">
-       <bool>false</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="2">
-     <spacer name="horizontalSpacer_3">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>40</width>
-        <height>1</height>
-       </size>
-      </property>
-     </spacer>
     </item>
     <item row="2" column="0">
      <widget class="QToolButton" name="onlineButton">
@@ -228,8 +150,8 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="0">
-     <widget class="QToolButton" name="newButton">
+    <item row="2" column="1">
+     <widget class="QToolButton" name="enginePlayButton">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -237,11 +159,40 @@
        </sizepolicy>
       </property>
       <property name="text">
-       <string>Create a board</string>
+       <string>Play against the machine</string>
       </property>
       <property name="icon">
        <iconset resource="q4go.qrc">
-        <normaloff>:/ClientWindowGui/images/clientwindow/new_board.png</normaloff>:/ClientWindowGui/images/clientwindow/new_board.png</iconset>
+        <normaloff>:/ClientWindowGui/images/clientwindow/human-robot.png</normaloff>:/ClientWindowGui/images/clientwindow/human-robot.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>100</width>
+        <height>64</height>
+       </size>
+      </property>
+      <property name="toolButtonStyle">
+       <enum>Qt::ToolButtonTextUnderIcon</enum>
+      </property>
+      <property name="autoRaise">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="2">
+     <widget class="QToolButton" name="analyzeButton">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Batch analysis</string>
+      </property>
+      <property name="icon">
+       <iconset resource="q4go.qrc">
+        <normaloff>:/ClientWindowGui/images/clientwindow/gear.png</normaloff>:/ClientWindowGui/images/clientwindow/gear.png</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -258,6 +209,35 @@
      </widget>
     </item>
     <item row="3" column="0">
+     <widget class="QToolButton" name="learnButton">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Learn Go</string>
+      </property>
+      <property name="icon">
+       <iconset resource="q4go.qrc">
+        <normaloff>:/ClientWindowGui/images/clientwindow/book.png</normaloff>:/ClientWindowGui/images/clientwindow/book.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>64</width>
+        <height>64</height>
+       </size>
+      </property>
+      <property name="toolButtonStyle">
+       <enum>Qt::ToolButtonTextUnderIcon</enum>
+      </property>
+      <property name="autoRaise">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
      <widget class="QToolButton" name="settingsButton">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -286,24 +266,73 @@
       </property>
      </widget>
     </item>
-    <item row="0" column="0" colspan="3">
-     <widget class="QLabel" name="label">
+    <item row="3" column="2">
+     <widget class="QToolButton" name="quitButton">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
       <property name="text">
-       <string/>
+       <string>Quit</string>
       </property>
-      <property name="pixmap">
-       <pixmap resource="q4go.qrc">:/images/goboard-small.png</pixmap>
+      <property name="icon">
+       <iconset resource="q4go.qrc">
+        <normaloff>:/ClientWindowGui/images/clientwindow/exit.png</normaloff>:/ClientWindowGui/images/clientwindow/exit.png</iconset>
       </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
+      <property name="iconSize">
+       <size>
+        <width>100</width>
+        <height>64</height>
+       </size>
+      </property>
+      <property name="toolButtonStyle">
+       <enum>Qt::ToolButtonTextUnderIcon</enum>
+      </property>
+      <property name="autoRaise">
+       <bool>false</bool>
       </property>
      </widget>
+    </item>
+    <item row="4" column="0">
+     <spacer name="horizontalSpacer">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>1</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="4" column="1">
+     <spacer name="horizontalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>1</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="4" column="2">
+     <spacer name="horizontalSpacer_3">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>1</height>
+       </size>
+      </property>
+     </spacer>
     </item>
    </layout>
   </widget>

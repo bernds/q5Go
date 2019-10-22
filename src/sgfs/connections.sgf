@@ -1,0 +1,517 @@
+(;FF[4]GM[1]CA[UTF-8]AP[q5go:0.9]
+SZ[11]
+PW[White]
+PB[Black]
+KM[6.500000]AW[ef][gf]AB[fe][ff][fg]LB[ac:C][bc:o][cc:n][dc:n][ec:e][fc:c][gc:t][hc:i][ic:o][jc:n][kc:s]
+C[Connections
+Welcome to this tutorial, where we cover various possibilities of connecting stones.
+Why connect? Separated stones must live independently, thus connected stones are often stronger.
+]
+;AE[ef][fe][gf]
+C[Connections
+Going back all the way to the rules, this is a group of two connected stones. They are vertically adjacent and thus form a connected unit.
+However, there are more interesting forms of connection.]
+;AW[ff][gg]AB[gf]
+C[Connections
+As a contrast, this is the most basic disconnected shape. None of the involved stones can directly connect to their friend.
+Interesting things can happen here, but that's a matter for a different tutorial.]
+;AE[ff][gg]
+C[Connections
+These two stones form a diagonal move. In this board position, they cannot be disconnected.
+]MN[2]
+;B[]LB[ff:A][gg:B]
+C[Connections
+These two stones form a diagonal move. In this board position, they cannot be disconnected.
+Black can make a solid connection with A or B.]MN[2]
+;W[ff]
+C[Connections
+White might try to separate, like this.]
+;B[gg]
+C[Connections
+Black just takes the other option. The diagonal move creates a miai situation, where two equivalent options for connection exist.
+]
+;AE[ff]
+C[Connections
+If we take away the white stone, what is left is called an empty triangle, a classic bad shape.
+]
+;W[]TR[gg]
+C[Connections
+If we take away the white stone, what is left is called an empty triangle, a classic bad shape.
+One reason this is bad is that Black has played an unnecessary move, connecting before White threatened to disconnect.
+]
+;AB[ee]AE[gf][gg]
+C[Connections
+Once stones are further apart, connections become more tenuous. This particular shape is called a knight's move.
+In this board position, Black is still connected.]
+;W[ff]
+C[Connections
+White might try to play in between the two black stones to separate them.]
+;B[ef]
+C[Connections
+Black answers.]
+;W[eg]
+C[Connections
+Now White has successfully played a cut, but there is a problem.]
+;B[gf]
+C[Connections
+One of White's stones can be captured. This is the ladder shape which you should recognize from an earlier tutorial.]
+;AW[fe][gd][ge][hc][hd][ia][ib][ic]AB[fd][gc][hb][he][id][ja][jb][jc]
+C[Connections
+Here's a reminder of how things will turn out. White cannot evade capture.]
+;AE[ef][eg][fd][fe][ff][gc][gd][ge][gf][hb][hc][hd][he][ia][ib][ic][id][ja][jb][jc]
+C[Connections
+However, remember also that ladder breakers exist. That means that our connection depends on conditions elsewhere on the board.]
+;AW[cg][ci][gc][id]
+C[Connections
+However, remember also that ladder breakers exist. That means that our connection depends on conditions elsewhere on the board.
+If White has ladder breakers in place, the knight's move can be cut because the ladders no longer work.]
+;AW[dd][de][ed][fd][gd][ge]AB[eg][fe]AE[cg][ci][gc][id]LB[ef:A][ff:B]
+C[Connections
+Let's show another type of solid connection.
+The black shape is called a bamboo joint. Black has miai at A and B to make a solid connection.
+]
+;W[ff]
+C[Connections
+If White takes one point...
+]
+;B[ef]
+C[Connections
+If White takes one point, Black takes the other and is connected.
+]
+;AE[ef][eg][ff]
+C[Connections
+In fact, in many situations a bamboo joint is overkill. In this position, Black is also connected.
+]
+;W[ff]
+C[Connections
+Once again, White might try to separate.]
+;B[ef]
+C[Connections
+There is only one choice for Black's move.
+]
+;W[]LB[eg:B][gf:A]
+C[Connections
+Once again, Black has miai alternatives: a solid connection at B is nice, but capturing a stone at A would be just as good.
+]
+;AE[dd][de][ed][ee][ef][fd][ff][gd][ge]
+C[Connections
+Let's take away even more stones. This shape here is called a one-space jump.
+Can white separate it, or is it connected?
+]
+;W[ff]
+C[Connections
+White will have to play here to attempt to separate.
+]
+;B[ef]
+C[Connections
+Black has two responses, but they are symmetrical, so let's just pick this one.]
+;W[gf]
+C[Connections
+White needs to extend to prevent the stone from being captured.
+]
+;B[ee]
+C[Connections
+Black connects on one side.
+]
+;W[eg]
+C[Connections
+White cuts on the other side.
+There is no immediate way to capture any of the white stones. Does this mean the one-space jump can be cut?]
+;AW[cd][ch][dd][dh][ee][ge][gg][hd][hh][id][ih]AB[dc][de][dg][di][ec][ed][eh][ei][gc][gd][gh][gi][hc][he][hg][hi]AE[ef][fe][ff][fg][gf]
+C[Connections
+The problem for White is that Black has many choices to answer. In any given board position, it is likely that one of these outcomes is favourable for Black.
+And these are just the symmetries of one position; other options exist.
+]
+;B[]
+C[Connections
+In summary, the one-space jump can be cut. In practice, this is rarely a good idea, but you need to be aware of the possibility.
+]
+;AW[fe][gf]AB[ff][ge]AE[cd][ch][dc][dd][de][dg][dh][di][ec][ed][ee][eg][eh][ei][gc][gd][gg][gh][gi][hc][hd][he][hg][hh][hi][id][ih]
+C[Connections
+In fact, there is an important lesson here.
+If your stones are cut, so are those of your opponent.
+]
+;W[]
+C[Connections
+Even if we talk about connections in this tutorial, it is also true that you don't always need to connect. You just need to get a good result.
+]
+;AW[ch][hh]AB[ef][ei]AE[fe][ff][ge][gf]
+C[Connections
+Let's explore this concept with an example. This is a corner position that might occur in a real game.
+Black's two-space jump can be cut, but that is not an issue.]
+;W[eg]
+C[Connections
+You do not need to understand all the moves in this example. It's the end result that is interesting.]
+;B[fg]
+C[Connections
+You do not need to understand all the moves in this example. It's the end result that is interesting.]
+;W[dg]
+C[Connections
+You do not need to understand all the moves in this example. It's the end result that is interesting.]
+;B[gi]
+C[Connections
+You do not need to understand all the moves in this example. It's the end result that is interesting.]
+;W[ff]
+C[Connections
+You do not need to understand all the moves in this example. It's the end result that is interesting.]
+;B[gg]
+C[Connections
+You do not need to understand all the moves in this example. It's the end result that is interesting.]
+;W[ee]
+C[Connections
+You do not need to understand all the moves in this example. It's the end result that is interesting.]
+;B[gf]
+C[Connections
+You do not need to understand all the moves in this example. It's the end result that is interesting.]
+;W[fe]
+C[Connections
+In the end, Black hasn't connected the two original stones. In fact, one of them is captured.
+But there is also one White stone that's separated from the others, so this may be an acceptable result.
+]
+;B[]
+C[Connections
+It's important to look for possibilities such as this just as much as one looks for ways to connect.
+End of digression.]
+;AB[fe]AE[ch][dg][ee][ef][eg][ei][ff][gf][gi][hh]
+C[Connections
+We've seen this pattern earlier as an example of a connected shape.
+However, shapes don't occur in a vacuum. What happens if there are white stones nearby?
+]
+;AW[ef][eg][fh][gh][hg]
+C[Connections
+In this more realistic position, the white stones have an effect on Black's connection.]
+;W[ff]
+C[Connections
+White can push in here. Black is in atari and must respond.
+]
+;B[gf]
+C[Connections
+Black extends...
+]
+;W[ge]
+C[Connections
+White cuts. Not only is Black separated, the three stones are in atari.
+]
+;B[hf]TR[fe]
+C[Connections
+Black might continue, but now White can at the very least capture the triangled stone in a ladder.
+]
+;AE[ff][ge][gf][hf]
+C[Connections
+Going back, Black needs to add a stone to ensure connection.
+]
+;B[ge]
+C[Connections
+Going back, Black needs to add a stone to ensure connection.
+Making a bamboo joint is a good option here.
+]
+;AW[ee][hd][he]AB[fc]
+C[Connections
+Even something as secure as the bamboo joint can run into trouble.
+Let's add a few stones and see what happens in this position.]
+;W[gf]
+C[Connections
+To start with, White can threaten the connection of the bamboo joint.]
+;B[ff]
+C[Connections
+Black can connect. This is not advisable, but let's see what happens.]
+;W[fd]
+C[Connections
+White continues here. This separates the two black groups and reduces Black's liberties to one.
+]
+;B[gd]
+C[Connections
+Playing here does not gain a liberty for the black stones.]
+;W[gc]
+C[Connections
+Oops.
+]
+;AB[fe][ff][fg][ge][gg]AE[gc]
+C[Connections
+So, back to this position. Black could try to capture one stone.
+]
+;B[hf]
+C[Connections
+Like this.
+]
+;W[gd]
+C[Connections
+But now, White has not only cleanly separated the black stones, there is another problem: once again there is a shortage of liberties.
+]
+;B[gf]
+C[Connections
+Connecting does not help.
+]
+;W[if]
+C[Connections
+Oops.
+]
+;AB[fe][fg][ge][gg]AE[fd][gd][if]LB[fe:B][fg:A]
+C[Connections
+In summary, Black does not have a secure connection between the two groups A and B, since the white stones are perfectly placed to take away crucial liberties.
+]
+;AW[ge][hf]AB[dg][gf]AE[ee][ef][eg][fc][fe][gg][hd][he]
+C[Connections
+Similar problems can occur for other types of connection. Here, the diagonal move does not ensure a connection.
+]
+;W[ff]
+C[Connections
+If White plays here, Black cannot connect.
+]
+;B[gg]
+C[Connections
+If Black does connect, it results in a bigger loss.
+]
+;W[eg]
+C[Connections
+White captures.
+]
+;AB[ef][fe][fg]AE[dg][eg][ff][fh][ge][gh][hf][hg]
+C[Connections
+We saw that the diagonal move relied on miai alternatives for connection.
+What happens if there are several such shapes near each other?
+]
+;AW[de][df][dg][gf]
+C[Connections
+We saw that the diagonal move relied on miai alternatives for connection.
+What happens if there are several such shapes near each other?
+Of course, White would have stones here too.
+]
+;W[ff]
+C[Connections
+If White pushes in here, Black has a problem.
+]
+;B[ee]
+C[Connections
+It does not matter on which side Black connects.
+]
+;W[eg]
+C[Connections
+White cuts on the other side.
+]
+;AE[ee][eg][ff]TR[ff]
+C[Connections
+The problem here is that both connections rely on the same point as one of their alternatives.
+This point becomes overloaded.
+
+]
+;AW[he][hf][hg]AE[ef][gf]
+C[Connections
+The one-space jump also becomes very weak in a similar way when there are strong positions nearby.
+]
+;W[ff]
+C[Connections
+Earlier we saw that Black has many ways to answer, but in this position they all produce essentially the same result.]
+;B[gf]
+C[Connections
+This is one possible continuation.]
+;W[ef]
+C[Connections
+This is one possible continuation.]
+;B[ge]
+C[Connections
+This is one possible continuation.]
+;W[gg]
+C[Connections
+And Black is cut.
+Of course, this is not surprising, seeing how Black was heavily outnumbered at the start.
+]
+;AW[eg][fc][fe][fg]AB[df][dg][eh][fh][gh][hf][hg]AE[de][ef][ff][ge][gf][he]
+C[Connections
+This is a famous position known as the crane's nest, which involves a shortage of liberties.
+It may seem like the three white stones are connected to the outside, but Black has other ideas.
+]
+;B[ff]
+C[Connections
+The central point is the tesuji, which is the term for a tactically astute move.
+Of course, any other move would let White connect immediately.
+]
+;W[ef]
+C[Connections
+White has little choice but to give atari to the black stone.
+]
+;B[ee]
+C[Connections
+Black does not save the one stone and instead plays a counter-atari.
+]
+;W[gf]
+C[Connections
+White must capture.
+]
+;B[ge]
+C[Connections
+This is the finishing touch. White is down to one liberty, and connecting doesn't change that fact. White's stones will be captured.
+]
+;AW[ch][di][ei]AB[fi]AE[df][dg][ee][ef][eg][fc][fe][fg][fh][ge][gf][gg][gh][hf][hg]
+C[Connections
+Let's look at some other possibilities for connecting stones.
+]
+;B[fh]
+C[Connections
+This is a solid connection. The black stones can't be separated, but this move also does not develop very far.
+]
+;AB[gh]AE[fh]
+C[Connections
+This is an alternative that is frequently used. It is called the tiger's mouth, and in this situation it extends a little further along the lower side.]
+;W[fh]
+C[Connections
+White can't really do anything to disconnect the black stones. A move like this is futile.
+]
+;B[fg]
+C[Connections
+Black just captures.
+]
+;AE[fg]
+C[Connections
+White might try to take a more indirect approach.
+]
+;W[fg]
+C[Connections
+This kind of move is known as a peep. It only threatens to cut.
+]
+;B[fh]
+C[Connections
+Black will likely connect. The question then becomes who gained more from the previous two moves.
+]
+;AE[fg][gh]
+C[Connections
+In fact, we can compare the previous result against the solid connection.
+]
+;AW[fg]AB[gh]TR[gi]SQ[fg][gh]
+C[Connections
+We've added one stone for either side, and note how Black was forced to make an empty triangle. We saw earlier that this is regarded as bad shape.
+This is balanced out by a little more development.
+]
+;AE[fg][fh]
+C[Connections
+Questions of positional judgment are rarely easy. Let's just say the tiger's mouth is a frequently used connection.
+]
+;AW[bi][bj][bk][ci][dh][eh][fh][fi][gi][gj][gk]AB[cj][ck][di][dk][ei][fj][fk]AE[gh]
+C[Connections
+Let's use the opportunity for a brief digression about bad shape. It is important not to misapply this concept.
+]
+;B[ej]
+C[Connections
+With this move, Black makes two empty triangles. But more importantly, the group now has two eyes and is alive.
+If White had played here, all black stones would be dead.
+]
+;W[]
+C[Connections
+It is important to avoid bad shape where possible.
+But sometimes, it is necessary, and if the opponent makes equally bad shape, it's often a fair result.
+End of digression.
+]
+;AW[ei][ej][gg][gh]AB[fe][ff][fg][fh][fi]AE[bi][bj][bk][ch][ci][cj][ck][dh][di][dk][fj][fk][gk]
+C[Connections
+At the edge of the Go board, sometimes shapes behave differently than they do in the center.
+Here we have an example where two white groups are connected.
+]
+;B[fj]
+C[Connections
+Black might try to push in between them to separate.
+]
+;W[fk]
+C[Connections
+With this move, White secures connection.]
+;B[]LB[ek:A][gk:B]
+C[Connections
+Black's has two cuts available at A and B. But in either case, a black stone played there could be captured immediately.
+]
+;AW[ee][ef][eg][fh][gd][ge][gf]AB[fc][fd]AE[eh][ei][ej][fi][fj][fk][gh][gi][gj]LB[eh:A][gh:B]
+C[Connections
+If we move the position upwards, the cutting points suddenly look a lot more viable, since there are more liberties.]
+;AW[ed][eh][ei][gi]AB[dd][de][df][dg][dh][di][dj]AE[fc][fd][fe][ff][fg][fh][gd][ge][gf][gg]
+C[Connections
+Let's imagine Black tries to build territory on the left, White on the right.
+There is a famous move available for Black to reduce White's area.
+]
+;B[gk]
+C[Connections
+This is called the monkey jump. It relies on the properties of the edge of the board.
+We will not look at all of White's options here, but none can disconnect Black.
+]
+;W[ej]
+C[Connections
+This is one possible threat to separate.]
+;B[ek]LB[dk:A][fk:B]
+C[Connections
+Now we have a situation like before, where any white stone played on a point that could separate Black would immediately be captured.
+]
+;AE[ej][ek]
+C[Connections
+Let's look at one other alternative for White.
+]
+;W[fj]
+C[Connections
+This move threatens to descend to the edge, which would separate the black stones.
+]
+;B[fk]
+C[Connections
+Black tries to connect up.]
+;W[ek]
+C[Connections
+White tries to intercede.
+]
+;B[ej]
+C[Connections
+Black connects by capturing the one white stone - it cannot escape.
+]
+;W[hk]
+C[Connections
+This is how the sequence plays out.]
+;B[dk]
+C[Connections
+This is how the sequence plays out.]
+;W[gj]
+C[Connections
+This is how the sequence plays out.]
+;B[ek]
+C[Connections
+This is how the sequence plays out.]
+;W[hj]
+C[Connections
+This is how the sequence plays out.
+Black has nicely reduced White's area.]
+;AW[cj][di][ec][fc][fi]AB[fd][fe][ff][fg][fh][gb][gc][gh][gi][gj]AE[dd][de][df][dg][dh][dk][ek][gk][hj][hk]
+C[Connections
+Shortages of liberties can also affect connections along the edge.]
+;B[]LB[ek:A][gk:B]
+C[Connections
+As we saw before, any stone White plays at A or B can be captured immediately.]MN[118]
+;W[dk]
+C[Connections
+But if White plays here, the two black stones cannot escape.
+
+]
+;B[ek]
+C[Connections
+Connecting does not gain a liberty.
+]
+;W[gk]
+C[Connections
+Black should have given up the two stones to avoid this larger loss.
+]
+;AB[ck][dj][ej][fk]AE[dk][gk]TR[ck]
+C[Connections
+Going back, what happens if Black has one extra stone (marked with a triangle)?
+]
+;W[ek]
+C[Connections
+White can start with this throw-in.
+]
+;B[dk]
+C[Connections
+Let's assume Black tries to save everything.
+]
+;W[bk]
+C[Connections
+Now White gives atari from this side, and we see the same issue as before.
+]
+;B[ek]
+C[Connections
+Connecting does not help.
+]
+;W[gk]
+C[Connections
+Once again Black should have given up earlier to avoid this large loss.
+])

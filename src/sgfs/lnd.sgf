@@ -1,0 +1,254 @@
+(;FF[4]GM[1]CA[UTF-8]AP[q5go:0.9]
+SZ[7]
+PW[White]
+PB[Black]
+KM[6.500000]AW[ac][ae][bc][be][cc][ce][da][db][dc][de][ea][eb][ec][ed][ee][fe][ff][fg][ge]AB[ab][af][bb][bf][ca][cb][cf][df][ef][eg][fa][fb][fc][fd][gd]
+C[Life & Death
+This is the second tutorial. It assumes you are familiar with the basic rules.
+
+Here, we will begin to see some of the complexities that can arise from the simple rules.
+]
+;B[]LB[aa:1][ag:6][ba:2][bg:7][cg:8][dg:9][ga:3][gb:4][gc:5]
+C[Life & Death
+How much territory does Black have?
+There are three groups, and they surround nine intersections.]
+;W[]
+C[Life & Death
+But some of the black groups also have few liberties, so maybe they can be captured?
+]
+;W[aa]
+C[Life & Death
+White takes away a liberty from one of the black groups. With the next move, the four black stones can be captured.
+]
+;B[ba]
+C[Life & Death
+Black could try to take away the white stone, but now the five black stones only have one liberty.]
+;W[aa]
+C[Life & Death
+Black could try to take away the white stone, but now the five black stones only have one liberty.
+So, White can capture them.]
+;AB[ab][bb][ca][cb]AE[aa]
+C[Life & Death
+Back to the original position. What about the other black groups?
+]
+;W[bg]
+C[Life & Death
+There are four possible initial moves against the lower side group, but they all lead to similar results. We show only this one. White attacks and takes away a liberty.
+]
+;B[cg]
+C[Life & Death
+Black answers, and now White has a problem.]
+;W[]LB[ag:A][dg:B]
+C[Life & Death
+Black's stones only have two liberites, but White needs to fill them both to capture.
+]
+;B[]LB[ag:A][dg:B]
+C[Life & Death
+But neither A nor B are valid moves, since a white stone there would not have any liberties.
+The black stones are safe from capture, and we say they are alive.
+]
+;AE[bg][cg]
+C[Life & Death
+So, what about the final black group?
+]
+;W[gb]
+C[Life & Death
+If White attacks, there is nothing Black can do.
+]
+;B[gc]
+C[Life & Death
+Answering here only reduces Black's liberties by one, so it does not help.]
+;AE[gc]
+C[Life & Death
+So, White is free to fill in the remaining liberties.]
+;W[ga]
+C[Life & Death
+So, White is free to fill in the remaining liberties.
+Like this.
+]
+;B[gc]
+C[Life & Death
+Black can capture, but now the situation is the same as in the upper left. Black is dead.
+]
+;AE[gc]
+C[Life & Death
+But if Black were to play first, there is a difference between the top left and the top right.
+]
+;B[gb]
+C[Life & Death
+By playing on the vital point, the black group becomes alive.
+Once more there are two moves White would have to make, and neither is allowed.]
+;W[]LB[ga:A][gc:B]
+C[Life & Death
+We call these surrounded points eyes. Normally, a group needs to be able to make at least two eyes to live. (We'll see exceptions later.)
+]
+;AE[gb]
+C[Life & Death
+Back to the original position. We have seen one example each of a dead group, an alive group, and an unsettled group where it depends on whose turn it is whether it lives or dies.
+]
+;AW[ad][bd][cd][dd][df][dg][fa][fb][fc][gc]AB[ac][ae][bc][be][ce][cg][ee][fe]AE[ab][af][bf][ea][eb][ff][fg][ge]
+C[Life & Death
+Here are some of the basic shapes that can occur in life and death situations.
+There are two unsettled black groups, and a dead one.
+]
+;W[aa]
+C[Life & Death
+The top left is very similar to the unsettled group we saw in the first position.
+Either player can make a move in the center to either make or prevent two eyes.
+]
+;B[gf]
+C[Life & Death
+In the bottom right, there is also a vital point. If Black plays there, the group has two eyes.
+]
+;W[fg]
+C[Life & Death
+White might try to attack, but it is futile.
+]
+;B[ff]
+C[Life & Death
+Black has two eyes.
+]
+;AW[gf]AE[ff][fg]
+C[Life & Death
+If White plays on the vital point, the five-point space can no longer be divided into two eyes.
+(There is more to say about this shape, but we'll ignore the details for now.)]
+;W[]
+C[Life & Death
+This leaves the bottom left to consider, and this is a little different: Black is just dead.
+]
+;B[af]
+C[Life & Death
+Any move Black might try to make just leads to the same shape as in the top left.
+]
+;W[bg]
+C[Life & Death
+White plays on the vital point to kill.
+You might like to verify that if White plays first, the black group can eventually be put into atari and captured.]
+;AW[ac][ae][af][bb][bc][ca][cb][cg][ea][ee][fd]AB[bd][bf][cc][cd][db][dd][de][eb][ec]AE[aa][ce][dc][ef][eg][fa][fe][gc][gd][gf]TR[dc]
+C[Life & Death
+Not everything that looks like an eye actually is one.
+Beware false eyes, which occur when the tail of a group can be captured.
+]
+;W[dc]
+C[Life & Death
+White could play here. Because of the capture, the white stone has liberties, so this is a valid move.
+Now the remaining black stones are in atari.]
+;AB[db][eb][ec]AE[dc]
+C[Life & Death
+Going back, Black is just dead in this position.]
+;AE[cb]TR[cb]
+C[Life & Death
+If we remove one of the white stones, the black group is unsettled. Black could connect at the triangled point to make two eyes.
+]
+;AE[ed]
+C[Life & Death
+If we remove yet another white stone, the black group is alive: there are now two options for connection.
+]
+;W[cb]
+C[Life & Death
+If White takes away one possibility...]
+;B[ed]
+C[Life & Death
+If White takes away one possibility, Black just takes the other.
+
+Black now has two secure eyes.]
+;AE[cb][ed]LB[cb:A][ed:B]
+C[Life & Death
+This is a fundamental concept in Go: having two equivalent options. Such a situation is known as miai.]
+;AW[ag][be][ce][db][dc][dd][de][ef][ff][fg][gf]AB[bg][df][dg][ea][ed][ee][fe][ge]AE[ac][ad][bb][bc][bd][ca][cc][cd][cg][fb][fc][fd]
+C[Life & Death
+Here is a new example position. What is going on here on the lower side?
+]
+;W[eg]
+C[Life & Death
+Black has two liberties, so White might try to take away one of them.
+(The other liberty is an eye can't be taken in the original board position.)]
+;B[gg]
+C[Life & Death
+Black has two liberties, so White might try to take away one of them.
+But that doesn't end well.
+]
+;AW[ef][ff][fg][gf]AE[gg]TR[eg]
+C[Life & Death
+The same would happen if Black were to try to attack.
+Neither side can play on the triangled point without losing everything.
+]
+;W[]
+C[Life & Death
+Here, neither group has two eyes, but despite this they cannot be captured. This kind of situation is known as seki.
+]
+;AW[ac][ba][bc][bd][bf][bg][cc][ee][eg]AB[cd][ce][cg][dc][fd][ff][fg][gd]AE[ae][af][ag][df][dg][ge][gf]
+C[Life & Death
+In the previous position, both sides had an eye. A seki can also occur without eyes.]
+;B[]TR[df][dg]
+C[Life & Death
+Neither side wants to play on either of the triangled points, because that would put their own stones in atari.
+]
+;W[]LB[cd:A][dd:B]
+C[Life & Death
+Therefore, the two strings of stones marked A and B are both alive in seki.]
+;AW[af][ag][dc][df][dg][fa][fb][fc][fd][fg][ga][gb][gc][gd][gg]AB[ad][bd][ee][ef][gf]AE[be][fe]
+C[Life & Death
+Sometimes you do not mind having your stones captured.
+It might look like both black groups are alive in seki, but in fact one of them is dead.
+]
+;W[ae]
+C[Life & Death
+If White plays here, there is only one shared liberty for the black and the white stones in the lower left.
+]
+;B[be]
+C[Life & Death
+Black can capture the white stones.
+But do you recognize the resulting shape?]
+;W[af]
+C[Life & Death
+It is in fact one of the unsettled shapes we saw earlier, and White can kill by playing on the vital point.
+]
+;W[ge]
+C[Life & Death
+On the other side of the board, the situation is different.
+This white move is bad, since it allows a large capture.
+]
+;B[fe]
+C[Life & Death
+Black's group is large enough that it can make two eyes no matter what White tries.
+White should have left the position alone. It would have remained as seki.
+]
+;AW[ae][ag][bf][ca][ec][fa][fb][fc][ff][gc][gf]AB[ab][bb][bg][cb][db][eg][fd][gd]AE[be][ed]LB[af:2][ca:1][gf:3]
+C[Life & Death
+Here are a few more examples. The numbered groups are all in atari, but capturing them does not help Black, since doing so leaves behind a killable shape.
+]
+;B[aa]
+C[Life & Death
+Let's just play it out to see White's best response if Black captures everywhere.]
+;W[ca]
+C[Life & Death
+Let's just play it out to see White's best response if Black captures everywhere.]
+;B[be]
+C[Life & Death
+Let's just play it out to see White's best response if Black captures everywhere.]
+;W[af]
+C[Life & Death
+Let's just play it out to see White's best response if Black captures everywhere.]
+;B[ge]
+C[Life & Death
+White does not even need to respond to this final capture. As we saw earlier, the square-four shape is dead as it stands.
+What about the central white stones though? They only have one eye.
+]
+;B[ed]
+C[Life & Death
+Black could try to attack the white stones by taking away their liberties.
+]
+;W[da]
+C[Life & Death
+Black could try to attack the white stones by taking away their liberties.
+However, White is quicker.
+]
+;B[gb]TR[ac][bc][cc][dc][dd][de][df][dg][ec][fa][fb][fc][gc]SQ[aa][ab][bb][cb][db][ea][eb]
+C[Life & Death
+Now, both the black and the white stones are in atari, but it is White's turn.
+
+]
+;W[ba]
+C[Life & Death
+White wins. Such a situation, where groups that are not independently alive try to capture each other, is called a capturing race.])

@@ -51,6 +51,12 @@
   <qresource prefix="/Help">
     <file>images/help/gohome.png</file>
   </qresource>
+  <qresource prefix="/Tutorials">
+    <file>sgfs/rules.sgf</file>
+    <file>sgfs/lnd.sgf</file>
+    <file>sgfs/tactics.sgf</file>
+    <file>sgfs/connections.sgf</file>
+  </qresource>
   <qresource prefix="/">
     <file>images/stone_b16.png</file>
     <file>images/stone_w16.png</file>
@@ -100,6 +106,7 @@
     <file>images/clientwindow/Bowl.png</file>
     <file>images/clientwindow/computerplay.png</file>
     <file>images/clientwindow/world.png</file>
+    <file>images/clientwindow/book.png</file>
     <file>images/clientwindow/exit.png</file>
     <file>images/clientwindow/human-robot.png</file>
     <file>images/clientwindow/gear.png</file>

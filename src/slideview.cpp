@@ -7,6 +7,7 @@
 #include "slideview.h"
 
 #include "ui_slideview_gui.h"
+#include "ui_slideshow_gui.h"
 
 void AspectContainer::fix_aspect ()
 {
@@ -24,18 +25,157 @@ void AspectContainer::fix_aspect ()
 		       (actual.height () - csz.height ()) / 2);
 }
 
-
-SlideView::SlideView (QWidget *parent)
-	: QDialog (parent), ui (new Ui::SlideViewDialog), m_board_exporter (new FigureView)
+template<class UI>
+BaseSlideView<UI>::BaseSlideView (QWidget *parent)
+	: QDialog (parent), ui (new UI), m_board_exporter (new FigureView)
 {
 	ui->setupUi (this);
 
 	ui->aspectWidget->set_child (ui->slideView);
+	ui->aspectWidget->set_aspect (m_aspect);
 	m_board_exporter->hide ();
+
+	m_font = setting->fontComments;
 
 	m_scene = new QGraphicsScene (0, 0, 30, 30, this);
 	ui->slideView->setScene (m_scene);
 
+	connect (ui->slideView, &SizeGraphicsView::resized, [this] () { view_resized (); });
+}
+
+template<class UI>
+BaseSlideView<UI>::~BaseSlideView ()
+{
+	delete m_scene;
+	delete m_board_exporter;
+	delete ui;
+}
+
+template<class UI>
+void BaseSlideView<UI>::set_game (go_game_ptr gr)
+{
+	m_game = gr;
+	m_board_exporter->reset_game (gr);
+	redraw ();
+}
+
+template<class UI>
+void BaseSlideView<UI>::set_active (game_state *st)
+{
+	m_board_exporter->set_displayed (st);
+	redraw ();
+}
+
+template<class UI>
+QPixmap BaseSlideView<UI>::render_text (int w, int h)
+{
+	int margin_px = w * m_margin / 100.;
+	QFontMetrics fm (m_font);
+	int fh = fm.height ();
+	double fh_chosen = (double)(h - 2 * margin_px) / m_n_lines;
+	int wrap_width = fh * m_n_lines * (m_aspect - 1);
+	double f_factor = (double)fh_chosen / fh;
+	int new_ps = m_font.pointSize () * f_factor;
+	QFont title_font = m_font;
+	if (m_bold_title)
+		title_font.setItalic (true);
+	if (m_italic_title)
+		title_font.setBold (true);
+	QFont f1 = m_font;
+	f1.setPointSize (new_ps);
+	QFont f2 = title_font;
+	f2.setPointSize (new_ps);
+
+	QPixmap pm (w, h);
+	pm.fill (m_white_text ? Qt::black : Qt::white);
+	QPainter painter;
+	painter.begin (&pm);
+	painter.setPen (m_white_text ? Qt::white : Qt::black);
+	int lineno = 0;
+	QString comments = QString::fromStdString (m_board_exporter->displayed ()->comment ());
+	QStringList paras = comments.split ("\n");
+	for (auto &p: paras) {
+		QStringList words = p.split (" ");
+		QString line;
+		QFont &this_font = lineno == 0 ? f2 : f1;
+		painter.setFont (this_font);
+		QFontMetrics fm_real (lineno == 0 ? title_font : m_font);
+		for (auto &w: words) {
+			if (lineno == m_n_lines)
+				break;
+			if (line.isEmpty ())
+				line = w;
+			else {
+				QString trial = line + " " + w;
+				QRect brect = fm_real.boundingRect (trial);
+				brect = fm_real.boundingRect (brect, Qt::AlignLeft | Qt::AlignTop, trial);
+				if (brect.width () > wrap_width) {
+					painter.drawStaticText (margin_px, margin_px + lineno * fh_chosen,
+								QStaticText (line));
+					line.clear ();
+					lineno++;
+					if (lineno == m_n_lines)
+						break;
+					line = w;
+				} else
+					line = trial;
+			}
+		}
+		if (!line.isEmpty ()) {
+			painter.drawStaticText (margin_px, margin_px + lineno * fh_chosen,
+						QStaticText (line));
+			lineno++;
+			if (lineno == m_n_lines)
+				break;
+		}
+	}
+	painter.end ();
+	return pm;
+}
+
+template<class UI>
+void BaseSlideView<UI>::update_text_font ()
+{
+	if (m_game == nullptr)
+		return;
+	int w = m_displayed_sz.width ();
+	int h = m_displayed_sz.height ();
+
+	QPixmap pm = render_text (w - h, h);
+	delete m_text_item;
+	m_text_item = m_scene->addPixmap (pm);
+	m_text_item->setPos (h, 0);
+}
+
+template<class UI>
+void BaseSlideView<UI>::redraw ()
+{
+	if (m_game == nullptr)
+		return;
+	update_text_font ();
+	int h = m_displayed_sz.height ();
+	m_board_exporter->set_show_coords (m_coords);
+	m_board_exporter->set_margin (0);
+	m_board_exporter->resizeBoard (h, h);
+	QPixmap board_pm = m_board_exporter->draw_position (0);
+	delete m_board_item;
+	m_board_item = m_scene->addPixmap (board_pm);
+	delete m_bg_item;
+	QImage wood = m_board_exporter->background_image ().copy (m_board_exporter->wood_rect ());
+	m_bg_item = m_scene->addPixmap (QPixmap::fromImage (wood));
+	m_bg_item->setZValue (-1);
+}
+
+template<class UI>
+void BaseSlideView<UI>::view_resized ()
+{
+	m_displayed_sz = ui->slideView->size ();
+	redraw ();
+}
+
+SlideView::SlideView (QWidget *parent)
+	: BaseSlideView<Ui::SlideViewDialog> (parent)
+{
 	update_prefs ();
 
 	ui->slideXEdit->setValidator (new QIntValidator (100, 9999, this));
@@ -62,97 +202,8 @@ SlideView::SlideView (QWidget *parent)
 	connect (ui->saveAllMainButton, &QPushButton::clicked, [this] () { save_mainline (false); });
 	connect (ui->saveComButton, &QPushButton::clicked, [this] () { save_all (true); });
 	connect (ui->saveComMainButton, &QPushButton::clicked, [this] () { save_mainline (true); });
-	connect (ui->saveAsButton, &QPushButton::clicked, this, &SlideView::save_as);
-	connect (ui->slideView, &SizeGraphicsView::resized, this, &SlideView::view_resized);
+	connect (ui->saveAsButton, &QPushButton::clicked, [this] () { save_as (); });
 	show ();
-}
-
-SlideView::~SlideView ()
-{
-	delete m_scene;
-	delete m_board_exporter;
-	delete ui;
-}
-
-QPixmap SlideView::render_text (int w, int h)
-{
-	int margin = ui->slideMarginSpinBox->value ();
-	int margin_px = w * margin / 100.;
-	int n_lines = ui->slideLinesSpinBox->value ();
-	QFontMetrics fm (m_font);
-	int fh = fm.height ();
-	double fh_chosen = (double)(h - 2 * margin_px) / n_lines;
-	int wrap_width = fh * n_lines * (m_aspect - 1);
-	double f_factor = (double)fh_chosen / fh;
-	int new_ps = m_font.pointSize () * f_factor;
-	QFont title_font = m_font;
-	if (ui->slideItalicCheckBox->isChecked ())
-		title_font.setItalic (true);
-	if (ui->slideBoldCheckBox->isChecked ())
-		title_font.setBold (true);
-	QFont f1 = m_font;
-	f1.setPointSize (new_ps);
-	QFont f2 = title_font;
-	f2.setPointSize (new_ps);
-
-	QPixmap pm (w, h);
-	pm.fill (ui->slideWBCheckBox->isChecked () ? Qt::black : Qt::white);
-	QPainter painter;
-	painter.begin (&pm);
-	painter.setPen (ui->slideWBCheckBox->isChecked () ? Qt::white : Qt::black);
-	int lineno = 0;
-	QString comments = QString::fromStdString (m_board_exporter->displayed ()->comment ());
-	QStringList paras = comments.split ("\n");
-	for (auto &p: paras) {
-		QStringList words = p.split (" ");
-		QString line;
-		QFont &this_font = lineno == 0 ? f2 : f1;
-		painter.setFont (this_font);
-		QFontMetrics fm_real (lineno == 0 ? title_font : m_font);
-		for (auto &w: words) {
-			if (lineno == n_lines)
-				break;
-			if (line.isEmpty ())
-				line = w;
-			else {
-				QString trial = line + " " + w;
-				QRect brect = fm_real.boundingRect (trial);
-				brect = fm_real.boundingRect (brect, Qt::AlignLeft | Qt::AlignTop, trial);
-				if (brect.width () > wrap_width) {
-					painter.drawStaticText (margin_px, margin_px + lineno * fh_chosen,
-								QStaticText (line));
-					line.clear ();
-					lineno++;
-					if (lineno == n_lines)
-						break;
-					line = w;
-				} else
-					line = trial;
-			}
-		}
-		if (!line.isEmpty ()) {
-			painter.drawStaticText (margin_px, margin_px + lineno * fh_chosen,
-						QStaticText (line));
-			lineno++;
-			if (lineno == n_lines)
-				break;
-		}
-	}
-	painter.end ();
-	return pm;
-}
-
-void SlideView::update_text_font ()
-{
-	if (m_game == nullptr)
-		return;
-	int w = m_displayed_sz.width ();
-	int h = m_displayed_sz.height ();
-
-	QPixmap pm = render_text (w - h, h);
-	delete m_text_item;
-	m_text_item = m_scene->addPixmap (pm);
-	m_text_item->setPos (h, 0);
 }
 
 QPixmap SlideView::render_export ()
@@ -174,30 +225,6 @@ QPixmap SlideView::render_export ()
 	p.drawPixmap (h, 0, text_pm);
 	p.end ();
 	return pm;
-}
-
-void SlideView::redraw ()
-{
-	if (m_game == nullptr)
-		return;
-	update_text_font ();
-	int h = m_displayed_sz.height ();
-	m_board_exporter->set_show_coords (ui->slideCoordsCheckBox->isChecked ());
-	m_board_exporter->set_margin (0);
-	m_board_exporter->resizeBoard (h, h);
-	QPixmap board_pm = m_board_exporter->draw_position (0);
-	delete m_board_item;
-	m_board_item = m_scene->addPixmap (board_pm);
-	delete m_bg_item;
-	QImage wood = m_board_exporter->background_image ().copy (m_board_exporter->wood_rect ());
-	m_bg_item = m_scene->addPixmap (QPixmap::fromImage (wood));
-	m_bg_item->setZValue (-1);
-}
-
-void SlideView::view_resized ()
-{
-	m_displayed_sz = ui->slideView->size ();
-	redraw ();
 }
 
 void SlideView::update_prefs ()
@@ -224,19 +251,13 @@ void SlideView::inputs_changed ()
 	m_aspect = w * 1.0 / std::max (1, h);
 	ui->aspectWidget->set_aspect (m_aspect);
 
-	redraw ();
-}
+	m_white_text = ui->slideWBCheckBox->isChecked ();
+	m_bold_title = ui->slideBoldCheckBox->isChecked ();
+	m_italic_title = ui->slideItalicCheckBox->isChecked ();
+	m_n_lines = ui->slideLinesSpinBox->value ();
+	m_margin = ui->slideMarginSpinBox->value ();
+	m_coords = ui->slideCoordsCheckBox->isChecked ();
 
-void SlideView::set_game (go_game_ptr gr)
-{
-	m_game = gr;
-	m_board_exporter->reset_game (gr);
-	redraw ();
-}
-
-void SlideView::set_active (game_state *st)
-{
-	m_board_exporter->set_displayed (st);
 	redraw ();
 }
 
@@ -343,3 +364,6 @@ void SlideView::choose_file ()
 
 	ui->fileTemplateEdit->setText (filename);
 }
+
+template class BaseSlideView<Ui::SlideViewDialog>;
+template class BaseSlideView<Ui::SlideshowDialog>;

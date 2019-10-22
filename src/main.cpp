@@ -21,6 +21,7 @@
 #include "dbdialog.h"
 #include "greeterwindow.h"
 #include "newaigamedlg.h"
+#include "tutorial.h"
 
 #include <qtranslator.h>
 #include <qtextcodec.h>
@@ -546,6 +547,14 @@ void show_batch_analysis ()
 		analyze_dialog = new AnalyzeDialog (nullptr, QString ());
 	analyze_dialog->setVisible (true);
 	analyze_dialog->activateWindow ();
+}
+
+void show_tutorials ()
+{
+	if (tutorial_dialog == nullptr)
+		tutorial_dialog = new Tutorial_Slideshow (nullptr);
+	tutorial_dialog->setVisible (true);
+	tutorial_dialog->activateWindow ();
 }
 
 int main(int argc, char **argv)

@@ -19,6 +19,7 @@ extern bit_array calculate_hoshis (const go_board &);
 extern board_rect find_crop (const game_state *gs);
 
 extern void show_batch_analysis ();
+extern void show_tutorials ();
 extern bool play_engine (QWidget *);
 extern bool play_two_engines (QWidget *);
 
