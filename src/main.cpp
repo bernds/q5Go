@@ -600,7 +600,6 @@ int main(int argc, char **argv)
 	const QStringList args = cmdp.positionalArguments ();
 
 	bool show_client = cmdp.isSet (clo_client);
-	bool show_greeter = !show_client && args.isEmpty () && !cmdp.isSet (clo_board) && !cmdp.isSet (clo_analysis);
 
 #ifdef OWN_DEBUG_MODE
 	qInstallMessageHandler (myMessageHandler);
