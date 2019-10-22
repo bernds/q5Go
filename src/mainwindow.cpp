@@ -2762,6 +2762,8 @@ void MainWindow::doPass ()
 	if (m_gamemode == modeNormal || m_gamemode == modeComputer) {
 		game_state *st = gfx_board->displayed ();
 		game_state *st_new = st->add_child_pass ();
+		push_undo (std::make_unique<undo_move_entry> ("Pass", st, st_new,
+							      st->find_child_idx (st_new)));
 		gfx_board->transfer_displayed (st, st_new);
 	}
 }
@@ -2816,6 +2818,8 @@ void MainWindow::doCountDone ()
 
 	game_state *st = gfx_board->displayed ();
 	m_pos_before_edit->add_child_tree (st);
+	push_undo (std::make_unique<undo_move_entry> ("Score the game", m_pos_before_edit, st,
+						      m_pos_before_edit->find_child_idx (st)));
 	m_pos_before_edit = nullptr;
 	doRealScore (false);
 }
