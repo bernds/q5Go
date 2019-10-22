@@ -135,7 +135,7 @@ In the original position, there is a more solid way of capturing the white stone
 ]
 ;B[eg]
 C[Captures
-Black creates a net. Sometimes the term geta is used as well.
+Black creates a <font>net</font>. Sometimes the term <font>geta</font> is used as well.
 ]
 ;W[ef]
 C[Captures
@@ -516,7 +516,7 @@ And, since the position is symmetrical, the same would be true if White were to 
 ]
 ;W[]TR[eh][ei][ej][ek]SQ[fh][fi][fj][fk]
 C[Captures
-A situation where two groups are threatening to capture each other is called a capturing race. Another term for it is semeai.
+A situation where two groups are threatening to capture each other is called a <font>capturing</font> <font>race</font>. Another term for it is <font>semeai</font>.
 ]
 ;AW[hg][hh]AB[gj][gk]AE[fk][gh][gi]TR[fk]
 C[Captures
@@ -580,7 +580,7 @@ Neither side wants to play at the marked points, since that would be self-atari.
 ]
 ;B[]TR[fj][fk]
 C[Captures
-We saw this in the Life and Death tutorial, it is called a seki. Both sides live. In fact, it was unnecessary to fill the outside liberties.]
+We saw this in the Life and Death tutorial, it is called a <font>seki</font>. Both sides live. In fact, it was unnecessary to fill the outside liberties.]
 ;AB[cg][ch]AE[dh][di][dj][dk][hg][hj][hk]
 C[Captures
 So far, the positions have been symmetrical.
@@ -744,7 +744,7 @@ What if White goes first?
 ]
 ;W[ik]
 C[Captures
-This sort of bend around is called a hane (approximately pronounced "hah-ney").
+This sort of bend around is called a <font>hane</font> (approximately pronounced "hah-ney").
 Hane once...
 ]
 ;B[hk]

@@ -35,7 +35,7 @@ There are fewer liberties available at the edge of the board. An attacker can ma
 ]
 ;AW[ce][ef][ff]AB[bd][be]AE[cg][de][ee][fg]TR[ce]
 C[Basic Tactics
-Another elementary tactic is the ladder. Black to play and capture the marked stone.
+Another elementary tactic is the <font>ladder</font>. Black to play and capture the marked stone.
 ]
 ;B[de]
 C[Basic Tactics
@@ -92,7 +92,7 @@ In this situation, White needs to realize that trying to save the marked stone i
 ;W[ec]
 C[Basic Tactics
 But there are options for White. The ladder goes through a large part of the board, and a white stone in its path would affect it.
-This play is a ladder breaker.]
+This play is a <font>ladder</font> <font>breaker</font>.]
 ;B[cd]
 C[Basic Tactics
 Black can react to the ladder breaker by simply capturing.]
@@ -116,7 +116,7 @@ C[Basic Tactics
 White connects with the ladder breaker. The white group now has three liberties, which was never the case previously.]
 ;B[fc]
 C[Basic Tactics
-Black could try to continue attacking, but since White has two liberties, there is time to counterattack.]
+Black could try to continue attacking, but since White still has two liberties, there is time to counterattack.]
 ;W[df]
 C[Basic Tactics
 Like so. Now it is a black stone that is in atari and will be captured.
@@ -187,7 +187,7 @@ C[Basic Tactics
 That leaves the other liberty to try.]
 ;W[dc]
 C[Basic Tactics
-White plays a stone which Black can capture immediately. This is called a throw-in.
+White plays a stone which Black can capture immediately. This is called a <font>throw-in</font>.
 ]
 ;B[dd]
 C[Basic Tactics
@@ -196,7 +196,7 @@ The black stones only have one liberty.]
 ;W[dc]
 C[Basic Tactics
 White captures.
-This kind of pattern, with a capture and a recapture, is called a snapback.]
+This kind of pattern, with a capture and a recapture, is called a <font>snapback</font>.]
 ;AW[cd][de]AB[cc][dd][ee]AE[bb][bd][be][bf][ca][cb][cf][da][db][dc][df][eb][ec][ed][ef][eg][fc][fd][fe][ff][fg]
 C[Basic Tactics
 Sometimes, players leave a lot of cutting points in their positions.
@@ -204,7 +204,7 @@ Sometimes, players leave a lot of cutting points in their positions.
 ;B[ce]TR[cd][de]
 C[Basic Tactics
 By playing here, Black makes two threats and can capture either of the marked white stones on the next move.
-This tactic is called a double atari and can be devastating.
+This tactic is called a <font>double</font> <font>atari</font> and can be devastating.
 ]
 ;W[df]
 C[Basic Tactics

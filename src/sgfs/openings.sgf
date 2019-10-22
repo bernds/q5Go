@@ -17,7 +17,7 @@ It is easiest to make living groups and territory in the corners, followed by th
 ;W[]LB[pc:A][pd:B][qd:A]
 C[Openings
 The most common opening moves are A and B: the 3-4 point, and the 4-4 point.]
-;W[]LB[oc:D][od:E][pc:A][pd:B][qc:C][qd:A]
+;B[]LB[oc:D][od:E][pc:A][pd:B][qc:C][qd:A]
 C[Openings
 But C, D and E area also played. All these moves are recognized as good, but you can play whereever you like.
 ]
@@ -42,7 +42,7 @@ Any move at A, B or C would also be recognized as enclosure.
 ]
 ;W[qo]LB[po:A]
 C[Openings
-To prevent a corner enclosure, the opponent could make an approach move such as this.
+To prevent a corner enclosure, the opponent could make an <font>approach</font> move such as this.
 A play at A would also be a very common approach move.
 ]
 ;B[np]
@@ -74,15 +74,14 @@ A normal choice for White is to protect the corner territory.
 ;B[iq]
 C[Openings
 And Black extends again, for stability.
-The sequence we have just seen is a joseki, which means a series of moves that occur often and are considered reasonable for both sides.]
+The sequence we have just seen is a <font>joseki</font>, which means a series of moves that occur often and are considered reasonable for both sides.]
 ;AE[cq][iq]
 C[Openings
 You need to be aware that just because something is joseki, your opponent might not want to play that way.
 The peaceful continuation we have seen is not the only possible outcome.]
 ;W[gq]
 C[Openings
-A move like this might come as a surprise. We will not go into the variations, but a contact play like this tends to start more complicated fights.
-A lot of things are possible on the Go board. Don't expect your opponent to follow your plans.
+A move like this might come as a surprise. We will not go into the variations here, but remember: a lot of things are possible on the Go board. Don't expect your opponent to follow your plans.
 ]
 ;AE[cn][dr][fq][gq]
 C[Openings
@@ -100,7 +99,7 @@ Generally, White blocks on one side or the other.
 ]
 ;B[cp]TR[ap][aq][ar][bp][bq][br]
 C[Openings
-Black extends, laying claim to territory and eye space in the marked area.
+Black extends, claiming territory and eye space in the marked area.
 Many continuations are possible.
 ]
 ;W[co]
@@ -122,8 +121,8 @@ Black strengthens the corner stone.
 ]
 ;W[cm]
 C[Openings
-There's more to say, but in a beginner tutorial let's stop it here. 
-We see that in this outcome, there has been a division of spoils, which is a common outcome in corner patterns.
+There's more to say, but in a beginner tutorial let's stop it here.
+We see that there has been a division of spoils, which is a common outcome in corner patterns.
 ]
 ;B[]TR[ap][aq][ar][bp][bq][br]
 C[Openings
@@ -148,7 +147,7 @@ Let's go back and show another way of dealing with an approach move.
 ]
 ;B[qk]
 C[Openings
-Black could play a pincer, limiting White's ability to extend along the side for safety.
+Black could play a <font>pincer</font>, limiting White's ability to extend along the side for safety.
 These days, pincers are played less commonly, but they are still important.
 ]
 ;W[no]
@@ -166,11 +165,11 @@ Let's look at a different type of opening. Here, both players have made their mo
 ;B[pj]
 C[Openings
 Instead of an approach move, Black could try to set up a position on the right side.
-A common idea is to build a large framework, also called a moyo, which could become territory over time.
+A common idea is to build a large framework, also called a <font>moyo</font>, which could become territory over time.
 ]
 ;W[nc]
 C[Openings
-White might approach to limit the scope of Black's area.
+White could approach to limit the scope of Black's area.
 Many responses to this have been seen over the years.
 ]
 ;B[lc]
@@ -190,7 +189,7 @@ White connects up, gaining a fair amount of territory.
 ]
 ;B[od]TR[oc]
 C[Openings
-Black extends again - this blocks White again, and also threatens to push in at the marked point.
+Black extends - this strengthens Blacks's stones, blocks White again, and also threatens to push in at the marked point.
 ]
 ;W[nb]
 C[Openings
@@ -203,8 +202,8 @@ Black loosely connects all of the stones in the area. This is another joseki seq
 ]
 ;W[]TR[oe][of][og][oh][oi][pe][pf][pg][ph][pi][qe][qf][qg][qh][qi][re][rf][rg][rh][ri][se][sf][sg][sh][si]
 C[Openings
-Black loosely connects all of the stones in the area. This is another joseki sequence. White has taken the corner.
-
+In exchange for the corner, Black lays claim to the side area, where the black stones are now quite strong.
+This is not secure territory, but any white stones played there will be outnumbered and under attack.
 ]
 ;AW[nq][nr][pq][qq]AB[lq][mo][op][qp]
 C[Openings
@@ -274,12 +273,13 @@ C[Openings
 This is where we'll stop looking at the moves. Let's see what just happened.
 ]
 ;W[]TR[lq][nq][op][oq][pq]SQ[pp][qo][qp][qq][rm]
-C[On the sides, we see a fairly equal division: both sides have made similar-looking shapes which surround side territory. These are solid positions.
+C[Openings
+On the sides, we see a fairly equal division: both sides have made similar-looking shapes which surround side territory. These are solid positions.
 ]
 ;B[]TR[pl][pn][po]SQ[no][np][oo]
 C[Openings
 But there is also one white and black group each in the center. These stones have no eye space, and they surround no territory.
-These are weak groups.
+These are <font>weak</font> <font>groups</font>.
 ]
 ;W[]TR[pl][pn][po]SQ[no][np][oo]
 C[Openings
@@ -326,12 +326,12 @@ A simple extension is also possible.
 ]
 ;W[ec]
 C[Openings
-This gives White the possibility of playing this kick. This surrounds more of the corner for White, and threatens Black's stone.
+This gives White the possibility of playing this <font>kick</font>. This surrounds more of the corner for White, and threatens Black's stone.
 ]
 ;B[fd]
 C[Openings
 An extension would be logical: this gains two liberties. Black now has a strong position, but it is a little cramped.
-Efficiency is important in the opening.
+Efficiency is important in the opening (and throughout the game of Go).
 ]
 ;AE[cf][ec][fc][fd][ic]
 C[Openings

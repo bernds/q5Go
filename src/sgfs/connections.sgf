@@ -17,22 +17,22 @@ As a contrast, this is the most basic disconnected shape. None of the involved s
 Interesting things can happen here, but that's a matter for a different tutorial.]
 ;AE[ff][gg]
 C[Connections
-These two stones form a diagonal move. In this board position, they cannot be disconnected.
+These two stones form a <font>diagonal</font> <font>move</font>. In this board position, they cannot be disconnected.
 ]MN[2]
 ;B[]LB[ff:A][gg:B]
 C[Connections
-These two stones form a diagonal move. In this board position, they cannot be disconnected.
+These two stones form a <font>diagonal</font> <font>move</font>. In this board position, they cannot be disconnected.
 Black can make a solid connection with A or B.]MN[2]
 ;W[ff]
 C[Connections
 White might try to separate, like this.]
 ;B[gg]
 C[Connections
-Black just takes the other option. The diagonal move creates a miai situation, where two equivalent options for connection exist.
+Black just takes the other option. The diagonal move creates a <font>miai</font> situation, where two equivalent options for connection exist.
 ]
 ;AE[ff]
 C[Connections
-If we take away the white stone, what is left is called an empty triangle, a classic bad shape.
+If we take away the white stone, what is left is called an <font>empty</font> <font>triangle</font>, a classic <font>bad</font> <font>shape</font>.
 ]
 ;W[]TR[gg]
 C[Connections
@@ -41,7 +41,7 @@ One reason this is bad is that Black has played an unnecessary move, connecting 
 ]
 ;AB[ee]AE[gf][gg]
 C[Connections
-Once stones are further apart, connections become more tenuous. This particular shape is called a knight's move.
+Once stones are further apart, connections become more tenuous. This particular shape is called a <font>knight's</font> <font>move</font>.
 In this board position, Black is still connected.]
 ;W[ff]
 C[Connections
@@ -51,7 +51,7 @@ C[Connections
 Black answers.]
 ;W[eg]
 C[Connections
-Now White has successfully played a cut, but there is a problem.]
+Now White has successfully played a <font>cut</font>, but there is a problem.]
 ;B[gf]
 C[Connections
 One of White's stones can be captured. This is the ladder shape which you should recognize from an earlier tutorial.]
@@ -60,15 +60,15 @@ C[Connections
 Here's a reminder of how things will turn out. White cannot evade capture.]
 ;AE[ef][eg][fd][fe][ff][gc][gd][ge][gf][hb][hc][hd][he][ia][ib][ic][id][ja][jb][jc]
 C[Connections
-However, remember also that ladder breakers exist. That means that our connection depends on conditions elsewhere on the board.]
+However, our connection depends on conditions elsewhere on the board.]
 ;AW[cg][ci][gc][id]
 C[Connections
-However, remember also that ladder breakers exist. That means that our connection depends on conditions elsewhere on the board.
-If White has ladder breakers in place, the knight's move can be cut because the ladders no longer work.]
+However, our connection depends on conditions elsewhere on the board.
+If White has <font>ladder</font> <font>breakers</font> in place, the knight's move can be cut because the ladders no longer work.]
 ;AW[dd][de][ed][fd][gd][ge]AB[eg][fe]AE[cg][ci][gc][id]LB[ef:A][ff:B]
 C[Connections
 Let's show another type of solid connection.
-The black shape is called a bamboo joint. Black has miai at A and B to make a solid connection.
+The black shape is called a <font>bamboo</font> <font>joint</font>. Black has miai at A and B to make a solid connection.
 ]
 ;W[ff]
 C[Connections
@@ -95,7 +95,7 @@ Once again, Black has miai alternatives: a solid connection at B is nice, but ca
 ]
 ;AE[dd][de][ed][ee][ef][fd][ff][gd][ge]
 C[Connections
-Let's take away even more stones. This shape here is called a one-space jump.
+Let's take away even more stones. This shape here is called a <font>one-space</font> <font>jump</font>.
 Can white separate it, or is it connected?
 ]
 ;W[ff]
@@ -236,7 +236,7 @@ Like this.
 ]
 ;W[gd]
 C[Connections
-But now, White has not only cleanly separated the black stones, there is another problem: once again there is a shortage of liberties.
+But now, White has not only cleanly separated the black stones, there is another problem: once again there is a <font>shortage</font> <font>of</font> <font>liberties</font>.
 ]
 ;B[gf]
 C[Connections
@@ -323,7 +323,7 @@ It may seem like the three white stones are connected to the outside, but Black 
 ]
 ;B[ff]
 C[Connections
-The central point is the tesuji, which is the term for a tactically astute move.
+The central point is the <font>tesuji</font>, which is the term for a tactically astute move.
 Of course, any other move would let White connect immediately.
 ]
 ;W[ef]
@@ -352,7 +352,7 @@ This is a solid connection. The black stones can't be separated, but this move a
 ]
 ;AB[gh]AE[fh]
 C[Connections
-This is an alternative that is frequently used. It is called the tiger's mouth, and in this situation it extends a little further along the lower side.]
+This is an alternative that is frequently used. It is called the <font>tiger's</font> <font>mouth</font>, and in this situation it extends a little further along the lower side.]
 ;W[fh]
 C[Connections
 White can't really do anything to disconnect the black stones. A move like this is futile.
@@ -367,7 +367,7 @@ White might try to take a more indirect approach.
 ]
 ;W[fg]
 C[Connections
-This kind of move is known as a peep. It only threatens to cut.
+This kind of move is known as a <font>peep</font>. It only threatens to cut.
 ]
 ;B[fh]
 C[Connections

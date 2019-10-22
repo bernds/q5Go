@@ -33,6 +33,7 @@ protected:
 
 	go_game_ptr m_game;
 
+	bool m_builtin_tutorial = false;
 	bool m_bold_title = true;
 	bool m_italic_title = true;
 	bool m_white_text = true;

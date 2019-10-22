@@ -31,6 +31,7 @@ static std::array<tutorial, 6> tutorials =
 Tutorial_Slideshow::Tutorial_Slideshow (QWidget *parent)
 	: BaseSlideView<Ui::SlideshowDialog> (parent)
 {
+	m_builtin_tutorial = true;
 	int i = 0;
 	for (auto &p: tutorials) {
 		QStringList l;

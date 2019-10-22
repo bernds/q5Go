@@ -94,36 +94,67 @@ QPixmap BaseSlideView<UI>::render_text (int w, int h)
 	int lineno = 0;
 	QString comments = QString::fromStdString (m_board_exporter->displayed ()->comment ());
 	QStringList paras = comments.split ("\n");
+	QTextOption opt;
+	opt.setWrapMode (QTextOption::NoWrap);
 	for (auto &p: paras) {
 		QStringList words = p.split (" ");
-		QString line;
+		QString line, trial_line;
 		QFont &this_font = lineno == 0 ? f2 : f1;
 		painter.setFont (this_font);
 		QFontMetrics fm_real (lineno == 0 ? title_font : m_font);
 		for (auto &w: words) {
 			if (lineno == m_n_lines)
 				break;
-			if (line.isEmpty ())
+			QString trial_word = w;
+			if (m_builtin_tutorial) {
+				/* This is a really ugly way of allowing the tutorials to
+				   highlight some words with a different color.
+				   Just having "<font color="..."> in the text would make it harder
+				   to word wrap, since we couldn't just look for spaces anymore.
+				   Hence, this nasty business.  */
+				QRegularExpression re ("^<[^>]*>([^<]*)<.*>([\\.,]*)");
+				auto re_result = re.match (w);
+
+				if (re_result.hasMatch ()) {
+					trial_word = re_result.captured (1) + re_result.captured (2);
+					if (w.startsWith ("<font>"))
+						w.insert (5, " color=\"yellow\"");
+				}
+			}
+
+			if (line.isEmpty ()) {
 				line = w;
-			else {
-				QString trial = line + " " + w;
-				QRect brect = fm_real.boundingRect (trial);
-				brect = fm_real.boundingRect (brect, Qt::AlignLeft | Qt::AlignTop, trial);
-				if (brect.width () > wrap_width) {
-					painter.drawStaticText (margin_px, margin_px + lineno * fh_chosen,
-								QStaticText (line));
-					line.clear ();
-					lineno++;
-					if (lineno == m_n_lines)
-						break;
-					line = w;
-				} else
-					line = trial;
+				trial_line = trial_word;
+				continue;
+			}
+
+			QString trial = trial_line + " " + trial_word;
+			QRect brect = fm_real.boundingRect (trial);
+			brect = fm_real.boundingRect (brect, Qt::AlignLeft | Qt::AlignTop, trial);
+			if (brect.width () > wrap_width) {
+				QStaticText t (line);
+				if (m_builtin_tutorial)
+					t.setTextFormat (Qt::RichText);
+				t.setTextOption (opt);
+				painter.drawStaticText (margin_px, margin_px + lineno * fh_chosen, t);
+				line.clear ();
+				trial_line.clear ();
+				lineno++;
+				if (lineno == m_n_lines)
+					break;
+				line = w;
+				trial_line = trial_word;
+			} else {
+				line = line + " " + w;
+				trial_line = trial;
 			}
 		}
 		if (!line.isEmpty ()) {
-			painter.drawStaticText (margin_px, margin_px + lineno * fh_chosen,
-						QStaticText (line));
+			QStaticText t (line);
+			if (m_builtin_tutorial)
+				t.setTextFormat (Qt::RichText);
+			t.setTextOption (opt);
+			painter.drawStaticText (margin_px, margin_px + lineno * fh_chosen, t);
 		}
 		lineno++;
 		if (lineno == m_n_lines)

@@ -33,13 +33,13 @@ Once placed, a stone never moves, but it can be captured.
 ;W[]CR[bc][cb][cd][dc][de][ed][ef][fc][fe][gb][gd]LB[cc:1][ee:2][gc:3]
 C[Rules of Go
 Intersections are connected by lines on the board.
-Empty spaces next to a stone are called liberties.
+Empty spaces next to a stone are called <font>liberties</font>.
 ]
 ;AW[cb][cd][dc]AE[ee][gc]CR[bc]
 C[Rules of Go
 Stones need liberties to remain on the board.
 
-A stone with only one remaining liberty is said to be in atari.
+A stone with only one remaining liberty is said to be in <font>atari</font>.
 ]
 ;W[bc]
 C[Rules of Go
@@ -105,55 +105,55 @@ White reduces the number of liberties to one again.
 ;B[ed]
 C[Example
 
-This particular situation is called a ladder.
+This particular situation is called a <font>ladder</font>.
 ]
 ;W[fd]
 C[Example
 
-This particular situation is called a ladder.
+This particular situation is called a <font>ladder</font>.
 ]
 ;B[ec]
 C[Example
 
-This particular situation is called a ladder.
+This particular situation is called a <font>ladder</font>.
 ]
 ;W[eb]
 C[Example
 
-This particular situation is called a ladder.
+This particular situation is called a <font>ladder</font>.
 ]
 ;B[fc]
 C[Example
 
-This particular situation is called a ladder.
+This particular situation is called a <font>ladder</font>.
 
 Black cannot escape, since at the edge of the board, fewer liberties are available.
 ]
 ;W[fb]
 C[Example
 
-This particular situation is called a ladder.
+This particular situation is called a <font>ladder</font>.
 
 Black cannot escape, since at the edge of the board, fewer liberties are available.
 ]
 ;B[gc]
 C[Example
 
-This particular situation is called a ladder.
+This particular situation is called a <font>ladder</font>.
 
 Black cannot escape, since at the edge of the board, fewer liberties are available.
 ]
 ;W[gd]
 C[Example
 
-This particular situation is called a ladder.
+This particular situation is called a <font>ladder</font>.
 
 Black cannot escape, since at the edge of the board, fewer liberties are available.
 ]
 ;B[gb]
 C[Example
 
-This particular situation is called a ladder.
+This particular situation is called a <font>ladder</font>.
 
 Black cannot escape, since at the edge of the board, fewer liberties are available.
 ]
@@ -191,7 +191,7 @@ If White captures a stone, it looks like Black could just recapture.
 
 That would repeat the board position, and that is not allowed.
 
-This situation is called ko.
+This situation is called <font>ko</font>.
 ]
 ;B[bb]
 C[Rules of Go
@@ -213,7 +213,7 @@ Then, White needs to find a threat to continue fighting the ko.
 C[Rules of Go
 Captures are worth a point at the end of the game.
 
-But surrounding empty intersections to make territory is also worth a point each.
+But surrounding empty intersections to make <font>territory</font> is also worth a point each.
 ]
 ;B[]TW[ag][bf][cf][cg][de][df][dg][ee][ef][eg][fe][ff][fg][ge][gf][gg]TB[aa][ab][ac][ba][bb][bc][ca][cb][cc][da][db][ea][eb][fa][ga]
 C[Rules of Go
@@ -240,7 +240,7 @@ These moves are an example of how to finish this position.]
 ;B[af]
 C[Rules of Go
 In this position, all territories have become clear.
-Players pass when they see no  more useful moves, and if both players pass, the game ends and counting begins.
+Players pass when they see no more useful moves, and if both players pass, the game ends and counting begins.
 ]
 ;AW[ae][be][ce][cf][df][dg]AB[ab][ba][bb][fa]AE[aa][af][cg][ga]
 C[Rules of Go
