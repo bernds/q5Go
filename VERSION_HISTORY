@@ -1,3 +1,20 @@
+q5Go 1.0
+
+These are the major user-visible changes in 1.0:
+ * A greeter dialog was added, similar to the ones used by cgoban or
+   gGo.
+ * There is now a "Learn Go" button that brings up beginner tutorials
+   in a slideshow view.
+ * Engine configuration in the preferences is a little more friendly.
+ * Edit mode works differently. Depending on the situation, an edited
+   position can be appended to or inserted before the current node, or
+   replace a previous edit.
+ * The board window now has menu items for undo/redo.
+ * When playing on IGS, the comments box now allows chatting even after
+   a match has completed, making it unnecessary to find the opponent's
+   talk tab.
+ * Corrected a bug when parsing nmatch preferences on IGS.
+
 q5Go 0.9
 
 These are the major user-visible changes in 0.9:

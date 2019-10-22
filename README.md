@@ -1,4 +1,4 @@
-## q5Go 0.9
+## q5Go 1.0
 
 This is a tool for Go players which performs the following functions:
 - SGF editor
@@ -19,23 +19,20 @@ and modernized.
 
 ![screenshot](screens/screenshot.png)
 
-These are the major user-visible changes in 0.9:
- * Support for KataGo analysis.  The evaluation graph can be switched between
-   score and win rate.
- * A new option to start a game against an engine game from the current
-   board position.
- * A new AI vs AI play mode.  The number of games to be played is
-   configurable, and an opening book can be used.
- * It is now possible to hide/show the analysis markup of the board rather
-   than having it displayed at all times.
- * The variant game dialog now supports removing intersections from the board,
-   allowing new variations of the game.
- * Several bug fixes related to scoring mode when playing games on IGS.
- * There are now a few presets for the stone visual appearance to make it
-   quicker and easier to arrive at a nice look.  The darkness of the shadows
-   can now also be configured.
- * Sounds should be a little more reliable, the samples used for stones were
-   too short to be played on some systems.
+These are the major user-visible changes in 1.0:
+ * A greeter dialog was added, similar to the ones used by cgoban or
+   gGo.
+ * There is now a "Learn Go" button that brings up beginner tutorials
+   in a slideshow view.
+ * Engine configuration in the preferences is a little more friendly.
+ * Edit mode works differently. Depending on the situation, an edited
+   position can be appended to or inserted before the current node, or
+   replace a previous edit.
+ * The board window now has menu items for undo/redo.
+ * When playing on IGS, the comments box now allows chatting even after
+   a match has completed, making it unnecessary to find the opponent's
+   talk tab.
+ * Corrected a bug when parsing nmatch preferences on IGS.
 
 See VERSION_HISTORY for a history of changes.
 
@@ -115,6 +112,14 @@ they want.  These layouts can be saved and restored, and the program
 tries to restore the correct layout whenever a new window is opened.
 
 ![screenshot](screens/docks.png)
+
+### Beginner tutorials
+
+Choosing "Learn Go" in the greeter window brings up a window with a
+selection of beginner tutorials, covering topics such as the basic
+rules, life and death, captures/connections and the opening.
+
+![screenshot](screens/tutorial.png)
 
 ### Database support
 
