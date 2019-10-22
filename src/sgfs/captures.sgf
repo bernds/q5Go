@@ -1,0 +1,792 @@
+(;FF[4]GM[1]CA[UTF-8]AP[q5go:0.9]
+SZ[11]
+PW[White]
+PB[Black]
+KM[6.500000]PL[W]AW[ef][fe][gf]AB[ff]
+C[Captures
+Welcome to this beginner-level tutorial on captures in Go.
+]
+;W[fg]
+C[Captures
+As a reminder about the rules, once a stone or a connected group of stones loses its last liberty, it is removed from the board.
+Captured stones are worth one point each.
+]
+;AW[eb][fc][gb]AB[fb][ff]AE[fg]
+C[Captures
+Sometimes, stones are already called "captured" when there is no way to save them.]
+;LB[fb:A][ff:B]
+C[Captures
+Sometimes, stones are already called "captured" when there is no way to save them.
+The black stone marked A cannot evade capture, while B could be saved.
+]
+;AB[fa][fg]
+C[Captures
+Let's play out the continuation on each side.
+Black must extend to avoid being captured. This gives additional liberties to the groups.
+]
+;AW[ga][gg]
+C[Captures
+Let's play out the continuation on each side.
+White continues to attack.
+]
+;AB[ea][eg]
+C[Captures
+Let's play out the continuation on each side.
+And Black tries to escape.
+]
+;AW[da][dg]AE[ea][fa][fb]
+C[Captures
+At the edge of the board, liberties are more scarce.
+In the center, Black's stones still have two liberties, and counterattacks are now possible.
+]
+;AW[cc][dd][dh][ed][fd][gd][hd][he][hf][hg][ig][ih][ii][ij][ik][kg]AB[dc][ec][fc][gc][hc][id][ie][if][jg][jh][ji][jj][jk]AE[da][dg][eb][ef][eg][fe][ff][fg][ga][gb][gf][gg]
+C[Captures
+While this is tutorial is about captures, it is important to know that sometimes, capturing is unnecessary.
+Unnecessary moves are bad.
+]
+;B[kf]
+C[Captures
+Black could attack the white stone.]
+;W[cb]
+C[Captures
+In response, White will just take a big move which enlarges the left-side territory.
+]
+;B[kh]
+C[Captures
+With the last two moves, Black has managed to capture the white stone, but this was unnecessary: it could not have escaped anyway.
+]
+;AW[kg]AE[cb][kf][kh]
+C[Captures
+You might like to try playing with this position to convince yourself that White cannot save that stone.
+]
+;W[jf]
+C[Captures
+Here is just one possible example. Once White tries something unreasonable, it is OK for Black to spend moves to actually remove stones from the board.
+]
+;B[je]
+C[Captures
+Now we have the familiar shape of a capture on the second line. Neither of White's stones can be saved.
+]
+;W[kf]
+C[Captures
+Just a few more moves to clearly show the result.]
+;B[ke]
+C[Captures
+Just a few more moves to clearly show the result.]
+;W[kh]
+C[Captures
+Just a few more moves to clearly show the result.]
+;B[ki]
+C[Captures
+Just a few more moves to clearly show the result.]
+;AW[ff][ge]AB[ef][fe][gf][gg]AE[cc][dc][dd][dh][ec][ed][fc][fd][gc][gd][hc][hd][hf][hg][id][ie][if][ig][ih][ii][ij][ik][je][jg][jh][ji][jj][jk][ke][ki]TR[ff]
+C[Captures
+Let's recap something we've seen before: the ladder.
+White's stone cannot escape.
+]
+;AW[ci][cj][dh][di][eg][eh][fg]AB[bi][bj][ch][dg][dj][ei][fh]
+C[Captures
+If White tries to escape, the group is driven towards the edge of the board and runs out of liberties.
+]
+;AE[bi][bj][ch][ci][cj][dg][dh][di][dj][ef][eg][eh][ei][fg][fh]TR[ef]
+C[Captures
+Going back, it is important to ask: should Black play at the marked point to capture the stone in a ladder?
+]
+;W[]TR[ff]
+C[Captures
+Here, the white stone is a cutting stone which separates two black groups. Capturing it is important.
+]
+;AE[ge][he]
+C[Captures
+If we remove the white stones on the other side, the white stone becomes unimportant.
+]
+;B[]LB[ef:B][ge:A]
+C[Captures
+Black now has equally good alternatives (miai) to connect at A or capture at B.
+(To be completely accurate, the capture at B is not quite as good, since White might play a ladder breaker.)
+]
+;W[ge]
+C[Captures
+What if White cuts? Should Black now play the ladder?
+Maybe.
+]
+;B[fd]
+C[Captures
+It is also possible to consider a move such as this.
+]
+;W[]LB[ef:B][he:A]
+C[Captures
+Once again, there are equivalent options: Black has ladders available in two directions to capture one stone and thereby connect his groups.
+]
+;AW[fd][he]AB[ee]TR[ff]
+C[Captures
+Let's look at a slightly different position. Black has an additional stone, and the question is: what is the best way to capture the marked white stone?
+]
+;B[ef]
+C[Captures
+Of course the ladder works, as before.
+]
+;W[dh]TR[ff]
+C[Captures
+But White has the opportunity to play a ladder breaker, and Black now may need to spend another move to remove White's stone from the board.]
+;AE[dh][ef]
+C[Captures
+In the original position, there is a more solid way of capturing the white stone.
+]
+;B[eg]
+C[Captures
+Black creates a net. Sometimes the term geta is used as well.
+]
+;W[ef]
+C[Captures
+White's stone cannot escape.
+]
+;B[df]
+C[Captures
+White's stone cannot escape.
+]
+;W[fg]
+C[Captures
+White's stone cannot escape.
+]
+;B[fh]
+C[Captures
+White's stone cannot escape.
+This is the result if White tries to save it.
+]
+;AW[ff]AE[df][fh]
+C[Captures
+There are no ladder breakers available to White with this shape.
+However, there are other moves White can try.
+]
+;W[df]
+C[Captures
+A peep threatens to connect to the captured stone.
+]
+;B[ef]
+C[Captures
+A peep threatens to connect to the captured stone.
+]
+;W[fh]
+C[Captures
+A peep threatens to connect to the captured stone.
+]
+;B[fg]
+C[Captures
+In the end, White has been able to play two stones on the outside which may be useful in the future.
+However, these peeps are usually not quite as devastating as ladder breakers.
+]
+;AW[ed][ff]AE[df][ef][eg][fg][fh]
+C[Captures
+Liberties are always important.
+]
+;B[eg]
+C[Captures
+Liberties are always important.
+In this situation, the net does not work.
+]
+;W[ef]TR[ee][fe]
+C[Captures
+White pushes out, and the marked stones are in atari.
+]
+;B[de]
+C[Captures
+Black has to extend to avoid capture
+]
+;W[df]
+C[Captures
+But White has escaped the net, and more fighting will follow.]
+;AW[hf][hg]AE[de][df][ef][eg]
+C[Captures
+If we give White even more stones on the outside to take away Black's liberties, the situation is worse.
+]
+;B[ef]
+C[Captures
+Even the ladder does not work anymore.
+]
+;W[fg]
+C[Captures
+Black cannot continue the ladder, since two stones are in atari.
+]
+;AE[ef][fg]TR[ee][fe][gf][gg]
+C[Captures
+Black has no way to capture the single white stone.
+Always keep track of the number of liberties and develop a sense of danger for when they run low.]
+;AW[ef]AB[de]AE[ed][hf][hg]
+C[Captures
+Let's show a more successful example again. This is another pattern where the net works.
+]
+;B[dg]
+C[Captures
+With this move, White's two stones cannot escape.
+]
+;W[df]
+C[Captures
+Let's play it out to demonstrate.]
+;B[cf]
+C[Captures
+Let's play it out to demonstrate.]
+;W[eg]
+C[Captures
+Let's play it out to demonstrate.]
+;B[eh]
+C[Captures
+Let's play it out to demonstrate.]
+;W[fg]
+C[Captures
+Let's play it out to demonstrate.]
+;B[fh]
+C[Captures
+All other attempts also fail.
+]
+;AW[ch][ei][fb][gb][gd][hc][ic][jc][jd]AB[ec][fc][gc][hd][id][if][je]AE[cf][de][dg][ee][eh][fd][fe][fh][ge][gf][gg][he]TR[gd]
+C[Captures
+Let's see more capturing techniques.
+Here, the goal is for Black to capture the marked white stone.
+]
+;B[ge]TR[ch]
+C[Captures
+The ladder does not work. The marked white stone acts as a ladder breaker.
+]
+;AW[cf][de][df][ed][ee][fd]AB[ce][dd][dg][ef][fe]TR[bf]
+C[Captures
+The ladder would run up to this point, and now the pattern would continue with a play at the triangled point for Black.
+But then White connects with the ladder breaker.
+]
+;B[cg]
+C[Captures
+What if Black varies the pattern?
+]
+;W[bf]
+C[Captures
+White now has three liberties.
+]
+;B[bg]
+C[Captures
+Black tries to separate the white stones.
+]
+;W[dc]TR[ec][fc][gc]
+C[Captures
+But now White has enough liberties, and so it is Black who is captured.
+]
+;AE[bf][bg][ce][cf][cg][dc][dd][de][df][dg][ed][ee][ef][fd][fe][ge]
+C[Captures
+So, what can Black do here? There are two options.
+]
+;B[ge]
+C[Captures
+Black can still start with this move.
+]
+;W[fd]
+C[Captures
+Let's assume White believes these stones can't be captured, and extends.
+]
+;B[ee]
+C[Captures
+We saw the net pattern earlier, and this looks similar, but there is a difference.
+]
+;W[he]TR[hd][id]
+C[Captures
+Black has two stones with only two liberties, and White gives atari.
+]
+;B[ie]
+C[Captures
+These stones are important, so Black connects.
+]
+;W[fe]TR[ge]
+C[Captures
+White now threatens another stone. But Black had been planning to give it up.
+]
+;B[ff]
+C[Captures
+Rather than save the single stone, Black reduces White's liberties to one.
+]
+;W[gf]
+C[Captures
+White captures the single black stone.
+]
+;B[ed]
+C[Captures
+Now Black can give atari again - three white stones can be captured on the next move.
+]
+;W[ge]
+C[Captures
+If White tries to connect, it just enlarges the loss.
+]
+;B[gg]
+C[Captures
+Black plays the final atari, and there is no escape.
+]
+;W[]
+C[Captures
+This kind of sequence, where a player gives up a stone to force the opponent into a clump with few liberties, is called a squeeze.
+]
+;AE[ed][ee][fd][fe][ff][ge][gf][gg][he][ie]
+C[Captures
+Going back, there is another method to capture the white stone.
+It is a variant of the net.
+]
+;B[fe]
+C[Captures
+Black can play here, and there is no escape for White.
+]
+;W[ge]
+C[Captures
+Once again, let's assume White tries to run out.
+]
+;B[gf]
+C[Captures
+Black blocks.
+]
+;W[he]
+C[Captures
+White turns, and this move is atari against two black stones.
+]
+;B[ie]
+C[Captures
+Black connects, and White is down to two liberties, and cannot gain any additional ones.
+]
+;W[hf]
+C[Captures
+Any further struggle is futile.]
+;B[hg]
+C[Captures
+Any further struggle is futile.]
+;W[fd]
+C[Captures
+Any further struggle is futile.]
+;B[ed]
+C[Captures
+Any further struggle is futile.]
+;AW[di][fj]AB[ej][fi][gj]AE[ch][ec][ed][fb][fc][fe][gb][gc][gf][hc][hd][hg][ic][id][ie][if][jc][jd][je]TR[fj]
+C[Captures
+In the "Basic Tactics" tutorial, we saw that a stone on the second line is vulnerable to capture.
+]
+;AW[dh][eh][fi]AB[ei][fh][gi]AE[di][ej][fj][gj]TR[fi]
+C[Captures
+What if we move the pattern up by one line? Is the white stone still captured?
+]
+;W[fj]
+C[Captures
+Let's try to save it.]
+;B[ej]
+C[Captures
+Black blocks on the left, since a play by White here can't be allowed.
+]
+;W[gj]
+C[Captures
+White tries to run away.
+]
+;B[hj]
+C[Captures
+Taking away another liberty leaves weaknesses in Black's position.
+]
+;W[hi]
+C[Captures
+White counterattacks.]
+;B[gh]
+C[Captures
+White counterattacks.]
+;W[ij]
+C[Captures
+White counterattacks and wins the fight.]
+;AE[gh][hi][hj][ij]
+C[Captures
+Let's go back a bit.
+]
+;B[hi]
+C[Captures
+Black might try to surround a little more loosely.
+But this doesn't take away a liberty from White and thus also allows a counterattack.
+]
+;W[fg]
+C[Captures
+Forcing once is good technique.
+]
+;B[gh]
+C[Captures
+Black is forced to connect, and notice how the empty triangle shape has appeared.
+]
+;W[dj]
+C[Captures
+Now White plays here, which immobilizes the two black stones.
+This is somewhat similar to a net, and a shape that often occurs on the side.
+]
+;B[hj]
+C[Captures
+Black can try to take away White's liberties, but White gets there first.]
+;W[di]
+C[Captures
+Black can try to take away White's liberties, but White gets there first.]
+;B[gk]
+C[Captures
+Black can try to take away White's liberties, but White gets there first.]
+;W[ek]
+C[Captures
+Black can try to take away White's liberties, but White gets there first.]
+;AB[ei][ej]AE[di][dj][ek][fg][gh][gk][hi][hj]TR[gh][hi]
+C[Captures
+In this situation, there is nothing Black can do.
+However, things would be different if there were a black stone at either of the marked points (and several others).
+]
+;AE[ej][fj][gj]
+C[Captures
+So, in the original pattern, we also need at least one additional stone for Black to make the capture work.
+]
+;AB[gh]
+C[Captures
+Like this...
+]
+;AB[hi]AE[gh]
+C[Captures
+... or like this.]
+;AW[fg]AB[ce][ch]AE[dh][ei][fh][fi][hi]
+C[Captures
+The kinds of shapes we have looked at are bulding blocks.
+Let's see how the previous pattern we looked at can occur in a real sequence.
+]
+;B[]
+C[Captures
+It's not important that you memorize the following sequence. It's a corner sequence that does occur in games, but we use it just as an illustration.
+]
+;W[ci]
+C[Captures
+This move could be seen as an attempt to separate Black.
+Once again, it is not important to fully understand every move in this sequence.
+]
+;B[di]
+C[Captures
+Black responds.]
+;W[dh]
+C[Captures
+White cuts.]
+;B[ei]
+C[Captures
+Black attempts to connect to the stone in the lower right.
+]
+;W[cg]
+C[Captures
+White gives atari. This is the third-line pattern we saw, but White does not have the extra stone needed to actually capture the black stone.
+]
+;B[bh]
+C[Captures
+So, Black extends.
+]
+;W[cf]LB[bi:A]
+C[Captures
+Now, White adds a stone that would help to capture the two black stones if White could play at A.
+]
+;B[bi]
+C[Captures
+Black saves the two stones and captures a white stone instead.
+]
+;W[de]
+C[Captures
+White bends around the lone black stone, and the sequence comes to an end.
+]
+;B[]TR[ce]
+C[Captures
+Black has a lot of profit, but White has separated one black stone from the others and reduced its liberties to two.
+]
+;W[]
+C[Captures
+Since White was outnumbered at the start, this can be a reasonable way of playing.
+]
+;AW[ei][ej][ek][fa][fb][fc][fd][fe][ff][gg][gh][gi][hi][hj][hk]AB[ci][cj][ck][dg][dh][ea][eb][ec][ed][ee][ef][eg][fh][fi][fj][fk]AE[bh][bi][ce][cf][cg][ch][de]TR[eh][ei][ej][ek]SQ[fh][fi][fj][fk]
+C[Captures
+What is going on in this position?
+Sometimes it is not clear who is attacking whom. Both of the marked strings of stones are in danger of being captured.
+
+]
+;B[dj]
+C[Captures
+If Black goes first, White is in atari already.
+]
+;W[gj]
+C[Captures
+It's too late to do anything about it.
+]
+;B[dk]
+C[Captures
+Black wins.
+]
+;AW[eh][ei][ej][ek]AE[dj][dk][gj]LB[gj:A][gk:B]
+C[Captures
+And, since the position is symmetrical, the same would be true if White were to play first at A or B.
+]
+;W[]TR[eh][ei][ej][ek]SQ[fh][fi][fj][fk]
+C[Captures
+A situation where two groups are threatening to capture each other is called a capturing race. Another term for it is semeai.
+]
+;AW[hg][hh]AB[gj][gk]AE[fk][gh][gi]TR[fk]
+C[Captures
+Let's modify the position a little. Now there is a liberty shared between the two groups involved in the semeai.
+
+]
+;B[dj]
+C[Captures
+Let's play it out to see if that makes a difference.
+]
+;W[gh]
+C[Captures
+Let's play it out to see if that makes a difference.
+]
+;B[dk]
+C[Captures
+Now White is in atari again.
+]
+;W[gi]
+C[Captures
+White is too late.
+]
+;B[fk]
+C[Captures
+Black wins.
+]
+;AW[eh][ei][ej][ek]AE[dj][dk][fk][gh][gi]
+C[Captures
+So, as before, whoever goes first can win the semeai.
+]
+;B[fk]
+C[Captures
+But what if Black plays here first?
+Now the situation is the same as in the first example, but it is White's turn.
+]
+;W[gh]
+C[Captures
+White fills a liberty and is going to win the race.
+]
+;AE[fk][gh]TR[fk]
+C[Captures
+This shows a general principle: in a capturing race, it is usually best to play from the outside first, and take shared liberties only at the end.
+]
+;AW[gh][ii][ij][ik]AB[gi]AE[fj][hj][hk]
+C[Captures
+Let's add another inside liberty and see how that affects the position.
+]
+;B[dj]
+C[Captures
+Let's have both sides fill outside liberties first, as we learned.]
+;W[hj]
+C[Captures
+Let's have both sides fill outside liberties first, as we learned.]
+;B[dk]
+C[Captures
+Let's have both sides fill outside liberties first, as we learned.]
+;W[hk]TR[fj][fk]
+C[Captures
+Now we have a different situation.
+Neither side wants to play at the marked points, since that would be self-atari.
+]
+;B[]TR[fj][fk]
+C[Captures
+We saw this in the Life and Death tutorial, it is called a seki. Both sides live. In fact, it was unnecessary to fill the outside liberties.]
+;AB[cg][ch]AE[dh][di][dj][dk][hg][hj][hk]
+C[Captures
+So far, the positions have been symmetrical.
+If one side has a large advantage in the number of liberties, it may not be much of a race.
+Here, Black is down four liberties to six.]
+;B[dh]
+C[Captures
+Let's even have Black start, and play out the sequence from here.
+]
+;W[hj]
+C[Captures
+Let's even have Black start, and play out the sequence from here.
+]
+;B[di]
+C[Captures
+Let's even have Black start, and play out the sequence from here.
+]
+;W[hk]
+C[Captures
+Let's even have Black start, and play out the sequence from here.
+]
+;B[dj]
+C[Captures
+Let's even have Black start, and play out the sequence from here.
+]
+;W[fj]
+C[Captures
+Let's even have Black start, and play out the sequence from here.
+]
+;B[dk]
+C[Captures
+Let's even have Black start, and play out the sequence from here.
+]
+;W[fk]
+C[Captures
+White wins, despite Black playing first in the capturing race.
+]
+;AB[fh][fi][gi][gj][gk]AE[dh][di][dj][dk][fj][fk][hj][hk]
+C[Captures
+Going back to the original position, Black is already captured. White does not need to add stones until Black tries to start something by filling liberties.
+]
+;AW[ji][jj][jk]AB[dh][di][hj][ij][ik]AE[cg][ch]TR[hk]
+C[Captures
+Here's another possibility. In a capturing race, one side might have an eye.
+(Remember the Life and Death tutorial: a group with two eyes is alive.)
+]
+;W[]TR[hk]
+C[Captures
+Here, White has four liberties to Black's three. What happens if White goes first?
+]
+;W[fj]
+C[Captures
+White is forced to play on an inside liberty. Playing in the eye is not a valid move until it becomes a capture.
+]
+;B[dj]
+C[Captures
+After two moves, White's advantage in the number of liberties has disappeared.
+]
+;W[fk]
+C[Captures
+Continuing, White would have to play an inside liberty again, but this is self-atari.
+]
+;B[dk]
+C[Captures
+Black wins.
+]
+;AW[eh][ei][ej][ek]AE[dj][dk]
+C[Captures
+In a capturing race, the side with an eye can have a large advantage if there are shared liberties.
+]
+;AW[ac][ad][ah][bd][bh][cd][ch][ci][da][db][dc][dd][di][dj][dk][ga][gb][gc][hc][ic][jc][kc]AB[ab][ai][ak][ba][bc][bi][bj][ca][cb][cc][ha][hb][ib][ja][jb][kb]AE[dg][dh][ea][eb][ec][ed][ee][ef][eg][eh][ei][ej][ek][fa][fb][fc][fd][fe][ff][fg][fh][fi][gg][gh][gi][gj][gk][hh][hi][hj][ii][ij][ik][ji][jj][jk]
+C[Captures
+Captures are inextricably linked to life and death - see the earlier tutorial.
+This position shows some minimal black groups which are alive.
+]
+;AW[ak][ba][ja]
+C[Captures
+In contrast, with white stones on the vital points, these groups are unable to make two eyes and are dead as they stand.
+]
+;AW[bb]AB[ac]AE[ah][ai][ak][ba][bh][bi][bj][ca][ch][ci][cj][ck][da][di][dj][dk][ga][gb][gc][ha][hb][hc][ib][ic][ja][jb][jc][kb][kc]
+C[Captures
+Earlier, we stated that playing moves to capture stones which cannot escape is unnecessary and therefore bad. But life and death considerations give us counterexamples.
+]
+;B[ba]
+C[Captures
+Here, Black should take the white stone. Black's group now has two eyes and is alive.
+]
+;AW[bb]AE[ba]
+C[Captures
+What happens if Black leaves the position without playing another move?
+]
+;W[ba]
+C[Captures
+White extends, making a larger sacrifice.
+]
+;B[ca]
+C[Captures
+Black can capture these two white stones.
+]
+;W[da]
+C[Captures
+Let's play out a few more moves...]
+;B[aa]
+C[Captures
+White's two stones are captured, but now we see the problem: Black has only one eye, and no way to make another.
+]
+;W[ba]
+C[Captures
+If White needed to remove the black stones, it can be done by just filling the two remaining liberties.
+]
+;AW[bj][ch][ci][cj][dg][dh][dk][eg][ej][fg][fj][fk][gh][gk][hh][ih][ii][ij][ik]AB[di][dj][ei][fi][gi][gj][hj][hk]AE[aa][ab][ac][ad][ba][bc][bd][ca][cb][cc][cd][da][db][dc][dd]
+C[Captures
+This is an important concept: sacrifices can be good to destroy the opponent's shape. Here's a more spectactular example.
+]
+;W[ek]
+C[Captures
+White makes a big clump with only one liberty. In this position, that is a good move.
+]
+;B[ck]
+C[Captures
+Black might be happy to take out six white stones.
+]
+;W[fk]
+C[Captures
+But now White plays on the vital point, and Black can make only one eye in the available space.
+This is the "bulky five" shape which was shown in the life and death tutorial.]
+;B[ek]
+C[Captures
+As an example, if Black tries to subdivide the space into two eyes...
+]
+;W[fj]
+C[Captures
+White extends. White's two stones can be captured again, but that doesn't help Black: only one eye will remain.
+]
+;AW[di][dj][ei][fi][gi][hi][hj]AB[ej][fj]AE[bj][ch][ci][cj][ck][dg][dh][eg][ek][fg][fk][gh][hh][hk][ih][ii][ij][ik]
+C[Captures
+Let's look at something else. We have a black group with three liberties. It looks a little sad and has no hope of living.
+]
+;AW[bi][bj][ci][ii][ji][jj]AB[cj][dj][hj][ij]
+C[Captures
+Things get more interesting when we enlarge the black group.
+Now, considerations of life and death come into play.
+]
+;B[ik]
+C[Captures
+Let's say Black plays here.
+]
+;W[ck]
+C[Captures
+White reduces the available eye shape.
+A move like this is often a killing move, so it is important to remember.
+Here, it does not work.]
+;B[dk]
+C[Captures
+Black descends again, and the four-space shape should be familiar from the earlier tutorial.
+Black is alive.
+]
+;AE[ck][dk][ik]
+C[Captures
+What if White goes first?
+]
+;W[ik]
+C[Captures
+This sort of bend around is called a hane (approximately pronounced "hah-ney").
+Hane once...
+]
+;B[hk]
+C[Captures
+Black answers.]
+;W[ck]
+C[Captures
+Hane twice...
+]
+;B[dk]
+C[Captures
+Black answers.
+]
+;W[fk]
+C[Captures
+Play on the vital point, and Black is dead.
+]
+;B[]TR[ck][ik]
+C[Captures
+The two marked white stones are in atari and can be captured, but that is irrelevant to the outcome. Capturing them only makes false eyes.
+]
+;B[jk]
+C[Captures
+Let's play it out for a bit.]
+;W[kj]
+C[Captures
+Let's play it out for a bit.]
+;B[bk]
+C[Captures
+Let's play it out for a bit.]
+;W[kk]TR[jk]
+C[Captures
+The marked black stone can be captured. It's a ko shape, but that does not change the fact that this is a dead black group.]
+;AE[bk][dk][fk][hk][jk][kj][kk]
+C[Captures
+A group like this, seven stones on the second line, is unsettled. Whoever plays first can either live or kill.
+]
+;AW[ki][kj]AB[jj]
+C[Captures
+It follows relatively easily that a group that is one stone longer is alive.
+]
+;AW[ij]AE[ji][jj][ki][kj]
+C[Captures
+On the other hand, this group is dead as it stands. "Six die, eight live" is a Go proverb.
+])

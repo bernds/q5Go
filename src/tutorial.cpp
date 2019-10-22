@@ -18,12 +18,13 @@ struct tutorial {
 	int lines;
 };
 
-static std::array<tutorial, 4> tutorials =
+static std::array<tutorial, 5> tutorials =
 {
 	tutorial { QObject::tr ("The Rules of Go"), ":/Tutorials/sgfs/rules.sgf", 12 },
 	tutorial { QObject::tr ("Life and Death"), ":/Tutorials/sgfs/lnd.sgf", 12 },
 	tutorial { QObject::tr ("Basic Tactics"), ":/Tutorials/sgfs/tactics.sgf", 12 },
-	tutorial { QObject::tr ("Connections"), ":/Tutorials/sgfs/connections.sgf", 12 }
+	tutorial { QObject::tr ("Connections"), ":/Tutorials/sgfs/connections.sgf", 12 },
+	tutorial { QObject::tr ("Captures"), ":/Tutorials/sgfs/captures.sgf", 12 }
 };
 
 Tutorial_Slideshow::Tutorial_Slideshow (QWidget *parent)
