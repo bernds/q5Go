@@ -2700,10 +2700,13 @@ void MainWindow::on_colorButton_clicked (bool)
 /* The "Edit Position" button: Switch to edit mode.  */
 void MainWindow::doEditPos (bool toggle)
 {
-	if (toggle)
+	if (toggle) {
+		editPosButton->setText (tr ("Cancel edit"));
 		setGameMode (modeEdit);
-	else
+	} else {
+		editPosButton->setText (tr ("Edit position"));
 		setGameMode (m_remember_mode);
+	}
 }
 
 /* The "Edit Game" button: Open a new window to edit observed game.  */
