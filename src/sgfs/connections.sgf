@@ -91,7 +91,7 @@ There is only one choice for Black's move.
 ]
 ;W[]LB[eg:B][gf:A]
 C[Connections
-Once again, Black has miai alternatives: a solid connection at B is nice, but capturing a stone at A would be just as good.
+Now, Black has miai alternatives: a solid connection at B is nice, but capturing a stone at A would be just as good.
 ]
 ;AE[dd][de][ed][ee][ef][fd][ff][gd][ge]
 C[Connections
@@ -129,7 +129,7 @@ In summary, the one-space jump can be cut. In practice, this is rarely a good id
 ;AW[fe][gf]AB[ff][ge]AE[cd][ch][dc][dd][de][dg][dh][di][ec][ed][ee][eg][eh][ei][gc][gd][gg][gh][gi][hc][hd][he][hg][hh][hi][id][ih]
 C[Connections
 In fact, there is an important lesson here.
-If your stones are cut, so are those of your opponent.
+Fundamentally, if your stones are cut, so are those of your opponent.
 ]
 ;W[]
 C[Connections
@@ -171,6 +171,7 @@ But there is also one White stone that's separated from the others, so this may 
 ;B[]
 C[Connections
 It's important to look for possibilities such as this just as much as one looks for ways to connect.
+
 End of digression.]
 ;AB[fe]AE[ch][dg][ee][ef][eg][ei][ff][gf][gi][hh]
 C[Connections
@@ -386,19 +387,20 @@ This is balanced out by a little more development.
 C[Connections
 Questions of positional judgment are rarely easy. Let's just say the tiger's mouth is a frequently used connection.
 ]
-;AW[bi][bj][bk][ci][dh][eh][fh][fi][gi][gj][gk]AB[cj][ck][di][dk][ei][fj][fk]AE[gh]
+;AW[bi][bj][ci][dh][eh][fh][fi][gi][gj][gk]AB[cj][di][dk][ei][fj][fk]AE[gh]
 C[Connections
 Let's use the opportunity for a brief digression about bad shape. It is important not to misapply this concept.
 ]
 ;B[ej]
 C[Connections
-With this move, Black makes two empty triangles. But more importantly, the group now has two eyes and is alive.
-If White had played here, all black stones would be dead.
+Black's move makes two empty triangles. But more importantly, the group now has two eyes and is alive. A white move here would have killed it.
+Bad shape is not relevant in life and death situations.
 ]
 ;W[]
 C[Connections
-It is important to avoid bad shape where possible.
-But sometimes, it is necessary, and if the opponent makes equally bad shape, it's often a fair result.
+It is important to avoid bad shape if possible.
+But sometimes, it is necessary. And in some situations, you can force the opponent to make equally bad shape, leading to a fair result.
+
 End of digression.
 ]
 ;AW[ei][ej][gg][gh]AB[fe][ff][fg][fh][fi]AE[bi][bj][bk][ch][ci][cj][ck][dh][di][dk][fj][fk][gk]
