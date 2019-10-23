@@ -1,8 +1,8 @@
-(;FF[4]GM[1]CA[UTF-8]AP[q5go:0.9]
+(;FF[4]GM[1]CA[UTF-8]AP[q5go:1.0]
 SZ[7]
 PW[White]
 PB[Black]
-KM[6.500000]LB[ac:W][bc:e][be:t][cc:l][ce:o][dc:c][dd:][ec:o][ee:G][fc:m][fe:o][gc:e]
+KM[6.500000]LB[ac:W][bc:e][be:t][cc:l][ce:o][dc:c][ec:o][ee:G][fc:m][fe:o][gc:e]
 C[Rules of Go
 
 This is an introduction to the rules of Go. Use the cursor keys or the buttons to navigate.
@@ -27,10 +27,12 @@ The players take turns placing stones on intersections.
 
 Black goes first.
 
-Once placed, a stone never moves, but it can be captured.
-
-]
-;W[]CR[bc][cb][cd][dc][de][ed][ef][fc][fe][gb][gd]LB[cc:1][ee:2][gc:3]
+Once placed, a stone never moves, but it can be captured.]
+;AE[ee][gc][cc]
+C[Rules of Go
+Usually, some intersections on the board are marked with thicker dots.
+These are called star points, but they are for visual reference only. They have no special properties.]
+;CR[bc][cb][cd][dc][de][ed][ef][fc][fe][gb][gd]AB[cc][gc]AW[ee]
 C[Rules of Go
 Intersections are connected by lines on the board.
 Empty spaces next to a stone are called <font>liberties</font>.
@@ -47,11 +49,11 @@ Stones need liberties to remain on the board.
 
 Once the opponent removes the last liberty, the stone is captured.
 ]
-;AW[bg][cf]AB[cg]AE[bc][cb][cd][dc]CR[dg]
+;AE[bc][cb][cd][dc]AW[bg][cf]AB[cg]CR[dg]
 C[Rules of Go
 There are fewer liberties at the edge (or in the corners) of the board.
 
-]
+]MN[7]
 ;W[dg]
 C[Rules of Go
 There are fewer liberties at the edge (or in the corners) of the board.
@@ -215,7 +217,7 @@ Captures are worth a point at the end of the game.
 
 But surrounding empty intersections to make <font>territory</font> is also worth a point each.
 ]
-;B[]TW[ag][bf][cf][cg][de][df][dg][ee][ef][eg][fe][ff][fg][ge][gf][gg]TB[aa][ab][ac][ba][bb][bc][ca][cb][cc][da][db][ea][eb][fa][ga]
+;W[]TW[ag][bf][cf][cg][de][df][dg][ee][ef][eg][fe][ff][fg][ge][gf][gg]TB[aa][ab][ac][ba][bb][bc][ca][cb][cc][da][db][ea][eb][fa][ga]
 C[Rules of Go
 In this game, Black has surrounded 15 points of territory, while White has 16.
 
@@ -245,7 +247,7 @@ Players pass when they see no more useful moves, and if both players pass, the g
 ;AW[ae][be][ce][cf][df][dg]AB[ab][ba][bb][fa]AE[aa][af][cg][ga]
 C[Rules of Go
 Back to the original position. More experienced players would pass here to end the game.]
-;B[]TW[aa][ab][ba][bb][da][db][fa][ga]TB[ae][af][ag][be][ce][cf][cg][df][dg][ee][fd][ff][fg][gd][ge][gf][gg]
+;W[]TW[aa][ab][ba][bb][da][db][fa][ga]TB[ae][af][ag][be][ce][cf][cg][df][dg][ee][fd][ff][fg][gd][ge][gf][gg]
 C[Rules of Go
 This is the result of scoring the game: dead stones are simply marked as such and removed from the board as prisoners.
 But how to identify dead stones? This will be shown in the next tutorial.
