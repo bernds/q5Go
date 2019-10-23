@@ -2365,7 +2365,7 @@ void MainWindow::setGameMode (GameMode mode)
 		tab_tg->setParent (nullptr);
 
 	followButton->setVisible (mode == modeObserveGTP);
-	passButton->setVisible (mode != modeObserve && mode != modeObserveGTP);
+	passButton->setVisible (mode != modeObserve && mode != modeObserveGTP && mode != modeBatch);
 	doneButton->setVisible (mode == modeScore || mode == modeScoreRemote);
 	scoreButton->setVisible (mode == modeNormal || mode == modeEdit || mode == modeScore);
 	undoButton->setVisible (mode == modeScoreRemote || mode == modeMatch || mode == modeComputer || mode == modeTeach);
