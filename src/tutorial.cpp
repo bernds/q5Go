@@ -29,7 +29,7 @@ static std::array<tutorial, 6> tutorials =
 };
 
 Tutorial_Slideshow::Tutorial_Slideshow (QWidget *parent)
-	: BaseSlideView<Ui::SlideshowDialog> (parent)
+	: BaseSlideView<Ui::SlideshowDialog, QWidget> (parent)
 {
 	m_builtin_tutorial = true;
 	int i = 0;

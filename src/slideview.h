@@ -17,8 +17,8 @@ namespace Ui {
 	class SlideshowDialog;
 };
 
-template<class UI>
-class BaseSlideView : public QDialog
+template<class UI, class Base>
+class BaseSlideView : public Base
 {
 protected:
 	UI *ui;
@@ -54,7 +54,7 @@ public:
 	void set_active (game_state *st);
 };
 
-class SlideView : public BaseSlideView<Ui::SlideViewDialog>
+class SlideView : public BaseSlideView<Ui::SlideViewDialog, QDialog>
 {
 	QPixmap render_export ();
 	void inputs_changed ();

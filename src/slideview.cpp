@@ -1,6 +1,5 @@
 #include <QPixmap>
 #include <QCheckBox>
-#include <QDialog>
 
 #include "gogame.h"
 #include "board.h"
@@ -25,9 +24,9 @@ void AspectContainer::fix_aspect ()
 		       (actual.height () - csz.height ()) / 2);
 }
 
-template<class UI>
-BaseSlideView<UI>::BaseSlideView (QWidget *parent)
-	: QDialog (parent), ui (new UI), m_board_exporter (new FigureView)
+template<class UI, class Base>
+BaseSlideView<UI, Base>::BaseSlideView (QWidget *parent)
+	: Base (parent), ui (new UI), m_board_exporter (new FigureView)
 {
 	ui->setupUi (this);
 
@@ -40,34 +39,34 @@ BaseSlideView<UI>::BaseSlideView (QWidget *parent)
 	m_scene = new QGraphicsScene (0, 0, 30, 30, this);
 	ui->slideView->setScene (m_scene);
 
-	connect (ui->slideView, &SizeGraphicsView::resized, [this] () { view_resized (); });
+	this->connect (ui->slideView, &SizeGraphicsView::resized, [this] () { view_resized (); });
 }
 
-template<class UI>
-BaseSlideView<UI>::~BaseSlideView ()
+template<class UI, class Base>
+BaseSlideView<UI, Base>::~BaseSlideView ()
 {
 	delete m_scene;
 	delete m_board_exporter;
 	delete ui;
 }
 
-template<class UI>
-void BaseSlideView<UI>::set_game (go_game_ptr gr)
+template<class UI, class Base>
+void BaseSlideView<UI, Base>::set_game (go_game_ptr gr)
 {
 	m_game = gr;
 	m_board_exporter->reset_game (gr);
 	redraw ();
 }
 
-template<class UI>
-void BaseSlideView<UI>::set_active (game_state *st)
+template<class UI, class Base>
+void BaseSlideView<UI, Base>::set_active (game_state *st)
 {
 	m_board_exporter->set_displayed (st);
 	redraw ();
 }
 
-template<class UI>
-QPixmap BaseSlideView<UI>::render_text (int w, int h)
+template<class UI, class Base>
+QPixmap BaseSlideView<UI, Base>::render_text (int w, int h)
 {
 	int margin_px = w * m_margin / 100.;
 	QFontMetrics fm (m_font);
@@ -164,8 +163,8 @@ QPixmap BaseSlideView<UI>::render_text (int w, int h)
 	return pm;
 }
 
-template<class UI>
-void BaseSlideView<UI>::update_text_font ()
+template<class UI, class Base>
+void BaseSlideView<UI, Base>::update_text_font ()
 {
 	if (m_game == nullptr)
 		return;
@@ -178,8 +177,8 @@ void BaseSlideView<UI>::update_text_font ()
 	m_text_item->setPos (h, 0);
 }
 
-template<class UI>
-void BaseSlideView<UI>::redraw ()
+template<class UI, class Base>
+void BaseSlideView<UI, Base>::redraw ()
 {
 	if (m_game == nullptr)
 		return;
@@ -197,15 +196,15 @@ void BaseSlideView<UI>::redraw ()
 	m_bg_item->setZValue (-1);
 }
 
-template<class UI>
-void BaseSlideView<UI>::view_resized ()
+template<class UI, class Base>
+void BaseSlideView<UI, Base>::view_resized ()
 {
 	m_displayed_sz = ui->slideView->size ();
 	redraw ();
 }
 
 SlideView::SlideView (QWidget *parent)
-	: BaseSlideView<Ui::SlideViewDialog> (parent)
+	: BaseSlideView<Ui::SlideViewDialog, QDialog> (parent)
 {
 	update_prefs ();
 
@@ -396,5 +395,5 @@ void SlideView::choose_file ()
 	ui->fileTemplateEdit->setText (filename);
 }
 
-template class BaseSlideView<Ui::SlideViewDialog>;
-template class BaseSlideView<Ui::SlideshowDialog>;
+template class BaseSlideView<Ui::SlideViewDialog, QDialog>;
+template class BaseSlideView<Ui::SlideshowDialog, QWidget>;

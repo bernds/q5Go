@@ -2,7 +2,7 @@
 
 #include <QMap>
 
-class Tutorial_Slideshow : public BaseSlideView<Ui::SlideshowDialog>
+class Tutorial_Slideshow : public BaseSlideView<Ui::SlideshowDialog, QWidget>
 {
 	void update_buttons ();
 	void load_tutorial (int);
