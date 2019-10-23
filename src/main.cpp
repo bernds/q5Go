@@ -572,10 +572,10 @@ void show_tutorials ()
 
 int main(int argc, char **argv)
 {
+	QApplication::setAttribute (Qt::AA_EnableHighDpiScaling);
+
 	QApplication myapp(argc, argv);
 	qgo_app = &myapp;
-
-	myapp.setAttribute (Qt::AA_EnableHighDpiScaling);
 
 	QCommandLineParser cmdp;
 	QCommandLineOption clo_client { { "c", "client" }, QObject::tr ("Show the Go server client window (default if no other arguments)") };
