@@ -73,6 +73,7 @@ Tutorial_Slideshow::Tutorial_Slideshow (QWidget *parent)
 		});
 	connect (ui->editButton, &QPushButton::clicked, [this] (bool) {
 			MainWindow *win = new MainWindow (0, m_game, screen_key (this));
+			win->set_game_position (m_board_exporter->displayed ());
 			win->show ();
 		});
 	load_tutorial (0);
