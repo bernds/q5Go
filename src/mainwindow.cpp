@@ -2625,7 +2625,7 @@ void MainWindow::setMoveData (const game_state *gs)
 		int y = gs->get_move_y ();
 		s.append(" (");
 		s.append((to_move == black ? w_str : b_str) + " ");
-		s.append(QString(QChar(static_cast<const char>('A' + (x < 9 ? x : x + 1)))));
+		s.append(QString(QChar('A' + (x < 9 ? x : x + 1))));
 		s.append(QString::number (b.size_y () - y) + ")");
 	}
 	s.append (QObject::tr ("\nVariation ") + QString::number (var_nr)
