@@ -32,12 +32,12 @@ Once placed, a stone never moves, but it can be captured.]
 C[Rules of Go
 Usually, some intersections on the board are marked with thicker dots.
 These are called star points, but they are for visual reference only. They have no special properties.]
-;CR[bc][cb][cd][dc][de][ed][ef][fc][fe][gb][gd]AB[cc][gc]AW[ee]
+;TR[bc][cb][cd][dc][de][ed][ef][fc][fe][gb][gd]AB[cc][gc]AW[ee]
 C[Rules of Go
 Intersections are connected by lines on the board.
 Empty spaces next to a stone are called <font>liberties</font>.
 ]
-;AW[cb][cd][dc]AE[ee][gc]CR[bc]
+;AW[cb][cd][dc]AE[ee][gc]TR[bc]
 C[Rules of Go
 Stones need liberties to remain on the board.
 
@@ -49,7 +49,7 @@ Stones need liberties to remain on the board.
 
 Once the opponent removes the last liberty, the stone is captured.
 ]
-;AE[bc][cb][cd][dc]AW[bg][cf]AB[cg]CR[dg]
+;AE[bc][cb][cd][dc]AW[bg][cf]AB[cg]TR[dg]
 C[Rules of Go
 There are fewer liberties at the edge (or in the corners) of the board.
 
@@ -59,7 +59,7 @@ C[Rules of Go
 There are fewer liberties at the edge (or in the corners) of the board.
 Thus, fewer moves are necessary to capture a stone on the edge.
 ]
-;AW[be][cd][df][ee]AB[ce][de]AE[bg][dg]CR[dd]
+;AW[be][cd][df][ee]AB[ce][de]AE[bg][dg]TR[dd]
 C[Rules of Go
 Stones of the same colour are also connected by the lines.
 
@@ -71,7 +71,7 @@ Stones of the same colour are also connected by the lines.
 
 Connected stones form a unit that can only be captured as a whole, when all liberties are filled.
 ]
-;AB[bd][ce][de]AE[dd]CR[dd]
+;AB[bd][ce][de]AE[dd]TR[dd]
 C[Rules of Go
 Stones of the same colour are also connected by the lines.
 
@@ -86,7 +86,7 @@ Diagonals do not form a connection.
 
 Different units can be captured separately.
 ]
-;AB[ce][de]AE[bd][dd]CR[dd]
+;AB[ce][de]AE[bd][dd]TR[dd]
 C[Example
 
 What if the black stones try to escape capture?
