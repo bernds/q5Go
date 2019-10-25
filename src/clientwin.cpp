@@ -197,7 +197,6 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	connect(parser, &Parser::signal_move, qgoif, &qGoIF::slot_move);
 	connect(parser, &Parser::signal_gamemove, qgoif, &qGoIF::slot_gamemove);
 	connect(parser, &Parser::signal_kibitz, qgoif, &qGoIF::slot_kibitz);
-	connect(parser, &Parser::signal_title, qgoif, &qGoIF::slot_title);
 	connect(parser, &Parser::signal_komi, qgoif, &qGoIF::slot_komi);
 	connect(parser, &Parser::signal_freegame, qgoif, &qGoIF::slot_freegame);
 	connect(parser, &Parser::signal_matchcreate, qgoif, &qGoIF::slot_matchcreate);

@@ -241,6 +241,8 @@ public:
 	void game_end (const QString &id, const QString &txt);
 	void game_end (const QString &player1, const QString &player2, const QString &txt);
 
+	void set_game_title (int, const QString&);
+
 	void handle_talk (const QString &pl, const QString &txt);
 
 public slots:
@@ -248,7 +250,6 @@ public slots:
 	void slot_move(GameInfo*);
 	void slot_gamemove(Game*);
 	void slot_kibitz(int, const QString&, const QString&);
-	void slot_title(const GameInfo *, const QString&);
 	void slot_komi(const QString&, const QString&, bool);
 	void slot_freegame(bool);
 	void slot_matchcreate(const QString&, const QString&);

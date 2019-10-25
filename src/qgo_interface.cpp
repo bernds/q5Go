@@ -651,9 +651,9 @@ void qGoIF::slot_matchsettings(const QString &id, const QString &handicap, const
 	qWarning("BOARD CORRESPONDING TO GAME SETTINGS NOT FOUND !!!");
 }
 
-void qGoIF::slot_title(const GameInfo *gi, const QString &title)
+void qGoIF::set_game_title (int nr, const QString &title)
 {
-	qGoBoard *qb = find_game_id (gi->nr.toInt ());
+	qGoBoard *qb = find_game_id (nr);
 	if (qb)
 		qb->set_title (title);
 }

@@ -587,7 +587,7 @@ InfoType Parser::cmd9(const QString &line)
 		// in aGameInfo.
 		QString t = line.section(':', 1);
 		qDebug() << "got game title " << t << " for " << aGameInfo->nr;
-		emit signal_title(aGameInfo, t);
+		m_qgoif->set_game_title (aGameInfo->nr.toInt (), t);
 		return IT_OTHER;
 	}
 	else if (line.contains("offers a new komi "))
