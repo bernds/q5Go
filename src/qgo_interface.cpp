@@ -292,20 +292,10 @@ void qGoIF::slot_move (GameInfo *gi)
 	if (gi->mv_col == "T") {
 		// set times
 		b->setTimerInfo (gi->btime, gi->bstones, gi->wtime, gi->wstones);
-	} else {
+	} else if (b->get_havegd ()) {
 		stone_color sc = gi->mv_col == "B" ? black : white;
 
-		// set move if game is initialized
-		if (b->get_havegd ())
-		{
-			// get all moves till now one times if kibitzing
-			if (b->get_Mode() == modeObserve && !b->get_sentmovescmd()) {
-				b->set_sentmovescmd (true);
-				client_window->sendcommand ("moves " + gi->nr, false);
-				client_window->sendcommand ("all " + gi->nr, false);
-			} else
-				b->set_move (sc, gi->mv_pt, gi->mv_nr);
-		}
+		b->set_move (sc, gi->mv_pt, gi->mv_nr);
 	}
 }
 
@@ -354,7 +344,6 @@ void qGoIF::set_observe (const QString& gameno)
 	b = new qGoBoard (this, nr);
 	boardlist.append (b);
 
-	b->set_sentmovescmd(true);
 	client_window->sendcommand ("games " + gameno, false);
 	client_window->sendcommand ("moves " + gameno, false);
 	client_window->sendcommand ("all " + gameno, false);
@@ -464,7 +453,6 @@ void qGoIF::create_match (const QString &gameno, const QString &opponent, bool r
 	}
 
 	if (resumed) {
-		b->set_sentmovescmd (true);
 		client_window->sendcommand ("games " + gameno, false);
 		client_window->sendcommand ("moves " + gameno, false);
 		client_window->sendcommand ("all " + gameno, false);

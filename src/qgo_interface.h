@@ -99,8 +99,6 @@ public:
 	void set_komi(const QString&);
 	void set_freegame(bool);
 	bool get_havegd() { return m_game != nullptr; }
-	bool get_sentmovescmd() { return sent_movescmd; }
-	void set_sentmovescmd(bool m) { sent_movescmd = m; }
 	bool get_adj() { return adjourned; }
 	QString get_bplayer() { return QString::fromStdString (m_game->info ().name_b); }
 	QString get_wplayer() { return QString::fromStdString (m_game->info ().name_w); }
@@ -185,7 +183,6 @@ protected:
 private:
 	int timer_id;
 	bool game_paused;
-	bool sent_movescmd;
 	bool adjourned;
 	bool myColorIsBlack;
 	GameMode gameMode;
