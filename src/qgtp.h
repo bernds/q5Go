@@ -15,13 +15,13 @@ class GTP_Process;
 
 class GTP_Controller
 {
-	friend class GTP_Process;
 	QWidget *m_parent;
 
 protected:
 	analyzer_id m_id;
 
 	GTP_Controller (QWidget *p) : m_parent (p) { }
+	~GTP_Controller () = default;
 	GTP_Process *create_gtp (const Engine &engine, int size_x, int size_y, double komi, bool show_dialog = true);
 	GTP_Process *create_gtp (const Engine &engine, int size, double komi, bool show_dialog = true)
 	{
