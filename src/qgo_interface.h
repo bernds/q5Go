@@ -243,6 +243,7 @@ public:
 
 	void set_game_title (int, const QString&);
 	void resume_own_game (const QString &, const QString &, const QString &);
+	void resume_observe (const QString &, const QString &, const QString &);
 	void create_match (const QString&, const QString&, bool resumed = false);
 
 	void handle_talk (const QString &pl, const QString &txt);

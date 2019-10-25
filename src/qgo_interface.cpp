@@ -322,49 +322,6 @@ bool qGoIF::parse_move (int src, GameInfo* gi, Game* g, QString txt)
 			else
 				game_id = g->nr.toInt();
 
-			if (g->Sz == QString("@"))
-			{
-				// look for adjourned games
-				for (auto qb: boardlist) {
-					if (qb->get_adj() && qb->get_id() == 10000 &&
-					    qb->get_bplayer() == g->bname &&
-					    qb->get_wplayer() == g->wname)
-					{
-						qDebug("ok, adjourned game found ...");
-						if (g->bname != myName && g->wname != myName)
-							// observe if I'm not playing
-							client_window->sendcommand ("observe " + g->nr, false);
-						else
-							// ensure that my game is correct stated
-							client_window->sendcommand ("games " + g->nr, false);
-						qb->set_sentmovescmd(true);
-						qb->set_id(g->nr.toInt());
-#if 0
-						qb->setGameData();
-						qb->setMode();
-#endif
-
-						qb->set_adj(false);
-//						qb->get_win()->toggleMode();
-						qb->set_runTimer();
-						qb->set_sentmovescmd(true);
-						client_window->sendcommand ("moves " + g->nr, false);
-						client_window->sendcommand ("all " + g->nr, false);
-
-						qb->send_kibitz(tr("Game continued as Game number %1").arg(g->nr));
-						// show new game number;
-						qb->get_win()->update_game_record ();
-
-						// renew refresh button
-						qb->get_win()->refreshButton->setText(QObject::tr("Refresh", "button label"));
-
-						n_observed++;
-						client_window->update_observed_games (n_observed);
-
-						return true;
-					}
-				}
-			}
 			break;
 
 		default:
@@ -492,6 +449,43 @@ void qGoIF::set_observe (const QString& gameno)
 
 	n_observed++;
 	client_window->update_observed_games (n_observed);
+}
+
+/* Called if the server informs us that a game has restarted (as indicated by a move number
+   higher than the starting move).
+   We check the list of adjourned games to see if there is a game between these two players
+   that we were observing before it adjourned.
+   This code does not currently trigger, and hasn't worked in a long while.
+   It's kept for reference, and also because making it work again for observed games (as opposed to
+   matches) shouldn't be too difficult.  */
+
+void qGoIF::resume_observe (const QString &gameno, const QString &wname, const QString &bname)
+{
+	for (auto qb: boardlist) {
+		if (qb->get_adj () && qb->get_id() == 10000
+		    && qb->get_bplayer() == bname && qb->get_wplayer() == wname)
+		{
+			qDebug("ok, adjourned game found ...");
+
+			qb->set_id (gameno.toInt());
+			qb->send_kibitz (tr ("Game continued as Game number %1").arg (gameno));
+			// show new game number;
+			qb->get_win()->update_game_record ();
+
+			qb->set_adj (false);
+
+			qb->set_runTimer ();
+			qb->set_sentmovescmd (true);
+			client_window->sendcommand ("observe " + gameno, false);
+			client_window->sendcommand ("moves " + gameno, false);
+			client_window->sendcommand ("all " + gameno, false);
+
+			n_observed++;
+			client_window->update_observed_games (n_observed);
+
+			return;
+		}
+	}
 }
 
 // a match is created

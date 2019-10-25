@@ -1429,7 +1429,7 @@ InfoType Parser::cmd21(const QString &line)
 			aGame->running = true;
 
 			client_window->server_add_game (aGame);
-			emit signal_gamemove(aGame);
+			m_qgoif->resume_observe (aGame->nr, aGame->wname, aGame->bname);
 			return GAME;
 		}
 
