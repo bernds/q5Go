@@ -10,9 +10,10 @@
 #ifdef OWN_DEBUG_MODE
 void myMessageHandler(QtMsgType type, const QMessageLogContext &, const QString &msg)
 {
-	if (debug_stream != nullptr)
+	if (debug_stream != nullptr) {
 		*debug_stream << msg << "\n";
-
+		debug_stream->flush ();
+	}
 	if (debug_view == nullptr || qgo_app->startingUp () || qgo_app->closingDown ())
 		return;
 
