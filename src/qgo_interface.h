@@ -242,6 +242,7 @@ public:
 	void game_end (const QString &player1, const QString &player2, const QString &txt);
 
 	void set_game_title (int, const QString&);
+	void resume_own_game (const QString &, const QString &, const QString &);
 
 	void handle_talk (const QString &pl, const QString &txt);
 

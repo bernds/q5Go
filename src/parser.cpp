@@ -1284,13 +1284,7 @@ InfoType Parser::cmd15(const QString &line)
 		{
 			// if a stored game is restarted then send start message first
 			// -> continuation of case 9
-			aGame->nr = aGameInfo->nr;
-			aGame->wname = aGameInfo->wname;
-			aGame->bname = aGameInfo->bname;
-			aGame->Sz = "@@";
-			aGame->running = true;
-
-			emit signal_gamemove(aGame);
+			m_qgoif->resume_own_game (aGameInfo->nr, aGameInfo->wname, aGameInfo->bname);
 
 			// reset memory
 			memory_str = QString::null;

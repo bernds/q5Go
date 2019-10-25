@@ -324,7 +324,7 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 			else
 				game_id = g->nr.toInt();
 
-			if (g->Sz == QString("@") || g->Sz == QString("@@"))
+			if (g->Sz == QString("@"))
 			{
 				// look for adjourned games
 				for (auto qb: boardlist) {
@@ -366,19 +366,6 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 						return true;
 					}
 				}
-			}
-
-			// special case: your own game
-			if (g->Sz == QString("@@"))// || g->bname == myName || g->wname == myName)
-			{
-				is_own = true;
-				// set up new game
-				if (g->bname == g->wname)
-					// teaching game
-					src = 4, mode = modeTeach;
-				else
-					// match
-					src = 3, mode = modeMatch;
 			}
 			break;
 
@@ -574,6 +561,42 @@ void qGoIF::slot_matchcreate(const QString &gameno, const QString &opponent)
 		parse_move(4, 0, 0, gameno);
 	else
 		parse_move(3, 0, 0, gameno);
+}
+
+// a match is created
+void qGoIF::resume_own_game (const QString &nr, const QString &wname, const QString &bname)
+{
+	// Look for adjourned games.
+	// Duplicated from parse_move, while we disentangle that function.
+	// This code does not actually trigger at the moment, and hasn't in a good long while.
+	for (auto qb: boardlist) {
+		if (qb->get_adj() && qb->get_id() == 10000 &&
+		    qb->get_bplayer() == bname && qb->get_wplayer() == wname)
+		{
+			qDebug("ok, adjourned game found ...");
+			// ensure that my game is correct stated
+			client_window->sendcommand ("games " + nr, false);
+			client_window->sendcommand ("moves " + nr, false);
+			client_window->sendcommand ("all " + nr, false);
+			qb->set_sentmovescmd(true);
+
+			qb->set_id (nr.toInt());
+
+			qb->set_adj(false);
+			qb->set_runTimer();
+
+			qb->send_kibitz (tr ("Game continued as Game number %1").arg (nr));
+			// show new game number;
+			qb->get_win ()->update_game_record ();
+
+			n_observed++;
+			client_window->update_observed_games (n_observed);
+
+			return;
+		}
+	}
+
+	slot_matchcreate (nr, wname == myName ? bname : wname);
 }
 
 // remove all boards
@@ -1064,7 +1087,6 @@ void qGoIF::observer_list_end (int id)
 qGoBoard::qGoBoard(qGoIF *qif, int gameid) : m_qgoif (qif), id (gameid)
 {
 	qDebug("::qGoBoard()");
-	sent_movescmd = false;
 	adjourned = false;
 	mv_counter = -1;
 	requests_set = false;
