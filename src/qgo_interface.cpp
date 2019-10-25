@@ -286,10 +286,6 @@ void qGoIF::handle_talk (const QString &pl, const QString &txt)
 // handle move info and distribute to different boards
 bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 {
-#ifdef SHOW_MOVES_DLG
-	static Talk *dlg;
-#endif
-
 	int         game_id = 0;
 	stone_color sc = none;
 	QString     pt;
@@ -408,18 +404,6 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 			return false;
 	}
 
-#ifdef SHOW_MOVES_DLG
-	// dialog recently used?
-	if (!dlg)
-	{
-		dlg = new Talk("SPIEL", parent, true);
-		connect(dlg->get_dialog(), SIGNAL(signal_talkto(QString&, QString&)), parent, SLOT(slot_talkto(QString&, QString&)));
-
-		CHECK_PTR(dlg);
-		dlg->write("New Dialog created\n");
-	}
-#endif
-
 	// board recently used?
 	if (!qgobrd || qgobrd->get_id() != game_id)
 	{
@@ -498,26 +482,13 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 	{
 		// regular move info (parser)
 		case 0:
-#ifdef SHOW_MOVES_DLG
-			dlg->write("Spiel " + gi->nr + gi->type + "\n");
-#endif
-
 			if (gi->mv_col == "T")
 			{
-#ifdef SHOW_MOVES_DLG
-				dlg->write("W: " + gi->wname + " " + gi->wprisoners + " " + gi->wtime + " " + gi->wstones + "\n");
-				dlg->write("B: " + gi->bname + " " + gi->bprisoners + " " + gi->btime + " " + gi->bstones + "\n");
-#endif
-
 				// set times
 				qgobrd->setTimerInfo(gi->btime, gi->bstones, gi->wtime, gi->wstones);
 			}
 			else if (gi->mv_col == "B" || gi->mv_col == "W")
 			{
-#ifdef SHOW_MOVES_DLG
-				dlg->write(gi->mv_col + " " + gi->mv_nr + " " + gi->mv_pt + "\n");
-#endif
-
 				// set move if game is initialized
 				if (qgobrd->get_havegd())
 				{
@@ -540,10 +511,6 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 
 		// adjourn/end/resume of a game (parser)
 		case 1:
-#ifdef SHOW_MOVES_DLG
-			dlg->write("Spiel " + g->nr + (g->running ? " running\n" : " STOPPED\n"));
-			dlg->write(g->Sz + "\n");
-#endif
 			if (!qgobrd->get_havegd())
 			{
 				stone_color own_color = none;
@@ -571,23 +538,6 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 			}
 			break;
 
-#ifdef SHOW_MOVES_DLG
-		// game to observe (mouse click)
-		case 2:
-			dlg->write("Observe: " + txt + "\n");
-			break;
-
-		// game to play (mouse click and match prompt)
-		case 3:
-			dlg->write("Play(MATCH): " + txt + "\n");
-			break;
-
-		// game to play (mouse click and match prompt)
-		case 4:
-			dlg->write("Teach: " + txt + "\n");
-			break;
-
-#endif
 		default:
 			//qDebug("qGoInterface::parse_move() - illegal parameter");
 			break;
