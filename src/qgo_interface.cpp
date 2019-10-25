@@ -566,6 +566,16 @@ void qGoIF::set_observe(const QString& gameno)
 	parse_move(2, 0, 0, gameno);
 }
 
+// a match is created
+void qGoIF::slot_matchcreate(const QString &gameno, const QString &opponent)
+{
+	if (opponent == myName)
+		// teaching game
+		parse_move(4, 0, 0, gameno);
+	else
+		parse_move(3, 0, 0, gameno);
+}
+
 // remove all boards
 void qGoIF::set_initIF ()
 {
@@ -576,16 +586,6 @@ void qGoIF::set_initIF ()
 
 	n_observed = 0;
 	client_window->update_observed_games (n_observed);
-}
-
-// a match is created
-void qGoIF::slot_matchcreate(const QString &gameno, const QString &opponent)
-{
-	if (opponent == myName)
-		// teaching game
-		parse_move(4, 0, 0, gameno);
-	else
-		parse_move(3, 0, 0, gameno);
 }
 
 void qGoIF::slot_matchsettings(const QString &id, const QString &handicap, const QString &komi, assessType kt)
