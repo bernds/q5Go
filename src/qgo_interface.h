@@ -243,6 +243,7 @@ public:
 
 	void set_game_title (int, const QString&);
 	void resume_own_game (const QString &, const QString &, const QString &);
+	void create_match (const QString&, const QString&, bool resumed = false);
 
 	void handle_talk (const QString &pl, const QString &txt);
 
@@ -253,7 +254,6 @@ public slots:
 	void slot_kibitz(int, const QString&, const QString&);
 	void slot_komi(const QString&, const QString&, bool);
 	void slot_freegame(bool);
-	void slot_matchcreate(const QString&, const QString&);
 	void slot_removestones(const QString&, const QString&);
 	void slot_undo(const QString&, const QString&);
 	void slot_result(const QString&, const QString&, bool, const QString&);

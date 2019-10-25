@@ -284,14 +284,12 @@ void qGoIF::handle_talk (const QString &pl, const QString &txt)
 }
 
 // handle move info and distribute to different boards
-bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
+bool qGoIF::parse_move (int src, GameInfo* gi, Game* g, QString txt)
 {
 	int         game_id = 0;
 	stone_color sc = none;
 	QString     pt;
 	QString     mv_nr;
-	GameMode    mode = modeObserve;
-	bool is_own = false;
 
 	switch (src)
 	{
@@ -369,23 +367,6 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 			}
 			break;
 
-		// game to observe
-		case 2:
-			game_id = txt.toInt();
-			mode = modeObserve;
-			break;
-
-		// match
-		case 3:
-			game_id = txt.toInt();
-			mode = modeMatch;
-			break;
-
-		// teaching game
-		case 4: game_id = txt.toInt();
-			mode = modeTeach;
-			break;
-
 		default:
 			qWarning("*** qGoIF::parse_move(): unknown case !!! ***");
 			return false;
@@ -402,67 +383,8 @@ bool qGoIF::parse_move(int src, GameInfo* gi, Game* g, QString txt)
 				break;
 			}
 		}
-		// not found -> create new dialog
-		if (!qgobrd)
-		{
-			// setup only with mouseclick or automatic in case of matching !!!!
-			// added case 0: 'observe' cmd
-			if (src < 2) //(src == 1) //
-			{
-				return false;
-			}
-
-			qgobrd = new qGoBoard (this, game_id);
-			boardlist.append (qgobrd);
-
-//			qgobrd->get_win()->setOnlineMenu(true);
-
-			CHECK_PTR(qgobrd);
-
-			if (mode == modeObserve) // (src == 2)
-			{
-				qgobrd->set_sentmovescmd(true);
-				client_window->sendcommand ("games " + txt, false);
-				client_window->sendcommand ("moves " + txt, false);
-				client_window->sendcommand ("all " + txt, false);
-			}
-
-			// for own games send "games" cmd to get full info
-			if (mode == modeMatch || mode == modeTeach) // (src == 3 || src == 4 || src == 13 || src == 14 )//|| src == 0)
-			{
-				if (is_own)//|| src== 0)
-				{
-					// src changed from 1 to 3/4
-					qgobrd->set_sentmovescmd(true);
-					client_window->sendcommand ("games " + g->nr, false);
-					client_window->sendcommand ("moves " + g->nr, false);
-					client_window->sendcommand ("all " + g->nr, false);
-				}
-				else
-					client_window->sendcommand ("games " + txt, false);
-
-				if (mode == modeTeach)
-				{
-					qgobrd->ExtendedTeachingGame = true;
-					qgobrd->IamTeacher = true;
-					qgobrd->havePupil = false;
-					qgobrd->mark_set = false;
-				}
-			}
-
-			// set correct mode in qGo
-			qgobrd->set_gsName (gsName);
-			qgobrd->set_myName (myName);
-			if (src==0)
-				qgobrd->set_Mode_real (modeObserve); // special case when not triggered by the 'observe' command (trail, for instance)
-			else
-				qgobrd->set_Mode_real (mode);
-
-			n_observed++;
-			client_window->update_observed_games (n_observed);
-
-			return true;
-		}
+		if (qgobrd == nullptr)
+			return false;
 	}
 
 	switch (src)
@@ -548,19 +470,73 @@ void qGoIF::slot_gamemove(Game *g)
 }
 
 // game to observe (mouse click)
-void qGoIF::set_observe(const QString& gameno)
+void qGoIF::set_observe (const QString& gameno)
 {
-	parse_move(2, 0, 0, gameno);
+	int nr = gameno.toInt ();
+	qGoBoard *b = find_game_id (nr);
+	if (b != nullptr)
+		return;
+
+	b = new qGoBoard (this, nr);
+	boardlist.append (b);
+
+	b->set_sentmovescmd(true);
+	client_window->sendcommand ("games " + gameno, false);
+	client_window->sendcommand ("moves " + gameno, false);
+	client_window->sendcommand ("all " + gameno, false);
+
+	// set correct mode in qGo
+	b->set_gsName (gsName);
+	b->set_myName (myName);
+	b->set_Mode_real (modeObserve);
+
+	n_observed++;
+	client_window->update_observed_games (n_observed);
 }
 
 // a match is created
-void qGoIF::slot_matchcreate(const QString &gameno, const QString &opponent)
+void qGoIF::create_match (const QString &gameno, const QString &opponent, bool resumed)
 {
-	if (opponent == myName)
-		// teaching game
-		parse_move(4, 0, 0, gameno);
+	GameMode mode = modeMatch;
+
+	int nr = gameno.toInt ();
+	/* At least with NNGS we are called multiple times for a single game start,
+	   for both of the lines.
+	   // 9 Match [5] with guest17 in 1 accepted.
+	   // 9 Creating match [5] with guest17.
+	   Don't create the board more than once.  */
+	qGoBoard *b = find_game_id (nr);
+	if (b != nullptr)
+		return;
+
+	b = new qGoBoard (this, nr);
+	boardlist.append (b);
+
+	if (opponent == myName) {
+		mode = modeTeach;
+		b->ExtendedTeachingGame = true;
+		b->IamTeacher = true;
+		b->havePupil = false;
+		b->mark_set = false;
+	}
+
+	if (resumed) {
+		// src changed from 1 to 3/4
+		b->set_sentmovescmd (true);
+		client_window->sendcommand ("games " + gameno, false);
+		client_window->sendcommand ("moves " + gameno, false);
+		client_window->sendcommand ("all " + gameno, false);
+	}
 	else
-		parse_move(3, 0, 0, gameno);
+		client_window->sendcommand ("games " + gameno, false);
+
+	// set correct mode in qGo
+	b->set_gsName (gsName);
+	b->set_myName (myName);
+	b->set_Mode_real (mode);
+
+	n_observed++;
+	client_window->update_observed_games (n_observed);
 }
 
 // a match is created
@@ -596,7 +572,7 @@ void qGoIF::resume_own_game (const QString &nr, const QString &wname, const QStr
 		}
 	}
 
-	slot_matchcreate (nr, wname == myName ? bname : wname);
+	create_match (nr, wname == myName ? bname : wname, true);
 }
 
 // remove all boards

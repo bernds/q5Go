@@ -731,9 +731,10 @@ InfoType Parser::cmd9(const QString &line)
 		QString nr = re.cap(1);
 		QString opp = re.cap(2);
 
-		emit signal_matchcreate(nr, opp);
+		m_qgoif->create_match (nr, opp);
+		emit signal_matchcreate (nr, opp);
 		// automatic opening of a dialog tab for further conversation
-		emit signal_talk(opp, "", true);
+		emit signal_talk (opp, "", true);
 	}
 	else if (line.contains("Match") && line.contains("accepted"))
 	{
@@ -743,7 +744,8 @@ InfoType Parser::cmd9(const QString &line)
 		}
 		QString nr = re.cap(1);
 		QString opp = re.cap(2);
-		emit signal_matchcreate(nr, opp);
+		m_qgoif->create_match (nr, opp);
+		emit signal_matchcreate (nr, opp);
 	}
 	// 9 frosla withdraws the match offer.
 	// 9 guest17 declines your request for a match.
@@ -1494,9 +1496,11 @@ InfoType Parser::cmd21(const QString &line)
 		aGame->H = QString::null;
 		aGame->running = true;
 
-		if (gsName == WING && aGame->wname == aGame->bname)
+		if (gsName == WING && aGame->wname == aGame->bname) {
 			// WING doesn't send 'create match' msg in case of teaching game
-			emit signal_matchcreate(aGame->nr, aGame->bname);
+			m_qgoif->create_match (aGame->nr, aGame->bname);
+			emit signal_matchcreate (aGame->nr, aGame->bname);
+		}
 
 		client_window->server_add_game (aGame);
 		return GAME;
