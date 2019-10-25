@@ -267,16 +267,11 @@ public slots:
 //	void slot_closeevent(int) {};
 	void set_observe(const QString&);
 
-protected:
-	bool parse_move(int src, GameInfo* gi=0, Game* g=0, QString txt=QString::null);
-
 private:
 	qGoBoard *find_game_id (int);
 	qGoBoard *find_game_players (const QString &, const QString &);
 
 	QWidget *parent;
-	// actual pointer, for speedup reason
-	qGoBoard *qgobrd;
 	QString  myName;
 	QList<qGoBoard *> boardlist;
 	QList<qGoBoard *> boardlist_disconnected;

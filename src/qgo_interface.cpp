@@ -128,7 +128,6 @@ qGoIF::qGoIF(QWidget *p) : QObject()
 	ASSERT(qgo);
 
 	parent = p;
-	qgobrd = 0;
 	gsName = GS_UNKNOWN;
 	localBoardCounter = 10000;
 }
@@ -283,147 +282,72 @@ void qGoIF::handle_talk (const QString &pl, const QString &txt)
 		qb->try_talk (pl, txt);
 }
 
-// handle move info and distribute to different boards
-bool qGoIF::parse_move (int src, GameInfo* gi, Game* g, QString txt)
-{
-	int         game_id = 0;
-	stone_color sc = none;
-	QString     pt;
-	QString     mv_nr;
-
-	switch (src)
-	{
-		// regular move info (parser)
-		case 0:
- 			game_id = gi->nr.toInt();
-			if (gi->mv_col == QString("B"))
-				sc = black;
-			else if (gi->mv_col == QString("W"))
-				sc = white;
-			else
-				sc = none;
-			mv_nr = gi->mv_nr;
-			pt = gi->mv_pt;
-			break;
-
-		// adjourn/end/resume of a game (parser)
-		case 1:
-			// check if g->nr is a number
-			if (g->nr == QString("@"))
-			{
-				qGoBoard *qb = find_game_players (myName, QString ());
-				if (qb == nullptr)
-				{
-					qWarning("*** You are not playing a game to be adjourned!");
-					return false;
-				}
-				game_id = qb->get_id ();
-			}
-			else
-				game_id = g->nr.toInt();
-
-			break;
-
-		default:
-			qWarning("*** qGoIF::parse_move(): unknown case !!! ***");
-			return false;
-	}
-
-	// board recently used?
-	if (!qgobrd || qgobrd->get_id() != game_id)
-	{
-		// seek dialog
-		qgobrd = nullptr;
-		for (auto b: boardlist) {
-			if (b->get_id () == game_id) {
-				qgobrd = b;
-				break;
-			}
-		}
-		if (qgobrd == nullptr)
-			return false;
-	}
-
-	switch (src)
-	{
-		// regular move info (parser)
-		case 0:
-			if (gi->mv_col == "T")
-			{
-				// set times
-				qgobrd->setTimerInfo(gi->btime, gi->bstones, gi->wtime, gi->wstones);
-			}
-			else if (gi->mv_col == "B" || gi->mv_col == "W")
-			{
-				// set move if game is initialized
-				if (qgobrd->get_havegd())
-				{
-					// get all moves till now one times if kibitzing
-					if (qgobrd->get_Mode() == modeObserve && !qgobrd->get_sentmovescmd())
-					{
-						qgobrd->set_sentmovescmd(true);
-						client_window->sendcommand ("moves " + gi->nr, false);
-						client_window->sendcommand ("all " + gi->nr, false);
-					}
-					else
-					{
-						// do normal move
-  						qgobrd->set_move(sc, pt, mv_nr);
-					}
-				}
-			}
-
-			break;
-
-		// adjourn/end/resume of a game (parser)
-		case 1:
-			if (!qgobrd->get_havegd())
-			{
-				stone_color own_color = none;
-				GameMode mode = modeObserve;
-				// check if it's my own game
-				if (g->bname == myName || g->wname == myName)
-				{
-					own_color = g->bname == myName ? black : white;
-					// case: trying to observe own game: this is the way to get back to match if
-					// board has been closed by mistake
-					if (g->bname == g->wname)
-						mode = modeTeach;
-					else
-						mode = modeMatch;
-				}
-				else if (g->bname == g->wname && !g->bname.contains('*'))
-				{
-					// case: observing a teaching game
-					qgobrd->ExtendedTeachingGame = true;
-					qgobrd->IamTeacher = false;
-					qgobrd->IamPupil = false;
-					qgobrd->havePupil = false;
-				}
-				qgobrd->set_game (g, mode, own_color);
-			}
-			break;
-
-		default:
-			//qDebug("qGoInterface::parse_move() - illegal parameter");
-			break;
-	}
-
-	// assume no new window
-	return false;
-}
-
-
 // regular move info (parser)
-void qGoIF::slot_move(GameInfo *gi)
+void qGoIF::slot_move (GameInfo *gi)
 {
-	parse_move(0, gi);
+	int game_id = gi->nr.toInt ();
+
+	qGoBoard *b = find_game_id (game_id);
+	if (b == nullptr) {
+		static int last_warn_id = -1;
+		if (last_warn_id != game_id)
+			qWarning () << "no board found for move in game " << game_id;
+		last_warn_id = game_id;
+		return;
+	}
+
+	if (gi->mv_col == "T") {
+		// set times
+		b->setTimerInfo (gi->btime, gi->bstones, gi->wtime, gi->wstones);
+	} else {
+		stone_color sc = gi->mv_col == "B" ? black : white;
+
+		// set move if game is initialized
+		if (b->get_havegd ())
+		{
+			// get all moves till now one times if kibitzing
+			if (b->get_Mode() == modeObserve && !b->get_sentmovescmd()) {
+				b->set_sentmovescmd (true);
+				client_window->sendcommand ("moves " + gi->nr, false);
+				client_window->sendcommand ("all " + gi->nr, false);
+			} else
+				b->set_move (sc, gi->mv_pt, gi->mv_nr);
+		}
+	}
 }
 
 // start/adjourn/end/resume of a game (parser)
 void qGoIF::slot_gamemove(Game *g)
 {
-	parse_move(1, 0, g);
+	qGoBoard *qb;
+
+	if (g->nr == "@")
+		qb = find_game_players (myName, QString ());
+	else
+		qb = find_game_id (g->nr.toInt());
+
+	if (qb == nullptr || qb->get_havegd ())
+		return;
+
+	stone_color own_color = none;
+	GameMode mode = modeObserve;
+	// check if it's my own game
+	if (g->bname == myName || g->wname == myName) {
+		own_color = g->bname == myName ? black : white;
+		// case: trying to observe own game: this is the way to get back to match if
+		// board has been closed by mistake
+		if (g->bname == g->wname)
+			mode = modeTeach;
+		else
+			mode = modeMatch;
+	} else if (g->bname == g->wname && !g->bname.contains('*')) {
+		// case: observing a teaching game
+		qb->ExtendedTeachingGame = true;
+		qb->IamTeacher = false;
+		qb->IamPupil = false;
+		qb->havePupil = false;
+	}
+	qb->set_game (g, mode, own_color);
 }
 
 // game to observe (mouse click)
@@ -515,7 +439,6 @@ void qGoIF::create_match (const QString &gameno, const QString &opponent, bool r
 	}
 
 	if (resumed) {
-		// src changed from 1 to 3/4
 		b->set_sentmovescmd (true);
 		client_window->sendcommand ("games " + gameno, false);
 		client_window->sendcommand ("moves " + gameno, false);
@@ -708,8 +631,6 @@ void qGoIF::window_closing (qGoBoard *qb)
 {
 	int id = qb->get_id();
 
-	// erase actual pointer to prevent error
-	qgobrd = 0;
 	qDebug() << "qGoIF::slot_closeevent() -> game " << id << "\n";
 
 	// destroy timers
