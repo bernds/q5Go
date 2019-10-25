@@ -90,7 +90,7 @@ protected:
 	/* Distance from table edge to wooden board edge.  */
 	int m_margin = 2;
 	/* Margins around coordinates, on all four sides.  */
-	static const int coord_margin;
+	const int m_coord_margin = 4;
 
 	double square_size;
 

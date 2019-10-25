@@ -94,9 +94,6 @@ Board::Board (QWidget *parent)
 	navIntersectionStatus = false;
 }
 
-// distance from coords to surrounding elements
-const int BoardView::coord_margin = 4;
-
 void BoardView::calculateSize ()
 {
 	// Calculate the size values
@@ -107,7 +104,7 @@ void BoardView::calculateSize ()
 	int table_size_x = w - 2 * m_margin;
 	int table_size_y = h - 2 * m_margin;
 
-	double cmargin = m_show_coords ? 4 * coord_margin : 0;
+	double cmargin = m_show_coords ? 4 * m_coord_margin : 0;
 	int shown_size_x = m_crop.width () + 2 * n_dups_h ();
 	int shown_size_y = m_crop.height () + 2 * n_dups_v ();
 	double coord_factor = m_show_coords ? setting->readIntEntry ("COORDS_SIZE") / 100.0 : 0;
@@ -238,7 +235,7 @@ QImage BoardView::background_image ()
 		double coord_factor = setting->readIntEntry ("COORDS_SIZE") / 100.0;
 		double coord_size = std::max (1.0, square_size * coord_factor);
 		// centres the coordinates text within the remaining space at table edge
-		const int center = coord_size / 2 + coord_margin;
+		const int center = coord_size / 2 + m_coord_margin;
 
 		QFont f = setting->fontMarks;
 		/* Throughout, we use the "double bounding rect" trick to obtain correct results.
