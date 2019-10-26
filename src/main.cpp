@@ -641,7 +641,6 @@ int main(int argc, char **argv)
 		qWarning() << "Failed to find translation file for " << lang;
 
 	client_window = new ClientWindow (0);
-	client_window->setWindowTitle (PACKAGE1 + QString(" V") + VERSION);
 
 #ifdef OWN_DEBUG_MODE
 	// restore size and pos
