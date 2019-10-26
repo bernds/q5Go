@@ -997,11 +997,6 @@ qGoBoard::qGoBoard(qGoIF *qif, int gameid) : m_qgoif (qif), id (gameid)
 	stated_mv_count =0 ;
   BY_timer = setting->readIntEntry("BY_TIMER");
 
-#ifdef SHOW_INTERNAL_TIME
-	chk_b = -2;
-	chk_w = -2;
-#endif
-
 	m_observers.setColumnCount (2);
 	m_observers.setHorizontalHeaderItem (0, new QStandardItem ("Name"));
 	m_observers.setHorizontalHeaderItem (1, new QStandardItem ("Rk"));
@@ -1298,17 +1293,7 @@ void qGoBoard::timerEvent(QTimerEvent*)
 		bt_i--;
 
 		bool warn = bt_i > - 1 && bt_i <= BY_timer;
-
-#ifdef SHOW_INTERNAL_TIME
-		chk_b--;
-		if (chk_b < bt_i + 20)
-			chk_b = bt_i;
-		win->setTimes("(" + secToTime(chk_b) + ") " + secToTime(bt_i), b_stones,
-						"(" + secToTime(chk_w) + ") " + wt, w_stones,
-						warn, false, bt_i);
-#else
 		win->setTimes(secToTime(bt_i), b_stones, wt, w_stones, warn, false, bt_i);
-#endif
 	}
 	else
 	{
@@ -1316,17 +1301,7 @@ void qGoBoard::timerEvent(QTimerEvent*)
 		wt_i--;
 
 		bool warn = wt_i > - 1 && wt_i <= BY_timer;
-
-#ifdef SHOW_INTERNAL_TIME
-		chk_w--;
-		if (chk_w < bt_i + 20)
-			chk_w = wt_i;
-		win->setTimes("(" + secToTime(chk_b) + ") " + bt, b_stones,
-					  "(" + secToTime(chk_w) + ") " + secToTime(wt_i), w_stones,
-						false, warn, wt_i);
-#else
 		win->setTimes(bt, b_stones, secToTime(wt_i), w_stones, false, warn, wt_i);
-#endif
 	}
 }
 
@@ -1347,27 +1322,12 @@ void qGoBoard::setTimerInfo(const QString &btime, const QString &bstones, const 
 	b_stones = bstones;
 	w_stones = wstones;
 
-#ifdef SHOW_INTERNAL_TIME
-	if (chk_b < 0)
-	{
-		chk_b = bt_i;
-		chk_w = wt_i;
-	}
-#endif
-
 	// set string in any case
 	bt = secToTime(bt_i);
 	wt = secToTime(wt_i);
 
 	if (m_game != nullptr)
 		update_time_info (m_state);
-#if 0
-	// set initial timer until game is initialized
-	if (!have_gameData)
-		win->setTimes(bt, bstones, wt, wstones,
-					  bt_i <= BY_timer && bt_i > -1 && mv_counter % 2 && bt_i %2,
-					  wt_i <= BY_timer && wt_i > -1 && (mv_counter % 2 && bt_i %2) == 0);
-#endif
 }
 
 // addtime function

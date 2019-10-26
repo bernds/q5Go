@@ -6,9 +6,6 @@
 #ifndef QGO_INTERFACE_H
 #define QGO_INTERFACE_H
 
-#undef SHOW_INTERNAL_TIME
-#undef SHOW_MOVES_DLG
-
 #include <QObject>
 #include <QString>
 #include <QTimerEvent>
@@ -200,10 +197,6 @@ private:
 	GSName      gsName;
 	QString     myName;
 	int         BY_timer;
-
-#ifdef SHOW_INTERNAL_TIME
-	int chk_b, chk_w;
-#endif
 };
 
 //-----------
