@@ -1287,7 +1287,7 @@ void qGoBoard::timerEvent(QTimerEvent*)
 	if (win == nullptr || mv_counter < 0 || id < 0 || game_paused)
 		return;
 
-	if (mv_counter % 2)
+	if (m_state->to_move () == black)
 	{
 		// B's turn
 		bt_i--;
