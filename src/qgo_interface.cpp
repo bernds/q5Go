@@ -2183,7 +2183,7 @@ void qGoBoard::slot_ttMark(bool on)
 			else
 			{
 				mark_set = false;
-				for (; mark_counter <= mv_counter; mark_counter++);
+				for (; mark_counter <= mv_counter; mark_counter++)
 					client_window->sendcommand ("undo", false);
 				mark_counter = 0;
 			}
