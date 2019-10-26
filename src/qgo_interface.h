@@ -123,7 +123,6 @@ public:
 	void set_stopTimer();
 	void set_gamePaused(bool p) { game_paused = p; }
 	int get_boardsize() { return m_game->boardsize (); }
-	int get_mvcount() { return mv_counter; }
 	void set_myColorIsBlack(bool b);
 	bool get_myColorIsBlack() { return m_own_color == black; }
 	void set_requests(const QString &handicap, const QString &komi, assessType);

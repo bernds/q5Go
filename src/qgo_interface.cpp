@@ -604,7 +604,7 @@ void qGoIF::slot_freegame(bool freegame)
 	for (auto qb: boardlist)
 		if (qb->get_havegd ()
 		    && (qb->get_wplayer() == myName || qb->get_bplayer() == myName)
-		    && qb->get_mvcount() < 3)
+		    && qb->get_mv_counter() < 3)
 		{
 			qb->set_freegame(freegame);
 			return;
