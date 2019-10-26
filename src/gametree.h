@@ -6,6 +6,7 @@
 #define GAMETREE_H
 
 #include <memory>
+#include <unordered_map>
 #include <QGraphicsView>
 #include "defines.h"
 #include "setting.h"
@@ -17,6 +18,12 @@ class game_record;
 typedef std::shared_ptr<game_record> go_game_ptr;
 class MainWindow;
 class FigureView;
+
+struct game_tree_pixmaps
+{
+	QPixmap w, b, wfig, bfig;
+	QPixmap e, box;
+};
 
 class GameTree : public QGraphicsView
 {
@@ -43,14 +50,16 @@ class GameTree : public QGraphicsView
 	QGraphicsRectItem *m_sel {};
 	QGraphicsPathItem *m_path {};
 	QGraphicsLineItem *m_path_end {};
-	QPixmap m_pm_w, m_pm_b, m_pm_wfig, m_pm_bfig;
-	QPixmap m_pm_e, m_pm_box;
+	QGraphicsItem *m_pixmap_holder {};
 	QFont m_header_font;
 	QStandardItemModel m_headers;
 	bool m_autocollapse = false;
 
+	game_tree_pixmaps m_pm;
+
 	void do_autocollapse ();
 	void resize_header ();
+	void clear_scene ();
 
 protected:
 	virtual void contextMenuEvent (QContextMenuEvent *e) override;
@@ -59,13 +68,13 @@ protected:
 	virtual bool event (QEvent *e) override;
 
 public:
-	GameTree(QWidget *parent);
+	GameTree (QWidget *parent);
 	void set_board_win (MainWindow *win, QGraphicsView *header);
 	void update (go_game_ptr gr, game_state *, bool force = false);
-	void show_menu (int x, int y, const QPoint &pos);
-	void item_clicked (int x, int y);
-	void toggle_collapse (int x, int y, bool);
-	void toggle_figure (int x, int y);
+	void show_menu (game_state *, const QPoint &pos);
+	void item_clicked (game_state *);
+	void toggle_collapse (game_state *, bool);
+	void toggle_figure (game_state *);
 
 	void update_prefs ();
 

@@ -766,13 +766,9 @@ public:
 	bool update_visualization (bool hide_figures);
 	typedef std::function<void (int, int, int, int, bool)> draw_line;
 	typedef std::function<void (int, int)> add_point;
-	void extract_visualization (int x, int y, visual_tree::bit_rect &stones_w,
-				    visual_tree::bit_rect &stones_b,
-				    visual_tree::bit_rect &edits,
-				    visual_tree::bit_rect &collapsed,
-				    visual_tree::bit_rect &figures,
-				    visual_tree::bit_rect &hidden_figs);
+	typedef std::function<bool (int, int, int, game_state *)> start_run;
 	void render_visualization (int, int, int, const draw_line &, bool first);
+	void render_visualization (int, int, const start_run &);
 	void render_active_trace (int, int, int, const add_point &, const draw_line &);
 	bool locate_visual (int, int, const game_state *active, int &, int &);
 	game_state *locate_by_vis_coords (int x, int y, int off_x, int off_y);
@@ -792,6 +788,11 @@ public:
 	{
 		return m_visual_collapse;
 	}
+	bool needs_visual_update ()
+	{
+		return !m_visual_ok;
+	}
+	bool has_hidden_diagrams ();
 	void expand_all ();
 	void collapse_nonactive (const game_state *until);
 

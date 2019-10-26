@@ -31,17 +31,19 @@ static QByteArray box_svg =
 	"     d=\"M 35.2,14 44.8,11 124.8,36 115.2,39 Z\" />"
 	"</svg>";
 
-class ClickablePixmap : public QGraphicsPixmapItem
+class ClickablePixmap : public QGraphicsItem
 {
 	GameTree *m_view;
-	int m_x, m_y, m_size;
+	game_state *m_root;
+	int m_size, m_width;
+	game_tree_pixmaps *m_pm;
 public:
-	ClickablePixmap (GameTree *view, QGraphicsScene *scene, int x, int y, int size, const QPixmap &pm)
-		: QGraphicsPixmapItem (pm), m_view (view), m_x (x), m_y (y), m_size (size)
+	ClickablePixmap (GameTree *view, QGraphicsScene *scene, game_state *item_root, int w, int size, game_tree_pixmaps *pms)
+		: m_view (view), m_root (item_root), m_size (size), m_width (w), m_pm (pms)
 	{
 		setZValue (10);
 		/* Supposedly faster, and makes it easier to click on edit nodes.  */
-		setShapeMode (QGraphicsPixmapItem::BoundingRectShape);
+		// setShapeMode (QGraphicsPixmapItem::BoundingRectShape);
 		scene->addItem (this);
 		setAcceptHoverEvents (true);
 	}
@@ -50,30 +52,76 @@ protected:
 	virtual void hoverEnterEvent (QGraphicsSceneHoverEvent *e) override;
 	virtual void hoverLeaveEvent (QGraphicsSceneHoverEvent *e) override;
 	virtual void contextMenuEvent (QGraphicsSceneContextMenuEvent *e) override;
+	virtual void paint (QPainter *, const QStyleOptionGraphicsItem *, QWidget *) override;
+	virtual QRectF boundingRect () const override
+	{
+		return QRectF(0, 0, m_size * m_width, m_size);
+	}
 };
+
+void ClickablePixmap::paint (QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
+{
+	game_state *st = m_root;
+	int x = 0;
+
+	painter->setPen (Qt::NoPen);
+	QPen diag_pen (Qt::blue);
+	diag_pen.setWidth (2);
+
+	while (st != nullptr) {
+		QPixmap *src = &m_pm->box;
+		if (!st->vis_collapsed ()) {
+			if (!st->was_move_p ())
+				src = &m_pm->e;
+			else if (st->get_move_color () == white)
+				src = st->has_figure () ? &m_pm->wfig : &m_pm->w;
+			else
+				src = st->has_figure () ? &m_pm->bfig : &m_pm->b;
+		}
+		painter->drawPixmap (x * m_size + 1, 1, *src);
+		if (st->has_hidden_diagrams ()) {
+			painter->setPen (diag_pen);
+			painter->drawRect (x * m_size + m_size / 2 + 2, 2,
+					  m_size / 2 - 4, m_size / 2 - 4);
+			painter->setPen (Qt::NoPen);
+		}
+		x++;
+		st = st->next_primary_move ();
+		if (st != nullptr && st->vis_collapsed ())
+			break;
+	}
+}
 
 void ClickablePixmap::contextMenuEvent (QGraphicsSceneContextMenuEvent *e)
 {
 	QPointF pos = e->pos ();
-	int x = m_x + pos.x () / m_size;
-	int y = m_y;
-	m_view->show_menu (x, y, e->screenPos ());
+	int x = pos.x () / m_size;
+	game_state *st = m_root;
+	while (x > 0) {
+		st = st->next_primary_move ();
+		x--;
+	}
+	m_view->show_menu (st, e->screenPos ());
 }
 
 void ClickablePixmap::mousePressEvent (QGraphicsSceneMouseEvent *e)
 {
 	QPointF pos = e->pos ();
-	int x = m_x + pos.x () / m_size;
-	int y = m_y;
+	int x = pos.x () / m_size;
+	game_state *st = m_root;
+	while (x > 0) {
+		st = st->next_primary_move ();
+		x--;
+	}
 	if (e->button () == Qt::LeftButton) {
 		if (e->modifiers () == Qt::ShiftModifier)
-			m_view->toggle_collapse (x, y, false);
+			m_view->toggle_collapse (st, false);
 		else if (e->modifiers () == Qt::ControlModifier)
-			m_view->toggle_collapse (x, y, true);
+			m_view->toggle_collapse (st, true);
 		else
-			m_view->item_clicked (x, y);
+			m_view->item_clicked (st);
 	} else if (e->button () == Qt::MiddleButton)
-		m_view->toggle_collapse (x, y, false);
+		m_view->toggle_collapse (st, false);
 }
 
 void ClickablePixmap::hoverEnterEvent (QGraphicsSceneHoverEvent *)
@@ -107,6 +155,12 @@ GameTree::GameTree (QWidget *parent)
 	m_previewer = new FigureView;
 }
 
+void GameTree::clear_scene ()
+{
+	m_scene->clear ();
+	setDragMode (QGraphicsView::ScrollHandDrag);
+}
+
 void GameTree::resize_header ()
 {
 	m_header_view->resize (viewport ()->width (), m_header_view->height ());
@@ -136,6 +190,8 @@ void GameTree::set_board_win (MainWindow *win, QGraphicsView *header)
 void GameTree::update_prefs ()
 {
 	m_size = std::max (30, std::min (120, setting->values.gametree_size));
+
+	clear_scene ();
 
 	QFont f = setting->fontStandard;
 	QFontMetrics fm (f);
@@ -175,17 +231,17 @@ void GameTree::update_prefs ()
 	edit.circle_at (ssize - soff / 2, ssize - soff / 2, (ssize / 4) * 0.9, "black", "none");
 	edit.circle_at (soff / 2, ssize - soff / 2, (ssize / 4) * 0.9 - 0.5, "white", "black", "1");
 	edit.circle_at (ssize - soff / 2, soff / 2, (ssize / 4) * 0.9 - 0.5, "white", "black", "1");
-	m_pm_w = QPixmap (wstone.to_pixmap (ssize, ssize));
-	m_pm_b = QPixmap (bstone.to_pixmap (ssize, ssize));
-	m_pm_wfig = QPixmap (wfig.to_pixmap (ssize, ssize));
-	m_pm_bfig = QPixmap (bfig.to_pixmap (ssize, ssize));
-	m_pm_e = QPixmap (edit.to_pixmap (ssize, ssize));
+	m_pm.w = QPixmap (wstone.to_pixmap (ssize, ssize));
+	m_pm.b = QPixmap (bstone.to_pixmap (ssize, ssize));
+	m_pm.wfig = QPixmap (wfig.to_pixmap (ssize, ssize));
+	m_pm.bfig = QPixmap (bfig.to_pixmap (ssize, ssize));
+	m_pm.e = QPixmap (edit.to_pixmap (ssize, ssize));
 
 	QSvgRenderer renderer (box_svg);
-	m_pm_box = QPixmap (ssize, ssize);
-	m_pm_box.fill (Qt::transparent);
+	m_pm.box = QPixmap (ssize, ssize);
+	m_pm.box.fill (Qt::transparent);
 	QPainter painter;
-	painter.begin (&m_pm_box);
+	painter.begin (&m_pm.box);
 	renderer.render (&painter);
 	painter.end ();
 
@@ -207,9 +263,8 @@ QSize GameTree::sizeHint () const
 	return QSize (100, 100);
 }
 
-void GameTree::toggle_collapse (int x, int y, bool one_level)
+void GameTree::toggle_collapse (game_state *st, bool one_level)
 {
-	game_state *st = m_game->get_root ()->locate_by_vis_coords (x, y, 0, 0);
 	if (one_level) {
 		if (!st->vis_expand_one ())
 			return;
@@ -218,9 +273,8 @@ void GameTree::toggle_collapse (int x, int y, bool one_level)
 	update (m_game, m_active);
 }
 
-void GameTree::toggle_figure (int x, int y)
+void GameTree::toggle_figure (game_state *st)
 {
-	game_state *st = m_game->get_root ()->locate_by_vis_coords (x, y, 0, 0);
 	if (st->has_figure ())
 		st->clear_figure ();
 	else
@@ -228,35 +282,33 @@ void GameTree::toggle_figure (int x, int y)
 	update (m_game, m_active);
 }
 
-void GameTree::item_clicked (int x, int y)
+void GameTree::item_clicked (game_state *st)
 {
 	if (m_game == nullptr)
 		return;
 
-	game_state *st = m_game->get_root ()->locate_by_vis_coords (x, y, 0, 0);
 	if (st == m_active)
 		return;
 	m_win->set_game_position (st);
 }
 
-void GameTree::show_menu (int x, int y, const QPoint &pos)
+void GameTree::show_menu (game_state *st, const QPoint &pos)
 {
-	game_state *st = m_game->get_root ()->locate_by_vis_coords (x, y, 0, 0);
 	QMenu menu;
 	if (st->vis_collapsed ()) {
-		menu.addAction (QIcon (m_pm_box), QObject::tr ("Expand subtree"), [=] () { toggle_collapse (x, y, false); });
-		menu.addAction (QObject::tr ("Expand one level of child nodes"), [=] () { toggle_collapse (x, y, true); });
+		menu.addAction (QIcon (m_pm.box), QObject::tr ("Expand subtree"), [=] () { toggle_collapse (st, false); });
+		menu.addAction (QObject::tr ("Expand one level of child nodes"), [=] () { toggle_collapse (st, true); });
 	} else
-		menu.addAction (QIcon (m_pm_box), QObject::tr ("Collapse subtree"), [=] () { toggle_collapse (x, y, false); });
+		menu.addAction (QIcon (m_pm.box), QObject::tr ("Collapse subtree"), [=] () { toggle_collapse (st, false); });
 	if (st->has_figure ())
 		menu.addAction (QIcon (":/BoardWindow/images/boardwindow/figure.png"),
 				QObject::tr("Clear diagram status for this node"),
-				[=] () { toggle_figure (x, y); m_win->update_figures (); });
+				[=] () { toggle_figure (st); m_win->update_figures (); });
 	else
 		menu.addAction (QIcon (":/BoardWindow/images/boardwindow/figure.png"),
 				QObject::tr("Set this move to be the start of a diagram"),
-				[=] () { toggle_figure (x, y); m_win->update_figures (); });
-	menu.addAction (QObject::tr ("Navigate to this node"), [=] () { item_clicked (x, y); });
+				[=] () { toggle_figure (st); m_win->update_figures (); });
+	menu.addAction (QObject::tr ("Navigate to this node"), [=] () { item_clicked (st); });
 	menu.exec (pos);
 }
 
@@ -273,9 +325,11 @@ void GameTree::update (go_game_ptr gr, game_state *active, bool force)
 	}
 	if (active_changed)
 		do_autocollapse ();
+
 	changed |= r->update_visualization (setting->values.gametree_diaghide) || force;
 	if (!changed && !active_changed)
 		return;
+
 	m_game = gr;
 	if (changed) {
 		const visual_tree &vroot = r->visualization ();
@@ -283,63 +337,23 @@ void GameTree::update (go_game_ptr gr, game_state *active, bool force)
 		int h = vroot.height ();
 
 		m_scene->setSceneRect (0, 0, m_size * w, m_size * h);
+		clear_scene ();
 
-		m_scene->clear ();
 		m_sel = nullptr;
 		m_path = nullptr;
 		m_path_end = nullptr;
 
-		setDragMode (QGraphicsView::ScrollHandDrag);
-
-		visual_tree::bit_rect stones_w (w, h);
-		visual_tree::bit_rect stones_b (w, h);
-		visual_tree::bit_rect edits (w, h);
-		visual_tree::bit_rect collapsed (w, h);
-		visual_tree::bit_rect figures (w, h);
-		visual_tree::bit_rect hidden_figs (w, h);
-
-		r->extract_visualization (0, 0, stones_w, stones_b, edits, collapsed, figures, hidden_figs);
-		visual_tree::bit_rect all_items = stones_w;
-		all_items.ior (stones_b, 0, 0);
-		all_items.ior (edits, 0, 0);
-		all_items.ior (collapsed, 0, 0);
-
 		QPen diag_pen (Qt::blue);
 		diag_pen.setWidth (2);
-		for (int y = 0; y < h; y++)
-			for (int x0 = 0; x0 < w; ) {
-				int len = 1;
-				if (all_items.test_bit (x0, y)) {
-					while (x0 + len < w && all_items.test_bit (x0 + len, y))
-						len++;
-					QPixmap combined (m_size * len, m_size);
-					combined.fill (QColor (0, 0, 0, 0));
-					QPainter painter;
-					painter.begin (&combined);
-					painter.setPen (Qt::NoPen);
-					for (int i = 0; i < len; i++) {
-						QPixmap *src = &m_pm_box;
-						bool fig = figures.test_bit (x0 + i, y);
-						if (edits.test_bit (x0 + i, y))
-							src =  &m_pm_e;
-						else if (stones_w.test_bit (x0 + i, y))
-							src = fig ? &m_pm_wfig : &m_pm_w;
-						else if (stones_b.test_bit (x0 + i, y))
-							src = fig ? &m_pm_bfig : &m_pm_b;
-						painter.drawPixmap (i * m_size + 1, 1, *src);
-						if (hidden_figs.test_bit (x0 + i, y)) {
-							painter.setPen (diag_pen);
-							painter.drawRect (i * m_size + m_size / 2 + 2, 2,
-									  m_size / 2 - 4, m_size / 2 - 4);
-							painter.setPen (Qt::NoPen);
-						}
-					}
-					painter.end ();
-					QGraphicsPixmapItem *pm = new ClickablePixmap (this, m_scene, x0, y, m_size, combined);
-					pm->setPos (x0 * m_size, y * m_size);
-				}
-				x0 += len;
-			}
+
+		auto start_run = [&] (int x0, int y, int len, game_state *st0) -> bool
+		{
+			ClickablePixmap *pm = new ClickablePixmap (this, m_scene, st0, len, m_size, &m_pm);
+			pm->setPos (x0 * m_size, y * m_size);
+			return true;
+		};
+		r->render_visualization (0, 0, start_run);
+
 		auto draw_line = [&] (int x0, int y0, int x1, int y1, bool dotted) -> void
 			{
 				QPen pen;

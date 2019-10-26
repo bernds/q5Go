@@ -192,42 +192,29 @@ void game_state::render_visualization (int cx, int cy, int size, const draw_line
 	}
 }
 
-void game_state::extract_visualization (int x, int y,
-					visual_tree::bit_rect &stones_w,
-					visual_tree::bit_rect &stones_b,
-					visual_tree::bit_rect &edits,
-					visual_tree::bit_rect &collapsed,
-					visual_tree::bit_rect &figures,
-					visual_tree::bit_rect &hidden_figs)
-{
-	size_t n_children = m_children.size ();
 
-	if (m_visual_collapse && n_children > 0) {
-		collapsed.set_bit (x, y);
+void game_state::render_visualization (int x, int y, const start_run &fn)
+{
+	if (m_parent == nullptr || this != m_parent->m_children[0]) {
+		int len = 0;
+		game_state *st = this;
+		for (;;) {
+			len++;
+			if (st->m_visual_collapse)
+				break;
+			if (st->m_children.size () == 0)
+				break;
+			st = st->m_children[0];
+		}
+		fn (x, y, len, this);
+	}
+	if (m_visual_collapse)
 		return;
-	}
-	switch (m_move_color) {
-	case none:
-		edits.set_bit (x, y);
-		break;
-	case white:
-		stones_w.set_bit (x, y);
-		break;
-	case black:
-		stones_b.set_bit (x, y);
-		break;
-	}
-	if (has_figure ())
-		figures.set_bit (x, y);
-	for (const auto &it: m_children) {
-		if (it != m_children[0] && !it->m_visual_shown)
-			hidden_figs.set_bit (x, y);
-	}
 	for (const auto &it: m_children) {
 		if (!it->m_visual_shown)
 			continue;
 		int yoff = it->m_visualized.y_offset ();
-		it->extract_visualization (x + 1, y + yoff, stones_w, stones_b, edits, collapsed, figures, hidden_figs);
+		it->render_visualization (x + 1, y + yoff, fn);
 	}
 }
 
@@ -252,6 +239,14 @@ void game_state::render_active_trace (int cx, int cy, int size, const add_point 
 		return;
 	}
 	c->render_active_trace (cx + size, cy + yoff * size, size, point_fn, line_fn);
+}
+
+bool game_state::has_hidden_diagrams ()
+{
+	for (auto it: m_children)
+		if (!it->m_visual_shown)
+			return true;
+	return false;
 }
 
 bool game_state::locate_visual (int x, int y, const game_state *active, int &ax, int &ay)
