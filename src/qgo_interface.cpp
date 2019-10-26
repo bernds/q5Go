@@ -129,7 +129,6 @@ qGoIF::qGoIF(QWidget *p) : QObject()
 
 	parent = p;
 	gsName = GS_UNKNOWN;
-	localBoardCounter = 10000;
 }
 
 qGoIF::~qGoIF()
@@ -553,7 +552,7 @@ void qGoIF::slot_komi(const QString &nr, const QString &komi, bool isrequest)
 			move_number_memo = qb->get_mv_counter();
 			komi_memo = komi;
 
-			if (qb->get_reqKomi() == komi  && setting->readBoolEntry("DEFAULT_AUTONEGO"))
+			if (qb->get_reqKomi() == komi && setting->readBoolEntry("DEFAULT_AUTONEGO"))
 			{
 				if (qb->get_currentKomi() != komi)
 				{
@@ -994,8 +993,8 @@ qGoBoard::qGoBoard(qGoIF *qif, int gameid) : m_qgoif (qif), id (gameid)
 	req_komi = -1;
 	bt_i = -1;
 	wt_i = -1;
-	stated_mv_count =0 ;
-  BY_timer = setting->readIntEntry("BY_TIMER");
+	stated_mv_count = 0;
+	BY_timer = setting->readIntEntry("BY_TIMER");
 
 	m_observers.setColumnCount (2);
 	m_observers.setHorizontalHeaderItem (0, new QStandardItem ("Name"));
@@ -1820,9 +1819,8 @@ void qGoBoard::check_requests()
 				client_window->sendcommand ("free", false);
 				break;
 		}
-	}
-else
-qDebug("Rated game settings ok...");
+	} else
+		qDebug("Rated game settings ok...");
 }
 
 // click on time field

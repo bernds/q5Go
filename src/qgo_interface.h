@@ -63,6 +63,17 @@ class qGoBoard : public QObject
 	QString *m_title = nullptr;
 	QString m_comments;
 	QString m_opp_name;
+	assessType m_freegame;
+
+	int mv_counter;
+	int stated_mv_count;
+
+	/* Requests.  */
+	assessType req_free;
+	QString req_handicap;
+	QString req_komi;
+	bool requests_set;
+
 	bool m_scoring = false;
 	bool m_connected = true;
 	bool m_postgame_chat = false;
@@ -131,7 +142,6 @@ public:
 	QString get_currentKomi() { return QString::number (m_game->info ().komi); }
 	void dec_mv_counter() { mv_counter--; }
 	int get_mv_counter() { return mv_counter; }
-	bool get_requests_set() { return requests_set; }
 	void set_gsName(GSName g) { gsName = g; }
 	void addtime_b(int m);
 	void addtime_w(int m);
@@ -154,7 +164,6 @@ public:
 	QString     ttOpponent;
 	bool        mark_set;
 	int         mark_counter;
-	assessType  m_freegame;
 
 public slots:
 	// MainWindow
@@ -183,16 +192,9 @@ private:
 	int id;
 	MainWindow_IGS *win;
 
-	int mv_counter;
-	int stated_mv_count;
-
 	int         bt_i, wt_i;
 	QString     bt, wt;
 	QString     b_stones, w_stones;
-	QString     req_handicap;
-	QString     req_komi;
-	assessType  req_free;
-	bool		    requests_set;
 	GSName      gsName;
 	QString     myName;
 	int         BY_timer;
@@ -254,10 +256,8 @@ public slots:
 	void slot_matchsettings(const QString&, const QString&, const QString&, assessType);
 	void slot_requestDialog(const QString&, const QString&, const QString&, const QString&);
 	void slot_timeAdded(int, bool);
-	//void slot_undoRequest(const QString &);
 
 	// qGoBoard
-//	void slot_closeevent(int) {};
 	void set_observe(const QString&);
 
 private:
@@ -269,8 +269,6 @@ private:
 	QList<qGoBoard *> boardlist;
 	QList<qGoBoard *> boardlist_disconnected;
 	GSName   gsName;
-	int      localBoardCounter;
-//	int      lockObserveCmd;
 };
 
 #endif
