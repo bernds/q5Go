@@ -87,7 +87,6 @@ public:
 	void game_startup ();
 	void disconnected (bool remove_from_list);
 	int get_id() const { return id; }
-	void set_id(int i) { id = i; }
 	void set_title(const QString&);
 	void set_komi(const QString&);
 	void set_freegame(bool);
@@ -99,6 +98,7 @@ public:
 	QString get_wplayer() { return QString::fromStdString (m_game->info ().name_w); }
 	void set_adj(bool a) { adjourned = a; }
 	void set_game(Game *g, GameMode mode, stone_color own_color);
+	bool matches_for_resume (const qGoBoard &) const;
 
 	void set_Mode_real (GameMode);
 	GameMode get_Mode() { return gameMode; }
@@ -124,7 +124,6 @@ public:
 	void setTimerInfo(const QString&, const QString&, const QString&, const QString&);
 	QString secToTime(int);
 	void set_stopTimer();
-	void set_runTimer();
 	void set_gamePaused(bool p) { game_paused = p; }
 	int get_boardsize() { return m_game->boardsize (); }
 	int get_mvcount() { return mv_counter; }
@@ -247,6 +246,8 @@ public:
 	void create_match (const QString&, const QString&, bool resumed = false);
 
 	void handle_talk (const QString &pl, const QString &txt);
+
+	qGoBoard *find_adjourned_game (const qGoBoard &) const;
 
 public slots:
 	// parser/mainwindow

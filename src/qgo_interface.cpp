@@ -140,7 +140,7 @@ qGoIF::~qGoIF()
 qGoBoard *qGoIF::find_game_id (int id)
 {
 	for (auto qb: boardlist)
-		if (qb->get_id() == id) {
+		if (qb->get_id() == id && !qb->get_adj ()) {
 			return qb;
 		}
 	return nullptr;
@@ -149,7 +149,7 @@ qGoBoard *qGoIF::find_game_id (int id)
 qGoBoard *qGoIF::find_game_players (const QString &pl1, const QString &pl2)
 {
 	for (auto qb: boardlist) {
-		if (!qb->get_havegd ())
+		if (!qb->get_havegd () || qb->get_adj ())
 			continue;
 		const QString qb1 = qb->get_wplayer ();
 		const QString qb2 = qb->get_bplayer ();
@@ -251,15 +251,9 @@ void qGoIF::game_end (qGoBoard *qb, const QString &txt)
 	if (txt.contains("adjourned"))
 	{
 		if (qb->get_havegd ()) {
-			QString wplayer = qb->get_wplayer();
-			QString bplayer = qb->get_bplayer();
-			if (bplayer == myName || wplayer == myName)
-				// can only reload own games
-				qb->get_win()->refreshButton->setText(tr("LOAD"));
 			qDebug() << "game adjourned... #" << QString::number(qb->get_id());
-			qb->set_adj(true);
+			qb->set_adj (true);
 		}
-		qb->disconnected (true);
 	}
 
 	n_observed--;
@@ -375,38 +369,70 @@ void qGoIF::set_observe (const QString& gameno)
 	client_window->update_observed_games (n_observed);
 }
 
+/* Called before we create a window for a qGoBoard.  See if we have an adjourned
+   game that matches this one so that we can resume rather than open a new window.  */
+bool qGoBoard::matches_for_resume (const qGoBoard &other) const
+{
+	if (other.m_game->info ().name_b != m_game->info ().name_b
+	    || other.m_game->info ().name_w != m_game->info ().name_w
+	    || other.m_game->info ().komi != m_game->info ().komi)
+		return false;
+
+	game_state *our_st = m_game->get_root ();
+	game_state *other_st = other.m_game->get_root ();
+	/* Compare game records.  It's ok to have more moves in the
+	   new version of the game.  They might have come in before we
+	   started observing again.  */
+	while (other_st != nullptr) {
+		if (our_st == nullptr)
+			return false;
+		if (!our_st->get_board ().position_equal_p (other_st->get_board ()))
+			return false;
+		our_st = our_st->next_primary_move ();
+		other_st = other_st->next_primary_move ();
+	}
+	/* At this point we know that we will use this board.  Transfer comments
+	   to the new copy of the game record.  */
+	our_st = m_game->get_root ();
+	other_st = other.m_game->get_root ();
+	while (other_st != nullptr) {
+		our_st->set_comment (other_st->comment ());
+		our_st = our_st->next_primary_move ();
+		other_st = other_st->next_primary_move ();
+	}
+	return true;
+}
+
+qGoBoard *qGoIF::find_adjourned_game (const qGoBoard &new_game) const
+{
+	for (auto qb: boardlist) {
+		if (qb->get_adj () && new_game.matches_for_resume (*qb))
+			return qb;
+	}
+	return nullptr;
+}
+
 /* Called if the server informs us that a game has restarted (as indicated by a move number
-   higher than the starting move).
+   higher than the starting move).  Can only occur in non-quiet mode.
    We check the list of adjourned games to see if there is a game between these two players
-   that we were observing before it adjourned.
-   This code does not currently trigger, and hasn't worked in a long while.
-   It's kept for reference, and also because making it work again for observed games (as opposed to
-   matches) shouldn't be too difficult.  */
+   that we were observing before it adjourned.  */
 
 void qGoIF::resume_observe (const QString &gameno, const QString &wname, const QString &bname)
 {
+	int nr = gameno.toInt ();
+
+	/* First, see if we are already observing the new game.  That can happen if we are
+	   trailing one of the players.  */
+	for (auto qb: boardlist)
+		if (!qb->get_adj () && qb->get_id () == nr)
+			return;
+
+	/* Now look if we were observing the old game.  */
 	for (auto qb: boardlist) {
-		if (qb->get_adj () && qb->get_id() == 10000
-		    && qb->get_bplayer() == bname && qb->get_wplayer() == wname)
+		if (qb->get_adj () && qb->get_bplayer() == bname && qb->get_wplayer() == wname)
 		{
 			qDebug("ok, adjourned game found ...");
-
-			qb->set_id (gameno.toInt());
-			qb->send_kibitz (tr ("Game continued as Game number %1").arg (gameno));
-			// show new game number;
-			qb->get_win()->update_game_record ();
-
-			qb->set_adj (false);
-
-			qb->set_runTimer ();
-			qb->set_sentmovescmd (true);
 			client_window->sendcommand ("observe " + gameno, false);
-			client_window->sendcommand ("moves " + gameno, false);
-			client_window->sendcommand ("all " + gameno, false);
-
-			n_observed++;
-			client_window->update_observed_games (n_observed);
-
 			return;
 		}
 	}
@@ -459,36 +485,6 @@ void qGoIF::create_match (const QString &gameno, const QString &opponent, bool r
 // a match is created
 void qGoIF::resume_own_game (const QString &nr, const QString &wname, const QString &bname)
 {
-	// Look for adjourned games.
-	// Duplicated from parse_move, while we disentangle that function.
-	// This code does not actually trigger at the moment, and hasn't in a good long while.
-	for (auto qb: boardlist) {
-		if (qb->get_adj() && qb->get_id() == 10000 &&
-		    qb->get_bplayer() == bname && qb->get_wplayer() == wname)
-		{
-			qDebug("ok, adjourned game found ...");
-			// ensure that my game is correct stated
-			client_window->sendcommand ("games " + nr, false);
-			client_window->sendcommand ("moves " + nr, false);
-			client_window->sendcommand ("all " + nr, false);
-			qb->set_sentmovescmd(true);
-
-			qb->set_id (nr.toInt());
-
-			qb->set_adj(false);
-			qb->set_runTimer();
-
-			qb->send_kibitz (tr ("Game continued as Game number %1").arg (nr));
-			// show new game number;
-			qb->get_win ()->update_game_record ();
-
-			n_observed++;
-			client_window->update_observed_games (n_observed);
-
-			return;
-		}
-	}
-
 	create_match (nr, wname == myName ? bname : wname, true);
 }
 
@@ -1105,19 +1101,36 @@ void qGoBoard::receive_score_line (int n, const QString &line)
 /* Called when we have game info and all the moves up to this point.  */
 void qGoBoard::game_startup ()
 {
-	bool am_black = m_own_color == black;
-	bool am_white = m_own_color == white;
-	win = new MainWindow_IGS (0, m_game, screen_key (client_window), this, am_white, am_black, gameMode);
-	win->show ();
-	win->set_observer_model (&m_observers);
+	bool resumed = false;
+	/* See if we can reuse an existing window when resuming observation of an adjourned game.  */
+	if (gameMode == modeObserve) {
+		qGoBoard *other = m_qgoif->find_adjourned_game (*this);
+		if (other) {
+			win = other->win;
+			other->win = nullptr;
+			other->disconnected (true);
+			win->init_game_record (m_game);
+			win->set_game_position (m_state);
+			resumed = true;
+		}
+	}
 
-	game_state *root = m_game->get_root ();
-	if (root != m_state)
-		win->transfer_displayed (root, m_state);
+	if (win == nullptr) {
+		bool am_black = m_own_color == black;
+		bool am_white = m_own_color == white;
+		win = new MainWindow_IGS (0, m_game, screen_key (client_window), this, am_white, am_black, gameMode);
+		game_state *root = m_game->get_root ();
+		if (root != m_state)
+			win->transfer_displayed (root, m_state);
+		win->show ();
+	}
+	win->set_observer_model (&m_observers);
 
 	if (m_comments.length () > 0)
 		win->append_comment (m_comments);
 
+	if (resumed)
+		send_kibitz (tr ("Game continued as game number %1\n").arg (id));
 }
 
 // set game info to one board
@@ -1324,13 +1337,6 @@ void qGoBoard::set_stopTimer()
 		killTimer(timer_id);
 
 	timer_id = 0;
-}
-
-// stop timer
-void qGoBoard::set_runTimer()
-{
-	if (!timer_id)
-		timer_id = startTimer(1000);
 }
 
 // send regular time info

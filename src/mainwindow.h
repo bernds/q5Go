@@ -140,8 +140,6 @@ private:
 		return dynamic_cast<T *>(m_undo_stack.back ().get ());
 	}
 
-	void init_game_record (go_game_ptr);
-
 	void update_undo_menus ();
 	void perform_undo ();
 	void perform_redo ();
@@ -182,6 +180,7 @@ public:
 	MainWindow (QWidget* parent, go_game_ptr, const QString opener_scrkey = QString (),
 		    GameMode mode = modeNormal, time_settings ts = time_settings ());
 	virtual ~MainWindow ();
+	void init_game_record (go_game_ptr);
 	Board* getBoard () const { return gfx_board; }
 	int checkModified (bool interactive=true);
 
