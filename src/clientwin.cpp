@@ -52,7 +52,10 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	// init
 
 	setWindowIcon (QIcon (":/ClientWindowGui/images/clientwindow/qgo.png"));
-	myAccount = new Account(this);
+
+	m_standard_caption = QString (PACKAGE1) + " V" + VERSION;
+	clear_server_data ();
+	update_caption ();
 
 	cmd_count = 0;
 
@@ -220,7 +223,6 @@ ClientWindow::~ClientWindow()
 	delete telnetConnection;
 	delete qgoif;
 	delete parser;
-	delete myAccount;
 }
 
 void ClientWindow::initStatusBar(QWidget* /*parent*/)
@@ -336,7 +338,7 @@ void ClientWindow::timerEvent(QTimerEvent* e)
 			// 12*5 min
 			resetCounter();
 
-			if (myAccount->num_observedgames == 0)
+			if (num_observedgames == 0)
 			{
 				// nothing observing
 				holdTheLine = false;
@@ -347,7 +349,7 @@ void ClientWindow::timerEvent(QTimerEvent* e)
 //qDebug(QString("%1: HoldTheLine LENGTHENED: observing game...").arg(statusOnlineTime->text()));
 			}
 		}
-		else if (myAccount->get_gsname() == IGS && holdTheLine)
+		else if (m_online_server == IGS && holdTheLine)
 		{
 			sendcommand("ayt", false);
 			qDebug() << statusOnlineTime->text() << " ayt";
@@ -425,6 +427,19 @@ void ClientWindow::enable_connection_buttons (bool on)
 	refreshGames->setEnabled (on);
 }
 
+void ClientWindow::update_caption ()
+{
+	Status st = m_online_status;
+	if (st == Status::offline)
+		setWindowTitle (m_standard_caption);
+	else {
+		QString t = m_online_server_name + " - " + m_online_acc_name;
+		if (st == Status::guest)
+			t += " (guest)";
+		setWindowTitle (t);
+	}
+}
+
 // slot_connect: emitted when connect button has toggled
 void ClientWindow::slot_connect (bool b)
 {
@@ -443,6 +458,14 @@ void ClientWindow::slot_connect (bool b)
 	enable_connection_buttons (b);
 }
 
+void ClientWindow::clear_server_data ()
+{
+	m_online_server = GS_UNKNOWN;
+	m_online_server_name = tr ("Unknown server");
+	m_online_acc_name = tr ("Unset account name");
+	m_online_status = Status::offline;
+}
+
 // connection closed
 void ClientWindow::slot_connclosed()
 {
@@ -457,8 +480,8 @@ void ClientWindow::slot_connclosed()
 	}
 	seekButtonTimer = oneSecondTimer = 0;
 
-	// set to offline:
-	myAccount->set_offline();
+	clear_server_data ();
+	update_caption ();
 	//pb_connect->setChecked(false);
 	toolConnect->setChecked(false);
 	seekMenu->clear();
@@ -621,7 +644,7 @@ void ClientWindow::sendTextToApp (const QString &txt)
 			ListView_games->setSorting (2);
 #endif
 
-		switch (myAccount->get_gsname ())
+		switch (m_online_server)
 		{
 		case IGS:
 		{
@@ -679,9 +702,9 @@ void ClientWindow::sendTextToApp (const QString &txt)
 			sendcommand ("message", false);
 
 		// let qgo know which server
-		qgoif->set_gsName (myAccount->get_gsname ());
+		qgoif->set_gsName (m_online_server);
 		// show current Server name in status bar
-		statusServer->setText (" " + myAccount->svname + " ");
+		statusServer->setText (" " + m_online_server_name + " ");
 
 		// start timer: event every second
 		onlineCount = 0;
@@ -700,7 +723,7 @@ void ClientWindow::sendTextToApp (const QString &txt)
 		if (store_sort_col != -1)
 			ListView_players->sortItems (store_sort_col, Qt::AscendingOrder);
 
-		if (myAccount->get_gsname () == IGS)
+		if (m_online_server == IGS)
 			ListView_players->showOpen (whoOpenCheck->isChecked ());
 		break;
 
@@ -719,8 +742,8 @@ void ClientWindow::sendTextToApp (const QString &txt)
 
 	case ACCOUNT:
 		// let qgo and parser know which account in case of setting something for own games
-		qgoif->set_myName (myAccount->acc_name);
-		parser->set_myname (myAccount->acc_name);
+		qgoif->set_myName (m_online_acc_name);
+		parser->set_myname (m_online_acc_name);
 		break;
 
 	case STATS:
@@ -759,7 +782,7 @@ int ClientWindow::sendTextFromApp(const QString &txt, bool localecho)
 	if (valid)
 		bytesOut += valid + 2;
 
-	if (myAccount->get_status() == Status::offline)
+	if (m_online_status == Status::offline)
 	{
 		// skip all commands while not telnet connection
 		sendTextToApp("Command skipped - no telnet connection: " + txt);
@@ -899,7 +922,7 @@ void ClientWindow::slot_cmdactivated(const QString &cmd)
 			// Manually entered who command, prepare table
 			prepare_player_list ();
 		}
-		if (cmdLine.mid(0,5).contains("; \\-1") && myAccount->get_gsname() == IGS)
+		if (cmdLine.mid(0,5).contains("; \\-1") && m_online_server == IGS)
 		{
 			// exit all channels
 			prepare_channels ();
@@ -928,7 +951,7 @@ void ClientWindow::set_sessionparameter(QString par, bool val)
 	else
 		value = " false";
 
-	switch(myAccount->get_gsname())
+	switch(m_online_server)
 	{
 		// only toggling...
 		case IGS:
@@ -1030,7 +1053,7 @@ void ClientWindow::slot_cbquiet(bool)
 void ClientWindow::setColumnsForExtUserInfo()
 {
 #if 0 /* @@@ Disabled for now.  Realistically, no one will use anything but IGS.  */
-	if (!extUserInfo || (myAccount->get_gsname() != IGS) )
+	if (!extUserInfo || m_online_server != IGS)
 	{
 		// set player table's columns to 'who' mode
 		ListView_players->removeColumn(11);
@@ -1122,12 +1145,12 @@ void ClientWindow::refresh_players ()
 	else if (whoBox1->currentIndex()  || whoBox2->currentIndex())
 		wparam.append ("1p-9p");
 	else
-		wparam.append (myAccount->get_gsname() == IGS ? "9p-BC" : " ");
+		wparam.append (m_online_server == IGS ? "9p-BC" : " ");
 
 	if (whoOpenCheck->isChecked())
-		wparam.append (myAccount->get_gsname() == WING ? "O" : "o");
+		wparam.append (m_online_server == WING ? "O" : "o");
 
-	if (myAccount->get_gsname() == IGS)
+	if (m_online_server == IGS)
 		sendcommand (wparam.prepend ("userlist "));
 	else
 		sendcommand (wparam.prepend ("who "));
@@ -1141,7 +1164,7 @@ void ClientWindow::refresh_games ()
 
 void ClientWindow::slot_whoopen (bool checked)
 {
-	if (myAccount->get_gsname() == IGS)
+	if (m_online_server == IGS)
 		ListView_players->showOpen(checked);
 }
 
@@ -1231,7 +1254,7 @@ void ClientWindow::handle_matchrequest (const QString &line, bool myrequest, boo
 		opponent = line.section (' ', 0, 0);
 		opp_rk = line.section (' ', 1, 1);
 	}
-	QString myrk = myAccount->get_rank ();
+	QString myrk = m_online_rank;
 
 	// look for same opponent
 	for (auto it: matchlist)
@@ -1240,10 +1263,10 @@ void ClientWindow::handle_matchrequest (const QString &line, bool myrequest, boo
 			break;
 		}
 
-	GSName gs = myAccount->get_gsname ();
+	GSName gs = m_online_server;
 	if (!dlg)
 	{
-		dlg = new GameDialog (0, gs, myAccount->acc_name, myrk, opponent, opp_rk);
+		dlg = new GameDialog (0, gs, m_online_acc_name, myrk, opponent, opp_rk);
 		matchlist.append (dlg);
 
 		if (gs == NNGS || gs == LGS)
@@ -1268,7 +1291,7 @@ void ClientWindow::handle_matchrequest (const QString &line, bool myrequest, boo
 		//dlg->cb_free->setChecked(true);
 
 		// teaching game:
-		if (opponent == myAccount->acc_name)
+		if (opponent == m_online_acc_name)
 			dlg->buttonOffer->setText(tr("Teaching"));
 
 		// If we came here through a context menu, we can check the player's nmatch setting.
@@ -1470,7 +1493,7 @@ void ClientWindow::slot_mouse_players (QTreeWidgetItem *lv)
 		puw->addAction (tr ("rating"),
 				[=] () {
 					// rating
-					if (myAccount->get_gsname() == IGS)
+					if (m_online_server == IGS)
 						sendcommand ("prob " + menu_player_name (), false);
 					else
 						sendcommand ("rating " + menu_player_name (), false);
@@ -1485,8 +1508,8 @@ void ClientWindow::slot_mouse_players (QTreeWidgetItem *lv)
 		// puw->insertSeparator();
 		puw->addAction (tr ("toggle watch list"),
 				[=] () {
-					myAccount->num_watchedplayers += toggle_player_state ("WATCH", "W");
-					statusUsers->setText (" P: " + QString::number (myAccount->num_players) + " / " + QString::number(myAccount->num_watchedplayers) + " ");
+					num_watchedplayers += toggle_player_state ("WATCH", "W");
+					statusUsers->setText (" P: " + QString::number (num_players) + " / " + QString::number (num_watchedplayers) + " ");
 				});
 		puw->addAction (tr ("toggle exclude list"),
 				[=] () { toggle_player_state ("EXCLUDE", "X"); });
@@ -1605,7 +1628,7 @@ void ClientWindow::slot_talkto(QString &receiver, QString &txt)
 	// echo
 	if (txt.length())
 	{
-		switch (myAccount->get_gsname())
+		switch (m_online_server)
 		{
 			case IGS:
 			{
@@ -2016,7 +2039,7 @@ void ClientWindow::slot_SeekList(const QString& player, const QString& condition
 */
 void ClientWindow::send_nmatch_range_parameters()
 {
-	if (myAccount->get_gsname() != IGS || myAccount->get_status() == Status::offline)
+	if (m_online_server != IGS || m_online_status == Status::offline)
 		return;
 
 	QString c = "nmatchrange ";

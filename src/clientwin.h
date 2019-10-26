@@ -40,7 +40,8 @@ class ClientWindow : public QMainWindow, public Ui::ClientWindowGui
 	TelnetConnection *telnetConnection;
 	Parser *parser;
 	qGoIF *qgoif;
-	Account *myAccount;
+
+	QString m_standard_caption;
 
 	// online time
 	int onlineCount;
@@ -99,14 +100,30 @@ class ClientWindow : public QMainWindow, public Ui::ClientWindowGui
 	// timing aids
 	int counter;
 
+	// Statistics
+	int num_players = 0;
+	int num_games = 0;
+	int num_watchedplayers = 0;
+	int num_observedgames = 0;
+
+	// Online status
+	Status m_online_status;
+	GSName m_online_server;
+	QString m_online_server_name;
+	QString m_online_acc_name;
+	QString m_online_rank;
+
 	// reset internal counter (quarter hour) for timing functions of class ClientWindow
 	void resetCounter() { counter = 899; }
 	void timerEvent (QTimerEvent*);
+
+	void clear_server_data ();
 
 	void initStatusBar (QWidget*);
 	void initToolBar ();
 	void initActions ();
 	void update_font ();
+	void update_caption ();
 
 	void set_tn_ready ();
 	int sendTextFromApp (const QString&, bool localecho=true);

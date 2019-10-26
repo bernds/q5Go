@@ -34,7 +34,7 @@ void ClientWindow::finish_game_list ()
 	for (GamesTableItem *lvi; (lvi = static_cast<GamesTableItem*>(*lvii));) {
 		lvii++;
 		if (!lvi->is_up_to_date ()) {
-			myAccount->num_games--;
+			num_games--;
 			delete lvi;
 		}
 	}
@@ -48,7 +48,7 @@ void ClientWindow::finish_player_list ()
 	for (PlayerTableItem *lvi; (lvi = static_cast<PlayerTableItem*>(*lvii));) {
 		lvii++;
 		if (!lvi->is_up_to_date ()) {
-			myAccount->num_players--;
+			num_players--;
 			delete lvi;
 		}
 	}
@@ -103,7 +103,7 @@ void ClientWindow::server_add_game (Game* g)
 	bool found = false;
 	GamesTableItem *lvi_mem = nullptr;
 
-	if (g->H.isEmpty() && !myAccount->num_games)
+	if (g->H.isEmpty() && !num_games)
 	{
 		// skip games until initial table has loaded
 		qDebug() << "game skipped because no init table";
@@ -200,7 +200,7 @@ void ClientWindow::server_add_game (Game* g)
 		new GamesTableItem(ListView_games, *g);
 
 		// increase number of games
-		myAccount->num_games++;
+		num_games++;
 		update_game_stats ();
 	}
 }
@@ -233,8 +233,8 @@ void ClientWindow::server_remove_game (Game* g)
 		for (QTreeWidgetItem *lvi; (lvi = *lv) && !found;) {
 			lv++;
 			// look for name
-			if (lvi->text(1) == myAccount->acc_name ||
-			    lvi->text(3) == myAccount->acc_name)
+			if (lvi->text(1) == m_online_acc_name ||
+			    lvi->text(3) == m_online_acc_name)
 			{
 				// used for player update below
 				game_id = lvi->text(0);
@@ -251,7 +251,7 @@ void ClientWindow::server_remove_game (Game* g)
 	else
 	{
 		// decrease number of games
-		myAccount->num_games--;
+		num_games--;
 		update_game_stats ();
 
 		QTreeWidgetItemIterator lvp(ListView_players);
@@ -275,7 +275,7 @@ void ClientWindow::server_remove_game (Game* g)
 
 void ClientWindow::update_player_stats ()
 {
-	statusUsers->setText (" P: " + QString::number (myAccount->num_players) + " / " + QString::number (myAccount->num_watchedplayers) + " ");
+	statusUsers->setText (" P: " + QString::number (num_players) + " / " + QString::number (num_watchedplayers) + " ");
 }
 
 // take a new player from parser
@@ -299,7 +299,7 @@ void ClientWindow::server_remove_player (const QString &name)
 			if (lvi->text(6) == "W")
 			{
 				qgo->playLeaveSound();
-				myAccount->num_watchedplayers--;
+				num_watchedplayers--;
 			}
 
 			lv++;
@@ -310,7 +310,7 @@ void ClientWindow::server_remove_player (const QString &name)
 			delete lvi;
 			found = true;;
 
-			myAccount->num_players--;
+			num_players--;
 			update_player_stats ();
 		}
 	}
@@ -332,7 +332,7 @@ void ClientWindow::server_add_player (Player *p, bool cmdplayers)
 {
 	QTreeWidgetItemIterator lv(ListView_players);
 
-	if (!cmdplayers && !myAccount->num_players) {
+	if (!cmdplayers && !num_players) {
 		qDebug() << "player skipped because no init table";
 		// skip players until initial table has loaded
 		return;
@@ -362,7 +362,7 @@ void ClientWindow::server_add_player (Player *p, bool cmdplayers)
 #endif
 				}
 
-				if (p->name == myAccount->acc_name)
+				if (p->name == m_online_acc_name)
 				{
 					qDebug() << "updating my account info... (1)";
 					// checkbox open
@@ -384,7 +384,7 @@ void ClientWindow::server_add_player (Player *p, bool cmdplayers)
 						slot_checkbox(2, true);
 
 					// get rank to calc handicap when matching
-					myAccount->set_rank(p->rank);
+					m_online_rank = p->rank;
 				}
 
 				return;
@@ -402,14 +402,14 @@ void ClientWindow::server_add_player (Player *p, bool cmdplayers)
 		// sound for entering - no sound while "who" cmd is executing
 		if (!cmdplayers)
 			qgo->playEnterSound();
-		else if (p->name == myAccount->acc_name)
+		else if (p->name == m_online_acc_name)
 			// it's me
 			// - only possible if 'who'/'user' cmd is executing
 			// - I am on the watchlist, however
 			// don't count!
-			myAccount->num_watchedplayers--;
+			num_watchedplayers--;
 
-		myAccount->num_watchedplayers++;
+		num_watchedplayers++;
 	}
 	// check for excluded players
 	else if (exclude.contains(";" + p->name + ";"))
@@ -420,7 +420,7 @@ void ClientWindow::server_add_player (Player *p, bool cmdplayers)
 	// check for open/looking state
 	if (cmdplayers)
 	{
-		if (p->name == myAccount->acc_name)
+		if (p->name == m_online_acc_name)
 		{
 			qDebug() << "updating my account info...(2)";
 			// checkbox open
@@ -438,7 +438,7 @@ void ClientWindow::server_add_player (Player *p, bool cmdplayers)
 				slot_checkbox(2, true);
 
 			// get rank to calc handicap when matching
-			myAccount->set_rank(p->rank);
+			m_online_rank = p->rank;
 			mark = "M";
 		}
 	}
@@ -449,7 +449,7 @@ void ClientWindow::server_add_player (Player *p, bool cmdplayers)
 	lv1->set_nmatchSettings(p);
 #endif
 	// increase number of players
-	myAccount->num_players++;
+	num_players++;
 	update_player_stats ();
 
 	//if (!cmdplayers)
@@ -458,12 +458,12 @@ void ClientWindow::server_add_player (Player *p, bool cmdplayers)
 
 void ClientWindow::update_game_stats ()
 {
-	statusGames->setText(" G: " + QString::number(myAccount->num_games) + " / " + QString::number(myAccount->num_observedgames) + " ");
+	statusGames->setText(" G: " + QString::number(num_games) + " / " + QString::number(num_observedgames) + " ");
 }
 
 void ClientWindow::update_observed_games (int count)
 {
-	myAccount->num_observedgames = count;
+	num_observedgames = count;
 	update_game_stats ();
 }
 
@@ -477,7 +477,7 @@ void ClientWindow::slot_channelinfo(int nr, const QString &txt)
 	// check if entering a channel
 	if (txt == QString("*on*"))
 	{
-		switch (myAccount->get_gsname())
+		switch (m_online_server)
 		{
 			case IGS:
 				sendcommand("channel");
@@ -504,7 +504,7 @@ void ClientWindow::slot_channelinfo(int nr, const QString &txt)
 
 	// check if I'm in given channel
 	bool flag_add;
-	if (txt.contains(myAccount->acc_name) && !txt.contains("Topic:") && !txt.contains("Title:"))
+	if (txt.contains (m_online_acc_name) && !txt.contains ("Topic:") && !txt.contains ("Title:"))
 		flag_add = true;
 	else
 		flag_add = false;
@@ -599,129 +599,36 @@ void ClientWindow::slot_shout(const QString &player, const QString &txt)
 }
 
 // server name found
-void ClientWindow::slot_svname(GSName &gs)
+void ClientWindow::slot_svname (GSName &gs)
 {
-	// save local at 'gsname'
-	// and change caption
-	myAccount->set_gsname(gs);
-	myAccount->set_caption();
+	m_online_server = gs;
+	switch (gs)
+	{
+	case IGS: m_online_server_name = "IGS"; break;
+	case NNGS: m_online_server_name = "NNGS"; break;
+	case LGS: m_online_server_name = "LGS"; break;
+	case WING: m_online_server_name = "WING"; break;
+	default: m_online_server_name = tr ("Unknown server"); break;
+	}
+
+	if (m_online_status == Status::offline)
+		m_online_status = Status::registered;
+
+	update_caption ();
 }
 
 // account name found
-void ClientWindow::slot_accname(QString &name)
+void ClientWindow::slot_accname (QString &name)
 {
-	// save local at 'gsname'
-	// and change caption
-	myAccount->set_accname(name);
-	myAccount->set_caption();
+	m_online_acc_name = name;
+	update_caption ();
 }
 
 // status found
-void ClientWindow::slot_status(Status s)
+void ClientWindow::slot_status (Status s)
 {
-	myAccount->set_status(s);
-	myAccount->set_caption();
-}
-
-/*
- *   account & caption
- */
-
-Account::Account(QWidget* parent)
-{
-	// init
-	this->parent = parent;
-	standard = PACKAGE + QString("V") + VERSION;
-
-	set_offline();
-}
-
-Account::~Account()
-{
-}
-
-// set caption
-void Account::set_caption()
-{
-	if (gsName == GS_UNKNOWN || acc_name.isNull())
-	{
-		// server unknown or no account name
-		// -> standard caption
-		parent->setWindowTitle(standard);
-	}
-  else
-	{
-		if (status == Status::guest)
-			parent->setWindowTitle(svname + " - " + acc_name + " (guest)");
-		else
-			parent->setWindowTitle(svname + " - " + acc_name);
-	}
-}
-
-// set go server name
-void Account::set_gsname(GSName gs)
-{
-	gsName = gs;
-
-	// now we know which server
-	switch (gsName)
-	{
-	case IGS: svname = "IGS"; break;
-	case NNGS: svname = "NNGS"; break;
-	case LGS: svname = "LGS"; break;
-	case WING: svname = "WING"; break;
-	default: svname = "unknown Server"; break;
-	}
-
-	// set account name
-	if (acc_name.isNull())
-	{
-		// acc_name should be set...
-		acc_name.sprintf("Lulu");
-		qWarning() << "set_gsname() - acc_name not found!";
-	}
-
-	if (status == Status::offline)
-		status = Status::registered;
-}
-
-// set account name
-void Account::set_accname(QString &name)
-{
-	acc_name = name;
-}
-
-// set status
-void Account::set_status(Status s)
-{
-	status = s;
-}
-
-// set to offline mode
-void Account::set_offline()
-{
-	gsName = GS_UNKNOWN;
-	svname = QString::null;
-	acc_name = QString::null;
-	status = Status::offline;
-
-	set_caption();
-
-	num_players = 0;
-	num_watchedplayers = 0;
-	num_observedgames = 0;
-	num_games = 0;
-}
-
-// get some variables
-Status Account::get_status()
-{
-	return status;
-}
-
-GSName Account::get_gsname()
-{
-	return gsName;
+	m_online_status = s;
+	update_caption ();
 }
 
 /*

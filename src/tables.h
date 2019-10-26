@@ -85,37 +85,6 @@ signals:
 
 //-----------
 
-class Account
-{
-public:
-	Account(QWidget*);
-	~Account();
-	void set_caption();
-	void set_gsname(GSName);
-	void set_offline();
-	void set_accname(QString&);
-	void set_status(Status);
-	void set_rank(QString &rk) { rank = rk; }
-	QString get_rank() { return rank; }
-	Status  get_status();
-	GSName  get_gsname();
-
-	GSName  gsName;
-	QString svname;
-	QString acc_name;
-	Status  status;
-	int     num_players;
-	int     num_games;
-	int     num_watchedplayers;
-	int     num_observedgames;
-
-private:
-	QString rank;
-	QString line;
-	QString standard;
-	QWidget *parent;
-};
-
 class Update_Locker
 {
 	QWidget *m_w;
