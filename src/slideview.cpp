@@ -65,6 +65,9 @@ void BaseSlideView<UI, Base>::set_active (game_state *st)
 	redraw ();
 }
 
+/* The reason we do all the word wrapping manually ourselves is that we want it to
+   be consistent across resizing.  What the user sees in the preview window should be
+   the same layout as in the final exported slide.  */
 template<class UI, class Base>
 QPixmap BaseSlideView<UI, Base>::render_text (int w, int h)
 {
@@ -101,10 +104,10 @@ QPixmap BaseSlideView<UI, Base>::render_text (int w, int h)
 		QFont &this_font = lineno == 0 ? f2 : f1;
 		painter.setFont (this_font);
 		QFontMetrics fm_real (lineno == 0 ? title_font : m_font);
-		for (auto &w: words) {
+		for (auto &word: words) {
 			if (lineno == m_n_lines)
 				break;
-			QString trial_word = w;
+			QString trial_word = word;
 			if (m_builtin_tutorial) {
 				/* This is a really ugly way of allowing the tutorials to
 				   highlight some words with a different color.
@@ -112,17 +115,17 @@ QPixmap BaseSlideView<UI, Base>::render_text (int w, int h)
 				   to word wrap, since we couldn't just look for spaces anymore.
 				   Hence, this nasty business.  */
 				QRegularExpression re ("^<[^>]*>([^<]*)<.*>([\\.,]*)");
-				auto re_result = re.match (w);
+				auto re_result = re.match (word);
 
 				if (re_result.hasMatch ()) {
 					trial_word = re_result.captured (1) + re_result.captured (2);
-					if (w.startsWith ("<font>"))
-						w.insert (5, " color=\"yellow\"");
+					if (word.startsWith ("<font>"))
+						word.insert (5, " color=\"yellow\"");
 				}
 			}
 
 			if (line.isEmpty ()) {
-				line = w;
+				line = word;
 				trial_line = trial_word;
 				continue;
 			}
@@ -141,10 +144,10 @@ QPixmap BaseSlideView<UI, Base>::render_text (int w, int h)
 				lineno++;
 				if (lineno == m_n_lines)
 					break;
-				line = w;
+				line = word;
 				trial_line = trial_word;
 			} else {
-				line = line + " " + w;
+				line = line + " " + word;
 				trial_line = trial;
 			}
 		}
