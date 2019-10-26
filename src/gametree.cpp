@@ -340,7 +340,7 @@ void GameTree::update (go_game_ptr gr, game_state *active, bool force)
 				}
 				x0 += len;
 			}
-		auto line = [&] (int x0, int y0, int x1, int y1, bool dotted) -> void
+		auto draw_line = [&] (int x0, int y0, int x1, int y1, bool dotted) -> void
 			{
 				QPen pen;
 				pen.setWidth (2);
@@ -349,7 +349,7 @@ void GameTree::update (go_game_ptr gr, game_state *active, bool force)
 				QLineF line (x0, y0, x1, y1);
 				m_scene->addLine (line, pen);
 			};
-		r->render_visualization (m_size / 2, m_size / 2, m_size, line, true);
+		r->render_visualization (m_size / 2, m_size / 2, m_size, draw_line, true);
 		m_header_scene->clear ();
 		m_header_scene->setSceneRect (0, 0, m_size * w, m_header_scene->height ());
 		m_header_view->setSceneRect (0, 0, m_size * w, m_header_scene->height ());
