@@ -107,6 +107,7 @@ class game_state_manager
 	const unsigned m_n_per_chunk = 128;
 	std::vector<char *> m_game_states;
 	bit_array m_free = bit_array (m_n_per_chunk, false);
+	int m_first_free = 0;
 
 public:
 	~game_state_manager ();
@@ -806,7 +807,8 @@ template<typename ... ARGS>
 game_state *game_state_manager::create_game_state (ARGS &&... args)
 {
 	size_t n_elts = m_game_states.size () * m_n_per_chunk;
-	unsigned free_elt = m_free.ffz ();
+	unsigned free_elt = m_free.ffz (m_first_free);
+	m_first_free = free_elt + 1;
 	char *arena;
 	// printf ("free elt: %u (max %u), within %u\n", free_elt, (unsigned)n_elts, free_elt % m_n_per_chunk);
 	if (free_elt == n_elts) {

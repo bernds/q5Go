@@ -41,6 +41,8 @@ void game_state_manager::release_game_state (game_state *st)
 		}
 		// printf ("freeing bit %u\n", st->m_id);
 		m_free.clear_bit (st->m_id);
+		if (st->m_id < m_first_free)
+			m_first_free = st->m_id;
 		st->~game_state();
 		st = next;
 	}
