@@ -80,7 +80,7 @@ class MainWindow : public QMainWindow, public Ui::BoardWindow
 {
 	Q_OBJECT
 
-	bool m_allow_text_update_signal;
+	bool m_allow_text_update_signal = false;
 	bool m_sgf_var_style;
 
 	QList<game_state *> m_figures;
