@@ -198,10 +198,10 @@ static void add_visible (game_state *gs, sgf::node *n)
 	gs->set_visible (a);
 }
 
-static bool add_eval_1 (game_state *gs, sgf::node::property *vals, bool kata)
+static bool add_eval_1 (game_state *gs, sgf::node::property *propvals, bool kata)
 {
 	bool retval = true;
-	for (const auto &v: vals->values) {
+	for (const auto &v: propvals->values) {
 		std::stringstream ss (v);
 		std::vector<std::string> vals;
 		for (;;) {
@@ -353,8 +353,8 @@ static void add_to_game_state (game_state *gs, sgf::node *n, bool force, QTextCo
 		const std::string *mn = n->find_property_val ("MN");
 		if (mn) {
 			try {
-				int n = stoi (*mn);
-				gs->set_sgf_move_number (n);
+				int nr = stoi (*mn);
+				gs->set_sgf_move_number (nr);
 			} catch (...) {
 				errs.invalid_val = true;
 			}
@@ -427,12 +427,12 @@ std::shared_ptr<game_record> sgf2record (const sgf &s, QTextCodec *codec)
 		else
 			codec = QTextCodec::codecForName ("ISO-8859-1"); // default encoding of SGF by specification
 	}
-	const std::string *p = s.nodes->find_property_val ("SZ");
+	const std::string *sz = s.nodes->find_property_val ("SZ");
 	int size_x = -1;
 	int size_y = 19;
 	/* GoGui writes files without SZ. Assume 19, I guess.  */
-	if (p != nullptr) {
-		const std::string &v = *p;
+	if (sz != nullptr) {
+		const std::string &v = *sz;
 		size_y = 0;
 		for (size_t i = 0; i < v.length (); i++) {
 			if (v[i] == ':') {
