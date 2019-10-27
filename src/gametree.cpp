@@ -157,7 +157,9 @@ GameTree::GameTree (QWidget *parent)
 
 void GameTree::clear_scene ()
 {
+	setScene (nullptr);
 	m_scene->clear ();
+	setScene (m_scene);
 	setDragMode (QGraphicsView::ScrollHandDrag);
 }
 
@@ -354,16 +356,26 @@ void GameTree::update (go_game_ptr gr, game_state *active, bool force)
 		};
 		r->render_visualization (0, 0, start_run);
 
+		QPainterPath path;
+		QPen dot_pen;
+		dot_pen.setWidth (2);
+		dot_pen.setStyle (Qt::DotLine);
+
 		auto draw_line = [&] (int x0, int y0, int x1, int y1, bool dotted) -> void
 			{
-				QPen pen;
-				pen.setWidth (2);
-				if (dotted)
-					pen.setStyle (Qt::DotLine);
-				QLineF line (x0, y0, x1, y1);
-				m_scene->addLine (line, pen);
+				if (dotted) {
+					QLineF line (x0, y0, x1, y1);
+					m_scene->addLine (line, dot_pen);
+				} else {
+					path.moveTo (x0, y0);
+					path.lineTo (x1, y1);
+				}
 			};
 		r->render_visualization (m_size / 2, m_size / 2, m_size, draw_line, true);
+		QPen pen;
+		pen.setWidth (2);
+		m_scene->addPath (path, pen);
+
 		m_header_scene->clear ();
 		m_header_scene->setSceneRect (0, 0, m_size * w, m_header_scene->height ());
 		m_header_view->setSceneRect (0, 0, m_size * w, m_header_scene->height ());
@@ -419,7 +431,7 @@ void GameTree::update (go_game_ptr gr, game_state *active, bool force)
 	m_sel->setZValue (-1);
 	if (found) {
 		m_sel->setPos (acx * m_size, acy * m_size);
-		if (active_changed)
+		if (active_changed || force)
 			ensureVisible (m_sel, m_size / 2, m_size / 2);
 	} else
 		m_sel->hide ();
