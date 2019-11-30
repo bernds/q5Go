@@ -2855,6 +2855,7 @@ void MainWindow::leave_edit_modify ()
 	m_pos_before_edit = nullptr;
 	m_game->release_game_state (st);
 	gfx_board->setModified ();
+	editPosButton->setText (tr ("Edit position"));
 }
 
 void MainWindow::leave_edit_append ()
@@ -2867,6 +2868,7 @@ void MainWindow::leave_edit_append ()
 	gfx_board->set_displayed (new_st);
 	m_pos_before_edit = nullptr;
 	gfx_board->setModified ();
+	editPosButton->setText (tr ("Edit position"));
 }
 
 void MainWindow::leave_edit_prepend ()
@@ -2882,6 +2884,7 @@ void MainWindow::leave_edit_prepend ()
 	gfx_board->set_displayed (new_st);
 	m_pos_before_edit = nullptr;
 	gfx_board->setModified ();
+	editPosButton->setText (tr ("Edit position"));
 }
 
 void MainWindow::add_engine_pv (game_state *st, game_state *pv)
