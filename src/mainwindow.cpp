@@ -2241,8 +2241,15 @@ void MainWindow::setGameMode (GameMode mode)
 {
 	GameMode old_mode = m_gamemode;
 	m_gamemode = mode;
-	if (mode == modePostMatch || mode == modeNormal)
+	if (mode == modePostMatch || mode == modeNormal) {
 		m_remember_mode = mode;
+		/* Disconnect any special functionality from the Pass and Done button.
+		   This handles a number of game end conditions for IGS or GTP windows.  */
+		disconnect (passButton, &QPushButton::clicked, nullptr, nullptr);
+		connect (passButton, &QPushButton::clicked, this, &MainWindow::doPass);
+		disconnect (doneButton, &QPushButton::clicked, nullptr, nullptr);
+		connect (doneButton, &QPushButton::clicked, this, &MainWindow::doCountDone);
+	}
 
 	bool editable_comments = mode != modeMatch && mode != modePostMatch && mode != modeObserve && mode != modeScoreRemote && m_remember_mode != modePostMatch;
 	leaveMatchButton->setVisible (mode == modePostMatch);
