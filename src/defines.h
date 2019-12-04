@@ -35,14 +35,14 @@
 	"Deutsch", \
 	"English", \
 	"Espanol",\
-	u8"Fran\u00e7ais", \
+	"Fran\u00e7ais", \
 	"Italiano", \
 	"Latin (!)", \
 	"Nederlands", \
 	"Polish", \
 	"Portuges", \
 	"Russian", \
-	u8"T\u00fcrk\u00e7e"}
+	"T\u00fcrk\u00e7e"}
 
 #define LANGUAGE_CODES { \
 	"zh", \
