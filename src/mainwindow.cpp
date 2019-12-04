@@ -2249,6 +2249,9 @@ void MainWindow::setGameMode (GameMode mode)
 		connect (passButton, &QPushButton::clicked, this, &MainWindow::doPass);
 		disconnect (doneButton, &QPushButton::clicked, nullptr, nullptr);
 		connect (doneButton, &QPushButton::clicked, this, &MainWindow::doCountDone);
+
+		/* Also make sure we can edit the game freely in these modes.  */
+		gfx_board->set_player_colors (true, true);
 	}
 
 	bool editable_comments = mode != modeMatch && mode != modePostMatch && mode != modeObserve && mode != modeScoreRemote && m_remember_mode != modePostMatch;
@@ -3067,7 +3070,6 @@ void MainWindow_GTP::time_loss (stone_color col)
 
 	m_game->set_result (result.toStdString ());
 	setGameMode (modeNormal);
-	gfx_board->set_player_colors (true, true);
 	QMessageBox mb (QMessageBox::Information, tr ("Clock has run out"), report,
 			QMessageBox::Ok | QMessageBox::Default);
 	mb.exec ();
@@ -3112,7 +3114,6 @@ void MainWindow_GTP::gtp_played_move (GTP_Process *p, int x, int y)
 		if (m_gtp_b)
 			m_gtp_b->quit ();
 		setGameMode (modeNormal);
-		gfx_board->set_player_colors (true, true);
 		return;
 	}
 	gfx_board->setModified ();
@@ -3197,7 +3198,6 @@ void MainWindow_GTP::game_end (const QString &result, stone_color winner)
 				QMessageBox::Ok | QMessageBox::Default);
 		mb.exec ();
 		setGameMode (modeNormal);
-		gfx_board->set_player_colors (true, true);
 		return;
 	}
 	setup_game ();
@@ -3214,7 +3214,6 @@ void MainWindow_GTP::enter_scoring ()
 		/* As of now, we're disconnected, and the scoring function should
 		   remember normal mode.  */
 		setGameMode (modeNormal);
-		gfx_board->set_player_colors (true, true);
 		doRealScore (true);
 	}
 }
@@ -3266,7 +3265,6 @@ void MainWindow_GTP::gtp_played_resign (GTP_Process *p)
 		m_gtp_w->quit ();
 	if (m_gtp_b)
 		m_gtp_b->quit ();
-	gfx_board->set_player_colors (true, true);
 }
 
 void MainWindow_GTP::gtp_failure (GTP_Process *, const QString &err)
@@ -3275,7 +3273,6 @@ void MainWindow_GTP::gtp_failure (GTP_Process *, const QString &err)
 		return;
 	show ();
 	setGameMode (modeNormal);
-	gfx_board->set_player_colors (true, true);
 	QMessageBox msg(QString (QObject::tr("Error")), err,
 			QMessageBox::Warning, QMessageBox::Ok | QMessageBox::Default,
 			Qt::NoButton, Qt::NoButton);
@@ -3288,7 +3285,6 @@ void MainWindow_GTP::gtp_exited (GTP_Process *)
 {
 	if (game_mode () == modeComputer || game_mode () == modeObserveGTP) {
 		setGameMode (modeNormal);
-		gfx_board->set_player_colors (true, true);
 		show ();
 		QMessageBox::warning (this, PACKAGE, QObject::tr ("GTP process exited unexpectedly."));
 	}
@@ -3346,7 +3342,6 @@ void MainWindow_GTP::player_resign ()
 		return;
 
 	setGameMode (modeNormal);
-	gfx_board->set_player_colors (true, true);
 	auto *gtp = single_engine ();
 	gtp->quit();
 	if (gfx_board->player_is (black))

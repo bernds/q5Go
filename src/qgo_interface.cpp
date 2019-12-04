@@ -1502,10 +1502,8 @@ void qGoBoard::disconnected (bool remove_from_list)
 	// set board editable...
 	GameMode new_mode = gameMode == modeMatch ? modePostMatch : modeNormal;
 	set_Mode_real (new_mode);
-	if (win) {
+	if (win)
 		win->setGameMode (new_mode);
-		win->getBoard ()->set_player_colors (true, true);
-	}
 	/* @@@ Sometimes we get a game result without moves, if we started observing just
 	   as the game ended.  We should arrange for some way to delete this qGoBoard.  */
 }
