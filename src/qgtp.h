@@ -121,6 +121,8 @@ class GTP_Process : public QProcess
 	bool m_analyze_lz = false;
 	bool m_analyze_kata = false;
 
+	stone_color m_genmove_col = none;
+
 	typedef void (GTP_Process::*t_receiver) (const QString &);
 	QMap <int, t_receiver> m_receivers;
 	QMap <int, t_receiver> m_err_receivers;

@@ -188,11 +188,14 @@ void GTP_Process::receive_move (const QString &move)
 	} else {
 		QChar sx = move[0];
 
-		int i = sx.toLatin1() - 'A';
-		if (i > 7)
-			i--;
+		int x = sx.toLatin1() - 'A';
+		if (x > 7)
+			x--;
 		int j = move.mid (1).toInt();
-		m_controller->gtp_played_move (this, i, m_size_y - j);
+		int y = m_size_y - j;
+		if (m_last_move != nullptr)
+			m_last_move = m_last_move->add_child_move (x, y, m_genmove_col);
+		m_controller->gtp_played_move (this, x, y);
 	}
 }
 
@@ -231,6 +234,7 @@ void GTP_Process::komi (double km)
 
 void GTP_Process::request_move (stone_color col)
 {
+	m_genmove_col = col;
 	if (col == black)
 		send_request ("genmove black", &GTP_Process::receive_move);
 	else
