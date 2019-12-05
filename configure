@@ -3778,9 +3778,19 @@ fi
 if test -z "QTCHOOSER" ; then
     as_fn_error $? "Cannot find 'qtchooser'" "$LINENO" 5
 else
-    MOC='qtchooser -run-tool=moc -qt=qt5'
-    UIC='qtchooser -run-tool=uic -qt=qt5'
-    RCC='qtchooser -run-tool=rcc -qt=qt5'
+    QT_LABELS="$(qtchooser -list-versions)"
+    if grep -q "qt5" <<< "$QT_LABELS" ; then
+        QT5_NAME="qt5"
+    elif grep -q "5-64" <<< "$QT_LABELS" ; then
+        QT5_NAME="5-64"
+    elif grep -q "5" <<< "$QT_LABELS" ; then
+        QT5_NAME="5"
+    else
+        as_fn_error $? "Cannot find a version of 'qt5' within 'qtchooser'" "$LINENO" 5
+    fi
+    MOC="qtchooser -run-tool=moc -qt=$QT5_NAME"
+    UIC="qtchooser -run-tool=uic -qt=$QT5_NAME"
+    RCC="qtchooser -run-tool=rcc -qt=$QT5_NAME"
 fi
 
 CXXFLAGS="$CXXFLAGS $QT5_CFLAGS -fPIC"
