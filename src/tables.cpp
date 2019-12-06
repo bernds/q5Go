@@ -161,10 +161,7 @@ void ClientWindow::server_add_game (const Game &g_in)
 
 			// I'm playing, thus I'm open, except teaching games
 			if (emw != "M" || emb != "M")
-			{
-				// checkbox open
-				slot_checkbox(0, true);
-			}
+				set_open_mode (true);
 		}
 		else if (emw == "W" || emb == "W")
 		{
@@ -378,21 +375,21 @@ void ClientWindow::server_add_player (const Player &p_in, bool cmdplayers)
 					qDebug() << "updating my account info... (1)";
 					// checkbox open
 					bool b = (p.info.contains('X') == 0);
-					slot_checkbox(0, b);
+					set_open_mode (b);
 					// checkbox looking - don't set if closed
 					if (p.info.contains('!') != 0)
 						// "!" found
-						slot_checkbox(1, true);
+						set_looking_mode (true);
 					else if (b)
 						// "!" not found && open
-						slot_checkbox(1, false);
+						set_looking_mode (false);
 					// checkbox quiet
 					// NOT CORRECT REPORTED BY SERVER!
 					//b = (p.info.contains('Q') != 0);
-					//slot_checkbox(2, b);
+					//set_quiet_mode (b);
 					// -> WORKAROUND
 					if (p.info.contains('Q') != 0)
-						slot_checkbox(2, true);
+						set_quiet_mode (true);
 
 					// get rank to calc handicap when matching
 					m_online_rank = p.rank;
@@ -436,17 +433,17 @@ void ClientWindow::server_add_player (const Player &p_in, bool cmdplayers)
 			qDebug() << "updating my account info...(2)";
 			// checkbox open
 			bool b = (p.info.contains('X') == 0);
-			slot_checkbox(0, b);
+			set_open_mode (b);
 			// checkbox looking
 			b = (p.info.contains('!') != 0);
-			slot_checkbox(1, b);
+			set_looking_mode (b);
 			// checkbox quiet
 			// NOT CORRECT REPORTED BY SERVER!
 			//b = (p.info.contains('Q') != 0);
-			//slot_checkbox(2, b);
+			//set_quiet_mode (b);
 			// -> WORKAROUND
 			if (p.info.contains('Q') != 0)
-				slot_checkbox(2, true);
+				set_quiet_mode (true);
 
 			// get rank to calc handicap when matching
 			m_online_rank = p.rank;

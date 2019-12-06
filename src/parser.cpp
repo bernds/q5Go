@@ -508,20 +508,20 @@ InfoType Parser::cmd9(const QString &line)
 	if (line.contains("Set open to be"))
 	{
 		bool val = (line.indexOf("False") == -1);
-		emit signal_checkbox(0, val);
+		client_window->set_open_mode (val);
 	}
 	else if (line.contains("Setting you open for matches"))
-		emit signal_checkbox(0, true);
+		client_window->set_open_mode (true);
 	else if (line.contains("Set looking to be"))
 	{
 		bool val = (line.indexOf("False") == -1);
-		emit signal_checkbox(1, val);
+		client_window->set_looking_mode (val);
 	}
 	// 9 Set quiet to be False.
 	else if (line.contains("Set quiet to be"))
 	{
 		bool val = (line.indexOf("False") == -1);
-		emit signal_checkbox(2, val);
+		client_window->set_quiet_mode (val);
 	}
 	else if (line.indexOf("Channel") == 0)
 	{

@@ -184,7 +184,6 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	connect(parser, &Parser::signal_status, this, &ClientWindow::slot_status);
 	connect(parser, &Parser::signal_connclosed, this, &ClientWindow::slot_connclosed);
 	connect(parser, &Parser::signal_talk, this, &ClientWindow::slot_talk);
-	connect(parser, &Parser::signal_checkbox, this, &ClientWindow::slot_checkbox);
 	connect(parser, &Parser::signal_channelinfo, this, &ClientWindow::slot_channelinfo);
 	connect(parser, &Parser::signal_matchrequest, [this] (const QString &line) { handle_matchrequest (line, false, false); });
 	connect(parser, &Parser::signal_matchCanceled, this, &ClientWindow::slot_removeMatchDialog);
@@ -988,38 +987,23 @@ void ClientWindow::slot_cbconnect (const QString &txt)
 		toolConnect->setToolTip (tr("Connect with") + " " + txt);
 }
 
-// set checkbox status because of server info or because menu / checkbok toggled
-void ClientWindow::slot_checkbox(int nr, bool val)
+void ClientWindow::set_open_mode (bool val)
 {
-	// set checkbox (nr) to val
-	switch (nr)
-	{
-		// open
-		case 0:
-			//toolOpen->setChecked(val);
-			setOpenMode->setChecked(val);
-			break;
+	setOpenMode->setChecked (val);
+}
 
-		// looking
-		case 1:
-			//toolLooking->setChecked(val);
-			setLookingMode->setChecked(val);
-			break;
+void ClientWindow::set_looking_mode (bool val)
+{
+	setLookingMode->setChecked (val);
+}
 
-		// quiet
-		case 2:
-			//toolQuiet->setChecked(val);
-			setQuietMode->setChecked(val);
-			break;
-
-		default:
-			qWarning("checkbox doesn't exist");
-			break;
-	}
+void ClientWindow::set_quiet_mode (bool val)
+{
+	setQuietMode->setChecked (val);
 }
 
 // checkbox looking cklicked
-void ClientWindow::slot_cblooking(bool)
+void ClientWindow::slot_cblooking (bool)
 {
 	bool val = setLookingMode->isChecked();
 //	setLookingMode->setChecked(val);
@@ -1031,7 +1015,7 @@ void ClientWindow::slot_cblooking(bool)
 
 
 // checkbox open clicked
-void ClientWindow::slot_cbopen(bool)
+void ClientWindow::slot_cbopen (bool)
 {
 	bool val = setOpenMode->isChecked();
 	set_sessionparameter("open", val);
@@ -1041,7 +1025,7 @@ void ClientWindow::slot_cbopen(bool)
 }
 
 // checkbox quiet clicked
-void ClientWindow::slot_cbquiet(bool)
+void ClientWindow::slot_cbquiet (bool)
 {
 	bool val = setQuietMode->isChecked();
 	set_sessionparameter("quiet", val);

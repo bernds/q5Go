@@ -33,7 +33,6 @@ signals:
 	void signal_status(Status);
 	void signal_connclosed();
 	void signal_talk(const QString&, const QString&, bool);
-	void signal_checkbox(int, bool);
 	void signal_channelinfo(int, const QString&);
 	void signal_kibitz(int, const QString&, const QString&);
 	void signal_komi(const QString&, const QString&, bool);

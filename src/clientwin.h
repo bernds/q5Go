@@ -183,6 +183,10 @@ public:
 
 	void stats_player (const Player &);
 
+	void set_open_mode (bool);
+	void set_looking_mode (bool);
+	void set_quiet_mode (bool);
+
 	void update_observed_games (int);
 	void handle_matchrequest (const QString&, bool, bool);
 
@@ -216,7 +220,6 @@ public slots:
 	void slot_status (Status);
 	void slot_connclosed ();
 	void slot_talk (const QString&, const QString&, bool);
-	void slot_checkbox (int, bool);
 	void slot_channelinfo (int, const QString&);
   	void slot_removeMatchDialog (const QString&);
 	void slot_shout (const QString&, const QString&);
