@@ -9,6 +9,22 @@
 #include "gs_globals.h"
 #include <math.h>
 
+void ClientWindow::update_player_stats ()
+{
+	statusUsers->setText (" P: " + QString::number (num_players) + " / " + QString::number (num_watchedplayers) + " ");
+}
+
+void ClientWindow::update_game_stats ()
+{
+	statusGames->setText(" G: " + QString::number(num_games) + " / " + QString::number(num_observedgames) + " ");
+}
+
+void ClientWindow::update_observed_games (int count)
+{
+	num_observedgames = count;
+	update_game_stats ();
+}
+
 void ClientWindow::prepare_game_list ()
 {
 	QTreeWidgetItemIterator lvii (ListView_games);
@@ -273,11 +289,6 @@ void ClientWindow::server_remove_game (Game* g)
 	}
 }
 
-void ClientWindow::update_player_stats ()
-{
-	statusUsers->setText (" P: " + QString::number (num_players) + " / " + QString::number (num_watchedplayers) + " ");
-}
-
 // take a new player from parser
 void ClientWindow::server_remove_player (const QString &name)
 {
@@ -454,17 +465,6 @@ void ClientWindow::server_add_player (Player *p, bool cmdplayers)
 
 	//if (!cmdplayers)
 	//	ListView_players->sort() ;
-}
-
-void ClientWindow::update_game_stats ()
-{
-	statusGames->setText(" G: " + QString::number(num_games) + " / " + QString::number(num_observedgames) + " ");
-}
-
-void ClientWindow::update_observed_games (int count)
-{
-	num_observedgames = count;
-	update_game_stats ();
 }
 
 // get channelinfo: ch nr + people
