@@ -410,10 +410,6 @@ InfoType Parser::cmd7(const QString &line)
 	aGame->brank = gamesre.cap (5);
 	aGame->ob = gamesre.cap (12);
 
-	// indicate game to be running
-	aGame->running = true;
-	aGame->oneColorGo = false;
-
 	client_window->server_add_game (aGame);
 	emit signal_gamemove(aGame);
 
@@ -816,7 +812,6 @@ InfoType Parser::cmd9(const QString &line)
 	{
 		// remove game from list - special case: own game
 		aGame->nr = "@";
-		aGame->running = false;
 
 		client_window->server_remove_game (aGame);
 	}
@@ -825,7 +820,6 @@ InfoType Parser::cmd9(const QString &line)
 	{
 		// remove game from list
 		aGame->nr = line.section(' ', 1, 1).remove(':');
-		aGame->running = false;
 
 		// for information
 		aGame->Sz = "has adjourned.";
@@ -838,7 +832,6 @@ InfoType Parser::cmd9(const QString &line)
 	{
 		aGame->nr = line.section(' ', 2, 2);
 		aGame->Sz = "-";
-		aGame->running = false;
 
 		m_qgoif->game_end (aGame->nr, "-");
 		return IT_OTHER;
@@ -1364,7 +1357,6 @@ InfoType Parser::cmd19(const QString &line)
 InfoType Parser::cmd20(const QString &line)
 {
 	aGame->nr = "@";
-	aGame->running = false;
 
 	QString player1 = line.section(' ', 0, 0);
 	QString score1 = line.section(' ', 2, 2);
@@ -1426,7 +1418,6 @@ InfoType Parser::cmd21(const QString &line)
 			aGame->mv = line.section(' ', 7, 7).remove('}');
 			aGame->Sz = "@";
 			aGame->H = QString::null;
-			aGame->running = true;
 
 			client_window->server_add_game (aGame);
 			m_qgoif->resume_observe (aGame->nr, aGame->wname, aGame->bname);
@@ -1449,7 +1440,6 @@ InfoType Parser::cmd21(const QString &line)
 		{
 			// remove game from list
 			aGame->nr = line.section(' ', 1, 1).remove(':');
-			aGame->running = false;
 
 			// for information
 			aGame->Sz = line.section(' ', 5).remove('}');
@@ -1494,7 +1484,6 @@ InfoType Parser::cmd21(const QString &line)
 		aGame->mv = "-";
 		aGame->Sz = "-";
 		aGame->H = QString::null;
-		aGame->running = true;
 
 		if (gsName == WING && aGame->wname == aGame->bname) {
 			// WING doesn't send 'create match' msg in case of teaching game

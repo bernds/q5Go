@@ -29,8 +29,6 @@ public:
 	QString FR;
 	QString ob;
 	QString sort_rk_w, sort_rk_b;
-	bool running;
-	bool oneColorGo;
 
 	bool up_to_date;
 };
