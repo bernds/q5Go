@@ -410,7 +410,7 @@ InfoType Parser::cmd7(const QString &line)
 	aGame->brank = gamesre.cap (5);
 	aGame->ob = gamesre.cap (12);
 
-	client_window->server_add_game (aGame);
+	client_window->server_add_game (*aGame);
 	emit signal_gamemove(aGame);
 
 	return GAME7;
@@ -1027,57 +1027,57 @@ InfoType Parser::cmd9(const QString &line)
 	else if (line.contains("Address:"))
 	{
 		statsPlayer->address = line.section(':', 1).trimmed();
-		emit signal_statsPlayer(statsPlayer);
+		client_window->stats_player (*statsPlayer);
 		return IT_OTHER;
 	}
 	else if (line.contains("Last Access"))
 	{
 		statsPlayer->idle = line.section(':', 1).trimmed();
-		emit signal_statsPlayer(statsPlayer);
+		client_window->stats_player (*statsPlayer);
 		return IT_OTHER;
 	}
 	else if (line.contains("Rating:"))
 	{
 		statsPlayer->rank = line.section(':', 1).trimmed();
-		emit signal_statsPlayer(statsPlayer);
+		client_window->stats_player (*statsPlayer);
 		return IT_OTHER;
 	}
 
 	else if (line.contains("Wins:"))
 	{
 		statsPlayer->won = line.section(':', 1).trimmed();
-		emit signal_statsPlayer(statsPlayer);
+		client_window->stats_player (*statsPlayer);
 		return IT_OTHER;
 	}
 	else if (line.contains("Losses:"))
 	{
 		statsPlayer->lost = line.section(':', 1).trimmed();
-		emit signal_statsPlayer(statsPlayer);
+		client_window->stats_player (*statsPlayer);
 		return IT_OTHER;
 	}
 	else if (line.contains("Country:") || line.contains("From:"))   //IGS || LGS
 	{
 		statsPlayer->country = line.section(':', 1).trimmed();
-		emit signal_statsPlayer(statsPlayer);
+		client_window->stats_player (*statsPlayer);
 		return IT_OTHER;
 	}
 
 	else if (line.contains("Defaults"))    //IGS
 	{
 		statsPlayer->extInfo = line.section(':', 1).trimmed();
-		emit signal_statsPlayer(statsPlayer);
+		client_window->stats_player (*statsPlayer);
 		return IT_OTHER;
 	}
 	else if (line.contains("Experience on WING"))  //WING
 	{
 		statsPlayer->extInfo = line;
-		emit signal_statsPlayer(statsPlayer);
+		client_window->stats_player (*statsPlayer);
 		return IT_OTHER;
 	}
 	else if (line.contains("User Level:")) //LGS
 	{
 		statsPlayer->extInfo = line;
-		emit signal_statsPlayer(statsPlayer);
+		client_window->stats_player (*statsPlayer);
 		return IT_OTHER;
 	}
 
@@ -1086,27 +1086,27 @@ InfoType Parser::cmd9(const QString &line)
 		if (! statsPlayer->info.isEmpty())
 			statsPlayer->info.append("\n");
 		statsPlayer->info.append(line);
-		emit signal_statsPlayer(statsPlayer);
+		client_window->stats_player (*statsPlayer);
 		return IT_OTHER;
 	}
 
 	else if (line.contains("Playing in game:"))       //IGS and LGS
 	{
 		statsPlayer->play_str = line.section(':', 1).trimmed();
-		emit signal_statsPlayer(statsPlayer);
+		client_window->stats_player (*statsPlayer);
 		return IT_OTHER;
 	}
 	else if (line.contains("(playing game"))       //WING
 	{
 		statsPlayer->play_str = line.section(':', 1).trimmed();
-		emit signal_statsPlayer(statsPlayer);
+		client_window->stats_player (*statsPlayer);
 		return IT_OTHER;
 	}
 
 	else if (line.contains("Rated Games:"))
 	{
 		statsPlayer->rated = line.section(':', 1).trimmed();
-		emit signal_statsPlayer(statsPlayer);
+		client_window->stats_player (*statsPlayer);
 		return IT_OTHER;
 	}
 
@@ -1116,7 +1116,7 @@ InfoType Parser::cmd9(const QString &line)
 		statsPlayer->rated = element(line, 2, " ");
 		statsPlayer->won = element(line, 0, "("," ");
 		statsPlayer->lost = element(line, 6, " ");
-		emit signal_statsPlayer(statsPlayer);
+		client_window->stats_player (*statsPlayer);
 #endif
 		return IT_OTHER;
 	}
@@ -1128,14 +1128,14 @@ InfoType Parser::cmd9(const QString &line)
 		else
 			statsPlayer->idle = line.section(')', 1).trimmed();
 
-		emit signal_statsPlayer(statsPlayer);
+		client_window->stats_player (*statsPlayer);
 		return IT_OTHER;
 	}
 
 	else if (line.contains("Last Access"))
 	{
 		statsPlayer->idle = "not on";
-		emit signal_statsPlayer(statsPlayer);
+		client_window->stats_player (*statsPlayer);
 		return IT_OTHER;
 	}
 
@@ -1143,7 +1143,7 @@ InfoType Parser::cmd9(const QString &line)
 	{
 		statsPlayer->rank = line.section(' ', 4, 4);
 		statsPlayer->rated = line.section(' ', 7, 7);
-		emit signal_statsPlayer(statsPlayer);
+		client_window->stats_player (*statsPlayer);
 		return IT_OTHER;
 	}
 
@@ -1151,7 +1151,7 @@ InfoType Parser::cmd9(const QString &line)
 	{
 		statsPlayer->won = line.section(' ', 2, 2);
 		statsPlayer->lost = line.section(' ', 4, 4);
-		emit signal_statsPlayer(statsPlayer);
+		client_window->stats_player (*statsPlayer);
 		return IT_OTHER;
 	}
 
@@ -1385,7 +1385,7 @@ InfoType Parser::cmd21(const QString &line)
 		aPlayer->idle = "-";
 
 		// false -> no "players" cmd preceded
-		client_window->server_add_player (aPlayer, false);
+		client_window->server_add_player (*aPlayer, false);
 		return PLAYER;
 	}
 	else if (line.contains("has disconnected"))
@@ -1411,7 +1411,7 @@ InfoType Parser::cmd21(const QString &line)
 			aGame->Sz = "@";
 			aGame->H = QString::null;
 
-			client_window->server_add_game (aGame);
+			client_window->server_add_game (*aGame);
 			m_qgoif->resume_observe (aGame->nr, aGame->wname, aGame->bname);
 			return GAME;
 		}
@@ -1483,7 +1483,7 @@ InfoType Parser::cmd21(const QString &line)
 			emit signal_matchcreate (aGame->nr, aGame->bname);
 		}
 
-		client_window->server_add_game (aGame);
+		client_window->server_add_game (*aGame);
 		return GAME;
 	}
 	// !xxxx!: a game anyone ?
@@ -1692,7 +1692,7 @@ InfoType Parser::cmd27(const QString &txt)
 			}
 
 			// check if line ok, true -> cmd "players" preceded
-			client_window->server_add_player (aPlayer, true);
+			client_window->server_add_player (*aPlayer, true);
 		}
 		else
 			qDebug() << "WING - player27 dropped (1): " << txt;
@@ -1724,7 +1724,7 @@ InfoType Parser::cmd27(const QString &txt)
 			}
 
 			// true -> cmd "players" preceded
-			client_window->server_add_player (aPlayer, true);
+			client_window->server_add_player (*aPlayer, true);
 		}
 		else
 			qDebug() << "WING - player27 dropped (2): " << txt;
@@ -1756,7 +1756,7 @@ InfoType Parser::cmd27(const QString &txt)
 			}
 
 			// check if line ok, true -> cmd "players" preceded
-			client_window->server_add_player (aPlayer, true);
+			client_window->server_add_player (*aPlayer, true);
 		}
 		else
 			qDebug() << "player27 dropped (1): " << txt;
@@ -1789,7 +1789,7 @@ InfoType Parser::cmd27(const QString &txt)
 			}
 
 			// true -> cmd "players" preceded
-			client_window->server_add_player (aPlayer, true);
+			client_window->server_add_player (*aPlayer, true);
 		}
 		else
 			qDebug() << "player27 dropped (2): " << txt;
@@ -2054,7 +2054,7 @@ InfoType Parser::cmd42(const QString &txt)
 	}
 
 	// check if line ok, true -> cmd 'players' or 'users' preceded
-	client_window->server_add_player (aPlayer, true);
+	client_window->server_add_player (*aPlayer, true);
 
 	return PLAYER42;
 }

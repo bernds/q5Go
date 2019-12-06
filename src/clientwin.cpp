@@ -178,7 +178,6 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 
 	// create parser and connect signals
 	parser = new Parser(this, qgoif);
-	connect(parser, &Parser::signal_statsPlayer, this, &ClientWindow::slot_statsPlayer);
 	connect(parser, &Parser::signal_message, this, &ClientWindow::slot_message);
 	connect(parser, &Parser::signal_svname, this, &ClientWindow::slot_svname);
 	connect(parser, &Parser::signal_accname, this, &ClientWindow::slot_accname);
@@ -1884,26 +1883,26 @@ void ClientWindow::slotViewToolBar(bool toggle)
 	statusBar()->showMessage(tr("Ready."));
 }
 
-void ClientWindow::slot_statsPlayer(Player *p)
+void ClientWindow::stats_player(const Player &p)
 {
-	if (p->name.isEmpty())
+	if (p.name.isEmpty())
 		return;
 
 	for (auto dlg: talklist) {
-		if (dlg->get_name() == p->name) {
-			dlg->stats_rating->setText(p->rank);
-			dlg->stats_info->setText(p->info);
-			dlg->stats_default->setText(p->extInfo);
-			dlg->stats_wins->setText(p->won);
-			dlg->stats_loss->setText(p->lost );
-			dlg->stats_country->setText(p->country);
-			dlg->stats_playing->setText(p->play_str);
-			dlg->stats_rated->setText(p->rated);
-			dlg->stats_address->setText(p->address);
+		if (dlg->get_name () == p.name) {
+			dlg->stats_rating->setText (p.rank);
+			dlg->stats_info->setText (p.info);
+			dlg->stats_default->setText (p.extInfo);
+			dlg->stats_wins->setText (p.won);
+			dlg->stats_loss->setText (p.lost);
+			dlg->stats_country->setText (p.country);
+			dlg->stats_playing->setText (p.play_str);
+			dlg->stats_rated->setText (p.rated);
+			dlg->stats_address->setText (p.address);
 
 			// stored either idle time or last access
-			dlg->stats_idle->setText(p->idle);
-			dlg->Label_Idle->setText(!p->idle.isEmpty() && p->idle.at(0).isDigit() ? "Idle :": "Last log :");
+			dlg->stats_idle->setText (p.idle);
+			dlg->Label_Idle->setText (!p.idle.isEmpty() && p.idle.at(0).isDigit() ? "Idle :": "Last log :");
 		}
 	}
 }

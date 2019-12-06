@@ -174,12 +174,14 @@ public:
 	QList<Engine> analysis_engines (int boardsize);
 
 	/* Called from parser.cpp.  */
-	void server_add_game (Game*);
+	void server_add_game (const Game &);
 	void server_remove_game (const QString &);
 
-	void server_add_player (Player *, bool);
+	void server_add_player (const Player &, bool);
 	void server_player_entered (const QString &);
 	void server_remove_player (const QString &);
+
+	void stats_player (const Player &);
 
 	void update_observed_games (int);
 	void handle_matchrequest (const QString&, bool, bool);
@@ -187,7 +189,6 @@ public:
 public slots:
 	void slot_pbRelTabs ();
 	void slot_pbRelOneTab (QWidget*);
-	void slot_statsPlayer (Player*);
 
 	void slot_whoopen (bool);
 

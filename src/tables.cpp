@@ -111,15 +111,16 @@ QString ClientWindow::getPlayerExcludeListEntry(QString player)
 	return QString::null;
 }
 
-void ClientWindow::server_add_game (Game* g)
+void ClientWindow::server_add_game (const Game &g_in)
 {
+	Game g = g_in;
 	// insert into ListView
 	QTreeWidgetItemIterator lv (ListView_games);
 
 	bool found = false;
 	GamesTableItem *lvi_mem = nullptr;
 
-	if (g->H.isEmpty() && !num_games)
+	if (g.H.isEmpty() && !num_games)
 	{
 		// skip games until initial table has loaded
 		qDebug() << "game skipped because no init table";
@@ -132,7 +133,7 @@ void ClientWindow::server_add_game (Game* g)
 	{
 		lvii++;
 		// compare game id
-		if (lvi->text(0) == g->nr)
+		if (lvi->text(0) == g.nr)
 		{
 			found = true;
 			lvi_mem = lvi;
@@ -143,14 +144,14 @@ void ClientWindow::server_add_game (Game* g)
 	QString myMark = "B";
 
 	// check if exclude entry is done later
-	if (!g->H.isEmpty()) //g->status.length() > 1)
+	if (!g.H.isEmpty()) //g.status.length() > 1)
 	{
 		QString emw;
 		QString emb;
 
 		// no: do it now
-		emw = getPlayerExcludeListEntry(g->wname);
-		emb = getPlayerExcludeListEntry(g->bname);
+		emw = getPlayerExcludeListEntry (g.wname);
+		emb = getPlayerExcludeListEntry (g.bname);
 
 		// ensure that my game is listed first
 		if (emw == "M" || emb == "M")
@@ -172,7 +173,7 @@ void ClientWindow::server_add_game (Game* g)
 	}
 
 	// update player info if this is not a 'who'-result or if it's me
-	if (g->H.isEmpty() || myMark == "A") //g->status.length() < 2)
+	if (g.H.isEmpty() || myMark == "A") //g.status.length() < 2)
 	{
 		QTreeWidgetItemIterator lvp(ListView_players);
 		PlayerTableItem *lvpi;
@@ -181,22 +182,22 @@ void ClientWindow::server_add_game (Game* g)
 		// look for players in playerlist
 		for (; (lvpi = static_cast<PlayerTableItem *>(*lvp)) && pl_found < 2;) {
 			// check if names are identical
-			if (lvpi->text(1) == g->wname || lvpi->text(1) == g->bname) {
+			if (lvpi->text(1) == g.wname || lvpi->text(1) == g.bname) {
 				pl_found++;
 				Player pl = lvpi->get_player ();
-				pl.play_str = g->nr;
+				pl.play_str = g.nr;
 				lvpi->update_player (pl);
 
 				// check if players has a rank
-				if (g->wrank == "??" || g->brank == "??")
+				if (g.wrank == "??" || g.brank == "??")
 				{
 					// no rank given in case of continued game -> set rank in games table
-					if (lvpi->text(1) == g->wname)
-						g->wrank = lvpi->text(2);
+					if (lvpi->text(1) == g.wname)
+						g.wrank = lvpi->text(2);
 
 					// no else case! bplayer could be identical to wplayer!
-					if (lvpi->text(1) == g->bname)
-						g->brank = lvpi->text(2);
+					if (lvpi->text(1) == g.bname)
+						g.brank = lvpi->text(2);
 				}
 			}
 
@@ -205,15 +206,15 @@ void ClientWindow::server_add_game (Game* g)
 
 //			ListView_games->sortItems (3, Qt::AscendingOrder);
 	}
-	QString rkw = myMark + rkToKey(g->wrank) + g->wname.toLower() + ":" + excludeMark;
-	QString rkb = myMark + rkToKey(g->brank) + g->bname.toLower() + ":" + excludeMark;
-	g->sort_rk_w = rkw;
-	g->sort_rk_b = rkb;
+	QString rkw = myMark + rkToKey (g.wrank) + g.wname.toLower () + ":" + excludeMark;
+	QString rkb = myMark + rkToKey (g.brank) + g.bname.toLower () + ":" + excludeMark;
+	g.sort_rk_w = rkw;
+	g.sort_rk_b = rkb;
 	if (found) {
-		lvi_mem->update_game (*g);
+		lvi_mem->update_game (g);
 	} else {
 		// from GAMES command or game info{...}
-		new GamesTableItem(ListView_games, *g);
+		new GamesTableItem (ListView_games, g);
 
 		// increase number of games
 		num_games++;
@@ -337,8 +338,9 @@ void ClientWindow::server_remove_player (const QString &name)
 }
 
 // take a new player from parser
-void ClientWindow::server_add_player (Player *p, bool cmdplayers)
+void ClientWindow::server_add_player (const Player &p_in, bool cmdplayers)
 {
+	Player p = p_in;
 	QTreeWidgetItemIterator lv(ListView_players);
 
 	if (!cmdplayers && !num_players) {
@@ -353,32 +355,32 @@ void ClientWindow::server_add_player (Player *p, bool cmdplayers)
 		{
 			lv++;
 			// compare names
-			if (lvi->text(1) == p->name)
+			if (lvi->text(1) == p.name)
 			{
 				// check if new player info is less than old
-				if (p->info != "??")
+				if (p.info != "??")
 				{
 					// new entry has more info
-					p->mark = lvi->text (6);
-					p->sort_rk = rkToKey(p->rank) + p->name.toLower();
-					lvi->update_player (*p);
+					p.mark = lvi->text (6);
+					p.sort_rk = rkToKey (p.rank) + p.name.toLower ();
+					lvi->update_player (p);
 
 #if 0
 					lvi->set_nmatchSettings(p);
-					//lvi->nmatch = p->nmatch;
+					//lvi->nmatch = p.nmatch;
 
 					lvi->ownRepaint();
 #endif
 				}
 
-				if (p->name == m_online_acc_name)
+				if (p.name == m_online_acc_name)
 				{
 					qDebug() << "updating my account info... (1)";
 					// checkbox open
-					bool b = (p->info.contains('X') == 0);
+					bool b = (p.info.contains('X') == 0);
 					slot_checkbox(0, b);
 					// checkbox looking - don't set if closed
-					if (p->info.contains('!') != 0)
+					if (p.info.contains('!') != 0)
 						// "!" found
 						slot_checkbox(1, true);
 					else if (b)
@@ -386,14 +388,14 @@ void ClientWindow::server_add_player (Player *p, bool cmdplayers)
 						slot_checkbox(1, false);
 					// checkbox quiet
 					// NOT CORRECT REPORTED BY SERVER!
-					//b = (p->info.contains('Q') != 0);
+					//b = (p.info.contains('Q') != 0);
 					//slot_checkbox(2, b);
 					// -> WORKAROUND
-					if (p->info.contains('Q') != 0)
+					if (p.info.contains('Q') != 0)
 						slot_checkbox(2, true);
 
 					// get rank to calc handicap when matching
-					m_online_rank = p->rank;
+					m_online_rank = p.rank;
 				}
 
 				return;
@@ -404,14 +406,14 @@ void ClientWindow::server_add_player (Player *p, bool cmdplayers)
 	QString mark;
 
 	// check for watched players
-	if (watch.contains(";" + p->name + ";"))
+	if (watch.contains(";" + p.name + ";"))
 	{
 		mark = "W";
 
 		// sound for entering - no sound while "who" cmd is executing
 		if (!cmdplayers)
 			qgo->playEnterSound();
-		else if (p->name == m_online_acc_name)
+		else if (p.name == m_online_acc_name)
 			// it's me
 			// - only possible if 'who'/'user' cmd is executing
 			// - I am on the watchlist, however
@@ -421,7 +423,7 @@ void ClientWindow::server_add_player (Player *p, bool cmdplayers)
 		num_watchedplayers++;
 	}
 	// check for excluded players
-	else if (exclude.contains(";" + p->name + ";"))
+	else if (exclude.contains(";" + p.name + ";"))
 	{
 		mark = "X";
 	}
@@ -429,31 +431,31 @@ void ClientWindow::server_add_player (Player *p, bool cmdplayers)
 	// check for open/looking state
 	if (cmdplayers)
 	{
-		if (p->name == m_online_acc_name)
+		if (p.name == m_online_acc_name)
 		{
 			qDebug() << "updating my account info...(2)";
 			// checkbox open
-			bool b = (p->info.contains('X') == 0);
+			bool b = (p.info.contains('X') == 0);
 			slot_checkbox(0, b);
 			// checkbox looking
-			b = (p->info.contains('!') != 0);
+			b = (p.info.contains('!') != 0);
 			slot_checkbox(1, b);
 			// checkbox quiet
 			// NOT CORRECT REPORTED BY SERVER!
-			//b = (p->info.contains('Q') != 0);
+			//b = (p.info.contains('Q') != 0);
 			//slot_checkbox(2, b);
 			// -> WORKAROUND
-			if (p->info.contains('Q') != 0)
+			if (p.info.contains('Q') != 0)
 				slot_checkbox(2, true);
 
 			// get rank to calc handicap when matching
-			m_online_rank = p->rank;
+			m_online_rank = p.rank;
 			mark = "M";
 		}
 	}
-	p->mark = mark;
-	p->sort_rk = rkToKey(p->rank) + p->name.toLower();
-	new PlayerTableItem(ListView_players, *p);
+	p.mark = mark;
+	p.sort_rk = rkToKey (p.rank) + p.name.toLower ();
+	new PlayerTableItem (ListView_players, p);
 #if 0
 	lv1->set_nmatchSettings(p);
 #endif
