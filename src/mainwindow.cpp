@@ -3247,6 +3247,9 @@ void MainWindow_GTP::gtp_played_pass (GTP_Process *p)
 
 void MainWindow_GTP::gtp_played_resign (GTP_Process *p)
 {
+	m_timer_white.stop (false);
+	m_timer_black.stop (false);
+
 	QString result = p == m_gtp_w ? tr ("B+R") : tr ("W+R");
 
 	if (two_engines ()) {
@@ -3338,6 +3341,8 @@ void MainWindow_GTP::player_pass ()
 
 void MainWindow_GTP::player_resign ()
 {
+	m_timer_white.stop (false);
+	m_timer_black.stop (false);
 	if (game_mode () != modeComputer)
 		return;
 
