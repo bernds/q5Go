@@ -457,6 +457,7 @@ MainWindow::MainWindow (QWidget* parent, go_game_ptr gr, const QString opener_sc
 
 	normalTools->show();
 	scoreTools->hide();
+	againButton->hide ();
 
 	showSlider = setting->readBoolEntry ("SLIDER");
 	sliderWidget->setVisible (showSlider);
@@ -2387,6 +2388,8 @@ void MainWindow::setGameMode (GameMode mode)
 	editPosButton->setVisible (mode == modeNormal || mode == modeEdit || mode == modeScore);
 	editPosButton->setEnabled (mode == modeNormal || mode == modeEdit);
 	editAppendButton->setVisible (mode == modeEdit);
+	againButton->setEnabled (mode == modeNormal || mode == modeComputer);
+
 	if (mode == modeEdit) {
 		game_state *st = gfx_board->displayed ();
 		/* We require ST to be an edit/score, because if we inserted an edit before a move, that move
@@ -2916,6 +2919,22 @@ void MainWindow::set_observer_model (QStandardItemModel *m)
 	ListView_observers->header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
 }
 
+void MainWindow_GTP::start_game (const Engine &program, bool b_is_comp, bool w_is_comp, const go_board &b)
+{
+	gfx_board->set_player_colors (!w_is_comp, !b_is_comp);
+	m_starting_up = 1;
+	auto g = create_gtp (program, b.size_x (), b.size_y (), m_game->info ().komi);
+	if (b_is_comp)
+		m_gtp_b = g;
+	else
+		m_gtp_w = g;
+	disconnect (passButton, &QPushButton::clicked, nullptr, nullptr);
+	connect (passButton, &QPushButton::clicked, this, &MainWindow_GTP::player_pass);
+	connect (resignButton, &QPushButton::clicked, this, &MainWindow_GTP::player_resign);
+	connect (againButton, &QPushButton::clicked, this, &MainWindow_GTP::play_again);
+	againButton->show ();
+}
+
 MainWindow_GTP::MainWindow_GTP (QWidget *parent, go_game_ptr gr, QString opener_scrkey, const Engine &program,
 				const time_settings &ts, bool b_is_comp, bool w_is_comp)
 	: MainWindow (parent, gr, opener_scrkey, modeComputer, ts), GTP_Controller (this)
@@ -2927,17 +2946,8 @@ MainWindow_GTP::MainWindow_GTP (QWidget *parent, go_game_ptr gr, QString opener_
 		st = st->next_primary_move ();
 	m_start_positions.push_back (st);
 
-	gfx_board->set_player_colors (!w_is_comp, !b_is_comp);
-	m_starting_up = 1;
 	const go_board &b = root->get_board ();
-	auto g = create_gtp (program, b.size_x (), b.size_y (), m_game->info ().komi);
-	if (b_is_comp)
-		m_gtp_b = g;
-	else
-		m_gtp_w = g;
-	disconnect (passButton, &QPushButton::clicked, nullptr, nullptr);
-	connect (passButton, &QPushButton::clicked, this, &MainWindow_GTP::player_pass);
-	connect (resignButton, &QPushButton::clicked, this, &MainWindow_GTP::player_resign);
+	start_game (program, b_is_comp, w_is_comp, b);
 }
 
 MainWindow_GTP::MainWindow_GTP (QWidget *parent, go_game_ptr gr, game_state *st, QString opener_scrkey, const Engine &program,
@@ -2948,17 +2958,8 @@ MainWindow_GTP::MainWindow_GTP (QWidget *parent, go_game_ptr gr, game_state *st,
 	m_start_positions.push_back (st);
 	m_game_position = root;
 
-	gfx_board->set_player_colors (!w_is_comp, !b_is_comp);
-	m_starting_up = 1;
 	const go_board &b = root->get_board ();
-	auto g = create_gtp (program, b.size_x (), b.size_y (), m_game->info ().komi);
-	if (b_is_comp)
-		m_gtp_b = g;
-	else
-		m_gtp_w = g;
-	disconnect (passButton, &QPushButton::clicked, nullptr, nullptr);
-	connect (passButton, &QPushButton::clicked, this, &MainWindow_GTP::player_pass);
-	connect (resignButton, &QPushButton::clicked, this, &MainWindow_GTP::player_resign);
+	start_game (program, b_is_comp, w_is_comp, b);
 }
 
 MainWindow_GTP::MainWindow_GTP (QWidget *parent, go_game_ptr gr, QString opener_scrkey,
@@ -2998,6 +2999,18 @@ MainWindow_GTP::~MainWindow_GTP ()
 	delete m_gtp_b;
 }
 
+void MainWindow_GTP::play_again ()
+{
+	setGameMode (modeComputer);
+	disconnect (passButton, &QPushButton::clicked, nullptr, nullptr);
+	connect (passButton, &QPushButton::clicked, this, &MainWindow_GTP::player_pass);
+	gfx_board->set_player_colors (m_gtp_w == nullptr, m_gtp_b == nullptr);
+	m_game_position = m_game->get_root ();
+	gfx_board->set_displayed (m_game_position);
+	m_start_positions.push_back (m_game_position);
+	setup_game ();
+}
+
 void MainWindow_GTP::request_next_move ()
 {
 	if (m_game_position->was_move_p ()) {
@@ -3012,6 +3025,7 @@ void MainWindow_GTP::request_next_move ()
 		p->send_remaining_time (c, QString::fromStdString (mt->report_gtp ()));
 		p->request_move (c);
 		mt->start ();
+		againButton->setEnabled (false);
 	}
 }
 
@@ -3093,6 +3107,8 @@ bool MainWindow_GTP::stop_move_timer ()
 
 void MainWindow_GTP::gtp_played_move (GTP_Process *p, int x, int y)
 {
+	againButton->setEnabled (true);
+
 	if (!stop_move_timer ())
 		return;
 
@@ -3114,6 +3130,7 @@ void MainWindow_GTP::gtp_played_move (GTP_Process *p, int x, int y)
 		if (m_gtp_b)
 			m_gtp_b->quit ();
 		setGameMode (modeNormal);
+		againButton->hide ();
 		return;
 	}
 	gfx_board->setModified ();
@@ -3209,8 +3226,6 @@ void MainWindow_GTP::enter_scoring ()
 		m_winner_1 = m_winner_2 = unknown;
 		m_gtp_w->request_score ();
 	} else {
-		auto *gtp = single_engine ();
-		gtp->quit ();
 		/* As of now, we're disconnected, and the scoring function should
 		   remember normal mode.  */
 		setGameMode (modeNormal);
@@ -3220,6 +3235,7 @@ void MainWindow_GTP::enter_scoring ()
 
 void MainWindow_GTP::gtp_played_pass (GTP_Process *p)
 {
+	againButton->setEnabled (true);
 	if (!stop_move_timer ())
 		return;
 
@@ -3263,15 +3279,12 @@ void MainWindow_GTP::gtp_played_resign (GTP_Process *p)
 		       tr ("The computer has resigned the game."),
 		       QMessageBox::Ok | QMessageBox::Default);
 	mb.exec ();
-
-	if (m_gtp_w)
-		m_gtp_w->quit ();
-	if (m_gtp_b)
-		m_gtp_b->quit ();
 }
 
 void MainWindow_GTP::gtp_failure (GTP_Process *, const QString &err)
 {
+	againButton->hide ();
+
 	if (game_mode () != modeComputer && game_mode () != modeObserveGTP)
 		return;
 	show ();
@@ -3286,6 +3299,8 @@ void MainWindow_GTP::gtp_failure (GTP_Process *, const QString &err)
 
 void MainWindow_GTP::gtp_exited (GTP_Process *)
 {
+	againButton->hide ();
+
 	if (game_mode () == modeComputer || game_mode () == modeObserveGTP) {
 		setGameMode (modeNormal);
 		show ();
@@ -3347,8 +3362,6 @@ void MainWindow_GTP::player_resign ()
 		return;
 
 	setGameMode (modeNormal);
-	auto *gtp = single_engine ();
-	gtp->quit();
 	if (gfx_board->player_is (black))
 		m_game->set_result ("W+R");
 	else

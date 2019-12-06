@@ -1672,6 +1672,22 @@ Pass your turn.</string>
                   </widget>
                  </item>
                  <item>
+                  <widget class="QPushButton" name="againButton">
+                   <property name="focusPolicy">
+                    <enum>Qt::NoFocus</enum>
+                   </property>
+                   <property name="toolTip">
+                    <string>Restart the game against the computer.</string>
+                   </property>
+                   <property name="whatsThis">
+                    <string>Restart the game against the computer.</string>
+                   </property>
+                   <property name="text">
+                    <string>Play again</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
                   <widget class="QPushButton" name="undoButton">
                    <property name="focusPolicy">
                     <enum>Qt::NoFocus</enum>
@@ -2535,7 +2551,7 @@ After placing and/or undo release button for returning to starting point automat
      <x>0</x>
      <y>0</y>
      <width>1192</width>
-     <height>23</height>
+     <height>30</height>
     </rect>
    </property>
    <widget class="QMenu" name="fileMenu">

@@ -369,6 +369,7 @@ class MainWindow_GTP : public MainWindow, public GTP_Controller
 		return m_gtp_w == nullptr ? m_gtp_b : m_gtp_w;
 	}
 	void enter_scoring ();
+	void start_game (const Engine &, bool b_is_comp, bool w_is_comp, const go_board &);
 	void setup_game ();
 	void game_end (const QString &, stone_color);
 	bool two_engines ()
@@ -382,6 +383,9 @@ class MainWindow_GTP : public MainWindow, public GTP_Controller
 
 	void player_pass ();
 	void player_resign ();
+	void play_again ();
+
+	void start_game (const Engine &program, const time_settings &, bool b_comp, bool w_comp);
 
 public:
 	MainWindow_GTP (QWidget *parent, go_game_ptr, QString opener_scrkey,
