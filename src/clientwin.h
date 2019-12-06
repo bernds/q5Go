@@ -175,7 +175,7 @@ public:
 
 	/* Called from parser.cpp.  */
 	void server_add_game (Game*);
-	void server_remove_game (Game*);
+	void server_remove_game (const QString &);
 
 	void server_add_player (Player *, bool);
 	void server_player_entered (const QString &);

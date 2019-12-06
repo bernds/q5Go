@@ -811,9 +811,7 @@ InfoType Parser::cmd9(const QString &line)
 	else if (line.contains("been adjourned"))
 	{
 		// remove game from list - special case: own game
-		aGame->nr = "@";
-
-		client_window->server_remove_game (aGame);
+		client_window->server_remove_game ("@");
 	}
 	// 9 Game 22: frosla vs frosla has adjourned.
 	else if (line.contains("has adjourned"))
@@ -821,19 +819,13 @@ InfoType Parser::cmd9(const QString &line)
 		// remove game from list
 		aGame->nr = line.section(' ', 1, 1).remove(':');
 
-		// for information
-		aGame->Sz = "has adjourned.";
-
-		client_window->server_remove_game (aGame);
+		client_window->server_remove_game (aGame->nr);
 		m_qgoif->game_end (aGame->nr, "has adjourned.");
 	}
 	// 9 Removing game 30 from observation list.
 	else if (line.contains("from observation list"))
 	{
-		aGame->nr = line.section(' ', 2, 2);
-		aGame->Sz = "-";
-
-		m_qgoif->game_end (aGame->nr, "-");
+		m_qgoif->game_end (line.section (' ', 2, 2), "-");
 		return IT_OTHER;
 	}
 	// 9 Adding game to observation list.
@@ -1448,7 +1440,7 @@ InfoType Parser::cmd21(const QString &line)
 			else if (aGame->Sz.indexOf(":") != -1)
 				aGame->Sz.remove(0,2);
 
-			client_window->server_remove_game (aGame);
+			client_window->server_remove_game (aGame->nr);
 			m_qgoif->game_end (aGame->nr, aGame->Sz);
 			return GAME;
 		}

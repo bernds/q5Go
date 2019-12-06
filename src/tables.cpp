@@ -222,20 +222,19 @@ void ClientWindow::server_add_game (Game* g)
 }
 
 
-void ClientWindow::server_remove_game (Game* g)
+void ClientWindow::server_remove_game (const QString &nr)
 {
 	QTreeWidgetItemIterator lv (ListView_games);
 
-	// from game info {...}
 	bool found = false;
 	QString game_id;
 
-	if (g->nr != "@") {
+	if (nr != "@") {
 		for (QTreeWidgetItem *lvi; (lvi = *lv) && !found;)
 		{
 			lv++;
 			// compare game id
-			if (lvi->text(0) == g->nr)
+			if (lvi->text(0) == nr)
 			{
 				lv++;
 				delete lvi;
@@ -244,7 +243,7 @@ void ClientWindow::server_remove_game (Game* g)
 		}
 
 		// used for player update below
-		game_id = g->nr;
+		game_id = nr;
 	} else {
 		for (QTreeWidgetItem *lvi; (lvi = *lv) && !found;) {
 			lv++;
@@ -253,7 +252,7 @@ void ClientWindow::server_remove_game (Game* g)
 			    lvi->text(3) == m_online_acc_name)
 			{
 				// used for player update below
-				game_id = lvi->text(0);
+				game_id = lvi->text (0);
 
 				lv++;
 				delete lvi;
@@ -263,10 +262,9 @@ void ClientWindow::server_remove_game (Game* g)
 	}
 
 	if (!found)
-		qWarning () << "game not found " << g->nr;
+		qWarning () << "game not found " << nr;
 	else
 	{
-		// decrease number of games
 		num_games--;
 		update_game_stats ();
 
