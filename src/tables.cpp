@@ -334,6 +334,34 @@ void ClientWindow::server_remove_player (const QString &name)
 #endif
 }
 
+void ClientWindow::update_olq_state_from_player_info (const Player &p)
+{
+	/* ??? This is legacy code that doesn't make a whole amount of sense.
+	   Should figure out if any of this is actually necessary (and correct) or not.  */
+
+	qDebug() << "updating my account info...";
+	// checkbox open
+	bool b = (p.info.contains('X') == 0);
+	set_open_mode (b);
+	// checkbox looking - don't set if closed
+	if (p.info.contains('!') != 0)
+		// "!" found
+		set_looking_mode (true);
+	else if (b)
+		// "!" not found && open
+		set_looking_mode (false);
+	// checkbox quiet
+	// NOT CORRECT REPORTED BY SERVER!
+	//b = (p.info.contains('Q') != 0);
+	//set_quiet_mode (b);
+	// -> WORKAROUND
+	if (p.info.contains('Q') != 0)
+		set_quiet_mode (true);
+
+	// get rank to calc handicap when matching
+	m_online_rank = p.rank;
+}
+
 // take a new player from parser
 void ClientWindow::server_add_player (const Player &p_in, bool cmdplayers)
 {
@@ -371,29 +399,7 @@ void ClientWindow::server_add_player (const Player &p_in, bool cmdplayers)
 				}
 
 				if (p.name == m_online_acc_name)
-				{
-					qDebug() << "updating my account info... (1)";
-					// checkbox open
-					bool b = (p.info.contains('X') == 0);
-					set_open_mode (b);
-					// checkbox looking - don't set if closed
-					if (p.info.contains('!') != 0)
-						// "!" found
-						set_looking_mode (true);
-					else if (b)
-						// "!" not found && open
-						set_looking_mode (false);
-					// checkbox quiet
-					// NOT CORRECT REPORTED BY SERVER!
-					//b = (p.info.contains('Q') != 0);
-					//set_quiet_mode (b);
-					// -> WORKAROUND
-					if (p.info.contains('Q') != 0)
-						set_quiet_mode (true);
-
-					// get rank to calc handicap when matching
-					m_online_rank = p.rank;
-				}
+					update_olq_state_from_player_info (p);
 
 				return;
 			}
@@ -426,29 +432,9 @@ void ClientWindow::server_add_player (const Player &p_in, bool cmdplayers)
 	}
 
 	// check for open/looking state
-	if (cmdplayers)
-	{
-		if (p.name == m_online_acc_name)
-		{
-			qDebug() << "updating my account info...(2)";
-			// checkbox open
-			bool b = (p.info.contains('X') == 0);
-			set_open_mode (b);
-			// checkbox looking
-			b = (p.info.contains('!') != 0);
-			set_looking_mode (b);
-			// checkbox quiet
-			// NOT CORRECT REPORTED BY SERVER!
-			//b = (p.info.contains('Q') != 0);
-			//set_quiet_mode (b);
-			// -> WORKAROUND
-			if (p.info.contains('Q') != 0)
-				set_quiet_mode (true);
-
-			// get rank to calc handicap when matching
-			m_online_rank = p.rank;
-			mark = "M";
-		}
+	if (cmdplayers && p.name == m_online_acc_name) {
+		update_olq_state_from_player_info (p);
+		mark = "M";
 	}
 	p.mark = mark;
 	p.sort_rk = rkToKey (p.rank) + p.name.toLower ();

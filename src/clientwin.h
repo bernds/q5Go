@@ -156,6 +156,8 @@ class ClientWindow : public QMainWindow, public Ui::ClientWindowGui
 	void refresh_players ();
 	void refresh_games ();
 
+	void update_olq_state_from_player_info (const Player &);
+
 public:
 	ClientWindow (QMainWindow* parent);
 	~ClientWindow ();
