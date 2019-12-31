@@ -31,14 +31,14 @@ static QByteArray box_svg =
 	"     d=\"M 35.2,14 44.8,11 124.8,36 115.2,39 Z\" />"
 	"</svg>";
 
-class ClickablePixmap : public QGraphicsItem
+class GameTreePixmap : public QGraphicsItem
 {
 	GameTree *m_view;
 	game_state *m_root;
 	int m_size, m_width;
 	game_tree_pixmaps *m_pm;
 public:
-	ClickablePixmap (GameTree *view, QGraphicsScene *scene, game_state *item_root, int w, int size, game_tree_pixmaps *pms)
+	GameTreePixmap (GameTree *view, QGraphicsScene *scene, game_state *item_root, int w, int size, game_tree_pixmaps *pms)
 		: m_view (view), m_root (item_root), m_size (size), m_width (w), m_pm (pms)
 	{
 		setZValue (10);
@@ -59,7 +59,7 @@ protected:
 	}
 };
 
-void ClickablePixmap::paint (QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
+void GameTreePixmap::paint (QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
 	game_state *st = m_root;
 	int x = 0;
@@ -92,7 +92,7 @@ void ClickablePixmap::paint (QPainter *painter, const QStyleOptionGraphicsItem *
 	}
 }
 
-void ClickablePixmap::contextMenuEvent (QGraphicsSceneContextMenuEvent *e)
+void GameTreePixmap::contextMenuEvent (QGraphicsSceneContextMenuEvent *e)
 {
 	QPointF pos = e->pos ();
 	int x = pos.x () / m_size;
@@ -104,7 +104,7 @@ void ClickablePixmap::contextMenuEvent (QGraphicsSceneContextMenuEvent *e)
 	m_view->show_menu (st, e->screenPos ());
 }
 
-void ClickablePixmap::mousePressEvent (QGraphicsSceneMouseEvent *e)
+void GameTreePixmap::mousePressEvent (QGraphicsSceneMouseEvent *e)
 {
 	QPointF pos = e->pos ();
 	int x = pos.x () / m_size;
@@ -124,12 +124,12 @@ void ClickablePixmap::mousePressEvent (QGraphicsSceneMouseEvent *e)
 		m_view->toggle_collapse (st, false);
 }
 
-void ClickablePixmap::hoverEnterEvent (QGraphicsSceneHoverEvent *)
+void GameTreePixmap::hoverEnterEvent (QGraphicsSceneHoverEvent *)
 {
 	m_view->setDragMode (QGraphicsView::NoDrag);
 }
 
-void ClickablePixmap::hoverLeaveEvent (QGraphicsSceneHoverEvent *)
+void GameTreePixmap::hoverLeaveEvent (QGraphicsSceneHoverEvent *)
 {
 	m_view->setDragMode (QGraphicsView::ScrollHandDrag);
 }
@@ -350,7 +350,7 @@ void GameTree::update (go_game_ptr gr, game_state *active, bool force)
 
 		auto start_run = [&] (int x0, int y, int len, game_state *st0) -> bool
 		{
-			ClickablePixmap *pm = new ClickablePixmap (this, m_scene, st0, len, m_size, &m_pm);
+			GameTreePixmap *pm = new GameTreePixmap (this, m_scene, st0, len, m_size, &m_pm);
 			pm->setPos (x0 * m_size, y * m_size);
 			return true;
 		};
