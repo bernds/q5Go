@@ -708,7 +708,7 @@ void ClientWindow::sendTextToApp (const QString &txt)
 		onlineCount = 0;
 		oneSecondTimer = startTimer (1000);
 		// init shouts
-		slot_talk ("Shouts*", QString::null, false);
+		slot_talk ("Shouts*", QString (), false);
 
 		qgo->playConnectSound ();
 		break;
@@ -746,7 +746,7 @@ void ClientWindow::sendTextToApp (const QString &txt)
 
 	case STATS:
 		// we just received a players name as first line of stats -> create the dialog tab
-		slot_talk (parser->get_statsPlayer ()->name, QString::null, true);
+		slot_talk (parser->get_statsPlayer ()->name, QString (), true);
 
 		break;
 
@@ -1465,10 +1465,10 @@ void ClientWindow::slot_mouse_players (QTreeWidgetItem *lv)
 		puw->addAction (tr ("match"),
 				[=] () { handle_matchrequest (menu_player_name () + " " + m_menu_player.rank, true, false); });
 		puw->addAction (tr ("talk"),
-				[=] () { slot_talk (menu_player_name (), QString::null, true); });
+				[=] () { slot_talk (menu_player_name (), QString (), true); });
 		// puw->insertSeparator();
 		puw->addAction (tr ("stats"),
-				[=] () { slot_talk (menu_player_name (), QString::null, true); });
+				[=] () { slot_talk (menu_player_name (), QString (), true); });
 		puw->addAction (tr ("stored games"),
 				[=] () { sendcommand ("stored " + menu_player_name (), false); });
 		puw->addAction (tr ("results"),

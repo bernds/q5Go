@@ -67,8 +67,8 @@ void TextView::delete_cursor_line ()
  */
 void TextView::saveMe()
 {
-	QString fileName(QFileDialog::getSaveFileName(this, tr ("Save ASCII export"), QString::null,
-						      tr("Text Files (*.txt);;All Files (*)")));
+	QString fileName (QFileDialog::getSaveFileName (this, tr ("Save ASCII export"), QString (),
+							tr ("Text Files (*.txt);;All Files (*)")));
 
 	if (fileName.isEmpty())
 		return;
@@ -130,8 +130,8 @@ void SvgView::set (const QByteArray &qba)
  */
 void SvgView::saveMe()
 {
-	QString fileName(QFileDialog::getSaveFileName(this, tr ("Save SVG export"), QString::null,
-						      tr("Svg Files (*.txt);;All Files (*)")));
+	QString fileName (QFileDialog::getSaveFileName (this, tr ("Save SVG export"), QString (),
+							tr ("Svg Files (*.txt);;All Files (*)")));
 
 	if (fileName.isEmpty())
 		return;

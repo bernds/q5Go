@@ -94,7 +94,7 @@ QString ClientWindow::getPlayerRk(QString player)
 		}
 	}
 
-	return QString::null;
+	return QString ();
 }
 
 // check for exclude list entry of a given name
@@ -108,7 +108,7 @@ QString ClientWindow::getPlayerExcludeListEntry(QString player)
 		if (lvpi->text(1) == player)
 			return lvpi->text(6);
 
-	return QString::null;
+	return QString ();
 }
 
 void ClientWindow::server_add_game (const Game &g_in)

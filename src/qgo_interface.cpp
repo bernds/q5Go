@@ -174,7 +174,7 @@ void qGoIF::game_end (qGoBoard *qb, const QString &txt)
 	qb->send_kibitz(txt + "\n");
 
 	// set correct result entry
-	QString rs = QString::null;
+	QString rs;
 	QString extended_rs = txt;
 
 	if (txt.contains("White forfeits"))
@@ -512,7 +512,7 @@ void qGoIF::slot_komi(const QString &nr, const QString &komi, bool isrequest)
 {
 	qGoBoard *qb;
 	static int move_number_memo = -1;
-	static QString komi_memo = QString::null;
+	static QString komi_memo;
 
 	// correctness:
 	if (komi.isEmpty())
@@ -530,7 +530,7 @@ void qGoIF::slot_komi(const QString &nr, const QString &komi, bool isrequest)
 		if (qb)
 		{
 			// check if same opponent twice (IGS problem...)
-			if (move_number_memo == qb->get_mv_counter() && !komi_memo.isNull() && komi_memo == komi)
+			if (move_number_memo == qb->get_mv_counter () && !komi_memo.isEmpty () && komi_memo == komi)
 			{
 				qDebug() << QString("...request skipped: opponent %1 wants komi %2").arg(nr).arg(komi);
 				return;
@@ -977,7 +977,7 @@ qGoBoard::qGoBoard(qGoIF *qif, int gameid) : m_qgoif (qif), id (gameid)
 	// set timer to 1 second
 	timer_id = startTimer(1000);
 	game_paused = false;
-	req_handicap = QString::null;
+	req_handicap = QString ();
 	req_komi = -1;
 	bt_i = -1;
 	wt_i = -1;

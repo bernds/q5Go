@@ -563,7 +563,7 @@ QString Setting::getLanguage()
 	{
 		const char *p = getenv("LANG");
 		if (p == NULL)
-			return QString::null;
+			return QString ();
 		return QString(p).left(2);
 	}
 	else
