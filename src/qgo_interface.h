@@ -214,10 +214,6 @@ public:
 	void set_initIF();
 	void set_myName(const QString &n) { myName = n; }
 	void set_gsName(GSName n) { gsName = n; }
-	void set_localboard(QString file=QString::null);
-	void set_localgame();
-	QWidget *get_parent() { return parent; }
-	void wrapupMatchGame(qGoBoard *, bool);
 
 	void window_closing (qGoBoard *);
 	void remove_board (qGoBoard *);
