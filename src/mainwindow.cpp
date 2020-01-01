@@ -3477,24 +3477,21 @@ void MainWindow::toggleSidebar(bool toggle)
 		toolsFrame->show();
 }
 
-void MainWindow::setTimes(const QString &btime, const QString &bstones, const QString &wtime, const QString &wstones,
-			  bool warn_black, bool warn_white, int timer_cnt)
+void MainWindow::setTimes (int bt, const QString &bstones, int wt, const QString &wstones,
+			   bool warn_black, bool warn_white, int timer_cnt)
 {
-	if (!btime.isEmpty())
-	{
-		if (bstones != QString("-1"))
-			normalTools->btimeView->set_text(btime + " / " + bstones);
-		else
-			normalTools->btimeView->set_text(btime);
-	}
+	QString wtime = sec_to_time (wt);
+	QString btime = sec_to_time (bt);
 
-	if (!wtime.isEmpty())
-	{
-		if (wstones != QString("-1"))
-			normalTools->wtimeView->set_text(wtime + " / " + wstones);
-		else
-			normalTools->wtimeView->set_text(wtime);
-	}
+	if (bstones != "-1")
+		normalTools->btimeView->set_text (btime + " / " + bstones);
+	else
+		normalTools->btimeView->set_text (btime);
+
+	if (wstones != "-1")
+		normalTools->wtimeView->set_text (wtime + " / " + wstones);
+	else
+		normalTools->wtimeView->set_text (wtime);
 
 	// warn if I am within the last 10 seconds
 	if (gfx_board->getGameMode() == modeMatch)

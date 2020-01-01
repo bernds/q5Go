@@ -1258,7 +1258,7 @@ void qGoBoard::timerEvent(QTimerEvent*)
 		st = st < 1 ? 1 : st;
 		int warn_time = m_warn_time * (m_divide_timer ? st : 1);
 		bool warn = bt_i > - 1 && bt_i <= warn_time;
-		win->setTimes (sec_to_time (bt_i), b_stones, wt, w_stones, warn, false, bt_i);
+		win->setTimes (bt_i, b_stones, wt_i, w_stones, warn, false, bt_i);
 	}
 	else
 	{
@@ -1268,7 +1268,7 @@ void qGoBoard::timerEvent(QTimerEvent*)
 		st = st < 1 ? 1 : st;
 		int warn_time = m_warn_time * (m_divide_timer ? st : 1);
 		bool warn = wt_i > - 1 && wt_i <= warn_time;
-		win->setTimes (bt, b_stones, sec_to_time (wt_i), w_stones, false, warn, wt_i);
+		win->setTimes (bt_i, b_stones, wt_i, w_stones, false, warn, wt_i);
 	}
 }
 
@@ -1289,10 +1289,6 @@ void qGoBoard::setTimerInfo (const QString &btime, const QString &bstones, const
 	b_stones = bstones;
 	w_stones = wstones;
 
-	// set string in any case
-	bt = sec_to_time (bt_i);
-	wt = sec_to_time (wt_i);
-
 	if (m_game != nullptr)
 		update_time_info (m_state);
 }
@@ -1301,15 +1297,13 @@ void qGoBoard::setTimerInfo (const QString &btime, const QString &bstones, const
 void qGoBoard::addtime_b(int m)
 {
 	bt_i += m*60;
-	bt = sec_to_time (bt_i);
-	win->setTimes (sec_to_time (bt_i), b_stones, wt, w_stones, false, false, 0);
+	win->setTimes (bt_i, b_stones, wt_i, w_stones, false, false, 0);
 }
 
 void qGoBoard::addtime_w(int m)
 {
 	wt_i += m*60;
-	wt = sec_to_time (wt_i);
-	win->setTimes (bt, b_stones, sec_to_time (wt_i), w_stones, false, false, 0);
+	win->setTimes (bt_i, b_stones, wt_i, w_stones, false, false, 0);
 }
 
 void qGoBoard::set_Mode_real(GameMode mode)

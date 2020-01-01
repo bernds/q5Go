@@ -224,9 +224,8 @@ public:
 	void set_eval (const QString &, double, stone_color, int);
 	void set_2nd_eval (const QString &, double, stone_color, int);
 
-	void setTimes(const QString &btime, const QString &bstones,
-		      const QString &wtime, const QString &wstones,
-		      bool warn_b, bool warn_w, int);
+	void setTimes (int btime, const QString &bstones, int wtime, const QString &wstones,
+		       bool warn_b, bool warn_w, int);
 
 	/* Navigation.  */
 	void nav_next_move ();

@@ -194,7 +194,6 @@ private:
 	MainWindow_IGS *win;
 
 	int         bt_i, wt_i;
-	QString     bt, wt;
 	QString     b_stones, w_stones;
 	GSName      gsName;
 	QString     myName;
