@@ -78,6 +78,9 @@ class qGoBoard : public QObject
 	bool m_connected = true;
 	bool m_postgame_chat = false;
 
+	bool m_divide_timer;
+	int m_warn_time;
+
 	/* State used while receiving a game result.  */
 	go_board *m_scoring_board = nullptr;
 
@@ -90,6 +93,8 @@ class qGoBoard : public QObject
 public:
 	qGoBoard(qGoIF *, int game_id);
 	~qGoBoard();
+
+	void update_settings ();
 
 	qGoIF *qgoIF () { return m_qgoif; }
 	void game_startup ();
@@ -194,7 +199,6 @@ private:
 	QString     b_stones, w_stones;
 	GSName      gsName;
 	QString     myName;
-	int         BY_timer;
 };
 
 //-----------
@@ -210,7 +214,9 @@ class qGoIF : public QObject
 public:
 	qGoIF(QWidget*);
 	~qGoIF();
-//	bool set_observe(QString);
+
+	void update_settings ();
+
 	void set_initIF();
 	void set_myName(const QString &n) { myName = n; }
 	void set_gsName(GSName n) { gsName = n; }

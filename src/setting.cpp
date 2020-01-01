@@ -94,6 +94,8 @@ Setting::Setting()
 	writeIntEntry("DEFAULT_TIME", 10);
 	writeIntEntry("DEFAULT_BY", 10);
 	writeIntEntry("BY_TIMER", 10);
+	writeBoolEntry("TIME_WARN_DIVIDE", true);
+
 	writeIntEntry("COMPUTER_SIZE", 19);
         QStringList docdirs = QStandardPaths::standardLocations (QStandardPaths::DocumentsLocation);
         qDebug () << "Docdirs: " << docdirs;

@@ -629,6 +629,166 @@ Select the font for the server console (fixed font preferably).</string>
          </layout>
         </widget>
        </item>
+       <item row="2" column="0">
+        <widget class="QWidget" name="horizontalWidget" native="true">
+         <layout class="QGridLayout" name="gridLayout_13">
+          <item row="0" column="1">
+           <widget class="QComboBox" name="languageComboBox">
+            <property name="focusPolicy">
+             <enum>Qt::TabFocus</enum>
+            </property>
+            <item>
+             <property name="text">
+              <string>System default</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_31">
+            <property name="text">
+             <string>Language:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_27">
+            <property name="text">
+             <string>File selectors:</string>
+            </property>
+            <property name="buddy">
+             <cstring>fileSelComboBox</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QComboBox" name="fileSelComboBox">
+            <item>
+             <property name="text">
+              <string>System default</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Qt selector with SGF preview</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QGroupBox" name="groupBox_5">
+         <property name="title">
+          <string>Sound defaults by game type</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_5">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="soundNormalCheckBox">
+            <property name="text">
+             <string>Local editing</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="soundObserveCheckBox">
+            <property name="text">
+             <string>Observed games</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QCheckBox" name="soundComputerCheckBox">
+            <property name="text">
+             <string>Computer games</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QCheckBox" name="soundMatchCheckBox">
+            <property name="text">
+             <string>On-line matches</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QGroupBox" name="groupBox_10">
+         <property name="title">
+          <string>Time warnings</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_6">
+          <item row="0" column="0" rowspan="2" colspan="2">
+           <widget class="QCheckBox" name="timeSoundCheckBox">
+            <property name="toolTip">
+             <string>Play sound for remaining seconds of own time</string>
+            </property>
+            <property name="whatsThis">
+             <string>Check this box if you want to be warned when Byo Yomi ends.
+You can set the warning time besides</string>
+            </property>
+            <property name="text">
+             <string>Enable sound</string>
+            </property>
+            <attribute name="buttonGroup">
+             <string notr="true">soundButtonGroup</string>
+            </attribute>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_30">
+            <property name="text">
+             <string>Warn at (seconds):</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QCheckBox" name="timeDivideCheckBox">
+            <property name="toolTip">
+             <string>When canadian time is used, divide time by number of stones left to determine whether to warn.</string>
+            </property>
+            <property name="whatsThis">
+             <string>When canadian time is used, divide time by number of stones left to determine whether to warn.</string>
+            </property>
+            <property name="text">
+             <string>Divide for Canadian</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QSpinBox" name="BYTimeSpin">
+            <property name="maximumSize">
+             <size>
+              <width>60</width>
+              <height>32767</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Warning time</string>
+            </property>
+            <property name="whatsThis">
+             <string>Set this to the number of seconds to which you want to be warned before Byo Yomi ends</string>
+            </property>
+            <property name="suffix">
+             <string/>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>99</number>
+            </property>
+            <property name="value">
+             <number>10</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
        <item row="0" column="0">
         <widget class="QGroupBox" name="soundButtonGroups">
          <property name="sizePolicy">
@@ -776,51 +936,6 @@ Enable this box when you want to listen a clicking sound when playing a stone on
             </attribute>
            </widget>
           </item>
-          <item row="5" column="0">
-           <widget class="QCheckBox" name="timeSoundCheckBox">
-            <property name="toolTip">
-             <string>Play sound for remaining seconds of own time</string>
-            </property>
-            <property name="whatsThis">
-             <string>Check this box if you want to be warned when Byo Yomi ends.
-You can set the warning time besides</string>
-            </property>
-            <property name="text">
-             <string>Time (secs.)</string>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">soundButtonGroup</string>
-            </attribute>
-           </widget>
-          </item>
-          <item row="5" column="1">
-           <widget class="QSpinBox" name="BYTimeSpin">
-            <property name="maximumSize">
-             <size>
-              <width>60</width>
-              <height>32767</height>
-             </size>
-            </property>
-            <property name="toolTip">
-             <string>Warning time</string>
-            </property>
-            <property name="whatsThis">
-             <string>Set this to the number of seconds to which you want to be warned before Byo Yomi ends</string>
-            </property>
-            <property name="suffix">
-             <string/>
-            </property>
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>99</number>
-            </property>
-            <property name="value">
-             <number>10</number>
-            </property>
-           </widget>
-          </item>
          </layout>
         </widget>
        </item>
@@ -839,120 +954,6 @@ You can set the warning time besides</string>
           </size>
          </property>
         </spacer>
-       </item>
-       <item row="2" column="1">
-        <widget class="QGroupBox" name="GroupBox8">
-         <property name="toolTip">
-          <string>Set application language</string>
-         </property>
-         <property name="whatsThis">
-          <string>Set application language
-
-Choose your language for qGo.
-If 'System default' is selected, qGo will use the standard language of your system. On Linux this will check the environment variable LANG, on Windows simply the language you have set in your preferences.
-
-This change will take effect only after qGo has been restarted.
-
-If your language is not supported, you might consider translating q5go. Please visit https://github.com/bernds/q5go</string>
-         </property>
-         <property name="title">
-          <string>Language</string>
-         </property>
-         <layout class="QHBoxLayout">
-          <property name="spacing">
-           <number>6</number>
-          </property>
-          <property name="leftMargin">
-           <number>11</number>
-          </property>
-          <property name="topMargin">
-           <number>11</number>
-          </property>
-          <property name="rightMargin">
-           <number>11</number>
-          </property>
-          <property name="bottomMargin">
-           <number>11</number>
-          </property>
-          <item>
-           <widget class="QComboBox" name="languageComboBox">
-            <property name="focusPolicy">
-             <enum>Qt::TabFocus</enum>
-            </property>
-            <item>
-             <property name="text">
-              <string>System default</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QGroupBox" name="groupBox_5">
-         <property name="title">
-          <string>Sound defaults by game type</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_5">
-          <item row="0" column="0">
-           <widget class="QCheckBox" name="soundNormalCheckBox">
-            <property name="text">
-             <string>Local editing</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QCheckBox" name="soundObserveCheckBox">
-            <property name="text">
-             <string>Observed games</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QCheckBox" name="soundComputerCheckBox">
-            <property name="text">
-             <string>Computer games</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QCheckBox" name="soundMatchCheckBox">
-            <property name="text">
-             <string>On-line matches</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <layout class="QHBoxLayout" name="horizontalLayout_21">
-         <item>
-          <widget class="QLabel" name="label_27">
-           <property name="text">
-            <string>File selectors:</string>
-           </property>
-           <property name="buddy">
-            <cstring>fileSelComboBox</cstring>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="fileSelComboBox">
-           <item>
-            <property name="text">
-             <string>System default</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Qt selector with SGF preview</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-        </layout>
        </item>
       </layout>
      </widget>
@@ -4828,8 +4829,6 @@ Select one of the predefined hosts -- xxx -- and add a title to use it.</string>
   <tabstop>leaveSoundCheckBox</tabstop>
   <tabstop>connectSoundCheckBox</tabstop>
   <tabstop>disConnectSoundCheckBox</tabstop>
-  <tabstop>timeSoundCheckBox</tabstop>
-  <tabstop>BYTimeSpin</tabstop>
   <tabstop>soundNormalCheckBox</tabstop>
   <tabstop>soundObserveCheckBox</tabstop>
   <tabstop>soundMatchCheckBox</tabstop>
@@ -4840,8 +4839,6 @@ Select one of the predefined hosts -- xxx -- and add a title to use it.</string>
   <tabstop>fontListsButton</tabstop>
   <tabstop>fontClocksButton</tabstop>
   <tabstop>fontConsoleButton</tabstop>
-  <tabstop>languageComboBox</tabstop>
-  <tabstop>fileSelComboBox</tabstop>
   <tabstop>variationComboBox</tabstop>
   <tabstop>varChildrenComboBox</tabstop>
   <tabstop>varSGFStyleComboBox</tabstop>

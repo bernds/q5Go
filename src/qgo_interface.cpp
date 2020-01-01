@@ -136,6 +136,12 @@ qGoIF::~qGoIF()
 	delete qgo;
 }
 
+void qGoIF::update_settings ()
+{
+	for (auto qb: boardlist)
+		qb->update_settings ();
+}
+
 qGoBoard *qGoIF::find_game_id (int id)
 {
 	for (auto qb: boardlist)
@@ -982,7 +988,7 @@ qGoBoard::qGoBoard(qGoIF *qif, int gameid) : m_qgoif (qif), id (gameid)
 	bt_i = -1;
 	wt_i = -1;
 	stated_mv_count = 0;
-	BY_timer = setting->readIntEntry("BY_TIMER");
+	update_settings ();
 
 	m_observers.setColumnCount (2);
 	m_observers.setHorizontalHeaderItem (0, new QStandardItem ("Name"));
@@ -999,6 +1005,12 @@ qGoBoard::~qGoBoard()
 
 	delete m_title;
 	delete m_scoring_board;
+}
+
+void qGoBoard::update_settings ()
+{
+	m_warn_time = setting->readIntEntry ("BY_TIMER");
+	m_divide_timer = setting->readBoolEntry ("TIME_WARN_DIVIDE");
 }
 
 void qGoBoard::observer_list_start ()
@@ -1278,17 +1290,21 @@ void qGoBoard::timerEvent(QTimerEvent*)
 	{
 		// B's turn
 		bt_i--;
-
-		bool warn = bt_i > - 1 && bt_i <= BY_timer;
-		win->setTimes(secToTime(bt_i), b_stones, wt, w_stones, warn, false, bt_i);
+		int st = b_stones.toInt ();
+		st = st < 1 ? 1 : st;
+		int warn_time = m_warn_time * (m_divide_timer ? st : 1);
+		bool warn = bt_i > - 1 && bt_i <= warn_time;
+		win->setTimes (secToTime (bt_i), b_stones, wt, w_stones, warn, false, bt_i);
 	}
 	else
 	{
 		// W's turn
 		wt_i--;
-
-		bool warn = wt_i > - 1 && wt_i <= BY_timer;
-		win->setTimes(bt, b_stones, secToTime(wt_i), w_stones, false, warn, wt_i);
+		int st = w_stones.toInt ();
+		st = st < 1 ? 1 : st;
+		int warn_time = m_warn_time * (m_divide_timer ? st : 1);
+		bool warn = wt_i > - 1 && wt_i <= warn_time;
+		win->setTimes (bt, b_stones, secToTime (wt_i), w_stones, false, warn, wt_i);
 	}
 }
 

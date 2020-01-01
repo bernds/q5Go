@@ -581,6 +581,8 @@ void PreferencesDialog::init_from_settings ()
 	ui->cursorCheckBox->setChecked (setting->readBoolEntry("CURSOR"));
 	ui->tooltipsCheckBox->setChecked (!(setting->readBoolEntry("TOOLTIPS")));
 	ui->BYTimeSpin->setValue (setting->readIntEntry("BY_TIMER"));
+	ui->timeDivideCheckBox->setChecked (setting->readBoolEntry("TIME_WARN_DIVIDE"));
+
 	int sidebar = setting->readBoolEntry("SIDEBAR_LEFT") ? 0 : 1;
 	ui->sidebarComboBox->setCurrentIndex (sidebar);
 	ui->antiClickoCheckBox->setChecked (setting->readBoolEntry("ANTICLICKO"));
@@ -844,6 +846,7 @@ void PreferencesDialog::slot_apply()
 	//setting->writeBoolEntry ("SMALL_STONES", ui->smallerStonesCheckBox->isChecked ());
 	setting->writeBoolEntry ("TOOLTIPS", !(ui->tooltipsCheckBox->isChecked ()));
 	setting->writeIntEntry ("BY_TIMER", ui->BYTimeSpin->text ().toInt ());
+	setting->writeBoolEntry ("TIME_WARN_DIVIDE", ui->timeDivideCheckBox->isChecked ());
 	setting->writeBoolEntry ("ANTICLICKO", ui->antiClickoCheckBox->isChecked ());
 	setting->writeBoolEntry ("ANTICLICKO_HITBOX", ui->hitboxCheckBox->isChecked ());
 

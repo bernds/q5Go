@@ -2063,6 +2063,7 @@ bool ClientWindow::preferencesAccept ()
 	}
 
 	// Update all boards with settings
+	qgoif->update_settings ();
 	qgo->updateAllBoardSettings ();
 	update_font ();
 
