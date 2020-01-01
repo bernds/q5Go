@@ -133,7 +133,6 @@ public:
 	void try_talk (const QString &pl, const QString &txt);
 	MainWindow_IGS *get_win() { return win; }
 	void setTimerInfo(const QString&, const QString&, const QString&, const QString&);
-	QString secToTime(int);
 	void set_stopTimer();
 	void set_gamePaused(bool p) { game_paused = p; }
 	int get_boardsize() { return m_game->boardsize (); }

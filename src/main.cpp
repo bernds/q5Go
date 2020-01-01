@@ -44,6 +44,41 @@ QTextStream *debug_stream {};
 QTextEdit *debug_view;
 #endif
 
+QString sec_to_time (int seconds)
+{
+	bool neg = seconds < 0;
+	if (neg)
+		seconds = -seconds;
+
+	int h = seconds / 3600;
+	seconds -= h*3600;
+	int m = seconds / 60;
+	int s = seconds - m*60;
+
+	QString sec;
+
+	// prevailling 0 for seconds
+	if ((h || m) && s < 10)
+		sec = "0" + QString::number(s);
+	else
+		sec = QString::number(s);
+
+	if (h)
+	{
+		QString min;
+
+		// prevailling 0 for minutes
+		if (h && m < 10)
+			min = "0" + QString::number(m);
+		else
+			min = QString::number(m);
+
+		return (neg ? "-" : "") + QString::number(h) + ":" + min + ":" + sec;
+	}
+	else
+		return (neg ? "-" : "") + QString::number(m) + ":" + sec;
+}
+
 go_game_ptr new_game_dialog (QWidget *parent)
 {
 	NewLocalGameDialog dlg(parent);

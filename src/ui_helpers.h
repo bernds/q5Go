@@ -18,6 +18,8 @@ extern QString get_candidate_filename (const QString &dir, const game_info &);
 extern bit_array calculate_hoshis (const go_board &);
 extern board_rect find_crop (const game_state *gs);
 
+extern QString sec_to_time (int);
+
 extern void show_batch_analysis ();
 extern void show_tutorials ();
 extern bool play_engine (QWidget *);
