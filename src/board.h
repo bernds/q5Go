@@ -243,7 +243,6 @@ public:
 	void mark_dead_external (int x, int y);
 
 	void setMode(GameMode mode);
-	GameMode getGameMode () { return m_game_mode; }
 	void setMarkType(mark t) { m_edit_mark = t; }
 
 	void navIntersection();

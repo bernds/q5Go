@@ -2013,7 +2013,7 @@ void MainWindow::keyReleaseEvent (QKeyEvent *e)
 void MainWindow::closeEvent (QCloseEvent *e)
 {
 	// qDebug("MainWindow::closeEvent(QCloseEvent *e)");
-	if (getBoard()->getGameMode() == modeObserve || checkModified ())
+	if (m_gamemode == modeObserve || checkModified ())
 	{
 		emit signal_closeevent();
 		e->accept();
@@ -3494,7 +3494,7 @@ void MainWindow::setTimes (int bt, const QString &bstones, int wt, const QString
 		normalTools->wtimeView->set_text (wtime);
 
 	// warn if I am within the last 10 seconds
-	if (gfx_board->getGameMode() == modeMatch)
+	if (m_gamemode == modeMatch)
 	{
 		if (gfx_board->player_is (black))
 		{
