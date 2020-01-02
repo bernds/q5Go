@@ -42,12 +42,13 @@ class BoardView : public QGraphicsView
 {
 	Q_OBJECT
 
-	void update_rect_select (int, int);
 	/* Used by mouse event handlers during rectangle selection.  */
 	int m_rect_down_x = -1, m_rect_down_y = -1;
 
 	/* Used in draw_grid for widened board outlines.  */
 	bit_array m_vgrid_outline, m_hgrid_outline;
+
+	void update_rect_select (int, int);
 
 protected:
 	go_game_ptr m_game;
@@ -99,6 +100,9 @@ protected:
 
 	int m_vars_type = 1;
 	bool m_vars_children = false;
+
+	/* Used to show a warning on the previous move if nonzero.  */
+	int m_time = 0;
 
 	QGraphicsPixmapItem m_stone_layer;
 
@@ -159,7 +163,7 @@ public:
 	void set_sgf_coords (bool);
 	bool sgf_coords () { return m_sgf_coords; }
 	void set_vardisplay (bool children, int type);
-
+	void set_time_warning (int seconds);
 	void update_prefs ();
 
 	void resizeBoard(int w, int h);

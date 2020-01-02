@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>664</width>
+    <width>667</width>
     <height>787</height>
    </rect>
   </property>
@@ -649,6 +649,9 @@ Select the font for the server console (fixed font preferably).</string>
             <property name="text">
              <string>Language:</string>
             </property>
+            <property name="buddy">
+             <cstring>languageComboBox</cstring>
+            </property>
            </widget>
           </item>
           <item row="1" column="0">
@@ -684,10 +687,10 @@ Select the font for the server console (fixed font preferably).</string>
           <string>Sound defaults by game type</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_5">
-          <item row="0" column="0">
-           <widget class="QCheckBox" name="soundNormalCheckBox">
+          <item row="1" column="1">
+           <widget class="QCheckBox" name="soundComputerCheckBox">
             <property name="text">
-             <string>Local editing</string>
+             <string>Computer games</string>
             </property>
            </widget>
           </item>
@@ -698,10 +701,10 @@ Select the font for the server console (fixed font preferably).</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
-           <widget class="QCheckBox" name="soundComputerCheckBox">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="soundNormalCheckBox">
             <property name="text">
-             <string>Computer games</string>
+             <string>Local editing</string>
             </property>
            </widget>
           </item>
@@ -712,53 +715,29 @@ Select the font for the server console (fixed font preferably).</string>
             </property>
            </widget>
           </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="spacingLabel">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
        <item row="1" column="0">
         <widget class="QGroupBox" name="groupBox_10">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="title">
           <string>Time warnings</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_6">
-          <item row="0" column="0" rowspan="2" colspan="2">
-           <widget class="QCheckBox" name="timeSoundCheckBox">
-            <property name="toolTip">
-             <string>Play sound for remaining seconds of own time</string>
-            </property>
-            <property name="whatsThis">
-             <string>Check this box if you want to be warned when Byo Yomi ends.
-You can set the warning time besides</string>
-            </property>
-            <property name="text">
-             <string>Enable sound</string>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">soundButtonGroup</string>
-            </attribute>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_30">
-            <property name="text">
-             <string>Warn at (seconds):</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QCheckBox" name="timeDivideCheckBox">
-            <property name="toolTip">
-             <string>When canadian time is used, divide time by number of stones left to determine whether to warn.</string>
-            </property>
-            <property name="whatsThis">
-             <string>When canadian time is used, divide time by number of stones left to determine whether to warn.</string>
-            </property>
-            <property name="text">
-             <string>Divide for Canadian</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="2">
+          <item row="3" column="2">
            <widget class="QSpinBox" name="BYTimeSpin">
             <property name="maximumSize">
              <size>
@@ -783,6 +762,50 @@ You can set the warning time besides</string>
             </property>
             <property name="value">
              <number>10</number>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" rowspan="2" colspan="2">
+           <widget class="QCheckBox" name="timeSoundCheckBox">
+            <property name="toolTip">
+             <string>Play sound for remaining seconds of own time</string>
+            </property>
+            <property name="whatsThis">
+             <string>Check this box if you want to be warned when Byo Yomi ends.
+You can set the warning time besides</string>
+            </property>
+            <property name="text">
+             <string>Enable sound</string>
+            </property>
+            <attribute name="buttonGroup">
+             <string notr="true">soundButtonGroup</string>
+            </attribute>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_30">
+            <property name="text">
+             <string>Warn at (seconds):</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QCheckBox" name="timeDivideCheckBox">
+            <property name="toolTip">
+             <string>When canadian time is used, divide time by number of stones left to determine whether to warn.</string>
+            </property>
+            <property name="whatsThis">
+             <string>When canadian time is used, divide time by number of stones left to determine whether to warn.</string>
+            </property>
+            <property name="text">
+             <string>Divide for Canadian</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0" colspan="3">
+           <widget class="QCheckBox" name="timeBoardCheckBox">
+            <property name="text">
+             <string>Show seconds left on the board</string>
             </property>
            </widget>
           </item>

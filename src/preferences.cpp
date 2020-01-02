@@ -582,6 +582,7 @@ void PreferencesDialog::init_from_settings ()
 	ui->tooltipsCheckBox->setChecked (!(setting->readBoolEntry("TOOLTIPS")));
 	ui->BYTimeSpin->setValue (setting->readIntEntry("BY_TIMER"));
 	ui->timeDivideCheckBox->setChecked (setting->readBoolEntry("TIME_WARN_DIVIDE"));
+	ui->timeBoardCheckBox->setChecked (setting->readBoolEntry("TIME_WARN_BOARD"));
 
 	int sidebar = setting->readBoolEntry("SIDEBAR_LEFT") ? 0 : 1;
 	ui->sidebarComboBox->setCurrentIndex (sidebar);
@@ -847,6 +848,7 @@ void PreferencesDialog::slot_apply()
 	setting->writeBoolEntry ("TOOLTIPS", !(ui->tooltipsCheckBox->isChecked ()));
 	setting->writeIntEntry ("BY_TIMER", ui->BYTimeSpin->text ().toInt ());
 	setting->writeBoolEntry ("TIME_WARN_DIVIDE", ui->timeDivideCheckBox->isChecked ());
+	setting->writeBoolEntry ("TIME_WARN_BOARD", ui->timeBoardCheckBox->isChecked ());
 	setting->writeBoolEntry ("ANTICLICKO", ui->antiClickoCheckBox->isChecked ());
 	setting->writeBoolEntry ("ANTICLICKO_HITBOX", ui->hitboxCheckBox->isChecked ());
 

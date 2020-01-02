@@ -76,6 +76,8 @@ struct setting_vals
 
 	bool clicko_delay;
 	bool clicko_hitbox;
+
+	bool time_warn_board;
 };
 
 class Setting

@@ -95,6 +95,7 @@ Setting::Setting()
 	writeIntEntry("DEFAULT_BY", 10);
 	writeIntEntry("BY_TIMER", 10);
 	writeBoolEntry("TIME_WARN_DIVIDE", true);
+	writeBoolEntry("TIME_WARN_BOARD", true);
 
 	writeIntEntry("COMPUTER_SIZE", 19);
         QStringList docdirs = QStandardPaths::standardLocations (QStandardPaths::DocumentsLocation);
@@ -486,6 +487,8 @@ void Setting::extract_frequent_settings ()
 
 	values.clicko_delay = readBoolEntry ("ANTICLICKO");
 	values.clicko_hitbox = readBoolEntry ("ANTICLICKO_HITBOX");
+
+	values.time_warn_board = readBoolEntry ("TIME_WARN_BOARD");
 }
 
 static std::array<const char *, NUMBER_OF_AVAILABLE_LANGUAGES> language_codes LANGUAGE_CODES;

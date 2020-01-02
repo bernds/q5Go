@@ -1110,6 +1110,14 @@ Board::ram_result Board::render_analysis_marks (svg_builder &svg, double svg_fac
 	return ram_result::hide;
 }
 
+void BoardView::set_time_warning (int seconds)
+{
+	bool redraw = m_time != seconds;
+	m_time = seconds;
+	if (redraw)
+		sync_appearance ();
+}
+
 /* The central function for synchronizing visual appearance with the abstract board data.  */
 QPixmap BoardView::draw_position (int default_vars_type)
 {
@@ -1138,6 +1146,14 @@ QPixmap BoardView::draw_position (int default_vars_type)
 	if (have_analysis ())
 		max_number = extract_analysis (mn_board);
 
+	bool skip_last_move_mark = false;
+	if (setting->values.time_warn_board && m_time != 0 && m_displayed->was_move_p ()) {
+		if (m_time < 100) {
+			mn_board.set_mark (m_displayed->get_move_x (), m_displayed->get_move_y (),
+					   mark::num, m_time);
+			skip_last_move_mark = true;
+		}
+	}
 	if (have_figure && print_num != 0) {
 		game_state *startpos = m_displayed;
 		if (!startpos->was_move_p () && startpos->n_children () > 0)
@@ -1200,7 +1216,7 @@ QPixmap BoardView::draw_position (int default_vars_type)
 			auto stone_display = stone_to_display (mn_board, visible, to_move, x, y, vars, var_type);
 			stone_color sc = stone_display.first;
 
-			if (!have_figure && m_displayed->was_move_p ()) {
+			if (!have_figure && !skip_last_move_mark && m_displayed->was_move_p ()) {
 				int last_x = m_displayed->get_move_x ();
 				int last_y = m_displayed->get_move_y ();
 				if (last_x == x && last_y == y)

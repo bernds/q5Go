@@ -2763,6 +2763,7 @@ MainWindow::move_result MainWindow::make_move (game_state *from, int x, int y)
 
 game_state *MainWindow::player_move (int x, int y)
 {
+	gfx_board->set_time_warning (0);
 	game_state *st = gfx_board->displayed ();
 	bool existed;
 	std::tie (st, existed) = make_move (st, x, y);
@@ -2777,6 +2778,7 @@ void MainWindow::doPass ()
 {
 	if (!gfx_board->player_to_move_p ())
 		return;
+	gfx_board->set_time_warning (0);
 	if (m_gamemode == modeNormal || m_gamemode == modeComputer) {
 		game_state *st = gfx_board->displayed ();
 		game_state *st_new = st->add_child_pass ();
@@ -3500,14 +3502,17 @@ void MainWindow::setTimes (int bt, const QString &bstones, int wt, const QString
 		{
 			normalTools->wtimeView->flash (false);
 			normalTools->btimeView->flash (timer_cnt % 2 != 0 && warn_black);
-			if (warn_black)
+			if (warn_black) {
+				gfx_board->set_time_warning (bt);
 				qgo->playTimeSound();
+			}
 		}
 		else if (gfx_board->player_is (white) && warn_white)
 		{
 			normalTools->btimeView->flash (false);
 			normalTools->wtimeView->flash (timer_cnt % 2 != 0 && warn_white);
 			if (warn_white)
+				gfx_board->set_time_warning (wt);
 				qgo->playTimeSound();
 		}
 	} else {
