@@ -167,7 +167,7 @@ TRANSLATIONS	      = qgo_cz.ts \
 macx :{
     LIBS += -framework CoreFoundation
 }
-
+win32-msvc : CONFIG += c++17
 !win32 {
 translation.path      = $$DATADIR/translations
 translation.files     = translations/*

@@ -1,6 +1,7 @@
 #include <QPixmap>
 #include <QCheckBox>
 #include <QDialog>
+#include <array>
 
 #include "gogame.h"
 #include "board.h"
