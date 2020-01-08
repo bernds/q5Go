@@ -494,8 +494,6 @@ void Setting::extract_frequent_settings ()
 static std::array<const char *, NUMBER_OF_AVAILABLE_LANGUAGES> language_codes LANGUAGE_CODES;
 static std::array<const char *, NUMBER_OF_AVAILABLE_LANGUAGES> available_languages AVAILABLE_LANGUAGES;
 
-static_assert (language_codes.size () == available_languages.size ());
-
 const QStringList Setting::getAvailableLanguages()
 {
 	QStringList list;
