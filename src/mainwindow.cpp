@@ -3511,9 +3511,10 @@ void MainWindow::setTimes (int bt, const QString &bstones, int wt, const QString
 		{
 			normalTools->btimeView->flash (false);
 			normalTools->wtimeView->flash (timer_cnt % 2 != 0 && warn_white);
-			if (warn_white)
+			if (warn_white) {
 				gfx_board->set_time_warning (wt);
 				qgo->playTimeSound();
+			}
 		}
 	} else {
 		normalTools->btimeView->flash (false);
