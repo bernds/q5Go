@@ -157,9 +157,13 @@ GameTree::GameTree (QWidget *parent)
 
 void GameTree::clear_scene ()
 {
+	/* Removing the scene before clearing it is an attempt at a performance optimization.
+	   It's not entirely clear whether it really helps.  */
+	QTransform t = transform ();
 	setScene (nullptr);
 	m_scene->clear ();
 	setScene (m_scene);
+	setTransform (t);
 	setDragMode (QGraphicsView::ScrollHandDrag);
 }
 
@@ -431,8 +435,7 @@ void GameTree::update (go_game_ptr gr, game_state *active, bool force)
 	m_sel->setZValue (-1);
 	if (found) {
 		m_sel->setPos (acx * m_size, acy * m_size);
-		if (active_changed || force)
-			ensureVisible (m_sel, m_size / 2, m_size / 2);
+		ensureVisible (m_sel, m_size / 2, m_size / 2);
 	} else
 		m_sel->hide ();
 	m_scene->update ();
