@@ -1,0 +1,154 @@
+(;FF[4]GM[1]CA[UTF-8]AP[q5go:1.0]
+SZ[7]
+PW[White]
+PB[Black]
+KM[6.500000]
+C[Terminology
+
+This is a beginner tutorial that explains some of the terminology that occurs in the game of Go. The game is also known as <font>Baduk</font> in Korea, or <font>Weiqi</font> in China.
+
+Most of the western literature uses Japanese terms, and so does this tutorial unless otherwise noted.]
+;
+C[Terminology
+
+For these examples, we use a 7x7 board - there are 49 playable intersections on it.
+Certain points are marked on the board, these are called <font>star-points</font>, or <font>hoshi</font>. They have no special function.]
+;B[]LB[ag:1][bf:2][bg:1][ce:3][cf:2][cg:1][de:3][df:2][dg:1][ee:3][ef:2][eg:1][ff:2][fg:1][gg:1]
+C[Terminology
+
+The lines are named by distance from the edge - first line, second line, etc.  We say that stones are <font>higher</font> and <font>lower</font>, with lower stones being closer to the edge.
+]MN[1]
+;AB[cc][ef][eg]TR[bc][cb][cd][dc][df][dg][ee][ff][fg]
+C[Terminology
+
+Empty intersections next to a string of stones are called <font>liberties</font>.
+]
+;AW[cb][cd][dc][df][ee][ff][fg]TR[bc][dg]
+C[Terminology
+
+When a group is down to its last liberty, it is said to be in <font>atari</font>. Here, White has given atari to both groups of black stones.]MN[2]
+;AW[cc][dd][ec][fe]AB[bb][bc][bd][ca][cd][ce][de][eb][fc]AE[dc][df][ef][eg][ff][fg]
+C[Terminology
+
+Certain situations where a group has too few liberties are called a <font>shortage</font> <font>of</font> <font>liberties</font>, or <font>damezumari</font>.
+]
+;W[]TR[db]
+C[Terminology
+
+Here, Black can capture two stones by playing on the triangled point, because connecting would not gain any liberties for White.]
+;AW[da][db][fb]AB[cb][dc][fa]AE[bb][bc][bd][cc][cd][ce][dd][de][ee][fc][fe]TR[ea]
+C[Terminology
+
+This is a special case of a shortage of liberties, known as a <font>snap-back</font>. If White captures at the triangled point, Black just recaptures three white stones immediately.]
+;AW[dc][ed]AB[dd]AE[ca][cb][da][db][eb][ec][fa][fb]TR[dc]
+C[Terminology
+
+A move like the triangled play, bending around a stone, is called by its Japanese term, a <font>hane</font>.]
+;AW[ee]AB[de]TR[dc]
+C[Terminology
+
+It would still be called a hane in this position, but more specifically this is known as the hane at the head of two stones - often a powerful tactic.]
+;AW[cb]AB[cc]LB[cb:2][cc:1]
+C[Terminology
+
+If we follow the position for two more moves, we see an example of a <font>double</font> <font>hane</font> played by White. This is also frequently powerful.
+]
+;AB[ec]AE[cb][cc][de][ee]CR[ec]
+C[Terminology
+
+Going back to the basic hane example, here Black has played a <font>cut</font>, leading to this <font>cross-cut</font> pattern.]
+;AW[de]AB[cd][ce][df][ee]AE[dc][dd][ec][ed]
+C[Terminology
+
+This is the basic pattern for a <font>ladder</font>, something we see in several of the other tutorials.
+
+The Japanese term, which is used very infrequently, is <font>shicho</font>.]MN[9]
+;AW[dd][ec][ed][fb][fc]AB[dc][eb][fd][gc]LB[dc:2][dd:1][eb:6][ec:5][ed:3][fb:9][fc:7][fd:4][gc:8]
+C[Terminology
+
+Playing out the ladder reveals the reason for the name, a stair-step pattern that ends with White being captured.]
+;AB[cc][ec][ef]AE[dc][eb][ed][ee][fb][fc][fd][gc]TR[ec]
+C[Terminology
+
+A <font>net</font> (sometimes called <font>geta</font>) is another method of capturing stones. The marked black stone cuts off escape for the two white stones.]
+;AB[dc][de][ed][ee]AE[dd][df][ef]TR[dd]
+C[Terminology
+
+Empty space surrounded entirely by one stones of one color is called an <font>eye</font>.
+This is a basic example, but there are other types of eye.]
+;AE[cc]TR[dd]
+C[Terminology
+
+For example, this is still an eye - the empty space is surrounded on all sides by the same string of black stones.
+]
+;AW[bd][be][bf][cb][cc][cf][db][df][eb][ee][fc][fd][fe]TR[dd]
+C[Terminology
+
+In this case, we have what is known as a <font>false</font> <font>eye</font>, where there is a defect that allows the opponent to capture parts of the stones surrounding the empty intersection.]
+;AE[bd][be][bf][cb][cd][db][dc][eb]TR[cc]
+C[Terminology
+
+Removing some stones from the previous example, we arrive at something that occurs in real games. The marked white play is called the <font>eye-stealing</font> <font>tesuji</font>.
+
+A tesuji is a tactically astute move.]
+;AW[ac][bc][dc][dd][de][dg][ec][ed][fa][fb][gd][ge]AB[ab][bb][cb][db][ea][eb][ee][ef][eg][fe][fg][gf]AE[ce][cf]TR[ba][ca]
+C[Terminology
+
+A group that has (or can make) two eyes is called <font>alive</font>. The upper black group here can subdivide its area at either of the marked two points. The lower group already has two eyes and White is not allowed to play in either of them.]
+;AW[ba]AE[dd][de][df][dg][ed][ee][ef][eg][fd][fe][fg][gd][ge][gf]TR[ba]
+C[Terminology
+
+Let's say White plays at the marked point. This threatens to <font>kill</font> the black group in the next move.]
+;B[ca]
+C[Terminology
+
+Black probably should respond and make two eyes for the group. A move that requires a local response is called a <font>sente</font> move.
+
+A move that does not require a response is called <font>gote</font>.]
+;AB[ce]AE[ab][ac][ba][bb][bc][ca][cb][cc][db][dc][ea][eb][ec][fa][fb][fc]
+C[Terminology
+
+The word <font>extend</font> is used for two different purposes.
+]
+;B[fe]
+C[Terminology
+
+You can make an extension along the side, with varying distance. This one is also called a <font>two-space</font> <font>jump</font>.]
+;AB[cf]AE[fe]CR[cf]
+C[Terminology
+
+Adding a stone to an existing stone is also called an extension. Since this one goes towards the edge of the board, it might also be termed a <font>descent</font>.]
+;AB[dd]AE[ce][cf]
+C[Terminology
+
+As an example, let's go through a sequence of moves and give them names.
+]
+;W[ed]
+C[Terminology
+
+This is an <font>attachment</font>
+]
+;B[ec]
+C[Terminology
+
+Black plays a hane.]
+;W[dc]
+C[Terminology
+
+White cuts
+]
+;B[cc]
+C[Terminology
+
+Black gives atari.
+]
+;W[db]
+C[Terminology
+
+White extends
+]
+;B[cd]
+C[Terminology
+
+Black connects.
+])
