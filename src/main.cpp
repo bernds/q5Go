@@ -154,6 +154,8 @@ go_game_ptr record_from_stream (QIODevice &isgf, QTextCodec* codec)
 		return gr;
 	} catch (invalid_boardsize &) {
 		QMessageBox::warning (0, PACKAGE, QObject::tr ("Unsupported board size in SGF file."));
+	} catch (old_sgf_format &) {
+		QMessageBox::warning (0, PACKAGE, QObject::tr ("The file uses an obsolete SGF format from 1993 that is no longer supported.\nIf you are using Jago, make sure the \"Pure SGF\" option is checked before saving."));
 	} catch (broken_sgf &) {
 		QMessageBox::warning (0, PACKAGE, QObject::tr ("Errors found in SGF file."));
 	} catch (...) {

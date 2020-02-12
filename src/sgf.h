@@ -14,6 +14,10 @@ class broken_sgf : public std::exception
 {
 };
 
+class old_sgf_format : public std::exception
+{
+};
+
 class invalid_boardsize : public std::exception
 {
 };
