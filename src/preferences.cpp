@@ -1079,23 +1079,37 @@ void PreferencesDialog::clear_host ()
 
 void PreferencesDialog::slot_add_server()
 {
-	// check if at least title and host inserted
-	if (!ui->LineEdit_title->text ().isEmpty() && !ui->LineEdit_host->text ().isEmpty())
-	{
-		// check if title already exists
-		bool check;
-		unsigned int tmp = ui->LineEdit_port->text ().toUInt(&check);
-		if (!check)
-		{
-			tmp = 0;
-			qWarning("Failed to convert port to integer!");
-		}
-
-		Host new_h (ui->LineEdit_title->text (), ui->LineEdit_host->text (), tmp,
-			    ui->LineEdit_login->text (), ui->LineEdit_pass->text (), ui->ComboBox_codec->currentText ());
-		m_hosts_model.add_or_replace (new_h);
-		m_hosts_changed = true;
+	if (ui->LineEdit_title->text ().isEmpty()) {
+		QMessageBox::warning (this, tr ("Title required"),
+				      tr ("You need to add a title for the account that you want to add."));
+		return;
 	}
+	if (ui->LineEdit_host->text ().isEmpty()) {
+		QMessageBox::warning (this, tr ("Host required"),
+				      tr ("You need to add a host name for the account that you want to add."));
+		return;
+	}
+	if (ui->LineEdit_login->text ().isEmpty()) {
+		QMessageBox::warning (this, tr ("Login name required"),
+				      tr ("You need to add the login name for the account that you want to add."));
+		return;
+	}
+
+	// check if title already exists
+	bool check;
+	unsigned int tmp = ui->LineEdit_port->text ().toUInt(&check);
+	if (!check)
+	{
+		tmp = 0;
+		QMessageBox::warning (this, tr ("Port required"),
+				      tr ("You need to add the server's port number for the account that you want to add."));
+		return;
+	}
+
+	Host new_h (ui->LineEdit_title->text (), ui->LineEdit_host->text (), tmp,
+		    ui->LineEdit_login->text (), ui->LineEdit_pass->text (), ui->ComboBox_codec->currentText ());
+	m_hosts_model.add_or_replace (new_h);
+	m_hosts_changed = true;
 
 	clear_host ();
 }
