@@ -153,33 +153,35 @@
     </message>
     <message>
         <source>If fixed engine komi:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">如果修改了引擎贴目:</translation>
     </message>
     <message>
         <source>Controls how to behave if the engine only supports a fixed value for komi.
 If the analyzed game has negative komi, the game can be analyzed with reversed colors for better results.
 It is also possible to analyze with both normal and flipped komi, for example for zero-komi games.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">控制引擎在只支持修改后的贴目的行为。
+如果被分析的棋局存在负贴目，棋局可以为更好的分析结果被反转黑白颜色再分析。
+也可以可以同时分析反转颜色和不反转颜色的棋局，比如.不贴目棋局。</translation>
     </message>
     <message>
         <source>Use default</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">使用棋局默认</translation>
     </message>
     <message>
         <source>Swap if better</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">如果更好则反转</translation>
     </message>
     <message>
         <source>Analyze both</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">两者都分析</translation>
     </message>
     <message>
         <source>Add evaluation info to comments</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">将评估信息导出到评论中</translation>
     </message>
     <message>
         <source> visits</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"> 访问</translation>
     </message>
 </context>
 <context>
@@ -1318,7 +1320,7 @@ option to replace an edited position, or to insert your edits before the current
     </message>
     <message>
         <source>Play against engine from current position...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">从当前位置和引擎对弈...</translation>
     </message>
     <message>
         <source>Start a game against an engine from the current position</source>
@@ -2391,7 +2393,7 @@ Analysis engines now require a board size to be set, assuming 19 for existing en
     </message>
     <message>
         <source>&amp;Computer vs. computer play</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;C机器 vs. 机器</translation>
     </message>
     <message>
         <source>Automatic computer vs. computer play</source>
@@ -2399,7 +2401,7 @@ Analysis engines now require a board size to be set, assuming 19 for existing en
     </message>
     <message>
         <source>Select two engines and let them play one or more games</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">选择两个引擎并让它们下棋</translation>
     </message>
     <message>
         <source>Brings up a dialog to set up play between two engines.
@@ -2414,14 +2416,14 @@ Analysis engines now require a board size to be set, assuming 19 for existing en
     </message>
     <message>
         <source>Open from &amp;database...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">从数据库打开&amp;d...</translation>
     </message>
 </context>
 <context>
     <name>DBDialog</name>
     <message>
         <source>Open database file</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">打开数据库文件</translation>
     </message>
     <message>
         <source>Filters</source>
@@ -2429,7 +2431,7 @@ Analysis engines now require a board size to be set, assuming 19 for existing en
     </message>
     <message>
         <source>Player 2:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">棋友 2:</translation>
     </message>
     <message>
         <source>Event:</source>
@@ -2441,7 +2443,7 @@ Analysis engines now require a board size to be set, assuming 19 for existing en
     </message>
     <message>
         <source>Player 1:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">棋友 1:</translation>
     </message>
     <message>
         <source>To:</source>
@@ -2461,7 +2463,7 @@ Analysis engines now require a board size to be set, assuming 19 for existing en
     </message>
     <message>
         <source>Configure database &amp;paths...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">设置数据库路径&amp;p...</translation>
     </message>
     <message>
         <source>Override character set for text in SGF file:</source>
@@ -2497,7 +2499,7 @@ Analysis engines now require a board size to be set, assuming 19 for existing en
     </message>
     <message>
         <source>File properties</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">对局信息</translation>
     </message>
     <message>
         <source>19</source>
@@ -2533,11 +2535,11 @@ Analysis engines now require a board size to be set, assuming 19 for existing en
     </message>
     <message>
         <source>Black</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">黑方</translation>
     </message>
     <message>
         <source>White</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">白方</translation>
     </message>
     <message>
         <source>Round:</source>
@@ -2569,7 +2571,7 @@ Analysis engines now require a board size to be set, assuming 19 for existing en
     </message>
     <message>
         <source>Res.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">结果.</translation>
     </message>
 </context>
 <context>
@@ -2583,7 +2585,7 @@ Analysis engines now require a board size to be set, assuming 19 for existing en
     <name>EngineDialog</name>
     <message>
         <source>Create a new engine configuration</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">创建一个新引擎设置</translation>
     </message>
     <message>
         <source>Arguments:</source>
@@ -2603,7 +2605,7 @@ Analysis engines now require a board size to be set, assuming 19 for existing en
     </message>
     <message>
         <source>Set this to the komi value the engine expects, or leave empty if the engine allows arbitrary values for komi.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">将此贴目设置为引擎所支持的贴目，若引擎支持任意贴目请留空。</translation>
     </message>
     <message>
         <source>Board size:</source>
@@ -2612,11 +2614,12 @@ Analysis engines now require a board size to be set, assuming 19 for existing en
     <message>
         <source>Enter a board size if the engine supports only one board size.
 Analysis engines currently require a fixed board size to be set.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">如果引擎只支持一种棋盘，请输入棋盘尺寸。
+用于分析的引擎目前需要一个修改后的尺寸来设置。</translation>
     </message>
     <message>
         <source>Any command line arguments that should be passed at startup.</source>
-        <translation type="unfinished">任何要传给程序启动的命令行参数</translation>
+        <translation type="unfinished">任何要传给程序启动的命令行参数。</translation>
     </message>
     <message>
         <source>The path to the GTP engine&apos;s executable.</source>
@@ -2628,15 +2631,15 @@ Analysis engines currently require a fixed board size to be set.</source>
     </message>
     <message>
         <source>Use for analysis (KataGo, Leela Zero or compatible)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">供分析使用(KataGo,Leela Zero或兼容的)</translation>
     </message>
     <message>
         <source>Create a new engine configuration from an existing one</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">从已有的引擎设置新建一个</translation>
     </message>
     <message>
         <source>Change an engine configuration</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">更改一个引擎的设置</translation>
     </message>
     <message>
         <source>Choose GTP engine path</source>
@@ -2648,46 +2651,49 @@ Analysis engines currently require a fixed board size to be set.</source>
     </message>
     <message>
         <source>No name set for the engine.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">未对引擎命名。</translation>
     </message>
     <message>
         <source>A name must be set for the engine.
 Please enter all necessary fields before continuing</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">必须为引擎输入一个名字。
+请在继续前将补充完整</translation>
     </message>
     <message>
         <source>No path set for the engine.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">未对引擎设置路径。</translation>
     </message>
     <message>
         <source>A path must be set for the engine.
 Please enter all necessary fields before continuing</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">必须为引擎输入一个路径。
+请在继续前将补充完整</translation>
     </message>
     <message>
         <source>Invalid size specified</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">无效的棋盘大小</translation>
     </message>
     <message>
         <source>The value entered for the board size is invalid.
 Please enter values between 3 and 25.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">输入的棋盘尺寸无效。
+请输入一个介于3到25之间的整数。</translation>
     </message>
     <message>
         <source>No boardsize specified for analysis engine.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">未明确分析引擎的棋盘尺寸。</translation>
     </message>
     <message>
         <source>Currently any engine used for analysis must specify a board size.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">目前所有用于分析的引擎必须规定棋盘尺寸。</translation>
     </message>
     <message>
         <source>Invalid komi specified</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">未确定的贴目数</translation>
     </message>
     <message>
         <source>The value entered for komi is invalid.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">无效的贴目数。</translation>
     </message>
 </context>
 <context>
@@ -2716,11 +2722,11 @@ Displays evaluation data found in the game record.</source>
     </message>
     <message>
         <source>Show scores</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">显示目数</translation>
     </message>
     <message>
         <source>Show winrates</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">显示胜率</translation>
     </message>
     <message>
         <source>Score</source>
@@ -2728,7 +2734,7 @@ Displays evaluation data found in the game record.</source>
     </message>
     <message>
         <source>Win rate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">胜率</translation>
     </message>
 </context>
 <context>
@@ -3287,7 +3293,7 @@ Overwrite stored game result?</source>
     </message>
     <message>
         <source>An invalid move was played by the engine, game terminated.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">引擎走出了一招不合法的起步,棋局停止。</translation>
     </message>
     <message>
         <source>Reported score by White: </source>
@@ -3415,11 +3421,11 @@ Overwrite stored game result?</source>
     </message>
     <message>
         <source>Square board size</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">等边棋盘尺寸</translation>
     </message>
     <message>
         <source>Rectangular board</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">不等边棋盘尺寸</translation>
     </message>
     <message>
         <source>x</source>
@@ -3431,7 +3437,7 @@ Overwrite stored game result?</source>
     </message>
     <message>
         <source>Main time (minutes):</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">基本用时 (分钟):</translation>
     </message>
     <message>
         <source>60</source>
@@ -3439,7 +3445,7 @@ Overwrite stored game result?</source>
     </message>
     <message>
         <source>Overtime</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">限时</translation>
     </message>
     <message>
         <source>10</source>
@@ -3447,11 +3453,11 @@ Overwrite stored game result?</source>
     </message>
     <message>
         <source>Period (minutes):</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">每阶段用时 (分钟):</translation>
     </message>
     <message>
         <source>Stones per period:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">每阶段手数:</translation>
     </message>
 </context>
 <context>
@@ -6743,7 +6749,7 @@ and play the selected number of games per line</source>
     <name>an_id_model</name>
     <message>
         <source>Engine</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">引擎</translation>
     </message>
 </context>
 <context>
