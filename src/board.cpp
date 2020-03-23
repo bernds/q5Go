@@ -991,6 +991,18 @@ bool Board::have_analysis ()
 	return false;
 }
 
+game_state *Board::analysis_primary_move ()
+{
+	game_state *eval_root = m_eval_state != nullptr ? m_eval_state : m_displayed;
+	auto &c = eval_root->children ();
+	for (auto it: c) {
+		eval ev = m_eval_state != nullptr ? it->best_eval () : it->eval_from (m_an_id, true);
+		if (it->has_figure () && ev.visits > 0 && it->was_move_p ())
+			return it;
+	}
+	return nullptr;
+}
+
 game_state *Board::analysis_at (int x, int y, int &num, double &primary)
 {
 	game_state *eval_root = m_eval_state != nullptr ? m_eval_state : m_displayed;
@@ -1018,24 +1030,32 @@ int Board::extract_analysis (go_board &b)
 
 	int idx;
 	double primary;
+	auto display_pv = [this, &b] (game_state *pv, void (MainWindow::*set_eval) (const QString &, double, bool, double, stone_color, int))
+		{
+			if (pv == nullptr) {
+				(m_board_win->*set_eval) (QString (), 0, false, 0, none, 0);
+				return;
+			}
+			int x = pv->get_move_x ();
+			int y = pv->get_move_y ();
+			stone_color to_move = m_displayed->to_move ();
+			eval ev = pv->best_eval ();
+			double wr = ev.wr_black;
+			int visits = ev.visits;
+			if (to_move == white)
+				wr = 1 - wr;
+			if (x > 7)
+				x++;
+			QString move = QChar ('A' + x) + QString::number (b.size_y () - y);
+			(m_board_win->*set_eval) (move, wr, ev.score_stddev != 0, ev.score_mean, to_move, visits);
+		};
+	game_state *primary_pv = analysis_primary_move ();
+	display_pv (primary_pv, &MainWindow::set_eval);
 	game_state *pv = analysis_at (curX, curY, idx, primary);
-	if (pv == nullptr) {
-		m_board_win->set_2nd_eval (nullptr, 0, none, 0);
+	display_pv (pv, &MainWindow::set_2nd_eval);
+	if (pv == nullptr)
 		return 0;
-	} else {
-		int x = pv->get_move_x ();
-		int y = pv->get_move_y ();
-		stone_color to_move = m_displayed->to_move ();
-		eval ev = pv->best_eval ();
-		double wr = ev.wr_black;
-		int visits = ev.visits;
-		if (to_move == white)
-			wr = 1 - wr;
-		if (x > 7)
-			x++;
-		QString move = QChar ('A' + x) + QString::number (b.size_y () - y);
-		m_board_win->set_2nd_eval (move, wr, to_move, visits);
-	}
+
 	int depth = 0;
 	game_state *first = pv;
 	game_state *last = pv;
@@ -1368,6 +1388,9 @@ void Board::sync_appearance (bool board_only)
 	if (!board_only) {
 		setup_analyzer_position ();
 	}
+	if (!have_analysis ())
+		m_board_win->set_eval (QString (), 0, false, 0, none, 0);
+
 	BoardView::sync_appearance (board_only);
 	const go_board &b = m_displayed->get_board ();
 	m_board_win->recalc_scores (b);
@@ -2175,7 +2198,8 @@ void Board::eval_received (const QString &move, int visits, bool have_score)
 {
 	m_board_win->update_analyzer_ids (m_id, have_score);
 	m_displayed->update_eval (*m_eval_state);
-	m_board_win->set_eval (move, m_primary_eval, m_displayed->to_move (), visits);
+	m_board_win->set_eval (move, m_primary_eval, m_primary_have_score, m_primary_score,
+			       m_displayed->to_move (), visits);
 	sync_appearance ();
 }
 

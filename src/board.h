@@ -278,6 +278,7 @@ protected:
 	virtual void leaveEvent(QEvent*) override;
 
 	virtual bool have_analysis () override;
+	game_state *analysis_primary_move ();
 	game_state *analysis_at (int x, int y, int &, double &);
 	virtual stone_color cursor_color (int x, int y, stone_color to_move) override;
 	virtual ram_result render_analysis_marks (svg_builder &, double svg_factor, double cx, double cy, const QFontInfo &,

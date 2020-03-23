@@ -170,6 +170,10 @@ private:
 	void defaultLandscapeLayout ();
 
 	void grey_eval_bar ();
+	void set_eval_bar (double);
+	void clear_primary_eval ();
+	void clear_2nd_eval ();
+	QString format_eval (double, bool, double, stone_color);
 
 	void update_ascii_dialog ();
 	void update_svg_dialog ();
@@ -220,9 +224,8 @@ public:
 
 	void recalc_scores (const go_board &);
 
-	void set_eval (double);
-	void set_eval (const QString &, double, stone_color, int);
-	void set_2nd_eval (const QString &, double, stone_color, int);
+	void set_eval (const QString &, double, bool, double, stone_color, int);
+	void set_2nd_eval (const QString &, double, bool, double, stone_color, int);
 
 	void setTimes (int btime, const QString &bstones, int wtime, const QString &wstones,
 		       bool warn_b, bool warn_w, int);

@@ -476,7 +476,7 @@ MainWindow::MainWindow (QWidget* parent, go_game_ptr gr, const QString opener_sc
 
 	m_eval = 0.5;
 
-	connect (evalView, &SizeGraphicsView::resized, this, [=] () { set_eval (m_eval); });
+	connect (evalView, &SizeGraphicsView::resized, this, [=] () { set_eval_bar (m_eval); });
 	connect (anIdListView, &ClickableListView::current_changed, [this] () { update_game_tree (); });
 
 	connect (passButton, &QPushButton::clicked, this, &MainWindow::doPass);
@@ -3388,20 +3388,14 @@ void MainWindow::update_analysis (analyzer state)
 		normalTools->anStartButton->setIcon (QIcon (":/images/power-standby.png"));
 	else
 		normalTools->anStartButton->setIcon (QIcon (":/images/power-on.png"));
-	normalTools->anPrimaryBox->setEnabled (state == analyzer::running);
-	normalTools->anShownBox->setEnabled (state == analyzer::running);
 	anPause->setEnabled (state != analyzer::disconnected);
 	normalTools->anPauseButton->setEnabled (state != analyzer::disconnected);
 	normalTools->anPauseButton->setChecked (state == analyzer::paused);
 	anPause->setChecked (state == analyzer::paused);
 
 	if (state == analyzer::disconnected) {
-		normalTools->primaryCoords->setText ("");
-		normalTools->primaryWR->setText ("");
-		normalTools->primaryVisits->setText ("");
-		normalTools->shownCoords->setText ("");
-		normalTools->shownWR->setText ("");
-		normalTools->shownVisits->setText ("");
+		clear_primary_eval ();
+		clear_2nd_eval ();
 	}
 }
 
@@ -3597,7 +3591,7 @@ void MainWindow::update_analyzer_ids (const analyzer_id &new_id, bool have_score
 	evalGraph->update (m_game, gfx_board->displayed (), idx.isValid () ? idx.row () : 0);
 }
 
-void MainWindow::set_eval (double eval)
+void MainWindow::set_eval_bar (double eval)
 {
 	m_eval = eval;
 	int w = evalView->width ();
@@ -3609,44 +3603,71 @@ void MainWindow::set_eval (double eval)
 	m_eval_canvas->update ();
 }
 
-void MainWindow::set_eval (const QString &move, double eval, stone_color to_move, int visits)
+void MainWindow::clear_primary_eval ()
 {
-	evalView->setBackgroundBrush (QBrush (Qt::white));
-	m_eval_bar->setBrush (QBrush (Qt::black));
-	set_eval (to_move == black ? eval : 1 - eval);
+	normalTools->anPrimaryBox->setTitle (tr ("Primary move"));
+	normalTools->primaryWR->setText ("");
+	normalTools->primaryVisits->setText ("");
+	normalTools->anPrimaryBox->setEnabled (false);
+	normalTools->anShownBox->setEnabled (false);
+}
 
+void MainWindow::clear_2nd_eval ()
+{
+	normalTools->anShownBox->setTitle (tr ("Highlighted move"));
+	normalTools->shownWR->setText ("");
+	normalTools->shownVisits->setText ("");
+}
+
+QString MainWindow::format_eval (double eval, bool have_score, double score, stone_color to_move)
+{
 	int winrate_for = setting->readIntEntry ("ANALYSIS_WINRATE");
 	stone_color wr_swap_col = winrate_for == 0 ? white : winrate_for == 1 ? black : none;
 	if (to_move == wr_swap_col)
 		eval = 1 - eval;
 
-	normalTools->primaryCoords->setText (move);
-	normalTools->primaryWR->setText (QString::number (100 * eval, 'f', 1));
-	normalTools->primaryVisits->setText (QString::number (visits));
-	if (winrate_for == 0 || (winrate_for == 2 && to_move == black)) {
-		normalTools->pWRLabel->setText (tr ("B Win %"));
-		normalTools->sWRLabel->setText (tr ("B Win %"));
-	} else {
-		normalTools->pWRLabel->setText (tr ("W Win %"));
-		normalTools->sWRLabel->setText (tr ("W Win %"));
+	QString ev_text = (winrate_for == 0 || (winrate_for == 2 && to_move == black)) ? tr ("B %1%") : tr ("W %1%");
+	ev_text = ev_text.arg (QString::number (100 * eval, 'f', 1));
+	if (have_score) {
+		ev_text += ", ";
+		if (score > 0)
+			ev_text += tr ("B+%1").arg (QString::number (score, 'f', 2));
+		else
+			ev_text += tr ("W+%1").arg (QString::number (-score, 'f', 2));
 	}
+	return ev_text;
 }
 
-void MainWindow::set_2nd_eval (const QString &move, double eval, stone_color to_move, int visits)
+void MainWindow::set_eval (const QString &move, double eval, bool have_score, double score,
+			   stone_color to_move, int visits)
 {
 	if (move.isEmpty ()) {
-		normalTools->shownCoords->setText ("");
-		normalTools->shownWR->setText ("");
-		normalTools->shownVisits->setText ("");
-	} else {
-		int winrate_for = setting->readIntEntry ("ANALYSIS_WINRATE");
-		stone_color wr_swap_col = winrate_for == 0 ? white : winrate_for == 1 ? black : none;
-		if (to_move == wr_swap_col)
-			eval = 1 - eval;
-		normalTools->shownCoords->setText (move);
-		normalTools->shownWR->setText (QString::number (100 * eval, 'f', 1));
-		normalTools->shownVisits->setText (QString::number (visits));
+		clear_primary_eval ();
+		return;
 	}
+	evalView->setBackgroundBrush (QBrush (Qt::white));
+	m_eval_bar->setBrush (QBrush (Qt::black));
+	set_eval_bar (to_move == black ? eval : 1 - eval);
+
+	normalTools->anPrimaryBox->setTitle (tr ("Primary move: %1").arg (move));
+	normalTools->primaryWR->setText (format_eval (eval, have_score, score, to_move));
+	normalTools->primaryVisits->setText (QString::number (visits));
+
+	normalTools->anPrimaryBox->setEnabled (true);
+	normalTools->anShownBox->setEnabled (true);
+}
+
+void MainWindow::set_2nd_eval (const QString &move, double eval, bool have_score, double score,
+			       stone_color to_move, int visits)
+{
+	if (move.isEmpty ()) {
+		clear_2nd_eval ();
+		return;
+	}
+
+	normalTools->anShownBox->setTitle (tr ("Highlighted: %1").arg (move));
+	normalTools->shownWR->setText (format_eval (eval, have_score, score, to_move));
+	normalTools->shownVisits->setText (QString::number (visits));
 }
 
 void MainWindow::grey_eval_bar ()

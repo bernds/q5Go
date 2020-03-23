@@ -66,7 +66,10 @@ protected:
 	   holds the right button.  */
 	bool m_pause_updates = false;
 
+	bool m_primary_have_score;
 	double m_primary_eval;
+	double m_primary_score;
+
 	game_state *m_eval_state {};
 
 	void clear_eval_data ();

@@ -578,38 +578,14 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
          <property name="bottomMargin">
           <number>2</number>
          </property>
-         <item row="0" column="0">
-          <widget class="QLabel" name="label">
-           <property name="text">
-            <string>Coords:</string>
-           </property>
-          </widget>
-         </item>
          <item row="1" column="0">
-          <widget class="QLabel" name="pWRLabel">
-           <property name="text">
-            <string>B Win%</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QLabel" name="primaryWR">
-           <property name="text">
-            <string/>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
           <widget class="QLabel" name="label_9">
            <property name="text">
             <string>Visits:</string>
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
+         <item row="1" column="1">
           <widget class="QLabel" name="primaryVisits">
            <property name="text">
             <string/>
@@ -619,13 +595,10 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
-          <widget class="QLabel" name="primaryCoords">
+         <item row="0" column="0" colspan="2">
+          <widget class="QLabel" name="primaryWR">
            <property name="text">
             <string/>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
           </widget>
          </item>
@@ -650,54 +623,27 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
          <property name="bottomMargin">
           <number>2</number>
          </property>
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_3">
-           <property name="text">
-            <string>Coords:</string>
-           </property>
-          </widget>
-         </item>
          <item row="1" column="0">
-          <widget class="QLabel" name="sWRLabel">
-           <property name="text">
-            <string>B Win%:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QLabel" name="shownCoords">
-           <property name="text">
-            <string/>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QLabel" name="shownWR">
-           <property name="text">
-            <string/>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
           <widget class="QLabel" name="label_10">
            <property name="text">
             <string>Visits:</string>
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
+         <item row="1" column="1">
           <widget class="QLabel" name="shownVisits">
            <property name="text">
             <string/>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0" colspan="2">
+          <widget class="QLabel" name="shownWR">
+           <property name="text">
+            <string/>
            </property>
           </widget>
          </item>

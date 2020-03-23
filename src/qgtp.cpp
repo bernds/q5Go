@@ -679,6 +679,8 @@ void GTP_Eval_Controller::gtp_eval (const QString &s, bool kata_format)
 		if (count == 0) {
 			primary_move = move;
 			m_primary_eval = wr;
+			m_primary_have_score = have_score;
+			m_primary_score = scorem;
 			primary_visits = visits;
 			m_eval_state->set_eval_data (visits, to_move == white ? 1 - wr : wr,
 						     scorem, scored, id);
