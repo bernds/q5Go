@@ -28,11 +28,11 @@ The players take turns placing stones on intersections.
 Black goes first.
 
 Once placed, a stone never moves, but it can be captured.]
-;AE[ee][gc][cc]
+;AE[cc][ee][gc]
 C[Rules of Go
 Usually, some intersections on the board are marked with thicker dots.
 These are called star points, but they are for visual reference only. They have no special properties.]
-;TR[bc][cb][cd][dc][de][ed][ef][fc][fe][gb][gd]AB[cc][gc]AW[ee]
+;AW[ee]AB[cc][gc]TR[bc][cb][cd][dc][de][ed][ef][fc][fe][gb][gd]
 C[Rules of Go
 Intersections are connected by lines on the board.
 Empty spaces next to a stone are called <font>liberties</font>.
@@ -49,7 +49,7 @@ Stones need liberties to remain on the board.
 
 Once the opponent removes the last liberty, the stone is captured.
 ]
-;AE[bc][cb][cd][dc]AW[bg][cf]AB[cg]TR[dg]
+;AW[bg][cf]AB[cg]AE[bc][cb][cd][dc]TR[dg]
 C[Rules of Go
 There are fewer liberties at the edge (or in the corners) of the board.
 
@@ -86,11 +86,21 @@ Diagonals do not form a connection.
 
 Different units can be captured separately.
 ]
-;AB[ce][de]AE[bd][dd]TR[dd]
+;AW[bc][bg][ca][db][dg][ec][ed][eg][fb][fc][gc]AB[ab][ad][bb][bf][cb][cc][ce][dc][de][ea][eb][ef][fa][fd][fe][ff][fg][gb][gd][gf]AE[dd]TR[dd]
+C[Rules of Go
+As a beginner, you may find it difficult to visualize connections. This program offers a feature to help with that.
+
+Try toggling the "visualization aid" checkbox.
+]
+;TR[dd]
+C[Rules of Go
+Try not to become reliant on having the program visualize the connections. It is unavailable on real boards or in match conditions.
+]MN[13]
+;AE[ab][ad][bb][bc][bd][bf][bg][ca][cb][cc][db][dc][dg][ea][eb][ec][ed][ef][eg][fa][fb][fc][fd][fe][ff][fg][gb][gc][gd][gf]TR[dd]
 C[Example
 
 What if the black stones try to escape capture?
-]
+]MN[13]
 ;B[dd]
 C[Example
 

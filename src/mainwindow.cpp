@@ -977,6 +977,7 @@ void MainWindow::initActions ()
 	connect(viewFullscreen, &QAction::toggled, this, &MainWindow::slotViewFullscreen);
 	connect(viewNumbers, &QAction::toggled, this, &MainWindow::slotViewMoveNumbers);
 	connect(viewDiagComments, &QAction::toggled, this, &MainWindow::slotViewDiagComments);
+	connect(viewConnections, &QAction::toggled, this, &MainWindow::slotViewConnections);
 
 	/* Analyze menu.  */
 	connect(anConnect, &QAction::triggered, this, [=] () { start_analysis (); });
@@ -1761,6 +1762,12 @@ void MainWindow::slotViewMoveNumbers(bool toggle)
 	statusBar()->showMessage(tr("Ready."));
 }
 
+void MainWindow::slotViewConnections(bool toggle)
+{
+	gfx_board->set_visualize_connections (toggle);
+	statusBar()->showMessage(tr("Ready."));
+}
+
 void MainWindow::slotViewDiagComments(bool toggle)
 {
 	diagCommentView->setVisible (toggle);
@@ -2257,6 +2264,7 @@ void MainWindow::setGameMode (GameMode mode)
 
 	bool editable_comments = mode != modeMatch && mode != modePostMatch && mode != modeObserve && mode != modeScoreRemote && m_remember_mode != modePostMatch;
 	leaveMatchButton->setVisible (mode == modePostMatch);
+	viewConnections->setVisible (mode != modeMatch && mode != modeTeach && mode != modeComputer);
 
 	/* For almost everything below this, modePostMatch behaves just like modeNormal.  */
 	GameMode mode_in = mode;

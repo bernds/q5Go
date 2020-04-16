@@ -318,6 +318,7 @@ public slots:
 	void slotViewFullscreen(bool toggle);
 	void slotViewMoveNumbers(bool toggle);
 	void slotViewDiagComments (bool);
+	void slotViewConnections (bool);
 
 	void slotTimerForward();
 	void slot_editBoardInNewWindow(bool);

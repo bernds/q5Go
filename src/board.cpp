@@ -1326,6 +1326,35 @@ QPixmap BoardView::draw_position (int default_vars_type)
 
 	draw_grid (painter, std::move (hgrid), std::move (vgrid), grid_hidden);
 
+	if (m_visualize_connections) {
+		int line_offx = m_board_rect.left () - m_wood_rect.left ();
+		int line_offy = m_board_rect.top () - m_wood_rect.top ();
+		int scaled_w = (int)square_size * 2 / 3 + 1;
+		QPen black_pen (Qt::black);
+		QPen white_pen (Qt::white);
+		black_pen.setWidth (scaled_w);
+		white_pen.setWidth (scaled_w);
+		for (int tx = 0; tx + 1 < visx + 2 * dups_x; tx++)
+			for (int ty = 0; ty + 1 < visy + 2 * dups_y; ty++) {
+				int x = (tx + shiftx + (szx - dups_x)) % szx;
+				int y = (ty + shifty + (szy - dups_y)) % szy;
+				int xp1 = (tx + 1 + shiftx + (szx - dups_x)) % szx;
+				int yp1 = (ty + 1 + shifty + (szy - dups_y)) % szy;
+				stone_color c = b.stone_at (x, y);
+				if (c == none)
+					continue;
+				painter.setPen (c == white ? white_pen : black_pen);
+				if (b.stone_at (xp1, y) == c) {
+					painter.drawLine (line_offx + tx * square_size, line_offy + ty * square_size,
+							  line_offx + (tx + 1) * square_size, line_offy + ty * square_size);
+				}
+				if (b.stone_at (x, yp1) == c) {
+					painter.drawLine (line_offx + tx * square_size, line_offy + ty * square_size,
+							  line_offx + tx * square_size, line_offy + (ty + 1) * square_size);
+				}
+			}
+	}
+
 	/* Now, draw stones.  Do this in two passes, with shadows first.  */
 	painter.setPen (Qt::NoPen);
 	int shadow_offx = m_board_rect.left () - m_wood_rect.left () - square_size / 2 - square_size / 8;
@@ -2070,6 +2099,16 @@ void BoardView::set_show_coords (bool b)
 		return;
 
 	changeSize();
+}
+
+void BoardView::set_visualize_connections (bool b)
+{
+	bool old = m_visualize_connections;
+	m_visualize_connections = b;
+	if (old == m_visualize_connections)
+		return;
+
+	sync_appearance ();
 }
 
 void BoardView::set_show_hoshis (bool b)

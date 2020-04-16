@@ -2551,7 +2551,7 @@ After placing and/or undo release button for returning to starting point automat
      <x>0</x>
      <y>0</y>
      <width>1192</width>
-     <height>30</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="fileMenu">
@@ -2675,6 +2675,7 @@ After placing and/or undo release button for returning to starting point automat
     <addaction name="viewNumbers"/>
     <addaction name="viewCoords"/>
     <addaction name="viewDiagComments"/>
+    <addaction name="viewConnections"/>
    </widget>
    <widget class="QMenu" name="anMenu">
     <property name="title">
@@ -3988,6 +3989,21 @@ Open the batch analysis dialog which allows you to add SGF files to a queue to b
    </property>
    <property name="shortcut">
     <string>Ctrl+Y</string>
+   </property>
+  </action>
+  <action name="viewConnections">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/connected.png</normaloff>:/BoardWindow/images/boardwindow/connected.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Visualize connections</string>
+   </property>
+   <property name="toolTip">
+    <string>Show thicker lines to visualize connections between stones. May be helpful for beginners.</string>
    </property>
   </action>
  </widget>

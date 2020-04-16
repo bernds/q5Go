@@ -107,6 +107,13 @@
          <number>1</number>
         </property>
         <item>
+         <widget class="QCheckBox" name="aidCheckBox">
+          <property name="text">
+           <string>Visualization aid</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <spacer name="horizontalSpacer_3">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>

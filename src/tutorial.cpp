@@ -62,6 +62,8 @@ Tutorial_Slideshow::Tutorial_Slideshow (QWidget *parent)
 		 [this] (bool) { set_active (m_board_exporter->displayed ()->next_primary_move ()); update_buttons (); });
 	connect (ui->goPrevButton, &QPushButton::clicked,
 		 [this] (bool) { set_active (m_board_exporter->displayed ()->prev_move ()); update_buttons (); });
+	connect (ui->aidCheckBox, &QCheckBox::toggled,
+		 [this] (bool toggled) { m_board_exporter->set_visualize_connections (toggled); redraw (); });
 
 	ui->goFirstButton->setShortcut (Qt::Key_Home);
 	ui->goLastButton->setShortcut (Qt::Key_End);

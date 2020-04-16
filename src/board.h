@@ -42,6 +42,8 @@ class BoardView : public QGraphicsView
 {
 	Q_OBJECT
 
+	bool m_visualize_connections = false;
+
 	/* Used by mouse event handlers during rectangle selection.  */
 	int m_rect_down_x = -1, m_rect_down_y = -1;
 
@@ -160,6 +162,7 @@ public:
 	void set_show_hoshis (bool);
 	void set_show_figure_caps (bool);
 	void set_show_coords (bool);
+	void set_visualize_connections (bool);
 	void set_sgf_coords (bool);
 	bool sgf_coords () { return m_sgf_coords; }
 	void set_vardisplay (bool children, int type);
