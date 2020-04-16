@@ -247,11 +247,22 @@ public:
 
 	std::pair<std::string, std::string> coords_name (int x, int y, bool sgf) const
 	{
-		if (sgf)
-			return std::make_pair (std::string (1, 'a' + x), std::string (1, 'a' + y));
-		if (x > 7)
-			x++;
-		return std::make_pair (std::string (1, 'A' + x), std::to_string (m_sz_y - y));
+		if (sgf) {
+			char cx = x > 25 ? 'A' + x - 26 : 'a' + x;
+			char cy = y > 25 ? 'A' + y - 26 : 'a' + y;
+			return std::make_pair (std::string (1, cx), std::string (1, cy));
+		}
+		std::string prefix;
+		if (x > 24) {
+			int x0 = x / 25 - 1;
+			if (x0 > 7)
+				x0++;
+			prefix = std::string (1, 'A' + x0);
+		}
+		int x1 = x % 25;
+		if (x1 > 7)
+			x1++;
+		return std::make_pair (prefix + std::string (1, 'A' + x1), std::to_string (m_sz_y - y));
 	}
 	bool valid_move_p (int x, int y, stone_color);
 	void add_stone (int x, int y, stone_color col, bool process_captures = true);
