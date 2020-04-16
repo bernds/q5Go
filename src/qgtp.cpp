@@ -1,3 +1,4 @@
+#include <utility>
 #include <QProcess>
 
 #include "qgo.h"
@@ -179,6 +180,29 @@ void GTP_Process::send_remaining_time (stone_color col, const QString &gtp_time)
 	send_request (QString ("time_left ") + (col == white ? "white " : "black ") + gtp_time);
 }
 
+namespace {
+std::pair<int, int> string_to_coords (const QString &move, int size_y)
+{
+	auto letter_to_coord = [] (QChar c) -> int {
+		int x = c.toLatin1() - 'A';
+		if (x > 7)
+			x--;
+		return x;
+	};
+
+	int x = letter_to_coord (move[0]);
+	int off = 1;
+	QChar sx = move[off];
+	if (sx.isLetter ()) {
+		x = (x + 1) * 25 + letter_to_coord (sx);
+		off++;
+	}
+	int j = move.mid (off).toInt();
+	int y = size_y - j;
+	return std::make_pair (x, y);
+}
+}
+
 void GTP_Process::receive_move (const QString &move)
 {
 	if (move.toLower () == "resign") {
@@ -186,13 +210,9 @@ void GTP_Process::receive_move (const QString &move)
 	} else if (move.toLower () == "pass") {
 		m_controller->gtp_played_pass (this);
 	} else {
-		QChar sx = move[0];
-
-		int x = sx.toLatin1() - 'A';
-		if (x > 7)
-			x--;
-		int j = move.mid (1).toInt();
-		int y = m_size_y - j;
+		auto coords = string_to_coords (move, m_size_y);
+		int x = coords.first;
+		int y = coords.second;
 		if (m_last_move != nullptr)
 			m_last_move = m_last_move->add_child_move (x, y, m_genmove_col);
 		m_controller->gtp_played_move (this, x, y);
@@ -203,10 +223,16 @@ void GTP_Process::played_move (stone_color col, int x, int y)
 {
 	if (m_last_move != nullptr)
 		m_last_move = m_last_move->add_child_move (x, y, col);
+	char req[20];
+	int first = x / 25;
+	x = x % 25;
 	if (x >= 8)
 		x++;
-	char req[20];
-	sprintf (req, "%c%d", 'A' + x, m_size_y - y);
+
+	if (first > 0)
+		sprintf (req, "%c%c%d", 'A' + first - 1, 'A' + x, m_size_y - y);
+	else
+		sprintf (req, "%c%d", 'A' + x, m_size_y - y);
 	if (col == black)
 		send_request ("play black " + QString (req));
 	else
@@ -693,14 +719,13 @@ void GTP_Eval_Controller::gtp_eval (const QString &s, bool kata_format)
 			game_state *cur = m_eval_state;
 			bool pv_first = true;
 			for (auto &pm: pvmoves) {
-				QChar sx = pm[0];
-
-				int i = sx.toLatin1 () - 'A';
-				if (i > 7)
-					i--;
 				int szx = m_eval_state->get_board ().size_x ();
 				int szy = m_eval_state->get_board ().size_y ();
-				int j = szy - pm.mid (1).toInt ();
+
+				auto coords = string_to_coords (pm, szy);
+				int i = coords.first;
+				int j = coords.second;
+
 				if (i >= 0 && i < szx && j >= 0 && j < szy) {
 					game_state *next = cur->add_child_move (i, j);
 					/* The program might have given us an invalid move.  Don't
