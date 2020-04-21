@@ -1,4 +1,4 @@
-## q5Go 1.0
+## q5Go 1.1
 
 This is a tool for Go players which performs the following functions:
 - SGF editor
@@ -19,20 +19,25 @@ and modernized.
 
 ![screenshot](screens/screenshot.png)
 
-These are the major user-visible changes in 1.0:
- * A greeter dialog was added, similar to the ones used by cgoban or
-   gGo.
- * There is now a "Learn Go" button that brings up beginner tutorials
-   in a slideshow view.
- * Engine configuration in the preferences is a little more friendly.
- * Edit mode works differently. Depending on the situation, an edited
-   position can be appended to or inserted before the current node, or
-   replace a previous edit.
- * The board window now has menu items for undo/redo.
- * When playing on IGS, the comments box now allows chatting even after
-   a match has completed, making it unnecessary to find the opponent's
-   talk tab.
- * Corrected a bug when parsing nmatch preferences on IGS.
+These are the major user-visible changes in 1.1:
+ * Performance improvements when loading and editing very large SGF files.
+ * q5go can now detect when an observed game on IGS is adjourned and restarted
+   and follow it in the same window. This requires the server to be set to
+   non-quiet mode.
+ * When playing an engine, there is now a "Play again" button.
+ * In an online match with Canadian time, time warnings can now be enabled
+   for remaining average time, not just remaining total time.
+ * In an online match, remaining seconds in low time situations can now be
+   shown on the opponent's last placed stone.
+ * Added a "Go terminology" SGF to the tutorials.
+ * The greeter window now has a hint to choose "Play online" for a full set
+   of menus.
+ * The program is more helpful when detecting a broken SGF written by Jago.
+ * Added more helpful error messages when editing servers in the preferences.
+ * Score evaluations are now shown in the board window when analysis is on.
+ * Added a feature to visualize connected stones by drawing thick lines
+   between them. May be helpful for beginners.
+ * GTP support was extended to support board sizes > 25, for KataGo.
 
 See VERSION_HISTORY for a history of changes.
 
