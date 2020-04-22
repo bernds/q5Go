@@ -1,4 +1,4 @@
-(;FF[4]GM[1]CA[UTF-8]AP[q5go:1.0]
+(;FF[4]GM[1]CA[UTF-8]AP[q5go:1.1]
 SZ[7]
 PW[White]
 PB[Black]
@@ -86,13 +86,13 @@ Diagonals do not form a connection.
 
 Different units can be captured separately.
 ]
-;AW[bc][bg][ca][db][dg][ec][ed][eg][fb][fc][gc]AB[ab][ad][bb][bf][cb][cc][ce][dc][de][ea][eb][ef][fa][fd][fe][ff][fg][gb][gd][gf]AE[dd]TR[dd]
+;AW[bc][bg][ca][db][dg][ec][ed][eg][fb][fc][gc]AB[ab][ad][bb][bf][cb][cc][ce][dc][de][ea][eb][ef][fa][fd][fe][ff][fg][gb][gd][gf]AE[dd]
 C[Rules of Go
 As a beginner, you may find it difficult to visualize connections. This program offers a feature to help with that.
 
 Try toggling the "visualization aid" checkbox.
 ]
-;TR[dd]
+;B[]
 C[Rules of Go
 Try not to become reliant on having the program visualize the connections. It is unavailable on real boards or in match conditions.
 ]MN[13]
