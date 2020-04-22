@@ -4,11 +4,11 @@
 #define PACKAGE1 "q5goClient"
 
 /* Version number of package */
-#define VERSION "1.0"
+#define VERSION "1.1"
 
 #define NEWVERSIONWARNING "<p>Welcome to version " VERSION " of q5go.</p>\n" \
-  "<p>This version adds some tutorials for beginners.</p><p>Edit mode has been changed a little, and there is now support for undo/redo.</p>" \
-  "<p>When started without any arguments, the program now displays a greeter dialog.</p>" \
+  "<p>This version mostly contains tweaks and improvements to existing features.</p>" \
+  "<p>Working with very large SGF files should be faster, and there are some additional options for time warnings in online games.</p>" \
   "<p>For a full list of changes, please refer to the README.</p>" \
   "<p>This message will not be shown anymore on startup.</p>"
 
