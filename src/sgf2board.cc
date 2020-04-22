@@ -14,12 +14,12 @@
 
 static int coord_from_letter (char x)
 {
-	/* None of the other sgf readers seem to agree on how to handle boards
-	   larger than 26x26.  Be conservative.  */
-	if (! isalpha (x) || ! islower (x))
+	if (! isalpha (x))
 		throw broken_sgf ();
-	x -= 'a';
-	return x;
+	if (islower (x))
+	    return x - 'a';
+	else
+	    return x - 'A' + 26;
 }
 
 static void put_stones (const sgf::node::property &p, int maxx, int maxy, std::function<void (int, int)> func)
@@ -452,7 +452,7 @@ std::shared_ptr<game_record> sgf2record (const sgf &s, QTextCodec *codec)
 	}
 	if (size_x == -1)
 		size_x = size_y;
-	if (size_x < 3 || size_x > 26 || size_y < 3 || size_y > 26)
+	if (size_x < 3 || size_x > 52 || size_y < 3 || size_y > 52)
 		throw invalid_boardsize ();
 
 	bool torus_h = false, torus_v = false;
@@ -782,8 +782,8 @@ void game_state::append_to_sgf (std::string &s) const
 			if (gs->was_move_p ()) {
 				int x = gs->get_move_x ();
 				int y = gs->get_move_y ();
-				s += 'a' + x;
-				s += 'a' + y;
+				s += x >= 26 ? 'A' + (x - 26) : 'a' + x;
+				s += y >= 26 ? 'A' + (y - 26) : 'a' + y;
 				linecount++;
 			}
 			s += ']';
