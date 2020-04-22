@@ -255,7 +255,7 @@ and play the selected number of games per line</string>
          <number>4</number>
         </property>
         <property name="maximum">
-         <number>36</number>
+         <number>52</number>
         </property>
         <property name="value">
          <number>19</number>
