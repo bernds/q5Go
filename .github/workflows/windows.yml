@@ -1,6 +1,8 @@
 name: Windows
 on: 
   push:
+    branches:
+      - 'upstreambranch'
     paths-ignore:
       - 'README.md'
       - 'LICENSE'
