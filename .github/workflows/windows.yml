@@ -52,12 +52,11 @@ jobs:
           vc_arch: ${{ matrix.msvc_arch }}
         run: |
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" %vc_arch%
-          dir
-          dir ..
           mkdir build
           cd build
-          qmake -r CONFIG+=release CONFIG+=qtquickcompiler ..\q5Go\q5go.pro
+          qmake -r CONFIG+=release CONFIG+=qtquickcompiler ..\src\q5go.pro
           nmake
+          dir
           cd ..
       - name: package
         env:
@@ -66,7 +65,7 @@ jobs:
         shell: pwsh
         run: |
           New-Item -ItemType Directory ${env:archiveName}
-          Copy-Item build\src\Release\${env:targetName}'.exe' ${env:archiveName}\
+          Copy-Item build\Release\${env:targetName}'.exe' ${env:archiveName}\
           windeployqt --qmldir . ${env:archiveName}\${env:targetName}'.exe'
           Compress-Archive -Path ${env:archiveName} ${env:archiveName}'.zip'
           $name = ${env:archiveName}

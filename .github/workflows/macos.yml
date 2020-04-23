@@ -36,16 +36,19 @@ jobs:
           
       - name: build macos
         run: |
-          ls -l
-          ls -l ..
+          pwd && ls -l
           mkdir build
           cd build
-          qmake -r CONFIG+=release CONFIG+=qtquickcompiler ../q5Go/q5go.pro
+          qmake -r CONFIG+=release CONFIG+=qtquickcompiler ../src/q5go.pro
           make -j 2
+          pwd && ls -l
+          cd ..
           
       - name: package
         run: |
-          cd build/src
+          pwd && ls -l
+          cd build
+          pwd && ls -l
           macdeployqt "${targetName}.app" -qmldir=. -verbose=1 -dmg
           
       - name: Upload artifact
