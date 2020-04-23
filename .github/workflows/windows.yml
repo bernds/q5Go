@@ -52,6 +52,8 @@ jobs:
           vc_arch: ${{ matrix.msvc_arch }}
         run: |
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" %vc_arch%
+          dir
+          dir ..
           mkdir build
           cd build
           qmake -r CONFIG+=release CONFIG+=qtquickcompiler ..\q5Go\q5go.pro

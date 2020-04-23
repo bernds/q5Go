@@ -36,11 +36,12 @@ jobs:
           
       - name: build macos
         run: |
+          ls -l
+          ls -l ..
           mkdir build
           cd build
           qmake -r CONFIG+=release CONFIG+=qtquickcompiler ../q5Go/q5go.pro
           make -j 2
-          cd ..
           
       - name: package
         run: |
