@@ -38,7 +38,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          qmake -r CONFIG+=release CONFIG+=qtquickcompiler ../q5go.pro
+          qmake -r CONFIG+=release CONFIG+=qtquickcompiler ../q5Go/q5go.pro
           make -j 2
           cd ..
           

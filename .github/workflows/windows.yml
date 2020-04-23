@@ -54,7 +54,7 @@ jobs:
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" %vc_arch%
           mkdir build
           cd build
-          qmake -r CONFIG+=release CONFIG+=qtquickcompiler ..\q5go.pro
+          qmake -r CONFIG+=release CONFIG+=qtquickcompiler ..\q5Go\q5go.pro
           nmake
           cd ..
       - name: package
