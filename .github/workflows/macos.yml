@@ -22,7 +22,7 @@ jobs:
         qt_ver: [5.14.2]
         qt_arch: [clang_64]
     env:
-      targetName: q5Go
+      targetName: q5go
     steps:
       - name: Install Qt
         uses: jurplel/install-qt-action@v2.0.0
@@ -39,7 +39,7 @@ jobs:
           pwd && ls -l
           mkdir build
           cd build
-          qmake -r CONFIG+=release CONFIG+=qtquickcompiler ../src/q5go.pro
+          qmake -r CONFIG+=release CONFIG+=qtquickcompiler ../src/${{ env.targetName }}.pro
           make -j 2
           pwd && ls -l
           cd ..
@@ -49,7 +49,7 @@ jobs:
           pwd && ls -l
           cd build
           pwd && ls -l
-          macdeployqt "${targetName}.app" -qmldir=. -verbose=1 -dmg
+          macdeployqt "${{ env.targetName }}.app" -qmldir=. -verbose=1 -dmg
           
       - name: Upload artifact
         uses: actions/upload-artifact@v1.0.0
