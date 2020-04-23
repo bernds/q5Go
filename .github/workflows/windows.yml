@@ -1,0 +1,147 @@
+name: Windows
+on: 
+  push:
+    paths-ignore:
+      - 'README.md'
+      - 'LICENSE'
+      - '.github/workflows/macos.yml'
+  pull_request:
+    paths-ignore:
+      - 'README.md'
+      - 'LICENSE'
+      - '.github/workflows/macos.yml'
+jobs:
+  build:
+    name: Build
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        qt_ver: [5.14.2]
+        qt_target: [desktop]
+        qt_arch: [win64_msvc2017_64, win32_msvc2017]
+        include:
+          - qt_arch: win64_msvc2017_64
+            msvc_arch: x64
+            qt_arch_install: msvc2017_64
+          - qt_arch: win32_msvc2017
+            msvc_arch: x86
+            qt_arch_install: msvc2017
+    env:
+      targetName: q5Go
+    steps:
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2.0.0
+        with:
+          # Version of Qt to install
+          version: ${{ matrix.qt_ver }}
+          # Target platform for build
+          target: ${{ matrix.qt_target }}
+          # Architecture for Windows/Android
+          arch: ${{ matrix.qt_arch }}
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - name: Checkout submodules
+        shell: cmd
+        env:
+          vc_arch: ${{ matrix.msvc_arch }}
+        run: |
+          git submodule update --init --recursive
+      - name: build-msvc
+        shell: cmd
+        env:
+          vc_arch: ${{ matrix.msvc_arch }}
+        run: |
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" %vc_arch%
+          mkdir build
+          cd build
+          qmake -r CONFIG+=release CONFIG+=qtquickcompiler ..\q5go.pro
+          nmake
+          cd ..
+      - name: package
+        env:
+          VCINSTALLDIR: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC'
+          archiveName: ${{ env.targetName }}-${{ matrix.qt_arch }}
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory ${env:archiveName}
+          Copy-Item build\src\Release\${env:targetName}'.exe' ${env:archiveName}\
+          windeployqt --qmldir . ${env:archiveName}\${env:targetName}'.exe'
+          Compress-Archive -Path ${env:archiveName} ${env:archiveName}'.zip'
+          $name = ${env:archiveName}
+          echo "::set-env name=packageName::$name"
+          Write-Host 'packageName:'${env:packageName}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: ${{ env.targetName }}-${{ matrix.qt_arch }}
+          path: ${{ env.targetName }}-${{ matrix.qt_arch }}
+
+      - name: queryReleaseWin
+        id: queryReleaseWin
+        if: startsWith(github.event.ref, 'refs/tags/')
+        shell: pwsh
+        env:
+          githubFullName: ${{ github.event.repository.full_name }}
+          ref: ${{ github.event.ref }}
+        run: |
+          [string]$tag = ${env:ref}.Substring(${env:ref}.LastIndexOf('/') + 1)
+          [string]$url = 'https://api.github.com/repos/' + ${env:githubFullName} + '/releases/tags/' + ${tag}
+          $response={}
+          try {
+            $response = Invoke-RestMethod -Uri $url -Method Get
+          } catch {
+            Write-Host "StatusCode:" $_.Exception.Response.StatusCode.value__ 
+            Write-Host "StatusDescription:" $_.Exception.Response.StatusDescription
+            echo "::set-output name=needCreateRelease::true"  
+            return
+          }
+          [string]$latestUpUrl = $response.upload_url
+          Write-Host 'latestUpUrl:'$latestUpUrl
+          if ($latestUpUrl.Length -eq 0) {
+            echo "::set-output name=needCreateRelease::true"  
+          }
+      - name: createReleaseWin
+        id: createReleaseWin
+        if: startsWith(github.event.ref, 'refs/tags/') && steps.queryReleaseWin.outputs.needCreateRelease == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: actions/create-release@v1.0.0
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: ${{ github.event.head_commit.message }}
+          draft: false
+          prerelease: false
+      - name: getLatestTagRelease
+        if: startsWith(github.event.ref, 'refs/tags/')
+        shell: pwsh
+        env:
+          githubFullName: ${{ github.event.repository.full_name }}
+          upUrl: ${{ steps.createReleaseWin.outputs.upload_url }}
+          ref: ${{ github.event.ref }}
+        run: |
+          if (${env:upUrl}.Length -gt 0) {
+              $v=${env:upUrl}
+              echo "::set-env name=uploadUrl::$v"
+              return
+          } 
+          [string]$tag = ${env:ref}.Substring(${env:ref}.LastIndexOf('/') + 1)
+          [string]$url = 'https://api.github.com/repos/' + ${env:githubFullName} + '/releases/tags/' + ${tag}
+          $response = Invoke-RestMethod -Uri $url -Method Get
+          [string]$latestUpUrl = $response.upload_url
+          Write-Host 'latestUpUrl:'$latestUpUrl
+          echo "::set-env name=uploadUrl::$latestUpUrl"
+          Write-Host 'env uploadUrl:'${env:uploadUrl}
+      - name: uploadRelease
+        id: uploadRelease
+        if: startsWith(github.event.ref, 'refs/tags/')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: actions/upload-release-asset@v1.0.1
+        with:
+          upload_url: ${{ env.uploadUrl }}
+          asset_path: ./${{ env.packageName }}.zip
+          asset_name: ${{ env.packageName }}.zip
+          asset_content_type: application/zip
