@@ -29,15 +29,11 @@ jobs:
         with:
           version: ${{ matrix.qt_ver }}
       
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
         with:
-          fetch-depth: 1
           ref: upstreambranch
-      - name: Checkout submodules
-        env:
-          vc_arch: ${{ matrix.msvc_arch }}
-        run: |
-          git submodule update --init --recursive
+          submodules: true
+          
       - name: build macos
         run: |
           mkdir build
