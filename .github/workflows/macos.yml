@@ -1,0 +1,55 @@
+name: MacOS
+on: 
+  push:
+    paths-ignore:
+      - 'README.md'
+      - 'LICENSE'
+      - '.github/workflows/windows.yml'
+  pull_request:
+    paths-ignore:
+      - 'README.md'
+      - 'LICENSE'
+      - '.github/workflows/windows.yml'
+jobs:
+  build:
+    name: Build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest]
+        qt_ver: [5.14.2]
+        qt_arch: [clang_64]
+    env:
+      targetName: q5go
+    steps:
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2.0.0
+        with:
+          version: ${{ matrix.qt_ver }}
+      
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+          submodules: true
+          
+      - name: build macos
+        run: |
+          mkdir build
+          cd build
+          qmake -r CONFIG+=release CONFIG+=qtquickcompiler ../src/${{ env.targetName }}.pro
+          make -j 2
+          cd ..
+          
+      - name: package
+        run: |
+          cd build
+          macdeployqt "${{ env.targetName }}.app" -qmldir=. -verbose=1 -dmg
+          pwd && ls -l
+          cd ..
+          
+      - name: Upload artifact
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: ${{ env.targetName }}-macOS
+          path: "build/${{ env.targetName }}.dmg"
+
