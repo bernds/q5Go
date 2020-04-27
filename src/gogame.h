@@ -104,7 +104,7 @@ class game_state;
    game_record, to make sure all game_states are deleted when the game is destroyed.  */
 class game_state_manager
 {
-	const unsigned m_n_per_chunk = 128;
+	const size_t m_n_per_chunk = 128;
 	std::vector<char *> m_game_states;
 	bit_array m_free = bit_array (m_n_per_chunk, false);
 	int m_first_free = 0;
@@ -229,7 +229,7 @@ public:
 	{
 	}
 	/* Returns the former position of the state in its parent's child vector.  */
-	int disconnect ()
+	size_t disconnect ()
 	{
 		game_state *parent = m_parent;
 

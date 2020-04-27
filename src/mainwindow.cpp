@@ -1424,7 +1424,7 @@ void MainWindow::slotEditDelete (bool)
 
 	game_state *parent = st->prev_move ();
 	st->walk_tree ([this, parent] (game_state *s)->bool { gfx_board->transfer_displayed (s, parent); return true; });
-	int idx = st->disconnect ();
+	size_t idx = st->disconnect ();
 	push_undo (std::make_unique<undo_delete_entry> ("Delete move", parent, st, idx));
 	update_game_tree ();
 	setMoveData (parent);
