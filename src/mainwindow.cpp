@@ -42,6 +42,7 @@
 #include "ui_helpers.h"
 #include "slideview.h"
 #include "multisave.h"
+#include "edit_analysis.h"
 
 std::list<MainWindow *> main_window_list;
 
@@ -155,6 +156,20 @@ QVariant an_id_model::headerData (int section, Qt::Orientation ot, int role) con
 		return tr ("Engine");
 	}
 	return QVariant ();
+}
+
+bool an_id_model::removeRows (int row, int count, const QModelIndex &)
+{
+	if (row < 0 || count < 1)
+		return false;
+	size_t last = row + count;
+	if (last > m_entries.size ())
+		return false;
+	beginRemoveRows (QModelIndex (), row, row + count - 1);
+	auto beg = m_entries.begin ();
+	m_entries.erase (beg + row, beg + row + count);
+	endRemoveRows ();
+	return true;
 }
 
 class undo_move_entry : public undo_entry
@@ -988,6 +1003,7 @@ void MainWindow::initActions ()
 	connect(anDisconnect, &QAction::triggered, this, [=] () { gfx_board->stop_analysis (); });
 	connect(anBatch, &QAction::triggered, [] (bool) { show_batch_analysis (); });
 	connect(anPlay, &QAction::triggered, this, &MainWindow::slotPlayFromHere);
+	connect(anEdit, &QAction::triggered, this, &MainWindow::slotEditAnalysis);
 
 	/* Help menu.  */
 	connect(helpManual, &QAction::triggered, [=] (bool) { qgo->openManual (QUrl ("index.html")); });
@@ -1479,6 +1495,12 @@ void MainWindow::slotEditFigure (bool on)
 		st->clear_figure ();
 	update_figures ();
 	update_game_tree ();
+}
+
+void MainWindow::slotEditAnalysis (bool)
+{
+	EditAnalysisDialog dlg (this, m_game, &m_an_id_model);
+	dlg.exec ();
 }
 
 void MainWindow::slotPlayFromHere (bool)
@@ -2568,6 +2590,30 @@ void MainWindow::update_figures ()
 	update_figure_display ();
 }
 
+/* Called from the Remove Analysis dialog.  TO_DELETE may be empty and we still may have made
+   changes (removing analysis).  */
+void MainWindow::remove_nodes (const std::vector<game_state *> &to_delete)
+{
+	game_state *root = m_game->get_root ();
+	for (auto st: to_delete) {
+		st->walk_tree ([board = gfx_board, root] (game_state *st)
+			       {
+				       board->transfer_displayed (st, root); return true;
+			       });
+		st->disconnect ();
+	}
+
+	gfx_board->setModified ();
+	m_undo_stack.clear ();
+	m_undo_stack_pos = 0;
+	update_undo_menus ();
+
+	update_figures ();
+	update_game_tree ();
+	/* Force redraw.  */
+	gfx_board->set_displayed (gfx_board->displayed ());
+}
+
 void MainWindow::set_game_position (game_state *gs)
 {
 	/* Have to call this first so we trace the correct path in the game tree
@@ -3405,10 +3451,15 @@ void MainWindow::update_analysis (analyzer state)
 		normalTools->anStartButton->setIcon (QIcon (":/images/power-standby.png"));
 	else
 		normalTools->anStartButton->setIcon (QIcon (":/images/power-on.png"));
+
 	anPause->setEnabled (state != analyzer::disconnected);
 	normalTools->anPauseButton->setEnabled (state != analyzer::disconnected);
 	normalTools->anPauseButton->setChecked (state == analyzer::paused);
 	anPause->setChecked (state == analyzer::paused);
+
+	/* A precaution: let's not have two parts of the program get into fights whether to add or
+	   remove analysis.  */
+	anEdit->setEnabled (state != analyzer::running);
 
 	if (state == analyzer::disconnected) {
 		clear_primary_eval ();

@@ -394,6 +394,17 @@ eval game_state::eval_from (const analyzer_id &id, bool require)
 	return require ? eval () : best_eval ();
 }
 
+void game_state::remove_eval (const analyzer_id &id)
+{
+	auto beg = m_evals.begin ();
+	auto end = m_evals.end ();
+	for (auto it = beg; it != end; ++it)
+		if (it->id == id) {
+			m_evals.erase (it);
+			return;
+		}
+}
+
 void game_state::walk_tree (const std::function<bool (game_state *)> &func)
 {
 	/* This function is slightly convoluted, in order to both

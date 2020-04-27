@@ -51,6 +51,7 @@ public:
 	QModelIndex parent (const QModelIndex &index ) const override;
 	int rowCount (const QModelIndex &parent = QModelIndex()) const override;
 	int columnCount (const QModelIndex &parent = QModelIndex()) const override;
+	bool removeRows (int, int, const QModelIndex &parent = QModelIndex()) override;
 	QVariant headerData (int section, Qt::Orientation orientation,
 			     int role = Qt::DisplayRole) const override;
 
@@ -204,6 +205,9 @@ public:
 	void set_game_position (game_state *);
 	void done_rect_select (int minx, int miny, int maxx, int maxy);
 
+	/* Callback from the Remove Analysis dialog.  */
+	void remove_nodes (const std::vector<game_state *> &);
+
 	/* Called from external source.  */
 	void append_comment (const QString &);
 	void refresh_comment ();
@@ -331,6 +335,7 @@ public slots:
 	void slotEditClearSelect(bool);
 
 	void slotPlayFromHere (bool);
+	void slotEditAnalysis (bool);
 
 	void slotDiagEdit (bool);
 	void slotDiagASCII (bool);

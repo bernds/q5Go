@@ -674,6 +674,11 @@ public:
 	void update_eval (const game_state &other);
 	eval best_eval ();
 	eval eval_from (const analyzer_id &id, bool require);
+	size_t eval_count () const
+	{
+		return m_evals.size ();
+	}
+	void remove_eval (const analyzer_id &);
 	void collect_analyzers (std::function<void (const analyzer_id &, bool)> &callback)
 	{
 		for (const auto &it: m_evals)

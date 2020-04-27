@@ -2691,6 +2691,7 @@ After placing and/or undo release button for returning to starting point automat
     <addaction name="anConnect"/>
     <addaction name="anDisconnect"/>
     <addaction name="anPause"/>
+    <addaction name="anEdit"/>
     <addaction name="separator"/>
     <addaction name="anPlay"/>
     <addaction name="separator"/>
@@ -4013,6 +4014,14 @@ Open the batch analysis dialog which allows you to add SGF files to a queue to b
    </property>
    <property name="toolTip">
     <string>Choose a pattern of file names and save every variation as its own file.</string>
+   </property>
+  </action>
+  <action name="anEdit">
+   <property name="text">
+    <string>&amp;Remove analysis...</string>
+   </property>
+   <property name="toolTip">
+    <string>Delete existing analysis from the file</string>
    </property>
   </action>
  </widget>

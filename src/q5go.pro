@@ -6,6 +6,7 @@ FORMS	      = gui_dialog.ui \
 		boardwindow_gui.ui \
                 clientwindow_gui.ui \
                 dbdialog_gui.ui \
+                edit_analysis_gui.ui \
                 enginedlg_gui.ui \
 		figuredlg_gui.ui \
                 gameinfo_gui.ui \
@@ -34,6 +35,7 @@ HEADERS		      = analyzedlg.h \
                         clickableviews.h \
                         clockview.h \
                         dbdialog.h \
+			edit_analysis.h \
 			evalgraph.h \
                         figuredlg.h \
                         gamedialog.h \
@@ -85,6 +87,7 @@ SOURCES		      = analyzedlg.cpp \
 			clientwin.cpp \
                         clockview.cpp \
                         dbdialog.cpp \
+			edit_analysis.cpp \
 			evalgraph.cpp \
 			figuredlg.cpp \
 			gamedialog.cpp \
