@@ -27,6 +27,7 @@ jobs:
             msvc_arch: x86
             qt_arch_install: msvc2017
           - qt_arch: win64_mingw73
+            msvc_arch: x64
             qt_arch_install: mingw64
     env:
       targetName: q5go
@@ -51,9 +52,7 @@ jobs:
         env:
           vc_arch: ${{ matrix.msvc_arch }}
         run: |
-	  if (${{ matrix.qt_arch }} -ne mingw73) {
-	     call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" %vc_arch%
-	  }
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" %vc_arch%
           mkdir build
           cd build
           qmake -r CONFIG+=release CONFIG+=qtquickcompiler ..\src\q5go.pro
