@@ -18,7 +18,7 @@ jobs:
       matrix:
         qt_ver: [5.14.2]
         qt_target: [desktop]
-        qt_arch: [win64_msvc2017_64, win32_msvc2017, win64_mingw73]
+        qt_arch: [win64_msvc2017_64, win32_msvc2017]
         include:
           - qt_arch: win64_msvc2017_64
             msvc_arch: x64
@@ -26,11 +26,8 @@ jobs:
           - qt_arch: win32_msvc2017
             msvc_arch: x86
             qt_arch_install: msvc2017
-          - qt_arch: win64_mingw73
-            msvc_arch: x64
-            qt_arch_install: mingw64
     env:
-      targetName: q5go
+      targetName: q5Go
     steps:
       - name: Install Qt
         uses: jurplel/install-qt-action@v2.0.0
@@ -41,29 +38,22 @@ jobs:
           target: ${{ matrix.qt_target }}
           # Architecture for Windows/Android
           arch: ${{ matrix.qt_arch }}
-
+          
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.head_ref }}
           submodules: true
-
+          
       - name: build-msvc
         shell: cmd
         env:
           vc_arch: ${{ matrix.msvc_arch }}
-          qt_arch: ${{ matrix.qt_arch }}
         run: |
-          if ( "%qt_arch%" -ne "win64_mingw73" ) {
-              call "C:\Progrm Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" %vc_arch%
-          }
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" %vc_arch%
           mkdir build
           cd build
           qmake -r CONFIG+=release CONFIG+=qtquickcompiler ..\src\q5go.pro
-          if ( "%qt_arch%" -eq "win64_mingw73" ) {
-              make
-          } else {
-              nmake
-          }
+          nmake
           dir
           dir release
           cd ..
@@ -74,12 +64,11 @@ jobs:
         shell: pwsh
         run: |
           dir
-          New-Item -ItemType Directory tmp-install
-          New-Item -ItemType Directory tmp-install\${env:archiveName}
-          dir tmp-install
-          Copy-Item build\Release\${env:targetName}'.exe' tmp-install\${env:archiveName}\
-          windeployqt --qmldir . tmp-install\${env:archiveName}\${env:targetName}'.exe'
-          Compress-Archive -Path tmp-install ${env:archiveName}'.zip'
+          New-Item -ItemType Directory ${env:archiveName}
+          dir
+          Copy-Item build\Release\${env:targetName}'.exe' ${env:archiveName}\
+          windeployqt --qmldir . ${env:archiveName}\${env:targetName}'.exe'
+          Compress-Archive -Path ${env:archiveName} ${env:archiveName}'.zip'
           $name = ${env:archiveName}
           echo "::set-env name=packageName::$name"
           Write-Host 'packageName:'${env:packageName}
@@ -88,4 +77,4 @@ jobs:
         uses: actions/upload-artifact@v1.0.0
         with:
           name: ${{ env.targetName }}-${{ matrix.qt_arch }}
-          path: tmp-install\${{ env.targetName }}-${{ matrix.qt_arch }}
+          path: ${{ env.targetName }}-${{ matrix.qt_arch }}
