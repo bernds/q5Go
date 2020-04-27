@@ -37,6 +37,7 @@ AnalyzeDialog::AnalyzeDialog (QWidget *parent, const QString &filename)
 
 	connect (enqueueButton, &QPushButton::clicked, [=] (bool) { start_job (); });
 	connect (fileselButton, &QPushButton::clicked, [=] (bool) { select_file (); });
+	connect (dbselButton, &QPushButton::clicked, [=] (bool) { select_file_db (); });
 	connect (openButton, &QPushButton::clicked, [=] (bool) { open_in_progress_window (false); });
 	connect (openDoneButton, &QPushButton::clicked, [=] (bool) { open_in_progress_window (true); });
 	connect (trashButton, &QPushButton::clicked, [=] (bool) { discard_job (false); });
@@ -281,6 +282,16 @@ void AnalyzeDialog::open_in_progress_window (bool done)
 void AnalyzeDialog::select_file ()
 {
 	QString filename = open_filename_dialog (this);
+	if (filename.isEmpty())
+		return;
+	QFileInfo fi (filename);
+	m_last_dir = fi.dir ().absolutePath ();
+	filenameEdit->setText (filename);
+}
+
+void AnalyzeDialog::select_file_db ()
+{
+	QString filename = open_db_filename_dialog (this);
 	if (filename.isEmpty())
 		return;
 	QFileInfo fi (filename);

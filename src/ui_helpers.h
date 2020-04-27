@@ -6,6 +6,7 @@ extern QString screen_key (QWidget *);
 enum class game_dialog_type { none, normal, variant };
 extern go_game_ptr open_file_dialog (QWidget *);
 extern go_game_ptr open_db_dialog (QWidget *);
+extern QString open_db_filename_dialog (QWidget *);
 extern QString open_filename_dialog (QWidget *);
 extern go_game_ptr new_game_dialog (QWidget *);
 extern go_game_ptr new_variant_game_dialog (QWidget *);

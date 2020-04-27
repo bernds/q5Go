@@ -228,7 +228,7 @@ go_game_ptr open_file_dialog (QWidget *parent)
 	return record_from_file (fileName, nullptr);
 }
 
-go_game_ptr open_db_dialog (QWidget *parent)
+static int exec_db_dialog (QWidget *parent)
 {
 	QString fileName;
 	QString geokey = "DBDIALOG_GEOM_" + screen_key (parent);
@@ -243,6 +243,12 @@ go_game_ptr open_db_dialog (QWidget *parent)
 	}
 	int result = db_dialog->exec ();
 	setting->writeEntry (geokey, QString::fromLatin1 (db_dialog->saveGeometry ().toHex ()));
+	return result;
+}
+
+go_game_ptr open_db_dialog (QWidget *parent)
+{
+	int result = exec_db_dialog (parent);
 	if (result == QDialog::Accepted) {
 		go_game_ptr gr = db_dialog->selected_record ();
 		if (gr != nullptr) {
@@ -252,6 +258,17 @@ go_game_ptr open_db_dialog (QWidget *parent)
 	}
 
 	return nullptr;
+}
+
+QString open_db_filename_dialog (QWidget *parent)
+{
+	int result = exec_db_dialog (parent);
+	if (result == QDialog::Accepted) {
+		go_game_ptr gr = db_dialog->selected_record ();
+		if (gr != nullptr)
+			return QString::fromStdString (gr->filename ());
+	}
+	return QString ();
 }
 
 QString open_filename_dialog (QWidget *parent)

@@ -269,21 +269,17 @@ It is also possible to analyze with both normal and flipped komi, for example fo
       <property name="title">
        <string>File to analyse</string>
       </property>
-      <layout class="QGridLayout" name="gridLayout_3">
-       <item row="1" column="1">
-        <widget class="QPushButton" name="enqueueButton">
-         <property name="text">
-          <string>Add to &amp;queue</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0" colspan="2">
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
           <widget class="QLineEdit" name="filenameEdit"/>
          </item>
          <item>
           <widget class="QToolButton" name="fileselButton">
+           <property name="toolTip">
+            <string>Choose a file</string>
+           </property>
            <property name="text">
             <string/>
            </property>
@@ -293,20 +289,51 @@ It is also possible to analyze with both normal and flipped komi, for example fo
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QToolButton" name="dbselButton">
+           <property name="toolTip">
+            <string>Choose a file from the database</string>
+           </property>
+           <property name="text">
+            <string>DB</string>
+           </property>
+           <property name="icon">
+            <iconset resource="q4go.qrc">
+             <normaloff>:/ClientWindowGui/images/clientwindow/fileopen.png</normaloff>:/ClientWindowGui/images/clientwindow/fileopen.png</iconset>
+           </property>
+           <property name="toolButtonStyle">
+            <enum>Qt::ToolButtonTextBesideIcon</enum>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
-       <item row="1" column="0">
-        <spacer name="horizontalSpacer_5">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <item>
+          <spacer name="horizontalSpacer_5">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="enqueueButton">
+           <property name="toolTip">
+            <string>Add the selected file to the job queue, using the current analysis parameters</string>
+           </property>
+           <property name="text">
+            <string>Add to &amp;queue</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>
@@ -522,6 +549,7 @@ It is also possible to analyze with both normal and flipped komi, for example fo
   <tabstop>commentsCheckBox</tabstop>
   <tabstop>filenameEdit</tabstop>
   <tabstop>fileselButton</tabstop>
+  <tabstop>dbselButton</tabstop>
   <tabstop>enqueueButton</tabstop>
   <tabstop>boardsizeSpinBox</tabstop>
   <tabstop>engineComboBox</tabstop>

@@ -81,6 +81,7 @@ class AnalyzeDialog : public QMainWindow, public Ui::AnalyzeDialog, public GTP_E
 	void queue_next ();
 
 	void select_file ();
+	void select_file_db ();
 	void start_engine ();
 	void start_job ();
 
