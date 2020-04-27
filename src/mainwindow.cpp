@@ -41,6 +41,7 @@
 #include "newaigamedlg.h"
 #include "ui_helpers.h"
 #include "slideview.h"
+#include "multisave.h"
 
 std::list<MainWindow *> main_window_list;
 
@@ -872,6 +873,7 @@ void MainWindow::initActions ()
 	connect(fileOpenDB, &QAction::triggered, this, &MainWindow::slotFileOpenDB);
 	connect(fileSave, &QAction::triggered, this, &MainWindow::slotFileSave);
 	connect(fileSaveAs, &QAction::triggered, this, &MainWindow::slotFileSaveAs);
+	connect(fileSaveVariations, &QAction::triggered, this, &MainWindow::slotFileSaveVariations);
 	connect(fileClose, &QAction::triggered, this, &MainWindow::slotFileClose);
 	connect(fileQuit, &QAction::triggered, this, &MainWindow::slotFileClose);//(qGo*)qApp, SLOT(quit);
 
@@ -1260,6 +1262,12 @@ bool MainWindow::slotFileSaveAs (bool)
 	std::string saved_name = m_game->filename ();
 	QString fileName = saved_name == "" ? QString () : QString::fromStdString (saved_name);
 	return doSave (fileName, false);
+}
+
+void MainWindow::slotFileSaveVariations (bool)
+{
+	MultiSaveDialog msd (this, m_game, gfx_board->displayed ());
+	msd.exec ();
 }
 
 bool MainWindow::doSave (QString fileName, bool force)

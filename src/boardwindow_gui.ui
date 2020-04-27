@@ -2580,6 +2580,7 @@ After placing and/or undo release button for returning to starting point automat
     <addaction name="fileOpenDB"/>
     <addaction name="fileSave"/>
     <addaction name="fileSaveAs"/>
+    <addaction name="fileSaveVariations"/>
     <addaction name="fileClose"/>
     <addaction name="separator"/>
     <addaction name="menu_Import_Export"/>
@@ -4004,6 +4005,14 @@ Open the batch analysis dialog which allows you to add SGF files to a queue to b
    </property>
    <property name="toolTip">
     <string>Show thicker lines to visualize connections between stones. May be helpful for beginners.</string>
+   </property>
+  </action>
+  <action name="fileSaveVariations">
+   <property name="text">
+    <string>Export &amp;individual variations as...</string>
+   </property>
+   <property name="toolTip">
+    <string>Choose a pattern of file names and save every variation as its own file.</string>
    </property>
   </action>
  </widget>

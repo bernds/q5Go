@@ -706,7 +706,7 @@ public:
 			}
 		return false;
 	}
-	void append_to_sgf (std::string &) const;
+	void append_to_sgf (std::string &, bool active_only) const;
 
 	/* Used for edits: modifying an existing edit (or root) node, or applying marks.  */
 	void replace (const go_board &b, stone_color to_move)
@@ -937,7 +937,7 @@ public:
 	{
 		return m_modified;
 	}
-	std::string to_sgf () const;
+	std::string to_sgf (bool active_only = false) const;
 	void set_errors (const sgf_errors &errs)
 	{
 		m_errors = errs;

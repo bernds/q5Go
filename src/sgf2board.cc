@@ -750,7 +750,7 @@ static void write_array (const bit_array *bitmap, const char *name, std::string 
 		}
 }
 
-void game_state::append_to_sgf (std::string &s) const
+void game_state::append_to_sgf (std::string &s, bool active_only) const
 {
 	int linecount = 0;
 	const game_state *gs = this;
@@ -861,12 +861,14 @@ void game_state::append_to_sgf (std::string &s) const
 				linecount++;
 			}
 		}
-		int l = gs->m_children.size ();
-		if (l != 1) {
-			for (int i = 0; i < l; i++) {
+		size_t l = gs->m_children.size ();
+		if (l == 0)
+			break;
+		if (l > 1 && !active_only) {
+			for (size_t i = 0; i < l; i++) {
 				game_state *c = gs->m_children[i];
 				s += "\n(;";
-				c->append_to_sgf (s);
+				c->append_to_sgf (s, active_only);
 				s += ")";
 				linecount = 16;
 			}
@@ -877,11 +879,11 @@ void game_state::append_to_sgf (std::string &s) const
 			linecount = 0;
 		}
 		s += ';';
-		gs = gs->m_children[0];
+		gs = gs->m_children[active_only ? gs->m_active : 0];
 	}
 }
 
-std::string game_record::to_sgf () const
+std::string game_record::to_sgf (bool active_only) const
 {
 	const go_board &rootb = m_root->get_board ();
 	std::string gm = "1";
@@ -930,7 +932,7 @@ std::string game_record::to_sgf () const
 	/* @@@ Could think about writing a ST property, but I dislike the idea of
 	   a file telling me how I have to view it.  */
 
-	m_root->append_to_sgf (s);
+	m_root->append_to_sgf (s, active_only);
 	s += ")\n";
 	return s;
 }

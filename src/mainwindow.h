@@ -294,6 +294,7 @@ public slots:
 	bool slotFileSave(bool = false);
 	void slotFileClose(bool);
 	bool slotFileSaveAs(bool);
+	void slotFileSaveVariations(bool);
 	void slotFileExportASCII(bool);
 	void slotFileExportSVG(bool);
 	void slotFileImportSgfClipB(bool);

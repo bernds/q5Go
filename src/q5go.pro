@@ -25,7 +25,8 @@ FORMS	      = gui_dialog.ui \
 		slideshow_gui.ui \
 		slideview_gui.ui \
                 svgview_gui.ui \
-                nthmove_gui.ui
+                nthmove_gui.ui \
+                multisave_gui.ui
 
 HEADERS		      = analyzedlg.h \
 		        autodiagsdlg.h \
@@ -58,6 +59,7 @@ HEADERS		      = analyzedlg.h \
 			imagehandler.h \
 			komispinbox.h \
                         mainwindow.h \
+                        multisave.h \
                         normaltools.h \
 			preferences.h \
 			qgo.h \
@@ -95,6 +97,7 @@ SOURCES		      = analyzedlg.cpp \
 			main.cpp \
 			misc.cpp \
 			msg_handler.cpp \
+			multisave.cpp \
 			parser.cpp \
 			playertable.cpp \
 			qgo_interface.cpp \
