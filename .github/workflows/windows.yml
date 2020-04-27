@@ -66,6 +66,7 @@ jobs:
           dir
           New-Item -ItemType Directory tmp-install
           New-Item -ItemType Directory tmp-install\${env:archiveName}
+          New-Item -ItemType Directory tmp-install\${env:archiveName}
           dir tmp-install
           Copy-Item build\Release\${env:targetName}'.exe' tmp-install\${env:archiveName}\
           windeployqt --qmldir . tmp-install\${env:archiveName}\${env:targetName}'.exe'
@@ -78,4 +79,4 @@ jobs:
         uses: actions/upload-artifact@v1.0.0
         with:
           name: ${{ env.targetName }}-${{ matrix.qt_arch }}
-          path: ${{ env.targetName }}-${{ matrix.qt_arch }}
+          path: tmp-install\${{ env.targetName }}-${{ matrix.qt_arch }}
