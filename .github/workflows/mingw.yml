@@ -1,17 +1,17 @@
 name: Windows
-on: 
+on:
   push:
     paths-ignore:
       - 'README.md'
       - 'LICENSE'
       - '.github/workflows/macos.yml'
-      - '.github/workflows/mingw.yml'
+      - '.github/workflows/windows.yml'
   pull_request:
     paths-ignore:
       - 'README.md'
       - 'LICENSE'
       - '.github/workflows/macos.yml'
-      - '.github/workflows/mingw.yml'
+      - '.github/workflows/windows.yml'
 jobs:
   build:
     name: Build
@@ -20,16 +20,12 @@ jobs:
       matrix:
         qt_ver: [5.14.2]
         qt_target: [desktop]
-        qt_arch: [win64_msvc2017_64, win32_msvc2017]
+        qt_arch: [win64_mingw73]
         include:
-          - qt_arch: win64_msvc2017_64
-            msvc_arch: x64
-            qt_arch_install: msvc2017_64
-          - qt_arch: win32_msvc2017
-            msvc_arch: x86
-            qt_arch_install: msvc2017
+          - qt_arch: win64_mingw73
+            qt_arch_install: mingw64_73
     env:
-      targetName: q5Go
+      targetName: q5go
     steps:
       - name: Install Qt
         uses: jurplel/install-qt-action@v2.0.0
@@ -40,28 +36,24 @@ jobs:
           target: ${{ matrix.qt_target }}
           # Architecture for Windows/Android
           arch: ${{ matrix.qt_arch }}
-          
+
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.head_ref }}
           submodules: true
-          
-      - name: build-msvc
+
+      - name: build-mingw
         shell: cmd
-        env:
-          vc_arch: ${{ matrix.msvc_arch }}
         run: |
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" %vc_arch%
           mkdir build
           cd build
           qmake -r CONFIG+=release CONFIG+=qtquickcompiler ..\src\q5go.pro
-          nmake
+          make
           dir
           dir release
           cd ..
       - name: package
         env:
-          VCINSTALLDIR: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC'
           archiveName: ${{ env.targetName }}-${{ matrix.qt_arch }}
         shell: pwsh
         run: |
