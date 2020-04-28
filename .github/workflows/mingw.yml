@@ -57,7 +57,7 @@ jobs:
           mkdir %archiveName%
           copy build\release\%targetName%.exe %archiveName%\
           cd %archiveName%
-          windeployqt --qmldir . %archiveName%\%targetName%'.exe'
+          windeployqt --qmldir . %archiveName%\%targetName%.exe
       - name: package
         env:
           archiveName: ${{ env.targetName }}-${{ matrix.qt_arch }}
