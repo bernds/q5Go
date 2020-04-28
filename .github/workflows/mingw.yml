@@ -47,7 +47,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          qmake -r CONFIG+=release CONFIG+=qtquickcompiler ..\src\q5go.pro
+          qmake -r CONFIG+=release CONFIG+=qtquickcompiler ..\src\q5go.pro DEFINES+=GITHUB_CI_BUILD
           make
           dir
           dir release

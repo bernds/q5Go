@@ -38,7 +38,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          qmake -r CONFIG+=release CONFIG+=qtquickcompiler ../src/${{ env.targetName }}.pro
+          qmake -r CONFIG+=release CONFIG+=qtquickcompiler ../src/${{ env.targetName }}.pro DEFINES+=GITHUB_CI_BUILD
           make -j 2
           cd ..
           
