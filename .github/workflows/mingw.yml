@@ -44,6 +44,8 @@ jobs:
 
       - name: build-mingw
         shell: cmd
+        env:
+          archiveName: ${{ env.targetName }}-${{ matrix.qt_arch }}
         run: |
           mkdir build
           cd build
@@ -52,16 +54,16 @@ jobs:
           dir
           dir release
           cd ..
+	  mkdir %archiveName%
+	  copy build\release\%targetName%.exe %archiveName%\
+	  cd %archiveName%
+	  windeployqt --qmldir . %archiveName%\%targetName%'.exe'
       - name: package
         env:
           archiveName: ${{ env.targetName }}-${{ matrix.qt_arch }}
         shell: pwsh
         run: |
-          dir
-          New-Item -ItemType Directory ${env:archiveName}
-          dir
-          Copy-Item build\Release\${env:targetName}'.exe' ${env:archiveName}\
-          windeployqt --qmldir . ${env:archiveName}\${env:targetName}'.exe'
+          dir ${env:archiveName}
           Compress-Archive -Path ${env:archiveName} ${env:archiveName}'.zip'
           $name = ${env:archiveName}
           echo "::set-env name=packageName::$name"
