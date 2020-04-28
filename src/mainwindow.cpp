@@ -456,7 +456,7 @@ MainWindow::MainWindow (QWidget* parent, go_game_ptr gr, const QString opener_sc
 	initToolBar();
 	initStatusBar();
 
-	/* Only ever shown if this is opened through slot_editBoardInNewWindow.  */
+	/* Only ever shown if this is opened through "Edit Game" in an observed online game.  */
 	refreshButton->setVisible (false);
 
 	viewStatusBar->setChecked (setting->readBoolEntry("STATUSBAR"));
@@ -2217,26 +2217,6 @@ void MainWindow::update_font ()
 	turnWarning->setPixmap (timg);
 }
 
-void MainWindow::slot_editBoardInNewWindow(bool)
-{
-	go_game_ptr newgr = std::make_shared<game_record> (*m_game);
-	// online mode -> don't score, open new Window instead
-	MainWindow *w = new MainWindow (nullptr, newgr);
-
-	connect (w->refreshButton, &QPushButton::clicked,
-		 [gr = m_game, w] (bool)
-		 {
-			 w->init_game_record (std::make_shared<game_record> (*gr));
-			 w->navLast->trigger ();
-		 });
-	w->refreshButton->setEnabled (true);
-	w->refreshButton->setVisible (true);
-	w->updateCaption ();
-
-	w->navLast->trigger ();
-	w->show ();
-}
-
 void MainWindow::slotSoundToggle(bool toggle)
 {
 	local_stone_sound = !toggle;
@@ -2793,7 +2773,22 @@ void MainWindow::doEditPos (bool toggle)
 /* The "Edit Game" button: Open a new window to edit observed game.  */
 void MainWindow::doEdit ()
 {
-	slot_editBoardInNewWindow (false);
+	go_game_ptr newgr = std::make_shared<game_record> (*m_game);
+	// online mode -> don't score, open new Window instead
+	MainWindow *w = new MainWindow (nullptr, newgr);
+
+	connect (w->refreshButton, &QPushButton::clicked,
+		 [gr = m_game, w] (bool)
+		 {
+			 w->init_game_record (std::make_shared<game_record> (*gr));
+			 w->navLast->trigger ();
+		 });
+	w->refreshButton->setEnabled (true);
+	w->refreshButton->setVisible (true);
+	w->updateCaption ();
+
+	w->navLast->trigger ();
+	w->show ();
 }
 
 /* Try to make a move and return status: the game state for the position after the

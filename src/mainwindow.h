@@ -286,8 +286,6 @@ signals:
 	void signal_sendcomment(const QString&);
 	void signal_closeevent();
 
-	void signal_editBoardInNewWindow();
-
 public slots:
 	void slotFocus (bool) { setFocus (); }
 	void slotFileNewBoard(bool);
@@ -326,7 +324,6 @@ public slots:
 	void slotViewConnections (bool);
 
 	void slotTimerForward();
-	void slot_editBoardInNewWindow(bool);
 	void slotSoundToggle(bool toggle);
 	void slotUpdateComment();
 	void slotUpdateComment2();
