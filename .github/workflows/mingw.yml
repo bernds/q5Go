@@ -54,22 +54,14 @@ jobs:
           dir
           dir release
           cd ..
-          mkdir %archiveName%
-          copy build\release\%targetName%.exe %archiveName%\
-          windeployqt --qmldir . %archiveName%\%targetName%.exe
-      - name: package
-        env:
-          archiveName: ${{ env.targetName }}-${{ matrix.qt_arch }}
-        shell: pwsh
-        run: |
-          dir ${env:archiveName}
-          Compress-Archive -Path ${env:archiveName} ${env:archiveName}'.zip'
-          $name = ${env:archiveName}
-          echo "::set-env name=packageName::$name"
-          Write-Host 'packageName:'${env:packageName}
+	  mkdir output
+          mkdir output\%archiveName%
+          copy build\release\%targetName%.exe output\%archiveName%\
+	  qtenv2
+          windeployqt --qmldir . output\%archiveName%\%targetName%.exe
 
       - name: Upload artifact
         uses: actions/upload-artifact@v1.0.0
         with:
           name: ${{ env.targetName }}-${{ matrix.qt_arch }}
-          path: ${{ env.targetName }}-${{ matrix.qt_arch }}
+          path: output
