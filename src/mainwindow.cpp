@@ -2700,9 +2700,11 @@ void MainWindow::setMoveData (const game_state *gs)
 		int x = gs->get_move_x ();
 		int y = gs->get_move_y ();
 		s.append(" (");
+		auto pair = b.coords_name (x, y, gfx_board->sgf_coords ());
 		s.append((to_move == black ? w_str : b_str) + " ");
-		s.append(QString(QChar('A' + (x < 8 ? x : x + 1))));
-		s.append(QString::number (b.size_y () - y) + ")");
+		s.append(QString::fromStdString (pair.first));
+		s.append(QString::fromStdString (pair.second));
+		s.append(")");
 	}
 	s.append (QObject::tr ("\nVariation ") + QString::number (var_nr)
 		  + QObject::tr (" of ") + QString::number (1 + brothers) + "\n");
