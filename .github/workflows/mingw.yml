@@ -54,7 +54,7 @@ jobs:
           dir
           dir release
           cd ..
-	  mkdir output
+          mkdir output
           mkdir output\%archiveName%
           copy build\release\%targetName%.exe output\%archiveName%\
           qtenv2
