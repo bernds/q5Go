@@ -3064,7 +3064,7 @@ After placing and/or undo release button for returning to starting point automat
     <number>8</number>
    </attribute>
    <widget class="QWidget" name="treeDockContents">
-    <layout class="QGridLayout" name="gridLayout" rowstretch="0">
+    <layout class="QGridLayout" name="gridLayout_1" rowstretch="0">
      <property name="leftMargin">
       <number>0</number>
      </property>

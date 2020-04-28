@@ -354,7 +354,7 @@
        </item>
        <item>
         <widget class="QFrame" name="frame_2">
-         <layout class="QGridLayout" name="gridLayout">
+         <layout class="QGridLayout" name="gridLayout_1">
           <item row="1" column="1">
            <widget class="QPushButton" name="resetButton">
             <property name="toolTip">

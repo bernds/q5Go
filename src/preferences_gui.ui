@@ -1927,7 +1927,7 @@ If you press to enter a move on the board, the move will not be acknowledged if 
               </widget>
              </item>
              <item row="0" column="0">
-              <widget class="QLabel" name="label_15">
+              <widget class="QLabel" name="ambientLabel">
                <property name="text">
                 <string>Ambient light:</string>
                </property>
@@ -1937,7 +1937,7 @@ If you press to enter a move on the board, the move will not be acknowledged if 
               </widget>
              </item>
              <item row="1" column="0">
-              <widget class="QLabel" name="label_25">
+              <widget class="QLabel" name="opacityLabel">
                <property name="text">
                 <string>Shadow opacity:</string>
                </property>
@@ -1994,7 +1994,7 @@ If you press to enter a move on the board, the move will not be acknowledged if 
            <number>6</number>
           </property>
           <item row="1" column="0">
-           <widget class="QLabel" name="textLabel1">
+           <widget class="QLabel" name="woodFileLabel">
             <property name="text">
              <string>Wood filename:</string>
             </property>
@@ -2046,7 +2046,7 @@ If the picture is not set, or unvalid, a default picture is used by qgo</string>
            </widget>
           </item>
           <item row="3" column="0">
-           <widget class="QLabel" name="textLabel1_2">
+           <widget class="QLabel" name="tableFileLabel">
             <property name="text">
              <string>Table picture</string>
             </property>
@@ -2113,7 +2113,7 @@ If the picture is not set, or unvalid, a default goban is used by qgo</string>
            </widget>
           </item>
           <item row="0" column="0">
-           <widget class="QLabel" name="label_6">
+           <widget class="QLabel" name="woodImageLabel">
             <property name="text">
              <string>Wood image:</string>
             </property>
@@ -2877,7 +2877,7 @@ New users: leave blank!</string>
          <property name="title">
           <string>Special players</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout">
+         <layout class="QGridLayout" name="gridLayout_1">
           <property name="leftMargin">
            <number>6</number>
           </property>
@@ -4453,7 +4453,7 @@ If checked then when a game you played completes, it is automatically saved in t
        <item row="1" column="1">
         <layout class="QHBoxLayout" name="horizontalLayout_13">
          <item>
-          <widget class="QLabel" name="label_22">
+          <widget class="QLabel" name="dupsLabel">
            <property name="text">
             <string>Duplicates shown either side of toroidal boards:</string>
            </property>
@@ -4603,7 +4603,7 @@ If checked then when a game you played completes, it is automatically saved in t
               <number>0</number>
              </property>
              <item>
-              <widget class="QLabel" name="label_26">
+              <widget class="QLabel" name="exportSizeLabel">
                <property name="text">
                 <string>Exported size:</string>
                </property>
@@ -4632,7 +4632,7 @@ If checked then when a game you played completes, it is automatically saved in t
               </widget>
              </item>
              <item>
-              <widget class="QLabel" name="label_28">
+              <widget class="QLabel" name="exportSizeYLabel">
                <property name="text">
                 <string>x</string>
                </property>
@@ -4676,7 +4676,7 @@ If checked then when a game you played completes, it is automatically saved in t
               <number>0</number>
              </property>
              <item row="0" column="0">
-              <widget class="QLabel" name="label_29">
+              <widget class="QLabel" name="commentLinesLabel">
                <property name="text">
                 <string>Lines of comment text:</string>
                </property>
@@ -4696,7 +4696,7 @@ If checked then when a game you played completes, it is automatically saved in t
               </widget>
              </item>
              <item row="1" column="0">
-              <widget class="QLabel" name="label_25">
+              <widget class="QLabel" name="marginLabel">
                <property name="text">
                 <string>Comment margin:</string>
                </property>
