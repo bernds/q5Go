@@ -509,6 +509,11 @@ MainWindow::MainWindow (QWidget* parent, go_game_ptr gr, const QString opener_sc
 	connect (editReplaceButton, &QPushButton::clicked, [this] (bool) { leave_edit_modify (); setGameMode (m_remember_mode); });
 	connect (editInsertButton, &QPushButton::clicked, [this] (bool) { leave_edit_prepend (); setGameMode (m_remember_mode); });
 
+	connect (editButton, &QPushButton::clicked, this, &MainWindow::doEdit);
+	connect (editPosButton, &QPushButton::clicked, this, &MainWindow::doEditPos);
+	connect (slider, &QSlider::valueChanged, this, &MainWindow::sliderChanged);
+	connect (scoreButton, &QPushButton::clicked, this, &MainWindow::doRealScore);
+
 	goLastButton->setDefaultAction (navLast);
 	goFirstButton->setDefaultAction (navFirst);
 	goNextButton->setDefaultAction (navForward);
