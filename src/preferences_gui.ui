@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>667</width>
+    <width>681</width>
     <height>787</height>
    </rect>
   </property>
@@ -2872,140 +2872,6 @@ New users: leave blank!</string>
          </item>
         </layout>
        </item>
-       <item row="11" column="0">
-        <widget class="QGroupBox" name="IGSgroup_box">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="title">
-          <string>IGS</string>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_3">
-          <property name="spacing">
-           <number>6</number>
-          </property>
-          <property name="leftMargin">
-           <number>6</number>
-          </property>
-          <property name="topMargin">
-           <number>6</number>
-          </property>
-          <property name="rightMargin">
-           <number>6</number>
-          </property>
-          <property name="bottomMargin">
-           <number>6</number>
-          </property>
-          <item>
-           <widget class="QCheckBox" name="CheckBox_extUserInfo">
-            <property name="focusPolicy">
-             <enum>Qt::NoFocus</enum>
-            </property>
-            <property name="toolTip">
-             <string>see more information from users -&gt; slow!</string>
-            </property>
-            <property name="whatsThis">
-             <string>If checked then additional information is requested from server.
-
-'user' cmd instead of 'who', thus, info string, won/lost, country and language settings are available.
-
-Works slow! Use 'Refresh players' after changing.
-
-On IGS only.</string>
-            </property>
-            <property name="text">
-             <string>Extended user info</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="11" column="1">
-        <widget class="QGroupBox" name="IGSgroup_box_2">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="title">
-          <string>Autosave</string>
-         </property>
-         <layout class="QHBoxLayout">
-          <property name="spacing">
-           <number>6</number>
-          </property>
-          <property name="leftMargin">
-           <number>6</number>
-          </property>
-          <property name="topMargin">
-           <number>6</number>
-          </property>
-          <property name="rightMargin">
-           <number>6</number>
-          </property>
-          <property name="bottomMargin">
-           <number>6</number>
-          </property>
-          <item>
-           <widget class="QCheckBox" name="CheckBox_autoSave">
-            <property name="focusPolicy">
-             <enum>Qt::NoFocus</enum>
-            </property>
-            <property name="toolTip">
-             <string>check for automatic saving observed games</string>
-            </property>
-            <property name="whatsThis">
-             <string>Autosave
-
-If checked then when an observed game completes, it is automatically saved in the working directory</string>
-            </property>
-            <property name="text">
-             <string>observed games</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="spacer12">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Expanding</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>0</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="CheckBox_autoSave_Played">
-            <property name="focusPolicy">
-             <enum>Qt::NoFocus</enum>
-            </property>
-            <property name="toolTip">
-             <string>check for automatic saving for your games</string>
-            </property>
-            <property name="whatsThis">
-             <string>Autosave
-
-If checked then when a game you played completes, it is automatically saved in the working directory</string>
-            </property>
-            <property name="text">
-             <string>played games</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
        <item row="12" column="0" colspan="2">
         <widget class="QGroupBox" name="special_players">
          <property name="title">
@@ -4493,6 +4359,88 @@ Select an entry to edit, change (Title keeps unchanged) or delete a line.
 
 Select one of the predefined hosts -- xxx -- and add a title to use it.</string>
          </property>
+        </widget>
+       </item>
+       <item row="11" column="0" colspan="2">
+        <widget class="QGroupBox" name="IGSgroup_box_2">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title">
+          <string>Autosave</string>
+         </property>
+         <layout class="QHBoxLayout">
+          <property name="spacing">
+           <number>6</number>
+          </property>
+          <property name="leftMargin">
+           <number>6</number>
+          </property>
+          <property name="topMargin">
+           <number>6</number>
+          </property>
+          <property name="rightMargin">
+           <number>6</number>
+          </property>
+          <property name="bottomMargin">
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="QCheckBox" name="CheckBox_autoSave">
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
+            <property name="toolTip">
+             <string>check for automatic saving observed games</string>
+            </property>
+            <property name="whatsThis">
+             <string>Autosave
+
+If checked then when an observed game completes, it is automatically saved in the working directory</string>
+            </property>
+            <property name="text">
+             <string>observed games</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="CheckBox_autoSave_Played">
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
+            <property name="toolTip">
+             <string>check for automatic saving for your games</string>
+            </property>
+            <property name="whatsThis">
+             <string>Autosave
+
+If checked then when a game you played completes, it is automatically saved in the working directory</string>
+            </property>
+            <property name="text">
+             <string>played games</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="spacer12">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Expanding</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>0</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
         </widget>
        </item>
       </layout>

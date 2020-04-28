@@ -63,7 +63,6 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	cmd_valid = false;
 	tn_ready = false;
 	tn_wait_for_tn_ready = false;
-	extUserInfo = false;
 	youhavemsg = false;
 	autoAwayMessage = false;
 	watch = ";" + setting->readEntry("WATCH") + ";";
@@ -168,9 +167,6 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 		pref_p = QPoint();
 		pref_s = QSize();
 	}
-
-	// 'user' cmd instead of 'who'?
-	setColumnsForExtUserInfo();
 
 	// create qGo Interface for board handling
 	qgoif = new qGoIF(this);
@@ -548,8 +544,6 @@ void ClientWindow::saveSettings()
 			QString::number(pref_s.width()) + DELIMITER +
 			QString::number(pref_s.height()));
 
-	setting->writeBoolEntry("EXTUSERINFO", extUserInfo);
-
 	setting->writeIntEntry("WHO_1", whoBox1->currentIndex());
 	setting->writeIntEntry("WHO_2", whoBox2->currentIndex());
 	setting->writeBoolEntry("WHO_CB", whoOpenCheck->isChecked());
@@ -691,9 +685,6 @@ void ClientWindow::sendTextToApp (const QString &txt)
 		Disconnect->setEnabled (true);
 		toolConnect->setChecked (true);
 		toolConnect->setToolTip (tr ("Disconnect from") + " " + cb_connect->currentText ());
-
-		// enable extended user info features
-		setColumnsForExtUserInfo ();
 
 		// check for messages
 		if (youhavemsg)
@@ -1031,45 +1022,6 @@ void ClientWindow::slot_cbquiet (bool)
 	set_sessionparameter("quiet", val);
 }
 
-
-// switch between 'who' and 'user' cmds
-void ClientWindow::setColumnsForExtUserInfo()
-{
-#if 0 /* @@@ Disabled for now.  Realistically, no one will use anything but IGS.  */
-	if (!extUserInfo || m_online_server != IGS)
-	{
-		// set player table's columns to 'who' mode
-		ListView_players->removeColumn(11);
-		ListView_players->removeColumn(10);
-		ListView_players->removeColumn(9);
-		ListView_players->removeColumn(8);
-		ListView_players->removeColumn(7);
-	}
-	else if ( ListView_players->columns()  < 9 )
-	{
-		// set player table's columns to 'user' mode
-		// first: remove invisible column
-		ListView_players->removeColumn(7);
-		// second: add new columns
-		ListView_players->addColumn(tr("Info"));
-		ListView_players->addColumn(tr("Won"));
-		ListView_players->addColumn(tr("Lost"));
-		ListView_players->addColumn(tr("Country"));
-		ListView_players->addColumn(tr("Match prefs"));
-		ListView_players->setColumnAlignment(7, Qt::AlignRight);
-		ListView_players->setColumnAlignment(8, Qt::AlignRight);
-		ListView_players->setColumnAlignment(9, Qt::AlignRight);
-	}
-#endif
-}
-
-// switch between 'who' and 'user' cmds
-void ClientWindow::slot_cbExtUserInfo()
-{
-	extUserInfo = setting->readBoolEntry("EXTUSERINFO");
-	setColumnsForExtUserInfo();
-}
-
 void ClientWindow::update_font ()
 {
 	// lists
@@ -1097,9 +1049,6 @@ void ClientWindow::update_font ()
 		viewMenuBar->setChecked(true);
 	}
 	viewStatusBar->setChecked(setting->readBoolEntry("MAINSTATUSBAR"));
-
-	extUserInfo = setting->readBoolEntry("EXTUSERINFO");
-	setColumnsForExtUserInfo();
 }
 
 void ClientWindow::server_player_entered (const QString &)

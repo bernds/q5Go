@@ -81,9 +81,6 @@ class ClientWindow : public QMainWindow, public Ui::ClientWindowGui
 	Player m_menu_player;
 	Game m_menu_game;
 
-	// extended user info
-	bool extUserInfo;
-
 	// statistics
 	int bytesIn, bytesOut;
 
@@ -139,7 +136,6 @@ class ClientWindow : public QMainWindow, public Ui::ClientWindowGui
 	void populate_cbconnect (const QString &);
 	void enable_connection_buttons (bool);
 
-	void setColumnsForExtUserInfo ();
 	void saveSettings ();
 
 	QString menu_player_name ();
@@ -199,7 +195,6 @@ public slots:
 	void slot_whoopen (bool);
 
 	// gui_BaseTable:
-	void slot_cbExtUserInfo ();
 	void slot_cblooking (bool);
 	void slot_cbopen (bool);
 	void slot_cbquiet (bool);

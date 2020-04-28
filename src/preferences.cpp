@@ -597,7 +597,6 @@ void PreferencesDialog::init_from_settings ()
 	// Client Window tab
 	ui->LineEdit_watch->setText (setting->readEntry("WATCH"));
 	ui->LineEdit_exclude->setText (setting->readEntry("EXCLUDE"));
-	ui->CheckBox_extUserInfo->setChecked (setting->readBoolEntry("EXTUSERINFO"));
 //	ui->CheckBox_useNmatch->setChecked (setting->readBoolEntry("USE_NMATCH"));
 	ui->checkBox_Nmatch_Black->setChecked (setting->readBoolEntry("NMATCH_BLACK"));
 	ui->checkBox_Nmatch_White->setChecked (setting->readBoolEntry("NMATCH_WHITE"));
@@ -855,7 +854,6 @@ void PreferencesDialog::slot_apply()
 	// Client Window Tab
 	setting->writeEntry ("WATCH", ui->LineEdit_watch->text ());
 	setting->writeEntry ("EXCLUDE", ui->LineEdit_exclude->text ());
-	setting->writeBoolEntry ("EXTUSERINFO", ui->CheckBox_extUserInfo->isChecked ());
 //	setting->writeBoolEntry ("USE_NMATCH", ui->CheckBox_useNmatch->isChecked ());
 
 	//Checks wether the nmatch parameters have been modified, in order to send a new nmatchrange command
