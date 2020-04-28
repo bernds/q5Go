@@ -57,7 +57,7 @@ jobs:
 	  mkdir output
           mkdir output\%archiveName%
           copy build\release\%targetName%.exe output\%archiveName%\
-	  qtenv2
+          qtenv2
           windeployqt --qmldir . output\%archiveName%\%targetName%.exe
 
       - name: Upload artifact
