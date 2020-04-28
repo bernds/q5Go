@@ -323,7 +323,7 @@ PreferencesDialog::PreferencesDialog (int tab, QWidget* parent)
 	connect (ui->whiteFlatSlider, &QSlider::valueChanged, [=] (int) { update_w_stones (); });
 	connect (ui->ambientSlider, &QSlider::valueChanged, [=] (int) { update_w_stones (); update_b_stones (); });
 	connect (ui->shadowSlider, &QSlider::valueChanged, [=] (int) { update_w_stones (); update_b_stones (); });
-	connect (ui->stripesCheckBox, &QCheckBox::toggled, [=] (int) { update_w_stones (); });
+	connect (ui->stripesCheckBox, &QCheckBox::toggled, [=] (bool) { update_w_stones (); });
 
 	void (QComboBox::*cic) (int) = &QComboBox::currentIndexChanged;
 	connect (ui->woodComboBox, cic, [=] (int i) { ui->GobanPicturePathButton->setEnabled (i == 0); ui->LineEdit_goban->setEnabled (i == 0); update_board_image (); });
@@ -362,6 +362,9 @@ PreferencesDialog::PreferencesDialog (int tab, QWidget* parent)
 	connect (ui->pb_engine_delete, &QPushButton::clicked, this, &PreferencesDialog::slot_delete_engine);
 	connect (ui->pb_engine_change, &QPushButton::clicked, this, &PreferencesDialog::slot_change_engine);
 	connect (ui->pb_engine_dup, &QPushButton::clicked, this, &PreferencesDialog::slot_dup_engine);
+
+	connect (ui->autosavePathCheckBox, &QCheckBox::toggled, [this] (bool on) { ui->autosavePathWidget->setEnabled (on); });
+	connect (ui->autosavePathButton, &QPushButton::clicked, this, &PreferencesDialog::slot_autosavedir);
 
 	update_current_engine ();
 	update_current_host ();
@@ -468,6 +471,22 @@ void PreferencesDialog::slot_dbrem (bool)
 	m_dbpath_model.removeRows (r, 1);
 	m_dbpaths.removeAt (r);
 	m_dbpaths_changed = true;
+}
+
+void PreferencesDialog::slot_autosavedir (bool)
+{
+	QString curr = ui->autosavePathEdit->text ();
+	QString dirname = QFileDialog::getExistingDirectory (this, QObject::tr ("Choose a directory for autosaves"),
+							     curr);
+	if (dirname.isEmpty ())
+		return;
+	QDir d (dirname);
+	if (!d.exists ()) {
+		QMessageBox::warning (this, tr ("Selected directory does not exist"),
+				      tr ("The selected directory does not exist."));
+		return;
+	}
+	ui->autosavePathEdit->setText (dirname);
 }
 
 void PreferencesDialog::update_board_image ()
@@ -624,8 +643,11 @@ void PreferencesDialog::init_from_settings ()
 	ui->BYSpin->setValue (setting->readIntEntry("DEFAULT_BY"));
 	ui->komiSpinDefault->setValue (setting->readIntEntry("DEFAULT_KOMI"));
 	ui->automaticNegotiationCheckBox->setChecked (setting->readBoolEntry("DEFAULT_AUTONEGO"));
-	ui->CheckBox_autoSave->setChecked (setting->readBoolEntry("AUTOSAVE"));
-	ui->CheckBox_autoSave_Played->setChecked (setting->readBoolEntry("AUTOSAVE_PLAYED"));
+	ui->autosaveCheckBox->setChecked (setting->readBoolEntry("AUTOSAVE"));
+	ui->autosavePlayedCheckBox->setChecked (setting->readBoolEntry("AUTOSAVE_PLAYED"));
+	ui->autosavePathCheckBox->setChecked (setting->readBoolEntry("AUTOSAVE_TO_PATH"));
+	ui->autosavePathEdit->setText (setting->readEntry("AUTOSAVE_PATH"));
+	ui->autosavePathWidget->setEnabled (ui->autosavePathCheckBox->isChecked ());
 
 	ui->toroidDupsSpin->setValue (setting->readIntEntry("TOROID_DUPS"));
 
@@ -880,8 +902,10 @@ void PreferencesDialog::slot_apply()
 	setting->writeIntEntry ("DEFAULT_BY", ui->BYSpin->text ().toInt ());
 	setting->writeIntEntry ("DEFAULT_KOMI", ui->komiSpinDefault->text ().toFloat());
 	setting->writeBoolEntry ("DEFAULT_AUTONEGO", ui->automaticNegotiationCheckBox->isChecked ());
-	setting->writeBoolEntry ("AUTOSAVE", ui->CheckBox_autoSave->isChecked ());
-	setting->writeBoolEntry ("AUTOSAVE_PLAYED", ui->CheckBox_autoSave_Played->isChecked ());
+	setting->writeBoolEntry ("AUTOSAVE", ui->autosaveCheckBox->isChecked ());
+	setting->writeBoolEntry ("AUTOSAVE_PLAYED", ui->autosavePlayedCheckBox->isChecked ());
+	setting->writeBoolEntry ("AUTOSAVE_TO_PATH", ui->autosavePathCheckBox->isChecked ());
+	setting->writeEntry ("AUTOSAVE_PATH", ui->autosavePathEdit->text ());
 
 	// Computer Tab
 	setting->writeBoolEntry ("COMPUTER_WHITE", ui->computerWhiteButton->isChecked ());

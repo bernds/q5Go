@@ -100,8 +100,11 @@ Setting::Setting()
 	writeIntEntry("COMPUTER_SIZE", 19);
         QStringList docdirs = QStandardPaths::standardLocations (QStandardPaths::DocumentsLocation);
         qDebug () << "Docdirs: " << docdirs;
-        if (!docdirs.isEmpty ())
-                writeEntry("LAST_DIR", docdirs.first ());
+        if (!docdirs.isEmpty ()) {
+		writeEntry("LAST_DIR", docdirs.first ());
+		writeEntry("AUTOSAVE_PATH", docdirs.first ());
+		writeBoolEntry("AUTOSAVE_TO_PATH", true);
+	}
 
 	writeIntEntry("STONES_BFLAT", 1);
 	writeIntEntry("STONES_BROUND", 80);

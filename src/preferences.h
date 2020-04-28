@@ -156,6 +156,8 @@ public slots:
 	void select_black_color (bool);
 	void select_stone_look (bool);
 
+	void slot_autosavedir (bool);
+
 	void slot_dbdir (bool);
 	void slot_dbcfg (bool);
 	void slot_dbrem (bool);

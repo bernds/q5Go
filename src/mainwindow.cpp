@@ -1296,36 +1296,34 @@ bool MainWindow::doSave (QString fileName, bool force)
 		if (choice != QMessageBox::Yes)
 			return false;
 	}
-	if (fileName.isNull () || fileName.isEmpty () || !force)
-  	{
-		if (QDir(fileName).exists())
-			fileName = get_candidate_filename (fileName, m_game->info ());
-		else if (fileName.isNull() || fileName.isEmpty()) {
-			QString dir = setting->readEntry("LAST_DIR");
-
-			fileName = get_candidate_filename (dir, m_game->info ());
-		}
-		if (!force)
-			fileName = QFileDialog::getSaveFileName(this, tr ("Save SGF file"),
-								fileName, tr("SGF Files (*.sgf);;All Files (*)"));
+	bool isdir = !fileName.isEmpty () && QDir(fileName).exists();
+	if (isdir)
+		fileName = get_candidate_filename (fileName, m_game->info ());
+	else if (fileName.isEmpty()) {
+		QString dir = setting->readEntry("LAST_DIR");
+		fileName = get_candidate_filename (dir, m_game->info ());
 	}
 
+	if (!force) {
+		fileName = QFileDialog::getSaveFileName (this, tr ("Save SGF file"),
+							 fileName, tr ("SGF Files (*.sgf);;All Files (*)"));
+	}
 	if (fileName.isEmpty())
 		return false;
 
-	if (getFileExtension(fileName, false).isEmpty())
-		fileName.append(".sgf");
+	if (getFileExtension (fileName, false).isEmpty ())
+		fileName.append (".sgf");
 
 	QFile of (fileName);
 	if (!of.open (QIODevice::WriteOnly)) {
-		QMessageBox::warning (this, PACKAGE, tr("Cannot open SGF file for saving."));
+		QMessageBox::warning (this, PACKAGE, tr ("Cannot open SGF file for saving."));
 		return false;
 	}
 	std::string sgf = m_game->to_sgf ();
 	QByteArray bytes = QByteArray::fromStdString (sgf);
 	qint64 written = of.write (bytes);
 	if (written != bytes.length ()) {
-		QMessageBox::warning (this, PACKAGE, tr("Failed to save SGF file."));
+		QMessageBox::warning (this, PACKAGE, tr ("Failed to save SGF file."));
 		return false;
 	}
 	of.close ();

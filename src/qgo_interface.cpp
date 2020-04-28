@@ -1669,13 +1669,17 @@ void qGoBoard::game_result (const QString &rs, const QString &extended_rs)
 	m_game->set_result (rs.toStdString ());
 	send_kibitz (rs + "\n");
 	bool autosave = setting->readBoolEntry (gameMode == modeObserve ? "AUTOSAVE" : "AUTOSAVE_PLAYED");
+	bool autosave_to_path = setting->readBoolEntry ("AUTOSAVE_TO_PATH");
 
 	/* Note that win can be null - observing a game just as it ends may cause the
 	   server to send a result without moves (or maybe before, but that is still unclear).  */
 	if (autosave && win)
 	{
-		win->doSave("", true);
-		qDebug("Game saved");
+		QString path = autosave_to_path ? setting->readEntry ("AUTOSAVE_PATH") : "";
+		/* Only use path if it is valid.  */
+		if (!path.isEmpty () && !QDir (path).exists ())
+			path = "";
+		win->doSave (path, true);
 	}
 
 	GameMode prev_mode = gameMode;
