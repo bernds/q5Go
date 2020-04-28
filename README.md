@@ -2,7 +2,7 @@
 
 This is a tool for Go players which performs the following functions:
 - SGF editor
-- Analysis frontend for Leela Zero (or compatible engines)
+- Analysis frontend for KataGo, Leela Zero or compatible engines
 - GTP interface
 - IGS client
 - Export to a variety of formats
@@ -12,7 +12,8 @@ that is fast, easy and convenient to use and does everything you could
 want out of such a tool.  Some of the more unusual features include a
 Go diagram exporting function for sites like lifein19x19.com or
 Sensei's library, as well as SVG vector graphics or slide export.
-q5go also supports some non-standard Go variants.
+q5go also supports some non-standard Go variants. For beginners, tutorials
+that explain the rules and basic tactics are included.
 
 This program is based on the old Qt3 version of qGo, but ported to Qt5
 and modernized.
@@ -139,8 +140,8 @@ with preview functionality.
 q5go supports rectangular and toroidal boards.  Note that the latter
 can only be saved in a non-standard SGF format since the specification
 does not allow for it.  When playing on a torus, q5go can be configured
-to extend the board past its regular dimensions, duplicating parts of
-the position for a better overview.  Also, the board can be dragged
+to show a larger area than the actual board dimensions, duplicating parts
+of the position for a better overview.  Also, the board can be dragged
 with the middle mouse button.
 
 In addition to that, it is possible to set up a board with some of the
