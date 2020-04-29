@@ -3087,7 +3087,8 @@ void MainWindow_GTP::request_next_move ()
 	GTP_Process *p = c == white ? m_gtp_w : m_gtp_b;
 	if (p != nullptr) {
 		move_timer *mt = c == white ? &m_timer_white : &m_timer_black;
-		p->send_remaining_time (c, QString::fromStdString (mt->report_gtp ()));
+		if (mt->settings ().system != time_system::none)
+			p->send_remaining_time (c, QString::fromStdString (mt->report_gtp ()));
 		p->request_move (c);
 		mt->start ();
 		againButton->setEnabled (false);
