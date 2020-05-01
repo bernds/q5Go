@@ -40,6 +40,13 @@ These are the major user-visible changes in 1.1:
    between them. May be helpful for beginners.
  * GTP support was extended to support board sizes > 25, for KataGo.
 
+Version 1.1.1 is mostly a bug-fix release to properly suppert saving and
+loading large board sizes. But there are also a few additions:
+ * There is now a tool to manage and remove the information added by engine
+   analysis from a given SGF file.
+ * It is now possible to save all variations in a file into separate files.
+ * It is possible to choose a path for autosaving online games.
+
 See VERSION_HISTORY for a history of changes.
 
 ## Overview of features
