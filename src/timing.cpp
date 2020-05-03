@@ -47,6 +47,9 @@ bool move_timer::update (bool set)
 	if (!m_ticking)
 		return true;
 
+	if (m_settings.system == time_system::none)
+		return true;
+
 	auto now = std::chrono::steady_clock::now ();
 	std::chrono::duration<double> d = now - m_start_within_period;
 	m_remaining_for_report = m_remaining - d;
