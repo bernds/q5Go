@@ -117,9 +117,7 @@ void GTP_Process::startup_part3 (const QString &)
 
 void GTP_Process::startup_part4 (const QString &)
 {
-	char komi[20];
-	sprintf (komi, "komi %.2f", m_komi);
-	send_request (komi, &GTP_Process::startup_part5);
+	send_request ("komi " + QString::number (m_komi), &GTP_Process::startup_part5);
 }
 
 void GTP_Process::startup_part5 (const QString &)
@@ -252,10 +250,8 @@ void GTP_Process::komi (double km)
 	if (km == m_komi)
 		return;
 
-	char komi[20];
-	sprintf (komi, "komi %.2f", km);
 	m_komi = km;
-	send_request (komi);
+	send_request ("komi " + QString::number (m_komi));
 }
 
 void GTP_Process::request_move (stone_color col)
