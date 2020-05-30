@@ -129,6 +129,10 @@ class GTP_Process : public QProcess
 	typedef void (GTP_Process::*t_receiver) (const QString &);
 	QMap <int, t_receiver> m_receivers;
 	QMap <int, t_receiver> m_err_receivers;
+	QMap <int, t_receiver> m_end_receivers;
+	t_receiver m_cur_receiver = nullptr;
+	t_receiver m_end_receiver = nullptr;
+	bool m_within_reply = false;
 
 	/* Number of the next request.  */
 	int req_cnt;
@@ -143,6 +147,7 @@ class GTP_Process : public QProcess
 	void setup_success (const QString &);
 	void receive_move (const QString &);
 	void pause_callback (const QString &);
+	void receive_eval (const QString &);
 	void score_callback_1 (const QString &);
 	void score_callback_2 (const QString &);
 	void internal_quit ();

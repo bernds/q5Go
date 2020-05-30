@@ -203,11 +203,15 @@ std::pair<int, int> string_to_coords (const QString &move, int size_y)
 
 void GTP_Process::receive_move (const QString &move)
 {
-	if (move.toLower () == "resign") {
+	if (output.isEmpty ())
+		return;
+	if (output.length () >= 10 && output.left (10) == "info move ")
+		m_controller->gtp_eval (output, m_analyze_kata);
+	else if (move.toLower () == "resign")
 		m_controller->gtp_played_resign (this);
-	} else if (move.toLower () == "pass") {
+	else if (move.toLower () == "pass")
 		m_controller->gtp_played_pass (this);
-	} else {
+	else {
 		auto coords = string_to_coords (move, m_size_y);
 		int x = coords.first;
 		int y = coords.second;
@@ -376,9 +380,9 @@ void GTP_Process::analyze (stone_color col, int interval)
 {
 	QString cmd = m_analyze_kata ? "kata-analyze " : "lz-analyze ";
 	if (col == black)
-		send_request (cmd + "black " + QString::number (interval));
+		send_request (cmd + "black " + QString::number (interval), &GTP_Process::receive_eval);
 	else
-		send_request (cmd + "white " + QString::number (interval));
+		send_request (cmd + "white " + QString::number (interval), &GTP_Process::receive_eval);
 }
 
 void GTP_Process::pause_analysis ()
@@ -426,6 +430,15 @@ void GTP_Process::slot_receive_stdout ()
 	}
 
 	while (!m_stopped) {
+		if (m_buffer.isEmpty ())
+			return;
+		if (m_within_reply && m_buffer[0] == '\n') {
+			if (m_end_receiver != nullptr)
+				(this->*m_end_receiver) (QString ());
+			m_cur_receiver = nullptr;
+			m_within_reply = false;
+		}
+
 		/* Clear empty lines at the front of the buffer.  */
 		int last_lf = -1;
 		int pos = 0;
@@ -442,43 +455,48 @@ void GTP_Process::slot_receive_stdout ()
 			return;
 
 		QString output = m_buffer.left (idx).trimmed ();
+		m_buffer = m_buffer.mid (idx + 1);
 
 		append_text (output, Qt::red);
 
-		m_buffer = m_buffer.mid (idx + 1);
-		if (output.length () >= 10 && output.left (10) == "info move ") {
-			m_controller->gtp_eval (output, m_analyze_kata);
-			continue;
-		}
+		qDebug () << (m_within_reply ? "CONT: " : "REPLY: ") << output;
+		if (!m_within_reply) {
+			if (m_receivers.isEmpty ())
+				continue;
 
-		if (m_receivers.isEmpty ())
-			continue;
-
-		qDebug () << output;
-		bool err = output[0] != '=';
-		output.remove (0, 1);
-		int len = output.length ();
-		int n_digits = 0;
-		while (n_digits < len && output[n_digits].isDigit ())
-			n_digits++;
-		while (n_digits < len && output[n_digits].isSpace ())
-			n_digits++;
-		if (n_digits == 0)
-			err = true;
-		int cmd_nr = output.left (n_digits).toInt ();
-		auto &rcv_map = err ? m_err_receivers : m_receivers;
-		QMap<int, t_receiver>::const_iterator map_iter = rcv_map.constFind (cmd_nr);
-		if (map_iter == rcv_map.constEnd ()) {
-			quit ();
-			m_controller->gtp_failure (this, tr ("Invalid response from GTP engine"));
-			return;
+			bool err = output[0] != '=';
+			output.remove (0, 1);
+			int len = output.length ();
+			int n_digits = 0;
+			while (n_digits < len && output[n_digits].isDigit ())
+				n_digits++;
+			while (n_digits < len && output[n_digits].isSpace ())
+				n_digits++;
+			if (n_digits == 0)
+				err = true;
+			int cmd_nr = output.left (n_digits).toInt ();
+			auto &rcv_map = err ? m_err_receivers : m_receivers;
+			QMap<int, t_receiver>::const_iterator map_iter = rcv_map.constFind (cmd_nr);
+			if (map_iter == rcv_map.constEnd ()) {
+				quit ();
+				m_controller->gtp_failure (this, tr ("Invalid response from GTP engine"));
+				return;
+			}
+			qDebug () << "reply for command " << cmd_nr;
+			m_cur_receiver = *map_iter;
+			m_receivers.remove (cmd_nr);
+			m_err_receivers.remove (cmd_nr);
+			output.remove (0, n_digits);
+			m_within_reply = true;
+			QMap<int, t_receiver>::const_iterator map2_iter = m_end_receivers.constFind (cmd_nr);
+			if (map2_iter != m_end_receivers.constEnd ()) {
+				m_end_receiver = *map2_iter;
+				m_end_receivers.remove (cmd_nr);
+			} else
+				m_end_receiver = nullptr;
 		}
-		t_receiver rcv = *map_iter;
-		m_receivers.remove (cmd_nr);
-		m_err_receivers.remove (cmd_nr);
-		output.remove (0, n_digits);
-		if (rcv != nullptr)
-			(this->*rcv) (output);
+		if (m_cur_receiver != nullptr)
+			(this->*m_cur_receiver) (output);
 	}
 }
 
@@ -494,7 +512,13 @@ void GTP_Process::rect_board_err_receiver (const QString &)
 	quit ();
 }
 
-void GTP_Process::send_request(const QString &s, t_receiver rcv, t_receiver err_rcv)
+void GTP_Process::receive_eval (const QString &output)
+{
+	if (output.length () >= 10 && output.left (10) == "info move ")
+		m_controller->gtp_eval (output, m_analyze_kata);
+}
+
+void GTP_Process::send_request (const QString &s, t_receiver rcv, t_receiver err_rcv)
 {
 	qDebug() << "send_request -> " << req_cnt << " " << s << "\n";
 	m_receivers[req_cnt] = rcv;
