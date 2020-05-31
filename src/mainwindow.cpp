@@ -2261,15 +2261,21 @@ void MainWindow::setToolsTabWidget(enum tabType p, enum tabState s)
 
 void MainWindow::update_pass_button ()
 {
-	bool enabled_p = m_gamemode != modeScore && m_gamemode != modeScoreRemote;
-	/* Undo is invisible if it shouldn't be enabled.  */
+	bool to_move = gfx_board->player_to_move_p ();
+	bool enabled_p = m_gamemode != modeScore && m_gamemode != modeScoreRemote && to_move;
+	/* Undo is invisible if it shouldn't be enabled, except when playing the computer.  */
 	bool enabled_u = true;
 
-	if (!gfx_board->player_to_move_p ()) {
-		enabled_p = false;
-		if (m_gamemode == modeComputer)
+	if (m_gamemode == modeComputer) {
+		if (!to_move)
 			enabled_u = false;
+		else {
+			game_state *st = gfx_board->displayed ();
+			if (st->root_node_p () || st->prev_move ()->root_node_p ())
+				enabled_u = false;
+		}
 	}
+
 	passButton->setEnabled (enabled_p);
 	undoButton->setEnabled (enabled_u);
 }
@@ -3015,6 +3021,7 @@ void MainWindow_GTP::start_game (const Engine &program, bool b_is_comp, bool w_i
 		m_gtp_w = g;
 	disconnect (passButton, &QPushButton::clicked, nullptr, nullptr);
 	connect (passButton, &QPushButton::clicked, this, &MainWindow_GTP::player_pass);
+	connect (undoButton, &QPushButton::clicked, this, &MainWindow_GTP::player_undo);
 	connect (resignButton, &QPushButton::clicked, this, &MainWindow_GTP::player_resign);
 	connect (againButton, &QPushButton::clicked, this, &MainWindow_GTP::play_again);
 	againButton->show ();
@@ -3465,6 +3472,26 @@ void MainWindow_GTP::player_pass ()
 		enter_scoring ();
 	else
 		request_next_move ();
+}
+
+void MainWindow_GTP::player_undo ()
+{
+	/* Shouldn't happen (button will be invisible), this is purely defensive.  */
+	if (game_mode () != modeComputer)
+		return;
+
+	if (m_game_position->root_node_p ())
+		return;
+	game_state *p = m_game_position->prev_move ();
+	if (p->root_node_p ())
+		return;
+	auto g = single_engine ();
+	g->undo_move ();
+	g->undo_move ();
+	m_game_position = p->prev_move ();
+	update_pass_button ();
+	gfx_board->set_game_position (m_game_position);
+	gfx_board->set_displayed (m_game_position);
 }
 
 void MainWindow_GTP::player_resign ()

@@ -388,6 +388,7 @@ class MainWindow_GTP : public MainWindow, public GTP_Eval_Controller
 	virtual void time_loss (stone_color) override;
 	bool stop_move_timer ();
 
+	void player_undo ();
 	void player_pass ();
 	void player_resign ();
 	void play_again ();
