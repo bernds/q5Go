@@ -441,9 +441,10 @@ void GTP_Process::slot_receive_stdout ()
 	}
 
 	while (!m_stopped) {
-		if (m_buffer.isEmpty ())
+		int len = m_buffer.length ();
+		if (len == 0)
 			return;
-		if (m_within_reply && m_buffer[0] == '\n') {
+		if (m_within_reply && m_buffer[0] == '\n' || (len > 1 && m_buffer[0] == '\r' && m_buffer[1] == '\n')) {
 			if (m_end_receiver != nullptr)
 				(this->*m_end_receiver) (QString ());
 			m_cur_receiver = nullptr;
@@ -453,7 +454,7 @@ void GTP_Process::slot_receive_stdout ()
 		/* Clear empty lines at the front of the buffer.  */
 		int last_lf = -1;
 		int pos = 0;
-		while (pos < m_buffer.length () && m_buffer[pos].isSpace ()) {
+		while (pos < len && m_buffer[pos].isSpace ()) {
 			if (m_buffer[pos] == '\n')
 				last_lf = pos;
 			pos++;
