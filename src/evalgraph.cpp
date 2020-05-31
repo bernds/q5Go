@@ -254,7 +254,7 @@ void EvalGraph::update (go_game_ptr gr, game_state *active, int sel_idx)
 	}
 	QGraphicsRectItem *sel = m_scene->addRect (GRADIENT_WIDTH + (int)(active_point * m_step), 0, round (m_step), h,
 						   Qt::NoPen, QBrush (Qt::gray));
-	sel->setZValue (2);
+	sel->setZValue (1);
 
 	m_scene->update ();
 }
