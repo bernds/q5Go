@@ -3269,6 +3269,7 @@ void MainWindow_GTP::game_end (const QString &result, stone_color winner)
 	m_n_games++;
 	QString res = tr ("Game #%1:\n").arg (m_n_games) + result;
 	append_result (st, res);
+	append_result (m_game_position, res);
 	game_state *r = m_game->get_root ();
 	if (r != st)
 		append_result (r, res);
