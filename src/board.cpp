@@ -1631,10 +1631,12 @@ void Board::mouseMoveEvent(QMouseEvent *e)
 		y = -1;
 	}
 
-	if (curX == x && curY == y)
+	bool show = show_cursor_p ();
+	if (curX == x && curY == y && m_cursor_shown == show)
 		return;
 	curX = x;
 	curY = y;
+	m_cursor_shown = show;
 
 	// Update the statusbar coords tip
 	if (x != -1) {

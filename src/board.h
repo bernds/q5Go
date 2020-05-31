@@ -232,6 +232,10 @@ class Board : public BoardView, public GTP_Eval_Controller
 	   list view.  */
 	analyzer_id m_an_id;
 
+	/* Used during matches, to prevent us from playing a move in anything but the
+	   current game position.  */
+	game_state *m_game_position {};
+
 	bool m_hide_analysis = false;
 
 	bool show_cursor_p ();
@@ -260,9 +264,17 @@ public:
 	void pause_analysis (bool);
 	void set_hide_analysis (bool);
 
+	void set_game_position (game_state *st)
+	{
+		m_game_position = st;
+	}
 	bool player_to_move_p ()
 	{
-		return !m_displayed->was_score_p () && (m_displayed->to_move () == black ? m_player_is_b : m_player_is_w);
+		if (m_game_position != nullptr && m_displayed != m_game_position)
+			return false;
+		if (m_displayed->was_score_p ())
+			return false;
+		return m_displayed->to_move () == black ? m_player_is_b : m_player_is_w;
 	}
 
 	void set_player_colors (bool w, bool b) { m_player_is_w = w; m_player_is_b = b; }
@@ -300,6 +312,7 @@ private:
 
 	bool navIntersectionStatus = false;
 	short curX, curY;
+	bool m_cursor_shown = false;
 };
 
 class FigureView : public BoardView

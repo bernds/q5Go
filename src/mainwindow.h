@@ -192,6 +192,7 @@ public:
 	void update_settings ();
 	void set_observer_model (QStandardItemModel *m);
 	bool doSave (QString fileName, bool force=false);
+	void update_pass_button ();
 	void setGameMode (GameMode);
 
 	void setMoveData (const game_state *);

@@ -2259,6 +2259,21 @@ void MainWindow::setToolsTabWidget(enum tabType p, enum tabState s)
 	}
 }
 
+void MainWindow::update_pass_button ()
+{
+	bool enabled_p = m_gamemode != modeScore && m_gamemode != modeScoreRemote;
+	/* Undo is invisible if it shouldn't be enabled.  */
+	bool enabled_u = true;
+
+	if (!gfx_board->player_to_move_p ()) {
+		enabled_p = false;
+		if (m_gamemode == modeComputer)
+			enabled_u = false;
+	}
+	passButton->setEnabled (enabled_p);
+	undoButton->setEnabled (enabled_u);
+}
+
 void MainWindow::setGameMode (GameMode mode)
 {
 	GameMode old_mode = m_gamemode;
@@ -2274,6 +2289,7 @@ void MainWindow::setGameMode (GameMode mode)
 
 		/* Also make sure we can edit the game freely in these modes.  */
 		gfx_board->set_player_colors (true, true);
+		gfx_board->set_game_position (nullptr);
 	}
 
 	bool editable_comments = mode != modeMatch && mode != modePostMatch && mode != modeObserve && mode != modeScoreRemote && m_remember_mode != modePostMatch;
@@ -2435,7 +2451,6 @@ void MainWindow::setGameMode (GameMode mode)
 
 	slider->setEnabled (mode == modeNormal || mode == modeObserve || mode == modeObserveGTP || mode == modeBatch);
 
-	passButton->setEnabled (mode != modeScore && mode != modeScoreRemote);
 	editButton->setEnabled (mode != modeScore);
 	scoreButton->setEnabled (mode != modeEdit);
 
@@ -2465,6 +2480,8 @@ void MainWindow::setGameMode (GameMode mode)
 	}
 
 	gfx_board->setMode (mode);
+
+	update_pass_button ();
 
 	scoreTools->setVisible (mode == modeScore || mode == modeScoreRemote);
 	normalTools->setVisible (mode != modeScore && mode != modeScoreRemote);
@@ -2731,6 +2748,8 @@ void MainWindow::setMoveData (const game_state *gs)
 	nextCommentButton->setIconSize (sz);
 	prevNumberButton->setIconSize (sz);
 	nextNumberButton->setIconSize (sz);
+
+	update_pass_button ();
 
 	scoreTools->setVisible (mode == modeScore || mode == modeScoreRemote || gs->was_score_p ());
 	normalTools->setVisible (mode != modeScore && mode != modeScoreRemote && !gs->was_score_p ());
@@ -3008,6 +3027,7 @@ MainWindow_GTP::MainWindow_GTP (QWidget *parent, go_game_ptr gr, QString opener_
 	game_state *root = gr->get_root ();
 	game_state *st = root;
 	m_game_position = root;
+
 	while (st->n_children () > 0)
 		st = st->next_primary_move ();
 	m_start_positions.push_back (st);
@@ -3023,6 +3043,8 @@ MainWindow_GTP::MainWindow_GTP (QWidget *parent, go_game_ptr gr, game_state *st,
 	game_state *root = gr->get_root ();
 	m_start_positions.push_back (st);
 	m_game_position = root;
+	gfx_board->set_game_position (m_game_position);
+	update_pass_button ();
 
 	const go_board &b = root->get_board ();
 	start_game (program, b_is_comp, w_is_comp, b);
@@ -3039,6 +3061,8 @@ MainWindow_GTP::MainWindow_GTP (QWidget *parent, go_game_ptr gr, QString opener_
 		primary = primary->next_primary_move ();
 
 	m_game_position = gr->get_root ();
+	gfx_board->set_game_position (m_game_position);
+	update_pass_button ();
 	for (int i = 0; i < n_games; i++)
 		if (book) {
 			std::function<bool (game_state *)> f = [this] (game_state *st) -> bool
@@ -3113,6 +3137,9 @@ void MainWindow_GTP::setup_game ()
 	if (m_game_position != st)
 		gfx_board->transfer_displayed (m_game_position, st);
 	m_game_position = st;
+	gfx_board->set_game_position (m_game_position);
+	update_pass_button ();
+
 	m_setting_up = 0;
 	if (m_gtp_w) {
 		m_setting_up++;
@@ -3212,6 +3239,8 @@ void MainWindow_GTP::gtp_played_move (GTP_Process *p, int x, int y)
 	gfx_board->setModified ();
 	gfx_board->transfer_displayed (st, st_new);
 	m_game_position = st_new;
+	gfx_board->set_game_position (st_new);
+	update_pass_button ();
 	update_game_tree ();
 
 	if (two_engines ()) {
@@ -3324,6 +3353,8 @@ void MainWindow_GTP::gtp_played_pass (GTP_Process *p)
 	game_state *st_new = st->add_child_pass ();
 	gfx_board->transfer_displayed (st, st_new);
 	m_game_position = st_new;
+	gfx_board->set_game_position (st_new);
+	update_pass_button ();
 	update_game_tree ();
 
 	if (st->was_pass_p ())
@@ -3398,6 +3429,9 @@ game_state *MainWindow_GTP::player_move (int x, int y)
 		return new_st;
 
 	m_game_position = new_st;
+	gfx_board->set_game_position (new_st);
+	update_pass_button ();
+
 	stone_color col = new_st->get_move_color ();
 
 	auto *gtp = single_engine ();
@@ -3423,6 +3457,8 @@ void MainWindow_GTP::player_pass ()
 
 	auto *gtp = single_engine ();
 	m_game_position = gfx_board->displayed ();
+	gfx_board->set_game_position (m_game_position);
+	update_pass_button ();
 
 	gtp->played_move_pass (col);
 	if (st->was_pass_p ())
