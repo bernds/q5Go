@@ -3201,6 +3201,7 @@ void MainWindow_GTP::gtp_played_move (GTP_Process *p, int x, int y)
 		againButton->hide ();
 		return;
 	}
+	st->make_child_primary (st_new);
 	if (m_eval_state != nullptr) {
 		for (const game_state *c: m_eval_state->children ()) {
 			if (!c->was_move_p () || c->get_move_x () != x || c->get_move_y () != y)

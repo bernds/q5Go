@@ -424,6 +424,7 @@ public:
 				return i;
 		return n;
 	}
+	void make_child_primary (const game_state *c);
 	game_state *add_child_edit_nochecks (const go_board &new_board, stone_color to_move, bool scored, add_mode am)
 	{
 		m_visual_ok = false;

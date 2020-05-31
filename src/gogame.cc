@@ -61,6 +61,20 @@ bool game_state::valid_move_p (int x, int y, stone_color col)
 	return m_board.valid_move_p (x, y, col);
 }
 
+void game_state::make_child_primary (const game_state *st)
+{
+	auto beg = std::begin (m_children);
+	auto end = std::end (m_children);
+	auto it = std::find (beg, end, st);
+	if (it == end) {
+#ifdef CHECKING
+		fprintf (stderr, "Child not found when making primary.\n");
+#endif
+		return;
+	}
+	std::rotate (beg, it, it + 1);
+	m_active = 0;
+}
 const go_board game_state::child_moves (const game_state *excluding, bool exclude_figs) const
 {
 	go_board b (m_board.size_x (), m_board.size_y ());
