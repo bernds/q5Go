@@ -389,20 +389,14 @@ public:
 		}
 	}
 
-	/* Determines how to add a new move.  set_active and keep_active add it to the end of the list,
-	   either making it active or leaving the current active move.  set_main is used in situations
-	   like online games where a new move must be made the main branch.  */
-	enum class add_mode { set_active, keep_active, set_main };
+	/* Determines whether to make a newly added move active or not when adding it.  */
+	enum class add_mode { set_active, keep_active };
 
 private:
 	game_state *insert_child (game_state *tmp, add_mode am)
 	{
 		m_visual_ok = false;
-		if (am == add_mode::set_main) {
-			m_children.insert (std::begin (m_children), tmp);
-			m_active = 0;
-		} else
-			m_children.push_back (tmp);
+		m_children.push_back (tmp);
 		if (am == add_mode::set_active)
 			m_active = m_children.size() - 1;
 		return tmp;
@@ -473,17 +467,18 @@ public:
 		return add_child_move_nochecks (new_board, to_move, x, y, am);
 	}
 
-	game_state *add_child_move (int x, int y, stone_color to_move, add_mode am = add_mode::set_active)
+	game_state *add_child_move (int x, int y, stone_color to_move, add_mode am = add_mode::set_active, bool dup = false)
 	{
 		if (!valid_move_p (x, y, to_move))
 			return nullptr;
 
 		go_board new_board (m_board, mark::none);
 		new_board.add_stone (x, y, to_move);
-		if (am != add_mode::set_main)
+		if (!dup) {
 			for (const auto &it: m_children)
 				if (it->was_move_p () && it->m_board.position_equal_p (new_board))
 					return it;
+		}
 
 		return add_child_move_nochecks (new_board, m_to_move, x, y, am);
 	}

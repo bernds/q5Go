@@ -1429,15 +1429,19 @@ void qGoBoard::set_move(stone_color sc, QString pt, QString mv_nr)
 			j = m_game->boardsize () + 1 - pt[1].digitValue();
 
 		game_state *st = m_state;
-		game_state *st_new = st->add_child_move (i - 1, j - 1, sc, game_state::add_mode::set_main);
+		/* The only way we can get a dup is if live analysis is running and we added a diagram with a
+		   shift-click.  We don't want the node marked as a diagram to become part of the main line.
+		   Hence, allow dups here when adding the move.  */
+		game_state *st_new = st->add_child_move (i - 1, j - 1, sc, game_state::add_mode::set_active, true);
 		if (st_new != nullptr) {
+			st->make_child_primary (st_new);
 			if (win != nullptr) {
 				win->transfer_displayed (st, st_new);
 				win->playClick ();
 			}
 			m_state = st_new;
 		} else {
-			/* @@@ do something sensible.  */
+			/* Invalid move.  @@@ do something sensible.  */
 		}
 
 		if (st_new != nullptr && stated_mv_count <= mv_counter && wt_i >= 0 && bt_i >= 0)
