@@ -18,7 +18,7 @@ class GTP_Controller
 	QWidget *m_parent;
 
 protected:
-	analyzer_id m_id;
+	QMap<GTP_Process *, analyzer_id> m_id_map;
 
 	GTP_Controller (QWidget *p) : m_parent (p) { }
 	~GTP_Controller () = default;
@@ -36,7 +36,7 @@ public:
 	virtual void gtp_setup_success (GTP_Process *p) = 0;
 	virtual void gtp_exited (GTP_Process *p) = 0;
 	virtual void gtp_failure (GTP_Process *p, const QString &) = 0;
-	virtual void gtp_eval (const QString &, bool)
+	virtual void gtp_eval (GTP_Process *p, const QString &, bool)
 	{
 	}
 	virtual void gtp_switch_ready () { }
@@ -79,8 +79,10 @@ protected:
 	void pause_eval_updates (bool on) { m_pause_updates = on; }
 	bool pause_analyzer (bool on, go_game_ptr, game_state *);
 	void initiate_switch ();
+	void set_analysis_state (go_game_ptr, game_state *);
+	void setup_for_analysis (go_game_ptr, game_state *, bool flip = false);
 	void request_analysis (go_game_ptr, game_state *, bool flip = false);
-	virtual void eval_received (const QString &, int, bool) = 0;
+	virtual void eval_received (const analyzer_id &, const QString &, int, bool) = 0;
 	virtual void analyzer_state_changed () { }
 	virtual void notice_analyzer_id (const analyzer_id &, bool) { }
 public:
@@ -91,7 +93,7 @@ public:
 	virtual void gtp_played_pass (GTP_Process *) override { /* Should not happen.  */ }
 	virtual void gtp_setup_success (GTP_Process *) override { /* Should not happen.  */ }
 	virtual void gtp_report_score (GTP_Process *, const QString &) override { /* Should not happen.  */ }
-	virtual void gtp_eval (const QString &, bool) override;
+	virtual void gtp_eval (GTP_Process *, const QString &, bool) override;
 	virtual void gtp_switch_ready () override;
 };
 
@@ -176,7 +178,7 @@ public:
 	bool setup_timing (const time_settings &);
 	void send_remaining_time (stone_color col, const QString &);
 	void setup_initial_position (game_state *);
-	void request_move (stone_color col);
+	void request_move (stone_color col, bool);
 	void request_score ();
 	void played_move (stone_color col, int x, int y);
 	void undo_move ();

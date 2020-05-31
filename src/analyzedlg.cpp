@@ -343,7 +343,7 @@ inline std::string s_tr (const char *s)
 	return QObject::tr (s).toStdString ();
 }
 
-void AnalyzeDialog::eval_received (const QString &, int, bool have_score)
+void AnalyzeDialog::eval_received (const analyzer_id &id, const QString &, int, bool have_score)
 {
 	job *j = m_requester;
 	if (j == nullptr) {

@@ -582,7 +582,7 @@ MainWindow::MainWindow (QWidget* parent, go_game_ptr gr, const QString opener_sc
 	if (figuremode == 1 && m_game->get_root ()->has_figure_recursive ())
 		figuremode = 2;
 	diagsDock->setVisible (figuremode == 2 || mode == modeBatch);
-	graphDock->setVisible (figuremode == 2 || mode == modeBatch);
+	graphDock->setVisible (figuremode == 2 || mode == modeBatch || mode == modeComputer || mode == modeObserveGTP);
 	if (mode == modeMatch || mode == modeTeach || mode == modeObserve)
 		observersDock->setVisible (true);
 	setGameMode (mode);
@@ -2306,6 +2306,7 @@ void MainWindow::setGameMode (GameMode mode)
 	normalTools->anGroup->setVisible (mode == modeNormal || mode == modeObserve);
 	normalTools->anStartButton->setVisible (mode == modeNormal || mode == modeObserve);
 	normalTools->anPauseButton->setVisible (mode == modeNormal || mode == modeObserve);
+	normalTools->anHideButton->setVisible (mode == modeNormal || mode == modeObserve);
 
 	/* Don't allow navigation through these back doors when in edit or score mode.  */
 	evalGraph->setEnabled (mode != modeEdit && mode != modeScore && mode != modeScoreRemote);
@@ -3002,7 +3003,7 @@ void MainWindow_GTP::start_game (const Engine &program, bool b_is_comp, bool w_i
 
 MainWindow_GTP::MainWindow_GTP (QWidget *parent, go_game_ptr gr, QString opener_scrkey, const Engine &program,
 				const time_settings &ts, bool b_is_comp, bool w_is_comp)
-	: MainWindow (parent, gr, opener_scrkey, modeComputer, ts), GTP_Controller (this)
+	: MainWindow (parent, gr, opener_scrkey, modeComputer, ts), GTP_Eval_Controller (this)
 {
 	game_state *root = gr->get_root ();
 	game_state *st = root;
@@ -3017,7 +3018,7 @@ MainWindow_GTP::MainWindow_GTP (QWidget *parent, go_game_ptr gr, QString opener_
 
 MainWindow_GTP::MainWindow_GTP (QWidget *parent, go_game_ptr gr, game_state *st, QString opener_scrkey, const Engine &program,
 				const time_settings &ts, bool b_is_comp, bool w_is_comp)
-	: MainWindow (parent, gr, opener_scrkey, modeComputer, ts), GTP_Controller (this)
+	: MainWindow (parent, gr, opener_scrkey, modeComputer, ts), GTP_Eval_Controller (this)
 {
 	game_state *root = gr->get_root ();
 	m_start_positions.push_back (st);
@@ -3030,7 +3031,7 @@ MainWindow_GTP::MainWindow_GTP (QWidget *parent, go_game_ptr gr, game_state *st,
 MainWindow_GTP::MainWindow_GTP (QWidget *parent, go_game_ptr gr, QString opener_scrkey,
 				const Engine &program_w, const Engine &program_b,
 				const time_settings &ts, int n_games, bool book)
-	: MainWindow (parent, gr, opener_scrkey, modeObserveGTP, ts), GTP_Controller (this)
+	: MainWindow (parent, gr, opener_scrkey, modeObserveGTP, ts), GTP_Eval_Controller (this)
 {
 	game_state *root = gr->get_root ();
 	game_state *primary = root;
@@ -3089,7 +3090,8 @@ void MainWindow_GTP::request_next_move ()
 		move_timer *mt = c == white ? &m_timer_white : &m_timer_black;
 		if (mt->settings ().system != time_system::none)
 			p->send_remaining_time (c, QString::fromStdString (mt->report_gtp ()));
-		p->request_move (c);
+		set_analysis_state (m_game, m_game_position);
+		p->request_move (c, true);
 		mt->start ();
 		againButton->setEnabled (false);
 	}
@@ -3198,6 +3200,13 @@ void MainWindow_GTP::gtp_played_move (GTP_Process *p, int x, int y)
 		setGameMode (modeNormal);
 		againButton->hide ();
 		return;
+	}
+	if (m_eval_state != nullptr) {
+		for (const game_state *c: m_eval_state->children ()) {
+			if (!c->was_move_p () || c->get_move_x () != x || c->get_move_y () != y)
+				continue;
+			st_new->update_eval (*c);
+		}
 	}
 	gfx_board->setModified ();
 	gfx_board->transfer_displayed (st, st_new);
@@ -3432,6 +3441,16 @@ void MainWindow_GTP::player_resign ()
 		m_game->set_result ("W+R");
 	else
 		m_game->set_result ("B+R");
+}
+
+void MainWindow_GTP::eval_received (const analyzer_id &id, const QString &move, int visits, bool have_score)
+{
+	update_analyzer_ids (id, have_score);
+	game_state *st = m_game_position;
+	st->update_eval (*m_eval_state);
+	set_eval (move, m_primary_eval, m_primary_have_score, m_primary_score,
+		  st->to_move (), visits);
+	update_game_tree ();
 }
 
 void MainWindow::update_analysis (analyzer state)

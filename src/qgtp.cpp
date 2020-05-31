@@ -9,17 +9,19 @@
 
 GTP_Process *GTP_Controller::create_gtp (const Engine &engine, int size_x, int size_y, double komi, bool show_dialog)
 {
-	m_id.engine = engine.title.toStdString ();
+	analyzer_id id;
+	id.engine = engine.title.toStdString ();
 	QString ekstr = engine.komi;
 	bool ok;
 	double ekomi = ekstr.toFloat (&ok);
-	m_id.komi_set = !ekstr.isEmpty () && ok;
-	if (m_id.komi_set) {
-		m_id.komi = ekomi;
+	id.komi_set = !ekstr.isEmpty () && ok;
+	if (id.komi_set) {
+		id.komi = ekomi;
 	} else
-		m_id.komi = komi;
+		id.komi = komi;
 
 	GTP_Process *g = new GTP_Process (m_parent, this, engine, size_x, size_y, komi, show_dialog);
+	m_id_map[g] = id;
 	return g;
 }
 
@@ -203,16 +205,21 @@ std::pair<int, int> string_to_coords (const QString &move, int size_y)
 
 void GTP_Process::receive_move (const QString &move)
 {
-	if (output.isEmpty ())
+	if (move.isEmpty ())
 		return;
-	if (output.length () >= 10 && output.left (10) == "info move ")
-		m_controller->gtp_eval (output, m_analyze_kata);
-	else if (move.toLower () == "resign")
+	if (move.length () >= 10 && move.left (10) == "info move ") {
+		m_controller->gtp_eval (this, move, m_analyze_kata);
+		return;
+	}
+
+	bool is_play = (m_analyze_lz || m_analyze_kata) && move.length () >= 5 && move.left (5) == "play ";
+	QString m = is_play ? move.mid (5) : move;
+	if (m.toLower () == "resign")
 		m_controller->gtp_played_resign (this);
-	else if (move.toLower () == "pass")
+	else if (m.toLower () == "pass")
 		m_controller->gtp_played_pass (this);
 	else {
-		auto coords = string_to_coords (move, m_size_y);
+		auto coords = string_to_coords (m, m_size_y);
 		int x = coords.first;
 		int y = coords.second;
 		if (m_last_move != nullptr)
@@ -258,13 +265,17 @@ void GTP_Process::komi (double km)
 	send_request ("komi " + QString::number (m_komi));
 }
 
-void GTP_Process::request_move (stone_color col)
+void GTP_Process::request_move (stone_color col, bool analyze)
 {
+	QString cmd = (analyze && m_analyze_kata ? "kata-genmove_analyze"
+		       : analyze && m_analyze_lz ? " lz-genmove_analyze"
+		       : "genmove");
+	QString centis = analyze && m_analyze_lz ? " 100" : "";
 	m_genmove_col = col;
 	if (col == black)
-		send_request ("genmove black", &GTP_Process::receive_move);
+		send_request (cmd + " black" + centis, &GTP_Process::receive_move);
 	else
-		send_request ("genmove white", &GTP_Process::receive_move);
+		send_request (cmd + " white" + centis, &GTP_Process::receive_move);
 }
 
 void GTP_Process::request_score ()
@@ -515,7 +526,7 @@ void GTP_Process::rect_board_err_receiver (const QString &)
 void GTP_Process::receive_eval (const QString &output)
 {
 	if (output.length () >= 10 && output.left (10) == "info move ")
-		m_controller->gtp_eval (output, m_analyze_kata);
+		m_controller->gtp_eval (this, output, m_analyze_kata);
 }
 
 void GTP_Process::send_request (const QString &s, t_receiver rcv, t_receiver err_rcv)
@@ -576,26 +587,38 @@ analyzer GTP_Eval_Controller::analyzer_state ()
 	return analyzer::running;
 }
 
+void GTP_Eval_Controller::set_analysis_state (go_game_ptr gr, game_state *st)
+{
+	if (m_eval_game != nullptr)
+		m_eval_game->release_game_state (m_eval_state);
+	const go_board &b = st->get_board ();
+	stone_color to_move = st->to_move ();
+	m_eval_game = gr;
+	m_eval_state = gr->create_game_state (b, to_move);
+}
+
+void GTP_Eval_Controller::setup_for_analysis (go_game_ptr gr, game_state *st, bool flip)
+{
+	initiate_switch ();
+
+	set_analysis_state (gr, st);
+
+	m_analyzer->setup_board (st, gr->info ().komi, flip);
+}
+
 void GTP_Eval_Controller::request_analysis (go_game_ptr gr, game_state *st, bool flip)
 {
 	if (analyzer_state () != analyzer::running)
 		return;
 
-	initiate_switch ();
+	setup_for_analysis (gr, st, flip);
 
-	const go_board &b = st->get_board ();
 	stone_color to_move = st->to_move ();
-	if (m_eval_game != nullptr)
-		m_eval_game->release_game_state (m_eval_state);
-	m_eval_game = gr;
-	m_eval_state = gr->create_game_state (b, to_move);
-
-	m_analyzer->setup_board (st, gr->info ().komi, flip);
-
 	if (flip)
 		to_move = flip_color (to_move);
 
 	m_last_request_flipped = flip;
+
 	m_analyzer->analyze (to_move, 100);
 }
 
@@ -658,7 +681,7 @@ bool GTP_Eval_Controller::pause_analyzer (bool on, go_game_ptr gr, game_state *s
 	return true;
 }
 
-void GTP_Eval_Controller::gtp_eval (const QString &s, bool kata_format)
+void GTP_Eval_Controller::gtp_eval (GTP_Process *p, const QString &s, bool kata_format)
 {
 	if (m_pause_updates || m_pause_eval || m_switch_pending)
 		return;
@@ -679,7 +702,7 @@ void GTP_Eval_Controller::gtp_eval (const QString &s, bool kata_format)
 
 	bool flip = m_last_request_flipped;
 
-	analyzer_id id = m_id;
+	analyzer_id id = m_id_map[p];
 	if (flip)
 		id.komi = -id.komi;
 
@@ -775,5 +798,5 @@ void GTP_Eval_Controller::gtp_eval (const QString &s, bool kata_format)
 	notice_analyzer_id (id, found_score);
 
 	if (!primary_move.isNull ())
-		eval_received (primary_move, primary_visits, found_score);
+		eval_received (id, primary_move, primary_visits, found_score);
 }

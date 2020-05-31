@@ -350,7 +350,7 @@ public slots:
 	void sliderChanged (int);
 };
 
-class MainWindow_GTP : public MainWindow, public GTP_Controller
+class MainWindow_GTP : public MainWindow, public GTP_Eval_Controller
 {
 	GTP_Process *m_gtp_w {};
 	GTP_Process *m_gtp_b {};
@@ -414,6 +414,7 @@ public:
 	virtual void gtp_exited (GTP_Process *p) override;
 	virtual void gtp_failure (GTP_Process *p, const QString &) override;
 	virtual void gtp_report_score (GTP_Process *p, const QString &) override;
+	virtual void eval_received (const analyzer_id &id, const QString &, int, bool) override;
 };
 
 extern std::list<MainWindow *> main_window_list;
