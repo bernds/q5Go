@@ -5,6 +5,8 @@
 #ifndef MAINWIN_H
 #define MAINWIN_H
 
+#include <list>
+
 #include "ui_clientwindow_gui.h"
 #include "miscdialogs.h"
 #include "setting.h"
@@ -20,17 +22,12 @@
 class GamesTable;
 class GameDialog;
 
-class sendBuf
+struct sendBuf
 {
-public:
-	sendBuf(QString text, bool echo=true) { txt = text; localecho = echo; }
-	~sendBuf() {}
-	QString get_txt() { return txt; }
-	bool get_localecho() { return localecho; }
 	QString txt;
-
-private:
 	bool localecho;
+
+	sendBuf (QString text, bool echo=true) { txt = text; localecho = echo; }
 };
 
 class ClientWindow : public QMainWindow, public Ui::ClientWindowGui
@@ -63,7 +60,7 @@ class ClientWindow : public QMainWindow, public Ui::ClientWindowGui
 	ChannelList channellist;
 	QList<Talk *> talklist;
 	QList<GameDialog *> matchlist;
-	QList<sendBuf *> sendBuffer;
+	std::list<sendBuf> m_send_buffer;
 
 	QLabel *statusUsers, *statusGames, *statusServer, *statusChannel;
 	QLabel *statusOnlineTime, *statusMessage;
@@ -123,6 +120,8 @@ class ClientWindow : public QMainWindow, public Ui::ClientWindowGui
 	void update_caption ();
 
 	void set_tn_ready ();
+	void try_send ();
+	void enqueue_command (const QString &, bool localecho = true);
 	int sendTextFromApp (const QString&, bool localecho=true);
 	void set_sessionparameter (QString, bool);
 	void send_nmatch_range_parameters ();

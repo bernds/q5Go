@@ -509,7 +509,7 @@ void ClientWindow::slot_connclosed()
 	toolConnect->setChecked(false);
 	toolConnect->setToolTip (tr("Connect with") + " " + cb_connect->currentText());
 
-	sendBuffer.clear ();
+	m_send_buffer.clear ();
 }
 
 // close application
@@ -601,7 +601,7 @@ void ClientWindow::sendTextToApp (const QString &txt)
 			QTimer::singleShot (200, this, &ClientWindow::set_tn_ready);
 			tn_wait_for_tn_ready = true;
 		}
-		sendTextFromApp (nullptr);
+
 	case WS:
 		// ready or white space -> return
 		return;
@@ -629,7 +629,7 @@ void ClientWindow::sendTextToApp (const QString &txt)
 		{
 			// enable sending
 			set_tn_ready ();
-		} while (sendTextFromApp (nullptr) != 0);
+		} while (!m_send_buffer.empty ());
 
 		// check if tables are sorted
 #if 0 && (QT_VERSION > 0x030006)
@@ -761,75 +761,40 @@ void ClientWindow::set_tn_ready()
 {
 	tn_ready = true;
 	tn_wait_for_tn_ready = false;
-	sendTextFromApp (nullptr);
+	try_send ();
 }
 
-// send text via telnet session; skipping empty string!
-int ClientWindow::sendTextFromApp(const QString &txt, bool localecho)
+void ClientWindow::try_send ()
 {
-	// implements a simple buffer
-	int valid = txt.length();
+	if (!tn_ready || m_send_buffer.empty ())
+		return;
 
-	// some statistics
-	if (valid)
-		bytesOut += valid + 2;
+	const sendBuf &s = m_send_buffer.front ();
 
-	if (m_online_status == Status::offline)
-	{
+	telnetConnection->sendTextFromApp (s.txt);
+	tn_ready = false;
+
+	// hold the line if cmd is sent; 'ayt' is autosend cmd
+	if (s.txt.indexOf("ayt") != -1)
+		resetCounter ();
+	if (s.localecho)
+		sendTextToApp (CONSOLECMDPREFIX + QString(" ") + s.txt);
+
+	m_send_buffer.pop_front ();
+}
+
+void ClientWindow::enqueue_command (const QString &cmd, bool localecho)
+{
+	if (m_online_status == Status::offline) {
 		// skip all commands while not telnet connection
-		sendTextToApp("Command skipped - no telnet connection: " + txt);
+		sendTextToApp ("Command skipped - no telnet connection: " + cmd);
 		// reset buffer
-		sendBuffer.clear();
-		return 0;
+		m_send_buffer.clear ();
+		return;
 	}
 
-	// check if telnet ready
-	if (tn_ready)
-	{
-		if (!sendBuffer.isEmpty ())
-		{
-			sendBuf *s = sendBuffer.takeFirst();
-
-			// send buffer cmd first; then put current cmd to buffer
-			telnetConnection->sendTextFromApp(s->get_txt());
-//qDebug("SENDBUFFER send: " + s->get_txt());
-
-			// hold the line if cmd is sent; 'ayt' is autosend cmd
-			if (s->get_txt().indexOf("ayt") != -1)
-				resetCounter();
-			if (s->get_localecho())
-				sendTextToApp(CONSOLECMDPREFIX + QString(" ") + s->get_txt());
-			tn_ready = false;
-
-			if (valid)
-			{
-				// append current command to send as soon as possible
-				sendBuffer.append(new sendBuf(txt, localecho));
-//qDebug("SENDBUFFER added: " + txt);
-			}
-			delete s;
-		}
-		else if (valid)
-		{
-			// buffer empty -> send direct
-			telnetConnection->sendTextFromApp(txt);
-
-			if (!txt.contains("ayt"))
-				resetCounter();
-			if (localecho)
-				sendTextToApp(CONSOLECMDPREFIX + QString(" ") + txt);
-			tn_ready = false;
-
-//qDebug("SENDBUFFER send direct: " + txt);
-		}
-	}
-	else if (valid)
-	{
-//qDebug("SENDBUFFER added: " + txt);
-		sendBuffer.append(new sendBuf(txt, localecho));
-	}
-
-	return sendBuffer.count();
+	m_send_buffer.emplace_back (cmd, localecho);
+	try_send ();
 }
 
 // show command, send it, and tell parser
@@ -872,8 +837,7 @@ void ClientWindow::sendcommand (const QString &cmd, bool localecho)
 		colored_message (cmd, Qt::blue);
 	}
 
-	// send to Host
-	sendTextFromApp(cmd, localecho);
+	enqueue_command (cmd, localecho);
 }
 
 // return pressed in edit line -> command to send
