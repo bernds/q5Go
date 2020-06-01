@@ -1604,7 +1604,7 @@ void MainWindow::hide_panes_for_mode ()
 	if (is_online) {
 		treeDock->setVisible (false);
 		treeDock->toggleViewAction ()->setVisible (false);
-		if (m_gamemode != modeObserve) {
+		if (m_gamemode != modeObserve && m_gamemode != modeObserveMulti) {
 			graphDock->setVisible (false);
 			graphDock->toggleViewAction ()->setVisible (false);
 		}
@@ -2453,7 +2453,7 @@ void MainWindow::setGameMode (GameMode mode)
 		tab_tg->setParent (nullptr);
 
 	followButton->setVisible (mode == modeObserveGTP);
-	passButton->setVisible (mode != modeObserve && mode != modeObserveGTP && mode != modeBatch);
+	passButton->setVisible (!is_observe && mode != modeObserveGTP && mode != modeBatch);
 	doneButton->setVisible (mode == modeScore || mode == modeScoreRemote);
 	scoreButton->setVisible (mode == modeNormal || mode == modeEdit || mode == modeScore);
 	undoButton->setVisible (mode == modeScoreRemote || mode == modeMatch || mode == modeComputer || mode == modeTeach);
