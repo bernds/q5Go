@@ -6,31 +6,56 @@ q5go_METASOURCES = AUTO
 
 KDE_OPTIONS = qtonly
 
-DISTHEADERS_MOC = analyzedlg.h audio.h autodiagsdlg.h bitarray.h board.h clickableviews.h clockview.h dbdialog.h \
-	edit_analysis.h evalgraph.h figuredlg.h gamedialog.h gamestable.h gametree.h greeterwindow.h \
-	helpviewer.h igsconnection.h mainwindow.h clientwin.h miscdialogs.h msg_handler.h multisave.h \
-	normaltools.h scoretools.h parser.h playertable.h preferences.h qgo.h qgo_interface.h qgtp.h \
-	sizegraphicsview.h slideview.h sgfpreview.h tables.h telnet.h textview.h tutorial.h variantgamedlg.h
+DISTHEADERS_MOC = analyzedlg.h audio.h autodiagsdlg.h \
+	bitarray.h board.h \
+	clientwin.h clickableviews.h clockview.h \
+	dbdialog.h \
+	edit_analysis.h evalgraph.h \
+	figuredlg.h \
+	gamedialog.h gamestable.h gametree.h greeterwindow.h \
+	helpviewer.h igsconnection.h \
+	mainwindow.h miscdialogs.h msg_handler.h multisave.h \
+	normaltools.h \
+	parser.h playertable.h preferences.h \
+	qgo.h qgo_interface.h qgtp.h \
+	scoretools.h sizegraphicsview.h slideview.h sgfpreview.h \
+	tables.h telnet.h textview.h tutorial.h \
+	variantgamedlg.h
 
 DISTHEADERS_NOMOC = goboard.h config.h defines.h grid.h goboard.h gogame.h gs_globals.h \
 	imagehandler.h komispinbox.hm isc.h newaigamedlg.h setting.h sgf.h sgfparser.h \
 	svgbuilder.h timing.h ui_helpers.h
 
-DISTSOURCES = analyzedlg.cpp audio.cpp autodiagsdlg.cpp board.cpp clockview.cpp dbdialog.cpp edit_analysis.cpp \
-		evalgraph.cpp figuredlg.cpp goboard.cc gogame.cc gamedialog.cpp gamestable.cpp gametree.cpp \
-		grid.cpp greeterwindow.cpp helpviewer.cpp igsconnection.cpp imagehandler.cpp main.cpp \
-		clientwin.cpp mainwindow.cpp \
-		misc.cpp msg_handler.cpp multisave.cpp parser.cpp \
-		playertable.cpp preferences.cpp qgo.cpp qgo_interface.cpp qgtp.cpp \
-		newaigamedlg.cpp setting.cpp  sgfload.cc sgf2board.cc sgfpreview.cpp \
-		slideview.cpp svgbuilder.cpp tables.cpp telnet.cpp textview.cpp timing.cpp variantgamedlg.cpp
+DISTSOURCES = analyzedlg.cpp audio.cpp autodiagsdlg.cpp \
+	board.cpp \
+	clientwin.cpp clockview.cpp \
+	dbdialog.cpp \
+	edit_analysis.cpp evalgraph.cpp \
+	figuredlg.cpp \
+	gamedialog.cpp gamestable.cpp gametree.cpp goboard.cc gogame.cc \
+	grid.cpp greeterwindow.cpp \
+	helpviewer.cpp \
+	igsconnection.cpp imagehandler.cpp \
+	main.cpp mainwindow.cpp misc.cpp msg_handler.cpp multisave.cpp \
+	newaigamedlg.cpp \
+	parser.cpp playertable.cpp preferences.cpp \
+	qgo.cpp qgo_interface.cpp qgtp.cpp \
+	setting.cpp sgfload.cc sgf2board.cc sgfpreview.cpp slideview.cpp svgbuilder.cpp \
+	tables.cpp telnet.cpp textview.cpp timing.cpp \
+	variantgamedlg.cpp
 
-FORMS = analyze_gui.ui autodiags_gui.ui boardwindow_gui.ui clientwindow_gui.ui dbdialog_gui.ui edit_analysis_gui.ui \
-	enginedlg_gui.ui figuredlg_gui.ui gameinfo_gui.ui gui_dialog.ui greeterwindow_gui.ui multisave_gui.ui \
-	newgame_gui.ui newlocalgame_gui.ui newvariantgame_gui.ui \
-	normaltools_gui.ui nthmove_gui.ui preferences_gui.ui newaigamedlg_gui.ui scoretools_gui.ui \
-	slideshow_gui.ui slideview_gui.ui slideshow_gui.ui svgview_gui.ui sgfpreview.ui talk_gui.ui \
-	textedit_gui.ui textview_gui.ui tutorial.cpp twoaigamedlg_gui.ui
+FORMS = analyze_gui.ui autodiags_gui.ui \
+	boardwindow_gui.ui \
+	clientwindow_gui.ui dbdialog_gui.ui \
+	edit_analysis_gui.ui enginedlg_gui.ui \
+	figuredlg_gui.ui \
+	gameinfo_gui.ui gui_dialog.ui greeterwindow_gui.ui \
+	multisave_gui.ui \
+	newaigamedlg_gui.ui newgame_gui.ui newlocalgame_gui.ui newvariantgame_gui.ui \
+	normaltools_gui.ui nthmove_gui.ui \
+	preferences_gui.ui \
+	scoretools_gui.ui sgfpreview.ui slideshow_gui.ui slideview_gui.ui slideshow_gui.ui svgview_gui.ui \
+	talk_gui.ui textedit_gui.ui textview_gui.ui tutorial.cpp twoaigamedlg_gui.ui
 
 RESOURCES = q4go.qrc
 
