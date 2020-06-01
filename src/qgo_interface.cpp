@@ -1670,13 +1670,18 @@ void qGoBoard::move_played (game_state *st, int x, int y)
 
 void qGoBoard::game_result (const QString &rs, const QString &extended_rs)
 {
+	/* We can get here without having seen moves - observing a game just as it ends may cause the
+	   server to send a result without moves.  Be extra careful.  */
+	if (m_game.get () == nullptr) {
+		qWarning () << "Result before game was set up";
+		return;
+	}
+
 	m_game->set_result (rs.toStdString ());
 	send_kibitz (rs + "\n");
 	bool autosave = setting->readBoolEntry (gameMode == modeObserve ? "AUTOSAVE" : "AUTOSAVE_PLAYED");
 	bool autosave_to_path = setting->readBoolEntry ("AUTOSAVE_TO_PATH");
 
-	/* Note that win can be null - observing a game just as it ends may cause the
-	   server to send a result without moves (or maybe before, but that is still unclear).  */
 	if (autosave && win)
 	{
 		QString path = autosave_to_path ? setting->readEntry ("AUTOSAVE_PATH") : "";
