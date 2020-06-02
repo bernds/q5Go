@@ -97,6 +97,7 @@ public:
 		if (game_mode () == modeObserveMulti)
 			update_preview (game, to);
 	}
+	void resume_game (qGoBoard *connector, go_game_ptr old_game, go_game_ptr new_game, game_state *st);
 	void add_game (go_game_ptr game, qGoBoard *connector, game_state *st);
 	void end_game (go_game_ptr game, qGoBoard *connector, GameMode new_mode);
 	const qGoBoard *active_board ();
@@ -472,6 +473,28 @@ void MainWindow_IGS::remove_connector ()
 {
 	delete m_connector;
 	m_connector = nullptr;
+}
+
+void MainWindow_IGS::resume_game (qGoBoard *connector, go_game_ptr old_game, go_game_ptr new_game, game_state *st)
+{
+	if (game_mode () == modeObserveMulti) {
+		for (auto &p: m_previews)
+			if (p.game == old_game) {
+				p.game = new_game;
+				p.connector = connector;
+				p.active = true;
+				p.state = st;
+				choices_resized ();
+				if (m_game == old_game) {
+					init_game_record (m_game);
+					set_game_position (st);
+				}
+				return;
+			}
+	} else {
+		init_game_record (m_game);
+		set_game_position (st);
+	}
 }
 
 /*
@@ -1461,11 +1484,11 @@ void qGoBoard::game_startup ()
 	if (gameMode == modeObserve) {
 		qGoBoard *other = m_qgoif->find_adjourned_game (*this);
 		if (other) {
+			go_game_ptr other_game = other->m_game;
 			win = other->win;
 			other->win = nullptr;
 			other->disconnected (true);
-			win->init_game_record (m_game);
-			win->set_game_position (m_state);
+			win->resume_game (this, other_game, m_game, m_state);
 			resumed = true;
 		}
 	}
