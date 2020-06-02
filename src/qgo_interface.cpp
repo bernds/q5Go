@@ -1254,6 +1254,15 @@ void qGoIF::slot_undo(const QString &player, const QString &move)
 
 void qGoBoard::remote_undo (const QString &)
 {
+	if (win == nullptr || m_state->root_node_p ()) {
+		/* @@@ I've observed an undo without a window, and before moves were
+		   sent. Sadly, there was a debugger running, but no log file, so
+		   it's unclear what the server was trying to communicate.
+		   Log it and hope we see it again.  */
+		qWarning () << "unexpected undo";
+		return;
+	}
+
 	if (!m_scoring)
 	{
 		dec_mv_counter();
