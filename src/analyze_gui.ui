@@ -59,9 +59,9 @@
          <item>
           <widget class="QComboBox" name="komiComboBox">
            <property name="toolTip">
-            <string>Controls how to behave if the engine only supports a fixed value for komi.
-If the analyzed game has negative komi, the game can be analyzed with reversed colors for better results.
-It is also possible to analyze with both normal and flipped komi, for example for zero-komi games.</string>
+            <string>&lt;p&gt;Controls how to behave if the engine only supports a fixed value for komi.&lt;/p&gt;
+&lt;p&gt;If the analyzed game has negative komi, the game can be analyzed with reversed colors for better results.
+It is also possible to analyze with both normal and flipped komi, for example for zero-komi games.&lt;/p&gt;</string>
            </property>
            <property name="statusTip">
             <string/>
@@ -326,7 +326,7 @@ It is also possible to analyze with both normal and flipped komi, for example fo
          <item>
           <widget class="QPushButton" name="enqueueButton">
            <property name="toolTip">
-            <string>Add the selected file to the job queue, using the current analysis parameters</string>
+            <string>&lt;p&gt;Add the selected file to the job queue, using the current analysis parameters&lt;/p&gt;</string>
            </property>
            <property name="text">
             <string>Add to &amp;queue</string>

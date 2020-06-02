@@ -80,7 +80,7 @@
          </sizepolicy>
         </property>
         <property name="toolTip">
-         <string>Deletes all diagrams that look like they were created by for the selected analysis. Evaluations are kept for the game positions.</string>
+         <string>&lt;p&gt;Deletes all diagrams that look like they were created for the selected analysis. Evaluations are kept for the game positions.&lt;/p&gt;</string>
         </property>
         <property name="text">
          <string>Delete &amp;diagrams</string>
@@ -90,7 +90,7 @@
       <item>
        <widget class="QPushButton" name="delAllButton">
         <property name="toolTip">
-         <string>Delete all trace of the selected analysis.</string>
+         <string>&lt;p&gt;Delete all trace of the selected analysis.&lt;/p&gt;</string>
         </property>
         <property name="text">
          <string>Delete diagrams and evaluations</string>
@@ -113,7 +113,7 @@
    <item row="3" column="0">
     <widget class="QCheckBox" name="keepMultiCheckBox">
      <property name="toolTip">
-      <string>Diagrams created by q5go's batch analysis feature only have an evaluation from one analysis engine. However, it is possible to add more evaluations to them, for example with live analysis. If this checkbox is enabled, such diagrams will always be kept.</string>
+      <string>&lt;p&gt;Diagrams created by q5go's batch analysis feature only have an evaluation from one analysis engine. However, it is possible to add more evaluations to them, for example with live analysis. If this checkbox is enabled, such diagrams will always be kept.&lt;/p&gt;</string>
      </property>
      <property name="text">
       <string>Always retain diagrams with analysis from multiple sources</string>

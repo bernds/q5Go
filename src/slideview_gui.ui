@@ -205,7 +205,7 @@
       <item row="1" column="2">
        <widget class="QCheckBox" name="slideBoldCheckBox">
         <property name="toolTip">
-         <string>Determines how the first paragraph of the comments should be displayed.</string>
+         <string>&lt;p&gt;Determines how the first paragraph of the comments should be displayed.&lt;/p&gt;</string>
         </property>
         <property name="text">
          <string>Bold header</string>
@@ -235,7 +235,7 @@
       <item row="0" column="2">
        <widget class="QCheckBox" name="slideItalicCheckBox">
         <property name="toolTip">
-         <string>Determines how the first paragraph of the comments should be displayed.</string>
+         <string>&lt;p&gt;Determines how the first paragraph of the comments should be displayed.&lt;/p&gt;</string>
         </property>
         <property name="text">
          <string>Italic header</string>
@@ -268,8 +268,8 @@
         <item>
          <widget class="QSpinBox" name="fileNrSpinBox">
           <property name="toolTip">
-           <string>Counts the number of the slide, incremented on every save.
-This is substituted into the filename template when choosing the Save button.</string>
+           <string>&lt;p&gt;Counts the number of the slide, incremented on every save.
+This is substituted into the filename template when choosing the Save button.&lt;/p&gt;</string>
           </property>
           <property name="minimum">
            <number>1</number>
@@ -282,7 +282,7 @@ This is substituted into the filename template when choosing the Save button.</s
         <item>
          <widget class="QCheckBox" name="overwriteCheckBox">
           <property name="toolTip">
-           <string>If checked, the Save button overwrites files without asking</string>
+           <string>&lt;p&gt;If checked, the Save button overwrites files without asking.&lt;/p&gt;</string>
           </property>
           <property name="text">
            <string>&amp;Force overwrite</string>
@@ -307,16 +307,14 @@ This is substituted into the filename template when choosing the Save button.</s
       <item row="0" column="1">
        <widget class="QLineEdit" name="fileTemplateEdit">
         <property name="toolTip">
-         <string>File name template
-This should be a filename, with &quot;%n&quot; somewhere to indicate where the current number should be substituted.</string>
+         <string>&lt;p&gt;File name template&lt;/p&gt;&lt;p&gt;This should be a filename, with &quot;%n&quot; somewhere to indicate where the current number should be substituted.&lt;/p&gt;</string>
         </property>
        </widget>
       </item>
       <item row="0" column="2">
        <widget class="QToolButton" name="fileOpenButton">
         <property name="toolTip">
-         <string>Choose a file name template
-You will need to add '%n&quot; somewhere in the template to indicate the position where the current number should be substituted.</string>
+         <string>&lt;p&gt;Choose a file name template&lt;/p&gt;&lt;p&gt;You will need to add '%n&quot; somewhere in the template to indicate the position where the current number should be substituted.&lt;/p&gt;</string>
         </property>
         <property name="text">
          <string>...</string>

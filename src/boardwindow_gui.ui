@@ -3445,7 +3445,7 @@ After placing and/or undo release button for returning to starting point automat
     <string>Go to clic&amp;ked move</string>
    </property>
    <property name="toolTip">
-    <string>Click on an intersection and move to stone played there (if any)</string>
+    <string>&lt;p&gt;Click on an intersection and move to stone played there (if any)&lt;/p&gt;</string>
    </property>
   </action>
   <action name="setGameInfo">
@@ -3550,9 +3550,7 @@ After placing and/or undo release button for returning to starting point automat
     <string>Set &amp;letter mark</string>
    </property>
    <property name="toolTip">
-    <string>Clicking places a letter mark.
-Hold shift to add a freely editable text mark.
-</string>
+    <string>&lt;p&gt;Clicking places a letter mark.&lt;/p&gt;&lt;p&gt;Hold shift to add a freely editable text mark.&lt;/p&gt;</string>
    </property>
   </action>
   <action name="editNumber">
@@ -3597,8 +3595,8 @@ Hold shift to add a freely editable text mark.
     <string>Select &amp;rectangle</string>
    </property>
    <property name="toolTip">
-    <string>Choose a rectangle to export.
-In play or edit mode, click to begin choosing a rectangle to be used when exporting to ASCII or SVG.</string>
+    <string>&lt;p&gt;Choose a rectangle to export.&lt;/p&gt;
+&lt;p&gt;In play or edit mode, click to begin choosing a rectangle to be used when exporting to ASCII or SVG.&lt;/p&gt;</string>
    </property>
    <property name="shortcut">
     <string>R</string>
@@ -3628,8 +3626,7 @@ In play or edit mode, click to begin choosing a rectangle to be used when export
     <string>Start dia&amp;gram here</string>
    </property>
    <property name="toolTip">
-    <string>If selected, the current node starts a diagram.
-Enable diagram display in the View menu to view and edit diagrams.</string>
+    <string>&lt;p&gt;If selected, the current node starts a diagram. Enable diagram display in the View menu to view and edit diagrams.&lt;/p&gt;</string>
    </property>
    <property name="shortcut">
     <string>G</string>
@@ -3762,8 +3759,7 @@ Export current board to ASCII diagrams, for use in web forums.</string>
     <string>Export S&amp;VG...</string>
    </property>
    <property name="toolTip">
-    <string>Export SVG
-Export the current board to an SVG vector graphics file</string>
+    <string>&lt;p&gt;Export SVG&lt;/p&gt;&lt;p&gt;Export the current board to an SVG vector graphics file.&lt;/p&gt;</string>
    </property>
   </action>
   <action name="fileImportSgfClipB">
@@ -3771,8 +3767,7 @@ Export the current board to an SVG vector graphics file</string>
     <string>Import SGF &amp;from clipboard</string>
    </property>
    <property name="toolTip">
-    <string>Import SGF from clipboard
-Import a complete game in SGF format from the clipboard.</string>
+    <string>&lt;p&gt;Import SGF from clipboard&lt;/p&gt;&lt;p&gt;Import a complete game in SGF format from the clipboard.&lt;/p&gt;</string>
    </property>
   </action>
   <action name="fileExportSgfClipB">
@@ -3780,8 +3775,7 @@ Import a complete game in SGF format from the clipboard.</string>
     <string>E&amp;xport SGF &amp;to clipboard</string>
    </property>
    <property name="toolTip">
-    <string>Export SGF to clipboard
-Export a complete game in SGF format to the clipboard.</string>
+    <string>&lt;p&gt;Export SGF to clipboard&lt;/p&gt;&lt;p&gt;Export a complete game in SGF format to the clipboard.&lt;/p&gt;</string>
    </property>
   </action>
   <action name="fileExportPic">
@@ -3789,8 +3783,7 @@ Export a complete game in SGF format to the clipboard.</string>
     <string>Export &amp;image...</string>
    </property>
    <property name="toolTip">
-    <string>Export image
-Take a screen grab of the current board and export it to an image file.</string>
+    <string>&lt;p&gt;Export image&lt;/p&gt;&lt;p&gt;Take a screen grab of the current board and export it to an image file.&lt;/p&gt;</string>
    </property>
   </action>
   <action name="fileExportPicClipB">
@@ -3798,8 +3791,7 @@ Take a screen grab of the current board and export it to an image file.</string>
     <string>&amp;Export image to clipboard</string>
    </property>
    <property name="toolTip">
-    <string>Export image to clipboard
-Take a screen grab of the current board position and export it to the clipboard as an image.</string>
+    <string>&lt;p&gt;Export image to clipboard&lt;/p&gt;&lt;p&gt;Take a screen grab of the current board position and export it to the clipboard as an image.&lt;/p&gt;</string>
    </property>
   </action>
   <action name="viewStatusBar">
@@ -3979,8 +3971,7 @@ Take a screen grab of the current board position and export it to the clipboard 
     <string>&amp;Connect analysis engine</string>
    </property>
    <property name="toolTip">
-    <string>Connect analysis engine
-Try to find an engine configured as an analysis tool in the engine list and connect to it.</string>
+    <string>&lt;p&gt;Connect analysis engine&lt;/p&gt;&lt;p&gt;Try to find an engine configured as an analysis tool in the engine list and connect to it.&lt;/p&gt;</string>
    </property>
   </action>
   <action name="anDisconnect">
@@ -4020,8 +4011,7 @@ Try to find an engine configured as an analysis tool in the engine list and conn
     <string>Batch analysis...</string>
    </property>
    <property name="toolTip">
-    <string>Batch analysis
-Open the batch analysis dialog which allows you to add SGF files to a queue to be analysed by an engine.</string>
+    <string>&lt;p&gt;Batch analysis&lt;/p&gt;&lt;p&gt;Open the batch analysis dialog which allows you to add SGF files to a queue to be analysed by an engine.&lt;/p&gt;</string>
    </property>
   </action>
   <action name="editAutoDiags">
@@ -4081,7 +4071,7 @@ Open the batch analysis dialog which allows you to add SGF files to a queue to b
     <string>&amp;Visualize connections</string>
    </property>
    <property name="toolTip">
-    <string>Show thicker lines to visualize connections between stones. May be helpful for beginners.</string>
+    <string>&lt;p&gt;Show thicker lines to visualize connections between stones. May be helpful for beginners.&lt;/p&gt;</string>
    </property>
   </action>
   <action name="fileSaveVariations">
@@ -4089,7 +4079,7 @@ Open the batch analysis dialog which allows you to add SGF files to a queue to b
     <string>Export &amp;individual variations as...</string>
    </property>
    <property name="toolTip">
-    <string>Choose a pattern of file names and save every variation as its own file.</string>
+    <string>&lt;p&gt;Choose a pattern of file names and save every variation as its own file.&lt;/p&gt;</string>
    </property>
   </action>
   <action name="anEdit">
