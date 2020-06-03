@@ -226,13 +226,15 @@ void MainWindow_IGS::update_preview (go_game_ptr game, game_state *st)
 
 	int margin = 6;
 	int img_size = m_preview_w - margin;
-	int img_size_y = img_size + 2 * m.height ();
+	int font_height = m.lineSpacing () + 1;
+	int img_size_y = img_size + 2 * font_height;
 	auto &gmp = m_previews[i];
 	gmp.state = st;
 	m_previewer->reset_game (gmp.game);
 	m_previewer->resizeBoard (img_size, img_size);
 	m_previewer->set_show_coords (false);
 	m_previewer->set_displayed (gmp.state);
+	m_previewer->set_margin (0);
 	QPixmap board_pm = m_previewer->draw_position (0);
 	QPixmap pm (img_size, img_size_y);
 	if (gmp.active) {
@@ -242,20 +244,21 @@ void MainWindow_IGS::update_preview (go_game_ptr game, game_state *st)
 	}
 	QPainter p;
 	p.begin (&pm);
+	p.setFont (setting->fontStandard);
 	if (!gmp.active)
 		p.setOpacity (0.5);
-	p.drawImage (QPoint (margin / 2, margin / 2 + m.height ()), m_previewer->background_image (), m_previewer->wood_rect ());
-	p.drawPixmap (margin / 2, margin / 2 + m.height (), board_pm);
-	QRect r1 (margin / 2, margin / 2, m_preview_w - margin, m.height ());
+	p.drawImage (QPoint (0, font_height), m_previewer->background_image (), m_previewer->wood_rect ());
+	p.drawPixmap (0, font_height, board_pm);
+	QRect r1 (0, 0, m_preview_w - margin, font_height);
 	QPen p_w = QPen (Qt::white);
 	p.fillRect (r1, QBrush (Qt::black));
 	p.setPen (p_w);
-	p.drawText (r1, 0, QString::fromStdString (info.name_b + " " + info.rank_b));
-	QRect r2 (margin / 2, margin / 2 + img_size + m.height (), m_preview_w - margin, m.height ());
+	p.drawText (r1, Qt::AlignVCenter, QString::fromStdString (info.name_b + " " + info.rank_b));
+	QRect r2 (0, img_size + font_height, m_preview_w - margin, font_height);
 	p.fillRect (r2, QBrush (Qt::white));
 	QPen p_b = QPen (Qt::black);
 	p.setPen (p_b);
-	p.drawText (r2, 0, QString::fromStdString (info.name_w + " " + info.rank_w));
+	p.drawText (r2, Qt::AlignVCenter, QString::fromStdString (info.name_w + " " + info.rank_w));
 	p.end ();
 	delete gmp.pixmap;
 	auto connector = gmp.connector;
@@ -327,10 +330,11 @@ void MainWindow_IGS::choices_resized ()
 	int sb_size = qApp->style()->pixelMetric(QStyle::PM_ScrollBarExtent);
 
 	QFontMetrics m (setting->fontStandard);
+	int font_height = m.lineSpacing () + 1;
 	int min_size = 220;
 	int min_w = min_size;
 	int min_h = min_size;
-	min_h += 2 * m.height ();
+	min_h += 2 * font_height;
 
 	int smaller = w < h ? w : h;
 	int smaller_min = w < h ? min_w : min_h;
@@ -357,9 +361,9 @@ void MainWindow_IGS::choices_resized ()
 		int ps2 = larger / n_large;
 		// printf ("ps1 %d [%d %d] ps2 %d [%d %d] %% %d\n", ps1, smaller, n_small, ps2, larger, n_large, sb_size);
 		if (w < h)
-			ps2 -= 2 * m.height ();
+			ps2 -= 2 * font_height;
 		else
-			ps1 -= 2 * m.height ();
+			ps1 -= 2 * font_height;
 		int min_ps = ps1 < min_size ? ps1 : std::min (ps1, ps2);
 		if (min_ps >= min_size || (ps1 < min_size && (ps2 > ps1 || assume_sb))) {
 			/* Everything fits (or can't fit, if the window is too narrow).
@@ -370,9 +374,9 @@ void MainWindow_IGS::choices_resized ()
 				int ps1b = smaller / n_small_new;
 				int ps2b = larger / n_large_new;
 				if (w < h)
-					ps2b -= 2 * m.height ();
+					ps2b -= 2 * font_height;
 				else
-					ps1b -= 2 * m.height ();
+					ps1b -= 2 * font_height;
 				int t = std::min (ps1b, ps2b);
 				if (t < min_ps)
 					break;
@@ -380,7 +384,7 @@ void MainWindow_IGS::choices_resized ()
 				n_small++;
 			}
 			m_preview_w = min_ps;
-			m_preview_h = min_ps + 2 * m.height ();
+			m_preview_h = min_ps + 2 * font_height;
 			break;
 		} else {
 			/* Use scrollbars and use the maximum width of the smaller side.  */
@@ -390,7 +394,7 @@ void MainWindow_IGS::choices_resized ()
 			}
 			// ps1 = std::max (ps1, min_size);
 			m_preview_w = ps1;
-			m_preview_h = ps1 + 2 * m.height ();
+			m_preview_h = ps1 + 2 * font_height;
 			break;
 		}
 	}
