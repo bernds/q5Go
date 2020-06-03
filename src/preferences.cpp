@@ -579,7 +579,7 @@ void PreferencesDialog::init_from_settings ()
 	ui->saySoundCheckBox->setChecked (setting->readBoolEntry("SOUND_SAY"));
 	ui->enterSoundCheckBox->setChecked (setting->readBoolEntry("SOUND_ENTER"));
 	ui->leaveSoundCheckBox->setChecked (setting->readBoolEntry("SOUND_LEAVE"));
-	ui->disConnectSoundCheckBox->setChecked (setting->readBoolEntry("SOUND_DISCONNECT"));
+	ui->disconnectSoundCheckBox->setChecked (setting->readBoolEntry("SOUND_DISCONNECT"));
 	ui->connectSoundCheckBox->setChecked (setting->readBoolEntry("SOUND_CONNECT"));
 
 	ui->soundMatchCheckBox->setChecked (setting->readBoolEntry("SOUND_MATCH_BOARD"));
@@ -851,7 +851,7 @@ void PreferencesDialog::slot_apply()
 	setting->writeBoolEntry ("SOUND_SAY", ui->saySoundCheckBox->isChecked ());
 	setting->writeBoolEntry ("SOUND_ENTER", ui->enterSoundCheckBox->isChecked ());
 	setting->writeBoolEntry ("SOUND_LEAVE", ui->leaveSoundCheckBox->isChecked ());
-	setting->writeBoolEntry ("SOUND_DISCONNECT", ui->disConnectSoundCheckBox->isChecked ());
+	setting->writeBoolEntry ("SOUND_DISCONNECT", ui->disconnectSoundCheckBox->isChecked ());
 	setting->writeBoolEntry ("SOUND_CONNECT", ui->connectSoundCheckBox->isChecked ());
 
 	setting->writeBoolEntry ("SOUND_MATCH_BOARD", ui->soundMatchCheckBox->isChecked ());
@@ -1222,8 +1222,8 @@ void PreferencesDialog::on_soundButtonGroup_buttonClicked (QAbstractButton *cb)
 		qgo->playGameEndSound (true);
 	else if (cb == ui->leaveSoundCheckBox)
 		qgo->playLeaveSound (true);
-	else if (cb == ui->disConnectSoundCheckBox)
-		qgo->playDisConnectSound (true);
+	else if (cb == ui->disconnectSoundCheckBox)
+		qgo->playDisconnectSound (true);
 	else if (cb == ui->connectSoundCheckBox)
 		qgo->playConnectSound (true);
 }

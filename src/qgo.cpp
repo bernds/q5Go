@@ -175,7 +175,7 @@ void qGo::playConnectSound (bool force)
 		QSound::play (":/sounds/connect.wav");
 }
 
-void qGo::playDisConnectSound (bool force)
+void qGo::playDisconnectSound (bool force)
 {
 	if (force || setting->readBoolEntry ("SOUND_DISCONNECT"))
 		QSound::play (":/sounds/connect.wav");

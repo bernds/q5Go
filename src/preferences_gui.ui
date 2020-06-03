@@ -329,7 +329,7 @@ Enable this box when you want to listen a clicking sound when playing a stone on
            </widget>
           </item>
           <item row="4" column="1">
-           <widget class="QCheckBox" name="disConnectSoundCheckBox">
+           <widget class="QCheckBox" name="disconnectSoundCheckBox">
             <property name="toolTip">
              <string>Play sound when disconnected from server</string>
             </property>
@@ -4878,7 +4878,7 @@ If checked then when a game you played completes, it is automatically saved in t
   <tabstop>enterSoundCheckBox</tabstop>
   <tabstop>leaveSoundCheckBox</tabstop>
   <tabstop>connectSoundCheckBox</tabstop>
-  <tabstop>disConnectSoundCheckBox</tabstop>
+  <tabstop>disconnectSoundCheckBox</tabstop>
   <tabstop>soundNormalCheckBox</tabstop>
   <tabstop>soundObserveCheckBox</tabstop>
   <tabstop>soundMatchCheckBox</tabstop>

@@ -29,7 +29,7 @@ public:
 	void playEnterSound (bool = false);
 	void playStoneSound (bool = false);
 	void playLeaveSound (bool = false);
-	void playDisConnectSound (bool = false);
+	void playDisconnectSound (bool = false);
 	void playConnectSound (bool = false);
 
 public slots:
