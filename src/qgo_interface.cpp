@@ -104,6 +104,13 @@ public:
 
 public slots:
 	void choices_resized ();
+	virtual void slotFileClose (bool) override
+	{
+		if (game_mode () == modeObserveMulti)
+			unobserve_game (m_game);
+		else
+			MainWindow::slotFileClose (false);
+	}
 };
 
 static MainWindow_IGS *multi_observer_win;
@@ -154,7 +161,8 @@ MainWindow_IGS::MainWindow_IGS (QWidget *parent, std::shared_ptr<game_record> gr
 		m_preview_scene = new QGraphicsScene (0, 0, w, h, gameChoiceView);
 		gameChoiceView->setScene (m_preview_scene);
 		connect (gameChoiceView, &SizeGraphicsView::resized, this, &MainWindow_IGS::choices_resized);
-
+		connect (unobserveButton, &QPushButton::clicked, this, &MainWindow_IGS::slotFileClose);
+		unobserveButton->show ();
 		add_game (gr, brd, gr->get_root ());
 	}
 }
@@ -461,7 +469,7 @@ void MainWindow_IGS::board_menu (QGraphicsSceneContextMenuEvent *e,
 				 go_game_ptr gr, qGoBoard *connector, game_state *st)
 {
 	QMenu menu;
-	menu.addAction (tr ("Stop observing this game"), [=] () { unobserve_game (gr); });
+	menu.addAction (tr ("Stop observing this game"), [this, gr] () { unobserve_game (gr); });
 	menu.exec (e->screenPos ());
 }
 

@@ -2295,6 +2295,13 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
                    </property>
                   </widget>
                  </item>
+                 <item>
+                  <widget class="QPushButton" name="unobserveButton">
+                   <property name="text">
+                    <string>Close game</string>
+                   </property>
+                  </widget>
+                 </item>
                 </layout>
                </widget>
               </widget>
@@ -4137,4 +4144,5 @@ Export current board to ASCII diagrams, for use in web forums.</string>
  <resources>
   <include location="q4go.qrc"/>
  </resources>
+ <connections/>
 </ui>

@@ -298,7 +298,7 @@ public slots:
 	void slotFileOpen(bool);
 	void slotFileOpenDB(bool);
 	bool slotFileSave(bool = false);
-	void slotFileClose(bool);
+	virtual void slotFileClose(bool);
 	bool slotFileSaveAs(bool);
 	void slotFileSaveVariations(bool);
 	void slotFileExportASCII(bool);

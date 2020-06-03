@@ -475,6 +475,7 @@ MainWindow::MainWindow (QWidget* parent, go_game_ptr gr, const QString opener_sc
 	normalTools->show();
 	scoreTools->hide();
 	againButton->hide ();
+	unobserveButton->hide ();
 
 	showSlider = setting->readBoolEntry ("SLIDER");
 	sliderWidget->setVisible (showSlider);
