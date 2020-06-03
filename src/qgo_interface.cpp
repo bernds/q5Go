@@ -240,7 +240,7 @@ void MainWindow_IGS::update_preview (go_game_ptr game, game_state *st)
 	if (gmp.active) {
 		pm.fill (Qt::transparent);
 	} else {
-		pm.fill (QColor (128, 128, 128, 127));
+		pm.fill (QColor (128, 128, 128, 255));
 	}
 	QPainter p;
 	p.begin (&pm);
@@ -249,6 +249,7 @@ void MainWindow_IGS::update_preview (go_game_ptr game, game_state *st)
 		p.setOpacity (0.5);
 	p.drawImage (QPoint (0, font_height), m_previewer->background_image (), m_previewer->wood_rect ());
 	p.drawPixmap (0, font_height, board_pm);
+	p.setOpacity (1);
 	QRect r1 (0, 0, m_preview_w - margin, font_height);
 	QPen p_w = QPen (Qt::white);
 	p.fillRect (r1, QBrush (Qt::black));
@@ -268,16 +269,7 @@ void MainWindow_IGS::update_preview (go_game_ptr game, game_state *st)
 			board_menu (e, game, connector, st);
 			return true;
 		};
-	if (!gmp.active) {
-		QPixmap tmp_pm (img_size, img_size_y);
-		tmp_pm.fill (Qt::transparent);
-		QPainter p1;
-		p1.begin (&tmp_pm);
-		p1.drawPixmap (0, 0, pm);
-		p1.end ();
-		gmp.pixmap = new ClickablePixmap (tmp_pm, callback, menu_callback);
-	} else
-		gmp.pixmap = new ClickablePixmap (pm, callback, menu_callback);
+	gmp.pixmap = new ClickablePixmap (pm, callback, menu_callback);
 	m_preview_scene->addItem (gmp.pixmap);
 	int szdiff_x = m_preview_w - img_size;
 	int szdiff_y = m_preview_h - img_size_y;
