@@ -2411,7 +2411,6 @@ void MainWindow::setGameMode (GameMode mode)
 
 	fileNew->setEnabled (mode == modeNormal || mode == modeEdit);
 	fileNewVariant->setEnabled (mode == modeNormal || mode == modeEdit);
-	fileNewBoard->setEnabled (mode == modeNormal || mode == modeEdit);
 	fileOpen->setEnabled (mode == modeNormal || mode == modeEdit);
 	fileOpenDB->setEnabled (mode == modeNormal || mode == modeEdit);
 
