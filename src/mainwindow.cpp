@@ -1157,7 +1157,20 @@ void MainWindow::updateCaption ()
 			s += " " + rank_b;
 	}
 	s += "   " + QString (PACKAGE " " VERSION);
-	setWindowTitle (s);
+
+	QString override;
+	/* Override with fixed titles for streaming.  */
+	if (m_gamemode == modeMatch || m_gamemode == modeTeach)
+		override = setting->readEntry ("WTITLE_MATCH");
+	else if (m_gamemode == modeComputer || m_gamemode == modeObserveGTP)
+		override = setting->readEntry ("WTITLE_ENGINE");
+	else if (m_gamemode == modeObserve || m_gamemode == modeObserveMulti)
+		override = setting->readEntry ("WTITLE_OBSERVE");
+
+	if (!override.isEmpty ())
+		setWindowTitle (override);
+	else
+		setWindowTitle (s);
 
 	rank_w.truncate (5);
 	int rwlen = rank_w.length ();
@@ -1729,6 +1742,8 @@ void MainWindow::update_settings ()
 
 	if (setting->engines_changed)
 		populate_engines_menu ();
+
+	updateCaption ();
 }
 
 void MainWindow::slotSetGameInfo (bool)

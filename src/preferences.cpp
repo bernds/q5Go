@@ -661,6 +661,11 @@ void PreferencesDialog::init_from_settings ()
 	ui->slideWBCheckBox->setChecked (setting->readBoolEntry ("SLIDE_WB"));
 	ui->slideCoordsCheckBox->setChecked (setting->readBoolEntry ("SLIDE_COORDS"));
 
+	ui->titleMatchEdit->setText (setting->readEntry ("WTITLE_MATCH"));
+	ui->titleObserveEdit->setText (setting->readEntry ("WTITLE_OBSERVE"));
+	ui->titleClientEdit->setText (setting->readEntry ("WTITLE_CLIENT"));
+	ui->titleEngineEdit->setText (setting->readEntry ("WTITLE_ENGINE"));
+
 	ui->fontStandardButton->setText (setting->fontToString(setting->fontStandard));
 	ui->fontMarksButton->setText (setting->fontToString(setting->fontMarks));
 	ui->fontCommentsButton->setText (setting->fontToString(setting->fontComments));
@@ -929,6 +934,11 @@ void PreferencesDialog::slot_apply()
 	setting->writeBoolEntry ("BOARD_DIAGCLEAR", ui->diagClearCheckBox->isChecked ());
 	setting->writeBoolEntry ("GAMETREE_DIAGHIDE", ui->diagHideCheckBox->isChecked ());
 
+	setting->writeEntry ("WTITLE_MATCH", ui->titleMatchEdit->text ());
+	setting->writeEntry ("WTITLE_OBSERVE", ui->titleObserveEdit->text ());
+	setting->writeEntry ("WTITLE_CLIENT", ui->titleClientEdit->text ());
+	setting->writeEntry ("WTITLE_ENGINE", ui->titleEngineEdit->text ());
+
 	setting->writeIntEntry ("TOROID_DUPS", ui->toroidDupsSpin->text ().toInt ());
 
 	if (m_dbpaths_changed) {
@@ -948,12 +958,12 @@ void PreferencesDialog::slot_apply()
 	}
 	setting->extract_frequent_settings ();
 
-	client_window->preferencesAccept();
+	client_window->accept_preferences ();
 }
 
-void PreferencesDialog::startHelpMode()
+void PreferencesDialog::startHelpMode ()
 {
-	QWhatsThis::enterWhatsThisMode();
+	QWhatsThis::enterWhatsThisMode ();
 }
 
 void PreferencesDialog::selectFont (QPushButton *button, QFont &font)

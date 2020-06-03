@@ -159,6 +159,13 @@ intersections removed.
 The screenshot shows the variant game dialog and a (different) position
 with both axes set to be toroidal.
 
+### Streaming features
+
+It is possible to override window titles in the preferences, which should
+make it easier to capture them with a tool like OBS. When observing multiple
+games online, there is the option of showing all the games in a single
+window with previews in a selection pane.
+
 ## Compiling
 
 On Linux, make a build subdirectory, enter it, and run

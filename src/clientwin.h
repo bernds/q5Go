@@ -164,7 +164,7 @@ public:
 	QPoint getPrefPos() { return pref_p; }
 	QSize getPrefSize() { return pref_s; }
 
-	bool preferencesAccept();
+	void accept_preferences ();
 	void dlgSetPreferences(int tab = 0);
 
 	Engine *analysis_engine (int boardsize);

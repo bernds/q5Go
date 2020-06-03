@@ -426,6 +426,11 @@ void ClientWindow::enable_connection_buttons (bool on)
 
 void ClientWindow::update_caption ()
 {
+	QString override = setting->readEntry ("WTITLE_CLIENT");
+	if (!override.isEmpty ()) {
+		setWindowTitle (override);
+		return;
+	}
 	Status st = m_online_status;
 	if (st == Status::offline)
 		setWindowTitle (m_standard_caption);
@@ -1972,7 +1977,7 @@ void ClientWindow::dlgSetPreferences(int tab)
 	}
 }
 
-bool ClientWindow::preferencesAccept ()
+void ClientWindow::accept_preferences ()
 {
 	if (setting->engines_changed) {
 		analyze_dialog->update_engines ();
@@ -1982,6 +1987,7 @@ bool ClientWindow::preferencesAccept ()
 	qgoif->update_settings ();
 	qgo->updateAllBoardSettings ();
 	update_font ();
+	update_caption ();
 
 	if (db_dialog != nullptr)
 		db_dialog->update_prefs ();
@@ -1996,6 +2002,4 @@ bool ClientWindow::preferencesAccept ()
 		setting->hosts_changed = false;
 	}
 	toolObserveMode->setChecked (setting->readBoolEntry ("OBSERVE_SINGLE"));
-
-	return true;//result;
 }
