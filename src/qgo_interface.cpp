@@ -444,7 +444,10 @@ void MainWindow_IGS::unobserve_game (go_game_ptr gr)
 	}
 	choices_resized ();
 	if (m_previews.empty ()) {
-		QMetaObject::invokeMethod (this, &QWidget::close, Qt::QueuedConnection);
+		/* This is supposed to use deleteLater, and should therefore
+		   be safe.  We used invokeMethod for a while, but not
+		   everyone has a recent enough Qt yet.  */
+		close ();
 	}
 }
 
