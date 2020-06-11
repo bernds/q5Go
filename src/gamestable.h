@@ -9,18 +9,14 @@
 #include <QDialog>
 #include <QTreeWidget>
 
-class Game
+struct Game
 {
-public:
-	Game() {};
-	~Game() {};
 	// #> [##] white name [ rk ] black name [ rk ] (Move size H Komi BY FR) (###) 
 	QString nr;
 	QString	wname;
 	QString	wrank;
 	QString	bname;
 	QString	brank;
-//	QString status;
 	QString	mv;
 	QString Sz;
 	QString H;

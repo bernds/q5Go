@@ -39,11 +39,8 @@ public slots:
 	void signal_doubleClicked (QTreeWidgetItem *);
 };
 
-class Player
+struct Player
 {
-public:
-	Player() {};
-	~Player() {};
 	// #> Info Name Idle Rank | Info Name Idle Rank 
 	QString info;
 	QString name;
@@ -61,16 +58,16 @@ public:
 	QString mark;
 	QString sort_rk;
 
-	int     playing;
-	int     observing;
-	bool 	nmatch;
+	int playing;
+	int observing;
+	bool nmatch;
 	// BWN 0-9 19-19 60-60 600-600 25-25 0-0 0-0 0-0
 	bool nmatch_black, nmatch_white, nmatch_nigiri;
-	int 	nmatch_handicapMin, nmatch_handicapMax, 
-		nmatch_timeMin, nmatch_timeMax, 
-		nmatch_BYMin, nmatch_BYMax, 
-		nmatch_stonesMin, nmatch_stonesMax,
-		nmatch_KoryoMin, nmatch_KoryoMax;
+	int nmatch_handicapMin, nmatch_handicapMax;
+	int nmatch_timeMin, nmatch_timeMax;
+	int nmatch_BYMin, nmatch_BYMax;
+	int nmatch_stonesMin, nmatch_stonesMax;
+	int nmatch_KoryoMin, nmatch_KoryoMax;
 
 	bool up_to_date;
 	bool has_nmatch_settings () { return nmatch_settings != "No match conditions"; }
