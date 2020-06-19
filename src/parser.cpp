@@ -1410,6 +1410,9 @@ InfoType Parser::cmd21(const QString &line)
 			aGame->mv = line.section(' ', 7, 7).remove('}');
 			aGame->Sz = "@";
 			aGame->H = QString ();
+			aGame->K = QString ();
+			aGame->By = QString ();
+			aGame->ob = "0";
 
 			client_window->server_add_game (*aGame);
 			m_qgoif->resume_observe (aGame->nr, aGame->wname, aGame->bname);
@@ -1476,6 +1479,9 @@ InfoType Parser::cmd21(const QString &line)
 		aGame->mv = "-";
 		aGame->Sz = "-";
 		aGame->H = QString ();
+		aGame->K = QString ();
+		aGame->By = QString ();
+		aGame->ob = "0";
 
 		if (gsName == WING && aGame->wname == aGame->bname) {
 			// WING doesn't send 'create match' msg in case of teaching game
