@@ -46,6 +46,9 @@ class MainWindow_IGS : public MainWindow
 	std::vector<preview> m_previews;
 	FigureView *m_previewer {};
 
+	QAction *m_ctab_action {};
+	QAction *m_sctab_action {};
+
 	void board_clicked (go_game_ptr game, qGoBoard *connector, game_state *st);
 	void board_menu (QGraphicsSceneContextMenuEvent *e, go_game_ptr game, qGoBoard *connector, game_state *st);
 	void unobserve_game (go_game_ptr);
@@ -171,6 +174,34 @@ MainWindow_IGS::MainWindow_IGS (QWidget *parent, std::shared_ptr<game_record> gr
 		connect (unobserveButton, &QPushButton::clicked, this, &MainWindow_IGS::slotFileClose);
 		unobserveButton->show ();
 		add_game (gr, brd, gr->get_root ());
+
+		m_ctab_action = new QAction (this);
+		m_sctab_action = new QAction (this);
+		m_ctab_action->setShortcut (Qt::CTRL + Qt::Key_Tab);
+		m_sctab_action->setShortcut (Qt::CTRL + Qt::SHIFT + Qt::Key_Tab);
+		addAction (m_ctab_action);
+		addAction (m_sctab_action);
+		connect (m_ctab_action, &QAction::triggered, [this] (bool)
+			 {
+				 size_t len = m_previews.size ();
+				 size_t i;
+				 for (i = 0; i < len; i++)
+					 if (m_previews[i].game == m_game)
+						 break;
+				 i = (i + 1) % len;
+				 board_clicked (m_previews[i].game, m_previews[i].connector, m_previews[i].state);
+			 });
+		connect (m_sctab_action, &QAction::triggered, [this] (bool)
+			 {
+				 size_t len = m_previews.size ();
+				 size_t i;
+				 for (i = 0; i < len; i++)
+					 if (m_previews[i].game == m_game)
+						 break;
+				 i = (i + len - 1) % len;
+				 board_clicked (m_previews[i].game, m_previews[i].connector, m_previews[i].state);
+			 });
+
 	}
 }
 
@@ -181,6 +212,8 @@ MainWindow_IGS::~MainWindow_IGS ()
 		m_previews.clear ();
 	}
 	delete m_previewer;
+	delete m_ctab_action;
+	delete m_sctab_action;
 }
 
 void MainWindow_IGS::closeEvent (QCloseEvent *e)
