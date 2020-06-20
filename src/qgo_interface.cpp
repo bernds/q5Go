@@ -100,7 +100,7 @@ public:
 	void update_game_tree (go_game_ptr game)
 	{
 		if (game == m_game)
-			update_game_tree ();
+			MainWindow::update_game_tree ();
 	}
 	void resume_game (qGoBoard *connector, go_game_ptr old_game, go_game_ptr new_game, game_state *st);
 	void add_game (go_game_ptr game, qGoBoard *connector, game_state *st);
