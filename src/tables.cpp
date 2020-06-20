@@ -9,6 +9,198 @@
 #include "gs_globals.h"
 #include <math.h>
 
+template<class T>
+void table_model<T>::reset ()
+{
+	beginResetModel ();
+	m_entries.clear ();
+	endResetModel ();
+}
+
+template<class T>
+QVariant table_model<T>::data (const QModelIndex &index, int role) const
+{
+	int row = index.row ();
+	int col = index.column ();
+
+	if (row < 0)
+		return QVariant ();
+
+	size_t r = row;
+	if (r >= m_entries.size ())
+		return QVariant ();
+
+
+	const T &e = m_entries[r];
+	if (role == Qt::ForegroundRole)
+		return e.foreground ();
+	if (role == Qt::TextAlignmentRole)
+		return T::justify_right (col) ? Qt::AlignRight : Qt::AlignLeft;
+	if (role != Qt::DisplayRole)
+		return QVariant ();
+	return e.column (col);
+}
+
+template<class T>
+const T *table_model<T>::find (const QModelIndex &index) const
+{
+	int row = index.row ();
+	if (row < 0)
+		return nullptr;
+
+	size_t r = row;
+	if (r >= m_entries.size ())
+		return nullptr;
+	return &m_entries[r];
+}
+
+template<class T>
+bool table_model<T>::removeRows (int row, int count, const QModelIndex &parent)
+{
+	if (row < 0 || count < 1 || (size_t) (row + count) > m_entries.size ())
+		return false;
+	beginRemoveRows (parent, row, row + count - 1);
+	m_entries.erase (m_entries.begin () + row, m_entries.begin () + (row + count));
+	endRemoveRows ();
+	return true;
+}
+
+
+template<class T>
+int table_model<T>::sort_compare (const T &a, const T &b)
+{
+	int r = a.compare (b, m_column);
+	if (r == 0)
+		r = a.unique_column ().compare (b.unique_column ());
+	if (m_order == Qt::AscendingOrder)
+		return r;
+	else
+		return -r;
+}
+
+template<class T>
+void table_model<T>::sort (int column, Qt::SortOrder o)
+{
+	m_column = column;
+	m_order = o;
+	beginResetModel ();
+	std::sort (std::begin (m_entries), std::end (m_entries),
+		   [this] (const T &a, const T &b) { return sort_compare (a, b) < 0; });
+	endResetModel ();
+}
+
+template<class T>
+void table_model<T>::update_from_map (const std::unordered_map<QString, T> &m)
+{
+	std::vector<T> new_entries;
+	for (auto &it: m)
+		if (!m_filter (it.second))
+			new_entries.push_back (it.second);
+	std::sort (std::begin (new_entries), std::end (new_entries),
+		   [this] (const T &a, const T &b) { return sort_compare (a, b) < 0; });
+
+	auto insert_at = [this, &new_entries] (int orig_oldp, int orig_newp, int newp)
+		{
+			// qDebug () << QString ("inserting %1 rows at %2\n").arg (newp - orig_newp).arg (orig_oldp);
+			auto nbeg = std::begin (new_entries);
+			auto obeg = std::begin (m_entries);
+			beginInsertRows (QModelIndex (), orig_oldp, orig_oldp + newp - orig_newp - 1);
+			m_entries.insert (obeg + orig_oldp, nbeg + orig_newp, nbeg + newp);
+			endInsertRows ();
+		};
+
+	size_t oldp = 0;
+	size_t newp = 0;
+	size_t oldn = m_entries.size ();
+	size_t newn = new_entries.size ();
+
+	while (oldp < oldn && newp < newn) {
+		const T &a = m_entries[oldp];
+		const T &b = new_entries[newp];
+		int c = sort_compare (a, b);
+		int orig_oldp = oldp;
+		int orig_newp = newp;
+		if (c == 0 && a == b) {
+			newp++;
+			oldp++;
+			continue;
+		}
+		if (c <= 0)
+			oldp++;
+		if (c >= 0)
+			newp++;
+		while (oldp < oldn && newp < newn) {
+			const T &a1 = m_entries[oldp];
+			const T &b1 = new_entries[newp];
+			if (sort_compare (a1, b1) != c || (c == 0 && a1 == b1))
+				break;
+			if (c <= 0)
+				oldp++;
+			if (c >= 0)
+				newp++;
+		}
+		if (c < 0) {
+			// qDebug () << QString ("removing %1 rows at %2\n").arg (oldp - orig_oldp).arg (oldp);
+			removeRows (orig_oldp, oldp - orig_oldp);
+			oldn -= oldp - orig_oldp;
+			oldp = orig_oldp;
+		} else if (c > 0) {
+			insert_at (orig_oldp, orig_newp, newp);
+			oldp += newp - orig_newp;
+			oldn += newp - orig_newp;
+		} else {
+			// qDebug () << QString ("data changed for %1 items at %2\n").arg (oldp - orig_oldp).arg (orig_oldp);
+			while (orig_oldp < oldp)
+				m_entries[orig_oldp++] = new_entries[orig_newp++];
+			emit dataChanged (index (orig_oldp, 0), index (oldp - 1, 0));
+		}
+	}
+	if (newp < newn) {
+		// qDebug () << "insert at end\n";
+		insert_at (oldp, newp, newn);
+	} else if (oldp < oldn) {
+		// qDebug () << QString ("removing %1 rows at end\n").arg (oldn - oldp);
+		removeRows (oldp, oldn - oldp);
+	}
+}
+
+template<class T>
+QModelIndex table_model<T>::index (int row, int col, const QModelIndex &) const
+{
+	return createIndex (row, col);
+}
+
+template<class T>
+QModelIndex table_model<T>::parent (const QModelIndex &) const
+{
+	return QModelIndex ();
+}
+
+template<class T>
+int table_model<T>::rowCount (const QModelIndex &) const
+{
+	return m_entries.size ();
+}
+
+template<class T>
+int table_model<T>::columnCount (const QModelIndex &) const
+{
+	return T::column_count ();
+}
+
+template<class T>
+QVariant table_model<T>::headerData (int section, Qt::Orientation ot, int role) const
+{
+	if (role == Qt::TextAlignmentRole) {
+		return Qt::AlignLeft;
+	}
+
+	if (role != Qt::DisplayRole || ot != Qt::Horizontal)
+		return QVariant ();
+	return T::header_column (section);
+}
+
+
 void ClientWindow::update_player_stats ()
 {
 	statusUsers->setText (" P: " + QString::number (num_players) + " / " + QString::number (num_watchedplayers) + " ");
@@ -27,48 +219,28 @@ void ClientWindow::update_observed_games (int count)
 
 void ClientWindow::prepare_game_list ()
 {
-	QTreeWidgetItemIterator lvii (ListView_games);
-	for (GamesTableItem *lvi; (lvi = static_cast<GamesTableItem*>(*lvii));) {
-		lvii++;
-		lvi->clear_up_to_date ();
-	}
+	num_games = 0;
+	m_games_table.clear ();
 }
 
 void ClientWindow::prepare_player_list ()
 {
-	QTreeWidgetItemIterator lvii (ListView_players);
-	for (PlayerTableItem *lvi; (lvi = static_cast<PlayerTableItem*>(*lvii));) {
-		lvii++;
-		lvi->clear_up_to_date ();
-	}
+	num_players = 0;
+	m_player_table.clear ();
 }
 
 void ClientWindow::finish_game_list ()
 {
-	Update_Locker l (ListView_games);
-	QTreeWidgetItemIterator lvii (ListView_games);
-	for (GamesTableItem *lvi; (lvi = static_cast<GamesTableItem*>(*lvii));) {
-		lvii++;
-		if (!lvi->is_up_to_date ()) {
-			num_games--;
-			delete lvi;
-		}
-	}
+	m_games_model.update_from_map (m_games_table);
 	update_game_stats ();
+	ListView_games->resize_columns ();
 }
 
 void ClientWindow::finish_player_list ()
 {
-	Update_Locker l (ListView_players);
-	QTreeWidgetItemIterator lvii (ListView_players);
-	for (PlayerTableItem *lvi; (lvi = static_cast<PlayerTableItem*>(*lvii));) {
-		lvii++;
-		if (!lvi->is_up_to_date ()) {
-			num_players--;
-			delete lvi;
-		}
-	}
+	m_player_model.update_from_map (m_player_table);
 	update_player_stats ();
+	ListView_players->resize_columns ();
 }
 
 void ClientWindow::prepare_channels ()
@@ -79,65 +251,32 @@ void ClientWindow::prepare_channels ()
 }
 
 // return the rank of a given name
-QString ClientWindow::getPlayerRk(QString player)
+QString ClientWindow::getPlayerRk (QString player)
 {
-	QTreeWidgetItemIterator lvp(ListView_players);
-	QTreeWidgetItem *lvpi;
-
-	// look for players in playerlist
-	for (; (lvpi = *lvp); lvp++)
-	{
-		// check if names are identical
-		if (lvpi->text(1) == player)
-		{
-			return lvpi->text(2);
-		}
+	auto it = m_player_table.find (player);
+	if (it != std::end (m_player_table)) {
+		return it->second.rank;
 	}
-
 	return QString ();
 }
 
-// check for exclude list entry of a given name
-QString ClientWindow::getPlayerExcludeListEntry(QString player)
+void ClientWindow::update_tables ()
 {
-	QTreeWidgetItemIterator lvp(ListView_players);
-	QTreeWidgetItem *lvpi;
-
-	// look for players in playerlist
-	for (; (lvpi = *lvp); lvp++)
-		if (lvpi->text(1) == player)
-			return lvpi->text(6);
-
-	return QString ();
+	if (!m_player7_active)
+		m_games_model.update_from_map (m_games_table);
+	if (!m_playerlist_active)
+		m_player_model.update_from_map (m_player_table);
 }
 
 void ClientWindow::server_add_game (const Game &g_in)
 {
 	Game g = g_in;
-	// insert into ListView
-	QTreeWidgetItemIterator lv (ListView_games);
-
-	bool found = false;
-	GamesTableItem *lvi_mem = nullptr;
 
 	if (g.H.isEmpty() && !num_games)
 	{
 		// skip games until initial table has loaded
 		qDebug() << "game skipped because no init table";
 		return;
-	}
-
-	// check if game already exists
-	QTreeWidgetItemIterator lvii = lv;
-	for (GamesTableItem *lvi; (lvi = static_cast<GamesTableItem*>(*lvii)) && !found;)
-	{
-		lvii++;
-		// compare game id
-		if (lvi->text(0) == g.nr)
-		{
-			found = true;
-			lvi_mem = lvi;
-		}
 	}
 
 	QString excludeMark = "";
@@ -150,8 +289,8 @@ void ClientWindow::server_add_game (const Game &g_in)
 		QString emb;
 
 		// no: do it now
-		emw = getPlayerExcludeListEntry (g.wname);
-		emb = getPlayerExcludeListEntry (g.bname);
+		emw = exclude.contains(";" + g.wname + ";");
+		emb = exclude.contains(";" + g.bname + ";");
 
 		// ensure that my game is listed first
 		if (emw == "M" || emb == "M")
@@ -172,166 +311,86 @@ void ClientWindow::server_add_game (const Game &g_in)
 	// update player info if this is not a 'who'-result or if it's me
 	if (g.H.isEmpty() || myMark == "A") //g.status.length() < 2)
 	{
-		QTreeWidgetItemIterator lvp(ListView_players);
-		PlayerTableItem *lvpi;
 		int pl_found = 0;
 
-		// look for players in playerlist
-		for (; (lvpi = static_cast<PlayerTableItem *>(*lvp)) && pl_found < 2;) {
-			// check if names are identical
-			if (lvpi->text(1) == g.wname || lvpi->text(1) == g.bname) {
-				pl_found++;
-				Player pl = lvpi->get_player ();
-				pl.play_str = g.nr;
-				lvpi->update_player (pl);
-
-				// check if players has a rank
-				if (g.wrank == "??" || g.brank == "??")
-				{
-					// no rank given in case of continued game -> set rank in games table
-					if (lvpi->text(1) == g.wname)
-						g.wrank = lvpi->text(2);
-
-					// no else case! bplayer could be identical to wplayer!
-					if (lvpi->text(1) == g.bname)
-						g.brank = lvpi->text(2);
-				}
-			}
-
-			lvp++;
+		auto w_it = m_player_table.find (g.wname);
+		auto b_it = m_player_table.find (g.bname);
+		if (w_it != std::end (m_player_table)) {
+			w_it->second.play_str = g.nr;
+			if (g.wrank == "??")
+				g.wrank = w_it->second.rank;
 		}
-
-//			ListView_games->sortItems (3, Qt::AscendingOrder);
+		if (b_it != std::end (m_player_table)) {
+			b_it->second.play_str = g.nr;
+			if (g.brank == "??")
+				g.brank = b_it->second.rank;
+		}
 	}
 	QString rkw = myMark + rkToKey (g.wrank) + g.wname.toLower () + ":" + excludeMark;
 	QString rkb = myMark + rkToKey (g.brank) + g.bname.toLower () + ":" + excludeMark;
 	g.sort_rk_w = rkw;
 	g.sort_rk_b = rkb;
-	if (found) {
-		lvi_mem->update_game (g);
-	} else {
-		// from GAMES command or game info{...}
-		new GamesTableItem (ListView_games, g);
 
-		// increase number of games
-		num_games++;
-		update_game_stats ();
-	}
+	m_games_table[g.nr] = g;
 }
-
 
 void ClientWindow::server_remove_game (const QString &nr)
 {
-	QTreeWidgetItemIterator lv (ListView_games);
-
 	bool found = false;
 	QString game_id;
 
 	if (nr != "@") {
-		for (QTreeWidgetItem *lvi; (lvi = *lv) && !found;)
-		{
-			lv++;
-			// compare game id
-			if (lvi->text(0) == nr)
-			{
-				lv++;
-				delete lvi;
-				found = true;
-			}
-		}
-
-		// used for player update below
 		game_id = nr;
+		auto it = m_games_table.find (nr);
+		if (it != std::end (m_games_table)) {
+			m_games_table.erase (it);
+			found = true;
+		}
 	} else {
-		for (QTreeWidgetItem *lvi; (lvi = *lv) && !found;) {
-			lv++;
-			// look for name
-			if (lvi->text(1) == m_online_acc_name ||
-			    lvi->text(3) == m_online_acc_name)
-			{
-				// used for player update below
-				game_id = lvi->text (0);
-
-				lv++;
-				delete lvi;
+		auto beg = std::begin (m_games_table);
+		auto end = std::end (m_games_table);
+		for (auto it = beg; it != end; it++) {
+			if (it->second.wname == m_online_acc_name || it->second.bname == m_online_acc_name) {
+				game_id = it->second.nr;
+				m_games_table.erase (it);
 				found = true;
+				break;
 			}
 		}
 	}
 
-	if (!found)
+	if (!found) {
 		qWarning () << "game not found " << nr;
-	else
-	{
-		num_games--;
-		update_game_stats ();
+		return;
+	}
 
-		QTreeWidgetItemIterator lvp(ListView_players);
-		PlayerTableItem *lvpi;
-		int pl_found = 0;
+	num_games--;
+	update_game_stats ();
 
-		// look for players in playerlist
-		for (; (lvpi = static_cast<PlayerTableItem *>(*lvp)) && pl_found < 2;) {
-			// check if numbers are identical
-			if (lvpi->text(3) == game_id) {
-				pl_found++;
-				Player pl = lvpi->get_player ();
-				pl.play_str = "-";
-				lvpi->update_player (pl);
-			}
+	int pl_found = 0;
 
-			lvp++;
-		}
+	for (auto &pl: m_player_table) {
+		if (pl.second.playing == game_id)
+			pl.second.playing = "-";
+		if (pl.second.observing == game_id)
+			pl.second.observing = "-";
 	}
 }
 
 // take a new player from parser
 void ClientWindow::server_remove_player (const QString &name)
 {
-  	QTreeWidgetItemIterator lv (ListView_players);
-#if 0
-	QPoint pp(0,0);
-	QTreeWidgetItem *topViewItem = ListView_players->itemAt(pp);
-  	bool deleted_topViewItem = false;
-#endif
-
-	bool found = false;
-	for (QTreeWidgetItem *lvi; (lvi = *lv) && !found;)
-	{
-		lv++;
-		// compare names
-		if (lvi->text(1) == name)
-		{
-			// check if it was a watched player
-			if (lvi->text(6) == "W")
-			{
-				qgo->playLeaveSound();
-				num_watchedplayers--;
-			}
-
-			lv++;
-#if 0
-			if (lvi == topViewItem)     // are we trying to delete the 'anchor' of the list viewport ?
-				deleted_topViewItem = true;
-#endif
-			delete lvi;
-			found = true;;
-
-			num_players--;
-			update_player_stats ();
+	auto it = m_player_table.find (name);
+	if (it != std::end (m_player_table)) {
+		if (it->second.mark == "W") {
+			qgo->playLeaveSound();
+			num_watchedplayers--;
 		}
-	}
-
-	if (!found)
+		m_player_table.erase (it);
+		num_players--;
+		update_player_stats ();
+	} else
 		qWarning() << "disconnected player not found: " << name;
-
-#if 0
-	if (! deleted_topViewItem) //don't try to refer to a deleted element ...
-	{
-		int ip = topViewItem->itemPos();
-		ListView_players->setContentsPos(0,ip);
-	}
-#endif
 }
 
 void ClientWindow::update_olq_state_from_player_info (const Player &p)
@@ -366,7 +425,6 @@ void ClientWindow::update_olq_state_from_player_info (const Player &p)
 void ClientWindow::server_add_player (const Player &p_in, bool cmdplayers)
 {
 	Player p = p_in;
-	QTreeWidgetItemIterator lv(ListView_players);
 
 	if (!cmdplayers && !num_players) {
 		qDebug() << "player skipped because no init table";
@@ -376,33 +434,19 @@ void ClientWindow::server_add_player (const Player &p_in, bool cmdplayers)
 
 	if (cmdplayers)
 	{
-		for (PlayerTableItem *lvi; (lvi = static_cast<PlayerTableItem*>(*lv));)
-		{
-			lv++;
-			// compare names
-			if (lvi->text(1) == p.name)
+		auto old = m_player_table.find (p_in.name);
+		if (old != std::end (m_player_table)) {
+			// check if new player info is less than old
+			if (p.info != "??")
 			{
-				// check if new player info is less than old
-				if (p.info != "??")
-				{
-					// new entry has more info
-					p.mark = lvi->text (6);
-					p.sort_rk = rkToKey (p.rank) + p.name.toLower ();
-					lvi->update_player (p);
-
-#if 0
-					lvi->set_nmatchSettings(p);
-					//lvi->nmatch = p.nmatch;
-
-					lvi->ownRepaint();
-#endif
-				}
-
-				if (p.name == m_online_acc_name)
-					update_olq_state_from_player_info (p);
-
-				return;
+				// new entry has more info
+				p.mark = old->second.mark;
+				p.sort_rk = old->second.sort_rk;
 			}
+			old->second = p;
+			if (p.name == m_online_acc_name)
+				update_olq_state_from_player_info (p);
+			return;
 		}
 	}
 
@@ -438,16 +482,45 @@ void ClientWindow::server_add_player (const Player &p_in, bool cmdplayers)
 	}
 	p.mark = mark;
 	p.sort_rk = rkToKey (p.rank) + p.name.toLower ();
-	new PlayerTableItem (ListView_players, p);
-#if 0
-	lv1->set_nmatchSettings(p);
-#endif
+
+	m_player_table[p.name] = p;
+
 	// increase number of players
 	num_players++;
 	update_player_stats ();
+}
 
-	//if (!cmdplayers)
-	//	ListView_players->sort() ;
+void ClientWindow::update_who_rank (QComboBox *box, int idx)
+{
+	QString rk;
+	if (idx == 0)
+		rk = rkToKey (box == whoBox1 ? "1p" : "9p");
+	else
+		rk = rkToKey (box->currentText ());
+	if (box == whoBox1)
+		m_who1_rk = rk;
+	else
+		m_who2_rk = rk;
+	qDebug () << "who ranks: " << m_who1_rk << m_who2_rk;
+	update_tables ();
+}
+
+bool ClientWindow::filter_game (const Game &g)
+{
+	return false;
+}
+
+bool ClientWindow::filter_player (const Player &p)
+{
+	if (m_online_server == IGS && m_whoopen) {
+		if (p.info.contains ('X') || !p.play_str.contains ('-'))
+			return true;
+	}
+	/* Rank comparisons are inverted: pro rank keys start with "a",
+	   dan ranks with "b", kyu with "c".  */
+	if (p.sort_rk > m_who1_rk || p.sort_rk < m_who2_rk)
+		return true;
+	return false;
 }
 
 // get channelinfo: ch nr + people
@@ -571,7 +644,7 @@ void ClientWindow::slot_message(QString txt)
 // shout...
 void ClientWindow::slot_shout(const QString &player, const QString &txt)
 {
-	if (getPlayerExcludeListEntry(player) == "X")
+	if (exclude.contains(";" + player + ";"))
 		return;
 
 	// check if send to a special handle:
@@ -687,3 +760,6 @@ void Talk::write (const QString &text) const
 	// Scroll at bottom of text, set cursor to end of line
 	MultiLineEdit1->append (txt); //eb16
 }
+
+template class table_model<Game>;
+template class table_model<Player>;

@@ -5,11 +5,46 @@
 #ifndef TABLES_H
 #define TABLES_H
 
+#include <unordered_map>
+#include <functional>
+
 #include "gs_globals.h"
 #include "parser.h"
 #include "ui_talk_gui.h"
+
 #include <QString>
 #include <QObject>
+#include <QAbstractItemModel>
+
+template<class T>
+class table_model : public QAbstractItemModel
+{
+	std::vector<T> m_entries;
+	int m_column = 0;
+	Qt::SortOrder m_order = Qt::AscendingOrder;
+	std::function<bool (const T&)> m_filter;
+	int sort_compare (const T &a, const T &b);
+public:
+	void reset ();
+	void set_filter (std::function<bool (const T&)> filter)
+	{
+		m_filter = filter;
+	}
+	const T *find (const QModelIndex &) const;
+	const std::vector<T> &entries () const { return m_entries; }
+	virtual QVariant data (const QModelIndex &index, int role = Qt::DisplayRole) const override;
+	QModelIndex index (int row, int col, const QModelIndex &parent = QModelIndex()) const override;
+	QModelIndex parent (const QModelIndex &index ) const override;
+	int rowCount (const QModelIndex &parent = QModelIndex()) const override;
+	int columnCount (const QModelIndex &parent = QModelIndex()) const override;
+	bool removeRows (int row, int count, const QModelIndex &parent = QModelIndex()) override;
+	QVariant headerData (int section, Qt::Orientation orientation,
+			     int role = Qt::DisplayRole) const override;
+	virtual void sort (int, Qt::SortOrder) override;
+
+	void update_from_map (const std::unordered_map<QString, T> &);
+};
+
 
 //-----------
 

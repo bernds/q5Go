@@ -6,6 +6,7 @@
 #define MAINWIN_H
 
 #include <list>
+#include <unordered_map>
 
 #include "ui_clientwindow_gui.h"
 #include "miscdialogs.h"
@@ -40,6 +41,9 @@ class ClientWindow : public QMainWindow, public Ui::ClientWindowGui
 
 	QString m_standard_caption;
 
+	bool m_player7_active = false;
+	bool m_playerlist_active = false;
+
 	// online time
 	int onlineCount;
 	bool youhavemsg;
@@ -47,6 +51,9 @@ class ClientWindow : public QMainWindow, public Ui::ClientWindowGui
 	bool playerListSteadyUpdate;
 	bool gamesListSteadyUpdate;
 	bool autoAwayMessage;
+
+	bool m_whoopen = false;
+	QString m_who1_rk, m_who2_rk;
 
 	// cmd_xx get current cmd number, and, if higher than last, cmd is valid,
 	//    else cmd is from history list
@@ -61,6 +68,10 @@ class ClientWindow : public QMainWindow, public Ui::ClientWindowGui
 	QList<Talk *> talklist;
 	QList<GameDialog *> matchlist;
 	std::list<sendBuf> m_send_buffer;
+	std::unordered_map<QString, Player> m_player_table;
+	std::unordered_map<QString, Game> m_games_table;
+	table_model<Game> m_games_model;
+	table_model<Player> m_player_model;
 
 	QLabel *statusUsers, *statusGames, *statusServer, *statusChannel;
 	QLabel *statusOnlineTime, *statusMessage;
@@ -128,7 +139,6 @@ class ClientWindow : public QMainWindow, public Ui::ClientWindowGui
 
 	int toggle_player_state (const char *list, const QString &symbol);
 	QString getPlayerRk (QString);
-	QString getPlayerExcludeListEntry (QString);
 
 	void colored_message (QString, QColor);
 
@@ -148,11 +158,15 @@ class ClientWindow : public QMainWindow, public Ui::ClientWindowGui
 	void update_player_stats ();
 	void update_game_stats ();
 
+	bool filter_game (const Game &);
+	bool filter_player (const Player &);
+
 	void refresh_players ();
 	void refresh_games ();
+	void update_tables ();
 
 	void update_olq_state_from_player_info (const Player &);
-
+	void update_who_rank (QComboBox *, int);
 public:
 	ClientWindow (QMainWindow* parent);
 	~ClientWindow ();
@@ -231,10 +245,10 @@ public slots:
 	void slot_SeekList (const QString&, const QString&);
 
 	// gamestable/playertable:
-	void slot_mouse_games (QTreeWidgetItem*);
-	void slot_mouse_players (QTreeWidgetItem*);
-	void slot_doubleclick_games (QTreeWidgetItem*);
-	void slot_doubleclick_players (QTreeWidgetItem *);
+	void slot_mouse_games (const Game &);
+	void slot_mouse_players (const Player &);
+	void slot_doubleclick_games (const Game &);
+	void slot_doubleclick_players (const Player &);
 	void slot_menu_games (const QPoint&);
 	void slot_menu_players (const QPoint&);
 

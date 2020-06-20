@@ -83,6 +83,15 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	// create instance of telnetConnection
 	telnetConnection = new TelnetConnection (this, ListView_players, ListView_games);
 
+	m_games_model.set_filter ([this] (const Game &g)->bool { return filter_game (g); });
+	m_player_model.set_filter ([this] (const Player &p)->bool { return filter_player (p); });
+	ListView_games->set_model (&m_games_model);
+	ListView_games->resize_columns ();
+	ListView_players->set_model (&m_player_model);
+	ListView_players->resize_columns ();
+	ListView_games->sortByColumn (2, Qt::AscendingOrder);
+	ListView_players->sortByColumn (2, Qt::AscendingOrder);
+
 	// doubleclick
 	connect (ListView_games, &GamesTable::signal_doubleClicked, this, &ClientWindow::slot_doubleclick_games);
 	connect (ListView_players, &PlayerTable::signal_doubleClicked, this, &ClientWindow::slot_doubleclick_players);
@@ -91,6 +100,9 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	connect (ListView_games, &GamesTable::customContextMenuRequested, this, &ClientWindow::slot_menu_games);
 
 	connect (whoOpenCheck, &QCheckBox::toggled, this, &ClientWindow::slot_whoopen);
+	void (QComboBox::*cic) (int) = &QComboBox::currentIndexChanged;
+	connect (whoBox1, cic, [this] (int idx) { update_who_rank (whoBox1, idx); });
+	connect (whoBox2, cic, [this] (int idx) { update_who_rank (whoBox2, idx); });
 	connect (toolObserveMode, &QToolButton::toggled, [this] (bool on) { setting->writeBoolEntry ("OBSERVE_SINGLE", on); });
 
 	initStatusBar(this);
@@ -104,9 +116,13 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	populate_cbconnect (setting->readEntry("ACTIVEHOST"));
 
 	//restore players list filters
-	whoBox1->setCurrentIndex(setting->readIntEntry("WHO_1"));
-	whoBox2->setCurrentIndex(setting->readIntEntry("WHO_2"));
-	whoOpenCheck->setChecked(setting->readIntEntry("WHO_CB"));
+	int who1 = setting->readIntEntry("WHO_1");
+	int who2 = setting->readIntEntry("WHO_2");
+	whoBox1->setCurrentIndex (who1);
+	whoBox2->setCurrentIndex (who2);
+	update_who_rank (whoBox1, who1);
+	update_who_rank (whoBox2, who2);
+	whoOpenCheck->setChecked (setting->readIntEntry("WHO_CB"));
 
 	toolObserveMode->setChecked (setting->readBoolEntry ("OBSERVE_SINGLE"));
 
@@ -217,6 +233,9 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 
 ClientWindow::~ClientWindow()
 {
+	ListView_games->setModel (nullptr);
+	ListView_players->setModel (nullptr);
+
 	delete telnetConnection;
 	delete qgoif;
 	delete parser;
@@ -302,6 +321,8 @@ void ClientWindow::timerEvent(QTimerEvent* e)
 		toolSeek->setIcon(seekingIcon[imagecounter]);
 		return;
 	}
+
+	update_tables ();
 
 	if (tn_ready)
 	{
@@ -514,7 +535,12 @@ void ClientWindow::slot_connclosed()
 	toolConnect->setChecked(false);
 	toolConnect->setToolTip (tr("Connect with") + " " + cb_connect->currentText());
 
+	m_player_table.clear ();
+	m_games_table.clear ();
 	m_send_buffer.clear ();
+
+	m_playerlist_active = false;
+	m_player7_active = false;
 }
 
 // close application
@@ -577,10 +603,6 @@ void ClientWindow::slot_last_window_closed ()
 // distribute text from telnet session and local commands to tables
 void ClientWindow::sendTextToApp (const QString &txt)
 {
-	static int store_sort_col = -1;
-	static int store_games_sort_col = -1;
-	static bool player7active = false;
-
 	// put text to parser
  	InfoType it_ = parser->put_line (txt);
 
@@ -588,14 +610,10 @@ void ClientWindow::sendTextToApp (const QString &txt)
 	bytesIn += txt.length () + 2;
 
 	// GAME7_END emulation:
-	if (player7active && it_ != GAME7)
+	if (m_player7_active && it_ != GAME7)
 	{
 		finish_game_list ();
-		player7active = false;
-		ListView_games->setSortingEnabled (true);
-		if (store_games_sort_col != -1)
-			ListView_games->sortItems (store_games_sort_col, Qt::AscendingOrder);
-		store_games_sort_col = -1;
+		m_player7_active = false;
 	}
 
 	switch (it_)
@@ -635,14 +653,6 @@ void ClientWindow::sendTextToApp (const QString &txt)
 			// enable sending
 			set_tn_ready ();
 		} while (!m_send_buffer.empty ());
-
-		// check if tables are sorted
-#if 0 && (QT_VERSION > 0x030006)
-		if (ListView_players->sortColumn () == -1)
-			ListView_players->setSorting (2);
-		if (ListView_games->sortColumn () == -1)
-			ListView_games->setSorting (2);
-#endif
 
 		switch (m_online_server)
 		{
@@ -715,26 +725,18 @@ void ClientWindow::sendTextToApp (const QString &txt)
 		// end of 'who'/'user' cmd
 	case PLAYER42_END:
 	case PLAYER27_END:
+		m_playerlist_active = false;
 		finish_player_list ();
-		ListView_players->setSortingEnabled (true);
-		if (store_sort_col != -1)
-			ListView_players->sortItems (store_sort_col, Qt::AscendingOrder);
-
-		if (m_online_server == IGS)
-			ListView_players->showOpen (whoOpenCheck->isChecked ());
 		break;
 
 	case PLAYER27_START:
 	case PLAYER42_START:
-		store_sort_col = ListView_players->sortColumn ();
-		ListView_players->setSortingEnabled (false);
+		m_playerlist_active = true;
 		break;
 
 	case GAME7_START:
 		// "emulate" GAME7_END
-		player7active = true;
-		store_games_sort_col = ListView_games->sortColumn ();
-		ListView_games->setSortingEnabled (false);
+		m_player7_active = true;
 		break;
 
 	case ACCOUNT:
@@ -1051,9 +1053,6 @@ void ClientWindow::refresh_players ()
 	else
 		wparam.append (m_online_server == IGS ? "9p-BC" : " ");
 
-	if (whoOpenCheck->isChecked())
-		wparam.append (m_online_server == WING ? "O" : "o");
-
 	if (m_online_server == IGS)
 		sendcommand (wparam.prepend ("userlist "));
 	else
@@ -1068,8 +1067,8 @@ void ClientWindow::refresh_games ()
 
 void ClientWindow::slot_whoopen (bool checked)
 {
-	if (m_online_server == IGS)
-		ListView_players->showOpen(checked);
+	m_whoopen = checked;
+	update_tables ();
 }
 
 // refresh games
@@ -1085,20 +1084,23 @@ void ClientWindow::slot_pbrefreshplayers(bool)
 }
 
 // doubleclick actions...
-void ClientWindow::slot_doubleclick_games (QTreeWidgetItem *lv)
+void ClientWindow::slot_doubleclick_games (const Game &g)
 {
-	sendcommand ("observe " + static_cast<GamesTableItem*>(lv)->text (0));
+	sendcommand ("observe " + g.nr);
 }
 
 void ClientWindow::slot_menu_games (const QPoint &pt)
 {
-	QTreeWidgetItem *item = ListView_games->itemAt (pt);
-	if (item)
-		slot_mouse_games (item);
+	QModelIndex idx = ListView_games->indexAt (pt);
+	if (!idx.isValid ())
+		return;
+	const Game *g = m_games_model.find (idx);
+	if (g != nullptr)
+		slot_mouse_games (*g);
 }
 
 // mouse click on ListView_games
-void ClientWindow::slot_mouse_games (QTreeWidgetItem *lv)
+void ClientWindow::slot_mouse_games (const Game &g)
 {
 	static QMenu *puw = nullptr;
 
@@ -1120,7 +1122,7 @@ void ClientWindow::slot_mouse_games (QTreeWidgetItem *lv)
 				});
 	}
 
-	m_menu_game = static_cast<GamesTableItem*>(lv)->get_game ();
+	m_menu_game = g;
 	puw->popup (QCursor::pos ());
 }
 
@@ -1344,28 +1346,27 @@ int ClientWindow::toggle_player_state (const char *list, const QString &symbol)
 
 	setting->writeEntry (list, line);
 
-	QTreeWidgetItemIterator lv (ListView_players);
-	for (PlayerTableItem *lvi; (lvi = static_cast<PlayerTableItem*>(*lv)); lv++)
-		if (lvi->text(1) == m_menu_player.name) {
-			lvi->update_player (m_menu_player);
-			break;
-		}
+	auto it = m_player_table.find (m_menu_player.name);
+	if (it != std::end (m_player_table))
+		it->second.mark = m_menu_player.mark;
 
 	return change;
 }
 
-void ClientWindow::slot_doubleclick_players (QTreeWidgetItem *lv)
+void ClientWindow::slot_doubleclick_players (const Player &p)
 {
-	m_menu_player = static_cast<PlayerTableItem*>(lv)->get_player ();
+	m_menu_player = p;
 	handle_matchrequest (menu_player_name () + " " + m_menu_player.rank, true, false);
 }
 
 void ClientWindow::slot_menu_players (const QPoint& pt)
 {
-	QTreeWidgetItem *item = ListView_players->itemAt (pt);
-	// emulate right button
-	if (item)
-		slot_mouse_players (item);
+	QModelIndex idx = ListView_players->indexAt (pt);
+	if (!idx.isValid ())
+		return;
+	const Player *p = m_player_model.find (idx);
+	if (p != nullptr)
+		slot_mouse_players (*p);
 }
 
 QString ClientWindow::menu_player_name ()
@@ -1376,7 +1377,7 @@ QString ClientWindow::menu_player_name ()
 }
 
 // mouse click on ListView_players
-void ClientWindow::slot_mouse_players (QTreeWidgetItem *lv)
+void ClientWindow::slot_mouse_players (const Player &p)
 {
 	static QMenu *puw = nullptr;
 
@@ -1419,7 +1420,7 @@ void ClientWindow::slot_mouse_players (QTreeWidgetItem *lv)
 				[=] () { toggle_player_state ("EXCLUDE", "X"); });
 	}
 
-	m_menu_player = static_cast<PlayerTableItem*>(lv)->get_player ();
+	m_menu_player = p;
 	puw->popup (QCursor::pos ());
 }
 

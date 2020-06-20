@@ -75,7 +75,7 @@
 		  <property name="bottomMargin">
 		    <number>3</number>
 		  </property>
-		  <item row="0" column="0" colspan="3">
+		  <item row="0" column="0" colspan="2">
 		    <widget class="PlayerTable" name="ListView_players" native="true">
 		      <property name="sizePolicy">
 			<sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -91,463 +91,485 @@
 		      </property>
 		    </widget>
 		  </item>
-		  <item row="1" column="1">
-		    <widget class="QComboBox" name="whoBox2">
-		      <property name="toolTip">
-			<string>Select players rank boundaries</string>
-		      </property>
-		      <property name="whatsThis">
-			<string>Select players ranks boundaries
-
-			Use these lists to select the rank of players you want to see in the list
-			This will take effect after refreshing the players list.</string>
-		      </property>
-		      <property name="currentIndex">
-			<number>0</number>
-		      </property>
-		      <item>
-			<property name="text">
-			  <string/>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>1p-9p</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>9d</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>8d</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>7d</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>6d</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>5d</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>4d</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>3d</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>2d</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>1d</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>1k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>2k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>3k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>4k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>5k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>6k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>7k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>8k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>9k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>10k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>11k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>12k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>13k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>14k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>15k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>16k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>17k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>18k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>19k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>20k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>21k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>22k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>23k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>24k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>25k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>26k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>27k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>28k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>29k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>30k</string>
-			</property>
-		      </item>
-		    </widget>
-		  </item>
-		  <item row="1" column="0">
-		    <widget class="QComboBox" name="whoBox1">
-		      <property name="toolTip">
-			<string>Select players rank boundaries</string>
-		      </property>
-		      <property name="whatsThis">
-			<string>Select players ranks boundaries
-
-			Use these lists to select the rank of players you want to see in the list
-			This will take effect after refreshing the players list.</string>
-		      </property>
-		      <property name="currentIndex">
-			<number>0</number>
-		      </property>
-		      <item>
-			<property name="text">
-			  <string/>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>1p-9p</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>9d</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>8d</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>7d</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>6d</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>5d</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>4d</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>3d</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>2d</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>1d</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>1k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>2k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>3k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>4k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>5k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>6k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>7k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>8k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>9k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>10k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>11k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>12k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>13k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>14k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>15k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>16k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>17k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>18k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>19k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>20k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>21k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>22k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>23k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>24k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>25k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>26k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>27k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>28k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>29k</string>
-			</property>
-		      </item>
-		      <item>
-			<property name="text">
-			  <string>30k</string>
-			</property>
-		      </item>
-		    </widget>
-		  </item>
-		  <item row="1" column="2">
-		    <widget class="QCheckBox" name="whoOpenCheck">
-		      <property name="toolTip">
-			<string>toggle for displaying only open players</string>
-		      </property>
-		      <property name="whatsThis">
-			<string>Open players
-
-			Check this box if you want the list to display only open players (uncheck if you want all players).
-			This will take effect after refreshing the players list.</string>
-		      </property>
-		      <property name="text">
-			<string>open</string>
-		      </property>
-		    </widget>
+		  <item row="1" column="0" colspan="2">
+		    <layout class="QHBoxLayout" name="horizontalLayout">
+		      <item>
+			<widget class="QLabel" name="label_2">
+			  <property name="text">
+			    <string>From:</string>
+			  </property>
+			</widget>
+		      </item>
+		      <item>
+			<widget class="QComboBox" name="whoBox1">
+			  <property name="toolTip">
+			    <string>Select players rank boundaries</string>
+			  </property>
+			  <property name="whatsThis">
+			    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select players ranks boundaries&lt;/p&gt;&lt;p&gt;Use these lists to select the rank of players you want to see in the list. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+			  </property>
+			  <property name="currentIndex">
+			    <number>0</number>
+			  </property>
+			  <item>
+			    <property name="text">
+			      <string/>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>1p-9p</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>9d</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>8d</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>7d</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>6d</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>5d</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>4d</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>3d</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>2d</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>1d</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>1k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>2k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>3k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>4k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>5k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>6k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>7k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>8k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>9k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>10k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>11k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>12k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>13k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>14k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>15k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>16k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>17k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>18k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>19k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>20k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>21k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>22k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>23k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>24k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>25k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>26k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>27k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>28k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>29k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>30k</string>
+			    </property>
+			  </item>
+			</widget>
+		      </item>
+		      <item>
+			<widget class="QLabel" name="label">
+			  <property name="text">
+			    <string>To:</string>
+			  </property>
+			</widget>
+		      </item>
+		      <item>
+			<widget class="QComboBox" name="whoBox2">
+			  <property name="toolTip">
+			    <string>Select players rank boundaries</string>
+			  </property>
+			  <property name="whatsThis">
+			    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select players ranks boundaries&lt;/p&gt;&lt;p&gt;Use these lists to select the rank of players you want to see in the list. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+			  </property>
+			  <property name="currentIndex">
+			    <number>0</number>
+			  </property>
+			  <item>
+			    <property name="text">
+			      <string/>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>1p-9p</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>9d</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>8d</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>7d</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>6d</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>5d</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>4d</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>3d</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>2d</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>1d</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>1k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>2k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>3k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>4k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>5k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>6k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>7k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>8k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>9k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>10k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>11k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>12k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>13k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>14k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>15k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>16k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>17k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>18k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>19k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>20k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>21k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>22k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>23k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>24k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>25k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>26k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>27k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>28k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>29k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>30k</string>
+			    </property>
+			  </item>
+			</widget>
+		      </item>
+		      <item>
+			<widget class="QCheckBox" name="whoOpenCheck">
+			  <property name="toolTip">
+			    <string>toggle for displaying only open players</string>
+			  </property>
+			  <property name="whatsThis">
+			    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Open players&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Check this box if you want the list to display only open players (uncheck if you want all players).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+			  </property>
+			  <property name="text">
+			    <string>open</string>
+			  </property>
+			</widget>
+		      </item>
+		      <item>
+			<spacer name="horizontalSpacer">
+			  <property name="orientation">
+			    <enum>Qt::Horizontal</enum>
+			  </property>
+			  <property name="sizeHint" stdset="0">
+			    <size>
+			      <width>40</width>
+			      <height>20</height>
+			    </size>
+			  </property>
+			</spacer>
+		      </item>
+		    </layout>
 		  </item>
 		</layout>
 	      </widget>

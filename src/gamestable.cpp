@@ -8,15 +8,94 @@
 #include "misc.h"
 #include "setting.h"
 
-GamesTable::GamesTable (QWidget *parent)
-	: QTreeWidget(parent)
+QString Game::column (int c) const
 {
-	setColumnCount (12);
+	switch (c) {
+	case 0: return nr;
+	case 1: return wname;
+	case 2: return wrank;
+	case 3: return bname;
+	case 4: return brank;
+	case 5: return mv;
+	case 6: return Sz;
+	case 7: return H;
+	case 8: return K;
+	case 9: return By;
+	case 10: return FR;
+	case 11: return ob;
+	default: return QString ();
+	}
+}
 
-	headers <<  tr ("Id") << tr ("White") << tr ("WR") << tr ("Black") << tr ("BR") << tr ("Mv") << tr ("Sz") << tr ("H") << tr ("K") << tr ("By") << tr ("FR") << tr ("Ob");
-	setHeaderLabels (headers);
-	for (int i = 0; i < 12; i++)
-		header()->setSectionResizeMode(i, QHeaderView::ResizeToContents);
+QString Game::header_column (int c)
+{
+	switch (c) {
+	case 0: return QObject::tr ("Id");
+	case 1: return QObject::tr ("White");
+	case 2: return QObject::tr ("WR");
+	case 3: return QObject::tr ("Black");
+	case 4: return QObject::tr ("BR");
+	case 5: return QObject::tr ("Mv");
+	case 6: return QObject::tr ("Sz");
+	case 7: return QObject::tr ("H");
+	case 8: return QObject::tr ("K");
+	case 9: return QObject::tr ("By");
+	case 10: return QObject::tr ("FR");
+	case 11: return QObject::tr ("Ob");
+	default: return QString ();
+	}
+}
+
+QVariant Game::foreground () const
+{
+#if 0
+	if (its_me)
+		return QBrush (Qt::blue);
+	else if (watched)
+		return QBrush (Qt::red);
+#endif
+	return QVariant ();
+}
+
+int Game::compare (const Game &other, int c) const
+{
+	switch (c) {
+	case 0:	case 5: case 6: case 7: case 9: case 11:
+	{
+		/* Numerical compare.  */
+		QString a = column (c);
+		QString b = other.column (c);
+		int r1 = a.length () - b.length ();
+		if (r1 != 0)
+			return r1;
+		return a.compare (b);
+	}
+	case 2:
+		return sort_rk_w.compare (other.sort_rk_w);
+	case 4:
+		return sort_rk_b.compare (other.sort_rk_b);
+	default:
+		return column (c).compare (other.column (c));
+	}
+}
+
+bool Game::justify_right (int column)
+{
+	return column == 0 || column >= 5;
+}
+
+QString Game::unique_column () const
+{
+	return nr;
+}
+
+GamesTable::GamesTable (QWidget *parent)
+	: QTreeView (parent)
+{
+	setSortingEnabled (true);
+	header ()->setSectionsMovable (false);
+	setItemsExpandable (false);
+	setRootIsDecorated (false);
 
 	setFocusPolicy (Qt::NoFocus);
 	setContextMenuPolicy (Qt::CustomContextMenu);
@@ -24,103 +103,16 @@ GamesTable::GamesTable (QWidget *parent)
 
 	setUniformRowHeights (true);
 	setAlternatingRowColors (true);
-	//setItemMargin(2);
-	sortItems (2, Qt::AscendingOrder);
-}
-
-GamesTable::~GamesTable ()
-{
 }
 
 void GamesTable::mouseDoubleClickEvent (QMouseEvent *e)
 {
-	if (e->button () == Qt::LeftButton) {
-		QTreeWidgetItem *item = itemAt (e->pos ());
-		printf ("item %p\n", item);
-		if (item)
-			emit signal_doubleClicked (item);
-	}
-}
+	if (e->button () != Qt::LeftButton)
+		return;
 
-/*
- *   GamesTableItem
- */
-
-GamesTableItem::GamesTableItem (GamesTable *parent, const Game &g)
-	: QTreeWidgetItem(parent), m_game (g)
-{
-	ownRepaint ();
-	m_game.up_to_date = true;
-}
-
-GamesTableItem::~GamesTableItem()
-{
-}
-
-QVariant GamesTableItem::data (int column, int role) const
-{
-	if (role == Qt::ForegroundRole) {
-		if (its_me)
-			return QBrush (Qt::blue);
-		else if (watched)
-			return QBrush (Qt::red);
-		return QVariant ();
-	} else if (role == Qt::TextAlignmentRole) {
-		return column < 5 && column != 0 ? Qt::AlignLeft : Qt::AlignRight;
-	}
-	if (role != Qt::DisplayRole)
-		return QVariant ();
-	switch (column) {
-	case 0: return m_game.nr;
-	case 1: return m_game.wname;
-	case 2: return m_game.wrank;
-	case 3: return m_game.bname;
-	case 4: return m_game.brank;
-	case 5: return m_game.mv;
-	case 6: return m_game.Sz;
-	case 7: return m_game.H;
-	case 8: return m_game.K;
-	case 9: return m_game.By;
-	case 10: return m_game.FR;
-	case 11: return m_game.ob;
-	case 12: return m_game.sort_rk_w;
-	case 14: return m_game.sort_rk_b;
-	default: return QVariant ();
-	}
-}
-
-void GamesTableItem::ownRepaint()
-{
-	watched = false;
-	its_me = false;
-	if (!m_game.sort_rk_w.isEmpty ())
-	{
-		its_me = m_game.sort_rk_w.at(0) == 'A';
-#if 0 /* @@@ None of this works?  */
-		if (text(7).isEmpty())
-			watched = false;
-		else
-			watched = text(12).at(text(7).length()-1) == 'W';
-#endif
-	}
-}
-
-bool GamesTableItem::operator<(const QTreeWidgetItem &other) const
-{
-	int column = treeWidget()->sortColumn();
-	int adj_col = column == 2 || column == 4 ? column + 10 : column;
-	const QString t1 = text (adj_col).trimmed ();
-	const QString t2 = other.text (adj_col).trimmed ();
-
-	if (column == 2 || column == 4)
-		return t1 < t2;
-
-	const QString r1 = m_game.sort_rk_w;
-	const QString r2 = other.text (12);
-
-	if (column == 0 || column == 5 || column == 6 || column == 7 || column == 9 || column == 11) {
-		// id, move, observe, Sz, H, By, Ob
-		return t1.rightJustified (8, '0') + r1 < t2.rightJustified (8, '0') + r2;
-	} else
-		return t1 + r1 < t2 + r2;
+	QModelIndex idx = indexAt (e->pos ());
+	if (!idx.isValid ())
+		return;
+	const Game *g = m_model->find (idx);
+	emit signal_doubleClicked (*g);
 }
