@@ -33,10 +33,39 @@
 
 ClientWindow *client_window;
 
-/*
- *   Clientwindow = MainWidget
- */
-
+static int get_who_setting (QString str)
+{
+	QString s = setting->readEntry (str + "_NEW");
+	int idx;
+	bool ok;
+	if (s.isNull ()) {
+		s = setting->readEntry (str);
+		if (s.isNull ())
+			return -1;
+		idx = s.toInt (&ok);
+		if (!ok)
+			return -1;
+		/* Compatibility code to adjust for ranks that were removed from the combo box.
+		   These were groups of four ranks each: 11-14k, 16-19k, 21-24k and 26-29k.
+		   10k is index 20.  */
+		switch (idx) {
+		case 36: case 37: case 38: case 39: case 40:
+			idx = 24; break;
+		case 31: case 32: case 33: case 34: case 35:
+			idx = 23; break;
+		case 26: case 27: case 28: case 29: case 30:
+			idx = 22; break;
+		case 22: case 23: case 24: case 25:
+			idx = 21; break;
+		}
+		return idx;
+	} else {
+		idx = s.toInt (&ok);
+		if (!ok)
+			return -1;
+		return idx;
+	}
+}
 
 ClientWindow::ClientWindow(QMainWindow *parent)
 	: QMainWindow( parent), seekButtonTimer (0), oneSecondTimer (0)
@@ -116,8 +145,12 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	populate_cbconnect (setting->readEntry("ACTIVEHOST"));
 
 	//restore players list filters
-	int who1 = setting->readIntEntry("WHO_1");
-	int who2 = setting->readIntEntry("WHO_2");
+	int who1 = get_who_setting ("WHO_1");
+	int who2 = get_who_setting ("WHO_2");
+	if (who1 == -1)
+		who1 = whoBox1->currentIndex ();
+	if (who2 == -1)
+		who2 = whoBox2->currentIndex ();
 	whoBox1->setCurrentIndex (who1);
 	whoBox2->setCurrentIndex (who2);
 	update_who_rank (whoBox1, who1);
@@ -578,9 +611,9 @@ void ClientWindow::saveSettings()
 			QString::number(pref_s.width()) + DELIMITER +
 			QString::number(pref_s.height()));
 
-	setting->writeIntEntry("WHO_1", whoBox1->currentIndex());
-	setting->writeIntEntry("WHO_2", whoBox2->currentIndex());
-	setting->writeBoolEntry("WHO_CB", whoOpenCheck->isChecked());
+	setting->writeIntEntry ("WHO_1_NEW", whoBox1->currentIndex ());
+	setting->writeIntEntry ("WHO_2_NEW", whoBox2->currentIndex ());
+	setting->writeBoolEntry ("WHO_CB", whoOpenCheck->isChecked ());
 
 	// write settings to file
 	setting->saveSettings();
@@ -1036,27 +1069,10 @@ void ClientWindow::refresh_players ()
 {
 	prepare_player_list ();
 
-	QString wparam;
-
-	// send "WHO" command
-	//set the params of "who command"
-	if (whoBox1->currentIndex() > 1 || whoBox2->currentIndex() > 1)
-	{
-		wparam.append (whoBox1->currentIndex() == 1 ? "9p" : whoBox1->currentText ());
-		if (whoBox1->currentIndex() && whoBox2->currentIndex())
-			wparam.append("-");
-
-		wparam.append(whoBox2->currentIndex() == 1 ? "9p" : whoBox2->currentText ());
-	}
-	else if (whoBox1->currentIndex()  || whoBox2->currentIndex())
-		wparam.append ("1p-9p");
-	else
-		wparam.append (m_online_server == IGS ? "9p-BC" : " ");
-
 	if (m_online_server == IGS)
-		sendcommand (wparam.prepend ("userlist "));
+		sendcommand ("userlist");
 	else
-		sendcommand (wparam.prepend ("who "));
+		sendcommand ("who");
 }
 
 void ClientWindow::refresh_games ()

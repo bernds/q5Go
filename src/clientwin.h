@@ -53,7 +53,10 @@ class ClientWindow : public QMainWindow, public Ui::ClientWindowGui
 	bool autoAwayMessage;
 
 	bool m_whoopen = false;
-	QString m_who1_rk, m_who2_rk;
+	/* Initialize both to prevent the code that keeps them in order
+	   to cause problems when they are initialized with the real values.  */
+	QString m_who1_rk = "zz";
+	QString m_who2_rk = "a";
 
 	// cmd_xx get current cmd number, and, if higher than last, cmd is valid,
 	//    else cmd is from history list

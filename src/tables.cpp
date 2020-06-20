@@ -493,14 +493,25 @@ void ClientWindow::server_add_player (const Player &p_in, bool cmdplayers)
 void ClientWindow::update_who_rank (QComboBox *box, int idx)
 {
 	QString rk;
+	/* Index 0 is an empty string, which means no limit.  */
 	if (idx == 0)
-		rk = rkToKey (box == whoBox1 ? "1p" : "9p");
+		rk = rkToKey (box == whoBox1 ? "BC" : "9p");
+	/* Index 1 is "1p to 9p".  */
+	else if (idx == 1 && box == whoBox1)
+		rk = rkToKey ("1p");
 	else
 		rk = rkToKey (box->currentText ());
 	if (box == whoBox1)
 		m_who1_rk = rk;
 	else
 		m_who2_rk = rk;
+
+	if (m_who1_rk < m_who2_rk) {
+		if (box == whoBox1)
+			whoBox2->setCurrentIndex (idx);
+		else
+			whoBox1->setCurrentIndex (idx);
+	}
 	qDebug () << "who ranks: " << m_who1_rk << m_who2_rk;
 	update_tables ();
 }

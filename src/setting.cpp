@@ -430,6 +430,9 @@ void Setting::saveSettings()
 	clearEntry ("FONT_CONSOLE");
 #endif
 
+	clearEntry ("WHO_1");
+	clearEntry ("WHO_2");
+
 	writeIntEntry("VERSION", SETTING_VERSION);
 
         QString configfile = QStandardPaths::locate (QStandardPaths::AppConfigLocation, PACKAGE "rc");

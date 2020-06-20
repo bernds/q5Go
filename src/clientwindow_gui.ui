@@ -109,7 +109,7 @@
 			    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select players ranks boundaries&lt;/p&gt;&lt;p&gt;Use these lists to select the rank of players you want to see in the list. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
 			  </property>
 			  <property name="currentIndex">
-			    <number>0</number>
+			    <number>24</number>
 			  </property>
 			  <item>
 			    <property name="text">
@@ -218,47 +218,7 @@
 			  </item>
 			  <item>
 			    <property name="text">
-			      <string>11k</string>
-			    </property>
-			  </item>
-			  <item>
-			    <property name="text">
-			      <string>12k</string>
-			    </property>
-			  </item>
-			  <item>
-			    <property name="text">
-			      <string>13k</string>
-			    </property>
-			  </item>
-			  <item>
-			    <property name="text">
-			      <string>14k</string>
-			    </property>
-			  </item>
-			  <item>
-			    <property name="text">
 			      <string>15k</string>
-			    </property>
-			  </item>
-			  <item>
-			    <property name="text">
-			      <string>16k</string>
-			    </property>
-			  </item>
-			  <item>
-			    <property name="text">
-			      <string>17k</string>
-			    </property>
-			  </item>
-			  <item>
-			    <property name="text">
-			      <string>18k</string>
-			    </property>
-			  </item>
-			  <item>
-			    <property name="text">
-			      <string>19k</string>
 			    </property>
 			  </item>
 			  <item>
@@ -268,52 +228,17 @@
 			  </item>
 			  <item>
 			    <property name="text">
-			      <string>21k</string>
-			    </property>
-			  </item>
-			  <item>
-			    <property name="text">
-			      <string>22k</string>
-			    </property>
-			  </item>
-			  <item>
-			    <property name="text">
-			      <string>23k</string>
-			    </property>
-			  </item>
-			  <item>
-			    <property name="text">
-			      <string>24k</string>
-			    </property>
-			  </item>
-			  <item>
-			    <property name="text">
 			      <string>25k</string>
 			    </property>
 			  </item>
 			  <item>
 			    <property name="text">
-			      <string>26k</string>
-			    </property>
-			  </item>
-			  <item>
-			    <property name="text">
-			      <string>27k</string>
-			    </property>
-			  </item>
-			  <item>
-			    <property name="text">
-			      <string>28k</string>
-			    </property>
-			  </item>
-			  <item>
-			    <property name="text">
-			      <string>29k</string>
-			    </property>
-			  </item>
-			  <item>
-			    <property name="text">
 			      <string>30k</string>
+			    </property>
+			  </item>
+			  <item>
+			    <property name="text">
+			      <string>BC</string>
 			    </property>
 			  </item>
 			</widget>
@@ -334,7 +259,7 @@
 			    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select players ranks boundaries&lt;/p&gt;&lt;p&gt;Use these lists to select the rank of players you want to see in the list. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
 			  </property>
 			  <property name="currentIndex">
-			    <number>0</number>
+			    <number>1</number>
 			  </property>
 			  <item>
 			    <property name="text">
@@ -443,47 +368,7 @@
 			  </item>
 			  <item>
 			    <property name="text">
-			      <string>11k</string>
-			    </property>
-			  </item>
-			  <item>
-			    <property name="text">
-			      <string>12k</string>
-			    </property>
-			  </item>
-			  <item>
-			    <property name="text">
-			      <string>13k</string>
-			    </property>
-			  </item>
-			  <item>
-			    <property name="text">
-			      <string>14k</string>
-			    </property>
-			  </item>
-			  <item>
-			    <property name="text">
 			      <string>15k</string>
-			    </property>
-			  </item>
-			  <item>
-			    <property name="text">
-			      <string>16k</string>
-			    </property>
-			  </item>
-			  <item>
-			    <property name="text">
-			      <string>17k</string>
-			    </property>
-			  </item>
-			  <item>
-			    <property name="text">
-			      <string>18k</string>
-			    </property>
-			  </item>
-			  <item>
-			    <property name="text">
-			      <string>19k</string>
 			    </property>
 			  </item>
 			  <item>
@@ -493,47 +378,7 @@
 			  </item>
 			  <item>
 			    <property name="text">
-			      <string>21k</string>
-			    </property>
-			  </item>
-			  <item>
-			    <property name="text">
-			      <string>22k</string>
-			    </property>
-			  </item>
-			  <item>
-			    <property name="text">
-			      <string>23k</string>
-			    </property>
-			  </item>
-			  <item>
-			    <property name="text">
-			      <string>24k</string>
-			    </property>
-			  </item>
-			  <item>
-			    <property name="text">
 			      <string>25k</string>
-			    </property>
-			  </item>
-			  <item>
-			    <property name="text">
-			      <string>26k</string>
-			    </property>
-			  </item>
-			  <item>
-			    <property name="text">
-			      <string>27k</string>
-			    </property>
-			  </item>
-			  <item>
-			    <property name="text">
-			      <string>28k</string>
-			    </property>
-			  </item>
-			  <item>
-			    <property name="text">
-			      <string>29k</string>
 			    </property>
 			  </item>
 			  <item>
