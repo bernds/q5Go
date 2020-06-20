@@ -64,17 +64,14 @@ jobs:
         shell: pwsh
         run: |
           dir
-          New-Item -ItemType Directory ${env:archiveName}
+          New-Item -ItemType Directory output
+          New-Item -ItemType Directory output\${env:archiveName}
           dir
-          Copy-Item build\Release\${env:targetName}'.exe' ${env:archiveName}\
-          windeployqt --qmldir . ${env:archiveName}\${env:targetName}'.exe'
-          Compress-Archive -Path ${env:archiveName} ${env:archiveName}'.zip'
-          $name = ${env:archiveName}
-          echo "::set-env name=packageName::$name"
-          Write-Host 'packageName:'${env:packageName}
+          Copy-Item build\Release\${env:targetName}'.exe' output\${env:archiveName}\
+          windeployqt --qmldir . output\${env:archiveName}\${env:targetName}'.exe'
 
       - name: Upload artifact
         uses: actions/upload-artifact@v1.0.0
         with:
           name: ${{ env.targetName }}-${{ matrix.qt_arch }}
-          path: ${{ env.targetName }}-${{ matrix.qt_arch }}
+          path: output
