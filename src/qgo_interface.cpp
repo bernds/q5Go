@@ -97,9 +97,16 @@ public:
 		if (game_mode () == modeObserveMulti)
 			update_preview (game, to);
 	}
+	void update_game_tree (go_game_ptr game)
+	{
+		if (game == m_game)
+			update_game_tree ();
+	}
 	void resume_game (qGoBoard *connector, go_game_ptr old_game, go_game_ptr new_game, game_state *st);
 	void add_game (go_game_ptr game, qGoBoard *connector, game_state *st);
 	void end_game (go_game_ptr game, qGoBoard *connector, GameMode new_mode);
+	void delete_last_move (go_game_ptr game, qGoBoard *connector);
+
 	const qGoBoard *active_board ();
 
 public slots:
@@ -1273,8 +1280,11 @@ void qGoBoard::remote_undo (const QString &)
 	if (!m_scoring)
 	{
 		dec_mv_counter();
-		m_state = m_state->prev_move ();
-		win->delete_last_move ();
+		game_state *prev = m_state->prev_move ();
+		win->transfer_displayed (m_game, m_state, prev);
+		m_state->disconnect ();
+		m_state = prev;
+		win->update_game_tree (m_game);
 		return;
 	}
 
@@ -1463,6 +1473,7 @@ void qGoBoard::receive_score_end ()
 	game_state *st_new = st->add_child_edit (*m_scoring_board, m_state->to_move (), true);
 	if (win != nullptr) {
 		win->transfer_displayed (m_game, st, st_new);
+		win->update_game_tree (m_game);
 	}
 	m_state = st_new;
 	delete m_scoring_board;
@@ -1802,11 +1813,11 @@ void qGoBoard::set_move(stone_color sc, QString pt, QString mv_nr)
 			qDebug ("corrected Handicap");
 		}
 	} else if (pt.contains ("Pass", Qt::CaseInsensitive)) {
-		qDebug () << "pass found\n";
 		game_state *st = m_state;
 		game_state *st_new = m_state->add_child_pass ();
 		if (win != nullptr) {
 			win->transfer_displayed (m_game, st, st_new);
+			win->update_game_tree (m_game);
 			win->playPassSound ();
 		}
 		m_state = st_new;
@@ -1842,6 +1853,7 @@ void qGoBoard::set_move(stone_color sc, QString pt, QString mv_nr)
 			st->make_child_primary (st_new);
 			if (win != nullptr) {
 				win->transfer_displayed (m_game, st, st_new);
+				win->update_game_tree (m_game);
 				win->playClick ();
 			}
 			m_state = st_new;

@@ -214,10 +214,6 @@ public:
 	/* Called from external source.  */
 	void append_comment (const QString &);
 	void refresh_comment ();
-	void delete_last_move ()
-	{
-		slotEditDelete (false);
-	}
 	void notice_mark_change (const go_board &new_board);
 	typedef std::pair<game_state *, bool> move_result;
 	move_result make_move (game_state *, int x, int y);
