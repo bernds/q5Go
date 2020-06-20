@@ -114,14 +114,14 @@ void GameDialog::slot_pbsuggest (bool)
 		}
 
 		// calcualte some suggest values from ranking info
-		int rkw = rkToKey(playerOpponentRkEdit->text(), true).toInt();
+		int rkw = rkToInt (playerOpponentRkEdit->text ());
 		int rkb;
 
 		// don't calc for NR
 		if (oppRk.contains("NR") || myRk.contains("NR"))
 			rkb = rkw;
 		else
-			rkb = rkToKey(myRk, true).toInt();
+			rkb = rkToInt (myRk);
 
 		// white is weaker than black? -> exchange
 		if (rkw < rkb)

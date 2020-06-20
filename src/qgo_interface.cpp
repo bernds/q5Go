@@ -1435,7 +1435,7 @@ void qGoBoard::observer_list_entry (const QString &n, const QString &r)
 	nm_item->setData (n, Qt::UserRole + 1);
 	list.append (nm_item);
 	QStandardItem *rk_item = new QStandardItem (r);
-	rk_item->setData (rkToKey (r, false), Qt::UserRole + 1);
+	rk_item->setData (rkToKey (r), Qt::UserRole + 1);
 	list.append (rk_item);
 	m_observers.appendRow (list);
 	if (win) {
