@@ -692,10 +692,7 @@ void ClientWindow::sendTextToApp (const QString &txt)
 		case IGS:
 		{
 			// IGS - check if client mode
-			bool ok;
-			txt.section (' ', 0, 0).toInt (&ok);
-			if (!ok)
-				set_sessionparameter ("client", true);
+			set_sessionparameter ("client", true);
 
 			// set quiet true; refresh players, games
 			//if (myAccount->get_status () == Status::guest)
