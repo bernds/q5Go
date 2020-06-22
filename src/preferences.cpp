@@ -698,6 +698,8 @@ void PreferencesDialog::init_from_settings ()
 	ui->fontListsButton->setFont(setting->fontLists);
 	ui->fontClocksButton->setFont(setting->fontClocks);
 	ui->fontConsoleButton->setFont(setting->fontConsole);
+
+	ui->tipsCheckBox->setChecked (setting->readBoolEntry ("TIPS_STARTUP"));
 }
 
 void PreferencesDialog::select_stone_look (bool)
@@ -968,6 +970,8 @@ void PreferencesDialog::slot_apply()
 	setting->writeEntry ("WTITLE_ENGINE", ui->titleEngineEdit->text ());
 
 	setting->writeIntEntry ("TOROID_DUPS", ui->toroidDupsSpin->text ().toInt ());
+
+	setting->writeBoolEntry ("TIPS_STARTUP", ui->tipsCheckBox->isChecked ());
 
 	if (m_dbpaths_changed) {
 		setting->m_dbpaths = m_dbpaths;

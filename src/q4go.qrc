@@ -96,6 +96,8 @@
     <file>images/goboard-small.png</file>
     <file>images/pause.png</file>
     <file>images/trash.png</file>
+    <file>images/lightbulb.png</file>
+
     <file>sounds/click.wav</file>
     <file>sounds/connect.wav</file>
     <file>sounds/enter.wav</file>
@@ -158,5 +160,16 @@
     <file>images/clientwindow/refresh_players.png</file>
     <file>images/clientwindow/observe-single.png</file>
     <file>images/clientwindow/observe-multi.png</file>
+  </qresource>
+  <qresource prefix="/totd">
+    <file>images/totd/anvars.png</file>
+    <file>images/totd/collapse.png</file>
+    <file>images/totd/ctrlclick.png</file>
+    <file>images/totd/docks.png</file>
+    <file>images/totd/evalmodes.png</file>
+    <file>images/totd/multi.png</file>
+    <file>images/totd/multieval.png</file>
+    <file>images/totd/tut.png</file>
+    <file>images/totd/visual.png</file>
   </qresource>
 </RCC>

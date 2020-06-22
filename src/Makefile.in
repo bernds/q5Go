@@ -81,7 +81,7 @@ am__objects_1 = analyzedlg.$(OBJEXT) autodiagsdlg.$(OBJEXT) \
 	sgfload.$(OBJEXT) sgf2board.$(OBJEXT) sgfpreview.$(OBJEXT) \
 	slideview.$(OBJEXT) svgbuilder.$(OBJEXT) tables.$(OBJEXT) \
 	telnet.$(OBJEXT) textview.$(OBJEXT) timing.$(OBJEXT) \
-	tutorial.$(OBJEXT) variantgamedlg.$(OBJEXT)
+	tips.$(OBJEXT) tutorial.$(OBJEXT) variantgamedlg.$(OBJEXT)
 am__objects_2 =
 am_q5go_OBJECTS = $(am__objects_1) $(am__objects_2)
 am__objects_3 = analyzedlg.moc.$(OBJEXT) autodiagsdlg.moc.$(OBJEXT) \
@@ -317,7 +317,7 @@ DISTSOURCES = analyzedlg.cpp autodiagsdlg.cpp \
 	parser.cpp playertable.cpp preferences.cpp \
 	qgo.cpp qgo_interface.cpp qgtp.cpp \
 	setting.cpp sgfload.cc sgf2board.cc sgfpreview.cpp slideview.cpp svgbuilder.cpp \
-	tables.cpp telnet.cpp textview.cpp timing.cpp tutorial.cpp \
+	tables.cpp telnet.cpp textview.cpp timing.cpp tips.cpp tutorial.cpp \
 	variantgamedlg.cpp
 
 FORMS = analyze_gui.ui autodiags_gui.ui \
@@ -331,7 +331,7 @@ FORMS = analyze_gui.ui autodiags_gui.ui \
 	normaltools_gui.ui nthmove_gui.ui \
 	preferences_gui.ui \
 	scoretools_gui.ui sgfpreview.ui slideshow_gui.ui slideview_gui.ui slideshow_gui.ui svgview_gui.ui \
-	talk_gui.ui textedit_gui.ui textview_gui.ui twoaigamedlg_gui.ui
+	talk_gui.ui textedit_gui.ui textview_gui.ui tips_gui.ui twoaigamedlg_gui.ui
 
 RESOURCES = q4go.qrc
 FORMHEADERS = $(FORMS:%.ui=ui_%.h)
@@ -509,6 +509,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/textview.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/textview.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/timing.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tips.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tutorial.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tutorial.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/variantgamedlg.Po@am__quote@

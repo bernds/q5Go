@@ -28,6 +28,7 @@
 #include "greeterwindow.h"
 #include "newaigamedlg.h"
 #include "tutorial.h"
+#include "tips.h"
 
 qGo *qgo;
 QApplication *qgo_app;
@@ -744,8 +745,13 @@ int main(int argc, char **argv)
 		analyze_dialog = new AnalyzeDialog (nullptr, QString ());
 	analyze_dialog->setVisible (cmdp.isSet (clo_analysis));
 
-	if (setting->getNewVersionWarning())
+	if (setting->getNewVersionWarning ())
 		help_new_version ();
+
+	if (setting->readBoolEntry ("TIPS_STARTUP")) {
+		TipsDialog tips (nullptr);
+		tips.exec ();
+	}
 
 	GreeterWindow *greeter {};
 	if (!windows_open) {

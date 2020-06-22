@@ -41,7 +41,7 @@ DISTSOURCES = analyzedlg.cpp autodiagsdlg.cpp \
 	parser.cpp playertable.cpp preferences.cpp \
 	qgo.cpp qgo_interface.cpp qgtp.cpp \
 	setting.cpp sgfload.cc sgf2board.cc sgfpreview.cpp slideview.cpp svgbuilder.cpp \
-	tables.cpp telnet.cpp textview.cpp timing.cpp tutorial.cpp \
+	tables.cpp telnet.cpp textview.cpp timing.cpp tips.cpp tutorial.cpp \
 	variantgamedlg.cpp
 
 FORMS = analyze_gui.ui autodiags_gui.ui \
@@ -55,7 +55,7 @@ FORMS = analyze_gui.ui autodiags_gui.ui \
 	normaltools_gui.ui nthmove_gui.ui \
 	preferences_gui.ui \
 	scoretools_gui.ui sgfpreview.ui slideshow_gui.ui slideview_gui.ui slideshow_gui.ui svgview_gui.ui \
-	talk_gui.ui textedit_gui.ui textview_gui.ui twoaigamedlg_gui.ui
+	talk_gui.ui textedit_gui.ui textview_gui.ui tips_gui.ui twoaigamedlg_gui.ui
 
 RESOURCES = q4go.qrc
 

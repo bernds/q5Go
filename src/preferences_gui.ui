@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>681</width>
-    <height>835</height>
+    <height>855</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -1036,6 +1036,13 @@ You can set the warning time besides</string>
            <widget class="QLineEdit" name="titleEngineEdit"/>
           </item>
          </layout>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QCheckBox" name="tipsCheckBox">
+         <property name="text">
+          <string>Show tips on startup</string>
+         </property>
         </widget>
        </item>
       </layout>

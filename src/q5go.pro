@@ -23,6 +23,7 @@ FORMS	      = gui_dialog.ui \
 		talk_gui.ui \
 		textedit_gui.ui \
 		textview_gui.ui \
+		tips_gui.ui \
 		slideshow_gui.ui \
 		slideview_gui.ui \
                 svgview_gui.ui \
@@ -75,6 +76,7 @@ HEADERS		      = analyzedlg.h \
                         svgbuilder.h \
                         textview.h \
                         timing.h \
+                        tips.h \
                         tutorial.h \
                         ui_helpers.h \
                         grid.h \
@@ -121,6 +123,7 @@ SOURCES		      = analyzedlg.cpp \
 			svgbuilder.cpp \
                         textview.cpp \
                         timing.cpp \
+                        tips.cpp \
                         tutorial.cpp \
                         grid.cpp \
                         variantgamedlg.cpp

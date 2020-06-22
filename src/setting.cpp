@@ -38,6 +38,8 @@ Setting::Setting()
 	params.clear ();
 
   	// defaults:
+	writeBoolEntry ("TIPS_STARTUP", true);
+
 	writeBoolEntry("USE_NMATCH", true);
 	writeBoolEntry("NMATCH_BLACK", true);
 	writeBoolEntry("NMATCH_WHITE", true);
