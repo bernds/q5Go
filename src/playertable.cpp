@@ -61,6 +61,12 @@ QVariant Player::foreground () const
 
 int Player::compare (const Player &other, int c) const
 {
+	/* Show watched players at the top of the list.  */
+	if (c != 6) {
+		int v = other.mark.contains ('W') - mark.contains ('W');
+		if (v != 0)
+			return v;
+	}
 	if (c == 2)
 		return sort_rk.compare (other.sort_rk);
 	else
