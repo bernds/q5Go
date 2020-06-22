@@ -5,10 +5,6 @@
 #ifndef IGS_GLOBALS_H
 #define IGS_GLOBALS_H
 
-#define DEFAULT_HOST "igs.joyjoy.net"
-#define DEFAULT_PORT  6969
-
-//enum RankType {kyu, dan, pro, NR};
 enum class Status { guest, registered, offline };
 enum InfoType {PLAYER, GAME, MESSAGE, YOUHAVEMSG, SERVERNAME,
 		ACCOUNT, STATUS, IT_OTHER, CMD, READY,

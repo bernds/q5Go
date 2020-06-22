@@ -1,7 +1,7 @@
 /*
  *   gamedialog.cpp
  */
-//#include "setting.h"
+
 #include "config.h"
 #include "misc.h"
 #include "defines.h"

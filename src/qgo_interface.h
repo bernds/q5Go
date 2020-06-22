@@ -16,7 +16,6 @@
 #include "gs_globals.h"
 #include "setting.h"
 
-#include "qgo.h"
 #include "gogame.h"
 
 //-----------

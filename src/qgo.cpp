@@ -1,16 +1,9 @@
-/*
-* qgo.cpp
-*/
-
-#include <QDir>
 #include <QMessageBox>
-#include <QLineEdit>
 #include <QDebug>
 #include <QSound>
 
 #include "qgo.h"
 #include "helpviewer.h"
-#include "board.h"
 #include "mainwindow.h"
 #include "setting.h"
 #include "defines.h"

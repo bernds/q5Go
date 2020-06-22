@@ -1,13 +1,7 @@
-/*
- *   playertable.cpp
- */
-
 #include <QHeaderView>
 #include <QMouseEvent>
 
 #include "playertable.h"
-#include "misc.h"
-#include "setting.h"
 
 QString Player::column (int column) const
 {

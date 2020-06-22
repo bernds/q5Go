@@ -1,7 +1,6 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
-#include "qgo.h"
 #include "defines.h"
 #include "setting.h"
 #include "newaigamedlg.h"

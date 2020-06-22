@@ -7,7 +7,6 @@
 
 #include <utility>
 
-#include <qlayout.h>
 #include <QGridLayout>
 #include <QLabel>
 #include <QAction>

@@ -1,15 +1,7 @@
-/*
-* telnet.cpp
-*/
-
 #include "telnet.h"
 #include "gs_globals.h"
 #include "clientwin.h"
 #include "igsconnection.h"
-#include <qapplication.h>
-#include <qmessagebox.h>
-#include <qlineedit.h>
-#include <qmenubar.h>
 
 TelnetConnection::TelnetConnection(ClientWindow *parent, QWidget *lv_p, QWidget *lv_g)
 {

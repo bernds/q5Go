@@ -1,7 +1,6 @@
 #include <QGraphicsTextItem>
 #include <QMouseEvent>
 
-#include "qgo.h"
 #include "defines.h"
 #include "gogame.h"
 #include "setting.h"

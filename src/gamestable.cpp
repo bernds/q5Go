@@ -1,12 +1,7 @@
-/*
- *  gamestable.cpp
- */
-
 #include <QHeaderView>
 #include <QMouseEvent>
+
 #include "gamestable.h"
-#include "misc.h"
-#include "setting.h"
 
 QString Game::column (int c) const
 {

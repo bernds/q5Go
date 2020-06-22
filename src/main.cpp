@@ -7,6 +7,12 @@
  */
 
 #include <QFileDialog>
+#include <QTranslator>
+#include <QTextCodec>
+#include <QApplication>
+#include <QDialog>
+#include <QMessageBox>
+#include <QDir>
 
 #include "config.h"
 #include "sgf.h"
@@ -22,13 +28,6 @@
 #include "greeterwindow.h"
 #include "newaigamedlg.h"
 #include "tutorial.h"
-
-#include <qtranslator.h>
-#include <qtextcodec.h>
-#include <qapplication.h>
-#include <qdialog.h>
-#include <qmessagebox.h>
-#include <qdir.h>
 
 qGo *qgo;
 QApplication *qgo_app;

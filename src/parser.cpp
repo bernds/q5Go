@@ -2,12 +2,12 @@
  *   parser.cpp
  */
 
+#include <QRegExp>
+
 #include "parser.h"
 #include "qgo_interface.h"
 #include "clientwin.h"
 
-#include <qregexp.h>
-#include <iostream>
 using namespace std;
 
 // Parsing of Go Server messages

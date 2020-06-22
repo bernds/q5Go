@@ -1,6 +1,6 @@
- /* 
+/*
  * igsconnection.cpp
- * 	
+ *
  * insprired by qigs
  *
  * authors: Peter Strempel & Tom Le Duc & Johannes Mesa
@@ -22,7 +22,6 @@ IGSConnection::IGSConnection(QWidget *lvp, QWidget *lvg) : m_lv_p (lvp), m_lv_g 
 	authState = LOGIN;
 
 	qsocket = new QTcpSocket(this);
-	CHECK_PTR(qsocket);
 
 	textCodec = 0;
 

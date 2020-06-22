@@ -5,13 +5,9 @@
 #include <fstream>
 #include <cmath>
 
-#include <qmessagebox.h>
-#include <qapplication.h>
-#include <qclipboard.h>
-#include <qpainter.h>
-#include <qlineedit.h>
-#include <qcursor.h>
-
+#include <QMessageBox>
+#include <QPainter>
+#include <QLineEdit>
 #include <QPixmap>
 #include <QResizeEvent>
 #include <QMouseEvent>
@@ -21,11 +17,9 @@
 
 #include "config.h"
 #include "setting.h"
-#include "qgo.h"
 #include "board.h"
 #include "imagehandler.h"
 #include "mainwindow.h"
-#include "clientwin.h"
 #include "miscdialogs.h"
 #include "svgbuilder.h"
 #include "ui_helpers.h"
@@ -47,7 +41,6 @@ BoardView::BoardView(QWidget *parent)
 
 	// Create an ImageHandler instance.
 	imageHandler = new ImageHandler();
-	CHECK_PTR(imageHandler);
 
 	// Init the canvas
 	canvas = new QGraphicsScene (0, 0, BOARD_X, BOARD_Y, this);

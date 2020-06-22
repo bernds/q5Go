@@ -547,8 +547,6 @@ qGoIF::qGoIF(QWidget *p) : QObject()
 {
 	qgo = new qGo();
 
-	ASSERT(qgo);
-
 	parent = p;
 	gsName = GS_UNKNOWN;
 }

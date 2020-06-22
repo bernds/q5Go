@@ -1,9 +1,6 @@
-/*
- * misc.cpp
- */
+#include <QRegExp>
 
 #include "misc.h"
-#include <qregexp.h>
 
 // convert rk to key for sorting;
 // if integer is true, then result can be used to calculate handicap

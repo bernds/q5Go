@@ -1,12 +1,7 @@
-/*
-* komispinbox.h
-*/
-
 #ifndef KOMISPINBOX_H
 #define KOMISPINBOX_H
 
-#include <qspinbox.h>
-#include <stdlib.h>
+#include <QSpinBox>
 
 class KomiSpinBox : public QDoubleSpinBox
 {

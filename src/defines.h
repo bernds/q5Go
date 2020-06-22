@@ -68,9 +68,6 @@ enum assessType { noREQ, FREE, RATED, TEACHING };
 enum tabType {tabNormalScore=0, tabTeachGameTree };
 enum tabState {tabSet, tabEnable, tabDisable };
 
-#define CHECK_PTR(x) do {} while (0)
-#define ASSERT(x)  do {} while (0)
-
 #include <QDebug>
 
 #endif
