@@ -411,7 +411,7 @@ InfoType Parser::cmd7(const QString &line)
 	aGame->ob = gamesre.cap (12);
 
 	client_window->server_add_game (*aGame);
-	emit signal_gamemove(aGame);
+	m_qgoif->slot_gamemove (aGame);
 
 	return GAME7;
 }

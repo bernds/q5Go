@@ -25,7 +25,6 @@ class Parser : public QObject
 	qGoIF *m_qgoif;
 
 signals:
-	void signal_gamemove(Game*);
 	void signal_move(GameInfo*);
 	void signal_message(QString);
 	void signal_svname(GSName&);
