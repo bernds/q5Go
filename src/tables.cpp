@@ -30,7 +30,6 @@ QVariant table_model<T>::data (const QModelIndex &index, int role) const
 	if (r >= m_entries.size ())
 		return QVariant ();
 
-
 	const T &e = m_entries[r];
 	if (role == Qt::ForegroundRole)
 		return e.foreground ();
@@ -99,7 +98,7 @@ void table_model<T>::update_from_map (const std::unordered_map<QString, T> &m)
 	std::sort (std::begin (new_entries), std::end (new_entries),
 		   [this] (const T &a, const T &b) { return sort_compare (a, b) < 0; });
 
-	auto insert_at = [this, &new_entries] (int orig_oldp, int orig_newp, int newp)
+	auto insert_at = [this, &new_entries] (size_t orig_oldp, size_t orig_newp, size_t newp)
 		{
 			// qDebug () << QString ("inserting %1 rows at %2\n").arg (newp - orig_newp).arg (orig_oldp);
 			auto nbeg = std::begin (new_entries);
@@ -118,8 +117,8 @@ void table_model<T>::update_from_map (const std::unordered_map<QString, T> &m)
 		const T &a = m_entries[oldp];
 		const T &b = new_entries[newp];
 		int c = sort_compare (a, b);
-		int orig_oldp = oldp;
-		int orig_newp = newp;
+		size_t orig_oldp = oldp;
+		size_t orig_newp = newp;
 		if (c == 0 && a == b) {
 			newp++;
 			oldp++;
@@ -311,8 +310,6 @@ void ClientWindow::server_add_game (const Game &g_in)
 	// update player info if this is not a 'who'-result or if it's me
 	if (g.H.isEmpty() || myMark == "A") //g.status.length() < 2)
 	{
-		int pl_found = 0;
-
 		auto w_it = m_player_table.find (g.wname);
 		auto b_it = m_player_table.find (g.bname);
 		if (w_it != std::end (m_player_table)) {
@@ -366,8 +363,6 @@ void ClientWindow::server_remove_game (const QString &nr)
 
 	num_games--;
 	update_game_stats ();
-
-	int pl_found = 0;
 
 	for (auto &pl: m_player_table) {
 		if (pl.second.playing == game_id)
@@ -516,7 +511,7 @@ void ClientWindow::update_who_rank (QComboBox *box, int idx)
 	update_tables ();
 }
 
-bool ClientWindow::filter_game (const Game &g)
+bool ClientWindow::filter_game (const Game &)
 {
 	return false;
 }
