@@ -23,11 +23,6 @@
 #include "ui_helpers.h"
 #include "sizegraphicsview.h"
 
-#ifdef Q_OS_MACX
-#include <CoreFoundation/CFString.h>
-#include <CoreFoundation/CFBundle.h>
-#endif //Q_OS_MACX
-
 class MainWindow_IGS : public MainWindow
 {
 	qGoBoard *m_connector;
