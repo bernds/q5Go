@@ -1427,10 +1427,14 @@ void ClientWindow::slot_mouse_players (const Player &p)
 		puw->addAction (tr ("toggle watch list"),
 				[=] () {
 					num_watchedplayers += toggle_player_state ("WATCH", "W");
+					watch = ";" + setting->readEntry ("WATCH") + ";";
 					statusUsers->setText (" P: " + QString::number (num_players) + " / " + QString::number (num_watchedplayers) + " ");
 				});
 		puw->addAction (tr ("toggle exclude list"),
-				[=] () { toggle_player_state ("EXCLUDE", "X"); });
+				[=] () {
+					toggle_player_state ("EXCLUDE", "X");
+					exclude = ";" + setting->readEntry ("EXCLUDE") + ";";
+				});
 	}
 
 	m_menu_player = p;
