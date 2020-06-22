@@ -128,8 +128,7 @@ void IGSConnection::OnConnected()
 void IGSConnection::OnReadyRead()
 {
 	qDebug("OnReadyRead....");
-	Update_Locker l1 (m_lv_p);
-	Update_Locker l2 (m_lv_g);
+
 	for (;;)
 	{
 		int available = qsocket->bytesAvailable();
