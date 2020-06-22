@@ -79,8 +79,7 @@ HEADERS		      = analyzedlg.h \
                         ui_helpers.h \
                         grid.h \
                         miscdialogs.h \
-                        variantgamedlg.h \
-                        audio.h
+                        variantgamedlg.h
 
 SOURCES		      = analyzedlg.cpp \
 			autodiagsdlg.cpp \
@@ -124,8 +123,7 @@ SOURCES		      = analyzedlg.cpp \
                         timing.cpp \
                         tutorial.cpp \
                         grid.cpp \
-                        variantgamedlg.cpp \
-                        audio.cpp
+                        variantgamedlg.cpp
 
 isEmpty(PREFIX) {
 PREFIX = /usr/local

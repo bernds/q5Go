@@ -6,7 +6,7 @@ q5go_METASOURCES = AUTO
 
 KDE_OPTIONS = qtonly
 
-DISTHEADERS_MOC = analyzedlg.h audio.h autodiagsdlg.h \
+DISTHEADERS_MOC = analyzedlg.h autodiagsdlg.h \
 	bitarray.h board.h \
 	clientwin.h clickableviews.h clockview.h \
 	dbdialog.h \
@@ -26,7 +26,7 @@ DISTHEADERS_NOMOC = goboard.h config.h defines.h grid.h goboard.h gogame.h gs_gl
 	imagehandler.h komispinbox.h misc.h newaigamedlg.h setting.h sgf.h sgfparser.h \
 	svgbuilder.h timing.h ui_helpers.h
 
-DISTSOURCES = analyzedlg.cpp audio.cpp autodiagsdlg.cpp \
+DISTSOURCES = analyzedlg.cpp autodiagsdlg.cpp \
 	board.cpp \
 	clientwin.cpp clockview.cpp \
 	dbdialog.cpp \

@@ -67,43 +67,43 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am__objects_1 = analyzedlg.$(OBJEXT) audio.$(OBJEXT) \
-	autodiagsdlg.$(OBJEXT) board.$(OBJEXT) clientwin.$(OBJEXT) \
-	clockview.$(OBJEXT) dbdialog.$(OBJEXT) edit_analysis.$(OBJEXT) \
-	evalgraph.$(OBJEXT) figuredlg.$(OBJEXT) gamedialog.$(OBJEXT) \
-	gamestable.$(OBJEXT) gametree.$(OBJEXT) goboard.$(OBJEXT) \
-	gogame.$(OBJEXT) grid.$(OBJEXT) greeterwindow.$(OBJEXT) \
-	helpviewer.$(OBJEXT) igsconnection.$(OBJEXT) \
-	imagehandler.$(OBJEXT) main.$(OBJEXT) mainwindow.$(OBJEXT) \
-	misc.$(OBJEXT) msg_handler.$(OBJEXT) multisave.$(OBJEXT) \
-	newaigamedlg.$(OBJEXT) parser.$(OBJEXT) playertable.$(OBJEXT) \
-	preferences.$(OBJEXT) qgo.$(OBJEXT) qgo_interface.$(OBJEXT) \
-	qgtp.$(OBJEXT) setting.$(OBJEXT) sgfload.$(OBJEXT) \
-	sgf2board.$(OBJEXT) sgfpreview.$(OBJEXT) slideview.$(OBJEXT) \
-	svgbuilder.$(OBJEXT) tables.$(OBJEXT) telnet.$(OBJEXT) \
-	textview.$(OBJEXT) timing.$(OBJEXT) variantgamedlg.$(OBJEXT)
+am__objects_1 = analyzedlg.$(OBJEXT) autodiagsdlg.$(OBJEXT) \
+	board.$(OBJEXT) clientwin.$(OBJEXT) clockview.$(OBJEXT) \
+	dbdialog.$(OBJEXT) edit_analysis.$(OBJEXT) evalgraph.$(OBJEXT) \
+	figuredlg.$(OBJEXT) gamedialog.$(OBJEXT) gamestable.$(OBJEXT) \
+	gametree.$(OBJEXT) goboard.$(OBJEXT) gogame.$(OBJEXT) \
+	grid.$(OBJEXT) greeterwindow.$(OBJEXT) helpviewer.$(OBJEXT) \
+	igsconnection.$(OBJEXT) imagehandler.$(OBJEXT) main.$(OBJEXT) \
+	mainwindow.$(OBJEXT) misc.$(OBJEXT) msg_handler.$(OBJEXT) \
+	multisave.$(OBJEXT) newaigamedlg.$(OBJEXT) parser.$(OBJEXT) \
+	playertable.$(OBJEXT) preferences.$(OBJEXT) qgo.$(OBJEXT) \
+	qgo_interface.$(OBJEXT) qgtp.$(OBJEXT) setting.$(OBJEXT) \
+	sgfload.$(OBJEXT) sgf2board.$(OBJEXT) sgfpreview.$(OBJEXT) \
+	slideview.$(OBJEXT) svgbuilder.$(OBJEXT) tables.$(OBJEXT) \
+	telnet.$(OBJEXT) textview.$(OBJEXT) timing.$(OBJEXT) \
+	variantgamedlg.$(OBJEXT)
 am__objects_2 =
 am_q5go_OBJECTS = $(am__objects_1) $(am__objects_2)
 am__objects_3 = tutorial.$(OBJEXT)
-am__objects_4 = analyzedlg.moc.$(OBJEXT) audio.moc.$(OBJEXT) \
-	autodiagsdlg.moc.$(OBJEXT) bitarray.moc.$(OBJEXT) \
-	board.moc.$(OBJEXT) clientwin.moc.$(OBJEXT) \
-	clickableviews.moc.$(OBJEXT) clockview.moc.$(OBJEXT) \
-	dbdialog.moc.$(OBJEXT) edit_analysis.moc.$(OBJEXT) \
-	evalgraph.moc.$(OBJEXT) figuredlg.moc.$(OBJEXT) \
-	gamedialog.moc.$(OBJEXT) gamestable.moc.$(OBJEXT) \
-	gametree.moc.$(OBJEXT) greeterwindow.moc.$(OBJEXT) \
-	helpviewer.moc.$(OBJEXT) igsconnection.moc.$(OBJEXT) \
-	mainwindow.moc.$(OBJEXT) miscdialogs.moc.$(OBJEXT) \
-	msg_handler.moc.$(OBJEXT) multisave.moc.$(OBJEXT) \
-	normaltools.moc.$(OBJEXT) parser.moc.$(OBJEXT) \
-	playertable.moc.$(OBJEXT) preferences.moc.$(OBJEXT) \
-	qgo.moc.$(OBJEXT) qgo_interface.moc.$(OBJEXT) \
-	qgtp.moc.$(OBJEXT) scoretools.moc.$(OBJEXT) \
-	sizegraphicsview.moc.$(OBJEXT) slideview.moc.$(OBJEXT) \
-	sgfpreview.moc.$(OBJEXT) tables.moc.$(OBJEXT) \
-	telnet.moc.$(OBJEXT) textview.moc.$(OBJEXT) \
-	tutorial.moc.$(OBJEXT) variantgamedlg.moc.$(OBJEXT)
+am__objects_4 = analyzedlg.moc.$(OBJEXT) autodiagsdlg.moc.$(OBJEXT) \
+	bitarray.moc.$(OBJEXT) board.moc.$(OBJEXT) \
+	clientwin.moc.$(OBJEXT) clickableviews.moc.$(OBJEXT) \
+	clockview.moc.$(OBJEXT) dbdialog.moc.$(OBJEXT) \
+	edit_analysis.moc.$(OBJEXT) evalgraph.moc.$(OBJEXT) \
+	figuredlg.moc.$(OBJEXT) gamedialog.moc.$(OBJEXT) \
+	gamestable.moc.$(OBJEXT) gametree.moc.$(OBJEXT) \
+	greeterwindow.moc.$(OBJEXT) helpviewer.moc.$(OBJEXT) \
+	igsconnection.moc.$(OBJEXT) mainwindow.moc.$(OBJEXT) \
+	miscdialogs.moc.$(OBJEXT) msg_handler.moc.$(OBJEXT) \
+	multisave.moc.$(OBJEXT) normaltools.moc.$(OBJEXT) \
+	parser.moc.$(OBJEXT) playertable.moc.$(OBJEXT) \
+	preferences.moc.$(OBJEXT) qgo.moc.$(OBJEXT) \
+	qgo_interface.moc.$(OBJEXT) qgtp.moc.$(OBJEXT) \
+	scoretools.moc.$(OBJEXT) sizegraphicsview.moc.$(OBJEXT) \
+	slideview.moc.$(OBJEXT) sgfpreview.moc.$(OBJEXT) \
+	tables.moc.$(OBJEXT) telnet.moc.$(OBJEXT) \
+	textview.moc.$(OBJEXT) tutorial.moc.$(OBJEXT) \
+	variantgamedlg.moc.$(OBJEXT)
 am__objects_5 = $(am__objects_3) $(am__objects_4)
 am__objects_6 = q4go.rcc.$(OBJEXT)
 am__objects_7 = $(am__objects_6)
@@ -283,7 +283,7 @@ top_srcdir = @top_srcdir@
 INCLUDES = $(all_includes)
 q5go_METASOURCES = AUTO
 KDE_OPTIONS = qtonly
-DISTHEADERS_MOC = analyzedlg.h audio.h autodiagsdlg.h \
+DISTHEADERS_MOC = analyzedlg.h autodiagsdlg.h \
 	bitarray.h board.h \
 	clientwin.h clickableviews.h clockview.h \
 	dbdialog.h \
@@ -303,7 +303,7 @@ DISTHEADERS_NOMOC = goboard.h config.h defines.h grid.h goboard.h gogame.h gs_gl
 	imagehandler.h komispinbox.h misc.h newaigamedlg.h setting.h sgf.h sgfparser.h \
 	svgbuilder.h timing.h ui_helpers.h
 
-DISTSOURCES = analyzedlg.cpp audio.cpp autodiagsdlg.cpp \
+DISTSOURCES = analyzedlg.cpp autodiagsdlg.cpp \
 	board.cpp \
 	clientwin.cpp clockview.cpp \
 	dbdialog.cpp \
@@ -435,8 +435,6 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/analyzedlg.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/analyzedlg.moc.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/audio.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/audio.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/autodiagsdlg.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/autodiagsdlg.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/bitarray.moc.Po@am__quote@
