@@ -47,8 +47,8 @@
 #define LANGUAGE_CODES { \
 	"zh", \
 	"zh_cn", \
-	"cz", \
-	"dk", \
+	"cs", \
+	"da", \
 	"de", \
 	"en", \
 	"es",\
