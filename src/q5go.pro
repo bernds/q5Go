@@ -178,7 +178,7 @@ translation.files     = translations/*
 INSTALLS += translation
 
 documentation.path    = $$DOCDIR/
-documentation.files   = ../AUTHORS ../COPYING ../NEWS ../README.md ../TODO ../ChangeLog
+documentation.files   = ../AUTHORS ../COPYING ../README.md ../ChangeLog
 INSTALLS += documentation
 
 system("pandoc --help >/dev/null 2>&1"): HAS_PANDOC = TRUE
