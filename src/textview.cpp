@@ -77,8 +77,8 @@ void TextView::saveMe()
 
 	if (!file.open(QIODevice::WriteOnly))
 	{
-		QString s = tr("Failed to write to file ") + fileName;
-		QMessageBox::warning(this, PACKAGE, s);
+		QString s = tr ("Failed to write to file \"%1\".").arg (fileName);
+		QMessageBox::warning (this, PACKAGE, s);
 		return;
 	}
 

@@ -907,10 +907,6 @@ Après avoir placé une pierre et/ou une anullation, libérer le bouton retourne
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>nMove to the previous move that starts a diagram</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Next dia&amp;gram</source>
         <translation type="unfinished"></translation>
     </message>
@@ -948,10 +944,6 @@ Après avoir placé une pierre et/ou une anullation, libérer le bouton retourne
     </message>
     <message>
         <source>Place &amp;stone</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&quot;Normal mode, click to place a stone.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1470,6 +1462,14 @@ option to replace an edited position, or to insert your edits before the current
     </message>
     <message>
         <source>Delete existing analysis from the file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move to the previous move that starts a diagram</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Normal mode, click to place a stone.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8766,7 +8766,7 @@ Les pierres seront affichées avec une taille légèrement inférieure, de faço
         <source>Play sound when placing a stone
 
 Enable this box when you want to listen a clicking sound when playing a stone on the board.</source>
-        <translation>Joue un son lorsqu&apos;une pierre est posée
+        <translation type="vanished">Joue un son lorsqu&apos;une pierre est posée
 
 Cochez cette case si vous souhaitez entendre un son lorsqu&apos;une pierre est posée sur le plateau.</translation>
     </message>
@@ -9078,7 +9078,7 @@ Si &apos;Aucun&apos; est sélectionné, le commentaire est caché par défaut.</
         <source>Display variations
 
 Select how to display all brothers of the current move. Either not at all, or as ghost stones, or as smaller stones.</source>
-        <translation>Affichage des variations
+        <translation type="vanished">Affichage des variations
 
 Détermine le mode d&apos;affichage des variations du coup actuel. Soit rien, soit une pierre transparente, soit une petite pierre.</translation>
     </message>
@@ -10295,7 +10295,7 @@ Lorsqu&apos;on utilise que des nombres à un seul chiffres, il est plus adéquat
 
 Check the box for setting an anti clicko delay (1/4 second) for on line games.
 If you press to enter a move on the board, the move will not be acknowledged if the mouse is released too early.</source>
-        <translation>Anti clicko
+        <translation type="vanished">Anti clicko
 
 Cocher pour avoir un délai anti clicko (1/4 seconde) dans les parties en ligne
 En cliquant pour jouer un coup sur le goban, le coup ne sera pas enregistré si la souris est relachée trop vite.</translation>
@@ -10733,10 +10733,6 @@ diagram pane shown:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Annotated games can potentially have very many figures. This option stops them from being displayed in the game tree. Instead, an icon is shown for any move that has diagrams as children.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Hide child diagrams in game tree</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10922,14 +10918,6 @@ a variation</source>
     </message>
     <message>
         <source>Options for preventing misclicks in online games</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>If set, moves are only played if the mouse button is held down for a brief period</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>If set, moves are only played when the click is not too close to an edge between positions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -11174,6 +11162,34 @@ a variation</source>
     </message>
     <message>
         <source>Save to fixed path:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;Play sound when placing a stone&lt;/p&gt;
+&lt;p&gt;Enable this box when you want to listen a clicking sound when playing a stone on the board.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;Display variations&lt;/p&gt;
+&lt;p&gt;Select how to display all brothers of the current move. Either not at all, or as ghost stones, or as smaller stones.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;Annotated games can potentially have very many figures. This option stops them from being displayed in the game tree. Instead, an icon is shown for any move that has diagrams as children.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If set, moves are only played if the mouse button is held down for a brief period.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;Anti Clicko&lt;/p&gt;
+&lt;p&gt;Check the box for setting an anti clicko delay (1/4 second) for on line games.
+If you press to enter a move on the board, the move will not be acknowledged if the mouse is released too early.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;If set, moves are only played when the click is not too close to an edge between positions.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -12612,7 +12628,7 @@ Après avoir placé une pierre et/ou une anullation, libérer le bouton retourne
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Failed to write to file </source>
+        <source>Failed to write to file &quot;%1&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

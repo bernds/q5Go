@@ -3417,7 +3417,7 @@ After placing and/or undo release button for returning to starting point automat
     <string>Previous &amp;diagram</string>
    </property>
    <property name="toolTip">
-    <string>nMove to the previous move that starts a diagram</string>
+    <string>Move to the previous move that starts a diagram</string>
    </property>
   </action>
   <action name="navNextFigure">
@@ -3482,7 +3482,7 @@ After placing and/or undo release button for returning to starting point automat
     <string>Place &amp;stone</string>
    </property>
    <property name="toolTip">
-    <string>&quot;Normal mode, click to place a stone.</string>
+    <string>Normal mode, click to place a stone.</string>
    </property>
   </action>
   <action name="editTriangle">

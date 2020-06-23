@@ -871,10 +871,6 @@ After placing and/or undo release button for returning to starting point automat
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>nMove to the previous move that starts a diagram</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Next dia&amp;gram</source>
         <translation type="unfinished"></translation>
     </message>
@@ -912,10 +908,6 @@ After placing and/or undo release button for returning to starting point automat
     </message>
     <message>
         <source>Place &amp;stone</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&quot;Normal mode, click to place a stone.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1434,6 +1426,14 @@ option to replace an edited position, or to insert your edits before the current
     </message>
     <message>
         <source>Delete existing analysis from the file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move to the previous move that starts a diagram</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Normal mode, click to place a stone.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7472,7 +7472,7 @@ Verwisselt zijbalk en bord, zodat het bord links staat en de zijbalk rechts.</tr
         <source>Play sound when placing a stone
 
 Enable this box when you want to listen a clicking sound when playing a stone on the board.</source>
-        <translation>Speel geluid bij het zetten van een steen
+        <translation type="vanished">Speel geluid bij het zetten van een steen
 
 Schakel dit in als je een klikgeluid wil horen wanneer een steen op het bord wordt gelegd.</translation>
     </message>
@@ -7718,7 +7718,7 @@ Om de opgeslagen oriëntatie van het opmerkingenveld te gebruiken moet u &apos;z
         <source>Display variations
 
 Select how to display all brothers of the current move. Either not at all, or as ghost stones, or as smaller stones.</source>
-        <translation>Weergeven variaties
+        <translation type="vanished">Weergeven variaties
 
 Selecteer hoe alle broers van de huidige zet moeten weergegeven worden. Ofwel helemaal, ofwel als denkbeeldige stenen, ofwel als kleinere stenen.</translation>
     </message>
@@ -8847,7 +8847,7 @@ Voor het bewerken van nummers van een cijfer kan het handig zijn deze optie uit 
 
 Check the box for setting an anti clicko delay (1/4 second) for on line games.
 If you press to enter a move on the board, the move will not be acknowledged if the mouse is released too early.</source>
-        <translation>Anti Clicko
+        <translation type="vanished">Anti Clicko
 
 Activeer deze optie om een anti clicko vertraging (1/4 seconde) in te stellen voor alle online spellen.
 Als je klikt om een zet te plaatsen zal de zet niet geplaatst worden als de muisknop te vroeg wordt losgelaten.</translation>
@@ -9230,10 +9230,6 @@ diagram pane shown:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Annotated games can potentially have very many figures. This option stops them from being displayed in the game tree. Instead, an icon is shown for any move that has diagrams as children.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Hide child diagrams in game tree</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9419,14 +9415,6 @@ a variation</source>
     </message>
     <message>
         <source>Options for preventing misclicks in online games</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>If set, moves are only played if the mouse button is held down for a brief period</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>If set, moves are only played when the click is not too close to an edge between positions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -9671,6 +9659,34 @@ a variation</source>
     </message>
     <message>
         <source>Save to fixed path:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;Play sound when placing a stone&lt;/p&gt;
+&lt;p&gt;Enable this box when you want to listen a clicking sound when playing a stone on the board.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;Display variations&lt;/p&gt;
+&lt;p&gt;Select how to display all brothers of the current move. Either not at all, or as ghost stones, or as smaller stones.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;Annotated games can potentially have very many figures. This option stops them from being displayed in the game tree. Instead, an icon is shown for any move that has diagrams as children.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If set, moves are only played if the mouse button is held down for a brief period.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;Anti Clicko&lt;/p&gt;
+&lt;p&gt;Check the box for setting an anti clicko delay (1/4 second) for on line games.
+If you press to enter a move on the board, the move will not be acknowledged if the mouse is released too early.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;If set, moves are only played when the click is not too close to an edge between positions.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -11009,7 +11025,7 @@ sluit het tabblad (en dialoogvenster)</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Failed to write to file </source>
+        <source>Failed to write to file &quot;%1&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

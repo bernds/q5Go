@@ -212,9 +212,8 @@
              <string>Play sound when placing a stone</string>
             </property>
             <property name="whatsThis">
-             <string>Play sound when placing a stone
-
-Enable this box when you want to listen a clicking sound when playing a stone on the board.</string>
+             <string>&lt;p&gt;Play sound when placing a stone&lt;/p&gt;
+&lt;p&gt;Enable this box when you want to listen a clicking sound when playing a stone on the board.&lt;/p&gt;</string>
             </property>
             <property name="text">
              <string>Stone played</string>
@@ -1225,9 +1224,8 @@ Globally disables all tool tips that would show up if the mouse hovers over a GU
           <string>Display variations</string>
          </property>
          <property name="whatsThis">
-          <string>Display variations
-
-Select how to display all brothers of the current move. Either not at all, or as ghost stones, or as smaller stones.</string>
+          <string>&lt;p&gt;Display variations&lt;/p&gt;
+&lt;p&gt;Select how to display all brothers of the current move. Either not at all, or as ghost stones, or as smaller stones.&lt;/p&gt;</string>
          </property>
          <property name="title">
           <string>Variation display</string>
@@ -1505,7 +1503,7 @@ diagram pane shown:</string>
           <item>
            <widget class="QCheckBox" name="diagHideCheckBox">
             <property name="whatsThis">
-             <string>Annotated games can potentially have very many figures. This option stops them from being displayed in the game tree. Instead, an icon is shown for any move that has diagrams as children.</string>
+             <string>&lt;p&gt;Annotated games can potentially have very many figures. This option stops them from being displayed in the game tree. Instead, an icon is shown for any move that has diagrams as children.&lt;/p&gt;</string>
             </property>
             <property name="text">
              <string>Hide child diagrams in game tree</string>
@@ -1564,13 +1562,12 @@ diagram pane shown:</string>
           <item>
            <widget class="QCheckBox" name="antiClickoCheckBox">
             <property name="toolTip">
-             <string>If set, moves are only played if the mouse button is held down for a brief period</string>
+             <string>If set, moves are only played if the mouse button is held down for a brief period.</string>
             </property>
             <property name="whatsThis">
-             <string>Anti Clicko
-
-Check the box for setting an anti clicko delay (1/4 second) for on line games.
-If you press to enter a move on the board, the move will not be acknowledged if the mouse is released too early.</string>
+             <string>&lt;p&gt;Anti Clicko&lt;/p&gt;
+&lt;p&gt;Check the box for setting an anti clicko delay (1/4 second) for on line games.
+If you press to enter a move on the board, the move will not be acknowledged if the mouse is released too early.&lt;/p&gt;</string>
             </property>
             <property name="text">
              <string>Anti clicko (1/4 second click latency)</string>
@@ -1580,7 +1577,7 @@ If you press to enter a move on the board, the move will not be acknowledged if 
           <item>
            <widget class="QCheckBox" name="hitboxCheckBox">
             <property name="toolTip">
-             <string>If set, moves are only played when the click is not too close to an edge between positions</string>
+             <string>&lt;p&gt;If set, moves are only played when the click is not too close to an edge between positions.&lt;/p&gt;</string>
             </property>
             <property name="text">
              <string>Anti clicko (smaller hitbox)</string>

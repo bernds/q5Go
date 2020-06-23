@@ -823,7 +823,7 @@ After placing and/or undo release button for returning to starting point automat
     </message>
     <message>
         <source>nMove to the previous move that starts a diagram</source>
-        <translation>跳转到前一图解</translation>
+        <translation type="vanished">跳转到前一图解</translation>
     </message>
     <message>
         <source>Next dia&amp;gram</source>
@@ -871,7 +871,7 @@ After placing and/or undo release button for returning to starting point automat
     </message>
     <message>
         <source>&quot;Normal mode, click to place a stone.</source>
-        <translation>普通模式，点击放置棋子。</translation>
+        <translation type="vanished">普通模式，点击放置棋子。</translation>
     </message>
     <message>
         <source>Set &amp;triangle mark</source>
@@ -1451,6 +1451,14 @@ option to replace an edited position, or to insert your edits before the current
     </message>
     <message>
         <source>Delete existing analysis from the file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move to the previous move that starts a diagram</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Normal mode, click to place a stone.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4657,7 +4665,7 @@ Globally disables all tool tips that would show up if the mouse hovers over a GU
         <source>Play sound when placing a stone
 
 Enable this box when you want to listen a clicking sound when playing a stone on the board.</source>
-        <translation>落子时播放音效
+        <translation type="vanished">落子时播放音效
 
 选中此项即可听见落子声音</translation>
     </message>
@@ -4833,7 +4841,7 @@ If your language is not supported, you might consider translating qGo. Please ch
         <source>Display variations
 
 Select how to display all brothers of the current move. Either not at all, or as ghost stones, or as smaller stones.</source>
-        <translation>如何显示变化
+        <translation type="vanished">如何显示变化
 
 选择如何显示当前一手的兄弟变化,可以是不显示,显示为半透明棋子,或者显示为小棋子.</translation>
     </message>
@@ -5315,7 +5323,7 @@ Be careful: it may be annoying if opponent does not want to accept your defaults
 
 Check the box for setting an anti clicko delay (1/4 second) for on line games.
 If you press to enter a move on the board, the move will not be acknowledged if the mouse is released too early.</source>
-        <translation>防止误点击
+        <translation type="vanished">防止误点击
 
 选中此项则在网上对局时启用&apos;防止误点击&apos;功能(1/4秒延迟)
 如果您在棋盘上点下鼠标后再松开的时间间隔太短(可能您的手颤动了一下),将不作为一次有效的落子.</translation>
@@ -5677,7 +5685,7 @@ diagram pane shown:</source>
     </message>
     <message>
         <source>Annotated games can potentially have very many figures. This option stops them from being displayed in the game tree. Instead, an icon is shown for any move that has diagrams as children.</source>
-        <translation>注解对局可能有很多图表。此选项禁止显示棋局树中的图表。但会在有图解的落子上显示一个子图标。</translation>
+        <translation type="vanished">注解对局可能有很多图表。此选项禁止显示棋局树中的图表。但会在有图解的落子上显示一个子图标。</translation>
     </message>
     <message>
         <source>Hide child diagrams in game tree</source>
@@ -5920,14 +5928,6 @@ a variation</source>
     </message>
     <message>
         <source>Options for preventing misclicks in online games</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>If set, moves are only played if the mouse button is held down for a brief period</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>If set, moves are only played when the click is not too close to an edge between positions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -6180,6 +6180,34 @@ a variation</source>
     </message>
     <message>
         <source>Save to fixed path:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;Play sound when placing a stone&lt;/p&gt;
+&lt;p&gt;Enable this box when you want to listen a clicking sound when playing a stone on the board.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;Display variations&lt;/p&gt;
+&lt;p&gt;Select how to display all brothers of the current move. Either not at all, or as ghost stones, or as smaller stones.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;Annotated games can potentially have very many figures. This option stops them from being displayed in the game tree. Instead, an icon is shown for any move that has diagrams as children.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If set, moves are only played if the mouse button is held down for a brief period.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;Anti Clicko&lt;/p&gt;
+&lt;p&gt;Check the box for setting an anti clicko delay (1/4 second) for on line games.
+If you press to enter a move on the board, the move will not be acknowledged if the mouse is released too early.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;If set, moves are only played when the click is not too close to an edge between positions.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7194,7 +7222,11 @@ closes the tab (and dialog)</source>
     </message>
     <message>
         <source>Failed to write to file </source>
-        <translation>写文件失败</translation>
+        <translation type="vanished">写文件失败</translation>
+    </message>
+    <message>
+        <source>Failed to write to file &quot;%1&quot;.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
