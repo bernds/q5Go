@@ -11,8 +11,8 @@
 #include "tables.h"
 #include "qgo_interface.h"
 
-class Player;
-class Game;
+struct Player;
+struct Game;
 class GameInfo;
 class qGoIF;
 class ClientWindow;
