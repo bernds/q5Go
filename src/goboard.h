@@ -338,7 +338,7 @@ public:
 		} else
 			m_mark_text.push_back (str);
 		m_marks[bp] = mark::text;
-		m_mark_extra[bp] = idx;
+		m_mark_extra[bp] = (mextra)idx;
 	}
 	void clear_marks ()
 	{
