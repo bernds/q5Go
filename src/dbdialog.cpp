@@ -25,7 +25,7 @@ DBDialog::DBDialog (QWidget *parent)
 	gameNumLabel->setText (m_model.status_string ());
 	dbListView->setModel (&m_model);
 
-	setWindowTitle ("Open SGF file from database");
+	setWindowTitle (tr ("Open SGF file from database"));
 
 	connect (dbListView, &ClickableListView::doubleclicked, this, &DBDialog::handle_doubleclick);
 	connect (dbListView->selectionModel (), &QItemSelectionModel::selectionChanged,
