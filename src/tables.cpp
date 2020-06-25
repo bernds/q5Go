@@ -202,11 +202,13 @@ QVariant table_model<T>::headerData (int section, Qt::Orientation ot, int role) 
 
 void ClientWindow::update_player_stats ()
 {
+	int num_players = m_player_table.size ();
 	statusUsers->setText (" P: " + QString::number (num_players) + " / " + QString::number (num_watchedplayers) + " ");
 }
 
 void ClientWindow::update_game_stats ()
 {
+	int num_games = m_games_table.size ();
 	statusGames->setText(" G: " + QString::number(num_games) + " / " + QString::number(num_observedgames) + " ");
 }
 
@@ -218,18 +220,17 @@ void ClientWindow::update_observed_games (int count)
 
 void ClientWindow::prepare_game_list ()
 {
-	num_games = 0;
 	m_games_table.clear ();
 }
 
 void ClientWindow::prepare_player_list ()
 {
-	num_players = 0;
 	m_player_table.clear ();
 }
 
 void ClientWindow::finish_game_list ()
 {
+	m_games_init_complete = true;
 	m_games_model.update_from_map (m_games_table);
 	update_game_stats ();
 	ListView_games->resize_columns ();
@@ -237,6 +238,7 @@ void ClientWindow::finish_game_list ()
 
 void ClientWindow::finish_player_list ()
 {
+	m_player_init_complete = true;
 	m_player_model.update_from_map (m_player_table);
 	update_player_stats ();
 	ListView_players->resize_columns ();
@@ -261,22 +263,23 @@ QString ClientWindow::getPlayerRk (QString player)
 
 void ClientWindow::update_tables ()
 {
-	if (!m_player7_active)
+	if (!m_player7_active) {
 		m_games_model.update_from_map (m_games_table);
-	if (!m_playerlist_active)
+		update_game_stats ();
+	}
+	if (!m_playerlist_active) {
 		m_player_model.update_from_map (m_player_table);
+		update_player_stats ();
+	}
 }
 
 void ClientWindow::server_add_game (const Game &g_in)
 {
 	Game g = g_in;
 
-	if (g.H.isEmpty() && !num_games)
-	{
-		// skip games until initial table has loaded
-		qDebug() << "game skipped because no init table";
+	// skip individual games until initial table has loaded
+	if (g.H.isEmpty() && !m_games_init_complete)
 		return;
-	}
 
 	QString excludeMark = "";
 	QString myMark = "B";
@@ -361,9 +364,6 @@ void ClientWindow::server_remove_game (const QString &nr)
 		return;
 	}
 
-	num_games--;
-	update_game_stats ();
-
 	for (auto &pl: m_player_table) {
 		if (pl.second.playing == game_id)
 			pl.second.playing = "-";
@@ -382,8 +382,6 @@ void ClientWindow::server_remove_player (const QString &name)
 			num_watchedplayers--;
 		}
 		m_player_table.erase (it);
-		num_players--;
-		update_player_stats ();
 	} else
 		qWarning() << "disconnected player not found: " << name;
 }
@@ -421,11 +419,9 @@ void ClientWindow::server_add_player (const Player &p_in, bool cmdplayers)
 {
 	Player p = p_in;
 
-	if (!cmdplayers && !num_players) {
-		qDebug() << "player skipped because no init table";
-		// skip players until initial table has loaded
+	// skip individual players until initial table has loaded
+	if (!cmdplayers && !m_player_init_complete)
 		return;
-	}
 
 	if (cmdplayers)
 	{
@@ -479,10 +475,6 @@ void ClientWindow::server_add_player (const Player &p_in, bool cmdplayers)
 	p.sort_rk = rkToKey (p.rank) + p.name.toLower ();
 
 	m_player_table[p.name] = p;
-
-	// increase number of players
-	num_players++;
-	update_player_stats ();
 }
 
 void ClientWindow::update_who_rank (QComboBox *box, int idx)

@@ -58,6 +58,8 @@ class ClientWindow : public QMainWindow, public Ui::ClientWindowGui
 
 	bool m_player7_active = false;
 	bool m_playerlist_active = false;
+	bool m_player_init_complete = false;
+	bool m_games_init_complete = false;
 
 	// online time
 	int onlineCount;
@@ -124,8 +126,6 @@ class ClientWindow : public QMainWindow, public Ui::ClientWindowGui
 	int counter;
 
 	// Statistics
-	int num_players = 0;
-	int num_games = 0;
 	int num_watchedplayers = 0;
 	int num_observedgames = 0;
 

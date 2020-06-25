@@ -522,7 +522,7 @@ void ClientWindow::clear_server_data ()
 }
 
 // connection closed
-void ClientWindow::slot_connclosed()
+void ClientWindow::slot_connclosed ()
 {
 	// no Timers in offline mode!
 	if (seekButtonTimer) {
@@ -573,6 +573,9 @@ void ClientWindow::slot_connclosed()
 
 	m_playerlist_active = false;
 	m_player7_active = false;
+
+	m_player_init_complete = false;
+	m_games_init_complete = false;
 }
 
 // close application
@@ -1427,7 +1430,7 @@ void ClientWindow::slot_mouse_players (const Player &p)
 				[=] () {
 					num_watchedplayers += toggle_player_state ("WATCH", "W");
 					watch = ";" + setting->readEntry ("WATCH") + ";";
-					statusUsers->setText (" P: " + QString::number (num_players) + " / " + QString::number (num_watchedplayers) + " ");
+					update_player_stats ();
 				});
 		puw->addAction (tr ("toggle exclude list"),
 				[=] () {
