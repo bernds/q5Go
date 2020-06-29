@@ -154,9 +154,9 @@ win32:RC_FILE	      = qgo.rc
 OBJECTS_DIR	      = temp_
 MOC_DIR		      = temp_
 UI_DIR		    = temp_
-TRANSLATIONS	      = qgo_cz.ts \
+TRANSLATIONS	      = qgo_cs.ts \
 			qgo_de.ts \
-			qgo_dk.ts \
+			qgo_da.ts \
 			qgo_es.ts \
 			qgo_fr.ts \
 			qgo_it.ts \

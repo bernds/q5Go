@@ -22,5 +22,5 @@ uninstall-local:
 ####### kdevelop will overwrite this part!!! (end)############
 
 Translationsdir = $(datadir)/qGo/translations
-Translations_DATA = qgo_de.qm qgo_fr.qm qgo_it.qm qgo_nl.qm qgo_cz.qm qgo_zh.qm \
-		qgo_dk.qm qgo_pt.qm qgo_ru.qm
+Translations_DATA = qgo_de.qm qgo_fr.qm qgo_it.qm qgo_nl.qm qgo_cs.qm qgo_zh.qm \
+		qgo_da.qm qgo_pt.qm qgo_ru.qm
