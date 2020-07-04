@@ -497,8 +497,7 @@ void PreferencesDialog::update_board_image ()
 	QPixmap pm;
 	QString filename = ui->LineEdit_goban->text();
 	int idx = ui->woodComboBox->currentIndex ();
-	if (idx > 0)
-		filename = QString (":/BoardWindow/images/board/wood%1.png").arg (idx);
+	filename = wood_image_resource (idx, filename);
 	QPixmap p (filename);
 	if (p.isNull ())
 		p = QPixmap (":/BoardWindow/images/board/wood1.png");

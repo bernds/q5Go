@@ -150,6 +150,8 @@ public:
 	const QPixmap *table_image () { return m_table_image; }
 };
 
+extern QString wood_image_resource (int idx, const QString &);
+
 extern Setting *setting;
 
 #endif

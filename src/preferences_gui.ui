@@ -2171,6 +2171,69 @@ If the picture is not set, or unvalid, a default picture is used by qgo</string>
                <normaloff>:/BoardWindow/images/board/icon-wood5.png</normaloff>:/BoardWindow/images/board/icon-wood5.png</iconset>
              </property>
             </item>
+            <item>
+             <property name="text">
+              <string>High Res 1</string>
+             </property>
+             <property name="icon">
+              <iconset resource="q4go.qrc">
+               <normaloff>:/BoardWindow/images/board/icon-wood6.png</normaloff>:/BoardWindow/images/board/icon-wood6.png</iconset>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>High Res 2</string>
+             </property>
+             <property name="icon">
+              <iconset resource="q4go.qrc">
+               <normaloff>:/BoardWindow/images/board/icon-wood7.png</normaloff>:/BoardWindow/images/board/icon-wood7.png</iconset>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>High Res 3</string>
+             </property>
+             <property name="icon">
+              <iconset resource="q4go.qrc">
+               <normaloff>:/BoardWindow/images/board/icon-wood8.png</normaloff>:/BoardWindow/images/board/icon-wood8.png</iconset>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>High Res 4</string>
+             </property>
+             <property name="icon">
+              <iconset resource="q4go.qrc">
+               <normaloff>:/BoardWindow/images/board/icon-wood9.png</normaloff>:/BoardWindow/images/board/icon-wood9.png</iconset>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>High Res 5</string>
+             </property>
+             <property name="icon">
+              <iconset resource="q4go.qrc">
+               <normaloff>:/BoardWindow/images/board/icon-wood10.png</normaloff>:/BoardWindow/images/board/icon-wood10.png</iconset>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>High Res 6</string>
+             </property>
+             <property name="icon">
+              <iconset resource="q4go.qrc">
+               <normaloff>:/BoardWindow/images/board/icon-wood11.png</normaloff>:/BoardWindow/images/board/icon-wood11.png</iconset>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>High Res 7</string>
+             </property>
+             <property name="icon">
+              <iconset resource="q4go.qrc">
+               <normaloff>:/BoardWindow/images/board/icon-wood12.png</normaloff>:/BoardWindow/images/board/icon-wood12.png</iconset>
+             </property>
+            </item>
            </widget>
           </item>
           <item row="1" column="1">

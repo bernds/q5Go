@@ -159,13 +159,21 @@ Setting::~Setting()
 	delete m_table_image;
 }
 
+QString wood_image_resource (int idx, const QString &filename)
+{
+	if (idx > 5) {
+		return QString (":/BoardWindow/images/board/wood%1.jpg").arg (idx);
+	} else if (idx > 0) {
+		return QString (":/BoardWindow/images/board/wood%1.png").arg (idx);
+	}
+	return filename;
+}
+
 void Setting::obtain_skin_images ()
 {
 	int idx = readIntEntry ("SKIN_INDEX");
 	QString filename = readEntry ("SKIN");
-	if (idx > 0) {
-		filename = QString (":/BoardWindow/images/board/wood%1.png").arg (idx);
-	}
+	filename = wood_image_resource (idx, filename);
 	QPixmap *p = new QPixmap (filename);
 	if (p->isNull ()) {
 		QMessageBox::warning (nullptr, PACKAGE, QObject::tr ("Could not load custom board image,\nreverting to default."));

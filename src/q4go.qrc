@@ -47,11 +47,25 @@
     <file>images/board/wood3.png</file>
     <file>images/board/wood4.png</file>
     <file>images/board/wood5.png</file>
+    <file>images/board/wood6.jpg</file>
+    <file>images/board/wood7.jpg</file>
+    <file>images/board/wood8.jpg</file>
+    <file>images/board/wood9.jpg</file>
+    <file>images/board/wood10.jpg</file>
+    <file>images/board/wood11.jpg</file>
+    <file>images/board/wood12.jpg</file>
     <file>images/board/icon-wood1.png</file>
     <file>images/board/icon-wood2.png</file>
     <file>images/board/icon-wood3.png</file>
     <file>images/board/icon-wood4.png</file>
     <file>images/board/icon-wood5.png</file>
+    <file>images/board/icon-wood6.png</file>
+    <file>images/board/icon-wood7.png</file>
+    <file>images/board/icon-wood8.png</file>
+    <file>images/board/icon-wood9.png</file>
+    <file>images/board/icon-wood10.png</file>
+    <file>images/board/icon-wood11.png</file>
+    <file>images/board/icon-wood12.png</file>
     <file>images/board/table.png</file>
   </qresource>
   <qresource prefix="/Help">
