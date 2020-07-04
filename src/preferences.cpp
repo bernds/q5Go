@@ -18,11 +18,6 @@
 #include "ui_preferences_gui.h"
 #include "ui_enginedlg_gui.h"
 
-#ifdef Q_OS_MACX
-#include <CoreFoundation/CFString.h>
-#include <CoreFoundation/CFBundle.h>
-#endif //Q_OS_MACX
-
 void EngineDialog::init ()
 {
 	m_komi_vald.setDecimals (2);
@@ -1229,17 +1224,7 @@ void PreferencesDialog::on_soundButtonGroup_buttonClicked (QAbstractButton *cb)
 
 void PreferencesDialog::slot_getGobanPicturePath()
 {
-#ifdef Q_OS_MACX
-	// On the Mac, we want to default this dialog to the directory in the bundle
-	// that contains the wood images we ship with the app
-	//get the bundle path and find our resources
-	CFURLRef bundleRef = CFBundleCopyBundleURL(CFBundleGetMainBundle());
-	CFStringRef bundlePath = CFURLCopyFileSystemPath(bundleRef, kCFURLPOSIXPathStyle);
-	QString path = (QString)CFStringGetCStringPtr(bundlePath, CFStringGetSystemEncoding())
-		+ "/Contents/Resources/Backgrounds";
-#else
 	QString path = setting->readEntry ("LAST_DIR");
-#endif
 	QString old_name = ui->LineEdit_goban->text ();
 	if (!old_name.isEmpty ()) {
 		QFileInfo info (old_name);
@@ -1258,17 +1243,7 @@ void PreferencesDialog::slot_getGobanPicturePath()
 
 void PreferencesDialog::slot_getTablePicturePath()
 {
-#ifdef Q_OS_MACX
-	// On the Mac, we want to default this dialog to the directory in the bundle
-	// that contains the wood images we ship with the app
-	//get the bundle path and find our resources
-	CFURLRef bundleRef = CFBundleCopyBundleURL(CFBundleGetMainBundle());
-	CFStringRef bundlePath = CFURLCopyFileSystemPath(bundleRef, kCFURLPOSIXPathStyle);
-	QString path = (QString)CFStringGetCStringPtr(bundlePath, CFStringGetSystemEncoding())
-		+ "/Contents/Resources/Backgrounds";
-#else
 	QString path = setting->readEntry ("LAST_DIR");
-#endif
 	QString old_name = ui->LineEdit_Table->text ();
 	if (!old_name.isEmpty ()) {
 		QFileInfo info (old_name);
