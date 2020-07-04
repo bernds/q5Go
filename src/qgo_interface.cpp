@@ -505,7 +505,7 @@ void MainWindow_IGS::board_clicked (go_game_ptr gr, qGoBoard *connector, game_st
 }
 
 void MainWindow_IGS::board_menu (QGraphicsSceneContextMenuEvent *e,
-				 go_game_ptr gr, qGoBoard *connector, game_state *st)
+				 go_game_ptr gr, qGoBoard *, game_state *)
 {
 	QMenu menu;
 	menu.addAction (tr ("Stop observing this game"), [this, gr] () { unobserve_game (gr); });
