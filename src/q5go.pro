@@ -139,10 +139,7 @@ win32:INCLUDEPATH     += .
 #win32:QMAKE_CXXFLAGS += -GX -Gf
 
 DISTFILES            += *.dsw \
-			pics/* \
 			sounds/*.wav \
-			wav*.c \
-			wav*.h \
 			*.rc \
 			*.ts \
                         qgo.pro
