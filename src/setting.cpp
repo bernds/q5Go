@@ -25,6 +25,8 @@
 #include <CoreFoundation/CFBundle.h>
 #endif //Q_OS_MACX
 
+const int default_skin_setting = 11;
+
 /*
  *   Settings
  */
@@ -64,7 +66,7 @@ Setting::Setting()
 
 	writeEntry("SKIN", "1");
 	writeEntry("SKIN_TABLE", "");
-	writeIntEntry ("SKIN_INDEX", 1);
+	writeIntEntry ("SKIN_INDEX", default_skin_setting);
 
 	writeIntEntry("FILESEL", 1);
 
@@ -341,7 +343,7 @@ void Setting::loadSettings ()
 	   have a wood image for which scaling would be inappropriate.  So check here if
 	   we still have the default SKIN_INDEX and no SKIN_SCALE_WOOD after loading.  */
 	if (!params.contains ("SKIN_SCALE_WOOD"))
-		writeBoolEntry ("SKIN_SCALE_WOOD", readIntEntry ("SKIN_INDEX") == 1);
+		writeBoolEntry ("SKIN_SCALE_WOOD", readIntEntry ("SKIN_INDEX") == default_skin_setting);
 
 	// Read obsolete font entries first, and then try to replace them with more current ones.
 	updateFont(fontStandard, "FONT_MAIN");
