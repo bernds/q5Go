@@ -190,7 +190,7 @@ public:
 	Board* getBoard () const { return gfx_board; }
 	int checkModified (bool interactive=true);
 
-	void update_settings ();
+	virtual void update_settings ();
 	void set_observer_model (QStandardItemModel *m);
 	bool doSave (QString fileName, bool force=false);
 	void update_pass_button ();

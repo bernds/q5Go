@@ -1730,6 +1730,8 @@ void MainWindow::update_settings ()
 #endif
 
 	gfx_board->update_prefs ();
+	diagView->update_prefs ();
+
 	slotViewLeftSidebar();
 
 	const go_board &b = m_game->get_root ()->get_board ();

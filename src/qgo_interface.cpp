@@ -105,6 +105,7 @@ public:
 	void end_game (go_game_ptr game, qGoBoard *connector, GameMode new_mode);
 	void delete_last_move (go_game_ptr game, qGoBoard *connector);
 
+	virtual void update_settings () override;
 	const qGoBoard *active_board ();
 
 public slots:
@@ -509,6 +510,13 @@ void MainWindow_IGS::board_menu (QGraphicsSceneContextMenuEvent *e,
 	QMenu menu;
 	menu.addAction (tr ("Stop observing this game"), [this, gr] () { unobserve_game (gr); });
 	menu.exec (e->screenPos ());
+}
+
+void MainWindow_IGS::update_settings ()
+{
+	MainWindow::update_settings ();
+	if (game_mode () == modeObserveMulti)
+		choices_resized ();
 }
 
 void MainWindow_IGS::remove_connector ()
