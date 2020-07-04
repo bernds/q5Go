@@ -1591,7 +1591,7 @@ If you press to enter a move on the board, the move will not be acknowledged if 
      </widget>
      <widget class="QWidget" name="tab">
       <attribute name="title">
-       <string>Stones</string>
+       <string>Graphics</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_11">
        <item row="0" column="0" colspan="2">
