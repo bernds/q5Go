@@ -9,7 +9,7 @@
 #include "ui_multisave_gui.h"
 
 MultiSaveDialog::MultiSaveDialog (QWidget *parent, go_game_ptr gr, game_state *pos)
-	: ui (new Ui::MultiSaveDialog), m_game (gr), m_position (pos), m_radios (new QButtonGroup)
+	: QDialog (parent), ui (new Ui::MultiSaveDialog), m_game (gr), m_position (pos), m_radios (new QButtonGroup)
 {
 	ui->setupUi (this);
 
