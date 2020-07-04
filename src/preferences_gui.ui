@@ -2130,25 +2130,45 @@ If the picture is not set, or unvalid, a default picture is used by qgo</string>
              <property name="text">
               <string>Default 1</string>
              </property>
+             <property name="icon">
+              <iconset resource="q4go.qrc">
+               <normaloff>:/BoardWindow/images/board/icon-wood1.png</normaloff>:/BoardWindow/images/board/icon-wood1.png</iconset>
+             </property>
             </item>
             <item>
              <property name="text">
               <string>Default 2</string>
+             </property>
+             <property name="icon">
+              <iconset resource="q4go.qrc">
+               <normaloff>:/BoardWindow/images/board/icon-wood2.png</normaloff>:/BoardWindow/images/board/icon-wood2.png</iconset>
              </property>
             </item>
             <item>
              <property name="text">
               <string>Default 3</string>
              </property>
+             <property name="icon">
+              <iconset resource="q4go.qrc">
+               <normaloff>:/BoardWindow/images/board/icon-wood3.png</normaloff>:/BoardWindow/images/board/icon-wood3.png</iconset>
+             </property>
             </item>
             <item>
              <property name="text">
               <string>Default 4</string>
              </property>
+             <property name="icon">
+              <iconset resource="q4go.qrc">
+               <normaloff>:/BoardWindow/images/board/icon-wood4.png</normaloff>:/BoardWindow/images/board/icon-wood4.png</iconset>
+             </property>
             </item>
             <item>
              <property name="text">
               <string>Default 5</string>
+             </property>
+             <property name="icon">
+              <iconset resource="q4go.qrc">
+               <normaloff>:/BoardWindow/images/board/icon-wood5.png</normaloff>:/BoardWindow/images/board/icon-wood5.png</iconset>
              </property>
             </item>
            </widget>
