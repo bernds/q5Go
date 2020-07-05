@@ -321,7 +321,14 @@ PreferencesDialog::PreferencesDialog (int tab, QWidget* parent)
 	connect (ui->stripesCheckBox, &QCheckBox::toggled, [=] (bool) { update_w_stones (); });
 
 	void (QComboBox::*cic) (int) = &QComboBox::currentIndexChanged;
-	connect (ui->woodComboBox, cic, [=] (int i) { ui->GobanPicturePathButton->setEnabled (i == 0); ui->LineEdit_goban->setEnabled (i == 0); update_board_image (); });
+	connect (ui->woodComboBox, cic, [=] (int i)
+		 {
+			 ui->GobanPicturePathButton->setEnabled (i == 0);
+			 ui->LineEdit_goban->setEnabled (i == 0);
+			 if (i != 0)
+				 ui->scaleWoodCheckBox->setChecked (i == 1 || i > 5);
+			 update_board_image ();
+		 });
 	connect (ui->shadersComboBox, cic, [=] (int) { update_w_stones (); update_b_stones (); });
 	connect (ui->LineEdit_goban, &QLineEdit::editingFinished, [=] () { update_board_image (); });
 
