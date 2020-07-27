@@ -28,7 +28,7 @@ public:
 	bool isConnected();
 	bool openConnection(const Host &);
 	bool closeConnection();
-	void sendTextToHost(QString txt, bool ignoreCodec=false);
+	void sendTextToHost(QString txt, bool ignoreCodec=false, bool log=true);
 
 signals:
 	void signal_text_to_app(const QString &);

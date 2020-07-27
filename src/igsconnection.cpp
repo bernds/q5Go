@@ -83,10 +83,10 @@ bool IGSConnection::checkPrompt(const QString &line)
 		case PASSWORD:
 			if ((line.indexOf("Password:") != -1) || (line.indexOf("1 1") != -1))
 			{
-				qDebug() << "Password or 1 1: found: " << line;
-				sendTextToApp(tr("...send password"));
-				qDebug() << "send password " << password;
-				sendTextToHost(password, true);
+				qDebug () << "Password or 1 1: found: " << line;
+				sendTextToApp (tr ("...send password"));
+				qDebug () << "send password <...>";
+				sendTextToHost (password, true, false);
 
 				// next state
 				authState = SESSION;
@@ -253,7 +253,7 @@ bool IGSConnection::isConnected()
 	return qsocket->state() == QAbstractSocket::ConnectedState;
 }
 
-void IGSConnection::sendTextToHost(QString txt, bool ignoreCodec)
+void IGSConnection::sendTextToHost(QString txt, bool ignoreCodec, bool log)
 {
 	/*
 	*	This is intended because for weird reasons, if 'username' s given
@@ -262,7 +262,8 @@ void IGSConnection::sendTextToHost(QString txt, bool ignoreCodec)
 	*	Therefore, we pretend to ignore the codec when passing username or password
 	*/
 
-	qDebug () << ">> " << txt;
+	if (log)
+		qDebug () << ">> " << txt;
 	if (ignoreCodec)
 	{
 
