@@ -593,6 +593,8 @@ MainWindow::MainWindow (QWidget* parent, go_game_ptr gr, const QString opener_sc
 
 	restoreWindowLayout (false, opener_scrkey);
 
+	update_view_menu ();
+
 	connect(commentEdit, &QTextEdit::textChanged, this, &MainWindow::slotUpdateComment);
 	connect(commentEdit2, &QLineEdit::returnPressed, this, &MainWindow::slotUpdateComment2);
 	m_allow_text_update_signal = true;
@@ -1960,6 +1962,14 @@ void MainWindow::saveWindowLayout (bool dflt)
 	statusBar ()->showMessage(tr("Window size saved.") + " (" + strKey + ")");
 }
 
+void MainWindow::update_view_menu ()
+{
+	viewSlider->setChecked (sliderWidget->isVisibleTo (this));
+	viewMenuBar->setChecked (menuBar ()->isVisibleTo (this));
+	viewStatusBar->setChecked (statusBar ()->isVisibleTo (this));
+	viewSidebar->setChecked (toolsFrame->isVisibleTo (this));
+}
+
 bool MainWindow::restoreWindowLayout (bool dflt, const QString &scrkey)
 {
 	QString strKey = scrkey.isEmpty () ? screen_key (this) : scrkey;
@@ -1997,10 +2007,7 @@ bool MainWindow::restoreWindowLayout (bool dflt, const QString &scrkey)
 		sliderWidget->setVisible (s3[2] != '0');
 		toolsFrame->setVisible (s3[3] != '0');
 	}
-	viewSlider->setChecked (sliderWidget->isVisibleTo (this));
-	viewMenuBar->setChecked (menuBar ()->isVisibleTo (this));
-	viewStatusBar->setChecked (statusBar ()->isVisibleTo (this));
-	viewSidebar->setChecked (toolsFrame->isVisibleTo (this));
+	update_view_menu ();
 
 	// ok, resize
 	gfx_board->lockResize = false;

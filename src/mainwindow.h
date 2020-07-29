@@ -168,6 +168,7 @@ private:
 	void restore_visibility_from_key (const QString &);
 	void saveWindowLayout (bool);
 	bool restoreWindowLayout (bool, const QString &scrkey = QString ());
+	void update_view_menu ();
 	void defaultPortraitLayout ();
 	void defaultLandscapeLayout ();
 
