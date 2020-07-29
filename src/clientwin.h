@@ -130,6 +130,7 @@ class ClientWindow : public QMainWindow, public Ui::ClientWindowGui
 	int num_observedgames = 0;
 
 	// Online status
+	Host m_active_host;
 	Status m_online_status;
 	GSName m_online_server;
 	QString m_online_server_name;

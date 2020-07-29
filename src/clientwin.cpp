@@ -502,10 +502,10 @@ void ClientWindow::slot_connect (bool b)
 		int idx = cb_connect->currentIndex ();
 		if (idx == -1)
 			return;
-		const Host &h = setting->m_hosts[idx];
+		m_active_host = setting->m_hosts[idx];
 
 		// connect to selected host
-		telnetConnection->connect_host (h);
+		telnetConnection->connect_host (m_active_host);
 	} else {
 		// disconnect
 		telnetConnection->slotHostQuit ();
@@ -698,7 +698,10 @@ void ClientWindow::sendTextToApp (const QString &txt)
 
 			// set quiet true; refresh players, games
 			//if (myAccount->get_status () == Status::guest)
-			set_sessionparameter ("quiet", true);
+			if (m_active_host.quiet == -1)
+				set_sessionparameter ("quiet", true);
+			else
+				set_sessionparameter ("quiet", m_active_host.quiet != 0);
 			sendcommand ("id " PACKAGE " " VERSION, true);
 			sendcommand ("toggle newrating");
 
@@ -723,7 +726,10 @@ void ClientWindow::sendTextToApp (const QString &txt)
 			set_sessionparameter ("client", true);
 			// set quiet false; refresh players, games
 			//if (myAccount->get_status() == Status::guest)
-			set_sessionparameter ("quiet", false);
+			if (m_active_host.quiet == -1)
+				set_sessionparameter ("quiet", false);
+			else
+				set_sessionparameter ("quiet", m_active_host.quiet != 0);
 			break;
 		}
 
@@ -1024,8 +1030,16 @@ void ClientWindow::slot_cbopen (bool)
 // checkbox quiet clicked
 void ClientWindow::slot_cbquiet (bool)
 {
-	bool val = setQuietMode->isChecked();
-	set_sessionparameter("quiet", val);
+	bool val = setQuietMode->isChecked ();
+	set_sessionparameter ("quiet", val);
+	for (auto &h: setting->m_hosts) {
+		if (h.host == m_active_host.host && h.login_name == m_active_host.login_name
+		    && h.title == m_active_host.title)
+		{
+			h.quiet = val;
+			break;
+		}
+	}
 }
 
 void ClientWindow::update_font ()

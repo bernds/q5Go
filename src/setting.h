@@ -43,11 +43,14 @@ struct Host
 	QString login_name;
 	QString password;
 	QString codec;
-	unsigned int port;
+	unsigned int port = -1;
+	/* -1 if unset.  */
+	int quiet = -1;
 
+	Host () = default;
 	Host (const QString &t, const QString &h, const unsigned int p,
-	      const QString &l, const QString &pw, const QString &c)
-		: title (t), host (h), login_name (l), password (pw), codec (c), port (p)
+	      const QString &l, const QString &pw, const QString &c, int q)
+		: title (t), host (h), login_name (l), password (pw), codec (c), port (p), quiet (q)
 	{
 	}
 	Host (const Host &) = default;
@@ -111,28 +114,33 @@ public:
 	std::vector<Engine> m_engines;
 	std::vector<Host> m_hosts;
 
-	void clearEntry(const QString &s) { writeEntry (s, QString ()); }
-	void writeEntry(const QString&, const QString&);
-	void writeBoolEntry(const QString &s, bool b) { writeEntry(s, (b ? "1" : "0")); }
-	void writeIntEntry(const QString &s, int i) { writeEntry(s, QString::number(i)); }
-	QString readEntry(const QString&);
-	bool readBoolEntry(const QString &s)
+	void clearEntry (const QString &s) { writeEntry (s, QString ()); }
+	void writeEntry (const QString&, const QString&);
+	void writeBoolEntry (const QString &s, bool b) { writeEntry (s, b ? "1" : "0"); }
+	void writeIntEntry (const QString &s, int i) { writeEntry (s, QString::number (i)); }
+	QString readEntry (const QString&);
+	bool readBoolEntry (const QString &s)
 	{
-		QString e = readEntry(s);
+		QString e = readEntry (s);
 		return e == "1";
 	}
-	int  readIntEntry(const QString &s)
+	int readIntEntry (const QString &s)
 	{
 		bool ok;
-		QString e = readEntry(s);
+		QString e = readEntry (s);
 		if (e.isNull ())
 			return 0;
-		int i = e.toInt(&ok);
+		int i = e.toInt (&ok);
 		if (ok)
 			return i;
 		return 0;
 	}
-
+	/* Tri-state bool, with -1 indicating unset.  */
+	int readTriEntry (const QString &s)
+	{
+		QString e = readEntry (s);
+		return e == "0" ? 0 : e == "1" ? 1 : -1;
+	}
 	void loadSettings();
 	void saveSettings();
 	QString fontToString(QFont);

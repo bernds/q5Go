@@ -223,13 +223,15 @@ void Setting::extract_lists ()
 				      setting->readIntEntry (prefix + "c"),
 				      setting->readEntry (prefix + "d"),
 				      setting->readEntry (prefix + "e"),
-				      setting->readEntry (prefix + "f"));
+				      setting->readEntry (prefix + "f"),
+				      setting->readTriEntry (prefix + "g"));
 		clearEntry (prefix + "a");
 		clearEntry (prefix + "b");
 		clearEntry (prefix + "c");
 		clearEntry (prefix + "d");
 		clearEntry (prefix + "e");
 		clearEntry (prefix + "f");
+		clearEntry (prefix + "g");
 	}
 	std::sort (m_hosts.begin (), m_hosts.end (),
 		   [] (const Host &a, const Host &b) { return a.title < b.title; });
@@ -285,6 +287,8 @@ void Setting::write_lists (QTextStream &file)
 		file << prefix << "d [" << h.login_name << "]" << endl;
 		file << prefix << "e [" << h.password << "]" << endl;
 		file << prefix << "f [" << h.codec << "]" << endl;
+		if (h.quiet != -1)
+			file << prefix << "g [" << h.quiet << "]" << endl;
 	}
 
 	i = 0;

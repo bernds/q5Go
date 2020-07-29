@@ -250,9 +250,9 @@ QVariant pref_vec_model<T>::headerData (int section, Qt::Orientation ot, int rol
 }
 
 std::vector<Host> standard_servers {
-	{ "-- IGS --", "igs.joyjoy.net", 7777, "guest", "", "SJIS" },
-	{ "-- LGS --", "lgs.taiwango.net", 9696, "guest", "", "Big5" },
-	{ "-- WING --", "wing.gr.jp", 1515, "guest", "", "" } };
+	{ "-- IGS --", "igs.joyjoy.net", 7777, "guest", "", "SJIS", -1 },
+	{ "-- LGS --", "lgs.taiwango.net", 9696, "guest", "", "Big5", -1 },
+	{ "-- WING --", "wing.gr.jp", 1515, "guest", "", "", -1 } };
 
 PreferencesDialog::PreferencesDialog (int tab, QWidget* parent)
 	: QDialog (parent), ui (new Ui::PreferencesDialogGui), m_hosts_model (setting->m_hosts, standard_servers), m_engines_model (setting->m_engines)
@@ -1142,7 +1142,7 @@ void PreferencesDialog::slot_add_server()
 	}
 
 	Host new_h (ui->LineEdit_title->text (), ui->LineEdit_host->text (), tmp,
-		    ui->LineEdit_login->text (), ui->LineEdit_pass->text (), ui->ComboBox_codec->currentText ());
+		    ui->LineEdit_login->text (), ui->LineEdit_pass->text (), ui->ComboBox_codec->currentText (), -1);
 	m_hosts_model.add_or_replace (new_h);
 	m_hosts_changed = true;
 
