@@ -729,6 +729,7 @@ void Talk::slot_returnPressed ()
 	QString txt = LineEdit1->text ();
 	emit signal_talkto (m_name, txt);
 	LineEdit1->clear ();
+	LineEdit1->setFocus ();
 }
 
 void Talk::slot_match ()
