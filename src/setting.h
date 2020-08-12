@@ -8,6 +8,7 @@
 #include <QMap>
 #include <QString>
 #include <QFont>
+#include <QColor>
 
 // delimiters for variables in settings file
 // however, this character must not be used in parameters, e.g. host
@@ -81,6 +82,7 @@ struct setting_vals
 	bool clicko_hitbox;
 
 	bool time_warn_board;
+	QColor chat_color;
 };
 
 class Setting

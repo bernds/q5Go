@@ -104,6 +104,8 @@ class PreferencesDialog : public QDialog
 	bool m_engines_changed = false;
 	bool m_hosts_changed = false;
 
+	QColor m_chat_color { Qt::black };
+
 	void init_from_settings ();
 
 	bool avoid_losing_data ();
@@ -114,6 +116,8 @@ class PreferencesDialog : public QDialog
 	void update_b_stones ();
 	void update_stone_params ();
 	void update_stone_positions ();
+
+	void update_chat_color ();
 
 	void update_current_host ();
 	void update_current_engine ();
@@ -155,6 +159,7 @@ public slots:
 	void select_white_color (bool);
 	void select_black_color (bool);
 	void select_stone_look (bool);
+	void select_chat_color (bool);
 
 	void slot_autosavedir (bool);
 

@@ -353,6 +353,10 @@ PreferencesDialog::PreferencesDialog (int tab, QWidget* parent)
 	ui->ListView_hosts->setModel (&m_hosts_model);
 	connect (ui->ListView_hosts, &ClickableListView::current_changed, [this] () { update_current_host (); });
 
+	update_chat_color ();
+	connect (ui->chatColorButton, &QToolButton::clicked, this, &PreferencesDialog::select_chat_color);
+	connect (ui->chatColorCheckBox, &QToolButton::toggled, [this] () { update_chat_color (); });
+
 	connect (ui->fontStandardButton, &QPushButton::clicked, [this] () { selectFont (ui->fontStandardButton, setting->fontStandard); });
 	connect (ui->fontMarksButton, &QPushButton::clicked, [this] () { selectFont (ui->fontMarksButton, setting->fontMarks); });
 	connect (ui->fontCommentsButton, &QPushButton::clicked, [this] () { selectFont (ui->fontCommentsButton, setting->fontComments); });
@@ -370,6 +374,15 @@ PreferencesDialog::PreferencesDialog (int tab, QWidget* parent)
 
 	update_current_engine ();
 	update_current_host ();
+}
+
+void PreferencesDialog::update_chat_color ()
+{
+	QPixmap p (16, 16);
+	p.fill (m_chat_color);
+	QIcon i (p);
+	ui->chatColorButton->setIcon (i);
+	ui->chatColorButton->setEnabled (ui->chatColorCheckBox->isChecked ());
 }
 
 void PreferencesDialog::update_dbpaths (const QStringList &l)
@@ -568,6 +581,9 @@ void PreferencesDialog::init_from_settings ()
 	ui->shadowSlider->setValue (setting->readIntEntry("STONES_SHADOWVAL"));
 	ui->shadersComboBox->setCurrentIndex (setting->readIntEntry("STONES_PRESET"));
 
+	m_chat_color = QColor (setting->readEntry ("CHAT_COLOR"));
+	ui->chatColorCheckBox->setChecked (setting->readBoolEntry ("CHAT_COLORED"));
+
 	ui->lineScaleCheckBox->setChecked (setting->readBoolEntry("BOARD_LINESCALE"));
 	ui->lineWidenCheckBox->setChecked (setting->readBoolEntry("BOARD_LINEWIDEN"));
 
@@ -687,6 +703,12 @@ void PreferencesDialog::select_stone_look (bool)
 	update_w_stones ();
 	update_b_stones ();
 	update_stone_positions ();
+}
+
+void PreferencesDialog::select_chat_color (bool)
+{
+	m_chat_color = QColorDialog::getColor (m_chat_color, this, tr ("Select color for own chat online"));
+	update_chat_color ();
 }
 
 void PreferencesDialog::select_white_color (bool)
@@ -839,6 +861,9 @@ void PreferencesDialog::slot_apply()
 	setting->writeIntEntry ("STONES_PRESET", ui->shadersComboBox->currentIndex ());
 	setting->writeEntry ("STONES_BCOL", black_color ().name ());
 	setting->writeEntry ("STONES_WCOL", white_color ().name ());
+
+	setting->writeEntry ("CHAT_COLOR", m_chat_color.name ());
+	setting->writeBoolEntry ("CHAT_COLORED", ui->chatColorCheckBox->isChecked ());
 
 	setting->writeBoolEntry ("BOARD_LINESCALE", ui->lineScaleCheckBox->isChecked ());
 	setting->writeBoolEntry ("BOARD_LINEWIDEN", ui->lineWidenCheckBox->isChecked ());

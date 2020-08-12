@@ -51,6 +51,13 @@ public:
 class MainWindow_IGS;
 class qGoIF;
 
+
+struct text_piece
+{
+	QString text;
+	bool colored;
+};
+
 class qGoBoard : public QObject
 {
 	Q_OBJECT
@@ -60,7 +67,7 @@ class qGoBoard : public QObject
 	stone_color m_own_color = none;
 	qGoIF *m_qgoif;
 	QString *m_title = nullptr;
-	QString m_comments;
+	std::vector<text_piece> m_comments;
 	QString m_opp_name;
 	assessType m_freegame;
 
@@ -88,7 +95,7 @@ class qGoBoard : public QObject
 	void send_coords (int x, int y);
 	void update_time_info (game_state *);
 	void add_postgame_break ();
-
+	void append_text (const QString &, bool);
 public:
 	qGoBoard(qGoIF *, int game_id);
 	~qGoBoard();
@@ -128,7 +135,7 @@ public:
 	void doAdjourn();
 	void doDone();
 
-	void send_kibitz(const QString&);
+	void send_kibitz(const QString&, bool own = false);
 	void try_talk (const QString &pl, const QString &txt);
 	MainWindow_IGS *get_win() { return win; }
 	void setTimerInfo(const QString&, const QString&, const QString&, const QString&);
@@ -148,7 +155,7 @@ public:
 	void addtime_w(int m);
 	void set_myName(const QString &n) { myName = n; }
 
-	const QString &comments () { return m_comments; }
+	const std::vector<text_piece> &comments () { return m_comments; }
 
 	void observer_list_start ();
 	void observer_list_entry (const QString &, const QString &);

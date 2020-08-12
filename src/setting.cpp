@@ -124,6 +124,8 @@ Setting::Setting()
 	writeIntEntry("STONES_LOOK", 3);
 	writeBoolEntry("STONES_STRIPES", 1);
 
+	writeEntry("CHAT_COLOR", "#000000");
+
 	writeIntEntry("ANALYSIS_VARTYPE", 2);
 	writeIntEntry("ANALYSIS_WINRATE", 2);
 	writeBoolEntry("ANALYSIS_PRUNE", 1);
@@ -509,6 +511,10 @@ void Setting::extract_frequent_settings ()
 	values.clicko_hitbox = readBoolEntry ("ANTICLICKO_HITBOX");
 
 	values.time_warn_board = readBoolEntry ("TIME_WARN_BOARD");
+	if (readBoolEntry ("CHAT_COLORED"))
+		values.chat_color = QColor (readEntry ("CHAT_COLOR"));
+	else
+		values.chat_color = QColor ();
 }
 
 static std::array<const char *, NUMBER_OF_AVAILABLE_LANGUAGES> language_codes LANGUAGE_CODES;

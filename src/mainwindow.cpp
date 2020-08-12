@@ -599,6 +599,8 @@ MainWindow::MainWindow (QWidget* parent, go_game_ptr gr, const QString opener_sc
 	connect(commentEdit2, &QLineEdit::returnPressed, this, &MainWindow::slotUpdateComment2);
 	m_allow_text_update_signal = true;
 
+	m_default_text_color = commentEdit->textColor ();
+
 	update_analysis (analyzer::disconnected);
 	main_window_list.push_back (this);
 }
@@ -2161,12 +2163,16 @@ void MainWindow::set_comment (const QString &t)
 }
 
 /* Called from an external source to append to the comments window.  */
-void MainWindow::append_comment (const QString &t)
+void MainWindow::append_comment (const QString &t, QColor col)
 {
 	bool old = m_allow_text_update_signal;
 	m_allow_text_update_signal = false;
 	/* The append method inserts paragraphs, which means we get an extra unwanted newline.  */
 	commentEdit->moveCursor (QTextCursor::End);
+	if (col.isValid ())
+		commentEdit->setTextColor (col);
+	else
+		commentEdit->setTextColor (m_default_text_color);
 	commentEdit->insertPlainText (t);
 	commentEdit->moveCursor (QTextCursor::End);
 	m_allow_text_update_signal = old;

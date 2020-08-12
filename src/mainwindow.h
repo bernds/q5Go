@@ -102,6 +102,8 @@ class MainWindow : public QMainWindow, public Ui::BoardWindow
 	double m_result {};
 	QString m_result_text;
 
+	QColor m_default_text_color;
+
 	/* When switching to edit/score mode, we make a temporary duplicate of the position.  */
 	game_state *m_pos_before_edit;
 protected:
@@ -212,7 +214,7 @@ public:
 	void remove_nodes (const std::vector<game_state *> &);
 
 	/* Called from external source.  */
-	void append_comment (const QString &);
+	void append_comment (const QString &, QColor = QColor ());
 	void refresh_comment ();
 	void notice_mark_change (const go_board &new_board);
 	typedef std::pair<game_state *, bool> move_result;

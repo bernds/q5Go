@@ -59,9 +59,13 @@ public:
 			qGoBoard *connector, bool playing_w, bool playing_b, GameMode mode);
 	~MainWindow_IGS ();
 
-	void append_remote_comment (go_game_ptr game, const QString &s)
+	void append_remote_comment (go_game_ptr game, const QString &s, bool colored)
 	{
-		if (game == m_game)
+		if (game != m_game)
+			return;
+		if (colored)
+			append_comment (s, setting->values.chat_color);
+		else
 			append_comment (s);
 	}
 	virtual game_state *player_move (int x, int y) override
@@ -494,7 +498,9 @@ void MainWindow_IGS::board_clicked (go_game_ptr gr, qGoBoard *connector, game_st
 	disconnect (this, &MainWindow::signal_sendcomment, nullptr, nullptr);
 	if (connector != nullptr) {
 		connect (this, &MainWindow::signal_sendcomment, connector, &qGoBoard::slot_sendcomment);
-		set_comment (connector->comments ());
+		set_comment ("");
+		for (const auto &c: connector->comments ())
+			append_remote_comment (m_game, c.text, c.colored);
 	}
 	/* Ensure the cursor moves.  */
 	for (const auto &p: m_previews)
@@ -1570,8 +1576,9 @@ void qGoBoard::game_startup ()
 	}
 	win->set_observer_model (&m_observers);
 
-	if (m_comments.length () > 0)
-		win->append_remote_comment (m_game, m_comments);
+	if (m_comments.size () > 0)
+		for (auto &c: m_comments)
+			win->append_remote_comment (m_game, c.text, c.colored);
 
 	if (resumed)
 		send_kibitz (tr ("Game continued as game number %1\n").arg (id));
@@ -1943,7 +1950,7 @@ void qGoBoard::add_postgame_break ()
 
 	m_postgame_chat = true;
 	QString to_add = "------------------------\n" + tr ("Post-game discussion:") + "\n";
-	win->append_remote_comment (m_game, to_add);
+	win->append_remote_comment (m_game, to_add, false);
 }
 
 void qGoBoard::try_talk (const QString &pl, const QString &txt)
@@ -1959,13 +1966,22 @@ void qGoBoard::try_talk (const QString &pl, const QString &txt)
 		m_state->set_comment (old_comment + to_add.toStdString ());
 	}
 
-	m_comments += to_add;
+	append_text (to_add, false);
 	if (win)
-		win->append_remote_comment (m_game, to_add);
+		win->append_remote_comment (m_game, to_add, false);
+}
+
+void qGoBoard::append_text (const QString &msg, bool colored)
+{
+	if (!m_comments.empty () && m_comments.back ().colored == colored) {
+		m_comments.back ().text += msg;
+		return;
+	}
+	m_comments.push_back (text_piece { msg, colored });
 }
 
 // write kibitz strings to comment window
-void qGoBoard::send_kibitz(const QString &msg)
+void qGoBoard::send_kibitz (const QString &msg, bool own)
 {
 	// if observing a teaching game
 	if (ExtendedTeachingGame && !IamTeacher)
@@ -2057,9 +2073,9 @@ void qGoBoard::send_kibitz(const QString &msg)
 		const std::string old_comment = m_state->comment ();
 		m_state->set_comment (old_comment + to_add.toStdString ());
 	}
-	m_comments += to_add;
+	append_text (to_add, own);
 	if (win)
-		win->append_remote_comment (m_game, to_add);
+		win->append_remote_comment (m_game, to_add, own);
 }
 
 void qGoBoard::slot_sendcomment(const QString &comment)
@@ -2076,16 +2092,14 @@ void qGoBoard::slot_sendcomment(const QString &comment)
 
 	if (gameMode == modePostMatch) {
 		client_window->sendcommand ("tell " + m_opp_name + " " + comment, false);
-		send_kibitz("-> " + comment + "\n");
 	} else if (gameMode == modeObserve || gameMode == modeTeach || gameMode == modeMatch && ExtendedTeachingGame) {
 		// kibitz
 		client_window->sendcommand ("kibitz " + QString::number(id) + " " + comment, false);
-		send_kibitz("-> " + comment + "\n");
 	} else {
 		// say
 		client_window->sendcommand ("say " + comment, false);
-		send_kibitz("-> " + comment + "\n");
 	}
+	send_kibitz("-> " + comment + "\n", true);
 }
 
 void qGoBoard::send_coords (int x, int y)
