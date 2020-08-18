@@ -1749,20 +1749,11 @@ void ClientWindow::slotFileOpenDB (bool)
 	win->show ();
 }
 
-Engine *ClientWindow::analysis_engine (int boardsize)
-{
-	for (auto &e: setting->m_engines) {
-		if (e.analysis && e.boardsize.toInt () == boardsize)
-			return &e;
-	}
-	return nullptr;
-}
-
 QList<Engine> ClientWindow::analysis_engines (int boardsize)
 {
 	QList<Engine> l;
 	for (auto &e: setting->m_engines) {
-		if (e.analysis && e.boardsize.toInt () == boardsize)
+		if (e.analysis && (!e.restrictions || e.boardsize.toInt () == boardsize))
 			l.append (e);
 	}
 	return l;

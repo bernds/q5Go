@@ -23,12 +23,13 @@ struct Engine
 	QString path;
 	QString args;
 	QString komi;
-	bool analysis;
 	QString boardsize;
+	bool analysis;
+	bool restrictions;
 
 	Engine (const QString &t, const QString &p, const QString &a, const QString &k, bool an,
-		const QString &size)
-		: title (t), path (p), args (a), komi (k), analysis (an), boardsize (size)
+		const QString &size, bool r)
+		: title (t), path (p), args (a), komi (k), boardsize (size), analysis (an), restrictions (r)
 	{
 	}
 	Engine (const Engine &) = default;

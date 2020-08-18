@@ -245,17 +245,23 @@ void Setting::extract_lists ()
 		QString s = setting->readEntry (prefix + "a");
 		if (s.isNull ())
 			break;
+		/* Deal with old settings files that did not have the "Restrictions" field.  */
+		bool restrictions = setting->readBoolEntry (prefix + "g");
+		QString size = setting->readEntry (prefix + "f");
+		if (!size.isEmpty () && setting->readEntry (prefix + "g").isEmpty ())
+			restrictions = true;
 		m_engines.emplace_back (s, setting->readEntry (prefix + "b"),
 					setting->readEntry (prefix + "c"),
 					setting->readEntry (prefix + "d"),
 					setting->readBoolEntry (prefix + "e"),
-					setting->readEntry (prefix + "f"));
+					size, restrictions);
 		clearEntry (prefix + "a");
 		clearEntry (prefix + "b");
 		clearEntry (prefix + "c");
 		clearEntry (prefix + "d");
 		clearEntry (prefix + "e");
 		clearEntry (prefix + "f");
+		clearEntry (prefix + "g");
 	}
 	std::sort (m_engines.begin (), m_engines.end (),
 		   [] (const Engine &a, const Engine &b) { return a.title < b.title; });
@@ -303,6 +309,7 @@ void Setting::write_lists (QTextStream &file)
 		file << prefix << "d [" << e.komi << "]" << endl;
 		file << prefix << "e [" << (e.analysis ? "1" : "0") << "]" << endl;
 		file << prefix << "f [" << e.boardsize << "]" << endl;
+		file << prefix << "g [" << (e.restrictions ? "1" : "0") << "]" << endl;
 	}
 }
 

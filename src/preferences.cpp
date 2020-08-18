@@ -51,6 +51,7 @@ EngineDialog::EngineDialog (QWidget *parent, const Engine &e, bool dup)
 	ui->engineArgs->setText (e.args);
 	ui->engineKomi->setText (e.komi);
 	ui->engineAnalysis->setChecked (e.analysis);
+	ui->engineRestrictions->setChecked (e.restrictions);
 	ui->engineSize->setText (e.boardsize);
 	init ();
 }
@@ -72,7 +73,8 @@ void EngineDialog::slot_get_path ()
 Engine EngineDialog::get_engine ()
 {
 	Engine e (ui->engineName->text (), ui->enginePath->text (), ui->engineArgs->text (),
-		  ui->engineKomi->text (), ui->engineAnalysis->isChecked (), ui->engineSize->text ());
+		  ui->engineKomi->text (), ui->engineAnalysis->isChecked (), ui->engineSize->text (),
+		  ui->engineRestrictions->isChecked ());
 
 	return e;
 }
@@ -96,9 +98,9 @@ void EngineDialog::accept ()
 				      tr ("The value entered for the board size is invalid.\nPlease enter values between 3 and 25."));
 		return;
 	}
-	if (ui->engineAnalysis->isChecked () && size.isEmpty ()) {
+	if (ui->engineAnalysis->isChecked () && ui->engineRestrictions->isChecked () && size.isEmpty ()) {
 		QMessageBox::warning (this, tr ("No boardsize specified for analysis engine."),
-				      tr ("Currently any engine used for analysis must specify a board size."));
+				      tr ("Uncheck the \"Restrictions\" field or specify a board size."));
 		return;
 	}
 	QString komi = ui->engineKomi->text ();

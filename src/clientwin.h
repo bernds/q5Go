@@ -200,7 +200,6 @@ public:
 	void accept_preferences ();
 	void dlgSetPreferences(int tab = 0);
 
-	Engine *analysis_engine (int boardsize);
 	QList<Engine> analysis_engines (int boardsize);
 
 	/* Called from parser.cpp.  */

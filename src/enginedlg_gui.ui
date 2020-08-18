@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>460</width>
-    <height>216</height>
+    <height>253</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -42,19 +42,10 @@
       <property name="bottomMargin">
        <number>0</number>
       </property>
-      <item row="2" column="0">
-       <widget class="QLabel" name="enginelabel_3">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>Arguments:</string>
-        </property>
-        <property name="buddy">
-         <cstring>engineArgs</cstring>
+      <item row="2" column="1" colspan="2">
+       <widget class="QLineEdit" name="engineArgs">
+        <property name="toolTip">
+         <string>Any command line arguments that should be passed at startup.</string>
         </property>
        </widget>
       </item>
@@ -74,22 +65,6 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="enginelabel_4">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>Fixed komi:</string>
-        </property>
-        <property name="buddy">
-         <cstring>engineKomi</cstring>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="0">
        <widget class="QLabel" name="enginelabel_2">
         <property name="sizePolicy">
@@ -106,50 +81,7 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
-       <widget class="QLineEdit" name="engineKomi">
-        <property name="maximumSize">
-         <size>
-          <width>60</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string>Set this to the komi value the engine expects, or leave empty if the engine allows arbitrary values for komi.</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="2">
-       <widget class="QLabel" name="enginelabel_5">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>Board size:</string>
-        </property>
-        <property name="buddy">
-         <cstring>engineSize</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="3">
-       <widget class="QLineEdit" name="engineSize">
-        <property name="maximumSize">
-         <size>
-          <width>60</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string>Enter a board size if the engine supports only one board size.
-Analysis engines currently require a fixed board size to be set.</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="5">
+      <item row="1" column="3">
        <widget class="QPushButton" name="enginePathButton">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -166,38 +98,121 @@ Analysis engines currently require a fixed board size to be set.</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="4">
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="2" column="1" colspan="4">
-       <widget class="QLineEdit" name="engineArgs">
+      <item row="0" column="1" colspan="2">
+       <widget class="QLineEdit" name="engineName">
         <property name="toolTip">
-         <string>Any command line arguments that should be passed at startup.</string>
+         <string>The name of the engine by which it is selected in the new computer game dialog</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1" colspan="4">
+      <item row="2" column="0">
+       <widget class="QLabel" name="enginelabel_3">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Arguments:</string>
+        </property>
+        <property name="buddy">
+         <cstring>engineArgs</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" colspan="2">
        <widget class="QLineEdit" name="enginePath">
         <property name="toolTip">
          <string>The path to the GTP engine's executable.</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="1" colspan="4">
-       <widget class="QLineEdit" name="engineName">
+      <item row="3" column="0" colspan="4">
+       <widget class="QGroupBox" name="engineRestrictions">
         <property name="toolTip">
-         <string>The name of the engine by which it is selected in the new computer game dialog</string>
+         <string>&lt;p&gt;Some engines, like Leela Zero, are restricted in what board size or komi they can support.&lt;/p&gt;&lt;p&gt;Uncheck this box if this engine can support any reasonable setting (like Katago).&lt;/p&gt;</string>
         </property>
+        <property name="title">
+         <string>Restrictions</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QLabel" name="enginelabel_4">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Fixed komi:</string>
+           </property>
+           <property name="buddy">
+            <cstring>engineKomi</cstring>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="engineKomi">
+           <property name="maximumSize">
+            <size>
+             <width>60</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Set this to the komi value the engine expects, or leave empty if the engine allows arbitrary values for komi.</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="enginelabel_5">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Board size:</string>
+           </property>
+           <property name="buddy">
+            <cstring>engineSize</cstring>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="engineSize">
+           <property name="maximumSize">
+            <size>
+             <width>60</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Enter a board size if the engine supports only one board size.
+Analysis engines currently require a fixed board size to be set.</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>120</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
        </widget>
       </item>
      </layout>
@@ -226,8 +241,6 @@ Analysis engines currently require a fixed board size to be set.</string>
   <tabstop>engineName</tabstop>
   <tabstop>enginePath</tabstop>
   <tabstop>engineArgs</tabstop>
-  <tabstop>engineKomi</tabstop>
-  <tabstop>engineSize</tabstop>
   <tabstop>engineAnalysis</tabstop>
   <tabstop>enginePathButton</tabstop>
  </tabstops>
