@@ -607,6 +607,8 @@ MainWindow::MainWindow (QWidget* parent, go_game_ptr gr, const QString opener_sc
 
 void MainWindow::init_game_record (go_game_ptr gr)
 {
+	if (m_game != nullptr && !gr->same_size (*m_game))
+		gfx_board->stop_analysis ();
 	m_undo_stack.clear ();
 	m_undo_stack_pos = 0;
 	update_undo_menus ();

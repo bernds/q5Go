@@ -926,6 +926,13 @@ public:
 		const go_board &b = m_root->get_board ();
 		return std::max (b.size_x (), b.size_y ());
 	}
+	bool same_size (const game_record &other)
+	{
+		const go_board &b1 = m_root->get_board ();
+		const go_board &b2 = other.m_root->get_board ();
+		return b1.size_x () == b2.size_x () && b1.size_y () == b2.size_y ();
+	}
+
 	std::shared_ptr<const bit_array> get_board_mask ()
 	{
 		return m_mask;
