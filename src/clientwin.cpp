@@ -755,7 +755,7 @@ void ClientWindow::sendTextToApp (const QString &txt)
 		onlineCount = 0;
 		oneSecondTimer = startTimer (1000);
 		// init shouts
-		slot_talk ("Shouts*", QString (), false);
+		slot_talk ("Shouts*", QString (), false, false);
 
 		qgo->playConnectSound ();
 		break;
@@ -785,7 +785,7 @@ void ClientWindow::sendTextToApp (const QString &txt)
 
 	case STATS:
 		// we just received a players name as first line of stats -> create the dialog tab
-		slot_talk (parser->get_statsPlayer ()->name, QString (), true);
+		slot_talk (parser->get_statsPlayer ()->name, QString (), true, false);
 
 		break;
 
@@ -1416,10 +1416,10 @@ void ClientWindow::slot_mouse_players (const Player &p)
 		puw->addAction (tr ("match"),
 				[=] () { handle_matchrequest (menu_player_name () + " " + m_menu_player.rank, true, false); });
 		puw->addAction (tr ("talk"),
-				[=] () { slot_talk (menu_player_name (), QString (), true); });
+				[=] () { slot_talk (menu_player_name (), QString (), true, false); });
 		// puw->insertSeparator();
 		puw->addAction (tr ("stats"),
-				[=] () { slot_talk (menu_player_name (), QString (), true); });
+				[=] () { slot_talk (menu_player_name (), QString (), true, false); });
 		puw->addAction (tr ("stored games"),
 				[=] () { sendcommand ("stored " + menu_player_name (), false); });
 		puw->addAction (tr ("results"),
@@ -1481,7 +1481,7 @@ void ClientWindow::slot_pbRelOneTab (QWidget *w)
 }
 
  // handle chat boxes in a list
-void ClientWindow::slot_talk(const QString &name, const QString &text, bool isplayer)
+void ClientWindow::slot_talk(const QString &name, const QString &text, bool isplayer, bool colored)
 {
 	QString txt;
 	bool bonus = false;
@@ -1525,7 +1525,10 @@ void ClientWindow::slot_talk(const QString &name, const QString &text, bool ispl
 
 	}
 	if (dlg) {
-		dlg->write(txt);
+		QColor col;
+		if (colored)
+			col = setting->values.chat_color;
+		dlg->write (txt, col);
 		if (dlg->parentWidget () != TabWidget_mini_2)
 		{
 			TabWidget_mini_2->addTab (dlg, dlg->get_name());
@@ -1591,7 +1594,7 @@ void ClientWindow::slot_talkto(QString &receiver, QString &txt)
 		}
 
 		// lokal echo in talk window
-		slot_talk(receiver, "-> " + txt, true);
+		slot_talk(receiver, "-> " + txt, true, true);
 	}
 }
 

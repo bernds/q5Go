@@ -247,7 +247,7 @@ public slots:
 	void slot_accname (QString&);
 	void slot_status (Status);
 	void slot_connclosed ();
-	void slot_talk (const QString&, const QString&, bool);
+	void slot_talk (const QString&, const QString&, bool, bool);
 	void slot_channelinfo (int, const QString&);
   	void slot_removeMatchDialog (const QString&);
 	void slot_shout (const QString&, const QString&);

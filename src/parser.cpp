@@ -312,7 +312,7 @@ InfoType Parser::cmd5(const QString &line)
 	if (line.contains("No user named"))
 	{
 		QString name = line.section('"', 1, 1);
-		emit signal_talk(name, "@@@", true);
+		emit signal_talk(name, "@@@", true, false);
 	}
 	else if (line.contains("is not open to match requests"))
 	{
@@ -730,7 +730,7 @@ InfoType Parser::cmd9(const QString &line)
 		m_qgoif->create_match (nr, opp);
 		emit signal_matchcreate (nr, opp);
 		// automatic opening of a dialog tab for further conversation
-		emit signal_talk (opp, "", true);
+		emit signal_talk (opp, "", true, false);
 	}
 	else if (line.contains("Match") && line.contains("accepted"))
 	{
@@ -891,8 +891,7 @@ InfoType Parser::cmd9(const QString &line)
 		if (textre.indexIn(line) != -1)
 		{
 			QString player = line.section(' ', 4, 4);
-			// true = player
-			emit signal_talk(player, "[" + textre.cap(1) + "]", true);
+			emit signal_talk(player, "[" + textre.cap(1) + "]", true, false);
 		}
 	}
 	// NNGS: 9 Messages: (after 'message' cmd)
@@ -1612,7 +1611,7 @@ InfoType Parser::cmd24(const QString &line)
 	}
 
 	m_qgoif->handle_talk (e1, e2);
-	emit signal_talk (e1, "> " + e2, true);
+	emit signal_talk (e1, "> " + e2, true, false);
 
 	return TELL;
 }
@@ -1863,7 +1862,7 @@ InfoType Parser::cmd32(const QString &line)
 		e1 = line.section(' ', -1).remove('.');
 		int nr = e1.toInt();
 		emit signal_channelinfo(nr, QString("*on*"));
-		emit signal_talk(e1, "", false);
+		emit signal_talk(e1, "", false, false);
 		//emit signal_message(line);
 
 		return IT_OTHER;
@@ -1900,8 +1899,7 @@ InfoType Parser::cmd32(const QString &line)
 		e2="> " + line.section(':', 1).trimmed();
 		break;
 	}
-	//emit signal_talk(line.section(':', 0, 0), line.section(':', 1).trimmed() + "\n", false);
-	emit signal_talk(e1, e2, false);
+	emit signal_talk (e1, e2, false, false);
 	return IT_OTHER;
 }
 

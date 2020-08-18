@@ -98,13 +98,14 @@ class Talk : public QDialog, public Ui::TalkGui
 	Q_OBJECT
 
 	QString m_name;
+	QColor m_default_text_color;
 
 public:
 	Talk (const QString&, QWidget*, bool isplayer = true);
 
 	QString get_name () const { return m_name; }
 	void set_name (QString &n) { m_name = n; }
-	void write (const QString &text) const;
+	void write (const QString &text, QColor col);
 
 	bool lineedit_has_focus ();
 

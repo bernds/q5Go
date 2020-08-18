@@ -640,16 +640,16 @@ void ClientWindow::slot_message(QString txt)
 }
 
 // shout...
-void ClientWindow::slot_shout(const QString &player, const QString &txt)
+void ClientWindow::slot_shout (const QString &player, const QString &txt)
 {
-	if (exclude.contains(";" + player + ";"))
+	if (exclude.contains (";" + player + ";"))
 		return;
 
 	// check if send to a special handle:
-	if (player.length() && player.contains('*'))
-		slot_talk(player, txt, true);
+	if (player.length () && player.contains ('*'))
+		slot_talk (player, txt, true, false);
 	else
-		slot_talk("Shouts*", txt, true);
+		slot_talk ("Shouts*", txt, true, false);
 }
 
 // server name found
@@ -711,6 +711,7 @@ Talk::Talk (const QString &playername, QWidget *parent, bool isplayer)
 		connect (pb_match, &QPushButton::pressed, this, &Talk::slot_match);
 	}
 	connect (LineEdit1, &QLineEdit::returnPressed, this, &Talk::slot_returnPressed);
+	m_default_text_color = MultiLineEdit1->textColor ();
 }
 
 bool Talk::lineedit_has_focus ()
@@ -735,7 +736,7 @@ void Talk::slot_match ()
 
 // write to txt field in dialog
 // if null string -> check edit field
-void Talk::write (const QString &text) const
+void Talk::write (const QString &text, QColor col)
 {
 	QString txt;
 
@@ -751,8 +752,11 @@ void Talk::write (const QString &text) const
 		LineEdit1->clear();
 	}
 
-	// Scroll at bottom of text, set cursor to end of line
-	MultiLineEdit1->append (txt); //eb16
+	if (col.isValid ())
+		MultiLineEdit1->setTextColor (col);
+	else
+		MultiLineEdit1->setTextColor (m_default_text_color);
+	MultiLineEdit1->append (txt);
 }
 
 template class table_model<Game>;
