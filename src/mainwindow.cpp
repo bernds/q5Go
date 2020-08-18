@@ -1223,6 +1223,7 @@ void MainWindow::slotFileNewGame (bool)
 
 	init_game_record (gr);
 	setGameMode (modeNormal);
+	populate_engines_menu ();
 
 	statusBar()->showMessage(tr("New board prepared."));
 }
@@ -1238,6 +1239,7 @@ void MainWindow::slotFileNewVariantGame (bool)
 
 	init_game_record (gr);
 	setGameMode (modeNormal);
+	populate_engines_menu ();
 
 	statusBar()->showMessage(tr("New board prepared."));
 }
@@ -1253,6 +1255,7 @@ void MainWindow::slotFileOpen (bool)
 
 	init_game_record (gr);
 	setGameMode (modeNormal);
+	populate_engines_menu ();
 }
 
 void MainWindow::slotFileOpenDB (bool)
@@ -1266,6 +1269,7 @@ void MainWindow::slotFileOpenDB (bool)
 
 	init_game_record (gr);
 	setGameMode (modeNormal);
+	populate_engines_menu ();
 }
 
 QString MainWindow::getFileExtension(const QString &fileName, bool defaultExt)
