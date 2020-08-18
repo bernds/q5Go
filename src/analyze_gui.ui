@@ -431,7 +431,7 @@ It is also possible to analyze with both normal and flipped komi, for example fo
              <number>7</number>
             </property>
             <property name="maximum">
-             <number>25</number>
+             <number>39</number>
             </property>
             <property name="value">
              <number>19</number>
