@@ -111,6 +111,9 @@ in this box you see the conversation with the player whose name appears on the t
      <property name="readOnly">
       <bool>true</bool>
      </property>
+     <property name="acceptRichText">
+      <bool>false</bool>
+     </property>
     </widget>
    </item>
    <item row="0" column="0">
