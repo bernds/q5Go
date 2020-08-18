@@ -718,11 +718,6 @@ bool Talk::lineedit_has_focus ()
 	return LineEdit1->hasFocus ();
 }
 
-void Talk::append_to_mle (const QString &s)
-{
-	MultiLineEdit1->append (s);
-}
-
 void Talk::slot_returnPressed ()
 {
 	// read tab

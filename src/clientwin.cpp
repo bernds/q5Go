@@ -1545,7 +1545,6 @@ void ClientWindow::slot_talk(const QString &name, const QString &text, bool ispl
 	if (((text.startsWith ('>') && bonus) || !dlg->lineedit_has_focus()) && !name.contains('*'))
 	{
 		qgo->playTalkSound();
-		dlg->append_to_mle ("");
 
 		// write time stamp
 		MultiLineEdit3->append(statusOnlineTime->text() + " " + name + (autoAnswer ? " (A)" : ""));
@@ -1553,7 +1552,6 @@ void ClientWindow::slot_talk(const QString &name, const QString &text, bool ispl
 	else if (name == tr("msg*"))
 	{
 		qgo->playTalkSound();
-		dlg->append_to_mle ("");
 
 		// write time stamp
 		MultiLineEdit3->append(tr("Message") + ": " + text);

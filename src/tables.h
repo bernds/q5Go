@@ -107,7 +107,6 @@ public:
 	void write (const QString &text) const;
 
 	bool lineedit_has_focus ();
-	void append_to_mle (const QString &);
 
 public slots:
 	void slot_returnPressed ();
