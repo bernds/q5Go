@@ -539,7 +539,7 @@ MainWindow::MainWindow (QWidget* parent, go_game_ptr gr, const QString opener_sc
 	connect(normalTools->anStartButton, &QToolButton::clicked,
 		[=] (bool on) { if (on) start_analysis (); else gfx_board->stop_analysis (); });
 	connect(normalTools->anPauseButton, &QToolButton::clicked,
-		[=] (bool on) { gfx_board->pause_analysis (on); });
+		[=] (bool on) { anPause->setChecked (on); });
 	connect(normalTools->anHideButton, &QToolButton::toggled, this, &MainWindow::slotToggleHideAnalysis);
 
 	connect(m_ascii_dlg.cb_coords, &QCheckBox::toggled, [=] (bool) { update_ascii_dialog (); });
