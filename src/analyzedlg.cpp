@@ -310,23 +310,19 @@ void AnalyzeDialog::queue_next ()
 		if (st != nullptr && st->get_board ().size_x () == boardsizeSpinBox->value ()) {
 			m_seconds_count = 0;
 			m_requester = j;
-			if (analyzer_state () == analyzer::paused)
-				pause_analyzer (false, j->m_game, st);
-			else {
-				bool flip = j->m_komi_type == engine_komi::do_swap;
-				if (j->m_komi_type == engine_komi::maybe_swap && !m_current_komi.isEmpty ()) {
-					bool ok;
-					double k = m_current_komi.toFloat (&ok);
-					double gm_k = j->m_game->info ().komi;
-					if (ok && std::abs (k - gm_k) > std::abs (k + gm_k))
-						flip = true;
-				}
-				request_analysis (j->m_game, st, flip);
+			bool flip = j->m_komi_type == engine_komi::do_swap;
+			if (j->m_komi_type == engine_komi::maybe_swap && !m_current_komi.isEmpty ()) {
+				bool ok;
+				double k = m_current_komi.toFloat (&ok);
+				double gm_k = j->m_game->info ().komi;
+				if (ok && std::abs (k - gm_k) > std::abs (k + gm_k))
+					flip = true;
 			}
+			request_analysis (j->m_game, st, flip);
 			return;
 		}
 	}
-	pause_analyzer (true, nullptr, nullptr);
+	pause_analyzer ();
 }
 
 void AnalyzeDialog::notice_analyzer_id (const analyzer_id &id, bool have_score)

@@ -609,6 +609,11 @@ void GTP_Eval_Controller::setup_for_analysis (go_game_ptr gr, game_state *st, bo
 
 void GTP_Eval_Controller::request_analysis (go_game_ptr gr, game_state *st, bool flip)
 {
+	bool was_paused = m_pause_eval;
+	m_pause_eval = false;
+	if (was_paused)
+		analyzer_state_changed ();
+
 	if (analyzer_state () != analyzer::running)
 		return;
 
@@ -665,19 +670,15 @@ void GTP_Eval_Controller::stop_analyzer ()
 }
 
 /* Return true iff the state changed.  */
-bool GTP_Eval_Controller::pause_analyzer (bool on, go_game_ptr gr, game_state *st)
+bool GTP_Eval_Controller::pause_analyzer ()
 {
 	if (m_analyzer == nullptr || !m_analyzer->started () || m_analyzer->stopped ())
 		return false;
-	if (m_pause_eval == on)
+	if (m_pause_eval)
 		return false;
-	m_pause_eval = on;
-	if (on) {
-		clear_eval_data ();
-		m_analyzer->pause_analysis ();
-	} else {
-		request_analysis (gr, st);
-	}
+	m_pause_eval = true;
+	clear_eval_data ();
+	m_analyzer->pause_analysis ();
 	analyzer_state_changed ();
 	return true;
 }

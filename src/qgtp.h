@@ -77,7 +77,7 @@ protected:
 	void start_analyzer (const Engine &engine, int size, double komi, bool show_dialog = true);
 	void stop_analyzer ();
 	void pause_eval_updates (bool on) { m_pause_updates = on; }
-	bool pause_analyzer (bool on, go_game_ptr, game_state *);
+	bool pause_analyzer ();
 	void initiate_switch ();
 	void set_analysis_state (go_game_ptr, game_state *);
 	void setup_for_analysis (go_game_ptr, game_state *, bool flip = false);

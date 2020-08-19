@@ -2202,7 +2202,8 @@ void Board::navIntersection()
 
 void Board::setup_analyzer_position ()
 {
-	request_analysis (m_game, m_displayed);
+	if (analyzer_state () == analyzer::running)
+		request_analysis (m_game, m_displayed);
 }
 
 void Board::gtp_startup_success (GTP_Process *)
@@ -2256,8 +2257,11 @@ void Board::stop_analysis ()
 
 void Board::pause_analysis (bool on)
 {
-	if (pause_analyzer (on, m_game, m_displayed))
-		m_board_win->update_analysis (analyzer_state ());
+	if (on)
+		pause_analyzer ();
+	else
+		request_analysis (m_game, m_displayed);
+	m_board_win->update_analysis (analyzer_state ());
 }
 
 FigureView::FigureView(QWidget *parent)
