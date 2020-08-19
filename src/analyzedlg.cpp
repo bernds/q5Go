@@ -54,6 +54,14 @@ AnalyzeDialog::AnalyzeDialog (QWidget *parent, const QString &filename)
 	connect (engineComboBox, cic, [this] (int v) { engineStartButton->setEnabled (v != -1 && analyzer_state () == analyzer::disconnected ); });
 	connect (configureButton, &QPushButton::clicked, [=] (bool) { client_window->dlgSetPreferences (3); });
 	connect (engineStartButton, &QPushButton::clicked, [=] (bool) { start_engine (); });
+	connect (engineStopButton, &QPushButton::clicked, [=] (bool) { stop_engine (); });
+	connect (enginePauseButton, &QPushButton::toggled, [=] (bool on)
+		 {
+			 if (on)
+				 pause_analyzer ();
+			 else
+				 queue_next ();
+		 });
 	connect (engineLogButton, &QPushButton::clicked, [=] (bool) { m_analyzer->dialog ()->show (); });
 
 	connect (closeButton, &QPushButton::clicked, [=] (bool) { close (); });
@@ -120,6 +128,10 @@ void AnalyzeDialog::analyzer_state_changed ()
 		engineStatusLabel->setText (tr ("working"));
 		break;
 	}
+	engineStopButton->setEnabled (s != analyzer::disconnected);
+	enginePauseButton->setEnabled (s == analyzer::running || s == analyzer::paused);
+	if (s == analyzer::disconnected)
+		enginePauseButton->setChecked (false);
 	engineStartButton->setEnabled (engineComboBox->currentIndex () != -1 && s == analyzer::disconnected);
 	engineComboBox->setEnabled (s == analyzer::disconnected);
 	engineLogButton->setEnabled (m_analyzer != nullptr && !m_analyzer->dialog ()->isVisible ());
@@ -302,7 +314,7 @@ void AnalyzeDialog::select_file_db ()
 /* Called only in situations when we know the engine is running.  */
 void AnalyzeDialog::queue_next ()
 {
-	if (m_jobs.jobs.size () != 0) {
+	if (m_jobs.jobs.size () != 0 && !enginePauseButton->isChecked ()) {
 		QStandardItem *item = m_jobs.model.item (0);
 		int jidx = item->data (Qt::UserRole + 1).toInt ();
 		job *j = m_jobs.map[jidx];
@@ -533,6 +545,14 @@ void AnalyzeDialog::gtp_exited (GTP_Process *)
 	clear_eval_data ();
 	QMessageBox::warning (this, PACKAGE, QObject::tr ("GTP process exited unexpectedly."));
 	analyzer_state_changed ();
+}
+
+void AnalyzeDialog::stop_engine ()
+{
+	if (analyzer_state () == analyzer::disconnected)
+		return;
+	m_seconds_count = 0;
+	stop_analyzer ();
 }
 
 void AnalyzeDialog::start_engine ()

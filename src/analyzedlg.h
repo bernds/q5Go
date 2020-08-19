@@ -83,6 +83,7 @@ class AnalyzeDialog : public QMainWindow, public Ui::AnalyzeDialog, public GTP_E
 	void select_file ();
 	void select_file_db ();
 	void start_engine ();
+	void stop_engine ();
 	void start_job ();
 
 	/* Maintaining the job queue listviews and assorted data structures.  */
