@@ -86,9 +86,9 @@ void GameTreePixmap::paint (QPainter *painter, const QStyleOptionGraphicsItem *,
 			painter->setPen (Qt::NoPen);
 		}
 		x++;
-		st = st->next_primary_move ();
-		if (st != nullptr && st->vis_collapsed ())
+		if (st->vis_collapsed ())
 			break;
+		st = st->next_primary_move ();
 	}
 }
 
