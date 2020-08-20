@@ -14,10 +14,10 @@ struct totd {
 std::array<totd, 9> tips {
 	totd { ":/totd/images/totd/docks.png",
 		QObject::tr ("<p>You can configure the layout of the board window by dragging the docks to the position you like. "
-			     "You can then save the layout in the View menu. New board windows try to restore the most appropriate"
+			     "You can then save the layout in the View menu. New board windows try to restore the most appropriate "
 			     "layout, and you can also press L to restore a previously saved layout.</p>") },
 	totd { ":/totd/images/totd/multi.png",
-		QObject::tr ("<p>When observing online matches, you can choose whether to view them in individual windows, or in "
+		QObject::tr ("<p>When observing online matches, you can choose whether to view them in individual windows, or "
 			     "grouped together in a single window.</p>"
 			     "<p>Use the icon from the client window's toolbar, highlighted in the screenshot, to toggle the behaviour.</p>") },
 	totd { ":/totd/images/totd/anvars.png",
