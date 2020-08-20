@@ -81,11 +81,10 @@ am__objects_1 = analyzedlg.$(OBJEXT) autodiagsdlg.$(OBJEXT) \
 	sgfload.$(OBJEXT) sgf2board.$(OBJEXT) sgfpreview.$(OBJEXT) \
 	slideview.$(OBJEXT) svgbuilder.$(OBJEXT) tables.$(OBJEXT) \
 	telnet.$(OBJEXT) textview.$(OBJEXT) timing.$(OBJEXT) \
-	variantgamedlg.$(OBJEXT)
+	tutorial.$(OBJEXT) variantgamedlg.$(OBJEXT)
 am__objects_2 =
 am_q5go_OBJECTS = $(am__objects_1) $(am__objects_2)
-am__objects_3 = tutorial.$(OBJEXT)
-am__objects_4 = analyzedlg.moc.$(OBJEXT) autodiagsdlg.moc.$(OBJEXT) \
+am__objects_3 = analyzedlg.moc.$(OBJEXT) autodiagsdlg.moc.$(OBJEXT) \
 	bitarray.moc.$(OBJEXT) board.moc.$(OBJEXT) \
 	clientwin.moc.$(OBJEXT) clickableviews.moc.$(OBJEXT) \
 	clockview.moc.$(OBJEXT) dbdialog.moc.$(OBJEXT) \
@@ -104,10 +103,10 @@ am__objects_4 = analyzedlg.moc.$(OBJEXT) autodiagsdlg.moc.$(OBJEXT) \
 	tables.moc.$(OBJEXT) telnet.moc.$(OBJEXT) \
 	textview.moc.$(OBJEXT) tutorial.moc.$(OBJEXT) \
 	variantgamedlg.moc.$(OBJEXT)
-am__objects_5 = $(am__objects_3) $(am__objects_4)
-am__objects_6 = q4go.rcc.$(OBJEXT)
-am__objects_7 = $(am__objects_6)
-nodist_q5go_OBJECTS = $(am__objects_5) $(am__objects_7)
+am__objects_4 = $(am__objects_2) $(am__objects_3)
+am__objects_5 = q4go.rcc.$(OBJEXT)
+am__objects_6 = $(am__objects_5)
+nodist_q5go_OBJECTS = $(am__objects_4) $(am__objects_6)
 q5go_OBJECTS = $(am_q5go_OBJECTS) $(nodist_q5go_OBJECTS)
 am__DEPENDENCIES_1 =
 q5go_DEPENDENCIES = $(am__DEPENDENCIES_1)
@@ -318,7 +317,7 @@ DISTSOURCES = analyzedlg.cpp autodiagsdlg.cpp \
 	parser.cpp playertable.cpp preferences.cpp \
 	qgo.cpp qgo_interface.cpp qgtp.cpp \
 	setting.cpp sgfload.cc sgf2board.cc sgfpreview.cpp slideview.cpp svgbuilder.cpp \
-	tables.cpp telnet.cpp textview.cpp timing.cpp \
+	tables.cpp telnet.cpp textview.cpp timing.cpp tutorial.cpp \
 	variantgamedlg.cpp
 
 FORMS = analyze_gui.ui autodiags_gui.ui \
@@ -332,7 +331,7 @@ FORMS = analyze_gui.ui autodiags_gui.ui \
 	normaltools_gui.ui nthmove_gui.ui \
 	preferences_gui.ui \
 	scoretools_gui.ui sgfpreview.ui slideshow_gui.ui slideview_gui.ui slideshow_gui.ui svgview_gui.ui \
-	talk_gui.ui textedit_gui.ui textview_gui.ui tutorial.cpp twoaigamedlg_gui.ui
+	talk_gui.ui textedit_gui.ui textview_gui.ui twoaigamedlg_gui.ui
 
 RESOURCES = q4go.qrc
 FORMHEADERS = $(FORMS:%.ui=ui_%.h)
