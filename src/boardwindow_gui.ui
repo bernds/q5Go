@@ -2704,6 +2704,12 @@ After placing and/or undo release button for returning to starting point automat
     <addaction name="separator"/>
     <addaction name="anBatch"/>
    </widget>
+   <widget class="QMenu" name="menu_Learn_Go">
+    <property name="title">
+     <string>&amp;Learn Go</string>
+    </property>
+    <addaction name="actionTutorials"/>
+   </widget>
    <widget class="QMenu" name="helpMenu">
     <property name="title">
      <string>&amp;Help</string>
@@ -2720,6 +2726,7 @@ After placing and/or undo release button for returning to starting point automat
    <addaction name="anMenu"/>
    <addaction name="viewMenu"/>
    <addaction name="settingsMenu"/>
+   <addaction name="menu_Learn_Go"/>
    <addaction name="helpMenu"/>
   </widget>
   <widget class="QToolBar" name="fileBar">
@@ -4095,6 +4102,14 @@ Export current board to ASCII diagrams, for use in web forums.</string>
    </property>
    <property name="toolTip">
     <string>Delete existing analysis from the file</string>
+   </property>
+  </action>
+  <action name="actionTutorials">
+   <property name="text">
+    <string>&amp;Tutorials...</string>
+   </property>
+   <property name="toolTip">
+    <string>Show the beginner tutorials dialog.</string>
    </property>
   </action>
  </widget>

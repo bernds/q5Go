@@ -1028,6 +1028,8 @@ void MainWindow::initActions ()
 	connect(helpAboutQt, &QAction::triggered, [=] (bool) { QMessageBox::aboutQt (this); });
 	whatsThis = QWhatsThis::createAction (this);
 
+	connect (actionTutorials, &QAction::triggered, [] () { show_tutorials (); });
+
 	// Disable some toolbuttons at startup
 	navForward->setEnabled(false);
 	navBackward->setEnabled(false);

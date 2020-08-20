@@ -782,6 +782,12 @@ window with a selection pane for choosing which game to observe.</string>
 	<addaction name="viewMenuBar"/>
 	<addaction name="viewStatusBar"/>
       </widget>
+      <widget class="QMenu" name="menu_Learn_Go">
+	<property name="title">
+	  <string>&amp;Learn Go</string>
+	</property>
+	<addaction name="actionTutorials"/>
+      </widget>
       <widget class="QMenu" name="helpMenu">
 	<property name="title">
 	  <string>&amp;Help</string>
@@ -797,6 +803,7 @@ window with a selection pane for choosing which game to observe.</string>
       <addaction name="PopupMenu"/>
       <addaction name="PopupMenu_2"/>
       <addaction name="PopupMenu_3"/>
+      <addaction name="menu_Learn_Go"/>
       <addaction name="helpMenu"/>
     </widget>
     <action name="fileOpen">
@@ -1390,6 +1397,14 @@ window with a selection pane for choosing which game to observe.</string>
     <action name="fileOpenDB">
       <property name="text">
 	<string>Open from &amp;database...</string>
+      </property>
+    </action>
+    <action name="actionTutorials">
+      <property name="text">
+	<string>&amp;Tutorials...</string>
+      </property>
+      <property name="toolTip">
+	<string>Show the beginner tutorials dialog.</string>
       </property>
     </action>
   </widget>

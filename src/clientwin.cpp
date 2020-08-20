@@ -1710,6 +1710,8 @@ void ClientWindow::initActions()
 	connect(helpAboutApp, &QAction::triggered, [=] (bool) { help_about (); });
 	connect(helpAboutQt, &QAction::triggered, [=] (bool) { QMessageBox::aboutQt (this); });
 	connect(helpNewVersion, &QAction::triggered, [=] (bool) { help_new_version (); });
+
+	connect (actionTutorials, &QAction::triggered, [] () { show_tutorials (); });
 }
 
 void ClientWindow::initToolBar()
