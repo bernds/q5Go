@@ -1328,11 +1328,10 @@ QPixmap BoardView::draw_position (int default_vars_type)
 		black_pen.setWidth (scaled_w);
 		white_pen.setWidth (scaled_w);
 		for (int tx = 0; tx + 1 < visx + 2 * dups_x; tx++)
-			for (int ty = 0; ty + 1 < visy + 2 * dups_y; ty++) {
+			for (int ty = 0; ty < visy + 2 * dups_y; ty++) {
 				int x = (tx + shiftx + (szx - dups_x)) % szx;
 				int y = (ty + shifty + (szy - dups_y)) % szy;
 				int xp1 = (tx + 1 + shiftx + (szx - dups_x)) % szx;
-				int yp1 = (ty + 1 + shifty + (szy - dups_y)) % szy;
 				stone_color c = b.stone_at (x, y);
 				if (c == none)
 					continue;
@@ -1341,6 +1340,16 @@ QPixmap BoardView::draw_position (int default_vars_type)
 					painter.drawLine (line_offx + tx * square_size, line_offy + ty * square_size,
 							  line_offx + (tx + 1) * square_size, line_offy + ty * square_size);
 				}
+			}
+		for (int tx = 0; tx < visx + 2 * dups_x; tx++)
+			for (int ty = 0; ty + 1 < visy + 2 * dups_y; ty++) {
+				int x = (tx + shiftx + (szx - dups_x)) % szx;
+				int y = (ty + shifty + (szy - dups_y)) % szy;
+				int yp1 = (ty + 1 + shifty + (szy - dups_y)) % szy;
+				stone_color c = b.stone_at (x, y);
+				if (c == none)
+					continue;
+				painter.setPen (c == white ? white_pen : black_pen);
 				if (b.stone_at (x, yp1) == c) {
 					painter.drawLine (line_offx + tx * square_size, line_offy + ty * square_size,
 							  line_offx + tx * square_size, line_offy + (ty + 1) * square_size);
