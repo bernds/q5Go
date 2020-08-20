@@ -1072,6 +1072,7 @@ void MainWindow::initMenuBar (GameMode mode)
 	viewMenu->insertAction (view_first, diagsDock->toggleViewAction ());
 	viewMenu->insertAction (view_first, graphDock->toggleViewAction ());
 	viewMenu->insertAction (view_first, treeDock->toggleViewAction ());
+	viewMenu->insertAction (view_first, chooseDock->toggleViewAction ());
 
 	helpMenu->addSeparator ();
 	helpMenu->addAction (whatsThis);
@@ -1643,6 +1644,7 @@ void MainWindow::hide_panes_for_mode ()
 		diagsDock->toggleViewAction ()->setVisible (true);
 		graphDock->toggleViewAction ()->setVisible (true);
 	}
+	chooseDock->toggleViewAction ()->setVisible (m_gamemode == modeObserveMulti);
 }
 
 void MainWindow::slotEngineGroup (bool)
