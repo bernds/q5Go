@@ -55,7 +55,7 @@ target_triplet = @target@
 subdir = .
 DIST_COMMON = $(am__configure_deps) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(srcdir)/config.h.in \
-	$(top_srcdir)/configure AUTHORS COPYING ChangeLog NEWS TODO \
+	$(top_srcdir)/configure AUTHORS COPYING ChangeLog \
 	admin/config.guess admin/config.sub admin/depcomp \
 	admin/install-sh admin/missing
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4

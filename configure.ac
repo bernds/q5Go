@@ -86,7 +86,6 @@ AC_CONFIG_FILES([ Makefile ])
 
 dnl AC_CONFIG_FILES([ po/Makefile ])
 AC_CONFIG_FILES([ src/Makefile ])
-AC_CONFIG_FILES([ src/pics/Makefile ])
 AC_CONFIG_FILES([ src/translations/Makefile ])
 AC_CONFIG_FILES([ templates/Makefile ])
 

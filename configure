@@ -3802,8 +3802,6 @@ ac_config_files="$ac_config_files Makefile"
 
 ac_config_files="$ac_config_files src/Makefile"
 
-ac_config_files="$ac_config_files src/pics/Makefile"
-
 ac_config_files="$ac_config_files src/translations/Makefile"
 
 ac_config_files="$ac_config_files templates/Makefile"
@@ -4533,7 +4531,6 @@ do
     "config.h") CONFIG_HEADERS="$CONFIG_HEADERS config.h" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "src/Makefile") CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
-    "src/pics/Makefile") CONFIG_FILES="$CONFIG_FILES src/pics/Makefile" ;;
     "src/translations/Makefile") CONFIG_FILES="$CONFIG_FILES src/translations/Makefile" ;;
     "templates/Makefile") CONFIG_FILES="$CONFIG_FILES templates/Makefile" ;;
 
