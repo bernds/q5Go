@@ -72,16 +72,17 @@ am__objects_1 = analyzedlg.$(OBJEXT) autodiagsdlg.$(OBJEXT) \
 	dbdialog.$(OBJEXT) edit_analysis.$(OBJEXT) evalgraph.$(OBJEXT) \
 	figuredlg.$(OBJEXT) gamedialog.$(OBJEXT) gamestable.$(OBJEXT) \
 	gametree.$(OBJEXT) goboard.$(OBJEXT) gogame.$(OBJEXT) \
-	grid.$(OBJEXT) greeterwindow.$(OBJEXT) helpviewer.$(OBJEXT) \
-	igsconnection.$(OBJEXT) imagehandler.$(OBJEXT) main.$(OBJEXT) \
-	mainwindow.$(OBJEXT) misc.$(OBJEXT) msg_handler.$(OBJEXT) \
-	multisave.$(OBJEXT) newaigamedlg.$(OBJEXT) parser.$(OBJEXT) \
-	playertable.$(OBJEXT) preferences.$(OBJEXT) qgo.$(OBJEXT) \
-	qgo_interface.$(OBJEXT) qgtp.$(OBJEXT) setting.$(OBJEXT) \
-	sgfload.$(OBJEXT) sgf2board.$(OBJEXT) sgfpreview.$(OBJEXT) \
-	slideview.$(OBJEXT) svgbuilder.$(OBJEXT) tables.$(OBJEXT) \
-	telnet.$(OBJEXT) textview.$(OBJEXT) timing.$(OBJEXT) \
-	tips.$(OBJEXT) tutorial.$(OBJEXT) variantgamedlg.$(OBJEXT)
+	gotools.$(OBJEXT) grid.$(OBJEXT) greeterwindow.$(OBJEXT) \
+	helpviewer.$(OBJEXT) igsconnection.$(OBJEXT) \
+	imagehandler.$(OBJEXT) main.$(OBJEXT) mainwindow.$(OBJEXT) \
+	misc.$(OBJEXT) msg_handler.$(OBJEXT) multisave.$(OBJEXT) \
+	newaigamedlg.$(OBJEXT) parser.$(OBJEXT) playertable.$(OBJEXT) \
+	preferences.$(OBJEXT) qgo.$(OBJEXT) qgo_interface.$(OBJEXT) \
+	qgtp.$(OBJEXT) setting.$(OBJEXT) sgfload.$(OBJEXT) \
+	sgf2board.$(OBJEXT) sgfpreview.$(OBJEXT) slideview.$(OBJEXT) \
+	svgbuilder.$(OBJEXT) tables.$(OBJEXT) telnet.$(OBJEXT) \
+	textview.$(OBJEXT) timing.$(OBJEXT) tips.$(OBJEXT) \
+	tutorial.$(OBJEXT) variantgamedlg.$(OBJEXT)
 am__objects_2 =
 am_q5go_OBJECTS = $(am__objects_1) $(am__objects_2)
 am__objects_3 = analyzedlg.moc.$(OBJEXT) autodiagsdlg.moc.$(OBJEXT) \
@@ -298,9 +299,9 @@ DISTHEADERS_MOC = analyzedlg.h autodiagsdlg.h \
 	tables.h telnet.h textview.h tutorial.h \
 	variantgamedlg.h
 
-DISTHEADERS_NOMOC = goboard.h config.h defines.h grid.h goboard.h gogame.h gs_globals.h \
-	imagehandler.h komispinbox.h misc.h newaigamedlg.h setting.h sgf.h sgfparser.h \
-	svgbuilder.h timing.h ui_helpers.h
+DISTHEADERS_NOMOC = goboard.h config.h defines.h grid.h goboard.h gogame.h gotools.h \
+	gs_globals.h imagehandler.h komispinbox.h misc.h newaigamedlg.h setting.h sgf.h \
+	sgfparser.h svgbuilder.h timing.h ui_helpers.h
 
 DISTSOURCES = analyzedlg.cpp autodiagsdlg.cpp \
 	board.cpp \
@@ -308,7 +309,7 @@ DISTSOURCES = analyzedlg.cpp autodiagsdlg.cpp \
 	dbdialog.cpp \
 	edit_analysis.cpp evalgraph.cpp \
 	figuredlg.cpp \
-	gamedialog.cpp gamestable.cpp gametree.cpp goboard.cc gogame.cc \
+	gamedialog.cpp gamestable.cpp gametree.cpp goboard.cc gogame.cc gotools.cc \
 	grid.cpp greeterwindow.cpp \
 	helpviewer.cpp \
 	igsconnection.cpp imagehandler.cpp \
@@ -460,6 +461,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gametree.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/goboard.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gogame.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gotools.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/greeterwindow.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/greeterwindow.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/grid.Po@am__quote@

@@ -42,6 +42,9 @@ HEADERS		      = analyzedlg.h \
                         gamedialog.h \
 			gamestable.h \
                         gametree.h \
+                        goboard.h \
+                        gogame.h \
+                        gotools.h \
                         greeterwindow.h \
 			gs_globals.h \
 			igsconnection.h \
@@ -56,8 +59,6 @@ HEADERS		      = analyzedlg.h \
 			telnet.h \
 			board.h \
 			defines.h \
-			goboard.h \
-			gogame.h \
 			helpviewer.h \
 			imagehandler.h \
 			komispinbox.h \
@@ -96,6 +97,7 @@ SOURCES		      = analyzedlg.cpp \
 			gametree.cpp \
                         goboard.cc \
                         gogame.cc \
+                        gotools.cc \
                         greeterwindow.cpp \
 			igsconnection.cpp \
 			main.cpp \

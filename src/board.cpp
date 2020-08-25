@@ -23,6 +23,7 @@
 #include "miscdialogs.h"
 #include "svgbuilder.h"
 #include "ui_helpers.h"
+#include "gotools.h"
 
 BoardView::BoardView(QWidget *parent)
 	: QGraphicsView(parent), m_vgrid_outline (1), m_hgrid_outline (1), m_dims (0, 0, DEFAULT_BOARD_SIZE, DEFAULT_BOARD_SIZE), m_hoshis (1)

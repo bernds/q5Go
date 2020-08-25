@@ -21,6 +21,7 @@
 #include "config.h"
 #include "clientwin.h"
 #include "ui_helpers.h"
+#include "gotools.h"
 #include "sizegraphicsview.h"
 
 class MainWindow_IGS : public MainWindow

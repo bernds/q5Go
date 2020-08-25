@@ -7,6 +7,7 @@
 #include "setting.h"
 #include "komispinbox.h"
 #include "qgtp.h"
+#include "gotools.h"
 #include "ui_helpers.h"
 
 #include "ui_newaigamedlg_gui.h"

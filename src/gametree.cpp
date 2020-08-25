@@ -12,7 +12,7 @@
 #include "mainwindow.h"
 #include "svgbuilder.h"
 #include "board.h"
-#include "ui_helpers.h"
+#include "gotools.h"
 
 static QByteArray box_svg =
 	"<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"

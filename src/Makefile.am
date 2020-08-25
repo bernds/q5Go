@@ -22,9 +22,9 @@ DISTHEADERS_MOC = analyzedlg.h autodiagsdlg.h \
 	tables.h telnet.h textview.h tutorial.h \
 	variantgamedlg.h
 
-DISTHEADERS_NOMOC = goboard.h config.h defines.h grid.h goboard.h gogame.h gs_globals.h \
-	imagehandler.h komispinbox.h misc.h newaigamedlg.h setting.h sgf.h sgfparser.h \
-	svgbuilder.h timing.h ui_helpers.h
+DISTHEADERS_NOMOC = goboard.h config.h defines.h grid.h goboard.h gogame.h gotools.h \
+	gs_globals.h imagehandler.h komispinbox.h misc.h newaigamedlg.h setting.h sgf.h \
+	sgfparser.h svgbuilder.h timing.h ui_helpers.h
 
 DISTSOURCES = analyzedlg.cpp autodiagsdlg.cpp \
 	board.cpp \
@@ -32,7 +32,7 @@ DISTSOURCES = analyzedlg.cpp autodiagsdlg.cpp \
 	dbdialog.cpp \
 	edit_analysis.cpp evalgraph.cpp \
 	figuredlg.cpp \
-	gamedialog.cpp gamestable.cpp gametree.cpp goboard.cc gogame.cc \
+	gamedialog.cpp gamestable.cpp gametree.cpp goboard.cc gogame.cc gotools.cc \
 	grid.cpp greeterwindow.cpp \
 	helpviewer.cpp \
 	igsconnection.cpp imagehandler.cpp \
