@@ -15,6 +15,7 @@ extern go_game_ptr record_from_file (const QString &filename, QTextCodec *codec)
 extern bool open_window_from_file (const QString &filename);
 extern bool open_local_board (QWidget *, game_dialog_type, const QString &);
 extern QString get_candidate_filename (const QString &dir, const game_info &);
+extern bool save_to_file (QWidget *, go_game_ptr, const QString &filename);
 
 extern QString sec_to_time (int);
 

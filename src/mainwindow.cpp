@@ -1349,24 +1349,10 @@ bool MainWindow::doSave (QString fileName, bool force)
 	if (getFileExtension (fileName, false).isEmpty ())
 		fileName.append (".sgf");
 
-	QFile of (fileName);
-	if (!of.open (QIODevice::WriteOnly)) {
-		QMessageBox::warning (this, PACKAGE, tr ("Cannot open SGF file for saving."));
+	if (!save_to_file (this, m_game, fileName))
 		return false;
-	}
-	std::string sgf = m_game->to_sgf ();
-	QByteArray bytes = QByteArray::fromStdString (sgf);
-	qint64 written = of.write (bytes);
-	if (written != bytes.length ()) {
-		QMessageBox::warning (this, PACKAGE, tr ("Failed to save SGF file."));
-		return false;
-	}
-	of.close ();
 
 	statusBar()->showMessage (fileName + " " + tr("saved."));
-	m_game->set_modified (false);
-	m_game->clear_errors ();
-	m_game->set_filename (fileName.toStdString ());
 	update_game_record ();
 	return true;
 }

@@ -2151,7 +2151,8 @@ void qGoBoard::game_result (const QString &rs, const QString &extended_rs)
 		/* Only use path if it is valid.  */
 		if (!path.isEmpty () && !QDir (path).exists ())
 			path = "";
-		win->doSave (path, true);
+		QString filename = get_candidate_filename (path, m_game->info ());
+		save_to_file (win, m_game, filename);
 	}
 
 	GameMode prev_mode = gameMode;

@@ -229,6 +229,28 @@ go_game_ptr open_file_dialog (QWidget *parent)
 	return record_from_file (fileName, nullptr);
 }
 
+bool save_to_file (QWidget *parent, go_game_ptr gr, const QString &filename)
+{
+	QFile of (filename);
+	if (!of.open (QIODevice::WriteOnly)) {
+		QMessageBox::warning (parent, PACKAGE, QObject::tr ("Cannot open SGF file for saving."));
+		return false;
+	}
+	std::string sgf = gr->to_sgf ();
+	QByteArray bytes = QByteArray::fromStdString (sgf);
+	qint64 written = of.write (bytes);
+	if (written != bytes.length ()) {
+		QMessageBox::warning (parent, PACKAGE, QObject::tr ("Failed to save SGF file."));
+		return false;
+	}
+	of.close ();
+
+	gr->set_modified (false);
+	gr->clear_errors ();
+	gr->set_filename (filename.toStdString ());
+	return true;
+}
+
 static int exec_db_dialog (QWidget *parent)
 {
 	QString fileName;
