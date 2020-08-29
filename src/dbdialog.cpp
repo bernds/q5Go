@@ -164,6 +164,12 @@ void DBDialog::db_model::populate_list ()
 						    date, q2.value (4).toString (), q2.value (5).toString ());
 		}
 	}
+	default_sort ();
+	endResetModel ();
+}
+
+void DBDialog::db_model::default_sort ()
+{
 	std::sort (std::begin (m_entries), std::end (m_entries),
 		   [this] (size_t a, size_t b)
 		   {
@@ -171,16 +177,6 @@ void DBDialog::db_model::populate_list ()
 			   const entry &e2 = m_all_entries[b];
 			   return e1.date > e2.date;
 		   });
-	endResetModel ();
-}
-
-void DBDialog::update_prefs ()
-{
-	if (!setting->dbpaths_changed)
-		return;
-	setting->dbpaths_changed = false;
-	m_model.populate_list ();
-	gameNumLabel->setText (m_model.status_string ());
 }
 
 void DBDialog::db_model::reset_filters ()
@@ -190,6 +186,8 @@ void DBDialog::db_model::reset_filters ()
 	m_entries.reserve (m_all_entries.size ());
 	for (size_t i = 0; i < m_all_entries.size (); i++)
 		m_entries.push_back (i);
+
+	default_sort ();
 
 	endResetModel ();
 }
@@ -223,6 +221,15 @@ void DBDialog::db_model::apply_filter (const QString &p1, const QString &p2, con
 					 }),
 			 std::end (m_entries));
 	endResetModel ();
+}
+
+void DBDialog::update_prefs ()
+{
+	if (!setting->dbpaths_changed)
+		return;
+	setting->dbpaths_changed = false;
+	m_model.populate_list ();
+	gameNumLabel->setText (m_model.status_string ());
 }
 
 void DBDialog::apply_filters (bool)

@@ -33,6 +33,7 @@ class DBDialog : public QDialog, public Ui::DBDialog
 	class db_model : public QAbstractItemModel {
 		std::vector<entry> m_all_entries;
 		std::vector<size_t> m_entries;
+		void default_sort ();
 	public:
 		db_model ()
 		{
