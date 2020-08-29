@@ -132,8 +132,10 @@ void DBDialog::db_model::populate_list ()
 		db.setDatabaseName (dbpath);
 		db.open ();
 		QSqlQuery q1 ("select * from db_info where rowid = 1");
-		if (!q1.next () || q1.value (0) != "kombilo 0.7")
+		if (!q1.next () || (q1.value (0) != "kombilo 0.7" && q1.value (0) != "kombilo 0.8")) {
+			qDebug () << "skipping database with " << q1.value (0);
 			continue;
+		}
 
 		QSqlQuery q2 ("select filename,pw,pb,dt,re,ev from GAMES");
 		while (q2.next ()) {
