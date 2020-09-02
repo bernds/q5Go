@@ -556,6 +556,9 @@ int main(int argc, char **argv)
 			str << err;
 		}
 	}
+
+	start_db_thread ();
+
 	if (cmdp.isSet (clo_analysis)) {
 		analyze_dialog = new AnalyzeDialog (nullptr, cmdp.value (clo_analysis));
 	} else
@@ -584,6 +587,9 @@ int main(int argc, char **argv)
 		debug_stream = nullptr;
 		debug_file = nullptr;
 	}
+
+	delete db_dialog;
+	end_db_thread ();
 
 	delete greeter;
 	delete client_window;

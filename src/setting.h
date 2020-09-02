@@ -9,6 +9,7 @@
 #include <QString>
 #include <QFont>
 #include <QColor>
+#include <QMutex>
 
 // delimiters for variables in settings file
 // however, this character must not be used in parameters, e.g. host
@@ -113,6 +114,9 @@ public:
 	bool engines_changed = false;
 	bool hosts_changed = false;
 
+	/* Protects access from the database thread.  m_dbpaths is only changed by
+	   the main thread, and only while the lock is held.  */
+	QMutex m_dbpath_lock;
 	QStringList m_dbpaths;
 	std::vector<Engine> m_engines;
 	std::vector<Host> m_hosts;

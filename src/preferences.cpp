@@ -974,8 +974,10 @@ void PreferencesDialog::slot_apply()
 	setting->writeBoolEntry ("TIPS_STARTUP", ui->tipsCheckBox->isChecked ());
 
 	if (m_dbpaths_changed) {
+		setting->m_dbpath_lock.lock ();
 		setting->m_dbpaths = m_dbpaths;
 		setting->dbpaths_changed = true;
+		setting->m_dbpath_lock.unlock ();
 		m_dbpaths_changed = false;
 	}
 	if (m_engines_changed) {

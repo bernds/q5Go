@@ -3,9 +3,127 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 
+#include <memory>
+
 #include "gogame.h"
 #include "dbdialog.h"
 #include "clientwin.h"
+
+namespace {
+
+QThread *db_thread;
+GameDB_Data *db_data;
+GameDB_Data_Controller *db_data_controller;
+
+};
+
+void start_db_thread ()
+{
+	db_thread = new QThread;
+	db_thread->start (QThread::LowPriority);
+	db_data = new GameDB_Data;
+
+	db_data->moveToThread (db_thread);
+	QObject::connect (db_thread, &QThread::finished, db_data, &QObject::deleteLater);
+
+	db_data_controller = new GameDB_Data_Controller;
+	db_data_controller->load ();
+}
+
+void end_db_thread ()
+{
+	db_thread->exit ();
+	db_thread->wait ();
+	delete db_thread;
+	delete db_data_controller;
+}
+
+GameDB_Data_Controller::GameDB_Data_Controller ()
+{
+	connect (this, &GameDB_Data_Controller::signal_start_load, db_data, &GameDB_Data::slot_start_load);
+}
+
+void GameDB_Data_Controller::load ()
+{
+	db_data->load_complete = false;
+	emit signal_start_load ();
+}
+
+void GameDB_Data::slot_start_load ()
+{
+	static bool init_once = false;
+	if (!init_once) {
+		QSqlDatabase::addDatabase ("QSQLITE", "kombilo");
+		init_once = true;
+	}
+
+	setting->m_dbpath_lock.lock ();
+	dbpaths = setting->m_dbpaths;
+	setting->m_dbpath_lock.unlock ();
+
+	m_all_entries.clear ();
+
+	QSqlDatabase db = QSqlDatabase::database ("kombilo");
+
+	QRegularExpression re_full ("(\\d\\d\\d\\d)[^\\d](\\d\\d)[^\\d](\\d\\d)");
+	QRegularExpression re_noday ("(\\d\\d\\d\\d)[^\\d](\\d\\d)");
+	QRegularExpression re_year ("(\\d\\d\\d\\d)");
+	/* Compatibility with old versions of qGo/q4go/q5go before we corrected
+	   that little problem.  */
+	QRegularExpression re_compat ("^(\\d\\d) (\\d\\d) (\\d\\d\\d\\d)$");
+
+	for (auto &it: dbpaths) {
+		QDir dbdir (it);
+		if (!dbdir.exists ("kombilo.db"))
+			continue;
+		QString dbpath = dbdir.filePath ("kombilo.db");
+		db.setDatabaseName (dbpath);
+		db.open ();
+		QSqlQuery q1 ("select * from db_info where rowid = 1", db);
+		if (!q1.next () || (q1.value (0) != "kombilo 0.7" && q1.value (0) != "kombilo 0.8")) {
+			qDebug () << "skipping database with " << q1.value (0);
+			continue;
+		}
+
+		QSqlQuery q2 ("select filename,pw,pb,dt,re,ev from GAMES", db);
+		while (q2.next ()) {
+			QString filename = dbdir.filePath (q2.value (0).toString ());
+			QString date = q2.value (3).toString ();
+			auto compat = re_compat.match (date);
+			if (compat.hasMatch ()) {
+				date = compat.captured (3) + "-" + compat.captured (2) + "-" + compat.captured (1);
+			} else {
+				auto full = re_full.match (date);
+				if (full.hasMatch ()) {
+					QStringList sl = full.capturedTexts ();
+					sl.removeFirst ();
+					date = sl.join ("-");
+				} else {
+					auto noday = re_noday.match (date);
+					if (noday.hasMatch ()) {
+						QStringList sl = noday.capturedTexts ();
+						sl.removeFirst ();
+						date = sl.join ("-") + "-??";
+					} else {
+						auto year = re_year.match (date);
+						if (year.hasMatch ()) {
+							date = year.captured (0) + "-??" "-??";
+						} else
+							date = "0000" "-??" "-??";
+					}
+				}
+			}
+
+			m_all_entries.emplace_back (filename, q2.value (1).toString (), q2.value (2).toString (),
+						    date, q2.value (4).toString (), q2.value (5).toString ());
+		}
+		db.close ();
+	}
+
+	load_complete = true;
+	std::atomic_thread_fence (std::memory_order_seq_cst);
+	emit signal_load_complete ();
+}
 
 DBDialog::DBDialog (QWidget *parent)
 	: QDialog (parent)
@@ -21,7 +139,6 @@ DBDialog::DBDialog (QWidget *parent)
 
 	clear_preview ();
 
-	m_model.populate_list ();
 	gameNumLabel->setText (m_model.status_string ());
 	dbListView->setModel (&m_model);
 
@@ -64,9 +181,16 @@ DBDialog::~DBDialog ()
 {
 }
 
+gamedb_model::gamedb_model ()
+{
+	connect (db_data, &GameDB_Data::signal_load_complete, this, &gamedb_model::slot_load_complete);
+	if (db_data->load_complete)
+		slot_load_complete ();
+}
+
 const gamedb_entry &gamedb_model::find (size_t row) const
 {
-	return m_all_entries[m_entries[row]];
+	return db_data->m_all_entries[m_entries[row]];
 }
 
 QVariant gamedb_model::data (const QModelIndex &index, int role) const
@@ -118,76 +242,17 @@ QVariant gamedb_model::headerData (int section, Qt::Orientation ot, int role) co
 	return QVariant ();
 }
 
-void gamedb_model::populate_list ()
+void gamedb_model::clear_list ()
 {
-	static bool init_once = false;
-	if (!init_once) {
-		QSqlDatabase::addDatabase ("QSQLITE", "kombilo");
-		init_once = true;
-	}
-
-	QSqlDatabase db = QSqlDatabase::database ("kombilo");
 	beginResetModel ();
-	m_all_entries.clear ();
 	m_entries.clear ();
-
-	QRegularExpression re_full ("(\\d\\d\\d\\d)[^\\d](\\d\\d)[^\\d](\\d\\d)");
-	QRegularExpression re_noday ("(\\d\\d\\d\\d)[^\\d](\\d\\d)");
-	QRegularExpression re_year ("(\\d\\d\\d\\d)");
-	/* Compatibility with old versions of qGo/q4go/q5go before we corrected
-	   that little problem.  */
-	QRegularExpression re_compat ("^(\\d\\d) (\\d\\d) (\\d\\d\\d\\d)$");
-
-	for (auto &it: setting->m_dbpaths) {
-		QDir dbdir (it);
-		if (!dbdir.exists ("kombilo.db"))
-			continue;
-		QString dbpath = dbdir.filePath ("kombilo.db");
-		db.setDatabaseName (dbpath);
-		db.open ();
-		QSqlQuery q1 ("select * from db_info where rowid = 1", db);
-		if (!q1.next () || (q1.value (0) != "kombilo 0.7" && q1.value (0) != "kombilo 0.8")) {
-			qDebug () << "skipping database with " << q1.value (0);
-			continue;
-		}
-
-		QSqlQuery q2 ("select filename,pw,pb,dt,re,ev from GAMES", db);
-		while (q2.next ()) {
-			m_entries.push_back (m_all_entries.size ());
-			QString filename = dbdir.filePath (q2.value (0).toString ());
-			QString date = q2.value (3).toString ();
-			auto compat = re_compat.match (date);
-			if (compat.hasMatch ()) {
-				date = compat.captured (3) + "-" + compat.captured (2) + "-" + compat.captured (1);
-			} else {
-				auto full = re_full.match (date);
-				if (full.hasMatch ()) {
-					QStringList sl = full.capturedTexts ();
-					sl.removeFirst ();
-					date = sl.join ("-");
-				} else {
-					auto noday = re_noday.match (date);
-					if (noday.hasMatch ()) {
-						QStringList sl = noday.capturedTexts ();
-						sl.removeFirst ();
-						date = sl.join ("-") + "-??";
-					} else {
-						auto year = re_year.match (date);
-						if (year.hasMatch ()) {
-							date = year.captured (0) + "-??" "-??";
-						} else
-							date = "0000" "-??" "-??";
-					}
-				}
-			}
-
-			m_all_entries.emplace_back (filename, q2.value (1).toString (), q2.value (2).toString (),
-						    date, q2.value (4).toString (), q2.value (5).toString ());
-		}
-		db.close ();
-	}
-	default_sort ();
 	endResetModel ();
+}
+
+void gamedb_model::slot_load_complete ()
+{
+	std::atomic_thread_fence (std::memory_order_seq_cst);
+	reset_filters ();
 }
 
 void gamedb_model::default_sort ()
@@ -195,8 +260,8 @@ void gamedb_model::default_sort ()
 	std::sort (std::begin (m_entries), std::end (m_entries),
 		   [this] (size_t a, size_t b)
 		   {
-			   const gamedb_entry &e1 = m_all_entries[a];
-			   const gamedb_entry &e2 = m_all_entries[b];
+			   const gamedb_entry &e1 = db_data->m_all_entries[a];
+			   const gamedb_entry &e2 = db_data->m_all_entries[b];
 			   return e1.date > e2.date;
 		   });
 }
@@ -205,8 +270,8 @@ void gamedb_model::reset_filters ()
 {
 	beginResetModel ();
 	m_entries.clear ();
-	m_entries.reserve (m_all_entries.size ());
-	for (size_t i = 0; i < m_all_entries.size (); i++)
+	m_entries.reserve (db_data->m_all_entries.size ());
+	for (size_t i = 0; i < db_data->m_all_entries.size (); i++)
 		m_entries.push_back (i);
 
 	default_sort ();
@@ -216,7 +281,7 @@ void gamedb_model::reset_filters ()
 
 QString gamedb_model::status_string () const
 {
-	return QString::number (m_entries.size ()) + "/" + QString::number (m_all_entries.size ()) + " games";
+	return QString::number (m_entries.size ()) + "/" + QString::number (db_data->m_all_entries.size ()) + " games";
 }
 
 void gamedb_model::apply_filter (const QString &p1, const QString &p2, const QString &event,
@@ -226,7 +291,7 @@ void gamedb_model::apply_filter (const QString &p1, const QString &p2, const QSt
 	m_entries.erase (std::remove_if (std::begin (m_entries), std::end (m_entries),
 					 [&](size_t idx)
 					 {
-						 const gamedb_entry &e = m_all_entries[idx];
+						 const gamedb_entry &e = db_data->m_all_entries[idx];
 						 if (!p1.isEmpty () && !e.pw.contains (p1) && !e.pb.contains (p1))
 							 return true;
 						 if (!p2.isEmpty () && !e.pw.contains (p2) && !e.pb.contains (p2))
@@ -250,7 +315,10 @@ void DBDialog::update_prefs ()
 	if (!setting->dbpaths_changed)
 		return;
 	setting->dbpaths_changed = false;
-	m_model.populate_list ();
+
+	m_model.clear_list ();
+	db_data_controller->load ();
+
 	gameNumLabel->setText (m_model.status_string ());
 }
 
