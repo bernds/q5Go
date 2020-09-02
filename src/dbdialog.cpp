@@ -123,6 +123,14 @@ void DBDialog::db_model::populate_list ()
 	beginResetModel ();
 	m_all_entries.clear ();
 	m_entries.clear ();
+
+	QRegularExpression re_full ("(\\d\\d\\d\\d)[^\\d](\\d\\d)[^\\d](\\d\\d)");
+	QRegularExpression re_noday ("(\\d\\d\\d\\d)[^\\d](\\d\\d)");
+	QRegularExpression re_year ("(\\d\\d\\d\\d)");
+	/* Compatibility with old versions of qGo/q4go/q5go before we corrected
+	   that little problem.  */
+	QRegularExpression re_compat ("^(\\d\\d) (\\d\\d) (\\d\\d\\d\\d)$");
+
 	for (auto &it: setting->m_dbpaths) {
 		QSqlDatabase db = QSqlDatabase::addDatabase ("QSQLITE");
 		QDir dbdir (it);
@@ -142,26 +150,31 @@ void DBDialog::db_model::populate_list ()
 			m_entries.push_back (m_all_entries.size ());
 			QString filename = dbdir.filePath (q2.value (0).toString ());
 			QString date = q2.value (3).toString ();
-			QRegExp re_full ("(\\d\\d\\d\\d)[^\\d](\\d\\d)[^\\d](\\d\\d)");
-			QRegExp re_noday ("(\\d\\d\\d\\d)[^\\d](\\d\\d)");
-			QRegExp re_year ("(\\d\\d\\d\\d)");
-			/* Compatibility with old versions of qGo/q4go/q5go before we corrected
-			   that little problem.  */
-			QRegExp re_compat ("^(\\d\\d) (\\d\\d) (\\d\\d\\d\\d)$");
-			if (re_compat.exactMatch (date)) {
-				date = re_compat.cap (3) + "-" + re_compat.cap (2) + "-" + re_compat.cap (1);
-			} else if (re_full.indexIn (date) != -1) {
-				QStringList sl = re_full.capturedTexts ();
-				sl.removeFirst ();
-				date = sl.join ("-");
-			} else if (re_noday.indexIn (date) != -1) {
-				QStringList sl = re_noday.capturedTexts ();
-				sl.removeFirst ();
-				date = sl.join ("-") + "-??";
-			} else if (re_year.indexIn (date) != -1) {
-				date = re_year.cap (0) + "-??" "-??";
-			} else
-				date = "0000" "-??" "-??";
+			auto compat = re_compat.match (date);
+			if (compat.hasMatch ()) {
+				date = compat.captured (3) + "-" + compat.captured (2) + "-" + compat.captured (1);
+			} else {
+				auto full = re_full.match (date);
+				if (full.hasMatch ()) {
+					QStringList sl = full.capturedTexts ();
+					sl.removeFirst ();
+					date = sl.join ("-");
+				} else {
+					auto noday = re_noday.match (date);
+					if (noday.hasMatch ()) {
+						QStringList sl = noday.capturedTexts ();
+						sl.removeFirst ();
+						date = sl.join ("-") + "-??";
+					} else {
+						auto year = re_year.match (date);
+						if (year.hasMatch ()) {
+							date = year.captured (0) + "-??" "-??";
+						} else
+							date = "0000" "-??" "-??";
+					}
+				}
+			}
+
 			m_all_entries.emplace_back (filename, q2.value (1).toString (), q2.value (2).toString (),
 						    date, q2.value (4).toString (), q2.value (5).toString ());
 		}
