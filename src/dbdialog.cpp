@@ -64,42 +64,42 @@ DBDialog::~DBDialog ()
 {
 }
 
-const DBDialog::entry &DBDialog::db_model::find (size_t row) const
+const gamedb_entry &gamedb_model::find (size_t row) const
 {
 	return m_all_entries[m_entries[row]];
 }
 
-QVariant DBDialog::db_model::data (const QModelIndex &index, int role) const
+QVariant gamedb_model::data (const QModelIndex &index, int role) const
 {
 	int row = index.row ();
 	int col = index.column ();
 	if (row < 0 || (size_t)row >= m_entries.size () || role != Qt::DisplayRole || col != 0)
 		return QVariant ();
-	const entry &e = find (row);
+	const gamedb_entry &e = find (row);
 	return e.pw + "-" + e.pb + ", " + e.result + ", " + e.date;
 }
 
-QModelIndex DBDialog::db_model::index (int row, int col, const QModelIndex &) const
+QModelIndex gamedb_model::index (int row, int col, const QModelIndex &) const
 {
 	return createIndex (row, col);
 }
 
-QModelIndex DBDialog::db_model::parent (const QModelIndex &) const
+QModelIndex gamedb_model::parent (const QModelIndex &) const
 {
 	return QModelIndex ();
 }
 
-int DBDialog::db_model::rowCount (const QModelIndex &) const
+int gamedb_model::rowCount (const QModelIndex &) const
 {
 	return m_entries.size ();
 }
 
-int DBDialog::db_model::columnCount (const QModelIndex &) const
+int gamedb_model::columnCount (const QModelIndex &) const
 {
 	return 1;
 }
 
-QVariant DBDialog::db_model::headerData (int section, Qt::Orientation ot, int role) const
+QVariant gamedb_model::headerData (int section, Qt::Orientation ot, int role) const
 {
 	if (role == Qt::TextAlignmentRole) {
 		return Qt::AlignLeft;
@@ -118,7 +118,7 @@ QVariant DBDialog::db_model::headerData (int section, Qt::Orientation ot, int ro
 	return QVariant ();
 }
 
-void DBDialog::db_model::populate_list ()
+void gamedb_model::populate_list ()
 {
 	static bool init_once = false;
 	if (!init_once) {
@@ -190,18 +190,18 @@ void DBDialog::db_model::populate_list ()
 	endResetModel ();
 }
 
-void DBDialog::db_model::default_sort ()
+void gamedb_model::default_sort ()
 {
 	std::sort (std::begin (m_entries), std::end (m_entries),
 		   [this] (size_t a, size_t b)
 		   {
-			   const entry &e1 = m_all_entries[a];
-			   const entry &e2 = m_all_entries[b];
+			   const gamedb_entry &e1 = m_all_entries[a];
+			   const gamedb_entry &e2 = m_all_entries[b];
 			   return e1.date > e2.date;
 		   });
 }
 
-void DBDialog::db_model::reset_filters ()
+void gamedb_model::reset_filters ()
 {
 	beginResetModel ();
 	m_entries.clear ();
@@ -214,19 +214,19 @@ void DBDialog::db_model::reset_filters ()
 	endResetModel ();
 }
 
-QString DBDialog::db_model::status_string () const
+QString gamedb_model::status_string () const
 {
 	return QString::number (m_entries.size ()) + "/" + QString::number (m_all_entries.size ()) + " games";
 }
 
-void DBDialog::db_model::apply_filter (const QString &p1, const QString &p2, const QString &event,
+void gamedb_model::apply_filter (const QString &p1, const QString &p2, const QString &event,
 				       const QString &dtfrom, const QString &dtto)
 {
 	beginResetModel ();
 	m_entries.erase (std::remove_if (std::begin (m_entries), std::end (m_entries),
 					 [&](size_t idx)
 					 {
-						 const entry &e = m_all_entries[idx];
+						 const gamedb_entry &e = m_all_entries[idx];
 						 if (!p1.isEmpty () && !e.pw.contains (p1) && !e.pb.contains (p1))
 							 return true;
 						 if (!p2.isEmpty () && !e.pw.contains (p2) && !e.pb.contains (p2))
@@ -359,7 +359,7 @@ bool DBDialog::update_selection ()
 		return false;
 
 	QModelIndex i = selected.first ();
-	const entry &e = m_model.find (i.row ());
+	const gamedb_entry &e = m_model.find (i.row ());
 	QString filename = e.filename;
 	qDebug () << filename;
 	setPath (filename);
