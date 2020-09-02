@@ -120,6 +120,13 @@ QVariant DBDialog::db_model::headerData (int section, Qt::Orientation ot, int ro
 
 void DBDialog::db_model::populate_list ()
 {
+	static bool init_once = false;
+	if (!init_once) {
+		QSqlDatabase::addDatabase ("QSQLITE", "kombilo");
+		init_once = true;
+	}
+
+	QSqlDatabase db = QSqlDatabase::database ("kombilo");
 	beginResetModel ();
 	m_all_entries.clear ();
 	m_entries.clear ();
@@ -132,20 +139,19 @@ void DBDialog::db_model::populate_list ()
 	QRegularExpression re_compat ("^(\\d\\d) (\\d\\d) (\\d\\d\\d\\d)$");
 
 	for (auto &it: setting->m_dbpaths) {
-		QSqlDatabase db = QSqlDatabase::addDatabase ("QSQLITE");
 		QDir dbdir (it);
 		if (!dbdir.exists ("kombilo.db"))
 			continue;
 		QString dbpath = dbdir.filePath ("kombilo.db");
 		db.setDatabaseName (dbpath);
 		db.open ();
-		QSqlQuery q1 ("select * from db_info where rowid = 1");
+		QSqlQuery q1 ("select * from db_info where rowid = 1", db);
 		if (!q1.next () || (q1.value (0) != "kombilo 0.7" && q1.value (0) != "kombilo 0.8")) {
 			qDebug () << "skipping database with " << q1.value (0);
 			continue;
 		}
 
-		QSqlQuery q2 ("select filename,pw,pb,dt,re,ev from GAMES");
+		QSqlQuery q2 ("select filename,pw,pb,dt,re,ev from GAMES", db);
 		while (q2.next ()) {
 			m_entries.push_back (m_all_entries.size ());
 			QString filename = dbdir.filePath (q2.value (0).toString ());
@@ -178,6 +184,7 @@ void DBDialog::db_model::populate_list ()
 			m_all_entries.emplace_back (filename, q2.value (1).toString (), q2.value (2).toString (),
 						    date, q2.value (4).toString (), q2.value (5).toString ());
 		}
+		db.close ();
 	}
 	default_sort ();
 	endResetModel ();
