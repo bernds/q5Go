@@ -132,7 +132,7 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	void (QComboBox::*cic) (int) = &QComboBox::currentIndexChanged;
 	connect (whoBox1, cic, [this] (int idx) { update_who_rank (whoBox1, idx); });
 	connect (whoBox2, cic, [this] (int idx) { update_who_rank (whoBox2, idx); });
-	connect (toolObserveMode, &QToolButton::toggled, [this] (bool on) { setting->writeBoolEntry ("OBSERVE_SINGLE", on); });
+	connect (toolObserveMode, &QToolButton::toggled, [] (bool on) { setting->writeBoolEntry ("OBSERVE_SINGLE", on); });
 
 	initStatusBar(this);
 	initActions();
