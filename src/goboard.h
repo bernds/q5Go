@@ -320,7 +320,7 @@ public:
 		init_marks (false);
 		int bp = bitpos (x, y);
 		if (m_marks[bp] == m
-		    && (m != mark::num || m != mark::letter || m_mark_extra[bp] == extra))
+		    && ((m != mark::num && m != mark::letter) || m_mark_extra[bp] == extra))
 			return false;
 
 		m_marks[bp] = m;
