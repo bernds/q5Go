@@ -12,7 +12,7 @@ DISTHEADERS_MOC = analyzedlg.h autodiagsdlg.h \
 	dbdialog.h \
 	edit_analysis.h evalgraph.h \
 	figuredlg.h \
-	gamedialog.h gamestable.h gametree.h greeterwindow.h \
+	gamedb.h gamedialog.h gamestable.h gametree.h greeterwindow.h \
 	helpviewer.h igsconnection.h \
 	mainwindow.h miscdialogs.h msg_handler.h multisave.h \
 	normaltools.h \

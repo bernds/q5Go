@@ -39,6 +39,7 @@ HEADERS		      = analyzedlg.h \
 			edit_analysis.h \
 			evalgraph.h \
                         figuredlg.h \
+                        gamedb.h \
                         gamedialog.h \
 			gamestable.h \
                         gametree.h \

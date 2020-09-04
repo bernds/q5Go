@@ -90,20 +90,20 @@ am__objects_3 = analyzedlg.moc.$(OBJEXT) autodiagsdlg.moc.$(OBJEXT) \
 	clientwin.moc.$(OBJEXT) clickableviews.moc.$(OBJEXT) \
 	clockview.moc.$(OBJEXT) dbdialog.moc.$(OBJEXT) \
 	edit_analysis.moc.$(OBJEXT) evalgraph.moc.$(OBJEXT) \
-	figuredlg.moc.$(OBJEXT) gamedialog.moc.$(OBJEXT) \
-	gamestable.moc.$(OBJEXT) gametree.moc.$(OBJEXT) \
-	greeterwindow.moc.$(OBJEXT) helpviewer.moc.$(OBJEXT) \
-	igsconnection.moc.$(OBJEXT) mainwindow.moc.$(OBJEXT) \
-	miscdialogs.moc.$(OBJEXT) msg_handler.moc.$(OBJEXT) \
-	multisave.moc.$(OBJEXT) normaltools.moc.$(OBJEXT) \
-	parser.moc.$(OBJEXT) playertable.moc.$(OBJEXT) \
-	preferences.moc.$(OBJEXT) qgo.moc.$(OBJEXT) \
-	qgo_interface.moc.$(OBJEXT) qgtp.moc.$(OBJEXT) \
-	scoretools.moc.$(OBJEXT) sizegraphicsview.moc.$(OBJEXT) \
-	slideview.moc.$(OBJEXT) sgfpreview.moc.$(OBJEXT) \
-	tables.moc.$(OBJEXT) telnet.moc.$(OBJEXT) \
-	textview.moc.$(OBJEXT) tutorial.moc.$(OBJEXT) \
-	variantgamedlg.moc.$(OBJEXT)
+	figuredlg.moc.$(OBJEXT) gamedb.moc.$(OBJEXT) \
+	gamedialog.moc.$(OBJEXT) gamestable.moc.$(OBJEXT) \
+	gametree.moc.$(OBJEXT) greeterwindow.moc.$(OBJEXT) \
+	helpviewer.moc.$(OBJEXT) igsconnection.moc.$(OBJEXT) \
+	mainwindow.moc.$(OBJEXT) miscdialogs.moc.$(OBJEXT) \
+	msg_handler.moc.$(OBJEXT) multisave.moc.$(OBJEXT) \
+	normaltools.moc.$(OBJEXT) parser.moc.$(OBJEXT) \
+	playertable.moc.$(OBJEXT) preferences.moc.$(OBJEXT) \
+	qgo.moc.$(OBJEXT) qgo_interface.moc.$(OBJEXT) \
+	qgtp.moc.$(OBJEXT) scoretools.moc.$(OBJEXT) \
+	sizegraphicsview.moc.$(OBJEXT) slideview.moc.$(OBJEXT) \
+	sgfpreview.moc.$(OBJEXT) tables.moc.$(OBJEXT) \
+	telnet.moc.$(OBJEXT) textview.moc.$(OBJEXT) \
+	tutorial.moc.$(OBJEXT) variantgamedlg.moc.$(OBJEXT)
 am__objects_4 = $(am__objects_2) $(am__objects_3)
 am__objects_5 = q4go.rcc.$(OBJEXT)
 am__objects_6 = $(am__objects_5)
@@ -268,6 +268,7 @@ prefix = @prefix@
 program_transform_name = @program_transform_name@
 psdir = @psdir@
 qtchooser = @qtchooser@
+runstatedir = @runstatedir@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 srcdir = @srcdir@
@@ -289,7 +290,7 @@ DISTHEADERS_MOC = analyzedlg.h autodiagsdlg.h \
 	dbdialog.h \
 	edit_analysis.h evalgraph.h \
 	figuredlg.h \
-	gamedialog.h gamestable.h gametree.h greeterwindow.h \
+	gamedb.h gamedialog.h gamestable.h gametree.h greeterwindow.h \
 	helpviewer.h igsconnection.h \
 	mainwindow.h miscdialogs.h msg_handler.h multisave.h \
 	normaltools.h \
@@ -453,6 +454,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/evalgraph.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/figuredlg.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/figuredlg.moc.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gamedb.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gamedialog.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gamedialog.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gamestable.Po@am__quote@
