@@ -5,19 +5,26 @@
 #include <QString>
 #include <vector>
 
+#include "bitarray.h"
+
 struct gamedb_entry
 {
+	int id;
 	QString filename;
 	QString pw, pb;
 	QString date, result, event;
+	bit_array finalpos_w, finalpos_b;
 
-	gamedb_entry (const QString &f, const QString &w, const QString &b,
-	       const QString &d, const QString &r, const QString &e)
-		: filename (f), pw (w), pb (b), date (d), result (r), event (e)
+	gamedb_entry (int i, const QString &f, const QString &w, const QString &b,
+		      const QString &d, const QString &r, const QString &e, int sz)
+		: id (i), filename (f), pw (w), pb (b), date (d), result (r), event (e),
+		finalpos_w (sz * sz), finalpos_b (sz * sz)
 	{
 	}
+	gamedb_entry (const gamedb_entry &other) = default;
 	gamedb_entry (gamedb_entry &&other) = default;
 	gamedb_entry &operator =(gamedb_entry &&other) = default;
+	gamedb_entry &operator =(const gamedb_entry &other) = default;
 };
 
 class gamedb_model : public QAbstractItemModel

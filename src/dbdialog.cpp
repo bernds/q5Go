@@ -4,6 +4,7 @@
 #include <QSqlQuery>
 
 #include <memory>
+#include <algorithm>
 
 #include "gogame.h"
 #include "dbdialog.h"
@@ -49,6 +50,98 @@ void GameDB_Data_Controller::load ()
 	emit signal_start_load ();
 }
 
+/* Read an extra kombilo file (kombilo.da to go with the kombilo.db database).  */
+
+bool GameDB_Data::read_extra_file (QDataStream &ds, int base_id, int boardsize)
+{
+	auto beg = std::begin (m_all_entries) + base_id;
+	auto end = std::end (m_all_entries);
+
+	size_t sz;
+	char sz_c[sizeof (size_t)];
+	char i_c[sizeof (int)];
+	/* The first section of this file is signature data, which is irrelevant to us.  */
+	if (ds.readRawData (sz_c, sizeof sz_c) != sizeof sz_c)
+		return false;
+	memcpy (&sz, sz_c, sizeof sz);
+	ds.skipRawData (sz);
+
+	/* The second part contains game final positions, which we add to the gamedb_entry records.  */
+	if (ds.readRawData (sz_c, sizeof sz_c) != sizeof sz_c)
+		return false;
+	memcpy (&sz, sz_c, sizeof sz);
+
+	int count;
+	if (ds.readRawData (i_c, sizeof i_c) != sizeof i_c)
+		return false;
+	memcpy (&count, i_c, sizeof count);
+
+	std::vector<char> buf;
+	size_t total = 0;
+	for (int i = 0; i < count; i++) {
+		int clen;
+		int gameid;
+
+		if (ds.readRawData (i_c, sizeof i_c) != sizeof i_c)
+			return false;
+		memcpy (&gameid, i_c, sizeof gameid);
+		gameid += base_id;
+
+		auto pos = std::lower_bound (beg, end, gameid,
+					     [] (const gamedb_entry &e, int val)
+					     {
+						     return e.id < val;
+					     });
+		if (ds.readRawData (i_c, sizeof i_c) != sizeof i_c)
+			return false;
+		memcpy (&clen, i_c, sizeof clen);
+		buf.reserve (clen);
+		if (ds.readRawData (&buf[0], clen) != clen)
+			return false;
+		if (pos != end) {
+#ifdef CHECKING
+			if (pos->id != gameid)
+				abort ();
+#endif
+			for (int y = 0; y < boardsize; y++) {
+				for (int x = 0; x < boardsize; x++) {
+					int bufpos = y / 2 + 10 * (x / 2);
+					int bitpos = 2 * (x % 2 + 2 * (y % 2));
+					if ((buf[bufpos] & (1 << bitpos)) == 0)
+						pos->finalpos_w.set_bit (x + y * boardsize);
+					if ((buf[bufpos] & (1 << (bitpos + 1))) == 0)
+						pos->finalpos_b.set_bit (x + y * boardsize);
+#if 0
+					char c = ' ';
+					if (pos->finalpos_w.test_bit (x + y * boardsize))
+						c = 'O';
+					if (pos->finalpos_b.test_bit (x + y * boardsize))
+						c = c == ' ' ? 'X' : '#';
+					putchar (c);
+#endif
+				}
+#if 0
+				putchar ('\n');
+#endif
+			}
+		}
+
+		// printf ("at %lx: gameid %d clen %d\n", (long)total, gameid, clen);
+		total += sizeof gameid + sizeof clen + clen;
+		if (total > sz) {
+			printf ("read past size\n");
+			return false;
+		}
+		if (total == sz) {
+			if (i + 1 != count) {
+				printf ("size mismatch\n");
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
 void GameDB_Data::slot_start_load ()
 {
 	static bool init_once = false;
@@ -72,6 +165,8 @@ void GameDB_Data::slot_start_load ()
 	   that little problem.  */
 	QRegularExpression re_compat ("^(\\d\\d) (\\d\\d) (\\d\\d\\d\\d)$");
 
+	/* Assign all games unique IDs, combining the stored ID with the current total.  */
+	int base_id = 0;
 	for (auto &it: dbpaths) {
 		QDir dbdir (it);
 		if (!dbdir.exists ("kombilo.db"))
@@ -84,12 +179,22 @@ void GameDB_Data::slot_start_load ()
 			qDebug () << "skipping database with " << q1.value (0);
 			continue;
 		}
+		QSqlQuery q1b ("select * from db_info where rowid = 3", db);
+		if (!q1b.next ()) {
+			qDebug () << "skipping database without boardsize";
+			continue;
+		}
+		int boardsize = q1b.value (0).toInt ();
 
-		QSqlQuery q2 ("select filename,pw,pb,dt,re,ev from GAMES", db);
+		QSqlQuery q2 ("select filename,pw,pb,dt,re,ev,id from GAMES order by id", db);
+		int this_max = 0;
 		while (q2.next ()) {
 			QString filename = dbdir.filePath (q2.value (0).toString ());
 			QString date = q2.value (3).toString ();
 			auto compat = re_compat.match (date);
+			int id = q2.value (6).toInt ();
+			this_max = std::max (this_max, id);
+			id += base_id;
 			if (compat.hasMatch ()) {
 				date = compat.captured (3) + "-" + compat.captured (2) + "-" + compat.captured (1);
 			} else {
@@ -114,10 +219,21 @@ void GameDB_Data::slot_start_load ()
 				}
 			}
 
-			m_all_entries.emplace_back (filename, q2.value (1).toString (), q2.value (2).toString (),
-						    date, q2.value (4).toString (), q2.value (5).toString ());
+			m_all_entries.emplace_back (id, filename, q2.value (1).toString (), q2.value (2).toString (),
+						    date, q2.value (4).toString (), q2.value (5).toString (),
+						    boardsize);
 		}
 		db.close ();
+
+		/* Now read the secondary kombilo data.  */
+		QFile f (dbdir.filePath ("kombilo.da"));
+		if (f.exists ()) {
+			f.open (QIODevice::ReadOnly);
+			QDataStream ds (&f);
+			read_extra_file (ds, base_id, boardsize);
+			f.close ();
+		}
+		base_id += this_max;
 	}
 
 	load_complete = true;

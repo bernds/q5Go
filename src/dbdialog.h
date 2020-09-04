@@ -2,7 +2,7 @@
 #define DBDIALOG_H
 
 #include <QStringList>
-#include <QAbstractItemModel>
+#include <QDataStream>
 
 #include "ui_dbdialog_gui.h"
 #include "gamedb.h"
@@ -29,6 +29,8 @@ public:
 	   after which only the main thread can access this vector.  */
 	std::vector<gamedb_entry> m_all_entries;
 	bool load_complete = false;
+
+	bool read_extra_file (QDataStream &, int, int);
 
 public slots:
 	void slot_start_load ();
