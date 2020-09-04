@@ -66,10 +66,10 @@ public:
 			bool handled = false;
 
 			property (std::string &i) : ident (i) { }
-			property (const property &other)
-				: ident (other.ident), values (other.values)
-			{
-			}
+			property (const property &other) = default;
+			property (property &&other) = default;
+			property &operator= (property &&other) = default;
+			property &operator= (const property &other) = default;
 		};
 		typedef std::vector<property> proplist;
 		proplist props;
