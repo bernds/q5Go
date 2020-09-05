@@ -1045,8 +1045,8 @@ void go_board::verify_invariants ()
 
 int main ()
 {
-	for (int round = 0; round < 100; round++) {
-		int sz = rand () % 200 + 100;
+	for (int round = 0; round < 400; round++) {
+		int sz = rand () % 400 + 100;
 		bit_array arr (sz);
 		int *vals = new int[sz] ();
 		int count = 0;
@@ -1055,6 +1055,25 @@ int main ()
 				vals[count++] = i;
 				arr.set_bit (i);
 			}
+		if (arr.popcnt () != count)
+			abort ();
+
+		bit_array arr2 (sz);
+		for (int i = 0; i < sz;) {
+			int len = std::min (sz - i, 1 + rand () % 63);
+			arr2.insert (i, len, arr.extract (i, len));
+			i += len;
+		}
+		bit_array arr3 (sz);
+		for (int i = 0; i < sz;) {
+			int len = std::min (sz - i, 56 + rand () % 8);
+			arr3.insert (i, len, arr.extract (i, len));
+			i += len;
+		}
+		if (arr != arr2)
+			abort ();
+		if (arr != arr3)
+			abort ();
 		int verify;
 		int pos = 0;
 		for (verify = 0; verify < sz; verify++) {

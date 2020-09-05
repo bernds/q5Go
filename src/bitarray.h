@@ -294,6 +294,40 @@ public:
 		}
 		return m_n_bits;
 	}
+	/* Extract SIZE bits (at most 64) from OFF.  */
+	uint64_t extract (unsigned off, unsigned size) const
+	{
+		int elt = off / 64;
+		int bitpos = off % 64;
+		if (elt >= m_n_elts)
+			return 0;
+		uint64_t v = m_bits[elt] >> bitpos;
+		if (bitpos + size > 64 && elt + 1 < m_n_elts) {
+			v |= m_bits[elt + 1] << (64 - bitpos);
+		}
+		uint64_t mask = 0;
+		mask = ~mask;
+		mask >>= 63 - (size + 63) % 64;
+		return v & mask;
+	}
+	/* Insert SIZE bits (at most 64) at OFF.  */
+	void insert (unsigned off, unsigned size, uint64_t data)
+	{
+		int elt = off / 64;
+		int bitpos = off % 64;
+		if (elt >= m_n_elts)
+			return;
+		uint64_t mask = ~(uint64_t)0 << bitpos;
+		m_bits[elt] &= ~mask;
+		m_bits[elt] |= (data << bitpos) & mask;
+		if (bitpos + size > 64 && elt + 1 < m_n_elts) {
+			uint64_t mask2 = (uint64_t)1 << (size + bitpos - 64);
+			mask2--;
+			m_bits[elt + 1] &= ~mask2;
+			m_bits[elt + 1] |= (data >> (64 - bitpos)) & mask2;
+		}
+	}
 };
 
 #endif
+
