@@ -1,0 +1,994 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>PatternSearchWindow</class>
+ <widget class="QMainWindow" name="PatternSearchWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1192</width>
+    <height>648</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Pattern Search</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="q4go.qrc">
+    <normaloff>:/ClientWindowGui/images/clientwindow/qgo.png</normaloff>:/ClientWindowGui/images/clientwindow/qgo.png</iconset>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <layout class="QGridLayout" name="gridLayout_5">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item row="0" column="1">
+     <widget class="QWidget" name="mainWidget" native="true">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_6">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item row="0" column="0">
+        <widget class="QWidget" name="widget" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <layout class="QGridLayout" name="mainGridLayout">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <property name="horizontalSpacing">
+           <number>0</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QFrame" name="boardFrame">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QGridLayout">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <property name="spacing">
+              <number>2</number>
+             </property>
+             <item row="0" column="0">
+              <layout class="QVBoxLayout" name="_2">
+               <property name="spacing">
+                <number>6</number>
+               </property>
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <layout class="QVBoxLayout" name="_3">
+                 <property name="spacing">
+                  <number>0</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_2">
+                   <property name="spacing">
+                    <number>4</number>
+                   </property>
+                   <property name="leftMargin">
+                    <number>4</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>4</number>
+                   </property>
+                   <item>
+                    <widget class="SimpleBoard" name="boardView" native="true">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                       <horstretch>1</horstretch>
+                       <verstretch>1</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="minimumSize">
+                      <size>
+                       <width>300</width>
+                       <height>300</height>
+                      </size>
+                     </property>
+                     <property name="caption" stdset="0">
+                      <string/>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="_4">
+                   <property name="spacing">
+                    <number>6</number>
+                   </property>
+                   <property name="leftMargin">
+                    <number>1</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>1</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>1</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>1</number>
+                   </property>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </item>
+             <item row="1" column="0">
+              <widget class="QWidget" name="sliderWidget" native="true">
+               <layout class="QHBoxLayout" name="horizontalLayout_5">
+                <property name="leftMargin">
+                 <number>6</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>6</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+               </layout>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1192</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="fileMenu">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <addaction name="fileNewBoard"/>
+    <addaction name="separator"/>
+    <addaction name="fileClose"/>
+   </widget>
+   <widget class="QMenu" name="settingsMenu">
+    <property name="title">
+     <string>&amp;Settings</string>
+    </property>
+    <addaction name="setPreferences"/>
+    <addaction name="setDBPrefs"/>
+    <addaction name="separator"/>
+   </widget>
+   <widget class="QMenu" name="viewMenu">
+    <property name="title">
+     <string>&amp;View</string>
+    </property>
+    <addaction name="separator"/>
+    <addaction name="separator"/>
+    <addaction name="separator"/>
+    <addaction name="viewLetters"/>
+    <addaction name="viewNumbers"/>
+    <addaction name="viewPercent"/>
+    <addaction name="viewCoords"/>
+   </widget>
+   <widget class="QMenu" name="helpMenu">
+    <property name="title">
+     <string>&amp;Help</string>
+    </property>
+    <addaction name="helpUsing"/>
+    <addaction name="helpReadme"/>
+    <addaction name="separator"/>
+    <addaction name="helpAbout"/>
+    <addaction name="helpAboutQt"/>
+   </widget>
+   <widget class="QMenu" name="menuSearch">
+    <property name="title">
+     <string>Search</string>
+    </property>
+    <addaction name="searchPattern"/>
+    <addaction name="searchAll"/>
+    <addaction name="resetAll"/>
+   </widget>
+   <addaction name="fileMenu"/>
+   <addaction name="viewMenu"/>
+   <addaction name="menuSearch"/>
+   <addaction name="settingsMenu"/>
+   <addaction name="helpMenu"/>
+  </widget>
+  <widget class="QToolBar" name="fileBar">
+   <property name="windowTitle">
+    <string>File toolbar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="fileNewBoard"/>
+  </widget>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>Navigation toolbar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="navFirst"/>
+   <addaction name="navBackward"/>
+   <addaction name="navForward"/>
+   <addaction name="navLast"/>
+   <addaction name="navGotoCont"/>
+  </widget>
+  <widget class="QToolBar" name="editBar">
+   <property name="windowTitle">
+    <string>Edit toolbar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="editDelete"/>
+   <addaction name="separator"/>
+   <addaction name="editStone"/>
+   <addaction name="editBlack"/>
+   <addaction name="editWhite"/>
+   <addaction name="separator"/>
+   <addaction name="editClearSelect"/>
+   <addaction name="resetAll"/>
+   <addaction name="actionReset"/>
+   <addaction name="searchPattern"/>
+   <addaction name="searchAll"/>
+   <addaction name="separator"/>
+   <addaction name="viewLetters"/>
+   <addaction name="viewNumbers"/>
+   <addaction name="viewPercent"/>
+  </widget>
+  <widget class="QDockWidget" name="listDock">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="features">
+    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
+   </property>
+   <property name="windowTitle">
+    <string>Game list</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>2</number>
+   </attribute>
+   <widget class="QWidget" name="listContents">
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0">
+       <item>
+        <widget class="ClickableListView" name="dbListView">
+         <property name="selectionBehavior">
+          <enum>QAbstractItemView::SelectRows</enum>
+         </property>
+         <property name="uniformItemSizes">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>1</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="openButton">
+           <property name="text">
+            <string>Open for editing</string>
+           </property>
+           <property name="icon">
+            <iconset resource="q4go.qrc">
+             <normaloff>:/ClientWindowGui/images/clientwindow/fileopen.png</normaloff>:/ClientWindowGui/images/clientwindow/fileopen.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="resetButton">
+           <property name="text">
+            <string>Reset Games</string>
+           </property>
+           <property name="icon">
+            <iconset resource="q4go.qrc">
+             <normaloff>:/BoardWindow/images/boardwindow/refresh.png</normaloff>:/BoardWindow/images/boardwindow/refresh.png</iconset>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QProgressBar" name="progressBar">
+         <property name="value">
+          <number>0</number>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="chooseDock">
+   <property name="features">
+    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
+   </property>
+   <property name="windowTitle">
+    <string>Previous patterns</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="chooseDockContents">
+    <layout class="QGridLayout" name="gridLayout" rowstretch="0">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <property name="verticalSpacing">
+      <number>0</number>
+     </property>
+     <item row="0" column="0">
+      <widget class="QFrame" name="frame">
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="SizeGraphicsView" name="gameChoiceView">
+          <property name="minimumSize">
+           <size>
+            <width>150</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="sizeAdjustPolicy">
+           <enum>QAbstractScrollArea::AdjustToContents</enum>
+          </property>
+          <property name="backgroundBrush">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>211</red>
+             <green>215</green>
+             <blue>207</blue>
+            </color>
+           </brush>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="infoDock">
+   <property name="features">
+    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
+   </property>
+   <property name="windowTitle">
+    <string>Game information</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>2</number>
+   </attribute>
+   <widget class="QWidget" name="infoContents">
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QFrame" name="infoFrame">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_6">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QGraphicsView" name="gameInfoView">
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="sizeAdjustPolicy">
+           <enum>QAbstractScrollArea::AdjustToContents</enum>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QToolBar" name="miscBar">
+   <property name="windowTitle">
+    <string>Miscellaneous toolbar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <action name="navForward">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/1rightarrow.png</normaloff>:/BoardWindow/images/boardwindow/1rightarrow.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Next move</string>
+   </property>
+   <property name="shortcut">
+    <string>Right</string>
+   </property>
+  </action>
+  <action name="navBackward">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/1leftarrow.png</normaloff>:/BoardWindow/images/boardwindow/1leftarrow.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Previous move</string>
+   </property>
+   <property name="shortcut">
+    <string>Left</string>
+   </property>
+  </action>
+  <action name="navFirst">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/2leftarrow.png</normaloff>:/BoardWindow/images/boardwindow/2leftarrow.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;First move</string>
+   </property>
+   <property name="shortcut">
+    <string>Home</string>
+   </property>
+  </action>
+  <action name="navLast">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/2rightarrow.png</normaloff>:/BoardWindow/images/boardwindow/2rightarrow.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Last move</string>
+   </property>
+   <property name="shortcut">
+    <string>End</string>
+   </property>
+  </action>
+  <action name="editStone">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/editstone.png</normaloff>:/BoardWindow/images/boardwindow/editstone.png</iconset>
+   </property>
+   <property name="text">
+    <string>Place &amp;stone</string>
+   </property>
+   <property name="toolTip">
+    <string>Normal mode, click to place a stone.</string>
+   </property>
+  </action>
+  <action name="editDelete">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/edit-cut.png</normaloff>:/BoardWindow/images/boardwindow/edit-cut.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Delete </string>
+   </property>
+   <property name="toolTip">
+    <string>Delete this and all following positions.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+D</string>
+   </property>
+   <property name="visible">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="editClearSelect">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/clear_select.png</normaloff>:/BoardWindow/images/boardwindow/clear_select.png</iconset>
+   </property>
+   <property name="text">
+    <string>Cle&amp;ar selection</string>
+   </property>
+   <property name="toolTip">
+    <string>Clear the selected rectangle and select the whole board again.</string>
+   </property>
+   <property name="shortcut">
+    <string>C</string>
+   </property>
+  </action>
+  <action name="fileNewBoard">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/ClientWindowGui/images/clientwindow/new_board.png</normaloff>:/ClientWindowGui/images/clientwindow/new_board.png</iconset>
+   </property>
+   <property name="text">
+    <string>New &amp;board window</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+B</string>
+   </property>
+  </action>
+  <action name="fileClose">
+   <property name="text">
+    <string>&amp;Close</string>
+   </property>
+   <property name="toolTip">
+    <string>Close this window.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
+   </property>
+  </action>
+  <action name="fileQuit">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/ClientWindowGui/images/clientwindow/fileexit.png</normaloff>:/ClientWindowGui/images/clientwindow/fileexit.png</iconset>
+   </property>
+   <property name="text">
+    <string>E&amp;xit</string>
+   </property>
+   <property name="toolTip">
+    <string>Quit the application.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::QuitRole</enum>
+   </property>
+  </action>
+  <action name="viewCoords">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/coords.png</normaloff>:/BoardWindow/images/boardwindow/coords.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Coordinates</string>
+   </property>
+   <property name="shortcut">
+    <string>F8</string>
+   </property>
+  </action>
+  <action name="setPreferences">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/ClientWindowGui/images/clientwindow/prefs.png</normaloff>:/ClientWindowGui/images/clientwindow/prefs.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Preferences...</string>
+   </property>
+   <property name="toolTip">
+    <string>Bring up the preferences dialog</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+P</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::PreferencesRole</enum>
+   </property>
+  </action>
+  <action name="helpAbout">
+   <property name="text">
+    <string>&amp;About..</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::AboutRole</enum>
+   </property>
+  </action>
+  <action name="helpAboutQt">
+   <property name="text">
+    <string>About &amp;Qt...</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::AboutQtRole</enum>
+   </property>
+  </action>
+  <action name="helpReadme">
+   <property name="text">
+    <string>View &amp;README</string>
+   </property>
+  </action>
+  <action name="fileOpenDB">
+   <property name="text">
+    <string>Open from &amp;database...</string>
+   </property>
+  </action>
+  <action name="searchPattern">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/search.png</normaloff>:/BoardWindow/images/boardwindow/search.png</iconset>
+   </property>
+   <property name="text">
+    <string>Search &amp;pattern</string>
+   </property>
+   <property name="toolTip">
+    <string>Search for the currently selected pattern</string>
+   </property>
+   <property name="shortcut">
+    <string>S</string>
+   </property>
+  </action>
+  <action name="editBlack">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/images/stone_b32.png</normaloff>:/images/stone_b32.png</iconset>
+   </property>
+   <property name="text">
+    <string>Place &amp;black stones</string>
+   </property>
+   <property name="toolTip">
+    <string>&lt;p&gt;Click the board to place black stones. You can also hold down shift while clicking to force a black stone.&lt;/p&gt;</string>
+   </property>
+  </action>
+  <action name="editWhite">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/images/stone_w32.png</normaloff>:/images/stone_w32.png</iconset>
+   </property>
+   <property name="text">
+    <string>Place &amp;white stones</string>
+   </property>
+   <property name="toolTip">
+    <string>&lt;p&gt;Click the board to place black stones. You can also hold down ctrl while clicking to force a black stone.&lt;/p&gt;</string>
+   </property>
+  </action>
+  <action name="resetAll">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/home.png</normaloff>:/BoardWindow/images/boardwindow/home.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Reset all</string>
+   </property>
+   <property name="toolTip">
+    <string>&lt;p&gt;Reset the game list and the board to their original state.&lt;/p&gt;</string>
+   </property>
+  </action>
+  <action name="helpUsing">
+   <property name="text">
+    <string>&amp;Using pattern search...</string>
+   </property>
+  </action>
+  <action name="searchAll">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/searchall.png</normaloff>:/BoardWindow/images/boardwindow/searchall.png</iconset>
+   </property>
+   <property name="text">
+    <string>Search in &amp;all games</string>
+   </property>
+   <property name="toolTip">
+    <string>Search for the currently selected pattern in the full game list</string>
+   </property>
+   <property name="shortcut">
+    <string>A</string>
+   </property>
+  </action>
+  <action name="viewPercent">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/viewpercent.png</normaloff>:/BoardWindow/images/boardwindow/viewpercent.png</iconset>
+   </property>
+   <property name="text">
+    <string>Show continuations as &amp;percentages</string>
+   </property>
+   <property name="toolTip">
+    <string>&lt;p&gt;When displaying continuations from a pattern, show percentages.&lt;/p&gt;</string>
+   </property>
+  </action>
+  <action name="viewLetters">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/viewletters.png</normaloff>:/BoardWindow/images/boardwindow/viewletters.png</iconset>
+   </property>
+   <property name="text">
+    <string>Show continuations as &amp;letters</string>
+   </property>
+   <property name="toolTip">
+    <string>&lt;p&gt;When displaying continuations from a pattern, show the rank as a letter.&lt;/p&gt;</string>
+   </property>
+  </action>
+  <action name="viewNumbers">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/viewnumbers.png</normaloff>:/BoardWindow/images/boardwindow/viewnumbers.png</iconset>
+   </property>
+   <property name="text">
+    <string>Show continuations as &amp;numbers</string>
+   </property>
+   <property name="toolTip">
+    <string>&lt;p&gt;When displaying continuations from a pattern, show the number of continuations.&lt;/p&gt;</string>
+   </property>
+  </action>
+  <action name="navGotoCont">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/goto-cont.png</normaloff>:/BoardWindow/images/boardwindow/goto-cont.png</iconset>
+   </property>
+   <property name="text">
+    <string>Go to continuation</string>
+   </property>
+   <property name="toolTip">
+    <string>Move forward to the first move within the current selection.</string>
+   </property>
+   <property name="shortcut">
+    <string>N</string>
+   </property>
+  </action>
+  <action name="setDBPrefs">
+   <property name="text">
+    <string>&amp;Configure database paths...</string>
+   </property>
+   <property name="toolTip">
+    <string>Bring up the preferences dialog for configuring database paths</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::PreferencesRole</enum>
+   </property>
+  </action>
+  <action name="actionReset">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/refresh.png</normaloff>:/BoardWindow/images/boardwindow/refresh.png</iconset>
+   </property>
+   <property name="text">
+    <string>Reset game list</string>
+   </property>
+   <property name="toolTip">
+    <string>&lt;p&gt;Reset the list of games to its original contents.&lt;/p&gt;</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>SizeGraphicsView</class>
+   <extends>QGraphicsView</extends>
+   <header>sizegraphicsview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ClickableListView</class>
+   <extends>QListView</extends>
+   <header>clickableviews.h</header>
+  </customwidget>
+  <customwidget>
+   <class>SimpleBoard</class>
+   <extends>QWidget</extends>
+   <header>board.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="q4go.qrc"/>
+ </resources>
+ <connections/>
+</ui>

@@ -1478,7 +1478,7 @@ void MainWindow::slotEditClearSelect(bool)
 	gfx_board->clear_selection ();
 }
 
-void MainWindow::done_rect_select (int, int, int, int)
+void MainWindow::done_rect_select ()
 {
 	editRectSelect->setChecked (false);
 }

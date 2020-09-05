@@ -16,14 +16,15 @@ DISTHEADERS_MOC = analyzedlg.h autodiagsdlg.h \
 	helpviewer.h igsconnection.h \
 	mainwindow.h miscdialogs.h msg_handler.h multisave.h \
 	normaltools.h \
-	parser.h playertable.h preferences.h \
+	parser.h patternsearch.h playertable.h preferences.h \
 	qgo.h qgo_interface.h qgtp.h \
 	scoretools.h sizegraphicsview.h slideview.h sgfpreview.h \
 	tables.h telnet.h textview.h tutorial.h \
 	variantgamedlg.h
 
 DISTHEADERS_NOMOC = goboard.h config.h defines.h grid.h goboard.h gogame.h gotools.h \
-	gs_globals.h imagehandler.h komispinbox.h misc.h newaigamedlg.h setting.h sgf.h \
+	gs_globals.h imagehandler.h komispinbox.h misc.h newaigamedlg.h pattern.h \
+	setting.h sgf.h \
 	sgfparser.h svgbuilder.h timing.h ui_helpers.h
 
 DISTSOURCES = analyzedlg.cpp autodiagsdlg.cpp \
@@ -38,7 +39,7 @@ DISTSOURCES = analyzedlg.cpp autodiagsdlg.cpp \
 	igsconnection.cpp imagehandler.cpp \
 	main.cpp mainwindow.cpp misc.cpp msg_handler.cpp multisave.cpp \
 	newaigamedlg.cpp \
-	parser.cpp playertable.cpp preferences.cpp \
+	parser.cpp pattern.cpp patternsearch.cpp playertable.cpp preferences.cpp \
 	qgo.cpp qgo_interface.cpp qgtp.cpp \
 	setting.cpp sgfload.cc sgf2board.cc sgfpreview.cpp slideview.cpp svgbuilder.cpp \
 	tables.cpp telnet.cpp textview.cpp timing.cpp tips.cpp tutorial.cpp \
@@ -53,7 +54,7 @@ FORMS = analyze_gui.ui autodiags_gui.ui \
 	multisave_gui.ui \
 	newaigamedlg_gui.ui newgame_gui.ui newlocalgame_gui.ui newvariantgame_gui.ui \
 	normaltools_gui.ui nthmove_gui.ui \
-	preferences_gui.ui \
+	patternsearch_gui.ui preferences_gui.ui \
 	scoretools_gui.ui sgfpreview.ui slideshow_gui.ui slideview_gui.ui slideshow_gui.ui svgview_gui.ui \
 	talk_gui.ui textedit_gui.ui textview_gui.ui tips_gui.ui twoaigamedlg_gui.ui
 

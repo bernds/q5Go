@@ -658,6 +658,10 @@ public:
 	{
 		m_board.set_text_mark (x, y, str);
 	}
+	void clear_marks ()
+	{
+		m_board.clear_marks ();
+	}
 	void set_comment (const std::string &c)
 	{
 		m_comment = c;

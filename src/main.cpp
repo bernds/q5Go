@@ -30,6 +30,7 @@
 #include "newaigamedlg.h"
 #include "tutorial.h"
 #include "tips.h"
+#include "patternsearch.h"
 
 qGo *qgo;
 QApplication *qgo_app;
@@ -37,6 +38,7 @@ QApplication *qgo_app;
 Setting *setting = 0;
 
 DBDialog *db_dialog;
+PatternSearchWindow *patsearch_window;
 
 Debug_Dialog *debug_dialog;
 #ifdef OWN_DEBUG_MODE
@@ -452,6 +454,7 @@ int main(int argc, char **argv)
 	QCommandLineOption clo_client { { "c", "client" }, QObject::tr ("Show the Go server client window (default if no other arguments)") };
 	QCommandLineOption clo_board { { "b", "board" }, QObject::tr ("Start up with a board window (ignored if files are loaded).") };
 	QCommandLineOption clo_analysis { { "a", "analyze" }, QObject::tr ("Start up with the computer analysis dialog to analyze <file>."), QObject::tr ("file") };
+	QCommandLineOption clo_pat { { "p", "pattern-search" }, QObject::tr ("Start up with the pattern search window.") };
 	QCommandLineOption clo_debug { { "d", "debug" }, QObject::tr ("Display debug messages in a window") };
 	QCommandLineOption clo_debug_file { { "D", "debug-file" }, QObject::tr ("Send debug messages to <file>."), QObject::tr ("file") };
 	QCommandLineOption clo_encoding { { "e", "encoding "}, QObject::tr ("Specify text <encoding> of SGF files passed by command line."), "encoding"};
@@ -459,6 +462,7 @@ int main(int argc, char **argv)
 	cmdp.addOption (clo_client);
 	cmdp.addOption (clo_board);
 	cmdp.addOption (clo_analysis);
+	cmdp.addOption (clo_pat);
 #ifdef OWN_DEBUG_MODE
 	cmdp.addOption (clo_debug);
 	cmdp.addOption (clo_debug_file);
@@ -545,6 +549,7 @@ int main(int argc, char **argv)
 	}
 	windows_open |= show_client;
 	windows_open |= cmdp.isSet (clo_analysis);
+	windows_open |= cmdp.isSet (clo_pat);
 	if (!not_found.isEmpty ()) {
 		QString err = QObject::tr ("The following files could not be found:") + "\n";
 		for (auto &it: not_found)
@@ -559,6 +564,10 @@ int main(int argc, char **argv)
 
 	start_db_thread ();
 
+	if (cmdp.isSet (clo_pat)) {
+		patsearch_window = new PatternSearchWindow ();
+		patsearch_window->show ();
+	}
 	if (cmdp.isSet (clo_analysis)) {
 		analyze_dialog = new AnalyzeDialog (nullptr, cmdp.value (clo_analysis));
 	} else

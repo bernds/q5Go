@@ -15,7 +15,8 @@ FORMS	      = gui_dialog.ui \
 		newlocalgame_gui.ui \
 		newvariantgame_gui.ui \
 		scoretools_gui.ui \
-		normaltools_gui.ui \
+                normaltools_gui.ui \
+                patternsearch_gui.ui \
 		preferences_gui.ui \
 		newaigamedlg_gui.ui \
 		twoaigamedlg_gui.ui \
@@ -66,6 +67,8 @@ HEADERS		      = analyzedlg.h \
                         mainwindow.h \
                         multisave.h \
                         normaltools.h \
+                        pattern.h \
+                        patternsearch.h \
 			preferences.h \
 			qgo.h \
 			qgtp.h \
@@ -105,7 +108,9 @@ SOURCES		      = analyzedlg.cpp \
 			misc.cpp \
 			msg_handler.cpp \
 			multisave.cpp \
-			parser.cpp \
+                        parser.cpp \
+                        pattern.cpp \
+                        patternsearch.cpp \
 			playertable.cpp \
 			qgo_interface.cpp \
 			setting.cpp \

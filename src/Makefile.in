@@ -76,7 +76,8 @@ am__objects_1 = analyzedlg.$(OBJEXT) autodiagsdlg.$(OBJEXT) \
 	helpviewer.$(OBJEXT) igsconnection.$(OBJEXT) \
 	imagehandler.$(OBJEXT) main.$(OBJEXT) mainwindow.$(OBJEXT) \
 	misc.$(OBJEXT) msg_handler.$(OBJEXT) multisave.$(OBJEXT) \
-	newaigamedlg.$(OBJEXT) parser.$(OBJEXT) playertable.$(OBJEXT) \
+	newaigamedlg.$(OBJEXT) parser.$(OBJEXT) pattern.$(OBJEXT) \
+	patternsearch.$(OBJEXT) playertable.$(OBJEXT) \
 	preferences.$(OBJEXT) qgo.$(OBJEXT) qgo_interface.$(OBJEXT) \
 	qgtp.$(OBJEXT) setting.$(OBJEXT) sgfload.$(OBJEXT) \
 	sgf2board.$(OBJEXT) sgfpreview.$(OBJEXT) slideview.$(OBJEXT) \
@@ -97,13 +98,14 @@ am__objects_3 = analyzedlg.moc.$(OBJEXT) autodiagsdlg.moc.$(OBJEXT) \
 	mainwindow.moc.$(OBJEXT) miscdialogs.moc.$(OBJEXT) \
 	msg_handler.moc.$(OBJEXT) multisave.moc.$(OBJEXT) \
 	normaltools.moc.$(OBJEXT) parser.moc.$(OBJEXT) \
-	playertable.moc.$(OBJEXT) preferences.moc.$(OBJEXT) \
-	qgo.moc.$(OBJEXT) qgo_interface.moc.$(OBJEXT) \
-	qgtp.moc.$(OBJEXT) scoretools.moc.$(OBJEXT) \
-	sizegraphicsview.moc.$(OBJEXT) slideview.moc.$(OBJEXT) \
-	sgfpreview.moc.$(OBJEXT) tables.moc.$(OBJEXT) \
-	telnet.moc.$(OBJEXT) textview.moc.$(OBJEXT) \
-	tutorial.moc.$(OBJEXT) variantgamedlg.moc.$(OBJEXT)
+	patternsearch.moc.$(OBJEXT) playertable.moc.$(OBJEXT) \
+	preferences.moc.$(OBJEXT) qgo.moc.$(OBJEXT) \
+	qgo_interface.moc.$(OBJEXT) qgtp.moc.$(OBJEXT) \
+	scoretools.moc.$(OBJEXT) sizegraphicsview.moc.$(OBJEXT) \
+	slideview.moc.$(OBJEXT) sgfpreview.moc.$(OBJEXT) \
+	tables.moc.$(OBJEXT) telnet.moc.$(OBJEXT) \
+	textview.moc.$(OBJEXT) tutorial.moc.$(OBJEXT) \
+	variantgamedlg.moc.$(OBJEXT)
 am__objects_4 = $(am__objects_2) $(am__objects_3)
 am__objects_5 = q4go.rcc.$(OBJEXT)
 am__objects_6 = $(am__objects_5)
@@ -294,14 +296,15 @@ DISTHEADERS_MOC = analyzedlg.h autodiagsdlg.h \
 	helpviewer.h igsconnection.h \
 	mainwindow.h miscdialogs.h msg_handler.h multisave.h \
 	normaltools.h \
-	parser.h playertable.h preferences.h \
+	parser.h patternsearch.h playertable.h preferences.h \
 	qgo.h qgo_interface.h qgtp.h \
 	scoretools.h sizegraphicsview.h slideview.h sgfpreview.h \
 	tables.h telnet.h textview.h tutorial.h \
 	variantgamedlg.h
 
 DISTHEADERS_NOMOC = goboard.h config.h defines.h grid.h goboard.h gogame.h gotools.h \
-	gs_globals.h imagehandler.h komispinbox.h misc.h newaigamedlg.h setting.h sgf.h \
+	gs_globals.h imagehandler.h komispinbox.h misc.h newaigamedlg.h pattern.h \
+	setting.h sgf.h \
 	sgfparser.h svgbuilder.h timing.h ui_helpers.h
 
 DISTSOURCES = analyzedlg.cpp autodiagsdlg.cpp \
@@ -316,7 +319,7 @@ DISTSOURCES = analyzedlg.cpp autodiagsdlg.cpp \
 	igsconnection.cpp imagehandler.cpp \
 	main.cpp mainwindow.cpp misc.cpp msg_handler.cpp multisave.cpp \
 	newaigamedlg.cpp \
-	parser.cpp playertable.cpp preferences.cpp \
+	parser.cpp pattern.cpp patternsearch.cpp playertable.cpp preferences.cpp \
 	qgo.cpp qgo_interface.cpp qgtp.cpp \
 	setting.cpp sgfload.cc sgf2board.cc sgfpreview.cpp slideview.cpp svgbuilder.cpp \
 	tables.cpp telnet.cpp textview.cpp timing.cpp tips.cpp tutorial.cpp \
@@ -331,7 +334,7 @@ FORMS = analyze_gui.ui autodiags_gui.ui \
 	multisave_gui.ui \
 	newaigamedlg_gui.ui newgame_gui.ui newlocalgame_gui.ui newvariantgame_gui.ui \
 	normaltools_gui.ui nthmove_gui.ui \
-	preferences_gui.ui \
+	patternsearch_gui.ui preferences_gui.ui \
 	scoretools_gui.ui sgfpreview.ui slideshow_gui.ui slideview_gui.ui slideshow_gui.ui svgview_gui.ui \
 	talk_gui.ui textedit_gui.ui textview_gui.ui tips_gui.ui twoaigamedlg_gui.ui
 
@@ -485,6 +488,9 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/normaltools.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parser.moc.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pattern.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/patternsearch.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/patternsearch.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/playertable.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/playertable.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/preferences.Po@am__quote@

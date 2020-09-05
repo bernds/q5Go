@@ -21,6 +21,7 @@
 #include "goboard.h"
 #include "gogame.h"
 #include "qgtp.h"
+#include "pattern.h"
 
 class ImageHandler;
 class Mark;
@@ -31,6 +32,9 @@ class MainWindow;
 class svg_builder;
 class QFontInfo;
 struct Engine;
+
+struct pattern_cont_data;
+enum class pattern_cont_view;
 
 /* We split the Board view into two classes: a BoardView, dealing only with display, and
    Board, which also interacts with the board window.
@@ -50,8 +54,6 @@ class BoardView : public QGraphicsView
 	/* Used in draw_grid for widened board outlines.  */
 	bit_array m_vgrid_outline, m_hgrid_outline;
 
-	void update_rect_select (int, int);
-
 protected:
 	go_game_ptr m_game;
 	MainWindow *m_board_win {};
@@ -61,6 +63,8 @@ protected:
 	bit_array m_hoshis;
 
 	game_state *m_displayed {};
+	const std::vector<pattern_cont_data> *m_cont {};
+	pattern_cont_view m_cont_view;
 
 	/* Collected when syncing the abstract position to the screen, and used
 	   when placing marks.  */
@@ -134,6 +138,9 @@ protected:
 							     stone_color to_move, int x, int y,
 							     const go_board &vars, int var_type);
 
+	void update_rect_select (int, int);
+	void end_rect_select () { m_rect_down_x = m_rect_down_y = -1; }
+
 public:
 	BoardView (QWidget *parent = nullptr, bool no_sync = false, bool no_marks = false);
 	~BoardView ();
@@ -143,6 +150,10 @@ public:
 	void set_displayed (game_state *);
 	void transfer_displayed (game_state *, game_state *);
 	game_state *displayed () { return m_displayed; }
+
+	void set_cont_data (const std::vector<pattern_cont_data> *d) { m_cont = d; sync_appearance (); }
+	void clear_cont_data () { m_cont = nullptr; sync_appearance (); }
+	void set_cont_view (pattern_cont_view v) { m_cont_view = v; if (m_cont != nullptr) sync_appearance (); }
 
 	stone_color to_move () { return m_displayed->to_move (); }
 
@@ -156,7 +167,10 @@ public:
 	QByteArray render_svg (bool, bool);
 
 	void set_drawn_selection (board_rect r) { m_drawn_sel = std::move (r); sync_appearance (); }
+	board_rect get_selection () const { return m_sel; }
+	void set_selection (board_rect r) { m_sel = std::move (r); updateCovers (); }
 	void clear_selection ();
+
 	void clear_crop ();
 	void set_crop (const board_rect &);
 
@@ -173,7 +187,9 @@ public:
 	void set_time_warning (int seconds);
 	void update_prefs ();
 
-	void resizeBoard(int w, int h);
+	void resizeBoard (int w, int h);
+
+	go_pattern selected_pattern ();
 
 public slots:
 	void changeSize();
@@ -205,6 +221,26 @@ protected:
 #ifdef Q_OS_WIN
 	bool resizeDelayFlag;
 #endif
+};
+
+class SimpleBoard : public BoardView
+{
+	Q_OBJECT
+
+	stone_color m_forced_color = none;
+	int m_cumulative_delta = 0;
+
+public:
+	using BoardView::BoardView;
+	virtual void wheelEvent (QWheelEvent *e) override;
+	virtual void mousePressEvent (QMouseEvent *e) override;
+	virtual void mouseReleaseEvent (QMouseEvent *e) override;
+	void set_stone_color (stone_color c) { m_forced_color = c; }
+
+signals:
+	void signal_move_made ();
+	void signal_nav_forward ();
+	void signal_nav_backward ();
 };
 
 class Board : public BoardView, public GTP_Eval_Controller

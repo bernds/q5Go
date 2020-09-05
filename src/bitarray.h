@@ -6,6 +6,16 @@
 #include <cstring>
 #include <stdexcept>
 
+inline unsigned popcnt (uint64_t val)
+{
+	unsigned cnt = 0;
+	while (val != 0) {
+		val &= val - 1;
+		cnt++;
+	}
+	return cnt;
+}
+
 class bit_array
 {
 	unsigned m_n_bits;
@@ -66,6 +76,7 @@ public:
 	{
 		return !(*this == other);
 	}
+	unsigned bitsize () const { return m_n_bits; }
 	void grow (unsigned sz)
 	{
 		if (sz < m_n_bits)
@@ -248,14 +259,9 @@ public:
 	unsigned popcnt () const
 	{
 		unsigned cnt = 0;
-		for (int i = 0; i < m_n_elts; i++) {
-			uint64_t val = m_bits[i];
-			while (val != 0) {
-				if (val & 1)
-					cnt++;
-				val >>= 1;
-			}
-		}
+		for (int i = 0; i < m_n_elts; i++)
+			cnt += ::popcnt (m_bits[i]);
+
 		return cnt;
 	}
 	unsigned ffs (int test = 0) const

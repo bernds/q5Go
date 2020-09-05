@@ -29,6 +29,9 @@
     <file>images/boardwindow/editstone.png</file>
     <file>images/boardwindow/rect_select.png</file>
     <file>images/boardwindow/clear_select.png</file>
+    <file>images/boardwindow/home.png</file>
+    <file>images/boardwindow/search.png</file>
+    <file>images/boardwindow/searchall.png</file>
     <file>images/boardwindow/figure.png</file>
     <file>images/boardwindow/123.png</file>
     <file>images/boardwindow/navclicked.png</file>
@@ -42,6 +45,11 @@
     <file>images/boardwindow/eye.png</file>
     <file>images/boardwindow/noeye.png</file>
     <file>images/boardwindow/connected.png</file>
+    <file>images/boardwindow/viewpercent.png</file>
+    <file>images/boardwindow/viewletters.png</file>
+    <file>images/boardwindow/viewnumbers.png</file>
+    <file>images/boardwindow/goto-cont.png</file>
+    <file>images/boardwindow/refresh.png</file>
     <file>images/board/wood1.png</file>
     <file>images/board/wood2.png</file>
     <file>images/board/wood3.png</file>

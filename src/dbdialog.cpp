@@ -10,13 +10,9 @@
 #include "dbdialog.h"
 #include "clientwin.h"
 
-namespace {
-
 QThread *db_thread;
 GameDB_Data *db_data;
 GameDB_Data_Controller *db_data_controller;
-
-};
 
 void start_db_thread ()
 {
@@ -55,8 +51,13 @@ void GameDB_Data_Controller::load ()
 
 bool GameDB_Data::read_extra_file (QDataStream &ds, int base_id, int boardsize)
 {
-	auto beg = std::begin (m_all_entries) + base_id;
+	auto beg = std::begin (m_all_entries);
 	auto end = std::end (m_all_entries);
+	beg = std::lower_bound (beg, end, base_id,
+				[] (const gamedb_entry &e, int val)
+				{
+					return e.id < val;
+				});
 
 	size_t sz;
 	char sz_c[sizeof (size_t)];
@@ -66,6 +67,7 @@ bool GameDB_Data::read_extra_file (QDataStream &ds, int base_id, int boardsize)
 		return false;
 	memcpy (&sz, sz_c, sizeof sz);
 	ds.skipRawData (sz);
+	size_t full_total = sz + sizeof sz;
 
 	/* The second part contains game final positions, which we add to the gamedb_entry records.  */
 	if (ds.readRawData (sz_c, sizeof sz_c) != sizeof sz_c)
@@ -108,10 +110,11 @@ bool GameDB_Data::read_extra_file (QDataStream &ds, int base_id, int boardsize)
 				for (int x = 0; x < boardsize; x++) {
 					int bufpos = y / 2 + 10 * (x / 2);
 					int bitpos = 2 * (x % 2 + 2 * (y % 2));
-					if ((buf[bufpos] & (1 << bitpos)) == 0)
-						pos->finalpos_w.set_bit (x + y * boardsize);
-					if ((buf[bufpos] & (1 << (bitpos + 1))) == 0)
+					char val = bufpos < clen ? buf[bufpos] : 0;
+					if ((val & (1 << bitpos)) == 0)
 						pos->finalpos_b.set_bit (x + y * boardsize);
+					if ((val & (1 << (bitpos + 1))) == 0)
+						pos->finalpos_w.set_bit (x + y * boardsize);
 #if 0
 					char c = ' ';
 					if (pos->finalpos_w.test_bit (x + y * boardsize))
@@ -140,21 +143,87 @@ bool GameDB_Data::read_extra_file (QDataStream &ds, int base_id, int boardsize)
 			}
 		}
 	}
+	full_total += sz + sizeof sz;
+
+	/* The third part contains move list and final-position captures.  */
+	if (ds.readRawData (sz_c, sizeof sz_c) != sizeof sz_c)
+		return false;
+	memcpy (&sz, sz_c, sizeof sz);
+
+	if (ds.readRawData (i_c, sizeof i_c) != sizeof i_c)
+		return false;
+	memcpy (&count, i_c, sizeof count);
+	total = sizeof sz + sizeof count;
+	for (int i = 0; i < count; i++) {
+		int clen;
+		int gameid;
+
+		if (ds.readRawData (i_c, sizeof i_c) != sizeof i_c)
+			return false;
+		memcpy (&gameid, i_c, sizeof gameid);
+		gameid += base_id;
+
+		auto pos = std::lower_bound (beg, end, gameid,
+					     [] (const gamedb_entry &e, int val)
+					     {
+						     return e.id < val;
+					     });
+		total += sizeof gameid;
+		if (pos != end) {
+#ifdef CHECKING
+			if (pos->movelist_off != 0)
+				abort ();
+#endif
+			pos->movelist_off = full_total + total + sizeof (int);
+		}
+		/* ??? Strange file format; it saves the length of the movelist first as
+		   a plain integer, then again as part of the char array.  */
+		if (ds.readRawData (i_c, sizeof i_c) != sizeof i_c)
+			return false;
+		int dlen;
+		memcpy (&dlen, i_c, sizeof dlen);
+
+		if (ds.readRawData (i_c, sizeof i_c) != sizeof i_c)
+			return false;
+		memcpy (&clen, i_c, sizeof clen);
+		if (clen != dlen) {
+			qDebug () << "movelist length mismatch";
+			return false;
+		}
+		if (pos != end) {
+			pos->movelist.resize (clen);
+			if (ds.readRawData (&pos->movelist[0], clen) != clen)
+				return false;
+		} else
+			ds.skipRawData (clen);
+		total += 2 * sizeof clen + clen;
+
+		if (ds.readRawData (i_c, sizeof i_c) != sizeof i_c)
+			return false;
+		memcpy (&clen, i_c, sizeof clen);
+		buf.resize (clen);
+		if (ds.readRawData (&buf[0], clen) != clen)
+			return false;
+		total += sizeof clen + clen;
+		if (pos != end) {
+			for (int y = 0; y < boardsize; y++) {
+				for (int x = 0; x < boardsize; x++) {
+					int bufpos = y / 4 + 5 * (x / 2);
+					int bitpos = x % 2 + 2 * (y % 4);
+					char val = bufpos < clen ? buf[bufpos] : 0;
+					if ((val & (1 << bitpos)) != 0)
+						pos->finalpos_c.set_bit (x + y * boardsize);
+				}
+			}
+		}
+	}
+
 	return true;
 }
 
-void GameDB_Data::slot_start_load ()
+void GameDB_Data::do_load ()
 {
-	static bool init_once = false;
-	if (!init_once) {
-		QSqlDatabase::addDatabase ("QSQLITE", "kombilo");
-		init_once = true;
-	}
-
-	setting->m_dbpath_lock.lock ();
-	dbpaths = setting->m_dbpaths;
-	setting->m_dbpath_lock.unlock ();
-
+	QMutexLocker lock (&db_mutex);
 	m_all_entries.clear ();
 
 	QSqlDatabase db = QSqlDatabase::database ("kombilo");
@@ -190,7 +259,7 @@ void GameDB_Data::slot_start_load ()
 		QSqlQuery q2 ("select filename,pw,pb,dt,re,ev,id from GAMES order by id", db);
 		int this_max = 0;
 		while (q2.next ()) {
-			QString filename = dbdir.filePath (q2.value (0).toString ());
+			QString filename = q2.value (0).toString ();
 			QString date = q2.value (3).toString ();
 			auto compat = re_compat.match (date);
 			int id = q2.value (6).toInt ();
@@ -220,7 +289,7 @@ void GameDB_Data::slot_start_load ()
 				}
 			}
 
-			m_all_entries.emplace_back (id, filename, q2.value (1).toString (), q2.value (2).toString (),
+			m_all_entries.emplace_back (id, it, filename, q2.value (1).toString (), q2.value (2).toString (),
 						    date, q2.value (4).toString (), q2.value (5).toString (),
 						    boardsize);
 		}
@@ -234,11 +303,26 @@ void GameDB_Data::slot_start_load ()
 			read_extra_file (ds, base_id, boardsize);
 			f.close ();
 		}
-		base_id += this_max;
+		base_id += this_max + 1;
 	}
 
 	load_complete = true;
 	std::atomic_thread_fence (std::memory_order_seq_cst);
+}
+
+void GameDB_Data::slot_start_load ()
+{
+	static bool init_once = false;
+	if (!init_once) {
+		QSqlDatabase::addDatabase ("QSQLITE", "kombilo");
+		init_once = true;
+	}
+
+	setting->m_dbpath_lock.lock ();
+	dbpaths = setting->m_dbpaths;
+	setting->m_dbpath_lock.unlock ();
+
+	do_load ();
 	emit signal_load_complete ();
 }
 
@@ -384,7 +468,7 @@ void gamedb_model::slot_load_complete ()
 void gamedb_model::default_sort ()
 {
 	std::sort (std::begin (m_entries), std::end (m_entries),
-		   [this] (size_t a, size_t b)
+		   [this] (unsigned a, unsigned b)
 		   {
 			   const gamedb_entry &e1 = db_data->m_all_entries[a];
 			   const gamedb_entry &e2 = db_data->m_all_entries[b];
@@ -411,12 +495,21 @@ QString gamedb_model::status_string () const
 	return QString::number (m_entries.size ()) + "/" + QString::number (db_data->m_all_entries.size ()) + " games";
 }
 
+void gamedb_model::apply_game_list (std::vector<unsigned> &&games)
+{
+	beginResetModel ();
+	m_entries = games;
+	default_sort ();
+	endResetModel ();
+	emit signal_changed ();
+}
+
 void gamedb_model::apply_filter (const QString &p1, const QString &p2, const QString &event,
-				       const QString &dtfrom, const QString &dtto)
+				 const QString &dtfrom, const QString &dtto)
 {
 	beginResetModel ();
 	m_entries.erase (std::remove_if (std::begin (m_entries), std::end (m_entries),
-					 [&](size_t idx)
+					 [&](unsigned idx)
 					 {
 						 const gamedb_entry &e = db_data->m_all_entries[idx];
 						 if (!p1.isEmpty () && !e.pw.contains (p1) && !e.pb.contains (p1))
@@ -544,7 +637,8 @@ bool DBDialog::update_selection ()
 
 	QModelIndex i = selected.first ();
 	const gamedb_entry &e = m_model.find (i.row ());
-	QString filename = e.filename;
+	QDir d (e.dirname);
+	QString filename = d.filePath (e.filename);
 	qDebug () << filename;
 	setPath (filename);
 	return true;

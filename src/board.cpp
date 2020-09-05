@@ -24,6 +24,7 @@
 #include "svgbuilder.h"
 #include "ui_helpers.h"
 #include "gotools.h"
+#include "patternsearch.h"
 
 BoardView::BoardView (QWidget *parent, bool no_sync, bool no_marks)
 	: QGraphicsView(parent), m_vgrid_outline (1), m_hgrid_outline (1), m_dims (0, 0, DEFAULT_BOARD_SIZE, DEFAULT_BOARD_SIZE),
@@ -38,7 +39,7 @@ BoardView::BoardView (QWidget *parent, bool no_sync, bool no_marks)
 	m_show_figure_caps = false;
 	m_show_coords = setting->readBoolEntry ("BOARD_COORDS");
 	m_sgf_coords = setting->readBoolEntry ("SGF_BOARD_COORDS");
-
+	m_cont_view = pattern_cont_view::letters;
 	setStyleSheet( "QGraphicsView { border-style: none; }" );
 
 	// Create an ImageHandler instance.
@@ -394,9 +395,10 @@ static QString convert_letter_mark (mextra extra)
 static bool add_mark_svg (svg_builder &svg, double cx, double cy, double factor,
 			  mark m, mextra me, const std::string &mstr, mark var_m, mextra var_me,
 			  stone_color sc, int count_val, int max_number,
-			  bool was_last_move, bool white_background, const QFontInfo &fi)
+			  bool was_last_move, bool white_background, const QFontInfo &fi,
+			  QString color_override = QString ())
 {
-	QString mark_col = sc == black ? "white" : "black";
+	QString mark_col = !color_override.isEmpty () ? color_override : sc == black ? "white" : "black";
 	if (sc == none && white_background && (count_val != 0 || m != mark::none || var_m != mark::none)) {
 		svg.square_at (cx, cy, factor * 0.9,
 			       "white", "none");
@@ -1216,7 +1218,7 @@ QPixmap BoardView::draw_position (int default_vars_type)
 
 	bit_array grid_hidden (b.bitsize ());
 
-	if (!m_no_marks)
+	if (!m_no_marks && m_cont == nullptr)
 		for (int tx = 0; tx < visx + 2 * dups_x; tx++)
 			for (int ty = 0; ty < visy + 2 * dups_y; ty++) {
 				int x = (tx + shiftx + (szx - dups_x)) % szx;
@@ -1268,7 +1270,51 @@ QPixmap BoardView::draw_position (int default_vars_type)
 				if (added)
 					grid_hidden.set_bit (b.bitpos (x, y));
 			}
+	if (m_cont != nullptr) {
+		double total = 0, total_w = 0, total_b = 0;
+		for (unsigned i = 0; i < b.bitsize (); i++) {
+			auto data = (*m_cont)[i];
+			total += data.get (none).count;
+			total_w += data.get (white).count;
+			total_b += data.get (black).count;
+		}
+		for (int tx = 0; tx < visx + 2 * dups_x; tx++)
+			for (int ty = 0; ty < visy + 2 * dups_y; ty++) {
+				int x = (tx + shiftx + (szx - dups_x)) % szx;
+				int y = (ty + shifty + (szy - dups_y)) % szy;
+				int bp = b.bitpos (x, y);
+				auto data = (*m_cont)[bp];
+				auto entry = data.get (none);
+				if (entry.count <= 0)
+					continue;
+				if (entry.rank > 52)
+					continue;
+				auto entry_w = data.get (white);
+				auto entry_b = data.get (black);
+				QString text_col = (entry_w.count > 0 && entry_b.count > 0 ? "#555555"
+						    : entry_w.count > 0 ? "white" : "black");
+				auto stone_display = stone_to_display (mn_board, visible, to_move, x, y, vars, var_type);
+				stone_color sc = stone_display.first;
 
+				double cx = svg_factor / 2 + svg_factor * tx;
+				double cy = svg_factor / 2 + svg_factor * ty;
+
+				if (m_cont_view == pattern_cont_view::letters) {
+					mextra val = entry.rank;
+					add_mark_svg (svg, cx, cy, svg_factor, mark::letter, val, "", mark::none, 0,
+						      sc, 0, 0, false, false, fi, text_col);
+				} else if (m_cont_view == pattern_cont_view::numbers) {
+					std::string t = QString::number (entry.count).toStdString ();
+					add_mark_svg (svg, cx, cy, svg_factor, mark::text, 0, t, mark::none, 0,
+						      sc, 0, 0, false, false, fi, text_col);
+				} else {
+					std::string t = QString::number (entry.count / total * 100, 'f', 1).toStdString ();
+					add_mark_svg (svg, cx, cy, svg_factor, mark::text, 0, t, mark::none, 0,
+						      sc, 0, 0, false, false, fi, text_col);
+				}
+				grid_hidden.set_bit (bp);
+			}
+	}
 	/* Every grid point is connected to up to four line segments.  Create bitmaps
 	   to indicate whether these should be drawn, one for horizontal lines and one
 	   for vertical lines, each holding two bits for every point.  */
@@ -1588,6 +1634,12 @@ void BoardView::update_rect_select (int x, int y)
 	canvas->update ();
 }
 
+go_pattern BoardView::selected_pattern ()
+{
+	return go_pattern (m_displayed->get_board (), m_sel.x2 + 1 - m_sel.x1, m_sel.y2 + 1 - m_sel.y1,
+			   m_sel.x1, m_sel.y1);
+}
+
 void BoardView::mouseMoveEvent(QMouseEvent *e)
 {
 	if (m_rect_down_x == -1)
@@ -1731,7 +1783,7 @@ void Board::mouseReleaseEvent(QMouseEvent* e)
 	if (m_mark_rect) {
 		m_mark_rect = false;
 		BoardView::mouseReleaseEvent (e);
-		m_board_win->done_rect_select (m_sel.x1, m_sel.y1, m_sel.x2, m_sel.y2);
+		m_board_win->done_rect_select ();
 		return;
 	}
 	int x = coord_vis_to_board_x (e->x ());
@@ -1807,6 +1859,67 @@ void Board::click_add_mark (QMouseEvent *e, int x, int y)
 		}
 		m_displayed->replace (b, m_displayed->to_move ());
 		sync_appearance (true);
+	}
+}
+
+void SimpleBoard::wheelEvent (QWheelEvent *e)
+{
+	QPoint numDegrees = e->angleDelta ();
+	m_cumulative_delta += numDegrees.y ();
+	if (m_cumulative_delta < -60) {
+		emit signal_nav_forward ();
+		m_cumulative_delta = 0;
+	} else if (m_cumulative_delta > 60) {
+		emit signal_nav_backward ();
+		m_cumulative_delta = 0;
+	}
+
+	e->accept ();
+}
+
+void SimpleBoard::mouseReleaseEvent (QMouseEvent *e)
+{
+	if (e->button () == Qt::RightButton)
+		end_rect_select ();
+}
+
+void SimpleBoard::mousePressEvent (QMouseEvent *e)
+{
+	if (e->button () == Qt::RightButton) {
+		int x = coord_vis_to_board_x (e->x ());
+		int y = coord_vis_to_board_y (e->y ());
+
+		update_rect_select (x, y);
+		return;
+	}
+
+	int x = coord_vis_to_board_x (e->x ());
+	int y = coord_vis_to_board_y (e->y ());
+	std::shared_ptr<const bit_array> board_mask = m_game->get_board_mask ();
+	const go_board &b = m_game->get_root ()->get_board ();
+	if (!m_dims.contained (x, y) || (board_mask != nullptr && board_mask->test_bit (b.bitpos (x, y))))
+		return;
+
+	if (e->button () == Qt::LeftButton) {
+		game_state *st = m_displayed;
+		stone_color col = m_forced_color;
+		if (col == none)
+			col = (e->modifiers () == Qt::ShiftModifier ? black
+			       : e->modifiers () == Qt::ControlModifier ? white
+			       : st->to_move ());
+		if (!st->valid_move_p (x, y, col))
+			return;
+		for (game_state *c: st->children ())
+			if (c->was_move_p () && c->get_move_x () == x && c->get_move_y () == y) {
+				transfer_displayed (st, c);
+				emit signal_move_made ();
+				return;
+		}
+		go_board new_board (st->get_board (), mark::none);
+		new_board.add_stone (x, y, col);
+		game_state *st_new = st->add_child_move (new_board, col, x, y);
+		transfer_displayed (st, st_new);
+		emit signal_move_made ();
 	}
 }
 
@@ -2041,6 +2154,7 @@ void BoardView::reset_game (go_game_ptr gr)
 	m_game = gr;
 	game_state *root = gr->get_root ();
 	m_displayed = root;
+	m_cont = nullptr;
 	const go_board &b = root->get_board ();
 	m_dims = board_rect (b);
 	/* Add hoshis unless we have masked off intersections from the board.  */
@@ -2068,7 +2182,8 @@ void BoardView::reset_game (go_game_ptr gr)
 
 	clear_selection ();
 
-	canvas->update();
+	canvas->update ();
+	sync_appearance ();
 }
 
 void BoardView::clear_crop ()
@@ -2089,6 +2204,7 @@ void BoardView::set_displayed (game_state *st)
 {
 	if (st == m_displayed)
 		return;
+	m_cont = nullptr;
 	m_displayed = st;
 	sync_appearance (false);
 }
