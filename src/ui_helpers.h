@@ -1,6 +1,8 @@
 #ifndef UI_HELPERS_H
 #define UI_HELPERS_H
 
+#include <utility>
+
 extern QString screen_key (QWidget *);
 
 enum class game_dialog_type { none, normal, variant };
@@ -26,5 +28,19 @@ extern bool play_two_engines (QWidget *);
 
 extern void help_about ();
 extern void help_new_version ();
+
+class ClickablePixmap;
+struct board_preview {
+	go_game_ptr game;
+	game_state *state;
+	ClickablePixmap *pixmap {};
+	int x = 0, y = 0;
+
+	board_preview (go_game_ptr g, game_state *st)
+		: game (g), state (st)
+	{
+	}
+};
+extern std::pair<int, int> layout_previews (QWidget *, const std::vector<board_preview *> &, int);
 
 #endif

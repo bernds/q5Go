@@ -31,13 +31,13 @@ class MainWindow_IGS : public MainWindow
 	QGraphicsRectItem *m_cursor {};
 	int m_preview_w = 0;
 	int m_preview_h = 0;
-	struct preview {
-		go_game_ptr game;
+	struct preview : public board_preview {
 		qGoBoard *connector;
-		game_state *state;
-		ClickablePixmap *pixmap {};
-		int x = 0, y = 0;
 		bool active = true;
+		preview (go_game_ptr g, game_state *st, qGoBoard *b)
+			: board_preview (g, st), connector (b)
+		{
+		}
 	};
 	std::vector<preview> m_previews;
 	FigureView *m_previewer {};
@@ -329,7 +329,7 @@ void MainWindow_IGS::update_preview (go_game_ptr game, game_state *st)
 
 void MainWindow_IGS::add_game (go_game_ptr game, qGoBoard *brd, game_state *st)
 {
-	struct preview p = { game, brd, st, nullptr };
+	struct preview p (game, st, brd);
 	m_previews.emplace_back (p);
 	choices_resized ();
 }
@@ -359,28 +359,27 @@ const qGoBoard *MainWindow_IGS::active_board ()
 	return nullptr;
 }
 
-void MainWindow_IGS::choices_resized ()
+std::pair<int, int> layout_previews (QWidget *view, const std::vector<board_preview *> &previews, int extra_height)
 {
-	int w = gameChoiceView->width ();
-	int h = gameChoiceView->height ();
-	int n_elts = m_previews.size ();
+	int w = view->width ();
+	int h = view->height ();
 
-	if (n_elts == 0)
-		return;
+	int n_elts = previews.size ();
 
-	int sb_size = qApp->style()->pixelMetric(QStyle::PM_ScrollBarExtent);
-
-	QFontMetrics m (setting->fontStandard);
-	int font_height = m.lineSpacing () + 1;
 	int min_size = 220;
 	int min_w = min_size;
 	int min_h = min_size;
-	min_h += 2 * font_height;
+	min_h += extra_height;
+
+	int sb_size = qApp->style()->pixelMetric (QStyle::PM_ScrollBarExtent);
 
 	int smaller = w < h ? w : h;
 	int smaller_min = w < h ? min_w : min_h;
 	int larger = w < h ? h : w;
 	int larger_min = w < h ? min_h : min_w;
+
+	int new_width = 0;
+	int new_height = 0;
 
 	/* Two attempts: try to fit everything without scrollbars first, then reduce the
 	   available area to account for the scroll bar.  */
@@ -402,9 +401,9 @@ void MainWindow_IGS::choices_resized ()
 		int ps2 = larger / n_large;
 		// printf ("ps1 %d [%d %d] ps2 %d [%d %d] %% %d\n", ps1, smaller, n_small, ps2, larger, n_large, sb_size);
 		if (w < h)
-			ps2 -= 2 * font_height;
+			ps2 -= extra_height;
 		else
-			ps1 -= 2 * font_height;
+			ps1 -= extra_height;
 		int min_ps = ps1 < min_size ? ps1 : std::min (ps1, ps2);
 		if (min_ps >= min_size || (ps1 < min_size && (ps2 > ps1 || assume_sb))) {
 			/* Everything fits (or can't fit, if the window is too narrow).
@@ -415,17 +414,17 @@ void MainWindow_IGS::choices_resized ()
 				int ps1b = smaller / n_small_new;
 				int ps2b = larger / n_large_new;
 				if (w < h)
-					ps2b -= 2 * font_height;
+					ps2b -= extra_height;
 				else
-					ps1b -= 2 * font_height;
+					ps1b -= extra_height;
 				int t = std::min (ps1b, ps2b);
 				if (t < min_ps)
 					break;
 				min_ps = t;
 				n_small++;
 			}
-			m_preview_w = min_ps;
-			m_preview_h = min_ps + 2 * font_height;
+			new_width = min_ps;
+			new_height = min_ps + extra_height;
 			break;
 		} else {
 			/* Use scrollbars and use the maximum width of the smaller side.  */
@@ -434,31 +433,51 @@ void MainWindow_IGS::choices_resized ()
 				continue;
 			}
 			// ps1 = std::max (ps1, min_size);
-			m_preview_w = ps1;
-			m_preview_h = ps1 + 2 * font_height;
+			new_width = ps1;
+			new_height = ps1 + extra_height;
 			break;
 		}
 	}
 
 	int row = 0;
 	int col = 0;
-	for (auto &p: m_previews) {
-		p.x = col;
-		p.y = row;
-		update_preview (p.game, p.state);
+	for (auto p: previews) {
+		p->x = col;
+		p->y = row;
 		if (w < h) {
-			col += m_preview_w;
-			if (col + m_preview_w > w) {
+			col += new_width;
+			if (col + new_width > w) {
 				col = 0;
-				row += m_preview_h;
+				row += new_height;
 			}
 		} else {
-			row += m_preview_h;
-			if (row + m_preview_h > h) {
+			row += new_height;
+			if (row + new_height > h) {
 				row = 0;
-				col += m_preview_w;
+				col += new_width;
 			}
 		}
+	}
+	return std::pair<int, int> { new_width, new_height };
+}
+
+void MainWindow_IGS::choices_resized ()
+{
+	size_t n_elts = m_previews.size ();
+
+	if (n_elts == 0)
+		return;
+
+	QFontMetrics m (setting->fontStandard);
+	int font_height = m.lineSpacing () + 1;
+
+	std::vector<board_preview *> preview_ptrs (n_elts);
+	for (size_t i = 0; i < n_elts; i++)
+		preview_ptrs[i] = &m_previews[i];
+	std::tie (m_preview_w, m_preview_h) = layout_previews (gameChoiceView, preview_ptrs, 2 * font_height);
+
+	for (auto &p: m_previews) {
+		update_preview (p.game, p.state);
 	}
 	gameChoiceView->setSceneRect (m_preview_scene->itemsBoundingRect ());
 }
