@@ -152,7 +152,7 @@ GameTree::GameTree (QWidget *parent)
 
 	update_prefs ();
 
-	m_previewer = new FigureView;
+	m_previewer = new FigureView (nullptr, true);
 }
 
 void GameTree::clear_scene ()

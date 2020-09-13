@@ -26,7 +26,7 @@ void AspectContainer::fix_aspect ()
 
 template<class UI, class Base>
 BaseSlideView<UI, Base>::BaseSlideView (QWidget *parent)
-	: Base (parent), ui (new UI), m_board_exporter (new FigureView)
+	: Base (parent), ui (new UI), m_board_exporter (new FigureView (nullptr, true))
 {
 	ui->setupUi (this);
 

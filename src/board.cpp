@@ -25,8 +25,9 @@
 #include "ui_helpers.h"
 #include "gotools.h"
 
-BoardView::BoardView(QWidget *parent)
-	: QGraphicsView(parent), m_vgrid_outline (1), m_hgrid_outline (1), m_dims (0, 0, DEFAULT_BOARD_SIZE, DEFAULT_BOARD_SIZE), m_hoshis (1)
+BoardView::BoardView (QWidget *parent, bool no_sync, bool no_marks)
+	: QGraphicsView(parent), m_vgrid_outline (1), m_hgrid_outline (1), m_dims (0, 0, DEFAULT_BOARD_SIZE, DEFAULT_BOARD_SIZE),
+	  m_hoshis (1), m_never_sync (no_sync), m_no_marks (no_marks)
 {
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -1215,57 +1216,58 @@ QPixmap BoardView::draw_position (int default_vars_type)
 
 	bit_array grid_hidden (b.bitsize ());
 
-	for (int tx = 0; tx < visx + 2 * dups_x; tx++)
-		for (int ty = 0; ty < visy + 2 * dups_y; ty++) {
-			int x = (tx + shiftx + (szx - dups_x)) % szx;
-			int y = (ty + shifty + (szy - dups_y)) % szy;
-			mark mark_at_pos = b.mark_at (x, y);
-			mextra extra = b.mark_extra_at (x, y);
-			bool was_last_move = false;
+	if (!m_no_marks)
+		for (int tx = 0; tx < visx + 2 * dups_x; tx++)
+			for (int ty = 0; ty < visy + 2 * dups_y; ty++) {
+				int x = (tx + shiftx + (szx - dups_x)) % szx;
+				int y = (ty + shifty + (szy - dups_y)) % szy;
+				mark mark_at_pos = b.mark_at (x, y);
+				mextra extra = b.mark_extra_at (x, y);
+				bool was_last_move = false;
 
-			/* Transfer dead marks to the mn_board which was initialized without marks.  */
-			if (mark_at_pos == mark::dead)
-				mn_board.set_mark (x, y, mark_at_pos, 0);
+				/* Transfer dead marks to the mn_board which was initialized without marks.  */
+				if (mark_at_pos == mark::dead)
+					mn_board.set_mark (x, y, mark_at_pos, 0);
 
-			auto stone_display = stone_to_display (mn_board, visible, to_move, x, y, vars, var_type);
-			stone_color sc = stone_display.first;
+				auto stone_display = stone_to_display (mn_board, visible, to_move, x, y, vars, var_type);
+				stone_color sc = stone_display.first;
 
-			if (!have_figure && !skip_last_move_mark && m_displayed->was_move_p ()) {
-				int last_x = m_displayed->get_move_x ();
-				int last_y = m_displayed->get_move_y ();
-				if (last_x == x && last_y == y)
-					was_last_move = true;
+				if (!have_figure && !skip_last_move_mark && m_displayed->was_move_p ()) {
+					int last_x = m_displayed->get_move_x ();
+					int last_y = m_displayed->get_move_y ();
+					if (last_x == x && last_y == y)
+						was_last_move = true;
+				}
+
+				mark var_mark = var_type == 2 ? vars.mark_at (x, y) : mark::none;
+				mextra var_me = vars.mark_extra_at (x, y);
+
+				if (mark_at_pos == mark::num)
+					m_used_numbers.set_bit (extra);
+				else if (mark_at_pos == mark::letter)
+					m_used_letters.set_bit (extra);
+
+				double cx = svg_factor / 2 + svg_factor * tx;
+				double cy = svg_factor / 2 + svg_factor * ty;
+
+				int v = mn_board.mark_at (x, y) == mark::num ? mn_board.mark_extra_at (x, y) : 0;
+
+				bool added = false;
+				bool an_child_mark = analysis_children && v == 0 && max_number == 0 && child_vars.stone_at (x, y) == to_move;
+				ram_result rs = render_analysis_marks (svg, svg_factor, cx, cy, fi,
+								       x, y, an_child_mark, v, max_number);
+				if (rs == ram_result::none) {
+					added = add_mark_svg (svg, cx, cy, svg_factor,
+							      mark_at_pos, extra,
+							      mark_at_pos == mark::text ? b.mark_text_at (x, y) : "",
+							      var_mark, var_me,
+							      sc, v, max_number, was_last_move, false, fi);
+				} else
+					added = rs == ram_result::hide;
+
+				if (added)
+					grid_hidden.set_bit (b.bitpos (x, y));
 			}
-
-			mark var_mark = var_type == 2 ? vars.mark_at (x, y) : mark::none;
-			mextra var_me = vars.mark_extra_at (x, y);
-
-			if (mark_at_pos == mark::num)
-				m_used_numbers.set_bit (extra);
-			else if (mark_at_pos == mark::letter)
-				m_used_letters.set_bit (extra);
-
-			double cx = svg_factor / 2 + svg_factor * tx;
-			double cy = svg_factor / 2 + svg_factor * ty;
-
-			int v = mn_board.mark_at (x, y) == mark::num ? mn_board.mark_extra_at (x, y) : 0;
-
-			bool added = false;
-			bool an_child_mark = analysis_children && v == 0 && max_number == 0 && child_vars.stone_at (x, y) == to_move;
-			ram_result rs = render_analysis_marks (svg, svg_factor, cx, cy, fi,
-							       x, y, an_child_mark, v, max_number);
-			if (rs == ram_result::none) {
-				added = add_mark_svg (svg, cx, cy, svg_factor,
-						      mark_at_pos, extra,
-						      mark_at_pos == mark::text ? b.mark_text_at (x, y) : "",
-						      var_mark, var_me,
-						      sc, v, max_number, was_last_move, false, fi);
-			} else
-				added = rs == ram_result::hide;
-
-			if (added)
-				grid_hidden.set_bit (b.bitpos (x, y));
-		}
 
 	/* Every grid point is connected to up to four line segments.  Create bitmaps
 	   to indicate whether these should be drawn, one for horizontal lines and one
@@ -1394,14 +1396,16 @@ QPixmap BoardView::draw_position (int default_vars_type)
 		}
 
 	/* Now render the marks on top of all that.  */
-	QTransform transform;
-	transform.translate (m_board_rect.x () - m_wood_rect.x () - square_size / 2,
-			     m_board_rect.y () - m_wood_rect.y () - square_size / 2);
-	transform.scale (((double)m_board_rect.width () + square_size) / m_wood_rect.width (),
-			 ((double)m_board_rect.height () + square_size) / m_wood_rect.height ());
-	painter.setWorldTransform (transform);
-	QSvgRenderer renderer (svg);
-	renderer.render (&painter);
+	if (!m_no_marks) {
+		QTransform transform;
+		transform.translate (m_board_rect.x () - m_wood_rect.x () - square_size / 2,
+				     m_board_rect.y () - m_wood_rect.y () - square_size / 2);
+		transform.scale (((double)m_board_rect.width () + square_size) / m_wood_rect.width (),
+				 ((double)m_board_rect.height () + square_size) / m_wood_rect.height ());
+		painter.setWorldTransform (transform);
+		QSvgRenderer renderer (svg);
+		renderer.render (&painter);
+	}
 
 	board_rect visible_sel = m_drawn_sel;
 	visible_sel.intersect (m_crop);
@@ -2293,8 +2297,8 @@ void Board::pause_analysis (bool on)
 	m_board_win->update_analysis (analyzer_state ());
 }
 
-FigureView::FigureView(QWidget *parent)
-	: BoardView (parent)
+FigureView::FigureView(QWidget *parent, bool no_sync, bool no_marks)
+	: BoardView (parent, no_sync, no_marks)
 {
 	m_figure_view = true;
 }

@@ -81,6 +81,7 @@ protected:
 	/* A few board display options.  */
 	bool m_figure_view = false;
 	bool m_never_sync = false;
+	bool m_no_marks = false;
 	bool m_move_numbers = false;
 	bool m_show_coords, m_sgf_coords, m_show_hoshis, m_show_figure_caps;
 
@@ -134,7 +135,7 @@ protected:
 							     const go_board &vars, int var_type);
 
 public:
-	BoardView (QWidget *parent = nullptr);
+	BoardView (QWidget *parent = nullptr, bool no_sync = false, bool no_marks = false);
 	~BoardView ();
 	/* Should be part of the constructor, but Qt doesn't seem to allow such a construction with the .ui files.  */
 	void set_board_win (MainWindow *w) { m_board_win = w; }
@@ -323,7 +324,7 @@ class FigureView : public BoardView
 	Q_OBJECT
 
 public:
-	FigureView (QWidget *parent = nullptr);
+	FigureView (QWidget *parent = nullptr, bool no_sync = false, bool no_marks = false);
 
 protected:
 	virtual void contextMenuEvent (QContextMenuEvent *e) override;

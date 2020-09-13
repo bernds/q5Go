@@ -165,8 +165,7 @@ MainWindow_IGS::MainWindow_IGS (QWidget *parent, std::shared_ptr<game_record> gr
 		connect (normalTools->wtimeView, &ClockView::clicked, brd, &qGoBoard::slot_addtimePauseW);
 	}
 	if (mode == modeObserveMulti) {
-		m_previewer = new FigureView;
-		m_previewer->set_never_sync (true);
+		m_previewer = new FigureView (nullptr, true);
 		multi_observer_win = this;
 		int w = gameChoiceView->width ();
 		int h = gameChoiceView->height ();
