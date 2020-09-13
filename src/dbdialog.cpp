@@ -320,7 +320,7 @@ QVariant gamedb_model::data (const QModelIndex &index, int role) const
 	if (row < 0 || (size_t)row >= m_entries.size () || role != Qt::DisplayRole || col != 0)
 		return QVariant ();
 	const gamedb_entry &e = find (row);
-	return e.pw + "-" + e.pb + ", " + e.result + ", " + e.date;
+	return e.pw + " - " + e.pb + ", " + e.result + ", " + e.date;
 }
 
 QModelIndex gamedb_model::index (int row, int col, const QModelIndex &) const
