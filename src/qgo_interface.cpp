@@ -166,6 +166,7 @@ MainWindow_IGS::MainWindow_IGS (QWidget *parent, std::shared_ptr<game_record> gr
 	}
 	if (mode == modeObserveMulti) {
 		m_previewer = new FigureView;
+		m_previewer->set_never_sync (true);
 		multi_observer_win = this;
 		int w = gameChoiceView->width ();
 		int h = gameChoiceView->height ();

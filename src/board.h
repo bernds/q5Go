@@ -71,7 +71,7 @@ protected:
 	int m_shift_x = 0, m_shift_y = 0;
 
 	/* Variables related to rectangle selection and crop.  */
-	board_rect m_sel;
+	board_rect m_sel, m_drawn_sel;
 	/* It can be somewhat scary to think about how crop would interact with shifts
 	   and duplications.  The solution is: it does not.  Cropping is only allowable
 	   on fairly plain boards without shift/duplicate, such as the figure view, or
@@ -80,6 +80,7 @@ protected:
 
 	/* A few board display options.  */
 	bool m_figure_view = false;
+	bool m_never_sync = false;
 	bool m_move_numbers = false;
 	bool m_show_coords, m_sgf_coords, m_show_hoshis, m_show_figure_caps;
 
@@ -144,6 +145,7 @@ public:
 
 	stone_color to_move () { return m_displayed->to_move (); }
 
+	void set_never_sync (bool n) { m_never_sync = n; }
 	void set_margin (int);
 	QPixmap grabPicture ();
 	QImage background_image ();
@@ -152,6 +154,7 @@ public:
 	QString render_ascii (bool, bool, bool);
 	QByteArray render_svg (bool, bool);
 
+	void set_drawn_selection (board_rect r) { m_drawn_sel = std::move (r); sync_appearance (); }
 	void clear_selection ();
 	void clear_crop ();
 	void set_crop (const board_rect &);

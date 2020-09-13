@@ -493,6 +493,20 @@ struct board_rect
 		return y2 == other.y2;
 	}
 	bool is_square () { return width () == height (); }
+	void intersect (const board_rect &other)
+	{
+		x1 = std::max (x1, other.x1);
+		x2 = std::min (x2, other.x2);
+		y1 = std::max (y1, other.y1);
+		y2 = std::min (y2, other.y2);
+	}
+	void translate (int xoff, int yoff)
+	{
+		x1 += xoff;
+		x2 += xoff;
+		y1 += yoff;
+		y2 += yoff;
+	}
 };
 
 /* Some functions to create unique bit sets of particular shapes.  These are the

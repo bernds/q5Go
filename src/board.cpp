@@ -1403,6 +1403,22 @@ QPixmap BoardView::draw_position (int default_vars_type)
 	QSvgRenderer renderer (svg);
 	renderer.render (&painter);
 
+	board_rect visible_sel = m_drawn_sel;
+	visible_sel.intersect (m_crop);
+	if (visible_sel != m_crop && visible_sel.height () > 0 && visible_sel.width () > 0) {
+		visible_sel.translate (-m_crop.x1, -m_crop.y1);
+		int x1 = m_wood_rect.left () + visible_sel.x1 * square_size;
+		int x2 = m_wood_rect.left () + (visible_sel.x2 + 1) * square_size;
+		int y1 = m_wood_rect.top () + visible_sel.y1 * square_size;
+		int y2 = m_wood_rect.top () + (visible_sel.y2 + 1) * square_size;
+		QRect sel_rect (x1, y1, x2 - x1 + 1, y2 - y1 + 1);
+		QRegion r (m_wood_rect);
+		r -= sel_rect;
+		painter.setClipRegion (r);
+		painter.setOpacity (0.5);
+		painter.fillRect (m_wood_rect, Qt::black);
+	}
+
 	painter.end ();
 	return image;
 }
@@ -1410,6 +1426,8 @@ QPixmap BoardView::draw_position (int default_vars_type)
 /* The central function for synchronizing visual appearance with the abstract board data.  */
 void BoardView::sync_appearance (bool)
 {
+	if (m_never_sync)
+		return;
 	QPixmap stones = draw_position (m_vars_type);
 	m_stone_layer.setPixmap (stones);
 	m_stone_layer.setPos (m_wood_rect.x (), m_wood_rect.y ());
@@ -1976,6 +1994,7 @@ void BoardView::set_margin (int m)
 void BoardView::clear_selection ()
 {
 	m_sel = m_dims;
+	m_drawn_sel = m_dims;
 	updateCovers ();
 }
 
