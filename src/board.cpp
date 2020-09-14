@@ -2087,10 +2087,9 @@ void BoardView::set_crop (const board_rect &r)
 
 void BoardView::set_displayed (game_state *st)
 {
+	if (st == m_displayed)
+		return;
 	m_displayed = st;
-#if 0
-	set_crop (find_crop (m_displayed));
-#endif
 	sync_appearance (false);
 }
 
