@@ -58,4 +58,36 @@ signals:
 	void signal_changed ();
 };
 
+class GameDB_Data_Controller : public QObject
+{
+	Q_OBJECT
+
+public:
+	GameDB_Data_Controller ();
+	void load ();
+signals:
+	void signal_prepare_load ();
+	void signal_start_load ();
+};
+
+class GameDB_Data : public QObject
+{
+	Q_OBJECT
+
+public:
+	/* A local copy of the paths in settings.  */
+	QStringList dbpaths;
+	/* Computed in slot_start_load.  Once completed, we signal_load_complete,
+	   after which only the main thread can access this vector.  */
+	std::vector<gamedb_entry> m_all_entries;
+	bool load_complete = false;
+
+	bool read_extra_file (QDataStream &, int, int);
+
+public slots:
+	void slot_start_load ();
+signals:
+	void signal_load_complete ();
+};
+
 #endif
