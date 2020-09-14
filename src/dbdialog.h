@@ -15,6 +15,7 @@ public:
 	GameDB_Data_Controller ();
 	void load ();
 signals:
+	void signal_prepare_load ();
 	void signal_start_load ();
 };
 
@@ -64,7 +65,6 @@ signals:
 public:
 	DBDialog (QWidget *parent);
 	~DBDialog ();
-	void update_prefs ();
 
 	virtual void accept () override;
 
@@ -75,5 +75,6 @@ extern DBDialog *db_dialog;
 
 extern void start_db_thread ();
 extern void end_db_thread ();
+extern void update_db_prefs ();
 
 #endif

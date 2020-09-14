@@ -52,7 +52,10 @@ public:
 
 	// Qt::ItemFlags flags(const QModelIndex &index) const override;
 public slots:
+	void slot_prepare_load ();
 	void slot_load_complete ();
+signals:
+	void signal_changed ();
 };
 
 #endif

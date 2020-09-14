@@ -2017,8 +2017,7 @@ void ClientWindow::accept_preferences ()
 	update_font ();
 	update_caption ();
 
-	if (db_dialog != nullptr)
-		db_dialog->update_prefs ();
+	update_db_prefs ();
 
 	if (setting->nmatch_settings_modified)
 	{

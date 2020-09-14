@@ -47,6 +47,7 @@ GameDB_Data_Controller::GameDB_Data_Controller ()
 void GameDB_Data_Controller::load ()
 {
 	db_data->load_complete = false;
+	emit signal_prepare_load ();
 	emit signal_start_load ();
 }
 
@@ -258,6 +259,7 @@ DBDialog::DBDialog (QWidget *parent)
 	gameNumLabel->setText (m_model.status_string ());
 	dbListView->setModel (&m_model);
 
+	connect (&m_model, &gamedb_model::signal_changed, [this] () { gameNumLabel->setText (m_model.status_string ()); });
 	setWindowTitle (tr ("Open SGF file from database"));
 
 	connect (dbListView, &ClickableListView::doubleclicked, this, &DBDialog::handle_doubleclick);
@@ -300,6 +302,8 @@ DBDialog::~DBDialog ()
 gamedb_model::gamedb_model ()
 {
 	connect (db_data, &GameDB_Data::signal_load_complete, this, &gamedb_model::slot_load_complete);
+	connect (db_data_controller, &GameDB_Data_Controller::signal_prepare_load, this, &gamedb_model::slot_prepare_load);
+
 	if (db_data->load_complete)
 		slot_load_complete ();
 }
@@ -363,6 +367,12 @@ void gamedb_model::clear_list ()
 	beginResetModel ();
 	m_entries.clear ();
 	endResetModel ();
+	emit signal_changed ();
+}
+
+void gamedb_model::slot_prepare_load ()
+{
+	clear_list ();
 }
 
 void gamedb_model::slot_load_complete ()
@@ -393,6 +403,7 @@ void gamedb_model::reset_filters ()
 	default_sort ();
 
 	endResetModel ();
+	emit signal_changed ();
 }
 
 QString gamedb_model::status_string () const
@@ -424,18 +435,7 @@ void gamedb_model::apply_filter (const QString &p1, const QString &p2, const QSt
 					 }),
 			 std::end (m_entries));
 	endResetModel ();
-}
-
-void DBDialog::update_prefs ()
-{
-	if (!setting->dbpaths_changed)
-		return;
-	setting->dbpaths_changed = false;
-
-	m_model.clear_list ();
-	db_data_controller->load ();
-
-	gameNumLabel->setText (m_model.status_string ());
+	emit signal_changed ();
 }
 
 void DBDialog::apply_filters (bool)
@@ -560,4 +560,13 @@ void DBDialog::handle_doubleclick ()
 void DBDialog::accept ()
 {
 	QDialog::accept ();
+}
+
+void update_db_prefs ()
+{
+	if (!setting->dbpaths_changed)
+		return;
+	setting->dbpaths_changed = false;
+
+	db_data_controller->load ();
 }
