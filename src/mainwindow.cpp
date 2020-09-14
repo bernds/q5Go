@@ -43,6 +43,7 @@
 #include "slideview.h"
 #include "multisave.h"
 #include "edit_analysis.h"
+#include "patternsearch.h"
 
 std::list<MainWindow *> main_window_list;
 
@@ -603,6 +604,14 @@ MainWindow::MainWindow (QWidget* parent, go_game_ptr gr, const QString opener_sc
 
 	update_analysis (analyzer::disconnected);
 	main_window_list.push_back (this);
+
+	connect (db_data_controller, &GameDB_Data_Controller::signal_prepare_load,
+		 [this] () { searchPattern->setEnabled (false); });
+	connect (db_data, &GameDB_Data::signal_load_complete,
+		 [this] () { searchPattern->setEnabled (true); });
+	searchPattern->setEnabled (db_data->load_complete);
+	searchPattern->setVisible (m_gamemode != modeMatch && !setting->m_dbpaths.isEmpty ());
+	connect (searchPattern, &QAction::triggered, this, &MainWindow::perform_search);
 }
 
 void MainWindow::init_game_record (go_game_ptr gr)
@@ -1703,6 +1712,8 @@ void MainWindow::populate_engines_menu ()
 void MainWindow::update_settings ()
 {
 	update_font ();
+
+	searchPattern->setVisible (m_gamemode != modeMatch && !setting->m_dbpaths.isEmpty ());
 
 	viewCoords->setChecked (setting->readBoolEntry ("BOARD_COORDS"));
 	gfx_board->set_sgf_coords (setting->readBoolEntry ("SGF_BOARD_COORDS"));
@@ -3895,4 +3906,15 @@ void MainWindow::grey_eval_bar ()
 {
 	evalView->setBackgroundBrush (QBrush (Qt::lightGray));
 	m_eval_bar->setBrush (QBrush (Qt::darkGray));
+}
+
+void MainWindow::perform_search ()
+{
+        go_game_ptr gr = std::make_shared<game_record> (*m_game);
+        game_state *curr_pos = gfx_board->displayed ();
+        game_state *st = gr->get_root ()->follow_path (curr_pos->path_from_root ());
+
+	show_pattern_search ();
+
+	patsearch_window->do_search (gr, st, gfx_board->get_selection ());
 }

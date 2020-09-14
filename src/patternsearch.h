@@ -124,7 +124,8 @@ public:
 	PatternSearchWindow ();
 	~PatternSearchWindow ();
 
-	public slots:
+	void do_search (go_game_ptr, game_state *, const board_rect &);
+public slots:
 	void do_open (bool);
 	void choices_resized ();
 	void slot_completed ();
@@ -143,5 +144,7 @@ public:
 signals:
 	void signal_start_search ();
 };
+
+extern PatternSearchWindow *patsearch_window;
 
 extern game_state *find_first_match (go_game_ptr, const go_pattern &, board_rect &);

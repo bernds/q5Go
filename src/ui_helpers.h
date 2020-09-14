@@ -23,6 +23,8 @@ extern QString sec_to_time (int);
 
 extern void show_batch_analysis ();
 extern void show_tutorials ();
+extern void show_pattern_search ();
+
 extern bool play_engine (QWidget *);
 extern bool play_two_engines (QWidget *);
 

@@ -109,6 +109,7 @@ signals:
 };
 
 extern GameDB_Data *db_data;
+extern GameDB_Data_Controller *db_data_controller;
 
 extern bit_array match_games (const std::vector<unsigned> &, const go_pattern &,
 			      std::vector<gamedb_model::cont_bw> &conts, coord_transform);

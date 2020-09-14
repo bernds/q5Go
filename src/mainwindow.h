@@ -350,6 +350,8 @@ public slots:
 	void doEdit ();
 	void doEditPos (bool);
 	void sliderChanged (int);
+
+	void perform_search ();
 };
 
 class MainWindow_GTP : public MainWindow, public GTP_Eval_Controller

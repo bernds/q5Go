@@ -576,6 +576,15 @@ void PatternSearchWindow::timerEvent (QTimerEvent *)
 	ui->progressBar->setMaximum (m_progress_max);
 }
 
+void PatternSearchWindow::do_search (go_game_ptr gr, game_state *st, const board_rect &r)
+{
+	m_game = gr;
+	ui->boardView->reset_game (gr);
+	ui->boardView->set_displayed (st);
+	ui->boardView->set_selection (r);
+	pattern_search (true);
+}
+
 void PatternSearchWindow::slot_using ()
 {
 	QString txt;

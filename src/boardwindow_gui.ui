@@ -2618,6 +2618,7 @@ After placing and/or undo release button for returning to starting point automat
     <addaction name="separator"/>
     <addaction name="editRectSelect"/>
     <addaction name="editClearSelect"/>
+    <addaction name="searchPattern"/>
    </widget>
    <widget class="QMenu" name="navMenu">
     <property name="title">
@@ -2789,6 +2790,7 @@ After placing and/or undo release button for returning to starting point automat
    <addaction name="separator"/>
    <addaction name="editRectSelect"/>
    <addaction name="editClearSelect"/>
+   <addaction name="searchPattern"/>
   </widget>
   <widget class="QDockWidget" name="diagsDock">
    <property name="windowTitle">
@@ -4110,6 +4112,21 @@ Export current board to ASCII diagrams, for use in web forums.</string>
    </property>
    <property name="toolTip">
     <string>Show the beginner tutorials dialog.</string>
+   </property>
+  </action>
+  <action name="searchPattern">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/search.png</normaloff>:/BoardWindow/images/boardwindow/search.png</iconset>
+   </property>
+   <property name="text">
+    <string>Search &amp;pattern...</string>
+   </property>
+   <property name="toolTip">
+    <string>&lt;p&gt;Open the pattern search window and start a search for the currently selected pattern.&lt;/p&gt;</string>
+   </property>
+   <property name="shortcut">
+    <string>S</string>
    </property>
   </action>
  </widget>

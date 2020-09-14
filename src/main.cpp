@@ -443,6 +443,14 @@ void show_tutorials ()
 	tutorial_dialog->activateWindow ();
 }
 
+void show_pattern_search ()
+{
+	if (patsearch_window == nullptr)
+		patsearch_window = new PatternSearchWindow ();
+	patsearch_window->setVisible (true);
+	patsearch_window->activateWindow ();
+}
+
 int main(int argc, char **argv)
 {
 	QApplication::setAttribute (Qt::AA_EnableHighDpiScaling);
@@ -526,7 +534,9 @@ int main(int argc, char **argv)
 	}
 #endif
 
-	QObject::connect(&myapp, &QApplication::lastWindowClosed, client_window, &ClientWindow::slot_last_window_closed);
+	QObject::connect (&myapp, &QApplication::lastWindowClosed, client_window, &ClientWindow::slot_last_window_closed);
+
+	start_db_thread ();
 
 	client_window->setVisible (show_client);
 
@@ -562,12 +572,8 @@ int main(int argc, char **argv)
 		}
 	}
 
-	start_db_thread ();
-
-	if (cmdp.isSet (clo_pat)) {
-		patsearch_window = new PatternSearchWindow ();
-		patsearch_window->show ();
-	}
+	if (cmdp.isSet (clo_pat))
+		show_pattern_search ();
 	if (cmdp.isSet (clo_analysis)) {
 		analyze_dialog = new AnalyzeDialog (nullptr, cmdp.value (clo_analysis));
 	} else
