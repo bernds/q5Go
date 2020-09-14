@@ -145,6 +145,9 @@ Setting::Setting()
 	writeIntEntry ("SLIDE_Y", 1080);
 	writeIntEntry ("SLIDE_MARGIN", 2);
 
+	writeIntEntry ("DB_MAX_FILESIZE", 50);
+	writeBoolEntry ("DB_CACHE_MOVELIST", true);
+
 	language = "Default";
 	fontStandard = QFont();
 	fontMarks = QFont();

@@ -700,6 +700,9 @@ void PreferencesDialog::init_from_settings ()
 	ui->fontConsoleButton->setFont(setting->fontConsole);
 
 	ui->tipsCheckBox->setChecked (setting->readBoolEntry ("TIPS_STARTUP"));
+
+	ui->maxDBSizeSpinBox->setValue (setting->readIntEntry ("DB_MAX_FILESIZE"));
+	ui->keepMovesCheckBox->setChecked (setting->readBoolEntry ("DB_CACHE_MOVELIST"));
 }
 
 void PreferencesDialog::select_stone_look (bool)
@@ -942,7 +945,7 @@ void PreferencesDialog::slot_apply()
 	setting->writeBoolEntry ("AUTOSAVE_PLAYED", ui->autosavePlayedCheckBox->isChecked ());
 	setting->writeBoolEntry ("AUTOSAVE_TO_PATH", ui->autosavePathCheckBox->isChecked ());
 	setting->writeEntry ("AUTOSAVE_PATH", ui->autosavePathEdit->text ());
-	setting->writeBoolEntry("OBSERVE_SINGLE", ui->observeSingleCheckBox->isChecked ());
+	setting->writeBoolEntry ("OBSERVE_SINGLE", ui->observeSingleCheckBox->isChecked ());
 
 	// Computer Tab
 	setting->writeBoolEntry ("COMPUTER_WHITE", ui->computerWhiteButton->isChecked ());
@@ -972,6 +975,9 @@ void PreferencesDialog::slot_apply()
 	setting->writeIntEntry ("TOROID_DUPS", ui->toroidDupsSpin->text ().toInt ());
 
 	setting->writeBoolEntry ("TIPS_STARTUP", ui->tipsCheckBox->isChecked ());
+
+	setting->writeIntEntry ("DB_MAX_FILESIZE", ui->maxDBSizeSpinBox->value ());
+	setting->writeBoolEntry ("DB_CACHE_MOVELIST", ui->keepMovesCheckBox->isChecked ());
 
 	if (m_dbpaths_changed) {
 		setting->m_dbpath_lock.lock ();

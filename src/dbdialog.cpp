@@ -38,18 +38,45 @@ void end_db_thread ()
 GameDB_Data_Controller::GameDB_Data_Controller ()
 {
 	connect (this, &GameDB_Data_Controller::signal_start_load, db_data, &GameDB_Data::slot_start_load);
+	connect (db_data, &GameDB_Data::signal_load_complete, this, &GameDB_Data_Controller::slot_load_complete);
 }
 
 void GameDB_Data_Controller::load ()
 {
+	int max_mb = setting->readIntEntry ("DB_MAX_FILESIZE");
+	if (max_mb < 1 || max_mb > 999)
+		max_mb = 50;
 	db_data->load_complete = false;
+	db_data->too_large = false;
+	db_data->errors_found = false;
+
 	emit signal_prepare_load ();
-	emit signal_start_load ();
+	emit signal_start_load (max_mb, setting->readBoolEntry ("DB_CACHE_MOVELIST"));
 }
+
+void GameDB_Data_Controller::slot_load_complete ()
+{
+	QString s;
+	if (db_data->too_large)
+		s += tr ("<p>One of the database files was too large to be loaded.  You can adjust the limit in the settings window.</p>");
+	if (db_data->errors_found)
+		s += tr ("<p>One of the database files contained errors.</p>");
+	if (!s.isEmpty ())
+		QMessageBox::warning (nullptr, PACKAGE, s);
+}
+
+class db_errors_found : public std::exception
+{
+public:
+	db_errors_found ()
+	{
+	}
+};
+
 
 /* Read an extra kombilo file (kombilo.da to go with the kombilo.db database).  */
 
-bool GameDB_Data::read_extra_file (QDataStream &ds, int base_id, int boardsize)
+bool GameDB_Data::read_extra_file (QDataStream &ds, int base_id, int boardsize, int max_mb, bool cache_movelist)
 {
 	auto beg = std::begin (m_all_entries);
 	auto end = std::end (m_all_entries);
@@ -64,19 +91,26 @@ bool GameDB_Data::read_extra_file (QDataStream &ds, int base_id, int boardsize)
 	char i_c[sizeof (int)];
 	/* The first section of this file is signature data, which is irrelevant to us.  */
 	if (ds.readRawData (sz_c, sizeof sz_c) != sizeof sz_c)
-		return false;
+		throw db_errors_found ();
+
 	memcpy (&sz, sz_c, sizeof sz);
 	ds.skipRawData (sz);
 	size_t full_total = sz + sizeof sz;
 
 	/* The second part contains game final positions, which we add to the gamedb_entry records.  */
 	if (ds.readRawData (sz_c, sizeof sz_c) != sizeof sz_c)
-		return false;
+		throw db_errors_found ();
 	memcpy (&sz, sz_c, sizeof sz);
+	size_t relevant_size = sz;
+
+	if (relevant_size / 1024 / 1024 > (size_t)max_mb) {
+		too_large = true;
+		return false;
+	}
 
 	int count;
 	if (ds.readRawData (i_c, sizeof i_c) != sizeof i_c)
-		return false;
+		throw db_errors_found ();
 	memcpy (&count, i_c, sizeof count);
 
 	std::vector<char> buf;
@@ -86,7 +120,7 @@ bool GameDB_Data::read_extra_file (QDataStream &ds, int base_id, int boardsize)
 		int gameid;
 
 		if (ds.readRawData (i_c, sizeof i_c) != sizeof i_c)
-			return false;
+			throw db_errors_found ();
 		memcpy (&gameid, i_c, sizeof gameid);
 		gameid += base_id;
 
@@ -96,11 +130,17 @@ bool GameDB_Data::read_extra_file (QDataStream &ds, int base_id, int boardsize)
 						     return e.id < val;
 					     });
 		if (ds.readRawData (i_c, sizeof i_c) != sizeof i_c)
-			return false;
+			throw db_errors_found ();
 		memcpy (&clen, i_c, sizeof clen);
+
+		total += sizeof gameid + sizeof clen + clen;
+		if (total > sz)
+			throw db_errors_found ();
+
 		buf.resize (clen);
 		if (ds.readRawData (&buf[0], clen) != clen)
-			return false;
+			throw db_errors_found ();
+
 		if (pos != end) {
 #ifdef CHECKING
 			if (pos->id != gameid)
@@ -130,36 +170,34 @@ bool GameDB_Data::read_extra_file (QDataStream &ds, int base_id, int boardsize)
 			}
 		}
 
-		// printf ("at %lx: gameid %d clen %d\n", (long)total, gameid, clen);
-		total += sizeof gameid + sizeof clen + clen;
-		if (total > sz) {
-			printf ("read past size\n");
-			return false;
-		}
 		if (total == sz) {
-			if (i + 1 != count) {
-				printf ("size mismatch\n");
-				return false;
-			}
+			if (i + 1 != count)
+				throw db_errors_found ();
 		}
 	}
 	full_total += sz + sizeof sz;
 
 	/* The third part contains move list and final-position captures.  */
 	if (ds.readRawData (sz_c, sizeof sz_c) != sizeof sz_c)
-		return false;
+		throw db_errors_found ();
 	memcpy (&sz, sz_c, sizeof sz);
 
-	if (ds.readRawData (i_c, sizeof i_c) != sizeof i_c)
+	relevant_size += sz;
+	if (relevant_size / 1024 / 1024 > (size_t)max_mb) {
+		too_large = true;
 		return false;
+	}
+
+	if (ds.readRawData (i_c, sizeof i_c) != sizeof i_c)
+		throw db_errors_found ();
 	memcpy (&count, i_c, sizeof count);
-	total = sizeof sz + sizeof count;
+	total = 0;
 	for (int i = 0; i < count; i++) {
 		int clen;
 		int gameid;
 
 		if (ds.readRawData (i_c, sizeof i_c) != sizeof i_c)
-			return false;
+			throw db_errors_found ();
 		memcpy (&gameid, i_c, sizeof gameid);
 		gameid += base_id;
 
@@ -174,37 +212,43 @@ bool GameDB_Data::read_extra_file (QDataStream &ds, int base_id, int boardsize)
 			if (pos->movelist_off != 0)
 				abort ();
 #endif
-			pos->movelist_off = full_total + total + sizeof (int);
+			pos->movelist_off = full_total + total + sizeof sz + sizeof count + sizeof (int);
 		}
 		/* ??? Strange file format; it saves the length of the movelist first as
 		   a plain integer, then again as part of the char array.  */
 		if (ds.readRawData (i_c, sizeof i_c) != sizeof i_c)
-			return false;
+			throw db_errors_found ();
 		int dlen;
 		memcpy (&dlen, i_c, sizeof dlen);
 
 		if (ds.readRawData (i_c, sizeof i_c) != sizeof i_c)
-			return false;
+			throw db_errors_found ();
 		memcpy (&clen, i_c, sizeof clen);
-		if (clen != dlen) {
-			qDebug () << "movelist length mismatch";
-			return false;
-		}
-		if (pos != end) {
+		if (clen != dlen)
+			throw db_errors_found ();
+
+		total += 2 * sizeof clen + clen;
+		if (total > sz)
+			throw db_errors_found ();
+
+		if (pos != end && cache_movelist) {
 			pos->movelist.resize (clen);
 			if (ds.readRawData (&pos->movelist[0], clen) != clen)
-				return false;
+				throw db_errors_found ();
 		} else
 			ds.skipRawData (clen);
-		total += 2 * sizeof clen + clen;
 
 		if (ds.readRawData (i_c, sizeof i_c) != sizeof i_c)
-			return false;
+			throw db_errors_found ();
 		memcpy (&clen, i_c, sizeof clen);
 		buf.resize (clen);
-		if (ds.readRawData (&buf[0], clen) != clen)
-			return false;
+
 		total += sizeof clen + clen;
+		if (total > sz)
+			throw db_errors_found ();
+
+		if (ds.readRawData (&buf[0], clen) != clen)
+			throw db_errors_found ();
 		if (pos != end) {
 			for (int y = 0; y < boardsize; y++) {
 				for (int x = 0; x < boardsize; x++) {
@@ -221,7 +265,7 @@ bool GameDB_Data::read_extra_file (QDataStream &ds, int base_id, int boardsize)
 	return true;
 }
 
-void GameDB_Data::do_load ()
+void GameDB_Data::do_load (int max_mb, bool cache_movelist)
 {
 	QMutexLocker lock (&db_mutex);
 	m_all_entries.clear ();
@@ -300,7 +344,11 @@ void GameDB_Data::do_load ()
 		if (f.exists ()) {
 			f.open (QIODevice::ReadOnly);
 			QDataStream ds (&f);
-			read_extra_file (ds, base_id, boardsize);
+			try {
+				read_extra_file (ds, base_id, boardsize, max_mb, cache_movelist);
+			} catch (db_errors_found &) {
+				errors_found = true;
+			}
 			f.close ();
 		}
 		base_id += this_max + 1;
@@ -310,7 +358,7 @@ void GameDB_Data::do_load ()
 	std::atomic_thread_fence (std::memory_order_seq_cst);
 }
 
-void GameDB_Data::slot_start_load ()
+void GameDB_Data::slot_start_load (int max_mb, bool cache_movelist)
 {
 	static bool init_once = false;
 	if (!init_once) {
@@ -322,7 +370,7 @@ void GameDB_Data::slot_start_load ()
 	dbpaths = setting->m_dbpaths;
 	setting->m_dbpath_lock.unlock ();
 
-	do_load ();
+	do_load (max_mb, cache_movelist);
 	emit signal_load_complete ();
 }
 

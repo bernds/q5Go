@@ -77,16 +77,18 @@ class GameDB_Data_Controller : public QObject
 public:
 	GameDB_Data_Controller ();
 	void load ();
+public slots:
+	void slot_load_complete ();
 signals:
 	void signal_prepare_load ();
-	void signal_start_load ();
+	void signal_start_load (int, bool);
 };
 
 class GameDB_Data : public QObject
 {
 	Q_OBJECT
 
-	void do_load ();
+	void do_load (int, bool);
 public:
 	/* A local copy of the paths in settings.  */
 	QStringList dbpaths;
@@ -95,11 +97,13 @@ public:
 	std::vector<gamedb_entry> m_all_entries;
 	QMutex db_mutex;
 	bool load_complete = false;
+	bool too_large = false;
+	bool errors_found = false;
 
-	bool read_extra_file (QDataStream &, int, int);
+	bool read_extra_file (QDataStream &, int, int, int, bool);
 
 public slots:
-	void slot_start_load ();
+	void slot_start_load (int, bool);
 signals:
 	void signal_load_complete ();
 };
