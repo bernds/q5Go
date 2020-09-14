@@ -96,7 +96,7 @@ bool GameDB_Data::read_extra_file (QDataStream &ds, int base_id, int boardsize)
 		if (ds.readRawData (i_c, sizeof i_c) != sizeof i_c)
 			return false;
 		memcpy (&clen, i_c, sizeof clen);
-		buf.reserve (clen);
+		buf.resize (clen);
 		if (ds.readRawData (&buf[0], clen) != clen)
 			return false;
 		if (pos != end) {
