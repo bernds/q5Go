@@ -856,7 +856,7 @@ void game_state::append_to_sgf (std::string &s, bool active_only) const
 		}
 		for (const auto &p: gs->m_unrecognized_props) {
 			s += p.ident;
-			for (const auto v: p.values) {
+			for (const auto &v: p.values) {
 				encode_string (s, nullptr, v, true);
 				linecount++;
 			}
