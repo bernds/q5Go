@@ -23,6 +23,8 @@ public:
 	go_pattern (const go_board &, unsigned sz_x, unsigned sz_y, unsigned offx, unsigned offy);
 	go_pattern (const go_pattern &) = default;
 	go_pattern (go_pattern &&) = default;
+	go_pattern &operator= (const go_pattern &) = default;
+	go_pattern &operator= (go_pattern &&) = default;
 
 	int sz_x () const { return m_sz_x; }
 	int sz_y () const { return m_sz_y; }
