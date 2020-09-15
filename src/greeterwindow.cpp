@@ -33,12 +33,26 @@ GreeterWindow::GreeterWindow (QWidget *parent)
 			hide ();
 		});
 
+	connect (ui->dbLoadButton, &QAbstractButton::clicked, [this] (bool) {
+			std::shared_ptr<game_record> gr = open_db_dialog (this);
+			if (gr == nullptr)
+				return;
+
+			MainWindow *win = new MainWindow (0, gr);
+			win->show ();
+			hide ();
+		});
+
 	connect (ui->onlineButton, &QAbstractButton::clicked, [this] (bool) {
 			client_window->show ();
 			hide ();
 		});
 	connect (ui->learnButton, &QAbstractButton::clicked, [this] (bool) {
 			show_tutorials ();
+			hide ();
+		});
+	connect (ui->patsearchButton, &QAbstractButton::clicked, [this] (bool) {
+			show_pattern_search ();
 			hide ();
 		});
 	connect (ui->enginePlayButton, &QAbstractButton::clicked, [this] (bool) {
@@ -68,6 +82,9 @@ GreeterWindow::~GreeterWindow ()
 void GreeterWindow::enable_buttons ()
 {
 	bool have_engines = setting->m_engines.size () > 0;
+	bool have_db = setting->m_dbpaths.size () > 0;
 	ui->enginePlayButton->setEnabled (have_engines);
 	ui->analyzeButton->setEnabled (have_engines);
+	ui->patsearchButton->setEnabled (have_db);
+	ui->dbLoadButton->setEnabled (have_db);
 }
