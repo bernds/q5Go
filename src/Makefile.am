@@ -33,7 +33,7 @@ DISTSOURCES = analyzedlg.cpp autodiagsdlg.cpp \
 	dbdialog.cpp \
 	edit_analysis.cpp evalgraph.cpp \
 	figuredlg.cpp \
-	gamedialog.cpp gamestable.cpp gametree.cpp goboard.cc gogame.cc gotools.cc \
+	gamedb.cpp gamedialog.cpp gamestable.cpp gametree.cpp goboard.cc gogame.cc gotools.cc \
 	grid.cpp greeterwindow.cpp \
 	helpviewer.cpp \
 	igsconnection.cpp imagehandler.cpp \

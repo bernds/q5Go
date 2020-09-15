@@ -70,20 +70,20 @@ PROGRAMS = $(bin_PROGRAMS)
 am__objects_1 = analyzedlg.$(OBJEXT) autodiagsdlg.$(OBJEXT) \
 	board.$(OBJEXT) clientwin.$(OBJEXT) clockview.$(OBJEXT) \
 	dbdialog.$(OBJEXT) edit_analysis.$(OBJEXT) evalgraph.$(OBJEXT) \
-	figuredlg.$(OBJEXT) gamedialog.$(OBJEXT) gamestable.$(OBJEXT) \
-	gametree.$(OBJEXT) goboard.$(OBJEXT) gogame.$(OBJEXT) \
-	gotools.$(OBJEXT) grid.$(OBJEXT) greeterwindow.$(OBJEXT) \
-	helpviewer.$(OBJEXT) igsconnection.$(OBJEXT) \
-	imagehandler.$(OBJEXT) main.$(OBJEXT) mainwindow.$(OBJEXT) \
-	misc.$(OBJEXT) msg_handler.$(OBJEXT) multisave.$(OBJEXT) \
-	newaigamedlg.$(OBJEXT) parser.$(OBJEXT) pattern.$(OBJEXT) \
-	patternsearch.$(OBJEXT) playertable.$(OBJEXT) \
-	preferences.$(OBJEXT) qgo.$(OBJEXT) qgo_interface.$(OBJEXT) \
-	qgtp.$(OBJEXT) setting.$(OBJEXT) sgfload.$(OBJEXT) \
-	sgf2board.$(OBJEXT) sgfpreview.$(OBJEXT) slideview.$(OBJEXT) \
-	svgbuilder.$(OBJEXT) tables.$(OBJEXT) telnet.$(OBJEXT) \
-	textview.$(OBJEXT) timing.$(OBJEXT) tips.$(OBJEXT) \
-	tutorial.$(OBJEXT) variantgamedlg.$(OBJEXT)
+	figuredlg.$(OBJEXT) gamedb.$(OBJEXT) gamedialog.$(OBJEXT) \
+	gamestable.$(OBJEXT) gametree.$(OBJEXT) goboard.$(OBJEXT) \
+	gogame.$(OBJEXT) gotools.$(OBJEXT) grid.$(OBJEXT) \
+	greeterwindow.$(OBJEXT) helpviewer.$(OBJEXT) \
+	igsconnection.$(OBJEXT) imagehandler.$(OBJEXT) main.$(OBJEXT) \
+	mainwindow.$(OBJEXT) misc.$(OBJEXT) msg_handler.$(OBJEXT) \
+	multisave.$(OBJEXT) newaigamedlg.$(OBJEXT) parser.$(OBJEXT) \
+	pattern.$(OBJEXT) patternsearch.$(OBJEXT) \
+	playertable.$(OBJEXT) preferences.$(OBJEXT) qgo.$(OBJEXT) \
+	qgo_interface.$(OBJEXT) qgtp.$(OBJEXT) setting.$(OBJEXT) \
+	sgfload.$(OBJEXT) sgf2board.$(OBJEXT) sgfpreview.$(OBJEXT) \
+	slideview.$(OBJEXT) svgbuilder.$(OBJEXT) tables.$(OBJEXT) \
+	telnet.$(OBJEXT) textview.$(OBJEXT) timing.$(OBJEXT) \
+	tips.$(OBJEXT) tutorial.$(OBJEXT) variantgamedlg.$(OBJEXT)
 am__objects_2 =
 am_q5go_OBJECTS = $(am__objects_1) $(am__objects_2)
 am__objects_3 = analyzedlg.moc.$(OBJEXT) autodiagsdlg.moc.$(OBJEXT) \
@@ -313,7 +313,7 @@ DISTSOURCES = analyzedlg.cpp autodiagsdlg.cpp \
 	dbdialog.cpp \
 	edit_analysis.cpp evalgraph.cpp \
 	figuredlg.cpp \
-	gamedialog.cpp gamestable.cpp gametree.cpp goboard.cc gogame.cc gotools.cc \
+	gamedb.cpp gamedialog.cpp gamestable.cpp gametree.cpp goboard.cc gogame.cc gotools.cc \
 	grid.cpp greeterwindow.cpp \
 	helpviewer.cpp \
 	igsconnection.cpp imagehandler.cpp \
@@ -457,6 +457,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/evalgraph.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/figuredlg.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/figuredlg.moc.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gamedb.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gamedb.moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gamedialog.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gamedialog.moc.Po@am__quote@

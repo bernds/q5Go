@@ -95,7 +95,8 @@ SOURCES		      = analyzedlg.cpp \
                         dbdialog.cpp \
 			edit_analysis.cpp \
 			evalgraph.cpp \
-			figuredlg.cpp \
+                        figuredlg.cpp \
+                        gamedb.cpp \
 			gamedialog.cpp \
 			gamestable.cpp \
 			gametree.cpp \
