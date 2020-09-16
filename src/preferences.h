@@ -50,12 +50,20 @@ public slots:
 	void slot_get_path ();
 };
 
-
 template<class T>
 class pref_vec_model : public QAbstractItemModel
 {
 	std::vector<T> m_entries;
 	std::vector<T> m_extra;
+
+	void init (const QStringList &init)
+	{
+		m_entries.clear ();
+		m_extra.clear ();
+		m_entries.reserve (init.size ());
+		for (const auto &s: init)
+			m_entries.emplace_back (s);
+	}
 public:
 	pref_vec_model (std::vector<T> init)
 		: m_entries (init)
@@ -65,7 +73,16 @@ public:
 		: m_entries (init), m_extra (extra)
 	{
 	}
-
+	pref_vec_model (const QStringList &l)
+	{
+		init (l);
+	}
+	void reinit (const QStringList &l)
+	{
+		beginResetModel ();
+		init (l);
+		endResetModel ();
+	}
 	void add_or_replace (T);
 	bool add_no_replace (T);
 	const T *find (const QModelIndex &) const;
@@ -76,6 +93,31 @@ public:
 	int rowCount (const QModelIndex &parent = QModelIndex()) const override;
 	int columnCount (const QModelIndex &parent = QModelIndex()) const override;
 	bool removeRows (int row, int count, const QModelIndex &parent = QModelIndex()) override;
+	QVariant headerData (int section, Qt::Orientation orientation,
+			     int role = Qt::DisplayRole) const override;
+};
+
+struct db_dir_entry
+{
+	QString title;
+	bool db_found;
+
+	db_dir_entry (const QString &s);
+
+	static int n_columns () { return 2; }
+	QString data (int col) const
+	{
+		if (col == 1)
+			return title;
+		return QString ();
+	}
+	QVariant icon (int col) const;
+};
+
+class dbpath_model : public pref_vec_model<db_dir_entry>
+{
+	using pref_vec_model<db_dir_entry>::pref_vec_model;
+
 	QVariant headerData (int section, Qt::Orientation orientation,
 			     int role = Qt::DisplayRole) const override;
 };
@@ -93,13 +135,13 @@ class PreferencesDialog : public QDialog
 	QGraphicsScene *m_stone_canvas;
 	int m_stone_size;
 
-	QStandardItemModel m_dbpath_model;
 	QStringList m_dbpaths;
 	bool m_dbpaths_changed = false;
 	QString m_last_added_dbdir;
 
 	pref_vec_model<Host> m_hosts_model;
 	pref_vec_model<Engine> m_engines_model;
+	dbpath_model m_dbpath_model;
 
 	bool m_engines_changed = false;
 	bool m_hosts_changed = false;
@@ -123,7 +165,7 @@ class PreferencesDialog : public QDialog
 	void update_current_engine ();
 
 	void update_db_selection ();
-	void update_dbpaths (const QStringList &);
+
 public:
 	PreferencesDialog (int tab, QWidget* parent = 0);
 	~PreferencesDialog ();

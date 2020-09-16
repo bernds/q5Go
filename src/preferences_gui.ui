@@ -5008,13 +5008,26 @@ If checked then when a game you played completes, it is automatically saved in t
             </layout>
            </widget>
           </item>
-          <item row="0" column="0">
-           <widget class="QListView" name="dbPathsListView"/>
-          </item>
           <item row="2" column="0">
            <widget class="Line" name="line_2">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QTreeView" name="dbPathsTreeView">
+            <property name="rootIsDecorated">
+             <bool>false</bool>
+            </property>
+            <property name="uniformRowHeights">
+             <bool>true</bool>
+            </property>
+            <property name="itemsExpandable">
+             <bool>false</bool>
+            </property>
+            <property name="expandsOnDoubleClick">
+             <bool>false</bool>
             </property>
            </widget>
           </item>

@@ -7,6 +7,7 @@
 
 #include <QMap>
 #include <QString>
+#include <QVariant>
 #include <QFont>
 #include <QColor>
 #include <QMutex>
@@ -37,6 +38,16 @@ struct Engine
 	Engine (Engine &&) = default;
 	Engine &operator= (Engine &&) = default;
 	Engine &operator= (const Engine &) = default;
+
+	static int n_columns () { return 1; }
+	QString data (int) const
+	{
+		return title;
+	}
+	QVariant icon (int) const
+	{
+		return QVariant ();
+	}
 };
 
 struct Host
@@ -60,8 +71,17 @@ struct Host
 	Host (Host &&) = default;
 	Host &operator= (Host &&) = default;
 	Host &operator= (const Host &) = default;
-};
 
+	static int n_columns () { return 1; }
+	QString data (int) const
+	{
+		return title;
+	}
+	QVariant icon (int) const
+	{
+		return QVariant ();
+	}
+};
 
 /* A few settings which are used frequently enough that we don't want
    to spend a lookup each time.  The alternative is caching them locally

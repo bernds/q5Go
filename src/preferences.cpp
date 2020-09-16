@@ -8,6 +8,7 @@
 #include <QFontDialog>
 #include <QColorDialog>
 #include <QWhatsThis>
+#include <QIcon>
 
 #include "preferences.h"
 #include "mainwindow.h"
@@ -17,6 +18,23 @@
 
 #include "ui_preferences_gui.h"
 #include "ui_enginedlg_gui.h"
+
+db_dir_entry::db_dir_entry (const QString &s)
+	: title (s), db_found (false)
+{
+	QDir d (s);
+	QFile path (d.filePath ("kombilo.db"));
+	db_found = path.exists ();
+}
+
+QVariant db_dir_entry::icon (int col) const
+{
+	if (col == 0) {
+		return QIcon (db_found ? ":/images/green-check.png" : ":/images/red-x.png");
+	}
+	return QVariant ();
+}
+
 
 void EngineDialog::init ()
 {
@@ -119,7 +137,7 @@ QVariant pref_vec_model<T>::data (const QModelIndex &index, int role) const
 	int row = index.row ();
 	int col = index.column ();
 
-	if (row < 0 || col != 0)
+	if (row < 0 || col < 0 || col >= T::n_columns ())
 		return QVariant ();
 
 	size_t r = row;
@@ -131,12 +149,15 @@ QVariant pref_vec_model<T>::data (const QModelIndex &index, int role) const
 			return QBrush (Qt::lightGray);
 		if (role != Qt::DisplayRole)
 			return QVariant ();
-		return m_extra[r].title;
+		return m_extra[r].data (col);
 	}
+	if (role == Qt::DecorationRole)
+		return m_entries[r].icon (col);
+
 	if (role != Qt::DisplayRole)
 		return QVariant ();
 	const T &e = m_entries[r];
-	return e.title;
+	return e.data (col);
 }
 
 template<class T>
@@ -218,7 +239,7 @@ int pref_vec_model<T>::rowCount (const QModelIndex &) const
 template<class T>
 int pref_vec_model<T>::columnCount (const QModelIndex &) const
 {
-	return 1;
+	return T::n_columns ();
 }
 
 #if 0
@@ -251,13 +272,32 @@ QVariant pref_vec_model<T>::headerData (int section, Qt::Orientation ot, int rol
 	return QVariant ();
 }
 
+QVariant dbpath_model::headerData (int section, Qt::Orientation ot, int role) const
+{
+	if (role == Qt::TextAlignmentRole) {
+		return Qt::AlignLeft;
+	}
+
+	if (role != Qt::DisplayRole || ot != Qt::Horizontal)
+		return QVariant ();
+	switch (section) {
+	case 0:
+		return tr ("DB");
+	case 1:
+		return tr ("Path");
+	}
+	return QVariant ();
+}
+
 std::vector<Host> standard_servers {
 	{ "-- IGS --", "igs.joyjoy.net", 7777, "guest", "", "SJIS", -1 },
 	{ "-- LGS --", "lgs.taiwango.net", 9696, "guest", "", "Big5", -1 },
 	{ "-- WING --", "wing.gr.jp", 1515, "guest", "", "", -1 } };
 
 PreferencesDialog::PreferencesDialog (int tab, QWidget* parent)
-	: QDialog (parent), ui (new Ui::PreferencesDialogGui), m_hosts_model (setting->m_hosts, standard_servers), m_engines_model (setting->m_engines)
+	: QDialog (parent), ui (new Ui::PreferencesDialogGui),
+	  m_hosts_model (setting->m_hosts, standard_servers), m_engines_model (setting->m_engines),
+	  m_dbpath_model (setting->m_dbpaths)
 {
 	ui->setupUi (this);
 	setModal (true);
@@ -342,10 +382,11 @@ PreferencesDialog::PreferencesDialog (int tab, QWidget* parent)
 	connect (ui->GobanPicturePathButton, &QToolButton::clicked, this, &PreferencesDialog::slot_getGobanPicturePath);
 	connect (ui->TablePicturePathButton, &QToolButton::clicked, this, &PreferencesDialog::slot_getTablePicturePath);
 
-	update_dbpaths (setting->m_dbpaths);
-	ui->dbPathsListView->setModel (&m_dbpath_model);
-	connect (ui->dbPathsListView->selectionModel (), &QItemSelectionModel::selectionChanged,
+	ui->dbPathsTreeView->setModel (&m_dbpath_model);
+	connect (ui->dbPathsTreeView->selectionModel (), &QItemSelectionModel::selectionChanged,
 		 [this] (const QItemSelection &, const QItemSelection &) { update_db_selection (); });
+	ui->dbPathsTreeView->header ()->setSectionResizeMode (0, QHeaderView::ResizeToContents);
+
 	connect (ui->dbDirsButton, &QPushButton::clicked, this, &PreferencesDialog::slot_dbdir);
 	connect (ui->dbCfgButton, &QPushButton::clicked, this, &PreferencesDialog::slot_dbcfg);
 	connect (ui->dbRemButton, &QPushButton::clicked, this, &PreferencesDialog::slot_dbrem);
@@ -387,21 +428,9 @@ void PreferencesDialog::update_chat_color ()
 	ui->chatColorButton->setEnabled (ui->chatColorCheckBox->isChecked ());
 }
 
-void PreferencesDialog::update_dbpaths (const QStringList &l)
-{
-	m_dbpaths = l;
-	m_dbpath_model.clear ();
-	for (auto &it: m_dbpaths) {
-		QStandardItem *item = new QStandardItem (it);
-		item->setEditable (false);
-		item->setDropEnabled (false);
-		m_dbpath_model.appendRow (item);
-	}
-}
-
 void PreferencesDialog::update_db_selection ()
 {
-	QItemSelectionModel *sel = ui->dbPathsListView->selectionModel ();
+	QItemSelectionModel *sel = ui->dbPathsTreeView->selectionModel ();
 	const QModelIndexList &selected = sel->selectedRows ();
 	bool selection = selected.length () != 0;
 
@@ -437,7 +466,7 @@ void PreferencesDialog::slot_dbdir (bool)
 	}
 	m_last_added_dbdir = dirname;
 	m_dbpaths.append (dirname);
-	m_dbpath_model.appendRow (new QStandardItem (dirname));
+	m_dbpath_model.add_no_replace (dirname);
 	m_dbpaths_changed = true;
 }
 
@@ -470,13 +499,13 @@ void PreferencesDialog::slot_dbcfg (bool)
 			l << vl[1];
 		i++;
 	}
-	update_dbpaths (l);
+	m_dbpath_model.reinit (l);
 	m_dbpaths_changed = true;
 }
 
 void PreferencesDialog::slot_dbrem (bool)
 {
-	QItemSelectionModel *sel = ui->dbPathsListView->selectionModel ();
+	QItemSelectionModel *sel = ui->dbPathsTreeView->selectionModel ();
 	const QModelIndexList &selected = sel->selectedRows ();
 	bool selection = selected.length () != 0;
 
