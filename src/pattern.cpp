@@ -230,6 +230,7 @@ bool match_movelist (const std::vector<char> &moves, std::vector<cand_match> &ca
 		}
 		if (endpos) {
 			for (size_t i = 0; i < active.size (); i++) {
+			again:
 				auto &it = active[i];
 				auto state = it->end_of_node ();
 				if (state == cand_match::matched)
@@ -237,6 +238,9 @@ bool match_movelist (const std::vector<char> &moves, std::vector<cand_match> &ca
 				else if (state == cand_match::failed || state == cand_match::continued) {
 					it = active[active.size () - 1];
 					active.pop_back ();
+					if (i == active.size ())
+						break;
+					goto again;
 				}
 			}
 			if (active.size () == 0)
