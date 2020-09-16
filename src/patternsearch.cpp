@@ -96,6 +96,9 @@ PatternSearchWindow::PatternSearchWindow ()
 	connect (ui->viewNumbers, &QAction::triggered, this, &PatternSearchWindow::slot_choose_view);
 	connect (ui->viewLetters, &QAction::triggered, this, &PatternSearchWindow::slot_choose_view);
 
+	connect (ui->viewCoords, &QAction::toggled, [this] (bool toggle) { ui->boardView->set_show_coords (toggle); });
+	ui->viewCoords->setChecked (setting->readBoolEntry ("BOARD_COORDS"));
+
 	m_view_group = new QActionGroup (this);
 	m_view_group->addAction (ui->viewPercent);
 	m_view_group->addAction (ui->viewNumbers);

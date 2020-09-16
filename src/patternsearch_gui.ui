@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1192</width>
-    <height>648</height>
+    <height>641</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -259,9 +259,6 @@
     <property name="title">
      <string>&amp;View</string>
     </property>
-    <addaction name="separator"/>
-    <addaction name="separator"/>
-    <addaction name="separator"/>
     <addaction name="viewLetters"/>
     <addaction name="viewNumbers"/>
     <addaction name="viewPercent"/>
@@ -279,7 +276,7 @@
    </widget>
    <widget class="QMenu" name="menuSearch">
     <property name="title">
-     <string>Search</string>
+     <string>Sea&amp;rch</string>
     </property>
     <addaction name="anchorAction"/>
     <addaction name="separator"/>
@@ -289,7 +286,29 @@
     <addaction name="actionReset"/>
     <addaction name="resetAll"/>
    </widget>
+   <widget class="QMenu" name="menu_Edit">
+    <property name="title">
+     <string>&amp;Edit</string>
+    </property>
+    <addaction name="editStone"/>
+    <addaction name="editBlack"/>
+    <addaction name="editWhite"/>
+    <addaction name="separator"/>
+    <addaction name="editClearSelect"/>
+   </widget>
+   <widget class="QMenu" name="menu_Navigation">
+    <property name="title">
+     <string>&amp;Navigation</string>
+    </property>
+    <addaction name="navFirst"/>
+    <addaction name="navBackward"/>
+    <addaction name="navForward"/>
+    <addaction name="navLast"/>
+    <addaction name="navGotoCont"/>
+   </widget>
    <addaction name="fileMenu"/>
+   <addaction name="menu_Edit"/>
+   <addaction name="menu_Navigation"/>
    <addaction name="viewMenu"/>
    <addaction name="menuSearch"/>
    <addaction name="settingsMenu"/>
