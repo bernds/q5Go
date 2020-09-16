@@ -115,6 +115,8 @@ PatternSearchWindow::PatternSearchWindow ()
 	addActions ({ ui->navForward, ui->navBackward, ui->navFirst, ui->navLast });
 	addActions ({ ui->searchPattern, ui->searchAll });
 
+	ui->anchorAction->setChecked (true);
+
 	search_thread.start ();
 
 	update_actions ();
@@ -551,7 +553,8 @@ void PatternSearchWindow::pattern_search (bool all_games)
 	if (all_games)
 		m_model.reset_filters ();
 	go_pattern p = ui->boardView->selected_pattern ();
-
+	if (!ui->anchorAction->isChecked ())
+		p.clear_alignment ();
 	search_runnable *r = new search_runnable (this, &m_model, &m_result, std::move (p),
 						  &m_progress, &m_progress_max);
 	r->moveToThread (&search_thread);

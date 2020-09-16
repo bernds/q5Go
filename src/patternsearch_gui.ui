@@ -281,8 +281,12 @@
     <property name="title">
      <string>Search</string>
     </property>
+    <addaction name="anchorAction"/>
+    <addaction name="separator"/>
     <addaction name="searchPattern"/>
     <addaction name="searchAll"/>
+    <addaction name="separator"/>
+    <addaction name="actionReset"/>
     <addaction name="resetAll"/>
    </widget>
    <addaction name="fileMenu"/>
@@ -336,6 +340,7 @@
    <addaction name="editWhite"/>
    <addaction name="separator"/>
    <addaction name="editClearSelect"/>
+   <addaction name="anchorAction"/>
    <addaction name="resetAll"/>
    <addaction name="actionReset"/>
    <addaction name="searchPattern"/>
@@ -967,6 +972,21 @@
    </property>
    <property name="toolTip">
     <string>&lt;p&gt;Reset the list of games to its original contents.&lt;/p&gt;</string>
+   </property>
+  </action>
+  <action name="anchorAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/BoardWindow/images/boardwindow/anchor.png</normaloff>:/BoardWindow/images/boardwindow/anchor.png</iconset>
+   </property>
+   <property name="text">
+    <string>Lock anchors</string>
+   </property>
+   <property name="toolTip">
+    <string>&lt;p&gt;When checked, patterns at the edge of the board will be anchored there during the search and will not be matched against patterns in the center.&lt;/p&gt;&lt;p&gt;This should normally be checked, since it tends to produce the expected results, while also being faster.&lt;/p&gt;</string>
    </property>
   </action>
  </widget>

@@ -32,6 +32,8 @@ public:
 	bool operator== (const go_pattern &other) const;
 	bool operator!= (const go_pattern &other) const { return !operator== (other); }
 
+	void clear_alignment () { m_align = { false, false, false, false }; }
+
 	template<class T> go_pattern transform () const;
 
 	bool match (const bit_array &other_w, const bit_array &other_b, unsigned other_sz_x, unsigned other_sz_y,
