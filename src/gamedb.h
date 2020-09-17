@@ -53,7 +53,7 @@ public:
 			   const QString &dtfrom, const QString &dtto);
 	void apply_game_list (std::vector<unsigned> &&);
 	void reset_filters ();
-	using search_result = std::pair<bit_array, std::vector<cont_bw>>;
+	using search_result = std::pair<std::vector<int[2]>, std::vector<cont_bw>>;
 	search_result find_pattern (const go_pattern &, std::atomic<long> *, std::atomic<long> *);
 	const gamedb_entry &find (size_t) const;
 	QString status_string () const;

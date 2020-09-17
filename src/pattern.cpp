@@ -342,8 +342,9 @@ void go_pattern::find_cands (std::vector<cand_match> &result,
 	}
 }
 
-bool match_movelist (const std::vector<char> &moves, std::vector<cand_match> &cands,
-		     std::vector<gamedb_model::cont_bw> &conts, int cont_maxx)
+static void match_movelist (const std::vector<char> &moves, std::vector<cand_match> &cands,
+			    std::vector<gamedb_model::cont_bw> &conts, int cont_maxx,
+			    int *match_count)
 {
 	std::vector<int> active (cands.size ());
 	std::vector<cand_match> *active_base = &cands;
@@ -368,7 +369,6 @@ bool match_movelist (const std::vector<char> &moves, std::vector<cand_match> &ca
 	std::vector<branch_data> stack;
 
 	size_t len = moves.size ();
-	bool success = false;
 	for (size_t i = 0; i + 1 < len; i += 2) {
 		int x = moves[i];
 		int y = moves[i + 1];
@@ -377,7 +377,7 @@ bool match_movelist (const std::vector<char> &moves, std::vector<cand_match> &ca
 			/* Never fully trust input data on disk, and limit the impact of
 			   bogus values.  */
 			if (stack.size () > 64)
-				return success;
+				return;
 			stack.emplace_back (cands, active, active_base);
 			branch_data &stack_top = stack.back ();
 			active_base = &stack_top.curr_cands;
@@ -385,7 +385,7 @@ bool match_movelist (const std::vector<char> &moves, std::vector<cand_match> &ca
 		}
 		if (x & db_mv_flag_endvar) {
 			if (stack.size () == 0)
-				return success;
+				return;
 			branch_data &stack_top = stack.back ();
 			active = stack_top.old_active;
 			active_base = stack_top.old_base;
@@ -412,9 +412,10 @@ bool match_movelist (const std::vector<char> &moves, std::vector<cand_match> &ca
 				int idx = active[i];
 				auto &it = (*active_base)[idx];
 				auto state = it.end_of_node ();
-				if (state == cand_match::matched)
-					success = true;
-				else if (state == cand_match::failed || state == cand_match::continued) {
+				if (state == cand_match::new_match) {
+					int off = it.was_swapped () ? 1 : 0;
+					match_count[off]++;
+				} else if (state == cand_match::failed || state == cand_match::continued) {
 					active[i] = active[active.size () - 1];
 					active.pop_back ();
 					if (i == active.size ())
@@ -438,20 +439,19 @@ bool match_movelist (const std::vector<char> &moves, std::vector<cand_match> &ca
 				conts[y * cont_maxx + x].second++;
 		}
 	}
-	return success;
 }
 
-bit_array match_games (const std::vector<unsigned> &cand_games, size_t first, size_t end,
-		       const std::vector<go_pattern> &patterns,
-		       std::vector<gamedb_model::cont_bw> &conts, int cont_maxx)
+std::vector<int[2]> match_games (const std::vector<unsigned> &cand_games, size_t first, size_t end,
+				 const std::vector<go_pattern> &patterns,
+				 std::vector<gamedb_model::cont_bw> &conts, int cont_maxx)
 {
-	bit_array result (db_data->m_all_entries.size ());
+	std::vector<int[2]> result (end - first);
 	std::vector<char> movelist;
 	std::vector<cand_match> cand_matches;
 	cand_matches.reserve (500);
 	for (size_t j = first; j < end; j++) {
-		unsigned i = cand_games[j];
-		auto &entry = db_data->m_all_entries[i];
+		unsigned g_idx = cand_games[j];
+		auto &entry = db_data->m_all_entries[g_idx];
 		cand_matches.clear ();
 		for (const auto &pat: patterns)
 			pat.find_cands (cand_matches, entry.finalpos_w, entry.finalpos_b, entry.finalpos_c,
@@ -459,8 +459,8 @@ bit_array match_games (const std::vector<unsigned> &cand_games, size_t first, si
 		if (cand_matches.size () == 0)
 			continue;
 		if (entry.movelist.size () > 0) {
-			if (match_movelist (entry.movelist, cand_matches, conts, cont_maxx))
-				result.set_bit (i);
+			match_movelist (entry.movelist, cand_matches, conts, cont_maxx,
+					result[j - first]);
 			continue;
 		}
 		QDir dbdir = entry.dirname;
@@ -485,8 +485,8 @@ bit_array match_games (const std::vector<unsigned> &cand_games, size_t first, si
 					memcpy (&len, i_c, sizeof len);
 				movelist.resize (len);
 				if (ds.readRawData (&movelist[0], len) == len) {
-					if (match_movelist (movelist, cand_matches, conts, cont_maxx))
-						result.set_bit (i);
+					match_movelist (movelist, cand_matches, conts, cont_maxx,
+							result[j - first]);
 				}
 			}
 			f.close ();
@@ -502,7 +502,7 @@ class PartialSearch : public QRunnable
 	std::vector<unsigned> *m_entries;
 	QMutex *m_mutex;
 	QSemaphore *m_sem;
-	bit_array *m_result;
+	std::vector<int[2]> *m_result;
 	std::vector<gamedb_model::cont_bw> *m_conts;
 	std::atomic<long> *m_pcur;
 	size_t m_first, m_end;
@@ -510,7 +510,7 @@ class PartialSearch : public QRunnable
 
 public:
 	PartialSearch (std::vector<unsigned> *e, int start, int end,
-		       const std::vector<go_pattern> &p, bit_array *r,
+		       const std::vector<go_pattern> &p, std::vector<int[2]> *r,
 		       std::vector<gamedb_model::cont_bw> *c, QMutex *m, QSemaphore *s,
 		       std::atomic<long> *count)
 		: m_pats (p), m_entries (e), m_mutex (m), m_sem (s), m_result (r), m_conts (c),
@@ -522,10 +522,15 @@ public:
 	void run () override
 	{
 		std::vector<gamedb_model::cont_bw> continuations (m_pats[0].sz_y () * m_pats[0].sz_x ());
-		auto games = match_games (*m_entries, m_first, m_end, m_pats, continuations, m_cont_sz_x);
+		std::vector<int[2]> games = match_games (*m_entries, m_first, m_end, m_pats, continuations, m_cont_sz_x);
 		{
 			QMutexLocker lock (m_mutex);
-			m_result->ior (games);
+			for (size_t i = m_first; i < m_end; i++) {
+				unsigned g_idx = (*m_entries)[i];
+				(*m_result)[g_idx][0] += games[i - m_first][0];
+				(*m_result)[g_idx][1] += games[i - m_first][1];
+			}
+			// m_result->ior (games);
 			for (size_t i = 0; i < m_conts->size (); i++) {
 				(*m_conts)[i].first += continuations[i].first;
 				(*m_conts)[i].second += continuations[i].second;
@@ -565,10 +570,10 @@ std::vector<go_pattern> unique_symmetries (const go_pattern &p0)
    continuations.
    Threading is used to search the eight symmetries in parallel.  */
 
-std::pair <bit_array, std::vector<gamedb_model::cont_bw>>
+gamedb_model::search_result
 gamedb_model::find_pattern (const go_pattern &p0, std::atomic<long> *cur, std::atomic<long> *max)
 {
-	bit_array result (db_data->m_all_entries.size ());
+	std::vector<int[2]> result (db_data->m_all_entries.size ());
 	std::vector<cont_bw> continuations (p0.sz_y () * p0.sz_x ());
 
 	std::vector<go_pattern> pats = unique_symmetries (p0);
@@ -586,7 +591,7 @@ gamedb_model::find_pattern (const go_pattern &p0, std::atomic<long> *cur, std::a
 		n_started++;
 	}
 	completion_sem.acquire (n_started);
-	return std::pair <bit_array, std::vector<gamedb_model::cont_bw>> { std::move (result), std::move (continuations) };
+	return std::pair <std::vector<int[2]>, std::vector<gamedb_model::cont_bw>> { std::move (result), std::move (continuations) };
 }
 
 game_state *find_first_match (go_game_ptr gr, const go_pattern &p0, board_rect &sel_return)

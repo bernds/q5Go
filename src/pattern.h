@@ -59,7 +59,7 @@ class cand_match : public go_pattern
 	bool m_swapped = false;
 
 public:
-	enum state { unmatched, matched, continued, failed };
+	enum state { unmatched, new_match, matched, continued, failed };
 	enum swapped { swapped };
 private:
 	enum state m_state = unmatched;
@@ -80,6 +80,8 @@ public:
 	}
 	cand_match (const cand_match &) = default;
 	cand_match (cand_match &&) = default;
+
+	bool was_swapped () { return m_swapped; }
 
 	std::tuple<unsigned, unsigned, int> extract_continuation ()
 	{
@@ -136,13 +138,12 @@ public:
 	{
 		if (m_state == continued || m_state == failed)
 			return m_state;
-		if (n_mismatched == 0)
+		if (n_mismatched == 0 && m_state == unmatched) {
 			m_state = matched;
+			return new_match;
+		}
 		return m_state;
 	}
 };
-
-extern bool match_movelist (const std::vector<char> &moves, std::vector<cand_match> &cands,
-			    std::vector<std::pair<int, int>> &conts, int);
 
 #endif

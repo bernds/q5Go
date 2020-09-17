@@ -21,6 +21,11 @@ struct pattern_cont_data
 		int idx = col == none ? 0 : col == white ? 1 : 2;
 		return data[idx];
 	}
+	const pattern_cont_entry &get (stone_color col) const
+	{
+		int idx = col == none ? 0 : col == white ? 1 : 2;
+		return data[idx];
+	}
 };
 
 enum class pattern_cont_view {
@@ -68,6 +73,8 @@ class PatternSearchWindow : public QMainWindow
 	gamedb_model m_model;
 	go_game_ptr m_game, m_orig_game;
 	std::vector<pattern_cont_data> m_game_cont;
+	const std::vector<pattern_cont_data> *m_search_cont {};
+
 	go_pattern *last_pattern {};
 	gamedb_model::search_result *m_result {};
 	QThread search_thread;
@@ -79,18 +86,25 @@ class PatternSearchWindow : public QMainWindow
 
 	QGraphicsScene *m_preview_scene {};
 	QGraphicsScene *m_info_scene {};
+	QGraphicsScene *m_stats_scene {};
+	QGraphicsScene *m_result_scene {};
 	QGraphicsRectItem *m_cursor {};
 	int m_preview_w = 0;
 	int m_preview_h = 0;
+	int m_result_n_games = 0, m_result_same = 0, m_result_inv = 0;
+
 	struct preview : public board_preview {
 		go_pattern pat;
 		board_rect selection;
 		std::vector<pattern_cont_data> cont;
 		bit_array games_result;
+		int n_hits_same, n_hits_inverted;
 
-		preview (go_pattern p, go_game_ptr g, game_state *st, board_rect sel, bit_array r)
+		preview (go_pattern p, go_game_ptr g, game_state *st, board_rect sel, bit_array r,
+			 int same, int inv)
 			: board_preview (g, st), pat (std::move (p)), selection (sel),
-			  cont (g->get_root ()->get_board ().bitsize ()), games_result (r)
+			  cont (g->get_root ()->get_board ().bitsize ()), games_result (r),
+			  n_hits_same (same), n_hits_inverted (inv)
 		{
 		}
 		preview (const preview &) = default;
@@ -115,6 +129,9 @@ class PatternSearchWindow : public QMainWindow
 	void handle_doubleclick ();
 	void update_selection ();
 	void update_caption ();
+
+	void redraw_stats ();
+	void redraw_result ();
 
 	void choose_color (bool);
 	void update_actions ();

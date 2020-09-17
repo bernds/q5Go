@@ -57,7 +57,10 @@ PatternSearchWindow::PatternSearchWindow ()
 			 clear_preview_cursor ();
 			 ui->boardView->set_cont_data (nullptr);
 			 m_previews.clear ();
+			 m_search_cont = nullptr;
 			 m_preview_scene->clear ();
+			 m_stats_scene->clear ();
+			 m_result_scene->clear ();
 			 choices_resized ();
 		 });
 	connect (ui->dbListView, &ClickableListView::doubleclicked, this, &PatternSearchWindow::handle_doubleclick);
@@ -83,8 +86,11 @@ PatternSearchWindow::PatternSearchWindow ()
 
 	m_preview_scene = create_scene_for (ui->gameChoiceView);
 	m_info_scene = create_scene_for (ui->gameInfoView);
+	m_stats_scene = create_scene_for (ui->statsView);
+	m_result_scene = create_scene_for (ui->resultView);
 
 	connect (ui->gameChoiceView, &SizeGraphicsView::resized, this, &PatternSearchWindow::choices_resized);
+	connect (ui->statsView, &SizeGraphicsView::resized, this, &PatternSearchWindow::redraw_stats);
 
 	connect (ui->boardView, &SimpleBoard::signal_move_made, [this] () { update_actions (); });
 	connect (ui->editClearSelect, &QAction::triggered, [this] () { ui->boardView->clear_selection (); });
@@ -126,6 +132,9 @@ PatternSearchWindow::PatternSearchWindow ()
 	addActions ({ ui->searchPattern, ui->searchAll });
 
 	ui->anchorAction->setChecked (true);
+
+	/* Later, once we have more ways of representing the data.  */
+	ui->statsButtonFrame->setVisible (false);
 
 	search_thread.start ();
 
@@ -281,6 +290,14 @@ void PatternSearchWindow::preview_clicked (const preview &p)
 
 	set_preview_cursor (p);
 	update_caption ();
+
+	m_result_same = p.n_hits_same;
+	m_result_inv = p.n_hits_inverted;
+	m_result_n_games = p.games_result.popcnt ();
+	redraw_result ();
+
+	m_search_cont = &p.cont;
+	redraw_stats ();
 }
 
 void PatternSearchWindow::preview_menu (QGraphicsSceneContextMenuEvent *e, const preview &p)
@@ -297,6 +314,9 @@ void PatternSearchWindow::preview_menu (QGraphicsSceneContextMenuEvent *e, const
 									  return &p == &other;
 								  }),
 						  std::end (m_previews));
+				m_search_cont = nullptr;
+				m_stats_scene->clear ();
+				m_result_scene->clear ();
 				choices_resized ();
 			});
 	menu.exec (e->screenPos ());
@@ -435,6 +455,112 @@ void PatternSearchWindow::update_selection ()
 	item2->moveBy (0, m.lineSpacing ());
 }
 
+void PatternSearchWindow::redraw_stats ()
+{
+	m_stats_scene->clear ();
+	if (m_search_cont == nullptr)
+		return;
+
+	int w1 = ui->statsView->width ();
+	int h1 = ui->statsView->height ();
+	QFontMetrics m (setting->fontStandard);
+
+	if (w1 < 20 || h1 < 10 + m.lineSpacing ())
+		return;
+	int margin_x = std::max (4, w1 / 80);
+	int margin_y = std::max (4, h1 / 80);
+	int margin = std::min (margin_x, margin_y);
+	int w = w1 - 2 * margin;
+	int h = h1 - 2 * margin;
+
+	size_t sz = m_search_cont->size ();
+	std::vector<int> rank;
+	rank.reserve (sz);
+	size_t count = 0;
+	for (size_t i = 0; i < sz; i++)
+		if ((*m_search_cont)[i].get (none).count > 0) {
+			rank.push_back (i);
+			if (++count >= 52)
+				break;
+		}
+
+	if (count == 0)
+		return;
+
+	std::sort (rank.begin (), rank.end (),
+		   [this] (int a, int b)
+		   {
+			   return (*m_search_cont)[a].get (none).count > (*m_search_cont)[b].get (none).count;
+		   });
+	int rk0_count = (*m_search_cont)[rank[0]].get (none).count;
+
+	std::vector<QGraphicsSimpleTextItem *> stis;
+	double max_w = 0;
+	for (size_t i = 0; i < count; i++) {
+		char c = (i < 26 ? 'A' : 'a' - 26) + i;
+		int this_count = (*m_search_cont)[rank[i]].get (none).count;
+#ifdef CHECKING
+		assert (this_count > 0);
+#endif
+		QString s = QString ("%1: %2").arg (QChar (c)).arg (this_count);
+		QGraphicsSimpleTextItem *item = m_stats_scene->addSimpleText (s, setting->fontStandard);
+		double iw = item->boundingRect ().width ();
+		double new_max_w = std::max (iw, max_w);
+		if ((i + 1) * new_max_w + i * 10 > w && i > 0) {
+			count = i;
+			delete item;
+			break;
+		}
+		max_w = new_max_w;
+		stis.push_back (item);
+	}
+	double spacing = count > 1 ? (w - max_w * count) / (count - 1) : 0;
+	double real_w = max_w < 10 ? max_w : max_w * 8. / 10;
+
+	for (size_t i = 0; i < stis.size (); i++) {
+		auto it = stis[i];
+		int x = margin + (max_w + spacing) * i;
+		double iw = it->boundingRect ().width ();
+		it->moveBy (x + (max_w - iw) / 2, margin + h - m.lineSpacing ());
+
+		int cw = (*m_search_cont)[rank[i]].get (white).count;
+		int cb = (*m_search_cont)[rank[i]].get (black).count;
+		if (cw + cb == 0)
+			/* This can't happen.  But let's be safe.  */
+			cw = 1;
+		int bar_height = h - m.lineSpacing () - 4;
+		int thisbar_height = (double)bar_height * (cw + cb) / rk0_count;
+		int thisbar_off = margin + bar_height - thisbar_height;
+		int w_height = thisbar_height * cw / (cw + cb);
+		int b_height = thisbar_height - w_height;
+		if (cw > 0 && w_height == 0)
+			w_height = 1;
+		if (cb > 0 && b_height == 0)
+			b_height = 1;
+		if (b_height > 0)
+			m_stats_scene->addRect (x + (max_w - real_w) / 2, thisbar_off, real_w, b_height, Qt::NoPen, Qt::black);
+		if (w_height > 0)
+			m_stats_scene->addRect (x + (max_w - real_w) / 2, thisbar_off + b_height, real_w, w_height, Qt::NoPen, Qt::white);
+	}
+}
+
+void PatternSearchWindow::redraw_result ()
+{
+	QFontMetrics m (setting->fontStandard);
+	int h = m.lineSpacing () * 3;
+	ui->resultContents->setMaximumHeight (h + ui->resultContents->minimumHeight () + ui->resultFrame->frameWidth () * 2 + 2);
+
+	m_result_scene->clear ();
+	QString s1 = tr ("%1 matches in %2 games.").arg (m_result_same + m_result_inv).arg (m_result_n_games);
+	QString s2 = tr ("%1 matches with same colors.").arg (m_result_same);
+	QString s3 = tr ("%1 matches with inverted colors.").arg (m_result_inv);
+	m_result_scene->addSimpleText (s1, setting->fontStandard);
+	auto item2 = m_result_scene->addSimpleText (s2, setting->fontStandard);
+	item2->moveBy (0, m.lineSpacing ());
+	auto item3 = m_result_scene->addSimpleText (s3, setting->fontStandard);
+	item3->moveBy (0, m.lineSpacing () * 2);
+}
+
 const gamedb_entry *last_loaded;
 
 go_game_ptr PatternSearchWindow::load_selected ()
@@ -551,15 +677,26 @@ void PatternSearchWindow::slot_completed ()
 	std::atomic_thread_fence (std::memory_order_seq_cst);
 	db_data->db_mutex.unlock ();
 
-	bit_array &games = m_result->first;
+	std::vector<int[2]> &hits = m_result->first;
 	std::vector<gamedb_model::cont_bw> &conts = m_result->second;
 
+	bit_array games (hits.size ());
+	int m1 = 0, m2 = 0;
+	for (size_t i = 0; i < hits.size (); i++) {
+		m1 += hits[i][0];
+		m2 += hits[i][1];
+		if (hits[i][0] + hits[i][1] > 0)
+			games.set_bit (i);
+	}
 	apply_game_result (games);
 
 	game_state *st = ui->boardView->displayed ();
 	board_rect sel = ui->boardView->get_selection ();
 	clear_preview_cursor ();
-	m_previews.emplace_back (*last_pattern, m_game, st, sel, games);
+	m_previews.emplace_back (*last_pattern, m_game, st, sel, games, m1, m2);
+	m_result_n_games = games.popcnt ();
+	m_result_same = m1;
+	m_result_inv = m2;
 	choices_resized ();
 
 	preview &p = m_previews.back ();
@@ -585,7 +722,7 @@ void PatternSearchWindow::slot_completed ()
 	std::sort (rank.begin (), rank.end (),
 		   [&p] (int a, int b)
 		   {
-			   return p.cont[a].get (none).count >  p.cont[b].get (none).count;
+			   return p.cont[a].get (none).count > p.cont[b].get (none).count;
 		   });
 	for (size_t i = 0; i < b.bitsize (); i++)
 		p.cont[rank[i]].get (none).rank = i;
@@ -593,6 +730,9 @@ void PatternSearchWindow::slot_completed ()
 	ui->boardView->set_displayed (st);
 	ui->boardView->set_cont_data (&p.cont);
 	slot_choose_view ();
+	redraw_result ();
+	m_search_cont = &p.cont;
+	redraw_stats ();
 	delete m_result;
 
 	setEnabled (true);
