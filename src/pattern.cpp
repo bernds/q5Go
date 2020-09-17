@@ -498,20 +498,8 @@ public:
 	}
 };
 
-/* The main pattern search entry point.
-
-   The algorithm is roughly the same as in Kombilo.  We use the "final position" bitmaps to identify candidate
-   spots where the pattern could match, just based on which color stones have been on any given position during
-   a game.  We then verify the candidates against the saved move list, identifying real matches and their
-   continuations.
-   Threading is used to search the eight symmetries in parallel.  */
-
-std::pair <bit_array, std::vector<gamedb_model::cont_bw>>
-gamedb_model::find_pattern (const go_pattern &p0, std::atomic<long> *cur, std::atomic<long> *max)
+std::vector<go_pattern> unique_symmetries (const go_pattern &p0)
 {
-	bit_array result (db_data->m_all_entries.size ());
-	std::vector<cont_bw> continuations (p0.sz_y () * p0.sz_x ());
-
 	std::vector<go_pattern> pats = {
 		p0,
 		p0.transform<coord_transform_r90> (),
@@ -528,6 +516,24 @@ gamedb_model::find_pattern (const go_pattern &p0, std::atomic<long> *cur, std::a
 					    return p0 == pat;
 				    }),
 		    std::end (pats));
+	return pats;
+}
+
+/* The main pattern search entry point.
+
+   The algorithm is roughly the same as in Kombilo.  We use the "final position" bitmaps to identify candidate
+   spots where the pattern could match, just based on which color stones have been on any given position during
+   a game.  We then verify the candidates against the saved move list, identifying real matches and their
+   continuations.
+   Threading is used to search the eight symmetries in parallel.  */
+
+std::pair <bit_array, std::vector<gamedb_model::cont_bw>>
+gamedb_model::find_pattern (const go_pattern &p0, std::atomic<long> *cur, std::atomic<long> *max)
+{
+	bit_array result (db_data->m_all_entries.size ());
+	std::vector<cont_bw> continuations (p0.sz_y () * p0.sz_x ());
+
+	std::vector<go_pattern> pats = unique_symmetries (p0);
 
 	QMutex result_mutex;
 	QSemaphore completion_sem (0);
@@ -547,22 +553,7 @@ gamedb_model::find_pattern (const go_pattern &p0, std::atomic<long> *cur, std::a
 
 game_state *find_first_match (go_game_ptr gr, const go_pattern &p0, board_rect &sel_return)
 {
-	std::vector<go_pattern> pats = {
-		p0,
-		p0.transform<coord_transform_r90> (),
-		p0.transform<coord_transform_r180> (),
-		p0.transform<coord_transform_r270> (),
-		p0.transform<coord_transform_flip1> (),
-		p0.transform<coord_transform_flip2> (),
-		p0.transform<coord_transform_flip3> (),
-		p0.transform<coord_transform_flip4> ()
-	};
-	pats.erase (std::remove_if (std::begin (pats) + 1, std::end (pats),
-				    [&p0] (const go_pattern &pat)
-				    {
-					    return p0 == pat;
-				    }),
-		    std::end (pats));
+	std::vector<go_pattern> pats = unique_symmetries (p0);
 
 	auto callback = [&pats, &sel_return] (game_state *st) -> bool
 	{
