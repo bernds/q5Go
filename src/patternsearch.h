@@ -67,6 +67,7 @@ class PatternSearchWindow : public QMainWindow
 
 	gamedb_model m_model;
 	go_game_ptr m_game, m_orig_game;
+	std::vector<pattern_cont_data> m_game_cont;
 	go_pattern *last_pattern {};
 	gamedb_model::search_result *m_result {};
 	QThread search_thread;
@@ -130,7 +131,7 @@ public slots:
 	void choices_resized ();
 	void slot_completed ();
 	void slot_choose_color (bool);
-	void slot_choose_view (bool);
+	void slot_choose_view (bool = false);
 
 	void slot_using ();
 

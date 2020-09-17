@@ -273,6 +273,7 @@ void PatternSearchWindow::preview_clicked (const preview &p)
 	ui->boardView->reset_game (p.game);
 	ui->boardView->set_displayed (p.state);
 	ui->boardView->set_cont_data (&p.cont);
+	slot_choose_view ();
 	ui->boardView->set_selection (p.selection);
 
 	delete last_pattern;
@@ -466,8 +467,32 @@ void PatternSearchWindow::handle_doubleclick ()
 		board_rect sel_rect;
 		game_state *st = find_first_match (new_gr, *last_pattern, sel_rect);
 		if (st) {
+			const go_board &b = st->get_board ();
 			ui->boardView->set_displayed (st);
 			ui->boardView->set_selection (sel_rect);
+			m_game_cont.clear ();
+			m_game_cont.resize (b.bitsize ());
+			int count = 1;
+			for (;;) {
+				st = st->next_move ();
+				if (st == nullptr || !st->was_move_p ())
+					break;
+				int x = st->get_move_x ();
+				int y = st->get_move_y ();
+				stone_color col = st->get_move_color ();
+				if (!sel_rect.contained (x, y))
+					continue;
+				unsigned bp = b.bitpos (x, y);
+				if (m_game_cont[bp].get (none).count != 0)
+					break;
+				m_game_cont[bp].get (none).count = count;
+				m_game_cont[bp].get (col).count = count;
+				count++;
+				if (count > 5)
+					break;
+			}
+			ui->boardView->set_cont_data (&m_game_cont);
+			ui->boardView->set_cont_view (pattern_cont_view::numbers);
 		}
 	}
 	update_actions ();
@@ -567,6 +592,7 @@ void PatternSearchWindow::slot_completed ()
 
 	ui->boardView->set_displayed (st);
 	ui->boardView->set_cont_data (&p.cont);
+	slot_choose_view ();
 	delete m_result;
 
 	setEnabled (true);
