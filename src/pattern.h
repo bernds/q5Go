@@ -13,6 +13,7 @@ class go_pattern
 protected:
 	struct bw { uint32_t bits[2]; };
 	std::vector<bw> m_lines;
+	coord_transform m_reverse;
 	unsigned m_sz_x, m_sz_y;
 
 	alignment m_align;
@@ -38,8 +39,10 @@ public:
 
 	bool match (const bit_array &other_w, const bit_array &other_b, unsigned other_sz_x, unsigned other_sz_y,
 		    board_rect &) const;
-	std::vector<cand_match> find_cands (const bit_array &other_w, const bit_array &other_b, const bit_array &other_caps,
-					    unsigned other_sz_x, unsigned other_sz_y) const;
+	void find_cands (std::vector<cand_match> &,
+			 const bit_array &other_w, const bit_array &other_b, const bit_array &other_caps,
+			 unsigned other_sz_x, unsigned other_sz_y) const;
+	coord_transform reverse () const { return m_reverse; }
 };
 
 class cand_match : public go_pattern
@@ -140,6 +143,6 @@ public:
 };
 
 extern bool match_movelist (const std::vector<char> &moves, std::vector<cand_match> &cands,
-			    std::vector<std::pair<int, int>> &conts, int, coord_transform);
+			    std::vector<std::pair<int, int>> &conts, int);
 
 #endif
