@@ -285,6 +285,7 @@
     <addaction name="separator"/>
     <addaction name="actionReset"/>
     <addaction name="resetAll"/>
+    <addaction name="forgetAction"/>
    </widget>
    <widget class="QMenu" name="menu_Edit">
     <property name="title">
@@ -1006,6 +1007,14 @@
    </property>
    <property name="toolTip">
     <string>&lt;p&gt;When checked, patterns at the edge of the board will be anchored there during the search and will not be matched against patterns in the center.&lt;/p&gt;&lt;p&gt;This should normally be checked, since it tends to produce the expected results, while also being faster.&lt;/p&gt;</string>
+   </property>
+  </action>
+  <action name="forgetAction">
+   <property name="text">
+    <string>&amp;Forget previous searches</string>
+   </property>
+   <property name="toolTip">
+    <string>&lt;p&gt;Remove the previews and data associated with all previous searches&lt;/p&gt;</string>
    </property>
   </action>
  </widget>

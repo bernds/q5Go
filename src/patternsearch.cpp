@@ -52,7 +52,14 @@ PatternSearchWindow::PatternSearchWindow ()
 			 ui->boardView->reset_game (m_game);
 			 clear_preview_cursor ();
 		 });
-
+	connect (ui->forgetAction, &QAction::triggered, [this] ()
+		 {
+			 clear_preview_cursor ();
+			 ui->boardView->set_cont_data (nullptr);
+			 m_previews.clear ();
+			 m_preview_scene->clear ();
+			 choices_resized ();
+		 });
 	connect (ui->dbListView, &ClickableListView::doubleclicked, this, &PatternSearchWindow::handle_doubleclick);
 
 	connect (ui->openButton, &QPushButton::clicked, this, &PatternSearchWindow::do_open);
