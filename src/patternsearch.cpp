@@ -282,8 +282,23 @@ void PatternSearchWindow::preview_clicked (const preview &p)
 	update_caption ();
 }
 
-void PatternSearchWindow::preview_menu (QGraphicsSceneContextMenuEvent *, const preview &)
+void PatternSearchWindow::preview_menu (QGraphicsSceneContextMenuEvent *e, const preview &p)
 {
+	QMenu menu;
+	menu.addAction (QIcon (":/images/trash.png"), QObject::tr ("&Forget this search"),
+			[this, &p] ()
+			{
+				delete p.pixmap;
+				clear_preview_cursor ();
+				m_previews.erase (std::remove_if (std::begin (m_previews), std::end (m_previews),
+								  [&p] (const preview &other)
+								  {
+									  return &p == &other;
+								  }),
+						  std::end (m_previews));
+				choices_resized ();
+			});
+	menu.exec (e->screenPos ());
 }
 
 void PatternSearchWindow::update_actions ()
