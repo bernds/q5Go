@@ -47,6 +47,8 @@ struct board_preview {
 	board_preview &operator= (const board_preview &) = default;
 	board_preview &operator= (board_preview &&) = default;
 };
-extern std::pair<int, int> layout_previews (QWidget *, const std::vector<board_preview *> &, int);
+
+class QGraphicsView;
+extern std::pair<int, int> layout_previews (QGraphicsView *, const std::vector<board_preview *> &, int);
 
 #endif

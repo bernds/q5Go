@@ -359,7 +359,7 @@ const qGoBoard *MainWindow_IGS::active_board ()
 	return nullptr;
 }
 
-std::pair<int, int> layout_previews (QWidget *view, const std::vector<board_preview *> &previews, int extra_height)
+std::pair<int, int> layout_previews (QGraphicsView *view, const std::vector<board_preview *> &previews, int extra_height)
 {
 	int w = view->width ();
 	int h = view->height ();
@@ -441,9 +441,13 @@ std::pair<int, int> layout_previews (QWidget *view, const std::vector<board_prev
 
 	int row = 0;
 	int col = 0;
+	int max_row = 0;
+	int max_col = 0;
 	for (auto p: previews) {
 		p->x = col;
 		p->y = row;
+		max_row = std::max (max_row, row);
+		max_col = std::max (max_col, col);
 		if (w < h) {
 			col += new_width;
 			if (col + new_width > w) {
@@ -458,6 +462,8 @@ std::pair<int, int> layout_previews (QWidget *view, const std::vector<board_prev
 			}
 		}
 	}
+	view->setSceneRect (0, 0, max_col + new_width, max_row + new_height);
+
 	return std::pair<int, int> { new_width, new_height };
 }
 
@@ -479,7 +485,7 @@ void MainWindow_IGS::choices_resized ()
 	for (auto &p: m_previews) {
 		update_preview (p.game, p.state);
 	}
-	gameChoiceView->setSceneRect (m_preview_scene->itemsBoundingRect ());
+//	gameChoiceView->setSceneRect (m_preview_scene->itemsBoundingRect ());
 }
 
 void MainWindow_IGS::unobserve_game (go_game_ptr gr)
