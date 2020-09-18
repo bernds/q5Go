@@ -540,7 +540,7 @@ gamedb_model::find_pattern (const go_pattern &p0, std::atomic<long> *cur, std::a
 	QThreadPool pool;
 	max->store (m_entries.size ());
 	int n_started = 0;
-	size_t steps = std::min ((size_t)10, m_entries.size () / 128);
+	size_t steps = std::max ((size_t)10, m_entries.size () / 128);
 	for (size_t i = 0; i < m_entries.size (); i += steps) {
 		size_t end = std::min (m_entries.size (), i + steps);
 		pool.start (new PartialSearch (&m_entries, i, end, pats, &result, &continuations,
