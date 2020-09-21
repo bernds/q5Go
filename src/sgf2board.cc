@@ -404,69 +404,8 @@ std::string translated_prop_str (const std::string *val, const QTextCodec *codec
 	return std::string (tmp.toStdString ());
 }
 
-std::shared_ptr<game_record> sgf2record (const sgf &s, QTextCodec *codec)
+game_info info_from_sgfroot (const sgf &s, QTextCodec *codec, sgf_errors &errs)
 {
-	sgf_errors errs = s.errs;
-
-	const std::string *ff = s.nodes->find_property_val ("FF");
-	const std::string *gm = s.nodes->find_property_val ("GM");
-	bool our_extensions = false;
-	if (ff != nullptr) {
-		if (*ff == "1" || *ff == "2")
-			throw old_sgf_format ();
-		if (*ff != "4" && *ff != "3")
-			throw broken_sgf ();
-	}
-	if (gm != nullptr) {
-		if (*gm == "q5go-1" || *gm == "q5go-2")
-			our_extensions = true;
-		else if (*gm != "1") {
-			throw broken_sgf ();
-		}
-	}
-	if (codec == nullptr) {
-		const std::string *ca = s.nodes->find_property_val ("CA");
-		if (ca != nullptr)
-			codec = QTextCodec::codecForName (ca->c_str ());
-		else
-			codec = QTextCodec::codecForName ("ISO-8859-1"); // default encoding of SGF by specification
-	}
-	const std::string *sz = s.nodes->find_property_val ("SZ");
-	int size_x = -1;
-	int size_y = 19;
-	/* GoGui writes files without SZ. Assume 19, I guess.  */
-	if (sz != nullptr) {
-		const std::string &v = *sz;
-		size_y = 0;
-		for (size_t i = 0; i < v.length (); i++) {
-			if (v[i] == ':') {
-				if (size_x != -1)
-					throw broken_sgf ();
-				size_x = size_y;
-				size_y = 0;
-			} else if (! isdigit (v[i]))
-				throw broken_sgf ();
-			else
-				size_y = size_y * 10 + v[i] - '0';
-		}
-	}
-	if (size_x == -1)
-		size_x = size_y;
-	if (size_x < 3 || size_x > 52 || size_y < 3 || size_y > 52)
-		throw invalid_boardsize ();
-
-	bool torus_h = false, torus_v = false;
-	const std::string *to = our_extensions ? s.nodes->find_property_val ("TO") : nullptr;
-	if (to != nullptr) {
-		if (to->length () != 1 || !isdigit ((*to)[0]))
-			throw broken_sgf ();
-		int torus = (*to)[0] - '0';
-		if (torus & 1)
-			torus_h = true;
-		if (torus & 2)
-			torus_v = true;
-
-	}
 	const std::string *gn = s.nodes->find_property_val ("GN");
 
 	const std::string *pw = s.nodes->find_property_val ("PW");
@@ -490,11 +429,10 @@ std::shared_ptr<game_record> sgf2record (const sgf &s, QTextCodec *codec)
 
 	const std::string *st = s.nodes->find_property_val ("ST");
 
-	sgf::node::property *mask = s.nodes->find_property ("MASK");
-
 	/* Ignored, but ensure it doesn't go on the list of unrecognized properties to
 	   write out later.  */
 	s.nodes->find_property_val ("AP");
+
 	if (km && km->length () == 0) {
 		errs.empty_komi = true;
 		km = nullptr;
@@ -535,6 +473,83 @@ std::shared_ptr<game_record> sgf2record (const sgf &s, QTextCodec *codec)
 	info.time = translated_prop_str (tm, codec);
 	info.overtime = translated_prop_str (ot, codec);
 	info.style = style;
+	return info;
+}
+
+std::pair<int, int> sizes_from_sgfroot (const sgf &s)
+{
+	const std::string *sz = s.nodes->find_property_val ("SZ");
+	int size_x = -1;
+	int size_y = 19;
+	/* GoGui writes files without SZ. Assume 19, I guess.  */
+	if (sz != nullptr) {
+		const std::string &v = *sz;
+		size_y = 0;
+		for (size_t i = 0; i < v.length (); i++) {
+			if (v[i] == ':') {
+				if (size_x != -1)
+					throw broken_sgf ();
+				size_x = size_y;
+				size_y = 0;
+			} else if (! isdigit (v[i]))
+				throw broken_sgf ();
+			else
+				size_y = size_y * 10 + v[i] - '0';
+		}
+	}
+	if (size_x == -1)
+		size_x = size_y;
+	if (size_x < 3 || size_x > 52 || size_y < 3 || size_y > 52)
+		throw invalid_boardsize ();
+	return std::pair<int, int> { size_x, size_y };
+}
+
+std::shared_ptr<game_record> sgf2record (const sgf &s, QTextCodec *codec)
+{
+	sgf_errors errs = s.errs;
+
+	const std::string *ff = s.nodes->find_property_val ("FF");
+	const std::string *gm = s.nodes->find_property_val ("GM");
+	bool our_extensions = false;
+	if (ff != nullptr) {
+		if (*ff == "1" || *ff == "2")
+			throw old_sgf_format ();
+		if (*ff != "4" && *ff != "3")
+			throw broken_sgf ();
+	}
+	if (gm != nullptr) {
+		if (*gm == "q5go-1" || *gm == "q5go-2")
+			our_extensions = true;
+		else if (*gm != "1") {
+			throw broken_sgf ();
+		}
+	}
+	if (codec == nullptr) {
+		const std::string *ca = s.nodes->find_property_val ("CA");
+		if (ca != nullptr)
+			codec = QTextCodec::codecForName (ca->c_str ());
+		else
+			codec = QTextCodec::codecForName ("ISO-8859-1"); // default encoding of SGF by specification
+	}
+
+	int size_x = -1;
+	int size_y = 19;
+	std::tie (size_x, size_y) = sizes_from_sgfroot (s);
+
+	bool torus_h = false, torus_v = false;
+	const std::string *to = our_extensions ? s.nodes->find_property_val ("TO") : nullptr;
+	if (to != nullptr) {
+		if (to->length () != 1 || !isdigit ((*to)[0]))
+			throw broken_sgf ();
+		int torus = (*to)[0] - '0';
+		if (torus & 1)
+			torus_h = true;
+		if (torus & 2)
+			torus_v = true;
+
+	}
+
+	sgf::node::property *mask = s.nodes->find_property ("MASK");
 
 	go_board initpos (size_x, size_y, torus_h, torus_v);
 	std::shared_ptr<bit_array> mask_array;
@@ -557,6 +572,8 @@ std::shared_ptr<game_record> sgf2record (const sgf &s, QTextCodec *codec)
 		}
 	initpos.identify_units ();
 	add_marks (initpos, s.nodes);
+
+	game_info info = info_from_sgfroot (s, codec, errs);
 
 	const std::string *pl = s.nodes->find_property_val ("PL");
 	stone_color to_play = pl && *pl == "W" ? white : black;
@@ -581,7 +598,7 @@ std::shared_ptr<game_record> sgf2record (const sgf &s, QTextCodec *codec)
 
 	/* Fix up situations where we have a handicap game without a PL property.
 	   If it really looks like white to move, fix up the root node.  */
-	if (pl == nullptr && hc > 1
+	if (pl == nullptr && info.handicap > 1
 	    && game->m_root->n_children () == 1
 	    && game->m_root->next_move ()->was_move_p ()
 	    && game->m_root->next_move ()->get_move_color () == white)

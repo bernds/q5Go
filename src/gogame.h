@@ -866,6 +866,8 @@ struct game_info
 
 class game_record;
 typedef std::shared_ptr<game_record> go_game_ptr;
+extern game_info info_from_sgfroot (const sgf &, QTextCodec *);
+extern std::pair<int, int> sizes_from_sgfroot (const sgf &);
 extern game_state *sgf2board (sgf &);
 extern go_game_ptr sgf2record (const sgf &, QTextCodec *codec);
 extern std::string record2sgf (const game_record &);
