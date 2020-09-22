@@ -463,7 +463,7 @@ void gamedb_model::slot_load_complete ()
 void gamedb_model::default_sort ()
 {
 	std::sort (std::begin (m_entries), std::end (m_entries),
-		   [this] (unsigned a, unsigned b)
+		   [] (unsigned a, unsigned b)
 		   {
 			   const gamedb_entry &e1 = db_data->m_all_entries[a];
 			   const gamedb_entry &e2 = db_data->m_all_entries[b];

@@ -3097,14 +3097,14 @@ After placing and/or undo release button for returning to starting point automat
       <number>0</number>
      </property>
      <item row="0" column="0">
-      <widget class="QFrame" name="frame">
+      <widget class="QFrame" name="treeFrame">
        <property name="frameShape">
         <enum>QFrame::StyledPanel</enum>
        </property>
        <property name="frameShadow">
         <enum>QFrame::Raised</enum>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
+       <layout class="QVBoxLayout" name="treeLayout">
         <property name="spacing">
          <number>0</number>
         </property>
@@ -3199,7 +3199,7 @@ After placing and/or undo release button for returning to starting point automat
     <number>1</number>
    </attribute>
    <widget class="QWidget" name="chooseDockContents">
-    <layout class="QGridLayout" name="gridLayout" rowstretch="0">
+    <layout class="QGridLayout" name="gridLayout_4" rowstretch="0">
      <property name="leftMargin">
       <number>0</number>
      </property>
@@ -3216,14 +3216,14 @@ After placing and/or undo release button for returning to starting point automat
       <number>0</number>
      </property>
      <item row="0" column="0">
-      <widget class="QFrame" name="frame">
+      <widget class="QFrame" name="chooseFrame">
        <property name="frameShape">
         <enum>QFrame::StyledPanel</enum>
        </property>
        <property name="frameShadow">
         <enum>QFrame::Raised</enum>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
+       <layout class="QVBoxLayout" name="chooseLayout">
         <property name="spacing">
          <number>0</number>
         </property>

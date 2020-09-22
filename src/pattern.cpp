@@ -180,9 +180,9 @@ go_pattern::go_pattern (const go_board &b, unsigned sz_x, unsigned sz_y, unsigne
 		m_lines[y].bits[1] = sb.extract (b.bitpos (offx, offy + y), sz_x);
 	}
 	m_align.top = offy == 0;
-	m_align.bot = offy + sz_y == b.size_y ();
+	m_align.bot = offy + sz_y == (unsigned)b.size_y ();
 	m_align.left = offx == 0;
-	m_align.right = offx + sz_x == b.size_x ();
+	m_align.right = offx + sz_x == (unsigned)b.size_x ();
 }
 
 void go_pattern::debug ()

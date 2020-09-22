@@ -63,7 +63,7 @@ GreeterWindow::GreeterWindow (QWidget *parent)
 			show_batch_analysis ();
 			hide ();
 		});
-	connect (ui->quitButton, &QAbstractButton::clicked, [this] (bool) {
+	connect (ui->quitButton, &QAbstractButton::clicked, [] (bool) {
 			client_window->quit ();
 		});
 	connect (ui->settingsButton, &QAbstractButton::clicked, [this] (bool) {
