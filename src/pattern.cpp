@@ -296,6 +296,9 @@ void go_pattern::find_cands (std::vector<cand_match> &result,
 		max_offx = 1;
 	if (m_align.top)
 		max_offy = 1;
+	if (min_offx > max_offx)
+		return;
+
 	for (unsigned yoff = min_offy; yoff < max_offy; yoff++) {
 		uint32_t valid_a = (1 << (max_offx - min_offx)) - 1;
 		uint32_t valid_b = valid_a;
