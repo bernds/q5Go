@@ -138,14 +138,13 @@ class PreferencesDialog : public QDialog
 	QGraphicsScene *m_stone_canvas;
 	int m_stone_size;
 
-	QStringList m_dbpaths;
-	bool m_dbpaths_changed = false;
 	QString m_last_added_dbdir;
 
 	pref_vec_model<Host> m_hosts_model;
 	pref_vec_model<Engine> m_engines_model;
 	dbpath_model m_dbpath_model;
 
+	bool m_dbpaths_changed = false;
 	bool m_engines_changed = false;
 	bool m_hosts_changed = false;
 
@@ -153,6 +152,7 @@ class PreferencesDialog : public QDialog
 
 	void init_from_settings ();
 
+	bool verify ();
 	bool avoid_losing_data ();
 	void clear_engine ();
 	void clear_host ();
@@ -168,6 +168,7 @@ class PreferencesDialog : public QDialog
 	void update_current_engine ();
 
 	void update_db_selection ();
+	void update_db_labels ();
 
 	/* Defined in gamedb.cpp.  */
 	bool create_db_for_dir (QProgressDialog &dlg, const QString &dir);

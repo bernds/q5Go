@@ -109,6 +109,9 @@
     <file>images/red-x.png</file>
     <file>images/yellow-exclam.png</file>
     <file>images/green-check.png</file>
+    <file>images/red-x-16.png</file>
+    <file>images/yellow-exclam-16.png</file>
+    <file>images/green-check-16.png</file>
 
     <file>sounds/click.wav</file>
     <file>sounds/connect.wav</file>

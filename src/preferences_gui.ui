@@ -4914,51 +4914,54 @@ If checked then when a game you played completes, it is automatically saved in t
            <number>6</number>
           </property>
           <item row="1" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout_18">
-            <item>
-             <widget class="QPushButton" name="dbCreateButton">
-              <property name="text">
-               <string>Create DB</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="dbRemButton">
-              <property name="text">
-               <string>Remove directory</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="dbDirsButton">
-              <property name="text">
-               <string>Add directory...</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer_3">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>1</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
-             <widget class="QPushButton" name="dbCfgButton">
-              <property name="text">
-               <string>Import from kombilo.cfg...</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
+           <widget class="QWidget" name="dbNotFoundLabel" native="true">
+            <layout class="QHBoxLayout" name="horizontalLayout_8">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="label_29">
+               <property name="text">
+                <string/>
+               </property>
+               <property name="pixmap">
+                <pixmap resource="q4go.qrc">:/images/red-x-16.png</pixmap>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_28">
+               <property name="text">
+                <string>Directories marked with this warning sign do not contain a database file.</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_7">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>1</width>
+                 <height>1</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
           </item>
-          <item row="3" column="0">
+          <item row="5" column="0">
            <widget class="QWidget" name="gridWidget" native="true">
             <layout class="QGridLayout" name="gridLayout">
              <property name="leftMargin">
@@ -5015,12 +5018,57 @@ If checked then when a game you played completes, it is automatically saved in t
             </layout>
            </widget>
           </item>
-          <item row="2" column="0">
+          <item row="4" column="0">
            <widget class="Line" name="line_2">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
            </widget>
+          </item>
+          <item row="3" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_18">
+            <item>
+             <widget class="QPushButton" name="dbCreateButton">
+              <property name="text">
+               <string>Create DB</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="dbRemButton">
+              <property name="text">
+               <string>Remove directory</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="dbDirsButton">
+              <property name="text">
+               <string>Add directory...</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>1</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="dbCfgButton">
+              <property name="text">
+               <string>Import from kombilo.cfg...</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
           <item row="0" column="0">
            <widget class="QTreeView" name="dbPathsTreeView">
@@ -5039,6 +5087,54 @@ If checked then when a game you played completes, it is automatically saved in t
             <property name="expandsOnDoubleClick">
              <bool>false</bool>
             </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QWidget" name="dbKombiloLabel" native="true">
+            <layout class="QHBoxLayout" name="horizontalLayout_17">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="label_36">
+               <property name="text">
+                <string/>
+               </property>
+               <property name="pixmap">
+                <pixmap resource="q4go.qrc">:/images/yellow-exclam-16.png</pixmap>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_37">
+               <property name="text">
+                <string>Directories marked with an exclamation mark only contain a Kombilo DB.</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_10">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>1</width>
+                 <height>1</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
            </widget>
           </item>
          </layout>

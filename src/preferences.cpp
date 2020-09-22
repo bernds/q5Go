@@ -432,6 +432,7 @@ PreferencesDialog::PreferencesDialog (int tab, QWidget* parent)
 
 	update_current_engine ();
 	update_current_host ();
+	update_db_labels ();
 }
 
 void PreferencesDialog::update_chat_color ()
@@ -453,6 +454,18 @@ void PreferencesDialog::update_db_selection ()
 	ui->dbCreateButton->setEnabled (selection);
 }
 
+void PreferencesDialog::update_db_labels ()
+{
+	bool missing = false;
+	bool kombilo = false;
+	for (auto &d: m_dbpath_model.entries ()) {
+		missing |= !(d.qdb_found | d.kdb_found);
+		kombilo |= !d.qdb_found && d.kdb_found;
+	}
+	ui->dbKombiloLabel->setVisible (kombilo);
+	ui->dbNotFoundLabel->setVisible (missing);
+}
+
 void PreferencesDialog::slot_dbdir (bool)
 {
 	QString dir;
@@ -466,14 +479,8 @@ void PreferencesDialog::slot_dbdir (bool)
 	if (dirname.isEmpty ())
 		return;
 	QDir d (dirname);
-	QFile path (d.filePath ("kombilo.db"));
-	if (!path.exists ()) {
-		QMessageBox::warning (this, tr ("Directory contains no database"),
-				      tr ("The directory could not be added because no kombilo.db file could be found."));
-		return;
-	}
-	for (auto &it: m_dbpaths) {
-		QDir d2 (it);
+	for (auto &it: m_dbpath_model.entries ()) {
+		QDir d2 (it.title);
 		if (d == d2) {
 			QMessageBox::warning (this, tr ("Directory already in the list"),
 					      tr ("The directory could not be added because it already exists in the list."));
@@ -481,9 +488,9 @@ void PreferencesDialog::slot_dbdir (bool)
 		}
 	}
 	m_last_added_dbdir = dirname;
-	m_dbpaths.append (dirname);
 	m_dbpath_model.add_no_replace (dirname);
 	m_dbpaths_changed = true;
+	update_db_labels ();
 }
 
 void PreferencesDialog::slot_dbcfg (bool)
@@ -517,6 +524,7 @@ void PreferencesDialog::slot_dbcfg (bool)
 	}
 	m_dbpath_model.reinit (l);
 	m_dbpaths_changed = true;
+	update_db_labels ();
 }
 
 void PreferencesDialog::slot_dbrem (bool)
@@ -534,9 +542,9 @@ void PreferencesDialog::slot_dbrem (bool)
 	std::sort (rows.begin (), rows.end (), [] (int r1, int r2) { return r1 > r2; });
 	for (auto r: rows) {
 		m_dbpath_model.removeRows (r, 1);
-		m_dbpaths.removeAt (r);
 	}
 	m_dbpaths_changed = true;
+	update_db_labels ();
 }
 
 void PreferencesDialog::slot_dbcreate (bool)
@@ -565,6 +573,7 @@ void PreferencesDialog::slot_dbcreate (bool)
 			}
 		}
 	}
+	update_db_labels ();
 }
 
 void PreferencesDialog::slot_autosavedir (bool)
@@ -884,28 +893,53 @@ PreferencesDialog::~PreferencesDialog()
 	delete ui;
 }
 
-void PreferencesDialog::slot_apply()
+bool PreferencesDialog::verify ()
 {
-	qDebug() << "onApply";
-
 	bool ok;
 	int slide_x = ui->slideXEdit->text ().toInt (&ok);
 	if (!ok || slide_x < 100 || slide_x > 10000) {
 		QMessageBox::warning (this, tr ("Invalid slide width"),
 				      tr ("Please enter valid dimensions for slide export (100x100 or larger)."));
-		return;
+		return false;
 	}
 	int slide_y = ui->slideYEdit->text ().toInt (&ok);
 	if (!ok || slide_y < 100 || slide_y > 10000) {
 		QMessageBox::warning (this, tr ("Invalid slide height"),
 				      tr ("Please enter valid dimensions for slide export (100x100 or larger)."));
-		return;
+		return false;
 	}
 	if (slide_y > slide_x) {
 		QMessageBox::warning (this, tr ("Invalid slide dimensions"),
 				      tr ("Slide export dimensions must be wider than they are tall."));
-		return;
+		return false;
 	}
+	if (m_dbpaths_changed) {
+		bool missing = false;
+		for (auto &d: m_dbpath_model.entries ())
+			missing |= !(d.qdb_found | d.kdb_found);
+		if (missing) {
+			QMessageBox mb (QMessageBox::Question, tr ("Missing database files"),
+					tr ("<p>No database files could be found in some of the directories configured for the database.</p><p>Do you want to go back and create them now?</p>"),
+					QMessageBox::Yes | QMessageBox::No);
+
+			if (mb.exec () == QMessageBox::Yes) {
+				ui->tabWidget->setCurrentIndex (6);
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+void PreferencesDialog::slot_apply()
+{
+	if (!verify ())
+		return;
+
+	bool ok;
+	int slide_x = ui->slideXEdit->text ().toInt (&ok);
+	int slide_y = ui->slideYEdit->text ().toInt (&ok);
+
 	setting->writeIntEntry ("SLIDE_X", slide_x);
 	setting->writeIntEntry ("SLIDE_Y", slide_y);
 	setting->writeIntEntry ("SLIDE_LINES", ui->slideLinesSpinBox->value ());
@@ -1057,8 +1091,11 @@ void PreferencesDialog::slot_apply()
 	setting->writeBoolEntry ("DB_CACHE_MOVELIST", ui->keepMovesCheckBox->isChecked ());
 
 	if (m_dbpaths_changed) {
+		QStringList new_paths;
+		for (auto &d: m_dbpath_model.entries ())
+			new_paths << d.title;
 		setting->m_dbpath_lock.lock ();
-		setting->m_dbpaths = m_dbpaths;
+		setting->m_dbpaths = new_paths;
 		setting->dbpaths_changed = true;
 		setting->m_dbpath_lock.unlock ();
 		m_dbpaths_changed = false;
@@ -1117,6 +1154,9 @@ void PreferencesDialog::slot_accept()
 {
 	if (avoid_losing_data ())
 		return;
+	if (!verify ())
+		return;
+
 	saveSizes();
 
 	slot_apply ();
