@@ -10,6 +10,7 @@
 #include <QProgressDialog>
 #include <QWhatsThis>
 #include <QIcon>
+#include <QTextStream>
 
 #include "preferences.h"
 #include "mainwindow.h"
@@ -508,20 +509,30 @@ void PreferencesDialog::slot_dbcfg (bool)
 	if (filename.isEmpty ())
 		return;
 
-	QSettings cfg (filename, QSettings::IniFormat);
+	QFile f (filename);
+	if (!f.open (QIODevice::ReadOnly | QIODevice::Text))
+		return;
 
-	QStringList l;
-	int i = 0;
-	for (;;) {
-		QVariant v = cfg.value ("databases/d" + QString::number (i));
-		if (v.isNull ())
+	/* We used to use QSettings here, which is almost exactly what's required.  Unfortunately,
+	   it fails on Windows, since it does not handle files with backspaces.  */
+	QTextStream ts (&f);
+	QRegularExpression db_re ("d[0-9]* *= *([^,]*), ([^,]*), kombilo");
+	while (!ts.atEnd()) {
+		QString line = ts.readLine ();
+		if (line == "[databases]")
 			break;
-		QStringList vl = v.toStringList ();
-		qDebug () << vl.length () << vl;
-		if (vl.length () == 3 && vl[2] == "kombilo")
-			l << vl[1];
-		i++;
 	}
+	QStringList l;
+	while (!ts.atEnd ()) {
+		QString line = ts.readLine ();
+		qDebug () << line;
+		auto match = db_re.match (line);
+		if (match.hasMatch())
+			l << match.captured (1);
+		else
+			break;
+	}
+	f.close ();
 	m_dbpath_model.reinit (l);
 	m_dbpaths_changed = true;
 	update_db_labels ();
