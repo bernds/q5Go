@@ -154,6 +154,8 @@ class PreferencesDialog : public QDialog
 
 	bool verify ();
 	bool avoid_losing_data ();
+	void do_apply ();
+
 	void clear_engine ();
 	void clear_host ();
 	void update_board_image ();

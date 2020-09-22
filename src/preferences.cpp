@@ -942,11 +942,14 @@ bool PreferencesDialog::verify ()
 	return true;
 }
 
-void PreferencesDialog::slot_apply()
+void PreferencesDialog::slot_apply ()
 {
-	if (!verify ())
-		return;
+	if (verify ())
+		do_apply ();
+}
 
+void PreferencesDialog::do_apply ()
+{
 	bool ok;
 	int slide_x = ui->slideXEdit->text ().toInt (&ok);
 	int slide_y = ui->slideYEdit->text ().toInt (&ok);
@@ -1168,10 +1171,10 @@ void PreferencesDialog::slot_accept()
 	if (!verify ())
 		return;
 
-	saveSizes();
+	saveSizes ();
 
-	slot_apply ();
-	accept();
+	do_apply ();
+	accept ();
 }
 
 void PreferencesDialog::slot_reject()
