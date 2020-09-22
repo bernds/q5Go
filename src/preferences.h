@@ -22,6 +22,7 @@ class ClientWindow;
 class ImageHandler;
 class QGraphicsScene;
 class QGraphicsPixmapItem;
+class QProgressDialog;
 
 namespace Ui
 {
@@ -83,6 +84,7 @@ public:
 		init (l);
 		endResetModel ();
 	}
+	void update_entry (const QModelIndex &i, const T &v);
 	void add_or_replace (T);
 	bool add_no_replace (T);
 	const T *find (const QModelIndex &) const;
@@ -100,7 +102,8 @@ public:
 struct db_dir_entry
 {
 	QString title;
-	bool db_found;
+	bool qdb_found;
+	bool kdb_found;
 
 	db_dir_entry (const QString &s);
 
@@ -166,6 +169,9 @@ class PreferencesDialog : public QDialog
 
 	void update_db_selection ();
 
+	/* Defined in gamedb.cpp.  */
+	bool create_db_for_dir (QProgressDialog &dlg, const QString &dir);
+
 public:
 	PreferencesDialog (int tab, QWidget* parent = 0);
 	~PreferencesDialog ();
@@ -208,8 +214,10 @@ public slots:
 	void slot_dbdir (bool);
 	void slot_dbcfg (bool);
 	void slot_dbrem (bool);
+	void slot_dbcreate (bool);
+
 private:
-	void          saveSizes();
+	void saveSizes ();
 };
 
 #endif

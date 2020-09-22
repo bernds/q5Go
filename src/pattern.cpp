@@ -342,15 +342,6 @@ void go_pattern::find_cands (std::vector<cand_match> &result,
 	}
 }
 
-static const int flag_white = 32;
-static const int flag_black = 64;
-static const int flag_black_shift = 6;
-static const int flag_delete = 128;
-
-static const int flag_endvar = 32;
-static const int flag_branch = 64;
-static const int flag_node_end = 128;
-
 bool match_movelist (const std::vector<char> &moves, std::vector<cand_match> &cands,
 		     std::vector<gamedb_model::cont_bw> &conts, int cont_maxx)
 {
@@ -364,17 +355,17 @@ bool match_movelist (const std::vector<char> &moves, std::vector<cand_match> &ca
 		int x = moves[i];
 		int y = moves[i + 1];
 
-		if (x & flag_endvar)
+		if (x & db_mv_flag_endvar)
 			break;
-		if (x & flag_branch)
+		if (x & db_mv_flag_branch)
 			continue;
-		bool have_move = (y & (flag_black | flag_white)) != 0;
-		bool endpos = (x & flag_node_end) != 0;
-		int col_off = (y >> flag_black_shift) & 1;
+		bool have_move = (y & (db_mv_flag_black | db_mv_flag_white)) != 0;
+		bool endpos = (x & db_mv_flag_node_end) != 0;
+		int col_off = (y >> db_mv_flag_black_shift) & 1;
 		x &= 31;
 		y &= 31;
 		if (have_move) {
-			if (y & flag_delete) {
+			if (y & db_mv_flag_delete) {
 				for (auto it: active)
 					it->clear_stone (x, y, col_off);
 			} else {
@@ -430,7 +421,7 @@ bit_array match_games (const std::vector<unsigned> &cand_games, size_t first, si
 		cand_matches.clear ();
 		for (const auto &pat: patterns)
 			pat.find_cands (cand_matches, entry.finalpos_w, entry.finalpos_b, entry.finalpos_c,
-					entry.boardsize, entry.boardsize);
+					entry.sz_x, entry.sz_y);
 		if (cand_matches.size () == 0)
 			continue;
 		if (entry.movelist.size () > 0) {
@@ -439,15 +430,25 @@ bit_array match_games (const std::vector<unsigned> &cand_games, size_t first, si
 			continue;
 		}
 		QDir dbdir = entry.dirname;
-		QFile f (dbdir.filePath ("kombilo.da"));
+		size_t off = entry.movelist_off;
+		QFile f (dbdir.filePath (off & 1 ? "q5go.db" : "kombilo.da"));
 		if (f.exists ()) {
 			f.open (QIODevice::ReadOnly);
-			f.seek (entry.movelist_off);
+			f.seek (off >> 1);
 			QDataStream ds (&f);
+			/* The following contortions are required because Kombilo uses plain int
+			   in the file format (which could be any size), while we use the specific
+			   uint32_t for q5go.db.  */
 			int len;
-			char i_c[sizeof len];
-			if (ds.readRawData (i_c, sizeof i_c) == sizeof i_c) {
-				memcpy (&len, i_c, sizeof len);
+			uint32_t u_len;
+			char i_c[std::max (sizeof len, sizeof u_len)];
+			int len_sz = off & 1 ? sizeof u_len : sizeof len;
+			if (ds.readRawData (i_c, len_sz) == len_sz) {
+				if (off & 1) {
+					memcpy (&u_len, i_c, sizeof u_len);
+					len = u_len;
+				} else
+					memcpy (&len, i_c, sizeof len);
 				movelist.resize (len);
 				if (ds.readRawData (&movelist[0], len) == len) {
 					if (match_movelist (movelist, cand_matches, conts, cont_maxx))

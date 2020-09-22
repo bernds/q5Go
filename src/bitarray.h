@@ -77,6 +77,8 @@ public:
 		return !(*this == other);
 	}
 	unsigned bitsize () const { return m_n_bits; }
+	uint64_t *raw_bits () const { return m_bits; }
+	unsigned raw_n_elts () const { return m_n_elts; }
 	void grow (unsigned sz)
 	{
 		if (sz < m_n_bits)

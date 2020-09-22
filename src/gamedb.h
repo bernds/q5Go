@@ -15,18 +15,20 @@ class go_pattern;
 struct gamedb_entry
 {
 	QString dirname, filename;
-	QString pw, pb;
+	QString pw, rkw, pb, rkb;
 	QString date, result, event;
 	std::vector<char> movelist;
 	int id;
-	int boardsize;
+	int sz_x, sz_y;
 	bit_array finalpos_w, finalpos_b, finalpos_c;
+	/* Shifted by 1, the lowest bit indicates whether it's in the q5go.db file.  */
 	size_t movelist_off = 0;
 
-	gamedb_entry (int i, const QString &dir, const QString &f, const QString &w, const QString &b,
-		      const QString &d, const QString &r, const QString &e, int sz)
-		: dirname (dir), filename (f), pw (w), pb (b), date (d), result (r), event (e),
-		id (i), boardsize (sz), finalpos_w (sz * sz), finalpos_b (sz * sz), finalpos_c (sz * sz)
+	gamedb_entry (int i, const QString &dir, const QString &f,
+		      const QString &w, const QString &rw, const QString &b, const QString &rb,
+		      const QString &d, const QString &r, const QString &e, int sx, int sy)
+		: dirname (dir), filename (f), pw (w), rkw (rw), pb (b), rkb (rb), date (d), result (r), event (e),
+		  id (i), sz_x (sx), sz_y (sy), finalpos_w (sx * sy), finalpos_b (sx * sy), finalpos_c (sx * sy)
 	{
 	}
 	gamedb_entry (const gamedb_entry &other) = default;
@@ -81,14 +83,18 @@ public slots:
 	void slot_load_complete ();
 signals:
 	void signal_prepare_load ();
-	void signal_start_load (int, bool);
+	void signal_start_load (unsigned, bool);
 };
 
+class QDir;
 class GameDB_Data : public QObject
 {
 	Q_OBJECT
 
-	void do_load (int, bool);
+	void do_load (unsigned, bool);
+	bool read_extra_file (QDataStream &, int, int, unsigned, bool);
+	bool read_q5go_db (const QDir &, int &, unsigned, bool);
+
 public:
 	/* A local copy of the paths in settings.  */
 	QStringList dbpaths;
@@ -99,17 +105,26 @@ public:
 	bool load_complete = false;
 	bool too_large = false;
 	bool errors_found = false;
-
-	bool read_extra_file (QDataStream &, int, int, int, bool);
+	bool errors_kombilo = false;
 
 public slots:
-	void slot_start_load (int, bool);
+	void slot_start_load (unsigned, bool);
 signals:
 	void signal_load_complete ();
 };
 
 extern GameDB_Data *db_data;
 extern GameDB_Data_Controller *db_data_controller;
+
+/* Kombilo's flags for the move list.  */
+static const int db_mv_flag_white = 32;
+static const int db_mv_flag_black = 64;
+static const int db_mv_flag_black_shift = 6;
+static const int db_mv_flag_delete = 128;
+
+static const int db_mv_flag_endvar = 32;
+static const int db_mv_flag_branch = 64;
+static const int db_mv_flag_node_end = 128;
 
 extern bit_array match_games (const std::vector<unsigned> &, const go_pattern &,
 			      std::vector<gamedb_model::cont_bw> &conts, coord_transform);

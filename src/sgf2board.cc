@@ -11,6 +11,7 @@
 #include "sgf.h"
 #include "goboard.h"
 #include "gogame.h"
+#include "gamedb.h"
 
 static int coord_from_letter (char x)
 {
@@ -253,6 +254,136 @@ static bool add_eval (game_state *gs, sgf::node *n)
 		if (!add_eval_1 (gs, qkgv, true))
 			return false;
 	return true;
+}
+
+static void encode_position_diff (std::vector<unsigned char> &movelist, bit_array &caps,
+				  const go_board &from, const go_board &to, bool force)
+{
+	bit_array b_add = to.get_stones_b ();
+	b_add.andnot (from.get_stones_b ());
+	bit_array w_add = to.get_stones_w ();
+	w_add.andnot (from.get_stones_w ());
+	bit_array b_sub = from.get_stones_b ();
+	b_sub.andnot (to.get_stones_b ());
+	bit_array w_sub = from.get_stones_w ();
+	w_sub.andnot (to.get_stones_w ());
+
+	caps.ior (b_sub);
+	caps.ior (w_sub);
+
+	size_t oldsz = movelist.size ();
+	for (int y = 0; y < from.size_y (); y++)
+		for (int x = 0; x < from.size_x (); x++) {
+			unsigned bp = from.bitpos (x, y);
+			if (b_add.test_bit (bp)) {
+				movelist.push_back (x);
+				movelist.push_back (y | db_mv_flag_black);
+			}
+			if (w_add.test_bit (bp)) {
+				movelist.push_back (x);
+				movelist.push_back (y | db_mv_flag_white);
+			}
+			if (b_sub.test_bit (bp)) {
+				movelist.push_back (x);
+				movelist.push_back (y | db_mv_flag_black | db_mv_flag_delete);
+			}
+			if (w_sub.test_bit (bp)) {
+				movelist.push_back (x);
+				movelist.push_back (y | db_mv_flag_white | db_mv_flag_delete);
+			}
+		}
+	size_t newsz = movelist.size ();
+	if (newsz > oldsz)
+		movelist[newsz - 2] |= db_mv_flag_node_end;
+	else if (force) {
+		movelist.push_back (db_mv_flag_node_end);
+		movelist.push_back (0);
+	}
+}
+
+/* Similar to add_to_game_state, but we don't create game_states or a game record, instead
+   we just collect the information necessary to produce a database entry for the pattern search.  */
+
+void db_info_from_sgf (go_board &b, sgf::node *n, bool is_root, sgf_errors &errs,
+		       bit_array &final_w, bit_array &final_b, bit_array &final_c,
+		       std::vector<unsigned char> &movelist)
+{
+	bool force = !is_root;
+	while (n) {
+		if (!force) {
+			while (n->m_siblings != nullptr) {
+				db_info_from_sgf (b, n, false, errs, final_w, final_b, final_c, movelist);
+				n = n->m_siblings;
+			}
+		}
+		force = false;
+		enum class im { unknown, yes, no } is_move = im::unknown;
+		go_board new_board (b, mark::none);
+		int move_x = -1, move_y = -1;
+		bool is_pass = false;
+		sgf::node::proplist unrecognized;
+		for (auto &p : n->props) {
+			const std::string &id = p.ident;
+			if (id == "AB" || id == "B" || id == "AW" || id == "W" || id == "AE") {
+				p.handled = true;
+				im thisprop_move = id.length () == 1 ? im::yes : im::no;
+				if (is_move == im::unknown)
+					is_move = thisprop_move;
+				else if (is_move == im::yes || is_move != thisprop_move)
+					/* Only one move per node allowed per the spec,
+					   and all types must match.  */
+					throw broken_sgf ();
+
+				stone_color sc = id == "AB" || id == "B" ? black : id == "AW" || id == "W" ? white : none;
+				if (is_move == im::yes)
+				{
+					if (p.values.size () != 1)
+						throw broken_sgf ();
+
+					const std::string &v = *p.values.begin ();
+
+					if (v.length () == 0) {
+						is_pass = true;
+						continue;
+					}
+					if (v.length () != 2)
+						throw broken_sgf ();
+
+					move_x = coord_from_letter (v[0]);
+					move_y = coord_from_letter (v[1]);
+					if (move_x < 0 || move_y < 0 || move_x >= new_board.size_x () || move_y >= new_board.size_y ()) {
+						is_pass = true;
+						/* [tt] is a backwards compatibility synonym for pass.   */
+						if (move_x != 19 || move_y != 19)
+							errs.move_outside_board = true;
+						continue;
+					}
+					if (new_board.stone_at (move_x, move_y) != none) {
+						/* We'd like to throw, but Kogo's Joseki Dictionary has
+						   such errors.  */
+						errs.played_on_stone = true;
+						return;
+					}
+					new_board.add_stone (move_x, move_y, sc);
+				} else {
+					put_stones (p, new_board.size_x (), new_board.size_y (),
+						    [&] (int x, int y) { new_board.set_stone_nounits (x, y, sc); });
+				}
+			}
+		}
+
+		if (is_move == im::no) {
+			new_board.identify_units ();
+		}
+		if (!is_pass || is_root) {
+			final_w.ior (new_board.get_stones_w ());
+			final_b.ior (new_board.get_stones_b ());
+			encode_position_diff (movelist, final_c, b, new_board, is_root);
+		}
+		b = new_board;
+
+		n = n->m_children;
+	}
 }
 
 static void add_to_game_state (game_state *gs, sgf::node *n, bool force, QTextCodec *codec, sgf_errors &errs)

@@ -7,6 +7,7 @@
 #include <QFileDialog>
 #include <QFontDialog>
 #include <QColorDialog>
+#include <QProgressDialog>
 #include <QWhatsThis>
 #include <QIcon>
 
@@ -15,22 +16,25 @@
 #include "qgo.h"
 #include "clientwin.h"
 #include "imagehandler.h"
+#include "gamedb.h"
 
 #include "ui_preferences_gui.h"
 #include "ui_enginedlg_gui.h"
 
 db_dir_entry::db_dir_entry (const QString &s)
-	: title (s), db_found (false)
+	: title (s), qdb_found (false), kdb_found (false)
 {
 	QDir d (s);
-	QFile path (d.filePath ("kombilo.db"));
-	db_found = path.exists ();
+	qdb_found = QFile (d.filePath ("q5go.db")).exists ();
+	kdb_found = QFile (d.filePath ("kombilo.db")).exists ();
 }
 
 QVariant db_dir_entry::icon (int col) const
 {
 	if (col == 0) {
-		return QIcon (db_found ? ":/images/green-check.png" : ":/images/red-x.png");
+		return QIcon (qdb_found ? ":/images/green-check.png"
+			      : kdb_found ? ":/images/yellow-exclam.png"
+			      : ":/images/red-x.png");
 	}
 	return QVariant ();
 }
@@ -186,6 +190,16 @@ bool pref_vec_model<T>::removeRows (int row, int count, const QModelIndex &paren
 	m_entries.erase (m_entries.begin () + row, m_entries.begin () + (row + count));
 	endRemoveRows ();
 	return true;
+}
+
+template<class T>
+void pref_vec_model<T>::update_entry (const QModelIndex &i, const T &v)
+{
+	int row = i.row ();
+	if (row >= 0) {
+		m_entries[row] = v;
+		emit dataChanged (i, i);
+	}
 }
 
 template<class T>
@@ -390,6 +404,7 @@ PreferencesDialog::PreferencesDialog (int tab, QWidget* parent)
 	connect (ui->dbDirsButton, &QPushButton::clicked, this, &PreferencesDialog::slot_dbdir);
 	connect (ui->dbCfgButton, &QPushButton::clicked, this, &PreferencesDialog::slot_dbcfg);
 	connect (ui->dbRemButton, &QPushButton::clicked, this, &PreferencesDialog::slot_dbrem);
+	connect (ui->dbCreateButton, &QPushButton::clicked, this, &PreferencesDialog::slot_dbcreate);
 
 	ui->ListView_engines->setModel (&m_engines_model);
 	connect (ui->ListView_engines, &ClickableListView::current_changed, [this] () { update_current_engine (); });
@@ -435,6 +450,7 @@ void PreferencesDialog::update_db_selection ()
 	bool selection = selected.length () != 0;
 
 	ui->dbRemButton->setEnabled (selection);
+	ui->dbCreateButton->setEnabled (selection);
 }
 
 void PreferencesDialog::slot_dbdir (bool)
@@ -512,11 +528,43 @@ void PreferencesDialog::slot_dbrem (bool)
 	if (!selection)
 		return;
 
-	QModelIndex i = selected.first ();
-	int r = i.row ();
-	m_dbpath_model.removeRows (r, 1);
-	m_dbpaths.removeAt (r);
+	std::vector<int> rows;
+	for (auto i: selected)
+		rows.push_back (i.row ());
+	std::sort (rows.begin (), rows.end (), [] (int r1, int r2) { return r1 > r2; });
+	for (auto r: rows) {
+		m_dbpath_model.removeRows (r, 1);
+		m_dbpaths.removeAt (r);
+	}
 	m_dbpaths_changed = true;
+}
+
+void PreferencesDialog::slot_dbcreate (bool)
+{
+	QItemSelectionModel *sel = ui->dbPathsTreeView->selectionModel ();
+	const QModelIndexList &selected = sel->selectedRows ();
+	bool selection = selected.length () != 0;
+
+	if (!selection)
+		return;
+
+	QProgressDialog dlg (tr ("Creating database from SGF files..."), tr ("Abort operation"),
+			     0, 100, this);
+	dlg.setWindowModality (Qt::WindowModal);
+	dlg.setMinimumDuration (0);
+
+	for (QModelIndex i: selected) {
+		const db_dir_entry *e = m_dbpath_model.find (i);
+		if (e) {
+			QString label = tr ("Creating database from SGF files...\nProcessing: ") + e->title;
+			dlg.setLabelText (label);
+			if (create_db_for_dir (dlg, e->title)) {
+				db_dir_entry new_e (e->title);
+				m_dbpath_model.update_entry (i, new_e);
+				m_dbpaths_changed = true;
+			}
+		}
+	}
 }
 
 void PreferencesDialog::slot_autosavedir (bool)

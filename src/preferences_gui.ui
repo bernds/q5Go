@@ -4916,6 +4916,27 @@ If checked then when a game you played completes, it is automatically saved in t
           <item row="1" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_18">
             <item>
+             <widget class="QPushButton" name="dbCreateButton">
+              <property name="text">
+               <string>Create DB</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="dbRemButton">
+              <property name="text">
+               <string>Remove directory</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="dbDirsButton">
+              <property name="text">
+               <string>Add directory...</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <spacer name="horizontalSpacer_3">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -4927,20 +4948,6 @@ If checked then when a game you played completes, it is automatically saved in t
                </size>
               </property>
              </spacer>
-            </item>
-            <item>
-             <widget class="QPushButton" name="dbRemButton">
-              <property name="text">
-               <string>Remove</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="dbDirsButton">
-              <property name="text">
-               <string>Add directory...</string>
-              </property>
-             </widget>
             </item>
             <item>
              <widget class="QPushButton" name="dbCfgButton">
@@ -5017,6 +5024,9 @@ If checked then when a game you played completes, it is automatically saved in t
           </item>
           <item row="0" column="0">
            <widget class="QTreeView" name="dbPathsTreeView">
+            <property name="selectionMode">
+             <enum>QAbstractItemView::ExtendedSelection</enum>
+            </property>
             <property name="rootIsDecorated">
              <bool>false</bool>
             </property>
