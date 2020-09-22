@@ -215,6 +215,7 @@ public slots:
 	void slot_autosavedir (bool);
 
 	void slot_dbdir (bool);
+	void slot_dbsubdir (bool);
 	void slot_dbcfg (bool);
 	void slot_dbrem (bool);
 	void slot_dbcreate (bool);

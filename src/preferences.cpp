@@ -403,6 +403,7 @@ PreferencesDialog::PreferencesDialog (int tab, QWidget* parent)
 	ui->dbPathsTreeView->header ()->setSectionResizeMode (0, QHeaderView::ResizeToContents);
 
 	connect (ui->dbDirsButton, &QPushButton::clicked, this, &PreferencesDialog::slot_dbdir);
+	connect (ui->dbSubdirsButton, &QPushButton::clicked, this, &PreferencesDialog::slot_dbsubdir);
 	connect (ui->dbCfgButton, &QPushButton::clicked, this, &PreferencesDialog::slot_dbcfg);
 	connect (ui->dbRemButton, &QPushButton::clicked, this, &PreferencesDialog::slot_dbrem);
 	connect (ui->dbCreateButton, &QPushButton::clicked, this, &PreferencesDialog::slot_dbcreate);
@@ -465,6 +466,54 @@ void PreferencesDialog::update_db_labels ()
 	}
 	ui->dbKombiloLabel->setVisible (kombilo);
 	ui->dbNotFoundLabel->setVisible (missing);
+}
+
+void PreferencesDialog::slot_dbsubdir (bool)
+{
+	QString dir;
+	if (!m_last_added_dbdir.isEmpty ()) {
+		QDir d (m_last_added_dbdir);
+		d.cdUp ();
+		dir = d.absolutePath ();
+	}
+	QString dirname = QFileDialog::getExistingDirectory (this, QObject::tr ("Add a set of database directories - choose the parent directory"),
+							     dir);
+	if (dirname.isEmpty ())
+		return;
+	QDir parent (dirname);
+	int skipped = 0;
+	int failed = 0;
+	for (auto subdir: parent.entryList (QDir::Dirs | QDir::Readable | QDir::NoDotAndDotDot, QDir::Name)) {
+		QDir d (parent);
+		if (!d.cd (subdir)) {
+			failed++;
+			continue;
+		}
+		bool skip = false;
+		for (auto &it: m_dbpath_model.entries ()) {
+			QDir d2 (it.title);
+			if (d == d2) {
+				skip = true;
+				skipped++;
+				break;
+			}
+		}
+		if (!skip) {
+			m_last_added_dbdir = d.absolutePath ();
+			m_dbpath_model.add_no_replace (d.absolutePath ());
+			m_dbpaths_changed = true;
+		}
+	}
+	if (skipped + failed > 0) {
+		QString text;
+		if (skipped > 0)
+			text = tr ("<p>%1 directories already exists in the list and were not added.</p>").arg (skipped);
+		if (failed > 0)
+			text += tr ("<p>%1 directories were not added because they could not be read.</p>").arg (failed);
+		QMessageBox::warning (this, tr ("Some directories not added"), text);
+	}
+
+	update_db_labels ();
 }
 
 void PreferencesDialog::slot_dbdir (bool)

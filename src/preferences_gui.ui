@@ -5029,6 +5029,9 @@ If checked then when a game you played completes, it is automatically saved in t
            <layout class="QHBoxLayout" name="horizontalLayout_18">
             <item>
              <widget class="QPushButton" name="dbCreateButton">
+              <property name="toolTip">
+               <string>&lt;p&gt;Create a database file in the currently selected directories by scanning all the SGF files found within.&lt;/p&gt;&lt;p&gt;Without a database file, no searches can be performed.&lt;/p&gt;</string>
+              </property>
               <property name="text">
                <string>Create DB</string>
               </property>
@@ -5036,6 +5039,9 @@ If checked then when a game you played completes, it is automatically saved in t
             </item>
             <item>
              <widget class="QPushButton" name="dbRemButton">
+              <property name="toolTip">
+               <string>&lt;p&gt;Remove the selected directories from the database list.&lt;/p&gt;</string>
+              </property>
               <property name="text">
                <string>Remove directory</string>
               </property>
@@ -5043,8 +5049,21 @@ If checked then when a game you played completes, it is automatically saved in t
             </item>
             <item>
              <widget class="QPushButton" name="dbDirsButton">
+              <property name="toolTip">
+               <string>Choose a directory to add to the database list.</string>
+              </property>
               <property name="text">
                <string>Add directory...</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="dbSubdirsButton">
+              <property name="toolTip">
+               <string>&lt;p&gt;A more convenient way to add a large database. Choose a parent directory; all its subdirectories will be added to the list of database directories.&lt;/p&gt;</string>
+              </property>
+              <property name="text">
+               <string>Add subdirs...</string>
               </property>
              </widget>
             </item>
@@ -5063,6 +5082,11 @@ If checked then when a game you played completes, it is automatically saved in t
             </item>
             <item>
              <widget class="QPushButton" name="dbCfgButton">
+              <property name="toolTip">
+               <string>&lt;p&gt;If a Kombilo database is installed, you can select the kombilo.cfg file to import the list of directories.&lt;/p&gt;
+&lt;p&gt;The Kombilo database files can be used by q5go, but there may be errors if Kombilo and q5go have a 32bit/64bit mismatch.&lt;/p&gt;
+&lt;p&gt;Use the &quot;Create DB&quot; button to ensure everything functions as intended by adding q5go's own database file to the directories.&lt;/p&gt;</string>
+              </property>
               <property name="text">
                <string>Import from kombilo.cfg...</string>
               </property>
