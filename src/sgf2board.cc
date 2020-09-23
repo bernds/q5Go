@@ -312,7 +312,12 @@ void db_info_from_sgf (go_board &b, sgf::node *n, bool is_root, sgf_errors &errs
 	while (n) {
 		if (!force) {
 			while (n->m_siblings != nullptr) {
-				db_info_from_sgf (b, n, false, errs, final_w, final_b, final_c, movelist);
+				movelist.push_back (db_mv_flag_branch);
+				movelist.push_back (0);
+				go_board tmp_b = b;
+				db_info_from_sgf (tmp_b, n, false, errs, final_w, final_b, final_c, movelist);
+				movelist.push_back (db_mv_flag_endvar);
+				movelist.push_back (0);
 				n = n->m_siblings;
 			}
 		}

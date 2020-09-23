@@ -345,9 +345,27 @@ void go_pattern::find_cands (std::vector<cand_match> &result,
 bool match_movelist (const std::vector<char> &moves, std::vector<cand_match> &cands,
 		     std::vector<gamedb_model::cont_bw> &conts, int cont_maxx)
 {
-	std::vector<cand_match *> active (cands.size ());
+	std::vector<int> active (cands.size ());
+	std::vector<cand_match> *active_base = &cands;
 	for (size_t i = 0; i < cands.size (); i++)
-		active[i] = &cands[i];
+		active[i] = i;
+
+	struct branch_data {
+		std::vector<cand_match> curr_cands;
+		std::vector<int> old_active;
+		std::vector<cand_match> *old_base;
+
+		branch_data (const std::vector<cand_match> oldc, std::vector<int> olda,
+			     std::vector<cand_match> *oldb)
+			: curr_cands (std::move (oldc)), old_active (std::move (olda)), old_base (oldb)
+		{
+		}
+		branch_data (branch_data &&) = default;
+		branch_data (const branch_data &) = default;
+		branch_data &operator= (branch_data &&) = default;
+		branch_data &operator= (const branch_data &) = default;
+	};
+	std::vector<branch_data> stack;
 
 	size_t len = moves.size ();
 	bool success = false;
@@ -355,10 +373,25 @@ bool match_movelist (const std::vector<char> &moves, std::vector<cand_match> &ca
 		int x = moves[i];
 		int y = moves[i + 1];
 
-		if (x & db_mv_flag_endvar)
-			break;
-		if (x & db_mv_flag_branch)
+		if (x & db_mv_flag_branch) {
+			/* Never fully trust input data on disk, and limit the impact of
+			   bogus values.  */
+			if (stack.size () > 64)
+				return success;
+			stack.emplace_back (cands, active, active_base);
+			branch_data &stack_top = stack.back ();
+			active_base = &stack_top.curr_cands;
 			continue;
+		}
+		if (x & db_mv_flag_endvar) {
+			if (stack.size () == 0)
+				return success;
+			branch_data &stack_top = stack.back ();
+			active = stack_top.old_active;
+			active_base = stack_top.old_base;
+			stack.pop_back ();
+			continue;
+		}
 		bool have_move = (y & (db_mv_flag_black | db_mv_flag_white)) != 0;
 		bool endpos = (x & db_mv_flag_node_end) != 0;
 		int col_off = (y >> db_mv_flag_black_shift) & 1;
@@ -367,28 +400,29 @@ bool match_movelist (const std::vector<char> &moves, std::vector<cand_match> &ca
 		if (have_move) {
 			if (y & db_mv_flag_delete) {
 				for (auto it: active)
-					it->clear_stone (x, y, col_off);
+					(*active_base)[it].clear_stone (x, y, col_off);
 			} else {
 				for (auto it: active)
-					it->put_stone (x, y, col_off);
+					(*active_base)[it].put_stone (x, y, col_off);
 			}
 		}
 		if (endpos) {
 			for (size_t i = 0; i < active.size (); i++) {
 			again:
-				auto &it = active[i];
-				auto state = it->end_of_node ();
+				int idx = active[i];
+				auto &it = (*active_base)[idx];
+				auto state = it.end_of_node ();
 				if (state == cand_match::matched)
 					success = true;
 				else if (state == cand_match::failed || state == cand_match::continued) {
-					it = active[active.size () - 1];
+					active[i] = active[active.size () - 1];
 					active.pop_back ();
 					if (i == active.size ())
 						break;
 					goto again;
 				}
 			}
-			if (active.size () == 0)
+			if (active.size () == 0 && stack.size () == 0)
 				break;
 		}
 	}
