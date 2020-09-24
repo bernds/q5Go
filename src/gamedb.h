@@ -6,6 +6,7 @@
 #include <QString>
 #include <vector>
 #include <atomic>
+#include <array>
 
 #include "bitarray.h"
 #include "coords.h"
