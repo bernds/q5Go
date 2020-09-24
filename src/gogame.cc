@@ -471,8 +471,20 @@ game_state *game_state::follow_path (const std::vector<int> &path)
 	for (size_t i = path.size (); i-- > 0;) {
 		int idx = path[i];
 		if (st->m_children.size () == 1) {
-			for (int j = 0; j < idx; j++)
+			for (int j = 0; j < idx; j++) {
+				/* This has occurred once, or at least the backtrace
+				   suggested it did.  Add some extra checking to try
+				   to catch it again when debugging, and to prevent
+				   crashes in release builds.  */
+				if (st->n_children () != 1) {
+#ifdef CHECKING
+					abort ();
+#else
+					return st;
+#endif
+				}
 				st = st->m_children[0];
+			}
 			continue;
 		}
 		if (idx >= st->m_children.size ())
