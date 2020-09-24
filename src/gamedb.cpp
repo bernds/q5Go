@@ -390,7 +390,7 @@ static std::string read_string (QDataStream &ds, std::vector<char> &buf)
 	return s;
 }
 
-bool GameDB_Data::read_q5go_db (const QDir &dbdir, int &base_id, unsigned max_mb, bool read_movelist)
+bool GameDB_Data::read_q5go_db (const QDir &dbdir, int base_id, unsigned max_mb, bool read_movelist)
 {
 	QFile f (dbdir.filePath ("q5go.db"));
 	f.open (QIODevice::ReadOnly);
@@ -689,6 +689,7 @@ void GameDB_Data::do_load (unsigned max_mb, bool cache_movelist)
 			size_t sz = m_all_entries.size ();
 			try {
 				read_q5go_db (dbdir, base_id, max_mb, cache_movelist);
+				base_id += m_all_entries.size () - sz;
 			} catch (db_errors_found &) {
 				m_all_entries.erase (m_all_entries.begin () + sz, m_all_entries.end ());
 				errors_found = true;

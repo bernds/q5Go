@@ -95,7 +95,7 @@ class GameDB_Data : public QObject
 
 	void do_load (unsigned, bool);
 	bool read_extra_file (QDataStream &, int, int, unsigned, bool);
-	bool read_q5go_db (const QDir &, int &, unsigned, bool);
+	bool read_q5go_db (const QDir &, int, unsigned, bool);
 
 public:
 	/* A local copy of the paths in settings.  */
