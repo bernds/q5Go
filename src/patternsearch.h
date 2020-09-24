@@ -135,6 +135,7 @@ class PatternSearchWindow : public QMainWindow
 
 	void choose_color (bool);
 	void update_actions ();
+	void restore_layout ();
 
 	go_game_ptr load_selected ();
 
@@ -143,6 +144,9 @@ public:
 	~PatternSearchWindow ();
 
 	void do_search (go_game_ptr, game_state *, const board_rect &);
+
+	void closeEvent (QCloseEvent *) override;
+
 public slots:
 	void do_open (bool);
 	void choices_resized ();

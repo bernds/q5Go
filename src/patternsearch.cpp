@@ -143,6 +143,7 @@ PatternSearchWindow::PatternSearchWindow ()
 	update_caption ();
 
 	show ();
+	restore_layout ();
 }
 
 PatternSearchWindow::~PatternSearchWindow ()
@@ -154,6 +155,34 @@ PatternSearchWindow::~PatternSearchWindow ()
 	delete m_edit_group;
 	delete m_view_group;
 	delete m_previewer;
+}
+
+void PatternSearchWindow::closeEvent (QCloseEvent *e)
+{
+	QString strKey = screen_key (this);
+
+	QByteArray v1 = saveState ().toHex ();
+	QByteArray v2 = saveGeometry ().toHex ();
+	setting->writeEntry("SEARCHLAYOUT1_" + strKey, QString::fromLatin1 (v1));
+	setting->writeEntry("SEARCHLAYOUT2_" + strKey, QString::fromLatin1 (v2));
+
+	QMainWindow::closeEvent (e);
+}
+
+void PatternSearchWindow::restore_layout ()
+{
+	QString strKey = screen_key (this);
+	QString s1 = setting->readEntry ("SEARCHLAYOUT1_" + strKey);
+	QString s2 = setting->readEntry ("SEARCHLAYOUT2_" + strKey);
+
+	if (s1.isEmpty () || s2.isEmpty ())
+		return;
+	QRegExp verify ("^[0-9A-Fa-f]*$");
+	if (!verify.exactMatch (s1) || !verify.exactMatch (s2))
+		return;
+
+	restoreGeometry (QByteArray::fromHex (s2.toLatin1 ()));
+	restoreState (QByteArray::fromHex (s1.toLatin1 ()));
 }
 
 void PatternSearchWindow::update_preview (preview &gmp)
