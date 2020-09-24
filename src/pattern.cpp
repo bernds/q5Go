@@ -354,11 +354,9 @@ static void match_movelist (const std::vector<char> &moves, std::vector<cand_mat
 	struct branch_data {
 		std::vector<cand_match> curr_cands;
 		std::vector<int> old_active;
-		std::vector<cand_match> *old_base;
 
-		branch_data (const std::vector<cand_match> oldc, std::vector<int> olda,
-			     std::vector<cand_match> *oldb)
-			: curr_cands (std::move (oldc)), old_active (std::move (olda)), old_base (oldb)
+		branch_data (const std::vector<cand_match> oldc, std::vector<int> olda)
+			: curr_cands (std::move (oldc)), old_active (std::move (olda))
 		{
 		}
 		branch_data (branch_data &&) = default;
@@ -378,7 +376,7 @@ static void match_movelist (const std::vector<char> &moves, std::vector<cand_mat
 			   bogus values.  */
 			if (stack.size () > 64)
 				return;
-			stack.emplace_back (cands, active, active_base);
+			stack.emplace_back (cands, active);
 			branch_data &stack_top = stack.back ();
 			active_base = &stack_top.curr_cands;
 			continue;
@@ -388,8 +386,11 @@ static void match_movelist (const std::vector<char> &moves, std::vector<cand_mat
 				return;
 			branch_data &stack_top = stack.back ();
 			active = stack_top.old_active;
-			active_base = stack_top.old_base;
 			stack.pop_back ();
+			if (stack.size () > 0)
+				active_base = &stack.back ().curr_cands;
+			else
+				active_base = &cands;
 			continue;
 		}
 		bool have_move = (y & (db_mv_flag_black | db_mv_flag_white)) != 0;
