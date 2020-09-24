@@ -11,7 +11,7 @@
 #include "clientwin.h"
 
 DBDialog::DBDialog (QWidget *parent)
-	: QDialog (parent)
+	: QDialog (parent), m_model (false)
 {
 	setupUi (this);
 

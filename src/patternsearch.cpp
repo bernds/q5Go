@@ -19,7 +19,7 @@ QGraphicsScene *create_scene_for (QGraphicsView *v)
 }
 
 PatternSearchWindow::PatternSearchWindow ()
-	: ui (new Ui::PatternSearchWindow), m_previewer (new FigureView (nullptr, true, true))
+	: ui (new Ui::PatternSearchWindow), m_model (true), m_previewer (new FigureView (nullptr, true, true))
 {
 	ui->setupUi (this);
 	go_board b (19);

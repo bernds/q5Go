@@ -42,10 +42,12 @@ class gamedb_model : public QAbstractItemModel
 	Q_OBJECT
 
 	std::vector<unsigned> m_entries;
+	bool m_patternsearch;
+
 	void default_sort ();
 public:
 	using cont_bw = std::pair<int, int>;
-	gamedb_model ();
+	gamedb_model (bool);
 	void clear_list ();
 	void apply_filter (const QString &p1, const QString &p2, const QString &event,
 			   const QString &dtfrom, const QString &dtto);

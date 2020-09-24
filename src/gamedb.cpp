@@ -733,6 +733,9 @@ void GameDB_Data::do_load (unsigned max_mb, bool cache_movelist)
 		}
 		db.close ();
 
+		/* Disabled since it creates too many problems, the main one being that there
+		   might be a mismatch between 32 and 64 bit between Kombilo and this program.  */
+#if 0
 		/* Now read the secondary kombilo data.  */
 		QFile f (dbdir.filePath ("kombilo.da"));
 		if (f.exists ()) {
@@ -746,6 +749,7 @@ void GameDB_Data::do_load (unsigned max_mb, bool cache_movelist)
 			}
 			f.close ();
 		}
+#endif
 		base_id += this_max + 1;
 	}
 
@@ -769,7 +773,8 @@ void GameDB_Data::slot_start_load (unsigned max_mb, bool cache_movelist)
 	emit signal_load_complete ();
 }
 
-gamedb_model::gamedb_model ()
+gamedb_model::gamedb_model (bool ps)
+	: m_patternsearch (ps)
 {
 	connect (db_data, &GameDB_Data::signal_load_complete, this, &gamedb_model::slot_load_complete);
 	connect (db_data_controller, &GameDB_Data_Controller::signal_prepare_load, this, &gamedb_model::slot_prepare_load);
@@ -868,7 +873,8 @@ void gamedb_model::reset_filters ()
 	m_entries.clear ();
 	m_entries.reserve (db_data->m_all_entries.size ());
 	for (size_t i = 0; i < db_data->m_all_entries.size (); i++)
-		m_entries.push_back (i);
+		if (db_data->m_all_entries[i].movelist_off != 0 || !m_patternsearch)
+			m_entries.push_back (i);
 
 	default_sort ();
 

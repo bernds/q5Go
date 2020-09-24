@@ -4898,7 +4898,7 @@ If checked then when a game you played completes, it is automatically saved in t
           </sizepolicy>
          </property>
          <property name="title">
-          <string>Kombilo database paths</string>
+          <string>Database paths</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_4">
           <property name="leftMargin">
@@ -5084,7 +5084,7 @@ If checked then when a game you played completes, it is automatically saved in t
              <widget class="QPushButton" name="dbCfgButton">
               <property name="toolTip">
                <string>&lt;p&gt;If a Kombilo database is installed, you can select the kombilo.cfg file to import the list of directories.&lt;/p&gt;
-&lt;p&gt;The Kombilo database files can be used by q5go, but there may be errors if Kombilo and q5go have a 32bit/64bit mismatch.&lt;/p&gt;
+&lt;p&gt;The Kombilo database files can be used by q5go, but only for player search, not for pattern search.&lt;/p&gt;
 &lt;p&gt;Use the &quot;Create DB&quot; button to ensure everything functions as intended by adding q5go's own database file to the directories.&lt;/p&gt;</string>
               </property>
               <property name="text">
@@ -5141,7 +5141,8 @@ If checked then when a game you played completes, it is automatically saved in t
              <item>
               <widget class="QLabel" name="label_37">
                <property name="text">
-                <string>Directories marked with an exclamation mark only contain a Kombilo DB.</string>
+                 <string>Marked directories contain a Kombilo DB, which cannot be used for pattern search.
+Use the "Create DB" to create a q5go database.</string>
                </property>
               </widget>
              </item>
