@@ -706,7 +706,7 @@ void PatternSearchWindow::slot_completed ()
 	std::atomic_thread_fence (std::memory_order_seq_cst);
 	db_data->db_mutex.unlock ();
 
-	std::vector<int[2]> &hits = m_result->first;
+	std::vector<std::array<int, 2>> &hits = m_result->first;
 	std::vector<gamedb_model::cont_bw> &conts = m_result->second;
 
 	bit_array games (hits.size ());

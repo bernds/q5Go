@@ -344,7 +344,7 @@ void go_pattern::find_cands (std::vector<cand_match> &result,
 
 static void match_movelist (const std::vector<char> &moves, std::vector<cand_match> &cands,
 			    std::vector<gamedb_model::cont_bw> &conts, int cont_maxx,
-			    int *match_count)
+			    std::array<int, 2> &match_count)
 {
 	std::vector<int> active (cands.size ());
 	std::vector<cand_match> *active_base = &cands;
@@ -442,11 +442,11 @@ static void match_movelist (const std::vector<char> &moves, std::vector<cand_mat
 	}
 }
 
-std::vector<int[2]> match_games (const std::vector<unsigned> &cand_games, size_t first, size_t end,
+std::vector<std::array<int, 2>> match_games (const std::vector<unsigned> &cand_games, size_t first, size_t end,
 				 const std::vector<go_pattern> &patterns,
 				 std::vector<gamedb_model::cont_bw> &conts, int cont_maxx)
 {
-	std::vector<int[2]> result (end - first);
+	std::vector<std::array<int, 2>> result (end - first);
 	std::vector<char> movelist;
 	std::vector<cand_match> cand_matches;
 	cand_matches.reserve (500);
@@ -503,7 +503,7 @@ class PartialSearch : public QRunnable
 	std::vector<unsigned> *m_entries;
 	QMutex *m_mutex;
 	QSemaphore *m_sem;
-	std::vector<int[2]> *m_result;
+	std::vector<std::array<int, 2>> *m_result;
 	std::vector<gamedb_model::cont_bw> *m_conts;
 	std::atomic<long> *m_pcur;
 	size_t m_first, m_end;
@@ -511,7 +511,7 @@ class PartialSearch : public QRunnable
 
 public:
 	PartialSearch (std::vector<unsigned> *e, int start, int end,
-		       const std::vector<go_pattern> &p, std::vector<int[2]> *r,
+		       const std::vector<go_pattern> &p, std::vector<std::array<int, 2>> *r,
 		       std::vector<gamedb_model::cont_bw> *c, QMutex *m, QSemaphore *s,
 		       std::atomic<long> *count)
 		: m_pats (p), m_entries (e), m_mutex (m), m_sem (s), m_result (r), m_conts (c),
@@ -523,7 +523,7 @@ public:
 	void run () override
 	{
 		std::vector<gamedb_model::cont_bw> continuations (m_pats[0].sz_y () * m_pats[0].sz_x ());
-		std::vector<int[2]> games = match_games (*m_entries, m_first, m_end, m_pats, continuations, m_cont_sz_x);
+		std::vector<std::array<int, 2>> games = match_games (*m_entries, m_first, m_end, m_pats, continuations, m_cont_sz_x);
 		{
 			QMutexLocker lock (m_mutex);
 			for (size_t i = m_first; i < m_end; i++) {
@@ -574,7 +574,7 @@ std::vector<go_pattern> unique_symmetries (const go_pattern &p0)
 gamedb_model::search_result
 gamedb_model::find_pattern (const go_pattern &p0, std::atomic<long> *cur, std::atomic<long> *max)
 {
-	std::vector<int[2]> result (db_data->m_all_entries.size ());
+	std::vector<std::array<int, 2>> result (db_data->m_all_entries.size ());
 	std::vector<cont_bw> continuations (p0.sz_y () * p0.sz_x ());
 
 	std::vector<go_pattern> pats = unique_symmetries (p0);
@@ -592,7 +592,7 @@ gamedb_model::find_pattern (const go_pattern &p0, std::atomic<long> *cur, std::a
 		n_started++;
 	}
 	completion_sem.acquire (n_started);
-	return std::pair <std::vector<int[2]>, std::vector<gamedb_model::cont_bw>> { std::move (result), std::move (continuations) };
+	return std::pair <std::vector<std::array<int, 2>>, std::vector<gamedb_model::cont_bw>> { std::move (result), std::move (continuations) };
 }
 
 game_state *find_first_match (go_game_ptr gr, const go_pattern &p0, board_rect &sel_return)
