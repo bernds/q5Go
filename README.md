@@ -3,6 +3,7 @@
 This is a tool for Go players which performs the following functions:
 - SGF editor
 - Analysis frontend for KataGo, Leela Zero or compatible engines
+- Pattern search and game info search in a database
 - GTP interface
 - IGS client
 - Export to a variety of formats
@@ -141,6 +142,14 @@ game event or date. This functions as an alternative file open dialog
 with preview functionality.
 
 ![screenshot](screens/database.png)
+
+q5go also has a pattern search feature similar to Kombilo. However, it
+does not use Kombilo's file format due to some technical issues which
+could lead to user confusion.  So you need to first create a new DB in
+each directory using the settings dialog; afterwards you will be able
+to use pattern search.
+
+![screenshot](screens/patsearch.png)
 
 ### Go variants
 
