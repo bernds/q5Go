@@ -545,6 +545,7 @@ void PatternSearchWindow::redraw_stats ()
 	}
 	double spacing = count > 1 ? (w - max_w * count) / (count - 1) : 0;
 	double real_w = max_w < 10 ? max_w : max_w * 8. / 10;
+	spacing = std::min (spacing, max_w * 0.75);
 
 	for (size_t i = 0; i < stis.size (); i++) {
 		auto it = stis[i];
