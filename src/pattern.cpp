@@ -563,6 +563,26 @@ std::vector<go_pattern> unique_symmetries (const go_pattern &p0)
 	return pats;
 }
 
+std::vector<go_pattern> identical_symmetries (const go_pattern &p0)
+{
+	std::vector<go_pattern> pats = {
+		p0.transform<coord_transform_r90> (),
+		p0.transform<coord_transform_r180> (),
+		p0.transform<coord_transform_r270> (),
+		p0.transform<coord_transform_flip1> (),
+		p0.transform<coord_transform_flip2> (),
+		p0.transform<coord_transform_flip3> (),
+		p0.transform<coord_transform_flip4> ()
+	};
+	pats.erase (std::remove_if (std::begin (pats), std::end (pats),
+				    [&p0] (const go_pattern &pat)
+				    {
+					    return p0 != pat;
+				    }),
+		    std::end (pats));
+	return pats;
+}
+
 /* The main pattern search entry point.
 
    The algorithm is roughly the same as in Kombilo.  We use the "final position" bitmaps to identify candidate
@@ -592,6 +612,27 @@ gamedb_model::find_pattern (const go_pattern &p0, std::atomic<long> *cur, std::a
 		n_started++;
 	}
 	completion_sem.acquire (n_started);
+
+	std::vector<go_pattern> sym_pats = identical_symmetries (p0);
+	for (auto &sym: sym_pats) {
+#ifdef CHECKING
+		if (sym.sz_x () != p0.sz_x () || sym.sz_y () != p0.sz_y ())
+			abort ();
+#endif
+		unsigned szx = p0.sz_x ();
+		unsigned szy = p0.sz_y ();
+		for (unsigned x = 0; x < szx; x++)
+			for (unsigned y = 0; y < szy; y++) {
+				unsigned x1, y1;
+				std::tie (x1, y1) = sym.reverse () (x, y, szx, szy);
+				if (y1 * szx + x1 < y * szx + x) {
+					continuations[y1 * szx + x1].first += continuations[y * szx + x].first;
+					continuations[y1 * szx + x1].second += continuations[y * szx + x].second;
+					continuations[y * szx + x].first = 0;
+					continuations[y * szx + x].second = 0;
+				}
+			}
+	}
 	return std::pair <std::vector<std::array<int, 2>>, std::vector<gamedb_model::cont_bw>> { std::move (result), std::move (continuations) };
 }
 

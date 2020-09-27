@@ -27,8 +27,8 @@ public:
 	go_pattern &operator= (const go_pattern &) = default;
 	go_pattern &operator= (go_pattern &&) = default;
 
-	int sz_x () const { return m_sz_x; }
-	int sz_y () const { return m_sz_y; }
+	unsigned sz_x () const { return m_sz_x; }
+	unsigned sz_y () const { return m_sz_y; }
 
 	bool operator== (const go_pattern &other) const;
 	bool operator!= (const go_pattern &other) const { return !operator== (other); }
