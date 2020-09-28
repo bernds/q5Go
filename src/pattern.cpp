@@ -299,6 +299,8 @@ void go_pattern::find_cands (std::vector<cand_match> &result,
 	if (min_offx > max_offx)
 		return;
 
+	bool is_empty = n_bits () == 0;
+
 	for (unsigned yoff = min_offy; yoff < max_offy; yoff++) {
 		uint32_t valid_a = (1 << (max_offx - min_offx)) - 1;
 		uint32_t valid_b = valid_a;
@@ -324,7 +326,8 @@ void go_pattern::find_cands (std::vector<cand_match> &result,
 		}
 		if ((valid_a | valid_b) == 0)
 			continue;
-
+		if (is_empty)
+			valid_b = 0;
 		for (unsigned xoff = min_offx; xoff < max_offx; xoff++, valid_a >>= 1, valid_b >>= 1) {
 			if (valid_a & 1) {
 				std::vector<uint32_t> caps (m_sz_y);

@@ -33,8 +33,14 @@ public:
 	bool operator== (const go_pattern &other) const;
 	bool operator!= (const go_pattern &other) const { return !operator== (other); }
 
+	unsigned n_bits () const
+	{
+		unsigned count = 0;
+		for (unsigned i = 0; i < m_sz_y; i++)
+			count += popcnt (m_lines[i].bits[0]) + popcnt (m_lines[i].bits[1]);
+		return count;
+	}
 	void clear_alignment () { m_align = { false, false, false, false }; }
-
 	template<class T> go_pattern transform () const;
 
 	bool match (const bit_array &other_w, const bit_array &other_b, unsigned other_sz_x, unsigned other_sz_y,
@@ -66,10 +72,8 @@ private:
 
 public:
 	cand_match (const go_pattern &pat, std::vector<uint32_t> &&caps, unsigned xoff, unsigned yoff)
-		: go_pattern (pat), final_caps (caps), m_xoff (xoff), m_yoff (yoff)
+		: go_pattern (pat), final_caps (caps), m_xoff (xoff), m_yoff (yoff), n_mismatched (n_bits ())
 	{
-		for (unsigned i = 0; i < m_sz_y; i++)
-			n_mismatched += popcnt (m_lines[i].bits[0]) + popcnt (m_lines[i].bits[1]);
 	}
 	cand_match (const go_pattern &pat, std::vector<uint32_t> &&caps, unsigned xoff, unsigned yoff, enum swapped)
 		: cand_match (pat, std::move (caps), xoff, yoff)
