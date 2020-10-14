@@ -4,7 +4,7 @@
 #define PACKAGE1 "q5goClient"
 
 /* Version number of package */
-#define VERSION_1 "1.1.1"
+#define VERSION_1 "2.0"
 
 #ifdef GITHUB_CI_BUILD
 #define VERSION VERSION_1 " (GitHub action CI build on " __DATE__ ")"
@@ -16,9 +16,8 @@
 
 #define NEWVERSIONWARNING "<p>Welcome to version " VERSION " of q5go.</p>\n" \
   CIBUILD \
-  "<p>This is a minor bug fix release for version 1.1, which had issues saving and loading games with large board sizes.</p>" \
-  "<p>There is also a new dialog to remove engine analysis from a file, and a feature to save all variations from a file to separate files.</p>" \
-  "<p>It is now possible to choose an autosave path for online games.</p>" \
+  "<p>This version has a new pattern search feature, similar to Kombilo. Create databases in the settings dialog.</p>" \
+  "<p>There are also a number of improvements in online play, for example the option to observe multiple games in one window.</p>" \
   "<p>For a full list of changes, please refer to the README.</p>" \
   "<p>This message will not be shown anymore on startup.</p>"
 

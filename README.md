@@ -1,4 +1,4 @@
-## q5Go 1.1
+## q5Go 2.0
 
 This is a tool for Go players which performs the following functions:
 - SGF editor
@@ -21,32 +21,34 @@ and modernized.
 
 ![screenshot](screens/screenshot.png)
 
-These are the major user-visible changes in 1.1:
- * Performance improvements when loading and editing very large SGF files.
- * q5go can now detect when an observed game on IGS is adjourned and restarted
-   and follow it in the same window. This requires the server to be set to
-   non-quiet mode.
- * When playing an engine, there is now a "Play again" button.
- * In an online match with Canadian time, time warnings can now be enabled
-   for remaining average time, not just remaining total time.
- * In an online match, remaining seconds in low time situations can now be
-   shown on the opponent's last placed stone.
- * Added a "Go terminology" SGF to the tutorials.
- * The greeter window now has a hint to choose "Play online" for a full set
-   of menus.
- * The program is more helpful when detecting a broken SGF written by Jago.
- * Added more helpful error messages when editing servers in the preferences.
- * Score evaluations are now shown in the board window when analysis is on.
- * Added a feature to visualize connected stones by drawing thick lines
-   between them. May be helpful for beginners.
- * GTP support was extended to support board sizes > 25, for KataGo.
-
-Version 1.1.1 is mostly a bug-fix release to properly suppert saving and
-loading large board sizes. But there are also a few additions:
- * There is now a tool to manage and remove the information added by engine
-   analysis from a given SGF file.
- * It is now possible to save all variations in a file into separate files.
- * It is possible to choose a path for autosaving online games.
+These are the major user-visible changes in 2.0:
+ * Pattern search is now available, similar to Kombilo.  Use the settings
+   dialog to create a suitable database.
+   Unfortunately existing Kombilo databases can't be used for this because
+   of 32/64 bit compatibility issues.
+ * Database load times are reduced, and threading was added so that
+   the user interface remains responsive.
+ * Multiple online games can now be observed in a single window with
+   clickable previews to switch between them.  The old mode of one game
+   per window is still available.
+ * There is a new "Tip of the day" dialog on startup, which displays
+   features that are maybe not easily discoverable.  It can be disabled.
+ * There are several new high resolution wood textures for the board
+   to choose from.
+ * When playing engines that are capable of analysis, the evaluation is
+   now collected during the game and can be displayed live.
+ * Engine configuration now allows engines to be unrestricted in
+   board size and komi, catching up with improvements in KataGo over
+   Leela Zero.
+ * Some GTP bugs were fixed, which may improve compatibility with
+   certain engines.
+ * Window titles can now be overriden in the settings, which should help
+   with streaming setups.
+ * Performance improvements for the screen updates should now make it
+   feasible to turn off quiet mode when online, which allows the server
+   to send live player and game updates.
+ * There is a new option to highlight the user's own chat messages in
+   a different color.
 
 See VERSION_HISTORY for a history of changes.
 

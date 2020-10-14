@@ -1,3 +1,34 @@
+q5Go 2.0
+
+These are the major user-visible changes in 2.0:
+ * Pattern search is now available, similar to Kombilo.  Use the settings
+   dialog to create a suitable database.
+   Unfortunately existing Kombilo databases can't be used for this because
+   of 32/64 bit compatibility issues.
+ * Database load times are reduced, and threading was added so that
+   the user interface remains responsive.
+ * Multiple online games can now be observed in a single window with
+   clickable previews to switch between them.  The old mode of one game
+   per window is still available.
+ * There is a new "Tip of the day" dialog on startup, which displays
+   features that are maybe not easily discoverable.  It can be disabled.
+ * There are several new high resolution wood textures for the board
+   to choose from.
+ * When playing engines that are capable of analysis, the evaluation is
+   now collected during the game and can be displayed live.
+ * Engine configuration now allows engines to be unrestricted in
+   board size and komi, catching up with improvements in KataGo over
+   Leela Zero.
+ * Some GTP bugs were fixed, which may improve compatibility with
+   certain engines.
+ * Window titles can now be overriden in the settings, which should help
+   with streaming setups.
+ * Performance improvements for the screen updates should now make it
+   feasible to turn off quiet mode when online, which allows the server
+   to send live player and game updates.
+ * There is a new option to highlight the user's own chat messages in
+   a different color.
+
 q5Go 1.1
 
 These are the major user-visible changes in 1.1:
