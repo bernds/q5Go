@@ -472,10 +472,12 @@ game_state *game_state::follow_path (const std::vector<int> &path)
 		int idx = path[i];
 		if (st->m_children.size () == 1) {
 			for (int j = 0; j < idx; j++) {
-				/* This has occurred once, or at least the backtrace
-				   suggested it did.  Add some extra checking to try
-				   to catch it again when debugging, and to prevent
-				   crashes in release builds.  */
+				/* This case occurred twice, when using pattern search
+				   on an observed game.  The cause seems to have been
+				   a game record mismatch when resuming an adjourned
+				   game.
+				   Assumed fixed now, but we can leave this code
+				   here for safety.  */
 				if (st->n_children () != 1) {
 #ifdef CHECKING
 					abort ();

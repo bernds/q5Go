@@ -568,7 +568,7 @@ void MainWindow_IGS::resume_game (qGoBoard *connector, go_game_ptr old_game, go_
 				p.state = st;
 				choices_resized ();
 				if (m_game == old_game) {
-					init_game_record (m_game);
+					init_game_record (new_game);
 					set_game_position (st);
 				}
 				return;
