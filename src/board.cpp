@@ -2209,6 +2209,12 @@ void BoardView::set_displayed (game_state *st)
 	sync_appearance (false);
 }
 
+void BoardView::replace_displayed (const go_board &b)
+{
+	m_displayed->replace (b, m_displayed->to_move ());
+	sync_appearance (false);
+}
+
 void BoardView::transfer_displayed (game_state *from, game_state *to)
 {
 	if (m_displayed == from)

@@ -306,6 +306,8 @@ public slots:
 	void slotFileExportPic(bool);
 	void slotFileExportPicClipB(bool);
 
+	void slotEditCopyPos(bool);
+	void slotEditPastePos(bool);
 	void slotEditDelete(bool);
 	void slotEditFigure(bool);
 

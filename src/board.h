@@ -148,6 +148,7 @@ public:
 	void set_board_win (MainWindow *w) { m_board_win = w; }
 	virtual void reset_game (go_game_ptr);
 	void set_displayed (game_state *);
+	void replace_displayed (const go_board &);
 	void transfer_displayed (game_state *, game_state *);
 	game_state *displayed () { return m_displayed; }
 

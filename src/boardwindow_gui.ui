@@ -2603,6 +2603,8 @@ After placing and/or undo release button for returning to starting point automat
     <addaction name="separator"/>
     <addaction name="setGameInfo"/>
     <addaction name="separator"/>
+    <addaction name="editCopyPos"/>
+    <addaction name="editPastePos"/>
     <addaction name="editDelete"/>
     <addaction name="separator"/>
     <addaction name="editStone"/>
@@ -4127,6 +4129,22 @@ Export current board to ASCII diagrams, for use in web forums.</string>
    </property>
    <property name="shortcut">
     <string>S</string>
+   </property>
+  </action>
+  <action name="editCopyPos">
+   <property name="text">
+    <string>Copy position</string>
+   </property>
+   <property name="toolTip">
+    <string>Copy the board position into the clipboard. It can be pasted in edit mode.</string>
+   </property>
+  </action>
+  <action name="editPastePos">
+   <property name="text">
+    <string>Paste position (Edit mode only)</string>
+   </property>
+   <property name="toolTip">
+    <string>Paste a position from the clipboard.</string>
    </property>
   </action>
  </widget>

@@ -931,6 +931,8 @@ void MainWindow::initActions ()
 		});
 
 	/* Edit menu.  */
+	connect(editCopyPos, &QAction::triggered, this, &MainWindow::slotEditCopyPos);
+	connect(editPastePos, &QAction::triggered, this, &MainWindow::slotEditPastePos);
 	connect(editDelete, &QAction::triggered, this, &MainWindow::slotEditDelete);
 	connect(setGameInfo, &QAction::triggered, this, &MainWindow::slotSetGameInfo);
 
@@ -1458,6 +1460,48 @@ void MainWindow::slotFileExportPic(bool)
 void MainWindow::slotFileExportPicClipB(bool)
 {
 	QApplication::clipboard()->setPixmap (gfx_board->grabPicture ());
+}
+
+void MainWindow::slotEditCopyPos (bool)
+{
+	game_state *st = gfx_board->displayed ();
+	const go_board &b = st->get_board ();
+	QString s;
+	for (int y = 0; y < b.size_y (); y++) {
+		for (int x = 0; x < b.size_x (); x++) {
+			stone_color c = b.stone_at (x, y);
+			s += c == none ? ' ' : c == black ? 'X' : 'O';
+		}
+		s += '\n';
+	}
+	QApplication::clipboard ()->setText (s);
+}
+
+void MainWindow::slotEditPastePos (bool)
+{
+	QString s = QApplication::clipboard ()->text ();
+	game_state *st = gfx_board->displayed ();
+	go_board b = st->get_board ();
+	try {
+		int sx = b.size_x ();
+		int sy = b.size_y ();
+		if (s.length () != (sx + 1) * sy)
+			throw false;
+		int pos = 0;
+		for (int y = 0; y < sy; y++) {
+			for (int x = 0; x < sx; x++) {
+				QChar c = s[pos++];
+				if (c != ' ' && c != 'X' && c != 'O')
+					throw false;
+				b.set_stone (x, y, c == ' ' ? none : c == 'X' ? black : white);
+			}
+			if (s[pos++] != '\n')
+				throw false;
+		}
+		gfx_board->replace_displayed (b);
+	} catch (...) {
+		QMessageBox::warning (this, PACKAGE, tr ("No valid position to paste found in the clipboard."));
+	}
 }
 
 void MainWindow::slotEditDelete (bool)
@@ -2418,6 +2462,7 @@ void MainWindow::setGameMode (GameMode mode)
 	navNextComment->setEnabled (enable_nav);
 	navIntersection->setEnabled (enable_nav);
 	navNthMove->setEnabled (enable_nav);
+	editPastePos->setEnabled (mode == modeEdit);
 	editDelete->setEnabled (enable_nav && mode_in != modePostMatch);
 	navSwapVariations->setEnabled (enable_nav);
 
