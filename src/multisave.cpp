@@ -1,5 +1,4 @@
 #include <QButtonGroup>
-#include <QProgressDialog>
 
 #include "gogame.h"
 #include "board.h"
