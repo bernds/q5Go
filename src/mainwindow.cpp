@@ -606,12 +606,22 @@ MainWindow::MainWindow (QWidget* parent, go_game_ptr gr, const QString opener_sc
 	main_window_list.push_back (this);
 
 	connect (db_data_controller, &GameDB_Data_Controller::signal_prepare_load,
-		 [this] () { searchPattern->setEnabled (false); });
+		 this, &MainWindow::disable_search_pattern);
 	connect (db_data, &GameDB_Data::signal_load_complete,
-		 [this] () { searchPattern->setEnabled (true); });
+		 this, &MainWindow::enable_search_pattern);
 	searchPattern->setEnabled (db_data->load_complete);
 	searchPattern->setVisible (m_gamemode != modeMatch && !setting->m_dbpaths.isEmpty ());
 	connect (searchPattern, &QAction::triggered, this, &MainWindow::perform_search);
+}
+
+void MainWindow::disable_search_pattern ()
+{
+	searchPattern->setEnabled (false);
+}
+
+void MainWindow::enable_search_pattern ()
+{
+	searchPattern->setEnabled (true);
 }
 
 void MainWindow::init_game_record (go_game_ptr gr)

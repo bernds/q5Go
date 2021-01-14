@@ -354,6 +354,8 @@ public slots:
 	void sliderChanged (int);
 
 	void perform_search ();
+	void enable_search_pattern ();
+	void disable_search_pattern ();
 };
 
 class MainWindow_GTP : public MainWindow, public GTP_Eval_Controller
