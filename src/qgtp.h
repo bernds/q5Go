@@ -87,6 +87,7 @@ protected:
 	virtual void notice_analyzer_id (const analyzer_id &, bool) { }
 public:
 	analyzer analyzer_state ();
+	void show_analyzer_dialog ();
 
 	virtual void gtp_played_move (GTP_Process *, int, int) override { /* Should not happen.  */ }
 	virtual void gtp_played_resign (GTP_Process *) override { /* Should not happen.  */ }
@@ -188,6 +189,7 @@ public:
 	void analyze (stone_color col, int interval);
 	void pause_analysis ();
 	void initiate_analysis_switch ();
+	void show_messages ();
 
 	void quit ();
 

@@ -2701,6 +2701,8 @@ After placing and/or undo release button for returning to starting point automat
     <addaction name="anConnect"/>
     <addaction name="anDisconnect"/>
     <addaction name="anPause"/>
+    <addaction name="anMessages"/>
+    <addaction name="separator"/>
     <addaction name="anEdit"/>
     <addaction name="separator"/>
     <addaction name="anPlay"/>
@@ -4145,6 +4147,11 @@ Export current board to ASCII diagrams, for use in web forums.</string>
    </property>
    <property name="toolTip">
     <string>Paste a position from the clipboard.</string>
+   </property>
+  </action>
+  <action name="anMessages">
+   <property name="text">
+    <string>&amp;Show engine messages</string>
    </property>
   </action>
  </widget>

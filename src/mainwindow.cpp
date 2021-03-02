@@ -1036,6 +1036,7 @@ void MainWindow::initActions ()
 	connect(anPause, &QAction::toggled, this, [=] (bool on) { if (on) { grey_eval_bar (); } gfx_board->pause_analysis (on); });
 	connect(anDisconnect, &QAction::triggered, this, [=] () { gfx_board->stop_analysis (); });
 	connect(anBatch, &QAction::triggered, [] (bool) { show_batch_analysis (); });
+	connect(anMessages, &QAction::triggered, [this] (bool) { gfx_board->show_analyzer_dialog (); });
 	connect(anPlay, &QAction::triggered, this, &MainWindow::slotPlayFromHere);
 	connect(anEdit, &QAction::triggered, this, &MainWindow::slotEditAnalysis);
 
@@ -1067,6 +1068,8 @@ void MainWindow::initActions ()
 	navNextFigure->setEnabled(false);
 	navPrevFigure->setEnabled(false);
 	navIntersection->setEnabled(false);
+
+	anMessages->setEnabled (false);
 
 	/* Need actions with shortcuts added to the window, so that the shortcut still works
 	   if the menubar is hidden.  */
@@ -1727,6 +1730,7 @@ void MainWindow::start_analysis ()
 		return;
 	}
 	gfx_board->start_analysis (it.value ());
+	anMessages->setEnabled (true);
 }
 
 void MainWindow::populate_engines_menu ()

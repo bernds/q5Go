@@ -150,6 +150,11 @@ void GTP_Process::startup_part7 (const QString &response)
 	m_controller->gtp_startup_success (this);
 }
 
+void GTP_Process::show_messages ()
+{
+	m_dlg.show ();
+}
+
 void GTP_Process::append_text (const QString &txt, const QColor &col)
 {
 	/* If we let the text grow without bounds, eventually Qt will
@@ -573,6 +578,12 @@ GTP_Eval_Controller::~GTP_Eval_Controller ()
 {
 	clear_eval_data ();
 	delete m_analyzer;
+}
+
+void GTP_Eval_Controller::show_analyzer_dialog ()
+{
+	if (m_analyzer != nullptr)
+		m_analyzer->show_messages ();
 }
 
 analyzer GTP_Eval_Controller::analyzer_state ()
