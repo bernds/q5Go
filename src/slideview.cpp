@@ -1,5 +1,6 @@
 #include <QPixmap>
 #include <QCheckBox>
+#include <QMessageBox>
 
 #include "gogame.h"
 #include "board.h"
