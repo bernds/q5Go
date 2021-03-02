@@ -1736,7 +1736,7 @@ InfoType Parser::cmd27(const QString &txt)
 	}
 	else
 	{
-		if (txt[15] != ' ')
+		if (txt.length () > 15 && txt[15] != ' ')
 		{
 			// parse line
 			aPlayer->info = txt.mid(4,2);
@@ -1769,7 +1769,7 @@ InfoType Parser::cmd27(const QString &txt)
 		// position of delimiter between two players
 		pos = txt.indexOf('|');
 		// check if 2nd player in a line && player (name) exists
-		if (pos != -1 && txt[52] != ' ')
+		if (pos != -1 && txt.length() >= 52 && txt[52] != ' ')
 		{
 			// parse line
 			aPlayer->info = txt.mid(41,2);
