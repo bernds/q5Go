@@ -1,4 +1,5 @@
 #include <fstream>
+#include <QFileDialog>
 
 #include "analyzedlg.h"
 
@@ -37,6 +38,7 @@ AnalyzeDialog::AnalyzeDialog (QWidget *parent, const QString &filename)
 
 	connect (enqueueButton, &QPushButton::clicked, [=] (bool) { start_job (); });
 	connect (fileselButton, &QPushButton::clicked, [=] (bool) { select_file (); });
+	connect (enqueueDirButton, &QPushButton::clicked, [=] (bool) { enqueue_dir (); });
 	connect (dbselButton, &QPushButton::clicked, [=] (bool) { select_file_db (); });
 	connect (openButton, &QPushButton::clicked, [=] (bool) { open_in_progress_window (false); });
 	connect (openDoneButton, &QPushButton::clicked, [=] (bool) { open_in_progress_window (true); });
@@ -140,7 +142,7 @@ void AnalyzeDialog::analyzer_state_changed ()
 	boardsizeSpinBox->setEnabled (!any_jobs && s == analyzer::disconnected);
 }
 
-AnalyzeDialog::job::job (AnalyzeDialog *dlg, QString &title, go_game_ptr gr, int n_seconds, int n_lines,
+AnalyzeDialog::job::job (AnalyzeDialog *dlg, const QString &title, go_game_ptr gr, int n_seconds, int n_lines,
 			 engine_komi k, bool comments)
 	: m_dlg (dlg), m_title (title), m_game (gr), m_n_seconds (n_seconds), m_n_lines (n_lines), m_komi_type (k),
 	  m_comments (comments)
@@ -299,6 +301,22 @@ void AnalyzeDialog::select_file ()
 	QFileInfo fi (filename);
 	m_last_dir = fi.dir ().absolutePath ();
 	filenameEdit->setText (filename);
+}
+
+void AnalyzeDialog::enqueue_dir ()
+{
+	QString dirname = QFileDialog::getExistingDirectory (this, tr ("Choose directory to add to the queue"), m_last_dir);
+	if (dirname.isEmpty())
+		return;
+	QDir dir (dirname);
+	QStringList filters;
+	filters << "*.sgf" << "*.SGF";
+	dir.setNameFilters (filters);
+	int skipped = 0;
+	int failed = 0;
+	for (auto f: dir.entryList (QDir::Files | QDir::Readable | QDir::NoDotAndDotDot, QDir::Name)) {
+		start_job (dir.absoluteFilePath (f));
+	}
 }
 
 void AnalyzeDialog::select_file_db ()
@@ -570,9 +588,8 @@ void AnalyzeDialog::start_engine ()
 	start_analyzer (e, boardsizeSpinBox->text ().toInt (), 7.5, false);
 }
 
-void AnalyzeDialog::start_job ()
+void AnalyzeDialog::start_job (const QString &f)
 {
-	QString f = filenameEdit->text ();
 	go_game_ptr gr = record_from_file (f, nullptr);
 	if (gr == nullptr)
 		return;
@@ -604,4 +621,9 @@ void AnalyzeDialog::start_job ()
 	if (analyzer_state () == analyzer::paused) {
 		queue_next ();
 	}
+}
+
+void AnalyzeDialog::start_job ()
+{
+	start_job (filenameEdit->text ());
 }

@@ -64,7 +64,7 @@ class AnalyzeDialog : public QMainWindow, public Ui::AnalyzeDialog, public GTP_E
 		display *m_display;
 		int m_idx;
 
-		job (AnalyzeDialog *dlg, QString &title, go_game_ptr gr, int n_seconds, int n_lines,
+		job (AnalyzeDialog *dlg, const QString &title, go_game_ptr gr, int n_seconds, int n_lines,
 		     engine_komi, bool comments);
 		~job ();
 		game_state *select_request (bool pop);
@@ -82,9 +82,11 @@ class AnalyzeDialog : public QMainWindow, public Ui::AnalyzeDialog, public GTP_E
 
 	void select_file ();
 	void select_file_db ();
+	void enqueue_dir ();
 	void start_engine ();
 	void stop_engine ();
 	void start_job ();
+	void start_job (const QString &);
 
 	/* Maintaining the job queue listviews and assorted data structures.  */
 	void insert_job (display &, QListView *, job *);
