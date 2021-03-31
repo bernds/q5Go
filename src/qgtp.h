@@ -36,6 +36,9 @@ public:
 	virtual void gtp_setup_success (GTP_Process *p) = 0;
 	virtual void gtp_exited (GTP_Process *p) = 0;
 	virtual void gtp_failure (GTP_Process *p, const QString &) = 0;
+	virtual void gtp_komi_failure (GTP_Process *p, const QString &)
+	{
+	}
 	virtual void gtp_eval (GTP_Process *, const QString &, bool)
 	{
 	}
@@ -154,6 +157,7 @@ class GTP_Process : public QProcess
 	void score_callback_1 (const QString &);
 	void score_callback_2 (const QString &);
 	void internal_quit ();
+	void komi_err_receiver (const QString &);
 	void default_err_receiver (const QString &);
 	void rect_board_err_receiver (const QString &);
 	void dup_move (game_state *, bool);

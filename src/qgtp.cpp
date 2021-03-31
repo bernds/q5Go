@@ -267,7 +267,7 @@ void GTP_Process::komi (double km)
 		return;
 
 	m_komi = km;
-	send_request ("komi " + QString::number (m_komi));
+	send_request ("komi " + QString::number (m_komi), nullptr, &GTP_Process::komi_err_receiver);
 }
 
 void GTP_Process::request_move (stone_color col, bool analyze)
@@ -521,6 +521,12 @@ void GTP_Process::default_err_receiver (const QString &)
 {
 	m_controller->gtp_failure (this, tr ("Invalid response from GTP engine"));
 	quit ();
+}
+
+void GTP_Process::komi_err_receiver (const QString &errstr)
+{
+	// Since SGF files with insane komi values exist, don't cause a hard error during analysis.
+	m_controller->gtp_komi_failure (this, errstr);
 }
 
 void GTP_Process::rect_board_err_receiver (const QString &)
