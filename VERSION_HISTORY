@@ -1,3 +1,13 @@
+q5Go 2.1
+
+These are the major user-visible changes in 2.1:
+ * A number of crashes in odd situations were fixed (such as analyzing
+   games with komi values like 650, or handling invalid server messages).
+ * It is now possible to copy/paste positions in Edit mode.
+ * The batch analysis dialog has a new button to enqueue an entire
+   directory of SGF files.
+ * Engine games now allow board sizes up to 52.
+
 q5Go 2.0
 
 These are the major user-visible changes in 2.0:

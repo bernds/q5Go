@@ -1,4 +1,4 @@
-## q5Go 2.0
+## q5Go 2.1
 
 This is a tool for Go players which performs the following functions:
 - SGF editor
@@ -21,34 +21,13 @@ and modernized.
 
 ![screenshot](screens/screenshot.png)
 
-These are the major user-visible changes in 2.0:
- * Pattern search is now available, similar to Kombilo.  Use the settings
-   dialog to create a suitable database.
-   Unfortunately existing Kombilo databases can't be used for this because
-   of 32/64 bit compatibility issues.
- * Database load times are reduced, and threading was added so that
-   the user interface remains responsive.
- * Multiple online games can now be observed in a single window with
-   clickable previews to switch between them.  The old mode of one game
-   per window is still available.
- * There is a new "Tip of the day" dialog on startup, which displays
-   features that are maybe not easily discoverable.  It can be disabled.
- * There are several new high resolution wood textures for the board
-   to choose from.
- * When playing engines that are capable of analysis, the evaluation is
-   now collected during the game and can be displayed live.
- * Engine configuration now allows engines to be unrestricted in
-   board size and komi, catching up with improvements in KataGo over
-   Leela Zero.
- * Some GTP bugs were fixed, which may improve compatibility with
-   certain engines.
- * Window titles can now be overriden in the settings, which should help
-   with streaming setups.
- * Performance improvements for the screen updates should now make it
-   feasible to turn off quiet mode when online, which allows the server
-   to send live player and game updates.
- * There is a new option to highlight the user's own chat messages in
-   a different color.
+These are the major user-visible changes in 2.1:
+ * A number of crashes in odd situations were fixed (such as analyzing
+   games with komi values like 650, or handling invalid server messages).
+ * It is now possible to copy/paste positions in Edit mode.
+ * The batch analysis dialog has a new button to enqueue an entire
+   directory of SGF files.
+ * Engine games now allow board sizes up to 52.
 
 See VERSION_HISTORY for a history of changes.
 
