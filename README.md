@@ -161,8 +161,10 @@ window with previews in a selection pane.
 On Linux, make a build subdirectory, enter it, and run
 ```sh
   qmake ../src/q5go.pro PREFIX=/where/you/want/to/install
+  make
+  make install
 ```
-followed by make and make install.  If the pandoc tool is installed, this
+If the pandoc tool is installed, this
 README.md file will be converted to html and installed, and can then be
 viewed through a menu option.
 
