@@ -4,7 +4,7 @@
 #define PACKAGE1 "q5goClient"
 
 /* Version number of package */
-#define VERSION_1 "2.1"
+#define VERSION_1 "2.1.1"
 
 #ifdef GITHUB_CI_BUILD
 #define VERSION VERSION_1 " (GitHub action CI build on " __DATE__ ")"

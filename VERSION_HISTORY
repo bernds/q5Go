@@ -8,6 +8,9 @@ These are the major user-visible changes in 2.1:
    directory of SGF files.
  * Engine games now allow board sizes up to 52.
 
+Version 2.1.1 is a minor update to also fix two engine play to accept
+board sizes up to 52.
+
 q5Go 2.0
 
 These are the major user-visible changes in 2.0:

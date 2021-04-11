@@ -1,4 +1,4 @@
-## q5Go 2.1
+## q5Go 2.1.1
 
 This is a tool for Go players which performs the following functions:
 - SGF editor
@@ -28,6 +28,9 @@ These are the major user-visible changes in 2.1:
  * The batch analysis dialog has a new button to enqueue an entire
    directory of SGF files.
  * Engine games now allow board sizes up to 52.
+
+Version 2.1.1 is a minor update to also fix two engine play to accept
+board sizes up to 52.
 
 See VERSION_HISTORY for a history of changes.
 
