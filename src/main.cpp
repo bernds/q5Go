@@ -547,8 +547,8 @@ int main(int argc, char **argv)
 		codec = QTextCodec::codecForName(encoding.toUtf8());
 	}
 	QStringList not_found;
-	for (auto arg: args) {
-		if (QFile::exists(arg) && arg.endsWith(".sgf", Qt::CaseInsensitive))
+	for (const auto &arg: args) {
+		if (QFile::exists(arg))
 			windows_open |= open_window_from_file (arg, codec);
 		else
 			not_found << arg;
