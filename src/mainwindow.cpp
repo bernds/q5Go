@@ -1858,6 +1858,7 @@ void MainWindow::slotSetGameInfo (bool)
 	dlg.blackRankEdit->setText (QString::fromStdString (i.rank_b));
 	dlg.resultEdit->setText (QString::fromStdString (i.result));
 	dlg.dateEdit->setText (QString::fromStdString (i.date));
+	dlg.rulesEdit->setText (QString::fromStdString (i.rules));
 	dlg.placeEdit->setText (QString::fromStdString (i.place));
 	dlg.eventEdit->setText (QString::fromStdString (i.event));
 	dlg.roundEdit->setText (QString::fromStdString (i.round));
@@ -1877,6 +1878,7 @@ void MainWindow::slotSetGameInfo (bool)
 		newi.title = dlg.gameNameEdit->text().toStdString ();
 		newi.result = dlg.resultEdit->text().toStdString ();
 		newi.date = dlg.dateEdit->text().toStdString ();
+		newi.rules = dlg.rulesEdit->text().toStdString ();
 		newi.place = dlg.placeEdit->text().toStdString ();
 		newi.event = dlg.eventEdit->text().toStdString ();
 		newi.round = dlg.roundEdit->text().toStdString ();
