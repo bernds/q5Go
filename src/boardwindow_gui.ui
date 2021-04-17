@@ -2697,11 +2697,20 @@ After placing and/or undo release button for returning to starting point automat
       <string>Choose analysis engine</string>
      </property>
     </widget>
+    <widget class="QMenu" name="menuRuleset">
+     <property name="title">
+      <string>Ruleset</string>
+     </property>
+     <addaction name="rulesGuess"/>
+     <addaction name="rulesJapanese"/>
+     <addaction name="rulesChinese"/>
+    </widget>
     <addaction name="anChooseMenu"/>
     <addaction name="anConnect"/>
     <addaction name="anDisconnect"/>
     <addaction name="anPause"/>
     <addaction name="anMessages"/>
+    <addaction name="menuRuleset"/>
     <addaction name="separator"/>
     <addaction name="anEdit"/>
     <addaction name="separator"/>
@@ -4152,6 +4161,30 @@ Export current board to ASCII diagrams, for use in web forums.</string>
   <action name="anMessages">
    <property name="text">
     <string>&amp;Show engine messages</string>
+   </property>
+  </action>
+  <action name="rulesGuess">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Best guess from SGF</string>
+   </property>
+  </action>
+  <action name="rulesJapanese">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Japanese</string>
+   </property>
+  </action>
+  <action name="rulesChinese">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Chinese</string>
    </property>
   </action>
  </widget>

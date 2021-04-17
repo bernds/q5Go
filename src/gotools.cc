@@ -3,6 +3,8 @@
 #include "gogame.h"
 #include "gotools.h"
 
+#include <QString>
+
 /* Create a bit array of hoshi points for a board shaped like REF.  */
 bit_array calculate_hoshis (const go_board &ref)
 {
@@ -207,4 +209,106 @@ board_rect find_crop (const game_state *gs)
 			break;
 		}
 	return rect;
+}
+
+// Return a best guess of the ruleset in use in game record GI.
+go_rules guess_rules (const game_info &gi)
+{
+	QString place = QString::fromStdString (gi.place);
+	bool igs = place == "IGS";
+	if (igs)
+		return go_rules::japanese;
+	QString event = QString::fromStdString (gi.event);
+	bool ogs = (place == "OGS"
+		    || place.startsWith ("OGS: http://online-go.com")
+		    || place.startsWith ("OGS: https://online-go.com"));
+	bool kgs = (place.startsWith ("The Kiseido Go Server (KGS)")
+		    || place.startsWith ("The KGS Go Server"));
+	QString rules = QString::fromStdString (gi.rules);
+
+	if (rules.compare ("Old Chinese", Qt::CaseInsensitive) == 0)
+		return go_rules::old_chinese;
+	if (rules.contains ("Tromp", Qt::CaseInsensitive)
+	    && rules.contains ("Taylor", Qt::CaseInsensitive))
+		return go_rules::tt;
+	if (rules.contains ("zealand", Qt::CaseInsensitive))
+		return go_rules::nz;
+
+	bool rules_japanese = (rules.compare ("japanese", Qt::CaseInsensitive) == 0
+			       || rules.compare ("jpn", Qt::CaseInsensitive) == 0
+			       // GoGoD uses this for 10-game matches.  Assume they were
+			       // historical Japanese ones (the word uchikomi is Japanese after all)
+			       || rules.compare ("uchikomi", Qt::CaseInsensitive) == 0
+			       // Also used by GoGoD. Assume this is the Old Meijin tournament
+			       // (we could also check EV if there was reason to think this oddity
+			       // exists with other rulesets than Japanese)
+			       || rules.compare ("W wins Jigo", Qt::CaseInsensitive) == 0);
+	bool rules_chinese = rules.compare ("chinese", Qt::CaseInsensitive) == 0;
+	bool rules_korean = (rules.compare ("korean", Qt::CaseInsensitive) == 0
+			     || rules.compare ("Hanguk Kiweon", Qt::CaseInsensitive) == 0
+			     || rules.compare ("Hanguk Kiwon", Qt::CaseInsensitive) == 0);
+	bool rules_ing = (rules.compare ("Ing Goe", Qt::CaseInsensitive) == 0
+			  || rules.compare ("Ing", Qt::CaseInsensitive) == 0);
+	bool rules_aga = rules.compare ("AGA", Qt::CaseInsensitive) == 0;
+	bool rules_bga = rules.compare ("BGA", Qt::CaseInsensitive) == 0;
+	if (rules_ing)
+		return go_rules::ing;
+	if (rules_aga)
+		return go_rules::aga;
+	if (rules_bga)
+		return go_rules::bga;
+	if (rules_japanese)
+		return go_rules::japanese;
+	if (rules_chinese && ogs)
+		return go_rules::ogs_chinese;
+	if (rules_chinese && kgs)
+		return go_rules::kgs_chinese;
+	if (ogs)
+		return go_rules::japanese;
+	if (rules_chinese)
+		return go_rules::chinese;
+	if (rules_korean
+	    || place.compare ("Hanguk Kiweon", Qt::CaseInsensitive) == 0
+	    || place.compare ("Hanguk Kiwon", Qt::CaseInsensitive) == 0)
+		return go_rules::korean;
+	/* Rulesets using area scoring normally wouldn't use these
+	   komi values, so Japanese is a good guess.  SL claims Korean
+	   rules are nearly identical to Japanese so a
+	   misidentification isn't a real problem in this case.  */
+	if (gi.komi == 6.5 || gi.komi == 4.5)
+		return go_rules::japanese;
+	if (place.compare ("Nihon Ki-in", Qt::CaseInsensitive) == 0)
+		return go_rules::japanese;
+
+	return go_rules::unknown;
+}
+
+QString rules_name (go_rules r)
+{
+	switch (r) {
+	case go_rules::tt:
+		return QObject::tr ("Tromp-Taylor");
+	case go_rules::japanese:
+		return QObject::tr ("Japanese");
+	case go_rules::chinese:
+		return QObject::tr ("Chinese");
+	case go_rules::kgs_chinese:
+		return QObject::tr ("Chinese (KGS)");
+	case go_rules::ogs_chinese:
+		return QObject::tr ("Chinese (OGS)");
+	case go_rules::old_chinese:
+		return QObject::tr ("Ancient Chinese");
+	case go_rules::korean:
+		return QObject::tr ("Korean");
+	case go_rules::aga:
+		return QObject::tr ("AGA");
+	case go_rules::bga:
+		return QObject::tr ("BGA");
+	case go_rules::nz:
+		return QObject::tr ("New Zealand");
+	case go_rules::ing:
+		return QObject::tr ("Ing");
+	default:
+		return QObject::tr ("unknown");
+	}
 }

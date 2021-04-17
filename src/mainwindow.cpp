@@ -44,6 +44,7 @@
 #include "multisave.h"
 #include "edit_analysis.h"
 #include "patternsearch.h"
+#include "gotools.h"
 
 std::list<MainWindow *> main_window_list;
 
@@ -624,10 +625,26 @@ void MainWindow::enable_search_pattern ()
 	searchPattern->setEnabled (true);
 }
 
+void MainWindow::update_rules (go_game_ptr gr)
+{
+	go_rules r = go_rules::tt;
+	go_rules guess = guess_rules (gr->info ());
+	QString guess_str = rules_name (guess);
+	rulesGuess->setText (tr ("Best guess from SGF: %1").arg (guess_str));
+	if (rulesChinese->isChecked ())
+		r = go_rules::chinese;
+	else if (rulesJapanese->isChecked ())
+		r = go_rules::japanese;
+	else
+		r = guess;
+	gfx_board->set_rules (r);
+}
+
 void MainWindow::init_game_record (go_game_ptr gr)
 {
 	if (m_game != nullptr && !gr->same_size (*m_game))
 		gfx_board->stop_analysis ();
+
 	m_undo_stack.clear ();
 	m_undo_stack_pos = 0;
 	update_undo_menus ();
@@ -665,6 +682,7 @@ void MainWindow::init_game_record (go_game_ptr gr)
 
 void MainWindow::update_game_record ()
 {
+	update_rules (m_game);
 	ranked r = m_game->info ().rated;
 	if (r == ranked::unknown) {
 		normalTools->byoWidget->hide ();
@@ -706,6 +724,7 @@ MainWindow::~MainWindow()
 	// Actions
 	delete escapeFocus;
 	delete editGroup;
+	delete rulesGroup;
 	delete navSwapVariations;
 
 	delete whatsThis;
@@ -963,6 +982,16 @@ void MainWindow::initActions ()
 	editGroup->addAction (editNumber);
 	editGroup->addAction (editLetter);
 	editStone->setChecked (true);
+
+	connect (rulesGuess, &QAction::triggered, [this] () { update_rules (m_game); });
+	connect (rulesJapanese, &QAction::triggered, [this] () { update_rules (m_game); });
+	connect (rulesChinese, &QAction::triggered, [this] () { update_rules (m_game); });
+
+	rulesGroup = new QActionGroup (this);
+	rulesGroup->addAction (rulesGuess);
+	rulesGroup->addAction (rulesChinese);
+	rulesGroup->addAction (rulesJapanese);
+	rulesGuess->setChecked (true);
 
 	engineGroup = new QActionGroup (this);
 

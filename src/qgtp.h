@@ -73,6 +73,8 @@ protected:
 	double m_primary_eval;
 	double m_primary_score;
 
+	go_rules m_rules = go_rules::japanese;
+
 	game_state *m_eval_state {};
 
 	void clear_eval_data ();
@@ -91,6 +93,7 @@ protected:
 public:
 	analyzer analyzer_state ();
 	void show_analyzer_dialog ();
+	void set_rules (go_rules);
 
 	virtual void gtp_played_move (GTP_Process *, int, int) override { /* Should not happen.  */ }
 	virtual void gtp_played_resign (GTP_Process *) override { /* Should not happen.  */ }
@@ -129,6 +132,7 @@ class GTP_Process : public QProcess
 
 	bool m_analyze_lz = false;
 	bool m_analyze_kata = false;
+	bool m_kata_rules = false;
 
 	stone_color m_genmove_col = none;
 
@@ -140,6 +144,8 @@ class GTP_Process : public QProcess
 	t_receiver m_end_receiver = nullptr;
 	bool m_within_reply = false;
 
+	QString m_restart_analysis;
+
 	/* Number of the next request.  */
 	int req_cnt;
 	void send_request(const QString &, t_receiver = nullptr, t_receiver = &GTP_Process::default_err_receiver);
@@ -150,6 +156,7 @@ class GTP_Process : public QProcess
 	void startup_part5 (const QString &);
 	void startup_part6 (const QString &);
 	void startup_part7 (const QString &);
+	void startup_part8 (const QString &);
 	void setup_success (const QString &);
 	void receive_move (const QString &);
 	void pause_callback (const QString &);
@@ -158,6 +165,7 @@ class GTP_Process : public QProcess
 	void score_callback_2 (const QString &);
 	void internal_quit ();
 	void komi_err_receiver (const QString &);
+	void rules_err_receiver (const QString &);
 	void default_err_receiver (const QString &);
 	void rect_board_err_receiver (const QString &);
 	void dup_move (game_state *, bool);
@@ -185,6 +193,7 @@ public:
 	void setup_initial_position (game_state *);
 	void request_move (stone_color col, bool);
 	void request_score ();
+	void set_rules (go_rules);
 	void played_move (stone_color col, int x, int y);
 	void undo_move ();
 	void komi (double);

@@ -122,7 +122,7 @@ protected:
 
 	QAction *escapeFocus, *whatsThis;
 	QAction *navSwapVariations;
-	QActionGroup *editGroup, *engineGroup;
+	QActionGroup *editGroup, *engineGroup, *rulesGroup;
 	QButtonGroup *scoreGroup;
 	QList<QAction *> engine_actions;
 	QMap<QAction *, Engine> engine_map;
@@ -174,6 +174,7 @@ private:
 	void defaultPortraitLayout ();
 	void defaultLandscapeLayout ();
 
+	void update_rules (go_game_ptr);
 	void grey_eval_bar ();
 	void set_eval_bar (double);
 	void clear_primary_eval ();

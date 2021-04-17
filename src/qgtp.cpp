@@ -140,6 +140,14 @@ void GTP_Process::startup_part7 (const QString &response)
 	if (response == "true")
 		m_analyze_kata = true;
 
+	send_request ("known_command kata-set-rules", &GTP_Process::startup_part8);
+}
+
+void GTP_Process::startup_part8 (const QString &response)
+{
+	if (response == "true")
+		m_kata_rules = true;
+
 	/* Set this before calling startup success, as the callee may want to examine it.  */
 	m_started = true;
 	m_dlg.textEdit->setTextColor (Qt::darkGray);
@@ -283,6 +291,58 @@ void GTP_Process::request_move (stone_color col, bool analyze)
 		send_request (cmd + " white" + centis, &GTP_Process::receive_move);
 }
 
+void GTP_Process::set_rules (go_rules r)
+{
+	if (!m_kata_rules)
+		return;
+	QString cmd = m_restart_analysis;
+	switch (r) {
+	case go_rules::unknown:
+		// Reset the program's ruleset in case we couldn't make a guess.
+	case go_rules::tt:
+		send_request ("kata-set-rules tromp-taylor", nullptr, &GTP_Process::rules_err_receiver);
+		break;
+	case go_rules::japanese:
+		send_request ("kata-set-rules japanese", nullptr, &GTP_Process::rules_err_receiver);
+		break;
+	case go_rules::chinese:
+		send_request ("kata-set-rules chinese", nullptr, &GTP_Process::rules_err_receiver);
+		break;
+	case go_rules::kgs_chinese:
+		send_request ("kata-set-rules chinese-kgs", nullptr, &GTP_Process::rules_err_receiver);
+		break;
+	case go_rules::ogs_chinese:
+		send_request ("kata-set-rules chinese-ogs", nullptr, &GTP_Process::rules_err_receiver);
+		break;
+	case go_rules::old_chinese:
+		// ??? Unclear if this is the correct string. It's the one KataGo recommends for Chinese rules,
+		// plus "ALL" for group tax, and without "friendlyPassOk" which causes errors
+		send_request ("kata-set-rules {\"hasButton\":false,\"ko\":\"POSITIONAL\", \"scoring\":\"AREA\", \"suicide\":false, \"tax\":\"ALL\", \"whiteHandicapBonus\":\"N\"}",
+			      nullptr, &GTP_Process::rules_err_receiver);
+		break;
+	case go_rules::korean:
+		send_request ("kata-set-rules korean", nullptr, &GTP_Process::rules_err_receiver);
+		break;
+	case go_rules::aga:
+		send_request ("kata-set-rules aga", nullptr, &GTP_Process::rules_err_receiver);
+		break;
+	case go_rules::bga:
+		send_request ("kata-set-rules bga", nullptr, &GTP_Process::rules_err_receiver);
+		break;
+	case go_rules::nz:
+		send_request ("kata-set-rules new-zealand", nullptr, &GTP_Process::rules_err_receiver);
+		break;
+	case go_rules::ing:
+		// No idea how to best map this to KataGo.
+		send_request ("kata-set-rules tromp-taylor", nullptr, &GTP_Process::rules_err_receiver);
+		break;
+	}
+	if (!cmd.isEmpty ()) {
+		send_request (cmd, &GTP_Process::receive_eval);
+		m_restart_analysis = cmd;
+	}
+}
+
 void GTP_Process::request_score ()
 {
 	send_request ("known_command final_score", &GTP_Process::score_callback_1);
@@ -396,9 +456,11 @@ void GTP_Process::analyze (stone_color col, int interval)
 {
 	QString cmd = m_analyze_kata ? "kata-analyze " : "lz-analyze ";
 	if (col == black)
-		send_request (cmd + "black " + QString::number (interval), &GTP_Process::receive_eval);
+		cmd += "black " + QString::number (interval);
 	else
-		send_request (cmd + "white " + QString::number (interval), &GTP_Process::receive_eval);
+		cmd += "white " + QString::number (interval);
+	send_request (cmd, &GTP_Process::receive_eval);
+	m_restart_analysis = cmd;
 }
 
 void GTP_Process::pause_analysis ()
@@ -529,6 +591,11 @@ void GTP_Process::komi_err_receiver (const QString &errstr)
 	m_controller->gtp_komi_failure (this, errstr);
 }
 
+void GTP_Process::rules_err_receiver (const QString &errstr)
+{
+	// @@@ Do something reasonable.
+}
+
 void GTP_Process::rect_board_err_receiver (const QString &)
 {
 	m_controller->gtp_failure (this, tr ("GTP engine '%1' does not support rectangular boards.").arg (m_name));
@@ -553,6 +620,9 @@ void GTP_Process::send_request (const QString &s, t_receiver rcv, t_receiver err
 	write (req.toLatin1 ());
 	waitForBytesWritten();
 	req_cnt++;
+
+	// Set to a nonempty string only in analysis.
+	m_restart_analysis = QString ();
 }
 
 void GTP_Process::internal_quit ()
@@ -605,6 +675,13 @@ analyzer GTP_Eval_Controller::analyzer_state ()
 	return analyzer::running;
 }
 
+void GTP_Eval_Controller::set_rules (go_rules r)
+{
+	m_rules = r;
+	if (m_analyzer != nullptr)
+		m_analyzer->set_rules (r);
+}
+
 void GTP_Eval_Controller::set_analysis_state (go_game_ptr gr, game_state *st)
 {
 	if (m_eval_game != nullptr)
@@ -621,6 +698,7 @@ void GTP_Eval_Controller::setup_for_analysis (go_game_ptr gr, game_state *st, bo
 
 	set_analysis_state (gr, st);
 
+	m_analyzer->set_rules (m_rules);
 	m_analyzer->setup_board (st, gr->info ().komi, flip);
 }
 
