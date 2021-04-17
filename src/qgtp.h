@@ -163,6 +163,7 @@ class GTP_Process : public QProcess
 	void receive_eval (const QString &);
 	void score_callback_1 (const QString &);
 	void score_callback_2 (const QString &);
+	void handle_failure (const QString &);
 	void internal_quit ();
 	void komi_err_receiver (const QString &);
 	void rules_err_receiver (const QString &);

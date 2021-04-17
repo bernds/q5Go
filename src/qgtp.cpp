@@ -101,8 +101,7 @@ void GTP_Process::slot_startup_messages ()
 void GTP_Process::startup_part2 (const QString &response)
 {
 	if (response != "2") {
-		m_controller->gtp_failure (this, tr ("GTP engine reported unsupported protocol version"));
-		quit ();
+		handle_failure (tr ("GTP engine reported unsupported protocol version"));
 		return;
 	}
 	if (m_size_x == m_size_y)
@@ -557,8 +556,7 @@ void GTP_Process::slot_receive_stdout ()
 			auto &rcv_map = err ? m_err_receivers : m_receivers;
 			QMap<int, t_receiver>::const_iterator map_iter = rcv_map.constFind (cmd_nr);
 			if (map_iter == rcv_map.constEnd ()) {
-				quit ();
-				m_controller->gtp_failure (this, tr ("Invalid response from GTP engine"));
+				handle_failure (tr ("Invalid response from GTP engine"));
 				return;
 			}
 			qDebug () << "reply for command " << cmd_nr;
@@ -579,10 +577,16 @@ void GTP_Process::slot_receive_stdout ()
 	}
 }
 
+void GTP_Process::handle_failure (const QString &msg)
+{
+	// Call quit before reporting the failure so that we suppress all further communication.
+	quit ();
+	m_controller->gtp_failure (this, msg);
+}
+
 void GTP_Process::default_err_receiver (const QString &)
 {
-	m_controller->gtp_failure (this, tr ("Invalid response from GTP engine"));
-	quit ();
+	handle_failure (tr ("Invalid response from GTP engine"));
 }
 
 void GTP_Process::komi_err_receiver (const QString &errstr)
@@ -598,8 +602,7 @@ void GTP_Process::rules_err_receiver (const QString &errstr)
 
 void GTP_Process::rect_board_err_receiver (const QString &)
 {
-	m_controller->gtp_failure (this, tr ("GTP engine '%1' does not support rectangular boards.").arg (m_name));
-	quit ();
+	handle_failure (tr ("GTP engine '%1' does not support rectangular boards.").arg (m_name));
 }
 
 void GTP_Process::receive_eval (const QString &output)
