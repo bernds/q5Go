@@ -23,7 +23,7 @@ jobs:
       targetName: q5go
     steps:
       - name: Install Qt
-        uses: jurplel/install-qt-action@v2.0.0
+        uses: jurplel/install-qt-action@v2
         with:
           version: ${{ matrix.qt_ver }}
       
