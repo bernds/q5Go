@@ -144,9 +144,11 @@ PREFIX = /usr/local
 # The actual minimum version is unknown. We try to make Qt 5.9 work, and a few
 # versions before that is probably OK too.
 # This version check is mainly here to prevent people from compiling with Qt4.
-!versionAtLeast(QT_VERSION, 5.7.0) {
-    error("This program requires Qt 5.7 or newer")
-}
+# @@@ versionAtLeast is only available with Qt 5.10 and later, so we can't
+# actually do this.
+#!versionAtLeast(QT_VERSION, 5.7.0) {
+#    error("This program requires Qt 5.7 or newer")
+#}
 
 TARGET                = q5go
 DATADIR               = $$PREFIX/share/q5go
