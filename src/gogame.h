@@ -5,16 +5,16 @@
 #include "goeval.h"
 
 #include <functional>
+#include <QString>
 
 inline std::string komi_str (double k)
 {
-	std::string s = std::to_string (k);
-	size_t dot = s.find_last_of ('.');
-	if (dot != std::string::npos) {
-		size_t last = s.find_last_not_of ('0');
-		s.resize (last + 1);
+	QString s = QString::number (k);
+	if (s.contains ('.')) {
+		while (s.endsWith ("0"))
+			s.chop (1);
 	}
-	return s;
+	return s.toStdString ();
 }
 
 class visual_tree

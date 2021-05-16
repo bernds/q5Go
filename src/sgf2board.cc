@@ -6,6 +6,8 @@
 /* Ideally this code would be independent of Qt, but plain C++ seems to have little
    support for converting text encodings.  */
 #include <QTextCodec>
+/* Plain C++ also has no sane way to format numbers without using the locale.  */
+#include <QString>
 
 #include "config.h"
 #include "sgf.h"
@@ -199,6 +201,17 @@ static void add_visible (game_state *gs, sgf::node *n)
 	gs->set_visible (a);
 }
 
+static double sane_stod (std::string s_in)
+{
+	QString s = QString::fromStdString (s_in);
+	s.replace (QChar (','), ".");
+	bool ok = false;
+	double v = s.toDouble (&ok);
+	if (!ok)
+		throw broken_sgf ();
+	return v;
+}
+
 static bool add_eval_1 (game_state *gs, sgf::node::property *propvals, bool kata)
 {
 	bool retval = true;
@@ -222,15 +235,15 @@ static bool add_eval_1 (game_state *gs, sgf::node::property *propvals, bool kata
 		size_t komi_idx = kata ? 4 : 2;
 		try {
 			visits = stoi (vals[0]);
-			winrate = stod (vals[1]);
+			winrate = sane_stod (vals[1]);
 			if (kata) {
-				scorem = stod (vals[2]);
-				scored = stod (vals[3]);
+				scorem = sane_stod (vals[2]);
+				scored = sane_stod (vals[3]);
 			}
 			if (sz >= komi_idx + 1) {
 				id.komi_set = vals[komi_idx].length () > 0;
 				if (id.komi_set)
-					id.komi = stod (vals[komi_idx]);
+					id.komi = sane_stod (vals[komi_idx]);
 			}
 			if (sz >= komi_idx + 2)
 				id.engine = vals[komi_idx + 1];
@@ -577,10 +590,10 @@ game_info info_from_sgfroot (const sgf &s, QTextCodec *codec, sgf_errors &errs)
 		size_t pos = 0;
 		if ((*km)[0] == '-')
 			pos++;
-		if (km->find_first_not_of ("0123456789.", pos) != std::string::npos)
+		if (km->find_first_not_of ("0123456789,.", pos) != std::string::npos)
 			throw broken_sgf ();
 	}
-	double komi = km ? stod (*km) : 0;
+	double komi = km ? sane_stod (*km) : 0;
 	if (ha && ha->length () == 0) {
 		errs.empty_handicap = true;
 		ha = nullptr;
@@ -996,9 +1009,9 @@ void game_state::append_to_sgf (std::string &s, bool active_only) const
 				first = false;
 				s += "[" + std::to_string (it.visits) + ":" + std::to_string (it.wr_black);
 				if (have_scores)
-					s += ":" + std::to_string (it.score_mean) + ":" + std::to_string (it.score_stddev);
+					s += (":" + QString::number (it.score_mean) + ":" + QString::number (it.score_stddev)).toStdString ();
 				if (it.id.komi_set) {
-					s += ":" + std::to_string (it.id.komi);
+					s += ":" + QString::number (it.id.komi).toStdString ();
 					if (it.id.engine.length () > 0)
 						s += ":" + it.id.engine;
 				} else if (it.id.engine.length () > 0)
@@ -1067,7 +1080,7 @@ std::string game_record::to_sgf (bool active_only) const
 	encode_string (s, "PB", m_info.name_b);
 	encode_string (s, "WR", m_info.rank_w);
 	encode_string (s, "BR", m_info.rank_b);
-	encode_string (s, "KM", std::to_string (m_info.komi));
+	encode_string (s, "KM", QString::number (m_info.komi).toStdString ());
 	encode_string (s, "PC", m_info.place);
 	encode_string (s, "DT", m_info.date);
 	encode_string (s, "RU", m_info.rules);
