@@ -36,7 +36,7 @@ public:
 	virtual void gtp_setup_success (GTP_Process *p) = 0;
 	virtual void gtp_exited (GTP_Process *p) = 0;
 	virtual void gtp_failure (GTP_Process *p, const QString &) = 0;
-	virtual void gtp_komi_failure (GTP_Process *p, const QString &)
+	virtual void gtp_komi_failure (GTP_Process *, const QString &)
 	{
 	}
 	virtual void gtp_eval (GTP_Process *, const QString &, bool)
