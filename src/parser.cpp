@@ -1736,7 +1736,7 @@ InfoType Parser::cmd27(const QString &txt)
 	}
 	else
 	{
-		if (txt.length () > 15 && txt[15] != ' ')
+		if (txt.length () > 33 && txt[15] != ' ')
 		{
 			// parse line
 			aPlayer->info = txt.mid(4,2);
@@ -1745,20 +1745,7 @@ InfoType Parser::cmd27(const QString &txt)
 			aPlayer->name = txt.mid(15,11).trimmed();
 			aPlayer->idle = txt.mid(26,3);
 			aPlayer->nmatch = false;
-			if (txt[33] == ' ')
-			{
-				if (txt[36] == ' ')
-					aPlayer->rank = txt.mid(34,2);
-				else
-					aPlayer->rank = txt.mid(34,3);
-			}
-			else
-			{
-				if (txt[36] == ' ')
-					aPlayer->rank = txt.mid(33,3);
-				else
-					aPlayer->rank = txt.mid(33,4);
-			}
+			aPlayer->rank = txt.mid(33,4).trimmed();
 
 			// check if line ok, true -> cmd "players" preceded
 			client_window->server_add_player (*aPlayer, true);
@@ -1769,7 +1756,7 @@ InfoType Parser::cmd27(const QString &txt)
 		// position of delimiter between two players
 		pos = txt.indexOf('|');
 		// check if 2nd player in a line && player (name) exists
-		if (pos != -1 && txt.length() >= 52 && txt[52] != ' ')
+		if (pos != -1 && txt.length() > 70 && txt[52] != ' ')
 		{
 			// parse line
 			aPlayer->info = txt.mid(41,2);
@@ -1778,20 +1765,7 @@ InfoType Parser::cmd27(const QString &txt)
 			aPlayer->name = txt.mid(52,11).trimmed();
 			aPlayer->idle = txt.mid(63,3);
 			aPlayer->nmatch = false;
-			if (txt[70] == ' ')
-			{
-				if (txt[73] == ' ')
-					aPlayer->rank = txt.mid(71,2);
-				else
-					aPlayer->rank = txt.mid(71,3);
-			}
-			else
-			{
-				if (txt[73] == ' ')
-					aPlayer->rank = txt.mid(70,3);
-				else
-					aPlayer->rank = txt.mid(70,4);
-			}
+			aPlayer->rank = txt.mid(70, 4).trimmed();
 
 			// true -> cmd "players" preceded
 			client_window->server_add_player (*aPlayer, true);
