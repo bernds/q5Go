@@ -4,7 +4,7 @@
 #define PACKAGE1 "q5goClient"
 
 /* Version number of package */
-#define VERSION_1 "2.1.1"
+#define VERSION_1 "2.1.2"
 
 #ifdef GITHUB_CI_BUILD
 #define VERSION VERSION_1 " (GitHub action CI build on " __DATE__ ")"
@@ -17,8 +17,7 @@
 #define NEWVERSIONWARNING "<p>Welcome to version " VERSION " of q5go.</p>\n" \
   CIBUILD \
   "<p>This version is primarily a minor bugfix release.</p>" \
-  "<p>It also has small enhancements, like copy/paste position in edit mode, and a new button to add an entire directory to the batch analysis.</p>" \
-  "<p>For a full list of changes, please refer to the README.</p>" \
+  "<p>It fixes a problem with saving SGF files when the locale is set to one that uses commas instead of decimal points.</p>" \
   "<p>This message will not be shown anymore on startup.</p>"
 
 #if __cplusplus >= 201703L

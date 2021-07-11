@@ -29,8 +29,9 @@ These are the major user-visible changes in 2.1:
    directory of SGF files.
  * Engine games now allow board sizes up to 52.
 
-Version 2.1.1 is a minor update to also fix two engine play to accept
-board sizes up to 52.
+Version 2.1.1 and 2.1.2 are minor updates to also fix two engine play to accept
+board sizes up to 52, and to fix a problem with SGF saving in locales that use
+commas instead of decimal points.
 
 See VERSION_HISTORY for a history of changes.
 
