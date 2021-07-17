@@ -104,8 +104,12 @@ class MainWindow : public QMainWindow, public Ui::BoardWindow
 
 	QColor m_default_text_color;
 
+	int m_autoplay_init = 10;
+	int m_autoplay_count = 10;
+
 	/* When switching to edit/score mode, we make a temporary duplicate of the position.  */
 	game_state *m_pos_before_edit;
+
 protected:
 	move_timer m_timer_white, m_timer_black;
 	std::string m_tstr_white, m_tstr_black;
@@ -126,7 +130,8 @@ protected:
 	QButtonGroup *scoreGroup;
 	QList<QAction *> engine_actions;
 	QMap<QAction *, Engine> engine_map;
-	QTimer *timer;
+	QTimer *timer {};
+	QTimer *autoplay_timer {};
 
 	bool isFullScreen;
 
@@ -312,9 +317,11 @@ public slots:
 	void slotEditDelete(bool);
 	void slotEditFigure(bool);
 
-	void slotNavIntersection(bool);
-	void slotNavNthMove(bool);
-	void slotNavSwapVariations(bool);
+	void slotNavIntersection (bool);
+	void slotNavNthMove (bool);
+	void slotNavSwapVariations (bool);
+	void slotNavAutoplay (bool);
+	void autoSliderChanged (int);
 
 	void slotSetGameInfo(bool);
 	void slotViewMenuBar(bool toggle);
@@ -328,13 +335,14 @@ public slots:
 	void slotViewDiagComments (bool);
 	void slotViewConnections (bool);
 
-	void slotTimerForward();
-	void slotSoundToggle(bool toggle);
-	void slotUpdateComment();
-	void slotUpdateComment2();
-	void slotEditGroup(bool);
-	void slotEditRectSelect(bool);
-	void slotEditClearSelect(bool);
+	void slotTimerForward ();
+	void slotAutoplayTimer ();
+	void slotSoundToggle (bool toggle);
+	void slotUpdateComment ();
+	void slotUpdateComment2 ();
+	void slotEditGroup (bool);
+	void slotEditRectSelect (bool);
+	void slotEditClearSelect (bool);
 
 	void slotPlayFromHere (bool);
 	void slotEditAnalysis (bool);

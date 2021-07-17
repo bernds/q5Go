@@ -453,6 +453,12 @@ MainWindow::MainWindow (QWidget* parent, go_game_ptr gr, const QString opener_sc
 			m_sgf_var_style = true;
 	}
 
+	autoBox->setVisible (false);
+	autoplayToolButton->setDefaultAction (navAutoplay);
+	navAutoplay->setVisible (mode == modeNormal);
+	connect (autoSlider, &QSlider::valueChanged, this, &MainWindow::autoSliderChanged);
+	autoSliderChanged (autoSlider->value ());
+
 	initActions ();
 	initMenuBar(mode);
 	initToolBar();
@@ -556,6 +562,10 @@ MainWindow::MainWindow (QWidget* parent, go_game_ptr gr, const QString opener_sc
 
 	timer = new QTimer (this);
 	connect (timer, &QTimer::timeout, this, &MainWindow::slotTimerForward);
+	if (mode == modeNormal) {
+		autoplay_timer = new QTimer (this);
+		connect (autoplay_timer, &QTimer::timeout, this, &MainWindow::slotAutoplayTimer);
+	}
 	if (ts.system != time_system::none)
 		timer->start (100);
 
@@ -1033,6 +1043,8 @@ void MainWindow::initActions ()
 	connect (navNthMove, &QAction::triggered, this, &MainWindow::slotNavNthMove);
 	connect (navIntersection, &QAction::triggered, this, &MainWindow::slotNavIntersection);
 
+	connect (navAutoplay, &QAction::toggled, this, &MainWindow::slotNavAutoplay);
+
 	navSwapVariations = new QAction(tr("S&wap variations"), this);
 	navSwapVariations->setStatusTip(tr("Swap current move with previous variation"));
 	navSwapVariations->setWhatsThis(tr("Swap variations\n\nSwap current move with previous variation."));
@@ -1082,6 +1094,7 @@ void MainWindow::initActions ()
 	connect (actionTutorials, &QAction::triggered, [] () { show_tutorials (); });
 
 	// Disable some toolbuttons at startup
+	navAutoplay->setEnabled(false);
 	navForward->setEnabled(false);
 	navBackward->setEnabled(false);
 	navFirst->setEnabled(false);
@@ -1671,6 +1684,43 @@ void MainWindow::slotDiagSVG (bool)
 	m_svg_dlg.exec ();
 	m_svg_dlg.buttonRefresh->show ();
 	statusBar()->showMessage(tr("Ready."));
+}
+
+void MainWindow::slotAutoplayTimer ()
+{
+	if (!navForward->isEnabled ()) {
+		navAutoplay->setChecked (false);
+		return;
+	}
+	if (autoPauseButton->isChecked ())
+		return;
+
+	if (m_autoplay_count-- > 0)
+		return;
+	m_autoplay_count = m_autoplay_init = autoSlider->value ();
+	nav_next_move ();
+	if (!navForward->isEnabled ()) {
+		navAutoplay->setChecked (false);
+		return;
+	}
+}
+
+void MainWindow::slotNavAutoplay (bool on)
+{
+	autoBox->setVisible (on);
+	if (!on) {
+		autoplay_timer->stop ();
+		autoPauseButton->setChecked (false);
+		return;
+	}
+	m_autoplay_count = m_autoplay_init;
+	autoplay_timer->start (500);
+}
+
+void MainWindow::autoSliderChanged (int v)
+{
+	m_autoplay_count = m_autoplay_init = v;
+	autoSpeedLabel->setText (tr ("%1s").arg (v * 0.5));
 }
 
 void MainWindow::slotNavIntersection(bool)
@@ -2813,6 +2863,7 @@ void MainWindow::setMoveData (const game_state *gs)
 
 	navBackward->setEnabled (good_mode && !is_root_node);
 	navForward->setEnabled (good_mode && sons > 0);
+	navAutoplay->setEnabled (good_mode && sons > 0);
 	navFirst->setEnabled (good_mode && !is_root_node);
 	navLast->setEnabled (good_mode && sons > 0);
 	navPrevComment->setEnabled (good_mode && !is_root_node);

@@ -33,6 +33,7 @@
     <file>images/boardwindow/anchor.png</file>
     <file>images/boardwindow/search.png</file>
     <file>images/boardwindow/searchall.png</file>
+    <file>images/boardwindow/autoplay.png</file>
     <file>images/boardwindow/figure.png</file>
     <file>images/boardwindow/123.png</file>
     <file>images/boardwindow/navclicked.png</file>
@@ -114,7 +115,6 @@
     <file>images/red-x-16.png</file>
     <file>images/yellow-exclam-16.png</file>
     <file>images/green-check-16.png</file>
-
     <file>sounds/click.wav</file>
     <file>sounds/connect.wav</file>
     <file>sounds/enter.wav</file>
