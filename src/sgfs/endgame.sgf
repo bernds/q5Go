@@ -1,0 +1,307 @@
+(;FF[4]GM[1]CA[UTF-8]AP[q5go:2.1.2]
+SZ[11]
+PW[White]
+PB[Black]
+KM[6.5]AW[fb][fc][fd][ge][gf][gg][gh][gi][gj][id]AB[ch][eb][ec][ed][fe][ff][fg][fh][fi][fj]
+C[Endgame Basics
+
+In this tutorial, we will look at some basic situations that occur in endgames. This is not intended a a guide to playing well, it is intended to show absolute beginners how to finish a game.
+]
+;B[]
+C[Endgame Basics
+
+In this position, both sides have peacefully mapped out territories. Usually, as you get to the end of the game, there is unfinished business at the borders that needs to be tidied up.]
+;W[]TR[ea][fa][fk][gk]
+C[Endgame Basics
+
+In this example, moves near the triangled points would be needed to finish the territories. At the moment, no player really fully surrounds any area.
+]
+;AW[fa][gk]AB[ea][fk]
+C[Endgame Basics
+
+If we imagine this position instead, all the boundaries are complete, and the game can be counted.]
+;B[]TW[ga][gb][gc][gd][ha][hb][hc][hd][he][hf][hg][hh][hi][hj][hk][ia][ib][ic][ie][if][ig][ih][ii][ij][ik][ja][jb][jc][jd][je][jf][jg][jh][ji][jj][jk][ka][kb][kc][kd][ke][kf][kg][kh][ki][kj][kk]TB[aa][ab][ac][ad][ae][af][ag][ah][ai][aj][ak][ba][bb][bc][bd][be][bf][bg][bh][bi][bj][bk][ca][cb][cc][cd][ce][cf][cg][ci][cj][ck][da][db][dc][dd][de][df][dg][dh][di][dj][dk][ee][ef][eg][eh][ei][ej][ek]
+C[Endgame Basics
+
+Like this.]MN[0]
+;AW[gd]AB[ee]AE[ch][id]TR[ee][gd]
+C[Endgame Basics
+
+When counting on a real board, after the game you would move stones inside their own territories so that they form more regular shapes. This does not change the result.
+]
+;AW[id]AB[ch]AE[ea][ee][fa][fk][gd][gk]
+C[Endgame Basics
+
+So, how does this play out? Usually players try to reduce their opponent's territory, while enlarging their own.
+]MN[1]
+;B[fa]
+C[Endgame Basics
+
+Black plays a <font>hane</font> on the first line. This threatens to destroy White's territory in this area.
+]
+;B[ha]TR[eb][fa]
+C[Endgame Basics
+
+For example, if White were to pass, Black could jump further - this is safe, and cannot be disconnected from the marked black stones.]
+;AE[ha]TR[eb][fa]
+C[Endgame Basics
+
+So, White's territory is in danger, and that is good reason to answer Black's move.]
+;W[ga]
+C[Endgame Basics
+
+Blocking here gives atari, so Black's stone is now threatened.
+]
+;B[ea]
+C[Endgame Basics
+
+Black connects. What happens next?
+
+]
+;B[gb]TR[ga]
+C[Endgame Basics
+
+If White plays elsewhere, there is a weakness left in White's position. Black can give atari to the marked stone, and it cannot escape.
+
+]
+;W[ha]
+C[Endgame Basics
+
+If White extends...
+]
+;B[hb]TR[gd]
+C[Endgame Basics
+
+Black just pursues until they both hit the right edge. Also, Black is threatening to capture three stones by playing the marked point.
+]
+;AE[gb][ha][hb]
+C[Endgame Basics
+
+So, going back...
+]
+;W[gb]
+C[Endgame Basics
+
+It seems reasonable that White would connect.
+]
+;B[gk]
+C[Endgame Basics
+
+Of course, that means that Black has the chance to do it again at the bottom.
+]
+;W[hk]
+C[Endgame Basics
+
+Things play out the same way.
+]
+;B[fk]
+C[Endgame Basics
+
+]
+;W[ij]
+C[Endgame Basics
+
+A <font>hanging</font> <font>connection</font> as also an option. It can be difficult to say which is better.]
+;AW[dg][dh][eb][ec][ee][ef][ei][ff][fj]AB[eg][fb][fc][gd][gg][gi][hd][he][hf][hi][hj]AE[ch][ea][ed][fa][fe][fh][fk][ga][gb][gh][gk][hk][id][ij]
+C[Endgame Basics
+
+Here is a different position, which shows some of the traps that can lurk in endgame situations.
+]
+;W[hk]
+C[Endgame Basics
+
+Let's say White tries to finish the boundary at the bottom. We saw very similar moves in the previous example.
+]
+;B[ik]
+C[Endgame Basics
+
+Once again, Black blocks.]
+;W[gk]
+C[Endgame Basics
+
+But this is where things deviate from the previous example. Connecting here is a mistake.]
+;B[ej]TR[ij]
+C[Endgame Basics
+
+Black does not need to connect at the marked point - he can capture four white stones instead, like this.
+]
+;AE[ej][gk][hk][ik]TR[hk]
+C[Endgame Basics
+
+So, in this position, White has no good reason to play at the marked point - it is not a gain.
+]
+;B[gk]
+C[Endgame Basics
+
+The situation will eventually play out like this, with Black threatening to capture two white stones.
+]
+;W[ej]
+C[Endgame Basics
+
+White usually connects, and then there are only small moves left locally.
+
+Let's look at the upper side, and let's assume again that it's White to play.]
+;W[fa]
+C[Endgame Basics
+
+We start once again with the hane.]
+;B[ga]
+C[Endgame Basics
+
+You might assume that Black should block, as usual.
+]
+;W[gb]
+C[Endgame Basics
+
+But White has this move - a double atari, threatening either of two captures.
+]
+;B[ea]
+C[Endgame Basics
+
+If Black tries to resist by taking one white stone...
+]
+;W[gc]
+C[Endgame Basics
+
+White gives atari from here...
+]
+;B[fa]
+C[Endgame Basics
+
+Black connects...
+]
+;W[da]
+C[Endgame Basics
+
+... and after this atari, there is no escape for the black stones. Let's play out a few moves.
+]
+;B[ha]
+C[Endgame Basics
+
+]
+;W[hb]
+C[Endgame Basics
+
+]
+;B[ia]
+C[Endgame Basics
+
+]
+;W[ib]
+C[Endgame Basics
+
+This runs towards the edge of the board, where Black will run out of liberties and lose.
+]
+;AW[fa]AE[da][ea][gc][ha][hb][ia][ib]
+C[Endgame Basics
+
+Let's go back to this position where the mistake already happened.]
+;B[gc]
+C[Endgame Basics
+
+Black can try to salvage a little bit by connecting here.
+]
+;W[ha]
+C[Endgame Basics
+
+White captures one stone. All of White's stones are connected, and we can see that Black's territory in the upper right has shrunk considerably.
+]
+;AE[gb][gc][ha]
+C[Endgame Basics
+
+Let's go back a little further. How does Black play correctly? There are two options.
+]
+;B[gb]
+C[Endgame Basics
+
+While ugly, this move prevents the worst outcome.
+]
+;W[ga]
+C[Endgame Basics
+
+White gets to push once more, but that can't be helped.
+]
+;B[ha]
+C[Endgame Basics
+
+Now Black can block, and it would continue with the connect-connect sequence from the first example.
+]
+;W[hb]
+C[Endgame Basics
+
+What if White here? It looks similar to the trick we saw in the original position.
+]
+;B[ea]
+C[Endgame Basics
+
+But it no longer works, because now Black gets to capture two stones, and White has no devastating atari.
+]
+;AW[fa]AE[ea][gb][ha][hb]
+C[Endgame Basics
+
+Black has another option to answer White's hane.
+]
+;B[hb]
+C[Endgame Basics
+
+It's worth it to remember this as a common good shape.]
+;W[ga]
+C[Endgame Basics
+
+White can push once more.
+]
+;B[ha]TR[gb]
+C[Endgame Basics
+
+Black blocks. Later, Black can give atari at the marked point. The two options are very similar in value.]
+;AW[ac][bc][cc][dc][dd][de][di][dj][dk][fg][fh][gd][gg][he][hf]AB[ab][bb][cb][db][ea][eb][ec][ed][ej][ek][gb][gc][gh][gj][hg][id][ie][if][je]AE[dg][dh][ef][eg][fa][fb][fc][ff][fj][ga][ge][gf][gi][gk][ha][hb][hj]
+C[Endgame Basics
+
+Gaps between territories can also occur in the center, not just on the sides of the board.
+Here, there is one unsettled spot on the board.
+]
+;W[fc]
+C[Endgame Basics
+
+White can push in.
+]
+;B[fb]
+C[Endgame Basics
+
+Black blocks. Is the game finished?
+]
+;B[ge]
+C[Endgame Basics
+
+No - if White had passed in the previous position, Black has a double atari., capturing some white stones.
+]
+;AE[ge]
+C[Endgame Basics
+
+So, White needs to defend.
+]
+;W[fe]
+C[Endgame Basics
+
+For example, like this.
+It's important to be on the lookout for cases where stones get short of liberties as the boundaries get filled in.
+]
+;AW[ed][ef][fa][fb][ff]AB[ga][gd][ge][gf][gg][hb][hc]AE[ab][ac][bb][bc][cb][cc][db][dc][dd][de][ea][eb][ec][fe][gc][he][hf][hg][id][ie][if][je]
+C[Endgame Basics
+
+Sometimes you get situations like this, where empty spots are left at the end that do not belong to anyone.
+]
+;B[]TR[fe][gc]
+C[Endgame Basics
+
+These are called neutral points - adjancent to both black and white stones.
+]
+;W[fe]
+C[Endgame Basics
+
+After everything else is finished, just fill these in, alternating moves.
+]
+;B[gc]
+C[Endgame Basics
+
+This way, any potential confusion is removed - especially on a real board, they might otherwise end up being counted as someone's territory.])
