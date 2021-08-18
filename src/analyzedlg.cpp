@@ -5,6 +5,7 @@
 
 #include "clientwin.h"
 #include "ui_helpers.h"
+#include "gotools.h"
 
 AnalyzeDialog *analyze_dialog;
 
@@ -143,9 +144,9 @@ void AnalyzeDialog::analyzer_state_changed ()
 }
 
 AnalyzeDialog::job::job (AnalyzeDialog *dlg, const QString &title, go_game_ptr gr, int n_seconds, int n_lines,
-			 engine_komi k, bool comments)
+			 engine_komi k, bool comments, go_rules rules)
 	: m_dlg (dlg), m_title (title), m_game (gr), m_n_seconds (n_seconds), m_n_lines (n_lines), m_komi_type (k),
-	  m_comments (comments)
+	  m_comments (comments), m_rules (rules)
 {
 	std::vector<game_state *> *q = &m_queue;
 	std::function<bool (game_state *)> f = [&q] (game_state *st) -> bool
@@ -348,6 +349,7 @@ void AnalyzeDialog::queue_next ()
 				if (ok && std::abs (k - gm_k) > std::abs (k + gm_k))
 					flip = true;
 			}
+			set_rules (j->m_rules);
 			request_analysis (j->m_game, st, flip);
 			return;
 		}
@@ -369,7 +371,7 @@ inline std::string s_tr (const char *s)
 	return QObject::tr (s).toStdString ();
 }
 
-void AnalyzeDialog::eval_received (const analyzer_id &, const QString &, int, bool have_score)
+void AnalyzeDialog::eval_received (const analyzer_id &id, const QString &, int, bool have_score)
 {
 	job *j = m_requester;
 	if (j == nullptr) {
@@ -379,6 +381,13 @@ void AnalyzeDialog::eval_received (const analyzer_id &, const QString &, int, bo
 	}
 	if (++m_seconds_count < j->m_n_seconds)
 		return;
+	if (j->m_done == 0) {
+		game_state *r = j->m_game->get_root ();
+		std::string comm = r->comment ();
+		QString report = tr ("Analysis by %1, ruleset %2\n").arg (QString::fromStdString (id.engine)).arg (rules_name (j->m_rules));
+		comm += report.toStdString ();
+		r->set_comment (comm);
+	}
 	j->m_done++;
 	update_progress ();
 
@@ -610,10 +619,15 @@ void AnalyzeDialog::start_job (const QString &f)
 	}
 	filenameEdit->setText ("");
 	int komi_val = komiComboBox->currentIndex ();
-
+	int rules_val = rulesComboBox->currentIndex ();
+	go_rules r = guess_rules (gr->info ());
+	if (rules_val == 1)
+		r = go_rules::japanese;
+	else if (rules_val == 2)
+		r = go_rules::chinese;
 	engine_komi k = komi_val == 2 ? engine_komi::both : komi_val == 1 ? engine_komi::maybe_swap : engine_komi::dflt;
 	m_all_jobs.emplace_front (this, f, gr, secondsEdit->text ().toInt (), maxlinesEdit->text ().toInt (), k,
-				  commentsCheckBox->isChecked ());
+				  commentsCheckBox->isChecked (), r);
 	job *j = &m_all_jobs.front ();
 	insert_job (m_jobs, jobView, j);
 

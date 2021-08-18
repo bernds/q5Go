@@ -143,6 +143,7 @@ class GTP_Process : public QProcess
 	t_receiver m_cur_receiver = nullptr;
 	t_receiver m_end_receiver = nullptr;
 	bool m_within_reply = false;
+	go_rules m_rules = go_rules::unknown;
 
 	QString m_restart_analysis;
 

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>657</width>
-    <height>528</height>
+    <height>550</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -215,74 +215,13 @@
        <string>Analysis parameters</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_4">
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Number of seconds per move: </string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QLineEdit" name="maxlinesEdit">
-         <property name="maximumSize">
-          <size>
-           <width>50</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="toolTip">
-          <string>Limits the number of variations added for engine lines</string>
-         </property>
-         <property name="text">
-          <string>10</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0" colspan="2">
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
-         <item>
-          <widget class="QLabel" name="label_6">
-           <property name="text">
-            <string>If fixed engine komi:</string>
-           </property>
-           <property name="buddy">
-            <cstring>komiComboBox</cstring>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="komiComboBox">
-           <property name="toolTip">
-            <string>&lt;p&gt;Controls how to behave if the engine only supports a fixed value for komi.&lt;/p&gt;
-&lt;p&gt;If the analyzed game has negative komi, the game can be analyzed with reversed colors for better results.
-It is also possible to analyze with both normal and flipped komi, for example for zero-komi games.&lt;/p&gt;</string>
-           </property>
-           <property name="statusTip">
-            <string/>
-           </property>
-           <item>
-            <property name="text">
-             <string>Use default</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Swap if better</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Analyze both</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-        </layout>
-       </item>
        <item row="1" column="0">
         <widget class="QLabel" name="label_4">
          <property name="text">
           <string>Maximum number of lines to add:</string>
+         </property>
+         <property name="buddy">
+          <cstring>maxlinesEdit</cstring>
          </property>
         </widget>
        </item>
@@ -307,6 +246,112 @@ It is also possible to analyze with both normal and flipped komi, for example fo
          <property name="checked">
           <bool>true</bool>
          </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="maxlinesEdit">
+         <property name="maximumSize">
+          <size>
+           <width>50</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>Limits the number of variations added for engine lines</string>
+         </property>
+         <property name="text">
+          <string>10</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Number of seconds per move: </string>
+         </property>
+         <property name="buddy">
+          <cstring>secondsEdit</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="2">
+        <widget class="QWidget" name="widget" native="true">
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_7">
+            <property name="text">
+             <string>Ruleset:</string>
+            </property>
+            <property name="buddy">
+             <cstring>rulesComboBox</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QComboBox" name="rulesComboBox">
+            <property name="toolTip">
+             <string>&lt;p&gt;Controls how to behave if the engine only supports a fixed value for komi.&lt;/p&gt;
+&lt;p&gt;If the analyzed game has negative komi, the game can be analyzed with reversed colors for better results.
+It is also possible to analyze with both normal and flipped komi, for example for zero-komi games.&lt;/p&gt;</string>
+            </property>
+            <property name="statusTip">
+             <string/>
+            </property>
+            <item>
+             <property name="text">
+              <string>Use best guess</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Japanese</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Chinese</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>If fixed engine komi:</string>
+            </property>
+            <property name="buddy">
+             <cstring>komiComboBox</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="komiComboBox">
+            <property name="toolTip">
+             <string>&lt;p&gt;Controls how to behave if the engine only supports a fixed value for komi.&lt;/p&gt;
+&lt;p&gt;If the analyzed game has negative komi, the game can be analyzed with reversed colors for better results.
+It is also possible to analyze with both normal and flipped komi, for example for zero-komi games.&lt;/p&gt;</string>
+            </property>
+            <property name="statusTip">
+             <string/>
+            </property>
+            <item>
+             <property name="text">
+              <string>Use default</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Swap if better</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Analyze both</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
       </layout>
@@ -444,6 +489,9 @@ It is also possible to analyze with both normal and flipped komi, for example fo
            <widget class="QLabel" name="label_3">
             <property name="text">
              <string>Choose:</string>
+            </property>
+            <property name="buddy">
+             <cstring>engineComboBox</cstring>
             </property>
            </widget>
           </item>
@@ -631,7 +679,6 @@ It is also possible to analyze with both normal and flipped komi, for example fo
  <tabstops>
   <tabstop>secondsEdit</tabstop>
   <tabstop>maxlinesEdit</tabstop>
-  <tabstop>komiComboBox</tabstop>
   <tabstop>commentsCheckBox</tabstop>
   <tabstop>filenameEdit</tabstop>
   <tabstop>fileselButton</tabstop>

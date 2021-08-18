@@ -294,6 +294,9 @@ void GTP_Process::set_rules (go_rules r)
 {
 	if (!m_kata_rules)
 		return;
+	if (r == m_rules)
+		return;
+	m_rules = r;
 	QString cmd = m_restart_analysis;
 	switch (r) {
 	case go_rules::unknown:
