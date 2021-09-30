@@ -2553,6 +2553,11 @@ If the picture is not set, or unvalid, a default goban is used by qgo</string>
               <string>Absolute percentage</string>
              </property>
             </item>
+            <item>
+             <property name="text">
+              <string>Score</string>
+             </property>
+            </item>
            </widget>
           </item>
           <item row="1" column="0">
