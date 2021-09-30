@@ -1106,22 +1106,37 @@ Board::ram_result Board::render_analysis_marks (svg_builder &svg, double svg_fac
 	}
 	svg.circle_at (cx, cy, svg_factor * 0.45, wr_col, child_mark ? "white" : "black", "1");
 
-	if (analysis_vartype == 0) {
+	if (analysis_vartype == 0) {  // letters
 		QChar c = pv_idx >= 26 ? 'a' + pv_idx - 26 : 'A' + pv_idx;
 		svg.text_at (cx, cy, svg_factor, 0, c,
 			     "black", fi);
-	} else {
+	} else if (analysis_vartype == 1) {  // win rate (relative)
 		double shown_val = wrdiff;
-		if (analysis_vartype == 2) {
-			shown_val = wr;
 
-			if (to_move == wr_swap_col)
-				shown_val = 1 - shown_val;
-		} else if (to_move == wr_swap_col)
+		if (to_move == wr_swap_col)
 			shown_val = -shown_val;
 
 		svg.text_at (cx, cy, svg_factor, 4,
 			     QString::number (shown_val * 100, 'f', 1),
+			     "black", fi);
+	} else if (analysis_vartype == 2) {  // win rate (absolute)
+		double shown_val = wr;
+
+		if (to_move == wr_swap_col)
+			shown_val = 1 - shown_val;
+
+		svg.text_at (cx, cy, svg_factor, 4,
+			     QString::number (shown_val * 100, 'f', 1),
+			     "black", fi);
+	} else {  // score
+		double shown_val = ev.score_mean;
+		int precision = abs(shown_val) < 2 ? 1 : 0;
+
+		if (to_move == white)
+			shown_val = -shown_val;
+
+		svg.text_at (cx, cy, svg_factor, 4,
+			     QString::number (shown_val, 'f', precision),
 			     "black", fi);
 	}
 	return ram_result::hide;

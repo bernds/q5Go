@@ -2553,6 +2553,11 @@ If the picture is not set, or unvalid, a default goban is used by qgo</string>
               <string>Absolute percentage</string>
              </property>
             </item>
+            <item>
+             <property name="text">
+              <string>Score</string>
+             </property>
+            </item>
            </widget>
           </item>
           <item row="1" column="0">
@@ -2917,7 +2922,7 @@ Port address is defined for each go server. It's a fixed number. See Host for pr
            <property name="whatsThis">
             <string>name
 
-Registered users: 
+Registered users:
 use your login name and password provided by the go server operator after registration
 
 New users: depends on server
@@ -2960,7 +2965,7 @@ others:		guest</string>
            <property name="whatsThis">
             <string>password
 
-Registered users: 
+Registered users:
 use your login name and password provided by the go server operator after registration
 
 New users: leave blank!</string>
@@ -3292,7 +3297,7 @@ Allow client to negotiate komi automatic.
 Be careful: it may be annoying if opponent does not want to accept your defaults even if defaults have been sent to opponent before. This may be due to different internal use of negotiation values by clients.</string>
                      </property>
                      <property name="text">
-                      <string>Automatic komi 
+                      <string>Automatic komi
 negotiation</string>
                      </property>
                     </widget>
@@ -3337,7 +3342,7 @@ negotiation</string>
                         <bool>false</bool>
                        </property>
                        <property name="text">
-                        <string>Main 
+                        <string>Main
 time :</string>
                        </property>
                        <property name="alignment">
@@ -3550,7 +3555,7 @@ time:</string>
                         <string>Playing time</string>
                        </property>
                        <property name="text">
-                        <string>Main time 
+                        <string>Main time
 up to :</string>
                        </property>
                        <property name="alignment">
@@ -3788,7 +3793,7 @@ up to :</string>
                         <string>board size</string>
                        </property>
                        <property name="text">
-                        <string>Handicap 
+                        <string>Handicap
 up to :</string>
                        </property>
                        <property name="alignment">
@@ -5142,7 +5147,7 @@ If checked then when a game you played completes, it is automatically saved in t
               <widget class="QLabel" name="label_37">
                <property name="text">
                  <string>Marked directories contain a Kombilo DB, which cannot be used for pattern search.
-Use the "Create DB" to create a q5go database.</string>
+Use the &quot;Create DB&quot; to create a q5go database.</string>
                </property>
               </widget>
              </item>
