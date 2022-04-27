@@ -4,7 +4,7 @@
 #define PACKAGE1 "q5goClient"
 
 /* Version number of package */
-#define VERSION_1 "2.1.2"
+#define VERSION_1 "2.1.3"
 
 #ifdef GITHUB_CI_BUILD
 #define VERSION VERSION_1 " (GitHub action CI build on " __DATE__ ")"
@@ -16,8 +16,8 @@
 
 #define NEWVERSIONWARNING "<p>Welcome to version " VERSION " of q5go.</p>\n" \
   CIBUILD \
-  "<p>This version is primarily a minor bugfix release.</p>" \
-  "<p>It fixes a problem with saving SGF files when the locale is set to one that uses commas instead of decimal points.</p>" \
+  "<p>This version is a minor update.</p>" \
+  "<p>It adds an autoplay feature for viewing game records and slightly extends support for KataGo's ruleset feature.</p>" \
   "<p>This message will not be shown anymore on startup.</p>"
 
 #if __cplusplus >= 201703L

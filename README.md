@@ -1,4 +1,4 @@
-## q5Go 2.1.1
+## q5Go 2.1.3
 
 This is a tool for Go players which performs the following functions:
 - SGF editor
@@ -29,9 +29,12 @@ These are the major user-visible changes in 2.1:
    directory of SGF files.
  * Engine games now allow board sizes up to 52.
 
-Version 2.1.1 and 2.1.2 are minor updates to also fix two engine play to accept
-board sizes up to 52, and to fix a problem with SGF saving in locales that use
-commas instead of decimal points.
+Version 2.1.1 to 2.1.3 are minor updates, which:
+ - fix two engine play to accept board sizes up to 52
+ - fix a problem with SGF saving in locales that use commas instead of
+   decimal points
+ - add support for the Katago rulesets feature
+ - add an autoplay feature for viewing game records
 
 See VERSION_HISTORY for a history of changes.
 
