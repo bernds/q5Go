@@ -38,9 +38,21 @@ public:
 	const QList<QPixmap> *getStonePixmaps() const { return &stonePixmaps; }
 	const QList<QPixmap> *getGhostPixmaps() const { return &ghostPixmaps; }
 
-	typedef std::tuple<int, int, int, int> t_params;
+	struct st_params
+	{
+		int radius; // roundness of the stone
+		int spec; // specularity
+		int flatten; // deviating from a spherical surface to give the impression of a flatter stone.
+		int sp_hard; // specular hardness
+	};
+	struct t_params
+	{
+		st_params b, w;
+		int ambient;
+		bool clamshell;
+	};
 
-	void set_stone_params (const std::tuple<t_params, t_params, int, bool> &, int);
+	void set_stone_params (const t_params &, int);
 	void set_stone_params (int preset, int shadow);
 	void set_stone_look (int l) { m_look = l; }
 	void paint_one_stone (QImage &, bool white, int size, int idx = 0);

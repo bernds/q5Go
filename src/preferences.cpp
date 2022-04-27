@@ -882,9 +882,9 @@ void PreferencesDialog::update_stone_params ()
 {
 	int shader_idx = ui->shadersComboBox->currentIndex ();
 	if (shader_idx == 0) {
-		auto vals = std::make_tuple (std::make_tuple (ui->blackRoundSlider->value (), ui->blackSpecSlider->value (), ui->blackFlatSlider->value (), ui->blackHardSlider->value ()),
-					     std::make_tuple (ui->whiteRoundSlider->value (), ui->whiteSpecSlider->value (), ui->whiteFlatSlider->value (), ui->whiteHardSlider->value ()),
-					     ui->ambientSlider->value (), ui->stripesCheckBox->isChecked ());
+		auto vals = ImageHandler::t_params { { ui->blackRoundSlider->value (), ui->blackSpecSlider->value (), ui->blackFlatSlider->value (), ui->blackHardSlider->value () },
+						     { ui->whiteRoundSlider->value (), ui->whiteSpecSlider->value (), ui->whiteFlatSlider->value (), ui->whiteHardSlider->value () },
+						     ui->ambientSlider->value (), ui->stripesCheckBox->isChecked () };
 		m_ih->set_stone_params (vals, ui->shadowSlider->value ());
 	} else
 		m_ih->set_stone_params (shader_idx - 1, ui->shadowSlider->value ());
