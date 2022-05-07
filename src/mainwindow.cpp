@@ -2379,6 +2379,7 @@ void MainWindow::update_font ()
 	commentEdit->setCurrentFont (setting->fontComments);
 	commentEdit->setTextCursor (c);
 	commentEdit->setCurrentFont (setting->fontComments);
+	commentEdit->setFont (setting->fontComments);
 
 	commentEdit2->setFont (setting->fontComments);
 
