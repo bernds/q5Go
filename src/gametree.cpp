@@ -36,10 +36,12 @@ class GameTreePixmap : public QGraphicsItem
 	GameTree *m_view;
 	game_state *m_root;
 	int m_size, m_width;
-	game_tree_pixmaps *m_pm;
+	game_tree_pixmaps *m_pm, *m_pm_comment;
+	QPixmap *m_box_pm;
 public:
-	GameTreePixmap (GameTree *view, QGraphicsScene *scene, game_state *item_root, int w, int size, game_tree_pixmaps *pms)
-		: m_view (view), m_root (item_root), m_size (size), m_width (w), m_pm (pms)
+	GameTreePixmap (GameTree *view, QGraphicsScene *scene, game_state *item_root, int w, int size,
+			game_tree_pixmaps *pms, game_tree_pixmaps *c_pms, QPixmap *box_pm)
+		: m_view (view), m_root (item_root), m_size (size), m_width (w), m_pm (pms), m_pm_comment (c_pms), m_box_pm (box_pm)
 	{
 		setZValue (10);
 		/* Supposedly faster, and makes it easier to click on edit nodes.  */
@@ -69,14 +71,15 @@ void GameTreePixmap::paint (QPainter *painter, const QStyleOptionGraphicsItem *,
 	diag_pen.setWidth (2);
 
 	while (st != nullptr) {
-		QPixmap *src = &m_pm->box;
+		game_tree_pixmaps *pm = st->comment ().empty () ? m_pm : m_pm_comment;
+		QPixmap *src = m_box_pm;
 		if (!st->vis_collapsed ()) {
 			if (!st->was_move_p ())
-				src = &m_pm->e;
+				src = &pm->e;
 			else if (st->get_move_color () == white)
-				src = st->has_figure () ? &m_pm->wfig : &m_pm->w;
+				src = st->has_figure () ? &pm->wfig : &pm->w;
 			else
-				src = st->has_figure () ? &m_pm->bfig : &m_pm->b;
+				src = st->has_figure () ? &pm->bfig : &pm->b;
 		}
 		painter->drawPixmap (x * m_size + 1, 1, *src);
 		if (st->has_hidden_diagrams ()) {
@@ -85,6 +88,17 @@ void GameTreePixmap::paint (QPainter *painter, const QStyleOptionGraphicsItem *,
 					  m_size / 2 - 4, m_size / 2 - 4);
 			painter->setPen (Qt::NoPen);
 		}
+#if 0
+		if (!st->comment ().empty ()) {
+			QPen circle_pen (diag_pen);
+			circle_pen.setWidthF (m_size / 10.);
+			painter->setPen (circle_pen);
+			int off = m_size / 5;
+			painter->drawEllipse (x * m_size + off , off,
+					      m_size - 2 * off, m_size - 2 * off);
+			painter->setPen (Qt::NoPen);
+		}
+#endif
 		x++;
 		if (st->vis_collapsed ())
 			break;
@@ -222,32 +236,37 @@ void GameTree::update_prefs ()
 		m_header_view->setMaximumHeight (fm2.height ());
 		m_header_view->resize (viewport ()->width (), fm2.height ());
 	}
-	int ssize = m_size - 2;
+	int psize = m_size - 2;
+	int ssize = 50;
 	int soff = ssize / 2;
-	svg_builder wstone (ssize, ssize);
-	wstone.circle_at (soff, soff, soff * 0.9 - 1, "white", "black", "2");
-	svg_builder bstone (ssize, ssize);
-	bstone.circle_at (soff, soff, soff * 0.9, "black", "none");
-	svg_builder wfig (ssize, ssize);
-	wfig.square_at (soff, soff, ssize * 0.9 - 1, "white", "black");
-	svg_builder bfig (ssize, ssize);
-	bfig.square_at (soff, soff, ssize * 0.9, "black", "none");
-	svg_builder edit (ssize, ssize);
-	edit.circle_at (soff / 2, soff / 2, (ssize / 4) * 0.9, "black", "none");
-	edit.circle_at (ssize - soff / 2, ssize - soff / 2, (ssize / 4) * 0.9, "black", "none");
-	edit.circle_at (soff / 2, ssize - soff / 2, (ssize / 4) * 0.9 - 0.5, "white", "black", "1");
-	edit.circle_at (ssize - soff / 2, soff / 2, (ssize / 4) * 0.9 - 0.5, "white", "black", "1");
-	m_pm.w = QPixmap (wstone.to_pixmap (ssize, ssize));
-	m_pm.b = QPixmap (bstone.to_pixmap (ssize, ssize));
-	m_pm.wfig = QPixmap (wfig.to_pixmap (ssize, ssize));
-	m_pm.bfig = QPixmap (bfig.to_pixmap (ssize, ssize));
-	m_pm.e = QPixmap (edit.to_pixmap (ssize, ssize));
-
+	auto make_pms = [&] (game_tree_pixmaps *pm, const char *border_w, const char *border_b, const char *width) -> void
+	{
+		svg_builder wstone (ssize, ssize);
+		wstone.circle_at (soff, soff, soff * 0.9 - 1, "white", border_w, width);
+		svg_builder bstone (ssize, ssize);
+		bstone.circle_at (soff, soff, soff * 0.9, "black", border_b, width);
+		svg_builder wfig (ssize, ssize);
+		wfig.square_at (soff, soff, ssize * 0.9 - 1, "white", border_w);
+		svg_builder bfig (ssize, ssize);
+		bfig.square_at (soff, soff, ssize * 0.9, "black", border_b);
+		svg_builder edit (ssize, ssize);
+		edit.circle_at (soff / 2, soff / 2, (ssize / 4) * 0.9, "black", border_b);
+		edit.circle_at (ssize - soff / 2, ssize - soff / 2, (ssize / 4) * 0.9, "black", border_b);
+		edit.circle_at (soff / 2, ssize - soff / 2, (ssize / 4) * 0.9 - 0.5, "white", border_w, "1");
+		edit.circle_at (ssize - soff / 2, soff / 2, (ssize / 4) * 0.9 - 0.5, "white", border_w, "1");
+		pm->w = QPixmap (wstone.to_pixmap (psize, psize));
+		pm->b = QPixmap (bstone.to_pixmap (psize, psize));
+		pm->wfig = QPixmap (wfig.to_pixmap (psize, psize));
+		pm->bfig = QPixmap (bfig.to_pixmap (psize, psize));
+		pm->e = QPixmap (edit.to_pixmap (psize, psize));
+	};
+	make_pms (&m_pm, "black", "none", "3");
+	make_pms (&m_pm_comment, "blue", "blue", "5");
 	QSvgRenderer renderer (box_svg);
-	m_pm.box = QPixmap (ssize, ssize);
-	m_pm.box.fill (Qt::transparent);
+	m_box_pm = QPixmap (psize, psize);
+	m_box_pm.fill (Qt::transparent);
 	QPainter painter;
-	painter.begin (&m_pm.box);
+	painter.begin (&m_box_pm);
 	renderer.render (&painter);
 	painter.end ();
 
@@ -302,10 +321,10 @@ void GameTree::show_menu (game_state *st, const QPoint &pos)
 {
 	QMenu menu;
 	if (st->vis_collapsed ()) {
-		menu.addAction (QIcon (m_pm.box), QObject::tr ("Expand subtree"), [=] () { toggle_collapse (st, false); });
+		menu.addAction (QIcon (m_box_pm), QObject::tr ("Expand subtree"), [=] () { toggle_collapse (st, false); });
 		menu.addAction (QObject::tr ("Expand one level of child nodes"), [=] () { toggle_collapse (st, true); });
 	} else
-		menu.addAction (QIcon (m_pm.box), QObject::tr ("Collapse subtree"), [=] () { toggle_collapse (st, false); });
+		menu.addAction (QIcon (m_box_pm), QObject::tr ("Collapse subtree"), [=] () { toggle_collapse (st, false); });
 	if (st->has_figure ())
 		menu.addAction (QIcon (":/BoardWindow/images/boardwindow/figure.png"),
 				QObject::tr("Clear diagram status for this node"),
@@ -354,7 +373,7 @@ void GameTree::update (go_game_ptr gr, game_state *active, bool force)
 
 		auto start_run = [&] (int x0, int y, int len, game_state *st0) -> bool
 		{
-			GameTreePixmap *pm = new GameTreePixmap (this, m_scene, st0, len, m_size, &m_pm);
+			GameTreePixmap *pm = new GameTreePixmap (this, m_scene, st0, len, m_size, &m_pm, &m_pm_comment, &m_box_pm);
 			pm->setPos (x0 * m_size, y * m_size);
 			return true;
 		};

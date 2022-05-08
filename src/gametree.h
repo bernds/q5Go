@@ -22,7 +22,7 @@ class FigureView;
 struct game_tree_pixmaps
 {
 	QPixmap w, b, wfig, bfig;
-	QPixmap e, box;
+	QPixmap e;
 };
 
 class GameTree : public QGraphicsView
@@ -56,6 +56,8 @@ class GameTree : public QGraphicsView
 	bool m_autocollapse = false;
 
 	game_tree_pixmaps m_pm;
+	game_tree_pixmaps m_pm_comment;
+	QPixmap m_box_pm;
 
 	void do_autocollapse ();
 	void resize_header ();
