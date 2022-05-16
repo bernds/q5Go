@@ -91,6 +91,8 @@
     <file>sgfs/captures.sgf</file>
     <file>sgfs/openings.sgf</file>
     <file>sgfs/endgame.sgf</file>
+    <file>sgfs/lnd2.sgf</file>
+    <file>sgfs/bentfour.sgf</file>
     <file>sgfs/terminology.sgf</file>
   </qresource>
   <qresource prefix="/">

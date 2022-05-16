@@ -1,0 +1,112 @@
+(;FF[4]GM[1]CA[UTF-8]AP[q5go:2.1.3]
+SZ[9]
+PW[White]
+PB[Black]
+KM[0]
+RU[Chinese]AW[aa][ab][ac][af][bf][cc][cd][ce][cf][dc][ea][eb][ec][fc][gc][gd][ge][ha][he][ib][ie]AB[ae][bb][bc][bd][be][ca][cb][fa][fb][gb][hb][hc][hd][id]
+C[Bent Four in the Corner
+
+Welcome to this brief tutorial on a special group of corner shapes. They are called "Bent Four in the Corner". They have interesting behaviour, and in Japanese rules there is even a game rule for them.
+
+]
+;AW[ca][cb][dd][ed][fd][hc][ia][ic]AB[da][db][dc][ec][fc][ha]AE[aa][ab][ac][ae][af][bb][bc][bd][be][bf][ce][cf][ea][eb][fa][ge][hd][he][id][ie]
+C[Bent Four in the Corner
+
+A simple question first. What is the status of the black group?
+]
+;B[]
+C[Bent Four in the Corner
+
+Black is alive because there are two alternative points to divide the territory into two eyes.
+]
+;W[fa]
+C[Bent Four in the Corner
+
+If White plays here...]
+;B[ea]
+C[Bent Four in the Corner
+
+Black answers here (and vice versa). Black now has two clear eyes.
+
+So this "bent four" shape is usually alive - but there is an exception. We'll get to it in a moment.]MN[3]
+;AW[ea][eb][ec][fc][ge][ha][he][ie]AB[fa][hc][hd][id]AE[ca][cb][cc][cd][da][db][dc][dd][ed][fd][ic]
+C[Bent Four in the Corner
+
+What is the status of this position?
+]MN[1]
+;W[]
+C[Bent Four in the Corner
+
+It might look like a seki. Black can't give atari, as the group would die immediately. It appears at first glance that White does not want to give atari either.]
+;W[ga]
+C[Bent Four in the Corner
+
+Let's say White does give atari. Now the "bent four" shape has appeared which gives these situations their name.
+]
+;B[ic]
+C[Bent Four in the Corner
+
+Black has no choice and must capture. Normally, capturing four stones in this shape gives two eyes.
+]
+;W[]LB[ha:A][ia:B]
+C[Bent Four in the Corner
+
+We saw earlier that elsewhere on the board, A and B would be miai to subdivide the space and make two eyes. But in the corner, things are slightly different.
+]
+;W[ha]
+C[Bent Four in the Corner
+
+White can attack here. Obviously, Black must take the other point.
+]
+;B[ia]
+C[Bent Four in the Corner
+
+Like this. But now...
+]
+;W[ib]
+C[Bent Four in the Corner
+
+A ko is formed!
+And White takes first, which is important.
+]
+;B[cg]
+C[Bent Four in the Corner
+
+Black could make a ko threat somewhere...
+]
+;W[ga]
+C[Bent Four in the Corner
+
+If White ignores the threat, the entire black group gets captured.
+]
+;AW[ia]AB[fa][fb][gb][hb][hc][hd][id]AE[cg][ga]
+C[Bent Four in the Corner
+
+Going back to the original position, Black is essentially dead. The point is that Black has no move, and White can delay action.
+]
+;B[]
+C[Bent Four in the Corner
+
+At the end of the game, White can solidify all positions and thereby remove all ko threats Black might have, and then start the attack on the corner position. Black then has no defense.
+]
+;W[]
+C[Bent Four in the Corner
+
+However, this is a rare situation where differences in rulesets actually matter. Under Chinese rules, you can simply play out such a situation. Wait, then remove ko threats, then kill the bent-four shape.]
+;AW[ag][bg][bh][bi][cg][dh][di][ed][fe][hf][hg][ig]AB[af][bf][cf][da][db][dc][dd][de][df][dg][ee][eg][eh][ei][ff][gf][gg][gh][hh][ih]LB[ch:A]
+C[Bent Four in the Corner
+
+In this position, Black has a very large ko threat at A. White needs to play inside his own territory, and under Japanese rules that loses a point.
+]QKGV[2448:0.004138:-2.29415:1.0295::KataGo 1.9 s1056]
+;B[]LB[ch:A]
+C[Bent Four in the Corner
+
+Here, White is far enough ahead that losing one point does not matter, but there could be situations where it does. As a result, Japanese rules simply say that groups with the bent four shape are considered dead at the end of the game.
+]
+;AW[aa][ab][ac][af][bf][cc][cd][ce][cf][dc][eg][eh][ei][fg][gf][gg][hi][ih][ii]AB[ae][bb][bc][bd][be][ca][cb][fh][fi][hf][hg][if]AE[ag][bg][bh][bi][cg][da][db][dd][de][df][dg][dh][di][ed][ee][fe][ff][ia][ig]
+C[Bent Four in the Corner
+
+This rule applies to the three situations shown here (obviously there could be extra stones if they don't add eyes to the black groups).
+
+It doesn't occur often, but players need to be aware of this possibility.
+])

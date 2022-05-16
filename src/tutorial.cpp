@@ -20,7 +20,7 @@ struct tutorial {
 	int lines;
 };
 
-static std::array<tutorial, 8> tutorials =
+static std::array<tutorial, 10> tutorials =
 {
 	tutorial { QObject::tr ("The Rules of Go"), ":/Tutorials/sgfs/rules.sgf", 12 },
 	tutorial { QObject::tr ("Life and Death"), ":/Tutorials/sgfs/lnd.sgf", 12 },
@@ -29,6 +29,8 @@ static std::array<tutorial, 8> tutorials =
 	tutorial { QObject::tr ("Captures"), ":/Tutorials/sgfs/captures.sgf", 12 },
 	tutorial { QObject::tr ("Openings"), ":/Tutorials/sgfs/openings.sgf", 12 },
 	tutorial { QObject::tr ("Endgame basics"), ":/Tutorials/sgfs/endgame.sgf", 12 },
+	tutorial { QObject::tr ("Advanced Life and Death"), ":/Tutorials/sgfs/lnd2.sgf", 13 },
+	tutorial { QObject::tr ("One more rule"), ":/Tutorials/sgfs/bentfour.sgf", 13 },
 	tutorial { QObject::tr ("Terminology"), ":/Tutorials/sgfs/terminology.sgf", 13 }
 };
 
