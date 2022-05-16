@@ -88,7 +88,7 @@ class go_board
 		bit_array area;
 		bit_array border;
 		enclosed_area (const bit_array &a, const bit_array &b) : area (a), border (b) { }
-		enclosed_area (bit_array &&a, bit_array &&b) : area (a), border (b) { }
+		enclosed_area (bit_array &&a, bit_array &&b) : area (std::move (a)), border (std::move (b)) { }
 		enclosed_area &operator= (enclosed_area other)
 		{
 			std::swap (other.area, area);
