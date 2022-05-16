@@ -1,0 +1,366 @@
+(;FF[4]GM[1]CA[UTF-8]AP[q5go:2.1.3]
+SZ[11]
+PW[White]
+PB[Black]
+KM[6.5]AW[bd][bk][cb][cc][ce][cf][ci][cj][ck][dc][dd][dg][dh][ed][fd][gc][gd][gi][gj][hc][hi][ib][ic][ig][ih][ii][jg]AB[be][bf][bi][bj][cg][ch][db][eb][ec][fa][fc][gb][hb][hj][ij][jh][ji][jj]
+C[Life & Death part 2
+
+Welcome to this second tutorial on Life and Death.
+We'll introduce a few additional concepts and look at typical shapes that can occur in games.]
+;AE[bd][be][bf][bi][bj][bk][ce][cf][cg][ch][ci][cj][ck][dg][dh][gi][gj][hi][hj][ig][ih][ii][ij][jg][jh][ji][jj]
+C[Life & Death part 2
+
+Let's start with something fairly simple: what is the status of the black group at the top?
+]
+;B[]LB[da:A][ha:B]
+C[Life & Death part 2
+
+It should be easy to see that it is alive: A and B are equally good options to make a second eye.]
+;W[da]
+C[Life & Death part 2
+
+If White takes one, ...
+]
+;B[ha]TR[ea]
+C[Life & Death part 2
+
+If White takes one, Black takes the other. Note that a play by White on the triangled point would be self-atari.
+
+]
+;AW[ca]AE[da][ha]TR[ca]
+C[Life & Death part 2
+
+Note that even one additional white stone can make a big difference. Here, White can kill.
+]
+;W[da]
+C[Life & Death part 2
+
+White can push in here, and unlike before, this stone is connected to the other white stones.
+]
+;B[ha]
+C[Life & Death part 2
+
+When Black tries to make a second eye...]
+;W[ea]
+C[Life & Death part 2
+
+When Black tries to make a second eye, White can give atari and the space in the middle is only a false eye.
+]
+;AE[ca][da][ea][ha]
+C[Life & Death part 2
+
+We already know the term <font>miai</font> for two opportunities that are equally good. Sometimes, it is also useful to think in terms of <font>half</font> <font>eyes</font>.]
+;B[]
+C[Life & Death part 2
+
+A half eye is something that can be turned into an eye with one additional move. Here Black has one real eye and two half eyes. The math works just as one would expect: the total is two eyes, the minimum for a living group.
+]
+;AW[cd][ce][db][de][ee][fe][ge][he][id][ie]AB[dd][ed][fb][fd][gd][hc][hd]AE[dc][ec][fa][gc]LB[ec:B][gc:A]
+C[Life & Death part 2
+
+Here is a slightly more artificial example. Black has one certain eye at A, and an obvious half eye at B. The situation at the top may be a little harder to see.]
+;B[ha]LB[ea:A][fa:B]
+C[Life & Death part 2
+
+By playing here, Black can make an eye at the top. The points A and B are now miai and White can't destroy the eye.
+
+The group now has two and a half eyes - more than necessary. So Black did not need to play this move yet.
+]
+;AE[cb][cc][cd][ce][db][dd][de][ed][ee][fc][fd][fe][gd][ge][hc][hd][he][ib][ic][id][ie]TR[hb]
+C[Life & Death part 2
+
+Let's consider this fragment of a shape a little more. These eye built from three spaces at the edge of the board is quite an important building block in many life and death situations.
+
+The triangled stone does not always appear, but it is a point that Black needs to control for this to be an eye.
+]
+;AW[db][dc][ec][fc][gc][gd][hd][id][jb][jc][jd]AB[hc][ib][ic]AE[hb]LB[ga:B][hb:A]
+C[Life & Death part 2
+
+Here is another example of a live group. It has eyes at A and B. Note how the three-space shape occurs here.
+]
+;AW[ea][ga]AB[ia]
+C[Life & Death part 2
+
+It follows that capturing three stones can often make an eye. Here we can imagine White has attempted some sort of attack on Black, but now it has failed.
+]
+;W[fa]
+C[Life & Death part 2
+
+If White tries to connect the stones somehow, ...
+]
+;B[da]
+C[Life & Death part 2
+
+If White tries to connect the stones somehow, Black just captures, and the shape we've seen previously appears.
+]
+;AW[cb][eb]AB[ea]AE[da][db][dc]
+C[Life & Death part 2
+
+Why is it important to capture three stones? Let's look at this position where only two spaces along the edge are controlled by Black. This could have occurred from the capture of two white stones.
+
+]
+;W[fa]
+C[Life & Death part 2
+
+White can now ruin Black's eye shape. It does not matter that Black can capture this stone.
+]
+;B[ga]TR[fa]
+C[Life & Death part 2
+
+The marked point will never be anything more than a false eye. Black's group has only one eye and is dead.
+]
+;AW[cc][cd][db][dd][ee][fa][fe][ge][he][ie]AB[dc][ec][fc][fd][gd][hd]AE[cb][ea][ga][gc][ha][ia]
+C[Life & Death part 2
+
+This theme is very important and occurs in many life and death problems. Here is a more advanced example. Can White kill Black?
+]QKGV[626:0.009917:-10.8086:10.9753::KataGo 1.9 s1056]
+;W[ha]
+C[Life & Death part 2
+
+This would be the move to consider - it threatens to connect either to the left or to the right, thereby preventing Black from controlling this area as eye space.
+]
+;B[ia]
+C[Life & Death part 2
+
+But the idea fails because there is a problem with White's shape. Black can intercept on this side.
+]
+;W[ga]
+C[Life & Death part 2
+
+White could try to connect.
+]
+;B[hb]
+C[Life & Death part 2
+
+Black can give atari, and now White has a problem.]
+;W[ea]LB[cb:A]
+C[Life & Death part 2
+
+If White does connect, note that the six white stones are short of liberties. Playing at A captures them.
+]
+;AW[cb]AE[ea]CR[cb]
+C[Life & Death part 2
+
+So it is better for White to connect here, but that allows the capture of three stones.
+]
+;B[ea]
+C[Life & Death part 2
+
+And with this, Black has another eye.
+]
+;AW[fa][ga][ha]AE[cb][ea][hb]
+C[Life & Death part 2
+
+However, let's go back a bit and note one very important point.]
+;B[hb]TR[ed][ja]
+C[Life & Death part 2
+
+Black can play this move because the black group has outside liberties. If they were filled, this move would be self-atari.
+]
+;AW[cb][dc][ed][fd][gd][ia][ib][ic]AB[da][db][gc][ha]AE[cd][dd][eb][ee][fa][fb][fe][ga][gb][ge][hd][he][ie][jb][jc][jd]
+C[Life & Death part 2
+
+It is very often the case that liberties are highly precious. Once they get filled, a living group may run into trouble.
+
+Let's consider this example.]QKGV[394:0.000056:-41.7118:11.3629::KataGo 1.9 s1056]
+;B[hd]
+C[Life & Death part 2
+
+Black may be tempted to push through the gap and force a response from White.
+]
+;W[he]
+C[Life & Death part 2
+
+But the main thing Black has achieved is to lose the last outside liberty. Black now needs to add a move to defend the group - so this sequence essentially loses a turn.]QKGV[806:0.000071:-48.5912:11.8417::KataGo 1.9 s1056]
+;W[fb]
+C[Life & Death part 2
+
+If Black does not defend, White can now kill.
+]QKGV[77:0.000077:-46.6492:10.7915::KataGo 1.9 s1056]
+;B[fa]LB[eb:A][gb:B]
+C[Life & Death part 2
+
+Normally this move would enable Black to make two eyes by playing either A or B - as miai.
+]QKGV[336:0.000068:-51.906:11.1413::KataGo 1.9 s1056]
+;W[eb]
+C[Life & Death part 2
+
+But the problem is that when White plays here, the point Black would need to play is a self-atari.
+]
+;B[gb]
+C[Life & Death part 2
+
+Because of the earlier bad move that lost a liberty for Black, this move no longer works.
+]
+;W[ga]
+C[Life & Death part 2
+
+Oops.
+]
+;AW[gb][gc][hc][ie][je]AB[hb][ib][jb][jc][jd]AE[cb][cc][da][db][dc][eb][ed][fa][fb][fd][ga][gd][he][ia]
+C[Life & Death part 2
+
+Here's an interesting problem. How can Black live?
+]
+;B[ka]
+C[Life & Death part 2
+
+If you paid attention, this move should jump out: it very elegantly makes two copies of the three-space eye shape we saw earlier. Black is alive.
+]
+;AE[ka]
+C[Life & Death part 2
+
+But if you're very perceptive, you may be considering other moves and wondering why they do not work.
+]
+;B[ha]
+C[Life & Death part 2
+
+For example, why not here?
+
+This leads to a discussion of a group of shapes called "Bent four in the corner". In Japanese rules, there is even a special rule for them. We'll cover them in another tutorial. They are frequent in problem books, but less common in actual games.]
+;AW[bb][bc][cc][ci][cj][dc][di][ec][ei][fd][fh][gd][gh][hd][ih][jb][jh][ji][jj]AB[cb][db][dj][eb][ej][fc][fi][fj][gc][gi][hc][ii][ij]AE[gb][ha][hb][ib][ie][jc][jd][je]
+C[Life & Death part 2
+
+Two more examples. By now, the idea should be fairly obvious.
+]QKGV[2416:0.000062:-85.9201:5.46103::KataGo 1.9 s1056]
+;B[gk]
+C[Life & Death part 2
+
+The situation at the bottom may look unclear - doesn't White still have an attack?
+]
+;W[hj]LB[hi:A][ik:B]
+C[Life & Death part 2
+
+Normally, a white move here would threaten to connect either at A or at B.
+]
+;B[hi]
+C[Life & Death part 2
+
+However, Black can capture the white stone. The earlier move on the first line is placed just right to prevent a white connection underneath.
+]
+;W[ik]
+C[Life & Death part 2
+
+White would have to play here...
+]
+;B[hk]
+C[Life & Death part 2
+
+But then, Black surrounds and makes an eye by capturing a stone.
+
+You can work out the example at the top on your own.
+]
+;AW[ac][ad][bd][cd][da][db][dd][hb][hc][jd][kc][kd]AB[ab][ba][bc][cc][ib][ic][ja][jc][kb]AE[bb][ci][cj][di][dj][eb][ec][ei][ej][fc][fd][fh][fi][fj][gc][gd][gh][gi][gk][hi][hj][hk][ih][ii][ij][ik][jb][jh][ji][jj]
+C[Life & Death part 2
+
+Let's switch to a different theme and talk about eye-stealing for a while. Destroying eyes and turning them into false eyes is often a killing technique.
+]
+;
+C[Life & Death part 2
+
+Here' we have the same black shape in both corners, but in the top left, White has an extra stone in place.
+]
+;W[ca]
+C[Life & Death part 2
+
+Playing here kills the black group: suddenly three stones are in atari, and even if Black were to connect, only one eye would remain.
+]
+;B[bb]
+C[Life & Death part 2
+
+Like this.
+]
+;W[aa]
+C[Life & Death part 2
+
+By contrast, the black group in the top right is safe from attack for now.]
+;W[ia]
+C[Life & Death part 2
+
+White could give atari, but...
+]
+;B[ha]
+C[Life & Death part 2
+
+White could give atari, but of course Black just captures it.
+]
+;AW[df][hf]AB[be][bf][cd][cf][dd][de][he][id][if][jd][je][jf]AE[aa][ac][ad][ca][da][db][dc][ha][hb][hc][ib][ic][ja][jc][kb][kc][kd]
+C[Life & Death part 2
+
+These are the basic patterns for false eyes. The player trying to destroy the eye needs to control two of the four corners surrounding the potential eye.]
+;AW[hj][ii][ik][ji]AB[gi][hi][ig][ih]AE[bd][be][bf][cd][cf][dd][de][df][hd][he][hf][id][if][jd][je][jf]
+C[Life & Death part 2
+
+This is important even in middle game positions. Black's shape in this example feels somewhat incomplete.
+]QKGV[203:0.010236:-6.86791:8.4729::KataGo 1.9 s1056]
+;W[gg]
+C[Life & Death part 2
+
+This is the <font>eye-stealing</font> <font>tesuji</font>. Black might have liked to keep these stones connected, but there are issues with that.]QKGV[2071:0.064631:-4.05047:8.54566::KataGo 1.9 s1056]
+;B[hh]
+C[Life & Death part 2
+
+The simplest way to connect is very ugly: two empty triangles and no sign of eye shape. These five stones will be a burden. Better than this would be to suffer White's cut.]QKGV[270:0.002860:-11.0008:9.21979::KataGo 1.9 s1056]
+;AB[gg]AE[hh]TR[gg]
+C[Life & Death part 2
+
+By contrast, if Black gets to play this point, the group is strong. It is perhaps a little inefficient (and not the best move on this board), but that's a separate consideration.]QKGV[703:0.773720:1.71304:8.64911::KataGo 1.9 s1056]
+;AW[ei][ej][ek][fi][gi][hi][ih][jg][kh][ki]AB[fj][fk][gj][hj][hk][ij][ik][ji][kj][kk]AE[gg][ig]
+C[Life & Death part 2
+
+Back to life and death - what is the killing move for White?
+]
+;W[jj]
+C[Life & Death part 2
+
+Playing here makes a false eye.
+]
+;B[jk]
+C[Life & Death part 2
+
+If Black captures, you should recognize one of the two basic shapes we saw earlier.
+]
+;AW[eh][fh][gh][hh][ji]AB[fi][hi][ii][jj]AE[ek][fk][gi][gj][hj][hk][ij][ik][jk][kh][kk]
+C[Life & Death part 2
+
+These basic concepts often appear In more advanced problems. This problem is not simple, it combines the eye-stealing tesuji with a different idea.
+]QKGV[614:0.000041:-55.1179:13.3048::KataGo 1.9 s1056]
+;W[hk]TR[ji]
+C[Life & Death part 2
+
+White plays here, inside the area Black is hoping to control. Note how this stone forms the eye-stealing tesuji with the marked stone - now White has to make this stone survive.]
+;B[gj]
+C[Life & Death part 2
+
+This is Black's most interesting resistance. It looks like there is now way for white to connect out to friendly stones.
+
+But...
+]
+;W[fk]
+C[Life & Death part 2
+
+This move at least threatens to connect.
+]
+;B[gk]
+C[Life & Death part 2
+
+Now it may look like White is separated and one stone is even in atari. How can this be a killing attack?
+
+This is where the second idea comes into play.
+]
+;W[hj]TR[gi]
+C[Life & Death part 2
+
+This sets up a shortage of liberties. Black is in atari and would still be in atari after connecting at the marked point.]
+;B[ek]
+C[Life & Death part 2
+
+So, Black's only choice is to capture one stone.
+]
+;W[gi]
+C[Life & Death part 2
+
+But now White has a double atari and all the black stones die.
+
+As a beginner, you're not expected to be able to find this solution. But hopefully it made you say "cool!"
+])
