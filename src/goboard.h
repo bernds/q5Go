@@ -98,6 +98,7 @@ class go_board
 	};
 	int m_sz_x, m_sz_y;
 	bool m_torus_h = false, m_torus_v = false;
+	bool m_store_units = true;
 	const bit_array *m_masked_left, *m_masked_right, *m_column_left, *m_column_right, *m_row_top, *m_row_bottom;
 	/* A mask for the board's intersections.  Null for non-variant games.
 	   Owned by the game_record corresponding to this board.  */
@@ -134,7 +135,7 @@ public:
 
 	go_board (const go_board &other)
 		: m_sz_x (other.m_sz_x), m_sz_y (other.m_sz_y),
-		m_torus_h (other.m_torus_h), m_torus_v (other.m_torus_v),
+		m_torus_h (other.m_torus_h), m_torus_v (other.m_torus_v), m_store_units (other.m_store_units),
 		m_masked_left (other.m_masked_left), m_masked_right (other.m_masked_right),
 		m_column_left (other.m_column_left), m_column_right (other.m_column_right),
 		m_row_top (other.m_row_top), m_row_bottom (other.m_row_bottom),
@@ -154,7 +155,7 @@ public:
 	   which just summarize that information.  */
 	go_board (const go_board &other, mark)
 		: m_sz_x (other.m_sz_x), m_sz_y (other.m_sz_y),
-		m_torus_h (other.m_torus_h), m_torus_v (other.m_torus_v),
+		m_torus_h (other.m_torus_h), m_torus_v (other.m_torus_v), m_store_units (other.m_store_units),
 		m_masked_left (other.m_masked_left), m_masked_right (other.m_masked_right),
 		m_column_left (other.m_column_left), m_column_right (other.m_column_right),
 		m_row_top (other.m_row_top), m_row_bottom (other.m_row_bottom),
@@ -171,7 +172,7 @@ public:
 	   Callers should pass none to the unused stone_color argument for clarity.  */
 	go_board (const go_board &other, stone_color)
 		: m_sz_x (other.m_sz_x), m_sz_y (other.m_sz_y),
-		m_torus_h (other.m_torus_h), m_torus_v (other.m_torus_v),
+		m_torus_h (other.m_torus_h), m_torus_v (other.m_torus_v), m_store_units (other.m_store_units),
 		m_masked_left (other.m_masked_left), m_masked_right (other.m_masked_right),
 		m_column_left (other.m_column_left), m_column_right (other.m_column_right),
 		m_row_top (other.m_row_top), m_row_bottom (other.m_row_bottom),
@@ -202,6 +203,8 @@ public:
 		m_dead_b = other.m_dead_b;
 		m_dead_w = other.m_dead_w;
 
+		m_store_units = other.m_store_units;
+
 		std::swap (m_stones_w, other.m_stones_w);
 		std::swap (m_stones_b, other.m_stones_b);
 		std::swap (m_units_w, other.m_units_w);
@@ -213,6 +216,16 @@ public:
 	}
 	~go_board ()
 	{
+	}
+	void set_discard_mode (bool on)
+	{
+		m_store_units = !on;
+		if (on) {
+			m_units_w.clear ();
+			m_units_b.clear ();
+		} else {
+			identify_units ();
+		}
 	}
 	int size_x () const
 	{

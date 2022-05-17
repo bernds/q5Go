@@ -2676,6 +2676,7 @@ void MainWindow::setGameMode (GameMode mode)
 		m_pos_before_edit = st;
 
 		go_board b = st->get_board ();
+		b.set_discard_mode (false);
 		if (mode == modeScore || mode == modeScoreRemote) {
 			if (mode == modeScore && st->was_score_p ())
 				b.territory_from_markers ();

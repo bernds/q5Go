@@ -753,6 +753,13 @@ std::shared_ptr<game_record> sgf2record (const sgf &s, QTextCodec *codec)
 	    && game->m_root->next_move ()->get_move_color () == white)
 		game->m_root->set_to_move (white);
 
+	game->m_root->walk_tree ([&] (game_state *st) -> bool
+	{
+		if (!st->was_score_p ())
+			st->set_discard_mode ();
+		return true;
+	});
+
 	return game;
 }
 

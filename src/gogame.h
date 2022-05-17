@@ -348,6 +348,11 @@ public:
 		return m_move_color;
 	}
 
+	void set_discard_mode (bool on = true)
+	{
+		m_board.set_discard_mode (on);
+	}
+
 	std::string time_left (stone_color col) const
 	{
 		return col == white ? m_timeleft_w : m_timeleft_b;

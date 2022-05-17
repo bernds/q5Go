@@ -4,6 +4,22 @@
 
 #include "goboard.h"
 
+template<class T>
+class discarder
+{
+	T &m_v;
+	bool m_doit;
+public:
+	discarder (T &v, bool do_discard) : m_v (v), m_doit (do_discard)
+	{
+	}
+	~discarder ()
+	{
+		if (m_doit)
+			m_v.clear ();
+	}
+};
+
 void bit_array::debug () const
 {
 	for (unsigned bit = 0; bit < m_n_bits; bit++) {
@@ -863,6 +879,13 @@ void go_board::add_stone (int x, int y, stone_color col, bool process_captures)
 	if (stone_at (x, y) != none)
 		throw std::logic_error ("placing stone on top of another");
 #endif
+
+	if (!m_store_units) {
+		identify_units ();
+	}
+	discarder dw (m_units_w, !m_store_units);
+	discarder db (m_units_b, !m_store_units);
+
 	std::vector<stone_unit> &opponent_units = col == black ? m_units_w : m_units_b;
 	std::vector<stone_unit> &player_units = col == black ? m_units_b : m_units_w;
 	bit_array *opponent_stones = col == black ? &m_stones_w : &m_stones_b;
@@ -966,6 +989,12 @@ bool go_board::valid_move_p (int x, int y, stone_color col)
 
 	if (count_liberties (pos) > 0)
 		return true;
+
+	if (!m_store_units) {
+		identify_units ();
+	}
+	discarder dw (m_units_w, !m_store_units);
+	discarder db (m_units_b, !m_store_units);
 
 	/* Look at surrounding units.  */
 	bit_array pos_neighbours (bitsize ());
