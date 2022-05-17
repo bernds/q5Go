@@ -881,10 +881,11 @@ void go_board::add_stone (int x, int y, stone_color col, bool process_captures)
 #endif
 
 	if (!m_store_units) {
+		printf ("identifying units\n");
 		identify_units ();
 	}
-	discarder dw (m_units_w, !m_store_units);
-	discarder db (m_units_b, !m_store_units);
+	discarder<std::vector<stone_unit>> dw (m_units_w, !m_store_units);
+	discarder<std::vector<stone_unit>> db (m_units_b, !m_store_units);
 
 	std::vector<stone_unit> &opponent_units = col == black ? m_units_w : m_units_b;
 	std::vector<stone_unit> &player_units = col == black ? m_units_b : m_units_w;
@@ -993,8 +994,8 @@ bool go_board::valid_move_p (int x, int y, stone_color col)
 	if (!m_store_units) {
 		identify_units ();
 	}
-	discarder dw (m_units_w, !m_store_units);
-	discarder db (m_units_b, !m_store_units);
+	discarder<std::vector<stone_unit>> dw (m_units_w, !m_store_units);
+	discarder<std::vector<stone_unit>> db (m_units_b, !m_store_units);
 
 	/* Look at surrounding units.  */
 	bit_array pos_neighbours (bitsize ());
