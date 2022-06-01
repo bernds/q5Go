@@ -2555,7 +2555,12 @@ If the picture is not set, or unvalid, a default goban is used by qgo</string>
             </item>
             <item>
              <property name="text">
-              <string>Score</string>
+              <string>Score difference</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Absolute score</string>
              </property>
             </item>
            </widget>

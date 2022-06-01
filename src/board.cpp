@@ -1000,17 +1000,20 @@ game_state *Board::analysis_primary_move ()
 	return nullptr;
 }
 
-game_state *Board::analysis_at (int x, int y, int &num, double &primary)
+game_state *Board::analysis_at (int x, int y, int &num, double &primary_wr, double &primary_score)
 {
 	game_state *eval_root = m_eval_state != nullptr ? m_eval_state : m_displayed;
 	auto &c = eval_root->children ();
 	num = 0;
-	primary = 0;
+	primary_wr = 0;
+	primary_score = 0;
 	for (auto it: c) {
 		eval ev = m_eval_state != nullptr ? it->best_eval () : it->eval_from (m_an_id, true);
 		if (it->has_figure () && ev.visits > 0 && it->was_move_p ()) {
-			if (num == 0)
-				primary = ev.wr_black;
+			if (num == 0) {
+				primary_wr = ev.wr_black;
+				primary_score = ev.score_mean;
+			}
 			if (it->get_move_x () == x && it->get_move_y () == y)
 				return it;
 			num++;
@@ -1026,7 +1029,7 @@ int Board::extract_analysis (go_board &b)
 	int maxdepth = setting->readIntEntry ("ANALYSIS_DEPTH");
 
 	int idx;
-	double primary;
+	double primary_wr, primary_score;
 	auto display_pv = [this, &b] (game_state *pv, void (MainWindow::*set_eval) (const QString &, double, bool, double, stone_color, int))
 		{
 			if (pv == nullptr) {
@@ -1048,7 +1051,7 @@ int Board::extract_analysis (go_board &b)
 		};
 	game_state *primary_pv = analysis_primary_move ();
 	display_pv (primary_pv, &MainWindow::set_eval);
-	game_state *pv = analysis_at (curX, curY, idx, primary);
+	game_state *pv = analysis_at (curX, curY, idx, primary_wr, primary_score);
 	display_pv (pv, &MainWindow::set_2nd_eval);
 	if (pv == nullptr)
 		return 0;
@@ -1074,8 +1077,8 @@ Board::ram_result Board::render_analysis_marks (svg_builder &svg, double svg_fac
 	bool hideother = setting->values.analysis_hideother;
 
 	int pv_idx;
-	double primary;
-	game_state *pv = analysis_at (x, y, pv_idx, primary);
+	double primary_wr, primary_score;
+	game_state *pv = analysis_at (x, y, pv_idx, primary_wr, primary_score);
 	if (pv == nullptr || v > 0 || (max_number > 0 && hideother)) {
 		if (child_mark) {
 			svg.circle_at (cx, cy, svg_factor * 0.45, "none", "white", "1");
@@ -1089,29 +1092,39 @@ Board::ram_result Board::render_analysis_marks (svg_builder &svg, double svg_fac
 	stone_color to_move = m_displayed->to_move ();
 	eval ev = pv->best_eval ();
 	double wr = ev.wr_black;
-	double wrdiff = wr - primary;
+	double score = ev.score_mean;
+	double wr_diff = wr - primary_wr;
+	double score_diff = score - primary_score;
 	if (to_move == white)
-		wr = 1 - wr, wrdiff = -wrdiff;
+		wr = 1 - wr, score = -score, wr_diff = -wr_diff, score_diff = -score_diff;
 
 	/* Put a percentage or letter mark on variations returned by the analysis engine,
 	   unless we are already showing a numbered variation and this intersection
 	   has a number.  */
-	QString wr_col = "lightblue";
+	QString col_name = "lightblue";
 	if (pv_idx > 0) {
-		/* Use green for a difference of 0, red for any loss bigger than 12%.
-		   The HSV angle between red and green is 120, so just multiply by 1000.  */
-		int angle = std::min (120.0, std::max (0.0, 120 + 1000 * wrdiff));
-		QColor col = QColor::fromHsv (angle, 255, 200);
-		wr_col = col.name ();
+		QColor col;
+		if (analysis_vartype<3) {  // win rate based
+			/* Use green for a difference of 0, red for any loss bigger than 12%.
+			   The HSV angle between red and green is 120, so just multiply by 1000. */
+			int angle = std::min (120.0, std::max (0.0, 120 + 1000 * wr_diff));
+			col = QColor::fromHsv (angle, 255, 200);
+		} else {  // score based
+			/* Use green for a difference of 0, red for any loss bigger than 3 points.
+			   The HSV angle between red and green is 120, so just multiply by 40. */
+			int angle = std::min (120.0, std::max (0.0, 120 + 40 * score_diff));
+			col = QColor::fromHsv (angle, 255, 200);
+		}
+		col_name = col.name ();
 	}
-	svg.circle_at (cx, cy, svg_factor * 0.45, wr_col, child_mark ? "white" : "black", "1");
+	svg.circle_at (cx, cy, svg_factor * 0.45, col_name, child_mark ? "white" : "black", "1");
 
 	if (analysis_vartype == 0) {  // letters
 		QChar c = pv_idx >= 26 ? 'a' + pv_idx - 26 : 'A' + pv_idx;
 		svg.text_at (cx, cy, svg_factor, 0, c,
 			     "black", fi);
 	} else if (analysis_vartype == 1) {  // win rate (relative)
-		double shown_val = wrdiff;
+		double shown_val = wr_diff;
 
 		if (to_move == wr_swap_col)
 			shown_val = -shown_val;
@@ -1128,12 +1141,16 @@ Board::ram_result Board::render_analysis_marks (svg_builder &svg, double svg_fac
 		svg.text_at (cx, cy, svg_factor, 4,
 			     QString::number (shown_val * 100, 'f', 1),
 			     "black", fi);
-	} else {  // score
-		double shown_val = ev.score_mean;
+	} else if (analysis_vartype == 3) {  // score (relative)
+		double shown_val = score_diff;
 		int precision = abs(shown_val) < 10 ? 1 : 0;
 
-		if (to_move == white)
-			shown_val = -shown_val;
+		svg.text_at (cx, cy, svg_factor, 4,
+			     QString::number (shown_val, 'f', precision),
+			     "black", fi);
+	} else {  // score (absolute)
+		double shown_val = score;
+		int precision = abs(shown_val) < 10 ? 1 : 0;
 
 		svg.text_at (cx, cy, svg_factor, 4,
 			     QString::number (shown_val, 'f', precision),
