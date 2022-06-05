@@ -547,7 +547,7 @@ public:
 
 std::vector<go_pattern> unique_symmetries (const go_pattern &p0)
 {
-	std::vector<go_pattern> pats = {
+	std::vector<go_pattern> pats0 = {
 		p0,
 		p0.transform<coord_transform_r90> (),
 		p0.transform<coord_transform_r180> (),
@@ -557,12 +557,15 @@ std::vector<go_pattern> unique_symmetries (const go_pattern &p0)
 		p0.transform<coord_transform_flip3> (),
 		p0.transform<coord_transform_flip4> ()
 	};
-	pats.erase (std::remove_if (std::begin (pats) + 1, std::end (pats),
-				    [&p0] (const go_pattern &pat)
-				    {
-					    return p0 == pat;
-				    }),
-		    std::end (pats));
+	std::vector<go_pattern> pats;
+	uint32_t dupes = 0;
+	for (int i = 0; i < 8; i++) {
+		if ((dupes & (1 << i)) == 0)
+		    pats.push_back (pats0[i]);
+		for (int j = i + 1; j < 8; j++)
+			if (pats0[i] == pats0[j])
+				dupes |= 1 << j;
+	}
 	return pats;
 }
 
