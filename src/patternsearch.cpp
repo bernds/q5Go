@@ -503,24 +503,19 @@ void PatternSearchWindow::redraw_stats ()
 	int h = h1 - 2 * margin;
 
 	size_t sz = m_search_cont->size ();
-	std::vector<int> rank;
-	rank.reserve (sz);
+	std::vector<int> rank (sz);
 	size_t count = 0;
-	for (size_t i = 0; i < sz; i++)
-		if ((*m_search_cont)[i].get (none).count > 0) {
-			rank.push_back (i);
-			if (++count >= 52)
-				break;
+	for (size_t i = 0; i < sz; i++) {
+		auto &entry = (*m_search_cont)[i].get (none);
+		if (entry.count > 0) {
+			rank[entry.rank] = i;
+			++count;
 		}
-
+	}
 	if (count == 0)
 		return;
 
-	std::sort (rank.begin (), rank.end (),
-		   [this] (int a, int b)
-		   {
-			   return (*m_search_cont)[a].get (none).count > (*m_search_cont)[b].get (none).count;
-		   });
+	count = std::min (count, (size_t)52);
 	int rk0_count = (*m_search_cont)[rank[0]].get (none).count;
 
 	std::vector<QGraphicsSimpleTextItem *> stis;
