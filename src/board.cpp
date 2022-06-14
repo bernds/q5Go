@@ -1019,6 +1019,9 @@ game_state *Board::analysis_at (int x, int y, int &num, double &primary_wr, doub
 			num++;
 		}
 	}
+	game_state *next = eval_root->next_move ();
+	if (next != nullptr && next->get_move_x () == x && next->get_move_y () == y)
+		return next;
 	return nullptr;
 }
 
@@ -1041,7 +1044,7 @@ int Board::extract_analysis (go_board &b)
 			stone_color to_move = m_displayed->to_move ();
 			eval ev = pv->best_eval ();
 			double wr = ev.wr_black;
-			int visits = ev.visits;
+			int visits = pv->has_figure () ? ev.visits : 0;
 			if (to_move == white)
 				wr = 1 - wr;
 			if (x > 7)
@@ -1051,9 +1054,10 @@ int Board::extract_analysis (go_board &b)
 		};
 	game_state *primary_pv = analysis_primary_move ();
 	display_pv (primary_pv, &MainWindow::set_eval);
+	/* This could return just the next game move, so check for has_figure as well.  */
 	game_state *pv = analysis_at (curX, curY, idx, primary_wr, primary_score);
 	display_pv (pv, &MainWindow::set_2nd_eval);
-	if (pv == nullptr)
+	if (pv == nullptr || !pv->has_figure ())
 		return 0;
 
 	int depth = 0;

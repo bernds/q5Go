@@ -4041,7 +4041,7 @@ void MainWindow::set_2nd_eval (const QString &move, double eval, bool have_score
 
 	normalTools->anShownBox->setTitle (tr ("Highlighted: %1").arg (move));
 	normalTools->shownWR->setText (format_eval (eval, have_score, score, to_move));
-	normalTools->shownVisits->setText (QString::number (visits));
+	normalTools->shownVisits->setText (visits == 0 ? tr ("Game move") : QString::number (visits));
 }
 
 void MainWindow::grey_eval_bar ()
