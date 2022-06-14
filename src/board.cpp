@@ -1019,6 +1019,8 @@ game_state *Board::analysis_at (int x, int y, int &num, double &primary_wr, doub
 			num++;
 		}
 	}
+	game_state *next = eval_root->next_move ();
+	if (next->get_move_x () == x && next->get_move_y () == y) return next;
 	return nullptr;
 }
 
