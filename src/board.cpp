@@ -1020,8 +1020,13 @@ game_state *Board::analysis_at (int x, int y, int &num, double &primary_wr, doub
 		}
 	}
 	game_state *next = eval_root->next_move ();
-	if (next != nullptr && next->get_move_x () == x && next->get_move_y () == y)
-		return next;
+	/* If we're not doing live analysis, the next move may have previously been evaluated.
+	   Elsewhere we're ensuring we're not displaying the rest of the game as a PV.  */
+	if (next != nullptr && next->get_move_x () == x && next->get_move_y () == y && m_eval_state == nullptr) {
+		eval ev;
+		if (next->find_eval (m_an_id, ev))
+			return next;
+	}
 	return nullptr;
 }
 
