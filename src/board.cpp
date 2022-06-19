@@ -347,9 +347,9 @@ stone_color Board::cursor_color (int x, int y, stone_color to_move)
 	return none;
 }
 
-static int collect_moves (go_board &b, game_state *startpos, game_state *stop_pos, bool primary)
+static int collect_moves (go_board &b, game_state *startpos, game_state *stop_pos, bool primary, bool from_one = false)
 {
-	int mvnr = startpos->sgf_move_number ();
+	int mvnr = from_one ? 1 : startpos->sgf_move_number ();
 	int count = 0;
 	game_state *st = startpos;
 	int maxnr = 0;
@@ -1226,9 +1226,24 @@ QPixmap BoardView::draw_position (int default_vars_type)
 	} else if (numbering && !m_displayed->has_figure () && m_displayed->was_move_p ()) {
 		game_state *startpos = m_displayed;
 		game_state *first = startpos;
-		while (startpos && startpos->was_move_p () && !first->has_figure ())
-			first = startpos, startpos = startpos->prev_move ();
-		max_number = collect_moves (mn_board, first, m_displayed, false);
+		game_state *first_branch = nullptr;
+		bool moves_from_one = false;
+		int num_style = setting->readIntEntry ("VAR_NUMBERING");
+		while (startpos && startpos->was_move_p () && !first->has_figure ()) {
+			first = startpos;
+			game_state *prev = startpos->prev_move ();
+			if (num_style != 0 && startpos != prev->next_primary_move ()) {
+				moves_from_one = true;
+				if (num_style == 2)
+					break;
+				if (num_style == 1)
+					first_branch = startpos;
+			}
+			startpos = prev;
+		}
+		if (num_style == 1 && first_branch != nullptr)
+			first = first_branch;
+		max_number = collect_moves (mn_board, first, m_displayed, false, moves_from_one);
 	}
 
 	/* Handle marks first.  They go into an svgbuilder which we'll render at the end,

@@ -755,6 +755,7 @@ void PreferencesDialog::init_from_settings ()
 	ui->variationComboBox->setCurrentIndex (setting->readIntEntry("VAR_GHOSTS"));
 	ui->varChildrenComboBox->setCurrentIndex (setting->readBoolEntry("VAR_CHILDREN") != 0);
 	ui->varSGFStyleComboBox->setCurrentIndex (setting->readIntEntry("VAR_SGF_STYLE"));
+	ui->varNumberingComboBox->setCurrentIndex (setting->readIntEntry("VAR_NUMBERING"));
 	ui->varDiagsCheckBox->setChecked (setting->readBoolEntry("VAR_IGNORE_DIAGS"));
 
 	int coords = (setting->readBoolEntry("BOARD_COORDS")
@@ -1069,6 +1070,7 @@ void PreferencesDialog::do_apply ()
 	setting->writeIntEntry ("VAR_GHOSTS", ui->variationComboBox->currentIndex ());
 	setting->writeBoolEntry ("VAR_CHILDREN", ui->varChildrenComboBox->currentIndex () == 1);
 	setting->writeIntEntry ("VAR_SGF_STYLE", ui->varSGFStyleComboBox->currentIndex ());
+	setting->writeIntEntry("VAR_NUMBERING", ui->varNumberingComboBox->currentIndex ());
 	setting->writeBoolEntry ("VAR_IGNORE_DIAGS", ui->varDiagsCheckBox->isChecked ());
 
 	int coords = ui->coordsComboBox->currentIndex ();
