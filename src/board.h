@@ -54,6 +54,9 @@ class BoardView : public QGraphicsView
 	/* Used in draw_grid for widened board outlines.  */
 	bit_array m_vgrid_outline, m_hgrid_outline;
 
+public:
+	enum class movenums { off, vars, vars_long, full };
+
 protected:
 	go_game_ptr m_game;
 	MainWindow *m_board_win {};
@@ -86,7 +89,7 @@ protected:
 	bool m_figure_view = false;
 	bool m_never_sync = false;
 	bool m_no_marks = false;
-	bool m_move_numbers = false;
+	movenums m_move_numbers = movenums::off;
 	bool m_show_coords, m_sgf_coords, m_show_hoshis, m_show_figure_caps;
 
 	/* Positioning of the board image inside the view.  The board rect gives the
@@ -177,7 +180,7 @@ public:
 
 	bool lockResize;
 
-	void set_show_move_numbers (bool);
+	void set_show_move_numbers (movenums);
 	void set_show_hoshis (bool);
 	void set_show_figure_caps (bool);
 	void set_show_coords (bool);

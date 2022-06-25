@@ -1174,7 +1174,7 @@ void BoardView::set_time_warning (int seconds)
 /* The central function for synchronizing visual appearance with the abstract board data.  */
 QPixmap BoardView::draw_position (int default_vars_type)
 {
-	bool numbering = !have_analysis () && m_move_numbers;
+	bool numbering = !have_analysis () && m_move_numbers != movenums::off;
 	bool have_figure = m_figure_view && !have_analysis () && m_displayed->has_figure ();
 	int print_num = m_displayed->print_numbering_inherited ();
 
@@ -1228,22 +1228,23 @@ QPixmap BoardView::draw_position (int default_vars_type)
 		game_state *first = startpos;
 		game_state *first_branch = nullptr;
 		bool moves_from_one = false;
-		int num_style = setting->readIntEntry ("VAR_NUMBERING");
 		while (startpos && startpos->was_move_p () && !first->has_figure ()) {
 			first = startpos;
 			game_state *prev = startpos->prev_move ();
-			if (num_style != 0 && startpos != prev->next_primary_move ()) {
+			if (m_move_numbers != movenums::full && startpos != prev->next_primary_move ()) {
 				moves_from_one = true;
-				if (num_style == 2)
+				first_branch = startpos;
+				if (m_move_numbers == movenums::vars)
 					break;
-				if (num_style == 1)
-					first_branch = startpos;
 			}
 			startpos = prev;
 		}
-		if (num_style == 1 && first_branch != nullptr)
+		if (m_move_numbers == movenums::vars_long && first_branch != nullptr)
 			first = first_branch;
-		max_number = collect_moves (mn_board, first, m_displayed, false, moves_from_one);
+		if (m_move_numbers != movenums::full && first_branch == nullptr)
+			numbering = false;
+		else
+			max_number = collect_moves (mn_board, first, m_displayed, false, moves_from_one);
 	}
 
 	/* Handle marks first.  They go into an svgbuilder which we'll render at the end,
@@ -2321,9 +2322,9 @@ void BoardView::set_show_hoshis (bool b)
 	sync_appearance ();
 }
 
-void BoardView::set_show_move_numbers (bool b)
+void BoardView::set_show_move_numbers (movenums b)
 {
-	bool old = m_move_numbers;
+	movenums old = m_move_numbers;
 	m_move_numbers = b;
 	if (old == m_move_numbers)
 		return;

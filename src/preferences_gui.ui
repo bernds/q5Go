@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>685</width>
+    <width>681</width>
     <height>855</height>
    </rect>
   </property>
@@ -1250,42 +1250,6 @@ Globally disables all tool tips that would show up if the mouse hovers over a GU
           <property name="bottomMargin">
            <number>6</number>
           </property>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string>Show as:</string>
-            </property>
-            <property name="buddy">
-             <cstring>variationComboBox</cstring>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="0">
-           <spacer name="verticalSpacer_18">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Preferred</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>1</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_2">
-            <property name="text">
-             <string>Show which:</string>
-            </property>
-            <property name="buddy">
-             <cstring>varChildrenComboBox</cstring>
-            </property>
-           </widget>
-          </item>
           <item row="2" column="1">
            <widget class="QComboBox" name="varSGFStyleComboBox">
             <item>
@@ -1305,10 +1269,61 @@ Globally disables all tool tips that would show up if the mouse hovers over a GU
             </item>
            </widget>
           </item>
-          <item row="5" column="0">
-           <widget class="QCheckBox" name="varDiagsCheckBox">
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_2">
             <property name="text">
-             <string>Ignore diagrams</string>
+             <string>Show which:</string>
+            </property>
+            <property name="buddy">
+             <cstring>varChildrenComboBox</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="variationComboBox">
+            <property name="focusPolicy">
+             <enum>Qt::TabFocus</enum>
+            </property>
+            <item>
+             <property name="text">
+              <string>None</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Ghosts</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Letters</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <spacer name="verticalSpacer_18">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Preferred</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>1</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Show as:</string>
+            </property>
+            <property name="buddy">
+             <cstring>variationComboBox</cstring>
             </property>
            </widget>
           </item>
@@ -1337,58 +1352,11 @@ child/sibling setting:</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
-           <widget class="QComboBox" name="variationComboBox">
-            <property name="focusPolicy">
-             <enum>Qt::TabFocus</enum>
-            </property>
-            <item>
-             <property name="text">
-              <string>None</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Ghosts</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Letters</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="label_32">
+          <item row="4" column="0">
+           <widget class="QCheckBox" name="varDiagsCheckBox">
             <property name="text">
-             <string>Move numbers:</string>
+             <string>Ignore diagrams</string>
             </property>
-            <property name="buddy">
-             <cstring>variationComboBox</cstring>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QComboBox" name="varNumberingComboBox">
-            <property name="toolTip">
-             <string>&lt;p&gt;This controls how move numbering, if it is enabled in the View menu, works in variations. You can choose to number all moves, or only moves after the current variation branched off.&lt;/p&gt;</string>
-            </property>
-            <item>
-             <property name="text">
-              <string>Whole game</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>First branch</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Last branch</string>
-             </property>
-            </item>
            </widget>
           </item>
          </layout>
@@ -5183,8 +5151,8 @@ If checked then when a game you played completes, it is automatically saved in t
              <item>
               <widget class="QLabel" name="label_37">
                <property name="text">
-                <string>Marked directories contain a Kombilo DB, which cannot be used for pattern search.
-Use the &quot;Create DB&quot; to create a q5go database.</string>
+                 <string>Marked directories contain a Kombilo DB, which cannot be used for pattern search.
+Use the "Create DB" to create a q5go database.</string>
                </property>
               </widget>
              </item>

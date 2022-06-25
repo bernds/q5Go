@@ -126,7 +126,7 @@ protected:
 
 	QAction *escapeFocus, *whatsThis;
 	QAction *navSwapVariations;
-	QActionGroup *editGroup, *engineGroup, *rulesGroup;
+	QActionGroup *editGroup, *engineGroup, *rulesGroup, *viewNumsGroup;
 	QButtonGroup *scoreGroup;
 	QList<QAction *> engine_actions;
 	QMap<QAction *, Engine> engine_map;

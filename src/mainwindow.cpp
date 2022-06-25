@@ -735,6 +735,7 @@ MainWindow::~MainWindow()
 	delete escapeFocus;
 	delete editGroup;
 	delete rulesGroup;
+	delete viewNumsGroup;
 	delete navSwapVariations;
 
 	delete whatsThis;
@@ -1056,6 +1057,13 @@ void MainWindow::initActions ()
 	soundToggle->setChecked(!local_stone_sound);
 
 	/* View menu.  */
+	viewNumsGroup = new QActionGroup (this);
+	viewNumsGroup->addAction (viewNumbersOff);
+	viewNumsGroup->addAction (viewNumbersVarsLong);
+	viewNumsGroup->addAction (viewNumbersVarsShort);
+	viewNumsGroup->addAction (viewNumbersFull);
+	viewNumbersOff->setChecked (true);
+
 	connect(viewMenuBar, &QAction::toggled, this, &MainWindow::slotViewMenuBar);
 	connect(viewStatusBar, &QAction::toggled, this, &MainWindow::slotViewStatusBar);
 	connect(viewCoords, &QAction::toggled, this, &MainWindow::slotViewCoords);
@@ -1068,7 +1076,10 @@ void MainWindow::initActions ()
 	connect(layoutPortrait, &QAction::triggered, this, [=] () { defaultPortraitLayout (); });
 	connect(layoutLandscape, &QAction::triggered, this, [=] () { defaultLandscapeLayout (); });
 	connect(viewFullscreen, &QAction::toggled, this, &MainWindow::slotViewFullscreen);
-	connect(viewNumbers, &QAction::toggled, this, &MainWindow::slotViewMoveNumbers);
+	connect(viewNumbersFull, &QAction::toggled, this, &MainWindow::slotViewMoveNumbers);
+	connect(viewNumbersVarsLong, &QAction::toggled, this, &MainWindow::slotViewMoveNumbers);
+	connect(viewNumbersVarsShort, &QAction::toggled, this, &MainWindow::slotViewMoveNumbers);
+	connect(viewNumbersOff, &QAction::toggled, this, &MainWindow::slotViewMoveNumbers);
 	connect(viewDiagComments, &QAction::toggled, this, &MainWindow::slotViewDiagComments);
 	connect(viewConnections, &QAction::toggled, this, &MainWindow::slotViewConnections);
 
@@ -1475,7 +1486,7 @@ void MainWindow::slotFileExportASCII(bool)
 	m_ascii_update_source = gfx_board;
 	if (!m_ascii_dlg.isVisible ()) {
 		/* Set defaults if the dialog is not open.  */
-		m_ascii_dlg.cb_numbering->setChecked (viewNumbers->isChecked ());
+		m_ascii_dlg.cb_numbering->setChecked (!viewNumbersOff->isChecked ());
 	}
 	update_ascii_dialog ();
 	m_ascii_dlg.show ();
@@ -1487,7 +1498,7 @@ void MainWindow::slotFileExportSVG(bool)
 	m_svg_update_source = gfx_board;
 	if (!m_svg_dlg.isVisible ()) {
 		/* Set defaults if the dialog is not open.  */
-		m_svg_dlg.cb_numbering->setChecked (viewNumbers->isChecked ());
+		m_svg_dlg.cb_numbering->setChecked (!viewNumbersOff->isChecked ());
 	}
 	update_svg_dialog ();
 	m_svg_dlg.show ();
@@ -1962,9 +1973,13 @@ void MainWindow::slotViewCoords(bool toggle)
 	statusBar()->showMessage(tr("Ready."));
 }
 
-void MainWindow::slotViewMoveNumbers(bool toggle)
+void MainWindow::slotViewMoveNumbers(bool)
 {
-	gfx_board->set_show_move_numbers (toggle);
+	Board::movenums mn = (viewNumbersFull->isChecked () ? Board::movenums::full
+			      : viewNumbersVarsLong->isChecked () ? Board::movenums::vars_long
+			      : viewNumbersVarsShort->isChecked () ? Board::movenums::vars
+			      : Board::movenums::off);
+	gfx_board->set_show_move_numbers (mn);
 	statusBar()->showMessage(tr("Ready."));
 }
 

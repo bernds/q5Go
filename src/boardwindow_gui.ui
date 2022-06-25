@@ -2794,7 +2794,11 @@ After placing and/or undo release button for returning to starting point automat
     <addaction name="menuSave_layout"/>
     <addaction name="menuRestore_layout"/>
     <addaction name="separator"/>
-    <addaction name="viewNumbers"/>
+    <addaction name="viewNumbersOff"/>
+    <addaction name="viewNumbersFull"/>
+    <addaction name="viewNumbersVarsLong"/>
+    <addaction name="viewNumbersVarsShort"/>
+    <addaction name="separator"/>
     <addaction name="viewCoords"/>
     <addaction name="viewDiagComments"/>
     <addaction name="viewConnections"/>
@@ -3978,12 +3982,12 @@ Export current board to ASCII diagrams, for use in web forums.</string>
     <string>F11</string>
    </property>
   </action>
-  <action name="viewNumbers">
+  <action name="viewNumbersFull">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Move &amp;numbers</string>
+    <string>Move &amp;numbers for all positions</string>
    </property>
   </action>
   <action name="viewCoords">
@@ -4316,6 +4320,30 @@ Export current board to ASCII diagrams, for use in web forums.</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Alt+P</string>
+   </property>
+  </action>
+  <action name="viewNumbersOff">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>No Move n&amp;umbers</string>
+   </property>
+  </action>
+  <action name="viewNumbersVarsLong">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Move numbers for varia&amp;tions (&amp;long)</string>
+   </property>
+  </action>
+  <action name="viewNumbersVarsShort">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Move numbers for variations (&amp;short)</string>
    </property>
   </action>
  </widget>
