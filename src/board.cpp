@@ -347,35 +347,6 @@ stone_color Board::cursor_color (int x, int y, stone_color to_move)
 	return none;
 }
 
-static int collect_moves (go_board &b, game_state *startpos, game_state *stop_pos, bool primary, bool from_one = false)
-{
-	int mvnr = from_one ? 1 : startpos->sgf_move_number ();
-	int count = 0;
-	game_state *st = startpos;
-	int maxnr = 0;
-	for (;;) {
-		if (!st->was_move_p ())
-			throw std::logic_error ("found non-move ");
-		int x = st->get_move_x ();
-		int y = st->get_move_y ();
-		stone_color to_move = st->get_move_color ();
-		stone_color present = b.stone_at (x, y);
-		if (present == none)
-			b.set_stone (x, y, present = to_move);
-		if (present == to_move)
-			b.set_mark (x, y, mark::num, maxnr = mvnr + count);
-
-		if (st == stop_pos)
-			break;
-		++count;
-		if (primary)
-			st = st->next_primary_move ();
-		else
-			st = st->next_move ();
-	}
-	return maxnr;
-}
-
 static QString convert_letter_mark (mextra extra)
 {
 	if (extra < 26)
