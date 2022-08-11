@@ -136,6 +136,7 @@ protected:
 	bool isFullScreen;
 
 	void set_comment (const QString &);
+	void set_displayed (game_state *);
 
 private:
 	std::vector<std::unique_ptr<undo_entry>> m_undo_stack;

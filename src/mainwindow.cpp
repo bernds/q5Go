@@ -741,13 +741,18 @@ MainWindow::~MainWindow()
 	delete whatsThis;
 }
 
+void MainWindow::set_displayed (game_state *st)
+{
+	gfx_board->set_displayed (st);
+}
+
 void MainWindow::nav_next_move ()
 {
 	game_state *st = gfx_board->displayed ();
 	game_state *next = st->next_move ();
 	if (next == nullptr)
 		return;
-	gfx_board->set_displayed (next);
+	set_displayed (next);
 }
 
 void MainWindow::nav_previous_move ()
@@ -756,7 +761,7 @@ void MainWindow::nav_previous_move ()
 	game_state *next = st->prev_move ();
 	if (next == nullptr)
 		return;
-	gfx_board->set_displayed (next);
+	set_displayed (next);
 }
 
 void MainWindow::nav_previous_comment ()
@@ -765,7 +770,7 @@ void MainWindow::nav_previous_comment ()
 	while (st != nullptr) {
 		st = st->prev_move ();
 		if (st != nullptr && st->comment () != "") {
-			gfx_board->set_displayed (st);
+			set_displayed (st);
 			break;
 		}
 	}
@@ -777,7 +782,7 @@ void MainWindow::nav_next_comment ()
 	while (st != nullptr) {
 		st = st->next_move ();
 		if (st != nullptr && st->comment () != "") {
-			gfx_board->set_displayed (st);
+			set_displayed (st);
 			break;
 		}
 	}
@@ -789,7 +794,7 @@ void MainWindow::nav_previous_figure ()
 	while (st != nullptr) {
 		st = st->prev_move ();
 		if (st != nullptr && st->has_figure ()) {
-			gfx_board->set_displayed (st);
+			set_displayed (st);
 			break;
 		}
 	}
@@ -801,7 +806,7 @@ void MainWindow::nav_next_figure ()
 	while (st != nullptr) {
 		st = st->next_move ();
 		if (st != nullptr && st->has_figure ()) {
-			gfx_board->set_displayed (st);
+			set_displayed (st);
 			break;
 		}
 	}
@@ -814,7 +819,7 @@ void MainWindow::nav_next_variation ()
 	if (next == nullptr)
 		return;
 	if (next != st)
-		gfx_board->set_displayed (next);
+		set_displayed (next);
 }
 
 void MainWindow::nav_previous_variation ()
@@ -824,12 +829,12 @@ void MainWindow::nav_previous_variation ()
 	if (next == nullptr)
 		return;
 	if (next != st)
-		gfx_board->set_displayed (next);
+		set_displayed (next);
 }
 
 void MainWindow::nav_goto_first_move ()
 {
-	gfx_board->set_displayed (m_game->get_root ());
+	set_displayed (m_game->get_root ());
 }
 
 void MainWindow::nav_goto_last_move ()
@@ -840,7 +845,7 @@ void MainWindow::nav_goto_last_move ()
 		game_state *next = st->next_move ();
 		if (next == nullptr) {
 			if (st != st_orig)
-				gfx_board->set_displayed (st);
+				set_displayed (st);
 			break;
 		}
 		st = next;
@@ -860,7 +865,7 @@ void MainWindow::nav_find_move (int x, int y)
 		if (st->was_move_p () && st->get_move_x () == x && st->get_move_y () == y)
 			break;
 	}
-	gfx_board->set_displayed (st);
+	set_displayed (st);
 }
 
 void MainWindow::nav_goto_nth_move (int n)
@@ -869,7 +874,7 @@ void MainWindow::nav_goto_nth_move (int n)
 	while (st->move_number () < n && st->n_children () > 0) {
 		st = st->next_move (true);
 	}
-	gfx_board->set_displayed (st);
+	set_displayed (st);
 }
 
 void MainWindow::nav_goto_nth_move_in_var (int n)
@@ -883,7 +888,7 @@ void MainWindow::nav_goto_nth_move_in_var (int n)
 			break;
 		st = next;
 	}
-	gfx_board->set_displayed (st);
+	set_displayed (st);
 }
 
 void MainWindow::nav_goto_main_branch ()
@@ -896,7 +901,7 @@ void MainWindow::nav_goto_main_branch ()
 		st = st->prev_move ();
 	}
 	if (go_to != st)
-		gfx_board->set_displayed (go_to);
+		set_displayed (go_to);
 }
 
 void MainWindow::nav_goto_var_start ()
@@ -916,7 +921,7 @@ void MainWindow::nav_goto_var_start ()
 			break;
 		st = prev;
 	}
-	gfx_board->set_displayed (st);
+	set_displayed (st);
 }
 
 void MainWindow::nav_goto_next_branch ()
@@ -932,7 +937,7 @@ void MainWindow::nav_goto_next_branch ()
 		st = next;
 	}
 	if (st != st_orig)
-		gfx_board->set_displayed (st);
+		set_displayed (st);
 }
 
 void MainWindow::initActions ()
@@ -2698,14 +2703,14 @@ void MainWindow::setGameMode (GameMode mode)
 				b.calc_scoring_markers_complex ();
 		}
 		game_state *edit_st = m_game->create_game_state (b, st->to_move ());
-		gfx_board->set_displayed (edit_st);
+		set_displayed (edit_st);
 	} else if (old_mode == modeScore || old_mode == modeScoreRemote || old_mode == modeEdit) {
 		/* The only way the scored or edited board is added to the game tree is through
 		   doCountDone and leave_edit.  These perform the necessary insertions and clear
 		   m_pos_before_edit.  */
 		if (m_pos_before_edit != nullptr) {
 			game_state *edit_st = gfx_board->displayed ();
-			gfx_board->set_displayed (m_pos_before_edit);
+			set_displayed (m_pos_before_edit);
 			m_game->release_game_state (edit_st);
 			m_pos_before_edit = nullptr;
 		}
@@ -2844,7 +2849,7 @@ void MainWindow::remove_nodes (const std::vector<game_state *> &to_delete)
 	update_figures ();
 	update_game_tree ();
 	/* Force redraw.  */
-	gfx_board->set_displayed (gfx_board->displayed ());
+	set_displayed (gfx_board->displayed ());
 }
 
 void MainWindow::set_game_position (game_state *gs)
@@ -2852,7 +2857,7 @@ void MainWindow::set_game_position (game_state *gs)
 	/* Have to call this first so we trace the correct path in the game tree
 	   once set_displayed calls back into there.  */
 	gs->make_active ();
-	gfx_board->set_displayed (gs);
+	set_displayed (gs);
 }
 
 /* Determine if we should update the comment edit field with the data from the game
@@ -3191,7 +3196,7 @@ void MainWindow::leave_edit_modify ()
 						      m_pos_before_edit->get_board (), m_pos_before_edit->to_move (),
 						      b, st->to_move (), true));
 	m_pos_before_edit->replace (b, st->to_move ());
-	gfx_board->set_displayed (m_pos_before_edit);
+	set_displayed (m_pos_before_edit);
 	m_pos_before_edit = nullptr;
 	m_game->release_game_state (st);
 	gfx_board->setModified ();
@@ -3205,7 +3210,7 @@ void MainWindow::leave_edit_append ()
 	game_state *new_st = m_pos_before_edit->add_child_edit (b, st->to_move ());
 	push_undo (std::make_unique<undo_move_entry> ("Append edited position", m_pos_before_edit,
 						      new_st, m_pos_before_edit->find_child_idx (new_st)));
-	gfx_board->set_displayed (new_st);
+	set_displayed (new_st);
 	m_pos_before_edit = nullptr;
 	gfx_board->setModified ();
 	editPosButton->setText (tr ("Edit position"));
@@ -3221,7 +3226,7 @@ void MainWindow::leave_edit_prepend ()
 	game_state *new_st = parent->replace_child_edit (m_pos_before_edit, b, st->to_move ());
 	push_undo (std::make_unique<undo_insert_entry> ("Insert edited position", parent,
 							new_st, parent->find_child_idx (new_st)));
-	gfx_board->set_displayed (new_st);
+	set_displayed (new_st);
 	m_pos_before_edit = nullptr;
 	gfx_board->setModified ();
 	editPosButton->setText (tr ("Edit position"));
@@ -3323,7 +3328,7 @@ MainWindow_GTP::MainWindow_GTP (QWidget *parent, go_game_ptr gr, QString opener_
 	const go_board &b = root->get_board ();
 	m_gtp_w = create_gtp (program_w, b.size_x (), b.size_y (), m_game->info ().komi);
 	m_gtp_b = create_gtp (program_b, b.size_x (), b.size_y (), m_game->info ().komi);
-	connect (followButton, &QPushButton::clicked, [this] (bool) { gfx_board->set_displayed (m_game_position); });
+	connect (followButton, &QPushButton::clicked, [this] (bool) { set_displayed (m_game_position); });
 }
 
 MainWindow_GTP::~MainWindow_GTP ()
@@ -3339,7 +3344,7 @@ void MainWindow_GTP::play_again ()
 	connect (passButton, &QPushButton::clicked, this, &MainWindow_GTP::player_pass);
 	gfx_board->set_player_colors (m_gtp_w == nullptr, m_gtp_b == nullptr);
 	m_game_position = m_game->get_root ();
-	gfx_board->set_displayed (m_game_position);
+	set_displayed (m_game_position);
 	m_start_positions.push_back (m_game_position);
 	setup_game ();
 }
@@ -3727,7 +3732,7 @@ void MainWindow_GTP::player_undo ()
 	m_game_position = p->prev_move ();
 	update_pass_button ();
 	gfx_board->set_game_position (m_game_position);
-	gfx_board->set_displayed (m_game_position);
+	set_displayed (m_game_position);
 }
 
 void MainWindow_GTP::player_resign ()
@@ -3942,7 +3947,7 @@ void MainWindow::perform_undo ()
 	auto &ur = m_undo_stack[m_undo_stack_pos];
 	game_state *st = ur->apply_undo ();
 	if (st != nullptr)
-		gfx_board->set_displayed (st);
+		set_displayed (st);
 
 	update_game_record ();
 	update_game_tree ();
@@ -3956,7 +3961,7 @@ void MainWindow::perform_redo ()
 	auto &ur = m_undo_stack[m_undo_stack_pos++];
 	game_state *st = ur->apply_redo ();
 	if (st != nullptr)
-		gfx_board->set_displayed (st);
+		set_displayed (st);
 
 	update_game_record ();
 	update_game_tree ();
