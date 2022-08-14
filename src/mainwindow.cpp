@@ -1980,10 +1980,10 @@ void MainWindow::slotViewCoords(bool toggle)
 
 void MainWindow::slotViewMoveNumbers(bool)
 {
-	Board::movenums mn = (viewNumbersFull->isChecked () ? Board::movenums::full
-			      : viewNumbersVarsLong->isChecked () ? Board::movenums::vars_long
-			      : viewNumbersVarsShort->isChecked () ? Board::movenums::vars
-			      : Board::movenums::off);
+	movenums mn = (viewNumbersFull->isChecked () ? movenums::full
+		       : viewNumbersVarsLong->isChecked () ? movenums::vars_long
+		       : viewNumbersVarsShort->isChecked () ? movenums::vars
+		       : movenums::off);
 	gfx_board->set_show_move_numbers (mn);
 	statusBar()->showMessage(tr("Ready."));
 }

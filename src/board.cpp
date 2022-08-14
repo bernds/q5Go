@@ -23,7 +23,6 @@
 #include "miscdialogs.h"
 #include "svgbuilder.h"
 #include "ui_helpers.h"
-#include "gotools.h"
 #include "patternsearch.h"
 
 BoardView::BoardView (QWidget *parent, bool no_sync, bool no_marks)
@@ -470,26 +469,9 @@ QByteArray BoardView::render_svg (bool do_number, bool coords)
 	go_board mn_board (b, mark::none);
 
 	if (have_figure && numbering) {
-		game_state *startpos = m_displayed;
-		if (!startpos->was_move_p () && startpos->n_children () > 0)
-			startpos = startpos->next_primary_move ();
-		game_state *last = startpos;
-		game_state *st = startpos->next_primary_move ();
-		while (st && st->was_move_p () && !st->has_figure ()) {
-			last = st;
-			st = st->next_primary_move ();
-		}
-		if (last != startpos || startpos->was_move_p ()) {
-			game_state *real_start = startpos->was_move_p () ? startpos->prev_move () : startpos;
-			mn_board = (fig_flags & 256) == 0 ? last->get_board () : real_start->get_board ();
-			max_number = collect_moves (mn_board, startpos, last, true);
-		}
+		max_number = collect_moves_for_figure (mn_board, m_displayed);
 	} else if (numbering && !m_displayed->has_figure () && m_displayed->was_move_p ()) {
-		game_state *startpos = m_displayed;
-		game_state *first = startpos;
-		while (startpos && startpos->was_move_p () && !startpos->has_figure ())
-			first = startpos, startpos = startpos->prev_move ();
-		max_number = collect_moves (mn_board, first, m_displayed, false);
+		max_number = collect_moves_for_nonfigure (mn_board, m_displayed, movenums::full);
 	}
 
 	double factor = 30;
@@ -1179,43 +1161,9 @@ QPixmap BoardView::draw_position (int default_vars_type)
 		}
 	}
 	if (have_figure && print_num != 0) {
-		game_state *startpos = m_displayed;
-		if (!startpos->was_move_p () && startpos->n_children () > 0)
-			startpos = startpos->next_primary_move ();
-		game_state *last = startpos;
-		game_state *st = startpos->next_primary_move ();
-		while (st && st->was_move_p () && !st->has_figure ()) {
-			last = st;
-			st = st->next_primary_move ();
-		}
-		if (last != startpos || startpos->was_move_p ()) {
-			int fig_flags = m_displayed->figure_flags ();
-			game_state *real_start = startpos->was_move_p () ? startpos->prev_move () : startpos;
-			mn_board = (fig_flags & 256) == 0 ? last->get_board () : real_start->get_board ();
-			max_number = collect_moves (mn_board, startpos, last, true);
-		}
+		max_number = collect_moves_for_figure (mn_board, m_displayed);
 	} else if (numbering && !m_displayed->has_figure () && m_displayed->was_move_p ()) {
-		game_state *startpos = m_displayed;
-		game_state *first = startpos;
-		game_state *first_branch = nullptr;
-		bool moves_from_one = false;
-		while (startpos && startpos->was_move_p () && !first->has_figure ()) {
-			first = startpos;
-			game_state *prev = startpos->prev_move ();
-			if (m_move_numbers != movenums::full && startpos != prev->next_primary_move ()) {
-				moves_from_one = true;
-				first_branch = startpos;
-				if (m_move_numbers == movenums::vars)
-					break;
-			}
-			startpos = prev;
-		}
-		if (m_move_numbers == movenums::vars_long && first_branch != nullptr)
-			first = first_branch;
-		if (m_move_numbers != movenums::full && first_branch == nullptr)
-			numbering = false;
-		else
-			max_number = collect_moves (mn_board, first, m_displayed, false, moves_from_one);
+		max_number = collect_moves_for_nonfigure (mn_board, m_displayed, m_move_numbers);
 	}
 
 	/* Handle marks first.  They go into an svgbuilder which we'll render at the end,

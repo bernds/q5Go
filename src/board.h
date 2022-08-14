@@ -20,6 +20,7 @@
 #include "setting.h"
 #include "goboard.h"
 #include "gogame.h"
+#include "gotools.h"
 #include "qgtp.h"
 #include "pattern.h"
 
@@ -53,9 +54,6 @@ class BoardView : public QGraphicsView
 
 	/* Used in draw_grid for widened board outlines.  */
 	bit_array m_vgrid_outline, m_hgrid_outline;
-
-public:
-	enum class movenums { off, vars, vars_long, full };
 
 protected:
 	go_game_ptr m_game;

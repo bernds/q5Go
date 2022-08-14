@@ -344,3 +344,47 @@ int collect_moves (go_board &b, game_state *startpos, game_state *stop_pos, bool
 	}
 	return maxnr;
 }
+
+int collect_moves_for_figure (go_board &b, game_state *startpos)
+{
+	int fig_flags = startpos->figure_flags ();
+	if (!startpos->was_move_p () && startpos->n_children () > 0)
+		startpos = startpos->next_primary_move ();
+	game_state *last = startpos;
+	game_state *st = startpos->next_primary_move ();
+	while (st && st->was_move_p () && !st->has_figure ()) {
+		last = st;
+		st = st->next_primary_move ();
+	}
+	if (last != startpos || startpos->was_move_p ()) {
+		game_state *real_start = startpos->was_move_p () ? startpos->prev_move () : startpos;
+		b = (fig_flags & 256) == 0 ? last->get_board () : real_start->get_board ();
+		return collect_moves (b, startpos, last, true);
+	}
+	return 0;
+}
+
+int collect_moves_for_nonfigure (go_board &b, game_state *startpos, movenums numbering_type)
+{
+	game_state *orig_pos = startpos;
+	game_state *first = startpos;
+	game_state *first_branch = nullptr;
+	bool moves_from_one = false;
+	while (startpos && startpos->was_move_p () && !first->has_figure ()) {
+		first = startpos;
+		game_state *prev = startpos->prev_move ();
+		if (numbering_type != movenums::full && startpos != prev->next_primary_move ()) {
+			moves_from_one = true;
+			first_branch = startpos;
+			if (numbering_type == movenums::vars)
+				break;
+		}
+		startpos = prev;
+	}
+	if (numbering_type == movenums::vars_long && first_branch != nullptr)
+		first = first_branch;
+
+	if (numbering_type != movenums::full && first_branch == nullptr)
+		return 0;
+	return collect_moves (b, first, orig_pos, false, moves_from_one);
+}
