@@ -2872,6 +2872,7 @@ After placing and/or undo release button for returning to starting point automat
    <addaction name="fileNew"/>
    <addaction name="fileNewVariant"/>
    <addaction name="fileOpen"/>
+   <addaction name="fileOpenDB"/>
    <addaction name="fileSave"/>
    <addaction name="fileSaveAs"/>
   </widget>
@@ -4166,6 +4167,10 @@ Export current board to ASCII diagrams, for use in web forums.</string>
    </property>
   </action>
   <action name="fileOpenDB">
+   <property name="icon">
+    <iconset resource="q4go.qrc">
+     <normaloff>:/ClientWindowGui/images/clientwindow/open-search.png</normaloff>:/ClientWindowGui/images/clientwindow/open-search.png</iconset>
+   </property>
    <property name="text">
     <string>Open from &amp;database...</string>
    </property>
