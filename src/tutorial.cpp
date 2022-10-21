@@ -91,8 +91,8 @@ void Tutorial_Slideshow::load_tutorial (int n)
 	QFile f (tutorials[n].filename);
 	f.open (QIODevice::ReadOnly);
 	go_game_ptr gr = record_from_stream (f, nullptr);
-	set_game (gr);
 	m_n_lines = tutorials[n].lines;
+	set_game (gr);
 	update_buttons ();
 }
 
