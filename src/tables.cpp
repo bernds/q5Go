@@ -623,10 +623,11 @@ void ClientWindow::slot_channelinfo(int nr, const QString &txt)
 // tell, say, kibitz...
 void ClientWindow::colored_message(QString txt, QColor c)
 {
-	MultiLineEdit2->setTextColor(c);
-	slot_message( txt);
+	QColor oldc = MultiLineEdit2->textColor ();
+	MultiLineEdit2->setTextColor (c);
+	slot_message (txt);
 
-	MultiLineEdit2->setTextColor(Qt::black);
+	MultiLineEdit2->setTextColor (oldc);
 }
 
 
