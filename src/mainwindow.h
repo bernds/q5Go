@@ -144,7 +144,7 @@ private:
 
 	template<class T> T *top_undo_entry ()
 	{
-		if (m_undo_stack.empty ())
+		if (m_undo_stack_pos == 0)
 			return nullptr;
 		m_undo_stack.erase (std::begin (m_undo_stack) + m_undo_stack_pos, std::end (m_undo_stack));
 		return dynamic_cast<T *>(m_undo_stack.back ().get ());

@@ -3952,6 +3952,7 @@ void MainWindow::perform_undo ()
 	update_game_record ();
 	update_game_tree ();
 	update_undo_menus ();
+	refresh_comment ();
 }
 
 void MainWindow::perform_redo ()
@@ -3966,6 +3967,7 @@ void MainWindow::perform_redo ()
 	update_game_record ();
 	update_game_tree ();
 	update_undo_menus ();
+	refresh_comment ();
 }
 
 /* Called whenever a new evaluation comes in from NEW_ID.  We update the evaluation graph.  */
