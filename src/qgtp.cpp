@@ -150,9 +150,22 @@ void GTP_Process::startup_part7 (const QString &response)
 
 void GTP_Process::startup_part8 (const QString &response)
 {
-	if (response == "true")
+	if (response == "true") {
 		m_kata_rules = true;
+		send_request ("kata-get-rules", &GTP_Process::startup_part9);
+	}
+	startup_success ();
+}
 
+void GTP_Process::startup_part9 (const QString &response)
+{
+	m_kata_orig_rules = response;
+	qDebug () << "kata rules: " << response;
+	startup_success ();
+}
+
+void GTP_Process::startup_success ()
+{
 	/* Set this before calling startup success, as the callee may want to examine it.  */
 	m_started = true;
 	m_dlg.textEdit->setTextColor (Qt::darkGray);
@@ -307,6 +320,9 @@ void GTP_Process::set_rules (go_rules r)
 	switch (r) {
 	case go_rules::unknown:
 		// Reset the program's ruleset in case we couldn't make a guess.
+	case go_rules::engine_dflt:
+		send_request ("kata-set-rules " + m_kata_orig_rules, nullptr, &GTP_Process::rules_err_receiver);
+		break;
 	case go_rules::tt:
 		send_request ("kata-set-rules tromp-taylor", nullptr, &GTP_Process::rules_err_receiver);
 		break;

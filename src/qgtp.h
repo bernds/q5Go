@@ -133,6 +133,7 @@ class GTP_Process : public QProcess
 	bool m_analyze_lz = false;
 	bool m_analyze_kata = false;
 	bool m_kata_rules = false;
+	QString m_kata_orig_rules;
 
 	stone_color m_genmove_col = none;
 
@@ -158,6 +159,8 @@ class GTP_Process : public QProcess
 	void startup_part6 (const QString &);
 	void startup_part7 (const QString &);
 	void startup_part8 (const QString &);
+	void startup_part9 (const QString &);
+	void startup_success ();
 	void setup_success (const QString &);
 	void receive_move (const QString &);
 	void pause_callback (const QString &);
