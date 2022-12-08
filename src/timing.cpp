@@ -124,9 +124,10 @@ std::string move_timer::report_gtp ()
 		result += " 0";
 	} else if (m_settings.system == time_system::canadian) {
 		int s = m_canadian_stones;
-		if (s == 0)
+		if (s == 0 || s == m_settings.canadian_stones) {
+			result = std::to_string (m_settings.period_time.count());
 			s = m_settings.canadian_stones;
-
+		}
 		result += " " + std::to_string (s);
 	}
 	return result;
