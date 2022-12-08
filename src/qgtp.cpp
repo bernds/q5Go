@@ -7,6 +7,12 @@
 #include "gogame.h"
 #include "timing.h"
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+#define SPLIT QString
+#else
+#define SPLIT Qt
+#endif
+
 GTP_Process *GTP_Controller::create_gtp (const Engine &engine, int size_x, int size_y, double komi, bool show_dialog)
 {
 	analyzer_id id;
@@ -791,7 +797,7 @@ void GTP_Eval_Controller::gtp_eval (GTP_Process *p, const QString &s, bool kata_
 
 	bool prune = setting->readBoolEntry("ANALYSIS_PRUNE");
 
-	QStringList moves = s.split ("info move ", QString::SkipEmptyParts);
+	QStringList moves = s.split ("info move ", SPLIT::SkipEmptyParts);
 	if (moves.isEmpty ())
 		return;
 
@@ -860,7 +866,7 @@ void GTP_Eval_Controller::gtp_eval (GTP_Process *p, const QString &s, bool kata_
 #if 0
 		qDebug () << move << " wr " << wr << " visits " << visits << " PV: " << pv;
 #endif
-		QStringList pvmoves = pv.split (" ", QString::SkipEmptyParts);
+		QStringList pvmoves = pv.split (" ", SPLIT::SkipEmptyParts);
 		if (count < 52 && (!prune || pvmoves.length () > 1 || visits >= 2)) {
 			game_state *cur = m_eval_state;
 			bool pv_first = true;
