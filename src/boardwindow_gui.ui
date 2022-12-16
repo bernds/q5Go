@@ -1932,7 +1932,6 @@ After placing and/or undo release button for returning to starting point automat
      <property name="title">
       <string>Ruleset</string>
      </property>
-     <addaction name="rulesDefault"/>
      <addaction name="rulesGuess"/>
      <addaction name="rulesJapanese"/>
      <addaction name="rulesChinese"/>
@@ -3466,14 +3465,6 @@ Export current board to ASCII diagrams, for use in web forums.</string>
    </property>
    <property name="text">
     <string>Move numbers for variations (&amp;short)</string>
-   </property>
-  </action>
-  <action name="rulesDefault">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Engine default</string>
    </property>
   </action>
  </widget>

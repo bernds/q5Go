@@ -837,7 +837,7 @@ class game_record;
 
 enum class ranked { unknown, free, ranked, teaching };
 
-enum class go_rules { unknown, old_chinese, chinese, japanese, korean, aga, bga, kgs_chinese, ogs_chinese, ing, tt, nz, engine_dflt };
+enum class go_rules { unknown, old_chinese, chinese, japanese, korean, aga, bga, kgs_chinese, ogs_chinese, ing, tt, nz };
 
 struct game_info
 {

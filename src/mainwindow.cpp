@@ -645,10 +645,8 @@ void MainWindow::update_rules (go_game_ptr gr)
 		r = go_rules::chinese;
 	else if (rulesJapanese->isChecked ())
 		r = go_rules::japanese;
-	else if (rulesGuess->isChecked ())
-		r = guess;
 	else
-		r = go_rules::engine_dflt;
+		r = guess;
 	gfx_board->set_rules (r);
 }
 
@@ -1001,13 +999,11 @@ void MainWindow::initActions ()
 	editGroup->addAction (editLetter);
 	editStone->setChecked (true);
 
-	connect (rulesDefault, &QAction::triggered, [this] () { update_rules (m_game); });
 	connect (rulesGuess, &QAction::triggered, [this] () { update_rules (m_game); });
 	connect (rulesJapanese, &QAction::triggered, [this] () { update_rules (m_game); });
 	connect (rulesChinese, &QAction::triggered, [this] () { update_rules (m_game); });
 
 	rulesGroup = new QActionGroup (this);
-	rulesGroup->addAction (rulesDefault);
 	rulesGroup->addAction (rulesGuess);
 	rulesGroup->addAction (rulesChinese);
 	rulesGroup->addAction (rulesJapanese);
