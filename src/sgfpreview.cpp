@@ -1,8 +1,6 @@
 #include <QPushButton>
 #include <QFileDialog>
 
-#include <fstream>
-
 #include "gogame.h"
 #include "sgfpreview.h"
 #include "ui_sgfpreview.h"

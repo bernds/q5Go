@@ -2,6 +2,13 @@
 * gametree.cpp
 */
 
+#include <QActionGroup>
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QClipboard>
+
+#include <cmath>
+
 #include "config.h"
 #include "setting.h"
 #include "goboard.h"

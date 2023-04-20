@@ -8,6 +8,7 @@
 #include <QMessageBox>
 #include <QClipboard>
 #include <QApplication>
+#include <QSvgWidget>
 
 #include "config.h"
 #include "textview.h"

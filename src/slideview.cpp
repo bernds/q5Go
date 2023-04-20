@@ -1,6 +1,10 @@
 #include <QPixmap>
 #include <QCheckBox>
 #include <QMessageBox>
+#include <QStaticText>
+#include <QFileDialog>
+#include <QProgressDialog>
+#include <QClipboard>
 
 #include "gogame.h"
 #include "board.h"

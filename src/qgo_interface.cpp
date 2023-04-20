@@ -4,11 +4,12 @@
 
 #include "common.h"
 #include <QTimerEvent>
-#include <QString>
 #include <QTimer>
+#include <QString>
 #include <QMessageBox>
 #include <QComboBox>
 #include <QRegExp>
+#include <QDir>
 #include <QGraphicsRectItem>
 
 #include "qgo.h"

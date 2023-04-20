@@ -2,6 +2,7 @@
 
 #include <QMap>
 
+class QTreeWidgetItem;
 class Tutorial_Slideshow : public BaseSlideView<Ui::SlideshowDialog, QWidget>
 {
 	void update_buttons ();

@@ -22,3 +22,5 @@ constexpr void (QComboBox::*combo_activated_str) (const QString &) = &QComboBox:
 constexpr void (QComboBox::*combo_activated_int) (int) = &QComboBox::activated;
 #endif
 #endif
+
+#include <QTextCodec>

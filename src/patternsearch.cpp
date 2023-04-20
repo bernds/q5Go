@@ -2,6 +2,8 @@
 
 #include <QActionGroup>
 #include <QFontMetrics>
+#include <QMessageBox>
+#include <QDir>
 
 #include "clientwin.h"
 #include "patternsearch.h"

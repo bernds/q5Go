@@ -8,9 +8,11 @@
 #include <memory>
 #include <unordered_map>
 #include <QGraphicsView>
+#include <QStandardItemModel>
+
 #include "defines.h"
 #include "setting.h"
-#include <textview.h>
+#include "textview.h"
 
 class ImageHandler;
 class game_state;

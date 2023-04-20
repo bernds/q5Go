@@ -1,5 +1,6 @@
 #include <fstream>
 #include <QFileDialog>
+#include <QMessageBox>
 
 #include "analyzedlg.h"
 #include "ui_analyze_gui.h"

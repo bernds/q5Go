@@ -14,6 +14,7 @@
 #include <QEvent>
 #include <QWheelEvent>
 #include <QFontMetrics>
+#include <QSvgRenderer>
 
 #include "config.h"
 #include "setting.h"

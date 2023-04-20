@@ -5,6 +5,9 @@
 #ifndef ANALYZEDLG_H
 #define ANALYZEDLG_H
 
+#include <QStandardItemModel>
+#include <QMainWindow>
+
 #include <vector>
 #include <map>
 #include <forward_list>
@@ -16,6 +19,9 @@
 #include "qgtp.h"
 
 class MainWindow;
+class QListView;
+class QProgressBar;
+class QToolButton;
 
 namespace Ui
 {

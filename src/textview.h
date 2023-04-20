@@ -6,7 +6,8 @@
 #define TEXTVIEW_H
 
 #include "common.h"
-#include <QtSvg>
+
+class QSvgWidget;
 
 #include "ui_textview_gui.h"
 

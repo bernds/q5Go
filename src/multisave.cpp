@@ -1,4 +1,6 @@
 #include <QButtonGroup>
+#include <QMessageBox>
+#include <QFileDialog>
 
 #include "gogame.h"
 #include "board.h"

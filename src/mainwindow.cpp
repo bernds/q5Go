@@ -11,6 +11,8 @@
 
 #include <QLabel>
 #include <QPixmap>
+#include <QWindow>
+#include <QScreen>
 #include <QCloseEvent>
 #include <QGridLayout>
 #include <QKeyEvent>
@@ -18,6 +20,8 @@
 #include <QFileDialog>
 #include <QWhatsThis>
 #include <QAction>
+#include <QActionGroup>
+#include <QButtonGroup>
 #include <QToolBar>
 #include <QMessageBox>
 #include <QApplication>
@@ -27,6 +31,8 @@
 #include <QLineEdit>
 #include <QTimer>
 #include <QFontMetrics>
+#include <QBuffer>
+#include <QClipboard>
 
 #include "clientwin.h"
 #include "mainwindow.h"

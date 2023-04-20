@@ -6,6 +6,7 @@
 #include <QFileDialog>
 #include <QWhatsThis>
 #include <QMessageBox>
+#include <QTimer>
 #include <QTimerEvent>
 #include <QMenu>
 #include <QAction>

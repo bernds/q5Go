@@ -13,6 +13,7 @@
 #include <QTextCodec>
 #include <QApplication>
 #include <QMessageBox>
+#include <QCommandLineParser>
 #include <QDir>
 
 #include "config.h"

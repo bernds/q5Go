@@ -3,6 +3,11 @@
 */
 
 #include <QHelpEvent>
+#include <QScrollBar>
+#include <QStandardItemModel>
+#include <QSvgRenderer>
+#include <QToolTip>
+#include <QBuffer>
 
 #include "config.h"
 #include "setting.h"

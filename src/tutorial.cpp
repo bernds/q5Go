@@ -1,5 +1,6 @@
 #include <QPixmap>
 #include <QCheckBox>
+#include <QTreeWidgetItem>
 
 #include <array>
 

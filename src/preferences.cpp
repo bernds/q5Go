@@ -2,8 +2,6 @@
 * preferences.cpp
 */
 
-#include <memory>
-
 #include <QFileDialog>
 #include <QFontDialog>
 #include <QColorDialog>
@@ -11,6 +9,7 @@
 #include <QWhatsThis>
 #include <QIcon>
 #include <QTextStream>
+#include <QMessageBox>
 
 #include "preferences.h"
 #include "mainwindow.h"

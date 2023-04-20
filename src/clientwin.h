@@ -21,6 +21,7 @@
 
 class GamesTable;
 class GameDialog;
+class QListWidgetItem;
 
 struct sendBuf
 {

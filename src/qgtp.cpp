@@ -1,5 +1,8 @@
 #include <utility>
 #include <QProcess>
+#include <QFileInfo>
+#include <QDir>
+#include <QDebug>
 
 #include "qgo.h"
 #include "setting.h"
