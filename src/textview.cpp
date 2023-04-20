@@ -38,6 +38,9 @@ TextView::TextView(QWidget* parent, type t)
 		cb_numbering->setChecked (true);
 		setWindowTitle (tr ("Export to ASCII"));
 	}
+	connect (buttonClose, &QPushButton::clicked, this, &TextView::accept);
+	connect (buttonSave, &QPushButton::clicked, this, &TextView::saveMe);
+	connect (buttonToClip, &QPushButton::clicked, this, &TextView::toClipboard);
 }
 
 /*
@@ -108,6 +111,9 @@ SvgView::SvgView(QWidget* parent)
 	cb_coords->setChecked (true);
 	cb_numbering->setChecked (true);
 	setWindowTitle (tr ("Export to SVG"));
+	connect (buttonClose, &QPushButton::clicked, this, &SvgView::accept);
+	connect (buttonSave, &QPushButton::clicked, this, &SvgView::saveMe);
+	connect (buttonToClip, &QPushButton::clicked, this, &SvgView::toClipboard);
 }
 
 /*
