@@ -1,13 +1,17 @@
 /*
  *   tables.cpp = part of mainwindow
  */
+#include <math.h>
+
 #include "tables.h"
 #include "clientwin.h"
 #include "misc.h"
 #include "playertable.h"
 #include "gamestable.h"
 #include "gs_globals.h"
-#include <math.h>
+
+#include "ui_clientwindow_gui.h"
+#include "ui_talk_gui.h"
 
 template<class T>
 void table_model<T>::reset ()
@@ -233,7 +237,7 @@ void ClientWindow::finish_game_list ()
 	m_games_init_complete = true;
 	m_games_model.update_from_map (m_games_table);
 	update_game_stats ();
-	ListView_games->resize_columns ();
+	ui->ListView_games->resize_columns ();
 }
 
 void ClientWindow::finish_player_list ()
@@ -241,7 +245,7 @@ void ClientWindow::finish_player_list ()
 	m_player_init_complete = true;
 	m_player_model.update_from_map (m_player_table);
 	update_player_stats ();
-	ListView_players->resize_columns ();
+	ui->ListView_players->resize_columns ();
 }
 
 void ClientWindow::prepare_channels ()
@@ -482,22 +486,22 @@ void ClientWindow::update_who_rank (QComboBox *box, int idx)
 	QString rk;
 	/* Index 0 is an empty string, which means no limit.  */
 	if (idx == 0)
-		rk = rkToKey (box == whoBox1 ? "BC" : "9p");
+		rk = rkToKey (box == ui->whoBox1 ? "BC" : "9p");
 	/* Index 1 is "1p to 9p".  */
-	else if (idx == 1 && box == whoBox1)
+	else if (idx == 1 && box == ui->whoBox1)
 		rk = rkToKey ("1p");
 	else
 		rk = rkToKey (box->currentText ());
-	if (box == whoBox1)
+	if (box == ui->whoBox1)
 		m_who1_rk = rk;
 	else
 		m_who2_rk = rk;
 
 	if (m_who1_rk < m_who2_rk) {
-		if (box == whoBox1)
-			whoBox2->setCurrentIndex (idx);
+		if (box == ui->whoBox1)
+			ui->whoBox2->setCurrentIndex (idx);
 		else
-			whoBox1->setCurrentIndex (idx);
+			ui->whoBox1->setCurrentIndex (idx);
 	}
 	qDebug () << "who ranks: " << m_who1_rk << m_who2_rk;
 	update_tables ();
@@ -623,21 +627,21 @@ void ClientWindow::slot_channelinfo(int nr, const QString &txt)
 // tell, say, kibitz...
 void ClientWindow::colored_message(QString txt, QColor c)
 {
-	QColor oldc = MultiLineEdit2->textColor ();
-	MultiLineEdit2->setTextColor (c);
+	QColor oldc = ui->MultiLineEdit2->textColor ();
+	ui->MultiLineEdit2->setTextColor (c);
 	slot_message (txt);
 
-	MultiLineEdit2->setTextColor (oldc);
+	ui->MultiLineEdit2->setTextColor (oldc);
 }
 
 
 void ClientWindow::slot_message(QString txt)
 {
 	// Scroll at bottom of text, set cursor to end of line
-	if (MultiLineEdit2->toPlainText().endsWith("\n") && txt == "\n")
+	if (ui->MultiLineEdit2->toPlainText().endsWith("\n") && txt == "\n")
 		return ;
 
-	MultiLineEdit2->append(txt);
+	ui->MultiLineEdit2->append(txt);
 }
 
 // shout...
@@ -691,47 +695,52 @@ void ClientWindow::slot_status (Status s)
  */
 
 Talk::Talk (const QString &playername, QWidget *parent, bool isplayer)
-	: QDialog (parent)
+	: QDialog (parent), ui (std::make_unique<Ui::TalkGui> ())
 {
-	setupUi (this);
+	ui->setupUi (this);
 	setWindowTitle (playername);
 	m_name = playername;
 
 	// create a new tab
-	MultiLineEdit1->setCurrentFont(setting->fontComments);
-	LineEdit1->setFont(setting->fontComments);
+	ui->MultiLineEdit1->setCurrentFont(setting->fontComments);
+	ui->LineEdit1->setFont(setting->fontComments);
 
 	// do not add a button for shouts* or channels tab
 	if (m_name.indexOf ('*') != -1 || !isplayer)
 	{
-		delete pb_releaseTalkTab;
-		delete pb_match;
-		delete stats_layout;
+		delete ui->pb_releaseTalkTab;
+		delete ui->pb_match;
+		delete ui->stats_layout;
 	} else {
-		connect (pb_releaseTalkTab, &QPushButton::pressed, [this] () { emit signal_pbRelOneTab (this); });
-		connect (pb_match, &QPushButton::pressed, this, &Talk::slot_match);
+		connect (ui->pb_releaseTalkTab, &QPushButton::pressed, [this] () { emit signal_pbRelOneTab (this); });
+		connect (ui->pb_match, &QPushButton::pressed, this, &Talk::slot_match);
 	}
-	connect (LineEdit1, &QLineEdit::returnPressed, this, &Talk::slot_returnPressed);
-	m_default_text_color = MultiLineEdit1->textColor ();
+	connect (ui->LineEdit1, &QLineEdit::returnPressed, this, &Talk::slot_returnPressed);
+	m_default_text_color = ui->MultiLineEdit1->textColor ();
+}
+
+Talk::~Talk ()
+{
+	// Empty destructor here, since Ui::TalkGui is incomplete in the header file.
 }
 
 bool Talk::lineedit_has_focus ()
 {
-	return LineEdit1->hasFocus ();
+	return ui->LineEdit1->hasFocus ();
 }
 
 void Talk::slot_returnPressed ()
 {
 	// read tab
-	QString txt = LineEdit1->text ();
+	QString txt = ui->LineEdit1->text ();
 	emit signal_talkto (m_name, txt);
-	LineEdit1->clear ();
-	LineEdit1->setFocus ();
+	ui->LineEdit1->clear ();
+	ui->LineEdit1->setFocus ();
 }
 
 void Talk::slot_match ()
 {
-	QString txt = m_name + " " + stats_rating->text ();
+	QString txt = m_name + " " + ui->stats_rating->text ();
 	client_window->handle_matchrequest (txt, true, true);
 }
 
@@ -746,18 +755,35 @@ void Talk::write (const QString &text, QColor col)
 		// ok, text given
 		txt = text;
 	else {
-		txt = LineEdit1->text();
+		txt = ui->LineEdit1->text();
 
 		if (txt.isEmpty())
 			return;
-		LineEdit1->clear();
+		ui->LineEdit1->clear();
 	}
 
 	if (col.isValid ())
-		MultiLineEdit1->setTextColor (col);
+		ui->MultiLineEdit1->setTextColor (col);
 	else
-		MultiLineEdit1->setTextColor (m_default_text_color);
-	MultiLineEdit1->append (txt);
+		ui->MultiLineEdit1->setTextColor (m_default_text_color);
+	ui->MultiLineEdit1->append (txt);
+}
+
+void Talk::set_player (const Player &p)
+{
+	ui->stats_rating->setText (p.rank);
+	ui->stats_info->setText (p.info);
+	ui->stats_default->setText (p.extInfo);
+	ui->stats_wins->setText (p.won);
+	ui->stats_loss->setText (p.lost);
+	ui->stats_country->setText (p.country);
+	ui->stats_playing->setText (p.play_str);
+	ui->stats_rated->setText (p.rated);
+	ui->stats_address->setText (p.address);
+
+	// stored either idle time or last access
+	ui->stats_idle->setText (p.idle);
+	ui->Label_Idle->setText (!p.idle.isEmpty() && p.idle.at(0).isDigit() ? "Idle :": "Last log :");
 }
 
 template class table_model<Game>;

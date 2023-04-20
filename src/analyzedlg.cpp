@@ -2,6 +2,7 @@
 #include <QFileDialog>
 
 #include "analyzedlg.h"
+#include "ui_analyze_gui.h"
 
 #include "clientwin.h"
 #include "ui_helpers.h"
@@ -10,64 +11,65 @@
 AnalyzeDialog *analyze_dialog;
 
 AnalyzeDialog::AnalyzeDialog (QWidget *parent, const QString &filename)
-	: QMainWindow (parent), GTP_Eval_Controller (parent)
+	: QMainWindow (parent), GTP_Eval_Controller (parent), ui (std::make_unique<Ui::AnalyzeDialog> ())
 {
-	setupUi (this);
-	filenameEdit->setText (filename);
+	ui->setupUi (this);
+
+	ui->filenameEdit->setText (filename);
 	if (!filename.isEmpty ()) {
 		QFileInfo fi (filename);
 		m_last_dir = fi.dir ().absolutePath ();
 	} else
 		m_last_dir = setting->readEntry ("LAST_DIR");
-	secondsEdit->setValidator (&m_seconds_vald);
-	maxlinesEdit->setValidator (&m_lines_vald);
+	ui->secondsEdit->setValidator (&m_seconds_vald);
+	ui->maxlinesEdit->setValidator (&m_lines_vald);
 
 	const QStyle *style = qgo_app->style ();
 	int iconsz = style->pixelMetric (QStyle::PixelMetric::PM_ToolBarIconSize);
 
 	QSize sz (iconsz, iconsz);
-	openButton->setIconSize (sz);
-	trashButton->setIconSize (sz);
-	openDoneButton->setIconSize (sz);
-	trashDoneButton->setIconSize (sz);
+	ui->openButton->setIconSize (sz);
+	ui->trashButton->setIconSize (sz);
+	ui->openDoneButton->setIconSize (sz);
+	ui->trashDoneButton->setIconSize (sz);
 
-	openButton->setEnabled (false);
+	ui->openButton->setEnabled (false);
 
 	/* "Swap komi if better" seems like a reasonable default.  It only affects games with negative
 	   komi.  */
-	komiComboBox->setCurrentIndex (1);
+	ui->komiComboBox->setCurrentIndex (1);
 
-	connect (enqueueButton, &QPushButton::clicked, [=] (bool) { start_job (); });
-	connect (fileselButton, &QPushButton::clicked, [=] (bool) { select_file (); });
-	connect (enqueueDirButton, &QPushButton::clicked, [=] (bool) { enqueue_dir (); });
-	connect (dbselButton, &QPushButton::clicked, [=] (bool) { select_file_db (); });
-	connect (openButton, &QPushButton::clicked, [=] (bool) { open_in_progress_window (false); });
-	connect (openDoneButton, &QPushButton::clicked, [=] (bool) { open_in_progress_window (true); });
-	connect (trashButton, &QPushButton::clicked, [=] (bool) { discard_job (false); });
-	connect (trashDoneButton, &QPushButton::clicked, [=] (bool) { discard_job (true); });
-	jobView->setModel (&m_jobs.model);
-	doneView->setModel (&m_done.model);
-	connect (jobView, &QListView::clicked, [=] (QModelIndex) { update_progress (); });
-	connect (jobView->selectionModel (), &QItemSelectionModel::selectionChanged,
+	connect (ui->enqueueButton, &QPushButton::clicked, [=] (bool) { start_job (); });
+	connect (ui->fileselButton, &QPushButton::clicked, [=] (bool) { select_file (); });
+	connect (ui->enqueueDirButton, &QPushButton::clicked, [=] (bool) { enqueue_dir (); });
+	connect (ui->dbselButton, &QPushButton::clicked, [=] (bool) { select_file_db (); });
+	connect (ui->openButton, &QPushButton::clicked, [=] (bool) { open_in_progress_window (false); });
+	connect (ui->openDoneButton, &QPushButton::clicked, [=] (bool) { open_in_progress_window (true); });
+	connect (ui->trashButton, &QPushButton::clicked, [=] (bool) { discard_job (false); });
+	connect (ui->trashDoneButton, &QPushButton::clicked, [=] (bool) { discard_job (true); });
+	ui->jobView->setModel (&m_jobs.model);
+	ui->doneView->setModel (&m_done.model);
+	connect (ui->jobView, &QListView::clicked, [=] (QModelIndex) { update_progress (); });
+	connect (ui->jobView->selectionModel (), &QItemSelectionModel::selectionChanged,
 		 [=] (const QItemSelection &, const QItemSelection &) { update_progress (); });
 
 	void (QSpinBox::*changed) (int) = &QSpinBox::valueChanged;
-	connect (boardsizeSpinBox, changed, [this] (int) { update_engines (); });
+	connect (ui->boardsizeSpinBox, changed, [this] (int) { update_engines (); });
 	void (QComboBox::*cic) (int) = &QComboBox::currentIndexChanged;
-	connect (engineComboBox, cic, [this] (int v) { engineStartButton->setEnabled (v != -1 && analyzer_state () == analyzer::disconnected ); });
-	connect (configureButton, &QPushButton::clicked, [=] (bool) { client_window->dlgSetPreferences (3); });
-	connect (engineStartButton, &QPushButton::clicked, [=] (bool) { start_engine (); });
-	connect (engineStopButton, &QPushButton::clicked, [=] (bool) { stop_engine (); });
-	connect (enginePauseButton, &QPushButton::toggled, [=] (bool on)
+	connect (ui->engineComboBox, cic, [this] (int v) { ui->engineStartButton->setEnabled (v != -1 && analyzer_state () == analyzer::disconnected ); });
+	connect (ui->configureButton, &QPushButton::clicked, [=] (bool) { client_window->dlgSetPreferences (3); });
+	connect (ui->engineStartButton, &QPushButton::clicked, [=] (bool) { start_engine (); });
+	connect (ui->engineStopButton, &QPushButton::clicked, [=] (bool) { stop_engine (); });
+	connect (ui->enginePauseButton, &QPushButton::toggled, [=] (bool on)
 		 {
 			 if (on)
 				 pause_analyzer ();
 			 else
 				 queue_next ();
 		 });
-	connect (engineLogButton, &QPushButton::clicked, [=] (bool) { m_analyzer->dialog ()->show (); });
+	connect (ui->engineLogButton, &QPushButton::clicked, [=] (bool) { m_analyzer->dialog ()->show (); });
 
-	connect (closeButton, &QPushButton::clicked, [=] (bool) { close (); });
+	connect (ui->closeButton, &QPushButton::clicked, [=] (bool) { close (); });
 
 	update_engines ();
 
@@ -119,28 +121,28 @@ void AnalyzeDialog::analyzer_state_changed ()
 	analyzer s = analyzer_state ();
 	switch (s) {
 	case analyzer::disconnected:
-		engineStatusLabel->setText (tr ("not running"));
+		ui->engineStatusLabel->setText (tr ("not running"));
 		break;
 	case analyzer::starting:
-		engineStatusLabel->setText (tr ("starting up"));
+		ui->engineStatusLabel->setText (tr ("starting up"));
 		break;
 	case analyzer::paused:
-		engineStatusLabel->setText (tr ("idle"));
+		ui->engineStatusLabel->setText (tr ("idle"));
 		break;
 	case analyzer::running:
-		engineStatusLabel->setText (tr ("working"));
+		ui->engineStatusLabel->setText (tr ("working"));
 		break;
 	}
-	engineStopButton->setEnabled (s != analyzer::disconnected);
-	enginePauseButton->setEnabled (s == analyzer::running || s == analyzer::paused);
+	ui->engineStopButton->setEnabled (s != analyzer::disconnected);
+	ui->enginePauseButton->setEnabled (s == analyzer::running || s == analyzer::paused);
 	if (s == analyzer::disconnected)
-		enginePauseButton->setChecked (false);
-	engineStartButton->setEnabled (engineComboBox->currentIndex () != -1 && s == analyzer::disconnected);
-	engineComboBox->setEnabled (s == analyzer::disconnected);
-	engineLogButton->setEnabled (m_analyzer != nullptr && !m_analyzer->dialog ()->isVisible ());
+		ui->enginePauseButton->setChecked (false);
+	ui->engineStartButton->setEnabled (ui->engineComboBox->currentIndex () != -1 && s == analyzer::disconnected);
+	ui->engineComboBox->setEnabled (s == analyzer::disconnected);
+	ui->engineLogButton->setEnabled (m_analyzer != nullptr && !m_analyzer->dialog ()->isVisible ());
 
 	bool any_jobs = m_jobs.model.rowCount () != 0 || m_done.model.rowCount () != 0;
-	boardsizeSpinBox->setEnabled (!any_jobs && s == analyzer::disconnected);
+	ui->boardsizeSpinBox->setEnabled (!any_jobs && s == analyzer::disconnected);
 }
 
 AnalyzeDialog::job::job (AnalyzeDialog *dlg, const QString &title, go_game_ptr gr, int n_seconds, int n_lines,
@@ -252,7 +254,7 @@ void AnalyzeDialog::remove_job (display &q, job *j)
 
 AnalyzeDialog::job *AnalyzeDialog::selected_job (bool done)
 {
-	QListView *view = done ? doneView : jobView;
+	QListView *view = done ? ui->doneView : ui->jobView;
 	display &q = done ? m_done : m_jobs;
 	const QModelIndexList &selected = view->selectionModel ()->selectedIndexes ();
 	if (selected.length () == 0)
@@ -301,7 +303,7 @@ void AnalyzeDialog::select_file ()
 		return;
 	QFileInfo fi (filename);
 	m_last_dir = fi.dir ().absolutePath ();
-	filenameEdit->setText (filename);
+	ui->filenameEdit->setText (filename);
 }
 
 void AnalyzeDialog::enqueue_dir ()
@@ -327,18 +329,18 @@ void AnalyzeDialog::select_file_db ()
 		return;
 	QFileInfo fi (filename);
 	m_last_dir = fi.dir ().absolutePath ();
-	filenameEdit->setText (filename);
+	ui->filenameEdit->setText (filename);
 }
 
 /* Called only in situations when we know the engine is running.  */
 void AnalyzeDialog::queue_next ()
 {
-	if (m_jobs.jobs.size () != 0 && !enginePauseButton->isChecked ()) {
+	if (m_jobs.jobs.size () != 0 && !ui->enginePauseButton->isChecked ()) {
 		QStandardItem *item = m_jobs.model.item (0);
 		int jidx = item->data (Qt::UserRole + 1).toInt ();
 		job *j = m_jobs.map[jidx];
 		game_state *st = j->select_request (false);
-		if (st != nullptr && st->get_board ().size_x () == boardsizeSpinBox->value ()) {
+		if (st != nullptr && st->get_board ().size_x () == ui->boardsizeSpinBox->value ()) {
 			m_seconds_count = 0;
 			m_requester = j;
 			bool flip = j->m_komi_type == engine_komi::do_swap;
@@ -479,7 +481,7 @@ void AnalyzeDialog::eval_received (const analyzer_id &id, const QString &, int, 
 			j->m_win->setGameMode (modeNormal);
 
 		remove_job (m_jobs, j);
-		insert_job (m_done, doneView, j);
+		insert_job (m_done, ui->doneView, j);
 		update_progress ();
 	}
 
@@ -528,24 +530,24 @@ void AnalyzeDialog::update_buttons (display &d, QListView *view, QProgressBar *b
 void AnalyzeDialog::update_engines ()
 {
 	/* Keep old entry showing if the engine is running.  */
-	if (!engineComboBox->isEnabled ())
+	if (!ui->engineComboBox->isEnabled ())
 		return;
 
-	auto new_list = client_window->analysis_engines (boardsizeSpinBox->value ());
-	engineComboBox->clear ();
+	auto new_list = client_window->analysis_engines (ui->boardsizeSpinBox->value ());
+	ui->engineComboBox->clear ();
 	for (auto &it: new_list) {
-		engineComboBox->addItem (it.title);
+		ui->engineComboBox->addItem (it.title);
 	}
 	m_engines = new_list;
 }
 
 void AnalyzeDialog::update_progress ()
 {
-	update_buttons (m_jobs, jobView, progressBar, openButton, trashButton);
-	update_buttons (m_done, doneView, nullptr, openDoneButton, trashDoneButton);
+	update_buttons (m_jobs, ui->jobView, ui->progressBar, ui->openButton, ui->trashButton);
+	update_buttons (m_done, ui->doneView, nullptr, ui->openDoneButton, ui->trashDoneButton);
 
 	bool any_jobs = m_jobs.model.rowCount () != 0 || m_done.model.rowCount () != 0;
-	boardsizeSpinBox->setEnabled (!any_jobs && analyzer_state () == analyzer::disconnected);
+	ui->boardsizeSpinBox->setEnabled (!any_jobs && analyzer_state () == analyzer::disconnected);
 
 	/* Garbage collect.  */
 	if (!any_jobs)
@@ -586,15 +588,15 @@ void AnalyzeDialog::start_engine ()
 {
 	if (analyzer_state () != analyzer::disconnected)
 		return;
-	int idx = engineComboBox->currentIndex ();
+	int idx = ui->engineComboBox->currentIndex ();
 	if (idx < 0 || idx >= m_engines.count ())
 		return;
 
-	boardsizeSpinBox->setEnabled (false);
+	ui->boardsizeSpinBox->setEnabled (false);
 
 	const Engine &e = m_engines.at (idx);
 	m_current_komi = e.komi;
-	start_analyzer (e, boardsizeSpinBox->text ().toInt (), 7.5, false);
+	start_analyzer (e, ui->boardsizeSpinBox->text ().toInt (), 7.5, false);
 }
 
 void AnalyzeDialog::start_job (const QString &f)
@@ -612,24 +614,24 @@ void AnalyzeDialog::start_job (const QString &f)
 		QMessageBox::warning (this, PACKAGE, tr ("Analysis is supported only for square boards!"));
 		return;
 	}
-	if (b.size_x () != boardsizeSpinBox->value ()) {
+	if (b.size_x () != ui->boardsizeSpinBox->value ()) {
 		QMessageBox::warning (this, PACKAGE,
 				      tr ("File has a different boardsize than selected!"));
 		return;
 	}
-	filenameEdit->setText ("");
-	int komi_val = komiComboBox->currentIndex ();
-	int rules_val = rulesComboBox->currentIndex ();
+	ui->filenameEdit->setText ("");
+	int komi_val = ui->komiComboBox->currentIndex ();
+	int rules_val = ui->rulesComboBox->currentIndex ();
 	go_rules r = guess_rules (gr->info ());
 	if (rules_val == 1)
 		r = go_rules::japanese;
 	else if (rules_val == 2)
 		r = go_rules::chinese;
 	engine_komi k = komi_val == 2 ? engine_komi::both : komi_val == 1 ? engine_komi::maybe_swap : engine_komi::dflt;
-	m_all_jobs.emplace_front (this, f, gr, secondsEdit->text ().toInt (), maxlinesEdit->text ().toInt (), k,
-				  commentsCheckBox->isChecked (), r);
+	m_all_jobs.emplace_front (this, f, gr, ui->secondsEdit->text ().toInt (), ui->maxlinesEdit->text ().toInt (), k,
+				  ui->commentsCheckBox->isChecked (), r);
 	job *j = &m_all_jobs.front ();
-	insert_job (m_jobs, jobView, j);
+	insert_job (m_jobs, ui->jobView, j);
 
 	update_progress ();
 	if (analyzer_state () == analyzer::paused) {
@@ -639,5 +641,5 @@ void AnalyzeDialog::start_job (const QString &f)
 
 void AnalyzeDialog::start_job ()
 {
-	start_job (filenameEdit->text ());
+	start_job (ui->filenameEdit->text ());
 }

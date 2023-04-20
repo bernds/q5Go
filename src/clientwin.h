@@ -8,7 +8,6 @@
 #include <list>
 #include <unordered_map>
 
-#include "ui_clientwindow_gui.h"
 #include "miscdialogs.h"
 #include "setting.h"
 #include "tables.h"
@@ -46,10 +45,16 @@ namespace std
 }
 #endif
 
-class ClientWindow : public QMainWindow, public Ui::ClientWindowGui
+namespace Ui
+{
+	class ClientWindowGui;
+};
+
+class ClientWindow : public QMainWindow
 {
 	Q_OBJECT
 
+	std::unique_ptr<Ui::ClientWindowGui> ui;
 	TelnetConnection *telnetConnection;
 	Parser *parser;
 	qGoIF *qgoif;

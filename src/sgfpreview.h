@@ -2,14 +2,22 @@
 #define SGFPREVIEW_H
 
 #include <QStringList>
+#include <QDialog>
 
-#include "ui_sgfpreview.h"
+#include <gogame.h>
 
 class QFileDialog;
 
-class SGFPreview : public QDialog, public Ui::SGFPreview
+namespace Ui
+{
+	class SGFPreview;
+};
+
+class SGFPreview : public QDialog
 {
 	Q_OBJECT
+
+	std::unique_ptr<Ui::SGFPreview> ui;
 
 	QFileDialog *fileDialog;
 	go_game_ptr m_empty_game;

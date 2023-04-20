@@ -15,13 +15,18 @@
 #include "gogame.h"
 #include "qgtp.h"
 
-#include "ui_analyze_gui.h"
-
 class MainWindow;
 
-class AnalyzeDialog : public QMainWindow, public Ui::AnalyzeDialog, public GTP_Eval_Controller
+namespace Ui
+{
+	class AnalyzeDialog;
+};
+
+class AnalyzeDialog : public QMainWindow, public GTP_Eval_Controller
 {
 	Q_OBJECT
+
+	std::unique_ptr<Ui::AnalyzeDialog> ui;
 
 	QList<Engine> m_engines;
 

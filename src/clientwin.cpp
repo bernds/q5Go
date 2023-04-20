@@ -31,6 +31,9 @@
 #include "dbdialog.h"
 #include "analyzedlg.h"
 
+#include "ui_clientwindow_gui.h"
+#include "ui_newgame_gui.h"
+
 ClientWindow *client_window;
 
 static int get_who_setting (QString str)
@@ -68,9 +71,9 @@ static int get_who_setting (QString str)
 }
 
 ClientWindow::ClientWindow(QMainWindow *parent)
-	: QMainWindow( parent), seekButtonTimer (0), oneSecondTimer (0)
+	: QMainWindow (parent), ui (std::make_unique<Ui::ClientWindowGui> ()), seekButtonTimer (0), oneSecondTimer (0)
 {
-	setupUi(this);
+	ui->setupUi(this);
 
 	seekingIcon[0] = QIcon (":/ClientWindowGui/images/clientwindow/seeking0.png");
 	seekingIcon[1] = QIcon (":/ClientWindowGui/images/clientwindow/seeking1.png");
@@ -101,38 +104,38 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	bytesOut = 0;
 	seekButtonTimer = 0;
 
-	cb_cmdLine->clear();
-	cb_cmdLine->addItem("");
+	ui->cb_cmdLine->clear();
+	ui->cb_cmdLine->addItem("");
 
  	escapeFocus = new QAction(this);
 	escapeFocus->setShortcut(Qt::Key_Escape);
 	connect (escapeFocus, &QAction::triggered, [=] () { setFocus (); });
-	cb_cmdLine->addAction (escapeFocus);
+	ui->cb_cmdLine->addAction (escapeFocus);
 
 	// create instance of telnetConnection
-	telnetConnection = new TelnetConnection (this, ListView_players, ListView_games);
+	telnetConnection = new TelnetConnection (this, ui->ListView_players, ui->ListView_games);
 
 	m_games_model.set_filter ([this] (const Game &g)->bool { return filter_game (g); });
 	m_player_model.set_filter ([this] (const Player &p)->bool { return filter_player (p); });
-	ListView_games->set_model (&m_games_model);
-	ListView_games->resize_columns ();
-	ListView_players->set_model (&m_player_model);
-	ListView_players->resize_columns ();
-	ListView_games->sortByColumn (2, Qt::AscendingOrder);
-	ListView_players->sortByColumn (2, Qt::AscendingOrder);
+	ui->ListView_games->set_model (&m_games_model);
+	ui->ListView_games->resize_columns ();
+	ui->ListView_players->set_model (&m_player_model);
+	ui->ListView_players->resize_columns ();
+	ui->ListView_games->sortByColumn (2, Qt::AscendingOrder);
+	ui->ListView_players->sortByColumn (2, Qt::AscendingOrder);
 
 	// doubleclick
-	connect (ListView_games, &GamesTable::signal_doubleClicked, this, &ClientWindow::slot_doubleclick_games);
-	connect (ListView_players, &PlayerTable::signal_doubleClicked, this, &ClientWindow::slot_doubleclick_players);
+	connect (ui->ListView_games, &GamesTable::signal_doubleClicked, this, &ClientWindow::slot_doubleclick_games);
+	connect (ui->ListView_players, &PlayerTable::signal_doubleClicked, this, &ClientWindow::slot_doubleclick_players);
 
-	connect (ListView_players, &PlayerTable::customContextMenuRequested, this, &ClientWindow::slot_menu_players);
-	connect (ListView_games, &GamesTable::customContextMenuRequested, this, &ClientWindow::slot_menu_games);
+	connect (ui->ListView_players, &PlayerTable::customContextMenuRequested, this, &ClientWindow::slot_menu_players);
+	connect (ui->ListView_games, &GamesTable::customContextMenuRequested, this, &ClientWindow::slot_menu_games);
 
-	connect (whoOpenCheck, &QCheckBox::toggled, this, &ClientWindow::slot_whoopen);
+	connect (ui->whoOpenCheck, &QCheckBox::toggled, this, &ClientWindow::slot_whoopen);
 	void (QComboBox::*cic) (int) = &QComboBox::currentIndexChanged;
-	connect (whoBox1, cic, [this] (int idx) { update_who_rank (whoBox1, idx); });
-	connect (whoBox2, cic, [this] (int idx) { update_who_rank (whoBox2, idx); });
-	connect (toolObserveMode, &QToolButton::toggled, [] (bool on) { setting->writeBoolEntry ("OBSERVE_SINGLE", on); });
+	connect (ui->whoBox1, cic, [this] (int idx) { update_who_rank (ui->whoBox1, idx); });
+	connect (ui->whoBox2, cic, [this] (int idx) { update_who_rank (ui->whoBox2, idx); });
+	connect (ui->toolObserveMode, &QToolButton::toggled, [] (bool on) { setting->writeBoolEntry ("OBSERVE_SINGLE", on); });
 
 	initStatusBar(this);
 	initActions();
@@ -148,16 +151,16 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	int who1 = get_who_setting ("WHO_1");
 	int who2 = get_who_setting ("WHO_2");
 	if (who1 == -1)
-		who1 = whoBox1->currentIndex ();
+		who1 = ui->whoBox1->currentIndex ();
 	if (who2 == -1)
-		who2 = whoBox2->currentIndex ();
-	whoBox1->setCurrentIndex (who1);
-	whoBox2->setCurrentIndex (who2);
-	update_who_rank (whoBox1, who1);
-	update_who_rank (whoBox2, who2);
-	whoOpenCheck->setChecked (setting->readIntEntry("WHO_CB"));
+		who2 = ui->whoBox2->currentIndex ();
+	ui->whoBox1->setCurrentIndex (who1);
+	ui->whoBox2->setCurrentIndex (who2);
+	update_who_rank (ui->whoBox1, who1);
+	update_who_rank (ui->whoBox2, who2);
+	ui->whoOpenCheck->setChecked (setting->readIntEntry("WHO_CB"));
 
-	toolObserveMode->setChecked (setting->readBoolEntry ("OBSERVE_SINGLE"));
+	ui->toolObserveMode->setChecked (setting->readBoolEntry ("OBSERVE_SINGLE"));
 
 	QString s;
 
@@ -184,10 +187,10 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 		w1 << s.section(DELIMITER, 0, 0).toInt() << s.section(DELIMITER, 1, 1).toInt();
 		h1 << s.section(DELIMITER, 2, 2).toInt() << s.section(DELIMITER, 3, 3).toInt();
 		w2 << s.section(DELIMITER, 4, 4).toInt() << s.section(DELIMITER, 5, 5).toInt();
-		//mainTable->s1->setSizes(w1);
-    		s1->setSizes(w1);
-		s2->setSizes(h1);
-		s3->setSizes(w2);
+		//mainTable->ui->s1->setSizes(w1);
+		ui->s1->setSizes(w1);
+		ui->s2->setSizes(h1);
+		ui->s3->setSizes(w2);
 	}
 
 	// restore size of debug window
@@ -265,8 +268,8 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 
 ClientWindow::~ClientWindow()
 {
-	ListView_games->setModel (nullptr);
-	ListView_players->setModel (nullptr);
+	ui->ListView_games->setModel (nullptr);
+	ui->ListView_players->setModel (nullptr);
 
 	delete telnetConnection;
 	delete qgoif;
@@ -350,7 +353,7 @@ void ClientWindow::timerEvent(QTimerEvent* e)
 	if (e->timerId() == seekButtonTimer)
 	{
 		imagecounter = (imagecounter+1) % 4;
-		toolSeek->setIcon(seekingIcon[imagecounter]);
+		ui->toolSeek->setIcon(seekingIcon[imagecounter]);
 		return;
 	}
 
@@ -468,13 +471,13 @@ void ClientWindow::timerEvent(QTimerEvent* e)
 
 void ClientWindow::enable_connection_buttons (bool on)
 {
-	cb_connect->setEnabled (!on);
-	toolSeek->setEnabled (on);
-	setLookingMode->setEnabled (on);
-	setQuietMode->setEnabled (on);
-	setOpenMode->setEnabled (on);
-	refreshPlayers->setEnabled (on);
-	refreshGames->setEnabled (on);
+	ui->cb_connect->setEnabled (!on);
+	ui->toolSeek->setEnabled (on);
+	ui->setLookingMode->setEnabled (on);
+	ui->setQuietMode->setEnabled (on);
+	ui->setOpenMode->setEnabled (on);
+	ui->refreshPlayers->setEnabled (on);
+	ui->refreshGames->setEnabled (on);
 }
 
 void ClientWindow::update_caption ()
@@ -499,7 +502,7 @@ void ClientWindow::update_caption ()
 void ClientWindow::slot_connect (bool b)
 {
 	if (b) {
-		int idx = cb_connect->currentIndex ();
+		int idx = ui->cb_connect->currentIndex ();
 		if (idx == -1)
 			return;
 		m_active_host = setting->m_hosts[idx];
@@ -538,7 +541,7 @@ void ClientWindow::slot_connclosed ()
 	clear_server_data ();
 	update_caption ();
 	//pb_connect->setChecked(false);
-	toolConnect->setChecked(false);
+	ui->toolConnect->setChecked(false);
 	seekMenu->clear();
 	slot_cancelSeek();
 
@@ -562,10 +565,10 @@ void ClientWindow::slot_connclosed ()
 	statusServer->setText(" OFFLINE ");
 
 	// set menu
-	Connect->setEnabled(true);
-	Disconnect->setEnabled(false);
-	toolConnect->setChecked(false);
-	toolConnect->setToolTip (tr("Connect with") + " " + cb_connect->currentText());
+	ui->Connect->setEnabled(true);
+	ui->Disconnect->setEnabled(false);
+	ui->toolConnect->setChecked(false);
+	ui->toolConnect->setToolTip (tr("Connect with") + " " + ui->cb_connect->currentText());
 
 	m_player_table.clear ();
 	m_games_table.clear ();
@@ -583,7 +586,7 @@ void ClientWindow::saveSettings()
 {
 	// save current connection if at least one host exists
 	if (setting->m_hosts.size () > 0)
-		setting->writeEntry ("ACTIVEHOST", cb_connect->currentText ());
+		setting->writeEntry ("ACTIVEHOST", ui->cb_connect->currentText ());
 
 	QString scrkey = screen_key (this);
 	setting->writeEntry("CLIENTWINDOW_" + scrkey,
@@ -592,12 +595,12 @@ void ClientWindow::saveSettings()
 			    QString::number(size().width()) + DELIMITER +
 			    QString::number(size().height()));
 	setting->writeEntry("CLIENTSPLITTER_" + scrkey,
-			    QString::number(s1->sizes().first()) + DELIMITER +
-			    QString::number(s1->sizes().last()) + DELIMITER +
-			    QString::number(s2->sizes().first()) + DELIMITER +
-			    QString::number(s2->sizes().last()) + DELIMITER +
-			    QString::number(s3->sizes().first()) + DELIMITER +
-			    QString::number(s3->sizes().last()));
+			    QString::number(ui->s1->sizes().first()) + DELIMITER +
+			    QString::number(ui->s1->sizes().last()) + DELIMITER +
+			    QString::number(ui->s2->sizes().first()) + DELIMITER +
+			    QString::number(ui->s2->sizes().last()) + DELIMITER +
+			    QString::number(ui->s3->sizes().first()) + DELIMITER +
+			    QString::number(ui->s3->sizes().last()));
 
 	if (debug_dialog->isVisible ())
 		setting->writeEntry("DEBUGWINDOW",
@@ -613,9 +616,9 @@ void ClientWindow::saveSettings()
 			QString::number(pref_s.width()) + DELIMITER +
 			QString::number(pref_s.height()));
 
-	setting->writeIntEntry ("WHO_1_NEW", whoBox1->currentIndex ());
-	setting->writeIntEntry ("WHO_2_NEW", whoBox2->currentIndex ());
-	setting->writeBoolEntry ("WHO_CB", whoOpenCheck->isChecked ());
+	setting->writeIntEntry ("WHO_1_NEW", ui->whoBox1->currentIndex ());
+	setting->writeIntEntry ("WHO_2_NEW", ui->whoBox2->currentIndex ());
+	setting->writeBoolEntry ("WHO_CB", ui->whoOpenCheck->isChecked ());
 
 	// write settings to file
 	setting->saveSettings();
@@ -737,10 +740,10 @@ void ClientWindow::sendTextToApp (const QString &txt)
 		refresh_games ();
 
 		// set menu
-		Connect->setEnabled (false);
-		Disconnect->setEnabled (true);
-		toolConnect->setChecked (true);
-		toolConnect->setToolTip (tr ("Disconnect from") + " " + cb_connect->currentText ());
+		ui->Connect->setEnabled (false);
+		ui->Disconnect->setEnabled (true);
+		ui->toolConnect->setChecked (true);
+		ui->toolConnect->setToolTip (tr ("ui->Disconnect from") + " " + ui->cb_connect->currentText ());
 
 		// check for messages
 		if (youhavemsg)
@@ -896,9 +899,9 @@ void ClientWindow::slot_cmdactivated(const QString &cmd)
 	if (cmd_valid)
 	{
 		// clear field, and restore the blank line at top
-		cb_cmdLine->removeItem(1);
-		cb_cmdLine->insertItem(0, "");
-		cb_cmdLine->clearEditText();
+		ui->cb_cmdLine->removeItem(1);
+		ui->cb_cmdLine->insertItem(0, "");
+		ui->cb_cmdLine->clearEditText();
 
 		// echo & send
 		QString cmdLine = cmd;
@@ -934,9 +937,9 @@ void ClientWindow::slot_cmdactivated(const QString &cmd)
 // number of activated cmd
 void ClientWindow::slot_cmdactivated_int(int)
 {
-	if (cb_cmdLine->count() > cmd_count)
+	if (ui->cb_cmdLine->count() > cmd_count)
 	{
-		cmd_count = cb_cmdLine->count();
+		cmd_count = ui->cb_cmdLine->count();
 		cmd_valid = true;
 	}
 	else
@@ -969,47 +972,47 @@ void ClientWindow::set_sessionparameter(QString par, bool val)
 void ClientWindow::populate_cbconnect (const QString &prev_text)
 {
 	// refill combobox
-	cb_connect->clear ();
+	ui->cb_connect->clear ();
 	for (auto &h: setting->m_hosts) {
-		cb_connect->addItem (h.title);
+		ui->cb_connect->addItem (h.title);
 		if (h.title == prev_text) {
-			cb_connect->setCurrentIndex (cb_connect->count() - 1);
+			ui->cb_connect->setCurrentIndex (ui->cb_connect->count() - 1);
 			slot_cbconnect (prev_text);
 		}
 	}
-	if (setting->m_hosts.size () > 0 && cb_connect->currentIndex () == -1) {
-		cb_connect->setCurrentIndex (0);
-		slot_cbconnect (cb_connect->currentText ());
+	if (setting->m_hosts.size () > 0 && ui->cb_connect->currentIndex () == -1) {
+		ui->cb_connect->setCurrentIndex (0);
+		slot_cbconnect (ui->cb_connect->currentText ());
 	}
 }
 
 // Select connection
 void ClientWindow::slot_cbconnect (const QString &txt)
 {
-	if (toolConnect)
-		toolConnect->setToolTip (tr("Connect with") + " " + txt);
+	if (ui->toolConnect)
+		ui->toolConnect->setToolTip (tr("Connect with") + " " + txt);
 }
 
 void ClientWindow::set_open_mode (bool val)
 {
-	setOpenMode->setChecked (val);
+	ui->setOpenMode->setChecked (val);
 }
 
 void ClientWindow::set_looking_mode (bool val)
 {
-	setLookingMode->setChecked (val);
+	ui->setLookingMode->setChecked (val);
 }
 
 void ClientWindow::set_quiet_mode (bool val)
 {
-	setQuietMode->setChecked (val);
+	ui->setQuietMode->setChecked (val);
 }
 
 // checkbox looking cklicked
 void ClientWindow::slot_cblooking (bool)
 {
-	bool val = setLookingMode->isChecked();
-//	setLookingMode->setChecked(val);
+	bool val = ui->setLookingMode->isChecked();
+//	ui->setLookingMode->setChecked(val);
 	set_sessionparameter("looking", val);
 	if (val)
 		// if looking then set open
@@ -1020,7 +1023,7 @@ void ClientWindow::slot_cblooking (bool)
 // checkbox open clicked
 void ClientWindow::slot_cbopen (bool)
 {
-	bool val = setOpenMode->isChecked();
+	bool val = ui->setOpenMode->isChecked();
 	set_sessionparameter("open", val);
 	if (!val)
 		// if not open then set close
@@ -1030,7 +1033,7 @@ void ClientWindow::slot_cbopen (bool)
 // checkbox quiet clicked
 void ClientWindow::slot_cbquiet (bool)
 {
-	bool val = setQuietMode->isChecked ();
+	bool val = ui->setQuietMode->isChecked ();
 	set_sessionparameter ("quiet", val);
 	for (auto &h: setting->m_hosts) {
 		if (h.host == m_active_host.host && h.login_name == m_active_host.login_name
@@ -1045,30 +1048,30 @@ void ClientWindow::slot_cbquiet (bool)
 void ClientWindow::update_font ()
 {
 	// lists
-	ListView_players->setFont(setting->fontLists);
-	ListView_games->setFont(setting->fontLists);
+	ui->ListView_players->setFont(setting->fontLists);
+	ui->ListView_games->setFont(setting->fontLists);
 
 	// comment fields
-	QTextCursor c = MultiLineEdit2->textCursor ();
-	MultiLineEdit2->selectAll();
-	MultiLineEdit2->setCurrentFont(setting->fontConsole);
-	MultiLineEdit2->setTextCursor (c);
-	MultiLineEdit2->setCurrentFont(setting->fontConsole);
+	QTextCursor c = ui->MultiLineEdit2->textCursor ();
+	ui->MultiLineEdit2->selectAll();
+	ui->MultiLineEdit2->setCurrentFont(setting->fontConsole);
+	ui->MultiLineEdit2->setTextCursor (c);
+	ui->MultiLineEdit2->setCurrentFont(setting->fontConsole);
 
-	MultiLineEdit3->setCurrentFont(setting->fontComments);
-	cb_cmdLine->setFont(setting->fontComments);
+	ui->MultiLineEdit3->setCurrentFont(setting->fontComments);
+	ui->cb_cmdLine->setFont(setting->fontComments);
 
 	// standard
 	setFont(setting->fontStandard);
 
 	// init menu
-	viewToolBar->setChecked(setting->readBoolEntry("MAINTOOLBAR"));
+	ui->viewToolBar->setChecked(setting->readBoolEntry("MAINTOOLBAR"));
 	if (setting->readBoolEntry("MAINMENUBAR"))
 	{
-		viewMenuBar->setChecked(false);
-		viewMenuBar->setChecked(true);
+		ui->viewMenuBar->setChecked(false);
+		ui->viewMenuBar->setChecked(true);
 	}
-	viewStatusBar->setChecked(setting->readBoolEntry("MAINSTATUSBAR"));
+	ui->viewStatusBar->setChecked(setting->readBoolEntry("MAINSTATUSBAR"));
 }
 
 void ClientWindow::server_player_entered (const QString &)
@@ -1120,7 +1123,7 @@ void ClientWindow::slot_doubleclick_games (const Game &g)
 
 void ClientWindow::slot_menu_games (const QPoint &pt)
 {
-	QModelIndex idx = ListView_games->indexAt (pt);
+	QModelIndex idx = ui->ListView_games->indexAt (pt);
 	if (!idx.isValid ())
 		return;
 	const Game *g = m_games_model.find (idx);
@@ -1128,7 +1131,7 @@ void ClientWindow::slot_menu_games (const QPoint &pt)
 		slot_mouse_games (*g);
 }
 
-// mouse click on ListView_games
+// mouse click on ui->ListView_games
 void ClientWindow::slot_mouse_games (const Game &g)
 {
 	static QMenu *puw = nullptr;
@@ -1159,7 +1162,7 @@ void ClientWindow::slot_mouse_games (const Game &g)
 void ClientWindow::slot_removeMatchDialog(const QString &opponent)
 {
 	for (auto it: matchlist)
-		if (it->playerOpponentEdit->text() == opponent) {
+		if (it->ui->playerOpponentEdit->text() == opponent) {
 			matchlist.removeOne (it);
 			delete it;
 			break;
@@ -1193,7 +1196,7 @@ void ClientWindow::handle_matchrequest (const QString &line, bool myrequest, boo
 
 	// look for same opponent
 	for (auto it: matchlist)
-		if (it->playerOpponentEdit->text() == opponent) {
+		if (it->ui->playerOpponentEdit->text() == opponent) {
 			dlg = it;
 			break;
 		}
@@ -1220,14 +1223,14 @@ void ClientWindow::handle_matchrequest (const QString &line, bool myrequest, boo
 
 	if (myrequest)
 	{
-		dlg->buttonDecline->setDisabled(true);
+		dlg->ui->buttonDecline->setDisabled(true);
 
 		// my request: free/rated game is also requested
-		//dlg->cb_free->setChecked(true);
+		//dlg->ui->cb_free->setChecked(true);
 
 		// teaching game:
 		if (opponent == m_online_acc_name)
-			dlg->buttonOffer->setText(tr("Teaching"));
+			dlg->ui->buttonOffer->setText(tr("Teaching"));
 
 		// If we came here through a context menu, we can check the player's nmatch setting.
 		bool is_nmatch = !from_talk_tab && m_menu_player.nmatch;
@@ -1242,26 +1245,26 @@ void ClientWindow::handle_matchrequest (const QString &line, bool myrequest, boo
 			int max_time = p.nmatch_timeMax / 60;
 			if (max_time == 0 || max_time < min_time)
 				min_time = 0, max_time = 60;
-			dlg->timeSpin->setRange (min_time, max_time);
+			dlg->ui->timeSpin->setRange (min_time, max_time);
 			int bmin_time = p.nmatch_BYMin / 60;
 			int bmax_time = p.nmatch_BYMax / 60;
 			if (bmax_time == 0 || bmax_time < bmin_time)
 				bmin_time = 0, bmax_time = 60;
-			dlg->byoTimeSpin->setRange (bmin_time, bmax_time);
-			dlg->handicapSpin->setRange (p.nmatch_handicapMin, p.nmatch_handicapMax);
+			dlg->ui->byoTimeSpin->setRange (bmin_time, bmax_time);
+			dlg->ui->handicapSpin->setRange (p.nmatch_handicapMin, p.nmatch_handicapMax);
 		}
 		else
 		{
-			dlg->timeSpin->setRange (0, 60);
-			dlg->byoTimeSpin->setRange (0, 60);
-			dlg->handicapSpin->setRange (0, 9);
+			dlg->ui->timeSpin->setRange (0, 60);
+			dlg->ui->byoTimeSpin->setRange (0, 60);
+			dlg->ui->handicapSpin->setRange (0, 9);
 		}
 
 		//default settings
-		dlg->boardSizeSpin->setValue(setting->readIntEntry("DEFAULT_SIZE"));
-		dlg->timeSpin->setValue(setting->readIntEntry("DEFAULT_TIME"));
-		dlg->byoTimeSpin->setValue(setting->readIntEntry("DEFAULT_BY"));
-		dlg->komiSpin->setValue(setting->readIntEntry("DEFAULT_KOMI")+0.5);
+		dlg->ui->boardSizeSpin->setValue(setting->readIntEntry("DEFAULT_SIZE"));
+		dlg->ui->timeSpin->setValue(setting->readIntEntry("DEFAULT_TIME"));
+		dlg->ui->byoTimeSpin->setValue(setting->readIntEntry("DEFAULT_BY"));
+		dlg->ui->komiSpin->setValue(setting->readIntEntry("DEFAULT_KOMI")+0.5);
 
 		dlg->slot_pbsuggest();
 	}
@@ -1283,15 +1286,15 @@ void ClientWindow::handle_matchrequest (const QString &line, bool myrequest, boo
 			time = line.section(' ', 5, 5);
 			byotime = line.section(' ', 6, 6);
 			byostones = line.section(' ', 7, 7);
-			dlg->timeSpin->setRange(0,100);
-			dlg->timeSpin->setValue(time.toInt()/60);
-			dlg->byoTimeSpin->setRange(0,100);
-			dlg->byoTimeSpin->setValue(byotime.toInt()/60);
-			dlg->BY_label->setText(tr(" Byoyomi Time : (")+byostones+ tr(" stones)"));
-			dlg->handicapSpin->setRange(0,9);
-			dlg->handicapSpin->setValue(handicap.toInt());
-			dlg->boardSizeSpin->setRange(1,19);
-			dlg->boardSizeSpin->setValue(size.toInt());
+			dlg->ui->timeSpin->setRange(0,100);
+			dlg->ui->timeSpin->setValue(time.toInt()/60);
+			dlg->ui->byoTimeSpin->setRange(0,100);
+			dlg->ui->byoTimeSpin->setValue(byotime.toInt()/60);
+			dlg->ui->BY_label->setText(tr(" Byoyomi Time : (")+byostones+ tr(" stones)"));
+			dlg->ui->handicapSpin->setRange(0,9);
+			dlg->ui->handicapSpin->setValue(handicap.toInt());
+			dlg->ui->boardSizeSpin->setRange(1,19);
+			dlg->ui->boardSizeSpin->setValue(size.toInt());
 		}
 		else
 		{
@@ -1299,24 +1302,24 @@ void ClientWindow::handle_matchrequest (const QString &line, bool myrequest, boo
 			size = line.section(' ', 3, 3);
 			time = line.section(' ', 4, 4);
 			byotime = line.section(' ', 5, 5);
-			dlg->timeSpin->setRange(0,1000);
-			dlg->timeSpin->setValue(time.toInt());
-			dlg->byoTimeSpin->setRange(0,100);
-			dlg->byoTimeSpin->setValue(byotime.toInt());
-			dlg->boardSizeSpin->setRange(1,19);
-			dlg->boardSizeSpin->setValue(size.toInt());
+			dlg->ui->timeSpin->setRange(0,1000);
+			dlg->ui->timeSpin->setValue(time.toInt());
+			dlg->ui->byoTimeSpin->setRange(0,100);
+			dlg->ui->byoTimeSpin->setValue(byotime.toInt());
+			dlg->ui->boardSizeSpin->setRange(1,19);
+			dlg->ui->boardSizeSpin->setValue(size.toInt());
 		}
 
 		if (opp_plays_white)
-			dlg->play_black_button->setChecked (true);
+			dlg->ui->play_black_button->setChecked (true);
 		else if (opp_plays_nigiri)
-			dlg->play_nigiri_button->setChecked (true);
+			dlg->ui->play_nigiri_button->setChecked (true);
 		else
-			dlg->play_white_button->setChecked (true);
+			dlg->ui->play_white_button->setChecked (true);
 
-		dlg->buttonDecline->setEnabled(true);
-		dlg->buttonOffer->setText(tr("Accept"));
-		dlg->buttonCancel->setDisabled(true);
+		dlg->ui->buttonDecline->setEnabled(true);
+		dlg->ui->buttonOffer->setText(tr("Accept"));
+		dlg->ui->buttonCancel->setDisabled(true);
 	}
 
 	dlg->setting_changed();
@@ -1390,7 +1393,7 @@ void ClientWindow::slot_doubleclick_players (const Player &p)
 
 void ClientWindow::slot_menu_players (const QPoint& pt)
 {
-	QModelIndex idx = ListView_players->indexAt (pt);
+	QModelIndex idx = ui->ListView_players->indexAt (pt);
 	if (!idx.isValid ())
 		return;
 	const Player *p = m_player_model.find (idx);
@@ -1405,7 +1408,7 @@ QString ClientWindow::menu_player_name ()
 	return txt1.right (1) == "*" ? txt1.left (txt1.length () - 1) : txt1;
 }
 
-// mouse click on ListView_players
+// mouse click on ui->ListView_players
 void ClientWindow::slot_mouse_players (const Player &p)
 {
 	static QMenu *puw = nullptr;
@@ -1463,7 +1466,7 @@ void ClientWindow::slot_pbRelTabs ()
 	// seek dialog
 	for (auto dlg: talklist) {
 		if (dlg->get_name ().indexOf ('*') == -1)
-			TabWidget_mini_2->removeTab (TabWidget_mini_2->indexOf (dlg));
+			ui->TabWidget_mini_2->removeTab (ui->TabWidget_mini_2->indexOf (dlg));
 	}
 }
 
@@ -1473,7 +1476,7 @@ void ClientWindow::slot_pbRelOneTab (QWidget *w)
 	// seek dialog
 	for (auto dlg: talklist) {
 		if (dlg == w) {
-			TabWidget_mini_2->removeTab (TabWidget_mini_2->indexOf (w));
+			ui->TabWidget_mini_2->removeTab (ui->TabWidget_mini_2->indexOf (w));
 			return;
 		}
 	}
@@ -1529,11 +1532,11 @@ void ClientWindow::slot_talk(const QString &name, const QString &text, bool ispl
 		if (colored)
 			col = setting->values.chat_color;
 		dlg->write (txt, col);
-		if (dlg->parentWidget () != TabWidget_mini_2)
+		if (dlg->parentWidget () != ui->TabWidget_mini_2)
 		{
-			TabWidget_mini_2->addTab (dlg, dlg->get_name());
+			ui->TabWidget_mini_2->addTab (dlg, dlg->get_name());
 			if (name != tr("Shouts*"))
-				TabWidget_mini_2->setCurrentIndex (TabWidget_mini_2->indexOf (dlg));
+				ui->TabWidget_mini_2->setCurrentIndex (ui->TabWidget_mini_2->indexOf (dlg));
 		}
 	}
 	// check if it was a channel message
@@ -1550,14 +1553,14 @@ void ClientWindow::slot_talk(const QString &name, const QString &text, bool ispl
 		qgo->playTalkSound();
 
 		// write time stamp
-		MultiLineEdit3->append(statusOnlineTime->text() + " " + name + (autoAnswer ? " (A)" : ""));
+		ui->MultiLineEdit3->append(statusOnlineTime->text() + " " + name + (autoAnswer ? " (A)" : ""));
 	}
 	else if (name == tr("msg*"))
 	{
 		qgo->playTalkSound();
 
 		// write time stamp
-		MultiLineEdit3->append(tr("Message") + ": " + text);
+		ui->MultiLineEdit3->append(tr("Message") + ": " + text);
 	}
 }
 
@@ -1608,10 +1611,10 @@ void ClientWindow::initActions()
 {
 	void (QComboBox::*cact1) (int) = &QComboBox::activated;
 	void (QComboBox::*cact2) (const QString &) = &QComboBox::activated;
-	connect (cb_cmdLine, cact1, this, &ClientWindow::slot_cmdactivated_int);
-	connect (cb_cmdLine, cact2, this, &ClientWindow::slot_cmdactivated);
+	connect (ui->cb_cmdLine, cact1, this, &ClientWindow::slot_cmdactivated_int);
+	connect (ui->cb_cmdLine, cact2, this, &ClientWindow::slot_cmdactivated);
 
-	ListView_games->setWhatsThis (tr("Table of games\n\n"
+	ui->ListView_games->setWhatsThis (tr("Table of games\n\n"
 		"right click to observe\n\n"
 		"Symbol explanation: (click on tab to sort by)\n"
 		"Id\tgame number\n"
@@ -1626,7 +1629,7 @@ void ClientWindow::initActions()
 		"(Ob)\tnumber of observers at last refresh\n\n"
 		"This table can be updated by 'Refresh games'"));
 
-	ListView_players->setWhatsThis (tr("Table of players\n\n"
+	ui->ListView_players->setWhatsThis (tr("Table of players\n\n"
 		"right click for menu\n\n"
 		"Symbol explanation: (click on tab to sort by)\n"
 		"Stat\tplayer's stats:\n"
@@ -1668,66 +1671,60 @@ void ClientWindow::initActions()
 	/*
 	* Menu File
 	*/
-	connect(fileNewBoard, &QAction::triggered, [=] (bool) { open_local_board (this, game_dialog_type::none, screen_key (this)); });
-	connect(fileNewVariant, &QAction::triggered, [=] (bool) { open_local_board (this, game_dialog_type::variant, screen_key (this)); });
-	connect(fileNew, &QAction::triggered, [=] (bool) { open_local_board (this, game_dialog_type::normal, screen_key (this)); });
-	connect(fileOpen, &QAction::triggered, this, &ClientWindow::slotFileOpen);
-	connect(fileOpenDB, &QAction::triggered, this, &ClientWindow::slotFileOpenDB);
-	connect(fileBatchAnalysis, &QAction::triggered, this, [] (bool) { show_batch_analysis (); });
-	connect(computerPlay, &QAction::triggered, [this] (bool) { play_engine (this); });
-	connect(twoEnginePlay, &QAction::triggered, [this] (bool) { play_two_engines (this); });
-	connect(fileQuit, &QAction::triggered, this, &ClientWindow::quit);
+	connect (ui->fileNewBoard, &QAction::triggered, [=] (bool) { open_local_board (this, game_dialog_type::none, screen_key (this)); });
+	connect (ui->fileNewVariant, &QAction::triggered, [=] (bool) { open_local_board (this, game_dialog_type::variant, screen_key (this)); });
+	connect (ui->fileNew, &QAction::triggered, [=] (bool) { open_local_board (this, game_dialog_type::normal, screen_key (this)); });
+	connect (ui->fileOpen, &QAction::triggered, this, &ClientWindow::slotFileOpen);
+	connect (ui->fileOpenDB, &QAction::triggered, this, &ClientWindow::slotFileOpenDB);
+	connect (ui->fileBatchAnalysis, &QAction::triggered, this, [] (bool) { show_batch_analysis (); });
+	connect (ui->computerPlay, &QAction::triggered, [this] (bool) { play_engine (this); });
+	connect (ui->twoEnginePlay, &QAction::triggered, [this] (bool) { play_two_engines (this); });
+	connect (ui->fileQuit, &QAction::triggered, this, &ClientWindow::quit);
 
 	/*
 	* Menu Connexion
 	*/
-	connect(Connect, &QAction::triggered, this, &ClientWindow::slotMenuConnect);
-	connect(Disconnect, &QAction::triggered, this, &ClientWindow::slotMenuDisconnect);
-	Disconnect->setEnabled(false);
-	connect(editServers, &QAction::triggered, this, &ClientWindow::slotMenuEditServers);
+	connect (ui->Connect, &QAction::triggered, this, &ClientWindow::slotMenuConnect);
+	connect (ui->Disconnect, &QAction::triggered, this, &ClientWindow::slotMenuDisconnect);
+	ui->Disconnect->setEnabled(false);
+	connect (ui->editServers, &QAction::triggered, this, &ClientWindow::slotMenuEditServers);
 
 	/*
 	* Menu Settings
 	*/
-	connect(setPreferences, &QAction::triggered, this, &ClientWindow::slot_preferences);
+	connect (ui->setPreferences, &QAction::triggered, this, &ClientWindow::slot_preferences);
 
 	/*
 	* Menu View
 	*/
-	connect(viewToolBar, &QAction::toggled, this, &ClientWindow::slotViewToolBar);
-	connect(viewMenuBar, &QAction::toggled, this, &ClientWindow::slotViewMenuBar);
-	viewStatusBar->setWhatsThis(tr("Statusbar\n\nEnables/disables the statusbar."));
-	connect(viewStatusBar, &QAction::toggled, this, &ClientWindow::slotViewStatusBar);
+	connect (ui->viewToolBar, &QAction::toggled, this, &ClientWindow::slotViewToolBar);
+	connect (ui->viewMenuBar, &QAction::toggled, this, &ClientWindow::slotViewMenuBar);
+	ui->viewStatusBar->setWhatsThis(tr("Statusbar\n\nEnables/disables the statusbar."));
+	connect (ui->viewStatusBar, &QAction::toggled, this, &ClientWindow::slotViewStatusBar);
 
 	/*
 	* Menu Help
 	*/
-	connect(helpManual, &QAction::triggered, [=] (bool) { qgo->openManual (QUrl ("index.html")); });
-	connect(helpReadme, &QAction::triggered, [=] (bool) { qgo->openManual (QUrl ("readme.html")); });
+	connect (ui->helpManual, &QAction::triggered, [=] (bool) { qgo->openManual (QUrl ("index.html")); });
+	connect (ui->helpReadme, &QAction::triggered, [=] (bool) { qgo->openManual (QUrl ("readme.html")); });
 	/* There isn't actually a manual.  Well, there is, but it's outdated and we don't ship it.  */
-	helpManual->setVisible (false);
-	helpManual->setEnabled (false);
-	connect(helpAboutApp, &QAction::triggered, [=] (bool) { help_about (); });
-	connect(helpAboutQt, &QAction::triggered, [=] (bool) { QMessageBox::aboutQt (this); });
-	connect(helpNewVersion, &QAction::triggered, [=] (bool) { help_new_version (); });
+	ui->helpManual->setVisible (false);
+	ui->helpManual->setEnabled (false);
+	connect (ui->helpAboutApp, &QAction::triggered, [=] (bool) { help_about (); });
+	connect (ui->helpAboutQt, &QAction::triggered, [=] (bool) { QMessageBox::aboutQt (this); });
+	connect (ui->helpNewVersion, &QAction::triggered, [=] (bool) { help_new_version (); });
 
-	connect (actionTutorials, &QAction::triggered, [] () { show_tutorials (); });
+	connect (ui->actionTutorials, &QAction::triggered, [] () { show_tutorials (); });
 }
 
 void ClientWindow::initToolBar()
 {
-	//connect( cb_connect, SIGNAL( activated(const QString&) ), this, SLOT( slot_cbconnect(const QString&) ) );
-
-	//  toolConnect->setText(tr("Connect with") + " " + cb_connect->currentText()); 
-	//connect( toolConnect, SIGNAL( toggled(bool) ), this, SLOT( slot_connect(bool) ) );  //end add eb 5
-
 	seekMenu = new QMenu();
-	toolSeek->setMenu (seekMenu);
-	toolSeek->setPopupMode (QToolButton::InstantPopup);
+	ui->toolSeek->setMenu (seekMenu);
+	ui->toolSeek->setPopupMode (QToolButton::InstantPopup);
 
 	whatsThis = QWhatsThis::createAction (this);
-	Toolbar->addAction (whatsThis);
-	//tb->setProperty( "geometry", QRect(0, 0, 20, 20));
+	ui->Toolbar->addAction (whatsThis);
 }
 
 // SLOTS
@@ -1765,13 +1762,13 @@ QList<Engine> ClientWindow::analysis_engines (int boardsize)
 void ClientWindow::slotMenuConnect(bool)
 {
 	// push button
-	toolConnect->toggle();
+	ui->toolConnect->toggle();
 }
 
 void ClientWindow::slotMenuDisconnect(bool)
 {
 	// push button
-	toolConnect->toggle();
+	ui->toolConnect->toggle();
 }
 
 void ClientWindow::slotMenuEditServers(bool)
@@ -1807,9 +1804,9 @@ void ClientWindow::slotViewMenuBar(bool toggle)
 void ClientWindow::slotViewToolBar(bool toggle)
 {
 	if (!toggle)
-		Toolbar->hide();
+		ui->Toolbar->hide();
 	else
-		Toolbar->show();
+		ui->Toolbar->show();
 
 	setting->writeBoolEntry("MAINTOOLBAR", toggle);
 
@@ -1822,35 +1819,22 @@ void ClientWindow::stats_player(const Player &p)
 		return;
 
 	for (auto dlg: talklist) {
-		if (dlg->get_name () == p.name) {
-			dlg->stats_rating->setText (p.rank);
-			dlg->stats_info->setText (p.info);
-			dlg->stats_default->setText (p.extInfo);
-			dlg->stats_wins->setText (p.won);
-			dlg->stats_loss->setText (p.lost);
-			dlg->stats_country->setText (p.country);
-			dlg->stats_playing->setText (p.play_str);
-			dlg->stats_rated->setText (p.rated);
-			dlg->stats_address->setText (p.address);
-
-			// stored either idle time or last access
-			dlg->stats_idle->setText (p.idle);
-			dlg->Label_Idle->setText (!p.idle.isEmpty() && p.idle.at(0).isDigit() ? "Idle :": "Last log :");
-		}
+		if (dlg->get_name () == p.name)
+			dlg->set_player (p);
 	}
 }
 
 void ClientWindow::slot_room(const QString& room, bool b)
 {
-	QList<QListWidgetItem *> items = RoomList->findItems(room.left(3), Qt::MatchStartsWith);
+	QList<QListWidgetItem *> items = ui->RoomList->findItems(room.left(3), Qt::MatchStartsWith);
 	//do we already have the same room number in list ?
 	if (items.length () > 0)
 		return;
 	//so far, we just create the room if it is open
 	if (!b)
-		RoomList->insertItem (-1, room);
+		ui->RoomList->insertItem (-1, room);
 
-	//RoomList->item(RoomList->count()-1)->setSelectable(!b);
+	//ui->RoomList->item(ui->RoomList->count()-1)->setSelectable(!b);
 }
 
 void ClientWindow::slot_enterRoom(const QString& room)
@@ -1905,18 +1889,18 @@ void ClientWindow::slot_seek(bool b)
 
 void ClientWindow::slot_cancelSeek()
 {
-	toolSeek->setChecked(false);
-	toolSeek->setMenu (seekMenu);
-	toolSeek->setPopupMode (QToolButton::InstantPopup);
-	toolSeek->setIcon(NotSeekingIcon);
+	ui->toolSeek->setChecked(false);
+	ui->toolSeek->setMenu (seekMenu);
+	ui->toolSeek->setPopupMode (QToolButton::InstantPopup);
+	ui->toolSeek->setIcon(NotSeekingIcon);
 	killTimer(seekButtonTimer);
 	seekButtonTimer = 0;
 }
 
 void ClientWindow::slot_seek (int i)
 {
-	toolSeek->setChecked (true);
-	toolSeek->setMenu (nullptr);
+	ui->toolSeek->setChecked (true);
+	ui->toolSeek->setMenu (nullptr);
 
 	//seek entry 1 19 5 3 0
 	QString send_seek = "seek entry " + QString::number (i) + " 19 ";
@@ -1924,7 +1908,7 @@ void ClientWindow::slot_seek (int i)
 	//childish, but we want to have an animated icon there
 	seekButtonTimer = startTimer (200);
 
-	switch (cb_seek_handicap->currentIndex ())
+	switch (ui->cb_seek_handicap->currentIndex ())
 	{
 		case 0:
 			send_seek.append ("1 1 0");
@@ -2025,8 +2009,8 @@ void ClientWindow::accept_preferences ()
 		setting->nmatch_settings_modified = false;
 	}
 	if (setting->hosts_changed) {
-		populate_cbconnect (cb_connect->currentText ());
+		populate_cbconnect (ui->cb_connect->currentText ());
 		setting->hosts_changed = false;
 	}
-	toolObserveMode->setChecked (setting->readBoolEntry ("OBSERVE_SINGLE"));
+	ui->toolObserveMode->setChecked (setting->readBoolEntry ("OBSERVE_SINGLE"));
 }

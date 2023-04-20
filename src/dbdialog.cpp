@@ -10,10 +10,12 @@
 #include "dbdialog.h"
 #include "clientwin.h"
 
+#include "ui_dbdialog_gui.h"
+
 DBDialog::DBDialog (QWidget *parent)
-	: QDialog (parent), m_model (false)
+	: QDialog (parent), ui (std::make_unique<Ui::DBDialog> ()), m_model (false)
 {
-	setupUi (this);
+	ui->setupUi (this);
 
 	game_info info;
 	info.name_w = tr ("White").toStdString ();
@@ -24,43 +26,43 @@ DBDialog::DBDialog (QWidget *parent)
 
 	clear_preview ();
 
-	gameNumLabel->setText (m_model.status_string ());
-	dbListView->setModel (&m_model);
+	ui->gameNumLabel->setText (m_model.status_string ());
+	ui->dbListView->setModel (&m_model);
 
-	connect (&m_model, &gamedb_model::signal_changed, [this] () { gameNumLabel->setText (m_model.status_string ()); });
+	connect (&m_model, &gamedb_model::signal_changed, [this] () { ui->gameNumLabel->setText (m_model.status_string ()); });
 	setWindowTitle (tr ("Open SGF file from database"));
 
-	connect (dbListView, &ClickableListView::doubleclicked, this, &DBDialog::handle_doubleclick);
-	connect (dbListView->selectionModel (), &QItemSelectionModel::selectionChanged,
+	connect (ui->dbListView, &ClickableListView::doubleclicked, this, &DBDialog::handle_doubleclick);
+	connect (ui->dbListView->selectionModel (), &QItemSelectionModel::selectionChanged,
 		 [this] (const QItemSelection &, const QItemSelection &) { update_selection (); });
 
-	connect (encodingList, &QComboBox::currentTextChanged, [this] (const QString &) { update_selection (); });
-	connect (overwriteSGFEncoding, &QGroupBox::toggled, [this] (bool) { update_selection (); });
+	connect (ui->encodingList, &QComboBox::currentTextChanged, [this] (const QString &) { update_selection (); });
+	connect (ui->overwriteSGFEncoding, &QGroupBox::toggled, [this] (bool) { update_selection (); });
 
-	connect (resetButton, &QPushButton::clicked,
-		 [this] (bool) { m_model.reset_filters (); gameNumLabel->setText (m_model.status_string ()); });
-	connect (clearButton, &QPushButton::clicked, this, &DBDialog::clear_filters);
-	connect (applyButton, &QPushButton::clicked, this, &DBDialog::apply_filters);
+	connect (ui->resetButton, &QPushButton::clicked,
+		 [this] (bool) { m_model.reset_filters (); ui->gameNumLabel->setText (m_model.status_string ()); });
+	connect (ui->clearButton, &QPushButton::clicked, this, &DBDialog::clear_filters);
+	connect (ui->applyButton, &QPushButton::clicked, this, &DBDialog::apply_filters);
 
-	connect (buttonBox->button (QDialogButtonBox::Cancel), &QPushButton::clicked, this, &DBDialog::reject);
-	QAbstractButton *open = buttonBox->button (QDialogButtonBox::Open);
+	connect (ui->buttonBox->button (QDialogButtonBox::Cancel), &QPushButton::clicked, this, &DBDialog::reject);
+	QAbstractButton *open = ui->buttonBox->button (QDialogButtonBox::Open);
 	connect (open, &QPushButton::clicked, this, &DBDialog::accept);
 	open->setEnabled (false);
 
-	applyButton->setShortcut (Qt::Key_Return);
-	boardView->reset_game (m_game);
-	boardView->set_show_coords (false);
+	ui->applyButton->setShortcut (Qt::Key_Return);
+	ui->boardView->reset_game (m_game);
+	ui->boardView->set_show_coords (false);
 
-	connect (goFirstButton, &QPushButton::clicked,
-		 [this] (bool) { boardView->set_displayed (m_game->get_root ()); update_buttons (); });
-	connect (goLastButton, &QPushButton::clicked,
-		 [this] (bool) { boardView->set_displayed (m_last_move); update_buttons (); });
-	connect (goNextButton, &QPushButton::clicked,
-		 [this] (bool) { boardView->set_displayed (boardView->displayed ()->next_primary_move ()); update_buttons (); });
-	connect (goPrevButton, &QPushButton::clicked,
-		 [this] (bool) { boardView->set_displayed (boardView->displayed ()->prev_move ()); update_buttons (); });
+	connect (ui->goFirstButton, &QPushButton::clicked,
+		 [this] (bool) { ui->boardView->set_displayed (m_game->get_root ()); update_buttons (); });
+	connect (ui->goLastButton, &QPushButton::clicked,
+		 [this] (bool) { ui->boardView->set_displayed (m_last_move); update_buttons (); });
+	connect (ui->goNextButton, &QPushButton::clicked,
+		 [this] (bool) { ui->boardView->set_displayed (ui->boardView->displayed ()->next_primary_move ()); update_buttons (); });
+	connect (ui->goPrevButton, &QPushButton::clicked,
+		 [this] (bool) { ui->boardView->set_displayed (ui->boardView->displayed ()->prev_move ()); update_buttons (); });
 
-	connect (dbConfButton, &QPushButton::clicked, [] (bool) { client_window->dlgSetPreferences (6); });
+	connect (ui->dbConfButton, &QPushButton::clicked, [] (bool) { client_window->dlgSetPreferences (6); });
 }
 
 DBDialog::~DBDialog ()
@@ -69,51 +71,51 @@ DBDialog::~DBDialog ()
 
 void DBDialog::apply_filters (bool)
 {
-	m_model.apply_filter (p1Edit->text (), p2Edit->text (), eventEdit->text (), fromEdit->text (), toEdit->text ());
-	gameNumLabel->setText (m_model.status_string ());
-	dbListView->update ();
+	m_model.apply_filter (ui->p1Edit->text (), ui->p2Edit->text (), ui->eventEdit->text (), ui->fromEdit->text (), ui->toEdit->text ());
+	ui->gameNumLabel->setText (m_model.status_string ());
+	ui->dbListView->update ();
 }
 
 void DBDialog::clear_filters (bool)
 {
-	p1Edit->setText ("");
-	p2Edit->setText ("");
-	eventEdit->setText ("");
-	fromEdit->setText ("");
-	toEdit->setText ("");
+	ui->p1Edit->setText ("");
+	ui->p2Edit->setText ("");
+	ui->eventEdit->setText ("");
+	ui->fromEdit->setText ("");
+	ui->toEdit->setText ("");
 }
 
 void DBDialog::update_buttons ()
 {
-	const game_state *st = boardView->displayed ();
-	goFirstButton->setEnabled (!st->root_node_p ());
-	goLastButton->setEnabled (st->n_children () > 0);
-	goNextButton->setEnabled (st->n_children () > 0);
-	goPrevButton->setEnabled (!st->root_node_p ());
+	const game_state *st = ui->boardView->displayed ();
+	ui->goFirstButton->setEnabled (!st->root_node_p ());
+	ui->goLastButton->setEnabled (st->n_children () > 0);
+	ui->goNextButton->setEnabled (st->n_children () > 0);
+	ui->goPrevButton->setEnabled (!st->root_node_p ());
 }
 
 void DBDialog::clear_preview ()
 {
-	boardView->reset_game (m_empty_game);
+	ui->boardView->reset_game (m_empty_game);
 	m_game = m_empty_game;
 	m_last_move = m_game->get_root ();
 
 	// ui->displayBoard->clearData ();
 
-	File_WhitePlayer->setText ("");
-	File_BlackPlayer->setText ("");
-	File_Date->setText ("");
-	File_Handicap->setText ("");
-	File_Result->setText ("");
-	File_Komi->setText ("");
-	File_Size->setText ("");
-	File_Event->setText ("");
-	File_Round->setText ("");
+	ui->File_WhitePlayer->setText ("");
+	ui->File_BlackPlayer->setText ("");
+	ui->File_Date->setText ("");
+	ui->File_Handicap->setText ("");
+	ui->File_Result->setText ("");
+	ui->File_Komi->setText ("");
+	ui->File_Size->setText ("");
+	ui->File_Event->setText ("");
+	ui->File_Round->setText ("");
 
-	goFirstButton->setEnabled (false);
-	goLastButton->setEnabled (false);
-	goNextButton->setEnabled (false);
-	goPrevButton->setEnabled (false);
+	ui->goFirstButton->setEnabled (false);
+	ui->goLastButton->setEnabled (false);
+	ui->goNextButton->setEnabled (false);
+	ui->goPrevButton->setEnabled (false);
 }
 
 bool DBDialog::setPath (QString path)
@@ -125,32 +127,32 @@ bool DBDialog::setPath (QString path)
 		f.open (QIODevice::ReadOnly);
 		// IOStreamAdapter adapter (&f);
 		sgf *sgf = load_sgf (f);
-		if (overwriteSGFEncoding->isChecked ()) {
-			m_game = sgf2record (*sgf, QTextCodec::codecForName (encodingList->currentText ().toLatin1 ()));
+		if (ui->overwriteSGFEncoding->isChecked ()) {
+			m_game = sgf2record (*sgf, QTextCodec::codecForName (ui->encodingList->currentText ().toLatin1 ()));
 		} else {
 			m_game = sgf2record (*sgf, nullptr);
 		}
 		m_game->set_filename (path.toStdString ());
 
-		boardView->reset_game (m_game);
+		ui->boardView->reset_game (m_game);
 		game_state *st = m_game->get_root ();
 		for (int i = 0; i < 20 && st->n_children () > 0; i++)
 			st = st->next_primary_move ();
-		boardView->set_displayed (st);
+		ui->boardView->set_displayed (st);
 		while (st->n_children () > 0)
 			st = st->next_primary_move ();
 		m_last_move = st;
 
 		const game_info &info = m_game->info ();
-		File_WhitePlayer->setText (QString::fromStdString (info.name_w));
-		File_BlackPlayer->setText (QString::fromStdString (info.name_b));
-		File_Date->setText (QString::fromStdString (info.date));
-		File_Handicap->setText (QString::number (info.handicap));
-		File_Result->setText (QString::fromStdString (info.result));
-		File_Komi->setText (QString::number (info.komi));
-		File_Size->setText (QString::number (st->get_board ().size_x ()));
-		File_Event->setText (QString::fromStdString (info.event));
-		File_Round->setText (QString::fromStdString (info.round));
+		ui->File_WhitePlayer->setText (QString::fromStdString (info.name_w));
+		ui->File_BlackPlayer->setText (QString::fromStdString (info.name_b));
+		ui->File_Date->setText (QString::fromStdString (info.date));
+		ui->File_Handicap->setText (QString::number (info.handicap));
+		ui->File_Result->setText (QString::fromStdString (info.result));
+		ui->File_Komi->setText (QString::number (info.komi));
+		ui->File_Size->setText (QString::number (st->get_board ().size_x ()));
+		ui->File_Event->setText (QString::fromStdString (info.event));
+		ui->File_Round->setText (QString::fromStdString (info.round));
 
 		update_buttons ();
 		return true;
@@ -161,11 +163,11 @@ bool DBDialog::setPath (QString path)
 
 bool DBDialog::update_selection ()
 {
-	QItemSelectionModel *sel = dbListView->selectionModel ();
+	QItemSelectionModel *sel = ui->dbListView->selectionModel ();
 	const QModelIndexList &selected = sel->selectedRows ();
 	bool selection = selected.length () != 0;
 
-	QAbstractButton *open = buttonBox->button (QDialogButtonBox::Open);
+	QAbstractButton *open = ui->buttonBox->button (QDialogButtonBox::Open);
 	open->setEnabled (selection);
 
 	if (!selection)

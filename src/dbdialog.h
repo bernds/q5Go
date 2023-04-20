@@ -1,16 +1,23 @@
 #ifndef DBDIALOG_H
 #define DBDIALOG_H
 
+#include <QDialog>
 #include <QStringList>
 #include <QDataStream>
 
-#include "ui_dbdialog_gui.h"
+#include "gogame.h"
 #include "gamedb.h"
 
-class DBDialog : public QDialog, public Ui::DBDialog
+namespace Ui
+{
+	class DBDialog;
+};
+
+class DBDialog : public QDialog
 {
 	Q_OBJECT
 
+	std::unique_ptr<Ui::DBDialog> ui;
 	go_game_ptr m_empty_game;
 	go_game_ptr m_game;
 	game_state *m_last_move;

@@ -6,12 +6,17 @@
 #define GAMEDIALOG_H
 
 #include <QButtonGroup>
+#include <QDialog>
 
-#include "ui_newgame_gui.h"
 #include "gs_globals.h"
 #include "defines.h"
 
-class GameDialog : public QDialog, public Ui::NewGameDialog
+namespace Ui
+{
+	class NewGameDialog;
+};
+
+class GameDialog : public QDialog
 {
 	Q_OBJECT
 
@@ -19,6 +24,9 @@ class GameDialog : public QDialog, public Ui::NewGameDialog
 	void clear_warnings ();
 
 public:
+	// Public because legacy code in clientwin wants to access it.
+	std::unique_ptr<Ui::NewGameDialog> ui;
+
 	GameDialog(QWidget* parent, GSName, const QString &, const QString &, const QString &, const QString &);
 	~GameDialog();
 	void set_is_nmatch (bool b);

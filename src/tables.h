@@ -10,11 +10,11 @@
 
 #include "gs_globals.h"
 #include "parser.h"
-#include "ui_talk_gui.h"
 
 #include <QString>
 #include <QObject>
 #include <QAbstractItemModel>
+#include <QDialog>
 
 template<class T>
 class table_model : public QAbstractItemModel
@@ -93,21 +93,32 @@ typedef QList<Channel *> ChannelList;
 
 //-----------
 
-class Talk : public QDialog, public Ui::TalkGui
+namespace Ui
+{
+	class TalkGui;
+};
+
+struct Player;
+
+class Talk : public QDialog
 {
 	Q_OBJECT
+
+	std::unique_ptr<Ui::TalkGui> ui;
 
 	QString m_name;
 	QColor m_default_text_color;
 
 public:
 	Talk (const QString&, QWidget*, bool isplayer = true);
+	~Talk ();
 
 	QString get_name () const { return m_name; }
 	void set_name (QString &n) { m_name = n; }
 	void write (const QString &text, QColor col);
 
 	bool lineedit_has_focus ();
+	void set_player (const Player &);
 
 public slots:
 	void slot_returnPressed ();
