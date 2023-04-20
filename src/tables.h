@@ -5,16 +5,15 @@
 #ifndef TABLES_H
 #define TABLES_H
 
+#include "common.h"
+
 #include <unordered_map>
 #include <functional>
 
 #include "gs_globals.h"
 #include "parser.h"
 
-#include <QString>
-#include <QObject>
 #include <QAbstractItemModel>
-#include <QDialog>
 
 template<class T>
 class table_model : public QAbstractItemModel

@@ -6,11 +6,12 @@
  *
  */
 
+#include "common.h"
+
 #include <QFileDialog>
 #include <QTranslator>
 #include <QTextCodec>
 #include <QApplication>
-#include <QDialog>
 #include <QMessageBox>
 #include <QDir>
 

@@ -5,6 +5,7 @@
 #ifndef TEXTVIEW_H
 #define TEXTVIEW_H
 
+#include "common.h"
 #include <QtSvg>
 
 #include "ui_textview_gui.h"

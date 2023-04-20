@@ -2,6 +2,7 @@
  *   qgo_interface.cpp - qGoClient's interface to qGo
  */
 
+#include "common.h"
 #include <QTimerEvent>
 #include <QString>
 #include <QTimer>
@@ -148,8 +149,7 @@ MainWindow_IGS::MainWindow_IGS (QWidget *parent, std::shared_ptr<game_record> gr
 	connect (this, &MainWindow::signal_sendcomment, brd, &qGoBoard::slot_sendcomment);
 
 	// teach tools
-	void (QComboBox::*cact) (const QString &) = &QComboBox::activated;
-	connect (cb_opponent, cact, brd, &qGoBoard::slot_ttOpponentSelected);
+	connect (cb_opponent, combo_activated_str, brd, &qGoBoard::slot_ttOpponentSelected);
 	connect (pb_controls, &QPushButton::toggled, brd, &qGoBoard::slot_ttControls);
 	connect (pb_mark, &QPushButton::toggled, brd, &qGoBoard::slot_ttMark);
 

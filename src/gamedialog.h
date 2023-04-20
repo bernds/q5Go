@@ -5,8 +5,8 @@
 #ifndef GAMEDIALOG_H
 #define GAMEDIALOG_H
 
+#include "common.h"
 #include <QButtonGroup>
-#include <QDialog>
 
 #include "gs_globals.h"
 #include "defines.h"

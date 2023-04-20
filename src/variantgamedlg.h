@@ -1,17 +1,13 @@
 #ifndef VARIANTGAMEDLG_H
 #define VARIANTGAMEDLG_H
 
-#include <memory>
-#include <QDialog>
+#include "common.h"
 #include <QGraphicsScene>
 
 namespace Ui {
 	class NewVariantGameDialog;
 };
 
-class game_state;
-class game_record;
-typedef std::shared_ptr<game_record> go_game_ptr;
 
 #include "bitarray.h"
 

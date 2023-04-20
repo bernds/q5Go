@@ -3,11 +3,11 @@
 */
 
 #include "qgo.h"
+#include "common.h"
 
 #include <fstream>
 #include <sstream>
 #include <cmath>
-#include <memory>
 
 #include <QLabel>
 #include <QPixmap>
@@ -541,8 +541,7 @@ MainWindow::MainWindow (QWidget* parent, go_game_ptr gr, const QString opener_sc
 	connect(diagEditButton, &QToolButton::clicked, this, &MainWindow::slotDiagEdit);
 	connect(diagASCIIButton, &QToolButton::clicked, this, &MainWindow::slotDiagASCII);
 	connect(diagSVGButton, &QToolButton::clicked, this, &MainWindow::slotDiagSVG);
-	void (QComboBox::*cact) (int) = &QComboBox::activated;
-	connect(diagComboBox, cact, this, &MainWindow::slotDiagChosen);
+	connect(diagComboBox, combo_activated_int, this, &MainWindow::slotDiagChosen);
 
 	connect(normalTools->anStartButton, &QToolButton::clicked,
 		[=] (bool on) { if (on) start_analysis (); else gfx_board->stop_analysis (); });
@@ -552,7 +551,7 @@ MainWindow::MainWindow (QWidget* parent, go_game_ptr gr, const QString opener_sc
 
 	connect(m_ascii_dlg.cb_coords, &QCheckBox::toggled, [=] (bool) { update_ascii_dialog (); });
 	connect(m_ascii_dlg.cb_numbering, &QCheckBox::toggled, [=] (bool) { update_ascii_dialog (); });
-	connect(m_ascii_dlg.targetComboBox, cact, [=] (int) { update_ascii_dialog (); });
+	connect(m_ascii_dlg.targetComboBox, combo_activated_int, [=] (int) { update_ascii_dialog (); });
 	connect(m_svg_dlg.cb_coords, &QCheckBox::toggled, [=] (bool) { update_svg_dialog (); });
 	connect(m_svg_dlg.cb_numbering, &QCheckBox::toggled, [=] (bool) { update_svg_dialog (); });
 	/* These don't do anything that toggling the checkboxes wouldn't also do, but it's slightly more

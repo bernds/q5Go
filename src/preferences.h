@@ -5,13 +5,11 @@
 #ifndef PREFERENCESDIALOG_H
 #define PREFERENCESDIALOG_H
 
+#include "common.h"
 #include "setting.h"
-
-#include <memory>
 
 #include <QStandardItemModel>
 #include <QAbstractItemModel>
-#include <QDialog>
 #include <QAbstractButton>
 #include <QIntValidator>
 #include <QDoubleValidator>

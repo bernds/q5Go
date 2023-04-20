@@ -1,6 +1,5 @@
 #include <QPixmap>
 #include <QCheckBox>
-#include <QDialog>
 
 #include <array>
 

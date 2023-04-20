@@ -1,7 +1,7 @@
 #ifndef DBDIALOG_H
 #define DBDIALOG_H
 
-#include <QDialog>
+#include "common.h"
 #include <QStringList>
 #include <QDataStream>
 

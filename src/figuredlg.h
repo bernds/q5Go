@@ -1,9 +1,9 @@
 #ifndef FIGUREDLG_H
 #define FIGUREDLG_H
 
+#include "common.h"
 #include "ui_figuredlg_gui.h"
 
-class game_state;
 class MainWindow;
 
 class FigureDialog : public QDialog, public Ui::FigureDialog

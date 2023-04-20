@@ -5,8 +5,8 @@
 #ifndef GAMESTABLE_H
 #define GAMESTABLE_H
 
+#include "common.h"
 #include <QVariant>
-#include <QDialog>
 #include <QTreeView>
 
 #include "tables.h"

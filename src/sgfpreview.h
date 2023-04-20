@@ -1,10 +1,8 @@
 #ifndef SGFPREVIEW_H
 #define SGFPREVIEW_H
 
+#include "common.h"
 #include <QStringList>
-#include <QDialog>
-
-#include <gogame.h>
 
 class QFileDialog;
 

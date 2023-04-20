@@ -1609,10 +1609,8 @@ void ClientWindow::slot_preferences(bool)
 
 void ClientWindow::initActions()
 {
-	void (QComboBox::*cact1) (int) = &QComboBox::activated;
-	void (QComboBox::*cact2) (const QString &) = &QComboBox::activated;
-	connect (ui->cb_cmdLine, cact1, this, &ClientWindow::slot_cmdactivated_int);
-	connect (ui->cb_cmdLine, cact2, this, &ClientWindow::slot_cmdactivated);
+	connect (ui->cb_cmdLine, combo_activated_int, this, &ClientWindow::slot_cmdactivated_int);
+	connect (ui->cb_cmdLine, combo_activated_str, this, &ClientWindow::slot_cmdactivated);
 
 	ui->ListView_games->setWhatsThis (tr("Table of games\n\n"
 		"right click to observe\n\n"

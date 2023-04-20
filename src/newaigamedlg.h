@@ -10,7 +10,6 @@
 #ifndef NEWAIGAMEDLG_H
 #define NEWAIGAMEDLG_H
 
-#include <QDialog>
 #include <utility>
 
 #include "goboard.h"

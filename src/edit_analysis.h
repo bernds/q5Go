@@ -1,7 +1,5 @@
 #include <memory>
 
-#include <QDialog>
-
 class game_record;
 typedef std::shared_ptr<game_record> go_game_ptr;
 class game_state;

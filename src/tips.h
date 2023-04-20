@@ -1,4 +1,4 @@
-#include <QDialog>
+#include "common.h"
 #include <QAction>
 
 namespace Ui

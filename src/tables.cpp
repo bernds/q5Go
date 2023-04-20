@@ -1,6 +1,7 @@
 /*
  *   tables.cpp = part of mainwindow
  */
+#include "common.h"
 #include <math.h>
 
 #include "tables.h"
