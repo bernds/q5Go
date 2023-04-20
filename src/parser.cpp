@@ -2,7 +2,7 @@
  *   parser.cpp
  */
 
-#include <QRegExp>
+#include <QRegularExpression>
 
 #include "parser.h"
 #include "qgo_interface.h"
@@ -125,7 +125,7 @@ InfoType Parser::put_line(const QString &txt)
 		if (line.indexOf("Your account name is",0) != -1)
 		{
 			buffer = line.right(line.length() - 21);
-			buffer.replace(QRegExp("[\".]"), "");
+			buffer.replace (QRegularExpression ("[\".]"), "");
 			emit signal_accname(buffer);
 			return ACCOUNT;
 		}
@@ -685,7 +685,7 @@ InfoType Parser::cmd9(const QString &line)
 			h = newline.section(' ', 3, 3);
 
 		// @@@ 10?
-		k = newline.section(' ', 9, 9).remove(QRegExp("\\.$"));
+		k = newline.section(' ', 9, 9).remove (QRegularExpression ("\\.$"));
 
 		int size = 19;
 		if (newline.contains("13x13"))

@@ -1,6 +1,7 @@
 #include <QButtonGroup>
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QRegularExpression>
 
 #include "gogame.h"
 #include "board.h"
@@ -63,7 +64,7 @@ bool MultiSaveDialog::save_one (const QString &pattern, int count)
 	while (count_str.length () < max_str.length ())
 		count_str = "0" + count_str;
 	QString filename = pattern;
-	filename.replace (QRegExp ("%n"), count_str);
+	filename.replace (QRegularExpression ("%n"), count_str);
 	QFile f (filename);
 	if (f.exists () && !ui->overwriteCheckBox->isChecked ()) {
 		QMessageBox::StandardButton choice;

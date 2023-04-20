@@ -11,6 +11,7 @@
 #include <QRegExp>
 #include <QDir>
 #include <QGraphicsRectItem>
+#include <QRegularExpression>
 
 #include "qgo.h"
 
@@ -2018,7 +2019,7 @@ void qGoBoard::send_kibitz (const QString &msg, bool own)
 		{
 			// opponent has been selected
 			QString opp;
-			opp = msg.section(':', 2, -1).remove(QRegExp("\\(.*$")).trimmed();
+			opp = msg.section(':', 2, -1).remove (QRegularExpression ("\\(.*$")).trimmed();
 
 			if (opp == "0")
 				slot_ttOpponentSelected(tr("-- none --"));
@@ -2068,7 +2069,7 @@ void qGoBoard::send_kibitz (const QString &msg, bool own)
 			//   it's ensured that yyy [rk] didn't send forged message
 			//   e.g.: yyy [rk]: xxx[rk]: S1 (3)
 			QString s;
-			s = msg.section(':', 1, -1).remove(QRegExp("\\(.*$")).trimmed().toUpper();
+			s = msg.section(':', 1, -1).remove (QRegularExpression ("\\(.*$")).trimmed().toUpper();
 
 			// check whether it's a position
 			// e.g. B1, A17, NOT: ok, yes

@@ -5,6 +5,7 @@
 #include <QFileDialog>
 #include <QProgressDialog>
 #include <QClipboard>
+#include <QRegularExpression>
 
 #include "gogame.h"
 #include "board.h"
@@ -326,7 +327,7 @@ bool SlideView::save ()
 	QString v_str = QString::number (v);
 	while (v_str.length () < 4)
 		v_str = "0" + v_str;
-	QString filename = pattern.replace (QRegExp ("%n"), v_str);
+	QString filename = pattern.replace (QRegularExpression ("%n"), v_str);
 	QFile f (filename);
 	if (f.exists () && !ui->overwriteCheckBox->isChecked ()) {
 		QMessageBox::StandardButton choice;

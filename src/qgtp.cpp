@@ -3,6 +3,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QDebug>
+#include <QRegularExpression>
 
 #include "qgo.h"
 #include "setting.h"
@@ -58,7 +59,7 @@ GTP_Process::GTP_Process(QWidget *parent, GTP_Controller *c, const Engine &engin
 
 	QStringList arguments;
 	if (!args.isEmpty ())
-		arguments = args.split (QRegExp ("\\s+"));
+		arguments = args.split (QRegularExpression ("\\s+"));
 	QFileInfo fi (prog);
 	QString wd = fi.dir ().absolutePath ();
 	setWorkingDirectory (wd);

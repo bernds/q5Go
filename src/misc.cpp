@@ -1,4 +1,4 @@
-#include <QRegExp>
+#include <QRegularExpression>
 
 #include "misc.h"
 
@@ -27,7 +27,7 @@ QString rkToKey (QString rk)
 
 	// get number
 	QString buffer = rk;
-	buffer.replace(QRegExp("[pdk+?\\*\\s]"), "");
+	buffer.replace (QRegularExpression ("[pdk+?\\*\\s]"), "");
 
 	// reverse sort order for dan/pro players
 	if (keyStr == "a" || keyStr == "b") {
@@ -55,7 +55,7 @@ int rkToInt (QString rk)
 
 	// get number
 	QString buffer = rk;
-	buffer.replace(QRegExp("[pdk+?\\*\\s]"), "");
+	buffer.replace (QRegularExpression ("[pdk+?\\*\\s]"), "");
 	bool ok;
 	int pt = buffer.toInt(&ok);
 	if (!ok)
