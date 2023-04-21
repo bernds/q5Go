@@ -1463,7 +1463,7 @@ qGoBoard::qGoBoard(qGoIF *qif, int gameid) : m_qgoif (qif), id (gameid)
 	timer_id = startTimer(1000);
 	game_paused = false;
 	req_handicap = QString ();
-	req_komi = -1;
+	req_komi = "-1";
 	bt_i = -1;
 	wt_i = -1;
 	stated_mv_count = 0;
