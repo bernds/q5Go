@@ -6,6 +6,8 @@
 #define QGO_H
 
 #include <QObject>
+#include <array>
+#include <QSoundEffect>
 
 class HelpViewer;
 class QUrl;
@@ -13,6 +15,13 @@ class QUrl;
 class qGo : public QObject
 {
 	Q_OBJECT
+
+	std::array<QSoundEffect,11> stone_sounds;
+	QSoundEffect sound_enter, sound_leave;
+	QSoundEffect sound_connect, sound_disconnect;
+	QSoundEffect sound_match, sound_pass, sound_gameend;
+	QSoundEffect sound_talk, sound_say, sound_time;
+
 public:
 
 	qGo();
