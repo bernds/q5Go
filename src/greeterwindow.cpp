@@ -1,3 +1,5 @@
+#include <QStatusBar>
+
 #include "gogame.h"
 #include "config.h"
 #include "greeterwindow.h"

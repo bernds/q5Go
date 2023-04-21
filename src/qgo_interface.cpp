@@ -27,6 +27,8 @@
 #include "gotools.h"
 #include "sizegraphicsview.h"
 
+#include "ui_boardwindow_gui.h"
+
 class MainWindow_IGS : public MainWindow
 {
 	qGoBoard *m_connector;
@@ -99,7 +101,7 @@ public:
 	}
 	void transfer_displayed (go_game_ptr game, game_state *from, game_state *to)
 	{
-		gfx_board->transfer_displayed (from, to);
+		ui->gfx_board->transfer_displayed (from, to);
 		if (game_mode () == modeObserveMulti)
 			update_preview (game, to);
 	}
@@ -133,49 +135,49 @@ MainWindow_IGS::MainWindow_IGS (QWidget *parent, std::shared_ptr<game_record> gr
 				qGoBoard *brd, bool playing_w, bool playing_b, GameMode mode)
 	: MainWindow (parent, gr, screen_key, mode), m_connector (brd)
 {
-	gfx_board->set_player_colors (playing_w, playing_b);
+	ui->gfx_board->set_player_colors (playing_w, playing_b);
 	/* Update clock tooltips after recording the player colors.  */
 	setGameMode (mode);
 
-	disconnect (passButton, &QPushButton::clicked, nullptr, nullptr);
-	connect (passButton, &QPushButton::clicked, [this] (bool) { if (m_connector) m_connector->doPass (); });
-	disconnect (undoButton, &QPushButton::clicked, nullptr, nullptr);
-	connect (undoButton, &QPushButton::clicked, [this] (bool) { if (m_connector) m_connector->doUndo (); });
-	disconnect (adjournButton, &QPushButton::clicked, nullptr, nullptr);
-	connect (adjournButton, &QPushButton::clicked, [this] (bool) { if (m_connector) m_connector->doAdjourn (); });
-	disconnect (resignButton, &QPushButton::clicked, nullptr, nullptr);
-	connect (resignButton, &QPushButton::clicked, [this] (bool) { if (m_connector) m_connector->doResign (); });
-	disconnect (doneButton, &QPushButton::clicked, nullptr, nullptr);
-	connect (doneButton, &QPushButton::clicked, [this] (bool) { if (m_connector) m_connector->doDone (); });
+	disconnect (ui->passButton, &QPushButton::clicked, nullptr, nullptr);
+	connect (ui->passButton, &QPushButton::clicked, [this] (bool) { if (m_connector) m_connector->doPass (); });
+	disconnect (ui->undoButton, &QPushButton::clicked, nullptr, nullptr);
+	connect (ui->undoButton, &QPushButton::clicked, [this] (bool) { if (m_connector) m_connector->doUndo (); });
+	disconnect (ui->adjournButton, &QPushButton::clicked, nullptr, nullptr);
+	connect (ui->adjournButton, &QPushButton::clicked, [this] (bool) { if (m_connector) m_connector->doAdjourn (); });
+	disconnect (ui->resignButton, &QPushButton::clicked, nullptr, nullptr);
+	connect (ui->resignButton, &QPushButton::clicked, [this] (bool) { if (m_connector) m_connector->doResign (); });
+	disconnect (ui->doneButton, &QPushButton::clicked, nullptr, nullptr);
+	connect (ui->doneButton, &QPushButton::clicked, [this] (bool) { if (m_connector) m_connector->doDone (); });
 
 	connect (this, &MainWindow::signal_sendcomment, brd, &qGoBoard::slot_sendcomment);
 
 	// teach tools
-	connect (cb_opponent, combo_activated_str, brd, &qGoBoard::slot_ttOpponentSelected);
-	connect (pb_controls, &QPushButton::toggled, brd, &qGoBoard::slot_ttControls);
-	connect (pb_mark, &QPushButton::toggled, brd, &qGoBoard::slot_ttMark);
+	connect (ui->cb_opponent, combo_activated_str, brd, &qGoBoard::slot_ttOpponentSelected);
+	connect (ui->pb_controls, &QPushButton::toggled, brd, &qGoBoard::slot_ttControls);
+	connect (ui->pb_mark, &QPushButton::toggled, brd, &qGoBoard::slot_ttMark);
 
 	if (brd->ExtendedTeachingGame) {
 		// make teaching features visible while observing
-		cb_opponent->setDisabled (brd->IamTeacher);
-		pb_controls->setDisabled (brd->IamTeacher);
-		pb_mark->setDisabled (brd->IamTeacher);
+		ui->cb_opponent->setDisabled (brd->IamTeacher);
+		ui->pb_controls->setDisabled (brd->IamTeacher);
+		ui->pb_mark->setDisabled (brd->IamTeacher);
 	}
 
 	if (mode == modeMatch || mode == modeTeach) {
-		connect (normalTools->btimeView, &ClockView::clicked, brd, &qGoBoard::slot_addtimePauseB);
-		connect (normalTools->wtimeView, &ClockView::clicked, brd, &qGoBoard::slot_addtimePauseW);
+		connect (ui->normalTools->btimeView, &ClockView::clicked, brd, &qGoBoard::slot_addtimePauseB);
+		connect (ui->normalTools->wtimeView, &ClockView::clicked, brd, &qGoBoard::slot_addtimePauseW);
 	}
 	if (mode == modeObserveMulti) {
 		m_previewer = new FigureView (nullptr, true);
 		multi_observer_win = this;
-		int w = gameChoiceView->width ();
-		int h = gameChoiceView->height ();
-		m_preview_scene = new QGraphicsScene (0, 0, w, h, gameChoiceView);
-		gameChoiceView->setScene (m_preview_scene);
-		connect (gameChoiceView, &SizeGraphicsView::resized, this, &MainWindow_IGS::choices_resized);
-		connect (unobserveButton, &QPushButton::clicked, this, &MainWindow_IGS::slotFileClose);
-		unobserveButton->show ();
+		int w = ui->gameChoiceView->width ();
+		int h = ui->gameChoiceView->height ();
+		m_preview_scene = new QGraphicsScene (0, 0, w, h, ui->gameChoiceView);
+		ui->gameChoiceView->setScene (m_preview_scene);
+		connect (ui->gameChoiceView, &SizeGraphicsView::resized, this, &MainWindow_IGS::choices_resized);
+		connect (ui->unobserveButton, &QPushButton::clicked, this, &MainWindow_IGS::slotFileClose);
+		ui->unobserveButton->show ();
 		add_game (gr, brd, gr->get_root ());
 
 		m_ctab_action = new QAction (this);
@@ -257,7 +259,7 @@ void MainWindow_IGS::set_preview_cursor (const preview &p)
 					     Qt::NoPen, QBrush (Qt::blue));
 	m_cursor->setPos (p.x, p.y);
 	m_cursor->setZValue (-1);
-	gameChoiceView->ensureVisible (m_cursor);
+	ui->gameChoiceView->ensureVisible (m_cursor);
 }
 
 void MainWindow_IGS::update_preview (go_game_ptr game, game_state *st)
@@ -482,12 +484,12 @@ void MainWindow_IGS::choices_resized ()
 	std::vector<board_preview *> preview_ptrs (n_elts);
 	for (size_t i = 0; i < n_elts; i++)
 		preview_ptrs[i] = &m_previews[i];
-	std::tie (m_preview_w, m_preview_h) = layout_previews (gameChoiceView, preview_ptrs, 2 * font_height);
+	std::tie (m_preview_w, m_preview_h) = layout_previews (ui->gameChoiceView, preview_ptrs, 2 * font_height);
 
 	for (auto &p: m_previews) {
 		update_preview (p.game, p.state);
 	}
-//	gameChoiceView->setSceneRect (m_preview_scene->itemsBoundingRect ());
+//	ui->gameChoiceView->setSceneRect (m_preview_scene->itemsBoundingRect ());
 }
 
 void MainWindow_IGS::unobserve_game (go_game_ptr gr)
@@ -522,7 +524,7 @@ void MainWindow_IGS::unobserve_game (go_game_ptr gr)
 void MainWindow_IGS::board_clicked (go_game_ptr gr, qGoBoard *connector, game_state *st)
 {
 	init_game_record (gr);
-	gfx_board->set_displayed (st);
+	ui->gfx_board->set_displayed (st);
 	disconnect (this, &MainWindow::signal_sendcomment, nullptr, nullptr);
 	if (connector != nullptr) {
 		connect (this, &MainWindow::signal_sendcomment, connector, &qGoBoard::slot_sendcomment);
@@ -1493,13 +1495,13 @@ void qGoBoard::update_settings ()
 void qGoBoard::observer_list_start ()
 {
 	if (win) {
-		win->cb_opponent->clear();
-		win->TextLabel_opponent->setText(tr("opponent:"));
-		win->cb_opponent->addItem(tr("-- none --"));
+		win->ui->cb_opponent->clear();
+		win->ui->TextLabel_opponent->setText(tr("opponent:"));
+		win->ui->cb_opponent->addItem(tr("-- none --"));
 		if (havePupil && ttOpponent != tr("-- none --"))
 		{
-			win->cb_opponent->addItem(ttOpponent, 1);
-			win->cb_opponent->setCurrentIndex(1);
+			win->ui->cb_opponent->addItem(ttOpponent, 1);
+			win->ui->cb_opponent->setCurrentIndex(1);
 		}
 	}
 
@@ -1517,9 +1519,9 @@ void qGoBoard::observer_list_entry (const QString &n, const QString &r)
 	list.append (rk_item);
 	m_observers.appendRow (list);
 	if (win) {
-		win->cb_opponent->addItem (n);
-		int cnt = win->cb_opponent->count();
-		win->TextLabel_opponent->setText(tr("opponent:") + " (" + QString::number(cnt-1) + ")");
+		win->ui->cb_opponent->addItem (n);
+		int cnt = win->ui->cb_opponent->count();
+		win->ui->TextLabel_opponent->setText(tr("opponent:") + " (" + QString::number(cnt-1) + ")");
 	}
 }
 
@@ -2033,16 +2035,16 @@ void qGoBoard::send_kibitz (const QString &msg, bool own)
 			{
 				// teacher gives controls to pupil
 				haveControls = true;
-				win->pb_controls->setEnabled(true);
-				win->pb_controls->setChecked(true);
+				win->enable_pb_controls (true);
+				win->check_pb_controls (true);
 				return;
 			}
 			else if (msg.indexOf("#TC:OFF") != -1)
 			{
 				// teacher takes controls back
 				haveControls = false;
-				win->pb_controls->setDisabled(true);
-				win->pb_controls->setChecked(false);
+				win->enable_pb_controls (false);
+				win->check_pb_controls (false);
 				return;
 			}
 		}
@@ -2054,7 +2056,7 @@ void qGoBoard::send_kibitz (const QString &msg, bool own)
 		{
 			// pupil gives controls back
 			haveControls = true;
-			win->pb_controls->setChecked(false);
+			win->check_pb_controls (false);
 			return;
 		}
 		else if (havePupil
@@ -2351,7 +2353,7 @@ void qGoBoard::slot_ttOpponentSelected(const QString &opponent)
 		// teacher has controls when opponent is selected
 		haveControls = IamTeacher;
 	}
-	win->pb_controls->setEnabled(IamTeacher && havePupil);
+	win->enable_pb_controls (IamTeacher && havePupil);
 
 	if (IamTeacher)
 	{
@@ -2366,7 +2368,7 @@ void qGoBoard::slot_ttOpponentSelected(const QString &opponent)
 	{
 		bool found = false;
 		// look for correct item
-		QComboBox *cb = win->cb_opponent;
+		QComboBox *cb = win->ui->cb_opponent;
 		int cnt = cb->count();
 		for (int i = 0; i < cnt && !found; i++)
 		{
@@ -2446,7 +2448,7 @@ void qGoBoard::slot_ttControls(bool on)
 			return;
 
 		client_window->sendcommand ("kibitz " + QString::number(id) + " #OC:OFF", false);
-		win->pb_controls->setDisabled(true);
+		win->enable_pb_controls (false);
 		haveControls = false;
 	}
 }

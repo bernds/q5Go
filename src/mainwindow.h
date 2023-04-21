@@ -23,8 +23,6 @@
 #include "qgtp.h"
 #include "timing.h"
 
-#include "ui_boardwindow_gui.h"
-
 class Board;
 class QSplitter;
 class QToolBar;
@@ -77,10 +75,20 @@ public:
 	virtual game_state *apply_redo () = 0;
 };
 
-class MainWindow : public QMainWindow, public Ui::BoardWindow
+namespace Ui
+{
+	class BoardWindow;
+};
+
+class MainWindow : public QMainWindow
 {
 	Q_OBJECT
 
+public:
+	// Should be protected, but legacy code in qgo_interface uses it.
+	std::unique_ptr<Ui::BoardWindow> ui;
+
+private:
 	bool m_allow_text_update_signal = false;
 	bool m_sgf_var_style;
 
@@ -198,7 +206,7 @@ public:
 		    GameMode mode = modeNormal, time_settings ts = time_settings ());
 	virtual ~MainWindow ();
 	void init_game_record (go_game_ptr);
-	Board* getBoard () const { return gfx_board; }
+	Board* getBoard () const;
 	int checkModified (bool interactive=true);
 
 	virtual void update_settings ();
@@ -208,7 +216,7 @@ public:
 	void setGameMode (GameMode);
 
 	void setMoveData (const game_state *);
-	void mark_dead_external (int x, int y) { gfx_board->mark_dead_external (x, y); }
+	void mark_dead_external (int x, int y);
 	/* Called when the record was changed by some external source (say, a Go server
 	   providing a title string).  */
 	void update_game_record ();
@@ -267,6 +275,9 @@ public:
 	   the server.  */
 	virtual game_state *player_move (int, int);
 	virtual void player_toggle_dead (int, int) { }
+
+	void enable_pb_controls (bool);
+	void check_pb_controls (bool);
 
 protected:
 	void initActions ();

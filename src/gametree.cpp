@@ -8,6 +8,7 @@
 #include <QSvgRenderer>
 #include <QToolTip>
 #include <QBuffer>
+#include <QMenu>
 
 #include "config.h"
 #include "setting.h"
