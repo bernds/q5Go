@@ -351,9 +351,9 @@ stone_color Board::cursor_color (int x, int y, stone_color to_move)
 static QString convert_letter_mark (mextra extra)
 {
 	if (extra < 26)
-		return QString ('A' + extra);
+		return QChar ('A' + extra);
 	else
-		return QString ('a' + extra - 26);
+		return QChar ('a' + extra - 26);
 }
 
 /* Render a mark in SVG at center position CX/CY in a square with a side length of FACTOR.
@@ -1079,7 +1079,7 @@ Board::ram_result Board::render_analysis_marks (svg_builder &svg, double svg_fac
 	svg.circle_at (cx, cy, svg_factor * 0.45, col_name, child_mark ? "white" : "black", "1");
 
 	if (analysis_vartype == 0) {  // letters
-		QChar c = pv_idx >= 26 ? 'a' + pv_idx - 26 : 'A' + pv_idx;
+		QChar c = QChar(pv_idx >= 26 ? 'a' + pv_idx - 26 : 'A' + pv_idx);
 		svg.text_at (cx, cy, svg_factor, 0, c,
 			     "black", fi);
 	} else if (analysis_vartype == 1) {  // win rate (relative)

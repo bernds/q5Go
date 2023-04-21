@@ -2139,7 +2139,7 @@ void qGoBoard::send_coords (int x, int y)
 
 	if (x > 7)
 		x++;
-	QChar c1 = x + 'A';
+	QChar c1 = QChar('A' + x);
 	int c2 = m_game->boardsize () - y;
 
 	if (ExtendedTeachingGame && IamPupil)
