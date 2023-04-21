@@ -182,8 +182,8 @@ MainWindow_IGS::MainWindow_IGS (QWidget *parent, std::shared_ptr<game_record> gr
 
 		m_ctab_action = new QAction (this);
 		m_sctab_action = new QAction (this);
-		m_ctab_action->setShortcut (Qt::CTRL + Qt::Key_Tab);
-		m_sctab_action->setShortcut (Qt::CTRL + Qt::SHIFT + Qt::Key_Tab);
+		m_ctab_action->setShortcut (Qt::CTRL | Qt::Key_Tab);
+		m_sctab_action->setShortcut (Qt::CTRL | Qt::SHIFT | Qt::Key_Tab);
 		addAction (m_ctab_action);
 		addAction (m_sctab_action);
 		connect (m_ctab_action, &QAction::triggered, [this] (bool)
