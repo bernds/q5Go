@@ -287,30 +287,22 @@ void ClientWindow::server_add_game (const Game &g_in)
 		return;
 
 	QString excludeMark = "";
-	QString myMark = "B";
+	QString myMark = "C";
 
 	// check if exclude entry is done later
 	if (!g.H.isEmpty()) //g.status.length() > 1)
 	{
-		QString emw;
-		QString emb;
-
 		// no: do it now
-		emw = exclude.contains(";" + g.wname + ";");
-		emb = exclude.contains(";" + g.bname + ";");
 
 		// ensure that my game is listed first
-		if (emw == "M" || emb == "M")
+		if (g.wname == m_online_acc_name || g.bname == m_online_acc_name)
 		{
 			myMark = "A";
 			excludeMark = "M";
-
-			// I'm playing, thus I'm open, except teaching games
-			if (emw != "M" || emb != "M")
-				set_open_mode (true);
 		}
-		else if (emw == "W" || emb == "W")
+		else if (watch.contains(";" + g.wname + ";") || watch.contains(";" + g.bname + ";"))
 		{
+			myMark = "B";
 			excludeMark = "W";
 		}
 	}
