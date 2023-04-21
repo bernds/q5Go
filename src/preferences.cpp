@@ -431,6 +431,16 @@ PreferencesDialog::PreferencesDialog (int tab, QWidget* parent)
 	connect (ui->autosavePathCheckBox, &QCheckBox::toggled, [this] (bool on) { ui->autosavePathWidget->setEnabled (on); });
 	connect (ui->autosavePathButton, &QPushButton::clicked, this, &PreferencesDialog::slot_autosavedir);
 
+	connect (ui->buttonOk, &QPushButton::clicked, this, &PreferencesDialog::slot_accept);
+	connect (ui->buttonApply, &QPushButton::clicked, this, &PreferencesDialog::slot_apply);
+	connect (ui->buttonCancel, &QPushButton::clicked, this, &PreferencesDialog::slot_reject);
+	connect (ui->buttonHelp, &QPushButton::clicked, this, &PreferencesDialog::startHelpMode);
+
+	connect (ui->pb_server_new, &QPushButton::clicked, this, &PreferencesDialog::slot_new_server);
+	connect (ui->pb_server_add, &QPushButton::clicked, this, &PreferencesDialog::slot_add_server);
+	connect (ui->pb_server_delete, &QPushButton::clicked, this, &PreferencesDialog::slot_delete_server);
+	connect (ui->LineEdit_title, &QLineEdit::textChanged, this, &PreferencesDialog::slot_serverChanged);
+
 	update_current_engine ();
 	update_current_host ();
 	update_db_labels ();
