@@ -2,6 +2,7 @@
  *   mainwin.cpp - qGoClient's main window (cont. in tables.cpp)
  */
 
+#include "common.h"
 #include <QMainWindow>
 #include <QFileDialog>
 #include <QWhatsThis>
@@ -137,6 +138,10 @@ ClientWindow::ClientWindow(QMainWindow *parent)
 	connect (ui->whoBox1, cic, [this] (int idx) { update_who_rank (ui->whoBox1, idx); });
 	connect (ui->whoBox2, cic, [this] (int idx) { update_who_rank (ui->whoBox2, idx); });
 	connect (ui->toolObserveMode, &QToolButton::toggled, [] (bool on) { setting->writeBoolEntry ("OBSERVE_SINGLE", on); });
+
+	connect (ui->pb_releaseTalkTabs, &QPushButton::clicked, this, &ClientWindow::slot_pbRelTabs);
+	connect (ui->RoomList, &QListWidget::itemDoubleClicked, this, &ClientWindow::slot_RoomListClicked);
+	connect (ui->LeaveRoomButton, &QPushButton::clicked, this, &ClientWindow::slot_leaveRoom);
 
 	initStatusBar(this);
 	initActions();
@@ -1724,6 +1729,17 @@ void ClientWindow::initToolBar()
 
 	whatsThis = QWhatsThis::createAction (this);
 	ui->Toolbar->addAction (whatsThis);
+
+	connect (ui->setQuietMode, &QAction::triggered, this, &ClientWindow::slot_cbquiet);
+	connect (ui->setOpenMode, &QAction::triggered, this, &ClientWindow::slot_cbopen);
+	connect (ui->setLookingMode, &QAction::triggered, this, &ClientWindow::slot_cblooking);
+
+	connect (ui->cb_connect, combo_activated_str, this, &ClientWindow::slot_cbconnect);
+	connect (ui->toolConnect, &QToolButton::toggled, this, &ClientWindow::slot_connect);
+	connect (ui->toolSeek, &QToolButton::toggled, this, &ClientWindow::slot_seek);
+
+	connect (ui->refreshPlayers, &QAction::triggered, this, &ClientWindow::slot_pbrefreshplayers);
+	connect (ui->refreshGames, &QAction::triggered, this, &ClientWindow::slot_pbrefreshgames);
 }
 
 // SLOTS
@@ -1866,7 +1882,7 @@ void ClientWindow::slot_addSeekCondition(const QString& a, const QString& b, con
 	time_condition = QString::number(int(b.toInt() / 60)) + " min + " + QString::number(int(c.toInt() / 60)) + " min / " + d + " stones";
 
 	int a_int = a.toInt ();
-	seekMenu->addAction(time_condition, this, [=] () { slot_seek(a_int); });
+	seekMenu->addAction(time_condition, this, [=] () { slot_seek_nr(a_int); });
 }
 
 
@@ -1896,7 +1912,7 @@ void ClientWindow::slot_cancelSeek()
 	seekButtonTimer = 0;
 }
 
-void ClientWindow::slot_seek (int i)
+void ClientWindow::slot_seek_nr (int i)
 {
 	ui->toolSeek->setChecked (true);
 	ui->toolSeek->setMenu (nullptr);

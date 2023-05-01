@@ -264,7 +264,7 @@ public slots:
 	void slot_addSeekCondition (const QString&, const QString&, const QString&, const QString&, const QString&);
 	void slot_clearSeekCondition ();
 	void slot_cancelSeek ();
-	void slot_seek (int i);
+	void slot_seek_nr (int i);
 	void slot_seek (bool);
 	void slot_SeekList (const QString&, const QString&);
 
