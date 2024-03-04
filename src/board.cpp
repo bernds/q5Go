@@ -95,8 +95,9 @@ void BoardView::calculateSize ()
 {
 	// Calculate the size values
 
-	int w = canvas->width ();
-	int h = canvas->height ();
+	qreal scale = devicePixelRatio();
+	int w = canvas->width () * scale;
+	int h = canvas->height () * scale;
 
 	int table_size_x = w - 2 * m_margin;
 	int table_size_y = h - 2 * m_margin;
@@ -167,8 +168,9 @@ void BoardView::resizeEvent(QResizeEvent*)
 
 QImage BoardView::background_image ()
 {
-	int w = canvas->width ();
-	int h = canvas->height ();
+	qreal scale = devicePixelRatio();
+	int w = canvas->width () * scale;
+	int h = canvas->height () * scale;
 
 	m_wood = *setting->wood_image ();
 	m_table = *setting->table_image ();
@@ -176,7 +178,6 @@ QImage BoardView::background_image ()
 	// Create pixmap of appropriate size
 	//QPixmap all(w, h);
 	QImage image (w, h, QImage::Format_RGB32);
-
 	// Paint table and board on the pixmap
 	QPainter painter;
 
@@ -300,6 +301,7 @@ QImage BoardView::background_image ()
 	}
 
 	painter.end ();
+	image.setDevicePixelRatio(devicePixelRatio());
 	return image;
 }
 
@@ -1443,6 +1445,7 @@ QPixmap BoardView::draw_position (int default_vars_type)
 	}
 
 	painter.end ();
+	image.setDevicePixelRatio(devicePixelRatio());
 	return image;
 }
 
@@ -1453,7 +1456,8 @@ void BoardView::sync_appearance (bool)
 		return;
 	QPixmap stones = draw_position (m_vars_type);
 	m_stone_layer.setPixmap (stones);
-	m_stone_layer.setPos (m_wood_rect.x (), m_wood_rect.y ());
+	qreal scale = devicePixelRatio();
+	m_stone_layer.setPos (m_wood_rect.x () / scale, m_wood_rect.y () / scale);
 }
 
 void Board::sync_appearance (bool board_only)
@@ -1497,6 +1501,7 @@ void Board::leaveEvent(QEvent*)
 
 int BoardView::coord_vis_to_board_x (int p, bool small_hitbox)
 {
+	p *= devicePixelRatio();
 	p -= m_board_rect.x () - square_size / 2;
 	if (p < 0)
 		return -1;
@@ -1519,6 +1524,7 @@ int BoardView::coord_vis_to_board_x (int p, bool small_hitbox)
 
 int BoardView::coord_vis_to_board_y (int p, bool small_hitbox)
 {
+	p *= devicePixelRatio();
 	p -= m_board_rect.y () - square_size / 2;
 	if (p < 0)
 		return -1;
