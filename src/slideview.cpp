@@ -178,12 +178,16 @@ void BaseSlideView<UI, Base>::update_text_font ()
 	if (m_game == nullptr)
 		return;
 	int w = m_displayed_sz.width ();
-	int h = m_displayed_sz.height ();
+	int h_orig = m_displayed_sz.height ();
 
+	qreal scale = m_board_exporter->devicePixelRatio();
+	w *= scale;
+	int h = h_orig * scale;
 	QPixmap pm = render_text (w - h, h);
+	pm.setDevicePixelRatio(scale);
 	delete m_text_item;
 	m_text_item = m_scene->addPixmap (pm);
-	m_text_item->setPos (h, 0);
+	m_text_item->setPos (h_orig, 0);
 }
 
 template<class UI, class Base>
