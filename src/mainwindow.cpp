@@ -9,6 +9,7 @@
 #include <sstream>
 #include <cmath>
 
+#include <QRegExp>
 #include <QLabel>
 #include <QPixmap>
 #include <QWindow>

@@ -513,7 +513,7 @@ int main(int argc, char **argv)
 	if (lang.isEmpty ()) {
 		QLocale locale = QLocale::system ();
 		qDebug() << "No language settings found, using system locale %s" << locale.name ();
-		loc = QString("qgo_") + locale.language ();
+		loc = QString("qgo_") + locale.name();
 	} else {
 		qDebug () << "Language settings found: " + lang;
 		loc = QString("qgo_") + lang;

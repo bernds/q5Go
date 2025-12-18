@@ -200,9 +200,9 @@ void ImageHandler::paint_stone_new (QImage &wi, int d, const QColor &col, double
 	decideAppearance(&desc, d, idx * 3);
 	double f = sqrt (3);
 
-	double d2 = (double)d/2.0-5e-1;
-	double r = d2-2e-1;
-	double h, s, v;
+	float d2 = (double)d/2.0-5e-1;
+	float r = d2-2e-1;
+	float h, s, v;
 	col.getHsvF (&h, &s, &v);
 
 	// these are the images

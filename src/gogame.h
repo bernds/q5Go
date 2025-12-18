@@ -6,6 +6,7 @@
 
 #include <functional>
 #include <QString>
+#include <QTextCodec>
 
 inline std::string komi_str (double k)
 {

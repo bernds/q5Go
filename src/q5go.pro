@@ -219,7 +219,7 @@ target.path           = $$PREFIX/bin
 INSTALLS += target
 }
 
-QT += widgets gui xml network multimedia svg sql
+QT += core5compat widgets gui xml network multimedia svg svgwidgets sql
 
 RESOURCES += \
     q4go.qrc

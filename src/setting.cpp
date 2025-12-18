@@ -5,6 +5,7 @@
 #include <array>
 #include <QApplication>
 #include <QTextStream>
+#include <QStringConverter>
 #include <QStandardPaths>
 #include <QMessageBox>
 #include <QPixmap>
@@ -334,7 +335,7 @@ void Setting::loadSettings ()
 
 	// read file
 	QTextStream txt(&file);
-	txt.setCodec(QTextCodec::codecForName("UTF-8"));
+	txt.setEncoding(QStringConverter::Utf8);
 	QString s;
 	int pos, pos1, pos2;
 	while (!txt.atEnd ())
@@ -422,7 +423,16 @@ void Setting::updateFont(QFont &font, QString entry)
 				font.setPointSize(n);
 				break;
 			case 2:
-				font.setWeight(n);
+				if (n <= 25)
+				font.setWeight(QFont::Light);
+				else if (n <= 50)
+				font.setWeight(QFont::Normal);
+				else if (n <= 63)
+				font.setWeight(QFont::DemiBold);
+				else if (n <= 75)
+				font.setWeight(QFont::Bold);
+				else
+				font.setWeight(QFont::Black);
 				break;
 			case 3:
 				font.setItalic(n);
@@ -478,7 +488,7 @@ void Setting::saveSettings()
 		lists_to_entries ();
 
 		QTextStream txtfile(&file);
-		txtfile.setCodec(QTextCodec::codecForName("UTF-8"));
+		txtfile.setEncoding(QStringConverter::Utf8);
 		// write list to file: KEY [TXT]
 		QMap<QString, QString>::const_iterator i = params.constBegin();
 		while (i != params.constEnd()) {

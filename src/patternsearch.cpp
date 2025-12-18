@@ -4,6 +4,7 @@
 #include <QFontMetrics>
 #include <QMessageBox>
 #include <QDir>
+#include <QRegExp>
 
 #include "clientwin.h"
 #include "patternsearch.h"

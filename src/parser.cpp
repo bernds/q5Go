@@ -2,7 +2,7 @@
  *   parser.cpp
  */
 
-#include <QRegularExpression>
+#include <QRegExp>
 
 #include "parser.h"
 #include "qgo_interface.h"
