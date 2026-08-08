@@ -214,7 +214,10 @@ void EvalGraph::update (go_game_ptr gr, game_state *active, int sel_idx)
 		QPen pen;
 		pen.setWidth (2);
 		QVariant v = m_model->data (m_model->index (idnr, 0), Qt::DecorationRole);
-		pen.setColor (v.value<QColor> ());
+		if (m_show_scores)
+			pen.setColor (v.value<QColor> ().darker ());
+		else
+			pen.setColor (v.value<QColor> ());
 		QBrush sdbrush (v.value<QColor> ().lighter ());
 		for (int x = 0; st != nullptr; x++, st = st->next_primary_move ()) {
 			eval ev;
