@@ -37,9 +37,13 @@ Grid::Grid (QGraphicsScene *canvas, const go_board &ref, const bit_array &hoshis
 	  m_hoshis (hoshis.popcnt ()), m_hoshi_pos (hoshis.popcnt ()), m_hoshi_screen_pos (hoshis.popcnt ())
 {
 	for (auto &i: m_vgrid)
+	{
 		canvas->addItem (&i);
+	}
 	for (auto &i: m_hgrid)
+	{
 		canvas->addItem (&i);
+	}
 	for (auto &i: m_covers) {
 		canvas->addItem (&i);
 		i.setBrush (QColor (128, 128, 255, 128));
@@ -90,6 +94,7 @@ void Grid::resize (const QRect &rect, int shift_x, int shift_y, double square_si
 			bool last_row = y + 1 == szy;
 
 			pen.setWidth ((first_col || last_col) ? widened_w : scaled_w);
+			pen.setCosmetic(true);
 			m_vgrid[bp].setPen (pen);
 			pen.setWidth ((first_row || last_row) ? widened_w : scaled_w);
 			m_hgrid[bp].setPen (pen);
